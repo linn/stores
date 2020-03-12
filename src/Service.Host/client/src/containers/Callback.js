@@ -10,7 +10,4 @@ function mapDispatchToProps() {
     };
 }
 
-export default connect(
-    null,
-    mapDispatchToProps
-)(Callback);
+export default connect(null, mapDispatchToProps)(Callback);
