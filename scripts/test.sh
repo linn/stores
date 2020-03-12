@@ -5,8 +5,8 @@ set -ev
 if [ "$CI" ] && [ "$TRAVIS" ]
 then 
 	source ~/.nvm/nvm.sh; 
-	nvm install 6;
-	nvm use 6;
+	nvm install 10;
+	nvm use 10;
 fi
 
 # c# tests
@@ -24,12 +24,10 @@ fi
 
 # javascript tests
 cd ./src/Service.Host
-./node_modules/.bin/jest --coverage
+./node_modules/.bin/jest
 echo $?
 result=$?
 cd ../..
 
-# report to codecov
-bash <(curl -s https://codecov.io/bash)
 
 exit $result
