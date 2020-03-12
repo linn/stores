@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AssemblyName>Linn.Stores.Service.Host</AssemblyName>
+    <RootNamespace>Linn.Stores.Service.Host</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="client\assets\" />
+    <Folder Include="client\src\components\common\" />
+    <Folder Include="Properties\" />
+    <Compile Remove="client\build\**" />
+    <Compile Remove="client\coverage\**" />
+    <Compile Remove="node_modules\**" />
+    <Content Remove="client\build\**" />
+    <Content Remove="client\coverage\**" />
+    <Content Remove="node_modules\**" />
+    <EmbeddedResource Remove="client\build\**" />
+    <EmbeddedResource Remove="client\coverage\**" />
+    <EmbeddedResource Remove="node_modules\**" />
+    <None Remove="client\build\**" />
+    <None Remove="client\coverage\**" />
+    <None Remove="node_modules\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Linn.Common.Authentication.Host" Version="1.0.2" />
+    <PackageReference Include="Linn.Common.Configuration" Version="2.0.0" />
+    <PackageReference Include="Linn.Common.Logging" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Owin" Version="2.2.0" />
+    <PackageReference Include="Nancy" Version="2.0.0" />
+    <PackageReference Include="Nancy.Bootstrappers.Autofac" Version="2.0.0-clinteastwood" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IoC\IoC.csproj" />
+    <ProjectReference Include="..\Service\Service.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="client\src\actions\" />
+    <Folder Include="client\src\components\__tests__\" />
+    <Folder Include="client\src\reducers\__tests__\" />
+    <Folder Include="client\src\selectors\__tests__\" />
+    <Folder Include="coverage\" />
+    <Folder Include="Modules\" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,27 @@
+{
+    "extends": ["airbnb", "prettier/react", "plugin:jest/recommended", "prettier"],
+    "globals": { "expect": true },
+    "plugins": ["prettier", "jest", "react-hooks"],
+    "parser": "babel-eslint",
+    "env": {
+        "browser": true
+    },
+    "rules": {
+        "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+        "prettier/prettier": ["error"],
+        "linebreak-style": ["error", "windows"],
+        "react/jsx-filename-extension": 0,
+        "spaced-comment": "off",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "error"
+    },
+    "overrides": [
+        {
+            "files": ["*.integration.js"],
+            "rules": {
+                "no-unused-expressions": "off",
+                "jest/valid-expect": "off"
+            }
+        }
+    ]
+}

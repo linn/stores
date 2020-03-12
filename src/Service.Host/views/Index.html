@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stores</title>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/javascript">
+        window.APPLICATION_SETTINGS = {
+            authorityUri: '@Model.AuthorityUri',
+            appRoot: '@Model.AppRoot',
+            proxyRoot: '@Model.ProxyRoot'
+        };
+    </script>
+    <script src="/stores/build/app.js"></script>
+</body>
+</html>

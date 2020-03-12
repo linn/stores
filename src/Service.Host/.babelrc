@@ -1,0 +1,19 @@
+﻿{
+  "presets": [
+    [
+      "@babel/preset-env",
+      { "modules": "commonjs" }
+    ],
+    "@babel/react"
+  ],
+  "plugins": [
+    "react-hot-loader/babel",
+    "@babel/plugin-transform-object-assign",
+    [
+      "@babel/plugin-proposal-class-properties",
+      {
+        "loose": true
+      }
+    ]
+  ]
+}
