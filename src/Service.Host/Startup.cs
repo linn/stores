@@ -31,7 +31,7 @@ namespace Linn.Stores.Service.Host
                 options =>
                     {
                         options.Authority = ConfigurationManager.Configuration["AUTHORITY_URI"];
-                        options.CallbackPath = new PathString("/stores/signin-oidc");
+                        options.CallbackPath = new PathString("/inventory/signin-oidc");
                     });
         }
 

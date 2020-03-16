@@ -8,9 +8,9 @@ const oidcConfig = {
     client_id: 'app',
     response_type: 'id_token token',
     scope: 'openid profile email associations',
-    redirect_uri: `${host}/stores/signin-oidc-client`,
+    redirect_uri: `${host}/inventory/signin-oidc-client`,
     post_logout_redirect_uri: `${host}`,
-    silent_redirect_uri: `${host}/stores/signin-oidc-silent`,
+    silent_redirect_uri: `${host}/inventory/signin-oidc-silent`,
     automaticSilentRenew: true,
     filterProtocolClaims: true,
     loadUserInfo: true

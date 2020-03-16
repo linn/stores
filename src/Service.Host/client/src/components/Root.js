@@ -22,7 +22,7 @@ const Root = ({ store }) => (
                             <Navigation />
                             <CssBaseline />
 
-                            <Route exact path="/" render={() => <Redirect to="/stores" />} />
+                            <Route exact path="/" render={() => <Redirect to="/inventory" />} />
 
                             <Route
                                 path="/"
@@ -33,11 +33,11 @@ const Root = ({ store }) => (
                             />
 
                             <Switch>
-                                <Route exact path="/stores" component={App} />
+                                <Route exact path="/inventory" component={App} />
 
                                 <Route
                                     exact
-                                    path="/stores/signin-oidc-client"
+                                    path="/inventory/signin-oidc-client"
                                     component={Callback}
                                 />
                             </Switch>
