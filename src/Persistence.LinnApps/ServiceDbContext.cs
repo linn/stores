@@ -1,8 +1,7 @@
-﻿namespace Persistence.LinnApps
+﻿namespace Linn.Stores.Persistence.LinnApps
 {
-    using Domain.LinnApps.Parts;
-
     using Linn.Common.Configuration;
+    using Linn.Stores.Domain.LinnApps.Parts;
 
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;

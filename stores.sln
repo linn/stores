@@ -60,9 +60,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{95A1
 		scripts\test.sh = scripts\test.sh
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.LinnApps", "src\Domain.LinnApps\Domain.LinnApps.csproj", "{38ABC1BD-0B96-4C5E-8DDF-DA187B266546}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.LinnApps", "src\Domain.LinnApps\Domain.LinnApps.csproj", "{38ABC1BD-0B96-4C5E-8DDF-DA187B266546}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence.LinnApps", "src\Persistence.LinnApps\Persistence.LinnApps.csproj", "{D779F0E2-F012-47CC-8563-B337CCE27EAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.LinnApps", "src\Persistence.LinnApps\Persistence.LinnApps.csproj", "{D779F0E2-F012-47CC-8563-B337CCE27EAD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.LinnApps.Tests", "tests\Unit\Domain.LinnApps.Tests\Domain.LinnApps.Tests.csproj", "{6A15A5CC-C977-4CFF-8A7A-3C21226AA47B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -138,6 +140,10 @@ Global
 		{D779F0E2-F012-47CC-8563-B337CCE27EAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D779F0E2-F012-47CC-8563-B337CCE27EAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D779F0E2-F012-47CC-8563-B337CCE27EAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A15A5CC-C977-4CFF-8A7A-3C21226AA47B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A15A5CC-C977-4CFF-8A7A-3C21226AA47B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A15A5CC-C977-4CFF-8A7A-3C21226AA47B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A15A5CC-C977-4CFF-8A7A-3C21226AA47B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -152,6 +158,7 @@ Global
 		{9EB56310-C2B7-4032-9DEC-87D8C6ED9EE3} = {B31DDE0C-67E3-4D19-B524-039D7AD3A00C}
 		{C64C5349-A32E-4A08-AF21-0C4C5694A3B4} = {3009A116-E434-4816-A0F4-570C303DA933}
 		{95A19A4F-379D-4A10-B22E-B31F0B1AEB17} = {3009A116-E434-4816-A0F4-570C303DA933}
+		{6A15A5CC-C977-4CFF-8A7A-3C21226AA47B} = {19C8CAF7-D5D1-44CB-BE5F-23D416B667CA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A61BEBB2-67FD-4B79-8ED3-83FCB7F5E5E4}
