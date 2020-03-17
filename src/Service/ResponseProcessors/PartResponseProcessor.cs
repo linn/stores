@@ -1,4 +1,4 @@
-﻿namespace Linn.Production.Service.ResponseProcessors
+﻿namespace Linn.Stores.Service.ResponseProcessors
 {
     using Domain.LinnApps.Parts;
 
