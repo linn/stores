@@ -20,7 +20,7 @@
 
         public DbSet<ParetoClass> ParetoClasses { get; set; }
 
-        public DbSet<ProductAnalysisCode> ProuAnalysisCodes { get; set; }
+        public DbSet<ProductAnalysisCode> ProductAnalysisCodes { get; set; }
 
         public DbQuery<Department> Departments { get; set; }
 
@@ -52,9 +52,9 @@
         private void BuildParts(ModelBuilder builder)
         {
             var e = builder.Entity<Part>().ToTable("PARTS");
-            e.HasKey(p => p.PartNumber);
+            e.HasKey(p => p.Id);
             e.Property(p => p.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
-            e.Property(p => p.BridgeId).HasColumnName("BRIDGE_ID");
+            e.Property(p => p.Id).HasColumnName("BRIDGE_ID");
             e.Property(p => p.Description).HasColumnName("DESCRIPTION").HasMaxLength(200);
             e.Property(p => p.RootProduct).HasColumnName("ROOT_PRODUCT").HasMaxLength(10);
             e.Property(p => p.StockControlled).HasColumnName("STOCK_CONTROLLED").HasMaxLength(1);

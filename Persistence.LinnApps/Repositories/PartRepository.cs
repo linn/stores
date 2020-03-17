@@ -8,11 +8,22 @@
 
     using Linn.Common.Persistence;
 
-    public class PartRepository : IRepository<Part, string>
+    public class PartRepository : IRepository<Part, int>
     {
-        public Part FindById(string key)
+        private readonly ServiceDbContext serviceDbContext;
+
+        public PartRepository(ServiceDbContext serviceDbContext)
         {
-            throw new NotImplementedException();
+            this.serviceDbContext = serviceDbContext;
+        }
+
+        public Part FindById(int key)
+        {
+            return this.serviceDbContext
+                .Parts
+                .Where(p => p.Id == key)
+                .ToList()
+                .FirstOrDefault();
         }
 
         public IQueryable<Part> FindAll()
