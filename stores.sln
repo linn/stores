@@ -62,6 +62,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{95A1
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.LinnApps", "Domain.LinnApps\Domain.LinnApps.csproj", "{38ABC1BD-0B96-4C5E-8DDF-DA187B266546}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence.LinnApps", "Persistence.LinnApps\Persistence.LinnApps.csproj", "{D779F0E2-F012-47CC-8563-B337CCE27EAD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -132,6 +134,10 @@ Global
 		{38ABC1BD-0B96-4C5E-8DDF-DA187B266546}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38ABC1BD-0B96-4C5E-8DDF-DA187B266546}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38ABC1BD-0B96-4C5E-8DDF-DA187B266546}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D779F0E2-F012-47CC-8563-B337CCE27EAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D779F0E2-F012-47CC-8563-B337CCE27EAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D779F0E2-F012-47CC-8563-B337CCE27EAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D779F0E2-F012-47CC-8563-B337CCE27EAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
