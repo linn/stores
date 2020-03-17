@@ -60,6 +60,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{95A1
 		scripts\test.sh = scripts\test.sh
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.LinnApps", "Domain.LinnApps\Domain.LinnApps.csproj", "{38ABC1BD-0B96-4C5E-8DDF-DA187B266546}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -126,6 +128,10 @@ Global
 		{9EB56310-C2B7-4032-9DEC-87D8C6ED9EE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EB56310-C2B7-4032-9DEC-87D8C6ED9EE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EB56310-C2B7-4032-9DEC-87D8C6ED9EE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38ABC1BD-0B96-4C5E-8DDF-DA187B266546}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38ABC1BD-0B96-4C5E-8DDF-DA187B266546}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38ABC1BD-0B96-4C5E-8DDF-DA187B266546}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38ABC1BD-0B96-4C5E-8DDF-DA187B266546}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
