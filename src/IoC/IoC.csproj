@@ -13,10 +13,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Persistence.LinnApps\Persistence.LinnApps.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Facade\Facade.csproj" />
     <ProjectReference Include="..\Messaging\Messaging.csproj" />
+    <ProjectReference Include="..\Persistence.LinnApps\Persistence.LinnApps.csproj" />
     <ProjectReference Include="..\Persistence\Persistence.csproj" />
     <ProjectReference Include="..\Proxy\Proxy.csproj" />
   </ItemGroup>

@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Domain.LinnApps\Domain.LinnApps.csproj" />
+    <ProjectReference Include="..\Domain.LinnApps\Domain.LinnApps.csproj" />
     <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Persistence\Persistence.csproj" />
     <ProjectReference Include="..\Resources\Resources.csproj" />
