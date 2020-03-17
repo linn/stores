@@ -2,6 +2,8 @@
 {
     using Domain.LinnApps.Parts;
 
+
+    using Linn.Common.Configuration;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
 
