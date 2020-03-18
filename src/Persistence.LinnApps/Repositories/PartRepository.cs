@@ -8,7 +8,7 @@
 
     using Linn.Common.Persistence;
 
-    public class PartRepository : IRepository<Part, int>
+    public class PartRepository : IRepository<Part, long>
     {
         private readonly ServiceDbContext serviceDbContext;
 
@@ -17,7 +17,7 @@
             this.serviceDbContext = serviceDbContext;
         }
 
-        public Part FindById(int key)
+        public Part FindById(long key)
         {
             return this.serviceDbContext
                 .Parts

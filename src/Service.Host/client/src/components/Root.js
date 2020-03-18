@@ -11,6 +11,9 @@ import App from './App';
 import Callback from '../containers/Callback';
 import userManager from '../helpers/userManager';
 import 'typeface-roboto';
+import Part from '../containers/parts/Part';
+import Parts from '../containers/parts/Parts';
+import CreatePart from '../containers/parts/CreatePart';
 
 const Root = ({ store }) => (
     <div>
@@ -40,6 +43,10 @@ const Root = ({ store }) => (
                                     path="/inventory/signin-oidc-client"
                                     component={Callback}
                                 />
+
+                                <Route exact path="/parts" component={Parts} />
+                                <Route exact path="/parts/create" component={CreatePart} />
+                                <Route exact path="/parts/:id" component={Part} />
                             </Switch>
                         </div>
                     </Router>

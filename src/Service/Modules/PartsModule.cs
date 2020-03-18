@@ -10,9 +10,9 @@
 
     public sealed class PartsModule : NancyModule
     {
-        private readonly IFacadeService<Part, int, PartResource, PartResource> partsFacadeService;
+        private readonly IFacadeService<Part, long, PartResource, PartResource> partsFacadeService;
 
-        public PartsModule(IFacadeService<Part, int, PartResource, PartResource> partsFacadeService)
+        public PartsModule(IFacadeService<Part, long, PartResource, PartResource> partsFacadeService)
         {
             this.partsFacadeService = partsFacadeService;
             this.Get("/parts/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
@@ -22,7 +22,7 @@
             this.Post("/parts", _ => this.AddPart());
         }
 
-        private object GetPart(int id)
+        private object GetPart(long id)
         {
             var results = this.partsFacadeService.GetById(id);
             return this.Negotiate
@@ -51,7 +51,7 @@
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
 
-        private object UpdatePart(int id)
+        private object UpdatePart(long id)
         {
             var resource = this.Bind<PartResource>();
             var result = this.partsFacadeService.Update(id, resource);
