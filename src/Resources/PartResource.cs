@@ -1,8 +1,10 @@
 ﻿namespace Linn.Stores.Resources
 {
+    using System.Numerics;
+
     public class PartResource
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public string PartNumber { get; set; }
 

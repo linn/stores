@@ -1,10 +1,11 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Parts
 {
     using System;
+    using System.Numerics;
 
     public class Part
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         public string PartNumber { get; set; }
 
@@ -34,6 +35,6 @@
 
         public string PsuPart { get; set; }
 
-        public DateTime SafetyCertificateExpirationDate { get; set; }
+        public DateTime? SafetyCertificateExpirationDate { get; set; }
     }
 }
