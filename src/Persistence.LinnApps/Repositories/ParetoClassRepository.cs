@@ -1,12 +1,11 @@
-﻿namespace Persistence.LinnApps.Repositories
+﻿namespace Linn.Stores.Persistence.LinnApps.Repositories
 {
     using System;
     using System.Linq;
     using System.Linq.Expressions;
 
-    using Domain.LinnApps;
-
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps;
 
     public class ParetoClassRepository : IRepository<ParetoClass, string>
     {

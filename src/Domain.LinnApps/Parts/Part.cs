@@ -1,4 +1,4 @@
-﻿namespace Domain.LinnApps.Parts
+﻿namespace Linn.Stores.Domain.LinnApps.Parts
 {
     using System;
 

@@ -1,4 +1,4 @@
-﻿namespace Domain.LinnApps
+﻿namespace Linn.Stores.Domain.LinnApps
 {
     using System.Collections.Generic;
 

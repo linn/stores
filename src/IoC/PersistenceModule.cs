@@ -1,20 +1,19 @@
 ﻿namespace Linn.Stores.IoC
 {
     using Amazon.SQS;
-    using Autofac;
 
-    using Domain.LinnApps;
-    using Domain.LinnApps.Parts;
+    using Autofac;
 
     using Linn.Common.Logging;
     using Linn.Common.Logging.AmazonSqs;
     using Linn.Common.Persistence;
     using Linn.Common.Persistence.EntityFramework;
+    using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Persistence.LinnApps;
+    using Linn.Stores.Persistence.LinnApps.Repositories;
 
     using Microsoft.EntityFrameworkCore;
-
-    using Persistence.LinnApps;
-    using Persistence.LinnApps.Repositories;
 
     public class PersistenceModule : Module
     {

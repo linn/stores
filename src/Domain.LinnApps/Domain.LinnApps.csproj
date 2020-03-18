@@ -1,7 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AssemblyName>Linn.Stores.Domain.LinnApps</AssemblyName>
+    <RootNamespace>Linn.Stores.Domain.LinnApps</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

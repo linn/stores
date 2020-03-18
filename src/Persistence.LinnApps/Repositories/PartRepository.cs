@@ -1,4 +1,4 @@
-﻿namespace Persistence.LinnApps.Repositories
+﻿namespace Linn.Stores.Persistence.LinnApps.Repositories
 {
     using System;
     using System.Linq;
