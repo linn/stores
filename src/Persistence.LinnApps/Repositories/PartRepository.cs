@@ -48,7 +48,11 @@
 
         public IQueryable<Part> FilterBy(Expression<Func<Part, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext
+                .Parts
+                .Where(expression)
+                .ToList()
+                .AsQueryable();
         }
     }
 }
