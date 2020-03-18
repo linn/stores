@@ -28,12 +28,12 @@
 
         public IQueryable<Part> FindAll()
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.Parts;
         }
 
         public void Add(Part entity)
         {
-            throw new NotImplementedException();
+            this.serviceDbContext.Parts.Add(entity);
         }
 
         public void Remove(Part entity)
