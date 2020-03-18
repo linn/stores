@@ -7,6 +7,7 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Resources;
     using Linn.Stores.Service.Modules;
@@ -27,6 +28,11 @@
 
         protected IRepository<Part, int> PartRepository { get; private set; }
 
+        protected IRepository<ParetoClass, string> ParetoClassRepository { get; private set; }
+
+        protected IRepository<ProductAnalysisCode, string> ProductAnalysisCodeRepository { get; private set; }
+
+
         [SetUp]
         public void EstablishContext()
         {
@@ -34,12 +40,16 @@
                 .For<IFacadeService<Part, int, PartResource, PartResource>>();
 
             this.PartRepository = Substitute.For<IRepository<Part, int>>();
+            this.ParetoClassRepository = Substitute.For<IRepository<ParetoClass, string>>();
+            this.ProductAnalysisCodeRepository = Substitute.For<IRepository<ProductAnalysisCode, string>>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
                         with.Dependency(this.PartsFacadeService);
                         with.Dependency(this.PartRepository);
+                        with.Dependency(this.ParetoClassRepository);
+                        with.Dependency(this.ProductAnalysisCodeRepository);
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());
                         with.Module<PartsModule>();
