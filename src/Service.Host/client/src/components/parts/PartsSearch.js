@@ -16,7 +16,7 @@ function PartFails({ items, fetchItems, loading, clearSearch, history }) {
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <>
-                        <CreateButton createUrl="/production/quality/parts/create" />
+                        <CreateButton createUrl="/parts/create" />
                     </>
                     <Typeahead
                         items={searchItems}
