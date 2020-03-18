@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Parts
 {
     using System;
-    using System.Numerics;
 
     public class Part
     {

@@ -1,7 +1,5 @@
 ﻿namespace Linn.Stores.Resources
 {
-    using System.Numerics;
-
     using Linn.Common.Resources;
 
     public class PartResource : HypermediaResource
