@@ -15,7 +15,7 @@
         public string StockControlled { get; set; }
 
         public string SafetyCriticalPart { get; set; }
-        
+
         public ProductAnalysisCode ProductAnalysisCode { get; set; }
 
         public ParetoClass ParetoClass { get; set; }
@@ -27,9 +27,9 @@
         public string SingleSourcePart { get; set; }
 
         public string PerformanceCriticalPart { get; set; }
-    
+
         public string SafetyDataDirectory { get; set; }
-        
+
         public string CccCriticalPart { get; set; }
 
         public string PsuPart { get; set; }
