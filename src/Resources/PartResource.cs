@@ -2,7 +2,9 @@
 {
     using System.Numerics;
 
-    public class PartResource
+    using Linn.Common.Resources;
+
+    public class PartResource : HypermediaResource
     {
         public long Id { get; set; }
 

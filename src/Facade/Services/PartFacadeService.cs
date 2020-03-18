@@ -10,14 +10,14 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
 
-    public class PartFacadeService : FacadeService<Part, int, PartResource, PartResource>
+    public class PartFacadeService : FacadeService<Part, long, PartResource, PartResource>
     {
         private readonly IRepository<ParetoClass, string> paretoClassRepository;
 
         private readonly IRepository<ProductAnalysisCode, string> productAnalysisCodeRepository;
 
         public PartFacadeService(
-            IRepository<Part, int> repository,
+            IRepository<Part, long> repository,
             IRepository<ParetoClass, string> paretoClassRepository,
             IRepository<ProductAnalysisCode, string> productAnalysisCodeRepository,
             ITransactionManager transactionManager)
@@ -84,7 +84,7 @@
 
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)
         {
-            return part => part.PartNumber.Equals(searchTerm);
+            return part => part.PartNumber.ToUpper().Equals(searchTerm.ToUpper());
         }
     }
 }

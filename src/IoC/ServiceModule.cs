@@ -17,7 +17,7 @@
         {
             // facade services
             builder.RegisterType<PartFacadeService>()
-                .As<IFacadeService<Part, int, PartResource, PartResource>>();
+                .As<IFacadeService<Part, long, PartResource, PartResource>>();
         }
     }
 }

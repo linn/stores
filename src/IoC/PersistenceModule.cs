@@ -23,7 +23,7 @@
                 .As<DbContext>().InstancePerRequest();
             builder.RegisterType<TransactionManager>().As<ITransactionManager>();
 
-            builder.RegisterType<PartRepository>().As<IRepository<Part, int>>();
+            builder.RegisterType<PartRepository>().As<IRepository<Part, long>>();
             builder.RegisterType<ParetoClassRepository>().As<IRepository<ParetoClass, string>>();
             builder.RegisterType<DepartmentRepository>().As<IRepository<Department, string>>();
             builder.RegisterType<ProductAnalysisCodeRepository>().As<IRepository<ProductAnalysisCode, string>>();

@@ -1,7 +1,7 @@
 ﻿namespace Linn.Stores.Facade.ResourceBuilders
 {
-    using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Domain.LinnApps.Parts;
 
@@ -17,7 +17,8 @@
                        {
                            Id = part.Id,
                            PartNumber = part.PartNumber,
-                           Description = part.Description
+                           Description = part.Description,
+                           Links = this.BuildLinks(part).ToArray()
                        };
         }
 
@@ -30,7 +31,7 @@
 
         private IEnumerable<LinkResource> BuildLinks(Part part)
         {
-            throw new NotImplementedException();
+            yield return new LinkResource { Rel = "self", Href = this.GetLocation(part) };
         }
     }
 }
