@@ -21,12 +21,12 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IFacadeService<Part, int, PartResource, PartResource> PartsFacadeService
+        protected IFacadeService<Part, long, PartResource, PartResource> PartsFacadeService
         {
             get; private set;
         }
 
-        protected IRepository<Part, int> PartRepository { get; private set; }
+        protected IRepository<Part, long> PartRepository { get; private set; }
 
         protected IRepository<ParetoClass, string> ParetoClassRepository { get; private set; }
 
@@ -37,9 +37,9 @@
         public void EstablishContext()
         {
             this.PartsFacadeService = Substitute
-                .For<IFacadeService<Part, int, PartResource, PartResource>>();
+                .For<IFacadeService<Part, long, PartResource, PartResource>>();
 
-            this.PartRepository = Substitute.For<IRepository<Part, int>>();
+            this.PartRepository = Substitute.For<IRepository<Part, long>>();
             this.ParetoClassRepository = Substitute.For<IRepository<ParetoClass, string>>();
             this.ProductAnalysisCodeRepository = Substitute.For<IRepository<ProductAnalysisCode, string>>();
 
