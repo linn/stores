@@ -20,7 +20,7 @@
 
         public ParetoClass ParetoClass { get; set; }
 
-        public string AccountingCompany { get; set; }
+        public AccountingCompany AccountingCompany { get; set; }
 
         public string EmcCriticalPart { get; set; }
 

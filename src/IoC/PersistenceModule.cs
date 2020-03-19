@@ -27,6 +27,7 @@
             builder.RegisterType<ParetoClassRepository>().As<IRepository<ParetoClass, string>>();
             builder.RegisterType<DepartmentRepository>().As<IRepository<Department, string>>();
             builder.RegisterType<ProductAnalysisCodeRepository>().As<IRepository<ProductAnalysisCode, string>>();
+            builder.RegisterType<AccountingCompanyRepository>().As<IQueryRepository<AccountingCompany>>();
         }
     }
 }

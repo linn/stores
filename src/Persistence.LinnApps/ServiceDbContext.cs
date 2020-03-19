@@ -23,12 +23,15 @@
 
         public DbQuery<Department> Departments { get; set; }
 
+        public DbQuery<AccountingCompany> AccountingCompanies { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
             this.BuildParetoClasses(builder);
             this.BuildDepartments(builder);
             this.BuildProductAnalysisCodes(builder);
+            this.BuildAccountingCompanies(builder);
             base.OnModelCreating(builder);
         }
 
@@ -48,6 +51,13 @@
             base.OnConfiguring(optionsBuilder);
         }
 
+        private void BuildAccountingCompanies(ModelBuilder builder)
+        {
+            var q = builder.Query<AccountingCompany>().ToView("ACCOUNTING_COMPANIES");
+            q.Property(c => c.Name).HasColumnName("ACCOUNTING_COMPANY");
+            q.Property(c => c.Description).HasColumnName("DESCRIPTION");
+        }
+
         private void BuildParts(ModelBuilder builder)
         {
             var e = builder.Entity<Part>().ToTable("PARTS");
@@ -63,7 +73,6 @@
             e.Property(p => p.PerformanceCriticalPart).HasColumnName("PERFORMANCE_CRITICAL_PART").HasMaxLength(1);
             e.Property(p => p.PsuPart).HasColumnName("PSU_PART").HasMaxLength(1);
             e.Property(p => p.SingleSourcePart).HasColumnName("SINGLE_SOURCE_PART").HasMaxLength(1);
-            e.Property(p => p.AccountingCompany).HasColumnName("ACCOUNTING_COMPANY").HasMaxLength(10);
             e.Property(p => p.SafetyCertificateExpirationDate).HasColumnName("SAFETY_CERTIFICATE_EXPIRY_DATE");
             e.Property(p => p.SafetyDataDirectory).HasColumnName("SAFETY_DATA_DIRECTORY").HasMaxLength(500);
             e.Property(p => p.LinnProduced).HasColumnName("LINN_PRODUCED").HasMaxLength(1);
@@ -91,7 +100,7 @@
             e.Property(p => p.ImdsWeight).HasColumnName("IMDS_WEIGHT_G");
             e.Property(p => p.MechanicalOrElectronic)
                 .HasColumnName("MECHANICAL_OR_ELECTRONIC").HasMaxLength(2);
-
+            e.HasOne(p => p.AccountingCompany).WithMany(c => c.PartsResponsibleFor).HasForeignKey("ACCOUNTING_COMPANY");
             e.HasOne(p => p.PreferredSupplier).WithMany(s => s.PartsPreferredSupplierOf)
                 .HasForeignKey("PREFERRED_SUPPLIER");
             e.HasOne<ParetoClass>(p => p.ParetoClass).WithMany(c => c.Parts).HasForeignKey("PARETO_CODE");

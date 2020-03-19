@@ -26,6 +26,8 @@
 
         public string AccountingCompany { get; set; }
 
+        public string AccountingCompanyDescription { get; set; }
+
         public bool? EmcCriticalPart { get; set; }
 
         public bool? SingleSourcePart { get; set; }

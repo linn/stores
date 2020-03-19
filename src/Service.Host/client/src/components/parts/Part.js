@@ -99,38 +99,72 @@ function Part({
                                 onClose={() => setSnackbarVisible(false)}
                                 message="Save Successful"
                             />
-                            <Tabs
-                                value={tab}
-                                onChange={handleTabChange}
-                                indicatorColor="primary"
-                                textColor="primary"
-                                style={{ paddingBottom: '40px' }}
-                            >
-                                <Tab label="General" />
-                                <Tab label="Build" />
-                                <Tab label="Purch" />
-                                <Tab label="Stores" />
-                                <Tab label="LifeCycle" />
-                            </Tabs>
-                            {tab === 0 && (
-                                <Grid item xs={12}>
-                                    <InputField
-                                        fullWidth
-                                        disabled={!creating()}
-                                        value={part.partNumber}
-                                        label="Part Number"
-                                        maxLength={10}
-                                        helperText={
-                                            !creating()
-                                                ? 'This field cannot be changed'
-                                                : `${partInvalid() ? 'This field is required' : ''}`
-                                        }
-                                        required
-                                        onChange={handleFieldChange}
-                                        propertyName="partNumber"
-                                    />
-                                </Grid>
-                            )}
+                            <Grid item xs={3}>
+                                <InputField
+                                    fullWidth
+                                    disabled={!creating()}
+                                    value={part.partNumber}
+                                    label="Part Number"
+                                    maxLength={10}
+                                    helperText={
+                                        !creating()
+                                            ? 'This field cannot be changed'
+                                            : `${partInvalid() ? 'This field is required' : ''}`
+                                    }
+                                    required
+                                    onChange={handleFieldChange}
+                                    propertyName="partNumber"
+                                />
+                            </Grid>
+                            <Grid item xs={8}>
+                                <InputField
+                                    fullWidth
+                                    value={part.description}
+                                    label="Description"
+                                    maxLength={10}
+                                    required
+                                    onChange={handleFieldChange}
+                                    propertyName="description"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Tabs
+                                    value={tab}
+                                    onChange={handleTabChange}
+                                    indicatorColor="primary"
+                                    textColor="primary"
+                                    style={{ paddingBottom: '40px' }}
+                                >
+                                    <Tab label="General" />
+                                    <Tab label="Build" />
+                                    <Tab label="Purch" />
+                                    <Tab label="Stores" />
+                                    <Tab label="LifeCycle" />
+                                </Tabs>
+                                {tab === 0 && (
+                                    <Grid item xs={12}>
+                                        <InputField
+                                            fullWidth
+                                            disabled={!creating()}
+                                            value={part.partNumber}
+                                            label="Part Number"
+                                            maxLength={10}
+                                            helperText={
+                                                !creating()
+                                                    ? 'This field cannot be changed'
+                                                    : `${
+                                                          partInvalid()
+                                                              ? 'This field is required'
+                                                              : ''
+                                                      }`
+                                            }
+                                            required
+                                            onChange={handleFieldChange}
+                                            propertyName="partNumber"
+                                        />
+                                    </Grid>
+                                )}{' '}
+                            </Grid>
                             {/* <Grid item xs={8}>
                                 <DatePicker
                                     label="Date Invalid"

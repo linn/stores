@@ -16,15 +16,19 @@
 
         private readonly IRepository<ProductAnalysisCode, string> productAnalysisCodeRepository;
 
+        private readonly IQueryRepository<AccountingCompany> accountingCompanyRepository;
+
         public PartFacadeService(
             IRepository<Part, int> repository,
             IRepository<ParetoClass, string> paretoClassRepository,
             IRepository<ProductAnalysisCode, string> productAnalysisCodeRepository,
+            IQueryRepository<AccountingCompany> accountingCompanyRepository,
             ITransactionManager transactionManager)
             : base(repository, transactionManager)
         {
             this.paretoClassRepository = paretoClassRepository;
             this.productAnalysisCodeRepository = productAnalysisCodeRepository;
+            this.accountingCompanyRepository = accountingCompanyRepository;
         }
 
         protected override Part CreateFromResource(PartResource resource)
@@ -33,7 +37,7 @@
                        {
                            PartNumber = resource.PartNumber,
                            Description = resource.Description,
-                           AccountingCompany = resource.AccountingCompany,
+                           AccountingCompany = this.accountingCompanyRepository.FindBy(c => c.Name == resource.AccountingCompany),
                            CccCriticalPart = this.ToYesOrNoString(resource.CccCriticalPart),
                            EmcCriticalPart = this.ToYesOrNoString(resource.EmcCriticalPart),
                            SafetyCriticalPart = this.ToYesOrNoString(resource.SafetyCriticalPart),
@@ -61,7 +65,8 @@
         protected override void UpdateFromResource(Part entity, PartResource resource)
         {
             entity.Description = resource.Description;
-            entity.AccountingCompany = resource.AccountingCompany;
+            entity.AccountingCompany =
+                this.accountingCompanyRepository.FindBy(c => c.Name == resource.AccountingCompany);
             entity.CccCriticalPart = this.ToYesOrNoString(resource.CccCriticalPart);
             entity.EmcCriticalPart = this.ToYesOrNoString(resource.EmcCriticalPart);
             entity.SafetyCriticalPart = this.ToYesOrNoString(resource.SafetyCriticalPart);
