@@ -6,9 +6,17 @@
 
     public class AllocationFacadeService : IAllocationFacadeService
     {
+        private readonly IAllocationService allocationService;
+
+        public AllocationFacadeService(IAllocationService allocationService)
+        {
+            this.allocationService = allocationService;
+        }
+
         public SuccessResult<AllocationStart> StartAllocation(AllocationOptionsResource allocationOptionsResource)
         {
-            throw new System.NotImplementedException();
+            return new SuccessResult<AllocationStart>(
+                this.allocationService.StartAllocation(allocationOptionsResource.StockPool));
         }
     }
 }
