@@ -4,7 +4,7 @@
 
     public class Part
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         public string PartNumber { get; set; }
 

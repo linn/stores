@@ -10,14 +10,14 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
 
-    public class PartFacadeService : FacadeService<Part, long, PartResource, PartResource>
+    public class PartFacadeService : FacadeService<Part, int, PartResource, PartResource>
     {
         private readonly IRepository<ParetoClass, string> paretoClassRepository;
 
         private readonly IRepository<ProductAnalysisCode, string> productAnalysisCodeRepository;
 
         public PartFacadeService(
-            IRepository<Part, long> repository,
+            IRepository<Part, int> repository,
             IRepository<ParetoClass, string> paretoClassRepository,
             IRepository<ProductAnalysisCode, string> productAnalysisCodeRepository,
             ITransactionManager transactionManager)

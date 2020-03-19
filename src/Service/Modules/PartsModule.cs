@@ -22,7 +22,7 @@
             this.Post("/parts", _ => this.AddPart());
         }
 
-        private object GetPart(long id)
+        private object GetPart(int id)
         {
             var results = this.partsFacadeService.GetById(id);
             return this.Negotiate
