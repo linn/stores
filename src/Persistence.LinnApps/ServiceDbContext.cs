@@ -66,6 +66,33 @@
             e.Property(p => p.AccountingCompany).HasColumnName("ACCOUNTING_COMPANY").HasMaxLength(10);
             e.Property(p => p.SafetyCertificateExpirationDate).HasColumnName("SAFETY_CERTIFICATE_EXPIRY_DATE");
             e.Property(p => p.SafetyDataDirectory).HasColumnName("SAFETY_DATA_DIRECTORY").HasMaxLength(500);
+            e.Property(p => p.LinnProduced).HasColumnName("LINN_PRODUCED").HasMaxLength(1);
+            e.Property(p => p.DecrementRule).HasColumnName("DECREMENT_RULE").HasMaxLength(10);
+            e.Property(p => p.BomType).HasColumnName("BOM_TYPE").HasMaxLength(1);
+            e.Property(p => p.OptionSet).HasColumnName("OPTION_SET").HasMaxLength(14);
+            e.Property(p => p.DrawingReference).HasColumnName("DRAWING_REFERENCE").HasMaxLength(100);
+            e.Property(p => p.BomId).HasColumnName("BOM_ID");
+            e.Property(p => p.UnitOfMeasure).HasColumnName("UNIT_OF_MEASURE").HasMaxLength(14);
+            e.Property(p => p.Currency).HasColumnName("CURRENCY").HasMaxLength(4);
+            e.Property(p => p.CurrencyUnitPrice).HasColumnName("CURRENCY_UNIT_PRICE");
+            e.Property(p => p.BaseUnitPrice).HasColumnName("BASE_UNIT_PRICE");
+            e.Property(p => p.MaterialPrice).HasColumnName("MATERIAL_PRICE");
+            e.Property(p => p.LabourPrice).HasColumnName("LABOUR_PRICE");
+            e.Property(p => p.CostingPrice).HasColumnName("COSTING_PRICE");
+            e.Property(p => p.OrderHold).HasColumnName("ORDER_HOLD").HasMaxLength(1);
+            e.Property(p => p.PartCategory).HasColumnName("PART_CATEGORY").HasMaxLength(2);
+            e.Property(p => p.NonForecastRequirement).HasColumnName("NON_FC_REQT");
+            e.Property(p => p.OneOffRequirement).HasColumnName("ONE_OFF_REQT");
+            e.Property(p => p.SparesRequirement).HasColumnName("SPARES_REQT");
+            e.Property(p => p.IgnoreWorkstationStock)
+                .HasColumnName("IGNORE_WORKSTN_STOCK").HasMaxLength(1);
+            e.Property(p => p.ImdsIdNumber).HasColumnName("IMDS_ID_NUMBER");
+            e.Property(p => p.ImdsWeight).HasColumnName("IMDS_WEIGHT_G");
+            e.Property(p => p.MechanicalOrElectronic)
+                .HasColumnName("MECHANICAL_OR_ELECTRONIC").HasMaxLength(2);
+
+            e.HasOne(p => p.PreferredSupplier).WithMany(s => s.PartsPreferredSupplierOf)
+                .HasForeignKey("PREFERRED_SUPPLIER");
             e.HasOne<ParetoClass>(p => p.ParetoClass).WithMany(c => c.Parts).HasForeignKey("PARETO_CODE");
             e.HasOne<ProductAnalysisCode>(p => p.ProductAnalysisCode).WithMany(c => c.Parts)
                 .HasForeignKey("PRODUCT_ANALYSIS_CODE");
