@@ -22,9 +22,15 @@
         [SetUp]
         public void SetUp()
         {
-            this.allocationStartDetails = new AllocationStart { Id = 2934762 };
+            this.allocationStartDetails = new AllocationStart(2934762);
 
-            this.resource = new AllocationOptionsResource();
+            this.resource = new AllocationOptionsResource
+                                {
+                                    AccountId = 111,
+                                    ArticleNumber = "article",
+                                    StockPoolCode = "st",
+                                    DespatchLocationCode = "d"
+                                };
 
             this.AllocationFacadeService.StartAllocation(Arg.Any<AllocationOptionsResource>())
                 .Returns(new SuccessResult<AllocationStart>(this.allocationStartDetails));
@@ -50,7 +56,10 @@
         {
             this.AllocationFacadeService.Received()
                 .StartAllocation(Arg.Is<AllocationOptionsResource>(
-                        r => r.StockPool == this.resource.StockPool));
+                        r => r.StockPoolCode == this.resource.StockPoolCode
+                             && r.ArticleNumber == this.resource.ArticleNumber
+                             && r.AccountId == this.resource.AccountId
+                             && r.DespatchLocationCode == this.resource.DespatchLocationCode));
         }
 
         [Test]

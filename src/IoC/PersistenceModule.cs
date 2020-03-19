@@ -6,6 +6,7 @@
     using Linn.Common.Persistence.EntityFramework;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Persistence.LinnApps;
     using Linn.Stores.Persistence.LinnApps.Repositories;
 
@@ -23,6 +24,7 @@
             builder.RegisterType<ParetoClassRepository>().As<IRepository<ParetoClass, string>>();
             builder.RegisterType<DepartmentRepository>().As<IRepository<Department, string>>();
             builder.RegisterType<ProductAnalysisCodeRepository>().As<IRepository<ProductAnalysisCode, string>>();
+            builder.RegisterType<SosOptionRepository>().As<IRepository<SosOption, int>>();
         }
     }
 }

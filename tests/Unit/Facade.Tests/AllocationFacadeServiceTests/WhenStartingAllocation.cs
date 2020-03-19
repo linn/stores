@@ -21,13 +21,18 @@
         [SetUp]
         public void SetUp()
         {
-            this.startDetails = new AllocationStart { Id = 234 };
+            this.startDetails = new AllocationStart(234);
             this.resource = new AllocationOptionsResource
-            {
-                StockPool = "LINN"
-            };
+                                {
+                                    StockPoolCode = "LINN",
+                                    AccountId = 24,
+                                    ArticleNumber = "article",
+                                    DespatchLocationCode = "dispatch"
+                                };
 
-            this.AllocationService.StartAllocation(Arg.Any<string>()).Returns(this.startDetails);
+            this.AllocationService
+                .StartAllocation(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int>(), Arg.Any<string>())
+                .Returns(this.startDetails);
 
             this.result = this.Sut.StartAllocation(this.resource);
         }
@@ -35,7 +40,11 @@
         [Test]
         public void ShouldCallService()
         {
-            this.AllocationService.Received().StartAllocation(this.resource.StockPool);
+            this.AllocationService.Received().StartAllocation(
+                this.resource.StockPoolCode,
+                this.resource.DespatchLocationCode,
+                this.resource.AccountId,
+                this.resource.ArticleNumber);
         }
 
         [Test]

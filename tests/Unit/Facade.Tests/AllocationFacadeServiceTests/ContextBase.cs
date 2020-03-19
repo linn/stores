@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Facade.Tests.AllocationFacadeServiceTests
 {
+    using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Facade.Services;
 

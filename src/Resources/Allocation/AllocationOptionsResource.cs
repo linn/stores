@@ -2,6 +2,12 @@
 {
     public class AllocationOptionsResource
     {
-        public string StockPool { get; set; }
+        public string StockPoolCode { get; set; }
+
+        public string DespatchLocationCode { get; set; }
+
+        public int AccountId { get; set; }
+
+        public string ArticleNumber { get; set; }
     }
 }
