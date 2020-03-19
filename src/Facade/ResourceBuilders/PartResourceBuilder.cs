@@ -19,7 +19,7 @@
                            PartNumber = part.PartNumber,
                            Description = part.Description,
                            ProductAnalysisCode = part.ProductAnalysisCode?.ProductCode,
-                           ProductAnalysisCodeDescription = part.ProductAnalysisCode.Description,
+                           ProductAnalysisCodeDescription = part.ProductAnalysisCode?.Description,
                            SafetyCertificateExpirationDate = part.SafetyCertificateExpirationDate?.ToString("o"),
                            SafetyCriticalPart = part.SafetyCriticalPart == "Y",
                            ImdsIdNumber = part.ImdsIdNumber,
