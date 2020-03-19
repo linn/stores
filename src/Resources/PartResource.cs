@@ -10,11 +10,11 @@
 
         public string Description { get; set; }
 
-        public bool RootProduct { get; set; }
+        public bool? RootProduct { get; set; }
 
-        public bool StockControlled { get; set; }
+        public bool? StockControlled { get; set; }
 
-        public bool SafetyCriticalPart { get; set; }
+        public bool? SafetyCriticalPart { get; set; }
 
         public string ProductAnalysisCode { get; set; }
 
@@ -22,17 +22,17 @@
 
         public string AccountingCompany { get; set; }
 
-        public bool EmcCriticalPart { get; set; }
+        public bool? EmcCriticalPart { get; set; }
 
-        public bool SingleSourcePart { get; set; }
+        public bool? SingleSourcePart { get; set; }
 
         public bool PerformanceCriticalPart { get; set; }
 
         public string SafetyDataDirectory { get; set; }
 
-        public bool CccCriticalPart { get; set; }
+        public bool? CccCriticalPart { get; set; }
 
-        public bool PsuPart { get; set; }
+        public bool? PsuPart { get; set; }
 
         public string SafetyCertificateExpirationDate { get; set; }
 
@@ -48,39 +48,35 @@
 
         public bool? PlannedSurplus { get; set; }
 
-        public int BomId { get; set; }
+        public int? BomId { get; set; }
 
         public string UnitOfMeasure { get; set; }
 
-        public int PreferredSupplier { get; set; }
+        public int? PreferredSupplier { get; set; }
 
         public string Currency { get; set; }
 
-        public decimal CurrencyUnitPrice { get; set; }
+        public decimal? CurrencyUnitPrice { get; set; }
 
-        public decimal BaseUnitPrice { get; set; }
+        public decimal? BaseUnitPrice { get; set; }
 
-        public decimal MaterialPrice { get; set; }
+        public decimal? MaterialPrice { get; set; }
 
-        public decimal LabourPrice { get; set; }
+        public decimal? LabourPrice { get; set; }
 
-        public decimal CostingPrice { get; set; }
+        public decimal? CostingPrice { get; set; }
 
         public bool? OrderHold { get; set; }
 
         public string PartCategory { get; set; }
 
-        public decimal NonForecastRequirement { get; set; }
-
-        public decimal OneOffRequirement { get; set; }
-
-        public decimal SparesRequirement { get; set; }
+        public decimal? SparesRequirement { get; set; }
 
         public string IgnoreWorkstationStock { get; set; }
 
-        public int ImdsIdNumber { get; set; }
+        public int? ImdsIdNumber { get; set; }
 
-        public decimal ImdsWeight { get; set; }
+        public decimal? ImdsWeight { get; set; }
 
         public string MechanicalOrElectronic { get; set; }
     }

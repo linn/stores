@@ -48,7 +48,7 @@
 
         public string PlannedSurplus { get; set; }
 
-        public int BomId { get; set; }
+        public int? BomId { get; set; }
 
         public string UnitOfMeasure { get; set; }
 
@@ -56,31 +56,31 @@
 
         public string Currency { get; set; }
 
-        public decimal CurrencyUnitPrice { get; set; }
+        public decimal? CurrencyUnitPrice { get; set; }
 
-        public decimal BaseUnitPrice { get; set; }
+        public decimal? BaseUnitPrice { get; set; }
 
-        public decimal MaterialPrice { get; set; }
+        public decimal? MaterialPrice { get; set; }
 
-        public decimal LabourPrice { get; set; }
+        public decimal? LabourPrice { get; set; }
 
-        public decimal CostingPrice { get; set; }
+        public decimal? CostingPrice { get; set; }
 
         public string OrderHold { get; set; }
 
         public string PartCategory { get; set; }
 
-        public decimal NonForecastRequirement { get; set; }
+        public decimal? NonForecastRequirement { get; set; }
 
-        public decimal OneOffRequirement { get; set; }
+        public decimal? OneOffRequirement { get; set; }
 
-        public decimal SparesRequirement { get; set; }
+        public decimal? SparesRequirement { get; set; }
 
         public string IgnoreWorkstationStock { get; set; }
 
-        public int ImdsIdNumber { get; set; }
+        public int? ImdsIdNumber { get; set; }
 
-        public decimal ImdsWeight { get; set; }
+        public decimal? ImdsWeight { get; set; }
 
         public string MechanicalOrElectronic { get; set; }
     }

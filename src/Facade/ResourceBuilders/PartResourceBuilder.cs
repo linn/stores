@@ -18,6 +18,12 @@
                            Id = part.Id,
                            PartNumber = part.PartNumber,
                            Description = part.Description,
+                           ProductAnalysisCode = part.ProductAnalysisCode.ProductCode, // description
+                           SafetyCertificateExpirationDate = part.SafetyCertificateExpirationDate?.ToString("o"),
+                           SafetyCriticalPart = part.SafetyCriticalPart == "Y",
+                           ImdsIdNumber = part.ImdsIdNumber,
+                           ParetoCode = part.ParetoClass.ParetoCode, // description
+                           ImdsWeight = part.ImdsWeight,
                            Links = this.BuildLinks(part).ToArray()
                        };
         }

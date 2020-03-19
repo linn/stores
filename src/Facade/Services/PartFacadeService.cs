@@ -34,22 +34,22 @@
                            PartNumber = resource.PartNumber,
                            Description = resource.Description,
                            AccountingCompany = resource.AccountingCompany,
-                           CccCriticalPart = resource.CccCriticalPart ? "Y" : "N",
-                           EmcCriticalPart = resource.EmcCriticalPart ? "Y" : "N",
-                           SafetyCriticalPart = resource.SafetyCriticalPart ? "Y" : "N",
-                           SingleSourcePart = resource.SingleSourcePart ? "Y" : "N",
-                           StockControlled = resource.StockControlled ? "Y" : "N",
+                           CccCriticalPart = this.ToYesOrNoString(resource.CccCriticalPart),
+                           EmcCriticalPart = this.ToYesOrNoString(resource.EmcCriticalPart),
+                           SafetyCriticalPart = this.ToYesOrNoString(resource.SafetyCriticalPart),
+                           SingleSourcePart = this.ToYesOrNoString(resource.SingleSourcePart),
+                           StockControlled = this.ToYesOrNoString(resource.StockControlled),
                            ParetoClass =
                                resource.ParetoCode != null
                                    ? this.paretoClassRepository.FindById(resource.ParetoCode)
                                    : null,
-                           PerformanceCriticalPart = resource.PerformanceCriticalPart ? "Y" : "N",
+                           PerformanceCriticalPart = this.ToYesOrNoString(resource.PerformanceCriticalPart),
                            ProductAnalysisCode =
                                resource.ProductAnalysisCode != null
                                    ? this.productAnalysisCodeRepository.FindById(resource.ProductAnalysisCode)
                                    : null,
-                           PsuPart = resource.PsuPart ? "Y" : "N",
-                           RootProduct = resource.RootProduct ? "Y" : "N",
+                           PsuPart = this.ToYesOrNoString(resource.PsuPart),
+                           RootProduct = this.ToYesOrNoString(resource.RootProduct),
                            SafetyCertificateExpirationDate =
                                string.IsNullOrEmpty(resource.SafetyCertificateExpirationDate)
                                    ? (DateTime?)null
@@ -62,20 +62,20 @@
         {
             entity.Description = resource.Description;
             entity.AccountingCompany = resource.AccountingCompany;
-            entity.CccCriticalPart = resource.CccCriticalPart ? "Y" : "N";
-            entity.EmcCriticalPart = resource.EmcCriticalPart ? "Y" : "N";
-            entity.SafetyCriticalPart = resource.SafetyCriticalPart ? "Y" : "N";
-            entity.SingleSourcePart = resource.SingleSourcePart ? "Y" : "N";
-            entity.StockControlled = resource.StockControlled ? "Y" : "N";
+            entity.CccCriticalPart = this.ToYesOrNoString(resource.CccCriticalPart);
+            entity.EmcCriticalPart = this.ToYesOrNoString(resource.EmcCriticalPart);
+            entity.SafetyCriticalPart = this.ToYesOrNoString(resource.SafetyCriticalPart);
+            entity.SingleSourcePart = this.ToYesOrNoString(resource.SingleSourcePart);
+            entity.StockControlled = this.ToYesOrNoString(resource.StockControlled);
             entity.ParetoClass = resource.ParetoCode != null
                                      ? this.paretoClassRepository.FindById(resource.ParetoCode)
                                      : null;
-            entity.PerformanceCriticalPart = resource.PerformanceCriticalPart ? "Y" : "N";
+            entity.PerformanceCriticalPart = this.ToYesOrNoString(resource.PerformanceCriticalPart);
             entity.ProductAnalysisCode = resource.ProductAnalysisCode != null
                                              ? this.productAnalysisCodeRepository.FindById(resource.ProductAnalysisCode)
                                              : null;
-            entity.PsuPart = resource.PsuPart ? "Y" : "N";
-            entity.RootProduct = resource.RootProduct ? "Y" : "N";
+            entity.PsuPart = this.ToYesOrNoString(resource.PsuPart);
+            entity.RootProduct = this.ToYesOrNoString(resource.RootProduct);
             entity.SafetyCertificateExpirationDate = string.IsNullOrEmpty(resource.SafetyCertificateExpirationDate)
                                                          ? (DateTime?)null
                                                          : DateTime.Parse(resource.SafetyCertificateExpirationDate);
@@ -85,6 +85,16 @@
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)
         {
             return part => part.PartNumber.ToUpper().Equals(searchTerm.ToUpper());
+        }
+
+        private string ToYesOrNoString(bool? booleanRepresentation)
+        {
+            if (booleanRepresentation == null)
+            {
+                return null;
+            }
+
+            return (bool)booleanRepresentation ? "Y" : "N";
         }
     }
 }
