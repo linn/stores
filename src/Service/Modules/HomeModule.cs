@@ -19,14 +19,14 @@
             this.Get(@"^(.*)$", _ => this.GetApp());
         }
 
+        public object GetApp()
+        {
+            return this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index");
+        }
+
         private object SilentRenew()
         {
             return this.Negotiate.WithView("silent-renew");
-        }
-
-        private object GetApp()
-        {
-            return this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index");
         }
     }
 }

@@ -4,7 +4,7 @@
 
     public class Part
     {
-        public int BridgeId { get; set; }
+        public int Id { get; set; }
 
         public string PartNumber { get; set; }
 
@@ -34,6 +34,6 @@
 
         public string PsuPart { get; set; }
 
-        public DateTime SafetyCertificateExpirationDate { get; set; }
+        public DateTime? SafetyCertificateExpirationDate { get; set; }
     }
 }
