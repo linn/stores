@@ -10,6 +10,6 @@
 
         public string Description { get; set; }
 
-        public List<Part> Parts { get; set; }
+        public IEnumerable<Part> Parts { get; set; }
     }
 }
