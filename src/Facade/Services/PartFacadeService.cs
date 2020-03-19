@@ -34,22 +34,22 @@
                            PartNumber = resource.PartNumber,
                            Description = resource.Description,
                            AccountingCompany = resource.AccountingCompany,
-                           CccCriticalPart = resource.CccCriticalPart,
-                           EmcCriticalPart = resource.EmcCriticalPart,
-                           SafetyCriticalPart = resource.SafetyCriticalPart,
-                           SingleSourcePart = resource.SingleSourcePart,
-                           StockControlled = resource.StockControlled,
+                           CccCriticalPart = resource.CccCriticalPart ? "Y" : "N",
+                           EmcCriticalPart = resource.EmcCriticalPart ? "Y" : "N",
+                           SafetyCriticalPart = resource.SafetyCriticalPart ? "Y" : "N",
+                           SingleSourcePart = resource.SingleSourcePart ? "Y" : "N",
+                           StockControlled = resource.StockControlled ? "Y" : "N",
                            ParetoClass =
                                resource.ParetoCode != null
                                    ? this.paretoClassRepository.FindById(resource.ParetoCode)
                                    : null,
-                           PerformanceCriticalPart = resource.PerformanceCriticalPart,
+                           PerformanceCriticalPart = resource.PerformanceCriticalPart ? "Y" : "N",
                            ProductAnalysisCode =
                                resource.ProductAnalysisCode != null
                                    ? this.productAnalysisCodeRepository.FindById(resource.ProductAnalysisCode)
                                    : null,
-                           PsuPart = resource.PsuPart,
-                           RootProduct = resource.RootProduct,
+                           PsuPart = resource.PsuPart ? "Y" : "N",
+                           RootProduct = resource.RootProduct ? "Y" : "N",
                            SafetyCertificateExpirationDate =
                                string.IsNullOrEmpty(resource.SafetyCertificateExpirationDate)
                                    ? (DateTime?)null
@@ -62,20 +62,20 @@
         {
             entity.Description = resource.Description;
             entity.AccountingCompany = resource.AccountingCompany;
-            entity.CccCriticalPart = resource.CccCriticalPart;
-            entity.EmcCriticalPart = resource.EmcCriticalPart;
-            entity.SafetyCriticalPart = resource.SafetyCriticalPart;
-            entity.SingleSourcePart = resource.SingleSourcePart;
-            entity.StockControlled = resource.StockControlled;
+            entity.CccCriticalPart = resource.CccCriticalPart ? "Y" : "N";
+            entity.EmcCriticalPart = resource.EmcCriticalPart ? "Y" : "N";
+            entity.SafetyCriticalPart = resource.SafetyCriticalPart ? "Y" : "N";
+            entity.SingleSourcePart = resource.SingleSourcePart ? "Y" : "N";
+            entity.StockControlled = resource.StockControlled ? "Y" : "N";
             entity.ParetoClass = resource.ParetoCode != null
                                      ? this.paretoClassRepository.FindById(resource.ParetoCode)
                                      : null;
-            entity.PerformanceCriticalPart = resource.PerformanceCriticalPart;
+            entity.PerformanceCriticalPart = resource.PerformanceCriticalPart ? "Y" : "N";
             entity.ProductAnalysisCode = resource.ProductAnalysisCode != null
                                              ? this.productAnalysisCodeRepository.FindById(resource.ProductAnalysisCode)
                                              : null;
-            entity.PsuPart = resource.PsuPart;
-            entity.RootProduct = resource.RootProduct;
+            entity.PsuPart = resource.PsuPart ? "Y" : "N";
+            entity.RootProduct = resource.RootProduct ? "Y" : "N";
             entity.SafetyCertificateExpirationDate = string.IsNullOrEmpty(resource.SafetyCertificateExpirationDate)
                                                          ? (DateTime?)null
                                                          : DateTime.Parse(resource.SafetyCertificateExpirationDate);
