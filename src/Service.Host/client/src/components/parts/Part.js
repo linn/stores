@@ -145,22 +145,13 @@ function Part({
                                     <Grid item xs={12}>
                                         <InputField
                                             fullWidth
-                                            disabled={!creating()}
-                                            value={part.partNumber}
-                                            label="Part Number"
+                                            disabled
+                                            value={part.rootProduct}
+                                            label="Root Product"
                                             maxLength={10}
-                                            helperText={
-                                                !creating()
-                                                    ? 'This field cannot be changed'
-                                                    : `${
-                                                          partInvalid()
-                                                              ? 'This field is required'
-                                                              : ''
-                                                      }`
-                                            }
                                             required
                                             onChange={handleFieldChange}
-                                            propertyName="partNumber"
+                                            propertyName="rootProduct"
                                         />
                                     </Grid>
                                 )}{' '}

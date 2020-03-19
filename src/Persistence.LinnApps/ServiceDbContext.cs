@@ -23,7 +23,7 @@
 
         public DbQuery<Department> Departments { get; set; }
 
-        public DbQuery<AccountingCompany> AccountingCompanies { get; set; }
+        public DbSet<AccountingCompany> AccountingCompanies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -53,7 +53,8 @@
 
         private void BuildAccountingCompanies(ModelBuilder builder)
         {
-            var q = builder.Query<AccountingCompany>().ToView("ACCOUNTING_COMPANIES");
+            var q = builder.Entity<AccountingCompany>().ToTable("ACCOUNTING_COMPANIES");
+            q.HasKey(a => a.Name);
             q.Property(c => c.Name).HasColumnName("ACCOUNTING_COMPANY");
             q.Property(c => c.Description).HasColumnName("DESCRIPTION");
         }
@@ -100,7 +101,8 @@
             e.Property(p => p.ImdsWeight).HasColumnName("IMDS_WEIGHT_G");
             e.Property(p => p.MechanicalOrElectronic)
                 .HasColumnName("MECHANICAL_OR_ELECTRONIC").HasMaxLength(2);
-            e.HasOne(p => p.AccountingCompany).WithMany(c => c.PartsResponsibleFor).HasForeignKey("ACCOUNTING_COMPANY");
+            e.HasOne(p => p.AccountingCompany).WithMany(c => c.PartsResponsibleFor)
+                .HasForeignKey("ACCOUNTING_COMPANY");
             e.HasOne(p => p.PreferredSupplier).WithMany(s => s.PartsPreferredSupplierOf)
                 .HasForeignKey("PREFERRED_SUPPLIER");
             e.HasOne<ParetoClass>(p => p.ParetoClass).WithMany(c => c.Parts).HasForeignKey("PARETO_CODE");
@@ -125,7 +127,7 @@
 
         private void BuildProductAnalysisCodes(ModelBuilder builder)
         {
-            var e = builder.Entity<ProductAnalysisCode>();
+            var e = builder.Entity<ProductAnalysisCode>().ToTable("PRODUCT_ANALYSIS_CODES");
             e.HasKey(p => p.ProductCode);
             e.Property(p => p.ProductCode).HasColumnName("PRODUCT_CODE").HasMaxLength(10);
             e.Property(p => p.Description).HasColumnName("DESCRIPTION").HasMaxLength(100);
