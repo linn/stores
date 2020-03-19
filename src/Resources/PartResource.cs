@@ -10,7 +10,7 @@
 
         public string Description { get; set; }
 
-        public bool? RootProduct { get; set; }
+        public string RootProduct { get; set; }
 
         public bool? StockControlled { get; set; }
 
@@ -18,7 +18,11 @@
 
         public string ProductAnalysisCode { get; set; }
 
+        public string ProductAnalysisCodeDescription { get; set; }
+
         public string ParetoCode { get; set; }
+
+        public string ParetoDescription { get; set; }
 
         public string AccountingCompany { get; set; }
 
@@ -26,7 +30,7 @@
 
         public bool? SingleSourcePart { get; set; }
 
-        public bool PerformanceCriticalPart { get; set; }
+        public bool? PerformanceCriticalPart { get; set; }
 
         public string SafetyDataDirectory { get; set; }
 
@@ -36,7 +40,7 @@
 
         public string SafetyCertificateExpirationDate { get; set; }
 
-        public string LinnProduced { get; set; }
+        public bool? LinnProduced { get; set; }
 
         public string DecrementRule { get; set; }
 
@@ -53,6 +57,8 @@
         public string UnitOfMeasure { get; set; }
 
         public int? PreferredSupplier { get; set; }
+
+        public string PreferredSupplierName { get; set; }
 
         public string Currency { get; set; }
 
@@ -72,7 +78,7 @@
 
         public decimal? SparesRequirement { get; set; }
 
-        public string IgnoreWorkstationStock { get; set; }
+        public bool? IgnoreWorkstationStock { get; set; }
 
         public int? ImdsIdNumber { get; set; }
 

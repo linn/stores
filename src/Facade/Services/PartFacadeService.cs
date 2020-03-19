@@ -49,7 +49,7 @@
                                    ? this.productAnalysisCodeRepository.FindById(resource.ProductAnalysisCode)
                                    : null,
                            PsuPart = this.ToYesOrNoString(resource.PsuPart),
-                           RootProduct = this.ToYesOrNoString(resource.RootProduct),
+                           RootProduct = resource.RootProduct,
                            SafetyCertificateExpirationDate =
                                string.IsNullOrEmpty(resource.SafetyCertificateExpirationDate)
                                    ? (DateTime?)null
@@ -75,7 +75,7 @@
                                              ? this.productAnalysisCodeRepository.FindById(resource.ProductAnalysisCode)
                                              : null;
             entity.PsuPart = this.ToYesOrNoString(resource.PsuPart);
-            entity.RootProduct = this.ToYesOrNoString(resource.RootProduct);
+            entity.RootProduct = resource.RootProduct;
             entity.SafetyCertificateExpirationDate = string.IsNullOrEmpty(resource.SafetyCertificateExpirationDate)
                                                          ? (DateTime?)null
                                                          : DateTime.Parse(resource.SafetyCertificateExpirationDate);
