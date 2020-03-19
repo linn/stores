@@ -13,7 +13,8 @@ const oidcConfig = {
     silent_redirect_uri: `${host}/inventory/signin-oidc-silent`,
     automaticSilentRenew: true,
     filterProtocolClaims: true,
-    loadUserInfo: true
+    loadUserInfo: true,
+    monitorSession: false
 };
 
 const userManager = createUserManager(oidcConfig);
