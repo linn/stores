@@ -84,6 +84,7 @@
             e.Property(p => p.NonForecastRequirement).HasColumnName("NON_FC_REQT");
             e.Property(p => p.OneOffRequirement).HasColumnName("ONE_OFF_REQT");
             e.Property(p => p.SparesRequirement).HasColumnName("SPARES_REQT");
+            e.Property(p => p.PlannedSurplus).HasColumnName("PLANNED_SURPLUS").HasMaxLength(1);
             e.Property(p => p.IgnoreWorkstationStock)
                 .HasColumnName("IGNORE_WORKSTN_STOCK").HasMaxLength(1);
             e.Property(p => p.ImdsIdNumber).HasColumnName("IMDS_ID_NUMBER");
