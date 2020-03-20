@@ -13,6 +13,7 @@ import {
     //DatePicker
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
+import GeneralTab from './GeneralTab';
 
 function Part({
     editStatus,
@@ -142,19 +143,11 @@ function Part({
                                     <Tab label="LifeCycle" />
                                 </Tabs>
                                 {tab === 0 && (
-                                    <Grid item xs={12}>
-                                        <InputField
-                                            fullWidth
-                                            disabled
-                                            value={part.rootProduct}
-                                            label="Root Product"
-                                            maxLength={10}
-                                            required
-                                            onChange={handleFieldChange}
-                                            propertyName="rootProduct"
-                                        />
-                                    </Grid>
-                                )}{' '}
+                                    <GeneralTab
+                                        accountingCompany={part.accountingCompany}
+                                        handleFieldChange={handleFieldChange}
+                                    />
+                                )}
                             </Grid>
                             {/* <Grid item xs={8}>
                                 <DatePicker

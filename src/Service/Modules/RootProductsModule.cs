@@ -1,0 +1,27 @@
+﻿namespace Linn.Stores.Service.Modules
+{
+    using Linn.Stores.Facade.Services;
+    using Linn.Stores.Service.Models;
+
+    using Nancy;
+
+    public sealed class RootProductsModule : NancyModule
+    {
+        private readonly IRootProductService rootProductsService;
+
+        public RootProductsModule(IRootProductService rootProductsFacadeService)
+        {
+            this.rootProductsService = rootProductsFacadeService;
+            this.Get("inventory/root-products", _ => this.GetRootProducts());
+        }
+
+        private object GetRootProducts()
+        {
+            var results = this.rootProductsService.GetValid();
+            return this.Negotiate
+                .WithModel(results)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
+        }
+    }
+}

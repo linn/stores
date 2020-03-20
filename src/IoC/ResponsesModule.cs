@@ -20,6 +20,14 @@
                 .As<IResourceBuilder<AccountingCompany>>();
             builder.RegisterType<AccountingCompaniesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<AccountingCompany>>>();
+            builder.RegisterType<RootProductResourceBuilder>()
+                .As<IResourceBuilder<RootProduct>>();
+            builder.RegisterType<RootProductsResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<RootProduct>>>();
+            builder.RegisterType<DepartmentResourceBuilder>()
+                .As<IResourceBuilder<Department>>();
+            builder.RegisterType<DepartmentsResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<Department>>>();
         }
     }
 }

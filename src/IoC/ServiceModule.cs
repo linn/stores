@@ -19,6 +19,8 @@
             builder.RegisterType<PartFacadeService>()
                 .As<IFacadeService<Part, int, PartResource, PartResource>>();
             builder.RegisterType<AccountingCompanyService>().As<IAccountingCompanyService>();
+            builder.RegisterType<RootProductsService>().As<IRootProductService>();
+            builder.RegisterType<DepartmentService>().As<IDepartmentsService>();
         }
     }
 }

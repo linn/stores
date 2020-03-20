@@ -23,6 +23,8 @@
 
         public DbQuery<Department> Departments { get; set; }
 
+        public DbQuery<RootProduct> RootProducts { get; set; }
+
         public DbSet<AccountingCompany> AccountingCompanies { get; set; }
 
         public DbSet<Employee> Employees { get; set; }
@@ -31,10 +33,11 @@
         {
             this.BuildParts(builder);
             this.BuildParetoClasses(builder);
-            this.BuildDepartments(builder);
+            this.QueryDepartments(builder);
             this.BuildProductAnalysisCodes(builder);
             this.BuildAccountingCompanies(builder);
             this.BuildEmployees(builder);
+            this.QueryRootProducts(builder);
             base.OnModelCreating(builder);
         }
 
@@ -159,11 +162,12 @@
             e.Property(p => p.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
         }
 
-        private void BuildDepartments(ModelBuilder builder)
+        private void QueryDepartments(ModelBuilder builder)
         {
             var e = builder.Query<Department>().ToView("LINN_DEPARTMENTS");
             e.Property(d => d.DepartmentCode).HasColumnName("DEPARTMENT_CODE").HasMaxLength(10);
             e.Property(d => d.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
+            e.Property(d => d.DateClosed).HasColumnName("DATE_CLOSED");
         }
 
         private void BuildProductAnalysisCodes(ModelBuilder builder)
@@ -172,6 +176,14 @@
             e.HasKey(p => p.ProductCode);
             e.Property(p => p.ProductCode).HasColumnName("PRODUCT_CODE").HasMaxLength(10);
             e.Property(p => p.Description).HasColumnName("DESCRIPTION").HasMaxLength(100);
+        }
+
+        private void QueryRootProducts(ModelBuilder builder)
+        {
+            var q = builder.Query<RootProduct>().ToView("ROOT_PRODS");
+            q.Property(p => p.Name).HasColumnName("ROOT_PRODUCT");
+            q.Property(p => p.Description).HasColumnName("DESCRIPTION");
+            q.Property(p => p.DateInvalid).HasColumnName("DATE_INVALID");
         }
     }
 }

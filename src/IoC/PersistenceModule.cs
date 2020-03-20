@@ -25,10 +25,11 @@
 
             builder.RegisterType<PartRepository>().As<IRepository<Part, int>>();
             builder.RegisterType<ParetoClassRepository>().As<IRepository<ParetoClass, string>>();
-            builder.RegisterType<DepartmentRepository>().As<IRepository<Department, string>>();
+            builder.RegisterType<DepartmentRepository>().As<IQueryRepository<Department>>();
             builder.RegisterType<ProductAnalysisCodeRepository>().As<IRepository<ProductAnalysisCode, string>>();
             builder.RegisterType<AccountingCompanyRepository>().As<IQueryRepository<AccountingCompany>>();
             builder.RegisterType<EmployeeRepository>().As<IRepository<Employee, int>>();
+            builder.RegisterType<RootProductRepository>().As<IQueryRepository<RootProduct>>();
         }
     }
 }
