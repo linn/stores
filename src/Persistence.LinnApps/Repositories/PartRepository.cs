@@ -27,6 +27,9 @@
                 .Include(p => p.AccountingCompany)
                 .Include(p => p.ParetoClass)
                 .Include(p => p.ProductAnalysisCode)
+                .Include(p => p.CreatedBy)
+                .Include(p => p.MadeLiveBy)
+                .Include(p => p.PhasedOutBy)
                 .ToList()
                 .FirstOrDefault();
         }
