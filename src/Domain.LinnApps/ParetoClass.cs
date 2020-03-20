@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Parts;
 
     public class ParetoClass
     {

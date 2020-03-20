@@ -4,9 +4,8 @@
     using System.Linq;
     using System.Linq.Expressions;
 
-    using Domain.LinnApps.Parts;
-
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.Parts;
 
     using Microsoft.EntityFrameworkCore;
 

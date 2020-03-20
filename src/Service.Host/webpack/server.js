@@ -10,7 +10,7 @@ new WebpackDevServer(webpack(config), {
     historyApiFallback: true,
     proxy: {
         '/stores/assets': {
-            target: 'http://localhost:51101',
+            target: 'http://localhost:51698',
             secure: false
         }
     }

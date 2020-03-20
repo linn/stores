@@ -3,11 +3,10 @@
     using System.Collections.Generic;
     using System.Security.Claims;
 
-    using Domain.LinnApps.Parts;
-
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Resources;
     using Linn.Stores.Service.Modules;

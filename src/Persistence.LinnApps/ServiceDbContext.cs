@@ -3,6 +3,7 @@
     using Linn.Common.Configuration;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Sos;
 
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
@@ -28,6 +29,8 @@
         public DbSet<AccountingCompany> AccountingCompanies { get; set; }
 
         public DbSet<Employee> Employees { get; set; }
+        
+        public DbSet<SosOption> SosOptions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -38,6 +41,7 @@
             this.BuildAccountingCompanies(builder);
             this.BuildEmployees(builder);
             this.QueryRootProducts(builder);
+            this.BuildSosOptions(builder);
             base.OnModelCreating(builder);
         }
 
@@ -184,6 +188,17 @@
             q.Property(p => p.Name).HasColumnName("ROOT_PRODUCT");
             q.Property(p => p.Description).HasColumnName("DESCRIPTION");
             q.Property(p => p.DateInvalid).HasColumnName("DATE_INVALID");
+        }
+        
+        private void BuildSosOptions(ModelBuilder builder)
+        {
+            var e = builder.Entity<SosOption>().ToTable("SOS_OPTIONS");
+            e.HasKey(p => p.JobId);
+            e.Property(p => p.JobId).HasColumnName("JOB_ID");
+            e.Property(p => p.StockPoolCode).HasColumnName("STOCK_POOL_CODE").HasMaxLength(10);
+            e.Property(p => p.AccountId).HasColumnName("ACCOUNT_ID");
+            e.Property(p => p.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
+            e.Property(p => p.DespatchLocationCode).HasColumnName("DESPATCH_LOCATION_CODE").HasMaxLength(10);
         }
     }
 }

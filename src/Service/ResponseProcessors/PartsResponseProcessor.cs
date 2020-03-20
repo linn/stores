@@ -2,10 +2,9 @@
 {
     using System.Collections.Generic;
 
-    using Domain.LinnApps.Parts;
-
     using Linn.Common.Facade;
     using Linn.Common.Nancy.Facade;
+    using Linn.Stores.Domain.LinnApps.Parts;
 
     public class PartsResponseProcessor : JsonResponseProcessor<IEnumerable<Part>>
     {

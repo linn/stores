@@ -1,15 +1,12 @@
 ﻿namespace Linn.Stores.IoC
 {
-    using Amazon.SQS;
-
     using Autofac;
 
-    using Linn.Common.Logging;
-    using Linn.Common.Logging.AmazonSqs;
     using Linn.Common.Persistence;
     using Linn.Common.Persistence.EntityFramework;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Persistence.LinnApps;
     using Linn.Stores.Persistence.LinnApps.Repositories;
 
@@ -30,6 +27,7 @@
             builder.RegisterType<AccountingCompanyRepository>().As<IQueryRepository<AccountingCompany>>();
             builder.RegisterType<EmployeeRepository>().As<IRepository<Employee, int>>();
             builder.RegisterType<RootProductRepository>().As<IQueryRepository<RootProduct>>();
+            builder.RegisterType<SosOptionRepository>().As<IRepository<SosOption, int>>();
         }
     }
 }

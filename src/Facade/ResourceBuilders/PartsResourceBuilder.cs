@@ -1,13 +1,11 @@
 ﻿namespace Linn.Stores.Facade.ResourceBuilders
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 
-    using Domain.LinnApps.Parts;
-
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources;
 
     public class PartsResourceBuilder : IResourceBuilder<IEnumerable<Part>>

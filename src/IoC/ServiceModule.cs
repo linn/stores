@@ -1,26 +1,33 @@
 ﻿namespace Linn.Stores.IoC
 {
-    using Amazon.SQS;
     using Autofac;
 
-    using Domain.LinnApps.Parts;
-
     using Linn.Common.Facade;
-    using Linn.Common.Logging;
-    using Linn.Common.Logging.AmazonSqs;
+    using Linn.Stores.Domain.LinnApps.Allocation;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
+    using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;
+    using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
 
     public class ServiceModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
+            // domain services
+            builder.RegisterType<AllocationService>().As<IAllocationService>();
+
             // facade services
             builder.RegisterType<PartFacadeService>()
                 .As<IFacadeService<Part, int, PartResource, PartResource>>();
             builder.RegisterType<AccountingCompanyService>().As<IAccountingCompanyService>();
             builder.RegisterType<RootProductsService>().As<IRootProductService>();
             builder.RegisterType<DepartmentService>().As<IDepartmentsService>();
+            builder.RegisterType<AllocationFacadeService>().As<IAllocationFacadeService>();
+
+            // proxy
+            builder.RegisterType<SosPack>().As<ISosPack>();
+            builder.RegisterType<DatabaseService>().As<IDatabaseService>();
         }
     }
 }
