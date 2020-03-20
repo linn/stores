@@ -83,5 +83,49 @@
         public decimal? ImdsWeight { get; set; }
 
         public string MechanicalOrElectronic { get; set; }
+
+        public string QcOnReceipt { get; set; }
+
+        public string QcInformation { get; set; }
+
+        public string RawOrFinished { get; set; }
+
+        public int? OurInspectionWeeks { get; set; }
+
+        public int? SafetyWeeks { get; set; }
+
+        public string RailMethod { get; set; }
+
+        public decimal? MinStockRail { get; set; }
+
+        public decimal? MaxStockRail { get; set; }
+
+        public string SecondStageBoard { get; set; }
+
+        public string SecondStageDescription { get; set; }
+
+        public string TqmsCategoryOverride { get; set; }
+
+        public string StockNotes { get; set; }
+
+        public DateTime? DateCreated { get; set; }
+
+        public Employee CreatedBy { get; set; }
+
+        public DateTime? DateLive { get; set; }
+
+        public Employee MadeLiveBy { get; set; }
+
+        public DateTime? DatePhasedOut { get; set; }
+
+        public Employee PhasedOutBy { get; set; }
+
+        public string ReasonPhasedOut { get; set; }
+
+        public string ScrapOrConvert { get; set; }
+
+        public string PurchasingPhaseOutType { get; set; }
+
+        public DateTime? DateDesignObsolete { get; set; }
     }
 }
