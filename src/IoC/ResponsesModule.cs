@@ -7,6 +7,7 @@
     using Domain.LinnApps.Parts;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.ResourceBuilders;
 
     public class ResponsesModule : Module
@@ -15,6 +16,10 @@
         {
             builder.RegisterType<PartResourceBuilder>().As<IResourceBuilder<Part>>();
             builder.RegisterType<PartsResourceBuilder>().As<IResourceBuilder<IEnumerable<Part>>>();
+            builder.RegisterType<AccountingCompanyResourceBuilder>()
+                .As<IResourceBuilder<AccountingCompany>>();
+            builder.RegisterType<AccountingCompaniesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<AccountingCompany>>>();
         }
     }
 }

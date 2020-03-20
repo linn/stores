@@ -59,6 +59,7 @@
             var q = builder.Entity<AccountingCompany>().ToTable("ACCOUNTING_COMPANIES");
             q.HasKey(a => a.Name);
             q.Property(c => c.Name).HasColumnName("ACCOUNTING_COMPANY");
+            q.Property(c => c.DateInvalid).HasColumnName("DATE_INVALID");
             q.Property(c => c.Description).HasColumnName("DESCRIPTION");
         }
 

@@ -5,7 +5,7 @@
     using System.Linq.Expressions;
 
     using Linn.Common.Persistence;
-    using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps;
 
     public class AccountingCompanyRepository : IQueryRepository<AccountingCompany>
     {
@@ -23,7 +23,7 @@
 
         public IQueryable<AccountingCompany> FilterBy(Expression<Func<AccountingCompany, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.AccountingCompanies.Where(expression);
         }
 
         public IQueryable<AccountingCompany> FindAll()
