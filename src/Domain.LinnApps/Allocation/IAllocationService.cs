@@ -7,7 +7,7 @@
         AllocationStart StartAllocation(
             string stockPoolCode,
             string despatchLocationCode,
-            int accountId,
+            int? accountId,
             string articleNumber);
     }
 }

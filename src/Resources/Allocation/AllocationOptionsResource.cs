@@ -6,7 +6,7 @@
 
         public string DespatchLocationCode { get; set; }
 
-        public int AccountId { get; set; }
+        public int? AccountId { get; set; }
 
         public string ArticleNumber { get; set; }
     }

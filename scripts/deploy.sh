@@ -32,14 +32,14 @@ if [ "${TRAVIS_BRANCH}" = "master" ]; then
   fi
 else
   # not master - deploy to int
-  echo deploy to int
+  echo do not deploy to int
 
-    aws s3 cp s3://$S3_BUCKET_NAME/stores/int.env ./secrets.env
+  #  aws s3 cp s3://$S3_BUCKET_NAME/stores/int.env ./secrets.env
 
-    STACK_NAME=stores-int
-    APP_ROOT=http://app-int.linn.co.uk
-    PROXY_ROOT=http://app.linn.co.uk
-    ENV_SUFFIX=-int
+  #  STACK_NAME=stores-int
+  #  APP_ROOT=http://app-int.linn.co.uk
+  #  PROXY_ROOT=http://app.linn.co.uk
+  #  ENV_SUFFIX=-int
 fi
 
 # load the secret variables but hide the output from the travis log
