@@ -7,6 +7,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Parts;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class PartRepository : IRepository<Part, int>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -21,6 +23,12 @@
             return this.serviceDbContext
                 .Parts
                 .Where(p => p.Id == key)
+                .Include(p => p.AccountingCompany)
+                .Include(p => p.ParetoClass)
+                .Include(p => p.ProductAnalysisCode)
+                .Include(p => p.CreatedBy)
+                .Include(p => p.MadeLiveBy)
+                .Include(p => p.PhasedOutBy)
                 .ToList()
                 .FirstOrDefault();
         }
