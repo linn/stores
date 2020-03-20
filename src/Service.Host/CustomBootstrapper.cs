@@ -60,7 +60,6 @@
                     builder.RegisterModule<AmazonSqsModule>();
                     builder.RegisterModule<LoggingModule>();
                     builder.RegisterModule<ServiceModule>();
-                    builder.RegisterModule<PersistenceModule>();
                     builder.RegisterModule<ResponsesModule>();
                 });
 
@@ -72,12 +71,8 @@
             lifetimeScope.Update(
                 builder =>
                 {
-                    builder.RegisterModule<AmazonCredentialsModule>();
-                    builder.RegisterModule<AmazonSqsModule>();
-                    builder.RegisterModule<LoggingModule>();
                     builder.RegisterModule<ServiceModule>();
                     builder.RegisterModule<PersistenceModule>();
-                    builder.RegisterModule<ResponsesModule>();
                 });
 
             base.ConfigureRequestContainer(lifetimeScope, context);

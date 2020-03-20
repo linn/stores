@@ -4,9 +4,8 @@
     using System.Linq;
     using System.Linq.Expressions;
 
-    using Domain.LinnApps;
-
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps;
 
     public class DepartmentRepository : IRepository<Department, string>
     {

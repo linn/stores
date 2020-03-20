@@ -3,10 +3,9 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Domain.LinnApps.Parts;
-
     using Linn.Common.Facade;
     using Linn.Common.Resources;
+    using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources;
 
     public class PartResourceBuilder : IResourceBuilder<Part>

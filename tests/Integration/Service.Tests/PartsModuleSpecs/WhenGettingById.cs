@@ -1,10 +1,9 @@
 ﻿namespace Linn.Stores.Service.Tests.PartsModuleSpecs
 {
-    using Domain.LinnApps.Parts;
-
     using FluentAssertions;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources;
 
     using Nancy;

@@ -3,11 +3,10 @@
     using System;
     using System.Linq.Expressions;
 
-    using Domain.LinnApps.Parts;
-
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources;
 
     public class PartFacadeService : FacadeService<Part, int, PartResource, PartResource>

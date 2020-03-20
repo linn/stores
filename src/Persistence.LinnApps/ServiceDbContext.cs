@@ -3,6 +3,7 @@
     using Linn.Common.Configuration;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Sos;
 
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
@@ -23,12 +24,15 @@
 
         public DbQuery<Department> Departments { get; set; }
 
+        public DbSet<SosOption> SosOptions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
             this.BuildParetoClasses(builder);
             this.BuildDepartments(builder);
             this.BuildProductAnalysisCodes(builder);
+            this.BuildSosOptions(builder);
             base.OnModelCreating(builder);
         }
 
@@ -92,6 +96,17 @@
             e.HasKey(p => p.ProductCode);
             e.Property(p => p.ProductCode).HasColumnName("PRODUCT_CODE").HasMaxLength(10);
             e.Property(p => p.Description).HasColumnName("DESCRIPTION").HasMaxLength(100);
+        }
+
+        private void BuildSosOptions(ModelBuilder builder)
+        {
+            var e = builder.Entity<SosOption>().ToTable("SOS_OPTIONS");
+            e.HasKey(p => p.JobId);
+            e.Property(p => p.JobId).HasColumnName("JOB_ID");
+            e.Property(p => p.StockPoolCode).HasColumnName("STOCK_POOL_CODE").HasMaxLength(10);
+            e.Property(p => p.AccountId).HasColumnName("ACCOUNT_ID");
+            e.Property(p => p.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
+            e.Property(p => p.DespatchLocationCode).HasColumnName("DESPATCH_LOCATION_CODE").HasMaxLength(10);
         }
     }
 }

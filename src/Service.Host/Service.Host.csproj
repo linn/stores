@@ -41,6 +41,5 @@
     <Folder Include="client\src\reducers\__tests__\" />
     <Folder Include="client\src\selectors\__tests__\" />
     <Folder Include="coverage\" />
-    <Folder Include="Modules\" />
   </ItemGroup>
 </Project>

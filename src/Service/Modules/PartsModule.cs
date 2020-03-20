@@ -1,7 +1,7 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
-    using Domain.LinnApps.Parts;
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources;
     using Linn.Stores.Service.Models;
 
@@ -10,9 +10,9 @@
 
     public sealed class PartsModule : NancyModule
     {
-        private readonly IFacadeService<Part, long, PartResource, PartResource> partsFacadeService;
+        private readonly IFacadeService<Part, int, PartResource, PartResource> partsFacadeService;
 
-        public PartsModule(IFacadeService<Part, long, PartResource, PartResource> partsFacadeService)
+        public PartsModule(IFacadeService<Part, int, PartResource, PartResource> partsFacadeService)
         {
             this.partsFacadeService = partsFacadeService;
             this.Get("/parts/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
@@ -51,7 +51,7 @@
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
 
-        private object UpdatePart(long id)
+        private object UpdatePart(int id)
         {
             var resource = this.Bind<PartResource>();
             var result = this.partsFacadeService.Update(id, resource);
