@@ -32,6 +32,8 @@
         
         public DbSet<SosOption> SosOptions { get; set; }
 
+        public DbSet<Carrier> Carriers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -42,6 +44,7 @@
             this.BuildEmployees(builder);
             this.QueryRootProducts(builder);
             this.BuildSosOptions(builder);
+            this.BuildCarriers(builder);
             base.OnModelCreating(builder);
         }
 
@@ -199,6 +202,16 @@
             e.Property(p => p.AccountId).HasColumnName("ACCOUNT_ID");
             e.Property(p => p.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
             e.Property(p => p.DespatchLocationCode).HasColumnName("DESPATCH_LOCATION_CODE").HasMaxLength(10);
+        }
+
+        private void BuildCarriers(ModelBuilder builder)
+        {
+            var e = builder.Entity<Carrier>().ToTable("CARRIERS");
+            e.HasKey(c => c.CarrierCode);
+            e.Property(c => c.CarrierCode).HasColumnName("CARRIER_CODE").HasMaxLength(10);
+            e.Property(c => c.Name).HasColumnName("NAME");
+            e.Property(c => c.OrganisationId).HasColumnName("ORG_ID");
+            e.Property(c => c.DateInvalid).HasColumnName("DATE_INVALID");
         }
     }
 }

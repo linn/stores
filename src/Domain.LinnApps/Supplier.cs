@@ -12,5 +12,7 @@
         public string Description { get; set; }
 
         public IEnumerable<Part> PartsPreferredSupplierOf { get; set; }
+
+        public string CountryCode { get; set; }
     }
 }
