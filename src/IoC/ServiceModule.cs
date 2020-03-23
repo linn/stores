@@ -24,6 +24,10 @@
             builder.RegisterType<RootProductsService>().As<IRootProductService>();
             builder.RegisterType<DepartmentService>().As<IDepartmentsService>();
             builder.RegisterType<AllocationFacadeService>().As<IAllocationFacadeService>();
+            builder.RegisterType<SernosSequencesService>().As<ISernosSequencesService>();
+            builder.RegisterType<UnitsOfMeasureService>().As<IUnitsOfMeasureService>();
+            builder.RegisterType<PartCategoryService>().As<IPartCategoryService>();
+            builder.RegisterType<SuppliersService>().As<ISuppliersService>();
 
             // proxy
             builder.RegisterType<SosPack>().As<ISosPack>();
