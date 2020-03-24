@@ -55,7 +55,7 @@
                            MechanicalOrElectronic = part.MechanicalOrElectronic,
                            RootProduct = part.RootProduct,
                            PreferredSupplier = part.PreferredSupplier?.Id,
-                           PreferredSupplierName = part.PreferredSupplier?.Description,
+                           PreferredSupplierName = part.PreferredSupplier?.Name,
                            SecondStageDescription = part.SecondStageDescription,
                            RailMethod = part.RailMethod,
                            DatePhasedOut = part.DatePhasedOut?.ToString("o"),

@@ -28,6 +28,10 @@
             builder.RegisterType<EmployeeRepository>().As<IRepository<Employee, int>>();
             builder.RegisterType<RootProductRepository>().As<IQueryRepository<RootProduct>>();
             builder.RegisterType<SosOptionRepository>().As<IRepository<SosOption, int>>();
+            builder.RegisterType<SernosSequenceRepository>().As<IQueryRepository<SernosSequence>>();
+            builder.RegisterType<UnitsOfMeasureRepository>().As<IQueryRepository<UnitOfMeasure>>();
+            builder.RegisterType<PartCategoryRepository>().As<IQueryRepository<PartCategory>>();
+            builder.RegisterType<SupplierRepository>().As<IQueryRepository<Supplier>>();
         }
     }
 }
