@@ -4,6 +4,10 @@ import * as itemTypes from '../itemTypes';
 export const partActionTypes = makeActionTypes(itemTypes.part.actionType);
 export const partsActionTypes = makeActionTypes(itemTypes.parts.actionType, false);
 
+export const accountingCompaniesActionTypes = makeActionTypes(
+    itemTypes.accountingCompanies.actionType
+);
+
 export const departmentsActionTypes = makeActionTypes(itemTypes.departments.actionType);
 
 export const rootProductsActionTypes = makeActionTypes(itemTypes.rootProducts.actionType);
