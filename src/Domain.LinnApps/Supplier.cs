@@ -1,6 +1,5 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
-    using System.Collections;
     using System.Collections.Generic;
 
     using Linn.Stores.Domain.LinnApps.Parts;
@@ -9,7 +8,7 @@
     {
         public int Id { get; set; }
 
-        public string Description { get; set; }
+        public string Name { get; set; }
 
         public IEnumerable<Part> PartsPreferredSupplierOf { get; set; }
 

@@ -32,7 +32,13 @@
         
         public DbSet<SosOption> SosOptions { get; set; }
 
-        public DbSet<Carrier> Carriers { get; set; }
+        public DbQuery<SernosSequence> SernosSequences { get; set; }
+
+        public DbQuery<UnitOfMeasure> UnitsOfMeasure { get; set; }
+
+        public DbQuery<PartCategory> PartCategories { get; set; }
+
+        public DbSet<Supplier> Suppliers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -44,6 +50,10 @@
             this.BuildEmployees(builder);
             this.QueryRootProducts(builder);
             this.BuildSosOptions(builder);
+            this.QuerySernosSequences(builder);
+            this.QueryUnitsOfMeasure(builder);
+            this.QueryPartCategories(builder);
+            this.BuildSuppliers(builder);
             this.BuildCarriers(builder);
             base.OnModelCreating(builder);
         }
@@ -81,6 +91,15 @@
             q.Property(e => e.Id).HasColumnName("USER_NUMBER");
             q.Property(e => e.FullName).HasColumnName("USER_NAME");
             q.Property(e => e.DateInvalid).HasColumnName("DATE_INVALID");
+        }
+
+        private void BuildSuppliers(ModelBuilder builder)
+        {
+            var q = builder.Entity<Supplier>();
+            q.HasKey(e => e.Id);
+            q.ToTable("SUPPLIERS");
+            q.Property(e => e.Id).HasColumnName("SUPPLIER_ID");
+            q.Property(e => e.Name).HasColumnName("SUPPLIER_NAME").HasMaxLength(50);
         }
 
         private void BuildParts(ModelBuilder builder)
@@ -202,6 +221,26 @@
             e.Property(p => p.AccountId).HasColumnName("ACCOUNT_ID");
             e.Property(p => p.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
             e.Property(p => p.DespatchLocationCode).HasColumnName("DESPATCH_LOCATION_CODE").HasMaxLength(10);
+        }
+
+        private void QuerySernosSequences(ModelBuilder builder)
+        {
+            var q = builder.Query<SernosSequence>().ToView("SERNOS_SEQUENCES");
+            q.Property(p => p.Sequence).HasColumnName("SEQUENCE_NAME");
+            q.Property(p => p.Description).HasColumnName("DESCRIPTION");
+        }
+
+        private void QueryUnitsOfMeasure(ModelBuilder builder)
+        {
+            builder.Query<UnitOfMeasure>().ToView("UNITS_OF_MEASURE");
+            builder.Query<UnitOfMeasure>().Property(p => p.Unit).HasColumnName("UNIT_OF_MEASURE");
+        }
+
+        private void QueryPartCategories(ModelBuilder builder)
+        {
+            builder.Query<PartCategory>().ToView("PART_CATEGORIES");
+            builder.Query<PartCategory>().Property(p => p.Category).HasColumnName("CATEGORY");
+            builder.Query<PartCategory>().Property(p => p.Description).HasColumnName("DESCRIPTION");
         }
 
         private void BuildCarriers(ModelBuilder builder)
