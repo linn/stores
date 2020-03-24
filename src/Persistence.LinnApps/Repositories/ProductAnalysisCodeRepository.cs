@@ -7,26 +7,13 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
 
-    public class ProductAnalysisCodeRepository : IRepository<ProductAnalysisCode, string>
+    public class ProductAnalysisCodeRepository : IQueryRepository<ProductAnalysisCode>
     {
-        public ProductAnalysisCode FindById(string key)
-        {
-            throw new NotImplementedException();
-        }
+        private readonly ServiceDbContext serviceDbContext;
 
-        public IQueryable<ProductAnalysisCode> FindAll()
+        public ProductAnalysisCodeRepository(ServiceDbContext serviceDbContext)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Add(ProductAnalysisCode entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Remove(ProductAnalysisCode entity)
-        {
-            throw new NotImplementedException();
+            this.serviceDbContext = serviceDbContext;
         }
 
         public ProductAnalysisCode FindBy(Expression<Func<ProductAnalysisCode, bool>> expression)
@@ -37,6 +24,11 @@
         public IQueryable<ProductAnalysisCode> FilterBy(Expression<Func<ProductAnalysisCode, bool>> expression)
         {
             throw new NotImplementedException();
+        }
+
+        public IQueryable<ProductAnalysisCode> FindAll()
+        {
+            return this.serviceDbContext.ProductAnalysisCodes;
         }
     }
 }

@@ -19,6 +19,9 @@ function GeneralTab({
     accountingCompany,
     handleFieldChange,
     accountingCompanies,
+    productAnalysisCodes,
+    productAnalysisCode,
+    productAnalysisCodeDescription,
     rootProduct,
     searchRootProducts,
     rootProductsSearchResults,
@@ -59,6 +62,31 @@ function GeneralTab({
                 />
             </Grid>
             <Grid item xs={8} />
+            <Grid itemx xs={4}>
+                <Dropdown
+                    label="Product Analysis Code"
+                    propertyName="productAnalysisCode"
+                    items={productAnalysisCodes.map(c => ({
+                        id: c.productCode,
+                        displayText: c.description
+                    }))}
+                    fullWidth
+                    allowNoValue
+                    value={productAnalysisCode}
+                    onChange={handleFieldChange}
+                />
+            </Grid>
+            <Grid item xs={8}>
+                <InputField
+                    fullWidth
+                    value={productAnalysisCodeDescription}
+                    label="Description"
+                    required
+                    disabled
+                    onChange={handleFieldChange}
+                    propertyName="ProductAnalysisCodeDescriptions"
+                />
+            </Grid>
         </Grid>
     );
 }

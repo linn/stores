@@ -19,3 +19,7 @@ export const suppliersActionTypes = makeActionTypes(itemTypes.suppliers.actionTy
 export const sernosSequencesActionTypes = makeActionTypes(itemTypes.sernosSequences.actionType);
 
 export const unitsOfMeasureActionTypes = makeActionTypes(itemTypes.unitsOfMeasure.actionType);
+
+export const productAnalysisCodesActionTypes = makeActionTypes(
+    itemTypes.productAnalysisCodes.actionType
+);

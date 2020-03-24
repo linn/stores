@@ -17,10 +17,13 @@
 
         private readonly IPartCategoryService partCategoryService;
 
+        private readonly IProductAnalysisCodeService productAnalysisCodeService;
+
         public PartsModule(
             IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
-            IPartCategoryService partCategoryService)
+            IPartCategoryService partCategoryService,
+            IProductAnalysisCodeService productAnalysisCodeService)
         {
             this.partsFacadeService = partsFacadeService;
 
@@ -35,6 +38,10 @@
 
             this.partCategoryService = partCategoryService;
             this.Get("inventory/part-categories", _ => this.GetPartCategories());
+
+            this.productAnalysisCodeService = productAnalysisCodeService;
+            this.Get("inventory/product-analysis-codes", _ => this.GetProductAnalysisCodes());
+            this.Get("inventory/product-analysis-codes", _ => this.GetProductAnalysisCodes());
         }
 
         private object GetPart(int id)
@@ -84,6 +91,13 @@
         private object GetPartCategories()
         {
             var result = this.partCategoryService.GetCategories();
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetProductAnalysisCodes()
+        {
+            var result = this.productAnalysisCodeService.GetProductAnalysisCodes();
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

@@ -6,6 +6,7 @@ import accountingCompanies from './accountingCompanies';
 import parts from './parts/parts';
 import part from './parts/part';
 import partCategories from './partCategories';
+import productAnalysisCodes from './productAnalysisCodes';
 import rootProducts from './rootProducts';
 import sernosSequences from './sernosSequences';
 import suppliers from './suppliers';
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
     part,
     partCategories,
     parts,
+    productAnalysisCodes,
     rootProducts,
     sernosSequences,
     suppliers,

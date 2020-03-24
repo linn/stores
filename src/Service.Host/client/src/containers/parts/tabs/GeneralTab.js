@@ -14,10 +14,12 @@ import accountingCompaniesSelectors from '../../../selectors/accountingCompanies
 import departmentsSelectors from '../../../selectors/departmentsSelectors';
 import rootProductsSelectors from '../../../selectors/rootProductsSelectors';
 import partCategoriesSelectors from '../../../selectors/partCategoriesSelectors';
+import productAnalysisCodesSelectors from '../../../selectors/productAnalysisCodesSelectors';
 import sernosSequencesSelectors from '../../../selectors/sernosSequencesSelectors';
 import suppliersSelectors from '../../../selectors/suppliersSelectors';
 import unitsOfMeasureSelectors from '../../../selectors/unitsOfMeasureSelectors';
 import rootProductsActions from '../../../actions/rootProductsActions';
+import productAnalysisCodesActions from '../../../actions/productAnalysisCodesActions';
 // import * as itemTypes from '../../itemTypes';
 
 const mapStateToProps = (state, ownProps) => ({
@@ -32,7 +34,10 @@ const mapStateToProps = (state, ownProps) => ({
     unitsOfMeasure: unitsOfMeasureSelectors.getItems(state),
     accountingCompanies: accountingCompaniesSelectors.getItems(state),
     rootProductsSearchResults: rootProductsSelectors.getSearchItems(state),
-    rootProductsSearchLoading: rootProductsSelectors.getSearchLoading(state)
+    rootProductsSearchLoading: rootProductsSelectors.getSearchLoading(state),
+    productAnalysisCode: ownProps.productAnalysisCode,
+    productAnalysisCodeDescription: ownProps.productAnalysisCodeDescription,
+    productAnalysisCodes: productAnalysisCodesSelectors.getItems(state)
 });
 
 const initialise = () => dispatch => {
@@ -42,7 +47,7 @@ const initialise = () => dispatch => {
     // dispatch(rootProductsActions.fetch());
     // dispatch(sernosSequencesActions.fetch());
     // dispatch(suppliersActions.fetch());
-    // dispatch(unitsOfMeasureActions.fetch());
+    dispatch(productAnalysisCodesActions.fetch());
     dispatch(accountingCompaniesActions.fetch());
 };
 
