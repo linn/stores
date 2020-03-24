@@ -13,7 +13,7 @@ import {
     //DatePicker
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
-import GeneralTab from './GeneralTab';
+import GeneralTab from '../../containers/parts/tabs/GeneralTab';
 
 function Part({
     editStatus,
@@ -146,6 +146,7 @@ function Part({
                                     <GeneralTab
                                         accountingCompany={part.accountingCompany}
                                         handleFieldChange={handleFieldChange}
+                                        rootProduct={part.rootProduct}
                                     />
                                 )}
                             </Grid>

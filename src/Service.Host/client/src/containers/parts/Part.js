@@ -32,7 +32,7 @@ const mapStateToProps = (state, { match }) => ({
     sernosSequences: sernosSequencesSelectors.getItems(state),
     suppliers: suppliersSelectors.getItems(state),
     unitsOfMeasure: unitsOfMeasureSelectors.getItems(state),
-    accountingCompanies: accountingCompaniesSelectors.getItems(state)
+    // accountingCompanies: accountingCompaniesSelectors.getItems(state)
 });
 
 const initialise = ({ itemId }) => dispatch => {
@@ -43,7 +43,7 @@ const initialise = ({ itemId }) => dispatch => {
     dispatch(sernosSequencesActions.fetch());
     dispatch(suppliersActions.fetch());
     dispatch(unitsOfMeasureActions.fetch());
-    dispatch(accountingCompaniesActions.fetch());
+    // dispatch(accountingCompaniesActions.fetch());
 };
 
 const mapDispatchToProps = {

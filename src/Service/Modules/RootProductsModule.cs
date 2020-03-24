@@ -1,9 +1,11 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
     using Linn.Stores.Facade.Services;
+    using Linn.Stores.Resources;
     using Linn.Stores.Service.Models;
 
     using Nancy;
+    using Nancy.ModelBinding;
 
     public sealed class RootProductsModule : NancyModule
     {
@@ -17,7 +19,9 @@
 
         private object GetRootProducts()
         {
-            var results = this.rootProductsService.GetValid();
+            var resource = this.Bind<SearchRequestResource>();
+
+            var results = this.rootProductsService.GetValid(resource.SearchTerm);
             return this.Negotiate
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
