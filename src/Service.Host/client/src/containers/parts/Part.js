@@ -9,12 +9,14 @@ import rootProductsActions from '../../actions/rootProductsActions';
 import partCategoriesActions from '../../actions/partCategoriesActions';
 import sernosSequencesActions from '../../actions/sernosSequencesActions';
 import suppliersActions from '../../actions/suppliersActions';
+import unitsOfMeasureActions from '../../actions/unitsOfMeasureActions';
 import accountingCompaniesSelectors from '../../selectors/accountingCompaniesSelectors';
 import departmentsSelectors from '../../selectors/departmentsSelectors';
 import rootProductsSelectors from '../../selectors/rootProductsSelectors';
 import partCategoriesSelectors from '../../selectors/partCategoriesSelectors';
 import sernosSequencesSelectors from '../../selectors/sernosSequencesSelectors';
 import suppliersSelectors from '../../selectors/suppliersSelectors';
+import unitsOfMeasureSelectors from '../../selectors/unitsOfMeasureSelectors';
 import * as itemTypes from '../../itemTypes';
 
 const mapStateToProps = (state, { match }) => ({
@@ -29,6 +31,7 @@ const mapStateToProps = (state, { match }) => ({
     rootProducts: rootProductsSelectors.getItems(state),
     sernosSequences: sernosSequencesSelectors.getItems(state),
     suppliers: suppliersSelectors.getItems(state),
+    unitsOfMeasure: unitsOfMeasureSelectors.getItems(state),
     accountingCompanies: accountingCompaniesSelectors.getItems(state)
 });
 
@@ -39,6 +42,7 @@ const initialise = ({ itemId }) => dispatch => {
     dispatch(rootProductsActions.fetch());
     dispatch(sernosSequencesActions.fetch());
     dispatch(suppliersActions.fetch());
+    dispatch(unitsOfMeasureActions.fetch());
     dispatch(accountingCompaniesActions.fetch());
 };
 

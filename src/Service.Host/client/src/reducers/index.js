@@ -9,6 +9,7 @@ import partCategories from './partCategories';
 import rootProducts from './rootProducts';
 import sernosSequences from './sernosSequences';
 import suppliers from './suppliers';
+import unitsOfMeasure from './unitsOfMeasure';
 
 const rootReducer = combineReducers({
     accountingCompanies,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
     rootProducts,
     sernosSequences,
     suppliers,
+    unitsOfMeasure,
     ...sharedLibraryReducers
 });
 

@@ -31,3 +31,9 @@ export const rootProducts = new ItemType(
     'ROOT_PRODUCTS',
     '/inventory/root-products'
 );
+
+export const unitsOfMeasure = new ItemType(
+    'unitsOfMeasure',
+    'UNITS_OF_MEASURE',
+    '/inventory/units-of-measure'
+);
