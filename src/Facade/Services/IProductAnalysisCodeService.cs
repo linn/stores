@@ -7,6 +7,6 @@
 
     public interface IProductAnalysisCodeService
     {
-        IResult<IEnumerable<ProductAnalysisCode>> GetProductAnalysisCodes();
+        IResult<IEnumerable<ProductAnalysisCode>> GetProductAnalysisCodes(string searchTerm = null);
     }
 }

@@ -15,8 +15,14 @@
             this.repository = repository;
         }
 
-        public IResult<IEnumerable<ProductAnalysisCode>> GetProductAnalysisCodes()
+        public IResult<IEnumerable<ProductAnalysisCode>> GetProductAnalysisCodes(string searchTerm = null)
         {
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                return new SuccessResult<IEnumerable<ProductAnalysisCode>>(
+                    this.repository.FilterBy(c => c.ProductCode.ToUpper().Contains(searchTerm.ToUpper())));
+            }
+
             return new SuccessResult<IEnumerable<ProductAnalysisCode>>(
                 this.repository.FindAll());
         }

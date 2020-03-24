@@ -97,7 +97,8 @@
 
         private object GetProductAnalysisCodes()
         {
-            var result = this.productAnalysisCodeService.GetProductAnalysisCodes();
+            var resource = this.Bind<SearchRequestResource>();
+            var result = this.productAnalysisCodeService.GetProductAnalysisCodes(resource.SearchTerm);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

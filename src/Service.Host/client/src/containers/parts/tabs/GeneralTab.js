@@ -37,7 +37,10 @@ const mapStateToProps = (state, ownProps) => ({
     rootProductsSearchLoading: rootProductsSelectors.getSearchLoading(state),
     productAnalysisCode: ownProps.productAnalysisCode,
     productAnalysisCodeDescription: ownProps.productAnalysisCodeDescription,
-    productAnalysisCodes: productAnalysisCodesSelectors.getItems(state)
+    productAnalysisCodeSearchResults: productAnalysisCodesSelectors
+        .getSearchItems(state)
+        .map(c => ({ name: c.productCode, description: c.description })),
+    productAnalysisCodesSearchLoading: productAnalysisCodesSelectors.getSearchLoading(state)
 });
 
 const initialise = () => dispatch => {
@@ -57,7 +60,9 @@ const mapDispatchToProps = {
     setEditStatus: partActions.setEditStatus,
     setSnackbarVisible: partActions.setSnackbarVisible,
     searchRootProducts: rootProductsActions.search,
-    clearRootProductsSearch: rootProductsActions.clearSearch
+    clearRootProductsSearch: rootProductsActions.clearSearch,
+    searchProductAnalysisCodes: productAnalysisCodesActions.search,
+    clearSearchProductAnalysisCodes: productAnalysisCodesActions.clearSearch
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(GeneralTab));

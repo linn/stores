@@ -146,6 +146,10 @@ function Part({
                                     <GeneralTab
                                         accountingCompany={part.accountingCompany}
                                         handleFieldChange={handleFieldChange}
+                                        productAnalysisCode={part.productAnalysisCode}
+                                        productAnalysisCodeDescription={
+                                            part.productAnalysisCodeDescription
+                                        }
                                         rootProduct={part.rootProduct}
                                     />
                                 )}

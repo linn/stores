@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import {
     SaveBackCancelButtons,
     InputField,
@@ -19,7 +17,10 @@ function GeneralTab({
     accountingCompany,
     handleFieldChange,
     accountingCompanies,
-    productAnalysisCodes,
+    productAnalysisCodeSearchResults,
+    productAnalysisCodesSearchLoading,
+    searchProductAnalysisCodes,
+    clearProductAnalysisCodesSearch,
     productAnalysisCode,
     productAnalysisCodeDescription,
     rootProduct,
@@ -28,11 +29,18 @@ function GeneralTab({
     rootProductsSearchLoading,
     clearRootProductsSearch
 }) {
+    // useEffect(() => {
+    //     handleFieldChange(
+    //         'productAnalysisCodeDescription',
+    //         productAnalysisCodes?.find(c => c.ProductCode === productAnalysisCode)?.description
+    //     );
+    // }, [productAnalysisCode, handleFieldChange, productAnalysisCodes]);
+
     return (
         <Grid container spacing={3}>
             <Grid itemx xs={4}>
                 <Dropdown
-                    label="AccountingCompanies"
+                    label="Accounting Company"
                     propertyName="accountingCompany"
                     items={accountingCompanies.map(c => ({
                         id: c.name,
@@ -63,17 +71,20 @@ function GeneralTab({
             </Grid>
             <Grid item xs={8} />
             <Grid itemx xs={4}>
-                <Dropdown
+                <Typeahead
+                    onSelect={newValue => {
+                        handleFieldChange('productAnalysisCode', newValue.name);
+                        handleFieldChange('productAnalysisCodeDescription', newValue.description);
+                    }}
                     label="Product Analysis Code"
-                    propertyName="productAnalysisCode"
-                    items={productAnalysisCodes.map(c => ({
-                        id: c.productCode,
-                        displayText: c.description
-                    }))}
-                    fullWidth
-                    allowNoValue
+                    modal
+                    items={productAnalysisCodeSearchResults}
                     value={productAnalysisCode}
-                    onChange={handleFieldChange}
+                    loading={productAnalysisCodesSearchLoading}
+                    fetchItems={searchProductAnalysisCodes}
+                    links={false}
+                    clearSearch={() => clearProductAnalysisCodesSearch}
+                    placeholder="Search Codes"
                 />
             </Grid>
             <Grid item xs={8}>
@@ -84,7 +95,7 @@ function GeneralTab({
                     required
                     disabled
                     onChange={handleFieldChange}
-                    propertyName="ProductAnalysisCodeDescriptions"
+                    propertyName="ProductAnalysisCodeDescription"
                 />
             </Grid>
         </Grid>

@@ -7,6 +7,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class ProductAnalysisCodeRepository : IQueryRepository<ProductAnalysisCode>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -23,12 +25,12 @@
 
         public IQueryable<ProductAnalysisCode> FilterBy(Expression<Func<ProductAnalysisCode, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.ProductAnalysisCodes.Where(expression).AsNoTracking();
         }
 
         public IQueryable<ProductAnalysisCode> FindAll()
         {
-            return this.serviceDbContext.ProductAnalysisCodes;
+            return this.serviceDbContext.ProductAnalysisCodes.AsNoTracking();
         }
     }
 }
