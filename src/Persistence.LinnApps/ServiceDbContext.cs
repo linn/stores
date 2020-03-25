@@ -40,6 +40,10 @@
 
         public DbSet<Supplier> Suppliers { get; set; }
 
+        public DbQuery<Nominal> Nominals { get; set; }
+
+        public DbQuery<NominalAccount> NominalAccounts { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -54,6 +58,8 @@
             this.QueryUnitsOfMeasure(builder);
             this.QueryPartCategories(builder);
             this.BuildSuppliers(builder);
+            this.QueryNominals(builder);
+            this.QueryNominalAccounts(builder);
             base.OnModelCreating(builder);
         }
 
@@ -240,6 +246,21 @@
             builder.Query<PartCategory>().ToView("PART_CATEGORIES");
             builder.Query<PartCategory>().Property(p => p.Category).HasColumnName("CATEGORY");
             builder.Query<PartCategory>().Property(p => p.Description).HasColumnName("DESCRIPTION");
+        }
+
+        private void QueryNominals(ModelBuilder builder)
+        {
+            builder.Query<Nominal>().ToView("LINN_NOMINALS");
+            builder.Query<Nominal>().Property(n => n.NominalCode).HasColumnName("NOMINAL_CODE");
+            builder.Query<Nominal>().Property(n => n.Description).HasColumnName("DESCRIPTION");
+        }
+
+        private void QueryNominalAccounts(ModelBuilder builder)
+        {
+            builder.Query<NominalAccount>().ToView("NOMINAL_ACCOUNTS");
+            builder.Query<NominalAccount>().Property(a => a.NominalAccountId).HasColumnName("NOMACC_ID");
+            builder.Query<NominalAccount>().Property(a => a.Department).HasColumnName("DEPARTMENT");
+            builder.Query<NominalAccount>().Property(a => a.Nominal).HasColumnName("NOMINAL");
         }
     }
 }
