@@ -14,6 +14,7 @@ import 'typeface-roboto';
 import Part from '../containers/parts/Part';
 import Parts from '../containers/parts/Parts';
 import CreatePart from '../containers/parts/CreatePart';
+import StartAllocation from '../containers/allocations/StartAllocation';
 
 const Root = ({ store }) => (
     <div>
@@ -47,6 +48,8 @@ const Root = ({ store }) => (
                                 <Route exact path="/parts" component={Parts} />
                                 <Route exact path="/parts/create" component={CreatePart} />
                                 <Route exact path="/parts/:id" component={Part} />
+
+                                <Route exact path="/logistics/allocations" component={StartAllocation} />
 
                             </Switch>
                         </div>
