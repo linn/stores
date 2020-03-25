@@ -18,7 +18,7 @@
 
         public Nominal FindBy(Expression<Func<Nominal, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.Nominals.Where(expression).ToList().FirstOrDefault();
         }
 
         public IQueryable<Nominal> FilterBy(Expression<Func<Nominal, bool>> expression)

@@ -23,3 +23,5 @@ export const unitsOfMeasureActionTypes = makeActionTypes(itemTypes.unitsOfMeasur
 export const productAnalysisCodesActionTypes = makeActionTypes(
     itemTypes.productAnalysisCodes.actionType
 );
+
+export const nominalActionTypes = makeActionTypes(itemTypes.nominal.actionType);

@@ -20,7 +20,8 @@ import suppliersSelectors from '../../../selectors/suppliersSelectors';
 import unitsOfMeasureSelectors from '../../../selectors/unitsOfMeasureSelectors';
 import rootProductsActions from '../../../actions/rootProductsActions';
 import productAnalysisCodesActions from '../../../actions/productAnalysisCodesActions';
-// import * as itemTypes from '../../itemTypes';
+import nominalActions from '../../../actions/nominalActions';
+import { nominal } from '../../../itemTypes';
 
 const mapStateToProps = (state, ownProps) => ({
     accountingComapny: ownProps.accountingComapny,
@@ -62,7 +63,8 @@ const mapDispatchToProps = {
     searchRootProducts: rootProductsActions.search,
     clearRootProductsSearch: rootProductsActions.clearSearch,
     searchProductAnalysisCodes: productAnalysisCodesActions.search,
-    clearSearchProductAnalysisCodes: productAnalysisCodesActions.clearSearch
+    clearSearchProductAnalysisCodes: productAnalysisCodesActions.clearSearch,
+    fetchNominalForDepartment: nominalActions.fetch
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(GeneralTab));

@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import { reducer as oidc } from 'redux-oidc';
 import departments from './departments';
 import accountingCompanies from './accountingCompanies';
+import nominal from './nominal';
 import parts from './parts/parts';
 import part from './parts/part';
 import partCategories from './partCategories';
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
     accountingCompanies,
     departments,
     oidc,
+    nominal,
     part,
     partCategories,
     parts,

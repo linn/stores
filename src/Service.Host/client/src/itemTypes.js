@@ -43,3 +43,5 @@ export const productAnalysisCodes = new ItemType(
     'PRODUCT_ANALYSIS_CODES',
     '/inventory/product-analysis-codes'
 );
+
+export const nominal = new ItemType('nominal', 'NOMINAL', '/inventory/nominal-for-department');
