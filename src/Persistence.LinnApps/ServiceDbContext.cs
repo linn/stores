@@ -183,8 +183,7 @@
             e.HasOne<ParetoClass>(p => p.ParetoClass).WithMany(c => c.Parts).HasForeignKey("PARETO_CODE");
             e.HasOne<ProductAnalysisCode>(p => p.ProductAnalysisCode).WithMany(c => c.Parts)
                 .HasForeignKey("PRODUCT_ANALYSIS_CODE");
-            e.Property(p => p.NominalAccountId).HasColumnName("NOMACC_NOMACC_ID");
-            e.HasOne(p => p.NominalAccount).WithMany(a => a.Parts).HasForeignKey(p => p.NominalAccountId);
+            e.HasOne(p => p.NominalAccount).WithMany(a => a.Parts).HasForeignKey("NOMACC_NOMACC_ID");
         }
 
         private void BuildParetoClasses(ModelBuilder builder)
@@ -257,14 +256,13 @@
             builder.Entity<Nominal>().Property(n => n.NominalCode).HasColumnName("NOMINAL_CODE");
             builder.Entity<Nominal>().Property(n => n.Description).HasColumnName("DESCRIPTION");
             builder.Entity<Nominal>().HasMany(n => n.NominalAccounts).WithOne(a => a.Nominal)
-                .HasForeignKey(a => a.NominalCode);
+                .HasForeignKey("NOMINAL");
         }
 
         private void BuildNominalAccounts(ModelBuilder builder)
         {
             builder.Entity<NominalAccount>().ToTable("NOMINAL_ACCOUNTS");
             builder.Entity<NominalAccount>().HasKey(a => a.NominalAccountId);
-            builder.Entity<NominalAccount>().Property(a => a.NominalCode).HasColumnName("NOMINAL");
             builder.Entity<NominalAccount>().Property(a => a.NominalAccountId).HasColumnName("NOMACC_ID");
             builder.Entity<NominalAccount>().Property(a => a.Department).HasColumnName("DEPARTMENT");
         }

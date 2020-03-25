@@ -12,7 +12,6 @@
 
         public Nominal Nominal { get; set; }
 
-        public string NominalCode { get; set; }
 
         public List<Part> Parts { get; set; }
     }
