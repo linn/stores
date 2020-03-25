@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Service.Tests.SuppliersModuleSpecs
+﻿namespace Linn.Stores.Service.Tests.CarriersModuleSpecs
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -21,26 +21,26 @@
         [SetUp]
         public void SetUp()
         {
-            var supplierA = new Supplier
+            var carrierA = new Carrier
             {
-                Id = 1,
-                Name = "Supplier A",
-                CountryCode = "DE"
-                
+                CarrierCode = "code numma 1",
+                Name = "Carrier A",
+                OrganisationId = 112
+
             };
-            var supplierB = new Supplier
+            var carrierB = new Carrier
             {
-                Id = 2,
-                Name = "Supplier B",
-                CountryCode = "RU"
+                CarrierCode = "code numma 2",
+                Name = "Carrier B",
+                OrganisationId = 118
             };
 
-            this.SuppliersService.GetAll()
-                .Returns(new SuccessResult<IEnumerable<Supplier>>(new List<Supplier> { supplierA, supplierB }));
+            this.CarriersService.GetAll()
+                .Returns(new SuccessResult<IEnumerable<Carrier>>(new List<Carrier> { carrierA, carrierB }));
 
 
             this.Response = this.Browser.Get(
-                "/inventory/suppliers",
+                "/logistics/carriers",
                 with =>
                 {
                     with.Header("Accept", "application/json");
@@ -56,16 +56,16 @@
         [Test]
         public void ShouldCallService()
         {
-            this.SuppliersService.Received().GetAll();
+            this.CarriersService.Received().GetAll();
         }
 
         [Test]
         public void ShouldReturnResource()
         {
-            var resource = this.Response.Body.DeserializeJson<IEnumerable<SupplierResource>>().ToList();
+            var resource = this.Response.Body.DeserializeJson<IEnumerable<CarrierResource>>().ToList();
             resource.Should().HaveCount(2);
-            resource.Should().Contain(a => a.Name == "Supplier A");
-            resource.Should().Contain(a => a.Name == "Supplier B");
+            resource.Should().Contain(a => a.Name == "Carrier A");
+            resource.Should().Contain(a => a.Name == "Carrier B");
         }
     }
 }

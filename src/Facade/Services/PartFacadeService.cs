@@ -2,7 +2,6 @@
 {
     using System;
     using System.Linq.Expressions;
-
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;

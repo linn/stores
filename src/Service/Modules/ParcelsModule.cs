@@ -7,11 +7,11 @@
     using Nancy;
     using Nancy.ModelBinding;
 
-    public sealed class ParcelModule : NancyModule
+    public sealed class ParcelsModule : NancyModule
     {
         private readonly IFacadeService<Parcel, int, ParcelResource, ParcelResource> parcelsFacadeService;
 
-        public ParcelModule(IFacadeService<Parcel, int, ParcelResource, ParcelResource> parcelsFacadeService)
+        public ParcelsModule(IFacadeService<Parcel, int, ParcelResource, ParcelResource> parcelsFacadeService)
         {
             this.parcelsFacadeService = parcelsFacadeService;
             this.Get("/logistics/parcels", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));

@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Service.Tests.SuppliersModuleSpecs
+﻿namespace Linn.Stores.Service.Tests.ParcelsModuleSpecs
 {
     using System.Collections.Generic;
     using System.Security.Claims;
@@ -19,29 +19,29 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IFacadeWithSearchReturnTen<Supplier, int, SupplierResource, SupplierResource> SuppliersService { get; private set; }
+        protected IFacadeWithSearchReturnTen<Parcel, int, ParcelResource, ParcelResource> ParcelsService { get; private set; }
 
-        protected IQueryRepository<Supplier> SupplierRepository { get; private set; }
+        protected IQueryRepository<Parcel> ParcelRepository { get; private set; }
 
 
         [SetUp]
         public void EstablishContext()
         {
-            this.SuppliersService = Substitute
-                .For<IFacadeWithSearchReturnTen<Supplier, int, SupplierResource, SupplierResource>>();
+            this.ParcelsService = Substitute
+                .For<IFacadeWithSearchReturnTen<Parcel, int, ParcelResource, ParcelResource>>();
 
-            this.SupplierRepository = Substitute
-                .For<IQueryRepository<Supplier>>();
+            this.ParcelRepository = Substitute
+                .For<IQueryRepository<Parcel>>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                 {
-                    with.Dependency(this.SuppliersService);
-                    with.Dependency(this.SupplierRepository);
-                    with.Dependency<IResourceBuilder<Supplier>>(new SupplierResourceBuilder());
-                    with.Dependency<IResourceBuilder<IEnumerable<Supplier>>>(new SuppliersResourceBuilder());
-                    with.Module<SuppliersModule>();
-                    with.ResponseProcessor<SuppliersResponseProcessor>();
+                    with.Dependency(this.ParcelsService);
+                    with.Dependency(this.ParcelRepository);
+                    with.Dependency<IResourceBuilder<Parcel>>(new ParcelResourceBuilder());
+                    with.Dependency<IResourceBuilder<IEnumerable<Parcel>>>(new ParcelsResourceBuilder());
+                    with.Module<ParcelsModule>();
+                    with.ResponseProcessor<ParcelResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {

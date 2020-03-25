@@ -46,6 +46,14 @@
                 .As<IResourceBuilder<Supplier>>();
             builder.RegisterType<SuppliersResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<Supplier>>>();
+            builder.RegisterType<CarrierResourceBuilder>()
+                .As<IResourceBuilder<Carrier>>();
+            builder.RegisterType<CarriersResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<Carrier>>>();
+            builder.RegisterType<ParcelResourceBuilder>()
+                .As<IResourceBuilder<Parcel>>();
+            builder.RegisterType<ParcelsResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<Parcel>>>();
         }
     }
 }

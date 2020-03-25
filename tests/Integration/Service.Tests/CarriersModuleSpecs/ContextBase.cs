@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Service.Tests.SuppliersModuleSpecs
+﻿namespace Linn.Stores.Service.Tests.CarriersModuleSpecs
 {
     using System.Collections.Generic;
     using System.Security.Claims;
@@ -19,29 +19,29 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IFacadeWithSearchReturnTen<Supplier, int, SupplierResource, SupplierResource> SuppliersService { get; private set; }
+        protected IFacadeWithSearchReturnTen<Carrier, int, CarrierResource, CarrierResource> CarriersService { get; private set; }
 
-        protected IQueryRepository<Supplier> SupplierRepository { get; private set; }
+        protected IQueryRepository<Carrier> CarrierRepository { get; private set; }
 
 
         [SetUp]
         public void EstablishContext()
         {
-            this.SuppliersService = Substitute
-                .For<IFacadeWithSearchReturnTen<Supplier, int, SupplierResource, SupplierResource>>();
+            this.CarriersService = Substitute
+                .For<IFacadeWithSearchReturnTen<Carrier, int, CarrierResource, CarrierResource>>();
 
-            this.SupplierRepository = Substitute
-                .For<IQueryRepository<Supplier>>();
+            this.CarrierRepository = Substitute
+                .For<IQueryRepository<Carrier>>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                 {
-                    with.Dependency(this.SuppliersService);
-                    with.Dependency(this.SupplierRepository);
-                    with.Dependency<IResourceBuilder<Supplier>>(new SupplierResourceBuilder());
-                    with.Dependency<IResourceBuilder<IEnumerable<Supplier>>>(new SuppliersResourceBuilder());
-                    with.Module<SuppliersModule>();
-                    with.ResponseProcessor<SuppliersResponseProcessor>();
+                    with.Dependency(this.CarriersService);
+                    with.Dependency(this.CarrierRepository);
+                    with.Dependency<IResourceBuilder<Carrier>>(new CarrierResourceBuilder());
+                    with.Dependency<IResourceBuilder<IEnumerable<Carrier>>>(new CarriersResourceBuilder());
+                    with.Module<CarriersModule>();
+                    with.ResponseProcessor<CarriersResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {

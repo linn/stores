@@ -6,8 +6,6 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
 
-    using Microsoft.EntityFrameworkCore;
-
     public class CarrierRepository : IRepository<Carrier, string>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -48,11 +46,7 @@
 
         public IQueryable<Carrier> FilterBy(Expression<Func<Carrier, bool>> expression)
         {
-            return this.serviceDbContext
-                .Carriers
-                .Where(expression)
-                .ToList()
-                .AsQueryable();
+            return this.serviceDbContext.Carriers.Where(expression);
         }
     }
 }

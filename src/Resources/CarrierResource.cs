@@ -1,15 +1,11 @@
-﻿namespace Linn.Stores.Domain.LinnApps
+﻿namespace Linn.Stores.Resources
 {
-    using System;
-
-    public class Carrier
+    public class CarrierResource
     {
         public string CarrierCode { get; set; }
 
         public string Name { get; set; }
 
         public int OrganisationId { get; set; }
-
-        public DateTime? DateInvalid { get; set; }
     }
 }

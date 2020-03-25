@@ -32,6 +32,8 @@
             builder.RegisterType<UnitsOfMeasureRepository>().As<IQueryRepository<UnitOfMeasure>>();
             builder.RegisterType<PartCategoryRepository>().As<IQueryRepository<PartCategory>>();
             builder.RegisterType<SupplierRepository>().As<IQueryRepository<Supplier>>();
+            builder.RegisterType<SupplierRepository>().As<IQueryRepository<Supplier>>();
+
         }
     }
 }

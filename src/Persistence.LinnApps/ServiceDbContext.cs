@@ -40,6 +40,9 @@
 
         public DbSet<Supplier> Suppliers { get; set; }
 
+        public DbSet<Carrier> Carriers { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -100,6 +103,8 @@
             q.ToTable("SUPPLIERS");
             q.Property(e => e.Id).HasColumnName("SUPPLIER_ID");
             q.Property(e => e.Name).HasColumnName("SUPPLIER_NAME").HasMaxLength(50);
+            q.Property(e => e.CountryCode).HasColumnName("COUNTRY");
+            q.Property(e => e.DateClosed).HasColumnName("DATE_CLOSED");
         }
 
         private void BuildParts(ModelBuilder builder)
