@@ -47,6 +47,7 @@ const Root = ({ store }) => (
                                 <Route exact path="/parts" component={Parts} />
                                 <Route exact path="/parts/create" component={CreatePart} />
                                 <Route exact path="/parts/:id" component={Part} />
+
                             </Switch>
                         </div>
                     </Router>

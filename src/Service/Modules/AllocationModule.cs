@@ -14,6 +14,7 @@
         public AllocationModule(IAllocationFacadeService allocationFacadeService)
         {
             this.allocationFacadeService = allocationFacadeService;
+            this.Get("/logistics/allocations", _ => this.GetApp());
             this.Post("/logistics/allocations", _ => this.StartAllocation());
         }
 
@@ -25,6 +26,11 @@
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");
+        }
+
+        private object GetApp()
+        {
+            return this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index");
         }
     }
 }

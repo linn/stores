@@ -10,9 +10,11 @@ import rootProducts from './rootProducts';
 import sernosSequences from './sernosSequences';
 import suppliers from './suppliers';
 import unitsOfMeasure from './unitsOfMeasure';
+import allocation from './allocation';
 
 const rootReducer = combineReducers({
     accountingCompanies,
+    allocation,
     departments,
     oidc,
     part,

@@ -37,3 +37,9 @@ export const unitsOfMeasure = new ItemType(
     'UNITS_OF_MEASURE',
     '/inventory/units-of-measure'
 );
+
+export const allocation = new ItemType(
+    'allocation',
+    'ALLOCATION',
+    '/logistics/allocations'
+);

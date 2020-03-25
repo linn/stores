@@ -6,6 +6,11 @@ function App() {
     return (
         <Page>
             <Typography variant="h6">Stores</Typography>
+            <List>
+                <ListItem component={Link} to="/logistics/allocations" button>
+                    <Typography color="primary">Start Allocation</Typography>
+                </ListItem>
+            </List>
         </Page>
     );
 }
