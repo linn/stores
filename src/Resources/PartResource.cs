@@ -139,5 +139,13 @@
         public string PurchasingPhaseOutType { get; set; }
 
         public string DateDesignObsolete { get; set; }
+
+        public int? NominalAccount { get; set; }
+
+        public string Nominal { get; set; }
+
+        public string NominalDescription { get; set; }
+
+        public string Department { get; set; }
     }
 }

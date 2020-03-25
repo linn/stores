@@ -27,7 +27,9 @@ function GeneralTab({
     searchRootProducts,
     rootProductsSearchResults,
     rootProductsSearchLoading,
-    clearRootProductsSearch
+    clearRootProductsSearch,
+    nominal,
+    fetchNominalForDepartment
 }) {
     // useEffect(() => {
     //     handleFieldChange(

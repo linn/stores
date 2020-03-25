@@ -40,9 +40,9 @@
 
         public DbSet<Supplier> Suppliers { get; set; }
 
-        public DbQuery<Nominal> Nominals { get; set; }
+        public DbSet<Nominal> Nominals { get; set; }
 
-        public DbQuery<NominalAccount> NominalAccounts { get; set; }
+        public DbSet<NominalAccount> NominalAccounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -58,8 +58,8 @@
             this.QueryUnitsOfMeasure(builder);
             this.QueryPartCategories(builder);
             this.BuildSuppliers(builder);
-            this.QueryNominals(builder);
-            this.QueryNominalAccounts(builder);
+            this.BuildNominals(builder);
+            this.BuildNominalAccounts(builder);
             base.OnModelCreating(builder);
         }
 
@@ -183,6 +183,8 @@
             e.HasOne<ParetoClass>(p => p.ParetoClass).WithMany(c => c.Parts).HasForeignKey("PARETO_CODE");
             e.HasOne<ProductAnalysisCode>(p => p.ProductAnalysisCode).WithMany(c => c.Parts)
                 .HasForeignKey("PRODUCT_ANALYSIS_CODE");
+            e.Property(p => p.NominalAccountId).HasColumnName("NOMACC_NOMACC_ID");
+            e.HasOne(p => p.NominalAccount).WithMany(a => a.Parts).HasForeignKey(p => p.NominalAccountId);
         }
 
         private void BuildParetoClasses(ModelBuilder builder)
@@ -248,19 +250,23 @@
             builder.Query<PartCategory>().Property(p => p.Description).HasColumnName("DESCRIPTION");
         }
 
-        private void QueryNominals(ModelBuilder builder)
+        private void BuildNominals(ModelBuilder builder)
         {
-            builder.Query<Nominal>().ToView("LINN_NOMINALS");
-            builder.Query<Nominal>().Property(n => n.NominalCode).HasColumnName("NOMINAL_CODE");
-            builder.Query<Nominal>().Property(n => n.Description).HasColumnName("DESCRIPTION");
+            builder.Entity<Nominal>().ToTable("LINN_NOMINALS");
+            builder.Entity<Nominal>().HasKey(n => n.NominalCode);
+            builder.Entity<Nominal>().Property(n => n.NominalCode).HasColumnName("NOMINAL_CODE");
+            builder.Entity<Nominal>().Property(n => n.Description).HasColumnName("DESCRIPTION");
+            builder.Entity<Nominal>().HasMany(n => n.NominalAccounts).WithOne(a => a.Nominal)
+                .HasForeignKey(a => a.NominalCode);
         }
 
-        private void QueryNominalAccounts(ModelBuilder builder)
+        private void BuildNominalAccounts(ModelBuilder builder)
         {
-            builder.Query<NominalAccount>().ToView("NOMINAL_ACCOUNTS");
-            builder.Query<NominalAccount>().Property(a => a.NominalAccountId).HasColumnName("NOMACC_ID");
-            builder.Query<NominalAccount>().Property(a => a.Department).HasColumnName("DEPARTMENT");
-            builder.Query<NominalAccount>().Property(a => a.Nominal).HasColumnName("NOMINAL");
+            builder.Entity<NominalAccount>().ToTable("NOMINAL_ACCOUNTS");
+            builder.Entity<NominalAccount>().HasKey(a => a.NominalAccountId);
+            builder.Entity<NominalAccount>().Property(a => a.NominalCode).HasColumnName("NOMINAL");
+            builder.Entity<NominalAccount>().Property(a => a.NominalAccountId).HasColumnName("NOMACC_ID");
+            builder.Entity<NominalAccount>().Property(a => a.Department).HasColumnName("DEPARTMENT");
         }
     }
 }

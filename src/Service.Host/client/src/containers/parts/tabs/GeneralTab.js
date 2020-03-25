@@ -21,7 +21,7 @@ import unitsOfMeasureSelectors from '../../../selectors/unitsOfMeasureSelectors'
 import rootProductsActions from '../../../actions/rootProductsActions';
 import productAnalysisCodesActions from '../../../actions/productAnalysisCodesActions';
 import nominalActions from '../../../actions/nominalActions';
-import { nominal } from '../../../itemTypes';
+import nominalSelectors from '../../../selectors/nominalSelectors';
 
 const mapStateToProps = (state, ownProps) => ({
     accountingComapny: ownProps.accountingComapny,
@@ -32,6 +32,7 @@ const mapStateToProps = (state, ownProps) => ({
     rootProducts: rootProductsSelectors.getItems(state),
     sernosSequences: sernosSequencesSelectors.getItems(state),
     suppliers: suppliersSelectors.getItems(state),
+    nominal: nominalSelectors.getItem(state),
     unitsOfMeasure: unitsOfMeasureSelectors.getItems(state),
     accountingCompanies: accountingCompaniesSelectors.getItems(state),
     rootProductsSearchResults: rootProductsSelectors.getSearchItems(state),

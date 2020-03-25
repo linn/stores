@@ -16,6 +16,10 @@
 
         public string SafetyCriticalPart { get; set; }
 
+        public NominalAccount NominalAccount { get; set; }
+
+        public int? NominalAccountId { get; set; }
+
         public ProductAnalysisCode ProductAnalysisCode { get; set; }
 
         public ParetoClass ParetoClass { get; set; }
