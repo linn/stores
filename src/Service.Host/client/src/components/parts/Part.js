@@ -13,7 +13,7 @@ import {
     //DatePicker
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
-import GeneralTab from './GeneralTab';
+import GeneralTab from '../../containers/parts/tabs/GeneralTab';
 
 function Part({
     editStatus,
@@ -28,7 +28,7 @@ function Part({
     setEditStatus,
     setSnackbarVisible
 }) {
-    const [part, setPart] = useState({});
+    const [part, setPart] = useState();
     const [prevPart, setPrevPart] = useState({});
 
     const [tab, setTab] = useState(0);
@@ -36,7 +36,6 @@ function Part({
     const handleTabChange = (event, value) => {
         setTab(value);
     };
-
     const creating = () => editStatus === 'create';
     const editing = () => editStatus === 'edit';
     const viewing = () => editStatus === 'view';
@@ -74,6 +73,43 @@ function Part({
             setEditStatus('edit');
         }
         setPart({ ...part, [propertyName]: newValue });
+    };
+
+    const handleDepartmentChange = newValue => {
+        if (viewing()) {
+            setEditStatus('edit');
+        }
+        setPart({
+            ...part,
+            department: newValue.name,
+            departmentDescription: newValue.description
+        });
+    };
+
+    const handleProductAnalysisCodeChange = newValue => {
+        if (viewing()) {
+            setEditStatus('edit');
+        }
+        setPart({
+            ...part,
+            productAnalysisCode: newValue.name,
+            productAnalysisCodeDescription: newValue.description
+        });
+    };
+
+    const handleAccountingCompanyChange = newValue => {
+        if (newValue === 'RECORDS') {
+            setPart({
+                ...part,
+                accountingCompany: newValue,
+                paretoCode: 'R',
+                bomType: 'C',
+                linnProduced: 'N',
+                qcOnReceipt: 'N'
+            });
+        } else {
+            setPart({ ...part, accountingCompany: newValue, paretoCode: 'U' });
+        }
     };
 
     return (
@@ -128,27 +164,39 @@ function Part({
                                     propertyName="description"
                                 />
                             </Grid>
-                            <Grid item xs={12}>
-                                <Tabs
-                                    value={tab}
-                                    onChange={handleTabChange}
-                                    indicatorColor="primary"
-                                    textColor="primary"
-                                    style={{ paddingBottom: '40px' }}
-                                >
-                                    <Tab label="General" />
-                                    <Tab label="Build" />
-                                    <Tab label="Purch" />
-                                    <Tab label="Stores" />
-                                    <Tab label="LifeCycle" />
-                                </Tabs>
-                                {tab === 0 && (
-                                    <GeneralTab
-                                        accountingCompany={part.accountingCompany}
-                                        handleFieldChange={handleFieldChange}
-                                    />
-                                )}
-                            </Grid>
+                            <Tabs
+                                value={tab}
+                                onChange={handleTabChange}
+                                indicatorColor="primary"
+                                textColor="primary"
+                                style={{ paddingBottom: '40px' }}
+                            >
+                                <Tab label="General" />
+                                <Tab label="Build" />
+                                <Tab label="Purch" />
+                                <Tab label="Stores" />
+                                <Tab label="LifeCycle" />
+                            </Tabs>
+                            {tab === 0 && (
+                                <GeneralTab
+                                    accountingCompany={part.accountingCompany}
+                                    handleFieldChange={handleFieldChange}
+                                    productAnalysisCode={part.productAnalysisCode}
+                                    productAnalysisCodeDescription={
+                                        part.productAnalysisCodeDescription
+                                    }
+                                    handleProductAnalysisCodeChange={
+                                        handleProductAnalysisCodeChange
+                                    }
+                                    rootProduct={part.rootProduct}
+                                    department={part.department}
+                                    departmentDescription={part.departmentDescription}
+                                    handleDepartmentChange={handleDepartmentChange}
+                                    paretoCode={part.paretoCode}
+                                    handleAccountingCompanyChange={handleAccountingCompanyChange}
+                                />
+                            )}
+
                             {/* <Grid item xs={8}>
                                 <DatePicker
                                     label="Date Invalid"

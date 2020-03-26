@@ -7,6 +7,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class SupplierRepository : IQueryRepository<Supplier>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -28,7 +30,7 @@
 
         public IQueryable<Supplier> FindAll()
         {
-            return this.serviceDbContext.Suppliers;
+            return this.serviceDbContext.Suppliers.AsNoTracking();
         }
     }
 }

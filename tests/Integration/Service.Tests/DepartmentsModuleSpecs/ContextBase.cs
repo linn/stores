@@ -7,7 +7,6 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
-    using Linn.Stores.Resources;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
 
@@ -21,6 +20,8 @@
     {
         protected IDepartmentsService DepartmentsService { get; private set; }
 
+        protected INominalService NominalService { get; set; }
+
         protected IQueryRepository<Department> DepartmentRepository { get; private set; }
 
 
@@ -30,18 +31,20 @@
             this.DepartmentsService = Substitute
                 .For<IDepartmentsService>();
 
-            this.DepartmentRepository = Substitute
-                .For<IQueryRepository<Department>>();
+            this.NominalService = Substitute.For<INominalService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                 {
                     with.Dependency(this.DepartmentsService);
-                    with.Dependency(this.DepartmentRepository);
+                    with.Dependency(this.NominalService);
                     with.Dependency<IResourceBuilder<Department>>(new DepartmentResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<Department>>>(new DepartmentsResourceBuilder());
+                    with.Dependency<IResourceBuilder<Nominal>>(new NominalResourceBuilder());
+
                     with.Module<DepartmentsModule>();
                     with.ResponseProcessor<DepartmentsResponseProcessor>();
+                    with.ResponseProcessor<NominalResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {

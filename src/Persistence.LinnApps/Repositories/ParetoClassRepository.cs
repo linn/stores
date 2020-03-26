@@ -9,9 +9,18 @@
 
     public class ParetoClassRepository : IRepository<ParetoClass, string>
     {
+        private readonly ServiceDbContext serviceDbContext;
+
+        public ParetoClassRepository(ServiceDbContext serviceDbContext)
+        {
+            this.serviceDbContext = serviceDbContext;
+        }
+
         public ParetoClass FindById(string key)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.ParetoClasses
+                .Where(p => p.ParetoCode == key)
+                .ToList().FirstOrDefault();
         }
 
         public IQueryable<ParetoClass> FindAll()

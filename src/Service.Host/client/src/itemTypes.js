@@ -39,3 +39,12 @@ export const unitsOfMeasure = new ItemType(
 );
 
 export const allocation = new ItemType('allocation', 'ALLOCATION', '/logistics/allocations');
+
+export const productAnalysisCodes = new ItemType(
+    'productAnalysisCodes',
+    'PRODUCT_ANALYSIS_CODES',
+    '/inventory/product-analysis-codes'
+);
+
+export const nominal = new ItemType('nominal', 'NOMINAL', '/inventory/nominal-for-department');
+

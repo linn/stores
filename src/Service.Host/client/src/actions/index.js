@@ -21,3 +21,10 @@ export const sernosSequencesActionTypes = makeActionTypes(itemTypes.sernosSequen
 export const unitsOfMeasureActionTypes = makeActionTypes(itemTypes.unitsOfMeasure.actionType);
 
 export const allocationActionTypes = makeActionTypes(itemTypes.allocation.actionType);
+
+export const productAnalysisCodesActionTypes = makeActionTypes(
+    itemTypes.productAnalysisCodes.actionType
+);
+
+export const nominalActionTypes = makeActionTypes(itemTypes.nominal.actionType);
+

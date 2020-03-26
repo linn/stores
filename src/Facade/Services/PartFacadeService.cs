@@ -13,14 +13,14 @@
     {
         private readonly IRepository<ParetoClass, string> paretoClassRepository;
 
-        private readonly IRepository<ProductAnalysisCode, string> productAnalysisCodeRepository;
+        private readonly IQueryRepository<ProductAnalysisCode> productAnalysisCodeRepository;
 
         private readonly IQueryRepository<AccountingCompany> accountingCompanyRepository;
 
         public PartFacadeService(
             IRepository<Part, int> repository,
             IRepository<ParetoClass, string> paretoClassRepository,
-            IRepository<ProductAnalysisCode, string> productAnalysisCodeRepository,
+            IQueryRepository<ProductAnalysisCode> productAnalysisCodeRepository,
             IQueryRepository<AccountingCompany> accountingCompanyRepository,
             ITransactionManager transactionManager)
             : base(repository, transactionManager)
@@ -49,7 +49,7 @@
                            PerformanceCriticalPart = this.ToYesOrNoString(resource.PerformanceCriticalPart),
                            ProductAnalysisCode =
                                resource.ProductAnalysisCode != null
-                                   ? this.productAnalysisCodeRepository.FindById(resource.ProductAnalysisCode)
+                                   ? this.productAnalysisCodeRepository.FindBy(c => c.ProductCode == resource.ProductAnalysisCode)
                                    : null,
                            PsuPart = this.ToYesOrNoString(resource.PsuPart),
                            RootProduct = resource.RootProduct,
@@ -76,7 +76,7 @@
                                      : null;
             entity.PerformanceCriticalPart = this.ToYesOrNoString(resource.PerformanceCriticalPart);
             entity.ProductAnalysisCode = resource.ProductAnalysisCode != null
-                                             ? this.productAnalysisCodeRepository.FindById(resource.ProductAnalysisCode)
+                                             ? this.productAnalysisCodeRepository.FindBy(c => c.ProductCode == resource.ProductAnalysisCode)
                                              : null;
             entity.PsuPart = this.ToYesOrNoString(resource.PsuPart);
             entity.RootProduct = resource.RootProduct;

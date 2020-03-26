@@ -29,6 +29,7 @@
                 .Include(p => p.CreatedBy)
                 .Include(p => p.MadeLiveBy)
                 .Include(p => p.PhasedOutBy)
+                .Include(p => p.NominalAccount).ThenInclude(a => a.Nominal)
                 .ToList()
                 .FirstOrDefault();
         }
