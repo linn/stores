@@ -5,11 +5,6 @@ import partActions from '../../../actions/partActions';
 import partSelectors from '../../../selectors/partSelectors';
 import accountingCompaniesActions from '../../../actions/accountingCompaniesActions';
 import departmentsActions from '../../../actions/departmentsActions';
-// import rootProductsActions from '../../actions/rootProductsActions';
-// import partCategoriesActions from '../../actions/partCategoriesActions';
-// import sernosSequencesActions from '../../actions/sernosSequencesActions';
-// import suppliersActions from '../../actions/suppliersActions';
-// import unitsOfMeasureActions from '../../actions/unitsOfMeasureActions';
 import accountingCompaniesSelectors from '../../../selectors/accountingCompaniesSelectors';
 import departmentsSelectors from '../../../selectors/departmentsSelectors';
 import rootProductsSelectors from '../../../selectors/rootProductsSelectors';
@@ -49,12 +44,6 @@ const mapStateToProps = (state, ownProps) => ({
 });
 
 const initialise = () => dispatch => {
-    // dispatch(partActions.fetch(itemId));
-    // dispatch(departmentsActions.fetch());
-    // dispatch(partCategoriesActions.fetch());
-    // dispatch(rootProductsActions.fetch());
-    // dispatch(sernosSequencesActions.fetch());
-    // dispatch(suppliersActions.fetch());
     dispatch(productAnalysisCodesActions.fetch());
     dispatch(accountingCompaniesActions.fetch());
 };
