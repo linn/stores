@@ -6,7 +6,8 @@ import {
     InputField,
     Loading,
     Title,
-    ErrorCard
+    ErrorCard,
+    Dropdown
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 
@@ -17,9 +18,10 @@ function StartAllocation({
     loading,
     addItem,
     setEditStatus,
-    snackbarVisible
+    snackbarVisible,
+    accountingCompanies
 }) {
-    const [allocationOptions, setAllocationOptions] = useState({});
+    const [allocationOptions, setAllocationOptions] = useState({ accountingCompany: 'LINN' });
 
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -42,6 +44,14 @@ function StartAllocation({
         setAllocationOptions({ ...allocationOptions, [propertyName]: newValue });
     };
 
+    const accountingCompanyOptions = () => {
+        return accountingCompanies
+            ?.map(c => ({
+                id: c.name,
+                displayText: c.name
+            }));
+    };
+
     return (
         <Page>
             <Grid container spacing={3}>
@@ -59,24 +69,17 @@ function StartAllocation({
                     </Grid>
                 ) : (
                         <>
-                            <Grid item xs={8}>
-                                <InputField
-                                    fullWidth
-                                    value={allocationOptions.description}
-                                    label="Description"
-                                    maxLength={10}
-                                    required
-                                    onChange={handleFieldChange}
-                                    propertyName="description"
-                                />
-                            </Grid>
-                            <Grid itemx xs={4}>
-                                <InputField
-                                    value={allocationOptions.accountingCompany}
+                            <Grid item xs={4}>
+                                <Dropdown
                                     label="Company"
                                     propertyName="accountingCompany"
+                                    items={accountingCompanyOptions()}
+                                    fullWidth
+                                    value={allocationOptions.accountingCompany}
                                     onChange={handleFieldChange}
                                 />
+                            </Grid>
+                            <Grid item xs={8}>
                             </Grid>
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons
@@ -102,6 +105,7 @@ StartAllocation.propTypes = {
         details: PropTypes.shape({}),
         item: PropTypes.string
     }),
+    accountingCompanies: PropTypes.arrayOf(PropTypes.shape({})),
     snackbarVisible: PropTypes.bool,
     addItem: PropTypes.func,
     loading: PropTypes.bool,
@@ -112,7 +116,8 @@ StartAllocation.defaultProps = {
     snackbarVisible: false,
     addItem: null,
     loading: null,
-    itemError: null
+    itemError: null,
+    accountingCompanies: []
 };
 
 export default StartAllocation;

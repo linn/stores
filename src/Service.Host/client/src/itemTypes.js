@@ -38,8 +38,4 @@ export const unitsOfMeasure = new ItemType(
     '/inventory/units-of-measure'
 );
 
-export const allocation = new ItemType(
-    'allocation',
-    'ALLOCATION',
-    '/logistics/allocations'
-);
+export const allocation = new ItemType('allocation', 'ALLOCATION', '/logistics/allocations');

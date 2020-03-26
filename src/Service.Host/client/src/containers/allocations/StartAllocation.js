@@ -10,7 +10,7 @@ import * as itemTypes from '../../itemTypes';
 const mapStateToProps = state => ({
     item: {},
     editStatus: 'create',
-    itemError: getItemError(state, itemTypes.part.item),
+    itemError: getItemError(state, itemTypes.allocation.item),
     loading: allocationSelectors.getLoading(state),
     snackbarVisible: allocationSelectors.getSnackbarVisible(state),
     accountingCompanies: accountingCompaniesSelectors.getItems(state)

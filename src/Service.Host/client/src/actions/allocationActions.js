@@ -1,5 +1,5 @@
 import { UpdateApiActions } from '@linn-it/linn-form-components-library';
-import { partActionTypes as actionTypes } from './index';
+import { allocationActionTypes as actionTypes } from './index';
 import * as itemTypes from '../itemTypes';
 import config from '../config';
 
