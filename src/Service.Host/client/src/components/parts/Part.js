@@ -28,7 +28,7 @@ function Part({
     setEditStatus,
     setSnackbarVisible
 }) {
-    const [part, setPart] = useState({});
+    const [part, setPart] = useState();
     const [prevPart, setPrevPart] = useState({});
 
     const [tab, setTab] = useState(0);
@@ -36,13 +36,13 @@ function Part({
     const handleTabChange = (event, value) => {
         setTab(value);
     };
-
     const creating = () => editStatus === 'create';
     const editing = () => editStatus === 'edit';
     const viewing = () => editStatus === 'view';
 
     useEffect(() => {
         if (item !== prevPart) {
+            console.log('resetting');
             setPart(item);
             setPrevPart(item);
         }
@@ -70,10 +70,34 @@ function Part({
     };
 
     const handleFieldChange = (propertyName, newValue) => {
+        console.log(propertyName, newValue);
         if (viewing()) {
             setEditStatus('edit');
         }
         setPart({ ...part, [propertyName]: newValue });
+        console.log(part.department);
+    };
+
+    const handleDepartmentChange = newValue => {
+        if (viewing()) {
+            setEditStatus('edit');
+        }
+        setPart({
+            ...part,
+            department: newValue.name,
+            departmentDescription: newValue.description
+        });
+    };
+
+    const handleProductAnalysisCodeChange = newValue => {
+        if (viewing()) {
+            setEditStatus('edit');
+        }
+        setPart({
+            ...part,
+            productAnalysisCode: newValue.name,
+            productAnalysisCodeDescription: newValue.description
+        });
     };
 
     return (
@@ -149,7 +173,13 @@ function Part({
                                     productAnalysisCodeDescription={
                                         part.productAnalysisCodeDescription
                                     }
+                                    handleProductAnalysisCodeChange={
+                                        handleProductAnalysisCodeChange
+                                    }
                                     rootProduct={part.rootProduct}
+                                    department={part.department}
+                                    departmentDescription={part.departmentDescription}
+                                    handleDepartmentChange={handleDepartmentChange}
                                 />
                             )}
 

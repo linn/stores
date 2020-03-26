@@ -4,7 +4,7 @@ import GeneralTab from '../../../components/parts/tabs/GeneralTab';
 import partActions from '../../../actions/partActions';
 import partSelectors from '../../../selectors/partSelectors';
 import accountingCompaniesActions from '../../../actions/accountingCompaniesActions';
-// import departmentsActions from '../../actions/departmentsActions';
+import departmentsActions from '../../../actions/departmentsActions';
 // import rootProductsActions from '../../actions/rootProductsActions';
 // import partCategoriesActions from '../../actions/partCategoriesActions';
 // import sernosSequencesActions from '../../actions/sernosSequencesActions';
@@ -27,7 +27,10 @@ const mapStateToProps = (state, ownProps) => ({
     accountingComapny: ownProps.accountingComapny,
     editStatus: partSelectors.getEditStatus(state),
     loading: partSelectors.getLoading(state),
-    departments: departmentsSelectors.getItems(state),
+    departmentsSearchResults: departmentsSelectors
+        .getSearchItems(state)
+        .map(c => ({ name: c.departmentCode, description: c.description })),
+    departmentsSearchLoading: departmentsSelectors.getSearchLoading(state),
     partCategoris: partCategoriesSelectors.getItems(state),
     rootProducts: rootProductsSelectors.getItems(state),
     sernosSequences: sernosSequencesSelectors.getItems(state),
@@ -65,7 +68,9 @@ const mapDispatchToProps = {
     clearRootProductsSearch: rootProductsActions.clearSearch,
     searchProductAnalysisCodes: productAnalysisCodesActions.search,
     clearSearchProductAnalysisCodes: productAnalysisCodesActions.clearSearch,
-    fetchNominalForDepartment: nominalActions.fetch
+    fetchNominalForDepartment: nominalActions.fetch,
+    searchDepartments: departmentsActions.search,
+    clearSearchDepartments: departmentsActions.clearSearch
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(GeneralTab));

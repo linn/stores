@@ -29,11 +29,19 @@ function GeneralTab({
     rootProductsSearchLoading,
     clearRootProductsSearch,
     nominal,
-    fetchNominalForDepartment
+    department,
+    departmentDescription,
+    fetchNominalForDepartment,
+    departmentsSearchResults,
+    departmentsSearchLoading,
+    searchDepartments,
+    clearDepartmentsSearch,
+    handleDepartmentChange,
+    handleProductAnalysisCodeChange
 }) {
     // useEffect(() => {
-        
-    // }, [productAnalysisCode, handleFieldChange, productAnalysisCodes]);
+
+    // }, []);
 
     return (
         <Grid container spacing={3}>
@@ -72,8 +80,34 @@ function GeneralTab({
             <Grid item xs={4}>
                 <Typeahead
                     onSelect={newValue => {
-                        handleFieldChange('productAnalysisCode', newValue.name);
-                        handleFieldChange('productAnalysisCodeDescription', newValue.description);
+                        handleDepartmentChange(newValue);
+                    }}
+                    label="Department"
+                    modal
+                    items={departmentsSearchResults}
+                    value={department}
+                    loading={departmentsSearchLoading}
+                    fetchItems={searchDepartments}
+                    links={false}
+                    clearSearch={() => clearDepartmentsSearch}
+                    placeholder="Search Code or Description"
+                />
+            </Grid>
+            <Grid item xs={8}>
+                <InputField
+                    fullWidth
+                    value={departmentDescription}
+                    label="Description"
+                    required
+                    disabled
+                    onChange={handleFieldChange}
+                    propertyName="departmentDescription"
+                />
+            </Grid>
+            <Grid item xs={4}>
+                <Typeahead
+                    onSelect={newValue => {
+                        handleProductAnalysisCodeChange(newValue);
                     }}
                     label="Product Analysis Code"
                     modal
@@ -86,7 +120,7 @@ function GeneralTab({
                     placeholder="Search Codes"
                 />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={8}>
                 <InputField
                     fullWidth
                     value={productAnalysisCodeDescription}

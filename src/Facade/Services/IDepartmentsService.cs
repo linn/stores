@@ -8,6 +8,6 @@
 
     public interface IDepartmentsService
     {
-        IResult<IEnumerable<Department>> GetOpenDepartments();
+        IResult<IEnumerable<Department>> GetOpenDepartments(string searchTerm = null);
     }
 }
