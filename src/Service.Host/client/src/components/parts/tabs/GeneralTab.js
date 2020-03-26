@@ -1,17 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import {
-    SaveBackCancelButtons,
-    InputField,
-    Dropdown,
-    Loading,
-    Title,
-    ErrorCard,
-    SnackbarMessage,
-    Typeahead
-    //DatePicker
-} from '@linn-it/linn-form-components-library';
+import { InputField, Dropdown, Typeahead } from '@linn-it/linn-form-components-library';
 
 function GeneralTab({
     accountingCompany,
@@ -28,21 +18,17 @@ function GeneralTab({
     rootProductsSearchResults,
     rootProductsSearchLoading,
     clearRootProductsSearch,
-    nominal,
     department,
     departmentDescription,
-    fetchNominalForDepartment,
     departmentsSearchResults,
     departmentsSearchLoading,
     searchDepartments,
     clearDepartmentsSearch,
     handleDepartmentChange,
-    handleProductAnalysisCodeChange
+    handleProductAnalysisCodeChange,
+    handleAccountingCompanyChange,
+    paretoCode
 }) {
-    // useEffect(() => {
-
-    // }, []);
-
     return (
         <Grid container spacing={3}>
             <Grid item xs={4}>
@@ -56,10 +42,22 @@ function GeneralTab({
                     fullWidth
                     allowNoValue
                     value={accountingCompany}
-                    onChange={handleFieldChange}
+                    onChange={(_, newValue) => {
+                        handleAccountingCompanyChange(newValue);
+                    }}
                 />
             </Grid>
-            <Grid item xs={8} />
+            <Grid item xs={2}>
+                <InputField
+                    fullWidth
+                    value={paretoCode}
+                    label="Pareto Code"
+                    disabled
+                    onChange={handleFieldChange}
+                    propertyName="paretoCode"
+                />
+            </Grid>
+            <Grid item xs={6} />
             <Grid item xs={4}>
                 <Typeahead
                     onSelect={newValue => {
@@ -98,7 +96,6 @@ function GeneralTab({
                     fullWidth
                     value={departmentDescription}
                     label="Description"
-                    required
                     disabled
                     onChange={handleFieldChange}
                     propertyName="departmentDescription"
@@ -125,7 +122,6 @@ function GeneralTab({
                     fullWidth
                     value={productAnalysisCodeDescription}
                     label="Description"
-                    required
                     disabled
                     onChange={handleFieldChange}
                     propertyName="ProductAnalysisCodeDescription"
@@ -140,8 +136,18 @@ const accountingCompanyShape = PropTypes.shape({
     description: PropTypes.string
 });
 
-const rootProductsShape = PropTypes.shape({
+const departmentShape = PropTypes.shape({
+    departmentCode: PropTypes.string,
+    description: PropTypes.string
+});
+
+const rootProductShape = PropTypes.shape({
     name: PropTypes.string,
+    description: PropTypes.string
+});
+
+const productAnalysisCodeShape = PropTypes.shape({
+    productCode: PropTypes.string,
     description: PropTypes.string
 });
 
@@ -149,11 +155,27 @@ GeneralTab.propTypes = {
     accountingCompany: accountingCompanyShape,
     accountingCompanies: PropTypes.arrayOf(accountingCompanyShape),
     handleFieldChange: PropTypes.func.isRequired,
-    rootProduct: rootProductsShape,
+    rootProduct: rootProductShape,
     searchRootProducts: PropTypes.func,
-    rootProductsSearchResults: PropTypes.arrayOf(rootProductsShape),
+    rootProductsSearchResults: PropTypes.arrayOf(rootProductShape),
     rootProductsSearchLoading: PropTypes.bool,
-    clearRootProductsSearch: PropTypes.func
+    clearRootProductsSearch: PropTypes.func.isRequired,
+    productAnalysisCode: productAnalysisCodeShape,
+    productAnalysisCodeSearchResults: PropTypes.arrayOf(productAnalysisCodeShape),
+    productAnalysisCodesSearchLoading: PropTypes.bool,
+    productAnalysisCodeDescription: PropTypes.string,
+    department: departmentShape,
+    departmentDescription: PropTypes.string,
+    departmentsSearchResults: PropTypes.arrayOf(departmentShape),
+    departmentsSearchLoading: PropTypes.bool,
+    paretoCode: PropTypes.string,
+    searchDepartments: PropTypes.func.isRequired,
+    clearDepartmentsSearch: PropTypes.func.isRequired,
+    handleDepartmentChange: PropTypes.func.isRequired,
+    handleProductAnalysisCodeChange: PropTypes.func.isRequired,
+    handleAccountingCompanyChange: PropTypes.func.isRequired,
+    searchProductAnalysisCodes: PropTypes.func.isRequired,
+    clearProductAnalysisCodesSearch: PropTypes.func.isRequired
 };
 
 GeneralTab.defaultProps = {
@@ -163,7 +185,15 @@ GeneralTab.defaultProps = {
     rootProductsSearchResults: null,
     searchRootProducts: PropTypes.func,
     rootProductsSearchLoading: false,
-    clearRootProductsSearch: () => {}
+    productAnalysisCode: null,
+    productAnalysisCodeSearchResults: [],
+    productAnalysisCodesSearchLoading: false,
+    productAnalysisCodeDescription: null,
+    department: null,
+    departmentDescription: null,
+    departmentsSearchResults: [],
+    departmentsSearchLoading: false,
+    paretoCode: null
 };
 
 export default GeneralTab;

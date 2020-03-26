@@ -42,7 +42,6 @@ function Part({
 
     useEffect(() => {
         if (item !== prevPart) {
-            console.log('resetting');
             setPart(item);
             setPrevPart(item);
         }
@@ -70,12 +69,10 @@ function Part({
     };
 
     const handleFieldChange = (propertyName, newValue) => {
-        console.log(propertyName, newValue);
         if (viewing()) {
             setEditStatus('edit');
         }
         setPart({ ...part, [propertyName]: newValue });
-        console.log(part.department);
     };
 
     const handleDepartmentChange = newValue => {
@@ -98,6 +95,21 @@ function Part({
             productAnalysisCode: newValue.name,
             productAnalysisCodeDescription: newValue.description
         });
+    };
+
+    const handleAccountingCompanyChange = newValue => {
+        if (newValue === 'RECORDS') {
+            setPart({
+                ...part,
+                accountingCompany: newValue,
+                paretoCode: 'R',
+                bomType: 'C',
+                linnProduced: 'N',
+                qcOnReceipt: 'N'
+            });
+        } else {
+            setPart({ ...part, accountingCompany: newValue, paretoCode: 'U' });
+        }
     };
 
     return (
@@ -180,6 +192,8 @@ function Part({
                                     department={part.department}
                                     departmentDescription={part.departmentDescription}
                                     handleDepartmentChange={handleDepartmentChange}
+                                    paretoCode={part.paretoCode}
+                                    handleAccountingCompanyChange={handleAccountingCompanyChange}
                                 />
                             )}
 
