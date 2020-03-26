@@ -22,7 +22,6 @@
 
         protected INominalService NominalService { get; set; }
 
-
         protected IQueryRepository<Department> DepartmentRepository { get; private set; }
 
 
