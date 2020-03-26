@@ -15,8 +15,16 @@
             this.repository = repository;
         }
 
-        public IResult<IEnumerable<RootProduct>> GetValid()
+        public IResult<IEnumerable<RootProduct>> GetValid(string searchTerm = null)
         {
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                return new SuccessResult<IEnumerable<RootProduct>>(
+                    this.repository.FilterBy(p => !p.DateInvalid.HasValue 
+                                                  && p.Name.ToUpper()
+                                                      .Contains(searchTerm.ToUpper())));
+            }
+
             return new SuccessResult<IEnumerable<RootProduct>>(
                 this.repository.FilterBy(p => !p.DateInvalid.HasValue));
         }

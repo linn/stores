@@ -46,6 +46,11 @@
                 .As<IResourceBuilder<Supplier>>();
             builder.RegisterType<SuppliersResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<Supplier>>>();
+            builder.RegisterType<ProductAnalysisCodeResourceBuilder>()
+                .As<IResourceBuilder<ProductAnalysisCode>>();
+            builder.RegisterType<ProductAnalysisCodesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<ProductAnalysisCode>>>();
+            builder.RegisterType<NominalResourceBuilder>().As<IResourceBuilder<Nominal>>();
         }
     }
 }

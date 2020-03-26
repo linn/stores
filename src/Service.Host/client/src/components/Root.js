@@ -44,9 +44,13 @@ const Root = ({ store }) => (
                                     component={Callback}
                                 />
 
-                                <Route exact path="/parts" component={Parts} />
-                                <Route exact path="/parts/create" component={CreatePart} />
-                                <Route exact path="/parts/:id" component={Part} />
+                                <Route exact path="/inventory/parts" component={Parts} />
+                                <Route
+                                    exact
+                                    path="/inventory/parts/create"
+                                    component={CreatePart}
+                                />
+                                <Route exact path="/inventory/parts/:id" component={Part} />
                             </Switch>
                         </div>
                     </Router>

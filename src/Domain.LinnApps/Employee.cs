@@ -12,7 +12,7 @@
 
         public string FullName { get; set; }
 
-        public DateTime DateInvalid { get; set; }
+        public DateTime? DateInvalid { get; set; }
 
         public IEnumerable<Part> PartsCreated { get; set; }
 

@@ -31,6 +31,8 @@
 
         protected IUnitsOfMeasureService UnitsOfMeasureService { get; private set; }
 
+        protected IProductAnalysisCodeService ProductAnalysisCodeService { get; set; }
+
         protected IRepository<Part, int> PartRepository { get; private set; }
 
         protected IRepository<ParetoClass, string> ParetoClassRepository { get; private set; }
@@ -44,6 +46,7 @@
                 .For<IFacadeService<Part, int, PartResource, PartResource>>();
             this.PartCategoriesService = Substitute.For<IPartCategoryService>();
             this.UnitsOfMeasureService = Substitute.For<IUnitsOfMeasureService>();
+            this.ProductAnalysisCodeService = Substitute.For<IProductAnalysisCodeService>();
             this.PartRepository = Substitute.For<IRepository<Part, int>>();
             this.ParetoClassRepository = Substitute.For<IRepository<ParetoClass, string>>();
             this.ProductAnalysisCodeRepository = Substitute.For<IRepository<ProductAnalysisCode, string>>();
@@ -54,6 +57,7 @@
                         with.Dependency(this.PartsFacadeService);
                         with.Dependency(this.UnitsOfMeasureService);
                         with.Dependency(this.PartCategoriesService);
+                        with.Dependency(this.ProductAnalysisCodeService);
                         with.Dependency(this.PartRepository);
                         with.Dependency(this.ParetoClassRepository);
                         with.Dependency(this.ProductAnalysisCodeRepository);
@@ -63,11 +67,15 @@
                         with.Dependency<IResourceBuilder<IEnumerable<UnitOfMeasure>>>(new UnitsOfMeasureResourceBuilder());
                         with.Dependency<IResourceBuilder<PartCategory>>(new PartCategoryResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<PartCategory>>>(new PartCategoriesResourceBuilder());
+                        with.Dependency<IResourceBuilder<ProductAnalysisCode>>(new ProductAnalysisCodeResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<ProductAnalysisCode>>>(
+                            new ProductAnalysisCodesResourceBuilder());
                         with.Module<PartsModule>();
                         with.ResponseProcessor<PartResponseProcessor>();
                         with.ResponseProcessor<PartsResponseProcessor>();
                         with.ResponseProcessor<UnitsOfMeasureResponseProcessor>();
                         with.ResponseProcessor<PartCategoriesResponseProcessor>();
+                        with.ResponseProcessor<ProductAnalysisCodesResponseProcessor>();
 
                         with.RequestStartup(
                             (container, pipelines, context) =>

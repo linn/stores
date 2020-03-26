@@ -28,6 +28,9 @@
             builder.RegisterType<UnitsOfMeasureService>().As<IUnitsOfMeasureService>();
             builder.RegisterType<PartCategoryService>().As<IPartCategoryService>();
             builder.RegisterType<SuppliersService>().As<ISuppliersService>();
+            builder.RegisterType<ProductAnalysisCodeService>()
+                .As<IProductAnalysisCodeService>();
+            builder.RegisterType<NominalService>().As<INominalService>();
 
             // proxy
             builder.RegisterType<SosPack>().As<ISosPack>();

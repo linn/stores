@@ -37,3 +37,11 @@ export const unitsOfMeasure = new ItemType(
     'UNITS_OF_MEASURE',
     '/inventory/units-of-measure'
 );
+
+export const productAnalysisCodes = new ItemType(
+    'productAnalysisCodes',
+    'PRODUCT_ANALYSIS_CODES',
+    '/inventory/product-analysis-codes'
+);
+
+export const nominal = new ItemType('nominal', 'NOMINAL', '/inventory/nominal-for-department');
