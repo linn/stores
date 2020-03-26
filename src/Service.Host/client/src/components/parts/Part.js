@@ -128,32 +128,31 @@ function Part({
                                     propertyName="description"
                                 />
                             </Grid>
-                            <Grid item xs={12}>
-                                <Tabs
-                                    value={tab}
-                                    onChange={handleTabChange}
-                                    indicatorColor="primary"
-                                    textColor="primary"
-                                    style={{ paddingBottom: '40px' }}
-                                >
-                                    <Tab label="General" />
-                                    <Tab label="Build" />
-                                    <Tab label="Purch" />
-                                    <Tab label="Stores" />
-                                    <Tab label="LifeCycle" />
-                                </Tabs>
-                                {tab === 0 && (
-                                    <GeneralTab
-                                        accountingCompany={part.accountingCompany}
-                                        handleFieldChange={handleFieldChange}
-                                        productAnalysisCode={part.productAnalysisCode}
-                                        productAnalysisCodeDescription={
-                                            part.productAnalysisCodeDescription
-                                        }
-                                        rootProduct={part.rootProduct}
-                                    />
-                                )}
-                            </Grid>
+                            <Tabs
+                                value={tab}
+                                onChange={handleTabChange}
+                                indicatorColor="primary"
+                                textColor="primary"
+                                style={{ paddingBottom: '40px' }}
+                            >
+                                <Tab label="General" />
+                                <Tab label="Build" />
+                                <Tab label="Purch" />
+                                <Tab label="Stores" />
+                                <Tab label="LifeCycle" />
+                            </Tabs>
+                            {tab === 0 && (
+                                <GeneralTab
+                                    accountingCompany={part.accountingCompany}
+                                    handleFieldChange={handleFieldChange}
+                                    productAnalysisCode={part.productAnalysisCode}
+                                    productAnalysisCodeDescription={
+                                        part.productAnalysisCodeDescription
+                                    }
+                                    rootProduct={part.rootProduct}
+                                />
+                            )}
+
                             {/* <Grid item xs={8}>
                                 <DatePicker
                                     label="Date Invalid"

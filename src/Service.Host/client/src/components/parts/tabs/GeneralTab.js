@@ -32,15 +32,12 @@ function GeneralTab({
     fetchNominalForDepartment
 }) {
     // useEffect(() => {
-    //     handleFieldChange(
-    //         'productAnalysisCodeDescription',
-    //         productAnalysisCodes?.find(c => c.ProductCode === productAnalysisCode)?.description
-    //     );
+        
     // }, [productAnalysisCode, handleFieldChange, productAnalysisCodes]);
 
     return (
         <Grid container spacing={3}>
-            <Grid itemx xs={4}>
+            <Grid item xs={4}>
                 <Dropdown
                     label="Accounting Company"
                     propertyName="accountingCompany"
@@ -72,7 +69,7 @@ function GeneralTab({
                 />
             </Grid>
             <Grid item xs={8} />
-            <Grid itemx xs={4}>
+            <Grid item xs={4}>
                 <Typeahead
                     onSelect={newValue => {
                         handleFieldChange('productAnalysisCode', newValue.name);
@@ -89,7 +86,7 @@ function GeneralTab({
                     placeholder="Search Codes"
                 />
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={4}>
                 <InputField
                     fullWidth
                     value={productAnalysisCodeDescription}
