@@ -9,5 +9,9 @@
         public int? AccountId { get; set; }
 
         public string ArticleNumber { get; set; }
+
+        public string AccountingCompany { get; set; }
+
+        public string CutOffDate { get; set; }
     }
 }

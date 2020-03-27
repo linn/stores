@@ -7,9 +7,7 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
-    using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Resources;
-    using Linn.Stores.Resources.Allocation;
 
     using Nancy;
     using Nancy.Testing;

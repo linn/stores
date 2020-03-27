@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Allocation
 {
+    using System;
+
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
@@ -27,7 +29,9 @@
             string stockPoolCode,
             string despatchLocationCode,
             int? accountId,
-            string articleNumber)
+            string articleNumber,
+            string accountingCompany,
+            DateTime? cutOffDate)
         {
             this.sosPack.SetNewJobId();
             var newId = this.sosPack.GetJobId();
@@ -38,7 +42,9 @@
                                                  ArticleNumber = articleNumber,
                                                  AccountId = accountId,
                                                  DespatchLocationCode = despatchLocationCode,
-                                                 StockPoolCode = stockPoolCode
+                                                 StockPoolCode = stockPoolCode,
+                                                 AccountingCompany = accountingCompany,
+                                                 CutOffDate = cutOffDate
                                              });
             this.transactionManager.Commit();
 

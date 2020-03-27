@@ -2,9 +2,6 @@
 {
     using System;
 
-    using FluentAssertions;
-    using FluentAssertions.Extensions;
-
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Resources.Allocation;
@@ -13,7 +10,7 @@
 
     using NUnit.Framework;
 
-    public class WhenStartingAllocation : ContextBase
+    public class WhenStartingAllocationWithNoCutOff : ContextBase
     {
         private AllocationOptionsResource resource;
 
@@ -32,7 +29,7 @@
                                     ArticleNumber = "article",
                                     DespatchLocationCode = "dispatch",
                                     AccountingCompany = "LINN",
-                                    CutOffDate = 1.July(2021).ToString("o")
+                                    CutOffDate = null
                                 };
 
             this.AllocationService.StartAllocation(
@@ -48,7 +45,7 @@
         }
 
         [Test]
-        public void ShouldCallService()
+        public void ShouldCallServiceWithoutDate()
         {
             this.AllocationService.Received().StartAllocation(
                 this.resource.StockPoolCode,
@@ -56,15 +53,7 @@
                 this.resource.AccountId,
                 this.resource.ArticleNumber,
                 this.resource.AccountingCompany,
-                1.July(2021));
-        }
-
-        [Test]
-        public void ShouldReturnSuccess()
-        {
-            this.result.Should().BeOfType<SuccessResult<AllocationStart>>();
-            var dataResult = ((SuccessResult<AllocationStart>)this.result).Data;
-            dataResult.Id.Should().Be(this.startDetails.Id);
+                null);
         }
     }
 }
