@@ -5,6 +5,7 @@
     using Linn.Common.Persistence;
     using Linn.Common.Persistence.EntityFramework;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Persistence.LinnApps;
@@ -34,6 +35,8 @@
             builder.RegisterType<SupplierRepository>().As<IQueryRepository<Supplier>>();
             builder.RegisterType<NominalRepository>().As<IQueryRepository<Nominal>>();
             builder.RegisterType<NominalAccountRepository>().As<IQueryRepository<NominalAccount>>();
+            builder.RegisterType<DespatchLocationRepository>().As<IRepository<DespatchLocation, int>>();
+            builder.RegisterType<StockPoolRepository>().As<IRepository<StockPool, int>>();
         }
     }
 }
