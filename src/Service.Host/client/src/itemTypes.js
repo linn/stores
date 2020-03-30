@@ -38,6 +38,8 @@ export const unitsOfMeasure = new ItemType(
     '/inventory/units-of-measure'
 );
 
+export const allocation = new ItemType('allocation', 'ALLOCATION', '/logistics/allocations');
+
 export const productAnalysisCodes = new ItemType(
     'productAnalysisCodes',
     'PRODUCT_ANALYSIS_CODES',
@@ -45,3 +47,4 @@ export const productAnalysisCodes = new ItemType(
 );
 
 export const nominal = new ItemType('nominal', 'NOMINAL', '/inventory/nominal-for-department');
+

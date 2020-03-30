@@ -115,7 +115,7 @@ module.exports = {
         new webpack.NoEmitOnErrorsPlugin(), // do not emit compiled assets that include errors
         new webpack.DefinePlugin({
             'PROCESS.ENV': {
-                appRoot: JSON.stringify('http://localhost:61798')
+                appRoot: JSON.stringify('http://localhost:51698')
             }
         })
     ]

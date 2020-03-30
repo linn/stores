@@ -1,14 +1,12 @@
-﻿namespace Linn.Stores.Service.Tests.AllocationModuleSpecs
+﻿namespace Linn.Stores.Service.Tests.StockPoolModuleSpecs
 {
     using System.Collections.Generic;
     using System.Security.Claims;
 
     using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps.Allocation;
-    using Linn.Stores.Domain.LinnApps.Allocation.Models;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.ResourceBuilders;
-    using Linn.Stores.Facade.Services;
-    using Linn.Stores.Resources.Allocation;
+    using Linn.Stores.Resources;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
     using Linn.Stores.Service.Tests;
@@ -21,26 +19,21 @@
 
     public abstract class ContextBase : NancyContextBase
     {
-        protected IAllocationFacadeService AllocationFacadeService { get; private set; }
-
-        protected IFacadeService<DespatchLocation, int, DespatchLocationResource, DespatchLocationResource> DespatchLocationFacadeService { get; private set; }
+        protected IFacadeService<StockPool, int, StockPoolResource, StockPoolResource> StockPoolFacadeService { get; private set; }
 
         [SetUp]
         public void EstablishContext()
         {
-            this.AllocationFacadeService = Substitute.For<IAllocationFacadeService>();
-            this.DespatchLocationFacadeService = Substitute.For<IFacadeService<DespatchLocation, int, DespatchLocationResource, DespatchLocationResource>>();
+            this.StockPoolFacadeService = Substitute.For<IFacadeService<StockPool, int, StockPoolResource, StockPoolResource>>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                 {
-                    with.Dependency(this.AllocationFacadeService);
-                    with.Dependency(this.DespatchLocationFacadeService);
-                    with.Dependency<IResourceBuilder<AllocationStart>>(new AllocationStartResourceBuilder());
-                    with.Dependency<IResourceBuilder<IEnumerable<DespatchLocation>>>(new DespatchLocationsResourceBuilder());
-                    with.Module<AllocationModule>();
-                    with.ResponseProcessor<AllocationStartResponseProcessor>();
-                    with.ResponseProcessor<DespatchLocationsResponseProcessor>();
+                    with.Dependency(this.StockPoolFacadeService);
+                    with.Dependency<IResourceBuilder<StockPool>>(new StockPoolResourceBuilder());
+                    with.Dependency<IResourceBuilder<IEnumerable<StockPool>>>(new StockPoolsResourceBuilder());
+                    with.Module<StockPoolModule>();
+                    with.ResponseProcessor<StockPoolsResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {

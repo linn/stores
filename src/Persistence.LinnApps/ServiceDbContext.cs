@@ -2,6 +2,7 @@
 {
     using Linn.Common.Configuration;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Sos;
 
@@ -29,7 +30,7 @@
         public DbSet<AccountingCompany> AccountingCompanies { get; set; }
 
         public DbSet<Employee> Employees { get; set; }
-        
+
         public DbSet<SosOption> SosOptions { get; set; }
 
         public DbQuery<SernosSequence> SernosSequences { get; set; }
@@ -43,6 +44,10 @@
         public DbSet<Nominal> Nominals { get; set; }
 
         public DbSet<NominalAccount> NominalAccounts { get; set; }
+
+        public DbSet<DespatchLocation> DespatchLocations { get; set; }
+
+        public DbSet<StockPool> StockPools { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -60,6 +65,8 @@
             this.BuildSuppliers(builder);
             this.BuildNominals(builder);
             this.BuildNominalAccounts(builder);
+            this.BuildDespatchLocations(builder);
+            this.BuildStockPools(builder);
             base.OnModelCreating(builder);
         }
 
@@ -265,6 +272,35 @@
             builder.Entity<NominalAccount>().HasKey(a => a.NominalAccountId);
             builder.Entity<NominalAccount>().Property(a => a.NominalAccountId).HasColumnName("NOMACC_ID");
             builder.Entity<NominalAccount>().Property(a => a.Department).HasColumnName("DEPARTMENT");
+        }
+
+        private void BuildDespatchLocations(ModelBuilder builder)
+        {
+            var q = builder.Entity<DespatchLocation>();
+            q.HasKey(e => e.Id);
+            q.ToTable("DESPATCH_LOCATIONS");
+            q.Property(e => e.Id).HasColumnName("BRIDGE_ID");
+            q.Property(e => e.LocationCode).HasColumnName("DESPATCH_LOCATION_CODE").HasMaxLength(10);
+            q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
+            q.Property(e => e.DateInvalid).HasColumnName("DATE_INVALID");
+            q.Property(e => e.Sequence).HasColumnName("SEQUENCE");
+            q.Property(e => e.UnAllocLocationId).HasColumnName("UNALLOC_LOCATION_ID");
+            q.Property(e => e.DefaultCarrier).HasColumnName("DEFAULT_CARRIER").HasMaxLength(10);
+        }
+
+        private void BuildStockPools(ModelBuilder builder)
+        {
+            var q = builder.Entity<StockPool>();
+            q.HasKey(e => e.Id);
+            q.ToTable("STOCK_POOLS");
+            q.Property(e => e.Id).HasColumnName("BRIDGE_ID");
+            q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE").HasMaxLength(10);
+            q.Property(e => e.Description).HasColumnName("STOCK_POOL_DESCRIPTION").HasMaxLength(50);
+            q.Property(e => e.DateInvalid).HasColumnName("DATE_INVALID");
+            q.Property(e => e.Sequence).HasColumnName("SEQUENCE");
+            q.Property(e => e.AccountingCompany).HasColumnName("ACCOUNTING_COMPANY").HasMaxLength(10);
+            q.Property(e => e.StockCategory).HasColumnName("STOCK_CATEGORY").HasMaxLength(1);
+            q.Property(e => e.DefaultLocation).HasColumnName("DEFAULT_LOCATION");
         }
     }
 }

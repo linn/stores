@@ -6,6 +6,7 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.ResourceBuilders;
@@ -51,6 +52,10 @@
             builder.RegisterType<ProductAnalysisCodesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<ProductAnalysisCode>>>();
             builder.RegisterType<NominalResourceBuilder>().As<IResourceBuilder<Nominal>>();
+            builder.RegisterType<DespatchLocationResourceBuilder>().As<IResourceBuilder<DespatchLocation>>();
+            builder.RegisterType<DespatchLocationsResourceBuilder>().As<IResourceBuilder<IEnumerable<DespatchLocation>>>();
+            builder.RegisterType<StockPoolResourceBuilder>().As<IResourceBuilder<StockPool>>();
+            builder.RegisterType<StockPoolsResourceBuilder>().As<IResourceBuilder<IEnumerable<StockPool>>>();
         }
     }
 }

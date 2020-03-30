@@ -3,12 +3,14 @@
     using Autofac;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.Allocation;
 
     public class ServiceModule : Module
     {
@@ -31,6 +33,10 @@
             builder.RegisterType<ProductAnalysisCodeService>()
                 .As<IProductAnalysisCodeService>();
             builder.RegisterType<NominalService>().As<INominalService>();
+            builder.RegisterType<DespatchLocationFacadeService>()
+                .As<IFacadeService<DespatchLocation, int, DespatchLocationResource, DespatchLocationResource>>();
+            builder.RegisterType<StockPoolFacadeService>()
+                .As<IFacadeService<StockPool, int, StockPoolResource, StockPoolResource>>();
 
             // proxy
             builder.RegisterType<SosPack>().As<ISosPack>();
