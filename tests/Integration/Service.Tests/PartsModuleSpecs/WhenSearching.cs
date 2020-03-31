@@ -21,8 +21,8 @@
         [SetUp]
         public void SetUp()
         {
-            var partA = new Part { PartNumber = "PART/A", Description = "description A" };
-            var partB = new Part { PartNumber = "PART/B", Description = "description B" };
+            var partA = new Part { PartNumber = "PART/A", Description = "description A", StockControlled = "Y" };
+            var partB = new Part { PartNumber = "PART/B", Description = "description B", StockControlled = "Y" };
 
             this.PartsFacadeService.Search("P")
                 .Returns(new SuccessResult<IEnumerable<Part>>(new List<Part> { partA, partB }));

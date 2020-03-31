@@ -33,7 +33,7 @@
                            OptionSet = part.OptionSet,
                            MaterialPrice = part.MaterialPrice,
                            SingleSourcePart = this.ToNullableBool(part.SingleSourcePart),
-                           StockControlled = this.ToNullableBool(part.StockControlled),
+                           StockControlled = part.StockControlled.Equals("Y"),
                            LinnProduced = this.ToNullableBool(part.LinnProduced),
                            PartCategory = part.PartCategory,
                            IgnoreWorkstationStock = this.ToNullableBool(part.IgnoreWorkstationStock),

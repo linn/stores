@@ -14,7 +14,7 @@
 
         public string RootProductDescription { get; set; }
 
-        public bool? StockControlled { get; set; }
+        public bool StockControlled { get; set; }
 
         public bool? SafetyCriticalPart { get; set; }
 
