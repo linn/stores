@@ -20,7 +20,7 @@
 
         public NominalAccount FindBy(Expression<Func<NominalAccount, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.NominalAccounts.Where(expression).ToList().FirstOrDefault();
         }
 
         public IQueryable<NominalAccount> FilterBy(Expression<Func<NominalAccount, bool>> expression)

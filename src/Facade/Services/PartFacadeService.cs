@@ -17,17 +17,21 @@
 
         private readonly IQueryRepository<AccountingCompany> accountingCompanyRepository;
 
+        private readonly IQueryRepository<NominalAccount> nominalAccountRepository;
+
         public PartFacadeService(
             IRepository<Part, int> repository,
             IRepository<ParetoClass, string> paretoClassRepository,
             IQueryRepository<ProductAnalysisCode> productAnalysisCodeRepository,
             IQueryRepository<AccountingCompany> accountingCompanyRepository,
+            IQueryRepository<NominalAccount> nominalAccountRepository,
             ITransactionManager transactionManager)
             : base(repository, transactionManager)
         {
             this.paretoClassRepository = paretoClassRepository;
             this.productAnalysisCodeRepository = productAnalysisCodeRepository;
             this.accountingCompanyRepository = accountingCompanyRepository;
+            this.nominalAccountRepository = nominalAccountRepository;
         }
 
         protected override Part CreateFromResource(PartResource resource)
@@ -57,8 +61,10 @@
                                string.IsNullOrEmpty(resource.SafetyCertificateExpirationDate)
                                    ? (DateTime?)null
                                    : DateTime.Parse(resource.SafetyCertificateExpirationDate),
-                           SafetyDataDirectory = resource.SafetyDataDirectory
-                       };
+                           SafetyDataDirectory = resource.SafetyDataDirectory,
+                           NominalAccount = this.nominalAccountRepository.FindBy(
+                               a => a.Nominal.NominalCode == resource.Nominal && a.Department == resource.Department)
+        };
         }
 
         protected override void UpdateFromResource(Part entity, PartResource resource)
@@ -84,6 +90,8 @@
                                                          ? (DateTime?)null
                                                          : DateTime.Parse(resource.SafetyCertificateExpirationDate);
             entity.SafetyDataDirectory = resource.SafetyDataDirectory;
+            entity.NominalAccount = this.nominalAccountRepository.FindBy(
+                a => a.Nominal.NominalCode == resource.Nominal && a.Department == resource.Department);
         }
 
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)

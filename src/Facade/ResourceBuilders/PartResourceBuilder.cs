@@ -20,7 +20,7 @@
                            ProductAnalysisCode = part.ProductAnalysisCode?.ProductCode,
                            ProductAnalysisCodeDescription = part.ProductAnalysisCode?.Description,
                            SafetyCertificateExpirationDate = part.SafetyCertificateExpirationDate?.ToString("o"),
-                           SafetyCriticalPart = part.SafetyCriticalPart == "Y",
+                           SafetyCriticalPart = this.ToNullableBool(part.SafetyCriticalPart),
                            ImdsIdNumber = part.ImdsIdNumber,
                            ParetoCode = part.ParetoClass?.ParetoCode,
                            ParetoDescription = part.ParetoClass?.Description,
