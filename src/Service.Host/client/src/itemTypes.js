@@ -47,4 +47,3 @@ export const productAnalysisCodes = new ItemType(
 );
 
 export const nominal = new ItemType('nominal', 'NOMINAL', '/inventory/nominal-for-department');
-
