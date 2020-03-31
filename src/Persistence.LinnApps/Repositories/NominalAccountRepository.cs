@@ -20,12 +20,14 @@
 
         public NominalAccount FindBy(Expression<Func<NominalAccount, bool>> expression)
         {
-            return this.serviceDbContext.NominalAccounts.Where(expression).ToList().FirstOrDefault();
+            return this.serviceDbContext.NominalAccounts.Where(expression)
+                .Include(a => a.Department).ToList().FirstOrDefault();
         }
 
         public IQueryable<NominalAccount> FilterBy(Expression<Func<NominalAccount, bool>> expression)
         {
-            return this.serviceDbContext.NominalAccounts.Where(expression).Include(a => a.Nominal);
+            return this.serviceDbContext.NominalAccounts
+                .Where(expression).Include(a => a.Nominal).Include(a => a.Department);
         }
 
         public IQueryable<NominalAccount> FindAll()
