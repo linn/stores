@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import { InputField, Dropdown, Typeahead } from '@linn-it/linn-form-components-library';
+import { InputField, Dropdown, Typeahead, DatePicker } from '@linn-it/linn-form-components-library';
 
 function GeneralTab({
     accountingCompany,
@@ -27,8 +27,25 @@ function GeneralTab({
     handleDepartmentChange,
     handleProductAnalysisCodeChange,
     handleAccountingCompanyChange,
-    paretoCode
+    paretoCode,
+    nominal,
+    nominalDescription,
+    stockControlled,
+    safetyCriticalPart,
+    performanceCriticalPart,
+    emcCriticalPart,
+    singleSourcePart,
+    cccCriticalPart,
+    psuPart,
+    safetyCertificateExpirationDate,
+    safetyDataDirectory
 }) {
+    const convertToYOrNString = booleanValue => {
+        if (booleanValue === '' || booleanValue === null) {
+            return null;
+        }
+        return booleanValue ? 'Yes' : 'No';
+    };
     return (
         <Grid container spacing={3}>
             <Grid item xs={4}>
@@ -102,6 +119,24 @@ function GeneralTab({
                 />
             </Grid>
             <Grid item xs={4}>
+                <InputField
+                    fullWidth
+                    value={nominal}
+                    label="Nominal"
+                    onChange={handleFieldChange}
+                    propertyName="nominal"
+                />
+            </Grid>
+            <Grid item xs={8}>
+                <InputField
+                    fullWidth
+                    value={nominalDescription}
+                    label="Description"
+                    disabled
+                    onChange={handleFieldChange}
+                />
+            </Grid>
+            <Grid item xs={4}>
                 <Typeahead
                     onSelect={newValue => {
                         handleProductAnalysisCodeChange(newValue);
@@ -125,6 +160,108 @@ function GeneralTab({
                     disabled
                     onChange={handleFieldChange}
                     propertyName="ProductAnalysisCodeDescription"
+                />
+            </Grid>
+            <Grid item xs={3}>
+                <Dropdown
+                    label="Stores Controlled?"
+                    propertyName="stockControlled"
+                    items={['Yes', 'No']}
+                    fullWidth
+                    allowNoValue={false}
+                    value={convertToYOrNString(stockControlled)}
+                    onChange={handleFieldChange}
+                />
+            </Grid>
+            <Grid item xs={9} />
+
+            <Grid item xs={3}>
+                <Dropdown
+                    label="Safety Critical?"
+                    propertyName="safetyCriticalPart"
+                    items={['Yes', 'No']}
+                    fullWidth
+                    allowNoValue
+                    value={convertToYOrNString(safetyCriticalPart)}
+                    onChange={handleFieldChange}
+                />
+            </Grid>
+            <Grid item xs={3}>
+                <Dropdown
+                    label="Performance Critical?"
+                    propertyName="performanceCriticalPart"
+                    items={['Yes', 'No']}
+                    fullWidth
+                    allowNoValue
+                    value={convertToYOrNString(performanceCriticalPart)}
+                    onChange={handleFieldChange}
+                />
+            </Grid>
+            <Grid item xs={6} />
+
+            <Grid item xs={3}>
+                <Dropdown
+                    label="EMC Critical?"
+                    propertyName="emcCriticalPart"
+                    items={['Yes', 'No']}
+                    fullWidth
+                    allowNoValue
+                    value={convertToYOrNString(emcCriticalPart)}
+                    onChange={handleFieldChange}
+                />
+            </Grid>
+            <Grid item xs={3}>
+                <Dropdown
+                    label="Single Source?"
+                    propertyName="singleSourcePart"
+                    items={['Yes', 'No']}
+                    fullWidth
+                    allowNoValue
+                    value={convertToYOrNString(singleSourcePart)}
+                    onChange={handleFieldChange}
+                />
+            </Grid>
+            <Grid item xs={6} />
+
+            <Grid item xs={3}>
+                <Dropdown
+                    label="CCC Critical?"
+                    propertyName="cccCriticalPart"
+                    items={['Yes', 'No']}
+                    allowNoValue={false}
+                    fullWidth
+                    value={convertToYOrNString(cccCriticalPart)}
+                    onChange={handleFieldChange}
+                />
+            </Grid>
+            <Grid item xs={3}>
+                <Dropdown
+                    label="Approved  PSU?"
+                    propertyName="psuPart"
+                    allowNoValue={false}
+                    items={['Yes', 'No']}
+                    fullWidth
+                    value={convertToYOrNString(psuPart)}
+                    onChange={handleFieldChange}
+                />
+            </Grid>
+            <Grid item xs={6} />
+            <Grid item xs={3}>
+                <DatePicker
+                    label="Safety Certificate Expiry Date"
+                    value={safetyCertificateExpirationDate}
+                    onChange={value => {
+                        handleFieldChange('safetyCertificateExpirationDate', value);
+                    }}
+                />
+            </Grid>
+            <Grid item xs={9}>
+                <InputField
+                    fullWidth
+                    value={safetyDataDirectory}
+                    label="EMC + Safety Data Directory"
+                    onChange={handleFieldChange}
+                    propertyName="safetyDataDirectory"
                 />
             </Grid>
         </Grid>
@@ -175,7 +312,18 @@ GeneralTab.propTypes = {
     handleProductAnalysisCodeChange: PropTypes.func.isRequired,
     handleAccountingCompanyChange: PropTypes.func.isRequired,
     searchProductAnalysisCodes: PropTypes.func.isRequired,
-    clearProductAnalysisCodesSearch: PropTypes.func.isRequired
+    clearProductAnalysisCodesSearch: PropTypes.func.isRequired,
+    nominal: PropTypes.string,
+    nominalDescription: PropTypes.string,
+    stockControlled: PropTypes.bool,
+    safetyCriticalPart: PropTypes.bool,
+    performanceCriticalPart: PropTypes.bool,
+    emcCriticalPart: PropTypes.bool,
+    singleSourcePart: PropTypes.bool,
+    cccCriticalPart: PropTypes.bool,
+    psuPart: PropTypes.bool,
+    safetyCertificateExpirationDate: PropTypes.string,
+    safetyDataDirectory: PropTypes.string
 };
 
 GeneralTab.defaultProps = {
@@ -193,7 +341,18 @@ GeneralTab.defaultProps = {
     departmentDescription: null,
     departmentsSearchResults: [],
     departmentsSearchLoading: false,
-    paretoCode: null
+    paretoCode: null,
+    nominal: null,
+    nominalDescription: null,
+    stockControlled: null,
+    safetyCriticalPart: null,
+    performanceCriticalPart: null,
+    emcCriticalPart: null,
+    singleSourcePart: null,
+    cccCriticalPart: null,
+    psuPart: null,
+    safetyCertificateExpirationDate: null,
+    safetyDataDirectory: null
 };
 
 export default GeneralTab;

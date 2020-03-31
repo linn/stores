@@ -10,7 +10,6 @@ import {
     Title,
     ErrorCard,
     SnackbarMessage
-    //DatePicker
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 import GeneralTab from '../../containers/parts/tabs/GeneralTab';
@@ -26,6 +25,8 @@ function Part({
     addItem,
     updateItem,
     setEditStatus,
+    nominal,
+    fetchNominal,
     setSnackbarVisible
 }) {
     const [part, setPart] = useState();
@@ -41,11 +42,22 @@ function Part({
     const viewing = () => editStatus === 'view';
 
     useEffect(() => {
+        if (item?.department) {
+            fetchNominal(item?.department);
+        }
         if (item !== prevPart) {
             setPart(item);
             setPrevPart(item);
         }
-    }, [item, prevPart]);
+    }, [item, prevPart, fetchNominal]);
+
+    useEffect(() => {
+        setPart(p => ({
+            ...p,
+            nominalCode: nominal?.nominalCode,
+            nominalDescription: nominal?.description
+        }));
+    }, [nominal, setPart]);
 
     const partInvalid = () => false;
 
@@ -72,13 +84,18 @@ function Part({
         if (viewing()) {
             setEditStatus('edit');
         }
-        setPart({ ...part, [propertyName]: newValue });
+        if (newValue === 'Yes' || newValue === 'No') {
+            setPart({ ...part, [propertyName]: newValue === 'Yes' });
+        } else {
+            setPart({ ...part, [propertyName]: newValue });
+        }
     };
 
     const handleDepartmentChange = newValue => {
         if (viewing()) {
             setEditStatus('edit');
         }
+        fetchNominal(newValue.name);
         setPart({
             ...part,
             department: newValue.name,
@@ -98,14 +115,17 @@ function Part({
     };
 
     const handleAccountingCompanyChange = newValue => {
+        if (viewing()) {
+            setEditStatus('edit');
+        }
         if (newValue === 'RECORDS') {
             setPart({
                 ...part,
                 accountingCompany: newValue,
                 paretoCode: 'R',
                 bomType: 'C',
-                linnProduced: 'N',
-                qcOnReceipt: 'N'
+                linnProduced: 'No',
+                qcOnReceipt: 'No'
             });
         } else {
             setPart({ ...part, accountingCompany: newValue, paretoCode: 'U' });
@@ -194,18 +214,21 @@ function Part({
                                     handleDepartmentChange={handleDepartmentChange}
                                     paretoCode={part.paretoCode}
                                     handleAccountingCompanyChange={handleAccountingCompanyChange}
+                                    nominal={part.nominalCode}
+                                    nominalDescription={part.nominalDescription}
+                                    stockControlled={part.stockControlled}
+                                    safetyCriticalPart={part.safetyCriticalPart}
+                                    performanceCriticalPart={part.performanceCriticalPart}
+                                    emcCriticalPart={part.emcCriticalPart}
+                                    singleSourcePart={part.singleSourcePart}
+                                    cccCriticalPart={part.cccCriticalPart}
+                                    psuPart={part.psuPart}
+                                    safetyCertificateExpirationDate={
+                                        part.safetyCertificateExpirationDate
+                                    }
+                                    safetyDataDirectory={part.safetyDataDirectory}
                                 />
                             )}
-
-                            {/* <Grid item xs={8}>
-                                <DatePicker
-                                    label="Date Invalid"
-                                    value={part.dateInvalid ? part.dateInvalid.toString() : null}
-                                    onChange={value => {
-                                        handleFieldChange('dateInvalid', value);
-                                    }}
-                                />
-                            </Grid> */}
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons
                                     saveDisabled={viewing() || partInvalid()}
@@ -243,7 +266,9 @@ Part.propTypes = {
     addItem: PropTypes.func,
     loading: PropTypes.bool,
     setEditStatus: PropTypes.func.isRequired,
-    setSnackbarVisible: PropTypes.func.isRequired
+    setSnackbarVisible: PropTypes.func.isRequired,
+    nominal: PropTypes.shape({ nominalCode: PropTypes.string, description: PropTypes.string }),
+    fetchNominal: PropTypes.func.isRequired
 };
 
 Part.defaultProps = {
@@ -253,7 +278,8 @@ Part.defaultProps = {
     updateItem: null,
     loading: null,
     itemError: null,
-    itemId: null
+    itemId: null,
+    nominal: null
 };
 
 export default Part;

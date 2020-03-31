@@ -5,6 +5,8 @@ import { OidcProvider } from 'redux-oidc';
 import { Router } from 'react-router-dom';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { Navigation } from '@linn-it/linn-form-components-library';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
 import PropTypes from 'prop-types';
 import history from '../history';
 import App from './App';
@@ -21,46 +23,48 @@ const Root = ({ store }) => (
         <div style={{ paddingTop: '40px' }}>
             <Provider store={store}>
                 <OidcProvider store={store} userManager={userManager}>
-                    <Router history={history}>
-                        <div>
-                            <Navigation />
-                            <CssBaseline />
+                    <MuiPickersUtilsProvider utils={MomentUtils}>
+                        <Router history={history}>
+                            <div>
+                                <Navigation />
+                                <CssBaseline />
 
-                            <Route exact path="/" render={() => <Redirect to="/inventory" />} />
-
-                            <Route
-                                path="/"
-                                render={() => {
-                                    document.title = 'Stores';
-                                    return false;
-                                }}
-                            />
-
-                            <Switch>
-                                <Route exact path="/inventory" component={App} />
+                                <Route exact path="/" render={() => <Redirect to="/inventory" />} />
 
                                 <Route
-                                    exact
-                                    path="/inventory/signin-oidc-client"
-                                    component={Callback}
+                                    path="/"
+                                    render={() => {
+                                        document.title = 'Stores';
+                                        return false;
+                                    }}
                                 />
 
-                                <Route exact path="/inventory/parts" component={Parts} />
-                                <Route
-                                    exact
-                                    path="/inventory/parts/create"
-                                    component={CreatePart}
-                                />
-                                <Route exact path="/inventory/parts/:id" component={Part} />
+                                <Switch>
+                                    <Route exact path="/inventory" component={App} />
 
-                                <Route
-                                    exact
-                                    path="/logistics/allocations"
-                                    component={StartAllocation}
-                                />
-                            </Switch>
-                        </div>
-                    </Router>
+                                    <Route
+                                        exact
+                                        path="/inventory/signin-oidc-client"
+                                        component={Callback}
+                                    />
+
+                                    <Route exact path="/inventory/parts" component={Parts} />
+                                    <Route
+                                        exact
+                                        path="/inventory/parts/create"
+                                        component={CreatePart}
+                                    />
+                                    <Route exact path="/inventory/parts/:id" component={Part} />
+
+                                    <Route
+                                        exact
+                                        path="/logistics/allocations"
+                                        component={StartAllocation}
+                                    />
+                                </Switch>
+                            </div>
+                        </Router>
+                    </MuiPickersUtilsProvider>
                 </OidcProvider>
             </Provider>
         </div>

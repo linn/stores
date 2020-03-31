@@ -17,6 +17,8 @@ import partCategoriesSelectors from '../../selectors/partCategoriesSelectors';
 import sernosSequencesSelectors from '../../selectors/sernosSequencesSelectors';
 import suppliersSelectors from '../../selectors/suppliersSelectors';
 import unitsOfMeasureSelectors from '../../selectors/unitsOfMeasureSelectors';
+import nominalActions from '../../actions/nominalActions';
+import nominalSelectors from '../../selectors/nominalSelectors';
 import * as itemTypes from '../../itemTypes';
 
 const mapStpartsToProps = state => ({
@@ -31,7 +33,8 @@ const mapStpartsToProps = state => ({
     rootProducts: rootProductsSelectors.getItems(state),
     sernosSequences: sernosSequencesSelectors.getItems(state),
     suppliers: suppliersSelectors.getItems(state),
-    unitsOfMeasure: unitsOfMeasureSelectors.getItems(state)
+    unitsOfMeasure: unitsOfMeasureSelectors.getItems(state),
+    nominal: nominalSelectors.getItem(state)
 });
 
 const initialise = () => dispatch => {
@@ -49,7 +52,8 @@ const mapDispatchToProps = {
     initialise,
     addItem: partsActions.add,
     setEditStatus: partsActions.setEditStatus,
-    setSnackbarVisible: partsActions.setSnackbarVisible
+    setSnackbarVisible: partsActions.setSnackbarVisible,
+    fetchNominal: nominalActions.fetch
 };
 
 export default connect(mapStpartsToProps, mapDispatchToProps)(initialiseOnMount(Part));
