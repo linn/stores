@@ -63,7 +63,7 @@
                                    : DateTime.Parse(resource.SafetyCertificateExpirationDate),
                            SafetyDataDirectory = resource.SafetyDataDirectory,
                            NominalAccount = this.nominalAccountRepository.FindBy(
-                               a => a.Nominal.NominalCode == resource.Nominal && a.Department == resource.Department)
+                               a => a.Nominal.NominalCode == resource.Nominal && a.Department.DepartmentCode == resource.Department)
         };
         }
 
@@ -91,7 +91,7 @@
                                                          : DateTime.Parse(resource.SafetyCertificateExpirationDate);
             entity.SafetyDataDirectory = resource.SafetyDataDirectory;
             entity.NominalAccount = this.nominalAccountRepository.FindBy(
-                a => a.Nominal.NominalCode == resource.Nominal && a.Department == resource.Department);
+                a => a.Nominal.NominalCode == resource.Nominal && a.Department.DepartmentCode == resource.Department);
         }
 
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)

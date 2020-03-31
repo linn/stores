@@ -147,5 +147,7 @@
         public string NominalDescription { get; set; }
 
         public string Department { get; set; }
+
+        public string DepartmentDescription { get; set; }
     }
 }

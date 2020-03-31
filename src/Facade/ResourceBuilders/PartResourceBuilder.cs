@@ -84,8 +84,9 @@
                            NominalAccount = part.NominalAccount?.NominalAccountId,
                            Nominal = part.NominalAccount?.Nominal?.NominalCode,
                            NominalDescription = part.NominalAccount?.Nominal?.Description,
-                           Department = part.NominalAccount?.Department,
-                           Links = this.BuildLinks(part).ToArray()
+                           Department = part.NominalAccount?.Department?.DepartmentCode,
+                           DepartmentDescription = part.NominalAccount?.Department?.Description,
+                Links = this.BuildLinks(part).ToArray()
                        };
         }
 
