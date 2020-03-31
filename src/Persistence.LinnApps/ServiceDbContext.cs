@@ -23,7 +23,7 @@
 
         public DbSet<ProductAnalysisCode> ProductAnalysisCodes { get; set; }
 
-        public DbQuery<Department> Departments { get; set; }
+        public DbSet<Department> Departments { get; set; }
 
         public DbQuery<RootProduct> RootProducts { get; set; }
 
@@ -53,7 +53,7 @@
         {
             this.BuildParts(builder);
             this.BuildParetoClasses(builder);
-            this.QueryDepartments(builder);
+            this.BuildDepartments(builder);
             this.BuildProductAnalysisCodes(builder);
             this.BuildAccountingCompanies(builder);
             this.BuildEmployees(builder);
@@ -201,12 +201,15 @@
             e.Property(p => p.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
         }
 
-        private void QueryDepartments(ModelBuilder builder)
+        private void BuildDepartments(ModelBuilder builder)
         {
-            var e = builder.Query<Department>().ToView("LINN_DEPARTMENTS");
+            var e = builder.Entity<Department>().ToTable("LINN_DEPARTMENTS");
+            e.HasKey(d => d.DepartmentCode);
             e.Property(d => d.DepartmentCode).HasColumnName("DEPARTMENT_CODE").HasMaxLength(10);
             e.Property(d => d.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
             e.Property(d => d.DateClosed).HasColumnName("DATE_CLOSED");
+            e.HasMany(n => n.NominalAccounts).WithOne(a => a.Department)
+                .HasForeignKey("DEPARTMENT");
         }
 
         private void BuildProductAnalysisCodes(ModelBuilder builder)
@@ -271,7 +274,6 @@
             builder.Entity<NominalAccount>().ToTable("NOMINAL_ACCOUNTS");
             builder.Entity<NominalAccount>().HasKey(a => a.NominalAccountId);
             builder.Entity<NominalAccount>().Property(a => a.NominalAccountId).HasColumnName("NOMACC_ID");
-            builder.Entity<NominalAccount>().Property(a => a.Department).HasColumnName("DEPARTMENT");
         }
 
         private void BuildDespatchLocations(ModelBuilder builder)
