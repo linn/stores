@@ -26,13 +26,13 @@
                              
         public IResult<Nominal> GetNominalForDepartment(string department)
         {
-            var nominalCode = this.departmentRepository.FindAll()
+            var nominal = this.departmentRepository.FindAll()
                 .Join(
                     this.nominalAccountRepository.FilterBy(a => a.Department == department),
                 dept => dept.DepartmentCode,
                 nomacc => nomacc.Department,
                 (dept, nomacc) => nomacc.Nominal).ToList().FirstOrDefault();
-            var result = this.nominalRepository.FindBy(n => n.NominalCode.Equals(nominalCode));
+            var result = this.nominalRepository.FindBy(n => n.NominalCode.Equals(nominal.NominalCode));
             return new SuccessResult<Nominal>(result);
         }
     }
