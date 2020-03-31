@@ -8,7 +8,7 @@
     {
         public int NominalAccountId { get; set; }
 
-        public string Department { get; set; }
+        public Department Department { get; set; }
 
         public Nominal Nominal { get; set; }
 
