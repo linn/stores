@@ -129,5 +129,7 @@
         public string PurchasingPhaseOutType { get; set; }
 
         public DateTime? DateDesignObsolete { get; set; }
+
+        public SernosSequence SernosSequence { get; set; }
     }
 }

@@ -33,7 +33,7 @@
 
         public DbSet<SosOption> SosOptions { get; set; }
 
-        public DbQuery<SernosSequence> SernosSequences { get; set; }
+        public DbSet<SernosSequence> SernosSequences { get; set; }
 
         public DbQuery<UnitOfMeasure> UnitsOfMeasure { get; set; }
 
@@ -59,7 +59,7 @@
             this.BuildEmployees(builder);
             this.QueryRootProducts(builder);
             this.BuildSosOptions(builder);
-            this.QuerySernosSequences(builder);
+            this.BuildSernosSequences(builder);
             this.QueryUnitsOfMeasure(builder);
             this.QueryPartCategories(builder);
             this.BuildSuppliers(builder);
@@ -191,6 +191,7 @@
             e.HasOne<ProductAnalysisCode>(p => p.ProductAnalysisCode).WithMany(c => c.Parts)
                 .HasForeignKey("PRODUCT_ANALYSIS_CODE");
             e.HasOne(p => p.NominalAccount).WithMany(a => a.Parts).HasForeignKey("NOMACC_NOMACC_ID");
+            e.HasOne(p => p.SernosSequence).WithMany(s => s.Parts).HasForeignKey("SERNOS_SEQUENCE");
         }
 
         private void BuildParetoClasses(ModelBuilder builder)
@@ -239,9 +240,10 @@
             e.Property(p => p.DespatchLocationCode).HasColumnName("DESPATCH_LOCATION_CODE").HasMaxLength(10);
         }
 
-        private void QuerySernosSequences(ModelBuilder builder)
+        private void BuildSernosSequences(ModelBuilder builder)
         {
-            var q = builder.Query<SernosSequence>().ToView("SERNOS_SEQUENCES");
+            var q = builder.Entity<SernosSequence>().ToTable("SERNOS_SEQUENCES");
+            q.HasKey(p => p.Sequence);
             q.Property(p => p.Sequence).HasColumnName("SEQUENCE_NAME");
             q.Property(p => p.Description).HasColumnName("DESCRIPTION");
         }

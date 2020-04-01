@@ -149,5 +149,9 @@
         public string Department { get; set; }
 
         public string DepartmentDescription { get; set; }
+
+        public string SernosSequenceName { get; set; }
+
+        public string SernosSequenceDescription { get; set; }
     }
 }

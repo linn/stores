@@ -86,7 +86,9 @@
                            NominalDescription = part.NominalAccount?.Nominal?.Description,
                            Department = part.NominalAccount?.Department?.DepartmentCode,
                            DepartmentDescription = part.NominalAccount?.Department?.Description,
-                Links = this.BuildLinks(part).ToArray()
+                           SernosSequenceName = part.SernosSequence?.Sequence,
+                           SernosSequenceDescription = part.SernosSequence?.Description,
+                           Links = this.BuildLinks(part).ToArray()
                        };
         }
 
