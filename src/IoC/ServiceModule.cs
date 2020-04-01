@@ -38,9 +38,9 @@
             builder.RegisterType<StockPoolFacadeService>()
                 .As<IFacadeService<StockPool, int, StockPoolResource, StockPoolResource>>();
             builder.RegisterType<AssemblyTechnologyService>()
-                .As<IFacadeService<AssemblyTechnology, int, AssemblyTechnologyResource, AssemblyTechnologyResource>>();
+                .As<IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>>();
             builder.RegisterType<DecrementRuleService>()
-                .As<IFacadeService<DecrementRule, int, DecrementRuleResource, DecrementRuleResource>>();
+                .As<IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource>>();
 
             // proxy
             builder.RegisterType<SosPack>().As<ISosPack>();

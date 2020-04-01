@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import { InputField, Dropdown, Typeahead, DatePicker } from '@linn-it/linn-form-components-library';
+import { InputField, Dropdown, Typeahead } from '@linn-it/linn-form-components-library';
 
 function BuildTab({
     handleFieldChange,
@@ -13,14 +13,16 @@ function BuildTab({
     sernosSequencesSearchLoading,
     searchSernosSequences,
     clearSernosSequencesSearch,
-    decrementRule,
-    assemblyTechnology,
+    decrementRuleName,
+    assemblyTechnologyName,
     bomType,
     bomId,
     optionSet,
     drawingReference,
     safetyCriticalPart,
-    plannedSurplus
+    plannedSurplus,
+    decrementRules,
+    assemblyTechnologies
 }) {
     const convertToYOrNString = booleanValue => {
         if (booleanValue === '' || booleanValue === null) {
@@ -68,117 +70,78 @@ function BuildTab({
                     propertyName="ProductAnalysisCodeDescription"
                 />
             </Grid>
-            {/* <Grid item xs={2}>
-                <InputField
+            <Grid item xs={6}>
+                <Dropdown
+                    label="Decrement Rule"
+                    propertyName="decrementRuleName"
+                    items={decrementRules.map(c => ({
+                        id: c.rule,
+                        displayText: c.description
+                    }))}
                     fullWidth
-                    value={paretoCode}
-                    label="Pareto Code"
-                    disabled
+                    allowNoValue
+                    value={decrementRuleName}
                     onChange={handleFieldChange}
-                    propertyName="paretoCode"
+                />
+            </Grid>
+            <Grid item xs={6} />
+            <Grid item xs={6}>
+                <Dropdown
+                    label="Assembly Technology"
+                    propertyName="assemblyTechnologyName"
+                    items={assemblyTechnologies.map(c => ({
+                        id: c.name,
+                        displayText: c.description
+                    }))}
+                    fullWidth
+                    allowNoValue
+                    value={assemblyTechnologyName}
+                    onChange={handleFieldChange}
                 />
             </Grid>
             <Grid item xs={6} />
             <Grid item xs={4}>
-                <Typeahead
-                    onSelect={newValue => {
-                        handleFieldChange('rootProduct', newValue.name);
-                    }}
-                    label="Root Product"
-                    modal
-                    items={rootProductsSearchResults}
-                    value={rootProduct}
-                    loading={rootProductsSearchLoading}
-                    fetchItems={searchRootProducts}
-                    links={false}
-                    clearSearch={() => clearRootProductsSearch}
-                    placeholder="Search Root Products"
+                <Dropdown
+                    label="Bom type"
+                    propertyName="bomType"
+                    items={['Component', 'Assembly', 'Phantom']}
+                    fullWidth
+                    allowNoValue={false}
+                    value={bomType}
+                    onChange={handleFieldChange}
+                />
+            </Grid>
+            <Grid item xs={2}>
+                <InputField
+                    fullWidth
+                    value={bomId}
+                    type="number"
+                    label="bomId"
+                    onChange={handleFieldChange}
+                    propertyName="bomId"
+                />
+            </Grid>
+            <Grid item xs={6} />
+            <Grid item xs={4}>
+                <InputField
+                    fullWidth
+                    value={optionSet}
+                    label="option Set"
+                    onChange={handleFieldChange}
+                    propertyName="optionSet"
                 />
             </Grid>
             <Grid item xs={8} />
-            <Grid item xs={4}>
-                <Typeahead
-                    onSelect={newValue => {
-                        handleDepartmentChange(newValue);
-                    }}
-                    label="Department"
-                    modal
-                    items={departmentsSearchResults}
-                    value={department}
-                    loading={departmentsSearchLoading}
-                    fetchItems={searchDepartments}
-                    links={false}
-                    clearSearch={() => clearDepartmentsSearch}
-                    placeholder="Search Code or Description"
-                />
-            </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={6}>
                 <InputField
                     fullWidth
-                    value={departmentDescription}
-                    label="Description"
-                    disabled
+                    value={drawingReference}
+                    label="Drawing Reference"
                     onChange={handleFieldChange}
-                    propertyName="departmentDescription"
+                    propertyName="drawingReference"
                 />
             </Grid>
-            <Grid item xs={4}>
-                <InputField
-                    fullWidth
-                    value={nominal}
-                    label="Nominal"
-                    onChange={handleFieldChange}
-                    propertyName="nominal"
-                />
-            </Grid>
-            <Grid item xs={8}>
-                <InputField
-                    fullWidth
-                    value={nominalDescription}
-                    label="Description"
-                    disabled
-                    onChange={handleFieldChange}
-                />
-            </Grid>
-            <Grid item xs={4}>
-                <Typeahead
-                    onSelect={newValue => {
-                        handleProductAnalysisCodeChange(newValue);
-                    }}
-                    label="Product Analysis Code"
-                    modal
-                    items={productAnalysisCodeSearchResults}
-                    value={productAnalysisCode}
-                    loading={productAnalysisCodesSearchLoading}
-                    fetchItems={searchProductAnalysisCodes}
-                    links={false}
-                    clearSearch={() => clearProductAnalysisCodesSearch}
-                    placeholder="Search Codes"
-                />
-            </Grid>
-            <Grid item xs={8}>
-                <InputField
-                    fullWidth
-                    value={productAnalysisCodeDescription}
-                    label="Description"
-                    disabled
-                    onChange={handleFieldChange}
-                    propertyName="ProductAnalysisCodeDescription"
-                />
-            </Grid>
-            <Grid item xs={3}>
-                <Dropdown
-                    label="Stores Controlled?"
-                    propertyName="stockControlled"
-                    items={['Yes', 'No']}
-                    fullWidth
-                    allowNoValue={false}
-                    value={convertToYOrNString(stockControlled)}
-                    onChange={handleFieldChange}
-                />
-            </Grid>
-            <Grid item xs={9} />
-
+            <Grid item xs={6} />
             <Grid item xs={3}>
                 <Dropdown
                     label="Safety Critical?"
@@ -190,84 +153,19 @@ function BuildTab({
                     onChange={handleFieldChange}
                 />
             </Grid>
+            <Grid item xs={9} />
             <Grid item xs={3}>
                 <Dropdown
-                    label="Performance Critical?"
-                    propertyName="performanceCriticalPart"
+                    label="planned Surplus?"
+                    propertyName="plannedSurplus"
                     items={['Yes', 'No']}
                     fullWidth
                     allowNoValue
-                    value={convertToYOrNString(performanceCriticalPart)}
+                    value={convertToYOrNString(plannedSurplus)}
                     onChange={handleFieldChange}
                 />
             </Grid>
-            <Grid item xs={6} />
-
-            <Grid item xs={3}>
-                <Dropdown
-                    label="EMC Critical?"
-                    propertyName="emcCriticalPart"
-                    items={['Yes', 'No']}
-                    fullWidth
-                    allowNoValue
-                    value={convertToYOrNString(emcCriticalPart)}
-                    onChange={handleFieldChange}
-                />
-            </Grid>
-            <Grid item xs={3}>
-                <Dropdown
-                    label="Single Source?"
-                    propertyName="singleSourcePart"
-                    items={['Yes', 'No']}
-                    fullWidth
-                    allowNoValue
-                    value={convertToYOrNString(singleSourcePart)}
-                    onChange={handleFieldChange}
-                />
-            </Grid>
-            <Grid item xs={6} />
-
-            <Grid item xs={3}>
-                <Dropdown
-                    label="CCC Critical?"
-                    propertyName="cccCriticalPart"
-                    items={['Yes', 'No']}
-                    allowNoValue={false}
-                    fullWidth
-                    value={convertToYOrNString(cccCriticalPart)}
-                    onChange={handleFieldChange}
-                />
-            </Grid>
-            <Grid item xs={3}>
-                <Dropdown
-                    label="Approved  PSU?"
-                    propertyName="psuPart"
-                    allowNoValue={false}
-                    items={['Yes', 'No']}
-                    fullWidth
-                    value={convertToYOrNString(psuPart)}
-                    onChange={handleFieldChange}
-                />
-            </Grid>
-            <Grid item xs={6} />
-            <Grid item xs={3}>
-                <DatePicker
-                    label="Safety Certificate Expiry Date"
-                    value={safetyCertificateExpirationDate}
-                    onChange={value => {
-                        handleFieldChange('safetyCertificateExpirationDate', value);
-                    }}
-                />
-            </Grid>
-            <Grid item xs={9}>
-                <InputField
-                    fullWidth
-                    value={safetyDataDirectory}
-                    label="EMC + Safety Data Directory"
-                    onChange={handleFieldChange}
-                    propertyName="safetyDataDirectory"
-                />
-            </Grid> */}
+            <Grid item xs={9} />
         </Grid>
     );
 }
@@ -275,8 +173,8 @@ function BuildTab({
 BuildTab.propTypes = {
     handleFieldChange: PropTypes.func.isRequired,
     linnProduced: PropTypes.bool,
-    decrementRule: PropTypes.string,
-    assemblyTechnology: PropTypes.string,
+    decrementRuleName: PropTypes.string,
+    assemblyTechnologyName: PropTypes.string,
     bomType: PropTypes.string,
     bomId: PropTypes.number,
     optionSet: PropTypes.string,
@@ -289,13 +187,15 @@ BuildTab.propTypes = {
     sernosSequencesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     sernosSequencesSearchLoading: PropTypes.bool,
     searchSernosSequences: PropTypes.func.isRequired,
-    clearSernosSequencesSearch: PropTypes.func.isRequired
+    clearSernosSequencesSearch: PropTypes.func.isRequired,
+    decrementRules: PropTypes.arrayOf(PropTypes.shape({})),
+    assemblyTechnologies: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 BuildTab.defaultProps = {
     linnProduced: null,
-    decrementRule: null,
-    assemblyTechnology: null,
+    decrementRuleName: null,
+    assemblyTechnologyName: null,
     bomType: null,
     bomId: null,
     optionSet: null,
@@ -305,7 +205,9 @@ BuildTab.defaultProps = {
     sernosSequenceName: null,
     sernosSequenceDescription: null,
     sernosSequencesSearchResults: [],
-    sernosSequencesSearchLoading: false
+    sernosSequencesSearchLoading: false,
+    decrementRules: [],
+    assemblyTechnologies: []
 };
 
 export default BuildTab;

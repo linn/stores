@@ -155,5 +155,9 @@
         public string SernosSequenceName { get; set; }
 
         public string SernosSequenceDescription { get; set; }
+
+        public string AssemblyTechnologyName { get; set; }
+
+        public string AssemblyTechnologyDescription { get; set; }
     }
 }

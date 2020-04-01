@@ -38,7 +38,8 @@
 
         public AssemblyTechnology FindBy(Expression<Func<AssemblyTechnology, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.AssemblyTechnologies.Where(expression).ToList().FirstOrDefault();
+
         }
 
         public IQueryable<AssemblyTechnology> FilterBy(Expression<Func<AssemblyTechnology, bool>> expression)

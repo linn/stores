@@ -26,6 +26,7 @@
                            ParetoDescription = part.ParetoClass?.Description,
                            ImdsWeight = part.ImdsWeight,
                            DecrementRuleName = part.DecrementRule?.Rule,
+                           DecrementRuleDescription = part.DecrementRule?.Description,
                            SparesRequirement = part.SparesRequirement,
                            BomType = part.BomType,
                            AccountingCompany = part.AccountingCompany?.Name,
@@ -88,6 +89,8 @@
                            DepartmentDescription = part.NominalAccount?.Department?.Description,
                            SernosSequenceName = part.SernosSequence?.Sequence,
                            SernosSequenceDescription = part.SernosSequence?.Description,
+                           AssemblyTechnologyName = part.AssemblyTechnology?.Name,
+                           AssemblyTechnologyDescription = part.AssemblyTechnology?.Description,
                            Links = this.BuildLinks(part).ToArray()
                        };
         }

@@ -56,10 +56,10 @@
             this.Get("inventory/product-analysis-codes", _ => this.GetProductAnalysisCodes());
 
             this.assemblyTechnologyService = assemblyTechnologyService;
-            this.Get("inventory/assembly-technologies", _ => this.GetDecrementRules());
+            this.Get("inventory/assembly-technologies", _ => this.GetAssemblyTechnologies());
 
             this.decrementRuleService = decrementRuleService;
-            this.Get("inventory/decrement-rules", _ => this.GetAssemblyTechnologies());
+            this.Get("inventory/decrement-rules", _ => this.GetDecrementRules());
         }
 
         private object GetPart(int id)

@@ -248,14 +248,14 @@ function Part({
                                     sernosSequenceName={part.sernosSequenceName}
                                     sernosSequenceDescription={part.sernosSequenceDescription}
                                     handleSernosSequenceChange={handleSernosSequenceChange}
-                                    decrementRule={part.decrementRule}
-                                    assemblyTechnology
-                                    bomType
-                                    bomId
-                                    optionSet
-                                    drawingReference
-                                    safetyCriticalPart
-                                    plannedSurplus
+                                    decrementRuleName={part.decrementRuleName}
+                                    assemblyTechnologyName={part.assemblyTechnologyName}
+                                    bomType={part.bomType}
+                                    bomId={part.bomId}
+                                    optionSet={part.optionSet}
+                                    drawingReference={part.drawingReference}
+                                    safetyCriticalPart={part.safetyCriticalPart}
+                                    plannedSurplus={part.plannedSurplus}
                                 />
                             )}
                             <Grid item xs={12}>

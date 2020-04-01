@@ -38,7 +38,7 @@
 
         public DecrementRule FindBy(Expression<Func<DecrementRule, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.DecrementRules.Where(expression).ToList().FirstOrDefault();
         }
 
         public IQueryable<DecrementRule> FilterBy(Expression<Func<DecrementRule, bool>> expression)

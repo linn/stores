@@ -138,7 +138,6 @@
             e.Property(p => p.SafetyCertificateExpirationDate).HasColumnName("SAFETY_CERTIFICATE_EXPIRY_DATE");
             e.Property(p => p.SafetyDataDirectory).HasColumnName("SAFETY_DATA_DIRECTORY").HasMaxLength(500);
             e.Property(p => p.LinnProduced).HasColumnName("LINN_PRODUCED").HasMaxLength(1);
-            e.Property(p => p.DecrementRule).HasColumnName("DECREMENT_RULE").HasMaxLength(10);
             e.Property(p => p.BomType).HasColumnName("BOM_TYPE").HasMaxLength(1);
             e.Property(p => p.OptionSet).HasColumnName("OPTION_SET").HasMaxLength(14);
             e.Property(p => p.DrawingReference).HasColumnName("DRAWING_REFERENCE").HasMaxLength(100);
@@ -199,7 +198,7 @@
             e.HasOne(p => p.NominalAccount).WithMany(a => a.Parts).HasForeignKey("NOMACC_NOMACC_ID");
             e.HasOne(p => p.SernosSequence).WithMany(s => s.Parts).HasForeignKey("SERNOS_SEQUENCE");
             e.HasOne(p => p.AssemblyTechnology).WithMany(s => s.Parts).HasForeignKey("ASSEMBLY_TECHNOLOGY");
-            e.HasOne(p => p.DecrementRule).WithMany(s => s.Parts).HasForeignKey("DECREMENT_RULES");
+            e.HasOne(p => p.DecrementRule).WithMany(s => s.Parts).HasForeignKey("DECREMENT_RULE");
         }
 
         private void BuildParetoClasses(ModelBuilder builder)

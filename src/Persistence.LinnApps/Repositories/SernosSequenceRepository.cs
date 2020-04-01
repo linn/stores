@@ -18,7 +18,7 @@
 
         public SernosSequence FindBy(Expression<Func<SernosSequence, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.SernosSequences.Where(expression).ToList().FirstOrDefault();
         }
 
         public IQueryable<SernosSequence> FilterBy(Expression<Func<SernosSequence, bool>> expression)
