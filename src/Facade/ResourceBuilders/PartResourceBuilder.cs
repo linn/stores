@@ -25,7 +25,7 @@
                            ParetoCode = part.ParetoClass?.ParetoCode,
                            ParetoDescription = part.ParetoClass?.Description,
                            ImdsWeight = part.ImdsWeight,
-                           DecrementRule = part.DecrementRule,
+                           DecrementRuleName = part.DecrementRule?.Rule,
                            SparesRequirement = part.SparesRequirement,
                            BomType = part.BomType,
                            AccountingCompany = part.AccountingCompany?.Name,

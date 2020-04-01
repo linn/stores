@@ -37,6 +37,10 @@
                 .As<IFacadeService<DespatchLocation, int, DespatchLocationResource, DespatchLocationResource>>();
             builder.RegisterType<StockPoolFacadeService>()
                 .As<IFacadeService<StockPool, int, StockPoolResource, StockPoolResource>>();
+            builder.RegisterType<AssemblyTechnologyService>()
+                .As<IFacadeService<AssemblyTechnology, int, AssemblyTechnologyResource, AssemblyTechnologyResource>>();
+            builder.RegisterType<DecrementRuleService>()
+                .As<IFacadeService<DecrementRule, int, DecrementRuleResource, DecrementRuleResource>>();
 
             // proxy
             builder.RegisterType<SosPack>().As<ISosPack>();

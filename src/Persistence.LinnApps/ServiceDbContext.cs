@@ -49,6 +49,10 @@
 
         public DbSet<StockPool> StockPools { get; set; }
 
+        public DbSet<DecrementRule> DecrementRules { get; set; }
+
+        public DbSet<AssemblyTechnology> AssemblyTechnologies { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -67,6 +71,8 @@
             this.BuildNominalAccounts(builder);
             this.BuildDespatchLocations(builder);
             this.BuildStockPools(builder);
+            this.BuildDecrementRules(builder);
+            this.BuildAssemblyTechnologies(builder);
             base.OnModelCreating(builder);
         }
 
@@ -192,6 +198,8 @@
                 .HasForeignKey("PRODUCT_ANALYSIS_CODE");
             e.HasOne(p => p.NominalAccount).WithMany(a => a.Parts).HasForeignKey("NOMACC_NOMACC_ID");
             e.HasOne(p => p.SernosSequence).WithMany(s => s.Parts).HasForeignKey("SERNOS_SEQUENCE");
+            e.HasOne(p => p.AssemblyTechnology).WithMany(s => s.Parts).HasForeignKey("ASSEMBLY_TECHNOLOGY");
+            e.HasOne(p => p.DecrementRule).WithMany(s => s.Parts).HasForeignKey("DECREMENT_RULES");
         }
 
         private void BuildParetoClasses(ModelBuilder builder)
@@ -200,6 +208,22 @@
             e.HasKey(p => p.ParetoCode);
             e.Property(p => p.ParetoCode).HasColumnName("PARETO_CODE").HasMaxLength(2);
             e.Property(p => p.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
+        }
+
+        private void BuildDecrementRules(ModelBuilder builder)
+        {
+            var e = builder.Entity<DecrementRule>().ToTable("DECREMENT_RULES");
+            e.HasKey(r => r.Rule);
+            e.Property(r => r.Rule).HasColumnName("DECREMENT_RULE").HasMaxLength(10);
+            e.Property(r => r.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
+        }
+
+        private void BuildAssemblyTechnologies(ModelBuilder builder)
+        {
+            var e = builder.Entity<AssemblyTechnology>().ToTable("ASSEMBLY_TECHNOLOGIES");
+            e.HasKey(r => r.Name);
+            e.Property(r => r.Name).HasColumnName("NAME").HasMaxLength(4);
+            e.Property(r => r.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
         }
 
         private void BuildDepartments(ModelBuilder builder)

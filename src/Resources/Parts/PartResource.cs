@@ -46,7 +46,9 @@
 
         public bool? LinnProduced { get; set; }
 
-        public string DecrementRule { get; set; }
+        public string DecrementRuleName { get; set; }
+
+        public string DecrementRuleDescription { get; set; }
 
         public string BomType { get; set; }
 
