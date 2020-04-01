@@ -99,6 +99,8 @@
                         with.ResponseProcessor<PartsResponseProcessor>();
                         with.ResponseProcessor<UnitsOfMeasureResponseProcessor>();
                         with.ResponseProcessor<PartCategoriesResponseProcessor>();
+                        with.ResponseProcessor<AssemblyTechnologiesResponseProcessor>();
+                        with.ResponseProcessor<DecrementRulesResponseProcessor>();
                         with.ResponseProcessor<ProductAnalysisCodesResponseProcessor>();
 
                         with.RequestStartup(
