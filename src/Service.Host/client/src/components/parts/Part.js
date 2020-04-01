@@ -13,6 +13,7 @@ import {
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 import GeneralTab from '../../containers/parts/tabs/GeneralTab';
+import BuildTab from '../../containers/parts/tabs/BuildTab';
 
 function Part({
     editStatus,
@@ -111,6 +112,17 @@ function Part({
             ...part,
             productAnalysisCode: newValue.name,
             productAnalysisCodeDescription: newValue.description
+        });
+    };
+
+    const handleSernosSequenceChange = newValue => {
+        if (viewing()) {
+            setEditStatus('edit');
+        }
+        setPart({
+            ...part,
+            sernosSequenceName: newValue.name,
+            sernosSequenceDescription: newValue.description
         });
     };
 
@@ -227,6 +239,23 @@ function Part({
                                         part.safetyCertificateExpirationDate
                                     }
                                     safetyDataDirectory={part.safetyDataDirectory}
+                                />
+                            )}
+                            {tab === 1 && (
+                                <BuildTab
+                                    handleFieldChange={handleFieldChange}
+                                    linnProduced={part.linnProduced}
+                                    sernosSequenceName={part.sernosSequenceName}
+                                    sernosSequenceDescription={part.sernosSequenceDescription}
+                                    handleSernosSequenceChange={handleSernosSequenceChange}
+                                    decrementRule={part.decrementRule}
+                                    assemblyTechnology
+                                    bomType
+                                    bomId
+                                    optionSet
+                                    drawingReference
+                                    safetyCriticalPart
+                                    plannedSurplus
                                 />
                             )}
                             <Grid item xs={12}>
