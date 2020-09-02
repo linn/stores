@@ -97,7 +97,7 @@
 
         public string GetLocation(Part part)
         {
-            return $"/parts/{part.Id}";
+            return $"/inventory/parts/{part.Id}";
         }
 
         object IResourceBuilder<Part>.Build(Part part) => this.Build(part);
