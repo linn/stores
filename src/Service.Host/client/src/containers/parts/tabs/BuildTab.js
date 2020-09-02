@@ -7,6 +7,7 @@ import assemblyTechnologiesSelectors from '../../../selectors/assemblyTechnologi
 import assemblyTechnologiesActions from '../../../actions/assemblyTechnologiesActions';
 import decrementRulesSelectors from '../../../selectors/decrementRulesSelectors';
 import decrementRulesActions from '../../../actions/decrementRulesActions';
+import config from '../../../config';
 
 const mapStateToProps = state => ({
     sernosSequencesSearchResults: sernosSequencesSelectors
@@ -14,7 +15,8 @@ const mapStateToProps = state => ({
         .map?.(s => ({ name: s.sequenceName, description: s.description })),
     sernosSequencesSearchLoading: sernosSequencesSelectors.getSearchLoading(state),
     assemblyTechnologies: assemblyTechnologiesSelectors.getItems(state),
-    decrementRules: decrementRulesSelectors.getItems(state)
+    decrementRules: decrementRulesSelectors.getItems(state),
+    appRoot: config.appRoot
 });
 
 const initialise = () => dispatch => {

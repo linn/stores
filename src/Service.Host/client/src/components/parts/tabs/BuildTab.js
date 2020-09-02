@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import { InputField, Dropdown, Typeahead } from '@linn-it/linn-form-components-library';
+import { InputField, Dropdown, Typeahead, LinkButton } from '@linn-it/linn-form-components-library';
 
 function BuildTab({
+    appRoot,
     handleFieldChange,
     linnProduced,
     sernosSequenceName,
@@ -34,7 +35,7 @@ function BuildTab({
         <Grid container spacing={3}>
             <Grid item xs={4}>
                 <Dropdown
-                    label="Linn"
+                    label="Linn Produced Assembly"
                     propertyName="linnProduced"
                     items={['Yes', 'No']}
                     fullWidth
@@ -43,7 +44,14 @@ function BuildTab({
                     onChange={handleFieldChange}
                 />
             </Grid>
-            <Grid ite xs={8} />
+            <Grid item xs={4} />
+            <Grid item xs={4}>
+                <LinkButton
+                    to={`${appRoot}/production/maintenance/production-trigger-levels/create`}
+                    text="Trigger Levels"
+                    external
+                />
+            </Grid>
             <Grid item xs={4}>
                 <Typeahead
                     onSelect={newValue => {
@@ -70,7 +78,7 @@ function BuildTab({
                     propertyName="ProductAnalysisCodeDescription"
                 />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={7}>
                 <Dropdown
                     label="Decrement Rule"
                     propertyName="decrementRuleName"
@@ -84,7 +92,15 @@ function BuildTab({
                     onChange={handleFieldChange}
                 />
             </Grid>
-            <Grid item xs={6} />
+            <Grid item xs={1}>
+                <LinkButton
+                    to="/inventory/parts/decrement-rules/create"
+                    text="Change"
+                    tooltip="Coming soon - still on Oracle Forms"
+                    // disabled
+                />
+            </Grid>
+            <Grid item xs={4} />
             <Grid item xs={6}>
                 <Dropdown
                     label="Assembly Technology"
@@ -171,6 +187,7 @@ function BuildTab({
 }
 
 BuildTab.propTypes = {
+    appRoot: PropTypes.string.isRequired,
     handleFieldChange: PropTypes.func.isRequired,
     linnProduced: PropTypes.bool,
     decrementRuleName: PropTypes.string,
