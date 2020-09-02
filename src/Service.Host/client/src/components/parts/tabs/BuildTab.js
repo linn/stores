@@ -97,7 +97,7 @@ function BuildTab({
                     to="/inventory/parts/decrement-rules/create"
                     text="Change"
                     tooltip="Coming soon - still on Oracle Forms"
-                    // disabled
+                    disabled
                 />
             </Grid>
             <Grid item xs={4} />
