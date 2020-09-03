@@ -137,7 +137,15 @@ function BuildTab({
                     propertyName="bomId"
                 />
             </Grid>
-            <Grid item xs={6} />
+            <Grid item xs={2}>
+                <LinkButton
+                    to="/inventory/parts/change-bom-type"
+                    text="Change Bom Type"
+                    tooltip="Coming soon - still on Oracle Forms"
+                    disabled
+                />
+            </Grid>
+            <Grid item xs={2} />
             <Grid item xs={4}>
                 <InputField
                     fullWidth

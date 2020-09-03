@@ -14,6 +14,7 @@ import {
 import Page from '../../containers/Page';
 import GeneralTab from '../../containers/parts/tabs/GeneralTab';
 import BuildTab from '../../containers/parts/tabs/BuildTab';
+import PurchTab from '../../containers/parts/tabs/PurchTab';
 
 function Part({
     editStatus,
@@ -92,6 +93,18 @@ function Part({
         }
     };
 
+    const handleIgnoreWorkstationStockChange = (_, newValue) => {
+        if (viewing()) {
+            setEditStatus('edit');
+        }
+        console.log(newValue);
+        if (newValue === 'Yes') {
+            setPart({ ...part, ignoreWorkstationStock: newValue === 'Yes' });
+        } else {
+            setPart({ ...part, ignoreWorkstationStock: null });
+        }
+    };
+
     const handleDepartmentChange = newValue => {
         if (viewing()) {
             setEditStatus('edit');
@@ -123,6 +136,17 @@ function Part({
             ...part,
             sernosSequenceName: newValue.name,
             sernosSequenceDescription: newValue.description
+        });
+    };
+
+    const handlePrefferedSupplierChange = newValue => {
+        if (viewing()) {
+            setEditStatus('edit');
+        }
+        setPart({
+            ...part,
+            preferredSupplier: newValue.name,
+            preferredSupplierName: newValue.description
         });
     };
 
@@ -256,6 +280,33 @@ function Part({
                                     drawingReference={part.drawingReference}
                                     safetyCriticalPart={part.safetyCriticalPart}
                                     plannedSurplus={part.plannedSurplus}
+                                />
+                            )}
+                            {tab === 2 && (
+                                <PurchTab
+                                    handleFieldChange={handleFieldChange}
+                                    ourUnitOfMeasure={part.ourUnitOfMeasure}
+                                    preferredSupplier={part.preferredSupplier}
+                                    handlePrefferedSupplierChange={handlePrefferedSupplierChange}
+                                    preferredSupplierName={part.preferredSupplierName}
+                                    currency={part.currency}
+                                    currencyUnitPrice={part.currencyUnitPrice}
+                                    baseUnitPrice={part.baseUnitPrice}
+                                    materialPrice={part.materialPrice}
+                                    labourPrice={part.labourPrice}
+                                    costingPrice={part.costingPrice}
+                                    orderHold={part.orderHold}
+                                    partCategory={part.partCategory}
+                                    nonForecastRequirement={part.nonForecastRequirement}
+                                    oneOffRequirement={part.oneOffRequirement}
+                                    sparesRequirement={part.sparesRequirement}
+                                    ignoreWorkstationStock={part.ignoreWorkstationStock}
+                                    handleIgnoreWorkstationStockChange={
+                                        handleIgnoreWorkstationStockChange
+                                    }
+                                    imdsIdNumber={part.imdsIdNumber}
+                                    imdsWeight={part.imdsWeight}
+                                    mechanicalOrElectronic={part.mechanicalOrElectronic}
                                 />
                             )}
                             <Grid item xs={12}>

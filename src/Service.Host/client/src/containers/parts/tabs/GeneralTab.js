@@ -12,7 +12,6 @@ import partCategoriesSelectors from '../../../selectors/partCategoriesSelectors'
 import productAnalysisCodesSelectors from '../../../selectors/productAnalysisCodesSelectors';
 import sernosSequencesSelectors from '../../../selectors/sernosSequencesSelectors';
 import suppliersSelectors from '../../../selectors/suppliersSelectors';
-import unitsOfMeasureSelectors from '../../../selectors/unitsOfMeasureSelectors';
 import rootProductsActions from '../../../actions/rootProductsActions';
 import productAnalysisCodesActions from '../../../actions/productAnalysisCodesActions';
 
@@ -28,7 +27,6 @@ const mapStateToProps = (state, ownProps) => ({
     rootProducts: rootProductsSelectors.getItems(state),
     sernosSequences: sernosSequencesSelectors.getItems(state),
     suppliers: suppliersSelectors.getItems(state),
-    unitsOfMeasure: unitsOfMeasureSelectors.getItems(state),
     accountingCompanies: accountingCompaniesSelectors.getItems(state),
     rootProductsSearchResults: rootProductsSelectors.getSearchItems(state),
     rootProductsSearchLoading: rootProductsSelectors.getSearchLoading(state),
