@@ -152,6 +152,7 @@
             entity.BaseUnitPrice = resource.BaseUnitPrice;
             entity.OneOffRequirement = resource.OneOffRequirement;
             entity.LabourPrice = resource.LabourPrice;
+            entity.LinnProduced = this.ToYesOrNoString(resource.LinnProduced);
             entity.PreferredSupplier = this.supplierRepository.FindBy(s => s.Id == resource.PreferredSupplier);
         }
 
