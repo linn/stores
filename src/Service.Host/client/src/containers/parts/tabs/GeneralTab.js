@@ -12,11 +12,8 @@ import partCategoriesSelectors from '../../../selectors/partCategoriesSelectors'
 import productAnalysisCodesSelectors from '../../../selectors/productAnalysisCodesSelectors';
 import sernosSequencesSelectors from '../../../selectors/sernosSequencesSelectors';
 import suppliersSelectors from '../../../selectors/suppliersSelectors';
-import unitsOfMeasureSelectors from '../../../selectors/unitsOfMeasureSelectors';
 import rootProductsActions from '../../../actions/rootProductsActions';
 import productAnalysisCodesActions from '../../../actions/productAnalysisCodesActions';
-import nominalActions from '../../../actions/nominalActions';
-import nominalSelectors from '../../../selectors/nominalSelectors';
 
 const mapStateToProps = (state, ownProps) => ({
     accountingComapny: ownProps.accountingComapny,
@@ -30,8 +27,6 @@ const mapStateToProps = (state, ownProps) => ({
     rootProducts: rootProductsSelectors.getItems(state),
     sernosSequences: sernosSequencesSelectors.getItems(state),
     suppliers: suppliersSelectors.getItems(state),
-    nominal: nominalSelectors.getItem(state),
-    unitsOfMeasure: unitsOfMeasureSelectors.getItems(state),
     accountingCompanies: accountingCompaniesSelectors.getItems(state),
     rootProductsSearchResults: rootProductsSelectors.getSearchItems(state),
     rootProductsSearchLoading: rootProductsSelectors.getSearchLoading(state),
@@ -57,7 +52,6 @@ const mapDispatchToProps = {
     clearRootProductsSearch: rootProductsActions.clearSearch,
     searchProductAnalysisCodes: productAnalysisCodesActions.search,
     clearSearchProductAnalysisCodes: productAnalysisCodesActions.clearSearch,
-    fetchNominalForDepartment: nominalActions.fetch,
     searchDepartments: departmentsActions.search,
     clearSearchDepartments: departmentsActions.clearSearch
 };

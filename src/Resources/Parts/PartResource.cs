@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Resources
+﻿namespace Linn.Stores.Resources.Parts
 {
     using Linn.Common.Resources;
 
@@ -14,7 +14,7 @@
 
         public string RootProductDescription { get; set; }
 
-        public bool? StockControlled { get; set; }
+        public bool StockControlled { get; set; }
 
         public bool? SafetyCriticalPart { get; set; }
 
@@ -46,7 +46,9 @@
 
         public bool? LinnProduced { get; set; }
 
-        public string DecrementRule { get; set; }
+        public string DecrementRuleName { get; set; }
+
+        public string DecrementRuleDescription { get; set; }
 
         public string BomType { get; set; }
 
@@ -58,7 +60,7 @@
 
         public int? BomId { get; set; }
 
-        public string UnitOfMeasure { get; set; }
+        public string OurUnitOfMeasure { get; set; }
 
         public int? PreferredSupplier { get; set; }
 
@@ -81,6 +83,10 @@
         public string PartCategory { get; set; }
 
         public decimal? SparesRequirement { get; set; }
+
+        public decimal? OneOffRequirement { get; set; }
+
+        public decimal? NonForecastRequirement { get; set; }
 
         public bool? IgnoreWorkstationStock { get; set; }
 
@@ -147,5 +153,15 @@
         public string NominalDescription { get; set; }
 
         public string Department { get; set; }
+
+        public string DepartmentDescription { get; set; }
+
+        public string SernosSequenceName { get; set; }
+
+        public string SernosSequenceDescription { get; set; }
+
+        public string AssemblyTechnologyName { get; set; }
+
+        public string AssemblyTechnologyDescription { get; set; }
     }
 }

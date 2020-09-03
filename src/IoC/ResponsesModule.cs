@@ -56,6 +56,14 @@
             builder.RegisterType<DespatchLocationsResourceBuilder>().As<IResourceBuilder<IEnumerable<DespatchLocation>>>();
             builder.RegisterType<StockPoolResourceBuilder>().As<IResourceBuilder<StockPool>>();
             builder.RegisterType<StockPoolsResourceBuilder>().As<IResourceBuilder<IEnumerable<StockPool>>>();
+            builder.RegisterType<AssemblyTechnologyResourceBuilder>()
+                .As<IResourceBuilder<AssemblyTechnology>>();
+            builder.RegisterType<AssemblyTechnologiesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<AssemblyTechnology>>>();
+            builder.RegisterType<DecrementRuleResourceBuilder>()
+                .As<IResourceBuilder<DecrementRule>>();
+            builder.RegisterType<DecrementRulesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<DecrementRule>>>();
         }
     }
 }

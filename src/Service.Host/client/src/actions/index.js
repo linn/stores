@@ -28,3 +28,8 @@ export const productAnalysisCodesActionTypes = makeActionTypes(
 
 export const nominalActionTypes = makeActionTypes(itemTypes.nominal.actionType);
 
+export const decrementRulesActionTypes = makeActionTypes(itemTypes.decrementRules.actionType);
+
+export const assemblyTechnologiesActionTypes = makeActionTypes(
+    itemTypes.assemblyTechnologies.actionType
+);

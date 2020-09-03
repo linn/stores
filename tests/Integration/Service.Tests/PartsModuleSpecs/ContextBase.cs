@@ -11,6 +11,7 @@
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.Parts;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
 
@@ -23,6 +24,18 @@
     public class ContextBase : NancyContextBase
     {
         protected IFacadeService<Part, int, PartResource, PartResource> PartsFacadeService
+        {
+            get; private set;
+        }
+
+        protected IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource> 
+            AssemblyTechnologyService
+        {
+            get; private set;
+        }
+
+        protected IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource> 
+            DecrementRuleService
         {
             get; private set;
         }
@@ -50,6 +63,10 @@
             this.PartRepository = Substitute.For<IRepository<Part, int>>();
             this.ParetoClassRepository = Substitute.For<IRepository<ParetoClass, string>>();
             this.ProductAnalysisCodeRepository = Substitute.For<IRepository<ProductAnalysisCode, string>>();
+            this.DecrementRuleService = Substitute
+                .For<IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource>>();
+            this.AssemblyTechnologyService = Substitute
+                .For<IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
@@ -61,6 +78,8 @@
                         with.Dependency(this.PartRepository);
                         with.Dependency(this.ParetoClassRepository);
                         with.Dependency(this.ProductAnalysisCodeRepository);
+                        with.Dependency(this.AssemblyTechnologyService);
+                        with.Dependency(this.DecrementRuleService);
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());
                         with.Dependency<IResourceBuilder<UnitOfMeasure>>(new UnitOfMeasureResourceBuilder());
@@ -71,10 +90,18 @@
                         with.Dependency<IResourceBuilder<IEnumerable<ProductAnalysisCode>>>(
                             new ProductAnalysisCodesResourceBuilder());
                         with.Module<PartsModule>();
+                        with.Dependency<IResourceBuilder<AssemblyTechnology>>(new AssemblyTechnologyResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<AssemblyTechnology>>>(
+                            new AssemblyTechnologiesResourceBuilder());
+                        with.Dependency<IResourceBuilder<DecrementRule>>(new DecrementRuleResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<DecrementRule>>>(
+                            new DecrementRulesResourceBuilder());
                         with.ResponseProcessor<PartResponseProcessor>();
                         with.ResponseProcessor<PartsResponseProcessor>();
                         with.ResponseProcessor<UnitsOfMeasureResponseProcessor>();
                         with.ResponseProcessor<PartCategoriesResponseProcessor>();
+                        with.ResponseProcessor<AssemblyTechnologiesResponseProcessor>();
+                        with.ResponseProcessor<DecrementRulesResponseProcessor>();
                         with.ResponseProcessor<ProductAnalysisCodesResponseProcessor>();
 
                         with.RequestStartup(

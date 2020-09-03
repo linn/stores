@@ -10,10 +10,11 @@ import {
     Title,
     ErrorCard,
     SnackbarMessage
-    //DatePicker
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 import GeneralTab from '../../containers/parts/tabs/GeneralTab';
+import BuildTab from '../../containers/parts/tabs/BuildTab';
+import PurchTab from '../../containers/parts/tabs/PurchTab';
 
 function Part({
     editStatus,
@@ -26,6 +27,8 @@ function Part({
     addItem,
     updateItem,
     setEditStatus,
+    nominal,
+    fetchNominal,
     setSnackbarVisible
 }) {
     const [part, setPart] = useState();
@@ -41,11 +44,22 @@ function Part({
     const viewing = () => editStatus === 'view';
 
     useEffect(() => {
+        if (item?.department) {
+            fetchNominal(item?.department);
+        }
         if (item !== prevPart) {
             setPart(item);
             setPrevPart(item);
         }
-    }, [item, prevPart]);
+    }, [item, prevPart, fetchNominal]);
+
+    useEffect(() => {
+        setPart(p => ({
+            ...p,
+            nominalCode: nominal?.nominalCode,
+            nominalDescription: nominal?.description
+        }));
+    }, [nominal, setPart]);
 
     const partInvalid = () => false;
 
@@ -72,13 +86,30 @@ function Part({
         if (viewing()) {
             setEditStatus('edit');
         }
-        setPart({ ...part, [propertyName]: newValue });
+        if (newValue === 'Yes' || newValue === 'No') {
+            setPart({ ...part, [propertyName]: newValue === 'Yes' });
+        } else {
+            setPart({ ...part, [propertyName]: newValue });
+        }
+    };
+
+    const handleIgnoreWorkstationStockChange = (_, newValue) => {
+        if (viewing()) {
+            setEditStatus('edit');
+        }
+        console.log(newValue);
+        if (newValue === 'Yes') {
+            setPart({ ...part, ignoreWorkstationStock: newValue === 'Yes' });
+        } else {
+            setPart({ ...part, ignoreWorkstationStock: null });
+        }
     };
 
     const handleDepartmentChange = newValue => {
         if (viewing()) {
             setEditStatus('edit');
         }
+        fetchNominal(newValue.name);
         setPart({
             ...part,
             department: newValue.name,
@@ -97,15 +128,40 @@ function Part({
         });
     };
 
+    const handleSernosSequenceChange = newValue => {
+        if (viewing()) {
+            setEditStatus('edit');
+        }
+        setPart({
+            ...part,
+            sernosSequenceName: newValue.name,
+            sernosSequenceDescription: newValue.description
+        });
+    };
+
+    const handlePrefferedSupplierChange = newValue => {
+        if (viewing()) {
+            setEditStatus('edit');
+        }
+        setPart({
+            ...part,
+            preferredSupplier: newValue.name,
+            preferredSupplierName: newValue.description
+        });
+    };
+
     const handleAccountingCompanyChange = newValue => {
+        if (viewing()) {
+            setEditStatus('edit');
+        }
         if (newValue === 'RECORDS') {
             setPart({
                 ...part,
                 accountingCompany: newValue,
                 paretoCode: 'R',
                 bomType: 'C',
-                linnProduced: 'N',
-                qcOnReceipt: 'N'
+                linnProduced: 'No',
+                qcOnReceipt: 'No'
             });
         } else {
             setPart({ ...part, accountingCompany: newValue, paretoCode: 'U' });
@@ -194,18 +250,65 @@ function Part({
                                     handleDepartmentChange={handleDepartmentChange}
                                     paretoCode={part.paretoCode}
                                     handleAccountingCompanyChange={handleAccountingCompanyChange}
+                                    nominal={part.nominalCode}
+                                    nominalDescription={part.nominalDescription}
+                                    stockControlled={part.stockControlled}
+                                    safetyCriticalPart={part.safetyCriticalPart}
+                                    performanceCriticalPart={part.performanceCriticalPart}
+                                    emcCriticalPart={part.emcCriticalPart}
+                                    singleSourcePart={part.singleSourcePart}
+                                    cccCriticalPart={part.cccCriticalPart}
+                                    psuPart={part.psuPart}
+                                    safetyCertificateExpirationDate={
+                                        part.safetyCertificateExpirationDate
+                                    }
+                                    safetyDataDirectory={part.safetyDataDirectory}
                                 />
                             )}
-
-                            {/* <Grid item xs={8}>
-                                <DatePicker
-                                    label="Date Invalid"
-                                    value={part.dateInvalid ? part.dateInvalid.toString() : null}
-                                    onChange={value => {
-                                        handleFieldChange('dateInvalid', value);
-                                    }}
+                            {tab === 1 && (
+                                <BuildTab
+                                    handleFieldChange={handleFieldChange}
+                                    linnProduced={part.linnProduced}
+                                    sernosSequenceName={part.sernosSequenceName}
+                                    sernosSequenceDescription={part.sernosSequenceDescription}
+                                    handleSernosSequenceChange={handleSernosSequenceChange}
+                                    decrementRuleName={part.decrementRuleName}
+                                    assemblyTechnologyName={part.assemblyTechnologyName}
+                                    bomType={part.bomType}
+                                    bomId={part.bomId}
+                                    optionSet={part.optionSet}
+                                    drawingReference={part.drawingReference}
+                                    safetyCriticalPart={part.safetyCriticalPart}
+                                    plannedSurplus={part.plannedSurplus}
                                 />
-                            </Grid> */}
+                            )}
+                            {tab === 2 && (
+                                <PurchTab
+                                    handleFieldChange={handleFieldChange}
+                                    ourUnitOfMeasure={part.ourUnitOfMeasure}
+                                    preferredSupplier={part.preferredSupplier}
+                                    handlePrefferedSupplierChange={handlePrefferedSupplierChange}
+                                    preferredSupplierName={part.preferredSupplierName}
+                                    currency={part.currency}
+                                    currencyUnitPrice={part.currencyUnitPrice}
+                                    baseUnitPrice={part.baseUnitPrice}
+                                    materialPrice={part.materialPrice}
+                                    labourPrice={part.labourPrice}
+                                    costingPrice={part.costingPrice}
+                                    orderHold={part.orderHold}
+                                    partCategory={part.partCategory}
+                                    nonForecastRequirement={part.nonForecastRequirement}
+                                    oneOffRequirement={part.oneOffRequirement}
+                                    sparesRequirement={part.sparesRequirement}
+                                    ignoreWorkstationStock={part.ignoreWorkstationStock}
+                                    handleIgnoreWorkstationStockChange={
+                                        handleIgnoreWorkstationStockChange
+                                    }
+                                    imdsIdNumber={part.imdsIdNumber}
+                                    imdsWeight={part.imdsWeight}
+                                    mechanicalOrElectronic={part.mechanicalOrElectronic}
+                                />
+                            )}
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons
                                     saveDisabled={viewing() || partInvalid()}
@@ -243,7 +346,9 @@ Part.propTypes = {
     addItem: PropTypes.func,
     loading: PropTypes.bool,
     setEditStatus: PropTypes.func.isRequired,
-    setSnackbarVisible: PropTypes.func.isRequired
+    setSnackbarVisible: PropTypes.func.isRequired,
+    nominal: PropTypes.shape({ nominalCode: PropTypes.string, description: PropTypes.string }),
+    fetchNominal: PropTypes.func.isRequired
 };
 
 Part.defaultProps = {
@@ -253,7 +358,8 @@ Part.defaultProps = {
     updateItem: null,
     loading: null,
     itemError: null,
-    itemId: null
+    itemId: null,
+    nominal: null
 };
 
 export default Part;

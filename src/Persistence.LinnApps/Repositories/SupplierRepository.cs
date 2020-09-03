@@ -20,12 +20,12 @@
 
         public Supplier FindBy(Expression<Func<Supplier, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.Suppliers.Where(expression).ToList().FirstOrDefault();
         }
 
         public IQueryable<Supplier> FilterBy(Expression<Func<Supplier, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.Suppliers.Where(expression);
         }
 
         public IQueryable<Supplier> FindAll()

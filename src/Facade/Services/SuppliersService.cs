@@ -15,10 +15,15 @@
             this.repository = repository;
         }
 
-        public IResult<IEnumerable<Supplier>> GetSuppliers()
+        public IResult<IEnumerable<Supplier>> GetSuppliers(string searchTerm = null)
         {
+            if (searchTerm == null)
+            {
+                return new SuccessResult<IEnumerable<Supplier>>(this.repository.FindAll());
+            }
+
             return new SuccessResult<IEnumerable<Supplier>>(
-                this.repository.FindAll());
+                this.repository.FilterBy(s => s.Name.ToUpper().Contains(searchTerm.ToUpper())));
         }
     }
 }

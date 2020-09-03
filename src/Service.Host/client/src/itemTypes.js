@@ -48,3 +48,14 @@ export const productAnalysisCodes = new ItemType(
 
 export const nominal = new ItemType('nominal', 'NOMINAL', '/inventory/nominal-for-department');
 
+export const assemblyTechnologies = new ItemType(
+    'assemblyTechnologies',
+    'ASSEMBLY_TECHNOLOGIES',
+    '/inventory/assembly-technologies'
+);
+
+export const decrementRules = new ItemType(
+    'decrementRules',
+    'DECREMENT_RULES',
+    '/inventory/decrement-rules'
+);

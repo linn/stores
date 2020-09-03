@@ -1,9 +1,12 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System.Security;
+
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.Parts;
     using Linn.Stores.Service.Models;
 
     using Nancy;
@@ -19,11 +22,21 @@
 
         private readonly IProductAnalysisCodeService productAnalysisCodeService;
 
+        private readonly
+            IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>
+            assemblyTechnologyService;
+
+        private readonly
+            IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource>
+            decrementRuleService;
+
         public PartsModule(
             IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
             IPartCategoryService partCategoryService,
-            IProductAnalysisCodeService productAnalysisCodeService)
+            IProductAnalysisCodeService productAnalysisCodeService,
+            IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource> assemblyTechnologyService,
+            IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource> decrementRuleService)
         {
             this.partsFacadeService = partsFacadeService;
 
@@ -42,6 +55,12 @@
             this.productAnalysisCodeService = productAnalysisCodeService;
             this.Get("inventory/product-analysis-codes", _ => this.GetProductAnalysisCodes());
             this.Get("inventory/product-analysis-codes", _ => this.GetProductAnalysisCodes());
+
+            this.assemblyTechnologyService = assemblyTechnologyService;
+            this.Get("inventory/assembly-technologies", _ => this.GetAssemblyTechnologies());
+
+            this.decrementRuleService = decrementRuleService;
+            this.Get("inventory/decrement-rules", _ => this.GetDecrementRules());
         }
 
         private object GetPart(int id)
@@ -99,6 +118,20 @@
         {
             var resource = this.Bind<SearchRequestResource>();
             var result = this.productAnalysisCodeService.GetProductAnalysisCodes(resource.SearchTerm);
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetDecrementRules()
+        {
+            var result = this.decrementRuleService.GetAll();
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetAssemblyTechnologies()
+        {
+            var result = this.assemblyTechnologyService.GetAll();
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

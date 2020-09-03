@@ -6,7 +6,7 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Parts;
-    using Linn.Stores.Resources;
+    using Linn.Stores.Resources.Parts;
 
     public class PartCategoriesResourceBuilder : IResourceBuilder<IEnumerable<PartCategory>>
     {

@@ -37,6 +37,8 @@
             builder.RegisterType<NominalAccountRepository>().As<IQueryRepository<NominalAccount>>();
             builder.RegisterType<DespatchLocationRepository>().As<IRepository<DespatchLocation, int>>();
             builder.RegisterType<StockPoolRepository>().As<IRepository<StockPool, int>>();
+            builder.RegisterType<AssemblyTechnologyRepository>().As<IRepository<AssemblyTechnology, string>>();
+            builder.RegisterType<DecrementRuleRepository>().As<IRepository<DecrementRule, string>>();
         }
     }
 }

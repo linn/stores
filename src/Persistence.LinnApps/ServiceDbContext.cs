@@ -23,7 +23,7 @@
 
         public DbSet<ProductAnalysisCode> ProductAnalysisCodes { get; set; }
 
-        public DbQuery<Department> Departments { get; set; }
+        public DbSet<Department> Departments { get; set; }
 
         public DbQuery<RootProduct> RootProducts { get; set; }
 
@@ -33,7 +33,7 @@
 
         public DbSet<SosOption> SosOptions { get; set; }
 
-        public DbQuery<SernosSequence> SernosSequences { get; set; }
+        public DbSet<SernosSequence> SernosSequences { get; set; }
 
         public DbQuery<UnitOfMeasure> UnitsOfMeasure { get; set; }
 
@@ -49,17 +49,21 @@
 
         public DbSet<StockPool> StockPools { get; set; }
 
+        public DbSet<DecrementRule> DecrementRules { get; set; }
+
+        public DbSet<AssemblyTechnology> AssemblyTechnologies { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
             this.BuildParetoClasses(builder);
-            this.QueryDepartments(builder);
+            this.BuildDepartments(builder);
             this.BuildProductAnalysisCodes(builder);
             this.BuildAccountingCompanies(builder);
             this.BuildEmployees(builder);
             this.QueryRootProducts(builder);
             this.BuildSosOptions(builder);
-            this.QuerySernosSequences(builder);
+            this.BuildSernosSequences(builder);
             this.QueryUnitsOfMeasure(builder);
             this.QueryPartCategories(builder);
             this.BuildSuppliers(builder);
@@ -67,6 +71,8 @@
             this.BuildNominalAccounts(builder);
             this.BuildDespatchLocations(builder);
             this.BuildStockPools(builder);
+            this.BuildDecrementRules(builder);
+            this.BuildAssemblyTechnologies(builder);
             base.OnModelCreating(builder);
         }
 
@@ -132,12 +138,11 @@
             e.Property(p => p.SafetyCertificateExpirationDate).HasColumnName("SAFETY_CERTIFICATE_EXPIRY_DATE");
             e.Property(p => p.SafetyDataDirectory).HasColumnName("SAFETY_DATA_DIRECTORY").HasMaxLength(500);
             e.Property(p => p.LinnProduced).HasColumnName("LINN_PRODUCED").HasMaxLength(1);
-            e.Property(p => p.DecrementRule).HasColumnName("DECREMENT_RULE").HasMaxLength(10);
             e.Property(p => p.BomType).HasColumnName("BOM_TYPE").HasMaxLength(1);
             e.Property(p => p.OptionSet).HasColumnName("OPTION_SET").HasMaxLength(14);
             e.Property(p => p.DrawingReference).HasColumnName("DRAWING_REFERENCE").HasMaxLength(100);
             e.Property(p => p.BomId).HasColumnName("BOM_ID");
-            e.Property(p => p.UnitOfMeasure).HasColumnName("UNIT_OF_MEASURE").HasMaxLength(14);
+            e.Property(p => p.OurUnitOfMeasure).HasColumnName("OUR_UNIT_OF_MEASURE").HasMaxLength(14);
             e.Property(p => p.Currency).HasColumnName("CURRENCY").HasMaxLength(4);
             e.Property(p => p.CurrencyUnitPrice).HasColumnName("CURRENCY_UNIT_PRICE");
             e.Property(p => p.BaseUnitPrice).HasColumnName("BASE_UNIT_PRICE");
@@ -191,6 +196,9 @@
             e.HasOne<ProductAnalysisCode>(p => p.ProductAnalysisCode).WithMany(c => c.Parts)
                 .HasForeignKey("PRODUCT_ANALYSIS_CODE");
             e.HasOne(p => p.NominalAccount).WithMany(a => a.Parts).HasForeignKey("NOMACC_NOMACC_ID");
+            e.HasOne(p => p.SernosSequence).WithMany(s => s.Parts).HasForeignKey("SERNOS_SEQUENCE");
+            e.HasOne(p => p.AssemblyTechnology).WithMany(s => s.Parts).HasForeignKey("ASSEMBLY_TECHNOLOGY");
+            e.HasOne(p => p.DecrementRule).WithMany(s => s.Parts).HasForeignKey("DECREMENT_RULE");
         }
 
         private void BuildParetoClasses(ModelBuilder builder)
@@ -201,12 +209,31 @@
             e.Property(p => p.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
         }
 
-        private void QueryDepartments(ModelBuilder builder)
+        private void BuildDecrementRules(ModelBuilder builder)
         {
-            var e = builder.Query<Department>().ToView("LINN_DEPARTMENTS");
+            var e = builder.Entity<DecrementRule>().ToTable("DECREMENT_RULES");
+            e.HasKey(r => r.Rule);
+            e.Property(r => r.Rule).HasColumnName("DECREMENT_RULE").HasMaxLength(10);
+            e.Property(r => r.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
+        }
+
+        private void BuildAssemblyTechnologies(ModelBuilder builder)
+        {
+            var e = builder.Entity<AssemblyTechnology>().ToTable("ASSEMBLY_TECHNOLOGIES");
+            e.HasKey(r => r.Name);
+            e.Property(r => r.Name).HasColumnName("NAME").HasMaxLength(4);
+            e.Property(r => r.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
+        }
+
+        private void BuildDepartments(ModelBuilder builder)
+        {
+            var e = builder.Entity<Department>().ToTable("LINN_DEPARTMENTS");
+            e.HasKey(d => d.DepartmentCode);
             e.Property(d => d.DepartmentCode).HasColumnName("DEPARTMENT_CODE").HasMaxLength(10);
             e.Property(d => d.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
             e.Property(d => d.DateClosed).HasColumnName("DATE_CLOSED");
+            e.HasMany(n => n.NominalAccounts).WithOne(a => a.Department)
+                .HasForeignKey("DEPARTMENT");
         }
 
         private void BuildProductAnalysisCodes(ModelBuilder builder)
@@ -236,9 +263,10 @@
             e.Property(p => p.DespatchLocationCode).HasColumnName("DESPATCH_LOCATION_CODE").HasMaxLength(10);
         }
 
-        private void QuerySernosSequences(ModelBuilder builder)
+        private void BuildSernosSequences(ModelBuilder builder)
         {
-            var q = builder.Query<SernosSequence>().ToView("SERNOS_SEQUENCES");
+            var q = builder.Entity<SernosSequence>().ToTable("SERNOS_SEQUENCES");
+            q.HasKey(p => p.Sequence);
             q.Property(p => p.Sequence).HasColumnName("SEQUENCE_NAME");
             q.Property(p => p.Description).HasColumnName("DESCRIPTION");
         }
@@ -271,7 +299,6 @@
             builder.Entity<NominalAccount>().ToTable("NOMINAL_ACCOUNTS");
             builder.Entity<NominalAccount>().HasKey(a => a.NominalAccountId);
             builder.Entity<NominalAccount>().Property(a => a.NominalAccountId).HasColumnName("NOMACC_ID");
-            builder.Entity<NominalAccount>().Property(a => a.Department).HasColumnName("DEPARTMENT");
         }
 
         private void BuildDespatchLocations(ModelBuilder builder)

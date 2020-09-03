@@ -40,8 +40,6 @@
 
         public string LinnProduced { get; set; }
 
-        public string DecrementRule { get; set; }
-
         public string BomType { get; set; }
 
         public string OptionSet { get; set; }
@@ -52,7 +50,7 @@
 
         public int? BomId { get; set; }
 
-        public string UnitOfMeasure { get; set; }
+        public string OurUnitOfMeasure { get; set; }
 
         public Supplier PreferredSupplier { get; set; }
 
@@ -129,5 +127,11 @@
         public string PurchasingPhaseOutType { get; set; }
 
         public DateTime? DateDesignObsolete { get; set; }
+
+        public SernosSequence SernosSequence { get; set; }
+
+        public AssemblyTechnology AssemblyTechnology { get; set; }
+
+        public DecrementRule DecrementRule { get; set; }
     }
 }

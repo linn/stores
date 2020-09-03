@@ -5,6 +5,7 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.Parts;
 
     using Nancy;
     using Nancy.Testing;
@@ -20,10 +21,11 @@
         [SetUp]
         public void SetUp()
         {
-            this.requestResource = new PartResource { Id = 1 };
+            this.requestResource = new PartResource { Id = 1, StockControlled = true };
             var part = new Part
                               {
-                                 Id = 1
+                                 Id = 1,
+                                 StockControlled = "Y"
                               };
             this.PartsFacadeService.Add(Arg.Any<PartResource>())
                 .Returns(new CreatedResult<Part>(part));

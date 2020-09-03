@@ -7,6 +7,7 @@
     using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.Parts;
 
     public class PartResourceBuilder : IResourceBuilder<Part>
     {
@@ -20,12 +21,13 @@
                            ProductAnalysisCode = part.ProductAnalysisCode?.ProductCode,
                            ProductAnalysisCodeDescription = part.ProductAnalysisCode?.Description,
                            SafetyCertificateExpirationDate = part.SafetyCertificateExpirationDate?.ToString("o"),
-                           SafetyCriticalPart = part.SafetyCriticalPart == "Y",
+                           SafetyCriticalPart = this.ToNullableBool(part.SafetyCriticalPart),
                            ImdsIdNumber = part.ImdsIdNumber,
                            ParetoCode = part.ParetoClass?.ParetoCode,
                            ParetoDescription = part.ParetoClass?.Description,
                            ImdsWeight = part.ImdsWeight,
-                           DecrementRule = part.DecrementRule,
+                           DecrementRuleName = part.DecrementRule?.Rule,
+                           DecrementRuleDescription = part.DecrementRule?.Description,
                            SparesRequirement = part.SparesRequirement,
                            BomType = part.BomType,
                            AccountingCompany = part.AccountingCompany?.Name,
@@ -33,7 +35,7 @@
                            OptionSet = part.OptionSet,
                            MaterialPrice = part.MaterialPrice,
                            SingleSourcePart = this.ToNullableBool(part.SingleSourcePart),
-                           StockControlled = this.ToNullableBool(part.StockControlled),
+                           StockControlled = part.StockControlled.Equals("Y"),
                            LinnProduced = this.ToNullableBool(part.LinnProduced),
                            PartCategory = part.PartCategory,
                            IgnoreWorkstationStock = this.ToNullableBool(part.IgnoreWorkstationStock),
@@ -50,7 +52,7 @@
                            SafetyDataDirectory = part.SafetyDataDirectory,
                            BomId = part.BomId,
                            BaseUnitPrice = part.BaseUnitPrice,
-                           UnitOfMeasure = part.UnitOfMeasure,
+                           OurUnitOfMeasure = part.OurUnitOfMeasure,
                            PerformanceCriticalPart = this.ToNullableBool(part.PerformanceCriticalPart),
                            MechanicalOrElectronic = part.MechanicalOrElectronic,
                            RootProduct = part.RootProduct,
@@ -84,14 +86,21 @@
                            NominalAccount = part.NominalAccount?.NominalAccountId,
                            Nominal = part.NominalAccount?.Nominal?.NominalCode,
                            NominalDescription = part.NominalAccount?.Nominal?.Description,
-                           Department = part.NominalAccount?.Department,
+                           Department = part.NominalAccount?.Department?.DepartmentCode,
+                           DepartmentDescription = part.NominalAccount?.Department?.Description,
+                           SernosSequenceName = part.SernosSequence?.Sequence,
+                           SernosSequenceDescription = part.SernosSequence?.Description,
+                           AssemblyTechnologyName = part.AssemblyTechnology?.Name,
+                           AssemblyTechnologyDescription = part.AssemblyTechnology?.Description,
+                           NonForecastRequirement = part.NonForecastRequirement,
+                           OneOffRequirement = part.OneOffRequirement,
                            Links = this.BuildLinks(part).ToArray()
                        };
         }
 
         public string GetLocation(Part part)
         {
-            return $"/parts/{part.Id}";
+            return $"/inventory/parts/{part.Id}";
         }
 
         object IResourceBuilder<Part>.Build(Part part) => this.Build(part);

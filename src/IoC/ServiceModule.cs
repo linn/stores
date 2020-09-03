@@ -11,6 +11,7 @@
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Allocation;
+    using Linn.Stores.Resources.Parts;
 
     public class ServiceModule : Module
     {
@@ -37,6 +38,10 @@
                 .As<IFacadeService<DespatchLocation, int, DespatchLocationResource, DespatchLocationResource>>();
             builder.RegisterType<StockPoolFacadeService>()
                 .As<IFacadeService<StockPool, int, StockPoolResource, StockPoolResource>>();
+            builder.RegisterType<AssemblyTechnologyService>()
+                .As<IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>>();
+            builder.RegisterType<DecrementRuleService>()
+                .As<IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource>>();
 
             // proxy
             builder.RegisterType<SosPack>().As<ISosPack>();

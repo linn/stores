@@ -26,10 +26,16 @@
                 .Include(p => p.AccountingCompany)
                 .Include(p => p.ParetoClass)
                 .Include(p => p.ProductAnalysisCode)
+                .Include(p => p.DecrementRule)
+                .Include(p => p.AssemblyTechnology)
                 .Include(p => p.CreatedBy)
                 .Include(p => p.MadeLiveBy)
                 .Include(p => p.PhasedOutBy)
+                .Include(p => p.SernosSequence)
+                .Include(p => p.PreferredSupplier)
+                .Include(p => p.NominalAccount).ThenInclude(a => a.Department)
                 .Include(p => p.NominalAccount).ThenInclude(a => a.Nominal)
+                .AsNoTracking()
                 .ToList()
                 .FirstOrDefault();
         }

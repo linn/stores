@@ -7,6 +7,6 @@
 
     public interface ISernosSequencesService
     {
-        IResult<IEnumerable<SernosSequence>> GetSequences();
+        IResult<IEnumerable<SernosSequence>> GetSequences(string searchTerm = null);
     }
 }

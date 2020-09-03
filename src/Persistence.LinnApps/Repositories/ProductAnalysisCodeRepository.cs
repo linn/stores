@@ -20,7 +20,10 @@
 
         public ProductAnalysisCode FindBy(Expression<Func<ProductAnalysisCode, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext
+                .ProductAnalysisCodes
+                .Where(expression)
+                .ToList().FirstOrDefault();
         }
 
         public IQueryable<ProductAnalysisCode> FilterBy(Expression<Func<ProductAnalysisCode, bool>> expression)
