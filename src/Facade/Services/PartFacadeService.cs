@@ -25,6 +25,8 @@
 
         private readonly IQueryRepository<SernosSequence> sernosSequenceRepository;
 
+        private readonly IQueryRepository<Supplier>supplierRepository;
+
         public PartFacadeService(
             IRepository<Part, int> repository,
             IRepository<ParetoClass, string> paretoClassRepository,
@@ -34,6 +36,7 @@
             IRepository<AssemblyTechnology, string> assemblyTechnologyRepository,
             IRepository<DecrementRule, string> decrementRuleRepository,
             IQueryRepository<SernosSequence> sernosSequenceRepository,
+            IQueryRepository<Supplier> supplierRepository,
             ITransactionManager transactionManager)
             : base(repository, transactionManager)
         {
@@ -44,6 +47,7 @@
             this.decrementRuleRepository = decrementRuleRepository;
             this.assemblyTechnologyRepository = assemblyTechnologyRepository;
             this.sernosSequenceRepository = sernosSequenceRepository;
+            this.supplierRepository = supplierRepository;
         }
 
         protected override Part CreateFromResource(PartResource resource)
@@ -148,6 +152,7 @@
             entity.BaseUnitPrice = resource.BaseUnitPrice;
             entity.OneOffRequirement = resource.OneOffRequirement;
             entity.LabourPrice = resource.LabourPrice;
+            entity.PreferredSupplier = this.supplierRepository.FindBy(s => s.Id == resource.PreferredSupplier);
         }
 
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)
