@@ -27,7 +27,7 @@
                                };
             var companyB = new AccountingCompany
                                {
-                                   Name = "B", Description = "description B yeah I think this would be doable for work stuff tbh"
+                                   Name = "B", Description = "description B"
                                };
 
             this.AccountingCompaniesService.GetValid()
