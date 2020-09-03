@@ -11,6 +11,7 @@
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Allocation;
+    using Linn.Stores.Resources.Parts;
 
     public class ServiceModule : Module
     {

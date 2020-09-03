@@ -7,6 +7,7 @@
     using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.Parts;
 
     public class PartResourceBuilder : IResourceBuilder<Part>
     {
@@ -51,7 +52,7 @@
                            SafetyDataDirectory = part.SafetyDataDirectory,
                            BomId = part.BomId,
                            BaseUnitPrice = part.BaseUnitPrice,
-                           UnitOfMeasure = part.UnitOfMeasure,
+                           OurUnitOfMeasure = part.OurUnitOfMeasure,
                            PerformanceCriticalPart = this.ToNullableBool(part.PerformanceCriticalPart),
                            MechanicalOrElectronic = part.MechanicalOrElectronic,
                            RootProduct = part.RootProduct,
@@ -91,6 +92,8 @@
                            SernosSequenceDescription = part.SernosSequence?.Description,
                            AssemblyTechnologyName = part.AssemblyTechnology?.Name,
                            AssemblyTechnologyDescription = part.AssemblyTechnology?.Description,
+                           NonForecastRequirement = part.NonForecastRequirement,
+                           OneOffRequirement = part.OneOffRequirement,
                            Links = this.BuildLinks(part).ToArray()
                        };
         }

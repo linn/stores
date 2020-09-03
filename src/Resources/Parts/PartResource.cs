@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Resources
+﻿namespace Linn.Stores.Resources.Parts
 {
     using Linn.Common.Resources;
 
@@ -60,7 +60,7 @@
 
         public int? BomId { get; set; }
 
-        public string UnitOfMeasure { get; set; }
+        public string OurUnitOfMeasure { get; set; }
 
         public int? PreferredSupplier { get; set; }
 
@@ -83,6 +83,10 @@
         public string PartCategory { get; set; }
 
         public decimal? SparesRequirement { get; set; }
+
+        public decimal? OneOffRequirement { get; set; }
+
+        public decimal? NonForecastRequirement { get; set; }
 
         public bool? IgnoreWorkstationStock { get; set; }
 

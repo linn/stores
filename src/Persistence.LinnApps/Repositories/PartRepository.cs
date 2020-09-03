@@ -32,6 +32,7 @@
                 .Include(p => p.MadeLiveBy)
                 .Include(p => p.PhasedOutBy)
                 .Include(p => p.SernosSequence)
+                .Include(p => p.PreferredSupplier)
                 .Include(p => p.NominalAccount).ThenInclude(a => a.Department)
                 .Include(p => p.NominalAccount).ThenInclude(a => a.Nominal)
                 .AsNoTracking()

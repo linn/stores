@@ -7,7 +7,7 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Parts;
-    using Linn.Stores.Resources;
+    using Linn.Stores.Resources.Parts;
 
     public class PartFacadeService : FacadeService<Part, int, PartResource, PartResource>
     {
@@ -85,6 +85,7 @@
                            OptionSet = resource.OptionSet,
                            DrawingReference = resource.DrawingReference,
                            BomType = resource.BomType,
+                           OurUnitOfMeasure = resource.OurUnitOfMeasure,
                            BomId = resource.BomId,
                            PlannedSurplus = this.ToYesOrNoString(resource.PlannedSurplus),
                            SernosSequence = resource.SernosSequenceName != null
@@ -102,7 +103,7 @@
             entity.EmcCriticalPart = this.ToYesOrNoString(resource.EmcCriticalPart);
             entity.SafetyCriticalPart = this.ToYesOrNoString(resource.SafetyCriticalPart);
             entity.PlannedSurplus = this.ToYesOrNoString(resource.PlannedSurplus);
-
+            entity.OurUnitOfMeasure = resource.OurUnitOfMeasure;
             entity.SingleSourcePart = this.ToYesOrNoString(resource.SingleSourcePart);
             entity.StockControlled = this.ToYesOrNoString(resource.StockControlled);
             entity.ParetoClass = resource.ParetoCode != null
@@ -134,6 +135,19 @@
             entity.SernosSequence = resource.SernosSequenceName != null
                 ? this.sernosSequenceRepository.FindBy(c => c.Sequence == resource.SernosSequenceName)
                 : null;
+            entity.IgnoreWorkstationStock = this.ToYesOrNoString(resource.IgnoreWorkstationStock);
+            entity.MechanicalOrElectronic = resource.MechanicalOrElectronic;
+            entity.ImdsIdNumber = resource.ImdsIdNumber;
+            entity.ImdsWeight = resource.ImdsWeight;
+            entity.PartCategory = resource.PartCategory;
+            entity.OrderHold = this.ToYesOrNoString(resource.OrderHold);
+            entity.MaterialPrice = resource.MaterialPrice;
+            entity.SparesRequirement = resource.SparesRequirement;
+            entity.CurrencyUnitPrice = resource.CurrencyUnitPrice;
+            entity.NonForecastRequirement = resource.NonForecastRequirement;
+            entity.BaseUnitPrice = resource.BaseUnitPrice;
+            entity.OneOffRequirement = resource.OneOffRequirement;
+            entity.LabourPrice = resource.LabourPrice;
         }
 
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)

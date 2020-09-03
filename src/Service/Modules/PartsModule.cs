@@ -6,6 +6,7 @@
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.Parts;
     using Linn.Stores.Service.Models;
 
     using Nancy;

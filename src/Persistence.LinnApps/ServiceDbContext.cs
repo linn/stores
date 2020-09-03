@@ -142,7 +142,7 @@
             e.Property(p => p.OptionSet).HasColumnName("OPTION_SET").HasMaxLength(14);
             e.Property(p => p.DrawingReference).HasColumnName("DRAWING_REFERENCE").HasMaxLength(100);
             e.Property(p => p.BomId).HasColumnName("BOM_ID");
-            e.Property(p => p.UnitOfMeasure).HasColumnName("UNIT_OF_MEASURE").HasMaxLength(14);
+            e.Property(p => p.OurUnitOfMeasure).HasColumnName("OUR_UNIT_OF_MEASURE").HasMaxLength(14);
             e.Property(p => p.Currency).HasColumnName("CURRENCY").HasMaxLength(4);
             e.Property(p => p.CurrencyUnitPrice).HasColumnName("CURRENCY_UNIT_PRICE");
             e.Property(p => p.BaseUnitPrice).HasColumnName("BASE_UNIT_PRICE");
