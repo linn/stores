@@ -25,7 +25,7 @@
 
         private readonly IQueryRepository<SernosSequence> sernosSequenceRepository;
 
-        private readonly IQueryRepository<Supplier>supplierRepository;
+        private readonly IQueryRepository<Supplier> supplierRepository;
 
         public PartFacadeService(
             IRepository<Part, int> repository,
@@ -154,6 +154,18 @@
             entity.LabourPrice = resource.LabourPrice;
             entity.LinnProduced = this.ToYesOrNoString(resource.LinnProduced);
             entity.PreferredSupplier = this.supplierRepository.FindBy(s => s.Id == resource.PreferredSupplier);
+            entity.QcOnReceipt = this.ToYesOrNoString(resource.QcOnReceipt);
+            entity.QcInformation = resource.QcInformation;
+            entity.RawOrFinished = resource.RawOrFinished;
+            entity.OurInspectionWeeks = resource.OurInspectionWeeks;
+            entity.SafetyWeeks = resource.SafetyWeeks;
+            entity.RailMethod = resource.RailMethod;
+            entity.MinStockRail = resource.MinStockRail;
+            entity.MaxStockRail = resource.MaxStockRail;
+            entity.SecondStageBoard = this.ToYesOrNoString(resource.SecondStageBoard);
+            entity.SecondStageDescription = resource.SecondStageDescription;
+            entity.TqmsCategoryOverride = resource.TqmsCategoryOverride;
+            entity.StockNotes = resource.StockNotes;
         }
 
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)

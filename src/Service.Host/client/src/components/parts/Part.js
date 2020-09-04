@@ -15,6 +15,8 @@ import Page from '../../containers/Page';
 import GeneralTab from '../../containers/parts/tabs/GeneralTab';
 import BuildTab from '../../containers/parts/tabs/BuildTab';
 import PurchTab from '../../containers/parts/tabs/PurchTab';
+import StoresTab from './tabs/StoresTab';
+import LifeCycleTab from './tabs/LifecycleTab';
 
 function Part({
     editStatus,
@@ -97,7 +99,6 @@ function Part({
         if (viewing()) {
             setEditStatus('edit');
         }
-        console.log(newValue);
         if (newValue === 'Yes') {
             setPart({ ...part, ignoreWorkstationStock: newValue === 'Yes' });
         } else {
@@ -307,6 +308,41 @@ function Part({
                                     imdsIdNumber={part.imdsIdNumber}
                                     imdsWeight={part.imdsWeight}
                                     mechanicalOrElectronic={part.mechanicalOrElectronic}
+                                />
+                            )}
+                            {tab === 3 && (
+                                <StoresTab
+                                    handleFieldChange={handleFieldChange}
+                                    qcOnReceipt={part.qcOnReceipt}
+                                    qcInfo={part.qcInfo}
+                                    rawOrFinished={part.rawOrFinished}
+                                    ourInspectionWeeks={part.ourInspectionWeeks}
+                                    safetyWeeks={part.safetyWeeks}
+                                    railMethod={part.railMethod}
+                                    minStockrail={part.minstockrail}
+                                    maxStockRail={part.maxStockRail}
+                                    secondStageBoard={part.secondStageBoard}
+                                    secondStageDescription={part.secondStageDescription}
+                                    tqmsCategoryOverride={part.tqmsCategoryOverride}
+                                    stockNotes={part.stockNotes}
+                                />
+                            )}
+                            {tab === 4 && (
+                                <LifeCycleTab
+                                    handleFieldChange={handleFieldChange}
+                                    dateCreated={part.dateCreated}
+                                    createdBy={part.createdBy}
+                                    createdByName={part.createdByName}
+                                    dateLive={part.dateLive}
+                                    madeLiveBy={part.madeLiveBy}
+                                    madeLiveByName={part.madeLiveByName}
+                                    phasedOutBy={part.phasedOutBy}
+                                    phasedOutByName={part.phasedOutByName}
+                                    reasonPhasedOut={part.reasonPhasedOut}
+                                    scrapOrConvert={part.scrapOrConvert}
+                                    purchasingPhaseOutType={part.purchasingPhaseOutType}
+                                    datePhasedOut={part.datePhasedOut}
+                                    dateDesignObsolete={part.dateDesignObsolete}
                                 />
                             )}
                             <Grid item xs={12}>
