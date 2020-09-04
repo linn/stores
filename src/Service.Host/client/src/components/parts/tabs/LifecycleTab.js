@@ -30,6 +30,7 @@ function LifeCycleTab({
                     onChange={value => {
                         handleFieldChange('dateCreated', value);
                     }}
+                    disabled
                 />
             </Grid>
             <Grid item xs={3}>
@@ -39,6 +40,7 @@ function LifeCycleTab({
                     label="Created By"
                     onChange={handleFieldChange}
                     propertyName="createdByName"
+                    disabled
                 />
             </Grid>
             <Grid item xs={6} />
@@ -49,6 +51,7 @@ function LifeCycleTab({
                     onChange={value => {
                         handleFieldChange('dateLive', value);
                     }}
+                    disabled
                 />
             </Grid>
             <Grid item xs={3}>
@@ -58,6 +61,7 @@ function LifeCycleTab({
                     label="Made Live By"
                     onChange={handleFieldChange}
                     propertyName="madeLiveByName"
+                    disabled
                 />
             </Grid>
             <Grid item xs={3}>
@@ -76,6 +80,7 @@ function LifeCycleTab({
                     label="Phased Out By"
                     onChange={handleFieldChange}
                     propertyName="phasedOutByName"
+                    disabled
                 />
             </Grid>
             <Grid item xs={6}>
@@ -118,6 +123,7 @@ function LifeCycleTab({
                     onChange={value => {
                         handleFieldChange('datePhasedOut', value);
                     }}
+                    disabled
                 />
             </Grid>
             <Grid item xs={3}>
