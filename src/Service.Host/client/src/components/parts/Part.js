@@ -31,7 +31,10 @@ function Part({
     setEditStatus,
     nominal,
     fetchNominal,
-    setSnackbarVisible
+    setSnackbarVisible,
+    privileges,
+    userName,
+    userNumber
 }) {
     const [part, setPart] = useState();
     const [prevPart, setPrevPart] = useState({});
@@ -44,6 +47,13 @@ function Part({
     const creating = () => editStatus === 'create';
     const editing = () => editStatus === 'edit';
     const viewing = () => editStatus === 'view';
+
+    const canPhaseOut = () => {
+        if (!(privileges.length < 1)) {
+            return privileges.some(priv => priv === 'part.admin');
+        }
+        return false;
+    };
 
     useEffect(() => {
         if (item?.department) {
@@ -85,7 +95,7 @@ function Part({
     };
 
     const handleFieldChange = (propertyName, newValue) => {
-        if (viewing()) {
+        if (viewing() && propertyName !== 'reasonPhasedOut') {
             setEditStatus('edit');
         }
         if (newValue === 'Yes' || newValue === 'No') {
@@ -93,6 +103,15 @@ function Part({
         } else {
             setPart({ ...part, [propertyName]: newValue });
         }
+    };
+
+    const handlePhaseOutClick = () => {
+        updateItem(itemId, {
+            ...part,
+            datePhasedOut: new Date(),
+            phasedOutBy: userNumber,
+            phasedOutByName: userName
+        });
     };
 
     const handleIgnoreWorkstationStockChange = (_, newValue) => {
@@ -330,6 +349,8 @@ function Part({
                             {tab === 4 && (
                                 <LifeCycleTab
                                     handleFieldChange={handleFieldChange}
+                                    handlePhaseOutClick={handlePhaseOutClick}
+                                    canPhaseOut={canPhaseOut()}
                                     dateCreated={part.dateCreated}
                                     createdBy={part.createdBy}
                                     createdByName={part.createdByName}
@@ -384,7 +405,10 @@ Part.propTypes = {
     setEditStatus: PropTypes.func.isRequired,
     setSnackbarVisible: PropTypes.func.isRequired,
     nominal: PropTypes.shape({ nominalCode: PropTypes.string, description: PropTypes.string }),
-    fetchNominal: PropTypes.func.isRequired
+    fetchNominal: PropTypes.func.isRequired,
+    privileges: PropTypes.arrayOf(PropTypes.string),
+    userName: PropTypes.string,
+    userNumber: PropTypes.number
 };
 
 Part.defaultProps = {
@@ -395,7 +419,10 @@ Part.defaultProps = {
     loading: null,
     itemError: null,
     itemId: null,
-    nominal: null
+    nominal: null,
+    privileges: null,
+    userName: null,
+    userNumber: null
 };
 
 export default Part;

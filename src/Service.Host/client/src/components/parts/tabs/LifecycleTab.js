@@ -7,6 +7,14 @@ import {
     DatePicker,
     LinkButton
 } from '@linn-it/linn-form-components-library';
+import { Button } from '@material-ui/core';
+import makeStyles from '@material-ui/styles/makeStyles';
+
+const useStyles = makeStyles(theme => ({
+    button: {
+        marginTop: theme.spacing(3)
+    }
+}));
 
 function LifeCycleTab({
     handleFieldChange,
@@ -19,8 +27,11 @@ function LifeCycleTab({
     scrapOrConvert,
     purchasingPhaseOutType,
     datePhasedOut,
-    dateDesignObsolete
+    dateDesignObsolete,
+    canPhaseOut,
+    handlePhaseOutClick
 }) {
+    const classes = useStyles();
     return (
         <Grid container spacing={3}>
             <Grid item xs={3}>
@@ -90,9 +101,23 @@ function LifeCycleTab({
                     label="Reason Phased Out"
                     onChange={handleFieldChange}
                     propertyName="reasonPhasedOut"
+                    helperText="Note: Must provide a reason before clicking PHASE OUT"
+                    disabled={!canPhaseOut || datePhasedOut}
                 />
             </Grid>
-            <Grid item xs={3} />
+            <Grid item xs={3}>
+                {canPhaseOut && !datePhasedOut && (
+                    <Button
+                        className={classes.button}
+                        disabled={!reasonPhasedOut}
+                        variant="outlined"
+                        color="secondary"
+                        onClick={handlePhaseOutClick}
+                    >
+                        PHASE OUT
+                    </Button>
+                )}
+            </Grid>
             <Grid item xs={4}>
                 <Dropdown
                     label="Scrap Or Convertible"
@@ -142,6 +167,7 @@ function LifeCycleTab({
 
 LifeCycleTab.propTypes = {
     handleFieldChange: PropTypes.func.isRequired,
+    handlePhaseOutClick: PropTypes.func.isRequired,
     dateCreated: PropTypes.string,
     createdByName: PropTypes.string,
     dateLive: PropTypes.string,
@@ -151,7 +177,8 @@ LifeCycleTab.propTypes = {
     scrapOrConvert: PropTypes.string,
     purchasingPhaseOutType: PropTypes.string,
     datePhasedOut: PropTypes.string,
-    dateDesignObsolete: PropTypes.string
+    dateDesignObsolete: PropTypes.string,
+    canPhaseOut: PropTypes.bool
 };
 
 LifeCycleTab.defaultProps = {
@@ -164,7 +191,8 @@ LifeCycleTab.defaultProps = {
     scrapOrConvert: null,
     purchasingPhaseOutType: null,
     datePhasedOut: null,
-    dateDesignObsolete: null
+    dateDesignObsolete: null,
+    canPhaseOut: false
 };
 
 export default LifeCycleTab;

@@ -27,6 +27,8 @@
 
         private readonly IQueryRepository<Supplier> supplierRepository;
 
+        private readonly IRepository<Employee, int> employeeRepository;
+
         public PartFacadeService(
             IRepository<Part, int> repository,
             IRepository<ParetoClass, string> paretoClassRepository,
@@ -37,6 +39,7 @@
             IRepository<DecrementRule, string> decrementRuleRepository,
             IQueryRepository<SernosSequence> sernosSequenceRepository,
             IQueryRepository<Supplier> supplierRepository,
+            IRepository<Employee, int> employeeRepository,
             ITransactionManager transactionManager)
             : base(repository, transactionManager)
         {
@@ -48,6 +51,7 @@
             this.assemblyTechnologyRepository = assemblyTechnologyRepository;
             this.sernosSequenceRepository = sernosSequenceRepository;
             this.supplierRepository = supplierRepository;
+            this.employeeRepository = employeeRepository;
         }
 
         protected override Part CreateFromResource(PartResource resource)
@@ -166,12 +170,18 @@
             entity.SecondStageDescription = resource.SecondStageDescription;
             entity.TqmsCategoryOverride = resource.TqmsCategoryOverride;
             entity.StockNotes = resource.StockNotes;
-            entity.ReasonPhasedOut = resource.ReasonPhasedOut;
             entity.ScrapOrConvert = resource.ScrapOrConvert;
             entity.PurchasingPhaseOutType = resource.PurchasingPhaseOutType;
             entity.DateDesignObsolete = string.IsNullOrEmpty(resource.DateDesignObsolete)
                                             ? (DateTime?)null
                                             : DateTime.Parse(resource.DateDesignObsolete);
+            entity.PhasedOutBy = resource.PhasedOutBy != null ?
+                                     this.employeeRepository
+                                         .FindById((int)resource.PhasedOutBy) : null;
+            entity.DatePhasedOut = string.IsNullOrEmpty(resource.DatePhasedOut)
+                    ? (DateTime?)null
+                    : DateTime.Parse(resource.DatePhasedOut);
+            entity.ReasonPhasedOut = resource.ReasonPhasedOut;
         }
 
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)
