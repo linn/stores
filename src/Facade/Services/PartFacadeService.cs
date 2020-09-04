@@ -166,6 +166,12 @@
             entity.SecondStageDescription = resource.SecondStageDescription;
             entity.TqmsCategoryOverride = resource.TqmsCategoryOverride;
             entity.StockNotes = resource.StockNotes;
+            entity.ReasonPhasedOut = resource.ReasonPhasedOut;
+            entity.ScrapOrConvert = resource.ScrapOrConvert;
+            entity.PurchasingPhaseOutType = resource.PurchasingPhaseOutType;
+            entity.DateDesignObsolete = string.IsNullOrEmpty(resource.DateDesignObsolete)
+                                            ? (DateTime?)null
+                                            : DateTime.Parse(resource.DateDesignObsolete);
         }
 
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)
