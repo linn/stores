@@ -17,6 +17,7 @@ import suppliersSelectors from '../../selectors/suppliersSelectors';
 import unitsOfMeasureSelectors from '../../selectors/unitsOfMeasureSelectors';
 import nominalActions from '../../actions/nominalActions';
 import nominalSelectors from '../../selectors/nominalSelectors';
+import { getPrivileges, getUserName, getUserNumber } from '../../selectors/userSelectors';
 import * as itemTypes from '../../itemTypes';
 
 const mapStateToProps = (state, { match }) => ({
@@ -32,7 +33,10 @@ const mapStateToProps = (state, { match }) => ({
     sernosSequences: sernosSequencesSelectors.getItems(state),
     suppliers: suppliersSelectors.getItems(state),
     unitsOfMeasure: unitsOfMeasureSelectors.getItems(state),
-    nominal: nominalSelectors.getItem(state)
+    nominal: nominalSelectors.getItem(state),
+    privileges: getPrivileges(state),
+    userName: getUserName(state),
+    userNumber: getUserNumber(state)
 });
 
 const initialise = ({ itemId }) => dispatch => {

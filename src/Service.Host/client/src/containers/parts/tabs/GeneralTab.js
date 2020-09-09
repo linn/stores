@@ -1,8 +1,6 @@
 import { connect } from 'react-redux';
 import { initialiseOnMount } from '@linn-it/linn-form-components-library';
 import GeneralTab from '../../../components/parts/tabs/GeneralTab';
-import partActions from '../../../actions/partActions';
-import partSelectors from '../../../selectors/partSelectors';
 import accountingCompaniesActions from '../../../actions/accountingCompaniesActions';
 import departmentsActions from '../../../actions/departmentsActions';
 import accountingCompaniesSelectors from '../../../selectors/accountingCompaniesSelectors';
@@ -17,8 +15,6 @@ import productAnalysisCodesActions from '../../../actions/productAnalysisCodesAc
 
 const mapStateToProps = (state, ownProps) => ({
     accountingComapny: ownProps.accountingComapny,
-    editStatus: partSelectors.getEditStatus(state),
-    loading: partSelectors.getLoading(state),
     departmentsSearchResults: departmentsSelectors
         .getSearchItems(state)
         .map(c => ({ name: c.departmentCode, description: c.description })),
@@ -45,9 +41,6 @@ const initialise = () => dispatch => {
 
 const mapDispatchToProps = {
     initialise,
-    updateItem: partActions.update,
-    setEditStatus: partActions.setEditStatus,
-    setSnackbarVisible: partActions.setSnackbarVisible,
     searchRootProducts: rootProductsActions.search,
     clearRootProductsSearch: rootProductsActions.clearSearch,
     searchProductAnalysisCodes: productAnalysisCodesActions.search,

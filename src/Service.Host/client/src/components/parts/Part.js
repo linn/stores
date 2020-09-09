@@ -15,6 +15,8 @@ import Page from '../../containers/Page';
 import GeneralTab from '../../containers/parts/tabs/GeneralTab';
 import BuildTab from '../../containers/parts/tabs/BuildTab';
 import PurchTab from '../../containers/parts/tabs/PurchTab';
+import StoresTab from './tabs/StoresTab';
+import LifeCycleTab from './tabs/LifecycleTab';
 
 function Part({
     editStatus,
@@ -29,7 +31,10 @@ function Part({
     setEditStatus,
     nominal,
     fetchNominal,
-    setSnackbarVisible
+    setSnackbarVisible,
+    privileges,
+    userName,
+    userNumber
 }) {
     const [part, setPart] = useState();
     const [prevPart, setPrevPart] = useState({});
@@ -42,6 +47,13 @@ function Part({
     const creating = () => editStatus === 'create';
     const editing = () => editStatus === 'edit';
     const viewing = () => editStatus === 'view';
+
+    const canPhaseOut = () => {
+        if (!(privileges.length < 1)) {
+            return privileges.some(priv => priv === 'part.admin');
+        }
+        return false;
+    };
 
     useEffect(() => {
         if (item?.department) {
@@ -83,7 +95,7 @@ function Part({
     };
 
     const handleFieldChange = (propertyName, newValue) => {
-        if (viewing()) {
+        if (viewing() && propertyName !== 'reasonPhasedOut') {
             setEditStatus('edit');
         }
         if (newValue === 'Yes' || newValue === 'No') {
@@ -93,11 +105,19 @@ function Part({
         }
     };
 
+    const handlePhaseOutClick = () => {
+        updateItem(itemId, {
+            ...part,
+            datePhasedOut: new Date(),
+            phasedOutBy: userNumber,
+            phasedOutByName: userName
+        });
+    };
+
     const handleIgnoreWorkstationStockChange = (_, newValue) => {
         if (viewing()) {
             setEditStatus('edit');
         }
-        console.log(newValue);
         if (newValue === 'Yes') {
             setPart({ ...part, ignoreWorkstationStock: newValue === 'Yes' });
         } else {
@@ -309,6 +329,43 @@ function Part({
                                     mechanicalOrElectronic={part.mechanicalOrElectronic}
                                 />
                             )}
+                            {tab === 3 && (
+                                <StoresTab
+                                    handleFieldChange={handleFieldChange}
+                                    qcOnReceipt={part.qcOnReceipt}
+                                    qcInfo={part.qcInfo}
+                                    rawOrFinished={part.rawOrFinished}
+                                    ourInspectionWeeks={part.ourInspectionWeeks}
+                                    safetyWeeks={part.safetyWeeks}
+                                    railMethod={part.railMethod}
+                                    minStockrail={part.minstockrail}
+                                    maxStockRail={part.maxStockRail}
+                                    secondStageBoard={part.secondStageBoard}
+                                    secondStageDescription={part.secondStageDescription}
+                                    tqmsCategoryOverride={part.tqmsCategoryOverride}
+                                    stockNotes={part.stockNotes}
+                                />
+                            )}
+                            {tab === 4 && (
+                                <LifeCycleTab
+                                    handleFieldChange={handleFieldChange}
+                                    handlePhaseOutClick={handlePhaseOutClick}
+                                    canPhaseOut={canPhaseOut()}
+                                    dateCreated={part.dateCreated}
+                                    createdBy={part.createdBy}
+                                    createdByName={part.createdByName}
+                                    dateLive={part.dateLive}
+                                    madeLiveBy={part.madeLiveBy}
+                                    madeLiveByName={part.madeLiveByName}
+                                    phasedOutBy={part.phasedOutBy}
+                                    phasedOutByName={part.phasedOutByName}
+                                    reasonPhasedOut={part.reasonPhasedOut}
+                                    scrapOrConvert={part.scrapOrConvert}
+                                    purchasingPhaseOutType={part.purchasingPhaseOutType}
+                                    datePhasedOut={part.datePhasedOut}
+                                    dateDesignObsolete={part.dateDesignObsolete}
+                                />
+                            )}
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons
                                     saveDisabled={viewing() || partInvalid()}
@@ -348,7 +405,10 @@ Part.propTypes = {
     setEditStatus: PropTypes.func.isRequired,
     setSnackbarVisible: PropTypes.func.isRequired,
     nominal: PropTypes.shape({ nominalCode: PropTypes.string, description: PropTypes.string }),
-    fetchNominal: PropTypes.func.isRequired
+    fetchNominal: PropTypes.func.isRequired,
+    privileges: PropTypes.arrayOf(PropTypes.string),
+    userName: PropTypes.string,
+    userNumber: PropTypes.number
 };
 
 Part.defaultProps = {
@@ -359,7 +419,10 @@ Part.defaultProps = {
     loading: null,
     itemError: null,
     itemId: null,
-    nominal: null
+    nominal: null,
+    privileges: null,
+    userName: null,
+    userNumber: null
 };
 
 export default Part;

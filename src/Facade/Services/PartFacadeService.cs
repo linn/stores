@@ -25,7 +25,9 @@
 
         private readonly IQueryRepository<SernosSequence> sernosSequenceRepository;
 
-        private readonly IQueryRepository<Supplier>supplierRepository;
+        private readonly IQueryRepository<Supplier> supplierRepository;
+
+        private readonly IRepository<Employee, int> employeeRepository;
 
         public PartFacadeService(
             IRepository<Part, int> repository,
@@ -37,6 +39,7 @@
             IRepository<DecrementRule, string> decrementRuleRepository,
             IQueryRepository<SernosSequence> sernosSequenceRepository,
             IQueryRepository<Supplier> supplierRepository,
+            IRepository<Employee, int> employeeRepository,
             ITransactionManager transactionManager)
             : base(repository, transactionManager)
         {
@@ -48,6 +51,7 @@
             this.assemblyTechnologyRepository = assemblyTechnologyRepository;
             this.sernosSequenceRepository = sernosSequenceRepository;
             this.supplierRepository = supplierRepository;
+            this.employeeRepository = employeeRepository;
         }
 
         protected override Part CreateFromResource(PartResource resource)
@@ -154,6 +158,30 @@
             entity.LabourPrice = resource.LabourPrice;
             entity.LinnProduced = this.ToYesOrNoString(resource.LinnProduced);
             entity.PreferredSupplier = this.supplierRepository.FindBy(s => s.Id == resource.PreferredSupplier);
+            entity.QcOnReceipt = this.ToYesOrNoString(resource.QcOnReceipt);
+            entity.QcInformation = resource.QcInformation;
+            entity.RawOrFinished = resource.RawOrFinished;
+            entity.OurInspectionWeeks = resource.OurInspectionWeeks;
+            entity.SafetyWeeks = resource.SafetyWeeks;
+            entity.RailMethod = resource.RailMethod;
+            entity.MinStockRail = resource.MinStockRail;
+            entity.MaxStockRail = resource.MaxStockRail;
+            entity.SecondStageBoard = this.ToYesOrNoString(resource.SecondStageBoard);
+            entity.SecondStageDescription = resource.SecondStageDescription;
+            entity.TqmsCategoryOverride = resource.TqmsCategoryOverride;
+            entity.StockNotes = resource.StockNotes;
+            entity.ScrapOrConvert = resource.ScrapOrConvert;
+            entity.PurchasingPhaseOutType = resource.PurchasingPhaseOutType;
+            entity.DateDesignObsolete = string.IsNullOrEmpty(resource.DateDesignObsolete)
+                                            ? (DateTime?)null
+                                            : DateTime.Parse(resource.DateDesignObsolete);
+            entity.PhasedOutBy = resource.PhasedOutBy != null ?
+                                     this.employeeRepository
+                                         .FindById((int)resource.PhasedOutBy) : null;
+            entity.DatePhasedOut = string.IsNullOrEmpty(resource.DatePhasedOut)
+                    ? (DateTime?)null
+                    : DateTime.Parse(resource.DatePhasedOut);
+            entity.ReasonPhasedOut = resource.ReasonPhasedOut;
         }
 
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)
