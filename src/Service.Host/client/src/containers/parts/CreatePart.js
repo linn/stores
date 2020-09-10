@@ -9,7 +9,6 @@ import { getPrivileges, getUserName, getUserNumber } from '../../selectors/userS
 
 const mapStpartsToProps = state => ({
     item: {},
-    editStatus: partSelectors.getEditStatus(state),
     snackbarVisible: partSelectors.getSnackbarVisible(state),
     accountingCompanies: accountingCompaniesSelectors.getItems(state),
     privileges: getPrivileges(state),

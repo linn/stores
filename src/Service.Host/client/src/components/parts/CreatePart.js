@@ -13,7 +13,6 @@ import {
 import Page from '../../containers/Page';
 
 function CreatePart({
-    editStatus,
     setEditStatus,
     item,
     snackbarVisible,
@@ -37,9 +36,6 @@ function CreatePart({
         createdBy: userNumber,
         dateCreated: new Date()
     });
-
-    const creating = () => editStatus === 'create';
-    const viewing = () => editStatus === 'view';
 
     const canCreate = () => {
         if (!(privileges.length < 1)) {
@@ -78,9 +74,6 @@ function CreatePart({
     };
 
     const handleAccountingCompanyChange = newValue => {
-        if (viewing()) {
-            setEditStatus('edit');
-        }
         if (newValue === 'RECORDS') {
             setPart({
                 ...part,
@@ -91,7 +84,13 @@ function CreatePart({
                 qcOnReceipt: 'No'
             });
         } else {
-            setPart({ ...part, accountingCompany: newValue, paretoCode: 'U' });
+            setPart({
+                ...part,
+                accountingCompany: newValue,
+                paretoCode: 'U',
+                bomType: '',
+                linnProduced: 'Yes'
+            });
         }
     };
 
@@ -99,7 +98,7 @@ function CreatePart({
         <Page>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    {creating() ? <Title text="Create Part" /> : <Title text="Part Details" />}
+                    <Title text="Create Part" />
                 </Grid>
                 {itemError && (
                     <Grid item xs={12}>
@@ -234,7 +233,6 @@ CreatePart.propTypes = {
     }),
     accountingCompanies: PropTypes.arrayOf(accountingCompanyShape),
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,
-    editStatus: PropTypes.string.isRequired,
     itemError: PropTypes.shape({
         status: PropTypes.number,
         statusText: PropTypes.string,
