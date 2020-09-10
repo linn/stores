@@ -58,48 +58,20 @@
         {
             return new Part
                        {
-                           PartNumber = resource.PartNumber,
-                           Description = resource.Description,
-                           AccountingCompany = this.accountingCompanyRepository.FindBy(c => c.Name == resource.AccountingCompany),
-                           CccCriticalPart = this.ToYesOrNoString(resource.CccCriticalPart),
-                           EmcCriticalPart = this.ToYesOrNoString(resource.EmcCriticalPart),
-                           SafetyCriticalPart = this.ToYesOrNoString(resource.SafetyCriticalPart),
-                           SingleSourcePart = this.ToYesOrNoString(resource.SingleSourcePart),
-                           StockControlled = this.ToYesOrNoString(resource.StockControlled),
-                           ParetoClass =
-                               resource.ParetoCode != null
-                                   ? this.paretoClassRepository.FindById(resource.ParetoCode)
-                                   : null,
-                           PerformanceCriticalPart = this.ToYesOrNoString(resource.PerformanceCriticalPart),
-                           ProductAnalysisCode =
-                               resource.ProductAnalysisCode != null
-                                   ? this.productAnalysisCodeRepository.FindBy(c => c.ProductCode == resource.ProductAnalysisCode)
-                                   : null,
-                           PsuPart = this.ToYesOrNoString(resource.PsuPart),
-                           RootProduct = resource.RootProduct,
-                           SafetyCertificateExpirationDate =
-                               string.IsNullOrEmpty(resource.SafetyCertificateExpirationDate)
-                                   ? (DateTime?)null
-                                   : DateTime.Parse(resource.SafetyCertificateExpirationDate),
-                           SafetyDataDirectory = resource.SafetyDataDirectory,
-                           NominalAccount = this.nominalAccountRepository.FindBy(
-                               a => a.Nominal.NominalCode == resource.Nominal && a.Department.DepartmentCode == resource.Department),
-                           DecrementRule = resource.DecrementRuleName != null
-                                               ? this.decrementRuleRepository.FindBy(c => c.Rule == resource.DecrementRuleName)
-                                               : null,
-                           AssemblyTechnology = resource.AssemblyTechnologyName != null
-                                                    ? this.assemblyTechnologyRepository.FindBy(c => c.Name == resource.AssemblyTechnologyName)
-                                                    : null,
-                           OptionSet = resource.OptionSet,
-                           DrawingReference = resource.DrawingReference,
-                           BomType = resource.BomType,
-                           OurUnitOfMeasure = resource.OurUnitOfMeasure,
-                           BomId = resource.BomId,
-                           PlannedSurplus = this.ToYesOrNoString(resource.PlannedSurplus),
-                           SernosSequence = resource.SernosSequenceName != null
-                                                    ? this.sernosSequenceRepository.FindBy(c => c.Sequence == resource.SernosSequenceName)
-                                                    : null,
-            };
+                          PartNumber = resource.PartNumber,
+                          Description = resource.Description,
+                          PsuPart = this.ToYesOrNoString(resource.PsuPart),
+                          CreatedBy = this.employeeRepository.FindById((int)resource.CreatedBy),
+                          DateCreated = DateTime.Parse(resource.DateCreated),
+                          StockControlled = this.ToYesOrNoString(resource.StockControlled),
+                          CccCriticalPart = this.ToYesOrNoString(resource.CccCriticalPart),
+                          AccountingCompany =
+                            this.accountingCompanyRepository.FindBy(c => c.Name == resource.AccountingCompany),
+                          ParetoClass = this.paretoClassRepository.FindById(resource.ParetoCode),
+                          BomType = resource.BomType,
+                          LinnProduced = this.ToYesOrNoString(resource.LinnProduced),
+                          QcOnReceipt = this.ToYesOrNoString(resource.QcOnReceipt)
+                       };
         }
 
         protected override void UpdateFromResource(Part entity, PartResource resource)

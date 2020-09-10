@@ -91,7 +91,7 @@ function Part({
     };
 
     const handleBackClick = () => {
-        history.push('/parts');
+        history.push('/inventory/parts');
     };
 
     const handleFieldChange = (propertyName, newValue) => {
