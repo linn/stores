@@ -1,9 +1,43 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Parts
 {
+    using Linn.Stores.Domain.LinnApps.Exceptions;
+
     public class PartService : IPartService
     {
         public void UpdatePart(Part from, Part to)
         {
+            if (from.DatePhasedOut == null && to.DatePhasedOut != null)
+            {
+                if (to.ReasonPhasedOut == null)
+                {
+                    throw new UpdatePartException("Must Provide a Reason When phasing out a part.");
+                }
+
+                from.ScrapOrConvert = to.ScrapOrConvert ?? "CONVERT";
+            }
+            
+
+            if (to.ScrapOrConvert != null && to.DatePhasedOut == null)
+            {
+                throw new UpdatePartException("A part must be obsolete to be convertible or to be scrapped.");
+            }
+
+            if (to.RailMethod == "SMM" 
+                && to.StockControlled == "Y" 
+                && to.MinStockRail == 0 
+                && to.MaxStockRail == 0)
+            {
+                throw new UpdatePartException("Rail method SMM with 0 min/max rails is not a valid stocking policy.");
+            }
+
+            if (to.TqmsCategoryOverride != null && to.StockNotes == null)
+            {
+                throw new UpdatePartException("You must enter a reason and/or reference or project code when setting an override");
+            }
+
+            from.PhasedOutBy = to.PhasedOutBy;
+            from.DatePhasedOut = to.DatePhasedOut;
+            from.ReasonPhasedOut = to.ReasonPhasedOut;
             from.Description = to.Description;
             from.AccountingCompany = to.AccountingCompany;
             from.CccCriticalPart = to.CccCriticalPart;
@@ -55,12 +89,8 @@
             from.SecondStageDescription = to.SecondStageDescription;
             from.TqmsCategoryOverride = to.TqmsCategoryOverride;
             from.StockNotes = to.StockNotes;
-            from.ScrapOrConvert = to.ScrapOrConvert;
-            from.PurchasingPhaseOutType = to.PurchasingPhaseOutType;
             from.DateDesignObsolete = to.DateDesignObsolete;
-            from.PhasedOutBy = to.PhasedOutBy;
-            from.DatePhasedOut = to.DatePhasedOut;
-            from.ReasonPhasedOut = to.ReasonPhasedOut;
+            from.PurchasingPhaseOutType = to.PurchasingPhaseOutType;
         }
     }
 }
