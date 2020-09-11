@@ -19,7 +19,8 @@
         {
             // domain services
             builder.RegisterType<AllocationService>().As<IAllocationService>();
-
+            builder.RegisterType<PartService>().As<IPartService>();
+            
             // facade services
             builder.RegisterType<PartFacadeService>()
                 .As<IFacadeService<Part, int, PartResource, PartResource>>();

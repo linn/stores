@@ -29,6 +29,8 @@
 
         private readonly IRepository<Employee, int> employeeRepository;
 
+        private readonly IPartService partService;
+
         public PartFacadeService(
             IRepository<Part, int> repository,
             IRepository<ParetoClass, string> paretoClassRepository,
@@ -40,6 +42,7 @@
             IQueryRepository<SernosSequence> sernosSequenceRepository,
             IQueryRepository<Supplier> supplierRepository,
             IRepository<Employee, int> employeeRepository,
+            IPartService partService,
             ITransactionManager transactionManager)
             : base(repository, transactionManager)
         {
@@ -52,6 +55,7 @@
             this.sernosSequenceRepository = sernosSequenceRepository;
             this.supplierRepository = supplierRepository;
             this.employeeRepository = employeeRepository;
+            this.partService = partService;
         }
 
         protected override Part CreateFromResource(PartResource resource)
@@ -76,84 +80,104 @@
 
         protected override void UpdateFromResource(Part entity, PartResource resource)
         {
-            entity.Description = resource.Description;
-            entity.AccountingCompany =
-                this.accountingCompanyRepository.FindBy(c => c.Name == resource.AccountingCompany);
-            entity.CccCriticalPart = this.ToYesOrNoString(resource.CccCriticalPart);
-            entity.EmcCriticalPart = this.ToYesOrNoString(resource.EmcCriticalPart);
-            entity.SafetyCriticalPart = this.ToYesOrNoString(resource.SafetyCriticalPart);
-            entity.PlannedSurplus = this.ToYesOrNoString(resource.PlannedSurplus);
-            entity.OurUnitOfMeasure = resource.OurUnitOfMeasure;
-            entity.SingleSourcePart = this.ToYesOrNoString(resource.SingleSourcePart);
-            entity.StockControlled = this.ToYesOrNoString(resource.StockControlled);
-            entity.ParetoClass = resource.ParetoCode != null
-                                     ? this.paretoClassRepository.FindById(resource.ParetoCode)
-                                     : null;
-            entity.PerformanceCriticalPart = this.ToYesOrNoString(resource.PerformanceCriticalPart);
-            entity.ProductAnalysisCode = resource.ProductAnalysisCode != null
-                                             ? this.productAnalysisCodeRepository.FindBy(c => c.ProductCode == resource.ProductAnalysisCode)
-                                             : null;
-            entity.PsuPart = this.ToYesOrNoString(resource.PsuPart);
-            entity.RootProduct = resource.RootProduct;
-            entity.SafetyCertificateExpirationDate = string.IsNullOrEmpty(resource.SafetyCertificateExpirationDate)
-                                                         ? (DateTime?)null
-                                                         : DateTime.Parse(resource.SafetyCertificateExpirationDate);
-            entity.SafetyDataDirectory = resource.SafetyDataDirectory;
-            entity.NominalAccount = this.nominalAccountRepository.FindBy(
-                a => a.Nominal.NominalCode == resource.Nominal && a.Department.DepartmentCode == resource.Department);
-            entity.DecrementRule = resource.DecrementRuleName != null
-                                       ? this.decrementRuleRepository.FindBy(c => c.Rule == resource.DecrementRuleName)
-                                       : null;
-            entity.AssemblyTechnology = resource.AssemblyTechnologyName != null
-                                            ? this.assemblyTechnologyRepository.FindBy(
-                                                c => c.Name == resource.AssemblyTechnologyName)
-                                            : null;
-            entity.OptionSet = resource.OptionSet;
-            entity.DrawingReference = resource.DrawingReference;
-            entity.BomType = resource.BomType;
-            entity.BomId = resource.BomId;
-            entity.SernosSequence = resource.SernosSequenceName != null
-                ? this.sernosSequenceRepository.FindBy(c => c.Sequence == resource.SernosSequenceName)
-                : null;
-            entity.IgnoreWorkstationStock = this.ToYesOrNoString(resource.IgnoreWorkstationStock);
-            entity.MechanicalOrElectronic = resource.MechanicalOrElectronic;
-            entity.ImdsIdNumber = resource.ImdsIdNumber;
-            entity.ImdsWeight = resource.ImdsWeight;
-            entity.PartCategory = resource.PartCategory;
-            entity.OrderHold = this.ToYesOrNoString(resource.OrderHold);
-            entity.MaterialPrice = resource.MaterialPrice;
-            entity.SparesRequirement = resource.SparesRequirement;
-            entity.CurrencyUnitPrice = resource.CurrencyUnitPrice;
-            entity.NonForecastRequirement = resource.NonForecastRequirement;
-            entity.BaseUnitPrice = resource.BaseUnitPrice;
-            entity.OneOffRequirement = resource.OneOffRequirement;
-            entity.LabourPrice = resource.LabourPrice;
-            entity.LinnProduced = this.ToYesOrNoString(resource.LinnProduced);
-            entity.PreferredSupplier = this.supplierRepository.FindBy(s => s.Id == resource.PreferredSupplier);
-            entity.QcOnReceipt = this.ToYesOrNoString(resource.QcOnReceipt);
-            entity.QcInformation = resource.QcInformation;
-            entity.RawOrFinished = resource.RawOrFinished;
-            entity.OurInspectionWeeks = resource.OurInspectionWeeks;
-            entity.SafetyWeeks = resource.SafetyWeeks;
-            entity.RailMethod = resource.RailMethod;
-            entity.MinStockRail = resource.MinStockRail;
-            entity.MaxStockRail = resource.MaxStockRail;
-            entity.SecondStageBoard = this.ToYesOrNoString(resource.SecondStageBoard);
-            entity.SecondStageDescription = resource.SecondStageDescription;
-            entity.TqmsCategoryOverride = resource.TqmsCategoryOverride;
-            entity.StockNotes = resource.StockNotes;
-            entity.ScrapOrConvert = resource.ScrapOrConvert;
-            entity.PurchasingPhaseOutType = resource.PurchasingPhaseOutType;
-            entity.DateDesignObsolete = string.IsNullOrEmpty(resource.DateDesignObsolete)
-                                            ? (DateTime?)null
-                                            : DateTime.Parse(resource.DateDesignObsolete);
-            entity.PhasedOutBy = resource.PhasedOutBy != null ?
-                                     this.employeeRepository
-                                         .FindById((int)resource.PhasedOutBy) : null;
-            entity.DatePhasedOut = string.IsNullOrEmpty(resource.DatePhasedOut)
-                    ? (DateTime?)null
-                    : DateTime.Parse(resource.DatePhasedOut);
-            entity.ReasonPhasedOut = resource.ReasonPhasedOut;
+            var updatedPart = new Part
+                                  {
+                                      Description = resource.Description,
+                                      AccountingCompany =
+                                          this.accountingCompanyRepository.FindBy(
+                                              c => c.Name == resource.AccountingCompany),
+                                      CccCriticalPart = this.ToYesOrNoString(resource.CccCriticalPart),
+                                      EmcCriticalPart = this.ToYesOrNoString(resource.EmcCriticalPart),
+                                      SafetyCriticalPart = this.ToYesOrNoString(resource.SafetyCriticalPart),
+                                      PlannedSurplus = this.ToYesOrNoString(resource.PlannedSurplus),
+                                      OurUnitOfMeasure = resource.OurUnitOfMeasure,
+                                      SingleSourcePart = this.ToYesOrNoString(resource.SingleSourcePart),
+                                      StockControlled = this.ToYesOrNoString(resource.StockControlled),
+                                      ParetoClass =
+                                          resource.ParetoCode != null
+                                              ? this.paretoClassRepository.FindById(resource.ParetoCode)
+                                              : null,
+                                      PerformanceCriticalPart = this.ToYesOrNoString(resource.PerformanceCriticalPart),
+                                      ProductAnalysisCode =
+                                          resource.ProductAnalysisCode != null
+                                              ? this.productAnalysisCodeRepository.FindBy(
+                                                  c => c.ProductCode == resource.ProductAnalysisCode)
+                                              : null,
+                                      PsuPart = this.ToYesOrNoString(resource.PsuPart),
+                                      RootProduct = resource.RootProduct,
+                                      SafetyCertificateExpirationDate =
+                                          string.IsNullOrEmpty(resource.SafetyCertificateExpirationDate)
+                                              ? (DateTime?)null
+                                              : DateTime.Parse(resource.SafetyCertificateExpirationDate),
+                                      SafetyDataDirectory = resource.SafetyDataDirectory,
+                                      NominalAccount =
+                                          this.nominalAccountRepository.FindBy(
+                                              a => a.Nominal.NominalCode == resource.Nominal
+                                                   && a.Department.DepartmentCode == resource.Department),
+                                      DecrementRule =
+                                          resource.DecrementRuleName != null
+                                              ? this.decrementRuleRepository.FindBy(
+                                                  c => c.Rule == resource.DecrementRuleName)
+                                              : null,
+                                      AssemblyTechnology =
+                                          resource.AssemblyTechnologyName != null
+                                              ? this.assemblyTechnologyRepository.FindBy(
+                                                  c => c.Name == resource.AssemblyTechnologyName)
+                                              : null,
+                                      OptionSet = resource.OptionSet,
+                                      DrawingReference = resource.DrawingReference,
+                                      BomType = resource.BomType,
+                                      BomId = resource.BomId,
+                                      SernosSequence =
+                                          resource.SernosSequenceName != null
+                                              ? this.sernosSequenceRepository.FindBy(
+                                                  c => c.Sequence == resource.SernosSequenceName)
+                                              : null,
+                                      IgnoreWorkstationStock = this.ToYesOrNoString(resource.IgnoreWorkstationStock),
+                                      MechanicalOrElectronic = resource.MechanicalOrElectronic,
+                                      ImdsIdNumber = resource.ImdsIdNumber,
+                                      ImdsWeight = resource.ImdsWeight,
+                                      PartCategory = resource.PartCategory,
+                                      OrderHold = this.ToYesOrNoString(resource.OrderHold),
+                                      MaterialPrice = resource.MaterialPrice,
+                                      SparesRequirement = resource.SparesRequirement,
+                                      CurrencyUnitPrice = resource.CurrencyUnitPrice,
+                                      NonForecastRequirement = resource.NonForecastRequirement,
+                                      BaseUnitPrice = resource.BaseUnitPrice,
+                                      OneOffRequirement = resource.OneOffRequirement,
+                                      LabourPrice = resource.LabourPrice,
+                                      LinnProduced = this.ToYesOrNoString(resource.LinnProduced),
+                                      PreferredSupplier =
+                                          this.supplierRepository.FindBy(s => s.Id == resource.PreferredSupplier),
+                                      QcOnReceipt = this.ToYesOrNoString(resource.QcOnReceipt),
+                                      QcInformation = resource.QcInformation,
+                                      RawOrFinished = resource.RawOrFinished,
+                                      OurInspectionWeeks = resource.OurInspectionWeeks,
+                                      SafetyWeeks = resource.SafetyWeeks,
+                                      RailMethod = resource.RailMethod,
+                                      MinStockRail = resource.MinStockRail,
+                                      MaxStockRail = resource.MaxStockRail,
+                                      SecondStageBoard = this.ToYesOrNoString(resource.SecondStageBoard),
+                                      SecondStageDescription = resource.SecondStageDescription,
+                                      TqmsCategoryOverride = resource.TqmsCategoryOverride,
+                                      StockNotes = resource.StockNotes,
+                                      ScrapOrConvert = resource.ScrapOrConvert,
+                                      PurchasingPhaseOutType = resource.PurchasingPhaseOutType,
+                                      DateDesignObsolete =
+                                          string.IsNullOrEmpty(resource.DateDesignObsolete)
+                                              ? (DateTime?)null
+                                              : DateTime.Parse(resource.DateDesignObsolete),
+                                      PhasedOutBy =
+                                          resource.PhasedOutBy != null
+                                              ? this.employeeRepository.FindById((int)resource.PhasedOutBy)
+                                              : null,
+                                      DatePhasedOut = string.IsNullOrEmpty(resource.DatePhasedOut)
+                                                          ? (DateTime?)null
+                                                          : DateTime.Parse(resource.DatePhasedOut),
+                                      ReasonPhasedOut = resource.ReasonPhasedOut,
+                                  };
+
+            this.partService.UpdatePart(entity, updatedPart);
         }
 
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)
