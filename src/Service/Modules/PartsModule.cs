@@ -89,7 +89,9 @@
 
         private object AddPart()
         {
+            this.RequiresAuthentication();
             var resource = this.Bind<PartResource>();
+            resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
             var result = this.partsFacadeService.Add(resource);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
