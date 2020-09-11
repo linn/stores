@@ -8,7 +8,6 @@
 
     public class PartService : IPartService
     {
-
         private readonly IAuthorisationService authService;
 
         public PartService(IAuthorisationService authService)
