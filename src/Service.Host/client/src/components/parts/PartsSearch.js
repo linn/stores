@@ -38,7 +38,7 @@ function PartsSearch({ items, fetchItems, loading, clearSearch, history, privile
                         loading={loading}
                         title="Part"
                         history={history}
-                    />{' '}
+                    />
                 </Grid>
             </Grid>
         </Page>
