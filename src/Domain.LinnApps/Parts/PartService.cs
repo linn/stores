@@ -1,13 +1,30 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Parts
 {
+    using System.Collections;
+    using System.Collections.Generic;
+
+    using Linn.Common.Authorisation;
     using Linn.Stores.Domain.LinnApps.Exceptions;
 
     public class PartService : IPartService
     {
-        public void UpdatePart(Part from, Part to)
+
+        private readonly IAuthorisationService authService;
+
+        public PartService(IAuthorisationService authService)
+        {
+            this.authService = authService;
+        }
+
+        public void UpdatePart(Part from, Part to, List<string> privileges)
         {
             if (from.DatePhasedOut == null && to.DatePhasedOut != null)
             {
+                if (!this.authService.HasPermissionFor(AuthorisedAction.PartAdmin, privileges))
+                {
+                    throw new UpdatePartException("You are not authorised to phase out parts.");
+                }
+
                 if (to.ReasonPhasedOut == null)
                 {
                     throw new UpdatePartException("Must Provide a Reason When phasing out a part.");

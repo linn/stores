@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System.Linq;
     using System.Security;
 
     using Linn.Common.Facade;
@@ -7,10 +8,12 @@
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Parts;
+    using Linn.Stores.Service.Extensions;
     using Linn.Stores.Service.Models;
 
     using Nancy;
     using Nancy.ModelBinding;
+    using Nancy.Security;
 
     public sealed class PartsModule : NancyModule
     {
@@ -94,7 +97,9 @@
 
         private object UpdatePart(int id)
         {
+            this.RequiresAuthentication();
             var resource = this.Bind<PartResource>();
+            resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
             var result = this.partsFacadeService.Update(id, resource);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);

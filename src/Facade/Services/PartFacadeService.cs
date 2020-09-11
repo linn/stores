@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
     using System;
+    using System.Linq;
     using System.Linq.Expressions;
 
     using Linn.Common.Facade;
@@ -65,7 +66,7 @@
                           PartNumber = resource.PartNumber,
                           Description = resource.Description,
                           PsuPart = this.ToYesOrNoString(resource.PsuPart),
-                          CreatedBy = this.employeeRepository.FindById((int)resource.CreatedBy),
+                          CreatedBy = this.employeeRepository.FindById(resource.CreatedBy),
                           DateCreated = DateTime.Parse(resource.DateCreated),
                           StockControlled = this.ToYesOrNoString(resource.StockControlled),
                           CccCriticalPart = this.ToYesOrNoString(resource.CccCriticalPart),
@@ -177,7 +178,7 @@
                                       ReasonPhasedOut = resource.ReasonPhasedOut,
                                   };
 
-            this.partService.UpdatePart(entity, updatedPart);
+            this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList());
         }
 
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)
