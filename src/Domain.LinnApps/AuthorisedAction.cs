@@ -2,6 +2,6 @@
 {
     public class AuthorisedAction
     {
-        public const string PartAdmin = "part-admin";
+        public const string PartAdmin = "part.admin";
     }
 }

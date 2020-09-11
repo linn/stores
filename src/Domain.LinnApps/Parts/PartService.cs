@@ -108,5 +108,15 @@
             from.DateDesignObsolete = to.DateDesignObsolete;
             from.PurchasingPhaseOutType = to.PurchasingPhaseOutType;
         }
+
+        public Part CreatePart(Part partToCreate, List<string> privileges)
+        {
+            if (!this.authService.HasPermissionFor(AuthorisedAction.PartAdmin, privileges))
+            {
+                throw new UpdatePartException("You are not authorised to create parts.");
+            }
+
+            return partToCreate;
+        }
     }
 }

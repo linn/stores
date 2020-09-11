@@ -61,7 +61,7 @@
 
         protected override Part CreateFromResource(PartResource resource)
         {
-            return new Part
+            var partToAdd = new Part
                        {
                           PartNumber = resource.PartNumber,
                           Description = resource.Description,
@@ -77,6 +77,7 @@
                           LinnProduced = this.ToYesOrNoString(resource.LinnProduced),
                           QcOnReceipt = this.ToYesOrNoString(resource.QcOnReceipt)
                        };
+            return this.partService.CreatePart(partToAdd, resource.UserPrivileges.ToList());
         }
 
         protected override void UpdateFromResource(Part entity, PartResource resource)
