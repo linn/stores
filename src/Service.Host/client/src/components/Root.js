@@ -49,7 +49,11 @@ const Root = ({ store }) => (
                                     />
 
                                     <Route exact path="/inventory/parts" component={Parts} />
-                                    <Route exact path="/parts/create" component={CreatePart} />
+                                    <Route
+                                        exact
+                                        path="/inventory/parts/create"
+                                        component={CreatePart}
+                                    />
                                     <Route exact path="/inventory/parts/:id" component={Part} />
 
                                     <Route

@@ -108,7 +108,7 @@ function CreatePart({
 
                 {loading ? (
                     <Grid item xs={12}>
-                        <Loading />{' '}
+                        <Loading />
                     </Grid>
                 ) : (
                     <>

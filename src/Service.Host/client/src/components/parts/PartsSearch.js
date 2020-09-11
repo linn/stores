@@ -1,23 +1,36 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import { Typeahead, CreateButton } from '@linn-it/linn-form-components-library';
+import { Typeahead, LinkButton } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Page from '../../containers/Page';
 
-function PartFails({ items, fetchItems, loading, clearSearch, history }) {
+function PartsSearch({ items, fetchItems, loading, clearSearch, history, privileges }) {
     const searchItems = items.map(item => ({
         ...item,
         name: item.partNumber.toString(),
         description: item.description
     }));
 
+    const canCreate = () => {
+        if (!(privileges.length < 1)) {
+            return privileges.some(priv => priv === 'part.admin');
+        }
+        return false;
+    };
+
     return (
         <Page>
             <Grid container spacing={3}>
+                <Grid item xs={11} />
+                <Grid item xs={1}>
+                    <LinkButton
+                        text="Create"
+                        to="/inventory/parts/create"
+                        disabled={!canCreate()}
+                        tooltip={canCreate() ? null : 'You are not authorised to create parts.'}
+                    />
+                </Grid>
                 <Grid item xs={12}>
-                    <>
-                        <CreateButton createUrl="/parts/create" />
-                    </>
                     <Typeahead
                         items={searchItems}
                         fetchItems={fetchItems}
@@ -25,14 +38,14 @@ function PartFails({ items, fetchItems, loading, clearSearch, history }) {
                         loading={loading}
                         title="Part"
                         history={history}
-                    />
+                    />{' '}
                 </Grid>
             </Grid>
         </Page>
     );
 }
 
-PartFails.propTypes = {
+PartsSearch.propTypes = {
     items: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -44,11 +57,12 @@ PartFails.propTypes = {
     loading: PropTypes.bool,
     fetchItems: PropTypes.func.isRequired,
     clearSearch: PropTypes.func.isRequired,
-    history: PropTypes.shape({}).isRequired
+    history: PropTypes.shape({}).isRequired,
+    privileges: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
-PartFails.defaultProps = {
+PartsSearch.defaultProps = {
     loading: false
 };
 
-export default PartFails;
+export default PartsSearch;
