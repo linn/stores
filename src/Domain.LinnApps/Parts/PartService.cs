@@ -1,18 +1,27 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Parts
 {
-    using System.Collections;
     using System.Collections.Generic;
 
     using Linn.Common.Authorisation;
+    using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Exceptions;
 
     public class PartService : IPartService
     {
         private readonly IAuthorisationService authService;
 
-        public PartService(IAuthorisationService authService)
+        private readonly IQueryRepository<Supplier> supplierRepository;
+
+        private readonly IRepository<Part, int> partRepository;
+
+        public PartService(
+            IAuthorisationService authService, 
+            IQueryRepository<Supplier> supplierRepository,
+            IRepository<Part, int> partRepository)
         {
             this.authService = authService;
+            this.supplierRepository = supplierRepository;
+            this.partRepository = partRepository;
         }
 
         public void UpdatePart(Part from, Part to, List<string> privileges)
@@ -114,6 +123,23 @@
             if (!this.authService.HasPermissionFor(AuthorisedAction.PartAdmin, privileges))
             {
                 throw new UpdatePartException("You are not authorised to create parts.");
+            }
+
+            if (partToCreate.StockControlled == "Y")
+            {
+                partToCreate.RailMethod = "POLICY";
+            }
+
+            if (partToCreate.LinnProduced == "Y" && partToCreate.PreferredSupplier == null)
+            {
+                partToCreate.PreferredSupplier = this.supplierRepository.FindBy(s => s.Id == 4415);
+            }
+
+            partToCreate.OrderHold = "N";
+
+            if (partToCreate.TqmsCategoryOverride != null && partToCreate.StockNotes == null)
+            {
+                throw new UpdatePartException("You must enter a reason and/or reference or project code when setting an override");
             }
 
             return partToCreate;

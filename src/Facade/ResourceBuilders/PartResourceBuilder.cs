@@ -69,7 +69,7 @@
                            ScrapOrConvert = part.ScrapOrConvert,
                            SafetyWeeks = part.SafetyWeeks,
                            RawOrFinished = part.RawOrFinished,
-                           CreatedBy = part.CreatedBy.Id,
+                           CreatedBy = part.CreatedBy?.Id,
                            CreatedByName = part.CreatedBy?.FullName,
                            PhasedOutBy = part.PhasedOutBy?.Id,
                            PhasedOutByName = part.PhasedOutBy?.FullName,

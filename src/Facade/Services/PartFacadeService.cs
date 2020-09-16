@@ -66,7 +66,8 @@
                           PartNumber = resource.PartNumber,
                           Description = resource.Description,
                           PsuPart = this.ToYesOrNoString(resource.PsuPart),
-                          CreatedBy = this.employeeRepository.FindById(resource.CreatedBy),
+                          CreatedBy = resource.CreatedBy != null ?
+                                          this.employeeRepository.FindById((int)resource.CreatedBy) : null,
                           DateCreated = DateTime.Parse(resource.DateCreated),
                           StockControlled = this.ToYesOrNoString(resource.StockControlled),
                           CccCriticalPart = this.ToYesOrNoString(resource.CccCriticalPart),
