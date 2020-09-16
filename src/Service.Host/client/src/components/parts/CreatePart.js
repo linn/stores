@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import {
@@ -23,7 +23,9 @@ function CreatePart({
     itemError,
     accountingCompanies,
     history,
-    loading
+    loading,
+    searchItems,
+    fetchItems
 }) {
     const [part, setPart] = useState({
         partNumber: '',
@@ -36,6 +38,25 @@ function CreatePart({
         createdBy: userNumber,
         dateCreated: new Date()
     });
+
+    const [safetyCriticalMessage, setSafetyCriticalMessage] = useState();
+
+    useEffect(() => {
+        const segments = part.partNumber.split('/1');
+        if (segments.length > 1) {
+            fetchItems(segments[0]);
+        } else {
+            setPart(p => ({ ...p, safetyCriticalPart: null }));
+            setSafetyCriticalMessage(null);
+        }
+    }, [fetchItems, part.partNumber]);
+
+    useEffect(() => {
+        if (searchItems?.length === 1 && searchItems[0].safetyCriticalPart) {
+            setPart(p => ({ ...p, safetyCriticalPart: 'Yes' }));
+            setSafetyCriticalMessage('Defaulted to yes since previous version is safety critical');
+        }
+    }, [searchItems]);
 
     const canCreate = () => {
         if (!(privileges.length < 1)) {
@@ -122,7 +143,7 @@ function CreatePart({
                                 fullWidth
                                 value={part.partNumber}
                                 label="Part Number"
-                                maxLength={10}
+                                //maxLength={10}
                                 required
                                 onChange={handleFieldChange}
                                 propertyName="partNumber"
@@ -204,6 +225,19 @@ function CreatePart({
                             />
                         </Grid>
                         <Grid item xs={8} />
+                        <Grid item xs={4}>
+                            <Dropdown
+                                label="Safety Critical Part"
+                                propertyName="safetyCriticalPart"
+                                helperText={safetyCriticalMessage}
+                                items={['Yes', 'No']}
+                                fullWidth
+                                allowNoValue
+                                value={part.safetyCriticalPart}
+                                onChange={handleFieldChange}
+                            />
+                        </Grid>
+                        <Grid item xs={8} />
                         <Grid item xs={12}>
                             <SaveBackCancelButtons
                                 saveDisabled={Object.values(part).some(v => !v) || !canCreate()}
@@ -245,7 +279,11 @@ CreatePart.propTypes = {
     setSnackbarVisible: PropTypes.func.isRequired,
     privileges: PropTypes.arrayOf(PropTypes.string),
     userNumber: PropTypes.number,
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
+    searchItems: PropTypes.arrayOf(
+        PropTypes.shape({ partNumber: PropTypes.string, safetyCriticalPart: PropTypes.bool })
+    ),
+    fetchItems: PropTypes.func.isRequired
 };
 
 CreatePart.defaultProps = {
@@ -256,7 +294,8 @@ CreatePart.defaultProps = {
     privileges: null,
     userNumber: null,
     accountingCompanies: [],
-    loading: false
+    loading: false,
+    searchItems: []
 };
 
 export default CreatePart;
