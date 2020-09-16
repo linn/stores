@@ -2,6 +2,7 @@
 {
     using Autofac;
 
+    using Linn.Common.Authorisation;
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
@@ -18,8 +19,11 @@
         protected override void Load(ContainerBuilder builder)
         {
             // domain services
-            builder.RegisterType<AllocationService>().As<IAllocationService>();
+            builder.RegisterType<AuthorisationService>().As<IAuthorisationService>();
 
+            builder.RegisterType<AllocationService>().As<IAllocationService>();
+            builder.RegisterType<PartService>().As<IPartService>();
+            
             // facade services
             builder.RegisterType<PartFacadeService>()
                 .As<IFacadeService<Part, int, PartResource, PartResource>>();

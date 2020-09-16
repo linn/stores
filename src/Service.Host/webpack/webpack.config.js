@@ -15,7 +15,7 @@ module.exports = {
     output: {
         path: path.join(__dirname, '../client/build'),
         filename: '[name].js',
-        publicPath: '/stores/build/'
+        publicPath: '/inventory/build/'
     },
     module: {
         rules: [

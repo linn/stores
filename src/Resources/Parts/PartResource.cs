@@ -1,5 +1,9 @@
 ﻿namespace Linn.Stores.Resources.Parts
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+
     using Linn.Common.Resources;
 
     public class PartResource : HypermediaResource
@@ -122,7 +126,7 @@
 
         public string DateCreated { get; set; }
 
-        public int? CreatedBy { get; set; }
+        public int CreatedBy { get; set; }
 
         public string CreatedByName { get; set; }
 
@@ -163,5 +167,7 @@
         public string AssemblyTechnologyName { get; set; }
 
         public string AssemblyTechnologyDescription { get; set; }
+
+        public IEnumerable<string> UserPrivileges { get; set; }
     }
 }

@@ -1,4 +1,7 @@
-﻿import { reducers as sharedLibraryReducers } from '@linn-it/linn-form-components-library';
+﻿import {
+    reducers as sharedLibraryReducers,
+    fetchErrorReducer
+} from '@linn-it/linn-form-components-library';
 import { combineReducers } from 'redux';
 import { reducer as oidc } from 'redux-oidc';
 import assemblyTechnologies from './parts/assemblyTechnologies';
@@ -15,6 +18,9 @@ import sernosSequences from './sernosSequences';
 import suppliers from './suppliers';
 import unitsOfMeasure from './unitsOfMeasure';
 import allocation from './allocation';
+import * as itemTypes from '../itemTypes';
+
+const errors = fetchErrorReducer({ ...itemTypes });
 
 const rootReducer = combineReducers({
     accountingCompanies,
@@ -32,7 +38,8 @@ const rootReducer = combineReducers({
     sernosSequences,
     suppliers,
     unitsOfMeasure,
-    ...sharedLibraryReducers
+    ...sharedLibraryReducers,
+    errors
 });
 
 export default rootReducer;
