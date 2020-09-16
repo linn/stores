@@ -12,16 +12,13 @@
 
         private readonly IQueryRepository<Supplier> supplierRepository;
 
-        private readonly IRepository<Part, int> partRepository;
 
         public PartService(
             IAuthorisationService authService, 
-            IQueryRepository<Supplier> supplierRepository,
-            IRepository<Part, int> partRepository)
+            IQueryRepository<Supplier> supplierRepository)
         {
             this.authService = authService;
             this.supplierRepository = supplierRepository;
-            this.partRepository = partRepository;
         }
 
         public void UpdatePart(Part from, Part to, List<string> privileges)
