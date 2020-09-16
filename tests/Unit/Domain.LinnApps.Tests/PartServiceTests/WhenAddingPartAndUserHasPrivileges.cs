@@ -3,10 +3,8 @@
     using System.Collections.Generic;
 
     using FluentAssertions;
-    using FluentAssertions.Extensions;
 
     using Linn.Stores.Domain.LinnApps.Parts;
-    using Linn.Stores.Domain.LinnApps.Sos;
 
     using NSubstitute;
 
@@ -35,6 +33,12 @@
         public void ShouldReturnNewPart()
         {
             this.result.Should().BeOfType<Part>();
+        }
+
+        [Test]
+        public void ShouldSetOrderHold()
+        {
+            this.result.OrderHold.Should().Be("N");
         }
     }
 }

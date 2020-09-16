@@ -122,7 +122,7 @@
                 throw new UpdatePartException("You are not authorised to create parts.");
             }
 
-            if (partToCreate.StockControlled == "Y")
+            if (partToCreate.StockControlled == "Y" && partToCreate.RailMethod == null)
             {
                 partToCreate.RailMethod = "POLICY";
             }
