@@ -215,6 +215,7 @@
             e.Property(q => q.NumberOfBookInsDone).HasColumnName("NUMBER_OF_BOOKINS_DONE");
             e.Property(q => q.OnOrOffQc).HasColumnName("ON_OR_OFF_QC");
             e.Property(q => q.Reason).HasColumnName("REASON");
+            e.Property(q => q.TransactionDate).HasColumnName("TRANSACTION_DATE");
         }
 
         private void BuildParetoClasses(ModelBuilder builder)

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
@@ -148,14 +149,16 @@
 
         public void AddQcControl(string partNumber, int? createdBy, string qcInfo)
         {
+            var test = this.qcControlRepository.FindAll().ToList();
             this.qcControlRepository.Add(new QcControl
                                              {
-                                                PartNumber = partNumber,
-                                                TransactionDate = DateTime.Today,
-                                                ChangedBy = createdBy,
-                                                NumberOfBookIns = 0,
-                                                OnOrOffQc = "ON",
-                                                Reason = qcInfo
+                                                 Id = null,
+                                                 PartNumber = partNumber,
+                                                 TransactionDate = DateTime.Today,
+                                                 ChangedBy = createdBy,
+                                                 NumberOfBookIns = 0,
+                                                 OnOrOffQc = "ON",
+                                                 Reason = qcInfo
                                              });
         }
     }

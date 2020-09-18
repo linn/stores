@@ -23,12 +23,13 @@
 
         public IQueryable<QcControl> FindAll()
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.QcControl;
         }
 
         public void Add(QcControl entity)
         {
-            this.serviceDbContext.Add(entity);
+            this.serviceDbContext.QcControl.Add(entity);
+            this.serviceDbContext.SaveChanges();
         }
 
         public void Remove(QcControl entity)
