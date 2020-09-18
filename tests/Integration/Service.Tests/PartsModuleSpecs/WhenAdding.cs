@@ -5,7 +5,6 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Parts;
-    using Linn.Stores.Resources;
     using Linn.Stores.Resources.Parts;
 
     using Nancy;
@@ -27,7 +26,7 @@
                               {
                                  Id = 1,
                                  StockControlled = "Y",
-                                 CreatedBy = new Employee { Id = 1 }
+                                 CreatedBy = new Employee { Id = 1 },
             };
             this.PartsFacadeService.Add(Arg.Any<PartResource>())
                 .Returns(new CreatedResult<Part>(part));
@@ -49,11 +48,13 @@
         }
 
         [Test]
-        public void ShouldCallService()
+        public void ShouldCallServices()
         {
             this.PartsFacadeService
                 .Received()
                 .Add(Arg.Is<PartResource>(r => r.Id == this.requestResource.Id));
+
+            this.PartsDomainService.Received().AddQcControl(Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<string>());
         }
 
         [Test]

@@ -16,12 +16,15 @@
 
         protected IQueryRepository<Supplier> SupplierRepo { get; set; }
 
+        protected IRepository<QcControl, int> qcControlRepo { get; set; }
+
         [SetUp]
         public void SetUpContext()
         {
             this.AuthService = Substitute.For<IAuthorisationService>();
             this.SupplierRepo = Substitute.For<IQueryRepository<Supplier>>();
-            this.Sut = new PartService(this.AuthService, this.SupplierRepo);
+            this.qcControlRepo = Substitute.For<IRepository<QcControl, int>>();
+            this.Sut = new PartService(this.AuthService, this.qcControlRepo, this.SupplierRepo);
         }
     }
 }

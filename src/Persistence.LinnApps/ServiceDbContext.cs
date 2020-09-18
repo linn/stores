@@ -53,6 +53,8 @@
 
         public DbSet<AssemblyTechnology> AssemblyTechnologies { get; set; }
 
+        public DbSet<QcControl> QcControl { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -73,6 +75,7 @@
             this.BuildStockPools(builder);
             this.BuildDecrementRules(builder);
             this.BuildAssemblyTechnologies(builder);
+            this.BuildQcControl(builder);
             base.OnModelCreating(builder);
         }
 
@@ -199,6 +202,19 @@
             e.HasOne(p => p.SernosSequence).WithMany(s => s.Parts).HasForeignKey("SERNOS_SEQUENCE");
             e.HasOne(p => p.AssemblyTechnology).WithMany(s => s.Parts).HasForeignKey("ASSEMBLY_TECHNOLOGY");
             e.HasOne(p => p.DecrementRule).WithMany(s => s.Parts).HasForeignKey("DECREMENT_RULE");
+        }
+
+        private void BuildQcControl(ModelBuilder builder)
+        {
+            var e = builder.Entity<QcControl>().ToTable("QC_CONTROL");
+            e.HasKey(q => q.Id);
+            e.Property(q => q.Id).HasColumnName("QC_CONTROL_ID");
+            e.Property(q => q.PartNumber).HasColumnName("PART_NUMBER");
+            e.Property(q => q.ChangedBy).HasColumnName("CHANGED_BY");
+            e.Property(q => q.NumberOfBookIns).HasColumnName("NUMBER_OF_BOOKINS");
+            e.Property(q => q.NumberOfBookInsDone).HasColumnName("NUMBER_OF_BOOKINS_DONE");
+            e.Property(q => q.OnOrOffQc).HasColumnName("ON_OR_OFF_QC");
+            e.Property(q => q.Reason).HasColumnName("REASON");
         }
 
         private void BuildParetoClasses(ModelBuilder builder)

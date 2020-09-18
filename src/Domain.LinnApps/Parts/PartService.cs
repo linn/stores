@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Parts
 {
+    using System;
     using System.Collections.Generic;
 
     using Linn.Common.Authorisation;
@@ -12,13 +13,16 @@
 
         private readonly IQueryRepository<Supplier> supplierRepository;
 
+        private readonly IRepository<QcControl, int> qcControlRepository;
 
         public PartService(
-            IAuthorisationService authService, 
+            IAuthorisationService authService,
+            IRepository<QcControl, int> qcControlRepository,
             IQueryRepository<Supplier> supplierRepository)
         {
             this.authService = authService;
             this.supplierRepository = supplierRepository;
+            this.qcControlRepository = qcControlRepository;
         }
 
         public void UpdatePart(Part from, Part to, List<string> privileges)
@@ -140,6 +144,19 @@
             }
 
             return partToCreate;
+        }
+
+        public void AddQcControl(string partNumber, int? createdBy, string qcInfo)
+        {
+            this.qcControlRepository.Add(new QcControl
+                                             {
+                                                PartNumber = partNumber,
+                                                TransactionDate = DateTime.Today,
+                                                ChangedBy = createdBy,
+                                                NumberOfBookIns = 0,
+                                                OnOrOffQc = "ON",
+                                                Reason = qcInfo
+                                             });
         }
     }
 }

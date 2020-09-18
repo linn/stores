@@ -1,8 +1,5 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
-    using System.Linq;
-    using System.Security;
-
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;
@@ -18,6 +15,8 @@
     public sealed class PartsModule : NancyModule
     {
         private readonly IFacadeService<Part, int, PartResource, PartResource> partsFacadeService;
+
+        private readonly IPartService partDomainService;
 
         private readonly IUnitsOfMeasureService unitsOfMeasureService;
 
@@ -39,10 +38,11 @@
             IPartCategoryService partCategoryService,
             IProductAnalysisCodeService productAnalysisCodeService,
             IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource> assemblyTechnologyService,
-            IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource> decrementRuleService)
+            IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource> decrementRuleService,
+            IPartService partDomainService)
         {
             this.partsFacadeService = partsFacadeService;
-
+            this.partDomainService = partDomainService;
             this.Get("/parts/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/parts/{id}", parameters => this.GetPart(parameters.id));
             this.Put("/parts/{id}", parameters => this.UpdatePart(parameters.id));
@@ -93,6 +93,7 @@
             var resource = this.Bind<PartResource>();
             resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
             var result = this.partsFacadeService.Add(resource);
+            this.partDomainService.AddQcControl(resource.PartNumber, resource.CreatedBy, resource.QcInformation);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

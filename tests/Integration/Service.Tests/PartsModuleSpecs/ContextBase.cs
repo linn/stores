@@ -52,16 +52,22 @@
 
         protected IRepository<ProductAnalysisCode, string> ProductAnalysisCodeRepository { get; private set; }
 
+        protected IRepository<QcControl, int> QcControlRepository { get; private set; }
+
+        protected IPartService PartsDomainService { get; private set; }
+
         [SetUp]
         public void EstablishContext()
         {
             this.PartsFacadeService = Substitute
                 .For<IFacadeService<Part, int, PartResource, PartResource>>();
+            this.PartsDomainService = Substitute.For<IPartService>();
             this.PartCategoriesService = Substitute.For<IPartCategoryService>();
             this.UnitsOfMeasureService = Substitute.For<IUnitsOfMeasureService>();
             this.ProductAnalysisCodeService = Substitute.For<IProductAnalysisCodeService>();
             this.PartRepository = Substitute.For<IRepository<Part, int>>();
             this.ParetoClassRepository = Substitute.For<IRepository<ParetoClass, string>>();
+            this.QcControlRepository = Substitute.For<IRepository<QcControl, int>>();
             this.ProductAnalysisCodeRepository = Substitute.For<IRepository<ProductAnalysisCode, string>>();
             this.DecrementRuleService = Substitute
                 .For<IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource>>();
@@ -78,8 +84,10 @@
                         with.Dependency(this.PartRepository);
                         with.Dependency(this.ParetoClassRepository);
                         with.Dependency(this.ProductAnalysisCodeRepository);
+                        with.Dependency(this.QcControlRepository);
                         with.Dependency(this.AssemblyTechnologyService);
                         with.Dependency(this.DecrementRuleService);
+                        with.Dependency(this.PartsDomainService);
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());
                         with.Dependency<IResourceBuilder<UnitOfMeasure>>(new UnitOfMeasureResourceBuilder());

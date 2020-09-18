@@ -39,6 +39,7 @@
             builder.RegisterType<StockPoolRepository>().As<IRepository<StockPool, int>>();
             builder.RegisterType<AssemblyTechnologyRepository>().As<IRepository<AssemblyTechnology, string>>();
             builder.RegisterType<DecrementRuleRepository>().As<IRepository<DecrementRule, string>>();
+            builder.RegisterType<QcControlRepository>().As<IRepository<QcControl, int>>();
         }
     }
 }
