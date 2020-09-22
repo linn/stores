@@ -3,6 +3,7 @@
     using FluentAssertions;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Parts;
@@ -21,12 +22,13 @@
         [SetUp]
         public void SetUp()
         {
-            this.requestResource = new PartResource { Id = 1, StockControlled = true };
+            this.requestResource = new PartResource { Id = 1, StockControlled = true, CreatedBy = 1 };
             var part = new Part
                               {
                                  Id = 1,
-                                 StockControlled = "Y"
-                              };
+                                 StockControlled = "Y",
+                                 CreatedBy = new Employee { Id = 1 }
+            };
             this.PartsFacadeService.Add(Arg.Any<PartResource>())
                 .Returns(new CreatedResult<Part>(part));
 
