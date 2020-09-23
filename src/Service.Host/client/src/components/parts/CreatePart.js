@@ -8,6 +8,7 @@ import {
     ErrorCard,
     Dropdown,
     SnackbarMessage,
+    Typeahead,
     Loading
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
@@ -19,35 +20,27 @@ function CreatePart({
     addItem,
     setSnackbarVisible,
     privileges,
-    userNumber,
     itemError,
     accountingCompanies,
     history,
     loading,
     searchItems,
-    fetchItems
+    fetchItems,
+    suppliersSearchResults,
+    suppliersSearchLoading,
+    searchSuppliers,
+    clearSuppliersSearch
 }) {
-    const [part, setPart] = useState({
-        partNumber: '',
-        description: '',
-        accountingCompany: 'LINN',
-        psuPart: 'No',
-        stockControlled: 'Yes',
-        cccCriticalPart: 'No',
-        paretoCode: 'U',
-        createdBy: userNumber,
-        dateCreated: new Date(),
-        railMethod: ''
-    });
+    const [part, setPart] = useState(item);
 
     const [safetyCriticalMessage, setSafetyCriticalMessage] = useState();
 
     useEffect(() => {
-        const segments = part.partNumber.split('/1');
-        if (segments.length > 1) {
+        const segments = part.partNumber?.split('/1');
+        if (segments?.length > 1) {
             fetchItems(segments[0]);
         } else {
-            setPart(p => ({ ...p, safetyCriticalPart: null }));
+            setPart(p => ({ ...p, safetyCriticalPart: 'No' }));
             setSafetyCriticalMessage(null);
         }
     }, [fetchItems, part.partNumber]);
@@ -58,12 +51,6 @@ function CreatePart({
             setSafetyCriticalMessage('Defaulted to yes since previous version is safety critical');
         }
     }, [searchItems]);
-
-    useEffect(() => {
-        if (!part.railMethod) {
-            setPart(p => ({ ...p, railMethod: 'POLICY' }));
-        }
-    }, [part.stockControlled, part.railMethod]);
 
     const canCreate = () => {
         if (!(privileges.length < 1)) {
@@ -195,7 +182,37 @@ function CreatePart({
                                 onChange={handleFieldChange}
                             />
                         </Grid>
-                        <Grid item xs={8} />
+                        <Grid item xs={4}>
+                            <Typeahead
+                                onSelect={newValue => {
+                                    setPart(p => ({
+                                        ...p,
+                                        preferredSupplier: newValue.name,
+                                        preferredSupplierName: newValue.description
+                                    }));
+                                }}
+                                label="Preferred Supplier"
+                                modal
+                                items={suppliersSearchResults}
+                                value={part.preferredSupplier}
+                                loading={suppliersSearchLoading}
+                                fetchItems={searchSuppliers}
+                                links={false}
+                                searc
+                                clearSearch={() => clearSuppliersSearch}
+                                placeholder="Search Code or Description"
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <InputField
+                                fullWidth
+                                value={part.preferredSupplierName}
+                                label="Name"
+                                disabled
+                                onChange={handleFieldChange}
+                                propertyName="preferredSupplierName"
+                            />
+                        </Grid>
                         <Grid item xs={4}>
                             <Dropdown
                                 label="Stores Controlled?"
@@ -213,7 +230,7 @@ function CreatePart({
                                 propertyName="railMethod"
                                 items={['MR9', 'SMM', 'POLICY', 'FIXED RAILS', 'OVERRIDE SAFETY']}
                                 fullWidth
-                                allowNoValue
+                                allowNoValue={false}
                                 value={part.railMethod}
                                 onChange={handleFieldChange}
                             />
@@ -250,7 +267,7 @@ function CreatePart({
                                 helperText={safetyCriticalMessage}
                                 items={['Yes', 'No']}
                                 fullWidth
-                                allowNoValue
+                                allowNoValue={false}
                                 value={part.safetyCriticalPart}
                                 onChange={handleFieldChange}
                             />
@@ -296,12 +313,20 @@ CreatePart.propTypes = {
     setEditStatus: PropTypes.func.isRequired,
     setSnackbarVisible: PropTypes.func.isRequired,
     privileges: PropTypes.arrayOf(PropTypes.string),
-    userNumber: PropTypes.number,
     loading: PropTypes.bool,
     searchItems: PropTypes.arrayOf(
         PropTypes.shape({ partNumber: PropTypes.string, safetyCriticalPart: PropTypes.bool })
     ),
-    fetchItems: PropTypes.func.isRequired
+    fetchItems: PropTypes.func.isRequired,
+    suppliersSearchResults: PropTypes.arrayOf(
+        PropTypes.shape({
+            supplierCode: PropTypes.string,
+            description: PropTypes.string
+        })
+    ),
+    suppliersSearchLoading: PropTypes.bool,
+    searchSuppliers: PropTypes.func.isRequired,
+    clearSuppliersSearch: PropTypes.func.isRequired
 };
 
 CreatePart.defaultProps = {
@@ -310,10 +335,11 @@ CreatePart.defaultProps = {
     addItem: null,
     itemError: null,
     privileges: null,
-    userNumber: null,
     accountingCompanies: [],
     loading: false,
-    searchItems: []
+    searchItems: [],
+    suppliersSearchResults: [],
+    suppliersSearchLoading: false
 };
 
 export default CreatePart;
