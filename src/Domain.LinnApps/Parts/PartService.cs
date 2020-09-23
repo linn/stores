@@ -124,7 +124,7 @@
         {
             if (!this.authService.HasPermissionFor(AuthorisedAction.PartAdmin, privileges))
             {
-                throw new UpdatePartException("You are not authorised to create parts.");
+                throw new CreatePartException("You are not authorised to create parts.");
             }
 
             if (partToCreate.StockControlled == "Y" && partToCreate.RailMethod == null)
@@ -141,7 +141,7 @@
 
             if (partToCreate.TqmsCategoryOverride != null && partToCreate.StockNotes == null)
             {
-                throw new UpdatePartException("You must enter a reason and/or reference or project code when setting an override");
+                throw new CreatePartException("You must enter a reason and/or reference or project code when setting an override");
             }
 
             return partToCreate;
@@ -149,7 +149,6 @@
 
         public void AddQcControl(string partNumber, int? createdBy, string qcInfo)
         {
-            var test = this.qcControlRepository.FindAll().ToList();
             this.qcControlRepository.Add(new QcControl
                                              {
                                                  Id = null,

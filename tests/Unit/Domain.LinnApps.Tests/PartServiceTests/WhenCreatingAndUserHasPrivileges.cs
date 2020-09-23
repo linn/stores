@@ -10,7 +10,7 @@
 
     using NUnit.Framework;
 
-    public class WhenAddingPartAndUserHasPrivileges : ContextBase
+    public class WhenCreatingAndUserHasPrivileges : ContextBase
     {
         private Part part;
 
