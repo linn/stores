@@ -26,7 +26,8 @@ const mapStateToProps = state => ({
         dateCreated: new Date(),
         railMethod: 'POLICY',
         preferredSupplier: 4415,
-        preferredSupplierName: 'Linn Products Ltd'
+        preferredSupplierName: 'Linn Products Ltd',
+        qcInformation: ''
     },
     snackbarVisible: partSelectors.getSnackbarVisible(state),
     accountingCompanies: accountingCompaniesSelectors.getItems(state),

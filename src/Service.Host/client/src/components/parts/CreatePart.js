@@ -273,9 +273,22 @@ function CreatePart({
                             />
                         </Grid>
                         <Grid item xs={8} />
+                        <Grid item xs={4}>
+                            <InputField
+                                fullWidth
+                                value={part.qcInformation}
+                                label="QC Info"
+                                onChange={handleFieldChange}
+                                propertyName="qcInformation"
+                            />
+                        </Grid>
                         <Grid item xs={12}>
                             <SaveBackCancelButtons
-                                saveDisabled={Object.values(part).some(v => !v) || !canCreate()}
+                                saveDisabled={
+                                    Object.keys(part)
+                                        .filter(k => k !== 'qcInformation')
+                                        .some(k => !part[k]) || !canCreate()
+                                }
                                 saveClick={handleSaveClick}
                                 cancelClick={handleCancelClick}
                                 backClick={handleBackClick}
