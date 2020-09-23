@@ -36,7 +36,8 @@ function CreatePart({
         cccCriticalPart: 'No',
         paretoCode: 'U',
         createdBy: userNumber,
-        dateCreated: new Date()
+        dateCreated: new Date(),
+        railMethod: ''
     });
 
     const [safetyCriticalMessage, setSafetyCriticalMessage] = useState();
@@ -57,6 +58,12 @@ function CreatePart({
             setSafetyCriticalMessage('Defaulted to yes since previous version is safety critical');
         }
     }, [searchItems]);
+
+    useEffect(() => {
+        if (!part.railMethod) {
+            setPart(p => ({ ...p, railMethod: 'POLICY' }));
+        }
+    }, [part.stockControlled, part.railMethod]);
 
     const canCreate = () => {
         if (!(privileges.length < 1)) {
@@ -200,7 +207,18 @@ function CreatePart({
                                 onChange={handleFieldChange}
                             />
                         </Grid>
-                        <Grid item xs={8} />
+                        <Grid item xs={4}>
+                            <Dropdown
+                                label="Rail Method"
+                                propertyName="railMethod"
+                                items={['MR9', 'SMM', 'POLICY', 'FIXED RAILS', 'OVERRIDE SAFETY']}
+                                fullWidth
+                                allowNoValue
+                                value={part.railMethod}
+                                onChange={handleFieldChange}
+                            />
+                        </Grid>
+                        <Grid item xs={4} />
                         <Grid item xs={4}>
                             <Dropdown
                                 label="CCC Critical?"
