@@ -224,6 +224,7 @@
             e.Property(p => p.NextNumber).HasColumnName("NEXT_NUMBER");
             e.Property(p => p.ProductCode).HasColumnName("PRODUCT_CODE").HasMaxLength(10);
             e.Property(p => p.AllowPartCreation).HasColumnName("ALLOW_PART_CREATION").HasMaxLength(1);
+            e.Property(p => p.AccountingCompany).HasColumnName("ACCOUNTING_COMPANY");
         }
 
         private void BuildQcControl(ModelBuilder builder)

@@ -11,6 +11,8 @@ import partsActions from '../../actions/partsActions';
 import partsSelectors from '../../selectors/partsSelectors';
 import suppliersActions from '../../actions/suppliersActions';
 import suppliersSelectors from '../../selectors/suppliersSelectors';
+import partTemplatesActions from '../../actions/partTemplatesActions';
+import partTemplatesSelectors from '../../selectors/partTemplatesSelectors';
 
 const mapStateToProps = state => ({
     item: {
@@ -40,11 +42,13 @@ const mapStateToProps = state => ({
     suppliersSearchResults: suppliersSelectors
         .getSearchItems(state)
         .map(c => ({ name: c.id, description: c.name })),
-    suppliersSearchLoading: suppliersSelectors.getSearchLoading(state)
+    suppliersSearchLoading: suppliersSelectors.getSearchLoading(state),
+    partTemplates: partTemplatesSelectors.getItems(state)
 });
 
 const initialise = () => dispatch => {
     dispatch(accountingCompaniesActions.fetch());
+    dispatch(partTemplatesActions.fetch());
 };
 
 const mapDispatchToProps = {

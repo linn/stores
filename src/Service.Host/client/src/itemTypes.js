@@ -18,6 +18,12 @@ export const partCategories = new ItemType(
     '/inventory/part-categories'
 );
 
+export const partTemplates = new ItemType(
+    'partTemplates',
+    'PART_TEMPLATES',
+    '/inventory/part-templates'
+);
+
 export const departments = new ItemType('departments', 'DEPARTMENTS', '/inventory/departments');
 
 export const accountingCompanies = new ItemType(
