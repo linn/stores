@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.IoC
 {
     using System.Collections.Generic;
+    using System.Runtime.InteropServices.ComTypes;
 
     using Autofac;
 
@@ -64,6 +65,8 @@
                 .As<IResourceBuilder<DecrementRule>>();
             builder.RegisterType<DecrementRulesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<DecrementRule>>>();
+            builder.RegisterType<PartTemplateResourceBuilder>().As<IResourceBuilder<PartTemplate>>();
+            builder.RegisterType<PartTemplatesResourceBuilder>().As<IResourceBuilder<IEnumerable<PartTemplate>>>();
         }
     }
 }

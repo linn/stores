@@ -46,6 +46,8 @@
                 .As<IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>>();
             builder.RegisterType<DecrementRuleService>()
                 .As<IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource>>();
+            builder.RegisterType<PartTemplateService>()
+                .As<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
 
             // proxy
             builder.RegisterType<SosPack>().As<ISosPack>();

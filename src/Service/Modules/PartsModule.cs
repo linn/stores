@@ -32,6 +32,9 @@
             IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource>
             decrementRuleService;
 
+        private readonly IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>
+            partTemplateService;
+
         public PartsModule(
             IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
@@ -39,7 +42,8 @@
             IProductAnalysisCodeService productAnalysisCodeService,
             IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource> assemblyTechnologyService,
             IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource> decrementRuleService,
-            IPartService partDomainService)
+            IPartService partDomainService,
+            IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> partTemplateService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
@@ -54,6 +58,9 @@
 
             this.partCategoryService = partCategoryService;
             this.Get("inventory/part-categories", _ => this.GetPartCategories());
+
+            this.partTemplateService = partTemplateService;
+            this.Get("inventory/part-templates", _ => this.GetPartTemplates());
 
             this.productAnalysisCodeService = productAnalysisCodeService;
             this.Get("inventory/product-analysis-codes", _ => this.GetProductAnalysisCodes());
@@ -118,6 +125,13 @@
         private object GetPartCategories()
         {
             var result = this.partCategoryService.GetCategories();
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetPartTemplates()
+        {
+            var result = this.partTemplateService.GetAll();
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

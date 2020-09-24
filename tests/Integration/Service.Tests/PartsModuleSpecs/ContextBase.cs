@@ -56,6 +56,9 @@
 
         protected IPartService PartsDomainService { get; private set; }
 
+        protected IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> 
+            partTemplateService { get; private set; }
+
         [SetUp]
         public void EstablishContext()
         {
@@ -73,7 +76,8 @@
                 .For<IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource>>();
             this.AssemblyTechnologyService = Substitute
                 .For<IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>>();
-
+            this.partTemplateService = Substitute
+                .For<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
@@ -88,8 +92,11 @@
                         with.Dependency(this.AssemblyTechnologyService);
                         with.Dependency(this.DecrementRuleService);
                         with.Dependency(this.PartsDomainService);
+                        with.Dependency(this.partTemplateService);
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());
+                        with.Dependency<IResourceBuilder<PartTemplate>>(new PartTemplateResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<PartTemplate>>>(new PartTemplatesResourceBuilder());
                         with.Dependency<IResourceBuilder<UnitOfMeasure>>(new UnitOfMeasureResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<UnitOfMeasure>>>(new UnitsOfMeasureResourceBuilder());
                         with.Dependency<IResourceBuilder<PartCategory>>(new PartCategoryResourceBuilder());
@@ -111,7 +118,7 @@
                         with.ResponseProcessor<AssemblyTechnologiesResponseProcessor>();
                         with.ResponseProcessor<DecrementRulesResponseProcessor>();
                         with.ResponseProcessor<ProductAnalysisCodesResponseProcessor>();
-
+                        with.ResponseProcessor<PartTemplatesResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
                                 {
