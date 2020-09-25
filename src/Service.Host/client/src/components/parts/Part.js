@@ -16,7 +16,7 @@ import GeneralTab from '../../containers/parts/tabs/GeneralTab';
 import BuildTab from '../../containers/parts/tabs/BuildTab';
 import PurchTab from '../../containers/parts/tabs/PurchTab';
 import StoresTab from './tabs/StoresTab';
-import LifeCycleTab from './tabs/LifecycleTab';
+import LifeCycleTab from './tabs/LifeCycleTab';
 
 function Part({
     editStatus,
