@@ -19,6 +19,7 @@ const useStyles = makeStyles(theme => ({
 function LifeCycleTab({
     handleFieldChange,
     dateCreated,
+    editStatus,
     createdByName,
     dateLive,
     madeLiveByName,
@@ -109,7 +110,7 @@ function LifeCycleTab({
                 {canPhaseOut && !datePhasedOut && (
                     <Button
                         className={classes.button}
-                        disabled={!reasonPhasedOut}
+                        disabled={editStatus === 'create' || !reasonPhasedOut}
                         variant="outlined"
                         color="secondary"
                         onClick={handlePhaseOutClick}
@@ -178,7 +179,8 @@ LifeCycleTab.propTypes = {
     purchasingPhaseOutType: PropTypes.string,
     datePhasedOut: PropTypes.string,
     dateDesignObsolete: PropTypes.string,
-    canPhaseOut: PropTypes.bool
+    canPhaseOut: PropTypes.bool,
+    editStatus: PropTypes.string.isRequired
 };
 
 LifeCycleTab.defaultProps = {

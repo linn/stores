@@ -376,6 +376,7 @@ function Part({
                                 <LifeCycleTab
                                     handleFieldChange={handleFieldChange}
                                     handlePhaseOutClick={handlePhaseOutClick}
+                                    editStatus={editStatus}
                                     canPhaseOut={canPhaseOut()}
                                     dateCreated={part.dateCreated}
                                     createdBy={part.createdBy}
