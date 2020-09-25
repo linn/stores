@@ -64,7 +64,7 @@ const mapDispatchToProps = dispatch => {
         updateItem: (itemId, item) => dispatch(partActions.update(itemId, item)),
         setEditStatus: status => dispatch(partActions.setEditStatus(status)),
         setSnackbarVisible: () => dispatch(partActions.setSnackbarVisible()),
-        fetchNominal: () => dispatch(nominalActions.fetch())
+        fetchNominal: name => dispatch(nominalActions.fetch(name))
     };
 };
 

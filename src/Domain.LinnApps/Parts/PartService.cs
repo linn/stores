@@ -2,8 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
 
     using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
@@ -15,7 +13,6 @@
 
         private readonly IQueryRepository<Supplier> supplierRepository;
 
-        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Reviewed. Suppression is OK here.")]
         private readonly IRepository<QcControl, int> qcControlRepository;
 
         public PartService(
@@ -45,7 +42,7 @@
                 from.ScrapOrConvert = to.ScrapOrConvert ?? "CONVERT";
             }
             
-            Validate(to);
+            this.Validate(to);
 
             from.PhasedOutBy = to.PhasedOutBy;
             from.DatePhasedOut = to.DatePhasedOut;
@@ -124,12 +121,12 @@
 
             partToCreate.OrderHold = "N";
 
-           Validate(partToCreate);
+           this.Validate(partToCreate);
 
             return partToCreate;
         }
 
-        private static void Validate(Part to)
+        private void Validate(Part to)
         {
             if (to.ScrapOrConvert != null && to.DatePhasedOut == null)
             {
