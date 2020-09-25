@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
 
     using Linn.Common.Authorisation;
@@ -14,6 +15,7 @@
 
         private readonly IQueryRepository<Supplier> supplierRepository;
 
+        [SuppressMessage("StyleCop.CSharp.NamingRules", "SA1305:FieldNamesMustNotUseHungarianNotation", Justification = "Reviewed. Suppression is OK here.")]
         private readonly IRepository<QcControl, int> qcControlRepository;
 
         public PartService(
@@ -43,24 +45,7 @@
                 from.ScrapOrConvert = to.ScrapOrConvert ?? "CONVERT";
             }
             
-
-            if (to.ScrapOrConvert != null && to.DatePhasedOut == null)
-            {
-                throw new UpdatePartException("A part must be obsolete to be convertible or to be scrapped.");
-            }
-
-            if (to.RailMethod == "SMM" 
-                && to.StockControlled == "Y" 
-                && to.MinStockRail == 0 
-                && to.MaxStockRail == 0)
-            {
-                throw new UpdatePartException("Rail method SMM with 0 min/max rails is not a valid stocking policy.");
-            }
-
-            if (to.TqmsCategoryOverride != null && to.StockNotes == null)
-            {
-                throw new UpdatePartException("You must enter a reason and/or reference or project code when setting an override");
-            }
+            Validate(to);
 
             from.PhasedOutBy = to.PhasedOutBy;
             from.DatePhasedOut = to.DatePhasedOut;
@@ -139,12 +124,30 @@
 
             partToCreate.OrderHold = "N";
 
-            if (partToCreate.TqmsCategoryOverride != null && partToCreate.StockNotes == null)
-            {
-                throw new CreatePartException("You must enter a reason and/or reference or project code when setting an override");
-            }
+           Validate(partToCreate);
 
             return partToCreate;
+        }
+
+        private static void Validate(Part to)
+        {
+            if (to.ScrapOrConvert != null && to.DatePhasedOut == null)
+            {
+                throw new UpdatePartException("A part must be obsolete to be convertible or to be scrapped.");
+            }
+
+            if (to.RailMethod == "SMM"
+                && to.StockControlled == "Y"
+                && to.MinStockRail == 0
+                && to.MaxStockRail == 0)
+            {
+                throw new UpdatePartException("Rail method SMM with 0 min/max rails is not a valid stocking policy.");
+            }
+
+            if (to.TqmsCategoryOverride != null && to.StockNotes == null)
+            {
+                throw new UpdatePartException("You must enter a reason and/or reference or project code when setting an override");
+            }
         }
 
         public void AddQcControl(string partNumber, int? createdBy, string qcInfo)

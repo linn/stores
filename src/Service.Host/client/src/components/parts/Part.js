@@ -34,7 +34,9 @@ function Part({
     setSnackbarVisible,
     privileges,
     userName,
-    userNumber
+    userNumber,
+    options,
+    partTemplates
 }) {
     const creating = () => editStatus === 'create';
     // const editing = () => editStatus === 'edit';
@@ -91,6 +93,27 @@ function Part({
             nominalDescription: nominal?.description
         }));
     }, [nominal, setPart]);
+
+    useEffect(() => {
+        if (options?.template && partTemplates.length) {
+            const template = partTemplates.find(t => t.partRoot === options.template);
+
+            setPart(p => ({
+                ...p,
+                description: template.description,
+                partNumber:
+                    template.hasNumberSequence === 'Y'
+                        ? `${template.partRoot} ${template.nextNumber}`
+                        : template.partRoot,
+                accountingCompany: template.accountingCompany,
+                assemblyTechnologyName: template.assemblyTechnologyName,
+                bomType: template.bomType,
+                linnProduced: template.linnProduced,
+                paretoCode: template.paretoCode,
+                stockControlled: template.stockControlled
+            }));
+        }
+    }, [options, partTemplates]);
 
     const partInvalid = () => !part.partNumber || !part.description;
 
@@ -435,7 +458,9 @@ Part.propTypes = {
     fetchNominal: PropTypes.func.isRequired,
     privileges: PropTypes.arrayOf(PropTypes.string),
     userName: PropTypes.string,
-    userNumber: PropTypes.number
+    userNumber: PropTypes.number,
+    options: PropTypes.shape({ template: PropTypes.string }),
+    partTemplates: PropTypes.arrayOf(PropTypes.shape({ partRoot: PropTypes.string }))
 };
 
 Part.defaultProps = {
@@ -447,7 +472,9 @@ Part.defaultProps = {
     nominal: null,
     privileges: null,
     userName: null,
-    userNumber: null
+    userNumber: null,
+    options: null,
+    partTemplates: []
 };
 
 export default Part;

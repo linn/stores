@@ -18,17 +18,14 @@ import suppliersSelectors from '../../selectors/suppliersSelectors';
 import unitsOfMeasureSelectors from '../../selectors/unitsOfMeasureSelectors';
 import nominalActions from '../../actions/nominalActions';
 import nominalSelectors from '../../selectors/nominalSelectors';
+import partTemplatesActions from '../../actions/partTemplatesActions';
+import partTemplateSelectors from '../../selectors/partTemplatesSelectors';
 import { getPrivileges, getUserName, getUserNumber } from '../../selectors/userSelectors';
 import * as itemTypes from '../../itemTypes';
 
 const creating = match => match?.url?.endsWith('/create');
 
-const getOptions = ownProps => {
-    const options = queryString.parse(ownProps?.location?.search);
-    return options;
-};
-
-const mapStateToProps = (state, { match }, ownProps) => ({
+const mapStateToProps = (state, { match, location }) => ({
     item: creating(match) ? null : partSelectors.getItem(state),
     itemId: creating(match) ? null : match.params.id,
     editStatus: creating(match) ? 'create' : partSelectors.getEditStatus(state),
@@ -45,7 +42,8 @@ const mapStateToProps = (state, { match }, ownProps) => ({
     privileges: getPrivileges(state),
     userName: getUserName(state),
     userNumber: getUserNumber(state),
-    options: getOptions(ownProps)
+    options: queryString.parse(location?.search),
+    partTemplates: partTemplateSelectors.getItems(state)
 });
 
 const mapDispatchToProps = dispatch => {
@@ -60,6 +58,7 @@ const mapDispatchToProps = dispatch => {
             dispatch(sernosSequencesActions.fetch());
             dispatch(suppliersActions.fetch());
             dispatch(unitsOfMeasureActions.fetch());
+            dispatch(partTemplatesActions.fetch());
         },
         addItem: item => dispatch(partActions.add(item)),
         updateItem: (itemId, item) => dispatch(partActions.update(itemId, item)),
