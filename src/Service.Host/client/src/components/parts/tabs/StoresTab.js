@@ -153,6 +153,10 @@ function StoresTab({
                     fullWidth
                     value={stockNotes}
                     label="Stock Notes"
+                    required={!!tqmsCategoryOverride}
+                    helperText={
+                        tqmsCategoryOverride ? 'You must provide a reason to set an override' : ''
+                    }
                     onChange={handleFieldChange}
                     propertyName="stockNotes"
                     rows={4}

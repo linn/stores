@@ -26,7 +26,8 @@ function Part({
     item,
     loading,
     snackbarVisible,
-    saveItem,
+    addItem,
+    updateItem,
     setEditStatus,
     nominal,
     fetchNominal,
@@ -35,7 +36,29 @@ function Part({
     userName,
     userNumber
 }) {
-    const [part, setPart] = useState();
+    const creating = () => editStatus === 'create';
+    // const editing = () => editStatus === 'edit';
+    const viewing = () => editStatus === 'view';
+    const [part, setPart] = useState(
+        creating()
+            ? {
+                  partNumber: '',
+                  description: '',
+                  accountingCompany: 'LINN',
+                  psuPart: 'No',
+                  stockControlled: 'Yes',
+                  cccCriticalPart: 'No',
+                  safetyCriticalPart: 'No',
+                  paretoCode: 'U',
+                  createdBy: userNumber,
+                  dateCreated: new Date(),
+                  railMethod: 'POLICY',
+                  preferredSupplier: 4415,
+                  preferredSupplierName: 'Linn Products Ltd',
+                  qcInformation: ''
+              }
+            : null
+    );
     const [prevPart, setPrevPart] = useState({});
 
     const [tab, setTab] = useState(0);
@@ -43,9 +66,6 @@ function Part({
     const handleTabChange = (event, value) => {
         setTab(value);
     };
-    const creating = () => editStatus === 'create';
-    // const editing = () => editStatus === 'edit';
-    const viewing = () => editStatus === 'view';
 
     const canPhaseOut = () => {
         if (!(privileges.length < 1)) {
@@ -58,11 +78,11 @@ function Part({
         if (item?.department) {
             fetchNominal(item?.department);
         }
-        if (item !== prevPart) {
+        if (item !== prevPart && editStatus !== 'create') {
             setPart(item);
             setPrevPart(item);
         }
-    }, [item, prevPart, fetchNominal]);
+    }, [item, prevPart, fetchNominal, editStatus]);
 
     useEffect(() => {
         setPart(p => ({
@@ -72,10 +92,24 @@ function Part({
         }));
     }, [nominal, setPart]);
 
-    const partInvalid = () => false;
+    const partInvalid = () => !part.partNumber || !part.description;
 
     const handleSaveClick = () => {
-        saveItem(itemId, part);
+        const partResource = part;
+        // convert Yes/No to true/false for resource to send
+        Object.keys(partResource).forEach(k => {
+            if (partResource[k] === 'Yes') {
+                partResource[k] = true;
+            }
+            if (partResource[k] === 'No') {
+                partResource[k] = false;
+            }
+        });
+        if (creating()) {
+            addItem(partResource);
+        } else {
+            updateItem(itemId, partResource);
+        }
         setEditStatus('view');
     };
 
@@ -100,7 +134,7 @@ function Part({
     };
 
     const handlePhaseOutClick = () => {
-        saveItem(itemId, {
+        updateItem(itemId, {
             ...part,
             datePhasedOut: new Date(),
             phasedOutBy: userNumber,
@@ -190,7 +224,9 @@ function Part({
                 </Grid>
                 {itemError && (
                     <Grid item xs={12}>
-                        <ErrorCard errorMessage={itemError.statusText} />
+                        <ErrorCard
+                            errorMessage={itemError?.details?.errors?.[0] || itemError.statusText}
+                        />
                     </Grid>
                 )}
                 {loading ? (
@@ -212,12 +248,8 @@ function Part({
                                     disabled={!creating()}
                                     value={part.partNumber}
                                     label="Part Number"
-                                    maxLength={10}
-                                    helperText={
-                                        !creating()
-                                            ? 'This field cannot be changed'
-                                            : `${partInvalid() ? 'This field is required' : ''}`
-                                    }
+                                    maxLength={14}
+                                    helperText={!creating() ? 'This field cannot be changed' : ''}
                                     required
                                     onChange={handleFieldChange}
                                     propertyName="partNumber"
@@ -228,7 +260,7 @@ function Part({
                                     fullWidth
                                     value={part.description}
                                     label="Description"
-                                    maxLength={10}
+                                    maxLength={200}
                                     required
                                     onChange={handleFieldChange}
                                     propertyName="description"
@@ -393,7 +425,8 @@ Part.propTypes = {
     }),
     itemId: PropTypes.string,
     snackbarVisible: PropTypes.bool,
-    saveItem: PropTypes.func,
+    addItem: PropTypes.func.isRequired,
+    updateItem: PropTypes.func.isRequired,
     loading: PropTypes.bool,
     setEditStatus: PropTypes.func.isRequired,
     setSnackbarVisible: PropTypes.func.isRequired,
@@ -407,7 +440,6 @@ Part.propTypes = {
 Part.defaultProps = {
     item: {},
     snackbarVisible: false,
-    saveItem: null,
     loading: null,
     itemError: null,
     itemId: null,

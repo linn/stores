@@ -21,23 +21,6 @@ import nominalSelectors from '../../selectors/nominalSelectors';
 import { getPrivileges, getUserName, getUserNumber } from '../../selectors/userSelectors';
 import * as itemTypes from '../../itemTypes';
 
-const defaults = state => ({
-    partNumber: '',
-    description: '',
-    accountingCompany: 'LINN',
-    psuPart: 'No',
-    stockControlled: 'Yes',
-    cccCriticalPart: 'No',
-    safetyCriticalPart: 'No',
-    paretoCode: 'U',
-    createdBy: getUserNumber(state),
-    dateCreated: new Date(),
-    railMethod: 'POLICY',
-    preferredSupplier: 4415,
-    preferredSupplierName: 'Linn Products Ltd',
-    qcInformation: ''
-});
-
 const creating = match => match?.url?.endsWith('/create');
 
 const getOptions = ownProps => {
@@ -46,7 +29,7 @@ const getOptions = ownProps => {
 };
 
 const mapStateToProps = (state, { match }, ownProps) => ({
-    item: creating(match) ? defaults(state) : partSelectors.getItem(state),
+    item: creating(match) ? null : partSelectors.getItem(state),
     itemId: creating(match) ? null : match.params.id,
     editStatus: creating(match) ? 'create' : partSelectors.getEditStatus(state),
     loading: partSelectors.getLoading(state),
@@ -65,25 +48,24 @@ const mapStateToProps = (state, { match }, ownProps) => ({
     options: getOptions(ownProps)
 });
 
-const initialise = ({ itemId }) => dispatch => {
-    if (itemId) {
-        dispatch(partActions.fetch(itemId));
-    }
-    dispatch(departmentsActions.fetch());
-    dispatch(partCategoriesActions.fetch());
-    dispatch(rootProductsActions.fetch());
-    dispatch(sernosSequencesActions.fetch());
-    dispatch(suppliersActions.fetch());
-    dispatch(unitsOfMeasureActions.fetch());
-};
-
-const mapDispatchToProps = (_, { match }) => {
+const mapDispatchToProps = dispatch => {
     return {
-        initialise,
-        saveItem: creating(match) ? partActions.add : partActions.update,
-        setEditStatus: partActions.setEditStatus,
-        setSnackbarVisible: partActions.setSnackbarVisible,
-        fetchNominal: nominalActions.fetch
+        initialise: ({ itemId }) => {
+            if (itemId) {
+                dispatch(partActions.fetch(itemId));
+            }
+            dispatch(departmentsActions.fetch());
+            dispatch(partCategoriesActions.fetch());
+            dispatch(rootProductsActions.fetch());
+            dispatch(sernosSequencesActions.fetch());
+            dispatch(suppliersActions.fetch());
+            dispatch(unitsOfMeasureActions.fetch());
+        },
+        addItem: item => dispatch(partActions.add(item)),
+        updateItem: (itemId, item) => dispatch(partActions.update(itemId, item)),
+        setEditStatus: status => dispatch(partActions.setEditStatus(status)),
+        setSnackbarVisible: () => dispatch(partActions.setSnackbarVisible()),
+        fetchNominal: () => dispatch(nominalActions.fetch())
     };
 };
 
