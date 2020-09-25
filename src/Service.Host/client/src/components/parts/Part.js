@@ -97,13 +97,18 @@ function Part({
     useEffect(() => {
         if (options?.template && partTemplates.length) {
             const template = partTemplates.find(t => t.partRoot === options.template);
-
+            const formatNextNumber = () => {
+                if (template.nextNumber < 1000) {
+                    return template.nextNumber.toString().padStart(3, 0);
+                }
+                return template.nextNumber().toString();
+            };
             setPart(p => ({
                 ...p,
                 description: template.description,
                 partNumber:
                     template.hasNumberSequence === 'Y'
-                        ? `${template.partRoot} ${template.nextNumber}`
+                        ? `${template.partRoot} ${formatNextNumber()}`
                         : template.partRoot,
                 accountingCompany: template.accountingCompany,
                 assemblyTechnologyName: template.assemblyTechnologyName,
@@ -121,10 +126,10 @@ function Part({
         const partResource = part;
         // convert Yes/No to true/false for resource to send
         Object.keys(partResource).forEach(k => {
-            if (partResource[k] === 'Yes') {
+            if (partResource[k] === 'Yes' || partResource[k] === 'Y') {
                 partResource[k] = true;
             }
-            if (partResource[k] === 'No') {
+            if (partResource[k] === 'No' || partResource[k] === 'N') {
                 partResource[k] = false;
             }
         });

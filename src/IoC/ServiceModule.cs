@@ -51,6 +51,7 @@
 
             // proxy
             builder.RegisterType<SosPack>().As<ISosPack>();
+            builder.RegisterType<PartPack>().As<IPartPack>();
             builder.RegisterType<DatabaseService>().As<IDatabaseService>();
         }
     }

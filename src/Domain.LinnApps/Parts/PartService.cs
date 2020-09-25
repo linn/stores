@@ -2,10 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Numerics;
 
     using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Exceptions;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
 
     public class PartService : IPartService
     {
@@ -15,14 +18,26 @@
 
         private readonly IRepository<QcControl, int> qcControlRepository;
 
+        private readonly IRepository<Part, int> partRepository;
+
+        private readonly IRepository<PartTemplate, string> templateRepository;
+
+        private readonly IPartPack partPack;
+
         public PartService(
             IAuthorisationService authService,
             IRepository<QcControl, int> qcControlRepository,
-            IQueryRepository<Supplier> supplierRepository)
+            IQueryRepository<Supplier> supplierRepository,
+            IRepository<Part, int> partRepository,
+            IRepository<PartTemplate, string> templateRepository,
+            IPartPack partPack)
         {
             this.authService = authService;
             this.supplierRepository = supplierRepository;
             this.qcControlRepository = qcControlRepository;
+            this.partRepository = partRepository;
+            this.partPack = partPack;
+            this.templateRepository = templateRepository;
         }
 
         public void UpdatePart(Part from, Part to, List<string> privileges)
@@ -109,6 +124,17 @@
                 throw new CreatePartException("You are not authorised to create parts.");
             }
 
+            if (this.partRepository.FindBy(p => p.PartNumber == partToCreate.PartNumber) != null)
+            {
+                var partRoot = this.partPack.PartRoot(partToCreate.PartNumber);
+                var newestPartOfThisType = this.partRepository.FilterBy(p => p.PartNumber.StartsWith(partRoot))
+                    .OrderByDescending(p => p.DateCreated).ToList().FirstOrDefault()
+                    ?.PartNumber;
+                var highestNumber = newestPartOfThisType?.Split(" ").Last();
+                var realNextNumber = int.Parse(highestNumber ?? throw new InvalidOperationException()) + 1;
+                throw new CreatePartException("A Part with that part Number Already exists. Why not try " + realNextNumber);
+            }
+
             if (partToCreate.StockControlled == "Y" && partToCreate.RailMethod == null)
             {
                 partToCreate.RailMethod = "POLICY";
@@ -121,7 +147,10 @@
 
             partToCreate.OrderHold = "N";
 
-           this.Validate(partToCreate);
+            this.Validate(partToCreate);
+            // todo - update nextNumber for the relevant part template
+           // this.templateRepository.FindById(this.partPack.PartRoot(partToCreate.PartNumber));
+
 
             return partToCreate;
         }

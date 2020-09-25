@@ -53,7 +53,11 @@ function PartsSearch({
                 <Grid item xs={1}>
                     <LinkButton
                         text="Create"
-                        to={`/inventory/parts/create?template=${template}`}
+                        to={
+                            template
+                                ? `/inventory/parts/create?template=${template}`
+                                : '/inventory/parts/create'
+                        }
                         disabled={!canCreate()}
                         tooltip={canCreate() ? null : 'You are not authorised to create parts.'}
                     />
