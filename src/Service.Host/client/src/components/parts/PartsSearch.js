@@ -31,7 +31,7 @@ function PartsSearch({
     return (
         <Page>
             <Grid container spacing={3}>
-                <Grid item xs={8} />
+                <Grid item xs={7} />
                 <Grid item xs={3}>
                     <Dropdown
                         label="Template"
@@ -58,6 +58,7 @@ function PartsSearch({
                         tooltip={canCreate() ? null : 'You are not authorised to create parts.'}
                     />
                 </Grid>
+                <Grid item xs={1} />
                 <Grid item xs={12}>
                     <Typeahead
                         items={searchItems}

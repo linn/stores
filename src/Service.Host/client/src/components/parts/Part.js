@@ -26,8 +26,7 @@ function Part({
     item,
     loading,
     snackbarVisible,
-    addItem,
-    updateItem,
+    saveItem,
     setEditStatus,
     nominal,
     fetchNominal,
@@ -45,7 +44,7 @@ function Part({
         setTab(value);
     };
     const creating = () => editStatus === 'create';
-    const editing = () => editStatus === 'edit';
+    // const editing = () => editStatus === 'edit';
     const viewing = () => editStatus === 'view';
 
     const canPhaseOut = () => {
@@ -76,13 +75,8 @@ function Part({
     const partInvalid = () => false;
 
     const handleSaveClick = () => {
-        if (editing()) {
-            updateItem(itemId, part);
-            setEditStatus('view');
-        } else if (creating()) {
-            addItem(part);
-            setEditStatus('view');
-        }
+        saveItem(itemId, part);
+        setEditStatus('view');
     };
 
     const handleCancelClick = () => {
@@ -106,7 +100,7 @@ function Part({
     };
 
     const handlePhaseOutClick = () => {
-        updateItem(itemId, {
+        saveItem(itemId, {
             ...part,
             datePhasedOut: new Date(),
             phasedOutBy: userNumber,
@@ -399,8 +393,7 @@ Part.propTypes = {
     }),
     itemId: PropTypes.string,
     snackbarVisible: PropTypes.bool,
-    updateItem: PropTypes.func,
-    addItem: PropTypes.func,
+    saveItem: PropTypes.func,
     loading: PropTypes.bool,
     setEditStatus: PropTypes.func.isRequired,
     setSnackbarVisible: PropTypes.func.isRequired,
@@ -414,8 +407,7 @@ Part.propTypes = {
 Part.defaultProps = {
     item: {},
     snackbarVisible: false,
-    addItem: null,
-    updateItem: null,
+    saveItem: null,
     loading: null,
     itemError: null,
     itemId: null,
