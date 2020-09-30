@@ -128,6 +128,12 @@
             }
 
             var partRoot = this.partPack.PartRoot(partToCreate.PartNumber);
+
+            if (this.templateRepository.FindById(partRoot).AllowPartCreation == "N")
+            {
+                throw new CreatePartException("The system no longer allows creation of " + partRoot + " parts.");
+            }
+
             var newestPartOfThisType = this.partRepository.FilterBy(p => p.PartNumber.StartsWith(partRoot))
                 .OrderByDescending(p => p.DateCreated).ToList().FirstOrDefault()
                 ?.PartNumber;
