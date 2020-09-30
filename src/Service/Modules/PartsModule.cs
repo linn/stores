@@ -100,7 +100,10 @@
             var resource = this.Bind<PartResource>();
             resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
             var result = this.partsFacadeService.Add(resource);
-            this.partDomainService.AddQcControl(resource.PartNumber, resource.CreatedBy, resource.QcInformation);
+            if (resource.QcOnReceipt != null && (bool)resource.QcOnReceipt)
+            {
+                this.partDomainService.AddQcControl(resource.PartNumber, resource.CreatedBy, resource.QcInformation);
+            }
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
