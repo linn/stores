@@ -60,7 +60,7 @@
                 from.ScrapOrConvert = to.ScrapOrConvert ?? "CONVERT";
             }
             
-            this.Validate(to);
+            Validate(to);
 
             from.PhasedOutBy = to.PhasedOutBy;
             from.DatePhasedOut = to.DatePhasedOut;
@@ -131,12 +131,11 @@
             var newestPartOfThisType = this.partRepository.FilterBy(p => p.PartNumber.StartsWith(partRoot))
                 .OrderByDescending(p => p.DateCreated).ToList().FirstOrDefault()
                 ?.PartNumber;
-            var highestNumber = newestPartOfThisType?.Split(" ").Last();
-            var realNextNumber = int.Parse(highestNumber ?? throw new InvalidOperationException()) + 1;
+            var realNextNumber = FindRealNextNumber(newestPartOfThisType);
 
             if (this.partRepository.FindBy(p => p.PartNumber == partToCreate.PartNumber) != null)
             {
-                throw new CreatePartException("A Part with that part Number Already exists. Why not try " + realNextNumber);
+                throw new CreatePartException("A Part with that Part Number already exists. Why not try " + realNextNumber);
             }
 
             if (partToCreate.StockControlled == "Y" && partToCreate.RailMethod == null)
@@ -151,14 +150,28 @@
 
             partToCreate.OrderHold = "N";
 
-            this.Validate(partToCreate);
+            Validate(partToCreate);
             
             this.templateRepository.FindById(partRoot).NextNumber = realNextNumber + 1;
             this.transactionManager.Commit();
             return partToCreate;
         }
 
-        private void Validate(Part to)
+        public void AddQcControl(string partNumber, int? createdBy, string qcInfo)
+        {
+            this.qcControlRepository.Add(new QcControl
+                                             {
+                                                 Id = null,
+                                                 PartNumber = partNumber,
+                                                 TransactionDate = DateTime.Today,
+                                                 ChangedBy = createdBy,
+                                                 NumberOfBookIns = 0,
+                                                 OnOrOffQc = "ON",
+                                                 Reason = qcInfo
+                                             });
+        }
+
+        private static void Validate(Part to)
         {
             if (to.ScrapOrConvert != null && to.DatePhasedOut == null)
             {
@@ -179,18 +192,10 @@
             }
         }
 
-        public void AddQcControl(string partNumber, int? createdBy, string qcInfo)
+        private static int FindRealNextNumber(string newestPartOfThisType)
         {
-            this.qcControlRepository.Add(new QcControl
-                                             {
-                                                 Id = null,
-                                                 PartNumber = partNumber,
-                                                 TransactionDate = DateTime.Today,
-                                                 ChangedBy = createdBy,
-                                                 NumberOfBookIns = 0,
-                                                 OnOrOffQc = "ON",
-                                                 Reason = qcInfo
-                                             });
+            var highestNumber = newestPartOfThisType?.Split(" ").Last();
+            return int.Parse(highestNumber ?? throw new InvalidOperationException()) + 1;
         }
     }
 }

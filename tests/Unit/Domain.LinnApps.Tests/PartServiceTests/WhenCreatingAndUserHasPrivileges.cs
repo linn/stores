@@ -5,14 +5,11 @@
     using System.Linq;
     using System.Linq.Expressions;
 
-    using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-
     using FluentAssertions;
 
     using Linn.Stores.Domain.LinnApps.Parts;
 
     using NSubstitute;
-    using NSubstitute.ReturnsExtensions;
 
     using NUnit.Framework;
 
@@ -28,27 +25,33 @@
         public void SetUp()
         {
             this.part = new Part();
-           this.privileges = new List<string> { "part.admin" };
+            this.privileges = new List<string> { "part.admin" };
 
-           this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
-           // this.PartRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>()).ReturnsNull();
-           this.PartRepository.FilterBy(Arg.Any<Expression<Func<Part, bool>>>())
-               .Returns(new List<Part>
-                            {
-                                new Part
-                                    {
-                                        PartNumber = "CAP 431"
-                                    }
-                            }.AsQueryable());
-           this.TemplateRepository.FindById(Arg.Any<string>()).Returns(new PartTemplate());
-           this.PartPack.PartRoot(Arg.Any<string>()).Returns("ROOT");
-           this.result = this.Sut.CreatePart(this.part, this.privileges);
+            this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
+            this.PartRepository.FilterBy(Arg.Any<Expression<Func<Part, bool>>>())
+                .Returns(new List<Part>
+                                {
+                                    new Part
+                                        {
+                                            PartNumber = "CAP 431"
+                                        }
+                                }.AsQueryable());
+            this.TemplateRepository.FindById(Arg.Any<string>()).Returns(new PartTemplate { NextNumber = 1 });
+            this.PartPack.PartRoot(Arg.Any<string>()).Returns("CAP");
+            this.result = this.Sut.CreatePart(this.part, this.privileges);
         }
 
         [Test]
         public void ShouldReturnNewPart()
         {
             this.result.Should().BeOfType<Part>();
+        }
+
+        [Test]
+        public void ShouldUpdatePartTemplateRepository()
+        {
+            this.TemplateRepository.Received().FindById("CAP");
+            this.TransactionManager.Received().Commit();
         }
 
         [Test]

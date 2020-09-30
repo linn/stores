@@ -48,13 +48,18 @@
         }
 
         [Test]
-        public void ShouldCallServices()
+        public void ShouldCallService()
         {
             this.PartsFacadeService
                 .Received()
                 .Add(Arg.Is<PartResource>(r => r.Id == this.requestResource.Id));
+        }
 
-            this.PartsDomainService.Received().AddQcControl(Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<string>());
+        [Test]
+        public void ShouldAddQcInfo()
+        {
+            this.PartsDomainService.Received()
+                .AddQcControl(Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<string>());
         }
 
         [Test]
