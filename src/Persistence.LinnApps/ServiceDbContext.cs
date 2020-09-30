@@ -57,7 +57,6 @@
 
         public DbSet<PartTemplate> PartTemplates { get; set; }
         
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
