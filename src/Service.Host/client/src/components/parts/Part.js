@@ -39,7 +39,6 @@ function Part({
     partTemplates
 }) {
     const creating = () => editStatus === 'create';
-    // const editing = () => editStatus === 'edit';
     const viewing = () => editStatus === 'view';
     const [part, setPart] = useState(
         creating()
@@ -57,7 +56,8 @@ function Part({
                   railMethod: 'POLICY',
                   preferredSupplier: 4415,
                   preferredSupplierName: 'Linn Products Ltd',
-                  qcInformation: ''
+                  qcInformation: '',
+                  orderHold: 'No'
               }
             : null
     );
@@ -156,6 +156,8 @@ function Part({
         }
         if (newValue === 'Yes' || newValue === 'No') {
             setPart({ ...part, [propertyName]: newValue === 'Yes' });
+        } else if (typeof newValue === 'string') {
+            setPart({ ...part, [propertyName]: newValue.toUpperCase() });
         } else {
             setPart({ ...part, [propertyName]: newValue });
         }
