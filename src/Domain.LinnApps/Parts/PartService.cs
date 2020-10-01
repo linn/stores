@@ -23,15 +23,12 @@
 
         private readonly IPartPack partPack;
 
-        private readonly ITransactionManager transactionManager;
-
         public PartService(
             IAuthorisationService authService,
             IRepository<QcControl, int> qcControlRepository,
             IQueryRepository<Supplier> supplierRepository,
             IRepository<Part, int> partRepository,
             IRepository<PartTemplate, string> templateRepository,
-            ITransactionManager transactionManager,
             IPartPack partPack)
         {
             this.authService = authService;
@@ -39,7 +36,6 @@
             this.qcControlRepository = qcControlRepository;
             this.partRepository = partRepository;
             this.partPack = partPack;
-            this.transactionManager = transactionManager;
             this.templateRepository = templateRepository;
         }
 
@@ -159,7 +155,6 @@
             Validate(partToCreate);
             
             this.templateRepository.FindById(partRoot).NextNumber = realNextNumber + 1;
-            this.transactionManager.Commit();
             return partToCreate;
         }
 

@@ -51,7 +51,6 @@
         public void ShouldUpdatePartTemplateRepository()
         {
             this.TemplateRepository.Received().FindById("CAP");
-            this.TransactionManager.Received().Commit();
         }
 
         [Test]

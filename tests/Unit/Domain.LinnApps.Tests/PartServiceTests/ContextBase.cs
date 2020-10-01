@@ -43,7 +43,6 @@
                 this.SupplierRepo,
                 this.PartRepository,
                 this.TemplateRepository,
-                this.TransactionManager,
                 this.PartPack);
         }
     }
