@@ -46,10 +46,10 @@ function Part({
                   partNumber: '',
                   description: '',
                   accountingCompany: 'LINN',
-                  psuPart: 'No',
-                  stockControlled: 'Yes',
-                  cccCriticalPart: 'No',
-                  safetyCriticalPart: 'No',
+                  psuPart: false,
+                  stockControlled: true,
+                  cccCriticalPart: false,
+                  safetyCriticalPart: false,
                   paretoCode: 'U',
                   createdBy: userNumber,
                   dateCreated: new Date(),
@@ -57,7 +57,8 @@ function Part({
                   preferredSupplier: 4415,
                   preferredSupplierName: 'Linn Products Ltd',
                   qcInformation: '',
-                  orderHold: 'No'
+                  qcOnReceipt: false,
+                  orderHold: false
               }
             : null
     );

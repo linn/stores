@@ -52,7 +52,7 @@ function StoresTab({
                     propertyName="rawOrFinished"
                     items={['R', 'F']}
                     fullWidth
-                    allowNoValue={false}
+                    allowNoValue
                     value={rawOrFinished}
                     onChange={handleFieldChange}
                 />
