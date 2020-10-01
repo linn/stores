@@ -31,7 +31,7 @@
                                PartRoot = "PART B"
                            };
             
-            this.partTemplateService.GetAll()
+            this.PartTemplateService.GetAll()
                 .Returns(new SuccessResult<IEnumerable<PartTemplate>>(new List<PartTemplate> { a, b }));
 
 
@@ -52,7 +52,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.partTemplateService.Received().GetAll();
+            this.PartTemplateService.Received().GetAll();
         }
 
         [Test]
