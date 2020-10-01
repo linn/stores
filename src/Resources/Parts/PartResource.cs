@@ -126,7 +126,7 @@
 
         public string DateCreated { get; set; }
 
-        public int CreatedBy { get; set; }
+        public int? CreatedBy { get; set; }
 
         public string CreatedByName { get; set; }
 

@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.IoC
 {
+    using System.Collections.Immutable;
+
     using Autofac;
 
     using Linn.Common.Persistence;
@@ -39,6 +41,8 @@
             builder.RegisterType<StockPoolRepository>().As<IRepository<StockPool, int>>();
             builder.RegisterType<AssemblyTechnologyRepository>().As<IRepository<AssemblyTechnology, string>>();
             builder.RegisterType<DecrementRuleRepository>().As<IRepository<DecrementRule, string>>();
+            builder.RegisterType<QcControlRepository>().As<IRepository<QcControl, int>>();
+            builder.RegisterType<PartTemplateRepository>().As<IRepository<PartTemplate, string>>();
         }
     }
 }

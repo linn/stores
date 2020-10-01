@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { getItemError, initialiseOnMount } from '@linn-it/linn-form-components-library';
+import queryString from 'query-string';
 import Part from '../../components/parts/Part';
 import partActions from '../../actions/partActions';
 import partSelectors from '../../selectors/partSelectors';
@@ -17,13 +18,17 @@ import suppliersSelectors from '../../selectors/suppliersSelectors';
 import unitsOfMeasureSelectors from '../../selectors/unitsOfMeasureSelectors';
 import nominalActions from '../../actions/nominalActions';
 import nominalSelectors from '../../selectors/nominalSelectors';
+import partTemplatesActions from '../../actions/partTemplatesActions';
+import partTemplateSelectors from '../../selectors/partTemplatesSelectors';
 import { getPrivileges, getUserName, getUserNumber } from '../../selectors/userSelectors';
 import * as itemTypes from '../../itemTypes';
 
-const mapStateToProps = (state, { match }) => ({
-    item: partSelectors.getItem(state),
-    itemId: match.params.id,
-    editStatus: partSelectors.getEditStatus(state),
+const creating = match => match?.url?.endsWith('/create');
+
+const mapStateToProps = (state, { match, location }) => ({
+    item: creating(match) ? null : partSelectors.getItem(state),
+    itemId: creating(match) ? null : match.params.id,
+    editStatus: creating(match) ? 'create' : partSelectors.getEditStatus(state),
     loading: partSelectors.getLoading(state),
     snackbarVisible: partSelectors.getSnackbarVisible(state),
     itemError: getItemError(state, itemTypes.part.item),
@@ -36,25 +41,31 @@ const mapStateToProps = (state, { match }) => ({
     nominal: nominalSelectors.getItem(state),
     privileges: getPrivileges(state),
     userName: getUserName(state),
-    userNumber: getUserNumber(state)
+    userNumber: getUserNumber(state),
+    options: queryString.parse(location?.search),
+    partTemplates: partTemplateSelectors.getItems(state)
 });
 
-const initialise = ({ itemId }) => dispatch => {
-    dispatch(partActions.fetch(itemId));
-    dispatch(departmentsActions.fetch());
-    dispatch(partCategoriesActions.fetch());
-    dispatch(rootProductsActions.fetch());
-    dispatch(sernosSequencesActions.fetch());
-    dispatch(suppliersActions.fetch());
-    dispatch(unitsOfMeasureActions.fetch());
-};
-
-const mapDispatchToProps = {
-    initialise,
-    updateItem: partActions.update,
-    setEditStatus: partActions.setEditStatus,
-    setSnackbarVisible: partActions.setSnackbarVisible,
-    fetchNominal: nominalActions.fetch
+const mapDispatchToProps = dispatch => {
+    return {
+        initialise: ({ itemId }) => {
+            if (itemId) {
+                dispatch(partActions.fetch(itemId));
+            }
+            dispatch(departmentsActions.fetch());
+            dispatch(partCategoriesActions.fetch());
+            dispatch(rootProductsActions.fetch());
+            dispatch(sernosSequencesActions.fetch());
+            dispatch(suppliersActions.fetch());
+            dispatch(unitsOfMeasureActions.fetch());
+            dispatch(partTemplatesActions.fetch());
+        },
+        addItem: item => dispatch(partActions.add(item)),
+        updateItem: (itemId, item) => dispatch(partActions.update(itemId, item)),
+        setEditStatus: status => dispatch(partActions.setEditStatus(status)),
+        setSnackbarVisible: () => dispatch(partActions.setSnackbarVisible()),
+        fetchNominal: name => dispatch(nominalActions.fetch(name))
+    };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Part));

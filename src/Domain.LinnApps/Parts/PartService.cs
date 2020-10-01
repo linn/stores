@@ -1,18 +1,42 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Parts
 {
-    using System.Collections;
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Linn.Common.Authorisation;
+    using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Exceptions;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
 
     public class PartService : IPartService
     {
         private readonly IAuthorisationService authService;
 
-        public PartService(IAuthorisationService authService)
+        private readonly IQueryRepository<Supplier> supplierRepository;
+
+        private readonly IRepository<QcControl, int> qcControlRepository;
+
+        private readonly IRepository<Part, int> partRepository;
+
+        private readonly IRepository<PartTemplate, string> templateRepository;
+
+        private readonly IPartPack partPack;
+
+        public PartService(
+            IAuthorisationService authService,
+            IRepository<QcControl, int> qcControlRepository,
+            IQueryRepository<Supplier> supplierRepository,
+            IRepository<Part, int> partRepository,
+            IRepository<PartTemplate, string> templateRepository,
+            IPartPack partPack)
         {
             this.authService = authService;
+            this.supplierRepository = supplierRepository;
+            this.qcControlRepository = qcControlRepository;
+            this.partRepository = partRepository;
+            this.partPack = partPack;
+            this.templateRepository = templateRepository;
         }
 
         public void UpdatePart(Part from, Part to, List<string> privileges)
@@ -32,24 +56,7 @@
                 from.ScrapOrConvert = to.ScrapOrConvert ?? "CONVERT";
             }
             
-
-            if (to.ScrapOrConvert != null && to.DatePhasedOut == null)
-            {
-                throw new UpdatePartException("A part must be obsolete to be convertible or to be scrapped.");
-            }
-
-            if (to.RailMethod == "SMM" 
-                && to.StockControlled == "Y" 
-                && to.MinStockRail == 0 
-                && to.MaxStockRail == 0)
-            {
-                throw new UpdatePartException("Rail method SMM with 0 min/max rails is not a valid stocking policy.");
-            }
-
-            if (to.TqmsCategoryOverride != null && to.StockNotes == null)
-            {
-                throw new UpdatePartException("You must enter a reason and/or reference or project code when setting an override");
-            }
+            Validate(to);
 
             from.PhasedOutBy = to.PhasedOutBy;
             from.DatePhasedOut = to.DatePhasedOut;
@@ -113,10 +120,83 @@
         {
             if (!this.authService.HasPermissionFor(AuthorisedAction.PartAdmin, privileges))
             {
-                throw new UpdatePartException("You are not authorised to create parts.");
+                throw new CreatePartException("You are not authorised to create parts.");
             }
 
+            var partRoot = this.partPack.PartRoot(partToCreate.PartNumber);
+
+            if (this.templateRepository.FindById(partRoot).AllowPartCreation == "N")
+            {
+                throw new CreatePartException("The system no longer allows creation of " + partRoot + " parts.");
+            }
+
+            var newestPartOfThisType = this.partRepository.FilterBy(p => p.PartNumber.StartsWith(partRoot))
+                .OrderByDescending(p => p.DateCreated).ToList().FirstOrDefault()
+                ?.PartNumber;
+            var realNextNumber = FindRealNextNumber(newestPartOfThisType);
+
+            if (this.partRepository.FindBy(p => p.PartNumber == partToCreate.PartNumber) != null)
+            {
+                throw new CreatePartException("A Part with that Part Number already exists. Why not try " + realNextNumber);
+            }
+
+            if (partToCreate.StockControlled == "Y" && partToCreate.RailMethod == null)
+            {
+                partToCreate.RailMethod = "POLICY";
+            }
+
+            if (partToCreate.LinnProduced == "Y" && partToCreate.PreferredSupplier == null)
+            {
+                partToCreate.PreferredSupplier = this.supplierRepository.FindBy(s => s.Id == 4415);
+            }
+
+            partToCreate.OrderHold = "N";
+
+            Validate(partToCreate);
+            
+            this.templateRepository.FindById(partRoot).NextNumber = realNextNumber + 1;
             return partToCreate;
+        }
+
+        public void AddQcControl(string partNumber, int? createdBy, string qcInfo)
+        {
+            this.qcControlRepository.Add(new QcControl
+                                             {
+                                                 Id = null,
+                                                 PartNumber = partNumber,
+                                                 TransactionDate = DateTime.Today,
+                                                 ChangedBy = createdBy,
+                                                 NumberOfBookIns = 0,
+                                                 OnOrOffQc = "ON",
+                                                 Reason = qcInfo
+                                             });
+        }
+
+        private static void Validate(Part to)
+        {
+            if (to.ScrapOrConvert != null && to.DatePhasedOut == null)
+            {
+                throw new UpdatePartException("A part must be obsolete to be convertible or to be scrapped.");
+            }
+
+            if (to.RailMethod == "SMM"
+                && to.StockControlled == "Y"
+                && to.MinStockRail == 0
+                && to.MaxStockRail == 0)
+            {
+                throw new UpdatePartException("Rail method SMM with 0 min/max rails is not a valid stocking policy.");
+            }
+
+            if (to.TqmsCategoryOverride != null && to.StockNotes == null)
+            {
+                throw new UpdatePartException("You must enter a reason and/or reference or project code when setting an override");
+            }
+        }
+
+        private static int FindRealNextNumber(string newestPartOfThisType)
+        {
+            var highestNumber = newestPartOfThisType?.Split(" ").Last();
+            return int.Parse(highestNumber ?? throw new InvalidOperationException()) + 1;
         }
     }
 }

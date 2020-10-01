@@ -181,7 +181,7 @@ function GeneralTab({
                     propertyName="safetyCriticalPart"
                     items={['Yes', 'No']}
                     fullWidth
-                    allowNoValue
+                    allowNoValue={false}
                     value={convertToYOrNString(safetyCriticalPart)}
                     onChange={handleFieldChange}
                 />
