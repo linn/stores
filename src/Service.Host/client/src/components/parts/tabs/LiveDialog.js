@@ -10,19 +10,9 @@ const useStyles = makeStyles(theme => ({
     pullRight: {
         float: 'right'
     },
-    a: {
-        textDecoration: 'none'
-    },
     dialog: {
         margin: theme.spacing(6),
         minWidth: theme.spacing(62)
-    },
-    nameText: {
-        fontWeight: theme.typography.fontWeightMedium
-    },
-    button: {
-        marginLeft: theme.spacing(1),
-        marginTop: theme.spacing(1)
     }
 }));
 
