@@ -63,7 +63,7 @@
                     throw new UpdatePartException("You are not authorised to complete this action.");
                 }
 
-                if (!this.partPack.PartLiveTest(from.PartNumber, out var message))
+                if (from.DateLive == null && !this.partPack.PartLiveTest(from.PartNumber, out var message))
                 {
                     throw new UpdatePartException(message);
                 }

@@ -36,7 +36,9 @@ function Part({
     userName,
     userNumber,
     options,
-    partTemplates
+    partTemplates,
+    liveTest,
+    fetchLiveTest
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -84,8 +86,9 @@ function Part({
         if (item !== prevPart && editStatus !== 'create') {
             setPart(item);
             setPrevPart(item);
+            fetchLiveTest(itemId);
         }
-    }, [item, prevPart, fetchNominal, editStatus]);
+    }, [item, prevPart, fetchNominal, editStatus, fetchLiveTest, itemId]);
 
     useEffect(() => {
         setPart(p => ({
@@ -171,6 +174,28 @@ function Part({
             phasedOutBy: userNumber,
             phasedOutByName: userName
         });
+    };
+
+    const handleChangeLiveness = () => {
+        console.log('0');
+        if (!item.dateLive) {
+            console.log('1');
+            updateItem(itemId, {
+                ...part,
+                dateLive: new Date(),
+                madeLiveBy: userNumber,
+                madeLiveByName: userName
+            });
+        } else {
+            console.log('2');
+
+            updateItem(itemId, {
+                ...part,
+                dateLive: null,
+                madeLiveBy: null,
+                madeLiveByName: null
+            });
+        }
     };
 
     const handleIgnoreWorkstationStockChange = (_, newValue) => {
@@ -422,6 +447,8 @@ function Part({
                                     purchasingPhaseOutType={part.purchasingPhaseOutType}
                                     datePhasedOut={part.datePhasedOut}
                                     dateDesignObsolete={part.dateDesignObsolete}
+                                    liveTest={liveTest}
+                                    handleChangeLiveness={handleChangeLiveness}
                                 />
                             )}
                             <Grid item xs={12}>
@@ -445,7 +472,8 @@ Part.propTypes = {
         part: PropTypes.string,
         description: PropTypes.string,
         nextSerialNumber: PropTypes.number,
-        dateClosed: PropTypes.string
+        dateClosed: PropTypes.string,
+        dateLive: PropTypes.string
     }),
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,
     editStatus: PropTypes.string.isRequired,
@@ -468,7 +496,9 @@ Part.propTypes = {
     userName: PropTypes.string,
     userNumber: PropTypes.number,
     options: PropTypes.shape({ template: PropTypes.string }),
-    partTemplates: PropTypes.arrayOf(PropTypes.shape({ partRoot: PropTypes.string }))
+    partTemplates: PropTypes.arrayOf(PropTypes.shape({ partRoot: PropTypes.string })),
+    liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
+    fetchLiveTest: PropTypes.func.isRequired
 };
 
 Part.defaultProps = {
@@ -482,7 +512,8 @@ Part.defaultProps = {
     userName: null,
     userNumber: null,
     options: null,
-    partTemplates: []
+    partTemplates: [],
+    liveTest: null
 };
 
 export default Part;
