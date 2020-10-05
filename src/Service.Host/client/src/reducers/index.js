@@ -19,6 +19,8 @@ import suppliers from './suppliers';
 import unitsOfMeasure from './unitsOfMeasure';
 import allocation from './allocation';
 import * as itemTypes from '../itemTypes';
+import stockPools from './stockPools';
+import despatchLocations from './despatchLocations';
 
 const errors = fetchErrorReducer({ ...itemTypes });
 
@@ -38,6 +40,8 @@ const rootReducer = combineReducers({
     sernosSequences,
     suppliers,
     unitsOfMeasure,
+    stockPools,
+    despatchLocations,
     ...sharedLibraryReducers,
     errors
 });

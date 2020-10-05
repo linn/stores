@@ -6,6 +6,10 @@ import allocationSelectors from '../../selectors/allocationSelectors';
 import accountingCompaniesActions from '../../actions/accountingCompaniesActions';
 import accountingCompaniesSelectors from '../../selectors/accountingCompaniesSelectors';
 import * as itemTypes from '../../itemTypes';
+import stockPoolsActions from '../../actions/stockPoolsActions';
+import stockPoolsSelectors from '../../selectors/stockPoolsSelectors';
+import despatchLocationsActions from '../../actions/despatchLocationsActions';
+import despatchLocationsSelectors from '../../selectors/despatchLocationsSelectors';
 
 const mapStateToProps = state => ({
     item: {},
@@ -13,12 +17,16 @@ const mapStateToProps = state => ({
     itemError: getItemError(state, itemTypes.allocation.item),
     loading: allocationSelectors.getLoading(state),
     snackbarVisible: allocationSelectors.getSnackbarVisible(state),
-    accountingCompanies: accountingCompaniesSelectors.getItems(state)
+    accountingCompanies: accountingCompaniesSelectors.getItems(state),
+    stockPools: stockPoolsSelectors.getItems(state),
+    despatchLocations: despatchLocationsSelectors.getItems(state)
 });
 
 const initialise = () => dispatch => {
     dispatch(allocationActions.clearErrorsForItem());
     dispatch(accountingCompaniesActions.fetch());
+    dispatch(stockPoolsActions.fetch());
+    dispatch(despatchLocationsActions.fetch());
 };
 
 const mapDispatchToProps = {

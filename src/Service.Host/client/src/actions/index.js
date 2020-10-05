@@ -33,3 +33,7 @@ export const decrementRulesActionTypes = makeActionTypes(itemTypes.decrementRule
 export const assemblyTechnologiesActionTypes = makeActionTypes(
     itemTypes.assemblyTechnologies.actionType
 );
+
+export const stockPoolsActionTypes = makeActionTypes(itemTypes.stockPools.actionType);
+
+export const despatchLocationsActionTypes = makeActionTypes(itemTypes.despatchLocations.actionType);

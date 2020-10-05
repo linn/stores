@@ -14,10 +14,10 @@
 
         public string AccountingCompany { get; set; }
 
-        public int Sequence { get; set; }
+        public int? Sequence { get; set; }
 
         public string StockCategory { get; set; }
 
-        public int DefaultLocation { get; set; }
+        public int? DefaultLocation { get; set; }
     }
 }

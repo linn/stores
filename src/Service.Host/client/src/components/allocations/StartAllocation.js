@@ -7,7 +7,8 @@ import {
     Loading,
     Title,
     ErrorCard,
-    Dropdown
+    Dropdown,
+    SnackbarMessage
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 
@@ -19,9 +20,12 @@ function StartAllocation({
     addItem,
     setEditStatus,
     snackbarVisible,
-    accountingCompanies
+    accountingCompanies,
+    setSnackbarVisible,
+    stockPools,
+    despatchLocations
 }) {
-    const [allocationOptions, setAllocationOptions] = useState({ accountingCompany: 'LINN' });
+    const [allocationOptions, setAllocationOptions] = useState({ accountingCompany: 'LINN', despatchLocation: 'LINN', stockPool: 'LINN'});
 
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -33,8 +37,7 @@ function StartAllocation({
         }
     };
 
-    const handleCancelClick = () => {
-    };
+    const handleCancelClick = () => {};
 
     const handleBackClick = () => {
         history.push('/logistics/allocations');
@@ -45,11 +48,24 @@ function StartAllocation({
     };
 
     const accountingCompanyOptions = () => {
-        return accountingCompanies
-            ?.map(c => ({
-                id: c.name,
-                displayText: c.name
-            }));
+        return accountingCompanies?.map(c => ({
+            id: c.name,
+            displayText: c.name
+        }));
+    };
+
+    const stockPoolOptions = () => {
+        return stockPools?.map(c => ({
+            id: c.stockPoolCode,
+            displayText: c.stockPoolCode
+        }));
+    };
+
+    const despatchLocationOptions = () => {
+        return despatchLocations?.map(c => ({
+            id: c.locationCode,
+            displayText: c.locationCode
+        }));
     };
 
     return (
@@ -68,28 +84,54 @@ function StartAllocation({
                         <Loading />
                     </Grid>
                 ) : (
-                        <>
-                            <Grid item xs={4}>
-                                <Dropdown
-                                    label="Company"
-                                    propertyName="accountingCompany"
-                                    items={accountingCompanyOptions()}
-                                    fullWidth
-                                    value={allocationOptions.accountingCompany}
-                                    onChange={handleFieldChange}
-                                />
-                            </Grid>
-                            <Grid item xs={8}>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <SaveBackCancelButtons
-                                    saveDisabled={viewing()}
-                                    saveClick={handleSaveClick}
-                                    cancelClick={handleCancelClick}
-                                    backClick={handleBackClick}
-                                />
-                            </Grid>
-                        </>
+                    <>
+                        <SnackbarMessage
+                            visible={snackbarVisible}
+                            onClose={() => setSnackbarVisible(false)}
+                            message="Allocation Successful"
+                        />
+                        <Grid item xs={4}>
+                            <Dropdown
+                                label="Company"
+                                propertyName="accountingCompany"
+                                items={accountingCompanyOptions()}
+                                fullWidth
+                                value={allocationOptions.accountingCompany}
+                                onChange={handleFieldChange}
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Dropdown
+                                label="Stock Pool"
+                                propertyName="stockPool"
+                                items={stockPoolOptions()}
+                                fullWidth
+                                value={allocationOptions.stockPool}
+                                onChange={handleFieldChange}
+                            />
+                        </Grid>
+                        <Grid item xs={4} />
+                        <Grid item xs={4}>
+                            <Dropdown
+                                label="Despatch Location"
+                                propertyName="despatchLocation"
+                                items={despatchLocationOptions()}
+                                fullWidth
+                                value={allocationOptions.despatchLocation}
+                                onChange={handleFieldChange}
+                            />
+                        </Grid>
+                        <Grid item xs={4} />
+                        <Grid item xs={4} />
+                        <Grid item xs={12}>
+                            <SaveBackCancelButtons
+                                saveDisabled={viewing()}
+                                saveClick={handleSaveClick}
+                                cancelClick={handleCancelClick}
+                                backClick={handleBackClick}
+                            />
+                        </Grid>
+                    </>
                 )}
             </Grid>
         </Page>
@@ -106,10 +148,12 @@ StartAllocation.propTypes = {
         item: PropTypes.string
     }),
     accountingCompanies: PropTypes.arrayOf(PropTypes.shape({})),
+    stockPools: PropTypes.arrayOf(PropTypes.shape({})),
     snackbarVisible: PropTypes.bool,
     addItem: PropTypes.func,
     loading: PropTypes.bool,
-    setEditStatus: PropTypes.func.isRequired
+    setEditStatus: PropTypes.func.isRequired,
+    setSnackbarVisible: PropTypes.func.isRequired
 };
 
 StartAllocation.defaultProps = {
@@ -117,7 +161,8 @@ StartAllocation.defaultProps = {
     addItem: null,
     loading: null,
     itemError: null,
-    accountingCompanies: []
+    accountingCompanies: [],
+    stockPools: []
 };
 
 export default StartAllocation;
