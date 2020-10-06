@@ -64,6 +64,8 @@
                 .As<IResourceBuilder<DecrementRule>>();
             builder.RegisterType<DecrementRulesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<DecrementRule>>>();
+            builder.RegisterType<CountryResourceBuilder>().As<IResourceBuilder<Country>>();
+            builder.RegisterType<CountriesResourceBuilder>().As<IResourceBuilder<IEnumerable<Country>>>();
         }
     }
 }

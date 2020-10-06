@@ -13,5 +13,7 @@
         public string AccountingCompany { get; set; }
 
         public string CutOffDate { get; set; }
+
+        public string CountryCode { get; set; }
     }
 }

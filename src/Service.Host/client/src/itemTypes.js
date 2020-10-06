@@ -62,11 +62,7 @@ export const decrementRules = new ItemType(
 
 export const stockPool = new ItemType('stockPool', 'STOCK_POOL', '/inventory/stock-pools');
 
-export const stockPools = new ItemType(
-    'stockPools',
-    'STOCK_POOLS',
-    '/inventory/stock-pools'
-);
+export const stockPools = new ItemType('stockPools', 'STOCK_POOLS', '/inventory/stock-pools');
 
 export const despatchLocation = new ItemType(
     'despatchLocation',
@@ -79,3 +75,5 @@ export const despatchLocations = new ItemType(
     'DESPATCH_LOCATIONS',
     '/logistics/despatch-locations'
 );
+
+export const countries = new ItemType('countries', 'COUNTRIES', '/logistics/countries');

@@ -37,3 +37,5 @@ export const assemblyTechnologiesActionTypes = makeActionTypes(
 export const stockPoolsActionTypes = makeActionTypes(itemTypes.stockPools.actionType);
 
 export const despatchLocationsActionTypes = makeActionTypes(itemTypes.despatchLocations.actionType);
+
+export const countriesActionTypes = makeActionTypes(itemTypes.countries.actionType);

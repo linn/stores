@@ -10,6 +10,8 @@ import stockPoolsActions from '../../actions/stockPoolsActions';
 import stockPoolsSelectors from '../../selectors/stockPoolsSelectors';
 import despatchLocationsActions from '../../actions/despatchLocationsActions';
 import despatchLocationsSelectors from '../../selectors/despatchLocationsSelectors';
+import countriesActions from '../../actions/countriesActions';
+import countriesSelectors from '../../selectors/countriesSelectors';
 
 const mapStateToProps = state => ({
     item: {},
@@ -19,7 +21,8 @@ const mapStateToProps = state => ({
     snackbarVisible: allocationSelectors.getSnackbarVisible(state),
     accountingCompanies: accountingCompaniesSelectors.getItems(state),
     stockPools: stockPoolsSelectors.getItems(state),
-    despatchLocations: despatchLocationsSelectors.getItems(state)
+    despatchLocations: despatchLocationsSelectors.getItems(state),
+    countries: countriesSelectors.getItems(state)
 });
 
 const initialise = () => dispatch => {
@@ -27,6 +30,7 @@ const initialise = () => dispatch => {
     dispatch(accountingCompaniesActions.fetch());
     dispatch(stockPoolsActions.fetch());
     dispatch(despatchLocationsActions.fetch());
+    dispatch(countriesActions.fetch());
 };
 
 const mapDispatchToProps = {

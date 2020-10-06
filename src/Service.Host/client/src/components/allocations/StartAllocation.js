@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import {
@@ -8,7 +8,8 @@ import {
     Title,
     ErrorCard,
     Dropdown,
-    SnackbarMessage
+    SnackbarMessage,
+    utilities
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 
@@ -23,9 +24,14 @@ function StartAllocation({
     accountingCompanies,
     setSnackbarVisible,
     stockPools,
-    despatchLocations
+    despatchLocations,
+    countries
 }) {
-    const [allocationOptions, setAllocationOptions] = useState({ accountingCompany: 'LINN', despatchLocation: 'LINN', stockPool: 'LINN'});
+    const [allocationOptions, setAllocationOptions] = useState({
+        accountingCompany: 'LINN',
+        despatchLocation: 'LINN',
+        stockPool: 'LINN'
+    });
 
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -65,6 +71,13 @@ function StartAllocation({
         return despatchLocations?.map(c => ({
             id: c.locationCode,
             displayText: c.locationCode
+        }));
+    };
+
+    const countryOptions = () => {
+        return utilities.sortEntityList(countries, 'displayName')?.map(c => ({
+            id: c.countryCode,
+            displayText: c.displayName
         }));
     };
 
@@ -121,7 +134,16 @@ function StartAllocation({
                                 onChange={handleFieldChange}
                             />
                         </Grid>
-                        <Grid item xs={4} />
+                        <Grid item xs={4}>
+                            <Dropdown
+                                label="Country"
+                                propertyName="countryCode"
+                                items={countryOptions()}
+                                fullWidth
+                                value={allocationOptions.countryCode}
+                                onChange={handleFieldChange}
+                            />
+                        </Grid>
                         <Grid item xs={4} />
                         <Grid item xs={12}>
                             <SaveBackCancelButtons
@@ -148,6 +170,8 @@ StartAllocation.propTypes = {
         item: PropTypes.string
     }),
     accountingCompanies: PropTypes.arrayOf(PropTypes.shape({})),
+    countries: PropTypes.arrayOf(PropTypes.shape({})),
+    despatchLocations: PropTypes.arrayOf(PropTypes.shape({})),
     stockPools: PropTypes.arrayOf(PropTypes.shape({})),
     snackbarVisible: PropTypes.bool,
     addItem: PropTypes.func,
@@ -162,7 +186,9 @@ StartAllocation.defaultProps = {
     loading: null,
     itemError: null,
     accountingCompanies: [],
-    stockPools: []
+    stockPools: [],
+    countries: [],
+    despatchLocations: []
 };
 
 export default StartAllocation;

@@ -53,6 +53,8 @@
 
         public DbSet<AssemblyTechnology> AssemblyTechnologies { get; set; }
 
+        public DbSet<Country> Countries { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -73,6 +75,7 @@
             this.BuildStockPools(builder);
             this.BuildDecrementRules(builder);
             this.BuildAssemblyTechnologies(builder);
+            this.BuildCountries(builder);
             base.OnModelCreating(builder);
         }
 
@@ -99,6 +102,18 @@
             q.Property(c => c.Name).HasColumnName("ACCOUNTING_COMPANY");
             q.Property(c => c.DateInvalid).HasColumnName("DATE_INVALID");
             q.Property(c => c.Description).HasColumnName("DESCRIPTION");
+        }
+
+        private void BuildCountries(ModelBuilder builder)
+        {
+            builder.Entity<Country>().ToTable("COUNTRIES");
+            builder.Entity<Country>().HasKey(c => c.CountryCode);
+            builder.Entity<Country>().Property(c => c.CountryCode).HasColumnName("COUNTRY_CODE").HasMaxLength(2);
+            builder.Entity<Country>().Property(c => c.Name).HasColumnName("NAME").HasMaxLength(50);
+            builder.Entity<Country>().Property(c => c.DisplayName).HasColumnName("DISPLAY_NAME").HasMaxLength(50);
+            builder.Entity<Country>().Property(c => c.TradeCurrency).HasColumnName("TRADE_CURRENCY").HasMaxLength(4);
+            builder.Entity<Country>().Property(c => c.ECMember).HasColumnName("EEC_MEMBER").HasMaxLength(1);
+            builder.Entity<Country>().Property(c => c.DateInvalid).HasColumnName("DATE_INVALID");
         }
 
         private void BuildEmployees(ModelBuilder builder)
