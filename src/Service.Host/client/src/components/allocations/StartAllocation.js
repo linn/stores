@@ -9,7 +9,9 @@ import {
     ErrorCard,
     Dropdown,
     SnackbarMessage,
-    utilities
+    utilities,
+    DatePicker,
+    OnOffSwitch
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 
@@ -30,7 +32,10 @@ function StartAllocation({
     const [allocationOptions, setAllocationOptions] = useState({
         accountingCompany: 'LINN',
         despatchLocation: 'LINN',
-        stockPool: 'LINN'
+        stockPool: 'LINN',
+        excludeUnsuppliableLines: true,
+        excludeOverCreditLimit: true,
+        excludeOnHold: true
     });
 
     const creating = () => editStatus === 'create';
@@ -145,6 +150,77 @@ function StartAllocation({
                             />
                         </Grid>
                         <Grid item xs={4} />
+                        <Grid item xs={4}>
+                            <InputField
+                                value={allocationOptions.articleNumber}
+                                label="Article Number"
+                                onChange={handleFieldChange}
+                                propertyName="articleNumber"
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <InputField
+                                value={allocationOptions.accountId}
+                                label="Account Id"
+                                type="number"
+                                onChange={handleFieldChange}
+                                propertyName="accountId"
+                            />
+                        </Grid>
+                        <Grid item xs={4} />
+                        <Grid item xs={4}>
+                            <OnOffSwitch
+                                label="Exclude Unsuppliable Lines"
+                                value={allocationOptions.excludeUnsuppliableLines}
+                                onChange={() => {
+                                    handleFieldChange(
+                                        'excludeUnsuppliableLines',
+                                        !allocationOptions.excludeUnsuppliableLines
+                                    );
+                                }}
+                                propertyName="excludeUnsuppliableLines"
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <OnOffSwitch
+                                label="Exclude On Hold"
+                                value={allocationOptions.excludeOnHold}
+                                onChange={() => {
+                                    handleFieldChange(
+                                        'excludeOnHold',
+                                        !allocationOptions.excludeOnHold
+                                    );
+                                }}
+                                propertyName="excludeOnHold"
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <OnOffSwitch
+                                label="Exclude Over Credit Limit"
+                                value={allocationOptions.excludeOverCreditLimit}
+                                onChange={() => {
+                                    handleFieldChange(
+                                        'excludeOverCreditLimit',
+                                        !allocationOptions.excludeOverCreditLimit
+                                    );
+                                }}
+                                propertyName="excludeOverCreditLimit"
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <DatePicker
+                                label="Cut Off Date"
+                                value={
+                                    allocationOptions.cutOffDate
+                                        ? allocationOptions.cutOffDate
+                                        : null
+                                }
+                                onChange={value => {
+                                    handleFieldChange('cutOffDate', value);
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={8} />
                         <Grid item xs={12}>
                             <SaveBackCancelButtons
                                 saveDisabled={viewing()}

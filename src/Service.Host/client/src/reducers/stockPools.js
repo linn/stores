@@ -7,8 +7,4 @@ const defaultState = {
     items: []
 };
 
-export default collectionStoreFactory(
-    itemTypes.stockPools.actionType,
-    actionTypes,
-    defaultState
-);
+export default collectionStoreFactory(itemTypes.stockPools.actionType, actionTypes, defaultState);

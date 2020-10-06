@@ -15,5 +15,11 @@
         public string CutOffDate { get; set; }
 
         public string CountryCode { get; set; }
+
+        public bool ExcludeUnsuppliableLines { get; set; }
+
+        public bool ExcludeOnHold { get; set; }
+
+        public bool ExcludeOverCreditLimit{ get; set; }
     }
 }
