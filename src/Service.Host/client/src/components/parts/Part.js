@@ -16,7 +16,7 @@ import GeneralTab from '../../containers/parts/tabs/GeneralTab';
 import BuildTab from '../../containers/parts/tabs/BuildTab';
 import PurchTab from '../../containers/parts/tabs/PurchTab';
 import StoresTab from './tabs/StoresTab';
-import LifeCycleTab from './tabs/LifecycleTab';
+import LifeCycleTab from './tabs/LifeCycleTab';
 
 function Part({
     editStatus,
@@ -34,9 +34,36 @@ function Part({
     setSnackbarVisible,
     privileges,
     userName,
-    userNumber
+    userNumber,
+    options,
+    partTemplates,
+    liveTest,
+    fetchLiveTest
 }) {
-    const [part, setPart] = useState();
+    const creating = () => editStatus === 'create';
+    const viewing = () => editStatus === 'view';
+    const [part, setPart] = useState(
+        creating()
+            ? {
+                  partNumber: '',
+                  description: '',
+                  accountingCompany: 'LINN',
+                  psuPart: false,
+                  stockControlled: true,
+                  cccCriticalPart: false,
+                  safetyCriticalPart: false,
+                  paretoCode: 'U',
+                  createdBy: userNumber,
+                  dateCreated: new Date(),
+                  railMethod: 'POLICY',
+                  preferredSupplier: 4415,
+                  preferredSupplierName: 'Linn Products Ltd',
+                  qcInformation: '',
+                  qcOnReceipt: false,
+                  orderHold: false
+              }
+            : null
+    );
     const [prevPart, setPrevPart] = useState({});
 
     const [tab, setTab] = useState(0);
@@ -44,9 +71,6 @@ function Part({
     const handleTabChange = (event, value) => {
         setTab(value);
     };
-    const creating = () => editStatus === 'create';
-    const editing = () => editStatus === 'edit';
-    const viewing = () => editStatus === 'view';
 
     const canPhaseOut = () => {
         if (!(privileges.length < 1)) {
@@ -59,11 +83,12 @@ function Part({
         if (item?.department) {
             fetchNominal(item?.department);
         }
-        if (item !== prevPart) {
+        if (item !== prevPart && editStatus !== 'create') {
             setPart(item);
             setPrevPart(item);
+            fetchLiveTest(itemId);
         }
-    }, [item, prevPart, fetchNominal]);
+    }, [item, prevPart, fetchNominal, editStatus, fetchLiveTest, itemId]);
 
     useEffect(() => {
         setPart(p => ({
@@ -73,16 +98,51 @@ function Part({
         }));
     }, [nominal, setPart]);
 
-    const partInvalid = () => false;
+    useEffect(() => {
+        if (options?.template && partTemplates.length) {
+            const template = partTemplates.find(t => t.partRoot === options.template);
+            const formatNextNumber = () => {
+                if (template.nextNumber < 1000) {
+                    return template.nextNumber.toString().padStart(3, 0);
+                }
+                return template.nextNumber().toString();
+            };
+            setPart(p => ({
+                ...p,
+                description: template.description,
+                partNumber:
+                    template.hasNumberSequence === 'Y'
+                        ? `${template.partRoot} ${formatNextNumber()}`
+                        : template.partRoot,
+                accountingCompany: template.accountingCompany,
+                assemblyTechnologyName: template.assemblyTechnologyName,
+                bomType: template.bomType,
+                linnProduced: template.linnProduced,
+                paretoCode: template.paretoCode,
+                stockControlled: template.stockControlled
+            }));
+        }
+    }, [options, partTemplates]);
+
+    const partInvalid = () => !part.partNumber || !part.description;
 
     const handleSaveClick = () => {
-        if (editing()) {
-            updateItem(itemId, part);
-            setEditStatus('view');
-        } else if (creating()) {
-            addItem(part);
-            setEditStatus('view');
+        const partResource = part;
+        // convert Yes/No to true/false for resource to send
+        Object.keys(partResource).forEach(k => {
+            if (partResource[k] === 'Yes' || partResource[k] === 'Y') {
+                partResource[k] = true;
+            }
+            if (partResource[k] === 'No' || partResource[k] === 'N') {
+                partResource[k] = false;
+            }
+        });
+        if (creating()) {
+            addItem(partResource);
+        } else {
+            updateItem(itemId, partResource);
         }
+        setEditStatus('view');
     };
 
     const handleCancelClick = () => {
@@ -100,6 +160,8 @@ function Part({
         }
         if (newValue === 'Yes' || newValue === 'No') {
             setPart({ ...part, [propertyName]: newValue === 'Yes' });
+        } else if (typeof newValue === 'string') {
+            setPart({ ...part, [propertyName]: newValue.toUpperCase() });
         } else {
             setPart({ ...part, [propertyName]: newValue });
         }
@@ -112,6 +174,28 @@ function Part({
             phasedOutBy: userNumber,
             phasedOutByName: userName
         });
+    };
+
+    const handleChangeLiveness = () => {
+        console.log('0');
+        if (!item.dateLive) {
+            console.log('1');
+            updateItem(itemId, {
+                ...part,
+                dateLive: new Date(),
+                madeLiveBy: userNumber,
+                madeLiveByName: userName
+            });
+        } else {
+            console.log('2');
+
+            updateItem(itemId, {
+                ...part,
+                dateLive: null,
+                madeLiveBy: null,
+                madeLiveByName: null
+            });
+        }
     };
 
     const handleIgnoreWorkstationStockChange = (_, newValue) => {
@@ -196,7 +280,9 @@ function Part({
                 </Grid>
                 {itemError && (
                     <Grid item xs={12}>
-                        <ErrorCard errorMessage={itemError.statusText} />
+                        <ErrorCard
+                            errorMessage={itemError?.details?.errors?.[0] || itemError.statusText}
+                        />
                     </Grid>
                 )}
                 {loading ? (
@@ -218,12 +304,8 @@ function Part({
                                     disabled={!creating()}
                                     value={part.partNumber}
                                     label="Part Number"
-                                    maxLength={10}
-                                    helperText={
-                                        !creating()
-                                            ? 'This field cannot be changed'
-                                            : `${partInvalid() ? 'This field is required' : ''}`
-                                    }
+                                    maxLength={14}
+                                    helperText={!creating() ? 'This field cannot be changed' : ''}
                                     required
                                     onChange={handleFieldChange}
                                     propertyName="partNumber"
@@ -234,7 +316,7 @@ function Part({
                                     fullWidth
                                     value={part.description}
                                     label="Description"
-                                    maxLength={10}
+                                    maxLength={200}
                                     required
                                     onChange={handleFieldChange}
                                     propertyName="description"
@@ -350,6 +432,7 @@ function Part({
                                 <LifeCycleTab
                                     handleFieldChange={handleFieldChange}
                                     handlePhaseOutClick={handlePhaseOutClick}
+                                    editStatus={editStatus}
                                     canPhaseOut={canPhaseOut()}
                                     dateCreated={part.dateCreated}
                                     createdBy={part.createdBy}
@@ -364,6 +447,8 @@ function Part({
                                     purchasingPhaseOutType={part.purchasingPhaseOutType}
                                     datePhasedOut={part.datePhasedOut}
                                     dateDesignObsolete={part.dateDesignObsolete}
+                                    liveTest={liveTest}
+                                    handleChangeLiveness={handleChangeLiveness}
                                 />
                             )}
                             <Grid item xs={12}>
@@ -387,7 +472,8 @@ Part.propTypes = {
         part: PropTypes.string,
         description: PropTypes.string,
         nextSerialNumber: PropTypes.number,
-        dateClosed: PropTypes.string
+        dateClosed: PropTypes.string,
+        dateLive: PropTypes.string
     }),
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,
     editStatus: PropTypes.string.isRequired,
@@ -399,8 +485,8 @@ Part.propTypes = {
     }),
     itemId: PropTypes.string,
     snackbarVisible: PropTypes.bool,
-    updateItem: PropTypes.func,
-    addItem: PropTypes.func,
+    addItem: PropTypes.func.isRequired,
+    updateItem: PropTypes.func.isRequired,
     loading: PropTypes.bool,
     setEditStatus: PropTypes.func.isRequired,
     setSnackbarVisible: PropTypes.func.isRequired,
@@ -408,21 +494,26 @@ Part.propTypes = {
     fetchNominal: PropTypes.func.isRequired,
     privileges: PropTypes.arrayOf(PropTypes.string),
     userName: PropTypes.string,
-    userNumber: PropTypes.number
+    userNumber: PropTypes.number,
+    options: PropTypes.shape({ template: PropTypes.string }),
+    partTemplates: PropTypes.arrayOf(PropTypes.shape({ partRoot: PropTypes.string })),
+    liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
+    fetchLiveTest: PropTypes.func.isRequired
 };
 
 Part.defaultProps = {
     item: {},
     snackbarVisible: false,
-    addItem: null,
-    updateItem: null,
     loading: null,
     itemError: null,
     itemId: null,
     nominal: null,
     privileges: null,
     userName: null,
-    userNumber: null
+    userNumber: null,
+    options: null,
+    partTemplates: [],
+    liveTest: null
 };
 
 export default Part;

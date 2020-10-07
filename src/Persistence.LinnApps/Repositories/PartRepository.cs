@@ -35,14 +35,13 @@
                 .Include(p => p.PreferredSupplier)
                 .Include(p => p.NominalAccount).ThenInclude(a => a.Department)
                 .Include(p => p.NominalAccount).ThenInclude(a => a.Nominal)
-                .AsNoTracking()
                 .ToList()
                 .FirstOrDefault();
         }
 
         public IQueryable<Part> FindAll()
         {
-            return this.serviceDbContext.Parts;
+            return this.serviceDbContext.Parts.AsNoTracking();
         }
 
         public void Add(Part entity)
@@ -57,7 +56,7 @@
 
         public Part FindBy(Expression<Func<Part, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.Parts.Where(expression).ToList().FirstOrDefault();
         }
 
         public IQueryable<Part> FilterBy(Expression<Func<Part, bool>> expression)

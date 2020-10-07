@@ -27,22 +27,6 @@
 
                 cmd.ExecuteNonQuery();
                 connection.Close();
-
-
-                connection.Open();
-                var cmd2 = new OracleCommand("sos.job_id", connection)
-                              {
-                                  CommandType = CommandType.StoredProcedure
-                              };
-
-                var result = new OracleParameter(null, OracleDbType.Int32)
-                                 {
-                                     Direction = ParameterDirection.ReturnValue
-                                 };
-                cmd2.Parameters.Add(result);
-
-                cmd2.ExecuteNonQuery();
-                connection.Close();
             }
         }
 

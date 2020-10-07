@@ -6,7 +6,6 @@
     using Linn.Common.Facade;
     using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps.Parts;
-    using Linn.Stores.Resources;
     using Linn.Stores.Resources.Parts;
 
     public class PartResourceBuilder : IResourceBuilder<Part>
@@ -69,7 +68,7 @@
                            ScrapOrConvert = part.ScrapOrConvert,
                            SafetyWeeks = part.SafetyWeeks,
                            RawOrFinished = part.RawOrFinished,
-                           CreatedBy = part.CreatedBy.Id,
+                           CreatedBy = part.CreatedBy?.Id,
                            CreatedByName = part.CreatedBy?.FullName,
                            PhasedOutBy = part.PhasedOutBy?.Id,
                            PhasedOutByName = part.PhasedOutBy?.FullName,

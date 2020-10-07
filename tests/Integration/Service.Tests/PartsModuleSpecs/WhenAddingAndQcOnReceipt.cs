@@ -5,7 +5,6 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Parts;
-    using Linn.Stores.Resources;
     using Linn.Stores.Resources.Parts;
 
     using Nancy;
@@ -15,20 +14,26 @@
 
     using NUnit.Framework;
 
-    public class WhenAdding : ContextBase
+    public class WhenAddingAndQcOnReceipt : ContextBase
     {
         private PartResource requestResource;
 
         [SetUp]
         public void SetUp()
         {
-            this.requestResource = new PartResource { Id = 1, StockControlled = true, CreatedBy = 1 };
+            this.requestResource = new PartResource
+                                       {
+                                           Id = 1,
+                                           StockControlled = true,
+                                           CreatedBy = 1,
+                                           QcOnReceipt = true
+                                       };
             var part = new Part
-                              {
-                                 Id = 1,
-                                 StockControlled = "Y",
-                                 CreatedBy = new Employee { Id = 1 }
-            };
+                           {
+                               Id = 1,
+                               StockControlled = "Y",
+                               CreatedBy = new Employee { Id = 1 },
+                           };
             this.PartsFacadeService.Add(Arg.Any<PartResource>())
                 .Returns(new CreatedResult<Part>(part));
 
@@ -54,6 +59,13 @@
             this.PartsFacadeService
                 .Received()
                 .Add(Arg.Is<PartResource>(r => r.Id == this.requestResource.Id));
+        }
+
+        [Test]
+        public void ShouldAddQcInfo()
+        {
+            this.PartsDomainService.Received()
+                .AddQcControl(Arg.Any<string>(), Arg.Any<int?>(), Arg.Any<string>());
         }
 
         [Test]

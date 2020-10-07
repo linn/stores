@@ -1,8 +1,5 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
-    using System.Linq;
-    using System.Security;
-
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;
@@ -19,6 +16,8 @@
     {
         private readonly IFacadeService<Part, int, PartResource, PartResource> partsFacadeService;
 
+        private readonly IPartService partDomainService;
+
         private readonly IUnitsOfMeasureService unitsOfMeasureService;
 
         private readonly IPartCategoryService partCategoryService;
@@ -33,16 +32,24 @@
             IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource>
             decrementRuleService;
 
+        private readonly IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>
+            partTemplateService;
+
+        private readonly IPartLiveService partLiveService;
+
         public PartsModule(
             IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
             IPartCategoryService partCategoryService,
             IProductAnalysisCodeService productAnalysisCodeService,
             IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource> assemblyTechnologyService,
-            IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource> decrementRuleService)
+            IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource> decrementRuleService,
+            IPartService partDomainService,
+            IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> partTemplateService,
+            IPartLiveService partLiveService)
         {
             this.partsFacadeService = partsFacadeService;
-
+            this.partDomainService = partDomainService;
             this.Get("/parts/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/parts/{id}", parameters => this.GetPart(parameters.id));
             this.Put("/parts/{id}", parameters => this.UpdatePart(parameters.id));
@@ -55,6 +62,9 @@
             this.partCategoryService = partCategoryService;
             this.Get("inventory/part-categories", _ => this.GetPartCategories());
 
+            this.partTemplateService = partTemplateService;
+            this.Get("inventory/part-templates", _ => this.GetPartTemplates());
+
             this.productAnalysisCodeService = productAnalysisCodeService;
             this.Get("inventory/product-analysis-codes", _ => this.GetProductAnalysisCodes());
             this.Get("inventory/product-analysis-codes", _ => this.GetProductAnalysisCodes());
@@ -64,6 +74,9 @@
 
             this.decrementRuleService = decrementRuleService;
             this.Get("inventory/decrement-rules", _ => this.GetDecrementRules());
+
+            this.partLiveService = partLiveService;
+            this.Get("inventory/parts/can-be-made-live/{id}", parameters => this.CheckCanBeMadeLive(parameters.id));
         }
 
         private object GetPart(int id)
@@ -93,6 +106,10 @@
             var resource = this.Bind<PartResource>();
             resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
             var result = this.partsFacadeService.Add(resource);
+            if (resource.QcOnReceipt != null && (bool)resource.QcOnReceipt)
+            {
+                this.partDomainService.AddQcControl(resource.PartNumber, resource.CreatedBy, resource.QcInformation);
+            }
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
@@ -121,6 +138,13 @@
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
 
+        private object GetPartTemplates()
+        {
+            var result = this.partTemplateService.GetAll();
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
         private object GetProductAnalysisCodes()
         {
             var resource = this.Bind<SearchRequestResource>();
@@ -139,6 +163,13 @@
         private object GetAssemblyTechnologies()
         {
             var result = this.assemblyTechnologyService.GetAll();
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object CheckCanBeMadeLive(int id)
+        {
+            var result = this.partLiveService.CheckIfPartCanBeMadeLive(id);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

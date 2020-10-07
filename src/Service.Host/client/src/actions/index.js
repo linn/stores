@@ -14,6 +14,10 @@ export const rootProductsActionTypes = makeActionTypes(itemTypes.rootProducts.ac
 
 export const partCategoriesActionTypes = makeActionTypes(itemTypes.partCategories.actionType);
 
+export const partTemplatesActionTypes = makeActionTypes(itemTypes.partTemplates.actionType);
+
+export const partLiveTestActionTypes = makeActionTypes(itemTypes.partLiveTest.actionType);
+
 export const suppliersActionTypes = makeActionTypes(itemTypes.suppliers.actionType);
 
 export const sernosSequencesActionTypes = makeActionTypes(itemTypes.sernosSequences.actionType);

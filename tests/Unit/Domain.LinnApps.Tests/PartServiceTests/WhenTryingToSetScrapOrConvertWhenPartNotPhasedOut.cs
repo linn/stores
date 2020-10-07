@@ -1,14 +1,11 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.PartServiceTests
 {
-    using System;
     using System.Collections.Generic;
 
     using FluentAssertions;
 
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Parts;
-
-    using NSubstitute;
 
     using NUnit.Framework;
 

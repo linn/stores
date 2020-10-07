@@ -11,6 +11,8 @@ import accountingCompanies from './accountingCompanies';
 import nominal from './nominal';
 import parts from './parts/parts';
 import part from './parts/part';
+import partTemplates from './parts/partTemplates';
+import partLiveTest from './parts/partLiveTest';
 import partCategories from './partCategories';
 import productAnalysisCodes from './productAnalysisCodes';
 import rootProducts from './rootProducts';
@@ -38,6 +40,8 @@ const rootReducer = combineReducers({
     part,
     partCategories,
     parts,
+    partLiveTest,
+    partTemplates,
     productAnalysisCodes,
     rootProducts,
     sernosSequences,

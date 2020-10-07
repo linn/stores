@@ -48,9 +48,13 @@
                 .As<IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource>>();
             builder.RegisterType<CountryFacadeService>()
                 .As<IFacadeService<Country, string, CountryResource, CountryResource>>();
+            builder.RegisterType<PartTemplateService>()
+                .As<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
+            builder.RegisterType<PartLiveService>().As<IPartLiveService>();
 
             // proxy
             builder.RegisterType<SosPack>().As<ISosPack>();
+            builder.RegisterType<PartPack>().As<IPartPack>();
             builder.RegisterType<DatabaseService>().As<IDatabaseService>();
         }
     }
