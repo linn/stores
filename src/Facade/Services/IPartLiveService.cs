@@ -8,7 +8,5 @@
     public interface IPartLiveService
     {
         IResult<PartLiveTest> CheckIfPartCanBeMadeLive(int id);
-
-        // IResult<PartLiveTest> MakePartLive(int id, int user, List<Priv>)
     }
 }
