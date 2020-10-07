@@ -23,7 +23,7 @@
 
             builder.RegisterType<AllocationService>().As<IAllocationService>();
             builder.RegisterType<PartService>().As<IPartService>();
-            
+
             // facade services
             builder.RegisterType<PartFacadeService>()
                 .As<IFacadeService<Part, int, PartResource, PartResource>>();
@@ -46,6 +46,8 @@
                 .As<IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>>();
             builder.RegisterType<DecrementRuleService>()
                 .As<IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource>>();
+            builder.RegisterType<CountryFacadeService>()
+                .As<IFacadeService<Country, string, CountryResource, CountryResource>>();
             builder.RegisterType<PartTemplateService>()
                 .As<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
             builder.RegisterType<PartLiveService>().As<IPartLiveService>();

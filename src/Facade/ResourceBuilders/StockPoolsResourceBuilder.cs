@@ -15,7 +15,7 @@
         public IEnumerable<StockPoolResource> Build(IEnumerable<StockPool> stockPools)
         {
             return stockPools
-                .OrderBy(b => b.Sequence)
+                .OrderBy(b => b.StockPoolCode)
                 .Select(a => this.stockPoolResourceBuilder.Build(a));
         }
 

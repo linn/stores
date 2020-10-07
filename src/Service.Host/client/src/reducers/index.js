@@ -21,6 +21,9 @@ import suppliers from './suppliers';
 import unitsOfMeasure from './unitsOfMeasure';
 import allocation from './allocation';
 import * as itemTypes from '../itemTypes';
+import stockPools from './stockPools';
+import despatchLocations from './despatchLocations';
+import countries from './countries';
 
 const errors = fetchErrorReducer({ ...itemTypes });
 
@@ -28,8 +31,10 @@ const rootReducer = combineReducers({
     accountingCompanies,
     assemblyTechnologies,
     allocation,
+    countries,
     departments,
     decrementRules,
+    despatchLocations,
     oidc,
     nominal,
     part,
@@ -40,6 +45,7 @@ const rootReducer = combineReducers({
     productAnalysisCodes,
     rootProducts,
     sernosSequences,
+    stockPools,
     suppliers,
     unitsOfMeasure,
     ...sharedLibraryReducers,
