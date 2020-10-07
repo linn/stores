@@ -55,6 +55,22 @@
 
                 from.ScrapOrConvert = to.ScrapOrConvert ?? "CONVERT";
             }
+
+            if (from.DateLive != to.DateLive)
+            {
+                if (!this.authService.HasPermissionFor(AuthorisedAction.PartAdmin, privileges))
+                {
+                    throw new UpdatePartException("You are not authorised to complete this action.");
+                }
+
+                if (from.DateLive == null && !this.partPack.PartLiveTest(from.PartNumber, out var message))
+                {
+                    throw new UpdatePartException(message);
+                }
+
+                from.DateLive = to.DateLive;
+                from.MadeLiveBy = to.MadeLiveBy;
+            }
             
             Validate(to);
 

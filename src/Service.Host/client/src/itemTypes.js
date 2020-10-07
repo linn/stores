@@ -65,3 +65,9 @@ export const decrementRules = new ItemType(
     'DECREMENT_RULES',
     '/inventory/decrement-rules'
 );
+
+export const partLiveTest = new ItemType(
+    'partLiveTest',
+    'PART_LIVE_TEST',
+    '/inventory/parts/can-be-made-live'
+);

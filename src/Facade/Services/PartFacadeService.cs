@@ -257,7 +257,14 @@
                                                           ? (DateTime?)null
                                                           : DateTime.Parse(resource.DatePhasedOut),
                                       ReasonPhasedOut = resource.ReasonPhasedOut,
-                                  };
+                                      DateLive = string.IsNullOrEmpty(resource.DateLive)
+                                                     ? (DateTime?)null
+                                                     : DateTime.Parse(resource.DateLive),
+                                     MadeLiveBy = 
+                                          resource.MadeLiveBy != null
+                                              ? this.employeeRepository.FindById((int)resource.MadeLiveBy)
+                                              : null,
+            };
 
             this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList());
         }

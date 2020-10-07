@@ -35,6 +35,8 @@
         private readonly IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>
             partTemplateService;
 
+        private readonly IPartLiveService partLiveService;
+
         public PartsModule(
             IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
@@ -43,7 +45,8 @@
             IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource> assemblyTechnologyService,
             IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource> decrementRuleService,
             IPartService partDomainService,
-            IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> partTemplateService)
+            IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> partTemplateService,
+            IPartLiveService partLiveService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
@@ -71,6 +74,9 @@
 
             this.decrementRuleService = decrementRuleService;
             this.Get("inventory/decrement-rules", _ => this.GetDecrementRules());
+
+            this.partLiveService = partLiveService;
+            this.Get("inventory/parts/can-be-made-live/{id}", parameters => this.CheckCanBeMadeLive(parameters.id));
         }
 
         private object GetPart(int id)
@@ -157,6 +163,13 @@
         private object GetAssemblyTechnologies()
         {
             var result = this.assemblyTechnologyService.GetAll();
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object CheckCanBeMadeLive(int id)
+        {
+            var result = this.partLiveService.CheckIfPartCanBeMadeLive(id);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

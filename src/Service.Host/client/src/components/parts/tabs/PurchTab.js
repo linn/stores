@@ -105,7 +105,7 @@ function PurchTab({
                     label="Currency Unit Price"
                     onChange={handleFieldChange}
                     type="number"
-                    propertyName="currencyUnitPrices"
+                    propertyName="currencyUnitPrice"
                 />
             </Grid>
             <Grid item xs={4}>
@@ -126,7 +126,7 @@ function PurchTab({
                     label="Base Unit Price"
                     onChange={handleFieldChange}
                     type="number"
-                    propertyName="baseUnitPrices"
+                    propertyName="baseUnitPrice"
                 />
             </Grid>
             <Grid item xs={4}>

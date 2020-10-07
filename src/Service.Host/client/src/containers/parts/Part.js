@@ -22,6 +22,8 @@ import partTemplatesActions from '../../actions/partTemplatesActions';
 import partTemplateSelectors from '../../selectors/partTemplatesSelectors';
 import { getPrivileges, getUserName, getUserNumber } from '../../selectors/userSelectors';
 import * as itemTypes from '../../itemTypes';
+import partLiveTestSelectors from '../../selectors/partLiveTestSelectors';
+import partLiveTestActions from '../../actions/partLiveTestActions';
 
 const creating = match => match?.url?.endsWith('/create');
 
@@ -33,7 +35,7 @@ const mapStateToProps = (state, { match, location }) => ({
     snackbarVisible: partSelectors.getSnackbarVisible(state),
     itemError: getItemError(state, itemTypes.part.item),
     departments: departmentsSelectors.getItems(state),
-    partCategoris: partCategoriesSelectors.getItems(state),
+    partCategories: partCategoriesSelectors.getItems(state),
     rootProducts: rootProductsSelectors.getItems(state),
     sernosSequences: sernosSequencesSelectors.getItems(state),
     suppliers: suppliersSelectors.getItems(state),
@@ -43,7 +45,8 @@ const mapStateToProps = (state, { match, location }) => ({
     userName: getUserName(state),
     userNumber: getUserNumber(state),
     options: queryString.parse(location?.search),
-    partTemplates: partTemplateSelectors.getItems(state)
+    partTemplates: partTemplateSelectors.getItems(state),
+    liveTest: creating(match) ? null : partLiveTestSelectors.getItem(state)
 });
 
 const mapDispatchToProps = dispatch => {
@@ -51,6 +54,7 @@ const mapDispatchToProps = dispatch => {
         initialise: ({ itemId }) => {
             if (itemId) {
                 dispatch(partActions.fetch(itemId));
+                dispatch(partLiveTestActions.fetch(itemId));
             }
             dispatch(departmentsActions.fetch());
             dispatch(partCategoriesActions.fetch());
@@ -64,7 +68,8 @@ const mapDispatchToProps = dispatch => {
         updateItem: (itemId, item) => dispatch(partActions.update(itemId, item)),
         setEditStatus: status => dispatch(partActions.setEditStatus(status)),
         setSnackbarVisible: () => dispatch(partActions.setSnackbarVisible()),
-        fetchNominal: name => dispatch(nominalActions.fetch(name))
+        fetchNominal: name => dispatch(nominalActions.fetch(name)),
+        fetchLiveTest: itemId => dispatch(partLiveTestActions.fetch(itemId))
     };
 };
 

@@ -56,14 +56,19 @@
 
         protected IPartService PartsDomainService { get; private set; }
 
-        protected IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> 
-            partTemplateService { get; private set; }
+        protected IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> PartTemplateService
+        {
+            get; private set;
+        }
+
+        protected IPartLiveService PartLiveService;
 
         [SetUp]
         public void EstablishContext()
         {
             this.PartsFacadeService = Substitute
                 .For<IFacadeService<Part, int, PartResource, PartResource>>();
+            this.PartLiveService = Substitute.For<IPartLiveService>();
             this.PartsDomainService = Substitute.For<IPartService>();
             this.PartCategoriesService = Substitute.For<IPartCategoryService>();
             this.UnitsOfMeasureService = Substitute.For<IUnitsOfMeasureService>();
@@ -76,11 +81,12 @@
                 .For<IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource>>();
             this.AssemblyTechnologyService = Substitute
                 .For<IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>>();
-            this.partTemplateService = Substitute
+            this.PartTemplateService = Substitute
                 .For<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
+                        with.Dependency(this.PartLiveService);
                         with.Dependency(this.PartsFacadeService);
                         with.Dependency(this.UnitsOfMeasureService);
                         with.Dependency(this.PartCategoriesService);
@@ -92,7 +98,7 @@
                         with.Dependency(this.AssemblyTechnologyService);
                         with.Dependency(this.DecrementRuleService);
                         with.Dependency(this.PartsDomainService);
-                        with.Dependency(this.partTemplateService);
+                        with.Dependency(this.PartTemplateService);
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());
                         with.Dependency<IResourceBuilder<PartTemplate>>(new PartTemplateResourceBuilder());
@@ -111,6 +117,8 @@
                         with.Dependency<IResourceBuilder<DecrementRule>>(new DecrementRuleResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<DecrementRule>>>(
                             new DecrementRulesResourceBuilder());
+                        with.Dependency<IResourceBuilder<PartLiveTest>>(
+                            new PartLiveTestResourceBuilder());
                         with.ResponseProcessor<PartResponseProcessor>();
                         with.ResponseProcessor<PartsResponseProcessor>();
                         with.ResponseProcessor<UnitsOfMeasureResponseProcessor>();
@@ -119,6 +127,7 @@
                         with.ResponseProcessor<DecrementRulesResponseProcessor>();
                         with.ResponseProcessor<ProductAnalysisCodesResponseProcessor>();
                         with.ResponseProcessor<PartTemplatesResponseProcessor>();
+                        with.ResponseProcessor<PartLiveTestResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
                                 {
