@@ -56,6 +56,10 @@
         public DbSet<QcControl> QcControl { get; set; }
 
         public DbSet<PartTemplate> PartTemplates { get; set; }
+
+        public DbSet<PartDataSheet> PartDataSheets { get; set; }
+
+        public DbSet<MechPartSource> MechPartSources { get; set; }
         
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -79,6 +83,8 @@
             this.BuildAssemblyTechnologies(builder);
             this.BuildQcControl(builder);
             this.BuildPartTemplates(builder);
+            this.BuildPartDataSheets(builder);
+            this.BuildMechPartSources(builder);
             base.OnModelCreating(builder);
         }
 
@@ -205,6 +211,36 @@
             e.HasOne(p => p.SernosSequence).WithMany(s => s.Parts).HasForeignKey("SERNOS_SEQUENCE");
             e.HasOne(p => p.AssemblyTechnology).WithMany(s => s.Parts).HasForeignKey("ASSEMBLY_TECHNOLOGY");
             e.HasOne(p => p.DecrementRule).WithMany(s => s.Parts).HasForeignKey("DECREMENT_RULE");
+            e.HasMany(p => p.DataSheets).WithOne(d => d.Part).HasForeignKey("PART_NUMBER");
+        }
+
+        private void BuildPartDataSheets(ModelBuilder builder)
+        {
+            var e = builder.Entity<PartDataSheet>().ToTable("PART_DATASHEETS");
+            e.HasKey(d => new { d.Sequence, d.PartNumber });
+            e.Property(d => d.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            e.Property(d => d.Sequence).HasColumnName("SEQ").HasMaxLength(4);
+            e.Property(d => d.PdfFilePath).HasColumnName("PDF_FILE_PATH").HasMaxLength(1000);
+        }
+
+        private void BuildMechPartSources(ModelBuilder builder)
+        {
+            var e = builder.Entity<MechPartSource>().ToTable("MECH_PART_SOURCES");
+            e.HasKey(s => s.Id);
+            e.Property(s => s.Id).HasColumnName("MS_ID").HasMaxLength(8);
+            e.HasOne<Employee>(s => s.ProposedBy).WithMany(m => m.SourcesProposed).HasForeignKey("PROPOSED_BY");
+            e.Property(s => s.DateEntered).HasColumnName("DATE_ENTERED");
+            e.HasOne<Part>(s => s.Part).WithOne(p => p.MechPartSource).HasForeignKey("PART_NUMBER");
+            e.Property(s => s.MechanicalOrElectrical).HasColumnName("MECH_ELEC_PART").HasMaxLength(1);
+            e.Property(s => s.PartType).HasColumnName("PART_TYPE").HasMaxLength(14);
+            e.Property(s => s.EstimatedVolume).HasColumnName("ESTIMATED_VOLUME");
+            e.Property(s => s.SamplesRequired).HasColumnName("SAMPLES_REQUIRED").HasMaxLength(1);
+            e.Property(s => s.SampleQuantity).HasColumnName("SAMPLE_QUANTITY");
+            e.Property(s => s.DateSamplesRequired).HasColumnName("DATE_SAMPLES_REQUIRED");
+            e.Property(s => s.RohsReplace).HasColumnName("ROHS_REPLACE").HasMaxLength(1);
+            e.Property(s => s.LinnPartNumber).HasColumnName("LINN_PART_NUMBER").HasMaxLength(14);
+            e.Property(s => s.Notes).HasColumnName("NOTES").HasMaxLength(2000);
+            e.Property(s => s.AssemblyType).HasColumnName("ASSEMBLY_TYPE").HasMaxLength(4);
         }
 
         private void BuildPartTemplates(ModelBuilder builder)

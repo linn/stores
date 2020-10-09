@@ -1,6 +1,8 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Parts
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
 
     public class Part
     {
@@ -133,5 +135,9 @@
         public AssemblyTechnology AssemblyTechnology { get; set; }
 
         public DecrementRule DecrementRule { get; set; }
+
+        public IEnumerable<PartDataSheet> DataSheets { get; set; }
+
+        public MechPartSource MechPartSource { get; set; }
     }
 }

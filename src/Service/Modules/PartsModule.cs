@@ -1,6 +1,9 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System.Linq;
+
     using Linn.Common.Facade;
+    using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
@@ -37,6 +40,8 @@
 
         private readonly IPartLiveService partLiveService;
 
+        private IRepository<MechPartSource, MechPartSourceKey> temp;
+
         public PartsModule(
             IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
@@ -46,7 +51,8 @@
             IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource> decrementRuleService,
             IPartService partDomainService,
             IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> partTemplateService,
-            IPartLiveService partLiveService)
+            IPartLiveService partLiveService,
+            IRepository<MechPartSource, MechPartSourceKey> temp)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
@@ -77,10 +83,13 @@
 
             this.partLiveService = partLiveService;
             this.Get("inventory/parts/can-be-made-live/{id}", parameters => this.CheckCanBeMadeLive(parameters.id));
+
+            this.temp = temp;
         }
 
         private object GetPart(int id)
         {
+            var x = this.temp.FindAll().ToList();
             var results = this.partsFacadeService.GetById(id);
             return this.Negotiate
                 .WithModel(results)
