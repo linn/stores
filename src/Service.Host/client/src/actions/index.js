@@ -15,6 +15,10 @@ export const rootProductsActionTypes = makeActionTypes(itemTypes.rootProducts.ac
 
 export const partCategoriesActionTypes = makeActionTypes(itemTypes.partCategories.actionType);
 
+export const partTemplatesActionTypes = makeActionTypes(itemTypes.partTemplates.actionType);
+
+export const partLiveTestActionTypes = makeActionTypes(itemTypes.partLiveTest.actionType);
+
 export const suppliersActionTypes = makeActionTypes(itemTypes.suppliers.actionType);
 
 export const sernosSequencesActionTypes = makeActionTypes(itemTypes.sernosSequences.actionType);
@@ -36,3 +40,9 @@ export const assemblyTechnologiesActionTypes = makeActionTypes(
 );
 
 export const wwdReportActionTypes = makeReportActionTypes(reportTypes.wwdReport.actionType);
+
+export const stockPoolsActionTypes = makeActionTypes(itemTypes.stockPools.actionType);
+
+export const despatchLocationsActionTypes = makeActionTypes(itemTypes.despatchLocations.actionType);
+
+export const countriesActionTypes = makeActionTypes(itemTypes.countries.actionType);

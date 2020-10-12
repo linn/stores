@@ -19,7 +19,7 @@ const mapStateToProps = (state, ownProps) => ({
         .getSearchItems(state)
         .map(c => ({ name: c.departmentCode, description: c.description })),
     departmentsSearchLoading: departmentsSelectors.getSearchLoading(state),
-    partCategoris: partCategoriesSelectors.getItems(state),
+    partCategories: partCategoriesSelectors.getItems(state),
     rootProducts: rootProductsSelectors.getItems(state),
     sernosSequences: sernosSequencesSelectors.getItems(state),
     suppliers: suppliersSelectors.getItems(state),

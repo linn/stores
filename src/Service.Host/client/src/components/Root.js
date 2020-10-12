@@ -15,7 +15,6 @@ import userManager from '../helpers/userManager';
 import 'typeface-roboto';
 import Part from '../containers/parts/Part';
 import Parts from '../containers/parts/Parts';
-import CreatePart from '../containers/parts/CreatePart';
 import StartAllocation from '../containers/allocations/StartAllocation';
 import WwdReportOptions from '../containers/reports/WwdReportOptions';
 import WwdReport from '../containers/reports/WwdReport';
@@ -51,11 +50,7 @@ const Root = ({ store }) => (
                                     />
 
                                     <Route exact path="/inventory/parts" component={Parts} />
-                                    <Route
-                                        exact
-                                        path="/inventory/parts/create"
-                                        component={CreatePart}
-                                    />
+                                    <Route exact path="/inventory/parts/create" component={Part} />
                                     <Route exact path="/inventory/parts/:id" component={Part} />
 
                                     <Route

@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.IoC
 {
+    using System.Collections.Immutable;
+
     using Autofac;
 
     using Linn.Common.Persistence;
@@ -42,6 +44,9 @@
             builder.RegisterType<ChangeRequestRepository>().As<IQueryRepository<ChangeRequest>>();
             builder.RegisterType<WwdWorkRepository>().As<IQueryRepository<WwdWork>>();
             builder.RegisterType<WwdWorkDetailsRepository>().As<IQueryRepository<WwdWorkDetail>>();
+            builder.RegisterType<CountryRepository>().As<IRepository<Country, string>>();
+            builder.RegisterType<QcControlRepository>().As<IRepository<QcControl, int>>();
+            builder.RegisterType<PartTemplateRepository>().As<IRepository<PartTemplate, string>>();
         }
     }
 }

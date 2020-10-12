@@ -59,6 +59,12 @@
 
         public DbQuery<WwdWorkDetail> WwdWorkDetails { get; set; }
 
+        public DbSet<Country> Countries { get; set; }
+
+        public DbSet<QcControl> QcControl { get; set; }
+
+        public DbSet<PartTemplate> PartTemplates { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -82,6 +88,9 @@
             this.QueryChangeRequests(builder);
             this.QueryWwdWorks(builder);
             this.QueryWwdWorkDetails(builder);
+            this.BuildCountries(builder);
+            this.BuildQcControl(builder);
+            this.BuildPartTemplates(builder);
             base.OnModelCreating(builder);
         }
 
@@ -108,6 +117,18 @@
             q.Property(c => c.Name).HasColumnName("ACCOUNTING_COMPANY");
             q.Property(c => c.DateInvalid).HasColumnName("DATE_INVALID");
             q.Property(c => c.Description).HasColumnName("DESCRIPTION");
+        }
+
+        private void BuildCountries(ModelBuilder builder)
+        {
+            builder.Entity<Country>().ToTable("COUNTRIES");
+            builder.Entity<Country>().HasKey(c => c.CountryCode);
+            builder.Entity<Country>().Property(c => c.CountryCode).HasColumnName("COUNTRY_CODE").HasMaxLength(2);
+            builder.Entity<Country>().Property(c => c.Name).HasColumnName("NAME").HasMaxLength(50);
+            builder.Entity<Country>().Property(c => c.DisplayName).HasColumnName("DISPLAY_NAME").HasMaxLength(50);
+            builder.Entity<Country>().Property(c => c.TradeCurrency).HasColumnName("TRADE_CURRENCY").HasMaxLength(4);
+            builder.Entity<Country>().Property(c => c.ECMember).HasColumnName("EEC_MEMBER").HasMaxLength(1);
+            builder.Entity<Country>().Property(c => c.DateInvalid).HasColumnName("DATE_INVALID");
         }
 
         private void BuildEmployees(ModelBuilder builder)
@@ -210,6 +231,39 @@
             e.HasOne(p => p.DecrementRule).WithMany(s => s.Parts).HasForeignKey("DECREMENT_RULE");
         }
 
+        private void BuildPartTemplates(ModelBuilder builder)
+        {
+            var e = builder.Entity<PartTemplate>().ToTable("PART_NUMBER_TEMPLATES");
+            e.HasKey(p => p.PartRoot);
+            e.Property(p => p.PartRoot).HasColumnName("PART_ROOT").HasMaxLength(14);
+            e.Property(p => p.Description).HasColumnName("DESCRIPTION").HasMaxLength(200);
+            e.Property(p => p.StockControlled).HasColumnName("STOCK_CONTROLLED").HasMaxLength(1);
+            e.Property(p => p.LinnProduced).HasColumnName("LINN_PRODUCED").HasMaxLength(1);
+            e.Property(p => p.BomType).HasColumnName("BOM_TYPE").HasMaxLength(1);
+            e.Property(p => p.ParetoCode).HasColumnName("PARETO_CODE").HasMaxLength(2);
+            e.Property(p => p.AssemblyTechnology).HasColumnName("ASSEMBLY_TECHNOLOGY");
+            e.Property(p => p.HasDataSheet).HasColumnName("HAS_DATASHEET").HasMaxLength(1);
+            e.Property(p => p.HasNumberSequence).HasColumnName("NUMBER_SEQUENCE").HasMaxLength(1);
+            e.Property(p => p.NextNumber).HasColumnName("NEXT_NUMBER");
+            e.Property(p => p.ProductCode).HasColumnName("PRODUCT_CODE").HasMaxLength(10);
+            e.Property(p => p.AllowPartCreation).HasColumnName("ALLOW_PART_CREATION").HasMaxLength(1);
+            e.Property(p => p.AccountingCompany).HasColumnName("ACCOUNTING_COMPANY");
+        }
+
+        private void BuildQcControl(ModelBuilder builder)
+        {
+            var e = builder.Entity<QcControl>().ToTable("QC_CONTROL");
+            e.HasKey(q => q.Id);
+            e.Property(q => q.Id).HasColumnName("QC_CONTROL_ID");
+            e.Property(q => q.PartNumber).HasColumnName("PART_NUMBER");
+            e.Property(q => q.ChangedBy).HasColumnName("CHANGED_BY");
+            e.Property(q => q.NumberOfBookIns).HasColumnName("NUMBER_OF_BOOKINS");
+            e.Property(q => q.NumberOfBookInsDone).HasColumnName("NUMBER_OF_BOOKINS_DONE");
+            e.Property(q => q.OnOrOffQc).HasColumnName("ON_OR_OFF_QC");
+            e.Property(q => q.Reason).HasColumnName("REASON");
+            e.Property(q => q.TransactionDate).HasColumnName("TRANSACTION_DATE");
+        }
+
         private void BuildParetoClasses(ModelBuilder builder)
         {
             var e = builder.Entity<ParetoClass>().ToTable("PARETO_CLASSES");
@@ -260,7 +314,7 @@
             q.Property(p => p.Description).HasColumnName("DESCRIPTION");
             q.Property(p => p.DateInvalid).HasColumnName("DATE_INVALID");
         }
-        
+
         private void BuildSosOptions(ModelBuilder builder)
         {
             var e = builder.Entity<SosOption>().ToTable("SOS_OPTIONS");
@@ -270,6 +324,8 @@
             e.Property(p => p.AccountId).HasColumnName("ACCOUNT_ID");
             e.Property(p => p.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
             e.Property(p => p.DespatchLocationCode).HasColumnName("DESPATCH_LOCATION_CODE").HasMaxLength(10);
+            e.Property(p => p.AccountingCompany).HasColumnName("ACCOUNTING_COMPANY").HasMaxLength(10);
+            e.Property(p => p.CutOffDate).HasColumnName("CUT_OFF_DATE");
         }
 
         private void BuildSernosSequences(ModelBuilder builder)

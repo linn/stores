@@ -1,14 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import {
-    InputField,
-    Dropdown,
-    DatePicker,
-    LinkButton
-} from '@linn-it/linn-form-components-library';
+import { InputField, Dropdown, DatePicker } from '@linn-it/linn-form-components-library';
 import { Button } from '@material-ui/core';
 import makeStyles from '@material-ui/styles/makeStyles';
+import LiveDialog from './LiveDialog';
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -19,6 +15,7 @@ const useStyles = makeStyles(theme => ({
 function LifeCycleTab({
     handleFieldChange,
     dateCreated,
+    editStatus,
     createdByName,
     dateLive,
     madeLiveByName,
@@ -29,11 +26,21 @@ function LifeCycleTab({
     datePhasedOut,
     dateDesignObsolete,
     canPhaseOut,
-    handlePhaseOutClick
+    handlePhaseOutClick,
+    handleChangeLiveness,
+    liveTest
 }) {
     const classes = useStyles();
+    const [dialogOpen, setDialogOpen] = useState(false);
     return (
         <Grid container spacing={3}>
+            <LiveDialog
+                open={dialogOpen}
+                onClose={() => setDialogOpen(false)}
+                liveTest={liveTest}
+                dateLive={dateLive}
+                handleChangeLiveness={handleChangeLiveness}
+            />
             <Grid item xs={3}>
                 <DatePicker
                     label="Date Created"
@@ -76,12 +83,22 @@ function LifeCycleTab({
                 />
             </Grid>
             <Grid item xs={3}>
-                <LinkButton
-                    to="/inventory/parts/make-live"
-                    text="Make Live"
-                    tooltip="Coming soon - still on Oracle Forms"
-                    disabled
-                />
+                {canPhaseOut && dateLive && (
+                    <Button
+                        className={classes.button}
+                        disabled={editStatus === 'create'}
+                        variant="outlined"
+                        color="secondary"
+                        onClick={handleChangeLiveness}
+                    >
+                        MAKE NON-LIVE
+                    </Button>
+                )}
+                {canPhaseOut && !dateLive && (
+                    <Button className={classes.button} onClick={setDialogOpen} variant="outlined">
+                        MAKE LIVE
+                    </Button>
+                )}
             </Grid>
             <Grid item xs={3} />
             <Grid item xs={3}>
@@ -109,7 +126,7 @@ function LifeCycleTab({
                 {canPhaseOut && !datePhasedOut && (
                     <Button
                         className={classes.button}
-                        disabled={!reasonPhasedOut}
+                        disabled={editStatus === 'create' || !reasonPhasedOut}
                         variant="outlined"
                         color="secondary"
                         onClick={handlePhaseOutClick}
@@ -178,7 +195,10 @@ LifeCycleTab.propTypes = {
     purchasingPhaseOutType: PropTypes.string,
     datePhasedOut: PropTypes.string,
     dateDesignObsolete: PropTypes.string,
-    canPhaseOut: PropTypes.bool
+    canPhaseOut: PropTypes.bool,
+    editStatus: PropTypes.string.isRequired,
+    liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
+    handleChangeLiveness: PropTypes.func.isRequired
 };
 
 LifeCycleTab.defaultProps = {
@@ -192,7 +212,8 @@ LifeCycleTab.defaultProps = {
     purchasingPhaseOutType: null,
     datePhasedOut: null,
     dateDesignObsolete: null,
-    canPhaseOut: false
+    canPhaseOut: false,
+    liveTest: null
 };
 
 export default LifeCycleTab;

@@ -3,17 +3,15 @@
     using System.Collections.Generic;
 
     using FluentAssertions;
-    using FluentAssertions.Extensions;
 
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Parts;
-    using Linn.Stores.Domain.LinnApps.Sos;
 
     using NSubstitute;
 
     using NUnit.Framework;
 
-    public class WhenAddingPartAndUserDoesNotHavePrivileges : ContextBase
+    public class WhenCreatingAndUserDoesNotHavePrivileges : ContextBase
     {
         private Part part;
 
@@ -31,7 +29,7 @@
         [Test]
         public void ShouldThrowException()
         {
-            var ex = Assert.Throws<UpdatePartException>(() => this.Sut.CreatePart(this.part, this.privileges));
+            var ex = Assert.Throws<CreatePartException>(() => this.Sut.CreatePart(this.part, this.privileges));
             ex.Message.Should().Be("You are not authorised to create parts.");
         }
     }
