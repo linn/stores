@@ -53,6 +53,12 @@
 
         public DbSet<AssemblyTechnology> AssemblyTechnologies { get; set; }
 
+        public DbQuery<ChangeRequest> ChangeRequests { get; set; }
+
+        public DbQuery<WwdWork> WwdWorks { get; set; }
+
+        public DbQuery<WwdWorkDetail> WwdWorkDetails { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -73,6 +79,9 @@
             this.BuildStockPools(builder);
             this.BuildDecrementRules(builder);
             this.BuildAssemblyTechnologies(builder);
+            this.QueryChangeRequests(builder);
+            this.QueryWwdWorks(builder);
+            this.QueryWwdWorkDetails(builder);
             base.OnModelCreating(builder);
         }
 
@@ -328,6 +337,41 @@
             q.Property(e => e.AccountingCompany).HasColumnName("ACCOUNTING_COMPANY").HasMaxLength(10);
             q.Property(e => e.StockCategory).HasColumnName("STOCK_CATEGORY").HasMaxLength(1);
             q.Property(e => e.DefaultLocation).HasColumnName("DEFAULT_LOCATION");
+        }
+
+        private void QueryChangeRequests(ModelBuilder builder)
+        {
+            var q = builder.Query<ChangeRequest>();
+            q.ToView("CHANGE_REQUESTS");
+            q.Property(e => e.ChangeState).HasColumnName("CHANGE_STATE");
+            q.Property(e => e.DocumentNumber).HasColumnName("DOCUMENT_NUMBER");
+            q.Property(e => e.NewPartNumber).HasColumnName("NEW_PART_NUMBER");
+            q.Property(e => e.OldPartNumber).HasColumnName("OLD_PART_NUMBER");
+        }
+
+        private void QueryWwdWorkDetails(ModelBuilder builder)
+        {
+            var q = builder.Query<WwdWorkDetail>();
+            q.ToView("WWD_WORK_DETAILS");
+            q.Property(e => e.LocationGroup).HasColumnName("LOCATION_GROUP");
+            q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER");
+            q.Property(e => e.Quantity).HasColumnName("QTY");
+            q.Property(e => e.State).HasColumnName("STATE");
+            q.Property(e => e.JobId).HasColumnName("JOB_ID");
+        }
+
+        private void QueryWwdWorks(ModelBuilder builder)
+        {
+            var q = builder.Query<WwdWork>();
+            q.ToView("WWD_WORK");
+            q.Property(e => e.JobId).HasColumnName("JOB_ID");
+            q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER");
+            q.Property(e => e.QuantityKitted).HasColumnName("QTY_KITTED");
+            q.Property(e => e.QuantityAtLocation).HasColumnName("QTY_AT_LOCATION");
+            q.Property(e => e.StoragePlace).HasColumnName("STORAGE_PLACE");
+            q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
+            q.Property(e => e.Remarks).HasColumnName("REMARKS");
         }
     }
 }

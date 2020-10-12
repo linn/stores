@@ -1,5 +1,6 @@
-import { makeActionTypes } from '@linn-it/linn-form-components-library';
+import { makeActionTypes, makeReportActionTypes } from '@linn-it/linn-form-components-library';
 import * as itemTypes from '../itemTypes';
+import * as reportTypes from '../reportTypes';
 
 export const partActionTypes = makeActionTypes(itemTypes.part.actionType);
 export const partsActionTypes = makeActionTypes(itemTypes.parts.actionType, false);
@@ -33,3 +34,5 @@ export const decrementRulesActionTypes = makeActionTypes(itemTypes.decrementRule
 export const assemblyTechnologiesActionTypes = makeActionTypes(
     itemTypes.assemblyTechnologies.actionType
 );
+
+export const wwdReportActionTypes = makeReportActionTypes(reportTypes.wwdReport.actionType);

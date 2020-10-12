@@ -18,6 +18,7 @@ import sernosSequences from './sernosSequences';
 import suppliers from './suppliers';
 import unitsOfMeasure from './unitsOfMeasure';
 import allocation from './allocation';
+import wwdReport from './wwdReport';
 import * as itemTypes from '../itemTypes';
 
 const errors = fetchErrorReducer({ ...itemTypes });
@@ -38,6 +39,7 @@ const rootReducer = combineReducers({
     sernosSequences,
     suppliers,
     unitsOfMeasure,
+    wwdReport,
     ...sharedLibraryReducers,
     errors
 });

@@ -17,6 +17,8 @@ import Part from '../containers/parts/Part';
 import Parts from '../containers/parts/Parts';
 import CreatePart from '../containers/parts/CreatePart';
 import StartAllocation from '../containers/allocations/StartAllocation';
+import WwdReportOptions from '../containers/reports/WwdReportOptions';
+import WwdReport from '../containers/reports/WwdReport';
 
 const Root = ({ store }) => (
     <div>
@@ -60,6 +62,17 @@ const Root = ({ store }) => (
                                         exact
                                         path="/logistics/allocations"
                                         component={StartAllocation}
+                                    />
+
+                                    <Route
+                                        exact
+                                        path="/inventory/reports/what-will-decrement/report"
+                                        component={WwdReport}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/reports/what-will-decrement"
+                                        component={WwdReportOptions}
                                     />
                                 </Switch>
                             </div>
