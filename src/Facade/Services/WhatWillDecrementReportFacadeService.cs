@@ -19,7 +19,6 @@
             string typeOfRun,
             string workstationCode)
         {
-            // TODO test and ioc
             return new SuccessResult<ResultsModel>(
                 this.whatWillDecrementReportService.WhatWillDecrementReport(
                     partNumber,

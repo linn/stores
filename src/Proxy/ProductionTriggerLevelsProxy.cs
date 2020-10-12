@@ -23,13 +23,8 @@
 
         public string GetWorkStationCode(string partNumber)
         {
-            // http://localhost:51690/
-            // var uri = new Uri(
-            // $"{this.rootUri}/production/maintenance/production-trigger-levels/{partNumber}",
-            //     UriKind.RelativeOrAbsolute);
-
             var uri = new Uri(
-                $"http://localhost:51690/production/maintenance/production-trigger-levels/{partNumber}",
+            $"{this.rootUri}/production/maintenance/production-trigger-levels/{partNumber}",
                 UriKind.RelativeOrAbsolute);
 
             var response = this.restClient.Get(
