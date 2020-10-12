@@ -18,7 +18,7 @@ export default function WwdReport({ reportData, loading, error, options }) {
                     <Typography variant="subtitle2">{`What Will Decrement Report - Part Number: ${
                         options.partNumber
                     }, Quantity: ${options.quantity}, Type of Run: ${options.typeOfRun}${
-                        options.workStationCode ? options.wortkStationCode : ''
+                        options.workStationCode ? options.workStationCode : ''
                     }`}</Typography>
                 </Grid>
                 <Grid item xs={12}>
@@ -44,7 +44,12 @@ WwdReport.propTypes = {
     reportData: PropTypes.shape({}),
     loading: PropTypes.bool,
     error: PropTypes.string,
-    options: PropTypes.shape({})
+    options: PropTypes.shape({
+        partNumber: PropTypes.string,
+        quantity: PropTypes.number,
+        workStationCode: PropTypes.string,
+        typeOfRun: PropTypes.string
+    })
 };
 
 WwdReport.defaultProps = {
