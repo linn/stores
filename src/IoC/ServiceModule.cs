@@ -3,11 +3,15 @@
     using Autofac;
 
     using Linn.Common.Authorisation;
+    using Linn.Common.Configuration;
     using Linn.Common.Facade;
+    using Linn.Common.Proxy;
+    using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Reports;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
@@ -20,10 +24,11 @@
         {
             // domain services
             builder.RegisterType<AuthorisationService>().As<IAuthorisationService>();
-
+            builder.RegisterType<ReportingHelper>().As<IReportingHelper>();
             builder.RegisterType<AllocationService>().As<IAllocationService>();
             builder.RegisterType<PartService>().As<IPartService>();
-
+            builder.RegisterType<WhatWillDecrementReportService>().As<IWhatWillDecrementReportService>();
+            
             // facade services
             builder.RegisterType<PartFacadeService>()
                 .As<IFacadeService<Part, int, PartResource, PartResource>>();
@@ -46,16 +51,24 @@
                 .As<IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>>();
             builder.RegisterType<DecrementRuleService>()
                 .As<IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource>>();
+            builder.RegisterType<WhatWillDecrementReportFacadeService>().As<IWhatWillDecrementReportFacadeService>();
             builder.RegisterType<CountryFacadeService>()
                 .As<IFacadeService<Country, string, CountryResource, CountryResource>>();
             builder.RegisterType<PartTemplateService>()
                 .As<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
             builder.RegisterType<PartLiveService>().As<IPartLiveService>();
 
-            // proxy
+            // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
             builder.RegisterType<PartPack>().As<IPartPack>();
             builder.RegisterType<DatabaseService>().As<IDatabaseService>();
+            builder.RegisterType<WwdPack>().As<IWwdPack>();
+
+            // rest client proxies
+            builder.RegisterType<RestClient>().As<IRestClient>();
+            builder.RegisterType<ProductionTriggerLevelsProxy>().As<IProductionTriggerLevelsService>().WithParameter(
+                "rootUri",
+                ConfigurationManager.Configuration["PROXY_ROOT"]);
         }
     }
 }

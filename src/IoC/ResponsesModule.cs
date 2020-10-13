@@ -6,6 +6,7 @@
     using Autofac;
 
     using Linn.Common.Facade;
+    using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
@@ -65,6 +66,7 @@
                 .As<IResourceBuilder<DecrementRule>>();
             builder.RegisterType<DecrementRulesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<DecrementRule>>>();
+            builder.RegisterType<ResultsModelResourceBuilder>().As<IResourceBuilder<ResultsModel>>();
             builder.RegisterType<CountryResourceBuilder>().As<IResourceBuilder<Country>>();
             builder.RegisterType<CountriesResourceBuilder>().As<IResourceBuilder<IEnumerable<Country>>>();
             builder.RegisterType<PartTemplateResourceBuilder>().As<IResourceBuilder<PartTemplate>>();

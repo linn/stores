@@ -20,6 +20,7 @@ import sernosSequences from './sernosSequences';
 import suppliers from './suppliers';
 import unitsOfMeasure from './unitsOfMeasure';
 import allocation from './allocation';
+import wwdReport from './wwdReport';
 import * as itemTypes from '../itemTypes';
 import stockPools from './stockPools';
 import despatchLocations from './despatchLocations';
@@ -48,6 +49,7 @@ const rootReducer = combineReducers({
     stockPools,
     suppliers,
     unitsOfMeasure,
+    wwdReport,
     ...sharedLibraryReducers,
     errors
 });

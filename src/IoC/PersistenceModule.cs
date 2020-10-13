@@ -41,6 +41,9 @@
             builder.RegisterType<StockPoolRepository>().As<IRepository<StockPool, int>>();
             builder.RegisterType<AssemblyTechnologyRepository>().As<IRepository<AssemblyTechnology, string>>();
             builder.RegisterType<DecrementRuleRepository>().As<IRepository<DecrementRule, string>>();
+            builder.RegisterType<ChangeRequestRepository>().As<IQueryRepository<ChangeRequest>>();
+            builder.RegisterType<WwdWorkRepository>().As<IQueryRepository<WwdWork>>();
+            builder.RegisterType<WwdWorkDetailsRepository>().As<IQueryRepository<WwdWorkDetail>>();
             builder.RegisterType<CountryRepository>().As<IRepository<Country, string>>();
             builder.RegisterType<QcControlRepository>().As<IRepository<QcControl, int>>();
             builder.RegisterType<PartTemplateRepository>().As<IRepository<PartTemplate, string>>();
