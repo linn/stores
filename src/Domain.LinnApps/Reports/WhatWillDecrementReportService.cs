@@ -125,7 +125,7 @@
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = wwdWork.PartNumber, Quantity = wwdWork.QuantityKitted, ColumnId = "Qty Kitted"
+                            RowId = wwdWork.PartNumber, Quantity = wwdWork.QuantityKitted ?? 0, ColumnId = "Qty Kitted"
                         });
                 values.Add(
                     new CalculationValueModel
@@ -138,7 +138,7 @@
                     new CalculationValueModel
                         {
                             RowId = wwdWork.PartNumber,
-                            Quantity = wwdWork.QuantityAtLocation,
+                            Quantity = wwdWork.QuantityAtLocation ?? 0,
                             ColumnId = "Qty at Work Station"
                         });
                 values.Add(

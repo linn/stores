@@ -6,15 +6,15 @@
 
         public string PartNumber { get; set; }
 
-        public int QuantityKitted { get; set; }
+        public int? QuantityKitted { get; set; }
 
-        public int QuantityAtLocation { get; set; }
+        public int? QuantityAtLocation { get; set; }
 
         public string StoragePlace { get; set; }
 
-        public int PalletNumber { get; set; }
+        public int? PalletNumber { get; set; }
 
-        public int LocationId { get; set; }
+        public int? LocationId { get; set; }
 
         public string Remarks { get; set; }
     }
