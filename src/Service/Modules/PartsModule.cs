@@ -1,6 +1,9 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System.Linq;
+
     using Linn.Common.Facade;
+    using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;

@@ -11,11 +11,10 @@
     using Linn.Stores.Domain.LinnApps.Parts;
 
     using NSubstitute;
-    using NSubstitute.ReturnsExtensions;
 
     using NUnit.Framework;
 
-    public class WhenCreatingAndPartNumberAlreadyInUse : ContextBase
+    public class WhenCreatingFromTemplateAndPartNumberAlreadyInUse : ContextBase
     {
         private Part part;
 
@@ -35,12 +34,12 @@
                              {
                                  new Part
                                      {
-                                         PartNumber = "PART"
+                                         PartNumber = "CAP 431"
                                      }
                              }.AsQueryable());
             this.PartRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>()).Returns(new Part());
-            this.TemplateRepository.FindById(Arg.Any<string>()).ReturnsNull();
-            this.PartPack.PartRoot(Arg.Any<string>()).Returns("PART");
+            this.TemplateRepository.FindById(Arg.Any<string>()).Returns(new PartTemplate());
+            this.PartPack.PartRoot(Arg.Any<string>()).Returns("ROOT");
             this.result = Assert.Throws<CreatePartException>(() => this.Sut.CreatePart(this.part, this.privileges));
         }
 
@@ -48,8 +47,13 @@
         public void ShouldThrowException()
         {
             this.result.Should().BeOfType<CreatePartException>();
+        }
+
+        [Test]
+        public void ShouldSuggestValidNextNumber()
+        {
             this.result.Message.Should()
-                .Be("A Part with that Part Number already exists.");
+                .Be("A Part with that Part Number already exists. Why not try 432");
         }
     }
 }
