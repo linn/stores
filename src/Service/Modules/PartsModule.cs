@@ -40,8 +40,6 @@
 
         private readonly IPartLiveService partLiveService;
 
-        private IRepository<MechPartSource, MechPartSourceKey> temp;
-
         public PartsModule(
             IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
@@ -51,8 +49,7 @@
             IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource> decrementRuleService,
             IPartService partDomainService,
             IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> partTemplateService,
-            IPartLiveService partLiveService,
-            IRepository<MechPartSource, MechPartSourceKey> temp)
+            IPartLiveService partLiveService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
@@ -83,13 +80,10 @@
 
             this.partLiveService = partLiveService;
             this.Get("inventory/parts/can-be-made-live/{id}", parameters => this.CheckCanBeMadeLive(parameters.id));
-
-            this.temp = temp;
         }
 
         private object GetPart(int id)
         {
-            var x = this.temp.FindAll().ToList();
             var results = this.partsFacadeService.GetById(id);
             return this.Negotiate
                 .WithModel(results)
