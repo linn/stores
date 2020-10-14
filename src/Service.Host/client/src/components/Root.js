@@ -18,6 +18,7 @@ import Parts from '../containers/parts/Parts';
 import StartAllocation from '../containers/allocations/StartAllocation';
 import WwdReportOptions from '../containers/reports/WwdReportOptions';
 import WwdReport from '../containers/reports/WwdReport';
+import NotFoundPage from './NotFoundPage';
 
 const Root = ({ store }) => (
     <div>
@@ -69,6 +70,7 @@ const Root = ({ store }) => (
                                         path="/inventory/reports/what-will-decrement"
                                         component={WwdReportOptions}
                                     />
+                                    <Route component={NotFoundPage} />
                                 </Switch>
                             </div>
                         </Router>
