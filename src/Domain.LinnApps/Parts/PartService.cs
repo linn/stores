@@ -139,21 +139,30 @@
                 throw new CreatePartException("You are not authorised to create parts.");
             }
 
+
             var partRoot = this.partPack.PartRoot(partToCreate.PartNumber);
-
-            if (this.templateRepository.FindById(partRoot).AllowPartCreation == "N")
+            
+            if (partRoot != null && this.templateRepository.FindById(partRoot) != null)
             {
-                throw new CreatePartException("The system no longer allows creation of " + partRoot + " parts.");
+                if (this.templateRepository.FindById(partRoot).AllowPartCreation == "N")
+                {
+                    throw new CreatePartException("The system no longer allows creation of " + partRoot + " parts.");
+                }
+
+                var newestPartOfThisType = this.partRepository.FilterBy(p => p.PartNumber.StartsWith(partRoot))
+                    .OrderByDescending(p => p.DateCreated).ToList().FirstOrDefault()
+                    ?.PartNumber;
+                var realNextNumber = FindRealNextNumber(newestPartOfThisType);
+                if (this.partRepository.FindBy(p => p.PartNumber == partToCreate.PartNumber) != null)
+                {
+                    throw new CreatePartException("A Part with that Part Number already exists. Why not try " + realNextNumber);
+                }
+
+                this.templateRepository.FindById(partRoot).NextNumber = realNextNumber + 1;
             }
-
-            var newestPartOfThisType = this.partRepository.FilterBy(p => p.PartNumber.StartsWith(partRoot))
-                .OrderByDescending(p => p.DateCreated).ToList().FirstOrDefault()
-                ?.PartNumber;
-            var realNextNumber = FindRealNextNumber(newestPartOfThisType);
-
-            if (this.partRepository.FindBy(p => p.PartNumber == partToCreate.PartNumber) != null)
+            else if (this.partRepository.FindBy(p => p.PartNumber == partToCreate.PartNumber) != null)
             {
-                throw new CreatePartException("A Part with that Part Number already exists. Why not try " + realNextNumber);
+                throw new CreatePartException("A Part with that Part Number already exists.");
             }
 
             if (partToCreate.StockControlled == "Y" && partToCreate.RailMethod == null)
@@ -170,7 +179,6 @@
 
             Validate(partToCreate);
             
-            this.templateRepository.FindById(partRoot).NextNumber = realNextNumber + 1;
             return partToCreate;
         }
 

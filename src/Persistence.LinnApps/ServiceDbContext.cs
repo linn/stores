@@ -230,7 +230,7 @@
             e.Property(s => s.Id).HasColumnName("MS_ID").HasMaxLength(8);
             e.HasOne<Employee>(s => s.ProposedBy).WithMany(m => m.SourcesProposed).HasForeignKey("PROPOSED_BY");
             e.Property(s => s.DateEntered).HasColumnName("DATE_ENTERED");
-            e.HasOne<Part>(s => s.Part).WithOne(p => p.MechPartSource).HasForeignKey("PART_NUMBER");
+            e.Property(s => s.PartNumber).HasColumnName("PART_NUMBER");
             e.Property(s => s.MechanicalOrElectrical).HasColumnName("MECH_ELEC_PART").HasMaxLength(1);
             e.Property(s => s.PartType).HasColumnName("PART_TYPE").HasMaxLength(14);
             e.Property(s => s.EstimatedVolume).HasColumnName("ESTIMATED_VOLUME");
