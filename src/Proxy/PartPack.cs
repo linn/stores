@@ -36,7 +36,6 @@
                                      Value = partNumber
                                  };
                 cmd.Parameters.Add(arg);
-               
 
                 cmd.ExecuteNonQuery();
                 connection.Close();
