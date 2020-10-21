@@ -39,6 +39,29 @@
             }
         }
 
+        public string GetSosNotes()
+        {
+            using (var connection = this.databaseService.GetConnection())
+            {
+                connection.Open();
+                var cmd = new OracleCommand("alloc_pack.get_sos_notes", connection)
+                              {
+                                  CommandType = CommandType.StoredProcedure
+                              };
+
+                var notes = new OracleParameter(null, OracleDbType.Varchar2)
+                                {
+                                    Direction = ParameterDirection.ReturnValue,
+                                    Size = 4000
+                                };
+                cmd.Parameters.Add(notes);
+
+                cmd.ExecuteNonQuery();
+                connection.Close();
+                return notes.Value.ToString();
+            }
+        }
+
         public int StartAllocation(
             int? jobId,
             string stockPoolCode,

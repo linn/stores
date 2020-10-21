@@ -28,7 +28,10 @@
                 allocationOptionsResource.AccountId,
                 allocationOptionsResource.ArticleNumber,
                 allocationOptionsResource.AccountingCompany,
-                cutOffDate));
+                cutOffDate,
+                allocationOptionsResource.ExcludeUnsuppliableLines,
+                allocationOptionsResource.ExcludeOnHold,
+                allocationOptionsResource.ExcludeOverCreditLimit));
         }
     }
 }
