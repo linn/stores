@@ -1,7 +1,5 @@
 ﻿namespace Linn.Stores.IoC
 {
-    using System.Collections.Immutable;
-
     using Autofac;
 
     using Linn.Common.Persistence;

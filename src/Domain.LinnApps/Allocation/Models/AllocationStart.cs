@@ -8,5 +8,9 @@
         }
 
         public int Id { get; set; }
+
+        public string AllocationNotes { get; set; }
+
+        public string SosNotes { get; set; }
     }
 }
