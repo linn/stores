@@ -72,6 +72,10 @@
             builder.RegisterType<PartTemplateResourceBuilder>().As<IResourceBuilder<PartTemplate>>();
             builder.RegisterType<PartTemplatesResourceBuilder>().As<IResourceBuilder<IEnumerable<PartTemplate>>>();
             builder.RegisterType<PartLiveTestResourceBuilder>().As<IResourceBuilder<PartLiveTest>>();
+            builder.RegisterType<AuditLocationResourceBuilder>().As<IResourceBuilder<AuditLocation>>();
+            builder.RegisterType<AuditLocationsResourceBuilder>().As<IResourceBuilder<IEnumerable<AuditLocation>>>();
+            builder.RegisterType<StoragePlaceResourceBuilder>().As<IResourceBuilder<StoragePlace>>();
+            builder.RegisterType<StoragePlacesResourceBuilder>().As<IResourceBuilder<IEnumerable<StoragePlace>>>();
         }
     }
 }

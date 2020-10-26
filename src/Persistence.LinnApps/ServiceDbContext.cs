@@ -69,6 +69,14 @@
 
         public DbSet<MechPartSource> MechPartSources { get; set; }
         
+        public DbQuery<StockLocator> StockLocators { get; set; }
+
+        public DbQuery<StoragePlace> StoragePlaces { get; set; }
+
+        public DbQuery<StoresBudget> StoresBudgets { get; set; }
+
+        public DbQuery<AuditLocation> AuditLocations { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -97,6 +105,10 @@
             this.BuildPartTemplates(builder);
             this.BuildPartDataSheets(builder);
             this.BuildMechPartSources(builder);
+            this.QueryStockLocators(builder);
+            this.QueryStoragePlaces(builder);
+            this.QueryStoresBudgets(builder);
+            this.QueryAuditLocations(builder);
             base.OnModelCreating(builder);
         }
 
@@ -464,6 +476,42 @@
             q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
             q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
             q.Property(e => e.Remarks).HasColumnName("REMARKS");
+        }
+
+        private void QueryStockLocators(ModelBuilder builder)
+        {
+            var q = builder.Query<StockLocator>();
+            q.ToView("STOCK_LOCATORS");
+            q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER");
+            q.Property(e => e.BudgetId).HasColumnName("BUDGET_ID");
+            q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
+            q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(e => e.Quantity).HasColumnName("QTY");
+            q.Property(e => e.QuantityAllocated).HasColumnName("QTY_ALLOCATED");
+        }
+
+        private void QueryStoragePlaces(ModelBuilder builder)
+        {
+            var q = builder.Query<StoragePlace>();
+            q.ToView("V_STORAGE_PLACES");
+            q.Property(e => e.StoragePlaceDescription).HasColumnName("STORAGE_PLACE_DESCRIPTION");
+            q.Property(e => e.StoragePlaceName).HasColumnName("STORAGE_PLACE_NAME");
+            q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
+            q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
+        }
+
+        private void QueryStoresBudgets(ModelBuilder builder)
+        {
+            var q = builder.Query<StoresBudget>();
+            q.ToView("STORES_BUDGET");
+            q.Property(e => e.BudgetId).HasColumnName("BUDGET_ID");
+        }
+
+        private void QueryAuditLocations(ModelBuilder builder)
+        {
+            var q = builder.Query<AuditLocation>();
+            q.ToView("V_AUDIT_LOCATIONS");
+            q.Property(e => e.StoragePlace).HasColumnName("STORAGE_PLACE");
         }
     }
 }

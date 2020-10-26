@@ -28,7 +28,8 @@
             builder.RegisterType<AllocationService>().As<IAllocationService>();
             builder.RegisterType<PartService>().As<IPartService>();
             builder.RegisterType<WhatWillDecrementReportService>().As<IWhatWillDecrementReportService>();
-            
+            builder.RegisterType<StoragePlaceAuditReportService>().As<IStoragePlaceAuditReportService>();
+
             // facade services
             builder.RegisterType<PartFacadeService>()
                 .As<IFacadeService<Part, int, PartResource, PartResource>>();
@@ -57,6 +58,8 @@
             builder.RegisterType<PartTemplateService>()
                 .As<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
             builder.RegisterType<PartLiveService>().As<IPartLiveService>();
+            builder.RegisterType<StoragePlaceAuditReportFacadeService>().As<IStoragePlaceAuditReportFacadeService>();
+            builder.RegisterType<AuditLocationService>().As<IAuditLocationService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
