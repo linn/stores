@@ -47,6 +47,7 @@
             builder.RegisterType<PartTemplateRepository>().As<IRepository<PartTemplate, string>>();
             builder.RegisterType<MechPartSourcesRepository>()
                 .As<IRepository<MechPartSource, MechPartSourceKey>>();
+            builder.RegisterType<SosAllocHeadRepository>().As<IQueryRepository<SosAllocHead>>();
         }
     }
 }
