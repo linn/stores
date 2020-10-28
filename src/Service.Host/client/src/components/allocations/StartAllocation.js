@@ -35,8 +35,9 @@ function StartAllocation({
         stockPool: 'LINN',
         excludeUnsuppliableLines: true,
         excludeOverCreditLimit: true,
-        excludeOnHold: true
-    });
+        excludeOnHold: true,
+        cutOffDate: new Date().toISOString()
+});
 
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';

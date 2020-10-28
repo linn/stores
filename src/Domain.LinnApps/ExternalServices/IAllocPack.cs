@@ -9,7 +9,6 @@
         string GetSosNotes();
 
         int StartAllocation(
-            int? jobId,
             string stockPoolCode,
             string despatchLocation,
             int? accountId,
@@ -21,6 +20,8 @@
             bool excludeUnsuppliable,
             bool excludeHold,
             bool excludeOverCredit,
-            bool excludeNorthAmerica);
+            bool excludeNorthAmerica,
+            out string notes,
+            out string sosNotes);
     }
 }

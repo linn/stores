@@ -40,24 +40,30 @@
             bool excludeOnHold,
             bool excludeOverCreditLimit)
         {
-            var newId = this.allocPack.StartAllocation(
-                null,
-                stockPoolCode,
-                despatchLocationCode,
-                accountId,
-                null,
-                articleNumber,
-                accountingCompany,
-                cutOffDate,
-                null,
-                true,
-                true,
-                true,
-                false);
+            var results = new AllocationStart
+                              {
+                                  Id = this.allocPack.StartAllocation(
+                                      stockPoolCode,
+                                      despatchLocationCode,
+                                      accountId,
+                                      null,
+                                      articleNumber,
+                                      accountingCompany,
+                                      cutOffDate,
+                                      null,
+                                      true,
+                                      true,
+                                      true,
+                                      false,
+                                      out var notes,
+                                      out var sosNotes),
+                                  SosNotes = sosNotes,
+                                  AllocationNotes = notes
+                              };
 
             this.sosOptionRepository.Add(new SosOption
                                              {
-                                                 JobId = newId,
+                                                 JobId = results.Id,
                                                  ArticleNumber = articleNumber,
                                                  AccountId = accountId,
                                                  DespatchLocationCode = despatchLocationCode,
@@ -68,11 +74,7 @@
 
             this.transactionManager.Commit();
 
-            return new AllocationStart(newId)
-                       {
-                           AllocationNotes = this.allocPack.GetNotes(),
-                           SosNotes = this.allocPack.GetSosNotes()
-                       };
+            return results;
         }
     }
 }
