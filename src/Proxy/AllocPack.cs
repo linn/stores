@@ -63,7 +63,6 @@
         }
 
         public int StartAllocation(
-            int? jobId,
             string stockPoolCode,
             string despatchLocation,
             int? accountId,
@@ -75,7 +74,9 @@
             bool excludeUnsuppliable,
             bool excludeHold,
             bool excludeOverCredit,
-            bool excludeNorthAmerica)
+            bool excludeNorthAmerica,
+            out string notes,
+            out string sosNotes)
         {
             using (var connection = this.databaseService.GetConnection())
             {
@@ -86,105 +87,90 @@
                               };
 
                 var returnJobId = new OracleParameter(null, OracleDbType.Int32)
-                                 {
-                                     Direction = ParameterDirection.ReturnValue
-                                 };
+                                      {
+                                          Direction = ParameterDirection.ReturnValue
+                                      };
                 cmd.Parameters.Add(returnJobId);
 
                 cmd.Parameters.Add(
-                    new OracleParameter("p_job_id", OracleDbType.Int32)
-                        {
-                            Direction = ParameterDirection.Input,
-                            IsNullable = true,
-                            Value = jobId
-                        });
-                cmd.Parameters.Add(
                     new OracleParameter("p_stock_pool_code", OracleDbType.Varchar2)
                         {
-                            Direction = ParameterDirection.Input,
-                            Value = stockPoolCode,
-                            Size = 10
+                            Direction = ParameterDirection.Input, Value = stockPoolCode, Size = 10
                         });
                 cmd.Parameters.Add(
                     new OracleParameter("p_despatch_location", OracleDbType.Varchar2)
                         {
-                            Direction = ParameterDirection.Input,
-                            Value = despatchLocation,
-                            Size = 10
+                            Direction = ParameterDirection.Input, Value = despatchLocation, Size = 10
                         });
                 cmd.Parameters.Add(
                     new OracleParameter("p_account_id", OracleDbType.Int32)
                         {
-                            Direction = ParameterDirection.Input,
-                            IsNullable = true,
-                            Value = accountId
+                            Direction = ParameterDirection.Input, IsNullable = true, Value = accountId
                         });
                 cmd.Parameters.Add(
                     new OracleParameter("p_outlet_number", OracleDbType.Int32)
                         {
-                            Direction = ParameterDirection.Input,
-                            IsNullable = true,
-                            Value = outletNumber
+                            Direction = ParameterDirection.Input, IsNullable = true, Value = outletNumber
                         });
                 cmd.Parameters.Add(
                     new OracleParameter("p_article_number", OracleDbType.Varchar2)
                         {
-                            Direction = ParameterDirection.Input,
-                            Value = articleNumber,
-                            Size = 14
+                            Direction = ParameterDirection.Input, Value = articleNumber, Size = 14
                         });
                 cmd.Parameters.Add(
                     new OracleParameter("p_accounting_company", OracleDbType.Varchar2)
                         {
-                            Direction = ParameterDirection.Input,
-                            Value = accountingCompany,
-                            Size = 10
+                            Direction = ParameterDirection.Input, Value = accountingCompany, Size = 10
                         });
                 cmd.Parameters.Add(
                     new OracleParameter("p_cut_off_date", OracleDbType.Date)
                         {
-                            Direction = ParameterDirection.Input,
-                            Value = cutOffDate,
-                            IsNullable = true
+                            Direction = ParameterDirection.Input, Value = cutOffDate, IsNullable = true
                         });
                 cmd.Parameters.Add(
                     new OracleParameter("p_country_code", OracleDbType.Varchar2)
                         {
-                            Direction = ParameterDirection.Input,
-                            Value = countryCode,
-                            Size = 2
+                            Direction = ParameterDirection.Input, Value = countryCode, Size = 2
                         });
                 cmd.Parameters.Add(
                     new OracleParameter("p_exclude_unsuppliable", OracleDbType.Varchar2)
                         {
-                            Direction = ParameterDirection.Input,
-                            Value = excludeUnsuppliable ? "Y" : "N",
-                            Size = 1
+                            Direction = ParameterDirection.Input, Value = excludeUnsuppliable ? "Y" : "N", Size = 1
                         });
                 cmd.Parameters.Add(
                     new OracleParameter("p_exclude_hold", OracleDbType.Varchar2)
                         {
-                            Direction = ParameterDirection.Input,
-                            Value = excludeHold ? "Y" : "N",
-                            Size = 1
+                            Direction = ParameterDirection.Input, Value = excludeHold ? "Y" : "N", Size = 1
                         });
                 cmd.Parameters.Add(
                     new OracleParameter("p_exclude_over_credit", OracleDbType.Varchar2)
                         {
-                            Direction = ParameterDirection.Input,
-                            Value = excludeOverCredit ? "Y" : "N",
-                            Size = 1
+                            Direction = ParameterDirection.Input, Value = excludeOverCredit ? "Y" : "N", Size = 1
                         });
                 cmd.Parameters.Add(
                     new OracleParameter("p_exclude_north_america", OracleDbType.Varchar2)
                         {
-                            Direction = ParameterDirection.Input,
-                            Value = excludeNorthAmerica ? "Y" : "N",
-                            Size = 1
+                            Direction = ParameterDirection.Input, Value = excludeNorthAmerica ? "Y" : "N", Size = 1
+                        });
+                var notesParam = cmd.Parameters.Add(
+                    new OracleParameter("p_notes", OracleDbType.Varchar2)
+                        {
+                            Direction = ParameterDirection.Output,
+                            Size = 4000
+                        });
+                var sosNotesParam = cmd.Parameters.Add(
+                    new OracleParameter("p_sos_notes", OracleDbType.Varchar2)
+                        {
+                            Direction = ParameterDirection.Output,
+                            Size = 4000
                         });
 
                 cmd.ExecuteNonQuery();
                 connection.Close();
+
+                notes = notesParam.Value.ToString();
+                sosNotes = sosNotesParam.Value.ToString();
+
                 return int.Parse(returnJobId.Value.ToString());
             }
         }

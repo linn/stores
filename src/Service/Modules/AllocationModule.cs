@@ -15,7 +15,6 @@
 
         private readonly IFacadeService<DespatchLocation, int, DespatchLocationResource, DespatchLocationResource> despatchLocationFacadeService;
 
-
         public AllocationModule(
             IAllocationFacadeService allocationFacadeService,
             IFacadeService<DespatchLocation, int, DespatchLocationResource, DespatchLocationResource> despatchLocationFacadeService)

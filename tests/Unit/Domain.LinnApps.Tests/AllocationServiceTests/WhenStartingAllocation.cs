@@ -38,7 +38,6 @@
         public void SetUp()
         {
             this.AllocPack.StartAllocation(
-                null,
                 this.stockPoolCode,
                 this.despatchLocation,
                 this.accountId,
@@ -50,7 +49,9 @@
                 this.excludeUnsuppliable,
                 this.excludeHold,
                 this.excludeOverCredit,
-                false).Returns(808);
+                false,
+                out _,
+                out _).Returns(808);
 
             this.result = this.Sut.StartAllocation(
                 this.stockPoolCode,

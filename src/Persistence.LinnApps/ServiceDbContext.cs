@@ -68,7 +68,9 @@
         public DbSet<PartDataSheet> PartDataSheets { get; set; }
 
         public DbSet<MechPartSource> MechPartSources { get; set; }
-        
+
+        public DbSet<SosAllocHead> SosAllocHeads { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -97,6 +99,7 @@
             this.BuildPartTemplates(builder);
             this.BuildPartDataSheets(builder);
             this.BuildMechPartSources(builder);
+            this.BuildSosAllocHeads(builder);
             base.OnModelCreating(builder);
         }
 
@@ -464,6 +467,19 @@
             q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
             q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
             q.Property(e => e.Remarks).HasColumnName("REMARKS");
+        }
+
+        private void BuildSosAllocHeads(ModelBuilder builder)
+        {
+            var table = builder.Entity<SosAllocHead>().ToTable("SOS_ALLOC_HEADS");
+            table.HasKey(s => new { s.JobId, s.AccountId, s.OutletNumber });
+            table.Property(s => s.JobId).HasColumnName("JOB_ID");
+            table.Property(s => s.AccountId).HasColumnName("ACCOUNT_ID");
+            table.Property(s => s.OutletNumber).HasColumnName("OUTLET_NUMBER");
+            table.Property(s => s.EarliestRequestedDate).HasColumnName("EARLIEST_REQUESTED_DATE");
+            table.Property(s => s.OldestOrder).HasColumnName("OLDEST_ORDER_NUMBER");
+            table.Property(s => s.ValueToAllocate).HasColumnName("VALUE_TO_ALLOCATE");
+            table.Property(s => s.OutletHoldStatus).HasColumnName("OUTLET_HOLD_STATUS").HasMaxLength(200);
         }
     }
 }

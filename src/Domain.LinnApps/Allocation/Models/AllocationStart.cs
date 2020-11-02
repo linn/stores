@@ -2,6 +2,10 @@
 {
     public class AllocationStart
     {
+        public AllocationStart()
+        {
+        }
+
         public AllocationStart(int id)
         {
             this.Id = id;
