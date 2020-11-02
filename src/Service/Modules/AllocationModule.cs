@@ -13,17 +13,28 @@
     {
         private readonly IAllocationFacadeService allocationFacadeService;
 
-        private readonly IFacadeService<DespatchLocation, int, DespatchLocationResource, DespatchLocationResource> despatchLocationFacadeService;
+        private readonly IFacadeService<DespatchLocation, int, DespatchLocationResource, DespatchLocationResource>
+            despatchLocationFacadeService;
+
+        private readonly ISosAllocHeadFacadeService sosAllocHeadFacadeService;
 
         public AllocationModule(
             IAllocationFacadeService allocationFacadeService,
-            IFacadeService<DespatchLocation, int, DespatchLocationResource, DespatchLocationResource> despatchLocationFacadeService)
+            IFacadeService<DespatchLocation, int, DespatchLocationResource, DespatchLocationResource> despatchLocationFacadeService,
+            ISosAllocHeadFacadeService sosAllocHeadFacadeService)
         {
             this.allocationFacadeService = allocationFacadeService;
             this.despatchLocationFacadeService = despatchLocationFacadeService;
+            this.sosAllocHeadFacadeService = sosAllocHeadFacadeService;
             this.Get("/logistics/allocations", _ => this.GetApp());
             this.Post("/logistics/allocations", _ => this.StartAllocation());
             this.Get("/logistics/despatch-locations", _ => this.GetDespatchLocations());
+            this.Get("/logistics/sos-alloc-heads/{jobId:int}", p => this.GetAllocHeads(p.jobId));
+        }
+
+        private object GetAllocHeads(int jobId)
+        {
+            return this.Negotiate.WithModel(this.sosAllocHeadFacadeService.GetAllocHeads(jobId));
         }
 
         private object GetDespatchLocations()
