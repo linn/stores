@@ -1,8 +1,6 @@
 ﻿namespace Linn.Stores.Service.Tests.ParcelsModuleSpecs
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using FluentAssertions;
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
@@ -40,7 +38,7 @@
 
             };
 
-            this.ParcelsService.GetById(Arg.Any<int>())
+            this.ParcelsService.GetById(Arg.Any<int>()) 
                 .Returns(new SuccessResult<Parcel>(parcel));
 
 
