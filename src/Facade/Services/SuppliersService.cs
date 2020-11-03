@@ -15,7 +15,7 @@
             this.repository = repository;
         }
 
-        public IResult<IEnumerable<Supplier>> GetSuppliers(string searchTerm = null)
+        public IResult<IEnumerable<Supplier>> GetSuppliers(string searchTerm = null, bool returnClosed = false)
         {
             if (searchTerm == null)
             {
@@ -23,7 +23,8 @@
             }
 
             return new SuccessResult<IEnumerable<Supplier>>(
-                this.repository.FilterBy(s => s.Name.ToUpper().Contains(searchTerm.ToUpper())));
+                this.repository.FilterBy(
+                    s => (returnClosed || !s.DateClosed.HasValue) && (s.Name.ToUpper().Contains(searchTerm.ToUpper()) || s.Name.ToUpper().Equals(searchTerm.ToUpper()))));
         }
     }
 }
