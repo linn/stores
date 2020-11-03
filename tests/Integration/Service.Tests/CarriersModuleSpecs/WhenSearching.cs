@@ -2,21 +2,17 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-
     using FluentAssertions;
-
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
-
     using Nancy;
     using Nancy.Testing;
-
     using NSubstitute;
-
     using NUnit.Framework;
+ 
 
-    public class WhenGettingAll : ContextBase
+    public class WhenSearching : ContextBase
     {
         [SetUp]
         public void SetUp()
@@ -28,6 +24,7 @@
                 OrganisationId = 112
 
             };
+
             var carrierB = new Carrier
             {
                 CarrierCode = "code numma 2",
@@ -35,15 +32,17 @@
                 OrganisationId = 118
             };
 
-            this.CarriersService.GetAll()
+            this.CarriersService.SearchCarriers(Arg.Any<string>())
                 .Returns(new SuccessResult<IEnumerable<Carrier>>(new List<Carrier> { carrierA, carrierB }));
 
+            var searchRequestResource = new SearchRequestResource { SearchTerm = "code numma" };
 
             this.Response = this.Browser.Get(
                 "/logistics/carriers",
                 with =>
                 {
                     with.Header("Accept", "application/json");
+                    with.JsonBody(searchRequestResource);
                 }).Result;
         }
 
@@ -56,7 +55,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.CarriersService.Received().GetAll();
+            this.CarriersService.Received().SearchCarriers(Arg.Any<string>());
         }
 
         [Test]

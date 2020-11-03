@@ -19,7 +19,7 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IFacadeWithSearchReturnTen<Parcel, int, ParcelResource, ParcelResource> ParcelsService { get; private set; }
+        protected IFacadeService<Parcel, int, ParcelResource, ParcelResource> ParcelsService { get; private set; }
 
         protected IQueryRepository<Parcel> ParcelRepository { get; private set; }
 
@@ -28,7 +28,7 @@
         public void EstablishContext()
         {
             this.ParcelsService = Substitute
-                .For<IFacadeWithSearchReturnTen<Parcel, int, ParcelResource, ParcelResource>>();
+                .For<IFacadeService<Parcel, int, ParcelResource, ParcelResource>>();
 
             this.ParcelRepository = Substitute
                 .For<IQueryRepository<Parcel>>();

@@ -35,7 +35,7 @@
                 CountryCode = "RU"
             };
 
-            this.SuppliersService.GetAll()
+            this.SuppliersService.GetSuppliers()
                 .Returns(new SuccessResult<IEnumerable<Supplier>>(new List<Supplier> { supplierA, supplierB }));
 
 
@@ -56,7 +56,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.SuppliersService.Received().GetAll();
+            this.SuppliersService.Received().GetSuppliers();
         }
 
         [Test]

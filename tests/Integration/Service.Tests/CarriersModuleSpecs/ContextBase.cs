@@ -19,7 +19,7 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IFacadeWithSearchReturnTen<Carrier, int, CarrierResource, CarrierResource> CarriersService { get; private set; }
+        protected ICarriersService CarriersService { get; private set; }
 
         protected IQueryRepository<Carrier> CarrierRepository { get; private set; }
 
@@ -28,7 +28,7 @@
         public void EstablishContext()
         {
             this.CarriersService = Substitute
-                .For<IFacadeWithSearchReturnTen<Carrier, int, CarrierResource, CarrierResource>>();
+                .For<ICarriersService>();
 
             this.CarrierRepository = Substitute
                 .For<IQueryRepository<Carrier>>();

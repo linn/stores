@@ -2,6 +2,7 @@
 {
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Service.Models;
     using Nancy;
@@ -9,20 +10,20 @@
 
     public sealed class CarriersModule : NancyModule
     {
-        private readonly IFacadeService<Carrier, int, CarrierResource, CarrierResource> carriersFacadeService;
+        private readonly ICarriersService carriersService;
 
-        public CarriersModule(IFacadeService<Carrier, int, CarrierResource, CarrierResource> carriersFacadeService)
+        public CarriersModule(ICarriersService carriersService)
         {
-            this.carriersFacadeService = carriersFacadeService;
+            this.carriersService = carriersService;
             this.Get("/logistics/carriers", _ => this.GetCarriers());
         }
 
         private object GetCarriers()
         {
             var resource = this.Bind<SearchRequestResource>();
-            var results = string.IsNullOrEmpty(resource.SearchTerm)
-                              ? this.carriersFacadeService.GetAll()
-                              : this.carriersFacadeService.Search(resource.SearchTerm);
+
+            var results = this.carriersService.SearchCarriers(resource.SearchTerm);
+
             return this.Negotiate
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
