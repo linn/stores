@@ -46,3 +46,5 @@ export const stockPoolsActionTypes = makeActionTypes(itemTypes.stockPools.action
 export const despatchLocationsActionTypes = makeActionTypes(itemTypes.despatchLocations.actionType);
 
 export const countriesActionTypes = makeActionTypes(itemTypes.countries.actionType);
+
+export const sosAllocHeadsActionTypes = makeActionTypes(itemTypes.sosAllocHeads.actionType);

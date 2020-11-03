@@ -16,6 +16,7 @@ import 'typeface-roboto';
 import Part from '../containers/parts/Part';
 import Parts from '../containers/parts/Parts';
 import StartAllocation from '../containers/allocations/StartAllocation';
+import SosAllocHeads from '../containers/allocations/SosAllocHeads';
 import WwdReportOptions from '../containers/reports/WwdReportOptions';
 import WwdReport from '../containers/reports/WwdReport';
 import NotFoundPage from './NotFoundPage';
@@ -59,6 +60,7 @@ const Root = ({ store }) => (
                                         path="/logistics/allocations"
                                         component={StartAllocation}
                                     />
+                                    <Route exact path="/logistics/sos-alloc-heads/:jobId" component={SosAllocHeads} />
 
                                     <Route
                                         exact

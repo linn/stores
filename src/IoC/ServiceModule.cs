@@ -57,6 +57,7 @@
             builder.RegisterType<PartTemplateService>()
                 .As<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
             builder.RegisterType<PartLiveService>().As<IPartLiveService>();
+            builder.RegisterType<SosAllocHeadFacadeService>().As<ISosAllocHeadFacadeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
