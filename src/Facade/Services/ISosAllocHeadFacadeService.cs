@@ -8,5 +8,7 @@
     public interface ISosAllocHeadFacadeService
     {
         SuccessResult<IEnumerable<SosAllocHead>> GetAllocHeads(int jobId);
+
+        SuccessResult<IEnumerable<SosAllocHead>> GetAllAllocHeads();
     }
 }

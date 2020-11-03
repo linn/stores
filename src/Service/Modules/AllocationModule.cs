@@ -3,6 +3,7 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Facade.Services;
+    using Linn.Stores.Resources;
     using Linn.Stores.Resources.Allocation;
     using Linn.Stores.Service.Models;
 
@@ -29,7 +30,22 @@
             this.Get("/logistics/allocations", _ => this.GetApp());
             this.Post("/logistics/allocations", _ => this.StartAllocation());
             this.Get("/logistics/despatch-locations", _ => this.GetDespatchLocations());
+            this.Get("/logistics/sos-alloc-heads", _ => this.GetAllocHeads());
             this.Get("/logistics/sos-alloc-heads/{jobId:int}", p => this.GetAllocHeads(p.jobId));
+        }
+
+        private object GetAllocHeads()
+        {
+            var searchResource = this.Bind<SearchRequestResource>();
+            if (string.IsNullOrWhiteSpace(searchResource.SearchTerm))
+            {
+                return this.Negotiate.WithModel(this.sosAllocHeadFacadeService.GetAllAllocHeads());
+            }
+            else
+            {
+                return this.Negotiate.WithModel(
+                    this.sosAllocHeadFacadeService.GetAllocHeads(int.Parse(searchResource.SearchTerm)));
+            }
         }
 
         private object GetAllocHeads(int jobId)

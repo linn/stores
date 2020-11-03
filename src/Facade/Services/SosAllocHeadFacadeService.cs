@@ -20,5 +20,10 @@
             return new SuccessResult<IEnumerable<SosAllocHead>>(
                 this.sosAllocHeadRepository.FilterBy(allocHead => allocHead.JobId == jobId));
         }
+
+        public SuccessResult<IEnumerable<SosAllocHead>> GetAllAllocHeads()
+        {
+            return new SuccessResult<IEnumerable<SosAllocHead>>(this.sosAllocHeadRepository.FindAll());
+        }
     }
 }
