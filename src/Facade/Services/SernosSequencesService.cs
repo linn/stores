@@ -15,8 +15,14 @@
             this.repository = repository;
         }
 
-        public IResult<IEnumerable<SernosSequence>> GetSequences()
+        public IResult<IEnumerable<SernosSequence>> GetSequences(string searchTerm = null)
         {
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                return new SuccessResult<IEnumerable<SernosSequence>>(
+                    this.repository.FilterBy(c => c.Sequence.ToUpper().Contains(searchTerm.ToUpper())));
+            }
+
             return new SuccessResult<IEnumerable<SernosSequence>>(
                 this.repository.FindAll());
         }

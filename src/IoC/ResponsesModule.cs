@@ -5,7 +5,9 @@
     using Autofac;
 
     using Linn.Common.Facade;
+    using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.ResourceBuilders;
@@ -46,6 +48,31 @@
                 .As<IResourceBuilder<Supplier>>();
             builder.RegisterType<SuppliersResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<Supplier>>>();
+            builder.RegisterType<ProductAnalysisCodeResourceBuilder>()
+                .As<IResourceBuilder<ProductAnalysisCode>>();
+            builder.RegisterType<ProductAnalysisCodesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<ProductAnalysisCode>>>();
+            builder.RegisterType<NominalResourceBuilder>().As<IResourceBuilder<Nominal>>();
+            builder.RegisterType<DespatchLocationResourceBuilder>().As<IResourceBuilder<DespatchLocation>>();
+            builder.RegisterType<DespatchLocationsResourceBuilder>().As<IResourceBuilder<IEnumerable<DespatchLocation>>>();
+            builder.RegisterType<StockPoolResourceBuilder>().As<IResourceBuilder<StockPool>>();
+            builder.RegisterType<StockPoolsResourceBuilder>().As<IResourceBuilder<IEnumerable<StockPool>>>();
+            builder.RegisterType<AssemblyTechnologyResourceBuilder>()
+                .As<IResourceBuilder<AssemblyTechnology>>();
+            builder.RegisterType<AssemblyTechnologiesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<AssemblyTechnology>>>();
+            builder.RegisterType<DecrementRuleResourceBuilder>()
+                .As<IResourceBuilder<DecrementRule>>();
+            builder.RegisterType<DecrementRulesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<DecrementRule>>>();
+            builder.RegisterType<ResultsModelResourceBuilder>().As<IResourceBuilder<ResultsModel>>();
+            builder.RegisterType<CountryResourceBuilder>().As<IResourceBuilder<Country>>();
+            builder.RegisterType<CountriesResourceBuilder>().As<IResourceBuilder<IEnumerable<Country>>>();
+            builder.RegisterType<PartTemplateResourceBuilder>().As<IResourceBuilder<PartTemplate>>();
+            builder.RegisterType<PartTemplatesResourceBuilder>().As<IResourceBuilder<IEnumerable<PartTemplate>>>();
+            builder.RegisterType<PartLiveTestResourceBuilder>().As<IResourceBuilder<PartLiveTest>>();
+            builder.RegisterType<SosAllocHeadResourceBuilder>().As<IResourceBuilder<SosAllocHead>>();
+            builder.RegisterType<SosAllocHeadsResourceBuilder>().As<IResourceBuilder<IEnumerable<SosAllocHead>>>();
             builder.RegisterType<CarrierResourceBuilder>()
                 .As<IResourceBuilder<Carrier>>();
             builder.RegisterType<CarriersResourceBuilder>()

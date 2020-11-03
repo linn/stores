@@ -167,7 +167,7 @@ Resources:
         - isTesting
         - !Sub ${TestClusterName}
         - !Sub ${ProductionClusterName}
-      DesiredCount: !If [ isTesting, 1, 2]
+      DesiredCount: !If [ isTesting, 0, 1]
       PlacementStrategies:
         - Field: attribute:ecs.availability-zone
           Type: spread

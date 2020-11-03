@@ -18,6 +18,12 @@ export const partCategories = new ItemType(
     '/inventory/part-categories'
 );
 
+export const partTemplates = new ItemType(
+    'partTemplates',
+    'PART_TEMPLATES',
+    '/inventory/part-templates'
+);
+
 export const departments = new ItemType('departments', 'DEPARTMENTS', '/inventory/departments');
 
 export const accountingCompanies = new ItemType(
@@ -37,3 +43,51 @@ export const unitsOfMeasure = new ItemType(
     'UNITS_OF_MEASURE',
     '/inventory/units-of-measure'
 );
+
+export const allocation = new ItemType('allocation', 'ALLOCATION', '/logistics/allocations');
+
+export const productAnalysisCodes = new ItemType(
+    'productAnalysisCodes',
+    'PRODUCT_ANALYSIS_CODES',
+    '/inventory/product-analysis-codes'
+);
+
+export const nominal = new ItemType('nominal', 'NOMINAL', '/inventory/nominal-for-department');
+
+export const assemblyTechnologies = new ItemType(
+    'assemblyTechnologies',
+    'ASSEMBLY_TECHNOLOGIES',
+    '/inventory/assembly-technologies'
+);
+
+export const decrementRules = new ItemType(
+    'decrementRules',
+    'DECREMENT_RULES',
+    '/inventory/decrement-rules'
+);
+
+export const stockPool = new ItemType('stockPool', 'STOCK_POOL', '/inventory/stock-pools');
+
+export const stockPools = new ItemType('stockPools', 'STOCK_POOLS', '/inventory/stock-pools');
+
+export const despatchLocation = new ItemType(
+    'despatchLocation',
+    'DESPATCH_LOCATION',
+    '/logistics/despatch-locations'
+);
+
+export const despatchLocations = new ItemType(
+    'despatchLocations',
+    'DESPATCH_LOCATIONS',
+    '/logistics/despatch-locations'
+);
+
+export const countries = new ItemType('countries', 'COUNTRIES', '/logistics/countries');
+
+export const partLiveTest = new ItemType(
+    'partLiveTest',
+    'PART_LIVE_TEST',
+    '/inventory/parts/can-be-made-live'
+);
+
+export const sosAllocHeads = new ItemType('sosAllocHeads', 'SOS_ALLOC_HEADS', '/logistics/sos-alloc-heads');

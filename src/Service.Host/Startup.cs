@@ -27,6 +27,8 @@ namespace Linn.Stores.Service.Host
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
+            services.AddLogging(a => a.AddConsole());
+
             services.AddLinnAuthentication(
                 options =>
                     {
@@ -36,10 +38,8 @@ namespace Linn.Stores.Service.Host
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            loggerFactory.AddConsole();
-
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             if (env.IsDevelopment())

@@ -3,8 +3,10 @@
     using FluentAssertions;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.Parts;
 
     using Nancy;
     using Nancy.Testing;
@@ -18,7 +20,7 @@
         [SetUp]
         public void SetUp()
         {
-            var p = new Part { Id = 1 };
+            var p = new Part { Id = 1, StockControlled = "Y", CreatedBy = new Employee { Id = 1 } };
             this.PartsFacadeService.GetById(1).Returns(new SuccessResult<Part>(p));
 
             this.Response = this.Browser.Get(

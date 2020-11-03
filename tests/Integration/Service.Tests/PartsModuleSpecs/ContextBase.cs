@@ -11,6 +11,7 @@
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.Parts;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
 
@@ -27,9 +28,23 @@
             get; private set;
         }
 
+        protected IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource> 
+            AssemblyTechnologyService
+        {
+            get; private set;
+        }
+
+        protected IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource> 
+            DecrementRuleService
+        {
+            get; private set;
+        }
+
         protected IPartCategoryService PartCategoriesService { get; set; }
 
         protected IUnitsOfMeasureService UnitsOfMeasureService { get; private set; }
+
+        protected IProductAnalysisCodeService ProductAnalysisCodeService { get; set; }
 
         protected IRepository<Part, int> PartRepository { get; private set; }
 
@@ -37,38 +52,82 @@
 
         protected IRepository<ProductAnalysisCode, string> ProductAnalysisCodeRepository { get; private set; }
 
+        protected IRepository<QcControl, int> QcControlRepository { get; private set; }
+
+        protected IPartService PartsDomainService { get; private set; }
+
+        protected IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> PartTemplateService
+        {
+            get; private set;
+        }
+
+        protected IPartLiveService PartLiveService;
+
         [SetUp]
         public void EstablishContext()
         {
             this.PartsFacadeService = Substitute
                 .For<IFacadeService<Part, int, PartResource, PartResource>>();
+            this.PartLiveService = Substitute.For<IPartLiveService>();
+            this.PartsDomainService = Substitute.For<IPartService>();
             this.PartCategoriesService = Substitute.For<IPartCategoryService>();
             this.UnitsOfMeasureService = Substitute.For<IUnitsOfMeasureService>();
+            this.ProductAnalysisCodeService = Substitute.For<IProductAnalysisCodeService>();
             this.PartRepository = Substitute.For<IRepository<Part, int>>();
             this.ParetoClassRepository = Substitute.For<IRepository<ParetoClass, string>>();
+            this.QcControlRepository = Substitute.For<IRepository<QcControl, int>>();
             this.ProductAnalysisCodeRepository = Substitute.For<IRepository<ProductAnalysisCode, string>>();
-
+            this.DecrementRuleService = Substitute
+                .For<IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource>>();
+            this.AssemblyTechnologyService = Substitute
+                .For<IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>>();
+            this.PartTemplateService = Substitute
+                .For<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
+                        with.Dependency(this.PartLiveService);
                         with.Dependency(this.PartsFacadeService);
                         with.Dependency(this.UnitsOfMeasureService);
                         with.Dependency(this.PartCategoriesService);
+                        with.Dependency(this.ProductAnalysisCodeService);
                         with.Dependency(this.PartRepository);
                         with.Dependency(this.ParetoClassRepository);
                         with.Dependency(this.ProductAnalysisCodeRepository);
+                        with.Dependency(this.QcControlRepository);
+                        with.Dependency(this.AssemblyTechnologyService);
+                        with.Dependency(this.DecrementRuleService);
+                        with.Dependency(this.PartsDomainService);
+                        with.Dependency(this.PartTemplateService);
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());
+                        with.Dependency<IResourceBuilder<PartTemplate>>(new PartTemplateResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<PartTemplate>>>(new PartTemplatesResourceBuilder());
                         with.Dependency<IResourceBuilder<UnitOfMeasure>>(new UnitOfMeasureResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<UnitOfMeasure>>>(new UnitsOfMeasureResourceBuilder());
                         with.Dependency<IResourceBuilder<PartCategory>>(new PartCategoryResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<PartCategory>>>(new PartCategoriesResourceBuilder());
+                        with.Dependency<IResourceBuilder<ProductAnalysisCode>>(new ProductAnalysisCodeResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<ProductAnalysisCode>>>(
+                            new ProductAnalysisCodesResourceBuilder());
                         with.Module<PartsModule>();
+                        with.Dependency<IResourceBuilder<AssemblyTechnology>>(new AssemblyTechnologyResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<AssemblyTechnology>>>(
+                            new AssemblyTechnologiesResourceBuilder());
+                        with.Dependency<IResourceBuilder<DecrementRule>>(new DecrementRuleResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<DecrementRule>>>(
+                            new DecrementRulesResourceBuilder());
+                        with.Dependency<IResourceBuilder<PartLiveTest>>(
+                            new PartLiveTestResourceBuilder());
                         with.ResponseProcessor<PartResponseProcessor>();
                         with.ResponseProcessor<PartsResponseProcessor>();
                         with.ResponseProcessor<UnitsOfMeasureResponseProcessor>();
                         with.ResponseProcessor<PartCategoriesResponseProcessor>();
-
+                        with.ResponseProcessor<AssemblyTechnologiesResponseProcessor>();
+                        with.ResponseProcessor<DecrementRulesResponseProcessor>();
+                        with.ResponseProcessor<ProductAnalysisCodesResponseProcessor>();
+                        with.ResponseProcessor<PartTemplatesResponseProcessor>();
+                        with.ResponseProcessor<PartLiveTestResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
                                 {

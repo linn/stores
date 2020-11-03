@@ -2,6 +2,7 @@
 {
     using Linn.Common.Configuration;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Sos;
 
@@ -22,23 +23,53 @@
 
         public DbSet<ProductAnalysisCode> ProductAnalysisCodes { get; set; }
 
-        public DbQuery<Department> Departments { get; set; }
+        public DbSet<Department> Departments { get; set; }
 
         public DbQuery<RootProduct> RootProducts { get; set; }
 
         public DbSet<AccountingCompany> AccountingCompanies { get; set; }
 
         public DbSet<Employee> Employees { get; set; }
-        
+
         public DbSet<SosOption> SosOptions { get; set; }
 
-        public DbQuery<SernosSequence> SernosSequences { get; set; }
+        public DbSet<SernosSequence> SernosSequences { get; set; }
 
         public DbQuery<UnitOfMeasure> UnitsOfMeasure { get; set; }
 
         public DbQuery<PartCategory> PartCategories { get; set; }
 
         public DbSet<Supplier> Suppliers { get; set; }
+
+        public DbSet<Nominal> Nominals { get; set; }
+
+        public DbSet<NominalAccount> NominalAccounts { get; set; }
+
+        public DbSet<DespatchLocation> DespatchLocations { get; set; }
+
+        public DbSet<StockPool> StockPools { get; set; }
+
+        public DbSet<DecrementRule> DecrementRules { get; set; }
+
+        public DbSet<AssemblyTechnology> AssemblyTechnologies { get; set; }
+
+        public DbQuery<ChangeRequest> ChangeRequests { get; set; }
+
+        public DbQuery<WwdWork> WwdWorks { get; set; }
+
+        public DbQuery<WwdWorkDetail> WwdWorkDetails { get; set; }
+
+        public DbSet<Country> Countries { get; set; }
+
+        public DbSet<QcControl> QcControl { get; set; }
+
+        public DbSet<PartTemplate> PartTemplates { get; set; }
+
+        public DbSet<PartDataSheet> PartDataSheets { get; set; }
+
+        public DbSet<MechPartSource> MechPartSources { get; set; }
+
+        public DbSet<SosAllocHead> SosAllocHeads { get; set; }
 
         public DbSet<Carrier> Carriers { get; set; }
 
@@ -47,16 +78,31 @@
         {
             this.BuildParts(builder);
             this.BuildParetoClasses(builder);
-            this.QueryDepartments(builder);
+            this.BuildDepartments(builder);
             this.BuildProductAnalysisCodes(builder);
             this.BuildAccountingCompanies(builder);
             this.BuildEmployees(builder);
             this.QueryRootProducts(builder);
             this.BuildSosOptions(builder);
-            this.QuerySernosSequences(builder);
+            this.BuildSernosSequences(builder);
             this.QueryUnitsOfMeasure(builder);
             this.QueryPartCategories(builder);
             this.BuildSuppliers(builder);
+            this.BuildNominals(builder);
+            this.BuildNominalAccounts(builder);
+            this.BuildDespatchLocations(builder);
+            this.BuildStockPools(builder);
+            this.BuildDecrementRules(builder);
+            this.BuildAssemblyTechnologies(builder);
+            this.QueryChangeRequests(builder);
+            this.QueryWwdWorks(builder);
+            this.QueryWwdWorkDetails(builder);
+            this.BuildCountries(builder);
+            this.BuildQcControl(builder);
+            this.BuildPartTemplates(builder);
+            this.BuildPartDataSheets(builder);
+            this.BuildMechPartSources(builder);
+            this.BuildSosAllocHeads(builder);
             this.BuildCarriers(builder);
             base.OnModelCreating(builder);
         }
@@ -84,6 +130,18 @@
             q.Property(c => c.Name).HasColumnName("ACCOUNTING_COMPANY");
             q.Property(c => c.DateInvalid).HasColumnName("DATE_INVALID");
             q.Property(c => c.Description).HasColumnName("DESCRIPTION");
+        }
+
+        private void BuildCountries(ModelBuilder builder)
+        {
+            builder.Entity<Country>().ToTable("COUNTRIES");
+            builder.Entity<Country>().HasKey(c => c.CountryCode);
+            builder.Entity<Country>().Property(c => c.CountryCode).HasColumnName("COUNTRY_CODE").HasMaxLength(2);
+            builder.Entity<Country>().Property(c => c.Name).HasColumnName("NAME").HasMaxLength(50);
+            builder.Entity<Country>().Property(c => c.DisplayName).HasColumnName("DISPLAY_NAME").HasMaxLength(50);
+            builder.Entity<Country>().Property(c => c.TradeCurrency).HasColumnName("TRADE_CURRENCY").HasMaxLength(4);
+            builder.Entity<Country>().Property(c => c.ECMember).HasColumnName("EEC_MEMBER").HasMaxLength(1);
+            builder.Entity<Country>().Property(c => c.DateInvalid).HasColumnName("DATE_INVALID");
         }
 
         private void BuildEmployees(ModelBuilder builder)
@@ -125,12 +183,11 @@
             e.Property(p => p.SafetyCertificateExpirationDate).HasColumnName("SAFETY_CERTIFICATE_EXPIRY_DATE");
             e.Property(p => p.SafetyDataDirectory).HasColumnName("SAFETY_DATA_DIRECTORY").HasMaxLength(500);
             e.Property(p => p.LinnProduced).HasColumnName("LINN_PRODUCED").HasMaxLength(1);
-            e.Property(p => p.DecrementRule).HasColumnName("DECREMENT_RULE").HasMaxLength(10);
             e.Property(p => p.BomType).HasColumnName("BOM_TYPE").HasMaxLength(1);
             e.Property(p => p.OptionSet).HasColumnName("OPTION_SET").HasMaxLength(14);
             e.Property(p => p.DrawingReference).HasColumnName("DRAWING_REFERENCE").HasMaxLength(100);
             e.Property(p => p.BomId).HasColumnName("BOM_ID");
-            e.Property(p => p.UnitOfMeasure).HasColumnName("UNIT_OF_MEASURE").HasMaxLength(14);
+            e.Property(p => p.OurUnitOfMeasure).HasColumnName("OUR_UNIT_OF_MEASURE").HasMaxLength(14);
             e.Property(p => p.Currency).HasColumnName("CURRENCY").HasMaxLength(4);
             e.Property(p => p.CurrencyUnitPrice).HasColumnName("CURRENCY_UNIT_PRICE");
             e.Property(p => p.BaseUnitPrice).HasColumnName("BASE_UNIT_PRICE");
@@ -183,6 +240,73 @@
             e.HasOne<ParetoClass>(p => p.ParetoClass).WithMany(c => c.Parts).HasForeignKey("PARETO_CODE");
             e.HasOne<ProductAnalysisCode>(p => p.ProductAnalysisCode).WithMany(c => c.Parts)
                 .HasForeignKey("PRODUCT_ANALYSIS_CODE");
+            e.HasOne(p => p.NominalAccount).WithMany(a => a.Parts).HasForeignKey("NOMACC_NOMACC_ID");
+            e.HasOne(p => p.SernosSequence).WithMany(s => s.Parts).HasForeignKey("SERNOS_SEQUENCE");
+            e.HasOne(p => p.AssemblyTechnology).WithMany(s => s.Parts).HasForeignKey("ASSEMBLY_TECHNOLOGY");
+            e.HasOne(p => p.DecrementRule).WithMany(s => s.Parts).HasForeignKey("DECREMENT_RULE");
+            e.HasMany(p => p.DataSheets).WithOne(d => d.Part).HasForeignKey("PART_NUMBER");
+        }
+
+        private void BuildPartDataSheets(ModelBuilder builder)
+        {
+            var e = builder.Entity<PartDataSheet>().ToTable("PART_DATASHEETS");
+            e.HasKey(d => new { d.Sequence, d.PartNumber });
+            e.Property(d => d.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            e.Property(d => d.Sequence).HasColumnName("SEQ").HasMaxLength(4);
+            e.Property(d => d.PdfFilePath).HasColumnName("PDF_FILE_PATH").HasMaxLength(1000);
+        }
+
+        private void BuildMechPartSources(ModelBuilder builder)
+        {
+            var e = builder.Entity<MechPartSource>().ToTable("MECH_PART_SOURCES");
+            e.HasKey(s => s.Id);
+            e.Property(s => s.Id).HasColumnName("MS_ID").HasMaxLength(8);
+            e.HasOne<Employee>(s => s.ProposedBy).WithMany(m => m.SourcesProposed).HasForeignKey("PROPOSED_BY");
+            e.Property(s => s.DateEntered).HasColumnName("DATE_ENTERED");
+            e.Property(s => s.PartNumber).HasColumnName("PART_NUMBER");
+            e.Property(s => s.MechanicalOrElectrical).HasColumnName("MECH_ELEC_PART").HasMaxLength(1);
+            e.Property(s => s.PartType).HasColumnName("PART_TYPE").HasMaxLength(14);
+            e.Property(s => s.EstimatedVolume).HasColumnName("ESTIMATED_VOLUME");
+            e.Property(s => s.SamplesRequired).HasColumnName("SAMPLES_REQUIRED").HasMaxLength(1);
+            e.Property(s => s.SampleQuantity).HasColumnName("SAMPLE_QUANTITY");
+            e.Property(s => s.DateSamplesRequired).HasColumnName("DATE_SAMPLES_REQUIRED");
+            e.Property(s => s.RohsReplace).HasColumnName("ROHS_REPLACE").HasMaxLength(1);
+            e.Property(s => s.LinnPartNumber).HasColumnName("LINN_PART_NUMBER").HasMaxLength(14);
+            e.Property(s => s.Notes).HasColumnName("NOTES").HasMaxLength(2000);
+            e.Property(s => s.AssemblyType).HasColumnName("ASSEMBLY_TYPE").HasMaxLength(4);
+        }
+
+        private void BuildPartTemplates(ModelBuilder builder)
+        {
+            var e = builder.Entity<PartTemplate>().ToTable("PART_NUMBER_TEMPLATES");
+            e.HasKey(p => p.PartRoot);
+            e.Property(p => p.PartRoot).HasColumnName("PART_ROOT").HasMaxLength(14);
+            e.Property(p => p.Description).HasColumnName("DESCRIPTION").HasMaxLength(200);
+            e.Property(p => p.StockControlled).HasColumnName("STOCK_CONTROLLED").HasMaxLength(1);
+            e.Property(p => p.LinnProduced).HasColumnName("LINN_PRODUCED").HasMaxLength(1);
+            e.Property(p => p.BomType).HasColumnName("BOM_TYPE").HasMaxLength(1);
+            e.Property(p => p.ParetoCode).HasColumnName("PARETO_CODE").HasMaxLength(2);
+            e.Property(p => p.AssemblyTechnology).HasColumnName("ASSEMBLY_TECHNOLOGY");
+            e.Property(p => p.HasDataSheet).HasColumnName("HAS_DATASHEET").HasMaxLength(1);
+            e.Property(p => p.HasNumberSequence).HasColumnName("NUMBER_SEQUENCE").HasMaxLength(1);
+            e.Property(p => p.NextNumber).HasColumnName("NEXT_NUMBER");
+            e.Property(p => p.ProductCode).HasColumnName("PRODUCT_CODE").HasMaxLength(10);
+            e.Property(p => p.AllowPartCreation).HasColumnName("ALLOW_PART_CREATION").HasMaxLength(1);
+            e.Property(p => p.AccountingCompany).HasColumnName("ACCOUNTING_COMPANY");
+        }
+
+        private void BuildQcControl(ModelBuilder builder)
+        {
+            var e = builder.Entity<QcControl>().ToTable("QC_CONTROL");
+            e.HasKey(q => q.Id);
+            e.Property(q => q.Id).HasColumnName("QC_CONTROL_ID");
+            e.Property(q => q.PartNumber).HasColumnName("PART_NUMBER");
+            e.Property(q => q.ChangedBy).HasColumnName("CHANGED_BY");
+            e.Property(q => q.NumberOfBookIns).HasColumnName("NUMBER_OF_BOOKINS");
+            e.Property(q => q.NumberOfBookInsDone).HasColumnName("NUMBER_OF_BOOKINS_DONE");
+            e.Property(q => q.OnOrOffQc).HasColumnName("ON_OR_OFF_QC");
+            e.Property(q => q.Reason).HasColumnName("REASON");
+            e.Property(q => q.TransactionDate).HasColumnName("TRANSACTION_DATE");
         }
 
         private void BuildParetoClasses(ModelBuilder builder)
@@ -193,12 +317,31 @@
             e.Property(p => p.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
         }
 
-        private void QueryDepartments(ModelBuilder builder)
+        private void BuildDecrementRules(ModelBuilder builder)
         {
-            var e = builder.Query<Department>().ToView("LINN_DEPARTMENTS");
+            var e = builder.Entity<DecrementRule>().ToTable("DECREMENT_RULES");
+            e.HasKey(r => r.Rule);
+            e.Property(r => r.Rule).HasColumnName("DECREMENT_RULE").HasMaxLength(10);
+            e.Property(r => r.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
+        }
+
+        private void BuildAssemblyTechnologies(ModelBuilder builder)
+        {
+            var e = builder.Entity<AssemblyTechnology>().ToTable("ASSEMBLY_TECHNOLOGIES");
+            e.HasKey(r => r.Name);
+            e.Property(r => r.Name).HasColumnName("NAME").HasMaxLength(4);
+            e.Property(r => r.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
+        }
+
+        private void BuildDepartments(ModelBuilder builder)
+        {
+            var e = builder.Entity<Department>().ToTable("LINN_DEPARTMENTS");
+            e.HasKey(d => d.DepartmentCode);
             e.Property(d => d.DepartmentCode).HasColumnName("DEPARTMENT_CODE").HasMaxLength(10);
             e.Property(d => d.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
             e.Property(d => d.DateClosed).HasColumnName("DATE_CLOSED");
+            e.HasMany(n => n.NominalAccounts).WithOne(a => a.Department)
+                .HasForeignKey("DEPARTMENT");
         }
 
         private void BuildProductAnalysisCodes(ModelBuilder builder)
@@ -216,7 +359,7 @@
             q.Property(p => p.Description).HasColumnName("DESCRIPTION");
             q.Property(p => p.DateInvalid).HasColumnName("DATE_INVALID");
         }
-        
+
         private void BuildSosOptions(ModelBuilder builder)
         {
             var e = builder.Entity<SosOption>().ToTable("SOS_OPTIONS");
@@ -226,11 +369,14 @@
             e.Property(p => p.AccountId).HasColumnName("ACCOUNT_ID");
             e.Property(p => p.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
             e.Property(p => p.DespatchLocationCode).HasColumnName("DESPATCH_LOCATION_CODE").HasMaxLength(10);
+            e.Property(p => p.AccountingCompany).HasColumnName("ACCOUNTING_COMPANY").HasMaxLength(10);
+            e.Property(p => p.CutOffDate).HasColumnName("CUT_OFF_DATE");
         }
 
-        private void QuerySernosSequences(ModelBuilder builder)
+        private void BuildSernosSequences(ModelBuilder builder)
         {
-            var q = builder.Query<SernosSequence>().ToView("SERNOS_SEQUENCES");
+            var q = builder.Entity<SernosSequence>().ToTable("SERNOS_SEQUENCES");
+            q.HasKey(p => p.Sequence);
             q.Property(p => p.Sequence).HasColumnName("SEQUENCE_NAME");
             q.Property(p => p.Description).HasColumnName("DESCRIPTION");
         }
@@ -246,6 +392,100 @@
             builder.Query<PartCategory>().ToView("PART_CATEGORIES");
             builder.Query<PartCategory>().Property(p => p.Category).HasColumnName("CATEGORY");
             builder.Query<PartCategory>().Property(p => p.Description).HasColumnName("DESCRIPTION");
+        }
+
+        private void BuildNominals(ModelBuilder builder)
+        {
+            builder.Entity<Nominal>().ToTable("LINN_NOMINALS");
+            builder.Entity<Nominal>().HasKey(n => n.NominalCode);
+            builder.Entity<Nominal>().Property(n => n.NominalCode).HasColumnName("NOMINAL_CODE");
+            builder.Entity<Nominal>().Property(n => n.Description).HasColumnName("DESCRIPTION");
+            builder.Entity<Nominal>().HasMany(n => n.NominalAccounts).WithOne(a => a.Nominal)
+                .HasForeignKey("NOMINAL");
+        }
+
+        private void BuildNominalAccounts(ModelBuilder builder)
+        {
+            builder.Entity<NominalAccount>().ToTable("NOMINAL_ACCOUNTS");
+            builder.Entity<NominalAccount>().HasKey(a => a.NominalAccountId);
+            builder.Entity<NominalAccount>().Property(a => a.NominalAccountId).HasColumnName("NOMACC_ID");
+        }
+
+        private void BuildDespatchLocations(ModelBuilder builder)
+        {
+            var q = builder.Entity<DespatchLocation>();
+            q.HasKey(e => e.Id);
+            q.ToTable("DESPATCH_LOCATIONS");
+            q.Property(e => e.Id).HasColumnName("BRIDGE_ID");
+            q.Property(e => e.LocationCode).HasColumnName("DESPATCH_LOCATION_CODE").HasMaxLength(10);
+            q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
+            q.Property(e => e.DateInvalid).HasColumnName("DATE_INVALID");
+            q.Property(e => e.Sequence).HasColumnName("SEQUENCE");
+            q.Property(e => e.UnAllocLocationId).HasColumnName("UNALLOC_LOCATION_ID");
+            q.Property(e => e.DefaultCarrier).HasColumnName("DEFAULT_CARRIER").HasMaxLength(10);
+        }
+
+        private void BuildStockPools(ModelBuilder builder)
+        {
+            var q = builder.Entity<StockPool>();
+            q.HasKey(e => e.Id);
+            q.ToTable("STOCK_POOLS");
+            q.Property(e => e.Id).HasColumnName("BRIDGE_ID");
+            q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE").HasMaxLength(10);
+            q.Property(e => e.Description).HasColumnName("STOCK_POOL_DESCRIPTION").HasMaxLength(50);
+            q.Property(e => e.DateInvalid).HasColumnName("DATE_INVALID");
+            q.Property(e => e.Sequence).HasColumnName("SEQUENCE");
+            q.Property(e => e.AccountingCompany).HasColumnName("ACCOUNTING_COMPANY").HasMaxLength(10);
+            q.Property(e => e.StockCategory).HasColumnName("STOCK_CATEGORY").HasMaxLength(1);
+            q.Property(e => e.DefaultLocation).HasColumnName("DEFAULT_LOCATION");
+        }
+
+        private void QueryChangeRequests(ModelBuilder builder)
+        {
+            var q = builder.Query<ChangeRequest>();
+            q.ToView("CHANGE_REQUESTS");
+            q.Property(e => e.ChangeState).HasColumnName("CHANGE_STATE");
+            q.Property(e => e.DocumentNumber).HasColumnName("DOCUMENT_NUMBER");
+            q.Property(e => e.NewPartNumber).HasColumnName("NEW_PART_NUMBER");
+            q.Property(e => e.OldPartNumber).HasColumnName("OLD_PART_NUMBER");
+        }
+
+        private void QueryWwdWorkDetails(ModelBuilder builder)
+        {
+            var q = builder.Query<WwdWorkDetail>();
+            q.ToView("WWD_WORK_DETAILS");
+            q.Property(e => e.LocationGroup).HasColumnName("LOCATION_GROUP");
+            q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER");
+            q.Property(e => e.Quantity).HasColumnName("QTY");
+            q.Property(e => e.State).HasColumnName("STATE");
+            q.Property(e => e.JobId).HasColumnName("JOB_ID");
+        }
+
+        private void QueryWwdWorks(ModelBuilder builder)
+        {
+            var q = builder.Query<WwdWork>();
+            q.ToView("WWD_WORK");
+            q.Property(e => e.JobId).HasColumnName("JOB_ID");
+            q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER");
+            q.Property(e => e.QuantityKitted).HasColumnName("QTY_KITTED");
+            q.Property(e => e.QuantityAtLocation).HasColumnName("QTY_AT_LOCATION");
+            q.Property(e => e.StoragePlace).HasColumnName("STORAGE_PLACE");
+            q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
+            q.Property(e => e.Remarks).HasColumnName("REMARKS");
+        }
+
+        private void BuildSosAllocHeads(ModelBuilder builder)
+        {
+            var table = builder.Entity<SosAllocHead>().ToTable("SOS_ALLOC_HEADS");
+            table.HasKey(s => new { s.JobId, s.AccountId, s.OutletNumber });
+            table.Property(s => s.JobId).HasColumnName("JOB_ID");
+            table.Property(s => s.AccountId).HasColumnName("ACCOUNT_ID");
+            table.Property(s => s.OutletNumber).HasColumnName("OUTLET_NUMBER");
+            table.Property(s => s.EarliestRequestedDate).HasColumnName("EARLIEST_REQUESTED_DATE");
+            table.Property(s => s.OldestOrder).HasColumnName("OLDEST_ORDER_NUMBER");
+            table.Property(s => s.ValueToAllocate).HasColumnName("VALUE_TO_ALLOCATE");
+            table.Property(s => s.OutletHoldStatus).HasColumnName("OUTLET_HOLD_STATUS").HasMaxLength(200);
         }
 
         private void BuildCarriers(ModelBuilder builder)

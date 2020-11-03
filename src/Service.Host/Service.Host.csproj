@@ -36,7 +36,6 @@
     <ProjectReference Include="..\Service\Service.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="client\src\actions\" />
     <Folder Include="client\src\components\__tests__\" />
     <Folder Include="client\src\reducers\__tests__\" />
     <Folder Include="client\src\selectors\__tests__\" />

@@ -5,6 +5,7 @@
     using Linn.Common.Persistence;
     using Linn.Common.Persistence.EntityFramework;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Persistence.LinnApps;
@@ -23,7 +24,7 @@
             builder.RegisterType<PartRepository>().As<IRepository<Part, int>>();
             builder.RegisterType<ParetoClassRepository>().As<IRepository<ParetoClass, string>>();
             builder.RegisterType<DepartmentRepository>().As<IQueryRepository<Department>>();
-            builder.RegisterType<ProductAnalysisCodeRepository>().As<IRepository<ProductAnalysisCode, string>>();
+            builder.RegisterType<ProductAnalysisCodeRepository>().As<IQueryRepository<ProductAnalysisCode>>();
             builder.RegisterType<AccountingCompanyRepository>().As<IQueryRepository<AccountingCompany>>();
             builder.RegisterType<EmployeeRepository>().As<IRepository<Employee, int>>();
             builder.RegisterType<RootProductRepository>().As<IQueryRepository<RootProduct>>();
@@ -32,8 +33,21 @@
             builder.RegisterType<UnitsOfMeasureRepository>().As<IQueryRepository<UnitOfMeasure>>();
             builder.RegisterType<PartCategoryRepository>().As<IQueryRepository<PartCategory>>();
             builder.RegisterType<SupplierRepository>().As<IQueryRepository<Supplier>>();
-            builder.RegisterType<SupplierRepository>().As<IQueryRepository<Supplier>>();
-
+            builder.RegisterType<NominalRepository>().As<IQueryRepository<Nominal>>();
+            builder.RegisterType<NominalAccountRepository>().As<IQueryRepository<NominalAccount>>();
+            builder.RegisterType<DespatchLocationRepository>().As<IRepository<DespatchLocation, int>>();
+            builder.RegisterType<StockPoolRepository>().As<IRepository<StockPool, int>>();
+            builder.RegisterType<AssemblyTechnologyRepository>().As<IRepository<AssemblyTechnology, string>>();
+            builder.RegisterType<DecrementRuleRepository>().As<IRepository<DecrementRule, string>>();
+            builder.RegisterType<ChangeRequestRepository>().As<IQueryRepository<ChangeRequest>>();
+            builder.RegisterType<WwdWorkRepository>().As<IQueryRepository<WwdWork>>();
+            builder.RegisterType<WwdWorkDetailsRepository>().As<IQueryRepository<WwdWorkDetail>>();
+            builder.RegisterType<CountryRepository>().As<IRepository<Country, string>>();
+            builder.RegisterType<QcControlRepository>().As<IRepository<QcControl, int>>();
+            builder.RegisterType<PartTemplateRepository>().As<IRepository<PartTemplate, string>>();
+            builder.RegisterType<MechPartSourcesRepository>()
+                .As<IRepository<MechPartSource, MechPartSourceKey>>();
+            builder.RegisterType<SosAllocHeadRepository>().As<IQueryRepository<SosAllocHead>>();
         }
     }
 }

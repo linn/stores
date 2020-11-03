@@ -6,8 +6,10 @@
     using FluentAssertions;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.Parts;
 
     using Nancy;
     using Nancy.Testing;
@@ -21,8 +23,20 @@
         [SetUp]
         public void SetUp()
         {
-            var partA = new Part { PartNumber = "PART/A", Description = "description A" };
-            var partB = new Part { PartNumber = "PART/B", Description = "description B" };
+            var partA = new Part
+                            {
+                                PartNumber = "PART/A",
+                                Description = "description A",
+                                StockControlled = "Y",
+                                CreatedBy = new Employee { Id = 1 }
+                            };
+            var partB = new Part
+                            {
+                                PartNumber = "PART/B",
+                                Description = "description B",
+                                StockControlled = "Y",
+                                CreatedBy = new Employee { Id = 1 }
+                            };
 
             this.PartsFacadeService.Search("P")
                 .Returns(new SuccessResult<IEnumerable<Part>>(new List<Part> { partA, partB }));

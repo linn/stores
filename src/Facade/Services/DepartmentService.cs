@@ -15,8 +15,17 @@
             this.repository = repository;
         }
 
-        public IResult<IEnumerable<Department>> GetOpenDepartments()
+        public IResult<IEnumerable<Department>> GetOpenDepartments(string searchTerm = null)
         {
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                return new SuccessResult<IEnumerable<Department>>(
+                    this.repository.FilterBy(d => !d.DateClosed.HasValue 
+                                                  && (d.DepartmentCode.Contains(searchTerm) 
+                                                         || d.Description
+                                                             .ToUpper()
+                                                             .Contains(searchTerm.ToUpper()))));
+            }
             return new SuccessResult<IEnumerable<Department>>(
                 this.repository.FilterBy(d => !d.DateClosed.HasValue));
         }

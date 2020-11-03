@@ -12,12 +12,14 @@
 
         public string FullName { get; set; }
 
-        public DateTime DateInvalid { get; set; }
+        public DateTime? DateInvalid { get; set; }
 
         public IEnumerable<Part> PartsCreated { get; set; }
 
         public IEnumerable<Part> PartsMadeLive { get; set; }
 
         public IEnumerable<Part> PartsPhasedOut { get; set; }
+
+        public IEnumerable<MechPartSource> SourcesProposed { get; set; }
     }
 }

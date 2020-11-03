@@ -7,6 +7,6 @@
 
     public interface ISuppliersService
     {
-        IResult<IEnumerable<Supplier>> GetSuppliers();
+        IResult<IEnumerable<Supplier>> GetSuppliers(string searchTerm = null);
     }
 }

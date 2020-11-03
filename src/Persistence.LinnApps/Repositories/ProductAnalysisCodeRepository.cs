@@ -7,36 +7,33 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
 
-    public class ProductAnalysisCodeRepository : IRepository<ProductAnalysisCode, string>
+    using Microsoft.EntityFrameworkCore;
+
+    public class ProductAnalysisCodeRepository : IQueryRepository<ProductAnalysisCode>
     {
-        public ProductAnalysisCode FindById(string key)
-        {
-            throw new NotImplementedException();
-        }
+        private readonly ServiceDbContext serviceDbContext;
 
-        public IQueryable<ProductAnalysisCode> FindAll()
+        public ProductAnalysisCodeRepository(ServiceDbContext serviceDbContext)
         {
-            throw new NotImplementedException();
-        }
-
-        public void Add(ProductAnalysisCode entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Remove(ProductAnalysisCode entity)
-        {
-            throw new NotImplementedException();
+            this.serviceDbContext = serviceDbContext;
         }
 
         public ProductAnalysisCode FindBy(Expression<Func<ProductAnalysisCode, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext
+                .ProductAnalysisCodes
+                .Where(expression)
+                .ToList().FirstOrDefault();
         }
 
         public IQueryable<ProductAnalysisCode> FilterBy(Expression<Func<ProductAnalysisCode, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.ProductAnalysisCodes.Where(expression).AsNoTracking();
+        }
+
+        public IQueryable<ProductAnalysisCode> FindAll()
+        {
+            return this.serviceDbContext.ProductAnalysisCodes.AsNoTracking();
         }
     }
 }

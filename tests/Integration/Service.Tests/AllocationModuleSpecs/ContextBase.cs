@@ -4,9 +4,11 @@
     using System.Security.Claims;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
+    using Linn.Stores.Resources.Allocation;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
     using Linn.Stores.Service.Tests;
@@ -19,20 +21,33 @@
 
     public abstract class ContextBase : NancyContextBase
     {
-        protected IAllocationFacadeService AllocationFacadeService{ get; private set; }
+        protected IAllocationFacadeService AllocationFacadeService { get; private set; }
+
+        protected IFacadeService<DespatchLocation, int, DespatchLocationResource, DespatchLocationResource> DespatchLocationFacadeService { get; private set; }
+
+        protected ISosAllocHeadFacadeService SosAllocHeadFacadeService { get; private set; }
 
         [SetUp]
         public void EstablishContext()
         {
             this.AllocationFacadeService = Substitute.For<IAllocationFacadeService>();
+            this.DespatchLocationFacadeService = Substitute.For<IFacadeService<DespatchLocation, int, DespatchLocationResource, DespatchLocationResource>>();
+            this.SosAllocHeadFacadeService = Substitute.For<ISosAllocHeadFacadeService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                 {
                     with.Dependency(this.AllocationFacadeService);
+                    with.Dependency(this.DespatchLocationFacadeService);
+                    with.Dependency(this.SosAllocHeadFacadeService);
                     with.Dependency<IResourceBuilder<AllocationStart>>(new AllocationStartResourceBuilder());
+                    with.Dependency<IResourceBuilder<IEnumerable<DespatchLocation>>>(new DespatchLocationsResourceBuilder());
+                    with.Dependency<IResourceBuilder<SosAllocHead>>(new SosAllocHeadResourceBuilder());
+                    with.Dependency<IResourceBuilder<IEnumerable<SosAllocHead>>>(new SosAllocHeadsResourceBuilder());
                     with.Module<AllocationModule>();
                     with.ResponseProcessor<AllocationStartResponseProcessor>();
+                    with.ResponseProcessor<DespatchLocationsResponseProcessor>();
+                    with.ResponseProcessor<SosAllocHeadsResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {

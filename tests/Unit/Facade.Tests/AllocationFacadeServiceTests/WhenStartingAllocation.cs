@@ -1,6 +1,9 @@
 ﻿namespace Linn.Stores.Facade.Tests.AllocationFacadeServiceTests
 {
+    using System;
+
     using FluentAssertions;
+    using FluentAssertions.Extensions;
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
@@ -27,11 +30,25 @@
                                     StockPoolCode = "LINN",
                                     AccountId = 24,
                                     ArticleNumber = "article",
-                                    DespatchLocationCode = "dispatch"
+                                    DespatchLocationCode = "dispatch",
+                                    AccountingCompany = "LINN",
+                                    CutOffDate = 1.July(2021).ToString("o"),
+                                    CountryCode = null,
+                                    ExcludeOverCreditLimit = true,
+                                    ExcludeUnsuppliableLines = true,
+                                    ExcludeOnHold = true
                                 };
 
-            this.AllocationService
-                .StartAllocation(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int>(), Arg.Any<string>())
+            this.AllocationService.StartAllocation(
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<int>(),
+                    Arg.Any<string>(),
+                    Arg.Any<string>(),
+                    Arg.Any<DateTime?>(),
+                    Arg.Any<bool>(),
+                    Arg.Any<bool>(),
+                    Arg.Any<bool>())
                 .Returns(this.startDetails);
 
             this.result = this.Sut.StartAllocation(this.resource);
@@ -44,7 +61,12 @@
                 this.resource.StockPoolCode,
                 this.resource.DespatchLocationCode,
                 this.resource.AccountId,
-                this.resource.ArticleNumber);
+                this.resource.ArticleNumber,
+                this.resource.AccountingCompany,
+                1.July(2021),
+                this.resource.ExcludeOverCreditLimit,
+                this.resource.ExcludeUnsuppliableLines,
+                this.resource.ExcludeOnHold);
         }
 
         [Test]
