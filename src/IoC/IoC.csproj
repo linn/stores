@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AssemblyName>Linn.Stores.IoC</AssemblyName>
     <RootNamespace>Linn.Stores.IoC</RootNamespace>
+    <UserSecretsId>e70c4427-46fb-4b3c-9326-6c20fadbe963</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
