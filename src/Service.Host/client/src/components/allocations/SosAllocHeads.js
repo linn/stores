@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+
 import {
     SaveBackCancelButtons,
     InputField,
@@ -24,6 +29,8 @@ function SosAllocHeads({
     items,
     setSnackbarVisible
 }) {
+    const [selectedIndex, setSelectedIndex] = useState(0);
+
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
 
@@ -51,6 +58,42 @@ function SosAllocHeads({
                         />
                     </>
                 )}
+            </Grid>
+            <Grid container spacing={3}>
+                {!loading && (
+                    <>
+                    <Grid item xs={2}>
+                        <List component="nav">
+                                {items.map((item, i) => (<><ListItem
+                                    button
+                                    selected={selectedIndex === i}
+                                    onClick={() => setSelectedIndex(i)} 
+                                >
+                                    <ListItemText primaryTypographyProps={{ style: {
+                                            fontSize: "0.9rem"
+                                        }
+                                    }} secondary={`Value ${item.valueToAllocate} `}  primary={`Account Id ${item.accountId} Outlet ${item.outletNumber}`}  />
+                                </ListItem>
+                                    <Divider /> </>) )}
+                        </List>
+                    </Grid>
+                        <Grid item xs={10}>
+                            <Grid container spacing={3} style={{paddingTop: "12px"}}>
+                        <Grid item xs={6}>
+                            big list 2
+                        </Grid>
+                        <Grid item xs={6}>
+                            big list 2
+                        </Grid>
+                        <Grid item xs={6}>
+                            big list 4
+                        </Grid>
+                        <Grid item xs={6}>
+                            big list 4
+                        </Grid></Grid>
+                    </Grid>
+                    </>
+                )} 
             </Grid>
         </Page>
     );
