@@ -1,6 +1,7 @@
 ﻿FROM microsoft/dotnet:2.2-runtime
 
 ARG gitBranch=unspecified
+ENV TZ UTC
 
 EXPOSE 5050
 
