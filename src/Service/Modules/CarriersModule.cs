@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
@@ -7,21 +8,22 @@
     using Nancy;
     using Nancy.ModelBinding;
 
-    public sealed class SuppliersModule : NancyModule
+    public sealed class CarriersModule : NancyModule
     {
-        private readonly ISuppliersService suppliersService;
+        private readonly ICarriersService carriersService;
 
-        public SuppliersModule(ISuppliersService suppliersFacadeService)
+        public CarriersModule(ICarriersService carriersService)
         {
-            this.suppliersService = suppliersFacadeService;
-            this.Get("inventory/suppliers", _ => this.GetSuppliers());
+            this.carriersService = carriersService;
+            this.Get("/logistics/carriers", _ => this.GetCarriers());
         }
 
-        private object GetSuppliers()
+        private object GetCarriers()
         {
             var resource = this.Bind<SearchRequestResource>();
 
-            var results = this.suppliersService.GetSuppliers(resource.SearchTerm);
+            var results = this.carriersService.SearchCarriers(resource.SearchTerm);
+
             return this.Negotiate
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)

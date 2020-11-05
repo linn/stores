@@ -71,6 +71,9 @@
 
         public DbSet<SosAllocHead> SosAllocHeads { get; set; }
 
+        public DbSet<Carrier> Carriers { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -100,6 +103,7 @@
             this.BuildPartDataSheets(builder);
             this.BuildMechPartSources(builder);
             this.BuildSosAllocHeads(builder);
+            this.BuildCarriers(builder);
             base.OnModelCreating(builder);
         }
 
@@ -157,6 +161,8 @@
             q.ToTable("SUPPLIERS");
             q.Property(e => e.Id).HasColumnName("SUPPLIER_ID");
             q.Property(e => e.Name).HasColumnName("SUPPLIER_NAME").HasMaxLength(50);
+            q.Property(e => e.CountryCode).HasColumnName("COUNTRY");
+            q.Property(e => e.DateClosed).HasColumnName("DATE_CLOSED");
         }
 
         private void BuildParts(ModelBuilder builder)
@@ -480,6 +486,16 @@
             table.Property(s => s.OldestOrder).HasColumnName("OLDEST_ORDER_NUMBER");
             table.Property(s => s.ValueToAllocate).HasColumnName("VALUE_TO_ALLOCATE");
             table.Property(s => s.OutletHoldStatus).HasColumnName("OUTLET_HOLD_STATUS").HasMaxLength(200);
+        }
+
+        private void BuildCarriers(ModelBuilder builder)
+        {
+            var e = builder.Entity<Carrier>().ToTable("CARRIERS");
+            e.HasKey(c => c.CarrierCode);
+            e.Property(c => c.CarrierCode).HasColumnName("CARRIER_CODE").HasMaxLength(10);
+            e.Property(c => c.Name).HasColumnName("NAME");
+            e.Property(c => c.OrganisationId).HasColumnName("ORG_ID");
+            e.Property(c => c.DateInvalid).HasColumnName("DATE_INVALID");
         }
     }
 }

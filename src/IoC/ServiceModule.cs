@@ -7,6 +7,7 @@
     using Linn.Common.Facade;
     using Linn.Common.Proxy;
     using Linn.Common.Reporting.Models;
+    using Linn.Production.Facade.Services;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
@@ -58,6 +59,7 @@
                 .As<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
             builder.RegisterType<PartLiveService>().As<IPartLiveService>();
             builder.RegisterType<SosAllocHeadFacadeService>().As<ISosAllocHeadFacadeService>();
+            builder.RegisterType<CarriersService>().As<ICarriersService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
