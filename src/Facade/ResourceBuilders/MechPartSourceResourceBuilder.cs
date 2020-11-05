@@ -17,7 +17,7 @@ namespace Linn.Stores.Facade.ResourceBuilders
                             EstimatedVolume = model.EstimatedVolume,
                             Id = model.Id,
                             LinnPartNumber = model.LinnPartNumber,
-                            LinnPartNumberDescription =model.LinnPart?.Description,
+                            LinnPartDescription =model.LinnPart?.Description,
                             MechanicalOrElectrical = model.MechanicalOrElectrical,
                             Notes = model.Notes,
                             PartNumber = model.PartNumber,
