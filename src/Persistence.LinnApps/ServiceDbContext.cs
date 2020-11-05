@@ -73,6 +73,7 @@
 
         public DbSet<Carrier> Carriers { get; set; }
 
+        public DbSet<Parcel> Parcels { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -104,6 +105,7 @@
             this.BuildMechPartSources(builder);
             this.BuildSosAllocHeads(builder);
             this.BuildCarriers(builder);
+            this.BuildParcels(builder);
             base.OnModelCreating(builder);
         }
 
@@ -496,6 +498,27 @@
             e.Property(c => c.Name).HasColumnName("NAME");
             e.Property(c => c.OrganisationId).HasColumnName("ORG_ID");
             e.Property(c => c.DateInvalid).HasColumnName("DATE_INVALID");
+        }
+
+        private void BuildParcels(ModelBuilder builder)
+        {
+            var e = builder.Entity<Parcel>().ToTable("PARCELS");
+            e.HasKey(c => c.ParcelNumber);
+            e.Property(c => c.ParcelNumber).HasColumnName("PARCEL_NUMBER");
+            e.Property(c => c.DateCreated).HasColumnName("DATE_CREATED");
+            e.Property(c => c.DateReceived).HasColumnName("DATE_RECEIVED");
+            e.Property(c => c.SupplierInvoiceNo).HasColumnName("SUPPLIER_INV_NUMBERS");
+            e.Property(c => c.ConsignmentNo).HasColumnName("CONSIGNMENT_NUMBER");
+            e.Property(c => c.Weight).HasColumnName("WEIGHT");
+            e.Property(c => c.CheckedById).HasColumnName("CHECKED_BY");
+            e.Property(c => c.SupplierId).HasColumnName("SUPPLIER_ID");
+            e.Property(c => c.Comments).HasColumnName("COMMENTS");
+            e.Property(c => c.CarrierId).HasColumnName("CARRIER");
+            e.Property(c => c.PalletCount).HasColumnName("NUMBER_OF_PALLETS");
+            e.Property(c => c.CartonCount).HasColumnName("NUMBER_OF_CARTONS");
+            e.Property(c => c.DateCancelled).HasColumnName("DATE_CANCELLED");
+            e.Property(c => c.CancellationReason).HasColumnName("REASON_CANCELLED");
+            e.Property(c => c.CancelledBy).HasColumnName("CANCELLED_BY");
         }
     }
 }

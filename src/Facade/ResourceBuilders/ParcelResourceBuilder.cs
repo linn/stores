@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Facade.ResourceBuilders
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Linn.Common.Facade;
     using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps;
@@ -29,8 +30,10 @@
                 CheckedById = parcel.CheckedById,
                 CheckedByName = parcel.CheckedByName,
                 Comments = parcel.Comments,
-                ImportNoVax = parcel.ImportNoVax, //todo check if this should be int
-                ImpbookId = parcel.ImpbookId
+                DateCancelled = parcel.DateCancelled.ToString("o"),
+                CancellationReason = parcel.CancellationReason,
+                CancelledBy = parcel.CancelledBy,
+                Links = BuildLinks(parcel).ToArray()
             };
         }
 
@@ -44,16 +47,6 @@
         private IEnumerable<LinkResource> BuildLinks(Parcel parcel)
         {
             yield return new LinkResource { Rel = "self", Href = this.GetLocation(parcel) };
-        }
-
-        private bool? ToNullableBool(string yesOrNoString)
-        {
-            if (yesOrNoString == null)
-            {
-                return null;
-            }
-
-            return yesOrNoString == "Y";
         }
     }
 }
