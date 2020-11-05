@@ -54,7 +54,7 @@
 
         protected IRepository<QcControl, int> QcControlRepository { get; private set; }
 
-        protected IRepository<MechPartSource, int> MechPartSourceRepository { get; private set; }
+        protected IRepository<MechPartSourceWithPartInfo, int> MechPartSourceRepository { get; private set; }
 
         protected IPartService PartsDomainService { get; private set; }
 
@@ -63,7 +63,7 @@
             get; private set;
         }
 
-        protected IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
+        protected IFacadeService<MechPartSourceWithPartInfo, int, MechPartSourceResource, MechPartSourceResource>
             MechPartSourceService;
 
         protected IPartLiveService PartLiveService;
@@ -79,7 +79,7 @@
             this.UnitsOfMeasureService = Substitute.For<IUnitsOfMeasureService>();
             this.ProductAnalysisCodeService = Substitute.For<IProductAnalysisCodeService>();
             this.PartRepository = Substitute.For<IRepository<Part, int>>();
-            this.MechPartSourceRepository = Substitute.For<IRepository<MechPartSource, int>>();
+            this.MechPartSourceRepository = Substitute.For<IRepository<MechPartSourceWithPartInfo, int>>();
             this.ParetoClassRepository = Substitute.For<IRepository<ParetoClass, string>>();
             this.QcControlRepository = Substitute.For<IRepository<QcControl, int>>();
             this.ProductAnalysisCodeRepository = Substitute.For<IRepository<ProductAnalysisCode, string>>();
@@ -90,7 +90,7 @@
             this.PartTemplateService = Substitute
                 .For<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
             this.MechPartSourceService = Substitute
-                .For<IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>>();
+                .For<IFacadeService<MechPartSourceWithPartInfo, int, MechPartSourceResource, MechPartSourceResource>>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
@@ -130,7 +130,7 @@
                             new DecrementRulesResourceBuilder());
                         with.Dependency<IResourceBuilder<PartLiveTest>>(
                             new PartLiveTestResourceBuilder());
-                        with.Dependency<IResourceBuilder<MechPartSource>>(new MechPartSourceResourceBuilder());
+                        with.Dependency<IResourceBuilder<MechPartSourceWithPartInfo>>(new MechPartSourceResourceBuilder());
                         with.ResponseProcessor<PartResponseProcessor>();
                         with.ResponseProcessor<PartsResponseProcessor>();
                         with.ResponseProcessor<UnitsOfMeasureResponseProcessor>();

@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
 
-        public int ProposedBy { get; set; }
+        public int? ProposedBy { get; set; }
 
         public string DateEntered { get; set; }
 
@@ -18,13 +18,15 @@
 
         public string SamplesRequired { get; set; }
 
-        public int SampleQuantity { get; set; }
+        public int? SampleQuantity { get; set; }
 
         public string DateSamplesRequired { get; set; }
 
         public string RohsReplace { get; set; }
 
         public string LinnPartNumber { get; set; }
+
+        public string LinnPartDescription { get; set; }
 
         public string Notes { get; set; }
 

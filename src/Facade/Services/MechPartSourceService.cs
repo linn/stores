@@ -7,23 +7,23 @@ namespace Linn.Stores.Facade.Services
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources.Parts;
 
-    public class MechPartSourceService : FacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
+    public class MechPartSourceService : FacadeService<MechPartSourceWithPartInfo, int, MechPartSourceResource, MechPartSourceResource>
     {
-        public MechPartSourceService(IRepository<MechPartSource, int> repository, ITransactionManager transactionManager) : base(repository, transactionManager)
+        public MechPartSourceService(IRepository<MechPartSourceWithPartInfo, int> repository, ITransactionManager transactionManager) : base(repository, transactionManager)
         {
         }
 
-        protected override MechPartSource CreateFromResource(MechPartSourceResource resource)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected override void UpdateFromResource(MechPartSource entity, MechPartSourceResource updateResource)
+        protected override MechPartSourceWithPartInfo CreateFromResource(MechPartSourceResource resource)
         {
             throw new NotImplementedException();
         }
 
-        protected override Expression<Func<MechPartSource, bool>> SearchExpression(string searchTerm)
+        protected override void UpdateFromResource(MechPartSourceWithPartInfo entity, MechPartSourceResource updateResource)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override Expression<Func<MechPartSourceWithPartInfo, bool>> SearchExpression(string searchTerm)
         {
             throw new NotImplementedException();
         }

@@ -1,4 +1,6 @@
-﻿namespace Linn.Stores.Persistence.LinnApps.Repositories
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Linn.Stores.Persistence.LinnApps.Repositories
 {
     using System;
     using System.Linq;
@@ -7,41 +9,53 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Parts;
 
-    public class MechPartSourcesRepository : IRepository<MechPartSource, int>
+    public class MechPartSourcesRepository : IRepository<MechPartSourceWithPartInfo, int>
     {
         private readonly ServiceDbContext serviceDbContext;
 
-        public MechPartSourcesRepository(ServiceDbContext serviceDbContext)
+        private readonly IRepository<Part, int> partRepository;
+
+        public MechPartSourcesRepository(ServiceDbContext serviceDbContext, IRepository<Part, int> partRepository)
         {
             this.serviceDbContext = serviceDbContext;
+            this.partRepository = partRepository;
         }
 
-        public MechPartSource FindById(int key)
+        public MechPartSourceWithPartInfo FindById(int key)
         {
-            return this.serviceDbContext.MechPartSources.Where(s => s.Id == key).ToList().FirstOrDefault();
+             var source = this.serviceDbContext.MechPartSources.Where(s => s.Id == key)
+                .Include(s => s.ProposedBy)
+                .ToList().FirstOrDefault();
+
+             var sourceWithPartInfo = new MechPartSourceWithPartInfo(source)
+             {
+                 LinnPart = this.partRepository.FindBy(p => p.PartNumber == source.LinnPartNumber)
+             };
+
+             return sourceWithPartInfo;
         }
 
-        public IQueryable<MechPartSource> FindAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Add(MechPartSource entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Remove(MechPartSource entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public MechPartSource FindBy(Expression<Func<MechPartSource, bool>> expression)
+        public IQueryable<MechPartSourceWithPartInfo> FindAll()
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<MechPartSource> FilterBy(Expression<Func<MechPartSource, bool>> expression)
+        public void Add(MechPartSourceWithPartInfo entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(MechPartSourceWithPartInfo entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MechPartSourceWithPartInfo FindBy(Expression<Func<MechPartSourceWithPartInfo, bool>> expression)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<MechPartSourceWithPartInfo> FilterBy(Expression<Func<MechPartSourceWithPartInfo, bool>> expression)
         {
             throw new NotImplementedException();
         }

@@ -4,9 +4,9 @@
     using Linn.Common.Nancy.Facade;
     using Linn.Stores.Domain.LinnApps.Parts;
 
-    public class MechPartSourceResponseProcessor : JsonResponseProcessor<MechPartSource>
+    public class MechPartSourceResponseProcessor : JsonResponseProcessor<MechPartSourceWithPartInfo>
     {
-        public MechPartSourceResponseProcessor(IResourceBuilder<MechPartSource> resourceBuilder) 
+        public MechPartSourceResponseProcessor(IResourceBuilder<MechPartSourceWithPartInfo> resourceBuilder) 
             : base(resourceBuilder, "linnapps-mech-part-source-1")
         {
         }

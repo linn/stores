@@ -1,11 +1,13 @@
-﻿namespace Linn.Stores.Facade.ResourceBuilders
+﻿using Linn.Common.Persistence;
+
+namespace Linn.Stores.Facade.ResourceBuilders
 {
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources.Parts;
-    public class MechPartSourceResourceBuilder : IResourceBuilder<MechPartSource>
+    public class MechPartSourceResourceBuilder : IResourceBuilder<MechPartSourceWithPartInfo>
     {
-        public MechPartSourceResource Build(MechPartSource model)
+        public MechPartSourceResource Build(MechPartSourceWithPartInfo model)
         {
             return new MechPartSourceResource
                         {
@@ -15,22 +17,23 @@
                             EstimatedVolume = model.EstimatedVolume,
                             Id = model.Id,
                             LinnPartNumber = model.LinnPartNumber,
+                            LinnPartNumberDescription =model.LinnPart?.Description,
                             MechanicalOrElectrical = model.MechanicalOrElectrical,
                             Notes = model.Notes,
                             PartNumber = model.PartNumber,
                             PartType = model.PartType,
-                            ProposedBy = model.ProposedBy.Id,
+                            ProposedBy = model.ProposedBy?.Id,
                             RohsReplace = model.RohsReplace,
                             SampleQuantity = model.SampleQuantity,
                             SamplesRequired = model.SamplesRequired
                         };
         }
 
-        public string GetLocation(MechPartSource model)
+        public string GetLocation(MechPartSourceWithPartInfo model)
         {
             throw new System.NotImplementedException();
         }
 
-        object IResourceBuilder<MechPartSource>.Build(MechPartSource source) => this.Build(source);
+        object IResourceBuilder<MechPartSourceWithPartInfo>.Build(MechPartSourceWithPartInfo source) => this.Build(source);
     }
 }

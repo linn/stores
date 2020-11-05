@@ -40,7 +40,7 @@
 
         private readonly IPartLiveService partLiveService;
 
-        private readonly IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
+        private readonly IFacadeService<MechPartSourceWithPartInfo, int, MechPartSourceResource, MechPartSourceResource>
             mechPartSourceService;
 
         public PartsModule(
@@ -53,7 +53,7 @@
             IPartService partDomainService,
             IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> partTemplateService,
             IPartLiveService partLiveService,
-            IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
+            IFacadeService<MechPartSourceWithPartInfo, int, MechPartSourceResource, MechPartSourceResource>
                 mechPartSourceService)
         {
             this.partsFacadeService = partsFacadeService;

@@ -59,7 +59,7 @@
             builder.RegisterType<PartLiveService>().As<IPartLiveService>();
             builder.RegisterType<SosAllocHeadFacadeService>().As<ISosAllocHeadFacadeService>();
             builder.RegisterType<MechPartSourceService>()
-                .As<IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>>();
+                .As<IFacadeService<MechPartSourceWithPartInfo, int, MechPartSourceResource, MechPartSourceResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
