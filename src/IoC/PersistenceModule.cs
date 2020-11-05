@@ -45,8 +45,8 @@
             builder.RegisterType<CountryRepository>().As<IRepository<Country, string>>();
             builder.RegisterType<QcControlRepository>().As<IRepository<QcControl, int>>();
             builder.RegisterType<PartTemplateRepository>().As<IRepository<PartTemplate, string>>();
-            builder.RegisterType<MechPartSourcesRepository>()
-                .As<IRepository<MechPartSourceWithPartInfo, int>>();
+            builder.RegisterType<MechPartSourceWithPartInfoRepository>()
+                .As<IMechPartSourceWithPartInfoRepository>();
             builder.RegisterType<SosAllocHeadRepository>().As<IQueryRepository<SosAllocHead>>();
             builder.RegisterType<PartDataSheetRepository>().As<IRepository<PartDataSheet, PartDataSheetKey>>();
         }

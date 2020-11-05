@@ -40,7 +40,7 @@
 
         private readonly IPartLiveService partLiveService;
 
-        private readonly IFacadeService<MechPartSourceWithPartInfo, int, MechPartSourceResource, MechPartSourceResource>
+        private readonly IMechPartSourceWithPartInfoService
             mechPartSourceService;
 
         public PartsModule(
@@ -53,7 +53,7 @@
             IPartService partDomainService,
             IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> partTemplateService,
             IPartLiveService partLiveService,
-            IFacadeService<MechPartSourceWithPartInfo, int, MechPartSourceResource, MechPartSourceResource>
+            IMechPartSourceWithPartInfoService
                 mechPartSourceService)
         {
             this.partsFacadeService = partsFacadeService;
@@ -185,9 +185,9 @@
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
 
-        private object GetMechPartSource(int id)
+        private object GetMechPartSource(string partNumber)
         {
-            var result = this.mechPartSourceService.GetById(id);
+            var result = this.mechPartSourceService.GetMechPartSourceWithPartInfo(partNumber);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

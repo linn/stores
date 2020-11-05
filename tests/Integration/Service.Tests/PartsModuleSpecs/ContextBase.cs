@@ -14,6 +14,7 @@
     using Linn.Stores.Resources.Parts;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
+    using Linn.Stores.Persistence.LinnApps.Repositories;
 
     using Nancy.Testing;
 
@@ -54,7 +55,7 @@
 
         protected IRepository<QcControl, int> QcControlRepository { get; private set; }
 
-        protected IRepository<MechPartSourceWithPartInfo, int> MechPartSourceRepository { get; private set; }
+        protected IMechPartSourceWithPartInfoRepository MechPartSourceRepository { get; private set; }
 
         protected IPartService PartsDomainService { get; private set; }
 
@@ -63,8 +64,7 @@
             get; private set;
         }
 
-        protected IFacadeService<MechPartSourceWithPartInfo, int, MechPartSourceResource, MechPartSourceResource>
-            MechPartSourceService;
+        protected IMechPartSourceWithPartInfoService MechPartSourceWithPartInfoService;
 
         protected IPartLiveService PartLiveService;
 
@@ -79,7 +79,7 @@
             this.UnitsOfMeasureService = Substitute.For<IUnitsOfMeasureService>();
             this.ProductAnalysisCodeService = Substitute.For<IProductAnalysisCodeService>();
             this.PartRepository = Substitute.For<IRepository<Part, int>>();
-            this.MechPartSourceRepository = Substitute.For<IRepository<MechPartSourceWithPartInfo, int>>();
+            this.MechPartSourceRepository = Substitute.For<IMechPartSourceWithPartInfoRepository>();
             this.ParetoClassRepository = Substitute.For<IRepository<ParetoClass, string>>();
             this.QcControlRepository = Substitute.For<IRepository<QcControl, int>>();
             this.ProductAnalysisCodeRepository = Substitute.For<IRepository<ProductAnalysisCode, string>>();
@@ -89,8 +89,8 @@
                 .For<IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>>();
             this.PartTemplateService = Substitute
                 .For<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
-            this.MechPartSourceService = Substitute
-                .For<IFacadeService<MechPartSourceWithPartInfo, int, MechPartSourceResource, MechPartSourceResource>>();
+            this.MechPartSourceWithPartInfoService = Substitute
+                .For<IMechPartSourceWithPartInfoService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
@@ -108,7 +108,7 @@
                         with.Dependency(this.DecrementRuleService);
                         with.Dependency(this.PartsDomainService);
                         with.Dependency(this.PartTemplateService);
-                        with.Dependency(this.MechPartSourceService);
+                        with.Dependency(this.MechPartSourceWithPartInfoService);
                         with.Dependency(this.MechPartSourceRepository);
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());
