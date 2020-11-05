@@ -54,12 +54,17 @@
 
         protected IRepository<QcControl, int> QcControlRepository { get; private set; }
 
+        protected IRepository<MechPartSource, int> MechPartSourceRepository { get; private set; }
+
         protected IPartService PartsDomainService { get; private set; }
 
         protected IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> PartTemplateService
         {
             get; private set;
         }
+
+        protected IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
+            MechPartSourceService;
 
         protected IPartLiveService PartLiveService;
 
@@ -74,6 +79,7 @@
             this.UnitsOfMeasureService = Substitute.For<IUnitsOfMeasureService>();
             this.ProductAnalysisCodeService = Substitute.For<IProductAnalysisCodeService>();
             this.PartRepository = Substitute.For<IRepository<Part, int>>();
+            this.MechPartSourceRepository = Substitute.For<IRepository<MechPartSource, int>>();
             this.ParetoClassRepository = Substitute.For<IRepository<ParetoClass, string>>();
             this.QcControlRepository = Substitute.For<IRepository<QcControl, int>>();
             this.ProductAnalysisCodeRepository = Substitute.For<IRepository<ProductAnalysisCode, string>>();
@@ -83,6 +89,9 @@
                 .For<IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>>();
             this.PartTemplateService = Substitute
                 .For<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
+            this.MechPartSourceService = Substitute
+                .For<IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>>();
+
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
@@ -99,6 +108,8 @@
                         with.Dependency(this.DecrementRuleService);
                         with.Dependency(this.PartsDomainService);
                         with.Dependency(this.PartTemplateService);
+                        with.Dependency(this.MechPartSourceService);
+                        with.Dependency(this.MechPartSourceRepository);
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());
                         with.Dependency<IResourceBuilder<PartTemplate>>(new PartTemplateResourceBuilder());
@@ -119,6 +130,7 @@
                             new DecrementRulesResourceBuilder());
                         with.Dependency<IResourceBuilder<PartLiveTest>>(
                             new PartLiveTestResourceBuilder());
+                        with.Dependency<IResourceBuilder<MechPartSource>>(new MechPartSourceResourceBuilder());
                         with.ResponseProcessor<PartResponseProcessor>();
                         with.ResponseProcessor<PartsResponseProcessor>();
                         with.ResponseProcessor<UnitsOfMeasureResponseProcessor>();
@@ -128,6 +140,7 @@
                         with.ResponseProcessor<ProductAnalysisCodesResponseProcessor>();
                         with.ResponseProcessor<PartTemplatesResponseProcessor>();
                         with.ResponseProcessor<PartLiveTestResponseProcessor>();
+                        with.ResponseProcessor<MechPartSourceResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
                                 {

@@ -40,6 +40,9 @@
 
         private readonly IPartLiveService partLiveService;
 
+        private readonly IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
+            mechPartSourceService;
+
         public PartsModule(
             IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
@@ -49,7 +52,9 @@
             IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource> decrementRuleService,
             IPartService partDomainService,
             IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> partTemplateService,
-            IPartLiveService partLiveService)
+            IPartLiveService partLiveService,
+            IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
+                mechPartSourceService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
@@ -80,6 +85,9 @@
 
             this.partLiveService = partLiveService;
             this.Get("inventory/parts/can-be-made-live/{id}", parameters => this.CheckCanBeMadeLive(parameters.id));
+
+            this.mechPartSourceService = mechPartSourceService;
+            this.Get("inventory/parts/sources/{id}", parameters => this.GetMechPartSource(parameters.id));
         }
 
         private object GetPart(int id)
@@ -173,6 +181,13 @@
         private object CheckCanBeMadeLive(int id)
         {
             var result = this.partLiveService.CheckIfPartCanBeMadeLive(id);
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetMechPartSource(int id)
+        {
+            var result = this.mechPartSourceService.GetById(id);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

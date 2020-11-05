@@ -7,7 +7,7 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Parts;
 
-    public class MechPartSourcesRepository : IRepository<MechPartSource, MechPartSourceKey>
+    public class MechPartSourcesRepository : IRepository<MechPartSource, int>
     {
         private readonly ServiceDbContext serviceDbContext;
 
@@ -16,14 +16,14 @@
             this.serviceDbContext = serviceDbContext;
         }
 
-        public MechPartSource FindById(MechPartSourceKey key)
+        public MechPartSource FindById(int key)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.MechPartSources.Where(s => s.Id == key).ToList().FirstOrDefault();
         }
 
         public IQueryable<MechPartSource> FindAll()
         {
-            return this.serviceDbContext.MechPartSources;
+            throw new NotImplementedException();
         }
 
         public void Add(MechPartSource entity)
@@ -38,7 +38,7 @@
 
         public MechPartSource FindBy(Expression<Func<MechPartSource, bool>> expression)
         {
-            return this.serviceDbContext.MechPartSources.Where(expression).ToList().FirstOrDefault();
+            throw new NotImplementedException();
         }
 
         public IQueryable<MechPartSource> FilterBy(Expression<Func<MechPartSource, bool>> expression)
