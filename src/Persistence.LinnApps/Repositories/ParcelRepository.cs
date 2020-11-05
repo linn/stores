@@ -45,9 +45,7 @@
         {
             return this.serviceDbContext
                 .Parcels
-                .Where(expression)
-                .ToList()
-                .AsQueryable();
+                .Where(expression);
         }
     }
 }
