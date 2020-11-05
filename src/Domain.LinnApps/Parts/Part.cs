@@ -134,7 +134,5 @@
         public AssemblyTechnology AssemblyTechnology { get; set; }
 
         public DecrementRule DecrementRule { get; set; }
-
-        public IEnumerable<PartDataSheet> DataSheets { get; set; }
     }
 }

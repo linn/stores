@@ -238,7 +238,6 @@
             e.HasOne(p => p.SernosSequence).WithMany(s => s.Parts).HasForeignKey("SERNOS_SEQUENCE");
             e.HasOne(p => p.AssemblyTechnology).WithMany(s => s.Parts).HasForeignKey("ASSEMBLY_TECHNOLOGY");
             e.HasOne(p => p.DecrementRule).WithMany(s => s.Parts).HasForeignKey("DECREMENT_RULE");
-            e.HasMany(p => p.DataSheets).WithOne(d => d.Part).HasForeignKey("PART_NUMBER");
         }
 
         private void BuildPartDataSheets(ModelBuilder builder)

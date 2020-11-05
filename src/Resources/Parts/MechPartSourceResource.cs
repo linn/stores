@@ -1,4 +1,6 @@
-﻿namespace Linn.Stores.Resources.Parts
+﻿using System.Collections.Generic;
+
+namespace Linn.Stores.Resources.Parts
 {
     public class MechPartSourceResource
     {
@@ -31,5 +33,7 @@
         public string Notes { get; set; }
 
         public string AssemblyType { get; set; }
+
+        public IEnumerable<PartDataSheetResource> DataSheets { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Linn.Common.Persistence;
+﻿using System.Linq;
+using Linn.Common.Persistence;
 
 namespace Linn.Stores.Facade.ResourceBuilders
 {
@@ -25,7 +26,13 @@ namespace Linn.Stores.Facade.ResourceBuilders
                             ProposedBy = model.ProposedBy?.Id,
                             RohsReplace = model.RohsReplace,
                             SampleQuantity = model.SampleQuantity,
-                            SamplesRequired = model.SamplesRequired
+                            SamplesRequired = model.SamplesRequired,
+                            DataSheets = model.DataSheets.Select(s => new PartDataSheetResource
+                                                                          {
+                                                                              PartNumber = s.PartNumber,
+                                                                              PdfFilePath = s.PdfFilePath,
+                                                                              Sequence = s.Sequence
+                                                                          })
                         };
         }
 

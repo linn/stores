@@ -1,8 +1,12 @@
-﻿namespace Linn.Stores.Domain.LinnApps.Parts
+﻿using System.Collections.Generic;
+
+namespace Linn.Stores.Domain.LinnApps.Parts
 {
     public class MechPartSourceWithPartInfo : MechPartSource
     {
         public Part LinnPart { get; set; }
+
+        public IEnumerable<PartDataSheet> DataSheets { get; set; }
 
         public MechPartSourceWithPartInfo(MechPartSource source)
         {

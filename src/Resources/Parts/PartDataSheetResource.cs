@@ -1,6 +1,6 @@
-﻿namespace Linn.Stores.Domain.LinnApps.Parts
+﻿namespace Linn.Stores.Resources.Parts
 {
-    public class PartDataSheet
+    public class PartDataSheetResource
     {
         public string PartNumber { get; set; }
 

@@ -15,10 +15,16 @@ namespace Linn.Stores.Persistence.LinnApps.Repositories
 
         private readonly IRepository<Part, int> partRepository;
 
-        public MechPartSourcesRepository(ServiceDbContext serviceDbContext, IRepository<Part, int> partRepository)
+        private readonly IRepository<PartDataSheet, PartDataSheetKey> dataSheetRepository;
+
+        public MechPartSourcesRepository(
+            ServiceDbContext serviceDbContext, 
+            IRepository<Part, int> partRepository,
+            IRepository<PartDataSheet, PartDataSheetKey> dataSheetRepository)
         {
             this.serviceDbContext = serviceDbContext;
             this.partRepository = partRepository;
+            this.dataSheetRepository = dataSheetRepository;
         }
 
         public MechPartSourceWithPartInfo FindById(int key)
@@ -29,7 +35,8 @@ namespace Linn.Stores.Persistence.LinnApps.Repositories
 
              var sourceWithPartInfo = new MechPartSourceWithPartInfo(source)
              {
-                 LinnPart = this.partRepository.FindBy(p => p.PartNumber == source.LinnPartNumber)
+                 LinnPart = this.partRepository.FindBy(p => p.PartNumber == source.LinnPartNumber),
+                 DataSheets = this.dataSheetRepository.FilterBy(s => s.PartNumber == source.PartNumber)
              };
 
              return sourceWithPartInfo;
