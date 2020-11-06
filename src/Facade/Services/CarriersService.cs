@@ -11,9 +11,9 @@
     public class CarriersService : ICarriersService
                                   
     {
-        private readonly IRepository<Carrier, int> repository;
+        private readonly IRepository<Carrier, string> repository;
 
-        public CarriersService(IRepository<Carrier, int> repository)
+        public CarriersService(IRepository<Carrier, string> repository)
         {
             this.repository = repository;
         }
