@@ -21,7 +21,7 @@
     {
         protected ICarriersService CarriersService { get; private set; }
 
-        protected IQueryRepository<Carrier> CarrierRepository { get; private set; }
+        protected IRepository<Carrier, string> CarrierRepository { get; private set; }
 
 
         [SetUp]
@@ -31,7 +31,7 @@
                 .For<ICarriersService>();
 
             this.CarrierRepository = Substitute
-                .For<IQueryRepository<Carrier>>();
+                .For<IRepository<Carrier, string>>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
