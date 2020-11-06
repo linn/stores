@@ -1,4 +1,4 @@
-﻿namespace Linn.Production.Facade.Services
+﻿namespace Linn.Stores.Facade.Services
 {
     using System;
     using System.Collections.Generic;
@@ -6,14 +6,13 @@
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
-    using Linn.Stores.Facade.Services;
 
     public class CarriersService : ICarriersService
                                   
     {
-        private readonly IRepository<Carrier, int> repository;
+        private readonly IRepository<Carrier, string> repository;
 
-        public CarriersService(IRepository<Carrier, int> repository)
+        public CarriersService(IRepository<Carrier, string> repository)
         {
             this.repository = repository;
         }
