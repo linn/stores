@@ -110,6 +110,14 @@
         private IEnumerable<LinkResource> BuildLinks(Part part)
         {
             yield return new LinkResource { Rel = "self", Href = this.GetLocation(part) };
+            if (part.MechPartSource != null)
+            {
+                yield return new LinkResource
+                {
+                    Rel = "mechanical-sourcing-sheet",
+                    Href = $"/inventory/parts/sources/{part.MechPartSource.Id}"
+                };
+            }
         }
 
         private bool? ToNullableBool(string yesOrNoString)
