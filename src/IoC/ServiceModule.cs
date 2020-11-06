@@ -60,6 +60,8 @@
             builder.RegisterType<PartLiveService>().As<IPartLiveService>();
             builder.RegisterType<SosAllocHeadFacadeService>().As<ISosAllocHeadFacadeService>();
             builder.RegisterType<CarriersService>().As<ICarriersService>();
+            builder.RegisterType<ParcelFacadeService>()
+                .As<IFacadeService<Parcel, int, ParcelResource, ParcelResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

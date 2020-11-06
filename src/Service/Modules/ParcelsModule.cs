@@ -23,9 +23,10 @@
 
         private object GetParcel(int id)
         {
-            var results = this.parcelsFacadeService.GetById(id);
+            var result = this.parcelsFacadeService.GetById(id);
+
             return this.Negotiate
-                .WithModel(results)
+                .WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");
         }
@@ -33,27 +34,31 @@
         private object GetParcels()
         {
             var resource = this.Bind<SearchRequestResource>();
+
             var results = string.IsNullOrEmpty(resource.SearchTerm)
                               ? this.parcelsFacadeService.GetAll()
                               : this.parcelsFacadeService.Search(resource.SearchTerm);
+
             return this.Negotiate
                 .WithModel(results)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
-                .WithView("Index");
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
 
         private object AddParcel()
         {
             var resource = this.Bind<ParcelResource>();
+
             var result = this.parcelsFacadeService.Add(resource);
-            return this.Negotiate.WithModel(result)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+
+            return this.Negotiate.WithModel(result).WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
 
         private object UpdateParcel(int id)
         {
             var resource = this.Bind<ParcelResource>();
+
             var result = this.parcelsFacadeService.Update(id, resource);
+
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

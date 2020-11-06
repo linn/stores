@@ -36,8 +36,12 @@
 
         public string Comments { get; set; }
 
-        public string ImportNoVax { get; set; }
+        public DateTime DateCancelled { get; set; }
 
-        public int ImpbookId { get; set; }
+        public int CancelledBy { get; set; }
+
+        public string CancellationReason { get; set; }
+
+
     }
 }

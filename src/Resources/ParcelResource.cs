@@ -1,6 +1,5 @@
 ﻿namespace Linn.Stores.Resources
 {
-    using System;
     using Linn.Common.Resources;
 
     public class ParcelResource : HypermediaResource
@@ -37,8 +36,10 @@
 
         public string Comments { get; set; }
 
-        public string ImportNoVax { get; set; } //todo check if this should be int
+        public string DateCancelled { get; set; }
 
-        public int ImpbookId { get; set; }
+        public int CancelledBy { get; set; }
+
+        public string CancellationReason { get; set; }
     }
 }

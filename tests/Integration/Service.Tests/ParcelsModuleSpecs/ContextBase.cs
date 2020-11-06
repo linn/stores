@@ -6,23 +6,19 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.ResourceBuilders;
-    using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
-
     using Nancy.Testing;
-
     using NSubstitute;
-
     using NUnit.Framework;
+
 
     public class ContextBase : NancyContextBase
     {
         protected IFacadeService<Parcel, int, ParcelResource, ParcelResource> ParcelsService { get; private set; }
 
-        protected IQueryRepository<Parcel> ParcelRepository { get; private set; }
-
+        protected IRepository<Parcel, int> ParcelRepository { get; private set; }
 
         [SetUp]
         public void EstablishContext()
@@ -31,7 +27,7 @@
                 .For<IFacadeService<Parcel, int, ParcelResource, ParcelResource>>();
 
             this.ParcelRepository = Substitute
-                .For<IQueryRepository<Parcel>>();
+                .For<IRepository<Parcel, int>>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
@@ -42,6 +38,7 @@
                     with.Dependency<IResourceBuilder<IEnumerable<Parcel>>>(new ParcelsResourceBuilder());
                     with.Module<ParcelsModule>();
                     with.ResponseProcessor<ParcelResponseProcessor>();
+                    with.ResponseProcessor<ParcelsResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {
