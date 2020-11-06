@@ -10,7 +10,7 @@
 
     public class PartResourceBuilder : IResourceBuilder<Part>
     {
-        private MechPartSourceResourceBuilder sourceResourceBuilder = new MechPartSourceResourceBuilder();
+        private PartDataSheetResourceBuilder dataSheetResourceBuilder = new PartDataSheetResourceBuilder();
 
         public PartResource Build(Part part)
         {
@@ -95,7 +95,7 @@
                            AssemblyTechnologyDescription = part.AssemblyTechnology?.Description,
                            NonForecastRequirement = part.NonForecastRequirement,
                            OneOffRequirement = part.OneOffRequirement,
-                           MechPartSource = part.MechPartSource == null ? null : this.sourceResourceBuilder.Build(part.MechPartSource),
+                           DataSheets = part.DataSheets?.Select(s => this.dataSheetResourceBuilder.Build(s)),
                            Links = this.BuildLinks(part).ToArray()
                        };
         }

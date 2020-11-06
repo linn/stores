@@ -162,7 +162,7 @@
         private void BuildParts(ModelBuilder builder)
         {
             var e = builder.Entity<Part>().ToTable("PARTS");
-            e.HasKey(p => p.Id);
+            e.HasKey(p => p.PartNumber);
             e.Property(p => p.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
             e.Property(p => p.Id).HasColumnName("BRIDGE_ID");
             e.Property(p => p.Description).HasColumnName("DESCRIPTION").HasMaxLength(200);
@@ -243,16 +243,18 @@
         private void BuildPartDataSheets(ModelBuilder builder)
         {
             var e = builder.Entity<PartDataSheet>().ToTable("PART_DATASHEETS");
-            e.HasKey(d => new { d.Sequence, d.PartNumber });
             e.Property(d => d.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
             e.Property(d => d.Sequence).HasColumnName("SEQ").HasMaxLength(4);
             e.Property(d => d.PdfFilePath).HasColumnName("PDF_FILE_PATH").HasMaxLength(1000);
+            e.HasKey(d => new { d.Sequence, d.PartNumber });
+            e.HasOne(d => d.Part).WithMany(p => p.DataSheets).HasForeignKey(d => d.PartNumber);
+
         }
 
         private void BuildMechPartSources(ModelBuilder builder)
         {
             var e = builder.Entity<MechPartSource>().ToTable("MECH_PART_SOURCES");
-            e.HasKey(s => s.PartNumber);
+            e.HasKey(s => s.Id);
             e.Property(s => s.Id).HasColumnName("MS_ID").HasMaxLength(8);
             e.HasOne<Employee>(s => s.ProposedBy).WithMany(m => m.SourcesProposed).HasForeignKey("PROPOSED_BY");
             e.Property(s => s.DateEntered).HasColumnName("DATE_ENTERED");
@@ -271,7 +273,8 @@
             e.Property(s => s.EmcCritical).HasColumnName("EMC_CRITICAL").HasMaxLength(1);
             e.Property(s => s.PerformanceCritical).HasColumnName("PERFORMANCE_CRITICAL").HasMaxLength(1);
             e.Property(s => s.SafetyCritical).HasColumnName("SAFETY_CRITICAL").HasMaxLength(1);
-            e.HasOne(s => s.Part).WithOne(p => p.MechPartSource);
+            e.HasOne(s => s.Part).WithOne(p => p.MechPartSource).HasForeignKey<MechPartSource>(s => s.PartNumber);
+            e.HasOne(s => s.PartToBeReplaced).WithMany(p => p.ReplacementParts).HasForeignKey(s => s.LinnPartNumber);
         }
 
         private void BuildPartTemplates(ModelBuilder builder)

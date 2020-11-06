@@ -30,8 +30,6 @@
 
         private readonly IRepository<Employee, int> employeeRepository;
 
-        private readonly IRepository<Part, int> partRepository;
-
         private readonly IPartService partService;
 
         public PartFacadeService(
@@ -59,7 +57,6 @@
             this.supplierRepository = supplierRepository;
             this.employeeRepository = employeeRepository;
             this.partService = partService;
-            this.partRepository = repository;
         }
 
         protected override Part CreateFromResource(PartResource resource)

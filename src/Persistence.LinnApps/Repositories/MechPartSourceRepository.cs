@@ -1,4 +1,6 @@
-﻿namespace Linn.Stores.Persistence.LinnApps.Repositories
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace Linn.Stores.Persistence.LinnApps.Repositories
 {
     using System;
     using System.Linq;
@@ -8,9 +10,19 @@
 
     public class MechPartSourceRepository : IRepository<MechPartSource, int>
     {
+        private readonly ServiceDbContext serviceDbContext;
+        
+        public MechPartSourceRepository(ServiceDbContext serviceDbContext)
+        {
+            this.serviceDbContext = serviceDbContext;
+        }
+
         public MechPartSource FindById(int key)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.MechPartSources.Where(s => s.Id == key)
+                .Include(s => s.PartToBeReplaced)
+                .Include(s => s.Part).ThenInclude(p => p.DataSheets)
+                .ToList().FirstOrDefault();
         }
 
         public IQueryable<MechPartSource> FindAll()

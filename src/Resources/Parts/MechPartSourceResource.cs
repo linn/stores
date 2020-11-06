@@ -34,6 +34,6 @@ namespace Linn.Stores.Resources.Parts
 
         public string AssemblyType { get; set; }
 
-        public IEnumerable<PartDataSheetResource> DataSheets { get; set; }
+        public PartResource Part { get; set; }
     }
 }

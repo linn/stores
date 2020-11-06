@@ -170,6 +170,6 @@
 
         public IEnumerable<string> UserPrivileges { get; set; }
 
-        public MechPartSourceResource MechPartSource { get; set; }
+        public IEnumerable<PartDataSheetResource> DataSheets { get; set; }
     }
 }

@@ -8,6 +8,8 @@ namespace Linn.Stores.Facade.ResourceBuilders
     using Linn.Stores.Resources.Parts;
     public class MechPartSourceResourceBuilder : IResourceBuilder<MechPartSource>
     {
+        private readonly PartResourceBuilder partResourceBuilder = new PartResourceBuilder();
+
         public MechPartSourceResource Build(MechPartSource model)
         {
             return new MechPartSourceResource
@@ -17,8 +19,8 @@ namespace Linn.Stores.Facade.ResourceBuilders
                             DateSamplesRequired = model.DateSamplesRequired.ToString("o"),
                             EstimatedVolume = model.EstimatedVolume,
                             Id = model.Id,
-                            LinnPartNumber = model.LinnPartNumber,
-                            //LinnPartDescription =model.LinnPart?.Description,
+                            LinnPartNumber = model.PartToBeReplaced?.PartNumber,
+                            LinnPartDescription = model.PartToBeReplaced?.Description,
                             MechanicalOrElectrical = model.MechanicalOrElectrical,
                             Notes = model.Notes,
                             PartNumber = model.PartNumber,
@@ -27,12 +29,7 @@ namespace Linn.Stores.Facade.ResourceBuilders
                             RohsReplace = model.RohsReplace,
                             SampleQuantity = model.SampleQuantity,
                             SamplesRequired = model.SamplesRequired,
-                            //DataSheets = model.DataSheets.Select(s => new PartDataSheetResource
-                            //                                              {
-                            //                                                  PartNumber = s.PartNumber,
-                            //                                                  PdfFilePath = s.PdfFilePath,
-                            //                                                  Sequence = s.Sequence
-                            //                                              })
+                            Part = this.partResourceBuilder.Build(model.Part)
                         };
         }
 

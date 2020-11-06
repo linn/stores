@@ -26,8 +26,6 @@
 
         public string RohsReplace { get; set; }
 
-        public string LinnPartNumber { get; set; }
-
         public string Notes { get; set; }
 
         public string AssemblyType { get; set; }
@@ -41,5 +39,9 @@
         public string SingleSource { get; set; }
 
         public Part Part { get; set; }
+
+        public Part PartToBeReplaced { get; set; }
+
+        public string LinnPartNumber { get; set; }
     }
 }
