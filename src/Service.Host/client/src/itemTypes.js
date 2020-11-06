@@ -90,4 +90,12 @@ export const partLiveTest = new ItemType(
     '/inventory/parts/can-be-made-live'
 );
 
-export const sosAllocHeads = new ItemType('sosAllocHeads', 'SOS_ALLOC_HEADS', '/logistics/sos-alloc-heads');
+export const sosAllocHeads = new ItemType(
+    'sosAllocHeads',
+    'SOS_ALLOC_HEADS',
+    '/logistics/sos-alloc-heads'
+);
+
+export const parcel = new ItemType('parcel', 'PARCEL', '/parcels');
+
+export const parcels = new ItemType('parcels', 'PARCELS', '/parcels');

@@ -48,3 +48,9 @@ export const despatchLocationsActionTypes = makeActionTypes(itemTypes.despatchLo
 export const countriesActionTypes = makeActionTypes(itemTypes.countries.actionType);
 
 export const sosAllocHeadsActionTypes = makeActionTypes(itemTypes.sosAllocHeads.actionType);
+
+export const parcelActionTypes = makeActionTypes(itemTypes.parcel.actionType);
+
+export const parcelsActionTypes = makeActionTypes(itemTypes.parcels.actionType, false);
+
+export const employeesActionTypes = makeActionTypes(itemTypes.employees.actionType, false);

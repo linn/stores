@@ -26,6 +26,9 @@ import stockPools from './stockPools';
 import despatchLocations from './despatchLocations';
 import countries from './countries';
 import sosAllocHeads from './sosAllocHeads';
+import parcels from './parcels/parcels';
+import parcel from './parcels/parcel';
+import employees from './employees';
 
 const errors = fetchErrorReducer({ ...itemTypes });
 
@@ -39,6 +42,8 @@ const rootReducer = combineReducers({
     despatchLocations,
     oidc,
     nominal,
+    parcel,
+    parcels,
     part,
     partCategories,
     parts,
@@ -52,6 +57,7 @@ const rootReducer = combineReducers({
     suppliers,
     unitsOfMeasure,
     wwdReport,
+    employees,
     ...sharedLibraryReducers,
     errors
 });
