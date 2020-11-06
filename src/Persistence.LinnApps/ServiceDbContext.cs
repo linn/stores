@@ -252,7 +252,7 @@
         private void BuildMechPartSources(ModelBuilder builder)
         {
             var e = builder.Entity<MechPartSource>().ToTable("MECH_PART_SOURCES");
-            e.HasKey(s => s.Id);
+            e.HasKey(s => s.PartNumber);
             e.Property(s => s.Id).HasColumnName("MS_ID").HasMaxLength(8);
             e.HasOne<Employee>(s => s.ProposedBy).WithMany(m => m.SourcesProposed).HasForeignKey("PROPOSED_BY");
             e.Property(s => s.DateEntered).HasColumnName("DATE_ENTERED");
@@ -271,6 +271,7 @@
             e.Property(s => s.EmcCritical).HasColumnName("EMC_CRITICAL").HasMaxLength(1);
             e.Property(s => s.PerformanceCritical).HasColumnName("PERFORMANCE_CRITICAL").HasMaxLength(1);
             e.Property(s => s.SafetyCritical).HasColumnName("SAFETY_CRITICAL").HasMaxLength(1);
+            e.HasOne(s => s.Part).WithOne(p => p.MechPartSource);
         }
 
         private void BuildPartTemplates(ModelBuilder builder)

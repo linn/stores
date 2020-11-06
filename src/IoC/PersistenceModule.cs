@@ -21,7 +21,7 @@
                 .As<DbContext>().InstancePerRequest();
             builder.RegisterType<TransactionManager>().As<ITransactionManager>();
 
-            builder.RegisterType<PartRepository>().As<IRepository<Part, string>>();
+            builder.RegisterType<PartRepository>().As<IRepository<Part, int>>();
             builder.RegisterType<ParetoClassRepository>().As<IRepository<ParetoClass, string>>();
             builder.RegisterType<DepartmentRepository>().As<IQueryRepository<Department>>();
             builder.RegisterType<ProductAnalysisCodeRepository>().As<IQueryRepository<ProductAnalysisCode>>();
@@ -45,10 +45,9 @@
             builder.RegisterType<CountryRepository>().As<IRepository<Country, string>>();
             builder.RegisterType<QcControlRepository>().As<IRepository<QcControl, int>>();
             builder.RegisterType<PartTemplateRepository>().As<IRepository<PartTemplate, string>>();
-            builder.RegisterType<MechPartSourceWithPartInfoRepository>()
-                .As<IMechPartSourceWithPartInfoRepository>();
             builder.RegisterType<SosAllocHeadRepository>().As<IQueryRepository<SosAllocHead>>();
             builder.RegisterType<PartDataSheetRepository>().As<IRepository<PartDataSheet, PartDataSheetKey>>();
+            builder.RegisterType<MechPartSourceRepository>().As<IRepository<MechPartSource, int>>();
         }
     }
 }

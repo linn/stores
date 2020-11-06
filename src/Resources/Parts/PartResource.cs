@@ -169,5 +169,7 @@
         public string AssemblyTechnologyDescription { get; set; }
 
         public IEnumerable<string> UserPrivileges { get; set; }
+
+        public MechPartSourceResource MechPartSource { get; set; }
     }
 }

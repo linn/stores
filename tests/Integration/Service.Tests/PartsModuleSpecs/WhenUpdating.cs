@@ -23,7 +23,7 @@
         {
             this.requestResource = new PartResource { PartNumber = "PART", Id = 1, Description = "Desc", StockControlled = true, CreatedBy = 1 };
             var part = new Part { PartNumber = "PART", Id = 1, Description = "Desc", StockControlled = "Y", CreatedBy = new Employee { Id = 1 } };
-            this.PartsFacadeService.Update("PART", Arg.Any<PartResource>())
+            this.PartsFacadeService.Update(1, Arg.Any<PartResource>())
                 .Returns(new SuccessResult<Part>(part));
 
             this.Response = this.Browser.Put(
@@ -47,7 +47,7 @@
         {
             this.PartsFacadeService
                 .Received()
-                .Update("PART", Arg.Is<PartResource>(r => r.Id == this.requestResource.Id));
+                .Update(1, Arg.Is<PartResource>(r => r.Id == this.requestResource.Id));
         }
 
         [Test]

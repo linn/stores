@@ -9,7 +9,7 @@
 
     using Microsoft.EntityFrameworkCore;
 
-    public class PartRepository : IRepository<Part, string>
+    public class PartRepository : IRepository<Part, int>
     {
         private readonly ServiceDbContext serviceDbContext;
 
@@ -18,11 +18,11 @@
             this.serviceDbContext = serviceDbContext;
         }
 
-        public Part FindById(string key)
+        public Part FindById(int key)
         {
             return this.serviceDbContext
                 .Parts
-                .Where(p => p.PartNumber == key)
+                .Where(p => p.Id == key)
                 .Include(p => p.AccountingCompany)
                 .Include(p => p.ParetoClass)
                 .Include(p => p.ProductAnalysisCode)
@@ -35,6 +35,7 @@
                 .Include(p => p.PreferredSupplier)
                 .Include(p => p.NominalAccount).ThenInclude(a => a.Department)
                 .Include(p => p.NominalAccount).ThenInclude(a => a.Nominal)
+                .Include(p => p.MechPartSource)
                 .ToList()
                 .FirstOrDefault();
         }

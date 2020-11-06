@@ -6,9 +6,9 @@ namespace Linn.Stores.Facade.ResourceBuilders
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources.Parts;
-    public class MechPartSourceResourceBuilder : IResourceBuilder<MechPartSourceWithPartInfo>
+    public class MechPartSourceResourceBuilder : IResourceBuilder<MechPartSource>
     {
-        public MechPartSourceResource Build(MechPartSourceWithPartInfo model)
+        public MechPartSourceResource Build(MechPartSource model)
         {
             return new MechPartSourceResource
                         {
@@ -18,7 +18,7 @@ namespace Linn.Stores.Facade.ResourceBuilders
                             EstimatedVolume = model.EstimatedVolume,
                             Id = model.Id,
                             LinnPartNumber = model.LinnPartNumber,
-                            LinnPartDescription =model.LinnPart?.Description,
+                            //LinnPartDescription =model.LinnPart?.Description,
                             MechanicalOrElectrical = model.MechanicalOrElectrical,
                             Notes = model.Notes,
                             PartNumber = model.PartNumber,
@@ -27,20 +27,20 @@ namespace Linn.Stores.Facade.ResourceBuilders
                             RohsReplace = model.RohsReplace,
                             SampleQuantity = model.SampleQuantity,
                             SamplesRequired = model.SamplesRequired,
-                            DataSheets = model.DataSheets.Select(s => new PartDataSheetResource
-                                                                          {
-                                                                              PartNumber = s.PartNumber,
-                                                                              PdfFilePath = s.PdfFilePath,
-                                                                              Sequence = s.Sequence
-                                                                          })
+                            //DataSheets = model.DataSheets.Select(s => new PartDataSheetResource
+                            //                                              {
+                            //                                                  PartNumber = s.PartNumber,
+                            //                                                  PdfFilePath = s.PdfFilePath,
+                            //                                                  Sequence = s.Sequence
+                            //                                              })
                         };
         }
 
-        public string GetLocation(MechPartSourceWithPartInfo model)
+        public string GetLocation(MechPartSource model)
         {
             throw new System.NotImplementedException();
         }
 
-        object IResourceBuilder<MechPartSourceWithPartInfo>.Build(MechPartSourceWithPartInfo source) => this.Build(source);
+        object IResourceBuilder<MechPartSource>.Build(MechPartSource source) => this.Build(source);
     }
 }

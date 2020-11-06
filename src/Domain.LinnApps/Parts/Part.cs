@@ -134,5 +134,7 @@
         public AssemblyTechnology AssemblyTechnology { get; set; }
 
         public DecrementRule DecrementRule { get; set; }
+
+        public MechPartSource MechPartSource { get; set; }
     }
 }

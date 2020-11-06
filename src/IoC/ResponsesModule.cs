@@ -73,7 +73,7 @@
             builder.RegisterType<PartLiveTestResourceBuilder>().As<IResourceBuilder<PartLiveTest>>();
             builder.RegisterType<SosAllocHeadResourceBuilder>().As<IResourceBuilder<SosAllocHead>>();
             builder.RegisterType<SosAllocHeadsResourceBuilder>().As<IResourceBuilder<IEnumerable<SosAllocHead>>>();
-            builder.RegisterType<MechPartSourceResourceBuilder>().As<IResourceBuilder<MechPartSourceWithPartInfo>>();
+            builder.RegisterType<MechPartSourceResourceBuilder>().As<IResourceBuilder<MechPartSource>>();
         }
     }
 }

@@ -31,7 +31,7 @@
 
             // facade services
             builder.RegisterType<PartFacadeService>()
-                .As<IGetByBridgeIdService<Part, string, PartResource>>();
+                .As<IFacadeService<Part, int, PartResource, PartResource>>();
             builder.RegisterType<AccountingCompanyService>().As<IAccountingCompanyService>();
             builder.RegisterType<RootProductsService>().As<IRootProductService>();
             builder.RegisterType<DepartmentService>().As<IDepartmentsService>();
@@ -58,8 +58,8 @@
                 .As<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
             builder.RegisterType<PartLiveService>().As<IPartLiveService>();
             builder.RegisterType<SosAllocHeadFacadeService>().As<ISosAllocHeadFacadeService>();
-            builder.RegisterType<MechPartSourceWithPartInfoService>()
-                .As<IMechPartSourceWithPartInfoService>();
+            builder.RegisterType<MechPartSourceService>()
+                .As<IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

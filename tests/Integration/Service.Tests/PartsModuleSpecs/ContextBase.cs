@@ -24,7 +24,7 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IGetByBridgeIdService<Part, string, PartResource> PartsFacadeService
+        protected IGetByBridgeIdService<Part, int, PartResource> PartsFacadeService
         {
             get; private set;
         }
@@ -47,7 +47,7 @@
 
         protected IProductAnalysisCodeService ProductAnalysisCodeService { get; set; }
 
-        protected IRepository<Part, string> PartRepository { get; private set; }
+        protected IRepository<Part, int> PartRepository { get; private set; }
 
         protected IRepository<ParetoClass, string> ParetoClassRepository { get; private set; }
 
@@ -55,7 +55,7 @@
 
         protected IRepository<QcControl, int> QcControlRepository { get; private set; }
 
-        protected IMechPartSourceWithPartInfoRepository MechPartSourceRepository { get; private set; }
+        protected IRepository<MechPartSource, int> MechPartSourceRepository { get; private set; }
 
         protected IPartService PartsDomainService { get; private set; }
 
@@ -64,7 +64,8 @@
             get; private set;
         }
 
-        protected IMechPartSourceWithPartInfoService MechPartSourceWithPartInfoService;
+        protected IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> 
+            MechPartSourceWithPartInfoService;
 
         protected IPartLiveService PartLiveService;
 
@@ -72,14 +73,14 @@
         public void EstablishContext()
         {
             this.PartsFacadeService = Substitute
-                .For<IGetByBridgeIdService<Part, string, PartResource>>();
+                .For<IGetByBridgeIdService<Part, int, PartResource>>();
             this.PartLiveService = Substitute.For<IPartLiveService>();
             this.PartsDomainService = Substitute.For<IPartService>();
             this.PartCategoriesService = Substitute.For<IPartCategoryService>();
             this.UnitsOfMeasureService = Substitute.For<IUnitsOfMeasureService>();
             this.ProductAnalysisCodeService = Substitute.For<IProductAnalysisCodeService>();
-            this.PartRepository = Substitute.For<IRepository<Part, string>>();
-            this.MechPartSourceRepository = Substitute.For<IMechPartSourceWithPartInfoRepository>();
+            this.PartRepository = Substitute.For<IRepository<Part, int>>();
+            this.MechPartSourceRepository = Substitute.For<IRepository<MechPartSource, int>>();
             this.ParetoClassRepository = Substitute.For<IRepository<ParetoClass, string>>();
             this.QcControlRepository = Substitute.For<IRepository<QcControl, int>>();
             this.ProductAnalysisCodeRepository = Substitute.For<IRepository<ProductAnalysisCode, string>>();
@@ -90,7 +91,7 @@
             this.PartTemplateService = Substitute
                 .For<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
             this.MechPartSourceWithPartInfoService = Substitute
-                .For<IMechPartSourceWithPartInfoService>();
+                .For<IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
@@ -130,7 +131,7 @@
                             new DecrementRulesResourceBuilder());
                         with.Dependency<IResourceBuilder<PartLiveTest>>(
                             new PartLiveTestResourceBuilder());
-                        with.Dependency<IResourceBuilder<MechPartSourceWithPartInfo>>(new MechPartSourceResourceBuilder());
+                        with.Dependency<IResourceBuilder<MechPartSource>>(new MechPartSourceResourceBuilder());
                         with.ResponseProcessor<PartResponseProcessor>();
                         with.ResponseProcessor<PartsResponseProcessor>();
                         with.ResponseProcessor<UnitsOfMeasureResponseProcessor>();

@@ -39,5 +39,7 @@
         public string PerformanceCritical { get; set; }
 
         public string SingleSource { get; set; }
+
+        public Part Part { get; set; }
     }
 }

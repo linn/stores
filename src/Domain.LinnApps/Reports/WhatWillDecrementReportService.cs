@@ -20,7 +20,7 @@
 
         private readonly IQueryRepository<ChangeRequest> changeRequestRepository;
 
-        private readonly IRepository<Part, string> partsRepository;
+        private readonly IRepository<Part, int> partsRepository;
 
         private readonly IReportingHelper reportingHelper;
 
@@ -30,7 +30,7 @@
             IQueryRepository<WwdWork> wwdWorkRepository,
             IQueryRepository<WwdWorkDetail> wwdWorkDetailsRepository,
             IQueryRepository<ChangeRequest> changeRequestRepository,
-            IRepository<Part, string> partsRepository,
+            IRepository<Part, int> partsRepository,
             IReportingHelper reportingHelper)
         {
             this.productionTriggerLevelsService = productionTriggerLevelsService;

@@ -15,7 +15,7 @@
 
     public sealed class PartsModule : NancyModule
     {
-        private readonly IGetByBridgeIdService<Part, string, PartResource> partsFacadeService;
+        private readonly IFacadeService<Part, int, PartResource, PartResource> partsFacadeService;
 
         private readonly IPartService partDomainService;
 
@@ -38,11 +38,11 @@
 
         private readonly IPartLiveService partLiveService;
 
-        private readonly IMechPartSourceWithPartInfoService
+        private readonly IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
             mechPartSourceService;
 
         public PartsModule(
-            IGetByBridgeIdService<Part, string, PartResource> partsFacadeService,
+            IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
             IPartCategoryService partCategoryService,
             IProductAnalysisCodeService productAnalysisCodeService,
@@ -51,7 +51,7 @@
             IPartService partDomainService,
             IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> partTemplateService,
             IPartLiveService partLiveService,
-            IMechPartSourceWithPartInfoService
+            IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
                 mechPartSourceService)
         {
             this.partsFacadeService = partsFacadeService;
@@ -90,7 +90,7 @@
         
         private object GetPart(int id)
         {
-            var results = this.partsFacadeService.GetByBridgeId(id);
+            var results = this.partsFacadeService.GetById(id);
             return this.Negotiate
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
@@ -127,7 +127,7 @@
             this.RequiresAuthentication();
             var resource = this.Bind<PartResource>();
             resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
-            var result = this.partsFacadeService.Update(resource.PartNumber, resource);
+            var result = this.partsFacadeService.Update(id, resource);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
@@ -182,9 +182,9 @@
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
 
-        private object GetMechPartSource(string partNumber)
+        private object GetMechPartSource(int id)
         {
-            var result = this.mechPartSourceService.GetMechPartSourceWithPartInfo(partNumber);
+            var result = this.mechPartSourceService.GetById(id);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
