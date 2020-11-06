@@ -9,9 +9,9 @@
     {
         private readonly IPartPack partPack;
 
-        private readonly IRepository<Part, int> partRepository;
+        private readonly IRepository<Part, string> partRepository;
 
-        public PartLiveService(IPartPack partPack, IRepository<Part, int> partRepository)
+        public PartLiveService(IPartPack partPack, IRepository<Part, string> partRepository)
         {
             this.partPack = partPack;
             this.partRepository = partRepository;

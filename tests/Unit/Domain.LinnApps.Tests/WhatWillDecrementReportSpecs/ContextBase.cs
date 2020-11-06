@@ -24,7 +24,7 @@
 
         protected IQueryRepository<ChangeRequest> ChangeRequestRepository { get; private set; }
 
-        protected IRepository<Part, int> PartsRepository { get; private set; }
+        protected IRepository<Part, string> PartsRepository { get; private set; }
 
         protected IReportingHelper ReportingHelper { get; private set; }
 
@@ -36,7 +36,7 @@
             this.WwdWorkRepository = Substitute.For<IQueryRepository<WwdWork>>();
             this.WwdWorkDetailsRepository = Substitute.For<IQueryRepository<WwdWorkDetail>>();
             this.ChangeRequestRepository = Substitute.For<IQueryRepository<ChangeRequest>>();
-            this.PartsRepository = Substitute.For<IRepository<Part, int>>();
+            this.PartsRepository = Substitute.For<IRepository<Part, string>>();
             this.ReportingHelper = new ReportingHelper();
             this.Sut = new WhatWillDecrementReportService(
                 this.ProductionTriggerLevelsService,

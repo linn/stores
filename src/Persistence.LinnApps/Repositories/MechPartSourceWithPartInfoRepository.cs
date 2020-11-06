@@ -10,13 +10,13 @@
     {
         private readonly ServiceDbContext serviceDbContext;
 
-        private readonly IRepository<Part, int> partRepository;
+        private readonly IRepository<Part, string> partRepository;
 
         private readonly IRepository<PartDataSheet, PartDataSheetKey> dataSheetRepository;
 
         public MechPartSourceWithPartInfoRepository(
             ServiceDbContext serviceDbContext, 
-            IRepository<Part, int> partRepository,
+            IRepository<Part, string> partRepository,
             IRepository<PartDataSheet, PartDataSheetKey> dataSheetRepository)
         {
             this.serviceDbContext = serviceDbContext;
@@ -26,7 +26,7 @@
 
         public MechPartSourceWithPartInfo FindByPartNumber(string partNumber)
         {
-            var source = this.serviceDbContext.MechPartSources.Where(s => s.PartNumber == partNumber)
+            var source = this.serviceDbContext.MechPartSources.Where(s => s.PartNumber == partNumber.ToUpper())
                 .Include(s => s.ProposedBy)
                 .ToList().FirstOrDefault();
 

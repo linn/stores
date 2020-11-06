@@ -19,7 +19,7 @@
 
         protected IRepository<QcControl, int> QcControlRepo { get; private set; }
 
-        protected IRepository<Part, int> PartRepository { get; private set; }
+        protected IRepository<Part, string> PartRepository { get; private set; }
 
         protected IRepository<PartTemplate, string> TemplateRepository { get; private set; }
 
@@ -33,7 +33,7 @@
             this.AuthService = Substitute.For<IAuthorisationService>();
             this.SupplierRepo = Substitute.For<IQueryRepository<Supplier>>();
             this.QcControlRepo = Substitute.For<IRepository<QcControl, int>>();
-            this.PartRepository = Substitute.For<IRepository<Part, int>>();
+            this.PartRepository = Substitute.For<IRepository<Part, string>>();
             this.TemplateRepository = Substitute.For<IRepository<PartTemplate, string>>();
             this.TransactionManager = Substitute.For<ITransactionManager>();
             this.PartPack = Substitute.For<IPartPack>();

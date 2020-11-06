@@ -24,7 +24,7 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IFacadeService<Part, int, PartResource, PartResource> PartsFacadeService
+        protected IGetByBridgeIdService<Part, string, PartResource> PartsFacadeService
         {
             get; private set;
         }
@@ -47,7 +47,7 @@
 
         protected IProductAnalysisCodeService ProductAnalysisCodeService { get; set; }
 
-        protected IRepository<Part, int> PartRepository { get; private set; }
+        protected IRepository<Part, string> PartRepository { get; private set; }
 
         protected IRepository<ParetoClass, string> ParetoClassRepository { get; private set; }
 
@@ -72,13 +72,13 @@
         public void EstablishContext()
         {
             this.PartsFacadeService = Substitute
-                .For<IFacadeService<Part, int, PartResource, PartResource>>();
+                .For<IGetByBridgeIdService<Part, string, PartResource>>();
             this.PartLiveService = Substitute.For<IPartLiveService>();
             this.PartsDomainService = Substitute.For<IPartService>();
             this.PartCategoriesService = Substitute.For<IPartCategoryService>();
             this.UnitsOfMeasureService = Substitute.For<IUnitsOfMeasureService>();
             this.ProductAnalysisCodeService = Substitute.For<IProductAnalysisCodeService>();
-            this.PartRepository = Substitute.For<IRepository<Part, int>>();
+            this.PartRepository = Substitute.For<IRepository<Part, string>>();
             this.MechPartSourceRepository = Substitute.For<IMechPartSourceWithPartInfoRepository>();
             this.ParetoClassRepository = Substitute.For<IRepository<ParetoClass, string>>();
             this.QcControlRepository = Substitute.For<IRepository<QcControl, int>>();

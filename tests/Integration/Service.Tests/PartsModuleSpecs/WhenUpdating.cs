@@ -21,9 +21,9 @@
         [SetUp]
         public void SetUp()
         {
-            this.requestResource = new PartResource { Id = 1, Description = "Desc", StockControlled = true, CreatedBy = 1 };
-            var part = new Part { Id = 1, Description = "Desc", StockControlled = "Y", CreatedBy = new Employee { Id = 1 } };
-            this.PartsFacadeService.Update(1, Arg.Any<PartResource>())
+            this.requestResource = new PartResource { PartNumber = "PART", Id = 1, Description = "Desc", StockControlled = true, CreatedBy = 1 };
+            var part = new Part { PartNumber = "PART", Id = 1, Description = "Desc", StockControlled = "Y", CreatedBy = new Employee { Id = 1 } };
+            this.PartsFacadeService.Update("PART", Arg.Any<PartResource>())
                 .Returns(new SuccessResult<Part>(part));
 
             this.Response = this.Browser.Put(
@@ -47,7 +47,7 @@
         {
             this.PartsFacadeService
                 .Received()
-                .Update(1, Arg.Is<PartResource>(r => r.Id == this.requestResource.Id));
+                .Update("PART", Arg.Is<PartResource>(r => r.Id == this.requestResource.Id));
         }
 
         [Test]

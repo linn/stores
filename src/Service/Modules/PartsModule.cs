@@ -1,7 +1,5 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
-    using System.Linq;
-
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Parts;
@@ -17,7 +15,7 @@
 
     public sealed class PartsModule : NancyModule
     {
-        private readonly IFacadeService<Part, int, PartResource, PartResource> partsFacadeService;
+        private readonly IGetByBridgeIdService<Part, string, PartResource> partsFacadeService;
 
         private readonly IPartService partDomainService;
 
@@ -44,7 +42,7 @@
             mechPartSourceService;
 
         public PartsModule(
-            IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
+            IGetByBridgeIdService<Part, string, PartResource> partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
             IPartCategoryService partCategoryService,
             IProductAnalysisCodeService productAnalysisCodeService,
@@ -89,10 +87,10 @@
             this.mechPartSourceService = mechPartSourceService;
             this.Get("inventory/parts/sources/{id}", parameters => this.GetMechPartSource(parameters.id));
         }
-
+        
         private object GetPart(int id)
         {
-            var results = this.partsFacadeService.GetById(id);
+            var results = this.partsFacadeService.GetByBridgeId(id);
             return this.Negotiate
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
@@ -110,7 +108,6 @@
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");
         }
-
         private object AddPart()
         {
             this.RequiresAuthentication();
@@ -130,11 +127,11 @@
             this.RequiresAuthentication();
             var resource = this.Bind<PartResource>();
             resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
-            var result = this.partsFacadeService.Update(id, resource);
+            var result = this.partsFacadeService.Update(resource.PartNumber, resource);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
-
+        
         private object GetUnitsOfMeasure()
         {
             var result = this.unitsOfMeasureService.GetUnitsOfMeasure();

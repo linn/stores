@@ -10,7 +10,7 @@
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources.Parts;
 
-    public class PartFacadeService : FacadeService<Part, int, PartResource, PartResource>
+    public class PartFacadeService : FacadeService<Part, string, PartResource, PartResource>, IGetByBridgeIdService<Part, string, PartResource>
     {
         private readonly IRepository<ParetoClass, string> paretoClassRepository;
 
@@ -30,10 +30,12 @@
 
         private readonly IRepository<Employee, int> employeeRepository;
 
+        private readonly IRepository<Part, string> partRepository;
+
         private readonly IPartService partService;
 
         public PartFacadeService(
-            IRepository<Part, int> repository,
+            IRepository<Part, string> repository,
             IRepository<ParetoClass, string> paretoClassRepository,
             IQueryRepository<ProductAnalysisCode> productAnalysisCodeRepository,
             IQueryRepository<AccountingCompany> accountingCompanyRepository,
@@ -57,6 +59,7 @@
             this.supplierRepository = supplierRepository;
             this.employeeRepository = employeeRepository;
             this.partService = partService;
+            this.partRepository = repository;
         }
 
         protected override Part CreateFromResource(PartResource resource)
@@ -282,6 +285,16 @@
             }
 
             return (bool)booleanRepresentation ? "Y" : "N";
+        }
+
+        public IResult<Part> GetByBridgeId(int id)
+        {
+            var res = this.partRepository.FindBy(p => p.Id == id);
+            if (res == null)
+            {
+                return new NotFoundResult<Part>($"No part found with Id {id}");
+            }
+            return new SuccessResult<Part>(res);
         }
     }
 }

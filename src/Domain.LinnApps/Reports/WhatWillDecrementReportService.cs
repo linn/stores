@@ -20,7 +20,7 @@
 
         private readonly IQueryRepository<ChangeRequest> changeRequestRepository;
 
-        private readonly IRepository<Part, int> partsRepositry;
+        private readonly IRepository<Part, string> partsRepository;
 
         private readonly IReportingHelper reportingHelper;
 
@@ -30,7 +30,7 @@
             IQueryRepository<WwdWork> wwdWorkRepository,
             IQueryRepository<WwdWorkDetail> wwdWorkDetailsRepository,
             IQueryRepository<ChangeRequest> changeRequestRepository,
-            IRepository<Part, int> partsRepositry,
+            IRepository<Part, string> partsRepository,
             IReportingHelper reportingHelper)
         {
             this.productionTriggerLevelsService = productionTriggerLevelsService;
@@ -38,7 +38,7 @@
             this.wwdWorkRepository = wwdWorkRepository;
             this.wwdWorkDetailsRepository = wwdWorkDetailsRepository;
             this.changeRequestRepository = changeRequestRepository;
-            this.partsRepositry = partsRepositry;
+            this.partsRepository = partsRepository;
             this.reportingHelper = reportingHelper;
         }
 
@@ -57,7 +57,7 @@
 
             var wwdWorks = this.wwdWorkRepository.FilterBy(w => w.JobId == jobId).ToList();
 
-            var parts = this.partsRepositry.FilterBy(
+            var parts = this.partsRepository.FilterBy(
                 p => wwdWorks.Any(w => w.PartNumber == p.PartNumber) && (p.BomType == "A" || p.BomType == "C")).ToList();
 
             if (typeOfRun == "SHORTAGES ONLY")

@@ -20,6 +20,7 @@ import SosAllocHeads from '../containers/allocations/SosAllocHeads';
 import WwdReportOptions from '../containers/reports/WwdReportOptions';
 import WwdReport from '../containers/reports/WwdReport';
 import NotFoundPage from './NotFoundPage';
+import MechPartSource from '../containers/parts/MechPartSource';
 
 const Root = ({ store }) => (
     <div>
@@ -54,14 +55,22 @@ const Root = ({ store }) => (
                                     <Route exact path="/inventory/parts" component={Parts} />
                                     <Route exact path="/inventory/parts/create" component={Part} />
                                     <Route exact path="/inventory/parts/:id" component={Part} />
+                                    <Route
+                                        exact
+                                        path="/inventory/parts/sources/:id"
+                                        component={MechPartSource}
+                                    />
 
                                     <Route
                                         exact
                                         path="/logistics/allocations"
                                         component={StartAllocation}
                                     />
-                                    <Route exact path="/logistics/sos-alloc-heads/:jobId" component={SosAllocHeads} />
-
+                                    <Route
+                                        exact
+                                        path="/logistics/sos-alloc-heads/:jobId"
+                                        component={SosAllocHeads}
+                                    />
                                     <Route
                                         exact
                                         path="/inventory/reports/what-will-decrement/report"
