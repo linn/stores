@@ -8,6 +8,8 @@ namespace Linn.Stores.Resources.Parts
 
         public int? ProposedBy { get; set; }
 
+        public string ProposedByName { get; set; }
+
         public string DateEntered { get; set; }
 
         public string PartNumber { get; set; }
@@ -35,5 +37,13 @@ namespace Linn.Stores.Resources.Parts
         public string AssemblyType { get; set; }
 
         public PartResource Part { get; set; }
+
+        public string EmcCritical { get; set; }
+
+        public string PerformanceCritical { get; set; }
+
+        public string SafetyCritical { get; set; }
+
+        public string SingleSource { get; set; }
     }
 }

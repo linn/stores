@@ -22,7 +22,7 @@
 
         public int? SampleQuantity { get; set; }
 
-        public DateTime DateSamplesRequired { get; set; }
+        public DateTime? DateSamplesRequired { get; set; }
 
         public string RohsReplace { get; set; }
 
