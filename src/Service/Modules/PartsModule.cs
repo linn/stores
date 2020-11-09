@@ -86,6 +86,7 @@
 
             this.mechPartSourceService = mechPartSourceService;
             this.Get("inventory/parts/sources/{id}", parameters => this.GetMechPartSource(parameters.id));
+            this.Put("inventory/parts/sources/{id}", parameters => this.UpdateMechPartSource(parameters.id));
         }
         
         private object GetPart(int id)
@@ -185,6 +186,14 @@
         private object GetMechPartSource(int id)
         {
             var result = this.mechPartSourceService.GetById(id);
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object UpdateMechPartSource(int id)
+        {
+            var resource = this.Bind<MechPartSourceResource>();
+            var result = this.mechPartSourceService.Update(id, resource);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

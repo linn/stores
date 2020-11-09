@@ -65,7 +65,7 @@
         }
 
         protected IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> 
-            MechPartSourceWithPartInfoService;
+            MechPartSourceService;
 
         protected IPartLiveService PartLiveService;
 
@@ -90,7 +90,7 @@
                 .For<IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>>();
             this.PartTemplateService = Substitute
                 .For<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
-            this.MechPartSourceWithPartInfoService = Substitute
+            this.MechPartSourceService = Substitute
                 .For<IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>>();
 
             var bootstrapper = new ConfigurableBootstrapper(
@@ -109,7 +109,7 @@
                         with.Dependency(this.DecrementRuleService);
                         with.Dependency(this.PartsDomainService);
                         with.Dependency(this.PartTemplateService);
-                        with.Dependency(this.MechPartSourceWithPartInfoService);
+                        with.Dependency(this.MechPartSourceService);
                         with.Dependency(this.MechPartSourceRepository);
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());
@@ -132,6 +132,8 @@
                         with.Dependency<IResourceBuilder<PartLiveTest>>(
                             new PartLiveTestResourceBuilder());
                         with.Dependency<IResourceBuilder<MechPartSource>>(new MechPartSourceResourceBuilder());
+                        with.Dependency<IResourceBuilder<PartDataSheet>>(new PartDataSheetResourceBuilder());
+
                         with.ResponseProcessor<PartResponseProcessor>();
                         with.ResponseProcessor<PartsResponseProcessor>();
                         with.ResponseProcessor<UnitsOfMeasureResponseProcessor>();

@@ -10,7 +10,7 @@
 
     public class PartResourceBuilder : IResourceBuilder<Part>
     {
-        private PartDataSheetResourceBuilder dataSheetResourceBuilder = new PartDataSheetResourceBuilder();
+        private readonly PartDataSheetResourceBuilder dataSheetResourceBuilder = new PartDataSheetResourceBuilder();
 
         public PartResource Build(Part part)
         {
@@ -95,7 +95,7 @@
                            AssemblyTechnologyDescription = part.AssemblyTechnology?.Description,
                            NonForecastRequirement = part.NonForecastRequirement,
                            OneOffRequirement = part.OneOffRequirement,
-                           DataSheets = part.DataSheets?.Select(s => this.dataSheetResourceBuilder.Build(s)),
+                           DataSheets = part.DataSheets?.Select(s => this.dataSheetResourceBuilder.Build(s)).OrderBy(s => s.Sequence),
                            Links = this.BuildLinks(part).ToArray()
                        };
         }
