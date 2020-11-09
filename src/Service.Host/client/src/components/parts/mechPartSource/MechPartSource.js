@@ -11,7 +11,9 @@ import {
     ErrorCard,
     SnackbarMessage
 } from '@linn-it/linn-form-components-library';
-import Page from '../../containers/Page';
+import Page from '../../../containers/Page';
+import DataSheetsTab from './tabs/DataSheetsTab';
+import ProposalTab from './tabs/ProposalTab';
 
 function MechPartSource({
     editStatus,
@@ -24,7 +26,8 @@ function MechPartSource({
     addItem,
     updateItem,
     setEditStatus,
-    setSnackbarVisible
+    setSnackbarVisible,
+    options
     // privileges,
     // userName,
     // userNumber,
@@ -35,7 +38,12 @@ function MechPartSource({
     const [mechPartSource, setMechPartSource] = useState(creating() ? {} : null);
     const [prevMechPartSource, setPrevMechPartSource] = useState({});
 
-    const [tab, setTab] = useState(0);
+    const tabDictionary = {
+        proposal: 0,
+        dataSheets: 1
+    };
+
+    const [tab, setTab] = useState(options.tab ? tabDictionary[options.tab] : 0);
 
     const handleTabChange = (event, value) => {
         setTab(value);
@@ -53,14 +61,14 @@ function MechPartSource({
     const handleSaveClick = () => {
         const mechPartSourceResource = mechPartSource;
         // convert Yes/No to true/false for resource to send
-        Object.keys(mechPartSourceResource).forEach(k => {
-            if (mechPartSourceResource[k] === 'Yes' || mechPartSourceResource[k] === 'Y') {
-                mechPartSourceResource[k] = true;
-            }
-            if (mechPartSourceResource[k] === 'No' || mechPartSourceResource[k] === 'N') {
-                mechPartSourceResource[k] = false;
-            }
-        });
+        // Object.keys(mechPartSourceResource).forEach(k => {
+        //     if (mechPartSourceResource[k] === 'Yes' || mechPartSourceResource[k] === 'Y') {
+        //         mechPartSourceResource[k] = true;
+        //     }
+        //     if (mechPartSourceResource[k] === 'No' || mechPartSourceResource[k] === 'N') {
+        //         mechPartSourceResource[k] = false;
+        //     }
+        // });
         if (creating()) {
             addItem(mechPartSourceResource);
         } else {
@@ -78,14 +86,24 @@ function MechPartSource({
         history.push('/inventory/stores/parts/sources');
     };
 
-    const handleFieldChange = (propertyName, newValue) => {
-        if (newValue === 'Yes' || newValue === 'No') {
-            setMechPartSource({ ...mechPartSource, [propertyName]: newValue === 'Yes' });
-        } else if (typeof newValue === 'string') {
-            setMechPartSource({ ...mechPartSource, [propertyName]: newValue.toUpperCase() });
-        } else {
-            setMechPartSource({ ...mechPartSource, [propertyName]: newValue });
+    const handleDatasheetsChange = dataSheets => {
+        if (viewing()) {
+            setEditStatus('edit');
         }
+        setMechPartSource(m => ({ ...m, part: { ...m.part, dataSheets } }));
+    };
+
+    const handleFieldChange = (propertyName, newValue) => {
+        if (viewing()) {
+            setEditStatus('editing');
+        }
+        // if (newValue === 'Yes' || newValue === 'No') {
+        //     setMechPartSource({ ...mechPartSource, [propertyName]: newValue === 'Yes' });
+        // } else if (typeof newValue === 'string') {
+        //     setMechPartSource({ ...mechPartSource, [propertyName]: newValue.toUpperCase() });
+        // } else {
+        setMechPartSource({ ...mechPartSource, [propertyName]: newValue });
+        //}
     };
 
     return (
@@ -134,11 +152,11 @@ function MechPartSource({
                             <Grid item xs={8}>
                                 <InputField
                                     fullWidth
-                                    value={mechPartSource.partDescription}
+                                    value={mechPartSource.part.description}
                                     label="Description"
                                     maxLength={200}
                                     required
-                                    onChange={handleFieldChange}
+                                    onChange={handleFieldChange} // todo - how to handle change?
                                     propertyName="partDescription"
                                 />
                             </Grid>
@@ -150,9 +168,20 @@ function MechPartSource({
                                 style={{ paddingBottom: '40px' }}
                             >
                                 <Tab label="Proposal" />
+                                <Tab label="DataSheets" />
                             </Tabs>
-                            {tab === 0 && <></>}
-                            {tab === 1 && <></>}
+                            {tab === 0 && (
+                                <ProposalTab
+                                    handleFieldChange={handleFieldChange}
+                                    notes={mechPartSource.notes}
+                                />
+                            )}
+                            {tab === 1 && (
+                                <DataSheetsTab
+                                    dataSheets={mechPartSource.part.dataSheets}
+                                    handleDataSheetsChange={handleDatasheetsChange}
+                                />
+                            )}
                             {tab === 2 && <></>}
                             {tab === 3 && <></>}
                             {tab === 4 && <></>}
