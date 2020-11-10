@@ -283,6 +283,8 @@
             e.Property(s => s.SafetyCritical).HasColumnName("SAFETY_CRITICAL").HasMaxLength(1);
             e.HasOne(s => s.Part).WithOne(p => p.MechPartSource).HasForeignKey<MechPartSource>(s => s.PartNumber);
             e.HasOne(s => s.PartToBeReplaced).WithMany(p => p.ReplacementParts).HasForeignKey(s => s.LinnPartNumber);
+            e.Property(s => s.SafetyDataDirectory).HasColumnName("SAFETY_DATA_DIRECTORY").HasMaxLength(500);
+            e.Property(s => s.ProductionDate).HasColumnName("PRODUCTION_DATE");
         }
 
         private void BuildPartTemplates(ModelBuilder builder)

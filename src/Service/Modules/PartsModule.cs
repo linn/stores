@@ -98,8 +98,7 @@
                 .WithView("Index");
         }
 
-        private object GetParts()
-        {
+        private object GetParts(){
             var resource = this.Bind<SearchRequestResource>();
             var results = string.IsNullOrEmpty(resource.SearchTerm)
                               ? this.partsFacadeService.GetAll()

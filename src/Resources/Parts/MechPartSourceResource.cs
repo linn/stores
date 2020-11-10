@@ -45,5 +45,9 @@ namespace Linn.Stores.Resources.Parts
         public string SafetyCritical { get; set; }
 
         public string SingleSource { get; set; }
+
+        public string SafetyDataDirectory { get; set; }
+
+        public string ProductionDate { get; set; }
     }
 }

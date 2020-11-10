@@ -20,7 +20,7 @@ import SosAllocHeads from '../containers/allocations/SosAllocHeads';
 import WwdReportOptions from '../containers/reports/WwdReportOptions';
 import WwdReport from '../containers/reports/WwdReport';
 import NotFoundPage from './NotFoundPage';
-import MechPartSource from '../containers/parts/MechPartSource';
+import MechPartSource from '../containers/parts/mechPartSource/MechPartSource';
 
 const Root = ({ store }) => (
     <div>

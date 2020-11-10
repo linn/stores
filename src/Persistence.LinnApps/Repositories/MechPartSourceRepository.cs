@@ -20,6 +20,7 @@ namespace Linn.Stores.Persistence.LinnApps.Repositories
         public MechPartSource FindById(int key)
         {
             return this.serviceDbContext.MechPartSources.Where(s => s.Id == key)
+                .Include(s => s.ProposedBy)
                 .Include(s => s.PartToBeReplaced)
                 .Include(s => s.Part).ThenInclude(p => p.DataSheets)
                 .ToList().FirstOrDefault();

@@ -43,5 +43,9 @@
         public Part PartToBeReplaced { get; set; }
 
         public string LinnPartNumber { get; set; }
+
+        public string SafetyDataDirectory { get; set; }
+
+        public DateTime? ProductionDate { get; set; }
     }
 }

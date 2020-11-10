@@ -35,6 +35,8 @@ namespace Linn.Stores.Facade.ResourceBuilders
                             SafetyCritical = model.SafetyCritical,
                             SingleSource = model.SingleSource,
                             Part = this.partResourceBuilder.Build(model.Part),
+                            SafetyDataDirectory = model.SafetyDataDirectory,
+                            ProductionDate = model.ProductionDate?.ToString("o")
                         };
         }
 

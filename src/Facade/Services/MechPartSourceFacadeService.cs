@@ -73,6 +73,10 @@ namespace Linn.Stores.Facade.Services
             entity.RohsReplace = resource.RohsReplace;
             entity.SampleQuantity = resource.SampleQuantity;
             entity.SamplesRequired = resource.SamplesRequired;
+            entity.ProductionDate = resource.ProductionDate == null
+                ? (DateTime?) null
+                : DateTime.Parse(resource.ProductionDate);
+            entity.SafetyDataDirectory = resource.SafetyDataDirectory;
 
             var currentDataSheets = entity.Part.DataSheets;
 

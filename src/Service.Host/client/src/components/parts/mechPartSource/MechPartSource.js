@@ -13,7 +13,7 @@ import {
 } from '@linn-it/linn-form-components-library';
 import Page from '../../../containers/Page';
 import DataSheetsTab from './tabs/DataSheetsTab';
-import ProposalTab from './tabs/ProposalTab';
+import ProposalTab from '../../../containers/parts/mechPartSource/tabs/ProposalTab';
 
 function MechPartSource({
     editStatus,
@@ -43,7 +43,7 @@ function MechPartSource({
         dataSheets: 1
     };
 
-    const [tab, setTab] = useState(options.tab ? tabDictionary[options.tab] : 0);
+    const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
 
     const handleTabChange = (event, value) => {
         setTab(value);
@@ -113,7 +113,7 @@ function MechPartSource({
                     {creating() ? (
                         <Title text="Create MechPartSource" />
                     ) : (
-                        <Title text="MechPartSource Details" />
+                        <Title text="Mech Part Source Details" />
                     )}
                 </Grid>
                 {itemError && (
@@ -174,6 +174,24 @@ function MechPartSource({
                                 <ProposalTab
                                     handleFieldChange={handleFieldChange}
                                     notes={mechPartSource.notes}
+                                    proposedBy={mechPartSource.proposedBy}
+                                    proposedByName={mechPartSource.proposedByName}
+                                    dateEntered={mechPartSource.dateEntered}
+                                    mechanicalOrElectrical={mechPartSource.mechanicalOrElectrical}
+                                    safetyCritical={mechPartSource.safetyCritical}
+                                    performanceCritical={mechPartSource.performanceCritical}
+                                    emcCritical={mechPartSource.emcCritical}
+                                    singleSource={mechPartSource.singleSource}
+                                    safetyDataDirectory={mechPartSource.safetyDataDirectory}
+                                    productionDate={mechPartSource.productionDate}
+                                    estimatedVolume={mechPartSource.estimatedVolume}
+                                    samplesRequired={mechPartSource.samplesRequired}
+                                    sampleQuantity={mechPartSource.sampleQuantity}
+                                    dateSamplesRequired={mechPartSource.dateSamplesRequired}
+                                    rohsReplace={mechPartSource.rohsReplace}
+                                    linnPartNumber={mechPartSource.linnPartNumber}
+                                    linnPartDescription={mechPartSource.linnPartDescription}
+                                    assemblyType={mechPartSource.assemblyType}
                                 />
                             )}
                             {tab === 1 && (
