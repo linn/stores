@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using Linn.Common.Persistence;
-
+﻿
 namespace Linn.Stores.Facade.ResourceBuilders
 {
     using Linn.Common.Facade;
