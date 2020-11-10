@@ -17,7 +17,7 @@ const mapStateToProps = state => ({
     item: {},
     editStatus: 'create',
     itemError: getItemError(state, itemTypes.allocation.item),
-    loading: allocationSelectors.getLoading(state),
+    loading: allocationSelectors.getLoading(state) || stockPoolsSelectors.getLoading(state),
     snackbarVisible: allocationSelectors.getSnackbarVisible(state),
     accountingCompanies: accountingCompaniesSelectors.getItems(state),
     stockPools: stockPoolsSelectors.getItems(state),

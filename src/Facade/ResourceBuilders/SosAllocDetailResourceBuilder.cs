@@ -17,7 +17,7 @@
                            Id = sosAllocDetail.Id,
                            AccountId = sosAllocDetail.AccountId,
                            OutletNumber = sosAllocDetail.OutletNumber,
-                           DatePossible = sosAllocDetail.DatePossible.ToString("o"),
+                           DatePossible = sosAllocDetail.DatePossible?.ToString("o"),
                            JobId = sosAllocDetail.JobId,
                            OrderNumber = sosAllocDetail.OrderNumber,
                            OrderLine = sosAllocDetail.OrderLine,
@@ -27,7 +27,7 @@
                            QuantitySuppliable = sosAllocDetail.QuantitySuppliable,
                            QuantityToAllocate = sosAllocDetail.QuantityToAllocate,
                            SupplyInFullCode = sosAllocDetail.SupplyInFullCode,
-                           SupplyInFullDate = sosAllocDetail.SupplyInFullDate.ToString("o"),
+                           SupplyInFullDate = sosAllocDetail.SupplyInFullDate?.ToString("o"),
                            UnitPriceIncludingVAT = sosAllocDetail.UnitPriceIncludingVAT,
                            Links = this.BuildLinks(sosAllocDetail).ToArray()
                        };

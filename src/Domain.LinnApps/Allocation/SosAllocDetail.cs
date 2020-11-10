@@ -18,9 +18,9 @@
 
         public int QuantitySuppliable { get; set; }
 
-        public DateTime DatePossible { get; set; }
+        public DateTime? DatePossible { get; set; }
 
-        public DateTime SupplyInFullDate { get; set; }
+        public DateTime? SupplyInFullDate { get; set; }
 
         public decimal QuantityToAllocate { get; set; }
 

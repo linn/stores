@@ -26,6 +26,7 @@ import stockPools from './stockPools';
 import despatchLocations from './despatchLocations';
 import countries from './countries';
 import sosAllocHeads from './sosAllocHeads';
+import sosAllocDetails from './sosAllocDetails';
 
 const errors = fetchErrorReducer({ ...itemTypes });
 
@@ -47,6 +48,7 @@ const rootReducer = combineReducers({
     productAnalysisCodes,
     rootProducts,
     sernosSequences,
+    sosAllocDetails,
     sosAllocHeads,
     stockPools,
     suppliers,

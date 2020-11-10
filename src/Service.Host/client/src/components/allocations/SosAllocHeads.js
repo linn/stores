@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -8,32 +8,31 @@ import Divider from '@material-ui/core/Divider';
 import SosAllocDetails from './SosAllocDetails';
 
 import {
-    SaveBackCancelButtons,
-    InputField,
     Loading,
     Title,
     ErrorCard,
-    Dropdown,
-    SnackbarMessage,
-    utilities,
-    DatePicker,
-    OnOffSwitch
+    SnackbarMessage
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 
 function SosAllocHeads({
-    editStatus,
     itemError,
-    history,
     loading,
     snackbarVisible,
     items,
-    setSnackbarVisible
+    setSnackbarVisible,
+    details,
+    detailsLoading
 }) {
     const [selectedIndex, setSelectedIndex] = useState(0);
+    const [selectedDetails, setSelectedDetails] = useState([]);
 
-    const creating = () => editStatus === 'create';
-    const viewing = () => editStatus === 'view';
+    useEffect(() => {
+        if (items.length > 0 && details.length > 0) {
+            setSelectedDetails(details.filter(d => d.accountId === items[selectedIndex].accountId &&
+                d.outletNumber === items[selectedIndex].outletNumber));
+        }
+    }, [selectedIndex, items, details, setSelectedDetails]);
 
     return (
         <Page>
@@ -61,7 +60,7 @@ function SosAllocHeads({
                 )}
             </Grid>
             <Grid container spacing={3}>
-                {!loading && (
+                {!loading && !detailsLoading && (
                     <>
                     <Grid item xs={2}>
                         <List component="nav">
@@ -78,22 +77,8 @@ function SosAllocHeads({
                                     <Divider /> </>) )}
                         </List>
                     </Grid>
-                        <Grid item xs={10}>
-                            <Grid container spacing={3} style={{ paddingTop: "12px" }}>
-
-                                <Grid item xs={6}>
-                        here 
-                                    <SosAllocDetails index={selectedIndex} />
-                        </Grid>
-                        <Grid item xs={6}>
-                            big list 2
-                        </Grid>
-                        <Grid item xs={6}>
-                            big list 4
-                        </Grid>
-                        <Grid item xs={6}>
-                            big list 4
-                        </Grid></Grid>
+                    <Grid item xs={10}>
+                        <SosAllocDetails index={selectedIndex} items={selectedDetails}/>
                     </Grid>
                     </>
                 )} 
@@ -113,8 +98,11 @@ SosAllocHeads.propTypes = {
     }),
     snackbarVisible: PropTypes.bool,
     loading: PropTypes.bool,
+    detailsLoading: PropTypes.bool,
     setEditStatus: PropTypes.func.isRequired,
-    setSnackbarVisible: PropTypes.func.isRequired
+    setSnackbarVisible: PropTypes.func.isRequired,
+    items: PropTypes.arrayOf(PropTypes.shape({})),
+    details: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 SosAllocHeads.defaultProps = {
@@ -122,7 +110,9 @@ SosAllocHeads.defaultProps = {
     addItem: null,
     loading: null,
     itemError: null,
-    items: []
+    items: [],
+    details: [],
+    detailsLoading: null
 };
 
 export default SosAllocHeads;

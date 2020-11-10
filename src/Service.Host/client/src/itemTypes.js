@@ -91,3 +91,5 @@ export const partLiveTest = new ItemType(
 );
 
 export const sosAllocHeads = new ItemType('sosAllocHeads', 'SOS_ALLOC_HEADS', '/logistics/sos-alloc-heads');
+
+export const sosAllocDetails = new ItemType('sosAllocDetails', 'SOS_ALLOC_DETAILS', '/logistics/sos-alloc-details');
