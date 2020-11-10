@@ -78,11 +78,12 @@ namespace Linn.Stores.Facade.Services
 
             var newDataSheets = resource.Part.DataSheets.Select(s => new PartDataSheet
                                                                         {
+                                                                            Part = entity.Part,
                                                                             Sequence = s.Sequence,
                                                                             PdfFilePath = s.PdfFilePath
                                                                         });
 
-            this.domainService.GetUpdatedDataSheets(currentDataSheets, newDataSheets);
+            entity.Part.DataSheets = this.domainService.GetUpdatedDataSheets(currentDataSheets, newDataSheets);
         }
 
         protected override Expression<Func<MechPartSource, bool>> SearchExpression(string searchTerm)

@@ -2,37 +2,20 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Linn.Common.Persistence;
 
     public class MechPartSourceService : IMechPartSourceService
     {
-        private readonly IRepository<PartDataSheet, PartDataSheetKey> dataSheetRepository;
-
-        public MechPartSourceService(IRepository<PartDataSheet, PartDataSheetKey> dataSheetRepository)
-        {
-            this.dataSheetRepository = dataSheetRepository;
-        }
-
         public IEnumerable<PartDataSheet> GetUpdatedDataSheets(IEnumerable<PartDataSheet> from, IEnumerable<PartDataSheet> to)
         {
-            var dataSheets = from.ToList();
-            var newDataSheets = to;
-
-            foreach (var newPartDataSheet in newDataSheets)
+            var updated = to.ToList();
+            var old = from.ToList();
+            
+            foreach (var partDataSheet in updated.Where(n => old.All(o => o.Sequence != n.Sequence)))
             {
-                var match = dataSheets.FirstOrDefault(s => s.Sequence == newPartDataSheet.Sequence);
-                if (match != null)
-                {
-                    dataSheets.First(s => s.Sequence == match.Sequence).PdfFilePath =
-                        newPartDataSheet.PdfFilePath;
-                }
-                else
-                {
-                    dataSheets = dataSheets.Concat(new List<PartDataSheet> {newPartDataSheet}).ToList();
-                }
+                partDataSheet.Sequence = updated.Max(s => s.Sequence) + 1;
             }
 
-            return dataSheets;
+            return updated;
         }
     }
 }
