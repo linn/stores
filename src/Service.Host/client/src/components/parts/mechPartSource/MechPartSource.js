@@ -28,10 +28,6 @@ function MechPartSource({
     setEditStatus,
     setSnackbarVisible,
     options
-    // privileges,
-    // userName,
-    // userNumber,
-    // options
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -59,20 +55,10 @@ function MechPartSource({
     }, [item, prevMechPartSource, editStatus, itemId]);
 
     const handleSaveClick = () => {
-        const mechPartSourceResource = mechPartSource;
-        // convert Yes/No to true/false for resource to send
-        // Object.keys(mechPartSourceResource).forEach(k => {
-        //     if (mechPartSourceResource[k] === 'Yes' || mechPartSourceResource[k] === 'Y') {
-        //         mechPartSourceResource[k] = true;
-        //     }
-        //     if (mechPartSourceResource[k] === 'No' || mechPartSourceResource[k] === 'N') {
-        //         mechPartSourceResource[k] = false;
-        //     }
-        // });
         if (creating()) {
-            addItem(mechPartSourceResource);
+            addItem(mechPartSource);
         } else {
-            updateItem(itemId, mechPartSourceResource);
+            updateItem(itemId, mechPartSource);
         }
         setEditStatus('view');
     };
@@ -97,13 +83,19 @@ function MechPartSource({
         if (viewing()) {
             setEditStatus('editing');
         }
-        // if (newValue === 'Yes' || newValue === 'No') {
-        //     setMechPartSource({ ...mechPartSource, [propertyName]: newValue === 'Yes' });
-        // } else if (typeof newValue === 'string') {
-        //     setMechPartSource({ ...mechPartSource, [propertyName]: newValue.toUpperCase() });
-        // } else {
         setMechPartSource({ ...mechPartSource, [propertyName]: newValue });
-        //}
+    };
+
+    const handleLinnPartChange = newValue => {
+        if (viewing()) {
+            setEditStatus('edit');
+        }
+        console.log(newValue);
+        setMechPartSource({
+            ...mechPartSource,
+            linnPartNumber: newValue.name,
+            linnPartDescription: newValue.description
+        });
     };
 
     return (
@@ -192,6 +184,7 @@ function MechPartSource({
                                     linnPartNumber={mechPartSource.linnPartNumber}
                                     linnPartDescription={mechPartSource.linnPartDescription}
                                     assemblyType={mechPartSource.assemblyType}
+                                    handleLinnPartChange={handleLinnPartChange}
                                 />
                             )}
                             {tab === 1 && (

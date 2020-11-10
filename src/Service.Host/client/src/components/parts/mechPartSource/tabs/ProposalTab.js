@@ -25,7 +25,7 @@ function ProposalTab({
     linnPartDescription,
     handleLinnPartChange,
     searchParts,
-    partSearchResults,
+    partsSearchResults,
     partsSearchLoading,
     clearPartsSearch,
     assemblyType
@@ -207,7 +207,7 @@ function ProposalTab({
                     }}
                     label="Linn Part Number for Replaced Part"
                     modal
-                    items={partSearchResults}
+                    items={partsSearchResults}
                     value={linnPartNumber}
                     loading={partsSearchLoading}
                     fetchItems={searchParts}
@@ -278,7 +278,7 @@ ProposalTab.propTypes = {
     assemblyType: PropTypes.string,
     handleLinnPartChange: PropTypes.func.isRequired,
     searchParts: PropTypes.func.isRequired,
-    partSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
+    partsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     partsSearchLoading: PropTypes.bool,
     clearPartsSearch: PropTypes.func.isRequired
 };
@@ -303,7 +303,7 @@ ProposalTab.defaultProps = {
     linnPartNumber: null,
     linnPartDescription: null,
     assemblyType: null,
-    partSearchResults: [],
+    partsSearchResults: [],
     partsSearchLoading: false
 };
 

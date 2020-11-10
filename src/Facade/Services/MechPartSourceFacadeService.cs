@@ -14,16 +14,20 @@ namespace Linn.Stores.Facade.Services
     {
         private readonly IRepository<Employee, int> employeeRepository;
 
+        private readonly IRepository<Part, int> partRepository;
+
         private readonly IMechPartSourceService domainService;
 
         public MechPartSourceFacadeService(
             IRepository<MechPartSource, int> repository, 
             ITransactionManager transactionManager,
             IMechPartSourceService domainService,
+            IRepository<Part, int> partRepository,
             IRepository<Employee, int> employeeRepository) : base(repository, transactionManager)
         {
             this.employeeRepository = employeeRepository;
             this.domainService = domainService;
+            this.partRepository = partRepository;
         }
 
         protected override MechPartSource CreateFromResource(MechPartSourceResource resource)
@@ -48,7 +52,9 @@ namespace Linn.Stores.Facade.Services
                 PartType = resource.PartType,
                 RohsReplace = resource.RohsReplace,
                 SampleQuantity = resource.SampleQuantity,
-                SamplesRequired = resource.SamplesRequired
+                SamplesRequired = resource.SamplesRequired,
+                PartToBeReplaced = resource.LinnPartNumber == null 
+                    ? null : partRepository.FindBy(p => p.PartNumber == resource.LinnPartNumber)
             };
         }
 
@@ -77,6 +83,9 @@ namespace Linn.Stores.Facade.Services
                 ? (DateTime?) null
                 : DateTime.Parse(resource.ProductionDate);
             entity.SafetyDataDirectory = resource.SafetyDataDirectory;
+            entity.PartToBeReplaced = resource.LinnPartNumber == null
+                ? null
+                : partRepository.FindBy(p => p.PartNumber == resource.LinnPartNumber);
 
             var currentDataSheets = entity.Part.DataSheets;
 
