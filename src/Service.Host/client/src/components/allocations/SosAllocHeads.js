@@ -11,7 +11,8 @@ import {
     Loading,
     Title,
     ErrorCard,
-    SnackbarMessage
+    SnackbarMessage,
+    utilities
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 
@@ -64,21 +65,28 @@ function SosAllocHeads({
                     <>
                     <Grid item xs={2}>
                         <List component="nav">
-                                {items.map((item, i) => (<><ListItem
+                            <Divider />
+                            {items.map((item, i) => (
+                                <>
+                                <ListItem
                                     button
                                     selected={selectedIndex === i}
                                     onClick={() => setSelectedIndex(i)} 
                                 >
-                                    <ListItemText primaryTypographyProps={{ style: {
+                                <ListItemText
+                                    primaryTypographyProps={{
+                                        style: {
                                             fontSize: "0.9rem"
                                         }
-                                    }} secondary={`Value ${item.valueToAllocate} `} primary={`Account Id ${item.accountId} Outlet ${item.outletNumber}`}  />
+                                    }}
+                                    secondary={`Value ${item.valueToAllocate} `} primary={`Account Id ${item.accountId} Outlet ${item.outletNumber}`} />
                                 </ListItem>
-                                    <Divider /> </>) )}
+                                <Divider />
+                                </>))}
                         </List>
                     </Grid>
                     <Grid item xs={10}>
-                        <SosAllocDetails index={selectedIndex} items={selectedDetails}/>
+                            <SosAllocDetails index={selectedIndex} items={utilities.sortEntityList(selectedDetails, 'orderNumber')}/>
                     </Grid>
                     </>
                 )} 
