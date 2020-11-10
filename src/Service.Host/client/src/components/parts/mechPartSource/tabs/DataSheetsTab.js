@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { TableWithInlineEditing } from '@linn-it/linn-form-components-library';
 
@@ -13,20 +13,19 @@ function DataSheetsTab({ dataSheets, handleDataSheetsChange }) {
     return (
         <TableWithInlineEditing
             columnsInfo={columnsInfo}
-            content={dataSheets
-                .map(d => ({ ...d, id: d.sequence }))
-                }
+            content={dataSheets.map(d => ({ ...d, id: d.sequence }))}
             updateContent={handleDataSheetsChange}
-            editStatus={'viewing'}
-            allowedToEdit={true}
-            allowedToCreate={true}
-            allowedToDelete={true}
+            editStatus="viewing"
+            allowedToEdit
+            allowedToCreate
+            allowedToDelete
         />
     );
 }
 
 DataSheetsTab.propTypes = {
-    dataSheets: PropTypes.arrayOf(PropTypes.shape({}))
+    dataSheets: PropTypes.arrayOf(PropTypes.shape({})),
+    handleDataSheetsChange: PropTypes.func.isRequired
 };
 
 DataSheetsTab.defaultProps = {
