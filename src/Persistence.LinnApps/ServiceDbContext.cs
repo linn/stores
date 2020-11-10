@@ -71,6 +71,8 @@
 
         public DbSet<SosAllocHead> SosAllocHeads { get; set; }
 
+        public DbSet<SosAllocDetail> SosAllocDetails { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -100,6 +102,7 @@
             this.BuildPartDataSheets(builder);
             this.BuildMechPartSources(builder);
             this.BuildSosAllocHeads(builder);
+            this.BuildSosAllocDetails(builder);
             base.OnModelCreating(builder);
         }
 
@@ -480,6 +483,27 @@
             table.Property(s => s.OldestOrder).HasColumnName("OLDEST_ORDER_NUMBER");
             table.Property(s => s.ValueToAllocate).HasColumnName("VALUE_TO_ALLOCATE");
             table.Property(s => s.OutletHoldStatus).HasColumnName("OUTLET_HOLD_STATUS").HasMaxLength(200);
+        }
+
+        private void BuildSosAllocDetails(ModelBuilder builder)
+        {
+            var table = builder.Entity<SosAllocDetail>().ToTable("SOS_ALLOC_DETAILS");
+            table.HasKey(s => s.Id);
+            table.Property(s => s.Id).HasColumnName("ID");
+            table.Property(s => s.JobId).HasColumnName("JOB_ID");
+            table.Property(s => s.AccountId).HasColumnName("ACCOUNT_ID");
+            table.Property(s => s.OutletNumber).HasColumnName("OUTLET_NUMBER");
+            table.Property(s => s.OrderNumber).HasColumnName("ORDER_NUMBER");
+            table.Property(s => s.OrderLine).HasColumnName("ORDER_LINE");
+            table.Property(s => s.QuantitySuppliable).HasColumnName("QTY_SUPPLIABLE");
+            table.Property(s => s.DatePossible).HasColumnName("DATE_POSSIBLE");
+            table.Property(s => s.SupplyInFullDate).HasColumnName("SUPPLY_IN_FULL_DATE");
+            table.Property(s => s.QuantityToAllocate).HasColumnName("QTY_TO_ALLOCATE");
+            table.Property(s => s.QuantityAllocated).HasColumnName("QTY_ALLOCATED");
+            table.Property(s => s.UnitPriceIncludingVAT).HasColumnName("UNIT_PRICE_INCL_VAT");
+            table.Property(s => s.SupplyInFullCode).HasColumnName("SUPPLY_IN_FULL_CODE").HasMaxLength(1);
+            table.Property(s => s.OrderLineHoldStatus).HasColumnName("ORDER_LINE_HOLD_STATUS").HasMaxLength(200);
+            table.Property(s => s.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
         }
     }
 }

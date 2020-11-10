@@ -19,19 +19,30 @@
 
         private readonly ISosAllocHeadFacadeService sosAllocHeadFacadeService;
 
+        private readonly IFacadeFilterService<SosAllocDetail, int, SosAllocDetailResource, SosAllocDetailResource, JobIdRequestResource> sosAllocDetailFacadeService;
+
         public AllocationModule(
             IAllocationFacadeService allocationFacadeService,
             IFacadeService<DespatchLocation, int, DespatchLocationResource, DespatchLocationResource> despatchLocationFacadeService,
-            ISosAllocHeadFacadeService sosAllocHeadFacadeService)
+            ISosAllocHeadFacadeService sosAllocHeadFacadeService,
+            IFacadeFilterService<SosAllocDetail, int, SosAllocDetailResource, SosAllocDetailResource, JobIdRequestResource> sosAllocDetailFacadeService)
         {
             this.allocationFacadeService = allocationFacadeService;
             this.despatchLocationFacadeService = despatchLocationFacadeService;
             this.sosAllocHeadFacadeService = sosAllocHeadFacadeService;
+            this.sosAllocDetailFacadeService = sosAllocDetailFacadeService;
             this.Get("/logistics/allocations", _ => this.GetApp());
             this.Post("/logistics/allocations", _ => this.StartAllocation());
             this.Get("/logistics/despatch-locations", _ => this.GetDespatchLocations());
             this.Get("/logistics/sos-alloc-heads", _ => this.GetAllocHeads());
             this.Get("/logistics/sos-alloc-heads/{jobId:int}", p => this.GetAllocHeads(p.jobId));
+            this.Get("/logistics/sos-alloc-details", _ => this.GetAllocDetails());
+        }
+
+        private object GetAllocDetails()
+        {
+            var resource = this.Bind<JobIdRequestResource>();
+            return this.Negotiate.WithModel(this.sosAllocDetailFacadeService.FilterBy(resource));
         }
 
         private object GetAllocHeads()

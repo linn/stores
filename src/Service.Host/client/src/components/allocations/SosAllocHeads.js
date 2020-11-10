@@ -5,6 +5,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
+import SosAllocDetails from './SosAllocDetails';
 
 import {
     SaveBackCancelButtons,
@@ -72,15 +73,17 @@ function SosAllocHeads({
                                     <ListItemText primaryTypographyProps={{ style: {
                                             fontSize: "0.9rem"
                                         }
-                                    }} secondary={`Value ${item.valueToAllocate} `}  primary={`Account Id ${item.accountId} Outlet ${item.outletNumber}`}  />
+                                    }} secondary={`Value ${item.valueToAllocate} `} primary={`Account Id ${item.accountId} Outlet ${item.outletNumber}`}  />
                                 </ListItem>
                                     <Divider /> </>) )}
                         </List>
                     </Grid>
                         <Grid item xs={10}>
-                            <Grid container spacing={3} style={{paddingTop: "12px"}}>
-                        <Grid item xs={6}>
-                            big list 2
+                            <Grid container spacing={3} style={{ paddingTop: "12px" }}>
+
+                                <Grid item xs={6}>
+                        here 
+                                    <SosAllocDetails index={selectedIndex} />
                         </Grid>
                         <Grid item xs={6}>
                             big list 2
