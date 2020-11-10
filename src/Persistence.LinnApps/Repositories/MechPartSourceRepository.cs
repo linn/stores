@@ -1,12 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Linn.Stores.Persistence.LinnApps.Repositories
+﻿namespace Linn.Stores.Persistence.LinnApps.Repositories
 {
     using System;
     using System.Linq;
     using System.Linq.Expressions;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Parts;
+
+    using Microsoft.EntityFrameworkCore;
 
     public class MechPartSourceRepository : IRepository<MechPartSource, int>
     {

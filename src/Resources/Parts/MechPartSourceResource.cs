@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Linn.Stores.Resources.Parts
+﻿namespace Linn.Stores.Resources.Parts
 {
     public class MechPartSourceResource
     {

@@ -3,7 +3,6 @@ import { getItemError, initialiseOnMount } from '@linn-it/linn-form-components-l
 import queryString from 'query-string';
 import mechPartSourceActions from '../../../actions/mechPartSourceActions';
 import mechPartSourceSelectors from '../../../selectors/mechPartSourceSelectors';
-// import { getPrivileges, getUserName, getUserNumber } from '../../../selectors/userSelectors';
 import * as itemTypes from '../../../itemTypes';
 import MechPartSource from '../../../components/parts/mechPartSource/MechPartSource';
 

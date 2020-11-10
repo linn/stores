@@ -14,7 +14,6 @@
     using Linn.Stores.Resources.Parts;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
-    using Linn.Stores.Persistence.LinnApps.Repositories;
 
     using Nancy.Testing;
 
@@ -24,7 +23,7 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IGetByBridgeIdService<Part, int, PartResource> PartsFacadeService
+        protected IFacadeService<Part, int, PartResource, PartResource> PartsFacadeService
         {
             get; private set;
         }
@@ -73,7 +72,7 @@
         public void EstablishContext()
         {
             this.PartsFacadeService = Substitute
-                .For<IGetByBridgeIdService<Part, int, PartResource>>();
+                .For<IFacadeService<Part, int, PartResource, PartResource>>();
             this.PartLiveService = Substitute.For<IPartLiveService>();
             this.PartsDomainService = Substitute.For<IPartService>();
             this.PartCategoriesService = Substitute.For<IPartCategoryService>();

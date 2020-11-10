@@ -242,9 +242,6 @@ MechPartSource.defaultProps = {
     loading: null,
     itemError: null,
     itemId: null,
-    // privileges: null,
-    // userName: null,
-    // userNumber: null,
     options: null,
     liveTest: null
 };

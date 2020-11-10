@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Domain\Domain.csproj" />
-    <ProjectReference Include="..\..\..\src\Persistence.LinnApps\Persistence.LinnApps.csproj" />
     <ProjectReference Include="..\..\..\src\Resources\Resources.csproj" />
     <ProjectReference Include="..\..\..\src\Service\Service.csproj" />
   </ItemGroup>
