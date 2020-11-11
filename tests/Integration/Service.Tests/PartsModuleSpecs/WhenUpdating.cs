@@ -21,8 +21,8 @@
         [SetUp]
         public void SetUp()
         {
-            this.requestResource = new PartResource { Id = 1, Description = "Desc", StockControlled = true, CreatedBy = 1 };
-            var part = new Part { Id = 1, Description = "Desc", StockControlled = "Y", CreatedBy = new Employee { Id = 1 } };
+            this.requestResource = new PartResource { PartNumber = "PART", Id = 1, Description = "Desc", StockControlled = true, CreatedBy = 1 };
+            var part = new Part { PartNumber = "PART", Id = 1, Description = "Desc", StockControlled = "Y", CreatedBy = new Employee { Id = 1 } };
             this.PartsFacadeService.Update(1, Arg.Any<PartResource>())
                 .Returns(new SuccessResult<Part>(part));
 

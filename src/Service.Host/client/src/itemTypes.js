@@ -90,4 +90,14 @@ export const partLiveTest = new ItemType(
     '/inventory/parts/can-be-made-live'
 );
 
-export const sosAllocHeads = new ItemType('sosAllocHeads', 'SOS_ALLOC_HEADS', '/logistics/sos-alloc-heads');
+export const mechPartSource = new ItemType(
+    'mechPartSource',
+    'MECH_PART_SOURCE',
+    '/inventory/parts/sources'
+);
+
+export const sosAllocHeads = new ItemType(
+    'sosAllocHeads',
+    'SOS_ALLOC_HEADS',
+    '/logistics/sos-alloc-heads'
+);

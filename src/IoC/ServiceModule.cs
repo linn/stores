@@ -7,13 +7,12 @@
     using Linn.Common.Facade;
     using Linn.Common.Proxy;
     using Linn.Common.Reporting.Models;
-    using Linn.Production.Facade.Services;
+    using Linn.Stores.Facade.Services;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Reports;
-    using Linn.Stores.Facade.Services;
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Allocation;
@@ -29,6 +28,7 @@
             builder.RegisterType<AllocationService>().As<IAllocationService>();
             builder.RegisterType<PartService>().As<IPartService>();
             builder.RegisterType<WhatWillDecrementReportService>().As<IWhatWillDecrementReportService>();
+            builder.RegisterType<MechPartSourceService>().As<IMechPartSourceService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -59,6 +59,8 @@
                 .As<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
             builder.RegisterType<PartLiveService>().As<IPartLiveService>();
             builder.RegisterType<SosAllocHeadFacadeService>().As<ISosAllocHeadFacadeService>();
+            builder.RegisterType<MechPartSourceFacadeService>()
+                .As<IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>>();
             builder.RegisterType<CarriersService>().As<ICarriersService>();
             builder.RegisterType<ParcelFacadeService>()
                 .As<IFacadeService<Parcel, int, ParcelResource, ParcelResource>>();
