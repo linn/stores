@@ -33,5 +33,7 @@
         public string OrderLineHoldStatus { get; set; }
 
         public string ArticleNumber { get; set; }
+
+        public int MaximumQuantityToAllocate { get; set; }
     }
 }

@@ -5,26 +5,12 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import {
-    Loading,
-    Title,
-    ErrorCard,
-    SnackbarMessage,
-    utilities
-} from '@linn-it/linn-form-components-library';
+import { Loading, Title, ErrorCard, utilities } from '@linn-it/linn-form-components-library';
 import SosAllocDetails from './SosAllocDetails';
 
 import Page from '../../containers/Page';
 
-function SosAllocHeads({
-    itemError,
-    loading,
-    snackbarVisible,
-    items,
-    setSnackbarVisible,
-    details,
-    detailsLoading
-}) {
+function SosAllocHeads({ itemError, loading, items, details, detailsLoading, updateDetail }) {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectedDetails, setSelectedDetails] = useState([]);
 
@@ -52,25 +38,17 @@ function SosAllocHeads({
                         <ErrorCard errorMessage={itemError.statusText} />
                     </Grid>
                 )}
-                {loading ? (
+                {loading && (
                     <Grid item xs={12}>
                         <Loading />
                     </Grid>
-                ) : (
-                    <>
-                        <SnackbarMessage
-                            visible={snackbarVisible}
-                            onClose={() => setSnackbarVisible(false)}
-                            message="Allocation Successful"
-                        />
-                    </>
                 )}
             </Grid>
             <Grid container spacing={3}>
                 {!loading && !detailsLoading && (
                     <>
                         <Grid item xs={2}>
-                            <List component="nav" style={{ paddingTop: "76px" }}>
+                            <List component="nav" style={{ paddingTop: '76px' }}>
                                 <Divider />
                                 {items.map((item, i) => (
                                     <>
@@ -97,6 +75,7 @@ function SosAllocHeads({
                         <Grid item xs={10}>
                             <SosAllocDetails
                                 index={selectedIndex}
+                                updateDetail={updateDetail}
                                 items={utilities.sortEntityList(selectedDetails, 'orderNumber')}
                             />
                         </Grid>
@@ -115,16 +94,16 @@ SosAllocHeads.propTypes = {
         details: PropTypes.shape({}),
         item: PropTypes.string
     }),
-    snackbarVisible: PropTypes.bool,
     loading: PropTypes.bool,
     detailsLoading: PropTypes.bool,
-    setSnackbarVisible: PropTypes.func.isRequired,
-    items: PropTypes.arrayOf(PropTypes.shape({})),
-    details: PropTypes.arrayOf(PropTypes.shape({}))
+    items: PropTypes.arrayOf(
+        PropTypes.shape({ accountId: PropTypes.number, outletNumber: PropTypes.number })
+    ),
+    details: PropTypes.arrayOf(PropTypes.shape({})),
+    updateDetail: PropTypes.func.isRequired
 };
 
 SosAllocHeads.defaultProps = {
-    snackbarVisible: false,
     loading: null,
     itemError: null,
     items: [],

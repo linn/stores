@@ -29,6 +29,7 @@
                            SupplyInFullCode = sosAllocDetail.SupplyInFullCode,
                            SupplyInFullDate = sosAllocDetail.SupplyInFullDate?.ToString("o"),
                            UnitPriceIncludingVAT = sosAllocDetail.UnitPriceIncludingVAT,
+                           MaximumQuantityToAllocate = sosAllocDetail.MaximumQuantityToAllocate,
                            Links = this.BuildLinks(sosAllocDetail).ToArray()
                        };
         }

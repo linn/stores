@@ -37,6 +37,13 @@
             this.Get("/logistics/sos-alloc-heads", _ => this.GetAllocHeads());
             this.Get("/logistics/sos-alloc-heads/{jobId:int}", p => this.GetAllocHeads(p.jobId));
             this.Get("/logistics/sos-alloc-details", _ => this.GetAllocDetails());
+            this.Put("/logistics/sos-alloc-details/{id:int}", p => this.UpdateAllocDetail(p.id));
+        }
+
+        private object UpdateAllocDetail(int id)
+        {
+            var resource = this.Bind<SosAllocDetailResource>();
+            return this.Negotiate.WithModel(this.sosAllocDetailFacadeService.Update(id, resource));
         }
 
         private object GetAllocDetails()

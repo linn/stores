@@ -35,7 +35,7 @@
 
         public SosAllocDetail FindById(int key)
         {
-            return this.serviceDbContext.SosAllocDetails.FirstOrDefault(a => a.Id == key);
+            return this.serviceDbContext.SosAllocDetails.Where(a => a.Id == key).ToList().FirstOrDefault();
         }
 
         public IQueryable<SosAllocDetail> FindAll()

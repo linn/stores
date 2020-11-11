@@ -1,10 +1,22 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import { ErrorCard, EditableTable } from '@linn-it/linn-form-components-library';
+import { ErrorCard, EditableTable, SnackbarMessage } from '@linn-it/linn-form-components-library';
 import Typography from '@material-ui/core/Typography';
 
-function SosAllocDetails({ itemError, loading, index, items }) {
+function SosAllocDetails({ itemError, loading, index, items, updateDetail }) {
+    const [internalError, setInternalError] = useState(null);
+    const updateRow = allocDetail => {
+        if (allocDetail.quantityToAllocate > allocDetail.maximumQuantityToAllocate) {
+            setInternalError(
+                `Cannot set quantity higher than ${allocDetail.maximumQuantityToAllocate}`
+            );
+        } else {
+            setInternalError(null);
+            updateDetail(allocDetail.id, allocDetail);
+        }
+    };
+
     const columns = [
         {
             title: 'Order No',
@@ -54,8 +66,14 @@ function SosAllocDetails({ itemError, loading, index, items }) {
                         </Grid>
                     )}
 
+                    <SnackbarMessage
+                        visible={internalError}
+                        autoHideDuration={50}
+                        onClose={() => setInternalError(null)}
+                        message={internalError}
+                    />
                     <Grid item xs={12}>
-                        <EditableTable columns={columns} rows={items} saveRow={() => {}} />
+                        <EditableTable columns={columns} rows={items} saveRow={updateRow} />
                     </Grid>
                 </>
             )}
@@ -70,16 +88,22 @@ SosAllocDetails.propTypes = {
         details: PropTypes.shape({}),
         item: PropTypes.string
     }),
-    items: PropTypes.shape({}),
+    items: PropTypes.arrayOf(
+        PropTypes.shape({ accountId: PropTypes.number, outletNumber: PropTypes.number })
+    ),
     index: PropTypes.number,
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
+    snackbarVisible: PropTypes.bool,
+    updateDetail: PropTypes.func.isRequired,
+    setSnackbarVisible: PropTypes.func.isRequired
 };
 
 SosAllocDetails.defaultProps = {
     index: 0,
     loading: null,
     itemError: null,
-    items: []
+    items: [],
+    snackbarVisible: false
 };
 
 export default SosAllocDetails;

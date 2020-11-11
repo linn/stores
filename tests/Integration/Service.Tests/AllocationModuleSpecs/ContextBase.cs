@@ -49,11 +49,13 @@
                     with.Dependency<IResourceBuilder<IEnumerable<DespatchLocation>>>(new DespatchLocationsResourceBuilder());
                     with.Dependency<IResourceBuilder<SosAllocHead>>(new SosAllocHeadResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<SosAllocHead>>>(new SosAllocHeadsResourceBuilder());
+                    with.Dependency<IResourceBuilder<SosAllocDetail>>(new SosAllocDetailResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<SosAllocDetail>>>(new SosAllocDetailsResourceBuilder());
                     with.Module<AllocationModule>();
                     with.ResponseProcessor<AllocationStartResponseProcessor>();
                     with.ResponseProcessor<DespatchLocationsResponseProcessor>();
                     with.ResponseProcessor<SosAllocHeadsResponseProcessor>();
+                    with.ResponseProcessor<SosAllocDetailResponseProcessor>();
                     with.ResponseProcessor<SosAllocDetailsResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>

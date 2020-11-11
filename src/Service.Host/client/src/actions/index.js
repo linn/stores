@@ -49,4 +49,6 @@ export const countriesActionTypes = makeActionTypes(itemTypes.countries.actionTy
 
 export const sosAllocHeadsActionTypes = makeActionTypes(itemTypes.sosAllocHeads.actionType);
 
+export const sosAllocDetailActionTypes = makeActionTypes(itemTypes.sosAllocDetail.actionType);
+
 export const sosAllocDetailsActionTypes = makeActionTypes(itemTypes.sosAllocDetails.actionType);

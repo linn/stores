@@ -23,7 +23,7 @@
 
         protected override void UpdateFromResource(SosAllocDetail entity, SosAllocDetailResource updateResource)
         {
-            throw new NotImplementedException();
+            entity.QuantityToAllocate = updateResource.QuantityToAllocate;
         }
 
         protected override Expression<Func<SosAllocDetail, bool>> SearchExpression(string searchTerm)

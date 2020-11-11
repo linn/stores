@@ -3,6 +3,7 @@ import { initialiseOnMount } from '@linn-it/linn-form-components-library';
 import sosAllocHeadsActions from '../../actions/sosAllocHeadsActions';
 import sosAllocHeadsSelectors from '../../selectors/sosAllocHeadsSelectors';
 import SosAllocHeads from '../../components/allocations/SosAllocHeads';
+import sosAllocDetailActions from '../../actions/sosAllocDetailActions';
 import sosAllocDetailsActions from '../../actions/sosAllocDetailsActions';
 import sosAllocDetailsSelectors from '../../selectors/sosAllocDetailsSelectors';
 
@@ -12,16 +13,16 @@ const mapStateToProps = (state, { match }) => ({
     loading: sosAllocHeadsSelectors.getSearchLoading(state),
     details: sosAllocDetailsSelectors.getSearchItems(state),
     detailsLoading: sosAllocDetailsSelectors.getSearchLoading(state)
-
 });
 
-const initialise = ( { jobId } ) => dispatch => {
+const initialise = ({ jobId }) => dispatch => {
     dispatch(sosAllocHeadsActions.search(jobId));
     dispatch(sosAllocDetailsActions.searchWithOptions(null, `&jobId=${jobId}`));
 };
 
 const mapDispatchToProps = {
-    initialise
+    initialise,
+    updateDetail: sosAllocDetailActions.update
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(SosAllocHeads));
