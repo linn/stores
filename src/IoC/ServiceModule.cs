@@ -28,7 +28,7 @@
             builder.RegisterType<AllocationService>().As<IAllocationService>();
             builder.RegisterType<PartService>().As<IPartService>();
             builder.RegisterType<WhatWillDecrementReportService>().As<IWhatWillDecrementReportService>();
-            builder.RegisterType<Domain.LinnApps.Parts.MechPartSourceService>().As<IMechPartSourceService>();
+            builder.RegisterType<MechPartSourceService>().As<IMechPartSourceService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()

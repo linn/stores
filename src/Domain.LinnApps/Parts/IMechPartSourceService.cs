@@ -5,6 +5,5 @@
     public interface IMechPartSourceService
     {
         IEnumerable<PartDataSheet> GetUpdatedDataSheets(IEnumerable<PartDataSheet> from, IEnumerable<PartDataSheet> to);
-
     }
 }
