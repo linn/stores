@@ -5,12 +5,12 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-import { Loading, Title, ErrorCard, utilities } from '@linn-it/linn-form-components-library';
+import { Loading, Title, utilities } from '@linn-it/linn-form-components-library';
 import SosAllocDetails from './SosAllocDetails';
 
 import Page from '../../containers/Page';
 
-function SosAllocHeads({ itemError, loading, items, details, detailsLoading, updateDetail }) {
+function SosAllocHeads({ loading, items, details, detailsLoading, updateDetail }) {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectedDetails, setSelectedDetails] = useState([]);
 
@@ -33,11 +33,6 @@ function SosAllocHeads({ itemError, loading, items, details, detailsLoading, upd
                 <Grid item xs={10}>
                     <Title text="Allocation" />
                 </Grid>
-                {itemError && (
-                    <Grid item xs={12}>
-                        <ErrorCard errorMessage={itemError.statusText} />
-                    </Grid>
-                )}
                 {loading && (
                     <Grid item xs={12}>
                         <Loading />
@@ -45,7 +40,7 @@ function SosAllocHeads({ itemError, loading, items, details, detailsLoading, upd
                 )}
             </Grid>
             <Grid container spacing={3}>
-                {!loading && !detailsLoading && (
+                {!loading && (
                     <>
                         <Grid item xs={2}>
                             <List component="nav" style={{ paddingTop: '76px' }}>
@@ -74,8 +69,9 @@ function SosAllocHeads({ itemError, loading, items, details, detailsLoading, upd
                         </Grid>
                         <Grid item xs={10}>
                             <SosAllocDetails
-                                index={selectedIndex}
+                                header={items[selectedIndex]}
                                 updateDetail={updateDetail}
+                                loading={detailsLoading}
                                 items={utilities.sortEntityList(selectedDetails, 'orderNumber')}
                             />
                         </Grid>
@@ -87,13 +83,6 @@ function SosAllocHeads({ itemError, loading, items, details, detailsLoading, upd
 }
 
 SosAllocHeads.propTypes = {
-    history: PropTypes.shape({ push: PropTypes.func }).isRequired,
-    itemError: PropTypes.shape({
-        status: PropTypes.number,
-        statusText: PropTypes.string,
-        details: PropTypes.shape({}),
-        item: PropTypes.string
-    }),
     loading: PropTypes.bool,
     detailsLoading: PropTypes.bool,
     items: PropTypes.arrayOf(
@@ -105,7 +94,6 @@ SosAllocHeads.propTypes = {
 
 SosAllocHeads.defaultProps = {
     loading: null,
-    itemError: null,
     items: [],
     details: [],
     detailsLoading: null

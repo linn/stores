@@ -1,16 +1,24 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import { ErrorCard, EditableTable, SnackbarMessage } from '@linn-it/linn-form-components-library';
+import Button from '@material-ui/core/Button';
+import {
+    Loading,
+    ErrorCard,
+    EditableTable,
+    SnackbarMessage
+} from '@linn-it/linn-form-components-library';
 import Typography from '@material-ui/core/Typography';
 
-function SosAllocDetails({ itemError, loading, index, items, updateDetail }) {
+function SosAllocDetails({ itemError, loading, items, updateDetail, header }) {
     const [internalError, setInternalError] = useState(null);
     const updateRow = allocDetail => {
         if (allocDetail.quantityToAllocate > allocDetail.maximumQuantityToAllocate) {
             setInternalError(
                 `Cannot set quantity higher than ${allocDetail.maximumQuantityToAllocate}`
             );
+        } else if (allocDetail.quantityToAllocate < 0) {
+            setInternalError('Cannot set quantity to be less than 0');
         } else {
             setInternalError(null);
             updateDetail(allocDetail.id, allocDetail);
@@ -51,14 +59,34 @@ function SosAllocDetails({ itemError, loading, index, items, updateDetail }) {
         }
     ];
 
+    const pickAll = () => {
+        items.forEach(item => {
+            updateDetail(item.id, { quantityToAllocate: item.maximumQuantityToAllocate });
+        });
+    };
+
+    const unpickAll = () => {
+        items.forEach(item => {
+            updateDetail(item.id, { quantityToAllocate: 0 });
+        });
+    };
+
     return (
         <Grid container spacing={3}>
-            {!loading && items && items.length > 0 && (
+            {loading ? (
+                <Loading />
+            ) : (
                 <>
-                    <Grid item xs={12}>
+                    <Grid item xs={8}>
                         <Typography variant="h6" gutterBottom>
-                            {`Account ${items[index].accountId} Outlet ${items[index].outletNumber}`}
+                            {`Account ${header.accountId} Outlet ${header.outletNumber} - Value To Allocate ${header.valueToAllocate} `}
                         </Typography>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <>
+                            <Button onClick={() => pickAll()}>Pick All</Button>
+                            <Button onClick={() => unpickAll()}>Unpick All</Button>
+                        </>
                     </Grid>
                     {itemError && (
                         <Grid item xs={12}>
@@ -89,21 +117,25 @@ SosAllocDetails.propTypes = {
         item: PropTypes.string
     }),
     items: PropTypes.arrayOf(
-        PropTypes.shape({ accountId: PropTypes.number, outletNumber: PropTypes.number })
+        PropTypes.shape({
+            accountId: PropTypes.number,
+            outletNumber: PropTypes.number
+        })
     ),
-    index: PropTypes.number,
     loading: PropTypes.bool,
-    snackbarVisible: PropTypes.bool,
     updateDetail: PropTypes.func.isRequired,
-    setSnackbarVisible: PropTypes.func.isRequired
+    header: PropTypes.shape({
+        accountId: PropTypes.number,
+        outletNumber: PropTypes.number,
+        valueToAllocate: PropTypes.number
+    })
 };
 
 SosAllocDetails.defaultProps = {
-    index: 0,
     loading: null,
     itemError: null,
     items: [],
-    snackbarVisible: false
+    header: {}
 };
 
 export default SosAllocDetails;
