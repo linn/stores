@@ -11,15 +11,27 @@ function PartsSearch({
     clearSearch,
     history,
     privileges,
-    partTemplates
+    partTemplates,
+    linkToSources
 }) {
+    const [template, setTemplate] = useState();
+
+    const createUrl = () => {
+        if (linkToSources) {
+            return '/inventory/parts/sources/create';
+        }
+        return template
+            ? `/inventory/parts/create?template=${template}`
+            : '/inventory/parts/create';
+    };
     const searchItems = items.map(item => ({
         ...item,
         name: item.partNumber.toString(),
-        description: item.description
+        description: item.description,
+        href: linkToSources
+            ? item.links.find(l => l.rel === 'mechanical-sourcing-sheet').href
+            : item.href
     }));
-
-    const [template, setTemplate] = useState();
 
     const canCreate = () => {
         if (!(privileges.length < 1)) {
@@ -33,31 +45,29 @@ function PartsSearch({
             <Grid container spacing={3}>
                 <Grid item xs={7} />
                 <Grid item xs={3}>
-                    <Dropdown
-                        label="Template"
-                        propertyName="partTemplate"
-                        items={partTemplates
-                            .filter(p => p.allowPartCreation === 'Y')
-                            .map(t => ({
-                                id: t.partRoot,
-                                displayText: t.description
-                            }))}
-                        fullWidth
-                        allowNoValue
-                        value={template}
-                        onChange={(_, newValue) => {
-                            setTemplate(newValue);
-                        }}
-                    />
+                    {!linkToSources && (
+                        <Dropdown
+                            label="Template"
+                            propertyName="partTemplate"
+                            items={partTemplates
+                                .filter(p => p.allowPartCreation === 'Y')
+                                .map(t => ({
+                                    id: t.partRoot,
+                                    displayText: t.description
+                                }))}
+                            fullWidth
+                            allowNoValue
+                            value={template}
+                            onChange={(_, newValue) => {
+                                setTemplate(newValue);
+                            }}
+                        />
+                    )}
                 </Grid>
                 <Grid item xs={1}>
                     <LinkButton
                         text="Create"
-                        to={
-                            template
-                                ? `/inventory/parts/create?template=${template}`
-                                : '/inventory/parts/create'
-                        }
+                        to={createUrl()}
                         disabled={!canCreate()}
                         tooltip={canCreate() ? null : 'You are not authorised to create parts.'}
                     />
@@ -92,12 +102,14 @@ PartsSearch.propTypes = {
     clearSearch: PropTypes.func.isRequired,
     history: PropTypes.shape({}).isRequired,
     privileges: PropTypes.arrayOf(PropTypes.string).isRequired,
-    partTemplates: PropTypes.arrayOf(PropTypes.shape({}))
+    partTemplates: PropTypes.arrayOf(PropTypes.shape({})),
+    linkToSources: PropTypes.bool
 };
 
 PartsSearch.defaultProps = {
     loading: false,
-    partTemplates: []
+    partTemplates: [],
+    linkToSources: false
 };
 
 export default PartsSearch;

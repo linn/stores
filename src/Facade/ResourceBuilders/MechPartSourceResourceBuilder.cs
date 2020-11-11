@@ -3,6 +3,11 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources.Parts;
+
+    using System.Collections.Generic;
+    using System.Linq;
+    using Linn.Common.Resources;
+
     public class MechPartSourceResourceBuilder : IResourceBuilder<MechPartSource>
     {
         private readonly PartResourceBuilder partResourceBuilder = new PartResourceBuilder();
@@ -31,17 +36,23 @@
                             PerformanceCritical = model.PerformanceCritical,
                             SafetyCritical = model.SafetyCritical,
                             SingleSource = model.SingleSource,
-                            Part = this.partResourceBuilder.Build(model.Part),
+                            Part = model.Part == null ? null : this.partResourceBuilder.Build(model.Part),
                             SafetyDataDirectory = model.SafetyDataDirectory,
-                            ProductionDate = model.ProductionDate?.ToString("o")
-                        };
+                            ProductionDate = model.ProductionDate?.ToString("o"),
+                            Links = this.BuildLinks(model).ToArray()
+            };
         }
 
         public string GetLocation(MechPartSource model)
         {
-            throw new System.NotImplementedException();
+            return $"/inventory/parts/sources/{model.Id}";
         }
 
         object IResourceBuilder<MechPartSource>.Build(MechPartSource source) => this.Build(source);
+
+        private IEnumerable<LinkResource> BuildLinks(MechPartSource source)
+        {
+            yield return new LinkResource { Rel = "self", Href = this.GetLocation(source) };
+        }
     }
 }

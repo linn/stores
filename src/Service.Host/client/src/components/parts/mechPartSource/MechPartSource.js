@@ -27,11 +27,17 @@ function MechPartSource({
     updateItem,
     setEditStatus,
     setSnackbarVisible,
-    options
+    options,
+    userName,
+    userNumber
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
-    const [mechPartSource, setMechPartSource] = useState(creating() ? {} : null);
+    const [mechPartSource, setMechPartSource] = useState(
+        creating()
+            ? { proposedBy: userNumber, proposedByName: userName, dateEntered: new Date() }
+            : null
+    );
     const [prevMechPartSource, setPrevMechPartSource] = useState({});
 
     const tabDictionary = {
@@ -45,7 +51,7 @@ function MechPartSource({
         setTab(value);
     };
 
-    const mechPartSourceInvalid = () => false;
+    const mechPartSourceInvalid = () => !mechPartSource.assemblyType;
 
     useEffect(() => {
         if (item !== prevMechPartSource && editStatus !== 'create') {
@@ -90,7 +96,6 @@ function MechPartSource({
         if (viewing()) {
             setEditStatus('edit');
         }
-        console.log(newValue);
         setMechPartSource({
             ...mechPartSource,
             linnPartNumber: newValue.name,
@@ -103,7 +108,7 @@ function MechPartSource({
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     {creating() ? (
-                        <Title text="Create MechPartSource" />
+                        <Title text="Create Mech Part Source" />
                     ) : (
                         <Title text="Mech Part Source Details" />
                     )}
@@ -144,7 +149,7 @@ function MechPartSource({
                             <Grid item xs={8}>
                                 <InputField
                                     fullWidth
-                                    value={mechPartSource.part.description}
+                                    value={mechPartSource.part?.description}
                                     label="Description"
                                     maxLength={200}
                                     required
@@ -189,7 +194,7 @@ function MechPartSource({
                             )}
                             {tab === 1 && (
                                 <DataSheetsTab
-                                    dataSheets={mechPartSource.part.dataSheets}
+                                    dataSheets={mechPartSource.part?.dataSheets}
                                     handleDataSheetsChange={handleDatasheetsChange}
                                 />
                             )}
@@ -229,9 +234,8 @@ MechPartSource.propTypes = {
     loading: PropTypes.bool,
     setEditStatus: PropTypes.func.isRequired,
     setSnackbarVisible: PropTypes.func.isRequired,
-    // privileges: PropTypes.arrayOf(PropTypes.string),
-    // userName: PropTypes.string,
-    // userNumber: PropTypes.number,
+    userName: PropTypes.string,
+    userNumber: PropTypes.number,
     options: PropTypes.shape({ template: PropTypes.string }),
     liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string })
 };
@@ -243,7 +247,9 @@ MechPartSource.defaultProps = {
     itemError: null,
     itemId: null,
     options: null,
-    liveTest: null
+    liveTest: null,
+    userName: null,
+    userNumber: null
 };
 
 export default MechPartSource;

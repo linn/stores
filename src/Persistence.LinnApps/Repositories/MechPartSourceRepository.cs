@@ -33,7 +33,7 @@
 
         public void Add(MechPartSource entity)
         {
-            throw new NotImplementedException();
+            this.serviceDbContext.Add(entity);
         }
 
         public void Remove(MechPartSource entity)

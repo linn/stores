@@ -1,6 +1,8 @@
-﻿namespace Linn.Stores.Resources.Parts
+﻿using Linn.Common.Resources;
+
+namespace Linn.Stores.Resources.Parts
 {
-    public class MechPartSourceResource
+    public class MechPartSourceResource : HypermediaResource
     {
         public int Id { get; set; }
 

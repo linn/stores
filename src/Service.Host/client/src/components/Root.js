@@ -51,16 +51,24 @@ const Root = ({ store }) => (
                                         path="/inventory/signin-oidc-client"
                                         component={Callback}
                                     />
-
+                                    <Route
+                                        exact
+                                        path="/inventory/parts/sources"
+                                        component={Parts}
+                                    />
                                     <Route exact path="/inventory/parts" component={Parts} />
                                     <Route exact path="/inventory/parts/create" component={Part} />
                                     <Route exact path="/inventory/parts/:id" component={Part} />
                                     <Route
                                         exact
+                                        path="/inventory/parts/sources/create"
+                                        component={MechPartSource}
+                                    />
+                                    <Route
+                                        exact
                                         path="/inventory/parts/sources/:id"
                                         component={MechPartSource}
                                     />
-
                                     <Route
                                         exact
                                         path="/logistics/allocations"

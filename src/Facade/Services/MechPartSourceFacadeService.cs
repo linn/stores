@@ -2,6 +2,7 @@
 {
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
+    using Linn.Stores.Proxy;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources.Parts;
     using Linn.Stores.Domain.LinnApps;
@@ -18,34 +19,57 @@
 
         private readonly IMechPartSourceService domainService;
 
+        private readonly IDatabaseService databaseService;
+
         public MechPartSourceFacadeService(
             IRepository<MechPartSource, int> repository, 
             ITransactionManager transactionManager,
             IMechPartSourceService domainService,
             IRepository<Part, int> partRepository,
+            IDatabaseService databaseService,
             IRepository<Employee, int> employeeRepository) : base(repository, transactionManager)
         {
             this.employeeRepository = employeeRepository;
             this.domainService = domainService;
             this.partRepository = partRepository;
+            this.databaseService = databaseService;
         }
 
         protected override MechPartSource CreateFromResource(MechPartSourceResource resource)
         {
+            // possibly move MechPartSource creation to domain service
+            var part = resource.LinnPartNumber == null
+                ? null
+                : partRepository.FindBy(p => p.PartNumber == resource.PartNumber);
+
+            // might want to throw exception if part = null and user is trying to add data sheets
+            if (part != null)
+            {
+                part.DataSheets = resource.Part.DataSheets.Select(s => new PartDataSheet
+                {
+                    Part = part,
+                    Sequence = s.Sequence,
+                    PdfFilePath = s.PdfFilePath
+                });
+            }
+            
             return new MechPartSource
             {
+                Id = this.databaseService.GetIdSequence("MECH_SOURCE_SEQ"),
                 PartNumber = resource.PartNumber,
                 AssemblyType = resource.AssemblyType,
                 DateEntered = DateTime.Parse(resource.DateEntered),
-                DateSamplesRequired = resource.DateSamplesRequired == null ? (DateTime?)null 
+                DateSamplesRequired = resource.DateSamplesRequired == null
+                    ? (DateTime?) null
                     : DateTime.Parse(resource.DateSamplesRequired),
                 EmcCritical = resource.EmcCritical,
                 EstimatedVolume = resource.EstimatedVolume,
                 LinnPartNumber = resource.LinnPartNumber,
                 MechanicalOrElectrical = resource.MechanicalOrElectrical,
                 Notes = resource.Notes,
-                ProposedBy = resource.ProposedBy == null 
-                    ? null : this.employeeRepository.FindById((int)resource.ProposedBy),
+                ProposedBy = resource.ProposedBy == null
+                    ? null
+                    : this.employeeRepository.FindById((int) resource.ProposedBy),
                 PerformanceCritical = resource.PerformanceCritical,
                 SafetyCritical = resource.SafetyCritical,
                 SingleSource = resource.SingleSource,
@@ -53,8 +77,14 @@
                 RohsReplace = resource.RohsReplace,
                 SampleQuantity = resource.SampleQuantity,
                 SamplesRequired = resource.SamplesRequired,
-                PartToBeReplaced = resource.LinnPartNumber == null 
-                    ? null : partRepository.FindBy(p => p.PartNumber == resource.LinnPartNumber)
+                PartToBeReplaced = resource.LinnPartNumber == null
+                    ? null
+                    : partRepository.FindBy(p => p.PartNumber == resource.LinnPartNumber),
+                ProductionDate = resource.DateSamplesRequired == null
+                    ? (DateTime?) null
+                    : DateTime.Parse(resource.ProductionDate),
+                SafetyDataDirectory = resource.SafetyDataDirectory,
+                Part = part,
             };
         }
 

@@ -5,26 +5,35 @@ import mechPartSourceActions from '../../../actions/mechPartSourceActions';
 import mechPartSourceSelectors from '../../../selectors/mechPartSourceSelectors';
 import * as itemTypes from '../../../itemTypes';
 import MechPartSource from '../../../components/parts/mechPartSource/MechPartSource';
+import { getPrivileges, getUserName, getUserNumber } from '../../../selectors/userSelectors';
+
+const creating = match => match?.url?.endsWith('/create');
 
 const mapStateToProps = (state, { match, location }) => ({
-    item: mechPartSourceSelectors.getItem(state),
-    itemId: match.params.id,
-    editStatus: mechPartSourceSelectors.getEditStatus(state),
+    item: creating(match) ? null : mechPartSourceSelectors.getItem(state),
+    itemId: creating(match) ? null : match.params.id,
+    editStatus: creating(match) ? 'create' : mechPartSourceSelectors.getEditStatus(state),
     loading: mechPartSourceSelectors.getLoading(state),
     snackbarVisible: mechPartSourceSelectors.getSnackbarVisible(state),
     itemError: getItemError(state, itemTypes.mechPartSource.item),
-    options: queryString.parse(location?.search)
+    options: queryString.parse(location?.search),
+    privileges: getPrivileges(state),
+    userName: getUserName(state),
+    userNumber: getUserNumber(state)
 });
 
 const initialise = ({ itemId }) => dispatch => {
-    dispatch(mechPartSourceActions.fetch(itemId));
+    if (itemId) {
+        dispatch(mechPartSourceActions.fetch(itemId));
+    }
 };
 
 const mapDispatchToProps = {
     initialise,
     updateItem: mechPartSourceActions.update,
     setEditStatus: mechPartSourceActions.setEditStatus,
-    setSnackbarVisible: mechPartSourceActions.setSnackbarVisible
+    setSnackbarVisible: mechPartSourceActions.setSnackbarVisible,
+    addItem: mechPartSourceActions.add
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(MechPartSource));
