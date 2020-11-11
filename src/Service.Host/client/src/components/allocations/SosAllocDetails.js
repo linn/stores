@@ -1,19 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import {
-    Title,
-    ErrorCard,
-    EditableTable
-} from '@linn-it/linn-form-components-library';
+import { ErrorCard, EditableTable } from '@linn-it/linn-form-components-library';
 import Typography from '@material-ui/core/Typography';
 
-function SosAllocDetails({
-    itemError,
-    loading,
-    index,
-    items
-}) {
+function SosAllocDetails({ itemError, loading, index, items }) {
     const columns = [
         {
             title: 'Order No',
@@ -48,32 +39,27 @@ function SosAllocDetails({
         }
     ];
 
-
     return (
         <Grid container spacing={3}>
             {!loading && items && items.length > 0 && (
                 <>
-                <Grid item xs={12}>
-                    <Typography variant="h6" gutterBottom>
-                        {`Account ${items[index].accountId} Outlet ${items[index].outletNumber}`}
-                    </Typography>
-                </Grid>
-                {itemError && (
                     <Grid item xs={12}>
-                        <ErrorCard errorMessage={itemError.statusText} />
+                        <Typography variant="h6" gutterBottom>
+                            {`Account ${items[index].accountId} Outlet ${items[index].outletNumber}`}
+                        </Typography>
                     </Grid>
-                )}
-                
-                <Grid item xs={12}>
-                    <EditableTable
-                        columns={columns}
-                        rows={items}
-                        saveRow={() => { }}
-                    />
+                    {itemError && (
+                        <Grid item xs={12}>
+                            <ErrorCard errorMessage={itemError.statusText} />
+                        </Grid>
+                    )}
+
+                    <Grid item xs={12}>
+                        <EditableTable columns={columns} rows={items} saveRow={() => {}} />
                     </Grid>
                 </>
-                )}
-            </Grid>
+            )}
+        </Grid>
     );
 }
 
