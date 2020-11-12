@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Service.Tests.AllocationModuleSpecs
 {
+    using System.Linq;
+
     using FluentAssertions;
 
     using Linn.Common.Facade;
@@ -73,6 +75,8 @@
         {
             var resultResource = this.Response.Body.DeserializeJson<AllocationStartResource>();
             resultResource.Id.Should().Be(this.allocationStartDetails.Id);
+            resultResource.Links.First(a => a.Rel == "display-results").Href.Should()
+                .Be($"/logistics/sos-alloc-heads/{this.allocationStartDetails.Id}");
         }
     }
 }

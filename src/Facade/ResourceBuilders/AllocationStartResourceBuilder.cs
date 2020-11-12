@@ -1,8 +1,10 @@
 ﻿namespace Linn.Stores.Facade.ResourceBuilders
 {
-    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     using Linn.Common.Facade;
+    using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Resources.Allocation;
 
@@ -14,15 +16,21 @@
                        {
                            Id = allocationStart.Id,
                            AllocationNotes = allocationStart.AllocationNotes,
-                           SosNotes = allocationStart.SosNotes
-                       };
+                           SosNotes = allocationStart.SosNotes,
+                           Links = this.BuildLinks(allocationStart).ToArray()
+            };
         }
 
         public string GetLocation(AllocationStart allocationStart)
         {
-            throw new NotImplementedException();
+            return $"/logistics/sos-alloc-heads/{allocationStart.Id}";
         }
 
         object IResourceBuilder<AllocationStart>.Build(AllocationStart allocationStart) => this.Build(allocationStart);
+
+        private IEnumerable<LinkResource> BuildLinks(AllocationStart allocationStart)
+        {
+            yield return new LinkResource { Rel = "display-results", Href = this.GetLocation(allocationStart) };
+        }
     }
 }

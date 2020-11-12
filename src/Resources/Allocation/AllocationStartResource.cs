@@ -1,6 +1,8 @@
 ﻿namespace Linn.Stores.Resources.Allocation
 {
-    public class AllocationStartResource
+    using Linn.Common.Resources;
+
+    public class AllocationStartResource : HypermediaResource
     {
         public int Id { get; set; }
 
