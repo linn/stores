@@ -4,7 +4,13 @@ import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
 import Divider from '@material-ui/core/Divider';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import { makeStyles } from '@material-ui/core/styles';
 import { Loading, Title, utilities } from '@linn-it/linn-form-components-library';
 import SosAllocDetails from './SosAllocDetails';
 
@@ -13,6 +19,7 @@ import Page from '../../containers/Page';
 function SosAllocHeads({ loading, items, details, detailsLoading, updateDetail }) {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectedDetails, setSelectedDetails] = useState([]);
+    const [progress, setProgress] = useState(50);
 
     useEffect(() => {
         if (items.length > 0 && details.length > 0) {
@@ -25,6 +32,36 @@ function SosAllocHeads({ loading, items, details, detailsLoading, updateDetail }
             );
         }
     }, [selectedIndex, items, details, setSelectedDetails]);
+
+    useEffect(() => {
+        if (selectedIndex === 0) {
+            setProgress(0);
+        } else if (selectedIndex === items.length - 1) {
+            setProgress(100);
+        } else {
+            setProgress((selectedIndex / (items.length - 1)) * 100);
+        }
+    }, [setProgress, selectedIndex, items]);
+
+    const useStyles = makeStyles({
+        progress: {
+            top: '50%'
+        }
+    });
+
+    const classes = useStyles();
+
+    const nextOutlet = () => {
+        if (selectedIndex < items.length - 1) {
+            setSelectedIndex(selectedIndex + 1);
+        }
+    };
+
+    const previousOutlet = () => {
+        if (selectedIndex > 0) {
+            setSelectedIndex(selectedIndex - 1);
+        }
+    };
 
     return (
         <Page>
@@ -43,7 +80,34 @@ function SosAllocHeads({ loading, items, details, detailsLoading, updateDetail }
                 {!loading && (
                     <>
                         <Grid item xs={2}>
-                            <List component="nav" style={{ paddingTop: '76px' }}>
+                            <Grid container>
+                                <Grid item xs={12}>
+                                    <Button
+                                        onClick={previousOutlet}
+                                        disabled={selectedIndex === 0}
+                                        startIcon={<KeyboardArrowUp />}
+                                    >
+                                        Previous
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <LinearProgress
+                                        variant="determinate"
+                                        value={progress}
+                                        className={classes.progress}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button
+                                        onClick={nextOutlet}
+                                        disabled={selectedIndex === items.length - 1}
+                                        startIcon={<KeyboardArrowDown />}
+                                    >
+                                        Next
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                            <List component="nav" style={{ paddingTop: '20px' }}>
                                 <Divider />
                                 {items.map((item, i) => (
                                     <>
