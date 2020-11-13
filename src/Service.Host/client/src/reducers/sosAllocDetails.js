@@ -7,4 +7,8 @@ const defaultState = {
     items: []
 };
 
-export default collectionStoreFactory(itemTypes.sosAllocDetails.actionType, actionTypes, defaultState);
+export default collectionStoreFactory(
+    itemTypes.sosAllocDetails.actionType,
+    actionTypes,
+    defaultState
+);

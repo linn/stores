@@ -18,7 +18,6 @@ const mapStateToProps = state => ({
     editStatus: 'create',
     itemError: getItemError(state, itemTypes.allocation.item),
     loading: allocationSelectors.getLoading(state) || stockPoolsSelectors.getLoading(state),
-    snackbarVisible: allocationSelectors.getSnackbarVisible(state),
     accountingCompanies: accountingCompaniesSelectors.getItems(state),
     stockPools: stockPoolsSelectors.getItems(state),
     despatchLocations: despatchLocationsSelectors.getItems(state),
@@ -36,8 +35,7 @@ const initialise = () => dispatch => {
 const mapDispatchToProps = {
     initialise,
     addItem: allocationActions.add,
-    setEditStatus: allocationActions.setEditStatus,
-    setSnackbarVisible: allocationActions.setSnackbarVisible
+    setEditStatus: allocationActions.setEditStatus
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(StartAllocation));

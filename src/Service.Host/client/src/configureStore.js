@@ -10,7 +10,14 @@ import allocationStarted from './middleware/allocationStarted';
 // eslint-disable-next-line no-underscore-dangle
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const middleware = [authorization, api, thunkMiddleware, itemCreated, receiveSosDetail, allocationStarted];
+const middleware = [
+    authorization,
+    api,
+    thunkMiddleware,
+    itemCreated,
+    receiveSosDetail,
+    allocationStarted
+];
 
 const configureStore = initialState => {
     const enhancers = composeEnhancers(applyMiddleware(...middleware));

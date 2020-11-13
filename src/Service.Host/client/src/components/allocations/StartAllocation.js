@@ -9,7 +9,6 @@ import {
     Title,
     ErrorCard,
     Dropdown,
-    SnackbarMessage,
     utilities,
     DatePicker,
     OnOffSwitch
@@ -29,9 +28,7 @@ function StartAllocation({
     loading,
     addItem,
     setEditStatus,
-    snackbarVisible,
     accountingCompanies,
-    setSnackbarVisible,
     stockPools,
     despatchLocations,
     countries
@@ -48,7 +45,6 @@ function StartAllocation({
 
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
-
     const classes = useStyles();
 
     const handleSaveClick = () => {
@@ -107,11 +103,6 @@ function StartAllocation({
                     </Grid>
                 ) : (
                     <>
-                        <SnackbarMessage
-                            visible={snackbarVisible}
-                            onClose={() => setSnackbarVisible(false)}
-                            message="Allocation Successful"
-                        />
                         <Grid item xs={4}>
                             <Dropdown
                                 label="Company"
@@ -258,15 +249,12 @@ StartAllocation.propTypes = {
     countries: PropTypes.arrayOf(PropTypes.shape({})),
     despatchLocations: PropTypes.arrayOf(PropTypes.shape({})),
     stockPools: PropTypes.arrayOf(PropTypes.shape({})),
-    snackbarVisible: PropTypes.bool,
     addItem: PropTypes.func,
     loading: PropTypes.bool,
-    setEditStatus: PropTypes.func.isRequired,
-    setSnackbarVisible: PropTypes.func.isRequired
+    setEditStatus: PropTypes.func.isRequired
 };
 
 StartAllocation.defaultProps = {
-    snackbarVisible: false,
     addItem: null,
     loading: null,
     itemError: null,

@@ -60,7 +60,11 @@ const Root = ({ store }) => (
                                         path="/logistics/allocations"
                                         component={StartAllocation}
                                     />
-                                    <Route exact path="/logistics/sos-alloc-heads/:jobId" component={SosAllocHeads} />
+                                    <Route
+                                        exact
+                                        path="/logistics/sos-alloc-heads/:jobId"
+                                        component={SosAllocHeads}
+                                    />
 
                                     <Route
                                         exact
