@@ -32,7 +32,7 @@
 
         private readonly bool excludeOverCredit = true;
 
-        private AllocationStart result;
+        private AllocationResult result;
 
         [SetUp]
         public void SetUp()

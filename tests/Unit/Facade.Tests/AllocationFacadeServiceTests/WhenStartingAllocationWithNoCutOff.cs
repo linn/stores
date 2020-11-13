@@ -13,12 +13,12 @@
     {
         private AllocationOptionsResource resource;
 
-        private AllocationStart startDetails;
+        private AllocationResult startDetails;
 
         [SetUp]
         public void SetUp()
         {
-            this.startDetails = new AllocationStart(234);
+            this.startDetails = new AllocationResult(234);
             this.resource = new AllocationOptionsResource
                                 {
                                     StockPoolCode = "LINN",

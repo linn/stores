@@ -17,14 +17,14 @@
     {
         private AllocationOptionsResource resource;
 
-        private AllocationStart startDetails;
+        private AllocationResult startDetails;
 
-        private IResult<AllocationStart> result;
+        private IResult<AllocationResult> result;
 
         [SetUp]
         public void SetUp()
         {
-            this.startDetails = new AllocationStart(234);
+            this.startDetails = new AllocationResult(234);
             this.resource = new AllocationOptionsResource
                                 {
                                     StockPoolCode = "LINN",
@@ -72,8 +72,8 @@
         [Test]
         public void ShouldReturnSuccess()
         {
-            this.result.Should().BeOfType<SuccessResult<AllocationStart>>();
-            var dataResult = ((SuccessResult<AllocationStart>)this.result).Data;
+            this.result.Should().BeOfType<SuccessResult<AllocationResult>>();
+            var dataResult = ((SuccessResult<AllocationResult>)this.result).Data;
             dataResult.Id.Should().Be(this.startDetails.Id);
         }
     }

@@ -2,7 +2,7 @@
 {
     using Linn.Common.Resources;
 
-    public class AllocationStartResource : HypermediaResource
+    public class AllocationResource : HypermediaResource
     {
         public int Id { get; set; }
 

@@ -17,7 +17,7 @@
         protected override void Load(ContainerBuilder builder)
         {
             // resource builders
-            builder.RegisterType<AllocationStartResourceBuilder>().As<IResourceBuilder<AllocationStart>>();
+            builder.RegisterType<AllocationStartResourceBuilder>().As<IResourceBuilder<AllocationResult>>();
             builder.RegisterType<PartResourceBuilder>().As<IResourceBuilder<Part>>();
             builder.RegisterType<PartsResourceBuilder>().As<IResourceBuilder<IEnumerable<Part>>>();
             builder.RegisterType<AccountingCompanyResourceBuilder>()

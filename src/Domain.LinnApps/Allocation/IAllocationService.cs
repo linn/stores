@@ -6,7 +6,7 @@
 
     public interface IAllocationService
     {
-        AllocationStart StartAllocation(
+        AllocationResult StartAllocation(
             string stockPoolCode,
             string despatchLocationCode,
             int? accountId,
@@ -16,5 +16,7 @@
             bool excludeUnsuppliableLines,
             bool excludeOnHold,
             bool excludeOverCreditLimit);
+
+        AllocationResult FinishAllocation(int jobId);
     }
 }
