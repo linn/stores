@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/styles';
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import {
-    SaveBackCancelButtons,
     InputField,
     Loading,
     Title,
@@ -15,10 +16,16 @@ import {
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 
+const useStyles = makeStyles({
+    runButton: {
+        float: 'right',
+        width: '100%'
+    }
+});
+
 function StartAllocation({
     editStatus,
     itemError,
-    history,
     loading,
     addItem,
     setEditStatus,
@@ -42,17 +49,13 @@ function StartAllocation({
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
 
+    const classes = useStyles();
+
     const handleSaveClick = () => {
         if (creating()) {
             addItem(allocationOptions);
             setEditStatus('view');
         }
-    };
-
-    const handleCancelClick = () => {};
-
-    const handleBackClick = () => {
-        history.push('/logistics/allocations');
     };
 
     const handleFieldChange = (propertyName, newValue) => {
@@ -222,14 +225,19 @@ function StartAllocation({
                             />
                         </Grid>
                         <Grid item xs={8} />
-                        <Grid item xs={12}>
-                            <SaveBackCancelButtons
-                                saveDisabled={viewing()}
-                                saveClick={handleSaveClick}
-                                cancelClick={handleCancelClick}
-                                backClick={handleBackClick}
-                            />
+                        <Grid item xs={6} />
+                        <Grid item xs={2}>
+                            <Button
+                                className={classes.runButton}
+                                disabled={viewing()}
+                                onClick={handleSaveClick}
+                                variant="contained"
+                                color="primary"
+                            >
+                                Run Allocation
+                            </Button>
                         </Grid>
+                        <Grid item xs={4} />
                     </>
                 )}
             </Grid>

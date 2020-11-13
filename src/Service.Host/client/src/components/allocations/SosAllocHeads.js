@@ -4,7 +4,6 @@ import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import KeyboardArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
@@ -67,8 +66,11 @@ function SosAllocHeads({ loading, items, details, detailsLoading, updateDetail }
         <Page>
             <Grid container spacing={3}>
                 <Grid item xs={2} />
-                <Grid item xs={10}>
+                <Grid item xs={8}>
                     <Title text="Allocation" />
+                </Grid>
+                <Grid item xs={2}>
+                    <Button variant="outlined">Allocate</Button>
                 </Grid>
                 {loading && (
                     <Grid item xs={12}>
