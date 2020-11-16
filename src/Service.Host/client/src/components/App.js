@@ -13,6 +13,12 @@ function App() {
                 <ListItem component={Link} to="/logistics/allocations" button>
                     <Typography color="primary">Start Allocation</Typography>
                 </ListItem>
+                <ListItem component={Link} to="/inventory/parts" button>
+                    <Typography color="primary">Parts Utility</Typography>
+                </ListItem>
+                <ListItem component={Link} to="/inventory/parts/sources" button>
+                    <Typography color="primary">Mech Part Sources Utility</Typography>
+                </ListItem>
             </List>
         </Page>
     );

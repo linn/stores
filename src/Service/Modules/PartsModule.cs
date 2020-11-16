@@ -1,9 +1,6 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
-    using System.Linq;
-
     using Linn.Common.Facade;
-    using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
@@ -40,6 +37,9 @@
 
         private readonly IPartLiveService partLiveService;
 
+        private readonly IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
+            mechPartSourceService;
+
         public PartsModule(
             IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
@@ -49,7 +49,8 @@
             IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource> decrementRuleService,
             IPartService partDomainService,
             IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> partTemplateService,
-            IPartLiveService partLiveService)
+            IPartLiveService partLiveService,
+            IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> mechPartSourceService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
@@ -80,6 +81,11 @@
 
             this.partLiveService = partLiveService;
             this.Get("inventory/parts/can-be-made-live/{id}", parameters => this.CheckCanBeMadeLive(parameters.id));
+
+            this.mechPartSourceService = mechPartSourceService;
+            this.Get("inventory/parts/sources/{id}", parameters => this.GetMechPartSource(parameters.id));
+            this.Put("inventory/parts/sources/{id}", parameters => this.UpdateMechPartSource(parameters.id));
+            this.Post("inventory/parts/sources", _ => this.AddMechPartSource());
         }
 
         private object GetPart(int id)
@@ -173,6 +179,31 @@
         private object CheckCanBeMadeLive(int id)
         {
             var result = this.partLiveService.CheckIfPartCanBeMadeLive(id);
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetMechPartSource(int id)
+        {
+            var result = this.mechPartSourceService.GetById(id);
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object UpdateMechPartSource(int id)
+        {
+            var resource = this.Bind<MechPartSourceResource>();
+            var result = this.mechPartSourceService.Update(id, resource);
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object AddMechPartSource()
+        {
+            this.RequiresAuthentication();
+            // todo - privileges check
+            var resource = this.Bind<MechPartSourceResource>();
+            var result = this.mechPartSourceService.Add(resource);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

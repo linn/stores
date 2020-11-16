@@ -28,6 +28,7 @@
             builder.RegisterType<AllocationService>().As<IAllocationService>();
             builder.RegisterType<PartService>().As<IPartService>();
             builder.RegisterType<WhatWillDecrementReportService>().As<IWhatWillDecrementReportService>();
+            builder.RegisterType<MechPartSourceService>().As<IMechPartSourceService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -60,6 +61,11 @@
             builder.RegisterType<SosAllocHeadFacadeService>().As<ISosAllocHeadFacadeService>();
             builder.RegisterType<SosAllocDetailFacadeService>()
                 .As<IFacadeFilterService<SosAllocDetail, int, SosAllocDetailResource, SosAllocDetailResource, JobIdRequestResource>>();
+            builder.RegisterType<MechPartSourceFacadeService>()
+                .As<IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>>();
+            builder.RegisterType<CarriersService>().As<ICarriersService>();
+            builder.RegisterType<ParcelFacadeService>()
+                .As<IFacadeService<Parcel, int, ParcelResource, ParcelResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

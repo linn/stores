@@ -52,3 +52,5 @@ export const sosAllocHeadsActionTypes = makeActionTypes(itemTypes.sosAllocHeads.
 export const sosAllocDetailActionTypes = makeActionTypes(itemTypes.sosAllocDetail.actionType);
 
 export const sosAllocDetailsActionTypes = makeActionTypes(itemTypes.sosAllocDetails.actionType);
+
+export const mechPartSourceActionTypes = makeActionTypes(itemTypes.mechPartSource.actionType);

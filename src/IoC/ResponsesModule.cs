@@ -75,6 +75,16 @@
             builder.RegisterType<SosAllocHeadsResourceBuilder>().As<IResourceBuilder<IEnumerable<SosAllocHead>>>();
             builder.RegisterType<SosAllocDetailResourceBuilder>().As<IResourceBuilder<SosAllocDetail>>();
             builder.RegisterType<SosAllocDetailsResourceBuilder>().As<IResourceBuilder<IEnumerable<SosAllocDetail>>>();
+            builder.RegisterType<MechPartSourceResourceBuilder>().As<IResourceBuilder<MechPartSource>>();
+            builder.RegisterType<PartDataSheetResourceBuilder>().As<IResourceBuilder<PartDataSheet>>();
+            builder.RegisterType<CarrierResourceBuilder>()
+                .As<IResourceBuilder<Carrier>>();
+            builder.RegisterType<CarriersResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<Carrier>>>();
+            builder.RegisterType<ParcelResourceBuilder>()
+                .As<IResourceBuilder<Parcel>>();
+            builder.RegisterType<ParcelsResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<Parcel>>>();
         }
     }
 }

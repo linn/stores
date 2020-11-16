@@ -3,7 +3,6 @@
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Service.Models;
-
     using Nancy;
     using Nancy.ModelBinding;
 

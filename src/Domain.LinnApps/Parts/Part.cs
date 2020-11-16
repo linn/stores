@@ -135,6 +135,10 @@
 
         public DecrementRule DecrementRule { get; set; }
 
+        public MechPartSource MechPartSource { get; set; }
+
         public IEnumerable<PartDataSheet> DataSheets { get; set; }
+
+        public IEnumerable<MechPartSource> ReplacementParts { get; set; }
     }
 }

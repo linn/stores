@@ -24,12 +24,14 @@
             var supplierA = new Supplier
             {
                 Id = 1,
-                Name = "Supplier A"
+                Name = "Supplier A",
+                CountryCode = "DE"
             };
             var supplierB = new Supplier
             {
                 Id = 2,
-                Name = "Supplier B"
+                Name = "Supplier B",
+                CountryCode = "RU"
             };
 
             this.SuppliersService.GetSuppliers()

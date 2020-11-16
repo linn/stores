@@ -27,6 +27,7 @@ import despatchLocations from './despatchLocations';
 import countries from './countries';
 import sosAllocHeads from './sosAllocHeads';
 import sosAllocDetails from './sosAllocDetails';
+import mechPartSource from './parts/mechPartSource';
 
 const errors = fetchErrorReducer({ ...itemTypes });
 
@@ -38,8 +39,9 @@ const rootReducer = combineReducers({
     departments,
     decrementRules,
     despatchLocations,
-    oidc,
+    mechPartSource,
     nominal,
+    oidc,
     part,
     partCategories,
     parts,
