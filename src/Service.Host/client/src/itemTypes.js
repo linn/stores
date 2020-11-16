@@ -111,9 +111,3 @@ export const mechPartSource = new ItemType(
     'MECH_PART_SOURCE',
     '/inventory/parts/sources'
 );
-
-export const sosAllocHeads = new ItemType(
-    'sosAllocHeads',
-    'SOS_ALLOC_HEADS',
-    '/logistics/sos-alloc-heads'
-);
