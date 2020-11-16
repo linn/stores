@@ -32,12 +32,18 @@
             this.sosAllocHeadFacadeService = sosAllocHeadFacadeService;
             this.sosAllocDetailFacadeService = sosAllocDetailFacadeService;
             this.Get("/logistics/allocations", _ => this.GetApp());
+            this.Post("/logistics/allocations/{jobId:int}", p => this.FinishAllocation(p.jobId));
             this.Post("/logistics/allocations", _ => this.StartAllocation());
             this.Get("/logistics/despatch-locations", _ => this.GetDespatchLocations());
             this.Get("/logistics/sos-alloc-heads", _ => this.GetAllocHeads());
             this.Get("/logistics/sos-alloc-heads/{jobId:int}", p => this.GetAllocHeads(p.jobId));
             this.Get("/logistics/sos-alloc-details", _ => this.GetAllocDetails());
             this.Put("/logistics/sos-alloc-details/{id:int}", p => this.UpdateAllocDetail(p.id));
+        }
+
+        private object FinishAllocation(int jobId)
+        {
+            return this.Negotiate.WithModel(this.allocationFacadeService.FinishAllocation(jobId));
         }
 
         private object UpdateAllocDetail(int id)

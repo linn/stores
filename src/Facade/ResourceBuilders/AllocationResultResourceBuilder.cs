@@ -8,7 +8,7 @@
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Resources.Allocation;
 
-    public class AllocationStartResourceBuilder : IResourceBuilder<AllocationResult>
+    public class AllocationResultResourceBuilder : IResourceBuilder<AllocationResult>
     {
         public AllocationResource Build(AllocationResult allocationStart)
         {

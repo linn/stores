@@ -35,5 +35,9 @@
         public string ArticleNumber { get; set; }
 
         public int MaximumQuantityToAllocate { get; set; }
+
+        public string AllocationSuccessful { get; set; }
+
+        public string AllocationMessage { get; set; }
     }
 }

@@ -45,7 +45,7 @@
                     with.Dependency(this.DespatchLocationFacadeService);
                     with.Dependency(this.SosAllocHeadFacadeService);
                     with.Dependency(this.SosAllocDetailFacadeService);
-                    with.Dependency<IResourceBuilder<AllocationResult>>(new AllocationStartResourceBuilder());
+                    with.Dependency<IResourceBuilder<AllocationResult>>(new AllocationResultResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<DespatchLocation>>>(new DespatchLocationsResourceBuilder());
                     with.Dependency<IResourceBuilder<SosAllocHead>>(new SosAllocHeadResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<SosAllocHead>>>(new SosAllocHeadsResourceBuilder());

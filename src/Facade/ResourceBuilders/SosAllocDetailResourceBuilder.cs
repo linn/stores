@@ -30,6 +30,8 @@
                            SupplyInFullDate = sosAllocDetail.SupplyInFullDate?.ToString("o"),
                            UnitPriceIncludingVAT = sosAllocDetail.UnitPriceIncludingVAT,
                            MaximumQuantityToAllocate = sosAllocDetail.MaximumQuantityToAllocate,
+                           AllocationSuccessful = sosAllocDetail.AllocationSuccessful,
+                           AllocationMessage = sosAllocDetail.AllocationMessage,
                            Links = this.BuildLinks(sosAllocDetail).ToArray()
                        };
         }
