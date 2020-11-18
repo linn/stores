@@ -54,7 +54,7 @@
 
         public string DrawingsPackageAvailable { get; set; }
 
-        public DateTime DrawingsPackageDate { get; set; }
+        public DateTime? DrawingsPackageDate { get; set; }
 
         public string DrawingFile { get; set; }
 
@@ -62,37 +62,37 @@
 
         public string ChecklistAvailable { get; set; }
 
-        public DateTime ChecklistDate { get; set; }
+        public DateTime? ChecklistDate { get; set; }
 
         public string PackingAvailable { get; set; }
 
         public string PackingRequired { get; set; }
 
-        public DateTime PackingDate { get; set; }
+        public DateTime? PackingDate { get; set; }
 
         public string ProductKnowledge { get; set; }
 
         public string ProductKnowledgeAvailable { get; set; }
 
-        public DateTime ProductKnowledgeDate { get; set; }
+        public DateTime? ProductKnowledgeDate { get; set; }
 
         public string TestEquipment { get; set; }
 
         public string TestEquipmentAvailable { get; set; }
 
-        public DateTime TestEquipmentDate { get; set; }
+        public DateTime? TestEquipmentDate { get; set; }
 
         public string ApprovedReferenceStandards { get; set; }
 
         public string ApprovedReferencesAvailable { get; set; }
 
-        public DateTime ApprovedReferencesDate { get; set; }
+        public DateTime? ApprovedReferencesDate { get; set; }
 
         public string ProcessEvaluation { get; set; }
 
         public string ProcessEvaluationAvailable { get; set; }
 
-        public DateTime ProcessEvaluationDate { get; set; }
+        public DateTime? ProcessEvaluationDate { get; set; }
 
         public IEnumerable<MechPartAlt> MechPartAlts { get; set; }
 
