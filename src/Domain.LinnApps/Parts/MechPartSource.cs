@@ -1,4 +1,6 @@
-﻿namespace Linn.Stores.Domain.LinnApps.Parts
+﻿using System.Collections.Generic;
+
+namespace Linn.Stores.Domain.LinnApps.Parts
 {
     using System;
 
@@ -47,5 +49,53 @@
         public string SafetyDataDirectory { get; set; }
 
         public DateTime? ProductionDate { get; set; }
+
+        public string DrawingsPackage { get; set; }
+
+        public string DrawingsPackageAvailable { get; set; }
+
+        public DateTime DrawingsPackageDate { get; set; }
+
+        public string DrawingFile { get; set; }
+
+        public string ChecklistCreated { get; set; }
+
+        public string ChecklistAvailable { get; set; }
+
+        public DateTime ChecklistDate { get; set; }
+
+        public string PackingAvailable { get; set; }
+
+        public string PackingRequired { get; set; }
+
+        public DateTime PackingDate { get; set; }
+
+        public string ProductKnowledge { get; set; }
+
+        public string ProductKnowledgeAvailable { get; set; }
+
+        public DateTime ProductKnowledgeDate { get; set; }
+
+        public string TestEquipment { get; set; }
+
+        public string TestEquipmentAvailable { get; set; }
+
+        public DateTime TestEquipmentDate { get; set; }
+
+        public string ApprovedReferenceStandards { get; set; }
+
+        public string ApprovedReferencesAvailable { get; set; }
+
+        public DateTime ApprovedReferencesDate { get; set; }
+
+        public string ProcessEvaluation { get; set; }
+
+        public string ProcessEvaluationAvailable { get; set; }
+
+        public DateTime ProcessEvaluationDate { get; set; }
+
+        public IEnumerable<MechPartAlt> MechPartAlts { get; set; }
+
+        public IEnumerable<MechPartManufacturerAlt> MechPartManufacturerAlts { get; set; }
     }
 }
