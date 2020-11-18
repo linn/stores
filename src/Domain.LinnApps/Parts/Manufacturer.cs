@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Linn.Stores.Domain.LinnApps.Parts
+﻿namespace Linn.Stores.Domain.LinnApps.Parts
 {
+    using System.Collections.Generic;
+
     public class Manufacturer
     {
         public string Code { get; set; }

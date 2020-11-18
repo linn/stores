@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Linn.Stores.Domain.LinnApps.Parts
+﻿namespace Linn.Stores.Domain.LinnApps.Parts
 {
+    using System;
+
     public class MechPartManufacturerAlt
     {
         public int MechPartSourceId { get; set; }

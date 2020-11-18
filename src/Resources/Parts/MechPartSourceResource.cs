@@ -1,4 +1,5 @@
-﻿using Linn.Common.Resources;
+﻿using System.Collections.Generic;
+using Linn.Common.Resources;
 
 namespace Linn.Stores.Resources.Parts
 {
@@ -49,5 +50,9 @@ namespace Linn.Stores.Resources.Parts
         public string SafetyDataDirectory { get; set; }
 
         public string ProductionDate { get; set; }
+
+        public IEnumerable<MechPartAltResource> MechPartAlts { get; set; }
+
+        public IEnumerable<MechPartManufacturerAltResource> MechPartManufacturerAlts { get; set; }
     }
 }

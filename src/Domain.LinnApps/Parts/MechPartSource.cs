@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-
-namespace Linn.Stores.Domain.LinnApps.Parts
+﻿namespace Linn.Stores.Domain.LinnApps.Parts
 {
     using System;
+
+    using System.Collections.Generic;
 
     public class MechPartSource
     {
