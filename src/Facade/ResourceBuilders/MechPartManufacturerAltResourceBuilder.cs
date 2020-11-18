@@ -24,7 +24,7 @@
                RohsCompliant = model.RohsCompliant,
                ApprovedBy = model.ApprovedBy.Id,
                ApprovedByName = model.ApprovedBy.FullName,
-               DateApproved = model.DateApproved.ToString("o")
+               DateApproved = model.DateApproved?.ToString("o")
             };
         }
 

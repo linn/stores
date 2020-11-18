@@ -24,6 +24,6 @@
 
         public Employee ApprovedBy { get; set; }
 
-        public DateTime DateApproved { get; set; }
+        public DateTime? DateApproved { get; set; }
     }
 }
