@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
     using Linn.Common.Facade;
-    using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
@@ -51,8 +50,7 @@
             IPartService partDomainService,
             IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> partTemplateService,
             IPartLiveService partLiveService,
-            IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
-                mechPartSourceService)
+            IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> mechPartSourceService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
@@ -88,7 +86,6 @@
             this.Get("inventory/parts/sources/{id}", parameters => this.GetMechPartSource(parameters.id));
             this.Put("inventory/parts/sources/{id}", parameters => this.UpdateMechPartSource(parameters.id));
             this.Post("inventory/parts/sources", _ => this.AddMechPartSource());
-
         }
 
         private object GetPart(int id)
@@ -100,7 +97,8 @@
                 .WithView("Index");
         }
 
-        private object GetParts(){
+        private object GetParts()
+        {
             var resource = this.Bind<SearchRequestResource>();
             var results = string.IsNullOrEmpty(resource.SearchTerm)
                               ? this.partsFacadeService.GetAll()
@@ -110,6 +108,7 @@
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");
         }
+
         private object AddPart()
         {
             this.RequiresAuthentication();

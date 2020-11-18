@@ -14,7 +14,7 @@
 
         public Manufacturer Manufacturer { get; set; }
 
-        public int Preference { get; set; }
+        public int? Preference { get; set; }
 
         public string PartNumber { get; set; }
 
