@@ -119,6 +119,7 @@
             {
                 this.partDomainService.AddQcControl(resource.PartNumber, resource.CreatedBy, resource.QcInformation);
             }
+
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
@@ -186,8 +187,10 @@
         private object GetMechPartSource(int id)
         {
             var result = this.mechPartSourceService.GetById(id);
-            return this.Negotiate.WithModel(result)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+            return this.Negotiate
+                .WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
 
         private object UpdateMechPartSource(int id)
