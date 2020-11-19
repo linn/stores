@@ -40,6 +40,9 @@
         private readonly IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
             mechPartSourceService;
 
+        private readonly IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>
+            manufacturerService;
+
         public PartsModule(
             IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
@@ -50,7 +53,8 @@
             IPartService partDomainService,
             IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> partTemplateService,
             IPartLiveService partLiveService,
-            IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> mechPartSourceService)
+            IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> mechPartSourceService,
+            IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> manufacturerService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
@@ -86,6 +90,9 @@
             this.Get("inventory/parts/sources/{id}", parameters => this.GetMechPartSource(parameters.id));
             this.Put("inventory/parts/sources/{id}", parameters => this.UpdateMechPartSource(parameters.id));
             this.Post("inventory/parts/sources", _ => this.AddMechPartSource());
+
+            this.manufacturerService = manufacturerService;
+            this.Get("/inventory/manufacturers", _ => this.GetManufacturers());
         }
 
         private object GetPart(int id)
@@ -207,6 +214,14 @@
             // todo - privileges check
             var resource = this.Bind<MechPartSourceResource>();
             var result = this.mechPartSourceService.Add(resource);
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetManufacturers()
+        {
+            var resource = this.Bind<SearchRequestResource>();
+            var result = this.manufacturerService.Search(resource.SearchTerm);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

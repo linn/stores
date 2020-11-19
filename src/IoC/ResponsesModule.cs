@@ -84,6 +84,7 @@
             builder.RegisterType<ParcelsResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<Parcel>>>();
             builder.RegisterType<ManufacturerResourceBuilder>().As<IResourceBuilder<Manufacturer>>();
+            builder.RegisterType<ManufacturersResourceBuilder>().As<IResourceBuilder<IEnumerable<Manufacturer>>>();
             builder.RegisterType<MechPartManufacturerAltResourceBuilder>()
                 .As<IResourceBuilder<MechPartManufacturerAlt>>();
             builder.RegisterType<MechPartAltResourceBuilder>()
