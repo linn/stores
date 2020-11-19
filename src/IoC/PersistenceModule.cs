@@ -49,6 +49,10 @@
             builder.RegisterType<PartTemplateRepository>().As<IRepository<PartTemplate, string>>();
             builder.RegisterType<MechPartSourcesRepository>()
                 .As<IRepository<MechPartSource, MechPartSourceKey>>();
+            builder.RegisterType<StockLocatorRepository>().As<IQueryRepository<StockLocator>>();
+            builder.RegisterType<StoragePlaceRepository>().As<IQueryRepository<StoragePlace>>();
+            builder.RegisterType<StoresBugetRepository>().As<IQueryRepository<StoresBudget>>();
+            builder.RegisterType<AuditLocationRepository>().As<IQueryRepository<AuditLocation>>();
         }
     }
 }

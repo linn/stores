@@ -495,7 +495,7 @@
             var q = builder.Query<StoragePlace>();
             q.ToView("V_STORAGE_PLACES");
             q.Property(e => e.StoragePlaceDescription).HasColumnName("STORAGE_PLACE_DESCRIPTION");
-            q.Property(e => e.StoragePlaceName).HasColumnName("STORAGE_PLACE_NAME");
+            q.Property(e => e.Name).HasColumnName("STORAGE_PLACE");
             q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
             q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
         }
@@ -503,7 +503,7 @@
         private void QueryStoresBudgets(ModelBuilder builder)
         {
             var q = builder.Query<StoresBudget>();
-            q.ToView("STORES_BUDGET");
+            q.ToView("STORES_BUDGETS");
             q.Property(e => e.BudgetId).HasColumnName("BUDGET_ID");
         }
 

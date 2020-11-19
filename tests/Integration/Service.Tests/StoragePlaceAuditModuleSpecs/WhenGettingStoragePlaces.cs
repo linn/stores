@@ -21,8 +21,8 @@
         [SetUp]
         public void SetUp()
         {
-            var sp1 = new StoragePlace { StoragePlaceName = "sp1" };
-            var sp2 = new StoragePlace { StoragePlaceName = "sp2" };
+            var sp1 = new StoragePlace { Name = "sp1" };
+            var sp2 = new StoragePlace { Name = "sp2" };
 
             this.StoragePlaceService.GetStoragePlaces("sp").Returns(
                 new SuccessResult<IEnumerable<StoragePlace>>(new List<StoragePlace> { sp1, sp2 }));
@@ -53,8 +53,8 @@
         {
             var resource = this.Response.Body.DeserializeJson<IEnumerable<StoragePlaceResource>>().ToList();
             resource.Should().HaveCount(2);
-            resource.Should().Contain(s => s.StoragePlaceName == "sp1");
-            resource.Should().Contain(s => s.StoragePlaceName == "sp2");
+            resource.Should().Contain(s => s.Name == "sp1");
+            resource.Should().Contain(s => s.Name == "sp2");
         }
     }
 }

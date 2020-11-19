@@ -39,20 +39,19 @@
 
             if (!string.IsNullOrEmpty(locationRange) && locationRange.StartsWith("E-K"))
             {
-                storagePlaces = this.storagePlaceRepository.FilterBy(s => s.StoragePlaceName.StartsWith(locationRange))
-                    .OrderBy(s => s.StoragePlaceName).ToList();
+                storagePlaces = this.storagePlaceRepository.FilterBy(s => s.Name.StartsWith(locationRange))
+                    .OrderBy(s => s.Name).ToList();
             }
             else
             {
-                storagePlaces = this.storagePlaceRepository.FilterBy(s => locationList.Any(l => s.StoragePlaceName == l))
-                    .OrderBy(s => s.StoragePlaceName).ToList();
+                storagePlaces = this.storagePlaceRepository.FilterBy(s => locationList.Any(l => s.Name == l))
+                    .OrderBy(s => s.Name).ToList();
             }
 
             var stockLocators = this.stockLocatorRepository.FilterBy(
                 s => storagePlaces.Any(sp => sp.LocationId == s.LocationId)
                      && storagePlaces.Any(sp => sp.PalletNumber == s.PalletNumber)).Where(s => s.Quantity > 0).ToList();
 
-            // maybe need an outer join here?
             var storesBudgets = this.storesBudgetsRepository
                 .FilterBy(s => stockLocators.Any(sl => sl.BudgetId == s.BudgetId)).ToList();
 
@@ -81,7 +80,6 @@
 
             foreach (var storagePlace in storagePlaces)
             {
-                // there are actually multiple of these I need to sum
                 var locators = stockLocators
                     .Where(sl => sl.LocationId == storagePlace.LocationId && sl.PalletNumber == storagePlace.PalletNumber);
 
@@ -91,61 +89,59 @@
                 
                 var part = parts.First(p => p.PartNumber == locators.First().PartNumber);
 
-                // TODO need to sort out the group by...
-
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = storagePlace.StoragePlaceName,
-                            TextDisplay = storagePlace.StoragePlaceName,
+                            RowId = storagePlace.Name,
+                            TextDisplay = storagePlace.Name,
                             ColumnId = "Storage Place"
                         });
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = storagePlace.StoragePlaceName,
+                            RowId = storagePlace.Name,
                             TextDisplay = storagePlace.StoragePlaceDescription,
                             ColumnId = "Description"
                         });
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = storagePlace.StoragePlaceName,
+                            RowId = storagePlace.Name,
                             TextDisplay = part.PartNumber,
                             ColumnId = "Part Number"
                         });
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = storagePlace.StoragePlaceName,
+                            RowId = storagePlace.Name,
                             TextDisplay = part.Description,
                             ColumnId = "Part Description"
                         });
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = storagePlace.StoragePlaceName,
+                            RowId = storagePlace.Name,
                             TextDisplay = part.OurUnitOfMeasure,
                             ColumnId = "UOM"
                         });
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = storagePlace.StoragePlaceName,
+                            RowId = storagePlace.Name,
                             TextDisplay = part.RawOrFinished,
                             ColumnId = "Raw or Finished"
                         });
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = storagePlace.StoragePlaceName, Quantity = quantity ?? 0, ColumnId = "Quantity"
+                            RowId = storagePlace.Name, Quantity = quantity ?? 0, ColumnId = "Quantity"
                         });
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = storagePlace.StoragePlaceDescription,
+                            RowId = storagePlace.Name,
                             Quantity = quantityAllocated ?? 0,
-                            ColumnId = "Quantity Allocated"
+                            ColumnId = "Allocated"
                         });
             }
 
@@ -182,11 +178,6 @@
                                },
                            new AxisDetailsModel("Quantity") { SortOrder = 6, GridDisplayType = GridDisplayType.Value },
                            new AxisDetailsModel("Allocated") { SortOrder = 7, GridDisplayType = GridDisplayType.Value },
-
-                           // new AxisDetailsModel("Test") { SortOrder = 2, GridDisplayType = GridDisplayType.TextValue },
-                           // new AxisDetailsModel("UOM") { SortOrder = 5, GridDisplayType = GridDisplayType.TextValue },
-                           // new AxisDetailsModel("Counted") { SortOrder = 7, GridDisplayType = GridDisplayType.Value },
-                           // new AxisDetailsModel("Adjusted") { SortOrder = 8, GridDisplayType = GridDisplayType.Value }
                        };
         }
     }

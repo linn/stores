@@ -28,7 +28,7 @@
 
         public IQueryable<AuditLocation> FindAll()
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.AuditLocations;
         }
     }
 }

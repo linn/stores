@@ -1,8 +1,14 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System;
+
+    using Linn.Common.Facade;
+    using Linn.Common.Resources;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
+    using Linn.Stores.Service.Extensions;
     using Linn.Stores.Service.Models;
 
     using Nancy;
@@ -28,6 +34,7 @@
             this.Get("/inventory/reports/storage-place-audit", _ => this.StoragePlaceAuditReportOptions());
             this.Get("/inventory/audit-locations", _ => this.GetAuditLocations());
             this.Get("/inventory/storage-places", _ => this.GetStoragePlaces());
+            this.Post("/inventory/storage-places/create-audit-reqs", _ => this.CreateAuditReqs());
         }
 
         private object StoragePlaceAuditReport()
@@ -69,6 +76,24 @@
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");
+        }
+
+        private object CreateAuditReqs()
+        {
+            var resource = this.Bind<CreateAuditReqsResource>();
+
+            resource.Links = new[] { new LinkResource("created-by", this.Context?.CurrentUser?.GetEmployeeUri()) };
+
+            try
+            {
+                this.storagePlaceService.CreateAuditReqs(resource);
+            }
+            catch (Exception e)
+            {
+                return this.Negotiate.WithModel(new BadRequestResult<Error>(e.Message));
+            }
+
+            return HttpStatusCode.OK;
         }
     }
 }

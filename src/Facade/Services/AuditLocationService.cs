@@ -18,7 +18,7 @@
         public IResult<IEnumerable<AuditLocation>> GetAuditLocations(string searchTerm)
         {
             return new SuccessResult<IEnumerable<AuditLocation>>(
-                this.repository.FilterBy(a => a.StoragePlace.Contains(searchTerm)));
+                this.repository.FilterBy(a => a.StoragePlace.StartsWith("E-K") && a.StoragePlace.Contains(searchTerm.ToUpper())));
         }
     }
 }

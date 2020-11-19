@@ -60,12 +60,14 @@
             builder.RegisterType<PartLiveService>().As<IPartLiveService>();
             builder.RegisterType<StoragePlaceAuditReportFacadeService>().As<IStoragePlaceAuditReportFacadeService>();
             builder.RegisterType<AuditLocationService>().As<IAuditLocationService>();
+            builder.RegisterType<StoragePlaceService>().As<IStoragePlaceService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
             builder.RegisterType<PartPack>().As<IPartPack>();
             builder.RegisterType<DatabaseService>().As<IDatabaseService>();
             builder.RegisterType<WwdPack>().As<IWwdPack>();
+            builder.RegisterType<StoragePlaceAuditPack>().As<IStoragePlaceAuditPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

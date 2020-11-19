@@ -23,7 +23,7 @@
 
         public IQueryable<StoragePlace> FilterBy(Expression<Func<StoragePlace, bool>> expression)
         {
-            return this.serviceDbContext.StoragePlaces.Where(expression);
+            return this.serviceDbContext.StoragePlaces.Where(expression).OrderBy(s => s.Name);
         }
 
         public IQueryable<StoragePlace> FindAll()
