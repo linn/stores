@@ -176,7 +176,7 @@
                                                                             PdfFilePath = s.PdfFilePath
                                                                         });
             entity.Part.DataSheets = this.domainService.GetUpdatedDataSheets(currentDataSheets, newDataSheets);
-            entity.MechPartManufacturerAlts = resource.MechPartManufacturerAlts.Select(
+            entity.MechPartManufacturerAlts = resource.MechPartManufacturerAlts?.Select(
                 a => new MechPartManufacturerAlt
                          {
                              Sequence = a.Sequence,
@@ -189,7 +189,7 @@
                              ReelSuffix = a.ReelSuffix,
                              RohsCompliant = a.RohsCompliant
                          });
-            entity.MechPartAlts = resource.MechPartAlts.Select(
+            entity.MechPartAlts = resource.MechPartAlts?.Select(
                 a => new MechPartAlt
                          {
                              PartNumber = a.PartNumber,
