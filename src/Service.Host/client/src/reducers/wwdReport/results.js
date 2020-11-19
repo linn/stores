@@ -1,4 +1,4 @@
-import { reportOptionsFactory, reportResultsFactory } from '@linn-it/linn-form-components-library';
+import { reportResultsFactory } from '@linn-it/linn-form-components-library';
 import { wwdReportActionTypes as actionTypes } from '../../actions';
 import * as reportTypes from '../../reportTypes';
 

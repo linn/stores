@@ -48,6 +48,28 @@
                                 this.manufacturerAltResourceBuilder.Build(x)),
                             MechPartAlts = model.MechPartAlts?.Select(x => 
                                 this.altResourceBuilder.Build(x)),
+                            PackingDate = model.PackingDate?.ToString("o"),
+                            DrawingsPackageDate = model.DrawingsPackageDate?.ToString("o"),
+                            ChecklistDate = model.ChecklistDate?.ToString("o"),
+                            ChecklistAvailable = model.ChecklistAvailable,
+                            TestEquipmentDate = model.TestEquipmentDate?.ToString("o"),
+                            TestEquipmentAvailable = model.TestEquipmentAvailable,
+                            ProcessEvaluationDate = model.ProcessEvaluationDate?.ToString("o"),
+                            DrawingsPackageAvailable = model.DrawingsPackageAvailable,
+                            ProcessEvaluationAvailable = model.ProcessEvaluationAvailable,
+                            ApprovedReferenceStandards = model.ApprovedReferenceStandards,
+                            ProductKnowledgeDate = model.ProductKnowledgeDate?.ToString("o"),
+                            ProcessEvaluation = model.ProcessEvaluation,
+                            ApprovedReferencesAvailable = model.ApprovedReferencesAvailable,
+                            ApprovedReferencesDate = model.ApprovedReferencesDate?.ToString("o"),
+                            ChecklistCreated = model.ChecklistCreated,
+                            DrawingFile = model.DrawingFile,
+                            DrawingsPackage = model.DrawingsPackage,
+                            PackingAvailable = model.PackingAvailable,
+                            PackingRequired = model.PackingRequired,
+                            ProductKnowledge = model.ProductKnowledge,
+                            ProductKnowledgeAvailable = model.ProductKnowledgeAvailable,
+                            TestEquipment = model.TestEquipment,
                             Links = this.BuildLinks(model).ToArray()
             };
         }

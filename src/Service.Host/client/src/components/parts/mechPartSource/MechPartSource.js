@@ -14,6 +14,7 @@ import {
 import Page from '../../../containers/Page';
 import DataSheetsTab from './tabs/DataSheetsTab';
 import ProposalTab from '../../../containers/parts/mechPartSource/tabs/ProposalTab';
+import QualityRequirementsTab from './tabs/QualityRequirementsTab';
 
 function MechPartSource({
     editStatus,
@@ -42,7 +43,8 @@ function MechPartSource({
 
     const tabDictionary = {
         proposal: 0,
-        dataSheets: 1
+        dataSheets: 1,
+        qualityRequirements: 2
     };
 
     const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
@@ -166,6 +168,7 @@ function MechPartSource({
                             >
                                 <Tab label="Proposal" />
                                 <Tab label="DataSheets" />
+                                <Tab label="Quality Requirements" />
                             </Tabs>
                             {tab === 0 && (
                                 <ProposalTab
@@ -198,7 +201,43 @@ function MechPartSource({
                                     handleDataSheetsChange={handleDatasheetsChange}
                                 />
                             )}
-                            {tab === 2 && <></>}
+                            {tab === 2 && (
+                                <QualityRequirementsTab
+                                    handleFieldChange={handleFieldChange}
+                                    drawingsPackage={mechPartSource.drawingsPackage}
+                                    drawingsPackageAvailable={
+                                        mechPartSource.drawingsPackageAvailable
+                                    }
+                                    drawingsPackageDate={mechPartSource.drawingsPackageDate}
+                                    drawingfile={mechPartSource.drawingFile}
+                                    checklistCreated={mechPartSource.checklistCreated}
+                                    checklistAvailable={mechPartSource.checklistAvailable}
+                                    checklistDate={mechPartSource.checklistDate}
+                                    packingRequired={mechPartSource.packingRequired}
+                                    packingAvailable={mechPartSource.packingAvailable}
+                                    packingDate={mechPartSource.packingDate}
+                                    productKnowledge={mechPartSource.productKnowledge}
+                                    productKnowledgeAvailable={
+                                        mechPartSource.productKnowledgeAvailable
+                                    }
+                                    productKnowledgeDate={mechPartSource.productKnowledgeDate}
+                                    testEquipment={mechPartSource.testEquipment}
+                                    testEquipmentAvailable={mechPartSource.testEquipmentAvailable}
+                                    testEquipmentDate={mechPartSource.testEquipmentDate}
+                                    approvedReferenceStandards={
+                                        mechPartSource.approvedReferenceStandards
+                                    }
+                                    approvedReferencesAvailable={
+                                        mechPartSource.approvedReferencesAvailable
+                                    }
+                                    approvedReferencesDate={mechPartSource.approvedReferencesDate}
+                                    processEvaluation={mechPartSource.processEvaluation}
+                                    processEvaluationAvailable={
+                                        mechPartSource.processEvaluationAvailable
+                                    }
+                                    processEvaluationDate={mechPartSource.processEvaluationDate}
+                                />
+                            )}
                             {tab === 3 && <></>}
                             {tab === 4 && <></>}
                             <Grid item xs={12}>
