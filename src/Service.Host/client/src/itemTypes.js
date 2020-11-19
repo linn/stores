@@ -101,3 +101,9 @@ export const sosAllocHeads = new ItemType(
     'SOS_ALLOC_HEADS',
     '/logistics/sos-alloc-heads'
 );
+
+export const manufacturers = new ItemType(
+    'manufacturers',
+    'MANUFACTURERS',
+    '/inventory/manufacturers'
+);

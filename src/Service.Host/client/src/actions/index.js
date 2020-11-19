@@ -50,3 +50,5 @@ export const countriesActionTypes = makeActionTypes(itemTypes.countries.actionTy
 export const sosAllocHeadsActionTypes = makeActionTypes(itemTypes.sosAllocHeads.actionType);
 
 export const mechPartSourceActionTypes = makeActionTypes(itemTypes.mechPartSource.actionType);
+
+export const manufacturersActionTypes = makeActionTypes(itemTypes.manufacturers.actionType);
