@@ -8,8 +8,6 @@
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources.Parts;
 
-    using PagedList.Core;
-
     public class ManufacturerService : 
         FacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>
     {
@@ -30,7 +28,7 @@
 
         protected override Expression<Func<Manufacturer, bool>> SearchExpression(string searchTerm)
         {
-            return m => m.Description == searchTerm;
+            return m => m.Description.ToUpper().Contains(searchTerm.ToUpper());
         }
     }
 }

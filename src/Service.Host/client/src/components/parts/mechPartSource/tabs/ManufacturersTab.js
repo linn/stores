@@ -9,7 +9,11 @@ function ManufacturersTab({
     searchManufacturers,
     clearManufacturersSearch,
     manufacturersSearchResults,
-    manufacturersSearchLoading
+    manufacturersSearchLoading,
+    searchEmployees,
+    clearEmployeesSearch,
+    employeesSearchResults,
+    employeesSearchLoading
 }) {
     const [newRow, setNewRow] = useState({});
     
@@ -30,9 +34,8 @@ function ManufacturersTab({
             clearSearch: clearManufacturersSearch,
             searchResults: manufacturersSearchResults,
             searchLoading: manufacturersSearchLoading,
-            searchTitle: 'Search Parts',
             // selectSearchResult: selectPartSearchResult,
-            required: true
+            searchTitle: 'Search Parts'
         },
         {
             title: 'Their Part Number',
@@ -56,9 +59,14 @@ function ManufacturersTab({
         {
             title: 'Approved By',
             id: 'approvedBy',
-            type: 'dropdown',
+            type: 'search',
             editable: true,
-            options: ['Y', 'N']
+            search: searchEmployees,
+            clearSearch: clearEmployeesSearch,
+            searchResults: employeesSearchResults,
+            searchLoading: employeesSearchLoading,
+            searchTitle: 'Search Employees'
+            // selectSearchResult: selectPartSearchResult,
         },
         {
             title: 'Date Approved',
@@ -85,11 +93,23 @@ function ManufacturersTab({
 
 ManufacturersTab.propTypes = {
     handleFieldChange: PropTypes.func.isRequired,
-    manufacturers: PropTypes.arrayOf(PropTypes.shape({}))
+    manufacturers: PropTypes.arrayOf(PropTypes.shape({})),
+    searchManufacturers: PropTypes.func.isRequired,
+    clearManufacturersSearch: PropTypes.func.isRequired,
+    manufacturersSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
+    manufacturersSearchLoading: PropTypes.bool,
+    searchEmployees: PropTypes.func.isRequired,
+    clearEmployeesSearch: PropTypes.func.isRequired,
+    employeesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
+    employeesSearchLoading: PropTypes.bool
 };
 
 ManufacturersTab.defaultProps = {
-    manufacturers: []
+    manufacturers: [],
+    manufacturersSearchResults: [],
+    manufacturersSearchLoading: false,
+    employeesSearchResults: [],
+    employeesSearchLoading: false
 };
 
 export default ManufacturersTab;
