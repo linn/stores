@@ -107,3 +107,5 @@ export const manufacturers = new ItemType(
     'MANUFACTURERS',
     '/inventory/manufacturers'
 );
+
+export const employees = new ItemType('employees', 'EMPLOYEES', '/inventory/employees');
