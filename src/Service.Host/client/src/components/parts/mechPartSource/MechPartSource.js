@@ -15,6 +15,7 @@ import Page from '../../../containers/Page';
 import DataSheetsTab from './tabs/DataSheetsTab';
 import ProposalTab from '../../../containers/parts/mechPartSource/tabs/ProposalTab';
 import QualityRequirementsTab from './tabs/QualityRequirementsTab';
+import Manufacturerstab from '../../../containers/parts/mechPartSource/tabs/ManufacturersTab';
 
 function MechPartSource({
     editStatus,
@@ -44,7 +45,9 @@ function MechPartSource({
     const tabDictionary = {
         proposal: 0,
         dataSheets: 1,
-        qualityRequirements: 2
+        qualityRequirements: 2,
+        manufacturers: 3,
+        suppliers: 4
     };
 
     const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
@@ -169,6 +172,7 @@ function MechPartSource({
                                 <Tab label="Proposal" />
                                 <Tab label="DataSheets" />
                                 <Tab label="Quality Requirements" />
+                                <Tab label="manufacturers" />
                             </Tabs>
                             {tab === 0 && (
                                 <ProposalTab
@@ -238,7 +242,12 @@ function MechPartSource({
                                     processEvaluationDate={mechPartSource.processEvaluationDate}
                                 />
                             )}
-                            {tab === 3 && <></>}
+                            {tab === 3 && (
+                                <Manufacturerstab
+                                    handleFieldChange={handleFieldChange}
+                                    manufacturers={mechPartSource.mechPartManufacturerAlts}
+                                />
+                            )}
                             {tab === 4 && <></>}
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons
