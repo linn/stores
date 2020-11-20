@@ -45,7 +45,7 @@
                             SafetyDataDirectory = model.SafetyDataDirectory,
                             ProductionDate = model.ProductionDate?.ToString("o"),
                             MechPartManufacturerAlts = model.MechPartManufacturerAlts?.Select(x => 
-                                this.manufacturerAltResourceBuilder.Build(x)),
+                                this.manufacturerAltResourceBuilder.Build(x)).OrderBy(x => x.Preference),
                             MechPartAlts = model.MechPartAlts?.Select(x => 
                                 this.altResourceBuilder.Build(x)),
                             PackingDate = model.PackingDate?.ToString("o"),

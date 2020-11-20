@@ -16,6 +16,7 @@ import DataSheetsTab from './tabs/DataSheetsTab';
 import ProposalTab from '../../../containers/parts/mechPartSource/tabs/ProposalTab';
 import QualityRequirementsTab from './tabs/QualityRequirementsTab';
 import Manufacturerstab from '../../../containers/parts/mechPartSource/tabs/ManufacturersTab';
+import { RowingTwoTone } from '@material-ui/icons';
 
 function MechPartSource({
     editStatus,
@@ -108,6 +109,53 @@ function MechPartSource({
         });
     };
 
+    const saveRow = row => {
+        setEditStatus('edit');
+        // we are adding a new row
+        if (!row.sequence) {
+            setMechPartSource(m => ({
+                ...m,
+                mechPartManufacturerAlts: [
+                    ...m.mechPartManufacturerAlts,
+                    {
+                        ...row,
+                        sequence:
+                            m.mechPartManufacturerAlts.reduce((prev, current) =>
+                                prev.sequence > current.sequence ? prev : current
+                            ).sequence + 1
+                    }
+                ]
+            }));
+        }
+        // or we are updating an existing row
+        setMechPartSource(m => ({
+            ...m,
+            mechPartManufacturerAlts: m.mechPartManufacturerAlts.map(x =>
+                x.sequence === row.sequence ? row : x
+            )
+        }));
+    };
+
+    const handleApprovedByChange = (sequence, newValue) => {
+        setMechPartSource(m => ({
+            ...m,
+            mechPartManufacturerAlts: m.mechPartManufacturerAlts.map(x =>
+                x.sequence === sequence
+                    ? { ...x, approvedBy: newValue.name, approvedByName: newValue.description }
+                    : x
+            )
+        }));
+    };
+
+    const handleManufacturerChange = (sequence, newValue) => {
+        setMechPartSource(m => ({
+            ...m,
+            mechPartManufacturerAlts: m.mechPartManufacturerAlts.map(x =>
+                x.sequence === sequence ? { ...x, manufacturerCode: newValue.name } : x
+            )
+        }));
+    };
+
     return (
         <Page>
             <Grid container spacing={3}>
@@ -159,7 +207,7 @@ function MechPartSource({
                                     maxLength={200}
                                     required
                                     onChange={handleFieldChange} // todo - how to handle change?
-                                    propertyName="partDescription"
+                                    propertyName="part.description"
                                 />
                             </Grid>
                             <Tabs
@@ -245,7 +293,10 @@ function MechPartSource({
                             {tab === 3 && (
                                 <Manufacturerstab
                                     handleFieldChange={handleFieldChange}
+                                    handleApprovedByChange={handleApprovedByChange}
+                                    handleManufacturerChange={handleManufacturerChange}
                                     manufacturers={mechPartSource.mechPartManufacturerAlts}
+                                    saveRow={saveRow}
                                 />
                             )}
                             {tab === 4 && <></>}

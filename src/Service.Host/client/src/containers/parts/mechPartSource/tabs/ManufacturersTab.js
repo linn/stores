@@ -13,8 +13,8 @@ const mapStateToProps = state => ({
     manufacturersSearchLoading: manufacturersSelectors.getSearchLoading(state),
     employeesSearchResults: employeesSelectors
         .getSearchItems(state)
-        .map(c => ({ name: c.id, description: c.fullbame })),
-    employeesSearchLoading: manufacturersSelectors.getSearchLoading(state)
+        .map(c => ({ name: c.id, description: c.fullName })),
+    employeesSearchLoading: employeesSelectors.getSearchLoading(state)
 });
 
 const mapDispatchToProps = {

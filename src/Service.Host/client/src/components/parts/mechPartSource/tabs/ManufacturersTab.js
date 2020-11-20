@@ -13,10 +13,33 @@ function ManufacturersTab({
     searchEmployees,
     clearEmployeesSearch,
     employeesSearchResults,
-    employeesSearchLoading
+    employeesSearchLoading,
+    handleApprovedByChange,
+    handleManufacturerChange,
+    saveRow
 }) {
     const [newRow, setNewRow] = useState({});
-    
+
+    const selectApprovedBySearchResult = (_propertyName, approvedBy, updatedItem) => {
+        handleApprovedByChange(updatedItem.sequence, approvedBy);
+        setNewRow(() => ({
+            ...updatedItem,
+            approvedBy: approvedBy.name,
+            approvedByName: approvedBy.description
+        }));
+    };
+
+    const selectManufacturerSearchResult = (_propertyName, manufacturer, updatedItem) => {
+        handleManufacturerChange(updatedItem.sequence, manufacturer);
+        setNewRow(() => ({
+            ...updatedItem,
+            manufacturerCode: manufacturer.name
+        }));
+    };
+
+    const updateRow = (item, setItem, propertyName, newValue) => {
+        setItem({ ...item, [propertyName]: newValue });
+    };
     const columns = [
         {
             title: 'Preferece',
@@ -34,8 +57,8 @@ function ManufacturersTab({
             clearSearch: clearManufacturersSearch,
             searchResults: manufacturersSearchResults,
             searchLoading: manufacturersSearchLoading,
-            // selectSearchResult: selectPartSearchResult,
-            searchTitle: 'Search Parts'
+            selectSearchResult: selectManufacturerSearchResult,
+            searchTitle: 'Search Manufacturers'
         },
         {
             title: 'Their Part Number',
@@ -65,8 +88,14 @@ function ManufacturersTab({
             clearSearch: clearEmployeesSearch,
             searchResults: employeesSearchResults,
             searchLoading: employeesSearchLoading,
-            searchTitle: 'Search Employees'
-            // selectSearchResult: selectPartSearchResult,
+            searchTitle: 'Search Employees',
+            selectSearchResult: selectApprovedBySearchResult,
+        },
+        {
+            title: 'Name',
+            id: 'approvedByName',
+            type: 'text',
+            editable: false
         },
         {
             title: 'Date Approved',
@@ -79,13 +108,13 @@ function ManufacturersTab({
         <Grid item xs={12}>
             <EditableTable
                 columns={columns}
-                rows={manufacturers}
+                rows={manufacturers.map(m => ({ ...m, id: m.sequence }))}
                 newRow={newRow}
-                createRow={() => {}}
-                saveRow={() => {}}
-                updateRow={() => {}}
-                validateRow={() => {}}
-                deleteRow={() => {}}
+                createRow={saveRow}
+                saveRow={saveRow}
+                //updateRow={saveRow}
+                //validateRow={() => {}}
+                deleteRow={() => true}
             />
         </Grid>
     );
@@ -101,7 +130,8 @@ ManufacturersTab.propTypes = {
     searchEmployees: PropTypes.func.isRequired,
     clearEmployeesSearch: PropTypes.func.isRequired,
     employeesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
-    employeesSearchLoading: PropTypes.bool
+    employeesSearchLoading: PropTypes.bool,
+    handleApprovedByChange: PropTypes.func.isRequired
 };
 
 ManufacturersTab.defaultProps = {

@@ -16,7 +16,7 @@
             {
                Sequence = model.Sequence,
                ManufacturerCode = model.ManufacturerCode,
-               ManufacturerDescription = model.Manufacturer.Description,
+               ManufacturerDescription = model.Manufacturer?.Description,
                Preference = model.Preference,
                PartNumber = model.PartNumber,
                ReelSuffix = model.ReelSuffix,

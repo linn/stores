@@ -95,7 +95,7 @@
                                          Preference = a.Preference,
                                          ReelSuffix = a.ReelSuffix,
                                          RohsCompliant = a.RohsCompliant
-                                     }),
+                                     }).ToList(),
                 MechPartAlts = resource.MechPartAlts.Select(a => new MechPartAlt
                                                                      {
                                                                          PartNumber = a.PartNumber,
@@ -188,7 +188,7 @@
                              Preference = a.Preference,
                              ReelSuffix = a.ReelSuffix,
                              RohsCompliant = a.RohsCompliant
-                         });
+                         }).ToList();
             entity.MechPartAlts = resource.MechPartAlts?.Select(
                 a => new MechPartAlt
                          {

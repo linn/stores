@@ -96,6 +96,6 @@
 
         public IEnumerable<MechPartAlt> MechPartAlts { get; set; }
 
-        public IEnumerable<MechPartManufacturerAlt> MechPartManufacturerAlts { get; set; }
+        public ICollection<MechPartManufacturerAlt> MechPartManufacturerAlts { get; set; }
     }
 }
