@@ -23,9 +23,9 @@ function ManufacturersTab({
         },
         {
             title: 'Manufacturer',
-            id: 'code',
+            id: 'manufacturerCode',
             type: 'search',
-            editable: false,
+            editable: true,
             search: searchManufacturers,
             clearSearch: clearManufacturersSearch,
             searchResults: manufacturersSearchResults,

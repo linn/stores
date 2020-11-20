@@ -5,8 +5,8 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
 
-    public interface IDepartmentsService
+    public interface IEmployeeService
     {
-        IResult<IEnumerable<Department>> GetOpenDepartments(string searchTerm = null);
+        IResult<IEnumerable<Employee>> SearchEmployees(string name, bool returnInvalid = false);
     }
 }
