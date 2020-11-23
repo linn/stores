@@ -19,7 +19,6 @@
 
         object IResourceBuilder<MechPartAlt>.Build(MechPartAlt alt) => this.Build(alt);
 
-
         public string GetLocation(MechPartAlt model)
         {
             throw new System.NotImplementedException();
