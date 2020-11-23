@@ -16,6 +16,7 @@ import DataSheetsTab from './tabs/DataSheetsTab';
 import ProposalTab from '../../../containers/parts/mechPartSource/tabs/ProposalTab';
 import QualityRequirementsTab from './tabs/QualityRequirementsTab';
 import Manufacturerstab from '../../../containers/parts/mechPartSource/tabs/ManufacturersTab';
+import SuppliersTab from '../../../containers/parts/mechPartSource/tabs/SuppliersTab';
 
 function MechPartSource({
     editStatus,
@@ -46,13 +47,13 @@ function MechPartSource({
         proposal: 0,
         dataSheets: 1,
         qualityRequirements: 2,
-        manufacturers: 3,
-        suppliers: 4
+        suppliers: 3,
+        manufacturers: 4
     };
 
     const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
 
-    const handleTabChange = (event, value) => {
+    const handleTabChange = (_, value) => {
         setTab(value);
     };
 
@@ -108,7 +109,7 @@ function MechPartSource({
         });
     };
 
-    const deleteRow = row => {
+    const deleteManufacturersRow = row => {
         setEditStatus('edit');
         setMechPartSource(m => ({
             ...m,
@@ -118,7 +119,15 @@ function MechPartSource({
         }));
     };
 
-    const saveRow = row => {
+    const deleteSuppliersRow = row => {
+        setEditStatus('edit');
+        setMechPartSource(m => ({
+            ...m,
+            mechPartAlts: m.mechPartAlts.filter(a => a.sequence === row.sequence)
+        }));
+    };
+
+    const saveManufacturersRow = row => {
         setEditStatus('edit');
         // we are adding a new row
         if (!row.sequence) {
@@ -147,12 +156,51 @@ function MechPartSource({
         }));
     };
 
+    const saveSuppliersRow = row => {
+        console.log(row);
+        setEditStatus('edit');
+        // we are adding a new row
+        if (!row.sequence) {
+            setMechPartSource(m => ({
+                ...m,
+                mechPartAlts: [
+                    ...m.mechPartAlts,
+                    {
+                        ...row,
+                        sequence:
+                            m.mechPartAlts?.length > 0
+                                ? m.mechPartAlts.reduce((prev, current) =>
+                                      prev.sequence > current.sequence ? prev : current
+                                  ).sequence + 1
+                                : 1
+                    }
+                ]
+            }));
+        }
+        // or we are updating an existing row
+        setMechPartSource(m => ({
+            ...m,
+            mechPartAlts: m.mechPartAlts.map(x => (x.sequence === row.sequence ? row : x))
+        }));
+    };
+
     const handleApprovedByChange = (sequence, newValue) => {
         setMechPartSource(m => ({
             ...m,
             mechPartManufacturerAlts: m.mechPartManufacturerAlts.map(x =>
                 x.sequence === sequence
                     ? { ...x, approvedBy: newValue.name, approvedByName: newValue.description }
+                    : x
+            )
+        }));
+    };
+
+    const handleSupplierChange = (sequence, newValue) => {
+        setMechPartSource(m => ({
+            ...m,
+            mechPartAlts: m.mechPartAlts.map(x =>
+                x.sequence === sequence
+                    ? { ...x, supplierId: newValue.name, supplierName: newValue.description }
                     : x
             )
         }));
@@ -231,7 +279,8 @@ function MechPartSource({
                                 <Tab label="Proposal" />
                                 <Tab label="DataSheets" />
                                 <Tab label="Quality Requirements" />
-                                <Tab label="manufacturers" />
+                                <Tab label="Suppliers" />
+                                <Tab label="Manufacturers" />
                             </Tabs>
                             {tab === 0 && (
                                 <ProposalTab
@@ -302,16 +351,23 @@ function MechPartSource({
                                 />
                             )}
                             {tab === 3 && (
+                                <SuppliersTab
+                                    handleSupplierChange={handleSupplierChange}
+                                    suppliers={mechPartSource.mechPartAlts}
+                                    saveRow={saveSuppliersRow}
+                                    deleteRow={deleteSuppliersRow}
+                                />
+                            )}
+                            {tab === 4 && (
                                 <Manufacturerstab
-                                    handleFieldChange={handleFieldChange}
                                     handleApprovedByChange={handleApprovedByChange}
                                     handleManufacturerChange={handleManufacturerChange}
                                     manufacturers={mechPartSource.mechPartManufacturerAlts}
-                                    saveRow={saveRow}
-                                    deleteRow={deleteRow}
+                                    saveRow={saveManufacturersRow}
+                                    deleteRow={deleteManufacturersRow}
                                 />
                             )}
-                            {tab === 4 && <></>}
+                            {tab === 5 && <></>}
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons
                                     saveDisabled={viewing() || mechPartSourceInvalid()}
