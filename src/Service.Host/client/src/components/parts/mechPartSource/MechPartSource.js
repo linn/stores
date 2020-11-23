@@ -120,9 +120,11 @@ function MechPartSource({
                     {
                         ...row,
                         sequence:
-                            m.mechPartManufacturerAlts.reduce((prev, current) =>
-                                prev.sequence > current.sequence ? prev : current
-                            ).sequence + 1
+                            m.mechPartManufacturerAlts?.length > 0
+                                ? m.mechPartManufacturerAlts.reduce((prev, current) =>
+                                      prev.sequence > current.sequence ? prev : current
+                                  ).sequence + 1
+                                : 1
                     }
                 ]
             }));

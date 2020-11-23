@@ -89,7 +89,7 @@ function ManufacturersTab({
             searchResults: employeesSearchResults,
             searchLoading: employeesSearchLoading,
             searchTitle: 'Search Employees',
-            selectSearchResult: selectApprovedBySearchResult,
+            selectSearchResult: selectApprovedBySearchResult
         },
         {
             title: 'Name',

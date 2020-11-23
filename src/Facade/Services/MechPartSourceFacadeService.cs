@@ -105,7 +105,7 @@
                                                                                  Id = a.SupplierId,
                                                                                  Name = a.SupplierName
                                                                              }
-                                                                     }),
+                                                                     }).ToList(),
                 ApprovedReferenceStandards = resource.ApprovedReferenceStandards,
                 ApprovedReferencesAvailable = resource.ApprovedReferencesAvailable,
                 ApprovedReferencesDate = resource.ApprovedReferencesDate != null
@@ -195,7 +195,7 @@
                              PartNumber = a.PartNumber,
                              Sequence = a.Sequence,
                              Supplier = new Supplier { Id = a.SupplierId, Name = a.SupplierName }
-                         });
+                         }).ToList();
             entity.ApprovedReferenceStandards = resource.ApprovedReferenceStandards;
             entity.ApprovedReferencesAvailable = resource.ApprovedReferencesAvailable;
             entity.ApprovedReferencesDate = resource.ApprovedReferencesDate != null

@@ -94,7 +94,7 @@
 
         public DateTime? ProcessEvaluationDate { get; set; }
 
-        public IEnumerable<MechPartAlt> MechPartAlts { get; set; }
+        public ICollection<MechPartAlt> MechPartAlts { get; set; }
 
         public ICollection<MechPartManufacturerAlt> MechPartManufacturerAlts { get; set; }
     }
