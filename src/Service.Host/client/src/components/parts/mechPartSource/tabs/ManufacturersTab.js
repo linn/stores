@@ -5,7 +5,6 @@ import Grid from '@material-ui/core/Grid';
 
 function ManufacturersTab({
     manufacturers,
-    handleFieldChange,
     searchManufacturers,
     clearManufacturersSearch,
     manufacturersSearchResults,
@@ -16,6 +15,7 @@ function ManufacturersTab({
     employeesSearchLoading,
     handleApprovedByChange,
     handleManufacturerChange,
+    deleteRow,
     saveRow
 }) {
     const [newRow, setNewRow] = useState({});
@@ -37,9 +37,6 @@ function ManufacturersTab({
         }));
     };
 
-    const updateRow = (item, setItem, propertyName, newValue) => {
-        setItem({ ...item, [propertyName]: newValue });
-    };
     const columns = [
         {
             title: 'Preferece',
@@ -112,16 +109,16 @@ function ManufacturersTab({
                 newRow={newRow}
                 createRow={saveRow}
                 saveRow={saveRow}
-                //updateRow={saveRow}
-                //validateRow={() => {}}
-                deleteRow={() => true}
+                deleteRow={deleteRow}
             />
         </Grid>
     );
 }
 
 ManufacturersTab.propTypes = {
-    handleFieldChange: PropTypes.func.isRequired,
+    handleManufacturerChange: PropTypes.func.isRequired,
+    saveRow: PropTypes.func.isRequired,
+    deleteRow: PropTypes.func.isRequired,
     manufacturers: PropTypes.arrayOf(PropTypes.shape({})),
     searchManufacturers: PropTypes.func.isRequired,
     clearManufacturersSearch: PropTypes.func.isRequired,

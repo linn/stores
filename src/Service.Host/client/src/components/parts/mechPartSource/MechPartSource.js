@@ -16,7 +16,6 @@ import DataSheetsTab from './tabs/DataSheetsTab';
 import ProposalTab from '../../../containers/parts/mechPartSource/tabs/ProposalTab';
 import QualityRequirementsTab from './tabs/QualityRequirementsTab';
 import Manufacturerstab from '../../../containers/parts/mechPartSource/tabs/ManufacturersTab';
-import { RowingTwoTone } from '@material-ui/icons';
 
 function MechPartSource({
     editStatus,
@@ -107,6 +106,16 @@ function MechPartSource({
             linnPartNumber: newValue.name,
             linnPartDescription: newValue.description
         });
+    };
+
+    const deleteRow = row => {
+        setEditStatus('edit');
+        setMechPartSource(m => ({
+            ...m,
+            mechPartManufacturerAlts: m.mechPartManufacturerAlts.filter(
+                a => a.sequence === row.sequence
+            )
+        }));
     };
 
     const saveRow = row => {
@@ -299,6 +308,7 @@ function MechPartSource({
                                     handleManufacturerChange={handleManufacturerChange}
                                     manufacturers={mechPartSource.mechPartManufacturerAlts}
                                     saveRow={saveRow}
+                                    deleteRow={deleteRow}
                                 />
                             )}
                             {tab === 4 && <></>}
