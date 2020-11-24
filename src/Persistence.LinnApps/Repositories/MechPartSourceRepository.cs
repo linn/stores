@@ -23,6 +23,7 @@
                 .Include(s => s.ProposedBy)
                 .Include(s => s.PartToBeReplaced)
                 .Include(s => s.Part).ThenInclude(p => p.DataSheets)
+                .Include(s => s.Part).ThenInclude(p => p.ParamData)
                 .ToList().FirstOrDefault();
         }
 

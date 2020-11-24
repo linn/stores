@@ -140,5 +140,7 @@
         public IEnumerable<PartDataSheet> DataSheets { get; set; }
 
         public IEnumerable<MechPartSource> ReplacementParts { get; set; }
+
+        public PartParamData ParamData { get; set; }
     }
 }

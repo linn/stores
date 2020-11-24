@@ -47,5 +47,7 @@
         public string SafetyDataDirectory { get; set; }
 
         public DateTime? ProductionDate { get; set; }
+
+        public int? CapacitorRippleCurrent { get; set; } 
     }
 }

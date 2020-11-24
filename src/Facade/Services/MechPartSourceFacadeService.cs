@@ -1,15 +1,15 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
-    using Linn.Common.Facade;
-    using Linn.Common.Persistence;
-    using Linn.Stores.Proxy;
-    using Linn.Stores.Domain.LinnApps.Parts;
-    using Linn.Stores.Resources.Parts;
-    using Linn.Stores.Domain.LinnApps;
-
     using System;
     using System.Linq;
     using System.Linq.Expressions;
+
+    using Linn.Common.Facade;
+    using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Proxy;
+    using Linn.Stores.Resources.Parts;
 
     public class MechPartSourceFacadeService : FacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
     {
