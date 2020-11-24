@@ -169,5 +169,7 @@
         public IEnumerable<string> UserPrivileges { get; set; }
 
         public IEnumerable<PartDataSheetResource> DataSheets { get; set; }
+
+        public PartParamDataResource ParamData { get; set; }
     }
 }
