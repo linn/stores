@@ -17,6 +17,7 @@ import ProposalTab from '../../../containers/parts/mechPartSource/tabs/ProposalT
 import QualityRequirementsTab from './tabs/QualityRequirementsTab';
 import Manufacturerstab from '../../../containers/parts/mechPartSource/tabs/ManufacturersTab';
 import SuppliersTab from '../../../containers/parts/mechPartSource/tabs/SuppliersTab';
+import ParamDataTab from './tabs/ParamDataTab';
 
 function MechPartSource({
     editStatus,
@@ -98,6 +99,30 @@ function MechPartSource({
         setMechPartSource({ ...mechPartSource, [propertyName]: newValue });
     };
 
+    const handlePartFieldChange = (propertyName, newValue) => {
+        if (viewing) {
+            setEditStatus('editing');
+        }
+        setMechPartSource({
+            ...mechPartSource,
+            part: { ...mechPartSource.part, [propertyName]: newValue }
+        });
+    };
+
+    const handleParamDataFieldChange = (propertyName, newValue) => {
+        console.log(propertyName, newValue);
+        if (viewing) {
+            setEditStatus('editing');
+        }
+        setMechPartSource({
+            ...mechPartSource,
+            part: {
+                ...mechPartSource.part,
+                paramData: { ...mechPartSource.part.paramData, [propertyName]: newValue }
+            }
+        });
+    };
+
     const handleLinnPartChange = newValue => {
         if (viewing()) {
             setEditStatus('edit');
@@ -157,7 +182,6 @@ function MechPartSource({
     };
 
     const saveSuppliersRow = row => {
-        console.log(row);
         setEditStatus('edit');
         // we are adding a new row
         if (!row.sequence) {
@@ -265,8 +289,8 @@ function MechPartSource({
                                     label="Description"
                                     maxLength={200}
                                     required
-                                    onChange={handleFieldChange} // todo - how to handle change?
-                                    propertyName="part.description"
+                                    onChange={handlePartFieldChange}
+                                    propertyName="description"
                                 />
                             </Grid>
                             <Tabs
@@ -281,6 +305,7 @@ function MechPartSource({
                                 <Tab label="Quality Requirements" />
                                 <Tab label="Suppliers" />
                                 <Tab label="Manufacturers" />
+                                <Tab label="Param Data" />
                             </Tabs>
                             {tab === 0 && (
                                 <ProposalTab
@@ -367,7 +392,12 @@ function MechPartSource({
                                     deleteRow={deleteManufacturersRow}
                                 />
                             )}
-                            {tab === 5 && <></>}
+                            {tab === 5 && (
+                                <ParamDataTab
+                                    paramData={mechPartSource.part.paramData}
+                                    handleFieldChange={handleParamDataFieldChange}
+                                />
+                            )}
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons
                                     saveDisabled={viewing() || mechPartSourceInvalid()}

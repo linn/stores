@@ -154,8 +154,7 @@
                                              DatePhasedOut = string.IsNullOrEmpty(resource.DatePhasedOut)
                                                                  ? (DateTime?)null
                                                                  : DateTime.Parse(resource.DatePhasedOut),
-                                             ReasonPhasedOut = resource.ReasonPhasedOut,
-                                             ParamData = this.CreateParamDataFromResource(resource.ParamData)
+                                             ReasonPhasedOut = resource.ReasonPhasedOut
                                          };
             return this.partService.CreatePart(partToAdd, resource.UserPrivileges.ToList());
         }
@@ -263,9 +262,9 @@
                                      MadeLiveBy = 
                                           resource.MadeLiveBy != null
                                               ? this.employeeRepository.FindById((int)resource.MadeLiveBy)
-                                              : null,
-                                     ParamData = this.CreateParamDataFromResource(resource.ParamData)
-            };
+                                              : null
+
+                                  };
 
             this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList());
         }
@@ -285,33 +284,5 @@
             return (bool)booleanRepresentation ? "Y" : "N";
         }
 
-        private PartParamData CreateParamDataFromResource(PartParamDataResource resource)
-        {
-            return new PartParamData
-                       {
-                           AttributeSet = resource.AttributeSet,
-                           Capacitance = resource.Capacitance,
-                           Construction = resource.Construction,
-                           Current = resource.Current,
-                           Diameter = resource.Diameter,
-                           Dielectric = resource.Dielectric,
-                           Height = resource.Height,
-                           IcFunction = resource.IcFunction,
-                           IcType = resource.IcType,
-                           Length = resource.Length,
-                           NegativeTolerance = resource.NegativeTolerance,
-                           Package = resource.Package,
-                           TransistorType = resource.TransistorType,
-                           Voltage = resource.Voltage,
-                           Pitch = resource.Pitch,
-                           Width = resource.Width,
-                           Polarity = resource.Polarity,
-                           Resistance = resource.Resistance,
-                           Power = resource.Power,
-                           TemperatureCoefficient = resource.TemperatureCoefficient,
-                           PartNumber = resource.PartNumber,
-                           PositiveTolerance = resource.PositiveTolerance
-                       };
-        }
     }
 }

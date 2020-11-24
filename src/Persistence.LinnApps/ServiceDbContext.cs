@@ -621,6 +621,7 @@
             e.Property(d => d.Package).HasColumnName("PACKAGE_NAME").HasMaxLength(14);
             e.Property(d => d.Pitch).HasColumnName("PITCH");
             e.Property(d => d.Polarity).HasColumnName("POLARITY").HasMaxLength(14);
+            e.Property(d => d.PositiveTolerance).HasColumnName("POS_TOLERANCE");
             e.Property(d => d.Power).HasColumnName("POWER");
             e.Property(d => d.Voltage).HasColumnName("VOLTAGE");
             e.Property(d => d.Resistance).HasColumnName("RESISTANCE");

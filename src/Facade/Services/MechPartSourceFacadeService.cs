@@ -49,6 +49,7 @@
                     Sequence = s.Sequence,
                     PdfFilePath = s.PdfFilePath
                 });
+                part.ParamData = this.CreateParamDataFromResource(resource.Part.ParamData);
             }
             
             return new MechPartSource
@@ -134,7 +135,7 @@
                 TestEquipment = resource.TestEquipment,
                 TestEquipmentAvailable = resource.TestEquipmentAvailable,
                 TestEquipmentDate = resource.TestEquipmentDate != null
-                                        ? DateTime.Parse(resource.TestEquipmentDate) : (DateTime?)null,
+                                        ? DateTime.Parse(resource.TestEquipmentDate) : (DateTime?)null
             };
         }
 
@@ -227,11 +228,46 @@
             entity.TestEquipmentAvailable = resource.TestEquipmentAvailable;
             entity.TestEquipmentDate = resource.TestEquipmentDate != null
                                            ? DateTime.Parse(resource.TestEquipmentDate) : (DateTime?)null;
+            entity.Part.ParamData = this.CreateParamDataFromResource(resource.Part?.ParamData);
         }
 
         protected override Expression<Func<MechPartSource, bool>> SearchExpression(string searchTerm)
         {
             return source => source.PartNumber == searchTerm.ToUpper();
+        }
+
+        private PartParamData CreateParamDataFromResource(PartParamDataResource resource)
+        {
+            if (resource == null)
+            {
+                return null;
+            }
+
+            return new PartParamData
+                       {
+                           AttributeSet = resource.AttributeSet,
+                           Capacitance = resource.Capacitance,
+                           Construction = resource.Construction,
+                           Current = resource.Current,
+                           Diameter = resource.Diameter,
+                           Dielectric = resource.Dielectric,
+                           Height = resource.Height,
+                           IcFunction = resource.IcFunction,
+                           IcType = resource.IcType,
+                           Length = resource.Length,
+                           NegativeTolerance = resource.NegativeTolerance,
+                           Package = resource.Package,
+                           TransistorType = resource.TransistorType,
+                           Voltage = resource.Voltage,
+                           Pitch = resource.Pitch,
+                           Width = resource.Width,
+                           Polarity = resource.Polarity,
+                           Resistance = resource.Resistance,
+                           Power = resource.Power,
+                           TemperatureCoefficient = resource.TemperatureCoefficient,
+                           PartNumber = resource.PartNumber,
+                           PositiveTolerance = resource.PositiveTolerance
+                       };
         }
     }
 }
