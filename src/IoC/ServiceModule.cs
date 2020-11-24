@@ -7,12 +7,12 @@
     using Linn.Common.Facade;
     using Linn.Common.Proxy;
     using Linn.Common.Reporting.Models;
-    using Linn.Stores.Facade.Services;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Reports;
+    using Linn.Stores.Facade.Services;
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Allocation;
@@ -64,6 +64,9 @@
             builder.RegisterType<CarriersService>().As<ICarriersService>();
             builder.RegisterType<ParcelFacadeService>()
                 .As<IFacadeService<Parcel, int, ParcelResource, ParcelResource>>();
+            builder.RegisterType<ManufacturerService>()
+                .As<IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>>();
+            builder.RegisterType<EmployeesService>().As<IEmployeeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

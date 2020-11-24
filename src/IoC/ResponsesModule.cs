@@ -10,6 +10,7 @@
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Facade;
     using Linn.Stores.Facade.ResourceBuilders;
 
     public class ResponsesModule : Module
@@ -83,6 +84,16 @@
                 .As<IResourceBuilder<Parcel>>();
             builder.RegisterType<ParcelsResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<Parcel>>>();
+            builder.RegisterType<ManufacturerResourceBuilder>().As<IResourceBuilder<Manufacturer>>();
+            builder.RegisterType<ManufacturersResourceBuilder>().As<IResourceBuilder<IEnumerable<Manufacturer>>>();
+            builder.RegisterType<MechPartManufacturerAltResourceBuilder>()
+                .As<IResourceBuilder<MechPartManufacturerAlt>>();
+            builder.RegisterType<MechPartAltResourceBuilder>()
+                .As<IResourceBuilder<MechPartAlt>>();
+            builder.RegisterType<EmployeeResourceBuilder>()
+                .As<IResourceBuilder<Employee>>();
+            builder.RegisterType<EmployeesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<Employee>>>();
         }
     }
 }

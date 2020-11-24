@@ -75,6 +75,12 @@
 
         public DbSet<Parcel> Parcels { get; set; }
 
+        public DbSet<MechPartAlt> MechPartAlts { get; set; }
+
+        public DbSet<Manufacturer> Manufacturers { get; set; }
+
+        public DbSet<MechPartManufacturerAlt> MechPartManufacturerAlts { get; set; }
+
         public DbSet<PartParamData> PartParamDataSheets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -108,6 +114,9 @@
             this.BuildSosAllocHeads(builder);
             this.BuildCarriers(builder);
             this.BuildParcels(builder);
+            this.BuildMechPartAlts(builder);
+            this.BuildManufacturers(builder);
+            this.BuildMechPartManufacturerAlts(builder);
             this.BuildPartParamDataSheets(builder);
             base.OnModelCreating(builder);
         }
@@ -245,7 +254,8 @@
             e.HasOne<ParetoClass>(p => p.ParetoClass).WithMany(c => c.Parts).HasForeignKey("PARETO_CODE");
             e.HasOne<ProductAnalysisCode>(p => p.ProductAnalysisCode).WithMany(c => c.Parts)
                 .HasForeignKey("PRODUCT_ANALYSIS_CODE");
-            e.HasOne(p => p.NominalAccount).WithMany(a => a.Parts).HasForeignKey("NOMACC_NOMACC_ID");
+            e.Property(p => p.NominalAccountId).HasColumnName("NOMACC_NOMACC_ID");
+            e.HasOne(p => p.NominalAccount).WithMany(a => a.Parts).HasForeignKey(p => p.NominalAccountId);
             e.HasOne(p => p.SernosSequence).WithMany(s => s.Parts).HasForeignKey("SERNOS_SEQUENCE");
             e.HasOne(p => p.AssemblyTechnology).WithMany(s => s.Parts).HasForeignKey("ASSEMBLY_TECHNOLOGY");
             e.HasOne(p => p.DecrementRule).WithMany(s => s.Parts).HasForeignKey("DECREMENT_RULE");
@@ -288,6 +298,64 @@
             e.Property(s => s.SafetyDataDirectory).HasColumnName("SAFETY_DATA_DIRECTORY").HasMaxLength(500);
             e.Property(s => s.ProductionDate).HasColumnName("PRODUCTION_DATE");
             e.Property(s => s.CapacitorRippleCurrent).HasColumnName("CAP_RIPPLE_CURRENT");
+            e.Property(s => s.DrawingsPackage).HasColumnName("DRAWINGS_PACKAGE").HasMaxLength(200);
+            e.Property(s => s.DrawingsPackageAvailable).HasColumnName("DRAWINGS_PACKAGE_AVAILABLE").HasMaxLength(1);
+            e.Property(s => s.DrawingsPackageDate).HasColumnName("DRAWINGS_PACKAGE_DATE");
+            e.Property(s => s.DrawingFile).HasColumnName("DRAWING_FILE").HasMaxLength(350);
+            e.Property(s => s.ChecklistCreated).HasColumnName("CHECKLIST_CREATED").HasMaxLength(200);
+            e.Property(s => s.ChecklistAvailable).HasColumnName("CHECKLIST_AVAILABLE").HasMaxLength(1);
+            e.Property(s => s.ChecklistDate).HasColumnName("CHECKLIST_DATE");
+            e.Property(s => s.PackingAvailable).HasColumnName("PACKING_AVAILABLE").HasMaxLength(1);
+            e.Property(s => s.PackingRequired).HasColumnName("PACKING_REQUIRED").HasMaxLength(1);
+            e.Property(s => s.PackingDate).HasColumnName("PACKING_DATE");
+            e.Property(s => s.ProductKnowledge).HasColumnName("PRODUCT_KNOWLEDGE").HasMaxLength(200);
+            e.Property(s => s.ProductKnowledgeAvailable).HasColumnName("PRODUCT_KNOWLEDGE_AVAILABLE").HasMaxLength(1);
+            e.Property(s => s.ProductKnowledgeDate).HasColumnName("PRODUCT_KNOWLEDGE_DATE");
+            e.Property(s => s.TestEquipment).HasColumnName("TEST_EQUIPMENT").HasMaxLength(200);
+            e.Property(s => s.TestEquipmentAvailable).HasColumnName("TEST_EQUIPMENT_AVAILABLE").HasMaxLength(1);
+            e.Property(s => s.TestEquipmentDate).HasColumnName("TEST_EQUIPMENT_DATE");
+            e.Property(s => s.ApprovedReferenceStandards).HasColumnName("APPROVED_REFERENCE_STANDARDS").HasMaxLength(200);
+            e.Property(s => s.ApprovedReferencesAvailable).HasColumnName("APPROVED_REFERENCES_AVAILABLE").HasMaxLength(1);
+            e.Property(s => s.ApprovedReferencesDate).HasColumnName("APPROVED_REFERENCES_DATE").HasMaxLength(200);
+            e.Property(s => s.ProcessEvaluation).HasColumnName("PROCESS_EVALUATION").HasMaxLength(200);
+            e.Property(s => s.ProcessEvaluationAvailable).HasColumnName("PROCESS_EVALUATION_AVAILABLE").HasMaxLength(1);
+            e.Property(s => s.ProcessEvaluationDate).HasColumnName("PROCESS_EVALUATION_DATE");
+        }
+
+        private void BuildMechPartAlts(ModelBuilder builder)
+        {
+            var e = builder.Entity<MechPartAlt>().ToTable("MECH_PART_ALTS");
+            e.HasKey(m => new { m.MechPartSourceId, m.Sequence});
+            e.Property(m => m.MechPartSourceId).HasColumnName("MS_ID").HasMaxLength(8);
+            e.Property(m => m.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(30);
+            e.Property(m => m.Sequence).HasColumnName("SEQ");
+            e.HasOne<Supplier>(s => s.Supplier).WithMany(s => s.MechPartAlts).HasForeignKey("SUPPLIER_ID");
+            e.HasOne<MechPartSource>(s => s.MechPartSource).WithMany(s => s.MechPartAlts).HasForeignKey(x => x.MechPartSourceId);
+        }
+
+        private void BuildManufacturers(ModelBuilder builder)
+        {
+            var e = builder.Entity<Manufacturer>().ToTable("MANUFACTURERS");
+            e.HasKey(m => m.Code);
+            e.Property(m => m.Code).HasColumnName("CODE").HasMaxLength(6);
+            e.Property(m => m.Description).HasColumnName("DESCRIPTION").HasMaxLength(30);
+        }
+
+        private void BuildMechPartManufacturerAlts(ModelBuilder builder)
+        {
+            var e = builder.Entity<MechPartManufacturerAlt>().ToTable("MECH_PART_MF_ALTS");
+            e.HasKey(m => new { m.MechPartSourceId, m.Sequence });
+            e.Property(m => m.MechPartSourceId).HasColumnName("MS_ID").HasMaxLength(8);
+            e.Property(m => m.PartNumber).HasColumnName("MANUF_PART_NUMBER").HasMaxLength(30);
+            e.Property(m => m.Sequence).HasColumnName("SEQ");
+            e.Property(m => m.ManufacturerCode).HasColumnName("MANUF_CODE").HasMaxLength(6);
+            e.HasOne<Manufacturer>(s => s.Manufacturer).WithMany(s => s.MechPartManufacturerAlts).HasForeignKey(x => x.ManufacturerCode);
+            e.HasOne<MechPartSource>(s => s.MechPartSource).WithMany(s => s.MechPartManufacturerAlts).HasForeignKey(x => x.MechPartSourceId);
+            e.Property(m => m.ReelSuffix).HasColumnName("REEL_SUFFIX").HasMaxLength(2);
+            e.Property(m => m.RohsCompliant).HasColumnName("ROHS_COMPL").HasMaxLength(1);
+            e.HasOne<Employee>(s => s.ApprovedBy).WithMany(m => m.MechPartManufacturerAltsApproved).HasForeignKey("APPROVED_BY");
+            e.Property(s => s.DateApproved).HasColumnName("DATE_APPROVED");
+            e.Property(s => s.Preference).HasColumnName("PREFERENCE");
         }
 
         private void BuildPartTemplates(ModelBuilder builder)
