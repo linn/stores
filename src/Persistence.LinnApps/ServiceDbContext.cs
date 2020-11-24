@@ -320,6 +320,33 @@
             e.Property(s => s.ProcessEvaluation).HasColumnName("PROCESS_EVALUATION").HasMaxLength(200);
             e.Property(s => s.ProcessEvaluationAvailable).HasColumnName("PROCESS_EVALUATION_AVAILABLE").HasMaxLength(1);
             e.Property(s => s.ProcessEvaluationDate).HasColumnName("PROCESS_EVALUATION_DATE");
+            e.Property(s => s.Capacitance).HasColumnName("CAP_CAPACITANCE");
+            e.Property(s => s.CapacitorVoltageRating).HasColumnName("CAP_VOLTAGE_RATING");
+            e.Property(s => s.CapacitorPositiveTolerance).HasColumnName("CAP_POSITIVE_TOLERANCE");
+            e.Property(s => s.CapacitorDielectric).HasColumnName("CAP_DIELECTRIC").HasMaxLength(40);
+            e.Property(s => s.Package).HasColumnName("PACKAGE").HasMaxLength(14);
+            e.Property(s => s.CapacitorPitch).HasColumnName("CAP_PITCH");
+            e.Property(s => s.CapacitorLength).HasColumnName("CAP_LENGTH");
+            e.Property(s => s.CapacitorWidth).HasColumnName("CAP_WIDTH");
+            e.Property(s => s.CapacitorHeight).HasColumnName("CAP_HEIGHT");
+            e.Property(s => s.CapacitorDiameter).HasColumnName("CAP_DIAMETER");
+            e.Property(s => s.CapacitanceUnit).HasColumnName("CAPACITANCE_CHAR");
+            e.Property(s => s.Resistance).HasColumnName("RES_RESISTANCE");
+            e.Property(s => s.ResistanceUnit).HasColumnName("RESISTANCE_CHAR");
+            e.Property(s => s.ResistorTolerance).HasColumnName("RES_TOLERANCE");
+            e.Property(s => s.Construction).HasColumnName("CONSTRUCTION").HasMaxLength(14);
+            e.Property(s => s.ResistorLength).HasColumnName("RES_LENGTH");
+            e.Property(s => s.ResistorWidth).HasColumnName("RES_WIDTH");
+            e.Property(s => s.ResistorHeight).HasColumnName("RES_HEIGHT");
+            e.Property(s => s.ResistorPowerRating).HasColumnName("RES_POWER_RATING");
+            e.Property(s => s.ResistorVoltageRating).HasColumnName("RES_VOLTAGE_RATING");
+            e.Property(s => s.TemperatureCoefficient).HasColumnName("TEMP_COEFF");
+            e.Property(s => s.TransistorType).HasColumnName("TRAN_TYPE").HasMaxLength(10);
+            e.Property(s => s.TransistorPolarity).HasColumnName("TRAN_POLARITY").HasMaxLength(30);
+            e.Property(s => s.TransistorVoltage).HasColumnName("TRAN_VOLTAGE_RATING");
+            e.Property(s => s.TransistorCurrent).HasColumnName("TRAN_AMPS");
+            e.Property(s => s.IcType).HasColumnName("IC_TYPE").HasMaxLength(50);
+            e.Property(s => s.IcFunction).HasColumnName("IC_FUNCTION").HasMaxLength(50);
         }
 
         private void BuildMechPartAlts(ModelBuilder builder)

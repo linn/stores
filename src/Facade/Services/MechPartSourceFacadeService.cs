@@ -49,7 +49,6 @@
                     Sequence = s.Sequence,
                     PdfFilePath = s.PdfFilePath
                 });
-                part.ParamData = this.CreateParamDataFromResource(resource.Part.ParamData);
             }
             
             return new MechPartSource
@@ -135,7 +134,35 @@
                 TestEquipment = resource.TestEquipment,
                 TestEquipmentAvailable = resource.TestEquipmentAvailable,
                 TestEquipmentDate = resource.TestEquipmentDate != null
-                                        ? DateTime.Parse(resource.TestEquipmentDate) : (DateTime?)null
+                                        ? DateTime.Parse(resource.TestEquipmentDate) : (DateTime?)null,
+                CapacitorRippleCurrent = resource.CapacitorRippleCurrent,
+                Capacitance = resource.Capacitance,
+                CapacitorVoltageRating = resource.CapacitorVoltageRating,
+                CapacitorPositiveTolerance = resource.CapacitorPositiveTolerance,
+                CapacitorDielectric = resource.CapacitorDielectric,
+                Package = resource.Package,
+                CapacitorPitch = resource.CapacitorPitch,
+                CapacitorLength = resource.CapacitorLength,
+                CapacitorWidth = resource.CapacitorWidth,
+                CapacitorHeight = resource.CapacitorHeight,
+                CapacitorDiameter = resource.CapacitorDiameter,
+                CapacitanceUnit = resource.CapacitanceUnit,
+                Resistance = resource.Resistance,
+                ResistanceUnit = resource.ResistanceUnit,
+                ResistorTolerance = resource.ResistorTolerance,
+                Construction = resource.Construction,
+                ResistorLength = resource.ResistorLength,
+                ResistorHeight = resource.ResistorHeight,
+                ResistorWidth = resource.ResistorWidth,
+                ResistorPowerRating = resource.ResistorPowerRating,
+                ResistorVoltageRating = resource.ResistorVoltageRating,
+                TemperatureCoefficient = resource.TemperatureCoefficient,
+                TransistorType = resource.TransistorType,
+                TransistorCurrent = resource.TransistorCurrent,
+                TransistorVoltage = resource.TransistorVoltage,
+                TransistorPolarity = resource.TransistorPolarity,
+                IcType = resource.IcType,
+                IcFunction = resource.IcFunction,
             };
         }
 
@@ -228,46 +255,39 @@
             entity.TestEquipmentAvailable = resource.TestEquipmentAvailable;
             entity.TestEquipmentDate = resource.TestEquipmentDate != null
                                            ? DateTime.Parse(resource.TestEquipmentDate) : (DateTime?)null;
-            entity.Part.ParamData = this.CreateParamDataFromResource(resource.Part?.ParamData);
+            entity.CapacitorRippleCurrent = resource.CapacitorRippleCurrent;
+            entity.Capacitance = resource.Capacitance;
+            entity.CapacitorVoltageRating = resource.CapacitorVoltageRating;
+            entity.CapacitorPositiveTolerance = resource.CapacitorPositiveTolerance;
+            entity.CapacitorDielectric = resource.CapacitorDielectric;
+            entity.Package = resource.Package;
+            entity.CapacitorPitch = resource.CapacitorPitch;
+            entity.CapacitorLength = resource.CapacitorLength;
+            entity.CapacitorWidth = resource.CapacitorWidth;
+            entity.CapacitorHeight = resource.CapacitorHeight;
+            entity.CapacitorDiameter = resource.CapacitorDiameter;
+            entity.CapacitanceUnit = resource.CapacitanceUnit;
+            entity.Resistance = resource.Resistance;
+            entity.ResistorWidth = resource.ResistorWidth;
+            entity.ResistanceUnit = resource.ResistanceUnit;
+            entity.ResistorTolerance = resource.ResistorTolerance;
+            entity.Construction = resource.Construction;
+            entity.ResistorLength = resource.ResistorLength;
+            entity.ResistorHeight = resource.ResistorHeight;
+            entity.ResistorPowerRating = resource.ResistorPowerRating;
+            entity.ResistorVoltageRating = resource.ResistorVoltageRating;
+            entity.TemperatureCoefficient = resource.TemperatureCoefficient;
+            entity.TransistorType = resource.TransistorType;
+            entity.TransistorCurrent = resource.TransistorCurrent;
+            entity.TransistorVoltage = resource.TransistorVoltage;
+            entity.TransistorPolarity = resource.TransistorPolarity;
+            entity.IcType = resource.IcType;
+            entity.IcFunction = resource.IcFunction;
         }
 
         protected override Expression<Func<MechPartSource, bool>> SearchExpression(string searchTerm)
         {
             return source => source.PartNumber == searchTerm.ToUpper();
-        }
-
-        private PartParamData CreateParamDataFromResource(PartParamDataResource resource)
-        {
-            if (resource == null)
-            {
-                return null;
-            }
-
-            return new PartParamData
-                       {
-                           AttributeSet = resource.AttributeSet,
-                           Capacitance = resource.Capacitance,
-                           Construction = resource.Construction,
-                           Current = resource.Current,
-                           Diameter = resource.Diameter,
-                           Dielectric = resource.Dielectric,
-                           Height = resource.Height,
-                           IcFunction = resource.IcFunction,
-                           IcType = resource.IcType,
-                           Length = resource.Length,
-                           NegativeTolerance = resource.NegativeTolerance,
-                           Package = resource.Package,
-                           TransistorType = resource.TransistorType,
-                           Voltage = resource.Voltage,
-                           Pitch = resource.Pitch,
-                           Width = resource.Width,
-                           Polarity = resource.Polarity,
-                           Resistance = resource.Resistance,
-                           Power = resource.Power,
-                           TemperatureCoefficient = resource.TemperatureCoefficient,
-                           PartNumber = resource.PartNumber,
-                           PositiveTolerance = resource.PositiveTolerance
-                       };
         }
     }
 }

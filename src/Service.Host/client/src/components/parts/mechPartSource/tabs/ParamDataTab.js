@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import { InputField } from '@linn-it/linn-form-components-library';
+import { Dropdown, InputField } from '@linn-it/linn-form-components-library';
 
 function ParamDataTab({ paramData, handleFieldChange }) {
     return (
@@ -14,6 +14,7 @@ function ParamDataTab({ paramData, handleFieldChange }) {
                     onChange={handleFieldChange}
                     type="number"
                 />
+                <Dropdown />
             </Grid>
         </Grid>
     );
