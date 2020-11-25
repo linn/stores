@@ -75,7 +75,7 @@
                             CapacitorVoltageRating = model.CapacitorVoltageRating,
                             CapacitorPositiveTolerance = model.CapacitorPositiveTolerance,
                             CapacitorDielectric = model.CapacitorDielectric,
-                            Package = model.Package,
+                            PackageName = model.Package,
                             CapacitorPitch = model.CapacitorPitch,
                             CapacitorLength = model.CapacitorLength,
                             CapacitorWidth = model.CapacitorWidth,
@@ -98,6 +98,8 @@
                             TransistorPolarity = model.TransistorPolarity,
                             IcType = model.IcType,
                             IcFunction = model.IcFunction,
+                            LibraryRef = model.LibraryRef,
+                            FootPrintRef = model.FootPrintRef,
                             Links = this.BuildLinks(model).ToArray()
             };
         }

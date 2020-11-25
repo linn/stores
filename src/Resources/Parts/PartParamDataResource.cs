@@ -38,7 +38,7 @@
 
         public decimal? Power { get; set; }
 
-        public int TemperatureCoefficient { get; set; }
+        public int? TemperatureCoefficient { get; set; }
 
         public string IcType { get; set; }
 

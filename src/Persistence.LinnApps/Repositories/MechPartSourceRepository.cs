@@ -23,7 +23,7 @@
                 .Include(s => s.ProposedBy)
                 .Include(s => s.PartToBeReplaced)
                 .Include(s => s.Part).ThenInclude(p => p.DataSheets)
-                .Include(s => s.Part).ThenInclude(p => p.ParamData)
+                .Include(s => s.Part)
                 .Include(s => s.MechPartManufacturerAlts).ThenInclude(m => m.Manufacturer)
                 .Include(s => s.MechPartManufacturerAlts).ThenInclude(m => m.ApprovedBy)
                 .Include(s => s.MechPartAlts).ThenInclude(a => a.Supplier)

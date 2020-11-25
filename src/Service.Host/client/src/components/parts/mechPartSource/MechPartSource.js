@@ -49,7 +49,8 @@ function MechPartSource({
         dataSheets: 1,
         qualityRequirements: 2,
         suppliers: 3,
-        manufacturers: 4
+        manufacturers: 4,
+        paramData: 5
     };
 
     const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
@@ -62,7 +63,7 @@ function MechPartSource({
 
     useEffect(() => {
         if (item !== prevMechPartSource && editStatus !== 'create') {
-            setMechPartSource(item);
+            setMechPartSource({ ...item, resistanceUnits: 'KΩ' });
             setPrevMechPartSource(item);
         }
     }, [item, prevMechPartSource, editStatus, itemId]);
@@ -106,20 +107,6 @@ function MechPartSource({
         setMechPartSource({
             ...mechPartSource,
             part: { ...mechPartSource.part, [propertyName]: newValue }
-        });
-    };
-
-    const handleParamDataFieldChange = (propertyName, newValue) => {
-        console.log(propertyName, newValue);
-        if (viewing) {
-            setEditStatus('editing');
-        }
-        setMechPartSource({
-            ...mechPartSource,
-            part: {
-                ...mechPartSource.part,
-                paramData: { ...mechPartSource.part.paramData, [propertyName]: newValue }
-            }
         });
     };
 
@@ -394,8 +381,40 @@ function MechPartSource({
                             )}
                             {tab === 5 && (
                                 <ParamDataTab
-                                    paramData={mechPartSource.part.paramData}
-                                    handleFieldChange={handleParamDataFieldChange}
+                                    partType={mechPartSource.partType}
+                                    resistance={mechPartSource.resistance}
+                                    resistanceUnits={mechPartSource.resistanceUnits}
+                                    handleFieldChange={handleFieldChange}
+                                    capacitorRippleCurrent={mechPartSource.capacitorRippleCurrent}
+                                    capacitance={mechPartSource.capacitance}
+                                    capacitorVoltageRating={mechPartSource.capacitorVoltageRating}
+                                    capacitorPositiveTolerance={
+                                        mechPartSource.capacitorPositiveTolerance
+                                    }
+                                    capacitorDialectric={mechPartSource.capacitorDialectric}
+                                    packageName={mechPartSource.packageName}
+                                    capacitorPitch={mechPartSource.capacitorPitchype}
+                                    capacitorWidth={mechPartSource.capacitorWidth}
+                                    capacitorHeight={mechPartSource.capacitorHeight}
+                                    capacitorDiameter={mechPartSource.capacitorDiameter}
+                                    capacitanceUnit={mechPartSource.capacitanceUnit}
+                                    resistanceUnit={mechPartSource.resistanceUnit}
+                                    resistorTolerance={mechPartSource.resistorTolerance}
+                                    construction={mechPartSource.construction}
+                                    resistorLength={mechPartSource.resistorLength}
+                                    resistorWidth={mechPartSource.resistorWidth}
+                                    resistorHeight={mechPartSource.resistorHeight}
+                                    resistorPowerRating={mechPartSource.resistorPowerRating}
+                                    resistorVoltageRating={mechPartSource.resistorVoltageRating}
+                                    temperatureCoefficient={mechPartSource.temperatureCoefficient}
+                                    transistorType={mechPartSource.transistorType}
+                                    transistorPolarity={mechPartSource.transistorPolarity}
+                                    transistorVoltage={mechPartSource.transistorVoltage}
+                                    transistorCurrent={mechPartSource.transistorCurrent}
+                                    icType={mechPartSource.icType}
+                                    icFunction={mechPartSource.icFunction}
+                                    libraryRef={mechPartSource.libraryRef}
+                                    footPrintRef={mechPartSource.footPrintRef}
                                 />
                             )}
                             <Grid item xs={12}>

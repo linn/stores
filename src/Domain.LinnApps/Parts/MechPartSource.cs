@@ -140,7 +140,7 @@
 
         public int? ResistorVoltageRating { get; set; }
 
-        public int TemperatureCoefficient { get; set; }
+        public int? TemperatureCoefficient { get; set; }
 
         public string TransistorType { get; set; }
 
@@ -153,5 +153,9 @@
         public string IcType { get; set; }
 
         public string IcFunction { get; set; }
+
+        public string LibraryRef { get; set; }
+
+        public string FootPrintRef { get; set; }
     }
 }

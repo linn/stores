@@ -140,7 +140,7 @@
                 CapacitorVoltageRating = resource.CapacitorVoltageRating,
                 CapacitorPositiveTolerance = resource.CapacitorPositiveTolerance,
                 CapacitorDielectric = resource.CapacitorDielectric,
-                Package = resource.Package,
+                Package = resource.PackageName,
                 CapacitorPitch = resource.CapacitorPitch,
                 CapacitorLength = resource.CapacitorLength,
                 CapacitorWidth = resource.CapacitorWidth,
@@ -163,6 +163,8 @@
                 TransistorPolarity = resource.TransistorPolarity,
                 IcType = resource.IcType,
                 IcFunction = resource.IcFunction,
+                LibraryRef = resource.LibraryRef,
+                FootPrintRef = resource.FootPrintRef
             };
         }
 
@@ -260,7 +262,7 @@
             entity.CapacitorVoltageRating = resource.CapacitorVoltageRating;
             entity.CapacitorPositiveTolerance = resource.CapacitorPositiveTolerance;
             entity.CapacitorDielectric = resource.CapacitorDielectric;
-            entity.Package = resource.Package;
+            entity.Package = resource.PackageName;
             entity.CapacitorPitch = resource.CapacitorPitch;
             entity.CapacitorLength = resource.CapacitorLength;
             entity.CapacitorWidth = resource.CapacitorWidth;
@@ -283,6 +285,8 @@
             entity.TransistorPolarity = resource.TransistorPolarity;
             entity.IcType = resource.IcType;
             entity.IcFunction = resource.IcFunction;
+            entity.LibraryRef = resource.LibraryRef;
+            entity.FootPrintRef = resource.FootPrintRef;
         }
 
         protected override Expression<Func<MechPartSource, bool>> SearchExpression(string searchTerm)
