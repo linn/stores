@@ -10,12 +10,12 @@
 
     public class PartDataSheetValuesListResourceBuilder : IResourceBuilder<IEnumerable<PartDataSheetValues>>
     {
-        private readonly PartDataSheetValuesResourceBuilder partDataSheetsResourceBuildedrResourceBuilder = new PartDataSheetValuesResourceBuilder();
+        private readonly PartDataSheetValuesResourceBuilder partDataSheetsResourceBuilderResourceBuilder = new PartDataSheetValuesResourceBuilder();
 
         public IEnumerable<PartDataSheetValuesResource> Build(IEnumerable<PartDataSheetValues> entities)
         {
             return entities
-                .Select(a => this.partDataSheetsResourceBuildedrResourceBuilder.Build(a));
+                .Select(a => this.partDataSheetsResourceBuilderResourceBuilder.Build(a));
         }
 
         object IResourceBuilder<IEnumerable<PartDataSheetValues>>.Build(IEnumerable<PartDataSheetValues> entities) => this.Build(entities);

@@ -2,10 +2,14 @@ import { connect } from 'react-redux';
 import { initialiseOnMount } from '@linn-it/linn-form-components-library';
 import ParamDataTab from '../../../../components/parts/mechPartSource/tabs/ParamDataTab';
 import partDataSheetValuesActions from '../../../../actions/partDataSheetValuesActions';
-import { getResistorConstructionValues } from '../../../../selectors/partDataSheetValuesSelectors';
+import {
+    getResistorConstructionValues,
+    getResistorPackageValues
+} from '../../../../selectors/partDataSheetValuesSelectors';
 
 const mapStateToProps = state => ({
-    resistorConstructionValues: getResistorConstructionValues(state)
+    resistorConstructionValues: getResistorConstructionValues(state),
+    resistorPackageValues: getResistorPackageValues(state)
 });
 
 const initialise = () => dispatch => {

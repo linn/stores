@@ -35,7 +35,9 @@ function ParamDataTab({
     icType,
     icFunction,
     libraryRef,
-    footPrintRef
+    footPrintRef,
+    resistorConstructionValues,
+    resistorPackageValues
 }) {
     const ohmUnitMultipliers = {
         KΩ: 1000,
@@ -98,7 +100,34 @@ function ParamDataTab({
                         type="number"
                     />
                 </Grid>
+
                 <Grid item xs={9} />
+                <Grid item xs={3}>
+                    <Dropdown
+                        items={resistorConstructionValues?.map(v => ({
+                            id: v.value,
+                            displayText: v.description
+                        }))}
+                        label="Construction"
+                        value={construction}
+                        propertyName="construction"
+                        onChange={handleFieldChange}
+                    />
+                </Grid>
+
+                <Grid item xs={9} />
+                <Grid item xs={3}>
+                    <Dropdown
+                        items={resistorPackageValues?.map(v => ({
+                            id: v.value,
+                            displayText: v?.description ? v.description : v.value
+                        }))}
+                        label="Package"
+                        value={packageName}
+                        propertyName="packageName"
+                        onChange={handleFieldChange}
+                    />
+                </Grid>
             </Grid>
         );
     }
@@ -136,7 +165,8 @@ ParamDataTab.propTypes = {
     icType: PropTypes.string,
     icFunction: PropTypes.string,
     libraryRef: PropTypes.string,
-    footPrintRef: PropTypes.string
+    footPrintRef: PropTypes.string,
+    resistorConstructionValues: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 ParamDataTab.defaultProps = {
@@ -170,6 +200,7 @@ ParamDataTab.defaultProps = {
     icFunction: null,
     libraryRef: null,
     footPrintRef: null,
-    partType: null
+    partType: null,
+    resistorConstructionValues: []
 };
 export default ParamDataTab;
