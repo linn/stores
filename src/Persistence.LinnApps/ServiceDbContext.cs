@@ -83,6 +83,8 @@
 
         public DbSet<PartParamData> PartParamDataSheets { get; set; }
 
+        public DbQuery<PartDataSheetValues> PartDataSheetValues { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -118,6 +120,7 @@
             this.BuildManufacturers(builder);
             this.BuildMechPartManufacturerAlts(builder);
             this.BuildPartParamDataSheets(builder);
+            this.QueryPartDataSheetValues(builder);
             base.OnModelCreating(builder);
         }
 
@@ -657,6 +660,15 @@
             e.Property(d => d.TemperatureCoefficient).HasColumnName("TEMP_COEFF");
             e.Property(d => d.TransistorType).HasColumnName("TRANSISTOR_TYPE").HasMaxLength(10);
             e.Property(d => d.Width).HasColumnName("WIDTH");
+        }
+
+        private void QueryPartDataSheetValues(ModelBuilder builder)
+        {
+            var q = builder.Query<PartDataSheetValues>().ToView("PART_DATA_SHEET_VALUES");
+            q.Property(v => v.AttributeSet).HasColumnName("ATTRIBUTE_SET");
+            q.Property(v => v.Description).HasColumnName("DESCRIPTION");
+            q.Property(v => v.Field).HasColumnName("FIELD");
+            q.Property(v => v.Value).HasColumnName("VALUE");
         }
     }
 }

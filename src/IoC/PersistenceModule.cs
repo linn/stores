@@ -51,6 +51,7 @@
             builder.RegisterType<ParcelRepository>().As<IRepository<Parcel, int>>();
             builder.RegisterType<CarrierRepository>().As<IRepository<Carrier, string>>();
             builder.RegisterType<ManufacturerRepository>().As<IRepository<Manufacturer, string>>();
+            builder.RegisterType<PartDataSheetValuesRepository>().As<IQueryRepository<PartDataSheetValues>>();
         }
     }
 }
