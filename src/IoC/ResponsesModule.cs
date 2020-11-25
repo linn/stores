@@ -94,6 +94,9 @@
                 .As<IResourceBuilder<Employee>>();
             builder.RegisterType<EmployeesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<Employee>>>();
+            builder.RegisterType<PartDataSheetValuesResourceBuilder>().As<IResourceBuilder<PartDataSheetValues>>();
+            builder.RegisterType<PartDataSheetValuesListResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<PartDataSheetValues>>>();
         }
     }
 }

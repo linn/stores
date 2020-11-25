@@ -98,6 +98,7 @@ function ParamDataTab({
                         type="number"
                     />
                 </Grid>
+                <Grid item xs={9} />
             </Grid>
         );
     }

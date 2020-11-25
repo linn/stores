@@ -17,7 +17,7 @@ import ProposalTab from '../../../containers/parts/mechPartSource/tabs/ProposalT
 import QualityRequirementsTab from './tabs/QualityRequirementsTab';
 import Manufacturerstab from '../../../containers/parts/mechPartSource/tabs/ManufacturersTab';
 import SuppliersTab from '../../../containers/parts/mechPartSource/tabs/SuppliersTab';
-import ParamDataTab from './tabs/ParamDataTab';
+import ParamDataTab from '../../../containers/parts/mechPartSource/tabs/ParamDataTab';
 
 function MechPartSource({
     editStatus,

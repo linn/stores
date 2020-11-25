@@ -29,6 +29,7 @@ import sosAllocHeads from './sosAllocHeads';
 import mechPartSource from './parts/mechPartSource';
 import manufacturers from './manufacturers';
 import employees from './employees';
+import partDataSheetValues from './partDataSheetValues';
 
 const errors = fetchErrorReducer({ ...itemTypes });
 
@@ -48,6 +49,7 @@ const rootReducer = combineReducers({
     part,
     partCategories,
     parts,
+    partDataSheetValues,
     partLiveTest,
     partTemplates,
     productAnalysisCodes,

@@ -23,12 +23,12 @@
 
         public IQueryable<PartDataSheetValues> FilterBy(Expression<Func<PartDataSheetValues, bool>> expression)
         {
-            return this.serviceDbContext.PartDataSheetValues.Where(expression);
+            throw new NotImplementedException();
         }
 
         public IQueryable<PartDataSheetValues> FindAll()
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.PartDataSheetValues;
         }
     }
 }

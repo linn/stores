@@ -67,6 +67,7 @@
             builder.RegisterType<ManufacturerService>()
                 .As<IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>>();
             builder.RegisterType<EmployeesService>().As<IEmployeeService>();
+            builder.RegisterType<PartDataSheetValuesService>().As<IPartDataSheetValuesService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

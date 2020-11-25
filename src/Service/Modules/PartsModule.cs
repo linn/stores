@@ -43,6 +43,8 @@
         private readonly IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>
             manufacturerService;
 
+        private readonly IPartDataSheetValuesService dataSheetsValuesService;
+
         public PartsModule(
             IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
@@ -54,7 +56,8 @@
             IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> partTemplateService,
             IPartLiveService partLiveService,
             IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> mechPartSourceService,
-            IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> manufacturerService)
+            IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> manufacturerService,
+            IPartDataSheetValuesService dataSheetsValuesService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
@@ -93,6 +96,9 @@
 
             this.manufacturerService = manufacturerService;
             this.Get("/inventory/manufacturers", _ => this.GetManufacturers());
+            
+            this.dataSheetsValuesService = dataSheetsValuesService;
+            this.Get("/inventory/parts/data-sheet-values", _ => this.GetPartDataSheetValues());
         }
 
         private object GetPart(int id)
@@ -222,6 +228,13 @@
         {
             var resource = this.Bind<SearchRequestResource>();
             var result = this.manufacturerService.Search(resource.SearchTerm);
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetPartDataSheetValues()
+        {
+            var result = this.dataSheetsValuesService.GetAll();
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

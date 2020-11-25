@@ -109,3 +109,9 @@ export const manufacturers = new ItemType(
 );
 
 export const employees = new ItemType('employees', 'EMPLOYEES', '/inventory/employees');
+
+export const partDataSheetValues = new ItemType(
+    'partDataSheetValues',
+    'PART_DATA_SHEET_VALUES',
+    '/inventory/parts/data-sheet-values'
+);
