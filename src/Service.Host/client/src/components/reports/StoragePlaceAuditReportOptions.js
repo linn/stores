@@ -62,7 +62,7 @@ export default function StoragePlaceAuditReportOptions({
             });
         } else {
             createAuditReqs({
-                locationRange: options.locationRange
+                locationRange: options.auditLocation
             });
         }
     };

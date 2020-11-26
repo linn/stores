@@ -1,4 +1,8 @@
-import { makeActionTypes, makeReportActionTypes } from '@linn-it/linn-form-components-library';
+import {
+    makeActionTypes,
+    makeReportActionTypes,
+    makeProcessActionTypes
+} from '@linn-it/linn-form-components-library';
 import * as itemTypes from '../itemTypes';
 import * as reportTypes from '../reportTypes';
 import * as processTypes from '../processTypes';
@@ -60,4 +64,6 @@ export const storagePlaceAuditReportActionTypes = makeReportActionTypes(
     reportTypes.storagePlaceAuditReport.actionType
 );
 
-export const createAuditReqsActionTypes = makeActionTypes(processTypes.createAuditReqs.actionType);
+export const createAuditReqsActionTypes = makeProcessActionTypes(
+    processTypes.createAuditReqs.actionType
+);
