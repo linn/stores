@@ -6,6 +6,7 @@ import SosAllocHeads from '../../components/allocations/SosAllocHeads';
 import sosAllocDetailActions from '../../actions/sosAllocDetailActions';
 import sosAllocDetailsActions from '../../actions/sosAllocDetailsActions';
 import sosAllocDetailsSelectors from '../../selectors/sosAllocDetailsSelectors';
+import finishAllocationActions from '../../actions/finishAllocationActions';
 
 const mapStateToProps = (state, { match }) => ({
     jobId: match.params.jobId,
@@ -17,12 +18,14 @@ const mapStateToProps = (state, { match }) => ({
 
 const initialise = ({ jobId }) => dispatch => {
     dispatch(sosAllocHeadsActions.search(jobId));
+    dispatch(finishAllocationActions.clearErrorsForItem());
     dispatch(sosAllocDetailsActions.searchWithOptions(null, `&jobId=${jobId}`));
 };
 
 const mapDispatchToProps = {
     initialise,
-    updateDetail: sosAllocDetailActions.update
+    updateDetail: sosAllocDetailActions.update,
+    finishAllocation: finishAllocationActions.requestProcessStart
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(SosAllocHeads));

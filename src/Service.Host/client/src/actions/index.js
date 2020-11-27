@@ -1,6 +1,7 @@
 import { makeActionTypes, makeReportActionTypes } from '@linn-it/linn-form-components-library';
 import * as itemTypes from '../itemTypes';
 import * as reportTypes from '../reportTypes';
+import * as processTypes from '../processTypes';
 
 export const partActionTypes = makeActionTypes(itemTypes.part.actionType);
 export const partsActionTypes = makeActionTypes(itemTypes.parts.actionType, false);
@@ -54,3 +55,7 @@ export const sosAllocDetailActionTypes = makeActionTypes(itemTypes.sosAllocDetai
 export const sosAllocDetailsActionTypes = makeActionTypes(itemTypes.sosAllocDetails.actionType);
 
 export const mechPartSourceActionTypes = makeActionTypes(itemTypes.mechPartSource.actionType);
+
+export const finishAllocationActionTypes = makeActionTypes(
+    processTypes.finishAllocation.actionType
+);

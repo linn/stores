@@ -28,6 +28,7 @@ import countries from './countries';
 import sosAllocHeads from './sosAllocHeads';
 import sosAllocDetails from './sosAllocDetails';
 import mechPartSource from './parts/mechPartSource';
+import finishAllocation from './finishAllocation';
 
 const errors = fetchErrorReducer({ ...itemTypes });
 
@@ -39,6 +40,7 @@ const rootReducer = combineReducers({
     departments,
     decrementRules,
     despatchLocations,
+    finishAllocation,
     mechPartSource,
     nominal,
     oidc,

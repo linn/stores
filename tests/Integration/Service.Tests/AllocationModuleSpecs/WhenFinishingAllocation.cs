@@ -6,6 +6,7 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
+    using Linn.Stores.Resources;
     using Linn.Stores.Resources.Allocation;
 
     using Nancy;
@@ -21,21 +22,24 @@
 
         private int jobId;
 
+        private JobIdRequestResource resource;
+
         [SetUp]
         public void SetUp()
         {
             this.jobId = 283476;
             this.allocationResult = new AllocationResult(this.jobId);
-
+            this.resource = new JobIdRequestResource { JobId = this.jobId };
             this.AllocationFacadeService.FinishAllocation(this.jobId)
                 .Returns(new SuccessResult<AllocationResult>(this.allocationResult));
 
             this.Response = this.Browser.Post(
-                $"/logistics/allocations/{this.jobId}",
+                $"/logistics/allocations/finish",
                 with =>
                 {
                     with.Header("Accept", "application/json");
                     with.Header("Content-Type", "application/json");
+                    with.JsonBody(this.resource);
                 }).Result;
         }
 

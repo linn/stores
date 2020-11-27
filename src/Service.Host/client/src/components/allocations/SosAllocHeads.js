@@ -15,7 +15,15 @@ import SosAllocDetails from './SosAllocDetails';
 
 import Page from '../../containers/Page';
 
-function SosAllocHeads({ loading, items, details, detailsLoading, updateDetail }) {
+function SosAllocHeads({
+    jobId,
+    loading,
+    items,
+    details,
+    detailsLoading,
+    updateDetail,
+    finishAllocation
+}) {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectedDetails, setSelectedDetails] = useState([]);
     const [progress, setProgress] = useState(50);
@@ -48,6 +56,10 @@ function SosAllocHeads({ loading, items, details, detailsLoading, updateDetail }
         }
     });
 
+    const doFinishAllocation = () =>{
+        finishAllocation({ jobId })
+    };
+
     const classes = useStyles();
 
     const nextOutlet = () => {
@@ -70,7 +82,7 @@ function SosAllocHeads({ loading, items, details, detailsLoading, updateDetail }
                     <Title text="Allocation" />
                 </Grid>
                 <Grid item xs={2}>
-                    <Button variant="outlined">Allocate</Button>
+                    <Button variant="outlined" onClick={doFinishAllocation}>Allocate</Button>
                 </Grid>
                 {loading && (
                     <Grid item xs={12}>
@@ -149,13 +161,15 @@ function SosAllocHeads({ loading, items, details, detailsLoading, updateDetail }
 }
 
 SosAllocHeads.propTypes = {
+    jobId: PropTypes.number.isRequired,
     loading: PropTypes.bool,
     detailsLoading: PropTypes.bool,
     items: PropTypes.arrayOf(
         PropTypes.shape({ accountId: PropTypes.number, outletNumber: PropTypes.number })
     ),
     details: PropTypes.arrayOf(PropTypes.shape({})),
-    updateDetail: PropTypes.func.isRequired
+    updateDetail: PropTypes.func.isRequired,
+    finishAllocation: PropTypes.func.isRequired
 };
 
 SosAllocHeads.defaultProps = {
