@@ -1,6 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Parts
 {
-    public class MechPartSourceKey
+    public class PartDataSheetKey
     {
         public string PartNumber { get; set; }
 

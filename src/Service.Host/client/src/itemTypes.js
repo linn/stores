@@ -113,3 +113,15 @@ export const auditLocations = new ItemType(
     'AUDIT_LOCATIONS',
     '/inventory/audit-locations'
 );
+
+export const mechPartSource = new ItemType(
+    'mechPartSource',
+    'MECH_PART_SOURCE',
+    '/inventory/parts/sources'
+);
+
+export const sosAllocHeads = new ItemType(
+    'sosAllocHeads',
+    'SOS_ALLOC_HEADS',
+    '/logistics/sos-alloc-heads'
+);

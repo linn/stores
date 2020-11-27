@@ -10,7 +10,7 @@
         public static IContainer BuildContainer()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterModule<AmazonCredentialsModule>();
+            //builder.RegisterModule<AmazonCredentialsModule>();
             builder.RegisterModule<AmazonSqsModule>();
             builder.RegisterModule<LoggingModule>();
             //builder.RegisterModule<MessagingModule>();

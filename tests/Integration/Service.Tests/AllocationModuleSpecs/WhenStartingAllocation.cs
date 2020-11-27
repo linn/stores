@@ -29,7 +29,10 @@
                                     AccountId = 111,
                                     ArticleNumber = "article",
                                     StockPoolCode = "st",
-                                    DespatchLocationCode = "d"
+                                    DespatchLocationCode = "d",
+                                    ExcludeOnHold = true,
+                                    ExcludeOverCreditLimit = true,
+                                    ExcludeUnsuppliableLines = true
                                 };
 
             this.AllocationFacadeService.StartAllocation(Arg.Any<AllocationOptionsResource>())
@@ -59,7 +62,10 @@
                         r => r.StockPoolCode == this.resource.StockPoolCode
                              && r.ArticleNumber == this.resource.ArticleNumber
                              && r.AccountId == this.resource.AccountId
-                             && r.DespatchLocationCode == this.resource.DespatchLocationCode));
+                             && r.DespatchLocationCode == this.resource.DespatchLocationCode
+                             && r.ExcludeOnHold == this.resource.ExcludeOnHold
+                             && r.ExcludeOverCreditLimit == this.resource.ExcludeOverCreditLimit
+                             && r.ExcludeUnsuppliableLines == this.resource.ExcludeUnsuppliableLines));
         }
 
         [Test]

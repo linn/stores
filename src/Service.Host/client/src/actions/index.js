@@ -67,3 +67,7 @@ export const storagePlaceAuditReportActionTypes = makeReportActionTypes(
 export const createAuditReqsActionTypes = makeProcessActionTypes(
     processTypes.createAuditReqs.actionType
 );
+
+export const sosAllocHeadsActionTypes = makeActionTypes(itemTypes.sosAllocHeads.actionType);
+
+export const mechPartSourceActionTypes = makeActionTypes(itemTypes.mechPartSource.actionType);

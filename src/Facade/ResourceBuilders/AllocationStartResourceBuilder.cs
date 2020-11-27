@@ -10,7 +10,12 @@
     {
         public AllocationStartResource Build(AllocationStart allocationStart)
         {
-            return new AllocationStartResource { Id = allocationStart.Id };
+            return new AllocationStartResource
+                       {
+                           Id = allocationStart.Id,
+                           AllocationNotes = allocationStart.AllocationNotes,
+                           SosNotes = allocationStart.SosNotes
+                       };
         }
 
         public string GetLocation(AllocationStart allocationStart)

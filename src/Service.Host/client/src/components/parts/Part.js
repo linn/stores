@@ -177,9 +177,7 @@ function Part({
     };
 
     const handleChangeLiveness = () => {
-        console.log('0');
         if (!item.dateLive) {
-            console.log('1');
             updateItem(itemId, {
                 ...part,
                 dateLive: new Date(),
@@ -187,8 +185,6 @@ function Part({
                 madeLiveByName: userName
             });
         } else {
-            console.log('2');
-
             updateItem(itemId, {
                 ...part,
                 dateLive: null,

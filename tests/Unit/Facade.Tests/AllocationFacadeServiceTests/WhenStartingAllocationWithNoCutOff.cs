@@ -2,7 +2,6 @@
 {
     using System;
 
-    using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Resources.Allocation;
 
@@ -16,8 +15,6 @@
 
         private AllocationStart startDetails;
 
-        private IResult<AllocationStart> result;
-
         [SetUp]
         public void SetUp()
         {
@@ -29,7 +26,11 @@
                                     ArticleNumber = "article",
                                     DespatchLocationCode = "dispatch",
                                     AccountingCompany = "LINN",
-                                    CutOffDate = null
+                                    CutOffDate = null,
+                                    CountryCode = null,
+                                    ExcludeOverCreditLimit = true,
+                                    ExcludeUnsuppliableLines = true,
+                                    ExcludeOnHold = true
                                 };
 
             this.AllocationService.StartAllocation(
@@ -38,10 +39,13 @@
                     Arg.Any<int>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
-                    Arg.Any<DateTime?>())
+                    Arg.Any<DateTime?>(),
+                    Arg.Any<bool>(),
+                    Arg.Any<bool>(),
+                    Arg.Any<bool>())
                 .Returns(this.startDetails);
 
-            this.result = this.Sut.StartAllocation(this.resource);
+            this.Sut.StartAllocation(this.resource);
         }
 
         [Test]
@@ -53,7 +57,10 @@
                 this.resource.AccountId,
                 this.resource.ArticleNumber,
                 this.resource.AccountingCompany,
-                null);
+                null,
+                this.resource.ExcludeOverCreditLimit,
+                this.resource.ExcludeUnsuppliableLines,
+                this.resource.ExcludeOnHold);
         }
     }
 }

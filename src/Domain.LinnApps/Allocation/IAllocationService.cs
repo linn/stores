@@ -12,6 +12,9 @@
             int? accountId,
             string articleNumber,
             string accountingCompany,
-            DateTime? cutOffDate);
+            DateTime? cutOffDate,
+            bool excludeUnsuppliableLines,
+            bool excludeOnHold,
+            bool excludeOverCreditLimit);
     }
 }

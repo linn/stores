@@ -31,6 +31,8 @@ import storagePlaces from './storagePlaces';
 import auditLocation from './auditLocation';
 import auditLocations from './auditLocations';
 import createAuditReqs from './createAuditReqs';
+import sosAllocHeads from './sosAllocHeads';
+import mechPartSource from './parts/mechPartSource';
 
 const errors = fetchErrorReducer({ ...itemTypes });
 
@@ -45,8 +47,9 @@ const rootReducer = combineReducers({
     departments,
     decrementRules,
     despatchLocations,
-    oidc,
+    mechPartSource,
     nominal,
+    oidc,
     part,
     partCategories,
     parts,
@@ -55,6 +58,7 @@ const rootReducer = combineReducers({
     productAnalysisCodes,
     rootProducts,
     sernosSequences,
+    sosAllocHeads,
     stockPools,
     storagePlace,
     storagePlaces,

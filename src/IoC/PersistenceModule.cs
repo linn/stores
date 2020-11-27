@@ -1,7 +1,5 @@
 ﻿namespace Linn.Stores.IoC
 {
-    using System.Collections.Immutable;
-
     using Autofac;
 
     using Linn.Common.Persistence;
@@ -47,8 +45,11 @@
             builder.RegisterType<CountryRepository>().As<IRepository<Country, string>>();
             builder.RegisterType<QcControlRepository>().As<IRepository<QcControl, int>>();
             builder.RegisterType<PartTemplateRepository>().As<IRepository<PartTemplate, string>>();
-            builder.RegisterType<MechPartSourcesRepository>()
-                .As<IRepository<MechPartSource, MechPartSourceKey>>();
+            builder.RegisterType<SosAllocHeadRepository>().As<IQueryRepository<SosAllocHead>>();
+            builder.RegisterType<PartDataSheetRepository>().As<IRepository<PartDataSheet, PartDataSheetKey>>();
+            builder.RegisterType<MechPartSourceRepository>().As<IRepository<MechPartSource, int>>();
+            builder.RegisterType<ParcelRepository>().As<IRepository<Parcel, int>>();
+            builder.RegisterType<CarrierRepository>().As<IRepository<Carrier, string>>();
             builder.RegisterType<StockLocatorRepository>().As<IQueryRepository<StockLocator>>();
             builder.RegisterType<StoragePlaceRepository>().As<IQueryRepository<StoragePlace>>();
             builder.RegisterType<StoresBugetRepository>().As<IQueryRepository<StoresBudget>>();

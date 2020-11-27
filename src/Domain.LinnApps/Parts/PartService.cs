@@ -6,8 +6,8 @@
 
     using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
-    using Linn.Stores.Domain.LinnApps.Exceptions;
-    using Linn.Stores.Domain.LinnApps.ExternalServices;
+    using Exceptions;
+    using ExternalServices;
 
     public class PartService : IPartService
     {

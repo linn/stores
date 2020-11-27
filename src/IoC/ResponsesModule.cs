@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.IoC
 {
     using System.Collections.Generic;
-    using System.Runtime.InteropServices.ComTypes;
 
     using Autofac;
 
@@ -72,7 +71,19 @@
             builder.RegisterType<PartTemplateResourceBuilder>().As<IResourceBuilder<PartTemplate>>();
             builder.RegisterType<PartTemplatesResourceBuilder>().As<IResourceBuilder<IEnumerable<PartTemplate>>>();
             builder.RegisterType<PartLiveTestResourceBuilder>().As<IResourceBuilder<PartLiveTest>>();
-            builder.RegisterType<AuditLocationResourceBuilder>().As<IResourceBuilder<AuditLocation>>();
+            builder.RegisterType<SosAllocHeadResourceBuilder>().As<IResourceBuilder<SosAllocHead>>();
+            builder.RegisterType<SosAllocHeadsResourceBuilder>().As<IResourceBuilder<IEnumerable<SosAllocHead>>>();
+            builder.RegisterType<MechPartSourceResourceBuilder>().As<IResourceBuilder<MechPartSource>>();
+            builder.RegisterType<PartDataSheetResourceBuilder>().As<IResourceBuilder<PartDataSheet>>();
+            builder.RegisterType<CarrierResourceBuilder>()
+                .As<IResourceBuilder<Carrier>>();
+            builder.RegisterType<CarriersResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<Carrier>>>();
+            builder.RegisterType<ParcelResourceBuilder>()
+                .As<IResourceBuilder<Parcel>>();
+            builder.RegisterType<ParcelsResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<Parcel>>>();
+                builder.RegisterType<AuditLocationResourceBuilder>().As<IResourceBuilder<AuditLocation>>();
             builder.RegisterType<AuditLocationsResourceBuilder>().As<IResourceBuilder<IEnumerable<AuditLocation>>>();
             builder.RegisterType<StoragePlaceResourceBuilder>().As<IResourceBuilder<StoragePlace>>();
             builder.RegisterType<StoragePlacesResourceBuilder>().As<IResourceBuilder<IEnumerable<StoragePlace>>>();

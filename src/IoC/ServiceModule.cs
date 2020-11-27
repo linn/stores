@@ -7,12 +7,12 @@
     using Linn.Common.Facade;
     using Linn.Common.Proxy;
     using Linn.Common.Reporting.Models;
+    using Linn.Stores.Facade.Services;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Reports;
-    using Linn.Stores.Facade.Services;
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Allocation;
@@ -29,6 +29,7 @@
             builder.RegisterType<PartService>().As<IPartService>();
             builder.RegisterType<WhatWillDecrementReportService>().As<IWhatWillDecrementReportService>();
             builder.RegisterType<StoragePlaceAuditReportService>().As<IStoragePlaceAuditReportService>();
+            builder.RegisterType<MechPartSourceService>().As<IMechPartSourceService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -61,6 +62,12 @@
             builder.RegisterType<StoragePlaceAuditReportFacadeService>().As<IStoragePlaceAuditReportFacadeService>();
             builder.RegisterType<AuditLocationService>().As<IAuditLocationService>();
             builder.RegisterType<StoragePlaceService>().As<IStoragePlaceService>();
+            builder.RegisterType<SosAllocHeadFacadeService>().As<ISosAllocHeadFacadeService>();
+            builder.RegisterType<MechPartSourceFacadeService>()
+                .As<IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>>();
+            builder.RegisterType<CarriersService>().As<ICarriersService>();
+            builder.RegisterType<ParcelFacadeService>()
+                .As<IFacadeService<Parcel, int, ParcelResource, ParcelResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
@@ -68,6 +75,7 @@
             builder.RegisterType<DatabaseService>().As<IDatabaseService>();
             builder.RegisterType<WwdPack>().As<IWwdPack>();
             builder.RegisterType<StoragePlaceAuditPack>().As<IStoragePlaceAuditPack>();
+            builder.RegisterType<AllocPack>().As<IAllocPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();
