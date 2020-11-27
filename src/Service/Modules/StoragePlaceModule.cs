@@ -14,7 +14,7 @@
     using Nancy;
     using Nancy.ModelBinding;
 
-    public class StoragePlaceModule : NancyModule
+    public sealed class StoragePlaceModule : NancyModule
     {
         private readonly IStoragePlaceAuditReportFacadeService reportService;
 

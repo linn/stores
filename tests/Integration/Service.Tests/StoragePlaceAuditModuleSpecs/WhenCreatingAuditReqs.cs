@@ -1,10 +1,6 @@
 ﻿namespace Linn.Stores.Service.Tests.StoragePlaceAuditModuleSpecs
 {
-    using FluentAssertions;
-
     using Linn.Stores.Resources.RequestResources;
-
-    using Nancy;
 
     using NSubstitute;
 
@@ -22,12 +18,6 @@
                         with.Header("Accept", "application/json");
                         with.Query("locationRange", "loc");
                     }).Result;
-        }
-
-        [Test]
-        public void ShouldReturnOk()
-        {
-            this.Response.Should().Be(HttpStatusCode.OK);
         }
 
         [Test]

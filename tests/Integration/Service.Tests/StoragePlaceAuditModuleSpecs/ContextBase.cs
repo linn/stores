@@ -6,6 +6,7 @@
     using Linn.Common.Facade;
     using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Service.Modules;
@@ -43,9 +44,11 @@
                             new AuditLocationsResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<StoragePlace>>>(
                             new StoragePlacesResourceBuilder());
+                        with.Dependency<IResourceBuilder<Error>>(new ErrorResourceBuilder());
                         with.ResponseProcessor<AuditLocationsResponseProcessor>();
                         with.ResponseProcessor<StoragePlacesResponseProcessor>();
                         with.ResponseProcessor<ResultsModelJsonResponseProcessor>();
+                        with.ResponseProcessor<ErrorResponseProcessor>();
                         with.Module<StoragePlaceModule>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
@@ -53,7 +56,8 @@
                                     var claims = new List<Claim>
                                                      {
                                                          new Claim(ClaimTypes.Role, "employee"),
-                                                         new Claim(ClaimTypes.NameIdentifier, "test-user")
+                                                         new Claim(ClaimTypes.NameIdentifier, "test-user"),
+                                                         new Claim("employee", "/e/33607")
                                                      };
                                     var user = new ClaimsIdentity(claims, "jwt");
 
