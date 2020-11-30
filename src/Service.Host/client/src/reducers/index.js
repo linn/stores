@@ -22,6 +22,8 @@ import unitsOfMeasure from './unitsOfMeasure';
 import allocation from './allocation';
 import wwdReport from './wwdReport';
 import * as itemTypes from '../itemTypes';
+import * as reportTypes from '../reportTypes';
+import * as processTypes from '../processTypes';
 import stockPools from './stockPools';
 import despatchLocations from './despatchLocations';
 import countries from './countries';
@@ -30,7 +32,7 @@ import sosAllocDetails from './sosAllocDetails';
 import mechPartSource from './parts/mechPartSource';
 import finishAllocation from './finishAllocation';
 
-const errors = fetchErrorReducer({ ...itemTypes });
+const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
 const rootReducer = combineReducers({
     accountingCompanies,

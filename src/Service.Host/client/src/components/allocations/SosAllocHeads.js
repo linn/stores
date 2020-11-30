@@ -10,7 +10,7 @@ import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
 import Divider from '@material-ui/core/Divider';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
-import { Loading, Title, utilities } from '@linn-it/linn-form-components-library';
+import { Loading, Title, utilities, ErrorCard } from '@linn-it/linn-form-components-library';
 import SosAllocDetails from './SosAllocDetails';
 
 import Page from '../../containers/Page';
@@ -22,7 +22,8 @@ function SosAllocHeads({
     details,
     detailsLoading,
     updateDetail,
-    finishAllocation
+    finishAllocation,
+    allocationError
 }) {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectedDetails, setSelectedDetails] = useState([]);
@@ -56,8 +57,8 @@ function SosAllocHeads({
         }
     });
 
-    const doFinishAllocation = () =>{
-        finishAllocation({ jobId })
+    const doFinishAllocation = () => {
+        finishAllocation({ jobId });
     };
 
     const classes = useStyles();
@@ -82,7 +83,9 @@ function SosAllocHeads({
                     <Title text="Allocation" />
                 </Grid>
                 <Grid item xs={2}>
-                    <Button variant="outlined" onClick={doFinishAllocation}>Allocate</Button>
+                    <Button variant="outlined" onClick={doFinishAllocation}>
+                        Allocate
+                    </Button>
                 </Grid>
                 {loading && (
                     <Grid item xs={12}>
@@ -146,12 +149,17 @@ function SosAllocHeads({
                             </List>
                         </Grid>
                         <Grid item xs={10}>
-                            <SosAllocDetails
-                                header={items[selectedIndex]}
-                                updateDetail={updateDetail}
-                                loading={detailsLoading}
-                                items={utilities.sortEntityList(selectedDetails, 'orderNumber')}
-                            />
+                            <>
+                                {allocationError && (
+                                    <ErrorCard errorMessage={`${allocationError}`} />
+                                )}
+                                <SosAllocDetails
+                                    header={items[selectedIndex]}
+                                    updateDetail={updateDetail}
+                                    loading={detailsLoading}
+                                    items={utilities.sortEntityList(selectedDetails, 'orderNumber')}
+                                />
+                            </>
                         </Grid>
                     </>
                 )}
@@ -169,14 +177,16 @@ SosAllocHeads.propTypes = {
     ),
     details: PropTypes.arrayOf(PropTypes.shape({})),
     updateDetail: PropTypes.func.isRequired,
-    finishAllocation: PropTypes.func.isRequired
+    finishAllocation: PropTypes.func.isRequired,
+    allocationError: PropTypes.string
 };
 
 SosAllocHeads.defaultProps = {
     loading: null,
     items: [],
     details: [],
-    detailsLoading: null
+    detailsLoading: null,
+    allocationError: null
 };
 
 export default SosAllocHeads;
