@@ -10,7 +10,14 @@ import KeyboardArrowUp from '@material-ui/icons/KeyboardArrowUp';
 import Divider from '@material-ui/core/Divider';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
-import { Loading, Title, utilities, ErrorCard } from '@linn-it/linn-form-components-library';
+import {
+    Loading,
+    Title,
+    utilities,
+    ErrorCard,
+    LinkButton
+} from '@linn-it/linn-form-components-library';
+import { Link } from 'react-router-dom';
 import SosAllocDetails from './SosAllocDetails';
 
 import Page from '../../containers/Page';
@@ -89,9 +96,9 @@ function SosAllocHeads({
                     <Title text="Allocation" />
                 </Grid>
                 <Grid item xs={2}>
-                    <Button variant="outlined" href="/logistics/allocations">
-                        Start New Run
-                    </Button>
+                    <Link to="/logistics/allocations">
+                        <Button variant="outlined">Start New Run</Button>
+                    </Link>
                 </Grid>
                 <Grid item xs={2}>
                     <Button
