@@ -10,22 +10,10 @@ import {
 } from '@linn-it/linn-form-components-library';
 import Typography from '@material-ui/core/Typography';
 
-function SosAllocDetails({ itemError, loading, items, updateDetail, header }) {
+function SosAllocDetails({ itemError, loading, items, updateDetail, header, displayOnly }) {
     const [internalError, setInternalError] = useState(null);
-    const updateRow = allocDetail => {
-        if (allocDetail.quantityToAllocate > allocDetail.maximumQuantityToAllocate) {
-            setInternalError(
-                `Cannot set quantity higher than ${allocDetail.maximumQuantityToAllocate}`
-            );
-        } else if (allocDetail.quantityToAllocate < 0) {
-            setInternalError('Cannot set quantity to be less than 0');
-        } else {
-            setInternalError(null);
-            updateDetail(allocDetail.id, allocDetail);
-        }
-    };
 
-    const columns = [
+    const editableColumns = [
         {
             title: 'Order No',
             id: 'orderNumber',
@@ -58,6 +46,34 @@ function SosAllocDetails({ itemError, loading, items, updateDetail, header }) {
             editable: false
         }
     ];
+
+    const displayOnlyColumns = editableColumns.concat([
+        {
+            title: 'Success',
+            id: 'allocationSuccessful',
+            type: 'text',
+            editable: false
+        },
+        {
+            title: 'Message',
+            id: 'allocationMessage',
+            type: 'text',
+            editable: false
+        }
+    ]);
+
+    const updateRow = allocDetail => {
+        if (allocDetail.quantityToAllocate > allocDetail.maximumQuantityToAllocate) {
+            setInternalError(
+                `Cannot set quantity higher than ${allocDetail.maximumQuantityToAllocate}`
+            );
+        } else if (allocDetail.quantityToAllocate < 0) {
+            setInternalError('Cannot set quantity to be less than 0');
+        } else {
+            setInternalError(null);
+            updateDetail(allocDetail.id, allocDetail);
+        }
+    };
 
     const pickAll = () => {
         items.forEach(item => {
@@ -101,7 +117,12 @@ function SosAllocDetails({ itemError, loading, items, updateDetail, header }) {
                         message={internalError}
                     />
                     <Grid item xs={12}>
-                        <EditableTable columns={columns} rows={items} saveRow={updateRow} />
+                        <EditableTable
+                            columns={displayOnly ? displayOnlyColumns : editableColumns}
+                            rows={items}
+                            saveRow={updateRow}
+                            editable={!displayOnly}
+                        />
                     </Grid>
                 </>
             )}
@@ -122,6 +143,7 @@ SosAllocDetails.propTypes = {
             outletNumber: PropTypes.number
         })
     ),
+    displayOnly: PropTypes.bool,
     loading: PropTypes.bool,
     updateDetail: PropTypes.func.isRequired,
     header: PropTypes.shape({
@@ -135,7 +157,8 @@ SosAllocDetails.defaultProps = {
     loading: null,
     itemError: null,
     items: [],
-    header: {}
+    header: {},
+    displayOnly: false
 };
 
 export default SosAllocDetails;

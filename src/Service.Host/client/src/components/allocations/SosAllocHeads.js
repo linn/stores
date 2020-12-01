@@ -28,6 +28,7 @@ function SosAllocHeads({
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectedDetails, setSelectedDetails] = useState([]);
     const [progress, setProgress] = useState(50);
+    const [alloctionHasFinished, setAllocationHasFinished] = useState(false);
 
     useEffect(() => {
         if (items.length > 0 && details.length > 0) {
@@ -40,6 +41,12 @@ function SosAllocHeads({
             );
         }
     }, [selectedIndex, items, details, setSelectedDetails]);
+
+    useEffect(() => {
+        if (details.length > 0 && details.some(detail => detail.allocationSuccessful)) {
+            setAllocationHasFinished(true);
+        }
+    }, [details, setAllocationHasFinished]);
 
     useEffect(() => {
         if (selectedIndex === 0) {
@@ -74,16 +81,25 @@ function SosAllocHeads({
             setSelectedIndex(selectedIndex - 1);
         }
     };
-
     return (
         <Page>
             <Grid container spacing={3}>
                 <Grid item xs={2} />
-                <Grid item xs={8}>
+                <Grid item xs={6}>
                     <Title text="Allocation" />
                 </Grid>
                 <Grid item xs={2}>
-                    <Button variant="outlined" onClick={doFinishAllocation}>
+                    <Button variant="outlined" href="/logistics/allocations">
+                        Start New Run
+                    </Button>
+                </Grid>
+                <Grid item xs={2}>
+                    <Button
+                        color="secondary"
+                        variant="contained"
+                        onClick={doFinishAllocation}
+                        disabled={alloctionHasFinished}
+                    >
                         Allocate
                     </Button>
                 </Grid>
@@ -157,6 +173,7 @@ function SosAllocHeads({
                                     header={items[selectedIndex]}
                                     updateDetail={updateDetail}
                                     loading={detailsLoading}
+                                    displayOnly={alloctionHasFinished}
                                     items={utilities.sortEntityList(selectedDetails, 'orderNumber')}
                                 />
                             </>
