@@ -52,40 +52,44 @@
                     PdfFilePath = s.PdfFilePath
                 });
             }
-            
+
             return new MechPartSource
-            {
-                Id = this.databaseService.GetIdSequence("MECH_SOURCE_SEQ"),
-                PartNumber = resource.PartNumber,
-                AssemblyType = resource.AssemblyType,
-                DateEntered = DateTime.Parse(resource.DateEntered),
-                DateSamplesRequired = resource.DateSamplesRequired == null
-                    ? (DateTime?) null
-                    : DateTime.Parse(resource.DateSamplesRequired),
-                EmcCritical = resource.EmcCritical,
-                EstimatedVolume = resource.EstimatedVolume,
-                LinnPartNumber = resource.LinnPartNumber,
-                MechanicalOrElectrical = resource.MechanicalOrElectrical,
-                Notes = resource.Notes,
-                ProposedBy = resource.ProposedBy == null
-                    ? null
-                    : this.employeeRepository.FindById((int) resource.ProposedBy),
-                PerformanceCritical = resource.PerformanceCritical,
-                SafetyCritical = resource.SafetyCritical,
-                SingleSource = resource.SingleSource,
-                PartType = resource.PartType,
-                RohsReplace = resource.RohsReplace,
-                SampleQuantity = resource.SampleQuantity,
-                SamplesRequired = resource.SamplesRequired,
-                PartToBeReplaced = resource.LinnPartNumber == null
-                    ? null
-                    : partRepository.FindBy(p => p.PartNumber == resource.LinnPartNumber),
-                ProductionDate = resource.DateSamplesRequired == null
-                    ? (DateTime?) null
-                    : DateTime.Parse(resource.ProductionDate),
-                SafetyDataDirectory = resource.SafetyDataDirectory,
-                Part = part,
-            };
+                       {
+                           Id = this.databaseService.GetIdSequence("MECH_SOURCE_SEQ"),
+                           PartNumber = resource.PartNumber,
+                           AssemblyType = resource.AssemblyType,
+                           DateEntered =
+                               resource.DateEntered == null ? (DateTime?)null : DateTime.Parse(resource.DateEntered),
+                           DateSamplesRequired =
+                               resource.DateSamplesRequired == null
+                                   ? (DateTime?)null
+                                   : DateTime.Parse(resource.DateSamplesRequired),
+                           EmcCritical = resource.EmcCritical,
+                           EstimatedVolume = resource.EstimatedVolume,
+                           LinnPartNumber = resource.LinnPartNumber,
+                           MechanicalOrElectrical = resource.MechanicalOrElectrical,
+                           Notes = resource.Notes,
+                           ProposedBy =
+                               resource.ProposedBy == null
+                                   ? null
+                                   : this.employeeRepository.FindById((int)resource.ProposedBy),
+                           PerformanceCritical = resource.PerformanceCritical,
+                           SafetyCritical = resource.SafetyCritical,
+                           SingleSource = resource.SingleSource,
+                           PartType = resource.PartType,
+                           RohsReplace = resource.RohsReplace,
+                           SampleQuantity = resource.SampleQuantity,
+                           SamplesRequired = resource.SamplesRequired,
+                           PartToBeReplaced =
+                               resource.LinnPartNumber == null
+                                   ? null
+                                   : partRepository.FindBy(p => p.PartNumber == resource.LinnPartNumber),
+                           ProductionDate = resource.DateSamplesRequired == null
+                                                ? (DateTime?)null
+                                                : DateTime.Parse(resource.ProductionDate),
+                           SafetyDataDirectory = resource.SafetyDataDirectory,
+                           Part = part,
+                       };
         }
 
         protected override void UpdateFromResource(MechPartSource entity, MechPartSourceResource resource)
