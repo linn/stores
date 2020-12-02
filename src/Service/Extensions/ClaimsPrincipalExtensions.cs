@@ -11,5 +11,10 @@
             return principal.Claims.Where(b => b.Type == "privilege")
                     .Select(a => a.Value);
         }
+
+        public static string GetEmployeeUri(this ClaimsPrincipal principal)
+        {
+            return principal?.Claims?.FirstOrDefault(c => c.Type == "employee")?.Value;
+        }
     }
 }

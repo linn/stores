@@ -20,6 +20,15 @@ function App() {
                     <Typography color="primary">Mech Part Sources Utility</Typography>
                 </ListItem>
             </List>
+            <Typography variant="h6">Reports</Typography>
+            <List>
+                <ListItem component={Link} to="/inventory/reports/storage-place-audit" button>
+                    <Typography color="primary">Storage Place Audit Report</Typography>
+                </ListItem>
+                <ListItem component={Link} to="/inventory/reports/what-will-decrement" button>
+                    <Typography color="primary">What Will Decrement Report</Typography>
+                </ListItem>
+            </List>
         </Page>
     );
 }

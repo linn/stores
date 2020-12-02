@@ -90,6 +90,30 @@ export const partLiveTest = new ItemType(
     '/inventory/parts/can-be-made-live'
 );
 
+export const storagePlace = new ItemType(
+    'storagePlace',
+    'STORAGE_PLACE',
+    'inventory/storage-places'
+);
+
+export const storagePlaces = new ItemType(
+    'storagePlaces',
+    'STORAGE_PLACES',
+    '/inventory/storage-places'
+);
+
+export const auditLocation = new ItemType(
+    'auditLocation',
+    'AUDIT_LOCATION',
+    '/inventory/audit-locations'
+);
+
+export const auditLocations = new ItemType(
+    'auditLocations',
+    'AUDIT_LOCATIONS',
+    '/inventory/audit-locations'
+);
+
 export const mechPartSource = new ItemType(
     'mechPartSource',
     'MECH_PART_SOURCE',
