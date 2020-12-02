@@ -29,10 +29,12 @@
                 allocationOptionsResource.AccountId,
                 allocationOptionsResource.ArticleNumber,
                 allocationOptionsResource.AccountingCompany,
+                allocationOptionsResource.CountryCode,
                 cutOffDate,
                 allocationOptionsResource.ExcludeUnsuppliableLines,
                 allocationOptionsResource.ExcludeOnHold,
-                allocationOptionsResource.ExcludeOverCreditLimit));
+                allocationOptionsResource.ExcludeOverCreditLimit,
+                allocationOptionsResource.ExcludeNorthAmerica));
         }
 
         public IResult<AllocationResult> FinishAllocation(int jobId)

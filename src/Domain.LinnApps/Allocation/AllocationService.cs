@@ -32,10 +32,12 @@
             int? accountId,
             string articleNumber,
             string accountingCompany,
+            string countryCode,
             DateTime? cutOffDate,
             bool excludeUnsuppliableLines,
             bool excludeOnHold,
-            bool excludeOverCreditLimit)
+            bool excludeOverCreditLimit,
+            bool excludeNorthAmerica)
         {
             var results = new AllocationResult
                               {
@@ -47,11 +49,11 @@
                                       articleNumber,
                                       accountingCompany,
                                       cutOffDate,
-                                      null,
-                                      true,
-                                      true,
-                                      true,
-                                      false,
+                                      countryCode,
+                                      excludeUnsuppliableLines,
+                                      excludeOnHold,
+                                      excludeOverCreditLimit,
+                                      excludeNorthAmerica,
                                       out var notes,
                                       out var sosNotes),
                                   SosNotes = sosNotes,
@@ -66,6 +68,7 @@
                                                  DespatchLocationCode = despatchLocationCode,
                                                  StockPoolCode = stockPoolCode,
                                                  AccountingCompany = accountingCompany,
+                                                 CountryCode = countryCode,
                                                  CutOffDate = cutOffDate
                                              });
 

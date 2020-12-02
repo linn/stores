@@ -40,6 +40,7 @@ function StartAllocation({
         excludeUnsuppliableLines: true,
         excludeOverCreditLimit: true,
         excludeOnHold: true,
+        excludeNorthAmerica: false,
         cutOffDate: new Date().toISOString()
     });
 
@@ -189,6 +190,7 @@ function StartAllocation({
                                 propertyName="excludeOnHold"
                             />
                         </Grid>
+                        <Grid item xs={4} />
                         <Grid item xs={4}>
                             <OnOffSwitch
                                 label="Exclude Over Credit Limit"
@@ -202,6 +204,20 @@ function StartAllocation({
                                 propertyName="excludeOverCreditLimit"
                             />
                         </Grid>
+                        <Grid item xs={4}>
+                            <OnOffSwitch
+                                label="Exclude North America"
+                                value={allocationOptions.excludeNorthAmerica}
+                                onChange={() => {
+                                    handleFieldChange(
+                                        'excludeNorthAmerica',
+                                        !allocationOptions.excludeNorthAmerica
+                                    );
+                                }}
+                                propertyName="excludeNorthAmerica"
+                            />
+                        </Grid>
+                        <Grid item xs={4} />
                         <Grid item xs={4}>
                             <DatePicker
                                 label="Cut Off Date"

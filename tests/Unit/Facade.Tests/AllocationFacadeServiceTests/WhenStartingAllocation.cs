@@ -36,7 +36,8 @@
                                     CountryCode = null,
                                     ExcludeOverCreditLimit = true,
                                     ExcludeUnsuppliableLines = true,
-                                    ExcludeOnHold = true
+                                    ExcludeOnHold = true,
+                                    ExcludeNorthAmerica = true
                                 };
 
             this.AllocationService.StartAllocation(
@@ -45,7 +46,9 @@
                     Arg.Any<int>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
+                    Arg.Any<string>(),
                     Arg.Any<DateTime?>(),
+                    Arg.Any<bool>(),
                     Arg.Any<bool>(),
                     Arg.Any<bool>(),
                     Arg.Any<bool>())
@@ -63,10 +66,12 @@
                 this.resource.AccountId,
                 this.resource.ArticleNumber,
                 this.resource.AccountingCompany,
+                this.resource.CountryCode,
                 1.July(2021),
                 this.resource.ExcludeOverCreditLimit,
                 this.resource.ExcludeUnsuppliableLines,
-                this.resource.ExcludeOnHold);
+                this.resource.ExcludeOnHold,
+                this.resource.ExcludeNorthAmerica);
         }
 
         [Test]
