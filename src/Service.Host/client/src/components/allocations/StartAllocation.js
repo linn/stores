@@ -37,7 +37,7 @@ function StartAllocation({
         excludeOverCreditLimit: true,
         excludeOnHold: true,
         cutOffDate: new Date().toISOString()
-});
+    });
 
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';

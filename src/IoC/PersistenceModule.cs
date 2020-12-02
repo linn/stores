@@ -54,6 +54,7 @@
             builder.RegisterType<StoragePlaceRepository>().As<IQueryRepository<StoragePlace>>();
             builder.RegisterType<StoresBugetRepository>().As<IQueryRepository<StoresBudget>>();
             builder.RegisterType<AuditLocationRepository>().As<IQueryRepository<AuditLocation>>();
+            builder.RegisterType<ManufacturerRepository>().As<IRepository<Manufacturer, string>>();
         }
     }
 }

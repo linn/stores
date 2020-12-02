@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
     using Linn.Common.Facade;
-    using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
@@ -41,6 +40,9 @@
         private readonly IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
             mechPartSourceService;
 
+        private readonly IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>
+            manufacturerService;
+
         public PartsModule(
             IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
@@ -51,8 +53,8 @@
             IPartService partDomainService,
             IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> partTemplateService,
             IPartLiveService partLiveService,
-            IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
-                mechPartSourceService)
+            IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> mechPartSourceService,
+            IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> manufacturerService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
@@ -89,6 +91,8 @@
             this.Put("inventory/parts/sources/{id}", parameters => this.UpdateMechPartSource(parameters.id));
             this.Post("inventory/parts/sources", _ => this.AddMechPartSource());
 
+            this.manufacturerService = manufacturerService;
+            this.Get("/inventory/manufacturers", _ => this.GetManufacturers());
         }
 
         private object GetPart(int id)
@@ -100,7 +104,8 @@
                 .WithView("Index");
         }
 
-        private object GetParts(){
+        private object GetParts()
+        {
             var resource = this.Bind<SearchRequestResource>();
             var results = string.IsNullOrEmpty(resource.SearchTerm)
                               ? this.partsFacadeService.GetAll()
@@ -110,6 +115,7 @@
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");
         }
+
         private object AddPart()
         {
             this.RequiresAuthentication();
@@ -120,6 +126,7 @@
             {
                 this.partDomainService.AddQcControl(resource.PartNumber, resource.CreatedBy, resource.QcInformation);
             }
+
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
@@ -187,8 +194,10 @@
         private object GetMechPartSource(int id)
         {
             var result = this.mechPartSourceService.GetById(id);
-            return this.Negotiate.WithModel(result)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+            return this.Negotiate
+                .WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
 
         private object UpdateMechPartSource(int id)
@@ -205,6 +214,14 @@
             // todo - privileges check
             var resource = this.Bind<MechPartSourceResource>();
             var result = this.mechPartSourceService.Add(resource);
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetManufacturers()
+        {
+            var resource = this.Bind<SearchRequestResource>();
+            var result = this.manufacturerService.Search(resource.SearchTerm);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

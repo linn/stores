@@ -71,3 +71,7 @@ export const createAuditReqsActionTypes = makeProcessActionTypes(
 export const sosAllocHeadsActionTypes = makeActionTypes(itemTypes.sosAllocHeads.actionType);
 
 export const mechPartSourceActionTypes = makeActionTypes(itemTypes.mechPartSource.actionType);
+
+export const manufacturersActionTypes = makeActionTypes(itemTypes.manufacturers.actionType);
+
+export const employeesActionTypes = makeActionTypes(itemTypes.employees.actionType);

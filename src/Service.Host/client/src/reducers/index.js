@@ -33,6 +33,8 @@ import auditLocations from './auditLocations';
 import createAuditReqs from './createAuditReqs';
 import sosAllocHeads from './sosAllocHeads';
 import mechPartSource from './parts/mechPartSource';
+import manufacturers from './manufacturers';
+import employees from './employees';
 
 const errors = fetchErrorReducer({ ...itemTypes });
 
@@ -47,6 +49,8 @@ const rootReducer = combineReducers({
     departments,
     decrementRules,
     despatchLocations,
+    employees,
+    manufacturers,
     mechPartSource,
     nominal,
     oidc,
