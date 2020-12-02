@@ -8,7 +8,6 @@
     using Linn.Stores.Domain.LinnApps;
 
     public class CarriersService : ICarriersService
-                                  
     {
         private readonly IRepository<Carrier, string> repository;
 

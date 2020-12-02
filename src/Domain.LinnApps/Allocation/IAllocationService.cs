@@ -6,15 +6,19 @@
 
     public interface IAllocationService
     {
-        AllocationStart StartAllocation(
+        AllocationResult StartAllocation(
             string stockPoolCode,
             string despatchLocationCode,
             int? accountId,
             string articleNumber,
             string accountingCompany,
+            string countryCode,
             DateTime? cutOffDate,
             bool excludeUnsuppliableLines,
             bool excludeOnHold,
-            bool excludeOverCreditLimit);
+            bool excludeOverCreditLimit,
+            bool excludeNorthAmerica);
+
+        AllocationResult FinishAllocation(int jobId);
     }
 }

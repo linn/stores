@@ -70,8 +70,16 @@ export const createAuditReqsActionTypes = makeProcessActionTypes(
 
 export const sosAllocHeadsActionTypes = makeActionTypes(itemTypes.sosAllocHeads.actionType);
 
+export const sosAllocDetailActionTypes = makeActionTypes(itemTypes.sosAllocDetail.actionType);
+
+export const sosAllocDetailsActionTypes = makeActionTypes(itemTypes.sosAllocDetails.actionType);
+
 export const mechPartSourceActionTypes = makeActionTypes(itemTypes.mechPartSource.actionType);
 
 export const manufacturersActionTypes = makeActionTypes(itemTypes.manufacturers.actionType);
 
 export const employeesActionTypes = makeActionTypes(itemTypes.employees.actionType);
+
+export const finishAllocationActionTypes = makeActionTypes(
+    processTypes.finishAllocation.actionType
+);

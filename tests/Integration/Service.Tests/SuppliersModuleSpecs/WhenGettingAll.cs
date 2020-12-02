@@ -26,7 +26,6 @@
                 Id = 1,
                 Name = "Supplier A",
                 CountryCode = "DE"
-                
             };
             var supplierB = new Supplier
             {

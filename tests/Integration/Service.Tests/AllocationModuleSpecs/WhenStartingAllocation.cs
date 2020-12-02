@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Service.Tests.AllocationModuleSpecs
 {
+    using System.Linq;
+
     using FluentAssertions;
 
     using Linn.Common.Facade;
@@ -17,12 +19,12 @@
     {
         private AllocationOptionsResource resource;
 
-        private AllocationStart allocationStartDetails;
+        private AllocationResult allocationResult;
 
         [SetUp]
         public void SetUp()
         {
-            this.allocationStartDetails = new AllocationStart(2934762);
+            this.allocationResult = new AllocationResult(2934762);
 
             this.resource = new AllocationOptionsResource
                                 {
@@ -36,7 +38,7 @@
                                 };
 
             this.AllocationFacadeService.StartAllocation(Arg.Any<AllocationOptionsResource>())
-                .Returns(new SuccessResult<AllocationStart>(this.allocationStartDetails));
+                .Returns(new SuccessResult<AllocationResult>(this.allocationResult));
 
             this.Response = this.Browser.Post(
                 "/logistics/allocations",
@@ -71,8 +73,10 @@
         [Test]
         public void ShouldReturnResource()
         {
-            var resultResource = this.Response.Body.DeserializeJson<AllocationStartResource>();
-            resultResource.Id.Should().Be(this.allocationStartDetails.Id);
+            var resultResource = this.Response.Body.DeserializeJson<AllocationResource>();
+            resultResource.Id.Should().Be(this.allocationResult.Id);
+            resultResource.Links.First(a => a.Rel == "display-results").Href.Should()
+                .Be($"/logistics/sos-alloc-heads/{this.allocationResult.Id}");
         }
     }
 }

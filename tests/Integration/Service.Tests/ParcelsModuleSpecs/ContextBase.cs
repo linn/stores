@@ -13,7 +13,6 @@
     using NSubstitute;
     using NUnit.Framework;
 
-
     public class ContextBase : NancyContextBase
     {
         protected IFacadeService<Parcel, int, ParcelResource, ParcelResource> ParcelsService { get; private set; }

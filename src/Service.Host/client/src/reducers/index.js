@@ -22,6 +22,8 @@ import unitsOfMeasure from './unitsOfMeasure';
 import allocation from './allocation';
 import wwdReport from './wwdReport';
 import * as itemTypes from '../itemTypes';
+import * as reportTypes from '../reportTypes';
+import * as processTypes from '../processTypes';
 import stockPools from './stockPools';
 import despatchLocations from './despatchLocations';
 import countries from './countries';
@@ -32,11 +34,13 @@ import auditLocation from './auditLocation';
 import auditLocations from './auditLocations';
 import createAuditReqs from './createAuditReqs';
 import sosAllocHeads from './sosAllocHeads';
+import sosAllocDetails from './sosAllocDetails';
 import mechPartSource from './parts/mechPartSource';
 import manufacturers from './manufacturers';
 import employees from './employees';
+import finishAllocation from './finishAllocation';
 
-const errors = fetchErrorReducer({ ...itemTypes });
+const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
 const rootReducer = combineReducers({
     accountingCompanies,
@@ -50,6 +54,7 @@ const rootReducer = combineReducers({
     decrementRules,
     despatchLocations,
     employees,
+    finishAllocation,
     manufacturers,
     mechPartSource,
     nominal,
@@ -62,6 +67,7 @@ const rootReducer = combineReducers({
     productAnalysisCodes,
     rootProducts,
     sernosSequences,
+    sosAllocDetails,
     sosAllocHeads,
     stockPools,
     storagePlace,

@@ -4,10 +4,12 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Exceptions;
+
+    using ExternalServices;
+
     using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
-    using Exceptions;
-    using ExternalServices;
 
     public class PartService : IPartService
     {
@@ -71,7 +73,7 @@
                 from.DateLive = to.DateLive;
                 from.MadeLiveBy = to.MadeLiveBy;
             }
-            
+
             Validate(to);
 
             from.PhasedOutBy = to.PhasedOutBy;
@@ -141,7 +143,7 @@
 
 
             var partRoot = this.partPack.PartRoot(partToCreate.PartNumber);
-            
+
             if (partRoot != null && this.templateRepository.FindById(partRoot) != null)
             {
                 if (this.templateRepository.FindById(partRoot).AllowPartCreation == "N")
@@ -178,7 +180,7 @@
             partToCreate.OrderHold = "N";
 
             Validate(partToCreate);
-            
+
             return partToCreate;
         }
 

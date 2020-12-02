@@ -17,14 +17,14 @@
     {
         private AllocationOptionsResource resource;
 
-        private AllocationStart startDetails;
+        private AllocationResult startDetails;
 
-        private IResult<AllocationStart> result;
+        private IResult<AllocationResult> result;
 
         [SetUp]
         public void SetUp()
         {
-            this.startDetails = new AllocationStart(234);
+            this.startDetails = new AllocationResult(234);
             this.resource = new AllocationOptionsResource
                                 {
                                     StockPoolCode = "LINN",
@@ -36,7 +36,8 @@
                                     CountryCode = null,
                                     ExcludeOverCreditLimit = true,
                                     ExcludeUnsuppliableLines = true,
-                                    ExcludeOnHold = true
+                                    ExcludeOnHold = true,
+                                    ExcludeNorthAmerica = true
                                 };
 
             this.AllocationService.StartAllocation(
@@ -45,7 +46,9 @@
                     Arg.Any<int>(),
                     Arg.Any<string>(),
                     Arg.Any<string>(),
+                    Arg.Any<string>(),
                     Arg.Any<DateTime?>(),
+                    Arg.Any<bool>(),
                     Arg.Any<bool>(),
                     Arg.Any<bool>(),
                     Arg.Any<bool>())
@@ -63,17 +66,19 @@
                 this.resource.AccountId,
                 this.resource.ArticleNumber,
                 this.resource.AccountingCompany,
+                this.resource.CountryCode,
                 1.July(2021),
                 this.resource.ExcludeOverCreditLimit,
                 this.resource.ExcludeUnsuppliableLines,
-                this.resource.ExcludeOnHold);
+                this.resource.ExcludeOnHold,
+                this.resource.ExcludeNorthAmerica);
         }
 
         [Test]
         public void ShouldReturnSuccess()
         {
-            this.result.Should().BeOfType<SuccessResult<AllocationStart>>();
-            var dataResult = ((SuccessResult<AllocationStart>)this.result).Data;
+            this.result.Should().BeOfType<SuccessResult<AllocationResult>>();
+            var dataResult = ((SuccessResult<AllocationResult>)this.result).Data;
             dataResult.Id.Should().Be(this.startDetails.Id);
         }
     }

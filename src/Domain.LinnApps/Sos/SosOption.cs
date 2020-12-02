@@ -16,6 +16,8 @@
 
         public string AccountingCompany { get; set; }
 
+        public string CountryCode { get; set; }
+
         public DateTime? CutOffDate { get; set; }
     }
 }

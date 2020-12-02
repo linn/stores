@@ -12,10 +12,7 @@
     public class ServiceDbContext : DbContext
     {
         public static readonly LoggerFactory MyLoggerFactory =
-            new LoggerFactory(new[]
-                                  {
-                                      new Microsoft.Extensions.Logging.Debug.DebugLoggerProvider()
-                                  });
+            new LoggerFactory(new[] { new Microsoft.Extensions.Logging.Debug.DebugLoggerProvider() });
 
         public DbSet<Part> Parts { get; set; }
 
@@ -83,6 +80,8 @@
 
         public DbSet<Parcel> Parcels { get; set; }
 
+        public DbSet<SosAllocDetail> SosAllocDetails { get; set; }
+
         public DbSet<MechPartAlt> MechPartAlts { get; set; }
 
         public DbSet<Manufacturer> Manufacturers { get; set; }
@@ -124,6 +123,7 @@
             this.BuildSosAllocHeads(builder);
             this.BuildCarriers(builder);
             this.BuildParcels(builder);
+            this.BuildSosAllocDetails(builder);
             this.BuildMechPartAlts(builder);
             this.BuildManufacturers(builder);
             this.BuildMechPartManufacturerAlts(builder);
@@ -223,12 +223,10 @@
             e.Property(p => p.OneOffRequirement).HasColumnName("ONE_OFF_REQT");
             e.Property(p => p.SparesRequirement).HasColumnName("SPARES_REQT");
             e.Property(p => p.PlannedSurplus).HasColumnName("PLANNED_SURPLUS").HasMaxLength(1);
-            e.Property(p => p.IgnoreWorkstationStock)
-                .HasColumnName("IGNORE_WORKSTN_STOCK").HasMaxLength(1);
+            e.Property(p => p.IgnoreWorkstationStock).HasColumnName("IGNORE_WORKSTN_STOCK").HasMaxLength(1);
             e.Property(p => p.ImdsIdNumber).HasColumnName("IMDS_ID_NUMBER");
             e.Property(p => p.ImdsWeight).HasColumnName("IMDS_WEIGHT_G");
-            e.Property(p => p.MechanicalOrElectronic)
-                .HasColumnName("MECHANICAL_OR_ELECTRONIC").HasMaxLength(2);
+            e.Property(p => p.MechanicalOrElectronic).HasColumnName("MECHANICAL_OR_ELECTRONIC").HasMaxLength(2);
             e.Property(p => p.QcOnReceipt).HasColumnName("QC_ON_RECEIPT").HasMaxLength(1);
             e.Property(p => p.QcInformation).HasColumnName("QC_INFORMATION").HasMaxLength(90);
             e.Property(p => p.RawOrFinished).HasColumnName("RM_FG").HasMaxLength(1);
@@ -237,27 +235,21 @@
             e.Property(p => p.RailMethod).HasColumnName("RAIL_METHOD").HasMaxLength(10);
             e.Property(p => p.MinStockRail).HasColumnName("MIN_RAIL");
             e.Property(p => p.MaxStockRail).HasColumnName("MAX_RAIL");
-            e.Property(p => p.SecondStageBoard).HasColumnName("SECOND_STAGE_BOARD")
-                .HasMaxLength(1);
+            e.Property(p => p.SecondStageBoard).HasColumnName("SECOND_STAGE_BOARD").HasMaxLength(1);
             e.Property(p => p.SecondStageDescription).HasColumnName("SS_DESCRIPTION").HasMaxLength(100);
             e.Property(p => p.TqmsCategoryOverride).HasColumnName("TQMS_CATEGORY_OVERRIDE").HasMaxLength(20);
             e.Property(p => p.StockNotes).HasColumnName("STOCK_NOTES").HasMaxLength(500);
             e.Property(p => p.DateCreated).HasColumnName("DATE_CREATED");
             e.Property(p => p.DateLive).HasColumnName("DATE_LIVE");
             e.Property(p => p.DatePhasedOut).HasColumnName("DATE_PURCH_PHASE_OUT");
-            e.Property(p => p.ReasonPhasedOut)
-                .HasColumnName("REASON_PURCH_PHASED_OUT").HasMaxLength(250);
-            e.Property(p => p.ScrapOrConvert)
-                .HasColumnName("SCRAP_OR_CONVERT").HasMaxLength(20);
+            e.Property(p => p.ReasonPhasedOut).HasColumnName("REASON_PURCH_PHASED_OUT").HasMaxLength(250);
+            e.Property(p => p.ScrapOrConvert).HasColumnName("SCRAP_OR_CONVERT").HasMaxLength(20);
             e.Property(p => p.PurchasingPhaseOutType).HasColumnName("PURCH_PHASE_OUT_TYPE").HasMaxLength(20);
             e.Property(p => p.DateDesignObsolete).HasColumnName("DATE_DESIGN_OBSOLETE");
-            e.HasOne<Employee>(p => p.PhasedOutBy)
-                .WithMany(m => m.PartsPhasedOut).HasForeignKey("PURCH_PHASED_OUT_BY");
-            e.HasOne<Employee>(p => p.MadeLiveBy)
-                .WithMany(m => m.PartsMadeLive).HasForeignKey("LIVE_BY");
+            e.HasOne<Employee>(p => p.PhasedOutBy).WithMany(m => m.PartsPhasedOut).HasForeignKey("PURCH_PHASED_OUT_BY");
+            e.HasOne<Employee>(p => p.MadeLiveBy).WithMany(m => m.PartsMadeLive).HasForeignKey("LIVE_BY");
             e.HasOne<Employee>(p => p.CreatedBy).WithMany(m => m.PartsCreated).HasForeignKey("CREATED_BY");
-            e.HasOne(p => p.AccountingCompany).WithMany(c => c.PartsResponsibleFor)
-                .HasForeignKey("ACCOUNTING_COMPANY");
+            e.HasOne(p => p.AccountingCompany).WithMany(c => c.PartsResponsibleFor).HasForeignKey("ACCOUNTING_COMPANY");
             e.HasOne(p => p.PreferredSupplier).WithMany(s => s.PartsPreferredSupplierOf)
                 .HasForeignKey("PREFERRED_SUPPLIER");
             e.HasOne<ParetoClass>(p => p.ParetoClass).WithMany(c => c.Parts).HasForeignKey("PARETO_CODE");
@@ -278,7 +270,6 @@
             e.Property(d => d.PdfFilePath).HasColumnName("PDF_FILE_PATH").HasMaxLength(1000);
             e.HasKey(d => new { d.Sequence, d.PartNumber });
             e.HasOne(d => d.Part).WithMany(p => p.DataSheets).HasForeignKey(d => d.PartNumber);
-
         }
 
         private void BuildMechPartSources(ModelBuilder builder)
@@ -431,8 +422,7 @@
             e.Property(d => d.DepartmentCode).HasColumnName("DEPARTMENT_CODE").HasMaxLength(10);
             e.Property(d => d.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
             e.Property(d => d.DateClosed).HasColumnName("DATE_CLOSED");
-            e.HasMany(n => n.NominalAccounts).WithOne(a => a.Department)
-                .HasForeignKey("DEPARTMENT");
+            e.HasMany(n => n.NominalAccounts).WithOne(a => a.Department).HasForeignKey("DEPARTMENT");
         }
 
         private void BuildProductAnalysisCodes(ModelBuilder builder)
@@ -461,6 +451,7 @@
             e.Property(p => p.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
             e.Property(p => p.DespatchLocationCode).HasColumnName("DESPATCH_LOCATION_CODE").HasMaxLength(10);
             e.Property(p => p.AccountingCompany).HasColumnName("ACCOUNTING_COMPANY").HasMaxLength(10);
+            e.Property(p => p.CountryCode).HasColumnName("COUNTRY_CODE").HasMaxLength(2);
             e.Property(p => p.CutOffDate).HasColumnName("CUT_OFF_DATE");
         }
 
@@ -491,8 +482,7 @@
             builder.Entity<Nominal>().HasKey(n => n.NominalCode);
             builder.Entity<Nominal>().Property(n => n.NominalCode).HasColumnName("NOMINAL_CODE");
             builder.Entity<Nominal>().Property(n => n.Description).HasColumnName("DESCRIPTION");
-            builder.Entity<Nominal>().HasMany(n => n.NominalAccounts).WithOne(a => a.Nominal)
-                .HasForeignKey("NOMINAL");
+            builder.Entity<Nominal>().HasMany(n => n.NominalAccounts).WithOne(a => a.Nominal).HasForeignKey("NOMINAL");
         }
 
         private void BuildNominalAccounts(ModelBuilder builder)
@@ -623,6 +613,30 @@
             e.Property(c => c.Name).HasColumnName("NAME");
             e.Property(c => c.OrganisationId).HasColumnName("ORG_ID");
             e.Property(c => c.DateInvalid).HasColumnName("DATE_INVALID");
+        }
+
+        private void BuildSosAllocDetails(ModelBuilder builder)
+        {
+            var table = builder.Entity<SosAllocDetail>().ToTable("SOS_ALLOC_DETAILS");
+            table.HasKey(s => s.Id);
+            table.Property(s => s.Id).HasColumnName("ID");
+            table.Property(s => s.JobId).HasColumnName("JOB_ID");
+            table.Property(s => s.AccountId).HasColumnName("ACCOUNT_ID");
+            table.Property(s => s.OutletNumber).HasColumnName("OUTLET_NUMBER");
+            table.Property(s => s.OrderNumber).HasColumnName("ORDER_NUMBER");
+            table.Property(s => s.OrderLine).HasColumnName("ORDER_LINE");
+            table.Property(s => s.QuantitySuppliable).HasColumnName("QTY_SUPPLIABLE");
+            table.Property(s => s.DatePossible).HasColumnName("DATE_POSSIBLE");
+            table.Property(s => s.SupplyInFullDate).HasColumnName("SUPPLY_IN_FULL_DATE");
+            table.Property(s => s.QuantityToAllocate).HasColumnName("QTY_TO_ALLOCATE");
+            table.Property(s => s.QuantityAllocated).HasColumnName("QTY_ALLOCATED");
+            table.Property(s => s.UnitPriceIncludingVAT).HasColumnName("UNIT_PRICE_INCL_VAT");
+            table.Property(s => s.SupplyInFullCode).HasColumnName("SUPPLY_IN_FULL_CODE").HasMaxLength(1);
+            table.Property(s => s.OrderLineHoldStatus).HasColumnName("ORDER_LINE_HOLD_STATUS").HasMaxLength(200);
+            table.Property(s => s.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
+            table.Property(s => s.MaximumQuantityToAllocate).HasColumnName("MAX_QTY_TO_ALLOCATE");
+            table.Property(s => s.AllocationMessage).HasColumnName("ALLOCATION_MESSAGE").HasMaxLength(2000);
+            table.Property(s => s.AllocationSuccessful).HasColumnName("ALLOCATION_SUCCESSFUL").HasMaxLength(1);
         }
 
         private void BuildParcels(ModelBuilder builder)

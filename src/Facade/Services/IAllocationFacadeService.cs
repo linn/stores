@@ -6,6 +6,8 @@
 
     public interface IAllocationFacadeService
     {
-        SuccessResult<AllocationStart> StartAllocation(AllocationOptionsResource allocationOptionsResource);
+        IResult<AllocationResult> StartAllocation(AllocationOptionsResource allocationOptionsResource);
+
+        IResult<AllocationResult> FinishAllocation(int jobId);
     }
 }

@@ -63,6 +63,8 @@
             builder.RegisterType<AuditLocationService>().As<IAuditLocationService>();
             builder.RegisterType<StoragePlaceService>().As<IStoragePlaceService>();
             builder.RegisterType<SosAllocHeadFacadeService>().As<ISosAllocHeadFacadeService>();
+            builder.RegisterType<SosAllocDetailFacadeService>()
+                .As<IFacadeFilterService<SosAllocDetail, int, SosAllocDetailResource, SosAllocDetailResource, JobIdRequestResource>>();
             builder.RegisterType<MechPartSourceFacadeService>()
                 .As<IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>>();
             builder.RegisterType<CarriersService>().As<ICarriersService>();
