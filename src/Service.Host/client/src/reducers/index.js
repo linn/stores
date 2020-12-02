@@ -27,6 +27,12 @@ import * as processTypes from '../processTypes';
 import stockPools from './stockPools';
 import despatchLocations from './despatchLocations';
 import countries from './countries';
+import storagePlaceAuditReport from './storagePlaceAuditReport';
+import storagePlace from './storagePlace';
+import storagePlaces from './storagePlaces';
+import auditLocation from './auditLocation';
+import auditLocations from './auditLocations';
+import createAuditReqs from './createAuditReqs';
 import sosAllocHeads from './sosAllocHeads';
 import sosAllocDetails from './sosAllocDetails';
 import mechPartSource from './parts/mechPartSource';
@@ -38,9 +44,12 @@ const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes
 
 const rootReducer = combineReducers({
     accountingCompanies,
-    assemblyTechnologies,
     allocation,
+    assemblyTechnologies,
+    auditLocation,
+    auditLocations,
     countries,
+    createAuditReqs,
     departments,
     decrementRules,
     despatchLocations,
@@ -61,6 +70,9 @@ const rootReducer = combineReducers({
     sosAllocDetails,
     sosAllocHeads,
     stockPools,
+    storagePlace,
+    storagePlaces,
+    storagePlaceAuditReport,
     suppliers,
     unitsOfMeasure,
     wwdReport,

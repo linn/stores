@@ -1,4 +1,8 @@
-import { makeActionTypes, makeReportActionTypes } from '@linn-it/linn-form-components-library';
+import {
+    makeActionTypes,
+    makeReportActionTypes,
+    makeProcessActionTypes
+} from '@linn-it/linn-form-components-library';
 import * as itemTypes from '../itemTypes';
 import * as reportTypes from '../reportTypes';
 import * as processTypes from '../processTypes';
@@ -47,6 +51,22 @@ export const stockPoolsActionTypes = makeActionTypes(itemTypes.stockPools.action
 export const despatchLocationsActionTypes = makeActionTypes(itemTypes.despatchLocations.actionType);
 
 export const countriesActionTypes = makeActionTypes(itemTypes.countries.actionType);
+
+export const storagePlaceActionTypes = makeActionTypes(itemTypes.storagePlace.actionType);
+
+export const storagePlacesActionTypes = makeActionTypes(itemTypes.storagePlaces.actionType);
+
+export const auditLocationActionTypes = makeActionTypes(itemTypes.auditLocation.actionType);
+
+export const auditLocationsActionTypes = makeActionTypes(itemTypes.auditLocations.actionType);
+
+export const storagePlaceAuditReportActionTypes = makeReportActionTypes(
+    reportTypes.storagePlaceAuditReport.actionType
+);
+
+export const createAuditReqsActionTypes = makeProcessActionTypes(
+    processTypes.createAuditReqs.actionType
+);
 
 export const sosAllocHeadsActionTypes = makeActionTypes(itemTypes.sosAllocHeads.actionType);
 

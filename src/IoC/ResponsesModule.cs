@@ -9,6 +9,7 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade;
     using Linn.Stores.Facade.ResourceBuilders;
@@ -86,6 +87,10 @@
                 .As<IResourceBuilder<Parcel>>();
             builder.RegisterType<ParcelsResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<Parcel>>>();
+                builder.RegisterType<AuditLocationResourceBuilder>().As<IResourceBuilder<AuditLocation>>();
+            builder.RegisterType<AuditLocationsResourceBuilder>().As<IResourceBuilder<IEnumerable<AuditLocation>>>();
+            builder.RegisterType<StoragePlaceResourceBuilder>().As<IResourceBuilder<StoragePlace>>();
+            builder.RegisterType<StoragePlacesResourceBuilder>().As<IResourceBuilder<IEnumerable<StoragePlace>>>();
             builder.RegisterType<ManufacturerResourceBuilder>().As<IResourceBuilder<Manufacturer>>();
             builder.RegisterType<ManufacturersResourceBuilder>().As<IResourceBuilder<IEnumerable<Manufacturer>>>();
             builder.RegisterType<MechPartManufacturerAltResourceBuilder>()
@@ -96,6 +101,7 @@
                 .As<IResourceBuilder<Employee>>();
             builder.RegisterType<EmployeesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<Employee>>>();
+            builder.RegisterType<ErrorResourceBuilder>().As<IResourceBuilder<Error>>();
         }
     }
 }
