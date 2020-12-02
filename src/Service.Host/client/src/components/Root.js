@@ -36,6 +36,11 @@ const Root = ({ store }) => (
                                 <CssBaseline />
 
                                 <Route exact path="/" render={() => <Redirect to="/inventory" />} />
+                                <Route
+                                    exact
+                                    path="/inventory/reports"
+                                    render={() => <Redirect to="/inventory" />}
+                                />
 
                                 <Route
                                     path="/"
