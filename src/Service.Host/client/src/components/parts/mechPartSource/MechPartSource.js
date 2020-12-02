@@ -14,6 +14,9 @@ import {
 import Page from '../../../containers/Page';
 import DataSheetsTab from './tabs/DataSheetsTab';
 import ProposalTab from '../../../containers/parts/mechPartSource/tabs/ProposalTab';
+import QualityRequirementsTab from './tabs/QualityRequirementsTab';
+import Manufacturerstab from '../../../containers/parts/mechPartSource/tabs/ManufacturersTab';
+import SuppliersTab from '../../../containers/parts/mechPartSource/tabs/SuppliersTab';
 
 function MechPartSource({
     editStatus,
@@ -42,12 +45,15 @@ function MechPartSource({
 
     const tabDictionary = {
         proposal: 0,
-        dataSheets: 1
+        dataSheets: 1,
+        qualityRequirements: 2,
+        suppliers: 3,
+        manufacturers: 4
     };
 
     const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
 
-    const handleTabChange = (event, value) => {
+    const handleTabChange = (_, value) => {
         setTab(value);
     };
 
@@ -103,6 +109,112 @@ function MechPartSource({
         });
     };
 
+    const deleteManufacturersRow = row => {
+        setEditStatus('edit');
+        setMechPartSource(m => ({
+            ...m,
+            mechPartManufacturerAlts: m.mechPartManufacturerAlts.filter(
+                a => a.sequence === row.sequence
+            )
+        }));
+    };
+
+    const deleteSuppliersRow = row => {
+        setEditStatus('edit');
+        setMechPartSource(m => ({
+            ...m,
+            mechPartAlts: m.mechPartAlts.filter(a => a.sequence === row.sequence)
+        }));
+    };
+
+    const saveManufacturersRow = row => {
+        setEditStatus('edit');
+        // we are adding a new row
+        if (!row.sequence) {
+            setMechPartSource(m => ({
+                ...m,
+                mechPartManufacturerAlts: [
+                    ...m.mechPartManufacturerAlts,
+                    {
+                        ...row,
+                        sequence:
+                            m.mechPartManufacturerAlts?.length > 0
+                                ? m.mechPartManufacturerAlts.reduce((prev, current) =>
+                                      prev.sequence > current.sequence ? prev : current
+                                  ).sequence + 1
+                                : 1
+                    }
+                ]
+            }));
+        }
+        // or we are updating an existing row
+        setMechPartSource(m => ({
+            ...m,
+            mechPartManufacturerAlts: m.mechPartManufacturerAlts.map(x =>
+                x.sequence === row.sequence ? row : x
+            )
+        }));
+    };
+
+    const saveSuppliersRow = row => {
+        console.log(row);
+        setEditStatus('edit');
+        // we are adding a new row
+        if (!row.sequence) {
+            setMechPartSource(m => ({
+                ...m,
+                mechPartAlts: [
+                    ...m.mechPartAlts,
+                    {
+                        ...row,
+                        sequence:
+                            m.mechPartAlts?.length > 0
+                                ? m.mechPartAlts.reduce((prev, current) =>
+                                      prev.sequence > current.sequence ? prev : current
+                                  ).sequence + 1
+                                : 1
+                    }
+                ]
+            }));
+        }
+        // or we are updating an existing row
+        setMechPartSource(m => ({
+            ...m,
+            mechPartAlts: m.mechPartAlts.map(x => (x.sequence === row.sequence ? row : x))
+        }));
+    };
+
+    const handleApprovedByChange = (sequence, newValue) => {
+        setMechPartSource(m => ({
+            ...m,
+            mechPartManufacturerAlts: m.mechPartManufacturerAlts.map(x =>
+                x.sequence === sequence
+                    ? { ...x, approvedBy: newValue.name, approvedByName: newValue.description }
+                    : x
+            )
+        }));
+    };
+
+    const handleSupplierChange = (sequence, newValue) => {
+        setMechPartSource(m => ({
+            ...m,
+            mechPartAlts: m.mechPartAlts.map(x =>
+                x.sequence === sequence
+                    ? { ...x, supplierId: newValue.name, supplierName: newValue.description }
+                    : x
+            )
+        }));
+    };
+
+    const handleManufacturerChange = (sequence, newValue) => {
+        setMechPartSource(m => ({
+            ...m,
+            mechPartManufacturerAlts: m.mechPartManufacturerAlts.map(x =>
+                x.sequence === sequence ? { ...x, manufacturerCode: newValue.name } : x
+            )
+        }));
+    };
+
     return (
         <Page>
             <Grid container spacing={3}>
@@ -154,7 +266,7 @@ function MechPartSource({
                                     maxLength={200}
                                     required
                                     onChange={handleFieldChange} // todo - how to handle change?
-                                    propertyName="partDescription"
+                                    propertyName="part.description"
                                 />
                             </Grid>
                             <Tabs
@@ -166,6 +278,9 @@ function MechPartSource({
                             >
                                 <Tab label="Proposal" />
                                 <Tab label="DataSheets" />
+                                <Tab label="Quality Requirements" />
+                                <Tab label="Suppliers" />
+                                <Tab label="Manufacturers" />
                             </Tabs>
                             {tab === 0 && (
                                 <ProposalTab
@@ -198,9 +313,61 @@ function MechPartSource({
                                     handleDataSheetsChange={handleDatasheetsChange}
                                 />
                             )}
-                            {tab === 2 && <></>}
-                            {tab === 3 && <></>}
-                            {tab === 4 && <></>}
+                            {tab === 2 && (
+                                <QualityRequirementsTab
+                                    handleFieldChange={handleFieldChange}
+                                    drawingsPackage={mechPartSource.drawingsPackage}
+                                    drawingsPackageAvailable={
+                                        mechPartSource.drawingsPackageAvailable
+                                    }
+                                    drawingsPackageDate={mechPartSource.drawingsPackageDate}
+                                    drawingfile={mechPartSource.drawingFile}
+                                    checklistCreated={mechPartSource.checklistCreated}
+                                    checklistAvailable={mechPartSource.checklistAvailable}
+                                    checklistDate={mechPartSource.checklistDate}
+                                    packingRequired={mechPartSource.packingRequired}
+                                    packingAvailable={mechPartSource.packingAvailable}
+                                    packingDate={mechPartSource.packingDate}
+                                    productKnowledge={mechPartSource.productKnowledge}
+                                    productKnowledgeAvailable={
+                                        mechPartSource.productKnowledgeAvailable
+                                    }
+                                    productKnowledgeDate={mechPartSource.productKnowledgeDate}
+                                    testEquipment={mechPartSource.testEquipment}
+                                    testEquipmentAvailable={mechPartSource.testEquipmentAvailable}
+                                    testEquipmentDate={mechPartSource.testEquipmentDate}
+                                    approvedReferenceStandards={
+                                        mechPartSource.approvedReferenceStandards
+                                    }
+                                    approvedReferencesAvailable={
+                                        mechPartSource.approvedReferencesAvailable
+                                    }
+                                    approvedReferencesDate={mechPartSource.approvedReferencesDate}
+                                    processEvaluation={mechPartSource.processEvaluation}
+                                    processEvaluationAvailable={
+                                        mechPartSource.processEvaluationAvailable
+                                    }
+                                    processEvaluationDate={mechPartSource.processEvaluationDate}
+                                />
+                            )}
+                            {tab === 3 && (
+                                <SuppliersTab
+                                    handleSupplierChange={handleSupplierChange}
+                                    suppliers={mechPartSource.mechPartAlts}
+                                    saveRow={saveSuppliersRow}
+                                    deleteRow={deleteSuppliersRow}
+                                />
+                            )}
+                            {tab === 4 && (
+                                <Manufacturerstab
+                                    handleApprovedByChange={handleApprovedByChange}
+                                    handleManufacturerChange={handleManufacturerChange}
+                                    manufacturers={mechPartSource.mechPartManufacturerAlts}
+                                    saveRow={saveManufacturersRow}
+                                    deleteRow={deleteManufacturersRow}
+                                />
+                            )}
+                            {tab === 5 && <></>}
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons
                                     saveDisabled={viewing() || mechPartSourceInvalid()}

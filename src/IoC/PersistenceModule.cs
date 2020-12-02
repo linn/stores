@@ -50,6 +50,7 @@
             builder.RegisterType<MechPartSourceRepository>().As<IRepository<MechPartSource, int>>();
             builder.RegisterType<ParcelRepository>().As<IRepository<Parcel, int>>();
             builder.RegisterType<CarrierRepository>().As<IRepository<Carrier, string>>();
+            builder.RegisterType<ManufacturerRepository>().As<IRepository<Manufacturer, string>>();
         }
     }
 }

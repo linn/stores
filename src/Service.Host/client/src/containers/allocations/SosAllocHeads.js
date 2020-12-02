@@ -10,7 +10,7 @@ const mapStateToProps = (state, { match }) => ({
     loading: sosAllocHeadsSelectors.getSearchLoading(state)
 });
 
-const initialise = ( { jobId } ) => dispatch => {
+const initialise = ({ jobId }) => dispatch => {
     dispatch(sosAllocHeadsActions.search(jobId));
 };
 
