@@ -111,3 +111,11 @@ export const mechPartSource = new ItemType(
     'MECH_PART_SOURCE',
     '/inventory/parts/sources'
 );
+
+export const manufacturers = new ItemType(
+    'manufacturers',
+    'MANUFACTURERS',
+    '/inventory/manufacturers'
+);
+
+export const employees = new ItemType('employees', 'EMPLOYEES', '/inventory/employees');

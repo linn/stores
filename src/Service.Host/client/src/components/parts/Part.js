@@ -54,6 +54,7 @@ function Part({
                   safetyCriticalPart: false,
                   paretoCode: 'U',
                   createdBy: userNumber,
+                  createdByName: userName,
                   dateCreated: new Date(),
                   railMethod: 'POLICY',
                   preferredSupplier: 4415,

@@ -66,6 +66,9 @@
             builder.RegisterType<CarriersService>().As<ICarriersService>();
             builder.RegisterType<ParcelFacadeService>()
                 .As<IFacadeService<Parcel, int, ParcelResource, ParcelResource>>();
+            builder.RegisterType<ManufacturerService>()
+                .As<IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>>();
+            builder.RegisterType<EmployeesService>().As<IEmployeeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

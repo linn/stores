@@ -16,5 +16,7 @@
         public string CountryCode { get; set; }
 
         public DateTime? DateClosed { get; set; }
+
+        public IEnumerable<MechPartAlt> MechPartAlts { get; set; }
     }
 }

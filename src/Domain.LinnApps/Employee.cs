@@ -21,5 +21,7 @@
         public IEnumerable<Part> PartsPhasedOut { get; set; }
 
         public IEnumerable<MechPartSource> SourcesProposed { get; set; }
+
+        public IEnumerable<MechPartManufacturerAlt> MechPartManufacturerAltsApproved { get; set; }
     }
 }
