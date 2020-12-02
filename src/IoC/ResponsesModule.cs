@@ -9,6 +9,7 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade;
     using Linn.Stores.Facade.ResourceBuilders;
@@ -98,6 +99,7 @@
                 .As<IResourceBuilder<Employee>>();
             builder.RegisterType<EmployeesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<Employee>>>();
+            builder.RegisterType<ErrorResourceBuilder>().As<IResourceBuilder<Error>>();
         }
     }
 }
