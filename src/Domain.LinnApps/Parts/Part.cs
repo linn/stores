@@ -142,5 +142,7 @@
         public IEnumerable<PartDataSheet> DataSheets { get; set; }
 
         public IEnumerable<MechPartSource> ReplacementParts { get; set; }
+
+        public IEnumerable<WwdWork> WwdWorks { get; set; }
     }
 }
