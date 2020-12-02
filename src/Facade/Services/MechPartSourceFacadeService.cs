@@ -50,92 +50,112 @@
                     PdfFilePath = s.PdfFilePath
                 });
             }
-            
+
             return new MechPartSource
-            {
-                Id = this.databaseService.GetIdSequence("MECH_SOURCE_SEQ"),
-                PartNumber = resource.PartNumber,
-                AssemblyType = resource.AssemblyType,
-                DateEntered = DateTime.Parse(resource.DateEntered),
-                DateSamplesRequired = resource.DateSamplesRequired == null
-                    ? (DateTime?)null
-                    : DateTime.Parse(resource.DateSamplesRequired),
-                EmcCritical = resource.EmcCritical,
-                EstimatedVolume = resource.EstimatedVolume,
-                LinnPartNumber = resource.LinnPartNumber,
-                MechanicalOrElectrical = resource.MechanicalOrElectrical,
-                Notes = resource.Notes,
-                ProposedBy = resource.ProposedBy == null
-                    ? null
-                    : this.employeeRepository.FindById((int)resource.ProposedBy),
-                PerformanceCritical = resource.PerformanceCritical,
-                SafetyCritical = resource.SafetyCritical,
-                SingleSource = resource.SingleSource,
-                PartType = resource.PartType,
-                RohsReplace = resource.RohsReplace,
-                SampleQuantity = resource.SampleQuantity,
-                SamplesRequired = resource.SamplesRequired,
-                PartToBeReplaced = resource.LinnPartNumber == null
-                    ? null
-                    : this.partRepository.FindBy(p => p.PartNumber == resource.LinnPartNumber),
-                ProductionDate = resource.DateSamplesRequired == null
-                    ? (DateTime?)null
-                    : DateTime.Parse(resource.ProductionDate),
-                SafetyDataDirectory = resource.SafetyDataDirectory,
-                Part = part,
-                MechPartManufacturerAlts = resource.MechPartManufacturerAlts
-                    .Select(a => new MechPartManufacturerAlt
-                                     {
-                                         Sequence = a.Sequence,
-                                         PartNumber = a.PartNumber,
-                                         DateApproved = a.DateApproved != null 
-                                                            ? DateTime.Parse(a.DateApproved) : (DateTime?)null,
-                                         ApprovedBy = a.ApprovedBy != null ? this.employeeRepository.FindById((int)a.ApprovedBy) : null,
-                                         ManufacturerCode = a.ManufacturerCode,
-                                         Preference = a.Preference,
-                                         ReelSuffix = a.ReelSuffix,
-                                         RohsCompliant = a.RohsCompliant
-                                     }).ToList(),
-                MechPartAlts = resource.MechPartAlts.Select(a => new MechPartAlt
-                                                                     {
-                                                                         PartNumber = a.PartNumber,
-                                                                         Sequence = a.Sequence,
-                                                                         Supplier = new Supplier
-                                                                             {
-                                                                                 Id = a.SupplierId,
-                                                                                 Name = a.SupplierName
-                                                                             }
-                                                                     }).ToList(),
-                ApprovedReferenceStandards = resource.ApprovedReferenceStandards,
-                ApprovedReferencesAvailable = resource.ApprovedReferencesAvailable,
-                ApprovedReferencesDate = resource.ApprovedReferencesDate != null
-                                         ? DateTime.Parse(resource.ApprovedReferencesDate) : (DateTime?)null,
-                ChecklistAvailable = resource.ChecklistAvailable,
-                ChecklistCreated = resource.ChecklistCreated,
-                ChecklistDate = resource.ChecklistDate != null
-                                    ? DateTime.Parse(resource.ChecklistDate) : (DateTime?)null,
-                DrawingFile = resource.DrawingFile,
-                DrawingsPackage = resource.DrawingsPackage,
-                DrawingsPackageAvailable = resource.DrawingsPackageAvailable,
-                DrawingsPackageDate = resource.DrawingsPackageDate != null
-                                          ? DateTime.Parse(resource.DrawingsPackageDate) : (DateTime?)null,
-                PackingAvailable = resource.PackingAvailable,
-                PackingDate = resource.PackingDate != null
-                                  ? DateTime.Parse(resource.PackingDate) : (DateTime?)null,
-                PackingRequired = resource.PackingRequired,
-                ProcessEvaluation = resource.ProcessEvaluation,
-                ProcessEvaluationAvailable = resource.ProcessEvaluationAvailable,
-                ProcessEvaluationDate = resource.ProcessEvaluationDate != null
-                                            ? DateTime.Parse(resource.ProcessEvaluationDate) : (DateTime?)null,
-                ProductKnowledge = resource.ProductKnowledge,
-                ProductKnowledgeAvailable = resource.ProductKnowledgeAvailable,
-                ProductKnowledgeDate = resource.ProductKnowledgeDate != null
-                                           ? DateTime.Parse(resource.ProductKnowledgeDate) : (DateTime?)null,
-                TestEquipment = resource.TestEquipment,
-                TestEquipmentAvailable = resource.TestEquipmentAvailable,
-                TestEquipmentDate = resource.TestEquipmentDate != null
-                                        ? DateTime.Parse(resource.TestEquipmentDate) : (DateTime?)null,
-            };
+                       {
+                           Id = this.databaseService.GetIdSequence("MECH_SOURCE_SEQ"),
+                           PartNumber = resource.PartNumber,
+                           AssemblyType = resource.AssemblyType,
+                           DateEntered =
+                               resource.DateEntered == null ? (DateTime?)null : DateTime.Parse(resource.DateEntered),
+                           DateSamplesRequired =
+                               resource.DateSamplesRequired == null
+                                   ? (DateTime?)null
+                                   : DateTime.Parse(resource.DateSamplesRequired),
+                           EmcCritical = resource.EmcCritical,
+                           EstimatedVolume = resource.EstimatedVolume,
+                           LinnPartNumber = resource.LinnPartNumber,
+                           MechanicalOrElectrical = resource.MechanicalOrElectrical,
+                           Notes = resource.Notes,
+                           ProposedBy =
+                               resource.ProposedBy == null
+                                   ? null
+                                   : this.employeeRepository.FindById((int)resource.ProposedBy),
+                           PerformanceCritical = resource.PerformanceCritical,
+                           SafetyCritical = resource.SafetyCritical,
+                           SingleSource = resource.SingleSource,
+                           PartType = resource.PartType,
+                           RohsReplace = resource.RohsReplace,
+                           SampleQuantity = resource.SampleQuantity,
+                           SamplesRequired = resource.SamplesRequired,
+                           PartToBeReplaced =
+                               resource.LinnPartNumber == null
+                                   ? null
+                                   : this.partRepository.FindBy(p => p.PartNumber == resource.LinnPartNumber),
+                           ProductionDate =
+                               resource.DateSamplesRequired == null
+                                   ? (DateTime?)null
+                                   : DateTime.Parse(resource.ProductionDate),
+                           SafetyDataDirectory = resource.SafetyDataDirectory,
+                           Part = part,
+                           MechPartManufacturerAlts =
+                               resource.MechPartManufacturerAlts.Select(
+                                   a => new MechPartManufacturerAlt
+                                            {
+                                                Sequence = a.Sequence,
+                                                PartNumber = a.PartNumber,
+                                                DateApproved =
+                                                    a.DateApproved != null
+                                                        ? DateTime.Parse(a.DateApproved)
+                                                        : (DateTime?)null,
+                                                ApprovedBy =
+                                                    a.ApprovedBy != null
+                                                        ? this.employeeRepository.FindById((int)a.ApprovedBy)
+                                                        : null,
+                                                ManufacturerCode = a.ManufacturerCode,
+                                                Preference = a.Preference,
+                                                ReelSuffix = a.ReelSuffix,
+                                                RohsCompliant = a.RohsCompliant
+                                            }).ToList(),
+                           MechPartAlts =
+                               resource.MechPartAlts.Select(
+                                   a => new MechPartAlt
+                                            {
+                                                PartNumber = a.PartNumber,
+                                                Sequence = a.Sequence,
+                                                Supplier = new Supplier { Id = a.SupplierId, Name = a.SupplierName }
+                                            }).ToList(),
+                           ApprovedReferenceStandards = resource.ApprovedReferenceStandards,
+                           ApprovedReferencesAvailable = resource.ApprovedReferencesAvailable,
+                           ApprovedReferencesDate =
+                               resource.ApprovedReferencesDate != null
+                                   ? DateTime.Parse(resource.ApprovedReferencesDate)
+                                   : (DateTime?)null,
+                           ChecklistAvailable = resource.ChecklistAvailable,
+                           ChecklistCreated = resource.ChecklistCreated,
+                           ChecklistDate =
+                               resource.ChecklistDate != null
+                                   ? DateTime.Parse(resource.ChecklistDate)
+                                   : (DateTime?)null,
+                           DrawingFile = resource.DrawingFile,
+                           DrawingsPackage = resource.DrawingsPackage,
+                           DrawingsPackageAvailable = resource.DrawingsPackageAvailable,
+                           DrawingsPackageDate =
+                               resource.DrawingsPackageDate != null
+                                   ? DateTime.Parse(resource.DrawingsPackageDate)
+                                   : (DateTime?)null,
+                           PackingAvailable = resource.PackingAvailable,
+                           PackingDate =
+                               resource.PackingDate != null ? DateTime.Parse(resource.PackingDate) : (DateTime?)null,
+                           PackingRequired = resource.PackingRequired,
+                           ProcessEvaluation = resource.ProcessEvaluation,
+                           ProcessEvaluationAvailable = resource.ProcessEvaluationAvailable,
+                           ProcessEvaluationDate =
+                               resource.ProcessEvaluationDate != null
+                                   ? DateTime.Parse(resource.ProcessEvaluationDate)
+                                   : (DateTime?)null,
+                           ProductKnowledge = resource.ProductKnowledge,
+                           ProductKnowledgeAvailable = resource.ProductKnowledgeAvailable,
+                           ProductKnowledgeDate =
+                               resource.ProductKnowledgeDate != null
+                                   ? DateTime.Parse(resource.ProductKnowledgeDate)
+                                   : (DateTime?)null,
+                           TestEquipment = resource.TestEquipment,
+                           TestEquipmentAvailable = resource.TestEquipmentAvailable,
+                           TestEquipmentDate = resource.TestEquipmentDate != null
+                                                   ? DateTime.Parse(resource.TestEquipmentDate)
+                                                   : (DateTime?)null,
+                       };
         }
 
         protected override void UpdateFromResource(MechPartSource entity, MechPartSourceResource resource)

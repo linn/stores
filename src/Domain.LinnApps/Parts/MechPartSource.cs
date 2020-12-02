@@ -10,7 +10,7 @@
 
         public Employee ProposedBy { get; set; }
 
-        public DateTime DateEntered { get; set; }
+        public DateTime? DateEntered { get; set; }
 
         public string PartNumber { get; set; }
 
