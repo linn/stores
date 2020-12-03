@@ -38,11 +38,8 @@ import sosAllocDetails from './sosAllocDetails';
 import mechPartSource from './parts/mechPartSource';
 import manufacturers from './manufacturers';
 import employees from './employees';
-<<<<<<< HEAD
 import partDataSheetValues from './partDataSheetValues';
-=======
 import finishAllocation from './finishAllocation';
->>>>>>> master
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -58,10 +55,7 @@ const rootReducer = combineReducers({
     decrementRules,
     despatchLocations,
     employees,
-<<<<<<< HEAD
-=======
     finishAllocation,
->>>>>>> master
     manufacturers,
     mechPartSource,
     nominal,

@@ -142,13 +142,6 @@ export const manufacturers = new ItemType(
     '/inventory/manufacturers'
 );
 
-<<<<<<< HEAD
-export const manufacturers = new ItemType(
-    'manufacturers',
-    'MANUFACTURERS',
-    '/inventory/manufacturers'
-);
-
 export const employees = new ItemType('employees', 'EMPLOYEES', '/inventory/employees');
 
 export const partDataSheetValues = new ItemType(
@@ -156,6 +149,3 @@ export const partDataSheetValues = new ItemType(
     'PART_DATA_SHEET_VALUES',
     '/inventory/parts/data-sheet-values'
 );
-=======
-export const employees = new ItemType('employees', 'EMPLOYEES', '/inventory/employees');
->>>>>>> master
