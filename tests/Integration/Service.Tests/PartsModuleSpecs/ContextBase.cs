@@ -76,7 +76,12 @@
             get; private set;
         }
 
-        protected IRepository<Manufacturer, string> ManufacturerRepository;
+        protected IRepository<Manufacturer, string> ManufacturerRepository
+        {
+            get; private set;
+        }
+
+        protected IPartDataSheetValuesService DataSheetValuesService { get; private set; }
 
         [SetUp]
         public void EstablishContext()
@@ -104,6 +109,7 @@
             this.ManufacturerService = Substitute
                 .For<IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>>();
             this.ManufacturerRepository = Substitute.For<IRepository<Manufacturer, string>>();
+            this.DataSheetValuesService = Substitute.For<IPartDataSheetValuesService>();
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
@@ -123,6 +129,7 @@
                         with.Dependency(this.MechPartSourceService);
                         with.Dependency(this.MechPartSourceRepository);
                         with.Dependency(this.ManufacturerService);
+                        with.Dependency(this.DataSheetValuesService);
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());
                         with.Dependency<IResourceBuilder<PartTemplate>>(new PartTemplateResourceBuilder());
