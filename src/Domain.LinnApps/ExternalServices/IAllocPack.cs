@@ -4,10 +4,6 @@
 
     public interface IAllocPack
     {
-        string GetNotes();
-
-        string GetSosNotes();
-
         int StartAllocation(
             string stockPoolCode,
             string despatchLocation,
@@ -23,5 +19,7 @@
             bool excludeNorthAmerica,
             out string notes,
             out string sosNotes);
+
+        void FinishAllocation(int jobId, out string notes, out string success);
     }
 }

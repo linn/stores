@@ -12,7 +12,6 @@
 
     public class WhenUpdating : ContextBase
     {
-
         [SetUp]
         public void SetUp()
         {

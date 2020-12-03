@@ -19,6 +19,8 @@ import StartAllocation from '../containers/allocations/StartAllocation';
 import SosAllocHeads from '../containers/allocations/SosAllocHeads';
 import WwdReportOptions from '../containers/reports/WwdReportOptions';
 import WwdReport from '../containers/reports/WwdReport';
+import StoragePlaceAuditReportOptions from '../containers/reports/StoragePlaceAuditReportOptions';
+import StoragePlaceAuditReport from '../containers/reports/StoragePlaceAuditReport';
 import NotFoundPage from './NotFoundPage';
 import MechPartSource from '../containers/parts/mechPartSource/MechPartSource';
 
@@ -34,6 +36,11 @@ const Root = ({ store }) => (
                                 <CssBaseline />
 
                                 <Route exact path="/" render={() => <Redirect to="/inventory" />} />
+                                <Route
+                                    exact
+                                    path="/inventory/reports"
+                                    render={() => <Redirect to="/inventory" />}
+                                />
 
                                 <Route
                                     path="/"
@@ -79,6 +86,12 @@ const Root = ({ store }) => (
                                         path="/logistics/sos-alloc-heads/:jobId"
                                         component={SosAllocHeads}
                                     />
+
+                                    <Route
+                                        exact
+                                        path="/logistics/sos-alloc-heads/:jobId"
+                                        component={SosAllocHeads}
+                                    />
                                     <Route
                                         exact
                                         path="/inventory/reports/what-will-decrement/report"
@@ -89,6 +102,18 @@ const Root = ({ store }) => (
                                         path="/inventory/reports/what-will-decrement"
                                         component={WwdReportOptions}
                                     />
+
+                                    <Route
+                                        exact
+                                        path="/inventory/reports/storage-place-audit/report"
+                                        component={StoragePlaceAuditReport}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/reports/storage-place-audit"
+                                        component={StoragePlaceAuditReportOptions}
+                                    />
+
                                     <Route component={NotFoundPage} />
                                 </Switch>
                             </div>

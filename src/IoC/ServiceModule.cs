@@ -28,6 +28,7 @@
             builder.RegisterType<AllocationService>().As<IAllocationService>();
             builder.RegisterType<PartService>().As<IPartService>();
             builder.RegisterType<WhatWillDecrementReportService>().As<IWhatWillDecrementReportService>();
+            builder.RegisterType<StoragePlaceAuditReportService>().As<IStoragePlaceAuditReportService>();
             builder.RegisterType<MechPartSourceService>().As<IMechPartSourceService>();
 
             // facade services
@@ -58,7 +59,12 @@
             builder.RegisterType<PartTemplateService>()
                 .As<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
             builder.RegisterType<PartLiveService>().As<IPartLiveService>();
+            builder.RegisterType<StoragePlaceAuditReportFacadeService>().As<IStoragePlaceAuditReportFacadeService>();
+            builder.RegisterType<AuditLocationService>().As<IAuditLocationService>();
+            builder.RegisterType<StoragePlaceService>().As<IStoragePlaceService>();
             builder.RegisterType<SosAllocHeadFacadeService>().As<ISosAllocHeadFacadeService>();
+            builder.RegisterType<SosAllocDetailFacadeService>()
+                .As<IFacadeFilterService<SosAllocDetail, int, SosAllocDetailResource, SosAllocDetailResource, JobIdRequestResource>>();
             builder.RegisterType<MechPartSourceFacadeService>()
                 .As<IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>>();
             builder.RegisterType<CarriersService>().As<ICarriersService>();
@@ -74,6 +80,7 @@
             builder.RegisterType<PartPack>().As<IPartPack>();
             builder.RegisterType<DatabaseService>().As<IDatabaseService>();
             builder.RegisterType<WwdPack>().As<IWwdPack>();
+            builder.RegisterType<StoragePlaceAuditPack>().As<IStoragePlaceAuditPack>();
             builder.RegisterType<AllocPack>().As<IAllocPack>();
 
             // rest client proxies

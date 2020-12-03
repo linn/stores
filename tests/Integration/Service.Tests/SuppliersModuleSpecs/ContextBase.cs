@@ -7,7 +7,6 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
-    using Linn.Stores.Resources;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
 
@@ -22,7 +21,6 @@
         protected ISuppliersService SuppliersService { get; private set; }
 
         protected IQueryRepository<Supplier> SupplierRepository { get; private set; }
-
 
         [SetUp]
         public void EstablishContext()

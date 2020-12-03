@@ -6,7 +6,6 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Allocation;
-    using Linn.Stores.Resources;
     using Linn.Stores.Resources.Allocation;
 
     public class SosAllocHeadsResourceBuilder : IResourceBuilder<IEnumerable<SosAllocHead>>

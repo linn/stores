@@ -12,7 +12,6 @@
 
     public class WhenAdding: ContextBase
     {
-
         [SetUp]
         public void SetUp()
         {

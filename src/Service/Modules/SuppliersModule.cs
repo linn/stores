@@ -1,6 +1,5 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
-    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Service.Models;

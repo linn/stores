@@ -1,12 +1,12 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Allocation.Models
 {
-    public class AllocationStart
+    public class AllocationResult
     {
-        public AllocationStart()
+        public AllocationResult()
         {
         }
 
-        public AllocationStart(int id)
+        public AllocationResult(int id)
         {
             this.Id = id;
         }

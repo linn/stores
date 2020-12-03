@@ -9,7 +9,7 @@
         {
             var updated = to.ToList();
             var old = from.ToList();
-            
+
             foreach (var partDataSheet in updated.Where(n => old.All(o => o.Sequence != n.Sequence)))
             {
                 partDataSheet.Sequence = updated.Max(s => s.Sequence) + 1;

@@ -17,7 +17,10 @@ import ProposalTab from '../../../containers/parts/mechPartSource/tabs/ProposalT
 import QualityRequirementsTab from './tabs/QualityRequirementsTab';
 import Manufacturerstab from '../../../containers/parts/mechPartSource/tabs/ManufacturersTab';
 import SuppliersTab from '../../../containers/parts/mechPartSource/tabs/SuppliersTab';
+<<<<<<< HEAD
 import ParamDataTab from '../../../containers/parts/mechPartSource/tabs/ParamDataTab';
+=======
+>>>>>>> master
 
 function MechPartSource({
     editStatus,
@@ -49,8 +52,12 @@ function MechPartSource({
         dataSheets: 1,
         qualityRequirements: 2,
         suppliers: 3,
+<<<<<<< HEAD
         manufacturers: 4,
         paramData: 5
+=======
+        manufacturers: 4
+>>>>>>> master
     };
 
     const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
@@ -169,6 +176,10 @@ function MechPartSource({
     };
 
     const saveSuppliersRow = row => {
+<<<<<<< HEAD
+=======
+        console.log(row);
+>>>>>>> master
         setEditStatus('edit');
         // we are adding a new row
         if (!row.sequence) {
@@ -276,8 +287,13 @@ function MechPartSource({
                                     label="Description"
                                     maxLength={200}
                                     required
+<<<<<<< HEAD
                                     onChange={handlePartFieldChange}
                                     propertyName="description"
+=======
+                                    onChange={handleFieldChange} // todo - how to handle change?
+                                    propertyName="part.description"
+>>>>>>> master
                                 />
                             </Grid>
                             <Tabs
@@ -292,7 +308,10 @@ function MechPartSource({
                                 <Tab label="Quality Requirements" />
                                 <Tab label="Suppliers" />
                                 <Tab label="Manufacturers" />
+<<<<<<< HEAD
                                 <Tab label="Param Data" />
+=======
+>>>>>>> master
                             </Tabs>
                             {tab === 0 && (
                                 <ProposalTab
@@ -379,6 +398,7 @@ function MechPartSource({
                                     deleteRow={deleteManufacturersRow}
                                 />
                             )}
+<<<<<<< HEAD
                             {tab === 5 && (
                                 <ParamDataTab
                                     partType={mechPartSource.partType}
@@ -417,6 +437,9 @@ function MechPartSource({
                                     footPrintRef={mechPartSource.footPrintRef}
                                 />
                             )}
+=======
+                            {tab === 5 && <></>}
+>>>>>>> master
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons
                                     saveDisabled={viewing() || mechPartSourceInvalid()}

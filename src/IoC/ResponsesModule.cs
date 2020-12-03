@@ -9,6 +9,7 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade;
     using Linn.Stores.Facade.ResourceBuilders;
@@ -18,7 +19,7 @@
         protected override void Load(ContainerBuilder builder)
         {
             // resource builders
-            builder.RegisterType<AllocationStartResourceBuilder>().As<IResourceBuilder<AllocationStart>>();
+            builder.RegisterType<AllocationResultResourceBuilder>().As<IResourceBuilder<AllocationResult>>();
             builder.RegisterType<PartResourceBuilder>().As<IResourceBuilder<Part>>();
             builder.RegisterType<PartsResourceBuilder>().As<IResourceBuilder<IEnumerable<Part>>>();
             builder.RegisterType<AccountingCompanyResourceBuilder>()
@@ -74,6 +75,8 @@
             builder.RegisterType<PartLiveTestResourceBuilder>().As<IResourceBuilder<PartLiveTest>>();
             builder.RegisterType<SosAllocHeadResourceBuilder>().As<IResourceBuilder<SosAllocHead>>();
             builder.RegisterType<SosAllocHeadsResourceBuilder>().As<IResourceBuilder<IEnumerable<SosAllocHead>>>();
+            builder.RegisterType<SosAllocDetailResourceBuilder>().As<IResourceBuilder<SosAllocDetail>>();
+            builder.RegisterType<SosAllocDetailsResourceBuilder>().As<IResourceBuilder<IEnumerable<SosAllocDetail>>>();
             builder.RegisterType<MechPartSourceResourceBuilder>().As<IResourceBuilder<MechPartSource>>();
             builder.RegisterType<PartDataSheetResourceBuilder>().As<IResourceBuilder<PartDataSheet>>();
             builder.RegisterType<CarrierResourceBuilder>()
@@ -84,6 +87,10 @@
                 .As<IResourceBuilder<Parcel>>();
             builder.RegisterType<ParcelsResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<Parcel>>>();
+            builder.RegisterType<AuditLocationResourceBuilder>().As<IResourceBuilder<AuditLocation>>();
+            builder.RegisterType<AuditLocationsResourceBuilder>().As<IResourceBuilder<IEnumerable<AuditLocation>>>();
+            builder.RegisterType<StoragePlaceResourceBuilder>().As<IResourceBuilder<StoragePlace>>();
+            builder.RegisterType<StoragePlacesResourceBuilder>().As<IResourceBuilder<IEnumerable<StoragePlace>>>();
             builder.RegisterType<ManufacturerResourceBuilder>().As<IResourceBuilder<Manufacturer>>();
             builder.RegisterType<ManufacturersResourceBuilder>().As<IResourceBuilder<IEnumerable<Manufacturer>>>();
             builder.RegisterType<MechPartManufacturerAltResourceBuilder>()
@@ -97,6 +104,7 @@
             builder.RegisterType<PartDataSheetValuesResourceBuilder>().As<IResourceBuilder<PartDataSheetValues>>();
             builder.RegisterType<PartDataSheetValuesListResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<PartDataSheetValues>>>();
+            builder.RegisterType<ErrorResourceBuilder>().As<IResourceBuilder<Error>>();
         }
     }
 }

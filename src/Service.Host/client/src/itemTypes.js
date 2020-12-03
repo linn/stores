@@ -90,18 +90,59 @@ export const partLiveTest = new ItemType(
     '/inventory/parts/can-be-made-live'
 );
 
-export const mechPartSource = new ItemType(
-    'mechPartSource',
-    'MECH_PART_SOURCE',
-    '/inventory/parts/sources'
-);
-
 export const sosAllocHeads = new ItemType(
     'sosAllocHeads',
     'SOS_ALLOC_HEADS',
     '/logistics/sos-alloc-heads'
 );
 
+export const sosAllocDetail = new ItemType(
+    'sosAllocDetail',
+    'SOS_ALLOC_DETAIL',
+    '/logistics/sos-alloc-details'
+);
+export const sosAllocDetails = new ItemType(
+    'sosAllocDetails',
+    'SOS_ALLOC_DETAILS',
+    '/logistics/sos-alloc-details'
+);
+export const storagePlace = new ItemType(
+    'storagePlace',
+    'STORAGE_PLACE',
+    'inventory/storage-places'
+);
+
+export const storagePlaces = new ItemType(
+    'storagePlaces',
+    'STORAGE_PLACES',
+    '/inventory/storage-places'
+);
+
+export const auditLocation = new ItemType(
+    'auditLocation',
+    'AUDIT_LOCATION',
+    '/inventory/audit-locations'
+);
+
+export const auditLocations = new ItemType(
+    'auditLocations',
+    'AUDIT_LOCATIONS',
+    '/inventory/audit-locations'
+);
+
+export const mechPartSource = new ItemType(
+    'mechPartSource',
+    'MECH_PART_SOURCE',
+    '/inventory/parts/sources'
+);
+
+export const manufacturers = new ItemType(
+    'manufacturers',
+    'MANUFACTURERS',
+    '/inventory/manufacturers'
+);
+
+<<<<<<< HEAD
 export const manufacturers = new ItemType(
     'manufacturers',
     'MANUFACTURERS',
@@ -115,3 +156,6 @@ export const partDataSheetValues = new ItemType(
     'PART_DATA_SHEET_VALUES',
     '/inventory/parts/data-sheet-values'
 );
+=======
+export const employees = new ItemType('employees', 'EMPLOYEES', '/inventory/employees');
+>>>>>>> master

@@ -46,12 +46,17 @@
             builder.RegisterType<QcControlRepository>().As<IRepository<QcControl, int>>();
             builder.RegisterType<PartTemplateRepository>().As<IRepository<PartTemplate, string>>();
             builder.RegisterType<SosAllocHeadRepository>().As<IQueryRepository<SosAllocHead>>();
+            builder.RegisterType<SosAllocDetailRepository>().As<IRepository<SosAllocDetail, int>>();
             builder.RegisterType<PartDataSheetRepository>().As<IRepository<PartDataSheet, PartDataSheetKey>>();
             builder.RegisterType<MechPartSourceRepository>().As<IRepository<MechPartSource, int>>();
             builder.RegisterType<ParcelRepository>().As<IRepository<Parcel, int>>();
             builder.RegisterType<CarrierRepository>().As<IRepository<Carrier, string>>();
-            builder.RegisterType<ManufacturerRepository>().As<IRepository<Manufacturer, string>>();
             builder.RegisterType<PartDataSheetValuesRepository>().As<IQueryRepository<PartDataSheetValues>>();
+            builder.RegisterType<StockLocatorRepository>().As<IQueryRepository<StockLocator>>();
+            builder.RegisterType<StoragePlaceRepository>().As<IQueryRepository<StoragePlace>>();
+            builder.RegisterType<StoresBugetRepository>().As<IQueryRepository<StoresBudget>>();
+            builder.RegisterType<AuditLocationRepository>().As<IQueryRepository<AuditLocation>>();
+            builder.RegisterType<ManufacturerRepository>().As<IRepository<Manufacturer, string>>();
         }
     }
 }

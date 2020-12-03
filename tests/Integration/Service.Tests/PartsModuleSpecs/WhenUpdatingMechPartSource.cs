@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Service.Tests.PartsModuleSpecs
 {
+    using System;
+
     using FluentAssertions;
 
     using Linn.Common.Facade;
@@ -13,8 +15,6 @@
     using NSubstitute;
 
     using NUnit.Framework;
-
-    using System;
 
     public class WhenUpdatingMechMechPartSourceSource : ContextBase
     {
@@ -35,9 +35,8 @@
                     StockControlled = true, 
                     CreatedBy = 1
                 },
-                
             };
-     
+
             var p = new MechPartSource
             {
                 Id = 1,

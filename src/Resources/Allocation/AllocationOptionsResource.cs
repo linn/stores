@@ -21,5 +21,7 @@
         public bool ExcludeOnHold { get; set; }
 
         public bool ExcludeOverCreditLimit { get; set; }
+
+        public bool ExcludeNorthAmerica { get; set; }
     }
 }

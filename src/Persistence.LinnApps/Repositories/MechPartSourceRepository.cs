@@ -11,7 +11,7 @@
     public class MechPartSourceRepository : IRepository<MechPartSource, int>
     {
         private readonly ServiceDbContext serviceDbContext;
-        
+
         public MechPartSourceRepository(ServiceDbContext serviceDbContext)
         {
             this.serviceDbContext = serviceDbContext;

@@ -4,9 +4,9 @@
     using Linn.Common.Nancy.Facade;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
 
-    public class AllocationStartResponseProcessor : JsonResponseProcessor<AllocationStart>
+    public class AllocationStartResponseProcessor : JsonResponseProcessor<AllocationResult>
     {
-        public AllocationStartResponseProcessor(IResourceBuilder<AllocationStart> resourceBuilder)
+        public AllocationStartResponseProcessor(IResourceBuilder<AllocationResult> resourceBuilder)
             : base(resourceBuilder, "allocation-details", 1)
         {
         }
