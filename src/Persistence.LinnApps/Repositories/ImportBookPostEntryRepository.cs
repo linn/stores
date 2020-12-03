@@ -1,0 +1,50 @@
+﻿namespace Linn.Stores.Persistence.LinnApps.Repositories
+{
+    using System;
+    using System.Linq;
+    using System.Linq.Expressions;
+
+    using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.ImportBooks;
+    using Linn.Stores.Domain.LinnApps.Parts;
+
+    public class ImportBookPostEntryRepository : IRepository<ImportBookPostEntry, ImportBookPostEntryKey>
+    {
+        private readonly ServiceDbContext serviceDbContext;
+
+        public ImportBookPostEntryRepository(ServiceDbContext serviceDbContext)
+        {
+            this.serviceDbContext = serviceDbContext;
+        }
+
+        public ImportBookPostEntry FindById(ImportBookPostEntryKey key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<ImportBookPostEntry> FindAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Add(ImportBookPostEntry entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(ImportBookPostEntry entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ImportBookPostEntry FindBy(Expression<Func<ImportBookPostEntry, bool>> expression)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<ImportBookPostEntry> FilterBy(Expression<Func<ImportBookPostEntry, bool>> expression)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
