@@ -329,6 +329,7 @@
             e.Property(s => s.Capacitance).HasColumnName("CAP_CAPACITANCE");
             e.Property(s => s.CapacitorVoltageRating).HasColumnName("CAP_VOLTAGE_RATING");
             e.Property(s => s.CapacitorPositiveTolerance).HasColumnName("CAP_POSITIVE_TOLERANCE");
+            e.Property(s => s.CapacitorNegativeTolerance).HasColumnName("CAP_NEGATIVE_TOLERANCE");
             e.Property(s => s.CapacitorDielectric).HasColumnName("CAP_DIELECTRIC").HasMaxLength(40);
             e.Property(s => s.Package).HasColumnName("PACKAGE").HasMaxLength(14);
             e.Property(s => s.CapacitorPitch).HasColumnName("CAP_PITCH");
@@ -348,6 +349,7 @@
             e.Property(s => s.ResistorVoltageRating).HasColumnName("RES_VOLTAGE_RATING");
             e.Property(s => s.TemperatureCoefficient).HasColumnName("TEMP_COEFF");
             e.Property(s => s.TransistorType).HasColumnName("TRAN_TYPE").HasMaxLength(10);
+            e.Property(s => s.TransistorDeviceName).HasColumnName("TRAN_DEVICE_NAME").HasMaxLength(50);
             e.Property(s => s.TransistorPolarity).HasColumnName("TRAN_POLARITY").HasMaxLength(30);
             e.Property(s => s.TransistorVoltage).HasColumnName("TRAN_VOLTAGE_RATING");
             e.Property(s => s.TransistorCurrent).HasColumnName("TRAN_AMPS");

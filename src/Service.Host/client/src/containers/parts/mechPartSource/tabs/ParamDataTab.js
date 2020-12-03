@@ -4,12 +4,22 @@ import ParamDataTab from '../../../../components/parts/mechPartSource/tabs/Param
 import partDataSheetValuesActions from '../../../../actions/partDataSheetValuesActions';
 import {
     getResistorConstructionValues,
-    getResistorPackageValues
+    getResistorPackageValues,
+    getCapacitorDielectricValues,
+    getCapacitorPackageValues,
+    getTransistorPackageValues,
+    getTransistorPolarityValues,
+    getIcPackageValues
 } from '../../../../selectors/partDataSheetValuesSelectors';
 
 const mapStateToProps = state => ({
     resistorConstructionValues: getResistorConstructionValues(state),
-    resistorPackageValues: getResistorPackageValues(state)
+    resistorPackageValues: getResistorPackageValues(state),
+    capacitorDielectricValues: getCapacitorDielectricValues(state),
+    capacitorPackageValues: getCapacitorPackageValues(state),
+    transistorPackageValues: getTransistorPackageValues(state),
+    transistorPolarityValues: getTransistorPolarityValues(state),
+    icPackageValues: getIcPackageValues(state)
 });
 
 const initialise = () => dispatch => {

@@ -108,6 +108,8 @@
 
         public int? CapacitorPositiveTolerance { get; set; }
 
+        public int? CapacitorNegativeTolerance { get; set; }
+
         public string CapacitorDielectric { get; set; }
 
         public string PackageName { get; set; }
@@ -128,7 +130,7 @@
 
         public string ResistanceUnit { get; set; }
 
-        public int? ResistorTolerance { get; set; }
+        public decimal? ResistorTolerance { get; set; }
 
         public string Construction { get; set; }
 
@@ -145,6 +147,9 @@
         public int? TemperatureCoefficient { get; set; }
 
         public string TransistorType { get; set; }
+
+        public string TransistorDeviceName { get; set; }
+
 
         public string TransistorPolarity { get; set; }
 

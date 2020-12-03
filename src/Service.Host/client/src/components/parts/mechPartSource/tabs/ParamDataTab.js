@@ -14,7 +14,9 @@ function ParamDataTab({
     capacitanceUnits,
     capacitorVoltageRating,
     capacitorPositiveTolerance,
-    capacitorDialectric,
+    capacitorNegativeTolerance,
+    capacitorDielectric,
+    capacitorPackageValues,
     packageName,
     capacitorPitch,
     capacitorWidth,
@@ -28,7 +30,7 @@ function ParamDataTab({
     resistorPowerRating,
     resistorVoltageRating,
     temperatureCoefficient,
-    transistorType,
+    transistorDeviceName,
     transistorPolarity,
     transistorVoltage,
     transistorCurrent,
@@ -37,7 +39,12 @@ function ParamDataTab({
     libraryRef,
     footPrintRef,
     resistorConstructionValues,
-    resistorPackageValues
+    resistorPackageValues,
+    capacitorDielectricValues,
+    capacitorLength,
+    transistorPackageValues,
+    transistorPolarityValues,
+    icPackageValues
 }) {
     const ohmUnitMultipliers = {
         KΩ: 1000,
@@ -51,6 +58,7 @@ function ParamDataTab({
         pF: 0.000000000001
     };
     const resistorTemperatureCoefficients = [25, 50, 75, 100, 250, 500, 999];
+    const resistorTolerances = [0.1, 1, 2, 5, 10, 20, 50, 80];
     const divide = (a, b) => new Decimal(a).dividedBy(new Decimal(b));
     switch (partType) {
         case 'RES':
@@ -90,7 +98,15 @@ function ParamDataTab({
                             type="number"
                         />
                     </Grid>
-                    <Grid item xs={3} />
+                    <Grid item xs={3}>
+                        <Dropdown
+                            items={resistorTolerances}
+                            label="Tolerance"
+                            value={resistorTolerance}
+                            propertyName="resistorTolerance"
+                            onChange={handleFieldChange}
+                        />
+                    </Grid>
                     <Grid item xs={3}>
                         <Dropdown
                             items={resistorConstructionValues?.map(v => ({
@@ -123,7 +139,7 @@ function ParamDataTab({
                         <InputField
                             value={resistorLength}
                             propertyName="resistorLength"
-                            label="Length"
+                            label="Length (mm)"
                             onChange={handleFieldChange}
                             type="number"
                         />
@@ -132,7 +148,7 @@ function ParamDataTab({
                         <InputField
                             value={resistorWidth}
                             propertyName="resistorWidth"
-                            label="rWidth"
+                            label="Width (mm)"
                             onChange={handleFieldChange}
                             type="number"
                         />
@@ -141,7 +157,7 @@ function ParamDataTab({
                         <InputField
                             value={resistorHeight}
                             propertyName="resistorHeight"
-                            label="Height"
+                            label="Height (mm)"
                             onChange={handleFieldChange}
                             type="number"
                         />
@@ -215,23 +231,52 @@ function ParamDataTab({
                             type="number"
                         />
                     </Grid>
-                    {/* <Grid item xs={3} />
+                    <Grid item xs={3} />
+
+                    <Grid item xs={3}>
+                        <InputField
+                            value={capacitorVoltageRating}
+                            propertyName="capacitorVoltageRating"
+                            label="Max Voltage (V)"
+                            onChange={handleFieldChange}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <InputField
+                            value={capacitorPositiveTolerance}
+                            propertyName="capacitorPositiveTolerance"
+                            label="+ve Tolerance"
+                            onChange={handleFieldChange}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <InputField
+                            value={capacitorNegativeTolerance}
+                            propertyName="capacitorNegativeTolerance"
+                            label="-ve Tolerance"
+                            onChange={handleFieldChange}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={3} />
                     <Grid item xs={3}>
                         <Dropdown
-                            items={resistorConstructionValues?.map(v => ({
+                            items={capacitorDielectricValues?.map(v => ({
                                 id: v.value,
                                 displayText: v.description
                             }))}
-                            label="Construction"
-                            value={construction}
-                            propertyName="construction"
+                            label="Dielectric"
+                            value={capacitorDielectric}
+                            propertyName="capacitorDielectric"
                             onChange={handleFieldChange}
                         />
                     </Grid>
                     <Grid item xs={9} />
                     <Grid item xs={3}>
                         <Dropdown
-                            items={resistorPackageValues?.map(v => ({
+                            items={capacitorPackageValues?.map(v => ({
                                 id: v.value,
                                 displayText: v?.description
                                     ? `${v.value} - ${v.description}`
@@ -246,46 +291,101 @@ function ParamDataTab({
                     <Grid item xs={9} />
                     <Grid item xs={3}>
                         <InputField
-                            value={resistorLength}
-                            propertyName="resistorLength"
-                            label="Length"
+                            value={capacitorPitch}
+                            propertyName="capacitorPitch"
+                            label="Pitch (mm)"
                             onChange={handleFieldChange}
                             type="number"
                         />
                     </Grid>
                     <Grid item xs={3}>
                         <InputField
-                            value={resistorWidth}
-                            propertyName="resistorWidth"
-                            label="rWidth"
+                            value={capacitorLength}
+                            propertyName="capacitorLength"
+                            label="Length (mm)"
                             onChange={handleFieldChange}
                             type="number"
                         />
                     </Grid>
                     <Grid item xs={3}>
                         <InputField
-                            value={resistorHeight}
-                            propertyName="resistorHeight"
-                            label="Height"
-                            onChange={handleFieldChange}
-                            type="number"
-                        />
-                    </Grid>
-                    <Grid item xs={3} />
-                    <Grid item xs={3}>
-                        <InputField
-                            value={resistorVoltageRating}
-                            propertyName="resistorVoltageRating"
-                            label="Voltage Rating (V)"
+                            value={capacitorWidth}
+                            propertyName="capacitorWidth"
+                            label="Height (mm)"
                             onChange={handleFieldChange}
                             type="number"
                         />
                     </Grid>
                     <Grid item xs={3}>
                         <InputField
-                            value={resistorPowerRating}
-                            propertyName="resistorPowerRating"
-                            label="Power Rating (W)"
+                            value={capacitorHeight}
+                            propertyName="capacitorHeight"
+                            label="Height (mm)"
+                            onChange={handleFieldChange}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <InputField
+                            value={capacitorDiameter}
+                            propertyName="capacitorDiameter"
+                            label="Diameter (mm)"
+                            onChange={handleFieldChange}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <InputField
+                            value={capacitorRippleCurrent}
+                            propertyName="capacitorRippleCurrent"
+                            label="Ripple Current (mA RMS)"
+                            onChange={handleFieldChange}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={6} />
+                </Grid>
+            );
+        case 'TRAN':
+            return (
+                <Grid container spacing={3}>
+                    <Grid item xs={3}>
+                        <InputField
+                            value={transistorDeviceName}
+                            propertyName="transistorDeviceName"
+                            label="Device/Type"
+                            onChange={handleFieldChange}
+                        />
+                    </Grid>
+                    <Grid item xs={9} />
+                    <Grid item xs={3}>
+                        <Dropdown
+                            items={transistorPolarityValues?.map(v => ({
+                                id: v.value,
+                                displayText: v.description ? v.description : v.value
+                            }))}
+                            label="Dielectric"
+                            value={transistorPolarity}
+                            allowNoValue
+                            propertyName="transistorPolarity"
+                            onChange={handleFieldChange}
+                        />
+                    </Grid>
+                    <Grid item xs={9} />
+                    <Grid item xs={3}>
+                        <InputField
+                            value={transistorVoltage}
+                            propertyName="transistorVoltage"
+                            label="Voltage (V)"
+                            onChange={handleFieldChange}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <InputField
+                            value={transistorCurrent}
+                            propertyName="transistorCurrent"
+                            label="Current (A)"
                             onChange={handleFieldChange}
                             type="number"
                         />
@@ -293,14 +393,20 @@ function ParamDataTab({
                     <Grid item xs={6} />
                     <Grid item xs={3}>
                         <Dropdown
-                            items={resistorTemperatureCoefficients}
-                            label="Temp Coeff"
-                            value={temperatureCoefficient}
-                            propertyName="temperatureCoefficient"
+                            items={transistorPackageValues?.map(v => ({
+                                id: v.value,
+                                displayText: v?.description
+                                    ? `${v.value} - ${v.description}`
+                                    : v.value
+                            }))}
+                            label="Package"
+                            allowNoValue
+                            value={packageName}
+                            propertyName="packageName"
                             onChange={handleFieldChange}
                         />
                     </Grid>
-                    <Grid item xs={9} /> */}
+                    <Grid item xs={9} />
                 </Grid>
             );
         default:
@@ -317,12 +423,14 @@ ParamDataTab.propTypes = {
     capacitance: PropTypes.number,
     capacitorVoltageRating: PropTypes.number,
     capacitorPositiveTolerance: PropTypes.number,
-    capacitorDialectric: PropTypes.number,
+    capacitorNegativeTolerance: PropTypes.number,
+    capacitorDielectric: PropTypes.number,
     packageName: PropTypes.string,
     capacitorPitch: PropTypes.number,
     capacitorWidth: PropTypes.number,
     capacitorHeight: PropTypes.number,
     capacitorDiameter: PropTypes.number,
+    capacitanceUnits: PropTypes.string,
     resistorTolerance: PropTypes.number,
     construction: PropTypes.string,
     resistorLength: PropTypes.number,
@@ -331,7 +439,7 @@ ParamDataTab.propTypes = {
     resistorPowerRating: PropTypes.number,
     resistorVoltageRating: PropTypes.number,
     temperatureCoefficient: PropTypes.number,
-    transistorType: PropTypes.string,
+    transistorDeviceName: PropTypes.string,
     transistorPolarity: PropTypes.string,
     transistorVoltage: PropTypes.number,
     transistorCurrent: PropTypes.number,
@@ -349,7 +457,8 @@ ParamDataTab.defaultProps = {
     capacitance: null,
     capacitorVoltageRating: null,
     capacitorPositiveTolerance: null,
-    capacitorDialectric: null,
+    capacitorNegativeTolerance: null,
+    capacitorDielectric: null,
     packageName: null,
     capacitorPitch: null,
     capacitorWidth: null,
@@ -364,7 +473,7 @@ ParamDataTab.defaultProps = {
     resistorPowerRating: null,
     resistorVoltageRating: null,
     temperatureCoefficient: null,
-    transistorType: null,
+    transistorDeviceName: null,
     transistorPolarity: null,
     transistorVoltage: null,
     transistorCurrent: null,

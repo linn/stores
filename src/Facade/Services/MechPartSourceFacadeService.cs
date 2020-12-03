@@ -100,9 +100,10 @@
                                                                      {
                                                                          PartNumber = a.PartNumber,
                                                                          Sequence = a.Sequence,
-                                                                         Supplier = new Supplier
+                                                                         Supplier = a.SupplierId == null ? null :
+                                                                             new Supplier
                                                                              {
-                                                                                 Id = a.SupplierId,
+                                                                                 Id = (int)a.SupplierId,
                                                                                  Name = a.SupplierName
                                                                              }
                                                                      }).ToList(),
@@ -139,6 +140,7 @@
                 Capacitance = resource.Capacitance,
                 CapacitorVoltageRating = resource.CapacitorVoltageRating,
                 CapacitorPositiveTolerance = resource.CapacitorPositiveTolerance,
+                CapacitorNegativeTolerance = resource.CapacitorNegativeTolerance,
                 CapacitorDielectric = resource.CapacitorDielectric,
                 Package = resource.PackageName,
                 CapacitorPitch = resource.CapacitorPitch,
@@ -158,6 +160,7 @@
                 ResistorVoltageRating = resource.ResistorVoltageRating,
                 TemperatureCoefficient = resource.TemperatureCoefficient,
                 TransistorType = resource.TransistorType,
+                TransistorDeviceName = resource.TransistorDeviceName,
                 TransistorCurrent = resource.TransistorCurrent,
                 TransistorVoltage = resource.TransistorVoltage,
                 TransistorPolarity = resource.TransistorPolarity,
@@ -224,7 +227,12 @@
                          {
                              PartNumber = a.PartNumber,
                              Sequence = a.Sequence,
-                             Supplier = new Supplier { Id = a.SupplierId, Name = a.SupplierName }
+                             Supplier = a.SupplierId == null ? null :
+                                            new Supplier
+                                                {
+                                                    Id = (int)a.SupplierId,
+                                                    Name = a.SupplierName
+                                                }
                          }).ToList();
             entity.ApprovedReferenceStandards = resource.ApprovedReferenceStandards;
             entity.ApprovedReferencesAvailable = resource.ApprovedReferencesAvailable;
@@ -261,6 +269,7 @@
             entity.Capacitance = resource.Capacitance;
             entity.CapacitorVoltageRating = resource.CapacitorVoltageRating;
             entity.CapacitorPositiveTolerance = resource.CapacitorPositiveTolerance;
+            entity.CapacitorNegativeTolerance = resource.CapacitorNegativeTolerance;
             entity.CapacitorDielectric = resource.CapacitorDielectric;
             entity.Package = resource.PackageName;
             entity.CapacitorPitch = resource.CapacitorPitch;
@@ -280,6 +289,7 @@
             entity.ResistorVoltageRating = resource.ResistorVoltageRating;
             entity.TemperatureCoefficient = resource.TemperatureCoefficient;
             entity.TransistorType = resource.TransistorType;
+            entity.TransistorDeviceName = resource.TransistorDeviceName;
             entity.TransistorCurrent = resource.TransistorCurrent;
             entity.TransistorVoltage = resource.TransistorVoltage;
             entity.TransistorPolarity = resource.TransistorPolarity;

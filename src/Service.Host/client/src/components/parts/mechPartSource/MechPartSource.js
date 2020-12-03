@@ -392,9 +392,13 @@ function MechPartSource({
                                     capacitorPositiveTolerance={
                                         mechPartSource.capacitorPositiveTolerance
                                     }
-                                    capacitorDialectric={mechPartSource.capacitorDialectric}
+                                    capacitorNegativeTolerance={
+                                        mechPartSource.capacitorNegativeTolerance
+                                    }
+                                    capacitorDielectric={mechPartSource.capacitorDielectric}
                                     packageName={mechPartSource.packageName}
-                                    capacitorPitch={mechPartSource.capacitorPitchype}
+                                    capacitorPitch={mechPartSource.capacitorPitch}
+                                    capacitorLength={mechPartSource.capacitorLength}
                                     capacitorWidth={mechPartSource.capacitorWidth}
                                     capacitorHeight={mechPartSource.capacitorHeight}
                                     capacitorDiameter={mechPartSource.capacitorDiameter}
@@ -406,7 +410,7 @@ function MechPartSource({
                                     resistorPowerRating={mechPartSource.resistorPowerRating}
                                     resistorVoltageRating={mechPartSource.resistorVoltageRating}
                                     temperatureCoefficient={mechPartSource.temperatureCoefficient}
-                                    transistorType={mechPartSource.transistorType}
+                                    transistorDeviceName={mechPartSource.transistorDeviceName}
                                     transistorPolarity={mechPartSource.transistorPolarity}
                                     transistorVoltage={mechPartSource.transistorVoltage}
                                     transistorCurrent={mechPartSource.transistorCurrent}
