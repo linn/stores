@@ -63,7 +63,7 @@ function MechPartSource({
 
     useEffect(() => {
         if (item !== prevMechPartSource && editStatus !== 'create') {
-            setMechPartSource({ ...item, resistanceUnits: 'KΩ' });
+            setMechPartSource({ ...item, resistanceUnits: 'KΩ', capacitanceUnits: 'uF' });
             setPrevMechPartSource(item);
         }
     }, [item, prevMechPartSource, editStatus, itemId]);
@@ -387,6 +387,7 @@ function MechPartSource({
                                     handleFieldChange={handleFieldChange}
                                     capacitorRippleCurrent={mechPartSource.capacitorRippleCurrent}
                                     capacitance={mechPartSource.capacitance}
+                                    capacitanceUnits={mechPartSource.capacitanceUnits}
                                     capacitorVoltageRating={mechPartSource.capacitorVoltageRating}
                                     capacitorPositiveTolerance={
                                         mechPartSource.capacitorPositiveTolerance
@@ -397,8 +398,6 @@ function MechPartSource({
                                     capacitorWidth={mechPartSource.capacitorWidth}
                                     capacitorHeight={mechPartSource.capacitorHeight}
                                     capacitorDiameter={mechPartSource.capacitorDiameter}
-                                    capacitanceUnit={mechPartSource.capacitanceUnit}
-                                    resistanceUnit={mechPartSource.resistanceUnit}
                                     resistorTolerance={mechPartSource.resistorTolerance}
                                     construction={mechPartSource.construction}
                                     resistorLength={mechPartSource.resistorLength}

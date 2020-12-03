@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Decimal } from 'decimal.js';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { Dropdown, InputField } from '@linn-it/linn-form-components-library';
@@ -10,6 +11,7 @@ function ParamDataTab({
     partType,
     capacitorRippleCurrent,
     capacitance,
+    capacitanceUnits,
     capacitorVoltageRating,
     capacitorPositiveTolerance,
     capacitorDialectric,
@@ -18,8 +20,6 @@ function ParamDataTab({
     capacitorWidth,
     capacitorHeight,
     capacitorDiameter,
-    capacitanceUnit,
-    resistanceUnit,
     resistorTolerance,
     construction,
     resistorLength,
@@ -45,137 +45,266 @@ function ParamDataTab({
         Ω: 1
     };
     const faradUnitMultipliers = {
+        F: 1,
         uF: 0.000001,
         nF: 0.000000001,
         pF: 0.000000000001
     };
     const resistorTemperatureCoefficients = [25, 50, 75, 100, 250, 500, 999];
-    if (!partType) {
-        return <> No Part Type Selected. </>;
-    }
-    if (partType === 'RES') {
-        return (
-            <Grid container spacing={3}>
-                <Grid item xs={3}>
-                    <InputField
-                        value={resistance / ohmUnitMultipliers[resistanceUnits]}
-                        propertyName="resistance"
-                        label="Resistance"
-                        onChange={(propertyName, newValue) => {
-                            handleFieldChange(
-                                propertyName,
-                                newValue * ohmUnitMultipliers[resistanceUnits]
-                            );
-                        }}
-                        type="number"
-                    />
+    const divide = (a, b) => new Decimal(a).dividedBy(new Decimal(b));
+    switch (partType) {
+        case 'RES':
+            return (
+                <Grid container spacing={3}>
+                    <Grid item xs={3}>
+                        <InputField
+                            value={divide(resistance, ohmUnitMultipliers[resistanceUnits])}
+                            propertyName="resistance"
+                            label="Resistance"
+                            onChange={(propertyName, newValue) => {
+                                handleFieldChange(
+                                    propertyName,
+                                    newValue * ohmUnitMultipliers[resistanceUnits]
+                                );
+                            }}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Dropdown
+                            items={Object.keys(ohmUnitMultipliers)}
+                            value={resistanceUnits}
+                            label="units"
+                            propertyName="resistanceUnits"
+                            onChange={handleFieldChange}
+                            allowNoValue={false}
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <InputField
+                            value={resistance}
+                            propertyName="resistance"
+                            label="Resistance ACTUAL"
+                            onChange={() => {}}
+                            disabled
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={3} />
+                    <Grid item xs={3}>
+                        <Dropdown
+                            items={resistorConstructionValues?.map(v => ({
+                                id: v.value,
+                                displayText: v.description
+                            }))}
+                            label="Construction"
+                            value={construction}
+                            propertyName="construction"
+                            onChange={handleFieldChange}
+                        />
+                    </Grid>
+                    <Grid item xs={9} />
+                    <Grid item xs={3}>
+                        <Dropdown
+                            items={resistorPackageValues?.map(v => ({
+                                id: v.value,
+                                displayText: v?.description
+                                    ? `${v.value} - ${v.description}`
+                                    : v.value
+                            }))}
+                            label="Package"
+                            value={packageName}
+                            propertyName="packageName"
+                            onChange={handleFieldChange}
+                        />
+                    </Grid>
+                    <Grid item xs={9} />
+                    <Grid item xs={3}>
+                        <InputField
+                            value={resistorLength}
+                            propertyName="resistorLength"
+                            label="Length"
+                            onChange={handleFieldChange}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <InputField
+                            value={resistorWidth}
+                            propertyName="resistorWidth"
+                            label="rWidth"
+                            onChange={handleFieldChange}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <InputField
+                            value={resistorHeight}
+                            propertyName="resistorHeight"
+                            label="Height"
+                            onChange={handleFieldChange}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={3} />
+                    <Grid item xs={3}>
+                        <InputField
+                            value={resistorVoltageRating}
+                            propertyName="resistorVoltageRating"
+                            label="Voltage Rating (V)"
+                            onChange={handleFieldChange}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <InputField
+                            value={resistorPowerRating}
+                            propertyName="resistorPowerRating"
+                            label="Power Rating (W)"
+                            onChange={handleFieldChange}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={6} />
+                    <Grid item xs={3}>
+                        <Dropdown
+                            items={resistorTemperatureCoefficients}
+                            label="Temp Coeff"
+                            value={temperatureCoefficient}
+                            propertyName="temperatureCoefficient"
+                            onChange={handleFieldChange}
+                        />
+                    </Grid>
+                    <Grid item xs={9} />
                 </Grid>
-                <Grid item xs={3}>
-                    <Dropdown
-                        items={Object.keys(ohmUnitMultipliers)}
-                        value={resistanceUnits}
-                        label="units"
-                        propertyName="resistanceUnits"
-                        onChange={handleFieldChange}
-                        allowNoValue={false}
-                    />
+            );
+        case 'CAP':
+            return (
+                <Grid container spacing={3}>
+                    <Grid item xs={3}>
+                        <InputField
+                            value={divide(capacitance, faradUnitMultipliers[capacitanceUnits])}
+                            propertyName="capacitance"
+                            label="Capacitance"
+                            onChange={(propertyName, newValue) => {
+                                handleFieldChange(
+                                    propertyName,
+                                    newValue * faradUnitMultipliers[capacitanceUnits]
+                                );
+                            }}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <Dropdown
+                            items={Object.keys(faradUnitMultipliers)}
+                            value={capacitanceUnits}
+                            label="units"
+                            propertyName="capacitanceUnits"
+                            onChange={handleFieldChange}
+                            allowNoValue={false}
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <InputField
+                            value={capacitance}
+                            propertyName="capacitance"
+                            label="Capacitance ACTUAL"
+                            onChange={() => {}}
+                            disabled
+                            type="number"
+                        />
+                    </Grid>
+                    {/* <Grid item xs={3} />
+                    <Grid item xs={3}>
+                        <Dropdown
+                            items={resistorConstructionValues?.map(v => ({
+                                id: v.value,
+                                displayText: v.description
+                            }))}
+                            label="Construction"
+                            value={construction}
+                            propertyName="construction"
+                            onChange={handleFieldChange}
+                        />
+                    </Grid>
+                    <Grid item xs={9} />
+                    <Grid item xs={3}>
+                        <Dropdown
+                            items={resistorPackageValues?.map(v => ({
+                                id: v.value,
+                                displayText: v?.description
+                                    ? `${v.value} - ${v.description}`
+                                    : v.value
+                            }))}
+                            label="Package"
+                            value={packageName}
+                            propertyName="packageName"
+                            onChange={handleFieldChange}
+                        />
+                    </Grid>
+                    <Grid item xs={9} />
+                    <Grid item xs={3}>
+                        <InputField
+                            value={resistorLength}
+                            propertyName="resistorLength"
+                            label="Length"
+                            onChange={handleFieldChange}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <InputField
+                            value={resistorWidth}
+                            propertyName="resistorWidth"
+                            label="rWidth"
+                            onChange={handleFieldChange}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <InputField
+                            value={resistorHeight}
+                            propertyName="resistorHeight"
+                            label="Height"
+                            onChange={handleFieldChange}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={3} />
+                    <Grid item xs={3}>
+                        <InputField
+                            value={resistorVoltageRating}
+                            propertyName="resistorVoltageRating"
+                            label="Voltage Rating (V)"
+                            onChange={handleFieldChange}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <InputField
+                            value={resistorPowerRating}
+                            propertyName="resistorPowerRating"
+                            label="Power Rating (W)"
+                            onChange={handleFieldChange}
+                            type="number"
+                        />
+                    </Grid>
+                    <Grid item xs={6} />
+                    <Grid item xs={3}>
+                        <Dropdown
+                            items={resistorTemperatureCoefficients}
+                            label="Temp Coeff"
+                            value={temperatureCoefficient}
+                            propertyName="temperatureCoefficient"
+                            onChange={handleFieldChange}
+                        />
+                    </Grid>
+                    <Grid item xs={9} /> */}
                 </Grid>
-                <Grid item xs={3}>
-                    <InputField
-                        value={resistance}
-                        propertyName="resistance"
-                        label="Resistance ACTUAL"
-                        onChange={() => {}}
-                        disabled
-                        type="number"
-                    />
-                </Grid>
-                <Grid item xs={3} />
-                <Grid item xs={3}>
-                    <Dropdown
-                        items={resistorConstructionValues?.map(v => ({
-                            id: v.value,
-                            displayText: v.description
-                        }))}
-                        label="Construction"
-                        value={construction}
-                        propertyName="construction"
-                        onChange={handleFieldChange}
-                    />
-                </Grid>
-                <Grid item xs={9} />
-                <Grid item xs={3}>
-                    <Dropdown
-                        items={resistorPackageValues?.map(v => ({
-                            id: v.value,
-                            displayText: v?.description ? `${v.value} - ${v.description}` : v.value
-                        }))}
-                        label="Package"
-                        value={packageName}
-                        propertyName="packageName"
-                        onChange={handleFieldChange}
-                    />
-                </Grid>
-                <Grid item xs={9} />
-                <Grid item xs={3}>
-                    <InputField
-                        value={resistorLength}
-                        propertyName="resistorLength"
-                        label="Length"
-                        onChange={handleFieldChange}
-                        type="number"
-                    />
-                </Grid>
-                <Grid item xs={3}>
-                    <InputField
-                        value={resistorWidth}
-                        propertyName="resistorWidth"
-                        label="rWidth"
-                        onChange={handleFieldChange}
-                        type="number"
-                    />
-                </Grid>
-                <Grid item xs={3}>
-                    <InputField
-                        value={resistorHeight}
-                        propertyName="resistorHeight"
-                        label="Height"
-                        onChange={handleFieldChange}
-                        type="number"
-                    />
-                </Grid>
-                <Grid item xs={3} />
-                <Grid item xs={3}>
-                    <InputField
-                        value={resistorVoltageRating}
-                        propertyName="resistorVoltageRating"
-                        label="Voltage Rating (V)"
-                        onChange={handleFieldChange}
-                        type="number"
-                    />
-                </Grid>
-                <Grid item xs={3}>
-                    <InputField
-                        value={resistorPowerRating}
-                        propertyName="resistorPowerRating"
-                        label="Power Rating (W)"
-                        onChange={handleFieldChange}
-                        type="number"
-                    />
-                </Grid>
-                <Grid item xs={6} />
-                <Grid item xs={3}>
-                    <Dropdown
-                        items={resistorTemperatureCoefficients}
-                        label="Temp Coeff"
-                        value={temperatureCoefficient}
-                        propertyName="temperatureCoefficient"
-                        onChange={handleFieldChange}
-                    />
-                </Grid>
-                <Grid item xs={9} />
-            </Grid>
-        );
+            );
+        default:
+            return <> No Part Type Selected. </>;
     }
 }
 
@@ -194,8 +323,6 @@ ParamDataTab.propTypes = {
     capacitorWidth: PropTypes.number,
     capacitorHeight: PropTypes.number,
     capacitorDiameter: PropTypes.number,
-    capacitanceUnit: PropTypes.number,
-    resistanceUnit: PropTypes.number,
     resistorTolerance: PropTypes.number,
     construction: PropTypes.string,
     resistorLength: PropTypes.number,
@@ -228,8 +355,7 @@ ParamDataTab.defaultProps = {
     capacitorWidth: null,
     capacitorHeight: null,
     capacitorDiameter: null,
-    capacitanceUnit: null,
-    resistanceUnit: null,
+    capacitanceUnits: null,
     resistorTolerance: null,
     construction: null,
     resistorLength: null,
