@@ -49,6 +49,7 @@ function ParamDataTab({
         nF: 0.000000001,
         pF: 0.000000000001
     };
+    const resistorTemperatureCoefficients = [25, 50, 75, 100, 250, 500, 999];
     if (!partType) {
         return <> No Part Type Selected. </>;
     }
@@ -90,18 +91,6 @@ function ParamDataTab({
                     />
                 </Grid>
                 <Grid item xs={3} />
-
-                <Grid item xs={3}>
-                    <InputField
-                        value={resistorVoltageRating}
-                        propertyName="resistorVoltageRating"
-                        label="Voltage Rating (V)"
-                        onChange={handleFieldChange}
-                        type="number"
-                    />
-                </Grid>
-
-                <Grid item xs={9} />
                 <Grid item xs={3}>
                     <Dropdown
                         items={resistorConstructionValues?.map(v => ({
@@ -114,13 +103,12 @@ function ParamDataTab({
                         onChange={handleFieldChange}
                     />
                 </Grid>
-
                 <Grid item xs={9} />
                 <Grid item xs={3}>
                     <Dropdown
                         items={resistorPackageValues?.map(v => ({
                             id: v.value,
-                            displayText: v?.description ? v.description : v.value
+                            displayText: v?.description ? `${v.value} - ${v.description}` : v.value
                         }))}
                         label="Package"
                         value={packageName}
@@ -128,6 +116,64 @@ function ParamDataTab({
                         onChange={handleFieldChange}
                     />
                 </Grid>
+                <Grid item xs={9} />
+                <Grid item xs={3}>
+                    <InputField
+                        value={resistorLength}
+                        propertyName="resistorLength"
+                        label="Length"
+                        onChange={handleFieldChange}
+                        type="number"
+                    />
+                </Grid>
+                <Grid item xs={3}>
+                    <InputField
+                        value={resistorWidth}
+                        propertyName="resistorWidth"
+                        label="rWidth"
+                        onChange={handleFieldChange}
+                        type="number"
+                    />
+                </Grid>
+                <Grid item xs={3}>
+                    <InputField
+                        value={resistorHeight}
+                        propertyName="resistorHeight"
+                        label="Height"
+                        onChange={handleFieldChange}
+                        type="number"
+                    />
+                </Grid>
+                <Grid item xs={3} />
+                <Grid item xs={3}>
+                    <InputField
+                        value={resistorVoltageRating}
+                        propertyName="resistorVoltageRating"
+                        label="Voltage Rating (V)"
+                        onChange={handleFieldChange}
+                        type="number"
+                    />
+                </Grid>
+                <Grid item xs={3}>
+                    <InputField
+                        value={resistorPowerRating}
+                        propertyName="resistorPowerRating"
+                        label="Power Rating (W)"
+                        onChange={handleFieldChange}
+                        type="number"
+                    />
+                </Grid>
+                <Grid item xs={6} />
+                <Grid item xs={3}>
+                    <Dropdown
+                        items={resistorTemperatureCoefficients}
+                        label="Temp Coeff"
+                        value={temperatureCoefficient}
+                        propertyName="temperatureCoefficient"
+                        onChange={handleFieldChange}
+                    />
+                </Grid>
+                <Grid item xs={9} />
             </Grid>
         );
     }
