@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Decimal } from 'decimal.js';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
@@ -36,8 +36,6 @@ function ParamDataTab({
     transistorCurrent,
     icType,
     icFunction,
-    libraryRef,
-    footPrintRef,
     resistorConstructionValues,
     resistorPackageValues,
     capacitorDielectricValues,
@@ -409,6 +407,46 @@ function ParamDataTab({
                     <Grid item xs={9} />
                 </Grid>
             );
+        case 'IC':
+            return (
+                <Grid container spacing={3}>
+                    <Grid item xs={3}>
+                        <InputField
+                            value={icType}
+                            propertyName="icType"
+                            label="Type"
+                            onChange={handleFieldChange}
+                        />
+                    </Grid>
+                    <Grid item xs={9} />
+                    <Grid item xs={3}>
+                        <InputField
+                            value={icFunction}
+                            propertyName="icFunction"
+                            label="Function"
+                            onChange={handleFieldChange}
+                        />
+                    </Grid>
+                    <Grid item xs={9} />
+                    <Grid item xs={3}>
+                        <Dropdown
+                            items={icPackageValues?.map(v => ({
+                                id: v.value,
+                                displayText: v?.description
+                                    ? `${v.value} - ${v.description}`
+                                    : v.value
+                            }))}
+                            label="Package"
+                            allowNoValue
+                            value={packageName}
+                            propertyName="packageName"
+                            onChange={handleFieldChange}
+                        />
+                    </Grid>
+
+                    <Grid item xs={9} />
+                </Grid>
+            );
         default:
             return <> No Part Type Selected. </>;
     }
@@ -445,8 +483,12 @@ ParamDataTab.propTypes = {
     transistorCurrent: PropTypes.number,
     icType: PropTypes.string,
     icFunction: PropTypes.string,
-    libraryRef: PropTypes.string,
-    footPrintRef: PropTypes.string,
+    resistorPackageValues: PropTypes.arrayOf(PropTypes.shape({})),
+    capacitorDielectricValues: PropTypes.arrayOf(PropTypes.shape({})),
+    capacitorLength: PropTypes.number,
+    transistorPackageValues: PropTypes.arrayOf(PropTypes.shape({})),
+    transistorPolarityValues: PropTypes.arrayOf(PropTypes.shape({})),
+    icPackageValues: PropTypes.arrayOf(PropTypes.shape({})),
     resistorConstructionValues: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
@@ -479,8 +521,12 @@ ParamDataTab.defaultProps = {
     transistorCurrent: null,
     icType: null,
     icFunction: null,
-    libraryRef: null,
-    footPrintRef: null,
+    resistorPackageValues: null,
+    capacitorDielectricValues: null,
+    capacitorLength: null,
+    transistorPackageValues: null,
+    transistorPolarityValues: null,
+    icPackageValues: null,
     partType: null,
     resistorConstructionValues: []
 };
