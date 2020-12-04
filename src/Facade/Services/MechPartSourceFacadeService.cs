@@ -167,7 +167,7 @@
                 IcType = resource.IcType,
                 IcFunction = resource.IcFunction,
                 LibraryRef = resource.LibraryRef,
-                FootPrintRef = resource.FootPrintRef
+                FootprintRef = resource.FootprintRef
             };
         }
 
@@ -296,7 +296,7 @@
             entity.IcType = resource.IcType;
             entity.IcFunction = resource.IcFunction;
             entity.LibraryRef = resource.LibraryRef;
-            entity.FootPrintRef = resource.FootPrintRef;
+            entity.FootprintRef = resource.FootprintRef;
         }
 
         protected override Expression<Func<MechPartSource, bool>> SearchExpression(string searchTerm)

@@ -101,7 +101,7 @@
                             IcType = model.IcType,
                             IcFunction = model.IcFunction,
                             LibraryRef = model.LibraryRef,
-                            FootPrintRef = model.FootPrintRef,
+                            FootprintRef = model.FootprintRef,
                             Links = this.BuildLinks(model).ToArray()
             };
         }

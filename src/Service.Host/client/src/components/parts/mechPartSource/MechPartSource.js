@@ -18,6 +18,7 @@ import QualityRequirementsTab from './tabs/QualityRequirementsTab';
 import Manufacturerstab from '../../../containers/parts/mechPartSource/tabs/ManufacturersTab';
 import SuppliersTab from '../../../containers/parts/mechPartSource/tabs/SuppliersTab';
 import ParamDataTab from '../../../containers/parts/mechPartSource/tabs/ParamDataTab';
+import CadDataTab from './tabs/CadDataTab';
 
 function MechPartSource({
     editStatus,
@@ -50,7 +51,8 @@ function MechPartSource({
         qualityRequirements: 2,
         suppliers: 3,
         manufacturers: 4,
-        paramData: 5
+        paramData: 5,
+        cadData: 6
     };
 
     const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
@@ -293,6 +295,7 @@ function MechPartSource({
                                 <Tab label="Suppliers" />
                                 <Tab label="Manufacturers" />
                                 <Tab label="Param Data" />
+                                <Tab label="Cad Data" />
                             </Tabs>
                             {tab === 0 && (
                                 <ProposalTab
@@ -418,6 +421,13 @@ function MechPartSource({
                                     icFunction={mechPartSource.icFunction}
                                     libraryRef={mechPartSource.libraryRef}
                                     footPrintRef={mechPartSource.footPrintRef}
+                                />
+                            )}
+                            {tab === 6 && (
+                                <CadDataTab
+                                    libraryRef={mechPartSource.libraryRef}
+                                    footprintRef={mechPartSource.footprintRef}
+                                    handleFieldChange={handleFieldChange}
                                 />
                             )}
                             <Grid item xs={12}>

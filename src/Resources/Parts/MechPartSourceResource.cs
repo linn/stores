@@ -163,6 +163,6 @@
 
         public string LibraryRef { get; set; }
 
-        public string FootPrintRef { get; set; }
+        public string FootprintRef { get; set; }
     }
 }

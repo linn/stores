@@ -489,6 +489,7 @@ ParamDataTab.propTypes = {
     transistorPackageValues: PropTypes.arrayOf(PropTypes.shape({})),
     transistorPolarityValues: PropTypes.arrayOf(PropTypes.shape({})),
     icPackageValues: PropTypes.arrayOf(PropTypes.shape({})),
+    capacitorPackageValues: PropTypes.arrayOf(PropTypes.shape({})),
     resistorConstructionValues: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
@@ -528,6 +529,7 @@ ParamDataTab.defaultProps = {
     transistorPolarityValues: null,
     icPackageValues: null,
     partType: null,
-    resistorConstructionValues: []
+    resistorConstructionValues: [],
+    capacitorPackageValues: []
 };
 export default ParamDataTab;
