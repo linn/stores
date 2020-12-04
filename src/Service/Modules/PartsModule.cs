@@ -1,6 +1,8 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using Linn.Common.Authorisation;
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;
@@ -24,6 +26,8 @@
         private readonly IPartCategoryService partCategoryService;
 
         private readonly IProductAnalysisCodeService productAnalysisCodeService;
+
+        private readonly IAuthorisationService authService;
 
         private readonly
             IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>
@@ -61,11 +65,13 @@
             IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> mechPartSourceService,
             IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> manufacturerService,
             IPartDataSheetValuesService dataSheetsValuesService,
-            IPartPack partPack)
+            IPartPack partPack,
+            IAuthorisationService authService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
             this.partPack = partPack;
+            this.authService = authService;
             this.Get("/parts/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/parts/{id}", parameters => this.GetPart(parameters.id));
             this.Put("/parts/{id}", parameters => this.UpdatePart(parameters.id));
@@ -213,6 +219,14 @@
 
         private object UpdateMechPartSource(int id)
         {
+            if (!this.authService
+                    .HasPermissionFor(
+                        AuthorisedAction.PartAdmin,
+                        this.Context.CurrentUser.GetPrivileges()))
+            {
+                return new UnauthorisedResult<MechPartSource>("You are not authorised to update.");
+            }
+
             var resource = this.Bind<MechPartSourceResource>();
             var result = this.mechPartSourceService.Update(id, resource);
             return this.Negotiate.WithModel(result)
@@ -222,9 +236,17 @@
         private object AddMechPartSource()
         {
             this.RequiresAuthentication();
+
+            if (!this.authService
+                    .HasPermissionFor(
+                        AuthorisedAction.PartAdmin, 
+                        this.Context.CurrentUser.GetPrivileges()))
+            {
+                return new UnauthorisedResult<MechPartSource>("You are not authorised to create.");
+            }
             
-            // todo - privileges check
             var resource = this.Bind<MechPartSourceResource>();
+            
             var result = this.mechPartSourceService.Add(resource);
             
             if (result.GetType() == typeof(CreatedResult<MechPartSource>))

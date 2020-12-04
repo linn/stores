@@ -210,7 +210,12 @@
                                                                             Sequence = s.Sequence,
                                                                             PdfFilePath = s.PdfFilePath
                                                                         });
-            entity.Part.DataSheets = this.domainService.GetUpdatedDataSheets(currentDataSheets, newDataSheets);
+            if (entity.Part != null)
+            {
+                entity.Part.DataSheets = 
+                    this.domainService.GetUpdatedDataSheets(currentDataSheets, newDataSheets);
+            }
+
             entity.MechPartManufacturerAlts = resource.MechPartManufacturerAlts?.Select(
                 a => new MechPartManufacturerAlt
                          {
