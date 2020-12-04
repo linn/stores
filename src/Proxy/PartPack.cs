@@ -78,5 +78,51 @@
                 return int.Parse(result.Value.ToString()) == 1;
             }
         }
+
+        public string CreatePartFromSourceSheet(int sourceId, int userNumber, string partNumber)
+        {
+            using (var connection = this.databaseService.GetConnection())
+            {
+                connection.Open();
+                var cmd = new OracleCommand("part_pack.create_part_from_ssheet", connection)
+                              {
+                                  CommandType = CommandType.StoredProcedure
+                              };
+
+                var arg0 = new OracleParameter("p_ms_id", OracleDbType.Int32)
+                              {
+                                  Direction = ParameterDirection.Input, Size = 14, Value = sourceId
+                              };
+                cmd.Parameters.Add(arg0);
+
+                var arg1 = new OracleParameter("p_created_by", OracleDbType.Int32)
+                              {
+                                  Direction = ParameterDirection.Input,
+                                  Size = 14,
+                                  Value = sourceId
+                              };
+                cmd.Parameters.Add(arg1);
+
+                var arg2 = new OracleParameter("p_part_number", OracleDbType.Varchar2)
+                              {
+                                  Direction = ParameterDirection.Input,
+                                  Size = 100
+                              };
+                cmd.Parameters.Add(arg2);
+
+                var arg3 = new OracleParameter("p_Message", OracleDbType.Varchar2)
+                              {
+                                  Direction = ParameterDirection.InputOutput, Size = 100
+                              };
+                cmd.Parameters.Add(arg3);
+
+
+                cmd.ExecuteNonQuery();
+                var message = cmd.Parameters[3].Value.ToString();
+                connection.Close();
+
+                return message;
+            }
+        }
     }
 }

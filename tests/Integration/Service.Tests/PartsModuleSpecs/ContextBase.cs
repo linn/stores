@@ -8,6 +8,7 @@
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
@@ -83,6 +84,8 @@
 
         protected IPartDataSheetValuesService DataSheetValuesService { get; private set; }
 
+        protected IPartPack PartPack { get; private set; }
+
         [SetUp]
         public void EstablishContext()
         {
@@ -110,6 +113,7 @@
                 .For<IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>>();
             this.ManufacturerRepository = Substitute.For<IRepository<Manufacturer, string>>();
             this.DataSheetValuesService = Substitute.For<IPartDataSheetValuesService>();
+            this.PartPack = Substitute.For<IPartPack>();
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
@@ -130,6 +134,7 @@
                         with.Dependency(this.MechPartSourceRepository);
                         with.Dependency(this.ManufacturerService);
                         with.Dependency(this.DataSheetValuesService);
+                        with.Dependency(this.PartPack);
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());
                         with.Dependency<IResourceBuilder<PartTemplate>>(new PartTemplateResourceBuilder());

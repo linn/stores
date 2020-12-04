@@ -200,7 +200,7 @@
                 ? null
                 : this.partRepository.FindBy(p => p.PartNumber == resource.LinnPartNumber);
 
-            var currentDataSheets = entity.Part.DataSheets;
+            var currentDataSheets = entity.Part?.DataSheets;
 
             var newDataSheets = resource.Part.DataSheets.Select(s => new PartDataSheet
                                                                         {

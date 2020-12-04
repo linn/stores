@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
@@ -45,6 +46,8 @@
 
         private readonly IPartDataSheetValuesService dataSheetsValuesService;
 
+        private readonly IPartPack partPack;
+
         public PartsModule(
             IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
@@ -57,10 +60,12 @@
             IPartLiveService partLiveService,
             IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> mechPartSourceService,
             IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> manufacturerService,
-            IPartDataSheetValuesService dataSheetsValuesService)
+            IPartDataSheetValuesService dataSheetsValuesService,
+            IPartPack partPack)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
+            this.partPack = partPack;
             this.Get("/parts/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/parts/{id}", parameters => this.GetPart(parameters.id));
             this.Put("/parts/{id}", parameters => this.UpdatePart(parameters.id));
@@ -217,9 +222,20 @@
         private object AddMechPartSource()
         {
             this.RequiresAuthentication();
+            
             // todo - privileges check
             var resource = this.Bind<MechPartSourceResource>();
             var result = this.mechPartSourceService.Add(resource);
+            
+            if (result.GetType() == typeof(SuccessResult<MechPartSource>))
+            {
+                var created = ((SuccessResult<MechPartSource>)result).Data;
+                this.partPack.CreatePartFromSourceSheet(
+                    created.Id, 
+                    created.ProposedBy.Id, 
+                    created.PartNumber);
+            }
+
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

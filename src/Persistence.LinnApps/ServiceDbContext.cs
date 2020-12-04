@@ -256,7 +256,8 @@
             e.HasOne<Employee>(p => p.CreatedBy).WithMany(m => m.PartsCreated).HasForeignKey("CREATED_BY");
             e.HasOne(p => p.AccountingCompany).WithMany(c => c.PartsResponsibleFor).HasForeignKey("ACCOUNTING_COMPANY");
             e.HasOne(p => p.PreferredSupplier).WithMany(s => s.PartsPreferredSupplierOf)
-                .HasForeignKey("PREFERRED_SUPPLIER");
+                .HasForeignKey(p => p.PreferredSupplierId);
+            e.Property(p => p.PreferredSupplierId).HasColumnName("PREFERRED_SUPPLIER");
             e.HasOne<ParetoClass>(p => p.ParetoClass).WithMany(c => c.Parts).HasForeignKey("PARETO_CODE");
             e.HasOne<ProductAnalysisCode>(p => p.ProductAnalysisCode).WithMany(c => c.Parts)
                 .HasForeignKey("PRODUCT_ANALYSIS_CODE");
@@ -265,6 +266,7 @@
             e.HasOne(p => p.SernosSequence).WithMany(s => s.Parts).HasForeignKey("SERNOS_SEQUENCE");
             e.HasOne(p => p.AssemblyTechnology).WithMany(s => s.Parts).HasForeignKey("ASSEMBLY_TECHNOLOGY");
             e.HasOne(p => p.DecrementRule).WithMany(s => s.Parts).HasForeignKey("DECREMENT_RULE");
+            e.HasOne(p => p.MechPartSource).WithOne(m => m.Part);
         }
 
         private void BuildPartDataSheets(ModelBuilder builder)
@@ -299,7 +301,7 @@
             e.Property(s => s.EmcCritical).HasColumnName("EMC_CRITICAL").HasMaxLength(1);
             e.Property(s => s.PerformanceCritical).HasColumnName("PERFORMANCE_CRITICAL").HasMaxLength(1);
             e.Property(s => s.SafetyCritical).HasColumnName("SAFETY_CRITICAL").HasMaxLength(1);
-            e.HasOne(s => s.Part).WithOne(p => p.MechPartSource).HasForeignKey<MechPartSource>(s => s.PartNumber);
+            e.HasOne<Part>(s => s.Part).WithOne(p => p.MechPartSource).HasForeignKey<MechPartSource>(s => s.PartNumber);
             e.HasOne(s => s.PartToBeReplaced).WithMany(p => p.ReplacementParts).HasForeignKey(s => s.LinnPartNumber);
             e.Property(s => s.SafetyDataDirectory).HasColumnName("SAFETY_DATA_DIRECTORY").HasMaxLength(500);
             e.Property(s => s.ProductionDate).HasColumnName("PRODUCTION_DATE");

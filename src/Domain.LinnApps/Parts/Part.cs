@@ -55,6 +55,8 @@
 
         public string OurUnitOfMeasure { get; set; }
 
+        public int? PreferredSupplierId { get; set; }
+
         public Supplier PreferredSupplier { get; set; }
 
         public string Currency { get; set; }
