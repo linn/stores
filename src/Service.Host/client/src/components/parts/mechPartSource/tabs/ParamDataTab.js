@@ -57,8 +57,7 @@ function ParamDataTab({
     };
     const resistorTemperatureCoefficients = [25, 50, 75, 100, 250, 500, 999];
     const resistorTolerances = [0.1, 1, 2, 5, 10, 20, 50, 80];
-    const divide = (a, b) =>
-        isNaN(a) || isNaN(b) ? null : new Decimal(a).dividedBy(new Decimal(b));
+    const divide = (a, b) => (!a || !b ? null : new Decimal(a).dividedBy(new Decimal(b)));
     switch (partType) {
         case 'RES':
             return (
