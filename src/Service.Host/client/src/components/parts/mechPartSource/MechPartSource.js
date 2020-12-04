@@ -301,6 +301,7 @@ function MechPartSource({
                                 <ProposalTab
                                     handleFieldChange={handleFieldChange}
                                     notes={mechPartSource.notes}
+                                    partType={mechPartSource.partType}
                                     proposedBy={mechPartSource.proposedBy}
                                     proposedByName={mechPartSource.proposedByName}
                                     dateEntered={mechPartSource.dateEntered}
@@ -453,8 +454,9 @@ MechPartSource.propTypes = {
     itemError: PropTypes.shape({
         status: PropTypes.number,
         statusText: PropTypes.string,
-        details: PropTypes.shape({}),
-        item: PropTypes.string
+        details: PropTypes.shape(),
+        item: PropTypes.string,
+        mechPartSource: PropTypes.number
     }),
     itemId: PropTypes.string,
     snackbarVisible: PropTypes.bool,
@@ -465,7 +467,7 @@ MechPartSource.propTypes = {
     setSnackbarVisible: PropTypes.func.isRequired,
     userName: PropTypes.string,
     userNumber: PropTypes.number,
-    options: PropTypes.shape({ template: PropTypes.string }),
+    options: PropTypes.shape({ tab: PropTypes.string }),
     liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string })
 };
 
