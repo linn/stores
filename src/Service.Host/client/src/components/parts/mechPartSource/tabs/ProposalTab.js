@@ -87,7 +87,6 @@ function ProposalTab({
                     propertyName="mechanicalOrElectrical"
                     items={['M', 'E']}
                     fullWidth
-                    disabled
                     value={mechanicalOrElectrical}
                     onChange={handleFieldChange}
                 />
@@ -99,7 +98,6 @@ function ProposalTab({
                     propertyName="partType"
                     items={partTypes}
                     fullWidth
-                    disabled
                     value={partType}
                     onChange={handleFieldChange}
                 />

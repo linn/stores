@@ -51,7 +51,7 @@
                 });
             }
             
-            return new MechPartSource
+            var x = new MechPartSource
             {
                 Id = this.databaseService.GetIdSequence("MECH_SOURCE_SEQ"),
                 PartNumber = resource.PartNumber,
@@ -78,13 +78,13 @@
                 PartToBeReplaced = resource.LinnPartNumber == null
                     ? null
                     : this.partRepository.FindBy(p => p.PartNumber == resource.LinnPartNumber),
-                ProductionDate = resource.DateSamplesRequired == null
+                ProductionDate = resource.ProductionDate == null
                     ? (DateTime?)null
                     : DateTime.Parse(resource.ProductionDate),
                 SafetyDataDirectory = resource.SafetyDataDirectory,
                 Part = part,
-                MechPartManufacturerAlts = resource.MechPartManufacturerAlts
-                    .Select(a => new MechPartManufacturerAlt
+                MechPartManufacturerAlts = resource.MechPartManufacturerAlts?.Select(
+                    a => new MechPartManufacturerAlt
                                      {
                                          Sequence = a.Sequence,
                                          PartNumber = a.PartNumber,
@@ -96,7 +96,7 @@
                                          ReelSuffix = a.ReelSuffix,
                                          RohsCompliant = a.RohsCompliant
                                      }).ToList(),
-                MechPartAlts = resource.MechPartAlts.Select(a => new MechPartAlt
+                MechPartAlts = resource.MechPartAlts?.Select(a => new MechPartAlt
                                                                      {
                                                                          PartNumber = a.PartNumber,
                                                                          Sequence = a.Sequence,
@@ -169,6 +169,8 @@
                 LibraryRef = resource.LibraryRef,
                 FootprintRef = resource.FootprintRef
             };
+
+            return x;
         }
 
         protected override void UpdateFromResource(MechPartSource entity, MechPartSourceResource resource)

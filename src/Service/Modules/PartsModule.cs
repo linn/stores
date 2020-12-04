@@ -227,9 +227,9 @@
             var resource = this.Bind<MechPartSourceResource>();
             var result = this.mechPartSourceService.Add(resource);
             
-            if (result.GetType() == typeof(SuccessResult<MechPartSource>))
+            if (result.GetType() == typeof(CreatedResult<MechPartSource>))
             {
-                var created = ((SuccessResult<MechPartSource>)result).Data;
+                var created = ((CreatedResult<MechPartSource>)result).Data;
                 this.partPack.CreatePartFromSourceSheet(
                     created.Id, 
                     created.ProposedBy.Id, 

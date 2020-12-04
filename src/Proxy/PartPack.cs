@@ -91,26 +91,29 @@
 
                 var arg0 = new OracleParameter("p_ms_id", OracleDbType.Int32)
                               {
-                                  Direction = ParameterDirection.Input, Size = 14, Value = sourceId
+                                  Direction = ParameterDirection.Input,
+                                  Size = 100, 
+                                  Value = sourceId
                               };
                 cmd.Parameters.Add(arg0);
 
                 var arg1 = new OracleParameter("p_created_by", OracleDbType.Int32)
                               {
                                   Direction = ParameterDirection.Input,
-                                  Size = 14,
-                                  Value = sourceId
+                                  Size = 100,
+                                  Value = userNumber
                               };
                 cmd.Parameters.Add(arg1);
 
                 var arg2 = new OracleParameter("p_part_number", OracleDbType.Varchar2)
                               {
                                   Direction = ParameterDirection.Input,
-                                  Size = 100
+                                  Size = 100,
+                                  Value = partNumber
                               };
                 cmd.Parameters.Add(arg2);
 
-                var arg3 = new OracleParameter("p_Message", OracleDbType.Varchar2)
+                var arg3 = new OracleParameter("p_message", OracleDbType.Varchar2)
                               {
                                   Direction = ParameterDirection.InputOutput, Size = 100
                               };
