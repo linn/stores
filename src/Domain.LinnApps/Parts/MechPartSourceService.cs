@@ -1,6 +1,5 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Parts
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -21,7 +20,26 @@
 
         public string CalculateResistanceChar(string unit, decimal value)
         {
-            throw new NotImplementedException();
+            var units = new Dictionary<string, decimal>
+                            {
+                                { "K", 1000m },
+                                { "M", 1000000m },
+                            };
+
+            if (unit.Equals("O"))
+            {
+                return value.ToString("G29");
+            }
+
+            if (value < 1)
+            {
+                return value.ToString("G29") + unit;
+            }
+
+            var result = value / units[unit];
+            return result % 1m == 0 ? 
+                       result.ToString("G29") + unit 
+                       : result.ToString("G29").Replace(".", unit);
         }
     }
 }
