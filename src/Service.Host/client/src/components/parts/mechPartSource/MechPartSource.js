@@ -293,7 +293,7 @@ function MechPartSource({
                                 style={{ paddingBottom: '40px' }}
                             >
                                 <Tab label="Proposal" />
-                                <Tab label="DataSheets" />
+                                {mechPartSource.part && <Tab label="DataSheets" />}
                                 <Tab label="Quality Requirements" />
                                 <Tab label="Suppliers" />
                                 <Tab label="Manufacturers" />
@@ -326,7 +326,7 @@ function MechPartSource({
                                     handleLinnPartChange={handleLinnPartChange}
                                 />
                             )}
-                            {tab === 1 && (
+                            {tab === 1 && mechPartSource.part &&  (
                                 <DataSheetsTab
                                     dataSheets={mechPartSource.part?.dataSheets}
                                     handleDataSheetsChange={handleDatasheetsChange}

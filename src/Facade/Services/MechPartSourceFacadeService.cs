@@ -37,7 +37,7 @@
 
         protected override MechPartSource CreateFromResource(MechPartSourceResource resource)
         {
-            var part = resource.LinnPartNumber == null
+            var part = resource.PartNumber == null
                 ? null
                 : this.partRepository.FindBy(p => p.PartNumber == resource.PartNumber);
 
