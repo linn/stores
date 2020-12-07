@@ -3,8 +3,8 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Facade.Services;
-    using Linn.Stores.Resources;
     using Linn.Stores.Resources.Allocation;
+    using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Service.Models;
 
     using Nancy;
@@ -34,11 +34,17 @@
             this.Get("/logistics/allocations", _ => this.GetApp());
             this.Post("/logistics/allocations", _ => this.StartAllocation());
             this.Post("/logistics/allocations/finish", p => this.FinishAllocation());
+            this.Post("/logistics/allocations/un-pick", p => this.UnPickItems());
             this.Get("/logistics/despatch-locations", _ => this.GetDespatchLocations());
             this.Get("/logistics/sos-alloc-heads", _ => this.GetAllocHeads());
             this.Get("/logistics/sos-alloc-heads/{jobId:int}", p => this.GetAllocHeads(p.jobId));
             this.Get("/logistics/sos-alloc-details", _ => this.GetAllocDetails());
             this.Put("/logistics/sos-alloc-details/{id:int}", p => this.UpdateAllocDetail(p.id));
+        }
+
+        private object UnPickItems()
+        {
+            throw new System.NotImplementedException();
         }
 
         private object FinishAllocation()

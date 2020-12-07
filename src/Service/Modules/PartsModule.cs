@@ -5,6 +5,7 @@
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Parts;
+    using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Service.Extensions;
     using Linn.Stores.Service.Models;
 
