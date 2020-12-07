@@ -34,7 +34,8 @@
             this.Get("/logistics/allocations", _ => this.GetApp());
             this.Post("/logistics/allocations", _ => this.StartAllocation());
             this.Post("/logistics/allocations/finish", p => this.FinishAllocation());
-            this.Post("/logistics/allocations/un-pick", p => this.UnPickItems());
+            this.Post("/logistics/allocations/pick", _ => this.PickItems());
+            this.Post("/logistics/allocations/unpick", _ => this.UnpickItems());
             this.Get("/logistics/despatch-locations", _ => this.GetDespatchLocations());
             this.Get("/logistics/sos-alloc-heads", _ => this.GetAllocHeads());
             this.Get("/logistics/sos-alloc-heads/{jobId:int}", p => this.GetAllocHeads(p.jobId));
@@ -42,9 +43,18 @@
             this.Put("/logistics/sos-alloc-details/{id:int}", p => this.UpdateAllocDetail(p.id));
         }
 
-        private object UnPickItems()
+        private object PickItems()
         {
-            throw new System.NotImplementedException();
+            var resource = this.Bind<AccountOutletRequestResource>();
+
+            return this.Negotiate.WithModel(this.allocationFacadeService.PickItems(resource));
+        }
+
+        private object UnpickItems()
+        {
+            var resource = this.Bind<AccountOutletRequestResource>();
+
+            return this.Negotiate.WithModel(this.allocationFacadeService.UnpickItems(resource));
         }
 
         private object FinishAllocation()

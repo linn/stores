@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Allocation
 {
     using System;
+    using System.Collections.Generic;
 
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
@@ -86,6 +87,16 @@
             }
 
             return new AllocationResult(jobId) { AllocationNotes = notes };
+        }
+
+        public IEnumerable<SosAllocDetail> PickItems(int jobId, int accountId, int outletNumber)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<SosAllocDetail> UnpickItems(int jobId, int accountId, int outletNumber)
+        {
+            throw new NotImplementedException();
         }
     }
 }
