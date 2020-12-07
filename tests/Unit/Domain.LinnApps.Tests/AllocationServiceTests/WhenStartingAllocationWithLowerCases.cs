@@ -12,21 +12,21 @@
 
     using NUnit.Framework;
 
-    public class WhenStartingAllocation : ContextBase
+    public class WhenStartingAllocationWithLowerCases : ContextBase
     {
         private readonly int? accountId = 123;
 
         private readonly DateTime? cutOffDate = 1.December(2021);
 
-        private readonly string stockPoolCode = "STORES";
+        private readonly string stockPoolCode = "stores";
 
-        private readonly string despatchLocation = "LOC1";
+        private readonly string despatchLocation = "loc1";
 
-        private readonly string articleNumber = "ARTICLE";
+        private readonly string articleNumber = "article";
 
-        private readonly string accountingCompany = "LINN";
+        private readonly string accountingCompany = "linn";
 
-        private readonly string countryCode = "FR";
+        private readonly string countryCode = "fr";
 
         private readonly bool excludeUnsuppliable = true;
 
@@ -42,14 +42,14 @@
         public void SetUp()
         {
             this.AllocPack.StartAllocation(
-                this.stockPoolCode,
-                this.despatchLocation,
+                this.stockPoolCode.ToUpper(),
+                this.despatchLocation.ToUpper(),
                 this.accountId,
                 null,
-                this.articleNumber,
-                this.accountingCompany,
+                this.articleNumber.ToUpper(),
+                this.accountingCompany.ToUpper(),
                 this.cutOffDate,
-                this.countryCode,
+                this.countryCode.ToUpper(),
                 this.excludeUnsuppliable,
                 this.excludeHold,
                 this.excludeOverCredit,
@@ -76,19 +76,13 @@
         {
             this.SosOptionRepository.Received().Add(
                 Arg.Is<SosOption>(
-                    o => o.ArticleNumber == this.articleNumber
+                    o => o.ArticleNumber == this.articleNumber.ToUpper()
                          && o.AccountId == this.accountId
-                         && o.DespatchLocationCode == this.despatchLocation
-                         && o.StockPoolCode == this.stockPoolCode
-                         && o.CountryCode == this.countryCode
-                         && o.AccountingCompany == this.accountingCompany
+                         && o.DespatchLocationCode == this.despatchLocation.ToUpper()
+                         && o.StockPoolCode == this.stockPoolCode.ToUpper()
+                         && o.CountryCode == this.countryCode.ToUpper()
+                         && o.AccountingCompany == this.accountingCompany.ToUpper()
                          && o.CutOffDate == this.cutOffDate));
-        }
-
-        [Test]
-        public void ShouldCommitTransaction()
-        {
-            this.TransactionManager.Received().Commit();
         }
 
         [Test]

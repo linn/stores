@@ -42,14 +42,14 @@
             var results = new AllocationResult
                               {
                                   Id = this.allocPack.StartAllocation(
-                                      stockPoolCode,
-                                      despatchLocationCode,
+                                      stockPoolCode?.ToUpper(),
+                                      despatchLocationCode?.ToUpper(),
                                       accountId,
                                       null,
-                                      articleNumber,
-                                      accountingCompany,
+                                      articleNumber?.ToUpper(),
+                                      accountingCompany?.ToUpper(),
                                       cutOffDate,
-                                      countryCode,
+                                      countryCode?.ToUpper(),
                                       excludeUnsuppliableLines,
                                       excludeOnHold,
                                       excludeOverCreditLimit,
@@ -63,12 +63,12 @@
             this.sosOptionRepository.Add(new SosOption
                                              {
                                                  JobId = results.Id,
-                                                 ArticleNumber = articleNumber,
+                                                 ArticleNumber = articleNumber?.ToUpper(),
                                                  AccountId = accountId,
-                                                 DespatchLocationCode = despatchLocationCode,
-                                                 StockPoolCode = stockPoolCode,
-                                                 AccountingCompany = accountingCompany,
-                                                 CountryCode = countryCode,
+                                                 DespatchLocationCode = despatchLocationCode?.ToUpper(),
+                                                 StockPoolCode = stockPoolCode?.ToUpper(),
+                                                 AccountingCompany = accountingCompany?.ToUpper(),
+                                                 CountryCode = countryCode?.ToUpper(),
                                                  CutOffDate = cutOffDate
                                              });
 
