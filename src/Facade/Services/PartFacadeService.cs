@@ -60,6 +60,7 @@
 
         protected override Part CreateFromResource(PartResource resource)
         {
+            // todo - move this to a new method that doesn
             if (resource.CreateFromSourceSheet)
             {
                 return this.partService.CreateFromSource(resource.SourceId, resource.SourceCreatedBy);

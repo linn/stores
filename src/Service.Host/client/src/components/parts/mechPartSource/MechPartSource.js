@@ -40,7 +40,12 @@ function MechPartSource({
     const viewing = () => editStatus === 'view';
     const [mechPartSource, setMechPartSource] = useState(
         creating()
-            ? { proposedBy: userNumber, proposedByName: userName, dateEntered: new Date() }
+            ? {
+                  proposedBy: userNumber,
+                  proposedByName: userName,
+                  dateEntered: new Date(),
+                  createPart: true
+              }
             : null
     );
     const [prevMechPartSource, setPrevMechPartSource] = useState({});

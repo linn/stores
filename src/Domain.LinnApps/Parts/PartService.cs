@@ -41,6 +41,7 @@
             this.qcControlRepository = qcControlRepository;
             this.partRepository = partRepository;
             this.partPack = partPack;
+            this.sourceRepository = sourceRepository;
             this.templateRepository = templateRepository;
         }
 

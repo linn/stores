@@ -125,7 +125,7 @@
                 partNumber = cmd.Parameters[2].Value.ToString();
                 connection.Close();
 
-                return message;
+                return partNumber;
             }
         }
     }

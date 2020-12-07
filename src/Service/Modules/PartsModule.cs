@@ -260,12 +260,9 @@
 
             var created = ((CreatedResult<MechPartSource>)result).Data;
 
-            this.partsFacadeService.Add(new PartResource
-                                            {
-                                                SourceId = created.Id, 
-                                                SourceCreatedBy = created.ProposedBy.Id
-                                            });
-            return this.Negotiate.WithModel(result)
+            this.partDomainService.CreateFromSource(created.Id, created.ProposedBy.Id);
+
+            return this.Negotiate.WithModel(this.mechPartSourceService.GetById(created.Id))
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
 
