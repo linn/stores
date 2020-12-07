@@ -128,8 +128,6 @@
 
         public decimal? Resistance { get; set; }
 
-        public string ResistanceUnit { get; set; }
-
         public decimal? ResistorTolerance { get; set; }
 
         public string Construction { get; set; }

@@ -341,7 +341,6 @@
             e.Property(s => s.CapacitorDiameter).HasColumnName("CAP_DIAMETER");
             e.Property(s => s.CapacitanceUnit).HasColumnName("CAPACITANCE_CHAR");
             e.Property(s => s.Resistance).HasColumnName("RES_RESISTANCE");
-            e.Property(s => s.ResistanceUnit).HasColumnName("RESISTANCE_CHAR");
             e.Property(s => s.ResistorTolerance).HasColumnName("RES_TOLERANCE");
             e.Property(s => s.Construction).HasColumnName("CONSTRUCTION").HasMaxLength(14);
             e.Property(s => s.ResistorLength).HasColumnName("RES_LENGTH");

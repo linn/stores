@@ -71,10 +71,13 @@ function MechPartSource({
     }, [item, prevMechPartSource, editStatus, itemId]);
 
     const handleSaveClick = () => {
+        const body = mechPartSource;
+        const rkmLetters = { KΩ: 'K', MΩ: 'M', Ω: '' };
+        body.resistanceUnits = rkmLetters[mechPartSource.resistanceUnits];
         if (creating()) {
-            addItem(mechPartSource);
+            addItem(body);
         } else {
-            updateItem(itemId, mechPartSource);
+            updateItem(itemId, body);
         }
         setEditStatus('view');
     };

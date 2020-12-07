@@ -9,8 +9,8 @@
         [Test]
         public void WhenUnitIsOhms()
         {
-            this.Sut.CalculateResistanceChar("O", 1000).Should().Be("1000");
-            this.Sut.CalculateResistanceChar("O", 0.47m).Should().Be("0.47");
+            this.Sut.CalculateResistanceChar(string.Empty, 1000).Should().Be("1000");
+            this.Sut.CalculateResistanceChar(null, 0.47m).Should().Be("0.47");
         }
 
         [Test]

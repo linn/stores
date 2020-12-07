@@ -150,7 +150,6 @@
                 CapacitorDiameter = resource.CapacitorDiameter,
                 CapacitanceUnit = resource.CapacitanceUnit,
                 Resistance = resource.Resistance,
-                ResistanceUnit = resource.ResistanceUnit,
                 ResistorTolerance = resource.ResistorTolerance,
                 Construction = resource.Construction,
                 ResistorLength = resource.ResistorLength,
@@ -167,7 +166,9 @@
                 IcType = resource.IcType,
                 IcFunction = resource.IcFunction,
                 LibraryRef = resource.LibraryRef,
-                FootprintRef = resource.FootprintRef
+                FootprintRef = resource.FootprintRef,
+                ResistanceChar = resource.Resistance == null ? null :
+                                     this.domainService.CalculateResistanceChar(resource.ResistanceUnits, (decimal)resource.Resistance)
             };
 
             return x;
@@ -287,7 +288,6 @@
             entity.CapacitanceUnit = resource.CapacitanceUnit;
             entity.Resistance = resource.Resistance;
             entity.ResistorWidth = resource.ResistorWidth;
-            entity.ResistanceUnit = resource.ResistanceUnit;
             entity.ResistorTolerance = resource.ResistorTolerance;
             entity.Construction = resource.Construction;
             entity.ResistorLength = resource.ResistorLength;

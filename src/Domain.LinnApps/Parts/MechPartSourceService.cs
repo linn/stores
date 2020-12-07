@@ -26,7 +26,7 @@
                                 { "M", 1000000m },
                             };
 
-            if (unit.Equals("O"))
+            if (string.IsNullOrEmpty(unit))
             {
                 return value.ToString("G29");
             }

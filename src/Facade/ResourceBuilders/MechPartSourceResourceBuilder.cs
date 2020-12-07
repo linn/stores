@@ -84,7 +84,7 @@
                             CapacitorDiameter = model.CapacitorDiameter,
                             CapacitanceUnit = model.CapacitanceUnit,
                             Resistance = model.Resistance,
-                            ResistanceUnit = model.ResistanceUnit,
+                            // ResistanceUnits = model.ResistanceUnit,
                             ResistorTolerance = model.ResistorTolerance,
                             Construction = model.Construction,
                             ResistorLength = model.ResistorLength,
