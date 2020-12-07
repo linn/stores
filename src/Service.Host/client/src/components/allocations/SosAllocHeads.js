@@ -24,12 +24,15 @@ function SosAllocHeads({
     detailsLoading,
     updateDetail,
     finishAllocation,
-    allocationError
+    allocationError,
+    finishAllocationWorking,
+    initialise
 }) {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectedDetails, setSelectedDetails] = useState([]);
     const [progress, setProgress] = useState(50);
     const [alloctionHasFinished, setAllocationHasFinished] = useState(false);
+    const [allocationHasStarted, setAllocationHasStarted] = useState(false);
 
     useEffect(() => {
         if (items.length > 0 && details.length > 0) {
@@ -44,10 +47,19 @@ function SosAllocHeads({
     }, [selectedIndex, items, details, setSelectedDetails]);
 
     useEffect(() => {
-        if (details.length > 0 && details.some(detail => detail.allocationSuccessful)) {
-            setAllocationHasFinished(true);
+        setAllocationHasFinished(
+            details.length > 0 && details.some(detail => detail.allocationSuccessful)
+        );
+    }, [details, items, jobId, setAllocationHasFinished]);
+
+    useEffect(() => {
+        if (allocationHasStarted && !finishAllocationWorking) {
+            setAllocationHasStarted(false);
+            initialise({ jobId });
+        } else {
+            setAllocationHasStarted(finishAllocationWorking);
         }
-    }, [details, setAllocationHasFinished]);
+    }, [finishAllocationWorking, jobId, setAllocationHasStarted, allocationHasStarted, initialise]);
 
     useEffect(() => {
         if (selectedIndex === 0) {
@@ -114,7 +126,7 @@ function SosAllocHeads({
                 )}
             </Grid>
             <Grid container spacing={3}>
-                {!loading && (
+                {!loading && !finishAllocationWorking && (
                     <>
                         <Grid item xs={2}>
                             <Grid container>
@@ -199,7 +211,9 @@ SosAllocHeads.propTypes = {
     details: PropTypes.arrayOf(PropTypes.shape({})),
     updateDetail: PropTypes.func.isRequired,
     finishAllocation: PropTypes.func.isRequired,
-    allocationError: PropTypes.string
+    allocationError: PropTypes.string,
+    finishAllocationWorking: PropTypes.bool,
+    initialise: PropTypes.func.isRequired
 };
 
 SosAllocHeads.defaultProps = {
@@ -207,7 +221,8 @@ SosAllocHeads.defaultProps = {
     items: [],
     details: [],
     detailsLoading: null,
-    allocationError: null
+    allocationError: null,
+    finishAllocationWorking: false
 };
 
 export default SosAllocHeads;

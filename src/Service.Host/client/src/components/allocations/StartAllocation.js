@@ -35,8 +35,11 @@ function StartAllocation({
 }) {
     const [allocationOptions, setAllocationOptions] = useState({
         accountingCompany: 'LINN',
-        despatchLocation: 'LINN',
-        stockPool: 'LINN',
+        despatchLocationCode: 'LINN',
+        stockPoolCode: 'LINN',
+        accountId: null,
+        articleNumber: null,
+        countryCode: null,
         excludeUnsuppliableLines: true,
         excludeOverCreditLimit: true,
         excludeOnHold: true,
@@ -117,10 +120,10 @@ function StartAllocation({
                         <Grid item xs={4}>
                             <Dropdown
                                 label="Stock Pool"
-                                propertyName="stockPool"
+                                propertyName="stockPoolCode"
                                 items={stockPoolOptions()}
                                 fullWidth
-                                value={allocationOptions.stockPool}
+                                value={allocationOptions.stockPoolCode}
                                 onChange={handleFieldChange}
                             />
                         </Grid>
@@ -128,10 +131,10 @@ function StartAllocation({
                         <Grid item xs={4}>
                             <Dropdown
                                 label="Despatch Location"
-                                propertyName="despatchLocation"
+                                propertyName="despatchLocationCode"
                                 items={despatchLocationOptions()}
                                 fullWidth
-                                value={allocationOptions.despatchLocation}
+                                value={allocationOptions.despatchLocationCode}
                                 onChange={handleFieldChange}
                             />
                         </Grid>
