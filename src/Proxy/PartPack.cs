@@ -79,7 +79,7 @@
             }
         }
 
-        public string CreatePartFromSourceSheet(int sourceId, int userNumber, string partNumber)
+        public string CreatePartFromSourceSheet(int sourceId, int userNumber, out string partNumber)
         {
             using (var connection = this.databaseService.GetConnection())
             {
@@ -107,9 +107,9 @@
 
                 var arg2 = new OracleParameter("p_part_number", OracleDbType.Varchar2)
                               {
-                                  Direction = ParameterDirection.Input,
+                                  Direction = ParameterDirection.InputOutput,
                                   Size = 100,
-                                  Value = partNumber
+                                  Value = string.Empty
                               };
                 cmd.Parameters.Add(arg2);
 
@@ -122,6 +122,7 @@
 
                 cmd.ExecuteNonQuery();
                 var message = cmd.Parameters[3].Value.ToString();
+                partNumber = cmd.Parameters[2].Value.ToString();
                 connection.Close();
 
                 return message;

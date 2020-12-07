@@ -1,5 +1,8 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     using Linn.Common.Authorisation;
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
@@ -248,15 +251,27 @@
             var resource = this.Bind<MechPartSourceResource>();
             
             var result = this.mechPartSourceService.Add(resource);
+
+            string partNumber = null;
+            MechPartSource created = null;
             
             if (result.GetType() == typeof(CreatedResult<MechPartSource>))
             {
-                var created = ((CreatedResult<MechPartSource>)result).Data;
+                created = ((CreatedResult<MechPartSource>)result).Data;
+
+                // under what conditions should we do this??
                 this.partPack.CreatePartFromSourceSheet(
                     created.Id, 
                     created.ProposedBy.Id, 
-                    created.PartNumber);
+                    out partNumber);
             }
+
+            var part = ((SuccessResult<IEnumerable<Part>>)this.partsFacadeService.Search(partNumber)).Data
+                .FirstOrDefault();
+
+            resource.PartNumber = part.PartNumber;
+
+            result = this.mechPartSourceService.Update(created.Id, resource);
 
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);

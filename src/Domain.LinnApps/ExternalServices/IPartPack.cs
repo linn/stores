@@ -6,6 +6,6 @@
 
         bool PartLiveTest(string partNumber, out string message);
 
-        string CreatePartFromSourceSheet(int sourceId, int userNumber, string partNumber);
+        string CreatePartFromSourceSheet(int sourceId, int userNumber, out string partNumber);
     }
 }

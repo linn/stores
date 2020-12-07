@@ -205,7 +205,7 @@
 
             var currentDataSheets = entity.Part?.DataSheets;
 
-            var newDataSheets = resource.Part.DataSheets.Select(s => new PartDataSheet
+            var newDataSheets = resource.Part?.DataSheets.Select(s => new PartDataSheet
                                                                         {
                                                                             Part = entity.Part,
                                                                             Sequence = s.Sequence,
