@@ -5,5 +5,7 @@
     public interface IMechPartSourceService
     {
         IEnumerable<PartDataSheet> GetUpdatedDataSheets(IEnumerable<PartDataSheet> from, IEnumerable<PartDataSheet> to);
+
+        string CalculateResistanceChar(string unit, decimal value);
     }
 }

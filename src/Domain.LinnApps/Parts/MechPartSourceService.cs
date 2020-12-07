@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Parts
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -16,6 +17,11 @@
             }
 
             return updated;
+        }
+
+        public string CalculateResistanceChar(string unit, decimal value)
+        {
+            throw new NotImplementedException();
         }
     }
 }
