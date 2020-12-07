@@ -91,18 +91,21 @@ function ProposalTab({
                     onChange={handleFieldChange}
                 />
             </Grid>
-            <Grid item xs={9} />
-            <Grid item xs={3}>
-                <Dropdown
-                    label="Part Type"
-                    propertyName="partType"
-                    items={partTypes}
-                    fullWidth
-                    value={partType}
-                    onChange={handleFieldChange}
-                />
-            </Grid>
-            <Grid item xs={9} />
+            {mechanicalOrElectrical === 'E' ? (
+                <Grid item xs={3}>
+                    <Dropdown
+                        label="Part Type"
+                        propertyName="partType"
+                        items={partTypes}
+                        fullWidth
+                        value={partType}
+                        onChange={handleFieldChange}
+                    />
+                </Grid>
+            ) : (
+                <Grid item xs={3} />
+            )}
+            <Grid item xs={6} />
 
             <Grid item xs={3}>
                 <Dropdown

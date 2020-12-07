@@ -297,7 +297,10 @@ function MechPartSource({
                                 <Tab label="Quality Requirements" />
                                 <Tab label="Suppliers" />
                                 <Tab label="Manufacturers" />
-                                <Tab label="Param Data" />
+                                <Tab
+                                    label="Param Data"
+                                    disabled={mechPartSource.mechanicalOrElectrical !== 'E'}
+                                />
                                 <Tab label="Cad Data" />
                             </Tabs>
                             {tab === 0 && (
@@ -386,7 +389,7 @@ function MechPartSource({
                                     deleteRow={deleteManufacturersRow}
                                 />
                             )}
-                            {tab === 5 && (
+                            {tab === 5 && mechPartSource.mechanicalOrElectrical === 'E' && (
                                 <ParamDataTab
                                     partType={mechPartSource.partType}
                                     resistance={mechPartSource.resistance}
