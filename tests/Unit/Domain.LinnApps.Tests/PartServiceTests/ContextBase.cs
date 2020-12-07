@@ -21,6 +21,8 @@
 
         protected IRepository<Part, int> PartRepository { get; private set; }
 
+        protected IRepository<MechPartSource, int> SourceRepository { get; private set; }
+
         protected IRepository<PartTemplate, string> TemplateRepository { get; private set; }
 
         protected ITransactionManager TransactionManager { get; private set; }
@@ -35,6 +37,7 @@
             this.QcControlRepo = Substitute.For<IRepository<QcControl, int>>();
             this.PartRepository = Substitute.For<IRepository<Part, int>>();
             this.TemplateRepository = Substitute.For<IRepository<PartTemplate, string>>();
+            this.SourceRepository = Substitute.For<IRepository<MechPartSource, int>>();
             this.TransactionManager = Substitute.For<ITransactionManager>();
             this.PartPack = Substitute.For<IPartPack>();
             this.Sut = new PartService(
@@ -43,6 +46,7 @@
                 this.SupplierRepo,
                 this.PartRepository,
                 this.TemplateRepository,
+                this.SourceRepository,
                 this.PartPack);
         }
     }
