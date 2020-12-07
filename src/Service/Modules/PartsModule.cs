@@ -252,27 +252,19 @@
             
             var result = this.mechPartSourceService.Add(resource);
 
-            string partNumber = null;
-            MechPartSource created = null;
-            
-            if (result.GetType() == typeof(CreatedResult<MechPartSource>))
+            if (result.GetType() != typeof(CreatedResult<MechPartSource>) || !resource.CreatePart)
             {
-                created = ((CreatedResult<MechPartSource>)result).Data;
-
-                // under what conditions should we do this??
-                this.partPack.CreatePartFromSourceSheet(
-                    created.Id, 
-                    created.ProposedBy.Id, 
-                    out partNumber);
+                return this.Negotiate
+                    .WithModel(result).WithMediaRangeModel("text/html", ApplicationSettings.Get);
             }
 
-            var part = ((SuccessResult<IEnumerable<Part>>)this.partsFacadeService.Search(partNumber)).Data
-                .FirstOrDefault();
+            var created = ((CreatedResult<MechPartSource>)result).Data;
 
-            resource.PartNumber = part.PartNumber;
-
-            result = this.mechPartSourceService.Update(created.Id, resource);
-
+            this.partsFacadeService.Add(new PartResource
+                                            {
+                                                SourceId = created.Id, 
+                                                SourceCreatedBy = created.ProposedBy.Id
+                                            });
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

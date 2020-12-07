@@ -164,5 +164,7 @@
         public string FootprintRef { get; set; }
 
         public string ResistanceUnits { get; set; }
+
+        public bool CreatePart { get; set; }
     }
 }

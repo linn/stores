@@ -289,6 +289,7 @@ function MechPartSource({
                                 value={tab}
                                 onChange={handleTabChange}
                                 indicatorColor="primary"
+                                scrollButtons="on"
                                 textColor="primary"
                                 style={{ paddingBottom: '40px' }}
                             >

@@ -60,6 +60,11 @@
 
         protected override Part CreateFromResource(PartResource resource)
         {
+            if (resource.CreateFromSourceSheet)
+            {
+                return this.partService.CreateFromSource(resource.SourceId, resource.SourceCreatedBy);
+            }
+
             var partToAdd = new Part
                                     {
                                              PartNumber = resource.PartNumber,

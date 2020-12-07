@@ -198,6 +198,12 @@
                                              });
         }
 
+        public Part CreateFromSource(int sourceId, int createdBy)
+        {
+            this.partPack.CreatePartFromSourceSheet(sourceId, createdBy, out var partNumber);
+            return this.partRepository.FindBy(p => p.PartNumber == partNumber);
+        }
+
         private static void Validate(Part to)
         {
             if (to.ScrapOrConvert != null && to.DatePhasedOut == null)

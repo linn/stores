@@ -9,5 +9,7 @@
         Part CreatePart(Part partToCreate, List<string> privileges);
 
         void AddQcControl(string partNumber, int? createdBy, string qcInfo);
+
+        Part CreateFromSource(int sourceId, int createdBy);
     }
 }
