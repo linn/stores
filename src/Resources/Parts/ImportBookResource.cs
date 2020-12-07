@@ -4,7 +4,7 @@
 
     public class ImportBookResource : HypermediaResource
     {
-        public int ImportBookId { get; set; }
+        public int Id { get; set; }
 
         public string DateCreated { get; set; }
 

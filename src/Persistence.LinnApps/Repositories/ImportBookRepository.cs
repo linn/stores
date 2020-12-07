@@ -20,7 +20,7 @@
 
         public ImportBook FindById(int key)
         {
-            return this.serviceDbContext.ImportBooks.Where(b => b.ImportBookId == key)
+            return this.serviceDbContext.ImportBooks.Where(b => b.Id == key)
                 .Include(b => b.ImportBookInvoiceDetail)
                 .Include(b => b.ImportBookOrderDetail)
                 .Include(b => b.ImportBookPostEntry)

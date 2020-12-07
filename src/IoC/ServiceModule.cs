@@ -10,6 +10,7 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
+    using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Reports;
     using Linn.Stores.Facade.Services;
@@ -73,6 +74,8 @@
             builder.RegisterType<ManufacturerService>()
                 .As<IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>>();
             builder.RegisterType<EmployeesService>().As<IEmployeeService>();
+            builder.RegisterType<ImportBookFacadeService>()
+                .As<IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

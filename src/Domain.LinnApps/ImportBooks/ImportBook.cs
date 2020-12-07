@@ -4,7 +4,7 @@
 
     public class ImportBook
     {
-        public int ImportBookId { get; set; }
+        public int Id { get; set; }
 
         public DateTime DateCreated { get; set; }
 

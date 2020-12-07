@@ -23,7 +23,7 @@
         {
             return new ImportBookResource
                        {
-                           ImportBookId = model.ImportBookId,
+                           Id = model.Id,
                            DateCreated = model.DateCreated.ToString("o"),
                            ParcelNumber = model.ParcelNumber,
                            SupplierId = model.SupplierId,
@@ -80,18 +80,24 @@
                            PortCode = model.PortCode,
                            CustomsEntryCodePrefix = model.CustomsEntryCodePrefix,
                            ImportBookOrderDetail =
-                               this.importBookOrderDetailResourceBuilder?.Build(model.ImportBookOrderDetail),
+                               model.ImportBookOrderDetail != null
+                                   ? this.importBookOrderDetailResourceBuilder.Build(model.ImportBookOrderDetail)
+                                   : null,
                            ImportBookPostEntry =
-                               this.importBookPostEntryResourceBuilder?.Build(model.ImportBookPostEntry),
+                               model.ImportBookPostEntry != null
+                                   ? this.importBookPostEntryResourceBuilder.Build(model.ImportBookPostEntry)
+                                   : null,
                            ImportBookInvoiceDetail =
-                               this.importBookInvoiceDetailResourceBuilder?.Build(model.ImportBookInvoiceDetail),
+                               model.ImportBookInvoiceDetail != null
+                                   ? this.importBookInvoiceDetailResourceBuilder.Build(model.ImportBookInvoiceDetail)
+                                   : null,
                            Links = this.BuildLinks(model).ToArray()
                        };
         }
 
         public string GetLocation(ImportBook model)
         {
-            return $"/inventory/import-books/{model.ImportBookId}";
+            return $"/inventory/import-books/{model.Id}";
         }
 
         object IResourceBuilder<ImportBook>.Build(ImportBook importBook) => this.Build(importBook);

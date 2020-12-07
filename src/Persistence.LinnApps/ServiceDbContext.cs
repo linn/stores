@@ -694,8 +694,8 @@
         private void BuildImportBooks(ModelBuilder builder)
         {
             var q = builder.Entity<ImportBook>().ToTable("IMPBOOKS");
-            q.HasKey(e => e.ImportBookId);
-            q.Property(e => e.ImportBookId).HasColumnName("IMPBOOK_ID");
+            q.HasKey(e => e.Id);
+            q.Property(e => e.Id).HasColumnName("IMPBOOK_ID");
             q.Property(e => e.DateCreated).HasColumnName("DATE_CREATED");
             q.Property(e => e.ParcelNumber).HasColumnName("PARCEL_NUMBER");
             q.Property(e => e.SupplierId).HasColumnName("SUPPLIER_ID");
