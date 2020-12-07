@@ -358,7 +358,7 @@
             e.Property(s => s.IcFunction).HasColumnName("IC_FUNCTION").HasMaxLength(50);
             e.Property(s => s.FootprintRef).HasColumnName("FOOTPRINT_REF").HasMaxLength(30);
             e.Property(s => s.LibraryRef).HasColumnName("LIBRARY_REF").HasMaxLength(30);
-            e.Property(s => s.ResistanceChar).HasColumnName("RESISTANCE_CHAR").HasMaxLength(18);
+            e.Property(s => s.RkmCode).HasColumnName("RESISTANCE_CHAR").HasMaxLength(18);
         }
 
         private void BuildMechPartAlts(ModelBuilder builder)

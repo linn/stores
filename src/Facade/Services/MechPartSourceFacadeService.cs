@@ -167,8 +167,8 @@
                 IcFunction = resource.IcFunction,
                 LibraryRef = resource.LibraryRef,
                 FootprintRef = resource.FootprintRef,
-                ResistanceChar = resource.Resistance == null ? null :
-                                     this.domainService.CalculateResistanceChar(resource.ResistanceUnits, (decimal)resource.Resistance)
+                RkmCode = resource.Resistance == null ? null :
+                                     this.domainService.GetRkmCode(resource.ResistanceUnits, (decimal)resource.Resistance)
             };
 
             return x;

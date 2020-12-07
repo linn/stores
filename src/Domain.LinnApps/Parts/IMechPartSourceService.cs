@@ -6,6 +6,6 @@
     {
         IEnumerable<PartDataSheet> GetUpdatedDataSheets(IEnumerable<PartDataSheet> from, IEnumerable<PartDataSheet> to);
 
-        string CalculateResistanceChar(string unit, decimal value);
+        string GetRkmCode(string unit, decimal value);
     }
 }

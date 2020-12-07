@@ -160,6 +160,6 @@
 
         public string FootprintRef { get; set; }
 
-        public string ResistanceChar { get; set; }
+        public string RkmCode { get; set; }
     }
 }

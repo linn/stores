@@ -18,7 +18,7 @@
             return updated;
         }
 
-        public string CalculateResistanceChar(string unit, decimal value)
+        public string GetRkmCode(string unit, decimal value)
         {
             var units = new Dictionary<string, decimal>
                             {
