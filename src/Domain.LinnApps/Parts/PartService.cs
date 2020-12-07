@@ -25,12 +25,15 @@
 
         private readonly IPartPack partPack;
 
+        private readonly IRepository<MechPartSource, int> sourceRepository;
+
         public PartService(
             IAuthorisationService authService,
             IRepository<QcControl, int> qcControlRepository,
             IQueryRepository<Supplier> supplierRepository,
             IRepository<Part, int> partRepository,
             IRepository<PartTemplate, string> templateRepository,
+            IRepository<MechPartSource, int> sourceRepository,
             IPartPack partPack)
         {
             this.authService = authService;
@@ -200,7 +203,8 @@
 
         public Part CreateFromSource(int sourceId, int createdBy)
         {
-            this.partPack.CreatePartFromSourceSheet(sourceId, createdBy, out var partNumber);
+            this.sourceRepository.FindById(sourceId).PartNumber = 
+                this.partPack.CreatePartFromSourceSheet(sourceId, createdBy, out var partNumber);
             return this.partRepository.FindBy(p => p.PartNumber == partNumber);
         }
 
