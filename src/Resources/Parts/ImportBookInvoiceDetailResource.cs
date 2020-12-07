@@ -1,6 +1,8 @@
-﻿namespace Linn.Stores.Domain.LinnApps.ImportBooks
+﻿namespace Linn.Stores.Resources.Parts
 {
-    public class ImportBookInvoiceDetail
+    using Linn.Common.Resources;
+
+    public class ImportBookInvoiceDetailResource : HypermediaResource
     {
         public int ImportBookId { get; set; }
 
@@ -9,7 +11,5 @@
         public string InvoiceNumber { get; set; }
 
         public int InvoiceValue { get; set; }
-
-        public ImportBook ImportBook { get; set; }
     }
 }

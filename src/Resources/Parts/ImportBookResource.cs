@@ -1,12 +1,12 @@
-﻿namespace Linn.Stores.Domain.LinnApps.ImportBooks
+﻿namespace Linn.Stores.Resources.Parts
 {
-    using System;
+    using Linn.Common.Resources;
 
-    public class ImportBook
+    public class ImportBookResource : HypermediaResource
     {
         public int ImportBookId { get; set; }
 
-        public DateTime DateCreated { get; set; }
+        public string DateCreated { get; set; }
 
         public int? ParcelNumber { get; set; }
 
@@ -40,7 +40,7 @@
 
         public string TransNature { get; set; }
 
-        public DateTime? ArrivalDate { get; set; }
+        public string ArrivalDate { get; set; }
 
         public int? FreightCharges { get; set; }
 
@@ -68,7 +68,7 @@
 
         public string CustomsEntryCode { get; set; }
 
-        public DateTime? CustomsEntryCodeDate { get; set; }
+        public string CustomsEntryCodeDate { get; set; }
 
         public int? LinnDuty { get; set; }
 
@@ -78,7 +78,7 @@
 
         public int? EecgNumber { get; set; }
 
-        public DateTime? DateCancelled { get; set; }
+        public string DateCancelled { get; set; }
 
         public int? CancelledBy { get; set; }
 
@@ -86,7 +86,7 @@
 
         public string CarrierInvNumber { get; set; }
 
-        public DateTime? CarrierInvDate { get; set; }
+        public string CarrierInvDate { get; set; }
 
         public string CountryOfOrigin { get; set; }
 
@@ -116,10 +116,10 @@
 
         public string CustomsEntryCodePrefix { get; set; }
 
-        public ImportBookOrderDetail ImportBookOrderDetail { get; set; }
-        
-        public ImportBookPostEntry ImportBookPostEntry { get; set; }
-        
-        public ImportBookInvoiceDetail ImportBookInvoiceDetail { get; set; }
+        public ImportBookOrderDetailResource ImportBookOrderDetail { get; set; }
+
+        public ImportBookPostEntryResource ImportBookPostEntry { get; set; }
+
+        public ImportBookInvoiceDetailResource ImportBookInvoiceDetail { get; set; }
     }
 }

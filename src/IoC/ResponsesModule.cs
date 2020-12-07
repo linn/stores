@@ -10,6 +10,7 @@
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Domain.LinnApps.Exceptions;
+    using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade;
     using Linn.Stores.Facade.ResourceBuilders;
@@ -102,6 +103,11 @@
             builder.RegisterType<EmployeesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<Employee>>>();
             builder.RegisterType<ErrorResourceBuilder>().As<IResourceBuilder<Error>>();
+            builder.RegisterType<ImportBookResourceBuilder>().As<IResourceBuilder<ImportBook>>();
+            builder.RegisterType<ImportBookInvoiceDetailResourceBuilder>()
+                .As<IResourceBuilder<ImportBookInvoiceDetail>>();
+            builder.RegisterType<ImportBookOrderDetailResourceBuilder>().As<IResourceBuilder<ImportBookOrderDetail>>();
+            builder.RegisterType<ImportBookPostEntryResourceBuilder>().As<IResourceBuilder<ImportBookPostEntry>>();
         }
     }
 }

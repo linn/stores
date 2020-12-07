@@ -751,6 +751,10 @@
             q.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
             q.Property(e => e.PortCode).HasColumnName("PORT_CODE").HasMaxLength(3);
             q.Property(e => e.CustomsEntryCodePrefix).HasColumnName("CUSTOMS_ENTRY_CODE_PREFIX").HasMaxLength(3);
+            q.HasOne(e => e.ImportBookOrderDetail).WithOne(b => b.ImportBook).HasForeignKey("IMPBOOK_ID");
+            q.HasOne(e => e.ImportBookPostEntry).WithOne(b => b.ImportBook).HasForeignKey("IMPBOOK_ID");
+            q.HasOne(e => e.ImportBookInvoiceDetail).WithOne(b => b.ImportBook).HasForeignKey("IMPBOOK_ID");
+            // e.HasMany(n => n.NominalAccounts).WithOne(a => a.Department).HasForeignKey("DEPARTMENT");
         }
 
         private void BuildImportBookInvoiceDetails(ModelBuilder builder)

@@ -7,6 +7,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class ImportBookRepository : IRepository<ImportBook, int>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -18,7 +20,12 @@
 
         public ImportBook FindById(int key)
         {
-            return this.serviceDbContext.ImportBooks.Where(b => b.ImportBookId == key).ToList().FirstOrDefault();
+            return this.serviceDbContext.ImportBooks.Where(b => b.ImportBookId == key)
+                .Include(b => b.ImportBookInvoiceDetail)
+                .Include(b => b.ImportBookOrderDetail)
+                .Include(b => b.ImportBookPostEntry)
+                .ToList()
+                .FirstOrDefault();
         }
 
         public IQueryable<ImportBook> FindAll()
