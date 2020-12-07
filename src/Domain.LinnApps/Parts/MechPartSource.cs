@@ -161,5 +161,7 @@
         public string LibraryRef { get; set; }
 
         public string FootprintRef { get; set; }
+
+        public string ResistanceChar { get; set; }
     }
 }
