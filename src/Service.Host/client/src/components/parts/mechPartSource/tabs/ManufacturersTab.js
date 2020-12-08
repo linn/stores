@@ -39,7 +39,7 @@ function ManufacturersTab({
 
     const columns = [
         {
-            title: 'Preferece',
+            title: 'Preference',
             id: 'preference',
             type: 'number',
             editable: true,
