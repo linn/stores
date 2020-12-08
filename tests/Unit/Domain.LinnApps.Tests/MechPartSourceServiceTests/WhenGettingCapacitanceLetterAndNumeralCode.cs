@@ -9,26 +9,26 @@
         [Test]
         public void WhenUnitIsMicro()
         {
-            this.Sut.GetCapacitanceLetterAndNumeralCode("u", 1m).Should().Be("1uF");
-            this.Sut.GetCapacitanceLetterAndNumeralCode("u", 4.7m).Should().Be("4u7F");
-            this.Sut.GetCapacitanceLetterAndNumeralCode("u", 470m).Should().Be("470uF");
+            this.Sut.GetCapacitanceLetterAndNumeralCode("u", 0.000001m).Should().Be("1uF");
+            this.Sut.GetCapacitanceLetterAndNumeralCode("u", 0.0000047m).Should().Be("4u7F");
+            this.Sut.GetCapacitanceLetterAndNumeralCode("u", 0.000470m).Should().Be("470uF");
         }
 
         [Test]
         public void WhenUnitIsNano()
         {
-            this.Sut.GetCapacitanceLetterAndNumeralCode("n", 150000m).Should().Be("150000nF");
-            this.Sut.GetCapacitanceLetterAndNumeralCode("n", 2.2m).Should().Be("2n2F");
-            this.Sut.GetCapacitanceLetterAndNumeralCode("n", 1m).Should().Be("1nF");
-            this.Sut.GetCapacitanceLetterAndNumeralCode("n", 100000m).Should().Be("100000nF");
+            this.Sut.GetCapacitanceLetterAndNumeralCode("n", 0.000150000m).Should().Be("150000nF");
+            this.Sut.GetCapacitanceLetterAndNumeralCode("n", 0.0000000022m).Should().Be("2n2F");
+            this.Sut.GetCapacitanceLetterAndNumeralCode("n", 0.000000001m).Should().Be("1nF");
+            this.Sut.GetCapacitanceLetterAndNumeralCode("n", 0.000100000m).Should().Be("100000nF");
         }
 
         [Test]
         public void WhenUnitIsPico()
         {
-            this.Sut.GetRkmCode("p", 220m).Should().Be("220pF");
-            this.Sut.GetRkmCode("p", 2.2m).Should().Be("2p2F");
-            this.Sut.GetRkmCode("p", 220000000m).Should().Be("220000000pF");
+            this.Sut.GetCapacitanceLetterAndNumeralCode("p", 0.000000000220m).Should().Be("220pF");
+            this.Sut.GetCapacitanceLetterAndNumeralCode("p", 0.0000000000022m).Should().Be("2p2F");
+            this.Sut.GetCapacitanceLetterAndNumeralCode("p", 0.000220000000m).Should().Be("220000000pF");
         }
     }
 }
