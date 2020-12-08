@@ -122,7 +122,7 @@
 
         public decimal? CapacitorDiameter { get; set; }
 
-        public string CapacitanceUnit { get; set; }
+        public string CapacitanceLetterAndNumeralCode { get; set; }
 
         public decimal? Resistance { get; set; }
 

@@ -41,5 +41,10 @@
                        result.ToString("G29") + unit 
                        : result.ToString("G29").Replace(".", unit);
         }
+
+        public string GetCapacitanceLetterAndNumeralCode(string unit, decimal value)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

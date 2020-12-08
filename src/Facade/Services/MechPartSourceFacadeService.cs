@@ -148,7 +148,10 @@
                 CapacitorWidth = resource.CapacitorWidth,
                 CapacitorHeight = resource.CapacitorHeight,
                 CapacitorDiameter = resource.CapacitorDiameter,
-                CapacitanceUnit = resource.CapacitanceUnit,
+                CapacitanceLetterAndNumeralCode = resource.Capacitance == null 
+                                                      ? null : this.domainService.GetCapacitanceLetterAndNumeralCode(
+                                                          resource.CapacitanceUnit, 
+                                                          (decimal)resource.Capacitance),
                 Resistance = resource.Resistance,
                 ResistorTolerance = resource.ResistorTolerance,
                 Construction = resource.Construction,
@@ -285,7 +288,12 @@
             entity.CapacitorWidth = resource.CapacitorWidth;
             entity.CapacitorHeight = resource.CapacitorHeight;
             entity.CapacitorDiameter = resource.CapacitorDiameter;
-            entity.CapacitanceUnit = resource.CapacitanceUnit;
+            entity.CapacitanceLetterAndNumeralCode = resource.Capacitance == null
+                                                         ? null
+                                                         : this.domainService
+                                                             .GetCapacitanceLetterAndNumeralCode(
+                                                             resource.CapacitanceUnit,
+                                                             (decimal)resource.Capacitance);
             entity.Resistance = resource.Resistance;
             entity.ResistorWidth = resource.ResistorWidth;
             entity.ResistorTolerance = resource.ResistorTolerance;
