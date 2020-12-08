@@ -51,7 +51,7 @@
                 });
             }
             
-            var x = new MechPartSource
+            return new MechPartSource
             {
                 Id = this.databaseService.GetIdSequence("MECH_SOURCE_SEQ"),
                 PartNumber = resource.PartNumber,
@@ -173,8 +173,6 @@
                 RkmCode = resource.Resistance == null ? null :
                                      this.domainService.GetRkmCode(resource.ResistanceUnits, (decimal)resource.Resistance)
             };
-
-            return x;
         }
 
         protected override void UpdateFromResource(MechPartSource entity, MechPartSourceResource resource)
