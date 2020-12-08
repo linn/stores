@@ -148,7 +148,6 @@
 
         public string TransistorDeviceName { get; set; }
 
-
         public string TransistorPolarity { get; set; }
 
         public int? TransistorVoltage { get; set; }
@@ -164,6 +163,10 @@
         public string FootprintRef { get; set; }
 
         public string ResistanceUnits { get; set; }
+
+        public string RkmCode { get; set; }
+
+        public string CapictanceLetterAndNumeralCode { get; set; }
 
         public bool CreatePart { get; set; }
     }

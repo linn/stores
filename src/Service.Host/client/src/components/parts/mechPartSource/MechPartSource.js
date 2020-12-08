@@ -399,11 +399,24 @@ function MechPartSource({
                                 <ParamDataTab
                                     partType={mechPartSource.partType}
                                     resistance={mechPartSource.resistance}
-                                    resistanceUnits={mechPartSource.resistanceUnits}
+                                    resistanceUnits={
+                                        creating()
+                                            ? mechPartSource.resistanceUnits
+                                            : mechPartSource?.rkmCode
+                                                  ?.replace(/[^a-zA-Z]/g, '')
+                                                  .concat('Ω')
+                                    }
                                     handleFieldChange={handleFieldChange}
                                     capacitorRippleCurrent={mechPartSource.capacitorRippleCurrent}
                                     capacitance={mechPartSource.capacitance}
-                                    capacitanceUnits={mechPartSource.capacitanceUnits}
+                                    capacitanceUnits={
+                                        creating()
+                                            ? mechPartSource.capacitanceUnits
+                                            : mechPartSource?.capacitanceLetterAndNumeralCodestring?.replace(
+                                                  /[^a-zA-Z]/g,
+                                                  ''
+                                              )
+                                    }
                                     capacitorVoltageRating={mechPartSource.capacitorVoltageRating}
                                     capacitorPositiveTolerance={
                                         mechPartSource.capacitorPositiveTolerance
@@ -411,6 +424,7 @@ function MechPartSource({
                                     capacitorNegativeTolerance={
                                         mechPartSource.capacitorNegativeTolerance
                                     }
+                                    creating={creating}
                                     capacitorDielectric={mechPartSource.capacitorDielectric}
                                     packageName={mechPartSource.packageName}
                                     capacitorPitch={mechPartSource.capacitorPitch}
