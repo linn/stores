@@ -106,7 +106,7 @@ function Part({
                 if (template.nextNumber < 1000) {
                     return template.nextNumber.toString().padStart(3, 0);
                 }
-                return template.nextNumber().toString();
+                return template.nextNumber.toString();
             };
             setPart(p => ({
                 ...p,
