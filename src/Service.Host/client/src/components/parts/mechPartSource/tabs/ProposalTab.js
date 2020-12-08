@@ -174,7 +174,6 @@ function ProposalTab({
                     onChange={value => {
                         handleFieldChange('productionDate', value);
                     }}
-                    disabled
                 />
             </Grid>
             <Grid item xs={8} />
@@ -217,7 +216,6 @@ function ProposalTab({
                     onChange={value => {
                         handleFieldChange('dateSamplesRequired', value);
                     }}
-                    disabled
                 />
             </Grid>
             <Grid item xs={3} />

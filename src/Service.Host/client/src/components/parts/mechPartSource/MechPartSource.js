@@ -66,7 +66,7 @@ function MechPartSource({
         setTab(value);
     };
 
-    const mechPartSourceInvalid = () => !mechPartSource.assemblyType;
+    const mechPartSourceInvalid = () => !mechPartSource.samplesRequired;
 
     useEffect(() => {
         if (item !== prevMechPartSource && editStatus !== 'create') {
