@@ -80,6 +80,10 @@ export const manufacturersActionTypes = makeActionTypes(itemTypes.manufacturers.
 
 export const employeesActionTypes = makeActionTypes(itemTypes.employees.actionType);
 
+export const partDataSheetValuesActionTypes = makeActionTypes(
+    itemTypes.partDataSheetValues.actionType
+);
+
 export const finishAllocationActionTypes = makeActionTypes(
     processTypes.finishAllocation.actionType
 );

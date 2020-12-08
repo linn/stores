@@ -35,30 +35,6 @@
                                  };
             var part = new Part { Id = 12, PartNumber = "PART 012", DataSheets = dataSheets, };
 
-            var mechPartSource = new MechPartSource
-            {
-                Id = 1,
-                DateSamplesRequired = DateTime.Today,
-                ProposedBy = employee,
-                ProductionDate = DateTime.Today,
-                LinnPartNumber = "PART 123",
-                Part = part,
-            };
-
-            var dataSheetsResource = new List<PartDataSheetResource>
-                                 {
-                                     new PartDataSheetResource
-                                         {
-                                            Sequence = 1,
-                                            PdfFilePath = "/path/1"
-                                         },
-                                     new PartDataSheetResource
-                                         {
-                                             Sequence = 2,
-                                             PdfFilePath = "/path/2"
-                                         },
-                                 };
-
             var mechPartAltsResource = new List<MechPartAltResource>
                                            {
                                                new MechPartAltResource
@@ -89,11 +65,7 @@
                 ProductionDate = DateTime.Today.ToString("o"),
                 LinnPartNumber = "PART 123",
                 MechPartAlts = mechPartAltsResource,
-                Part = new PartResource
-                {
-                    PartNumber = "PART 012",
-                    DataSheets = dataSheetsResource,
-                },
+                CreatePart = false,
                 MechPartManufacturerAlts = mechPartManufacturerAlts
             };
             this.DatabaseService.GetIdSequence("MECH_SOURCE_SEQ").Returns(1);
@@ -113,7 +85,7 @@
         {
             this.result.Should().BeOfType<CreatedResult<MechPartSource>>();
             var dataResult = ((CreatedResult<MechPartSource>)this.result).Data;
-            dataResult.Part.Id.Should().Be(12);
+            dataResult.Id.Should().Be(1);
         }
     }
 }

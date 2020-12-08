@@ -5,5 +5,7 @@
         string PartRoot(string partNumber);
 
         bool PartLiveTest(string partNumber, out string message);
+
+        string CreatePartFromSourceSheet(int sourceId, int userNumber, out string partNumber);
     }
 }

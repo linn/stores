@@ -5,9 +5,11 @@
 
     using Domain.LinnApps.Parts;
 
+    using Linn.Common.Authorisation;
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
@@ -76,7 +78,16 @@
             get; private set;
         }
 
-        protected IRepository<Manufacturer, string> ManufacturerRepository;
+        protected IRepository<Manufacturer, string> ManufacturerRepository
+        {
+            get; private set;
+        }
+
+        protected IPartDataSheetValuesService DataSheetValuesService { get; private set; }
+
+        protected IPartPack PartPack { get; private set; }
+
+        protected IAuthorisationService AuthService { get; private set; }
 
         [SetUp]
         public void EstablishContext()
@@ -104,6 +115,9 @@
             this.ManufacturerService = Substitute
                 .For<IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>>();
             this.ManufacturerRepository = Substitute.For<IRepository<Manufacturer, string>>();
+            this.DataSheetValuesService = Substitute.For<IPartDataSheetValuesService>();
+            this.PartPack = Substitute.For<IPartPack>();
+            this.AuthService = Substitute.For<IAuthorisationService>();
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
@@ -123,6 +137,9 @@
                         with.Dependency(this.MechPartSourceService);
                         with.Dependency(this.MechPartSourceRepository);
                         with.Dependency(this.ManufacturerService);
+                        with.Dependency(this.DataSheetValuesService);
+                        with.Dependency(this.PartPack);
+                        with.Dependency(this.AuthService);
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());
                         with.Dependency<IResourceBuilder<PartTemplate>>(new PartTemplateResourceBuilder());

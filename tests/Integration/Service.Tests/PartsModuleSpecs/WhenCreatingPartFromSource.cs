@@ -16,7 +16,7 @@
 
     using NUnit.Framework;
 
-    public class WhenAddingMechPartSource : ContextBase
+    public class WhenCreatingPartFromSource : ContextBase
     {
         private MechPartSourceResource requestResource;
 
@@ -28,20 +28,32 @@
                 Id = 1,
                 ProposedBy = 33087,
                 AssemblyType = "SM",
-                SamplesRequired = "N"
+                SamplesRequired = "N",
+                CreatePart = true
             };
 
-                var source = new MechPartSource
-                {
-                    Id = 1,
-                    ProposedBy = new Employee { Id = 33087 },
-                    AssemblyType = "SM",
-                    SamplesRequired = "N"
-                };
+            var source = new MechPartSource
+                             {
+                                 Id = 1,
+                                 ProposedBy = new Employee { Id = 33087 },
+                                 AssemblyType = "SM",
+                                 SamplesRequired = "N"
+                             };
+
+            var part = new Part
+                           {
+                               Id = 1,
+                               StockControlled = "Y",
+                               CreatedBy = new Employee { Id = 33087 },
+                           };
 
             this.MechPartSourceService.Add(Arg.Any<MechPartSourceResource>())
                 .Returns(new CreatedResult<MechPartSource>(source));
-            this.AuthService.HasPermissionFor(Arg.Any<string>(), Arg.Any<IEnumerable<string>>()).Returns(true);
+            this.PartsDomainService.CreateFromSource(1, 33087).Returns(part);
+            this.MechPartSourceService.GetById(1).Returns(new SuccessResult<MechPartSource>(source));
+            this.AuthService.HasPermissionFor(
+                Arg.Any<string>(),
+                Arg.Any<IEnumerable<string>>()).Returns(true);
 
             this.Response = this.Browser.Post(
                 "/inventory/parts/sources",
@@ -54,17 +66,29 @@
         }
 
         [Test]
-        public void ShouldReturnCreated()
+        public void ShouldReturnSuccess()
         {
-            this.Response.StatusCode.Should().Be(HttpStatusCode.Created);
+            this.Response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [Test]
-        public void ShouldCallService()
+        public void ShouldAddMechPartSource()
         {
             this.MechPartSourceService
                 .Received()
                 .Add(Arg.Is<MechPartSourceResource>(r => r.Id == this.requestResource.Id));
+        }
+
+        [Test]
+        public void ShouldCreatePart()
+        {
+            this.PartsDomainService.Received().CreateFromSource(1, 33087);
+        }
+
+        [Test]
+        public void ShouldGetUpdatedSource()
+        {
+            this.MechPartSourceService.Received().GetById(1);
         }
 
         [Test]

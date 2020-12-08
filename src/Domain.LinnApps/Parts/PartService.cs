@@ -25,12 +25,15 @@
 
         private readonly IPartPack partPack;
 
+        private readonly IRepository<MechPartSource, int> sourceRepository;
+
         public PartService(
             IAuthorisationService authService,
             IRepository<QcControl, int> qcControlRepository,
             IQueryRepository<Supplier> supplierRepository,
             IRepository<Part, int> partRepository,
             IRepository<PartTemplate, string> templateRepository,
+            IRepository<MechPartSource, int> sourceRepository,
             IPartPack partPack)
         {
             this.authService = authService;
@@ -38,6 +41,7 @@
             this.qcControlRepository = qcControlRepository;
             this.partRepository = partRepository;
             this.partPack = partPack;
+            this.sourceRepository = sourceRepository;
             this.templateRepository = templateRepository;
         }
 
@@ -196,6 +200,13 @@
                                                  OnOrOffQc = "ON",
                                                  Reason = qcInfo
                                              });
+        }
+
+        public Part CreateFromSource(int sourceId, int createdBy)
+        {
+            this.sourceRepository.FindById(sourceId).PartNumber = 
+                this.partPack.CreatePartFromSourceSheet(sourceId, createdBy, out var partNumber);
+            return this.partRepository.FindBy(p => p.PartNumber == partNumber);
         }
 
         private static void Validate(Part to)

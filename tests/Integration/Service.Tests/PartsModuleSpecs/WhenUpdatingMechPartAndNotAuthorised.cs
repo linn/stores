@@ -17,7 +17,7 @@
 
     using NUnit.Framework;
 
-    public class WhenUpdatingMechMechPartSource: ContextBase
+    public class WhenUpdatingMechPartSourceAndUnauthorised : ContextBase
     {
         private MechPartSourceResource requestResource;
 
@@ -30,10 +30,10 @@
                 DateEntered = DateTime.Today.ToString("o"),
                 Part = new PartResource
                 {
-                    PartNumber = "PART", 
-                    Id = 1, 
-                    Description = "Desc", 
-                    StockControlled = true, 
+                    PartNumber = "PART",
+                    Id = 1,
+                    Description = "Desc",
+                    StockControlled = true,
                     CreatedBy = 1
                 },
             };
@@ -49,8 +49,10 @@
                 },
                 DateEntered = DateTime.Today
             };
-            this.MechPartSourceService.Update(1, Arg.Any<MechPartSourceResource>()).Returns(new SuccessResult<MechPartSource>(p));
-            this.AuthService.HasPermissionFor(Arg.Any<string>(), Arg.Any<IEnumerable<string>>()).Returns(true);
+            this.MechPartSourceService.Update(1, Arg.Any<MechPartSourceResource>())
+                .Returns(new SuccessResult<MechPartSource>(p));
+            this.AuthService.
+                HasPermissionFor(Arg.Any<string>(), Arg.Any<IEnumerable<string>>()).Returns(false);
             this.Response = this.Browser.Put(
                 "inventory/parts/sources/1",
                 with =>
@@ -62,22 +64,9 @@
         }
 
         [Test]
-        public void ShouldReturnOk()
+        public void ShouldReturnBadRequest()
         {
-            this.Response.StatusCode.Should().Be(HttpStatusCode.OK);
-        }
-
-        [Test]
-        public void ShouldCallService()
-        {
-            this.MechPartSourceService.Received().Update(1, Arg.Any<MechPartSourceResource>());
-        }
-
-        [Test]
-        public void ShouldReturnResource()
-        {
-            var resource = this.Response.Body.DeserializeJson<MechPartSourceResource>();
-            resource.Id.Should().Be(1);
+            this.Response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
 }

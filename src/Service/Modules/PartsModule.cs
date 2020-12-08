@@ -1,6 +1,12 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Linn.Common.Authorisation;
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
@@ -24,6 +30,8 @@
 
         private readonly IProductAnalysisCodeService productAnalysisCodeService;
 
+        private readonly IAuthorisationService authService;
+
         private readonly
             IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>
             assemblyTechnologyService;
@@ -43,6 +51,10 @@
         private readonly IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>
             manufacturerService;
 
+        private readonly IPartDataSheetValuesService dataSheetsValuesService;
+
+        private readonly IPartPack partPack;
+
         public PartsModule(
             IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
@@ -54,10 +66,15 @@
             IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> partTemplateService,
             IPartLiveService partLiveService,
             IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> mechPartSourceService,
-            IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> manufacturerService)
+            IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> manufacturerService,
+            IPartDataSheetValuesService dataSheetsValuesService,
+            IPartPack partPack,
+            IAuthorisationService authService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
+            this.partPack = partPack;
+            this.authService = authService;
             this.Get("/parts/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/parts/{id}", parameters => this.GetPart(parameters.id));
             this.Put("/parts/{id}", parameters => this.UpdatePart(parameters.id));
@@ -93,6 +110,9 @@
 
             this.manufacturerService = manufacturerService;
             this.Get("/inventory/manufacturers", _ => this.GetManufacturers());
+            
+            this.dataSheetsValuesService = dataSheetsValuesService;
+            this.Get("/inventory/parts/data-sheet-values", _ => this.GetPartDataSheetValues());
         }
 
         private object GetPart(int id)
@@ -202,6 +222,14 @@
 
         private object UpdateMechPartSource(int id)
         {
+            if (!this.authService
+                    .HasPermissionFor(
+                        AuthorisedAction.PartAdmin,
+                        this.Context.CurrentUser.GetPrivileges()))
+            {
+                return new UnauthorisedResult<MechPartSource>("You are not authorised to update.");
+            }
+
             var resource = this.Bind<MechPartSourceResource>();
             var result = this.mechPartSourceService.Update(id, resource);
             return this.Negotiate.WithModel(result)
@@ -211,10 +239,30 @@
         private object AddMechPartSource()
         {
             this.RequiresAuthentication();
-            // todo - privileges check
+
+            if (!this.authService
+                    .HasPermissionFor(
+                        AuthorisedAction.PartAdmin, 
+                        this.Context.CurrentUser.GetPrivileges()))
+            {
+                return new UnauthorisedResult<MechPartSource>("You are not authorised to create.");
+            }
+            
             var resource = this.Bind<MechPartSourceResource>();
+            
             var result = this.mechPartSourceService.Add(resource);
-            return this.Negotiate.WithModel(result)
+
+            if (result.GetType() != typeof(CreatedResult<MechPartSource>) || !resource.CreatePart)
+            {
+                return this.Negotiate
+                    .WithModel(result).WithMediaRangeModel("text/html", ApplicationSettings.Get);
+            }
+
+            var created = ((CreatedResult<MechPartSource>)result).Data;
+
+            this.partDomainService.CreateFromSource(created.Id, created.ProposedBy.Id);
+
+            return this.Negotiate.WithModel(this.mechPartSourceService.GetById(created.Id))
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
 
@@ -222,6 +270,13 @@
         {
             var resource = this.Bind<SearchRequestResource>();
             var result = this.manufacturerService.Search(resource.SearchTerm);
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetPartDataSheetValues()
+        {
+            var result = this.dataSheetsValuesService.GetAll();
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

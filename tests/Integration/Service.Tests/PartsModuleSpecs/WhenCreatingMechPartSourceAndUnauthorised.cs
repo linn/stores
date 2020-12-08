@@ -16,7 +16,7 @@
 
     using NUnit.Framework;
 
-    public class WhenAddingMechPartSource : ContextBase
+    public class WhenAddingMechPartSourceAndUnauthorised : ContextBase
     {
         private MechPartSourceResource requestResource;
 
@@ -31,17 +31,17 @@
                 SamplesRequired = "N"
             };
 
-                var source = new MechPartSource
-                {
-                    Id = 1,
-                    ProposedBy = new Employee { Id = 33087 },
-                    AssemblyType = "SM",
-                    SamplesRequired = "N"
-                };
+            var source = new MechPartSource
+            {
+                Id = 1,
+                ProposedBy = new Employee { Id = 33087 },
+                AssemblyType = "SM",
+                SamplesRequired = "N"
+            };
 
             this.MechPartSourceService.Add(Arg.Any<MechPartSourceResource>())
                 .Returns(new CreatedResult<MechPartSource>(source));
-            this.AuthService.HasPermissionFor(Arg.Any<string>(), Arg.Any<IEnumerable<string>>()).Returns(true);
+            this.AuthService.HasPermissionFor(Arg.Any<string>(), Arg.Any<IEnumerable<string>>()).Returns(false);
 
             this.Response = this.Browser.Post(
                 "/inventory/parts/sources",
@@ -54,24 +54,9 @@
         }
 
         [Test]
-        public void ShouldReturnCreated()
+        public void ShouldReturnUnauthorised()
         {
-            this.Response.StatusCode.Should().Be(HttpStatusCode.Created);
-        }
-
-        [Test]
-        public void ShouldCallService()
-        {
-            this.MechPartSourceService
-                .Received()
-                .Add(Arg.Is<MechPartSourceResource>(r => r.Id == this.requestResource.Id));
-        }
-
-        [Test]
-        public void ShouldReturnResource()
-        {
-            var resource = this.Response.Body.DeserializeJson<MechPartSource>();
-            resource.Id.Should().Be(1);
+            this.Response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
 }

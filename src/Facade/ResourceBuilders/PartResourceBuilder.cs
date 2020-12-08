@@ -96,6 +96,7 @@
                            NonForecastRequirement = part.NonForecastRequirement,
                            OneOffRequirement = part.OneOffRequirement,
                            DataSheets = part.DataSheets?.Select(s => this.dataSheetResourceBuilder.Build(s)).OrderBy(s => s.Sequence),
+                           ParamData = this.BuildParamDataResource(part.ParamData),
                            Links = this.BuildLinks(part).ToArray()
                        };
         }
@@ -128,6 +129,40 @@
             }
 
             return yesOrNoString == "Y";
+        }
+
+        private PartParamDataResource BuildParamDataResource(PartParamData entity)
+        {
+            if (entity == null)
+            {
+                return null;
+            }
+
+            return new PartParamDataResource
+                       {
+                           AttributeSet = entity.AttributeSet,
+                           Capacitance = entity.Capacitance,
+                           Construction = entity.Construction,
+                           Current = entity.Current,
+                           Diameter = entity.Diameter,
+                           Dielectric = entity.Dielectric,
+                           Height = entity.Height,
+                           IcFunction = entity.IcFunction,
+                           IcType = entity.IcType,
+                           Length = entity.Length,
+                           NegativeTolerance = entity.NegativeTolerance,
+                           Package = entity.Package,
+                           TransistorType = entity.TransistorType,
+                           Voltage = entity.Voltage,
+                           Pitch = entity.Pitch,
+                           Width = entity.Width,
+                           Polarity = entity.Polarity,
+                           Resistance = entity.Resistance,
+                           Power = entity.Power,
+                           TemperatureCoefficient = entity.TemperatureCoefficient,
+                           PartNumber = entity.PartNumber,
+                           PositiveTolerance = entity.PositiveTolerance
+                       };
         }
     }
 }
