@@ -204,9 +204,16 @@
 
         public Part CreateFromSource(int sourceId, int createdBy)
         {
-            this.sourceRepository.FindById(sourceId).PartNumber = 
-                this.partPack.CreatePartFromSourceSheet(sourceId, createdBy, out var partNumber);
-            return this.partRepository.FindBy(p => p.PartNumber == partNumber);
+            var source = this.sourceRepository.FindById(sourceId);
+            source.PartNumber = 
+                this.partPack.CreatePartFromSourceSheet(sourceId, createdBy, out var message);
+            
+            if (message != $"Created Part {source.PartNumber}")
+            {
+                throw new CreatePartException(message);
+            }
+
+            return this.partRepository.FindBy(p => p.PartNumber == source.PartNumber);
         }
 
         private static void Validate(Part to)
