@@ -70,10 +70,9 @@ function MechPartSource({
         setTab(value);
     };
 
-    const mechPartSourceInvalid = () => false;
-    // () =>
-    //     !mechPartSource.samplesRequired ||
-    //     (mechPartSource.mechanicalOrElectrical === 'E' && !mechPartSource.partType);
+    const mechPartSourceInvalid = () =>
+        !mechPartSource.samplesRequired ||
+        (mechPartSource.mechanicalOrElectrical === 'E' && !mechPartSource.partType);
 
     useEffect(() => {
         if (item !== prevMechPartSource && editStatus !== 'create') {
