@@ -145,7 +145,6 @@
                 throw new CreatePartException("You are not authorised to create parts.");
             }
 
-
             var partRoot = this.partPack.PartRoot(partToCreate.PartNumber);
 
             if (partRoot != null && this.templateRepository.FindById(partRoot) != null)
