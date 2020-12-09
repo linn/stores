@@ -266,30 +266,36 @@ function MechPartSource({
                                 onClose={() => setSnackbarVisible(false)}
                                 message="Save Successful"
                             />
-                            <Grid item xs={3}>
-                                <InputField
-                                    fullWidth
-                                    disabled={!creating()}
-                                    value={mechPartSource.partNumber}
-                                    label="Part Number"
-                                    maxLength={14}
-                                    helperText={!creating() ? 'This field cannot be changed' : ''}
-                                    required
-                                    onChange={handleFieldChange}
-                                    propertyName="partNumber"
-                                />
-                            </Grid>
-                            <Grid item xs={8}>
-                                <InputField
-                                    fullWidth
-                                    value={mechPartSource.part?.description}
-                                    label="Description"
-                                    maxLength={200}
-                                    required
-                                    onChange={handlePartFieldChange}
-                                    propertyName="description"
-                                />
-                            </Grid>
+                            {!creating() && (
+                                <>
+                                    <Grid item xs={3}>
+                                        <InputField
+                                            fullWidth
+                                            disabled={!creating()}
+                                            value={mechPartSource.partNumber}
+                                            label="Part Number"
+                                            maxLength={14}
+                                            helperText={
+                                                !creating() ? 'This field cannot be changed' : ''
+                                            }
+                                            required
+                                            onChange={handleFieldChange}
+                                            propertyName="partNumber"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                        <InputField
+                                            fullWidth
+                                            value={mechPartSource.part?.description}
+                                            label="Description"
+                                            maxLength={200}
+                                            required
+                                            onChange={handlePartFieldChange}
+                                            propertyName="description"
+                                        />
+                                    </Grid>
+                                </>
+                            )}
                             <Tabs
                                 value={tab}
                                 onChange={handleTabChange}
