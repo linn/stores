@@ -18,9 +18,9 @@
         [SetUp]
         public void SetUp()
         {
-            this.privileges = new List<string> { "irrelevant.privilege" };
+            this.privileges = new List<string> { "some.privilege" };
 
-            this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(false);
+            this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
             this.SourceRepository.FindById(Arg.Any<int>()).Returns(new MechPartSource { });
             this.PartPack.CreatePartFromSourceSheet(Arg.Any<int>(), Arg.Any<int>(), out Arg.Any<string>())
                 .Returns(
