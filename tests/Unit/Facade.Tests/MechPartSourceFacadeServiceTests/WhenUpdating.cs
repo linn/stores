@@ -2,6 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq.Expressions;
+
+    using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
     using FluentAssertions;
 
@@ -96,6 +99,8 @@
                                 };
             this.PartRepository.FindById(12).Returns(part);
             this.EmployeeRepository.FindById(33870).Returns(employee);
+            this.SupplierRepository.FindBy(Arg.Any<Expression<Func<Supplier, bool>>>())
+                .Returns(new Supplier { Id = 1 });
             this.MechPartSourceRepository.FindById(1).Returns(mechPartSource);
             this.result = this.Sut.Update(this.resource.Id, this.resource);
         }
