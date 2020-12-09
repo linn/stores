@@ -60,6 +60,7 @@ function SuppliersTab({
                 createRow={saveRow}
                 saveRow={saveRow}
                 deleteRow={deleteRow}
+                closeEditingOnSave
             />
         </Grid>
     );
