@@ -4,8 +4,6 @@
     using System.Collections.Generic;
     using System.Linq.Expressions;
 
-    using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-
     using FluentAssertions;
 
     using Linn.Common.Facade;
