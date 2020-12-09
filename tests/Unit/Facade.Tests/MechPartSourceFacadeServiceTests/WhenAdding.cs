@@ -75,7 +75,7 @@
         }
 
         [Test]
-        public void ShouldGet()
+        public void ShouldAdd()
         {
             this.MechPartSourceRepository.Received().Add(Arg.Any<MechPartSource>());
         }
