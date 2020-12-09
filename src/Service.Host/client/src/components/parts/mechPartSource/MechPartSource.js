@@ -66,6 +66,9 @@ function MechPartSource({
 
     const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
 
+    const [newManufacturersRow, setNewManufacturersRow] = useState({});
+    const [newSuppliersRow, setNewSuppliersRow] = useState({});
+
     const handleTabChange = (_, value) => {
         setTab(value);
     };
@@ -396,6 +399,8 @@ function MechPartSource({
                                     suppliers={mechPartSource.mechPartAlts}
                                     saveRow={saveSuppliersRow}
                                     deleteRow={deleteSuppliersRow}
+                                    newRow={newSuppliersRow}
+                                    setNewRow={setNewSuppliersRow}
                                 />
                             )}
                             {tab === 4 && (
@@ -405,6 +410,8 @@ function MechPartSource({
                                     manufacturers={mechPartSource.mechPartManufacturerAlts}
                                     saveRow={saveManufacturersRow}
                                     deleteRow={deleteManufacturersRow}
+                                    newRow={newManufacturersRow}
+                                    setNewRow={setNewManufacturersRow}
                                 />
                             )}
                             {tab === 5 && mechPartSource.mechanicalOrElectrical === 'E' && (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { EditableTable } from '@linn-it/linn-form-components-library';
 import Grid from '@material-ui/core/Grid';
@@ -16,10 +16,10 @@ function ManufacturersTab({
     handleApprovedByChange,
     handleManufacturerChange,
     deleteRow,
+    newRow,
+    setNewRow,
     saveRow
 }) {
-    const [newRow, setNewRow] = useState({});
-
     const selectApprovedBySearchResult = (_propertyName, approvedBy, updatedItem) => {
         handleApprovedByChange(updatedItem.sequence, approvedBy);
         setNewRow(() => ({
@@ -128,7 +128,9 @@ ManufacturersTab.propTypes = {
     clearEmployeesSearch: PropTypes.func.isRequired,
     employeesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     employeesSearchLoading: PropTypes.bool,
-    handleApprovedByChange: PropTypes.func.isRequired
+    handleApprovedByChange: PropTypes.func.isRequired,
+    setNewRow: PropTypes.func.isRequired,
+    newRow: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 ManufacturersTab.defaultProps = {
@@ -136,7 +138,8 @@ ManufacturersTab.defaultProps = {
     manufacturersSearchResults: [],
     manufacturersSearchLoading: false,
     employeesSearchResults: [],
-    employeesSearchLoading: false
+    employeesSearchLoading: false,
+    newRow: []
 };
 
 export default ManufacturersTab;

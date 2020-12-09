@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { EditableTable } from '@linn-it/linn-form-components-library';
 import Grid from '@material-ui/core/Grid';
@@ -11,10 +11,10 @@ function SuppliersTab({
     suppliersSearchLoading,
     handleSupplierChange,
     deleteRow,
-    saveRow
+    saveRow,
+    newRow,
+    setNewRow
 }) {
-    const [newRow, setNewRow] = useState({});
-
     const selectSupplierSearchResult = (_propertyName, supplier, updatedItem) => {
         handleSupplierChange(updatedItem.sequence, supplier);
         setNewRow(() => ({
@@ -73,13 +73,16 @@ SuppliersTab.propTypes = {
     searchSuppliers: PropTypes.func.isRequired,
     clearSuppliersSearch: PropTypes.func.isRequired,
     suppliersSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
-    suppliersSearchLoading: PropTypes.bool
+    suppliersSearchLoading: PropTypes.bool,
+    setNewRow: PropTypes.func.isRequired,
+    newRow: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 SuppliersTab.defaultProps = {
     suppliers: [],
     suppliersSearchResults: [],
-    suppliersSearchLoading: false
+    suppliersSearchLoading: false,
+    newRow: []
 };
 
 export default SuppliersTab;
