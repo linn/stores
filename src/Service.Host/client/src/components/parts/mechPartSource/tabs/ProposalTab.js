@@ -194,7 +194,7 @@ function ProposalTab({
                     propertyName="samplesRequired"
                     items={['Y', 'N']}
                     fullWidth
-                    allowNoValue
+                    allowNoValue={false}
                     required
                     value={samplesRequired}
                     onChange={handleFieldChange}

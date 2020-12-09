@@ -44,7 +44,11 @@ function MechPartSource({
                   proposedBy: userNumber,
                   proposedByName: userName,
                   dateEntered: new Date(),
-                  createPart: true
+                  createPart: true,
+                  mechPartAlts: [],
+                  mechPartManufacturerAlts: [],
+                  mechanicalOrElectrical: 'E',
+                  samplesRequired: 'N'
               }
             : null
     );
@@ -66,7 +70,9 @@ function MechPartSource({
         setTab(value);
     };
 
-    const mechPartSourceInvalid = () => !mechPartSource.samplesRequired;
+    const mechPartSourceInvalid = () =>
+        !mechPartSource.samplesRequired ||
+        (mechPartSource.mechanicalOrElectrical === 'E' && !mechPartSource.partType);
 
     useEffect(() => {
         if (item !== prevMechPartSource && editStatus !== 'create') {
