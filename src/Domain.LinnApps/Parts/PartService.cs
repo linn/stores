@@ -208,7 +208,7 @@
             source.PartNumber = 
                 this.partPack.CreatePartFromSourceSheet(sourceId, createdBy, out var message);
             
-            if (message != $"Created Part {source.PartNumber}")
+            if (message != $"Created part {source.PartNumber}")
             {
                 throw new CreatePartException(message);
             }
