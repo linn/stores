@@ -30,8 +30,7 @@ function SosAllocHeads({
     pickItemsAllocation,
     pickItemsAllocationWorking,
     unpickItemsAllocation,
-    unpickItemsAllocationWorking,
-    fetchSosAllocDetails
+    unpickItemsAllocationWorking
 }) {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectedDetails, setSelectedDetails] = useState([]);
@@ -200,9 +199,6 @@ function SosAllocHeads({
                                     pickItemsAllocationWorking={pickItemsAllocationWorking}
                                     unpickItemsAllocation={unpickItemsAllocation}
                                     unpickItemsAllocationWorking={unpickItemsAllocationWorking}
-                                    fetchSosAllocDetails={() =>
-                                        fetchSosAllocDetails(null, `&jobId=${jobId}`)
-                                    }
                                 />
                             </>
                         </Grid>
@@ -229,8 +225,7 @@ SosAllocHeads.propTypes = {
     pickItemsAllocation: PropTypes.func.isRequired,
     pickItemsAllocationWorking: PropTypes.func.isRequired,
     unpickItemsAllocation: PropTypes.func.isRequired,
-    unpickItemsAllocationWorking: PropTypes.func.isRequired,
-    fetchSosAllocDetails: PropTypes.func.isRequired
+    unpickItemsAllocationWorking: PropTypes.func.isRequired
 };
 
 SosAllocHeads.defaultProps = {

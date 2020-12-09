@@ -20,8 +20,7 @@ function SosAllocDetails({
     pickItemsAllocation,
     pickItemsAllocationWorking,
     unpickItemsAllocation,
-    unpickItemsAllocationWorking,
-    fetchSosAllocDetails
+    unpickItemsAllocationWorking
 }) {
     const [internalError, setInternalError] = useState(null);
 
@@ -163,7 +162,6 @@ SosAllocDetails.propTypes = {
     pickItemsAllocationWorking: PropTypes.func.isRequired,
     unpickItemsAllocation: PropTypes.func.isRequired,
     unpickItemsAllocationWorking: PropTypes.func.isRequired,
-    fetchSosAllocDetails: PropTypes.func.isRequired,
     displayOnly: PropTypes.bool,
     loading: PropTypes.bool,
     updateDetail: PropTypes.func.isRequired,
