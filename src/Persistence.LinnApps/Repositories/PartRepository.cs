@@ -20,7 +20,7 @@
 
         public Part FindById(int key)
         {
-            return this.FilterBy(p => p.Id == key)
+            return this.serviceDbContext.Parts.Where(p => p.Id == key)
                 .Include(p => p.AccountingCompany)
                 .Include(p => p.ParetoClass)
                 .Include(p => p.ProductAnalysisCode)
