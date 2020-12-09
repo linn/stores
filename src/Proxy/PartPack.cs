@@ -1,7 +1,9 @@
 ﻿namespace Linn.Stores.Proxy
 {
+    using System;
     using System.Data;
 
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
 
     using Oracle.ManagedDataAccess.Client;
@@ -79,7 +81,7 @@
             }
         }
 
-        public string CreatePartFromSourceSheet(int sourceId, int userNumber, out string partNumber)
+        public string CreatePartFromSourceSheet(int sourceId, int userNumber, out string message)
         {
             using (var connection = this.databaseService.GetConnection())
             {
@@ -121,8 +123,8 @@
 
 
                 cmd.ExecuteNonQuery();
-                var message = cmd.Parameters[3].Value.ToString();
-                partNumber = cmd.Parameters[2].Value.ToString();
+                message = cmd.Parameters[3].Value.ToString();
+                var partNumber = cmd.Parameters[2].Value.ToString();
                 connection.Close();
 
                 return partNumber;

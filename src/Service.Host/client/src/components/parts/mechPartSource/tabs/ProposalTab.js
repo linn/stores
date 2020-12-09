@@ -174,7 +174,6 @@ function ProposalTab({
                     onChange={value => {
                         handleFieldChange('productionDate', value);
                     }}
-                    disabled
                 />
             </Grid>
             <Grid item xs={8} />
@@ -195,7 +194,8 @@ function ProposalTab({
                     propertyName="samplesRequired"
                     items={['Y', 'N']}
                     fullWidth
-                    allowNoValue
+                    allowNoValue={false}
+                    required
                     value={samplesRequired}
                     onChange={handleFieldChange}
                 />
@@ -217,7 +217,6 @@ function ProposalTab({
                     onChange={value => {
                         handleFieldChange('dateSamplesRequired', value);
                     }}
-                    disabled
                 />
             </Grid>
             <Grid item xs={3} />

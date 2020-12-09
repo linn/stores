@@ -17,6 +17,8 @@
 
         private readonly IRepository<Part, int> partRepository;
 
+        private readonly IQueryRepository<Supplier> supplierRepository;
+
         private readonly IMechPartSourceService domainService;
 
         private readonly IDatabaseService databaseService;
@@ -27,12 +29,14 @@
             IMechPartSourceService domainService,
             IRepository<Part, int> partRepository,
             IDatabaseService databaseService,
+            IQueryRepository<Supplier> supplierRepository,
             IRepository<Employee, int> employeeRepository) : base(repository, transactionManager)
         {
             this.employeeRepository = employeeRepository;
             this.domainService = domainService;
             this.partRepository = partRepository;
             this.databaseService = databaseService;
+            this.supplierRepository = supplierRepository;
         }
 
         protected override MechPartSource CreateFromResource(MechPartSourceResource resource)
@@ -237,11 +241,7 @@
                              PartNumber = a.PartNumber,
                              Sequence = a.Sequence,
                              Supplier = a.SupplierId == null ? null :
-                                            new Supplier
-                                                {
-                                                    Id = (int)a.SupplierId,
-                                                    Name = a.SupplierName
-                                                }
+                                            this.supplierRepository.FindBy(s => s.Id == (int)a.SupplierId)
                          }).ToList();
             entity.ApprovedReferenceStandards = resource.ApprovedReferenceStandards;
             entity.ApprovedReferencesAvailable = resource.ApprovedReferencesAvailable;

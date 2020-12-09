@@ -60,7 +60,6 @@
 
         protected override Part CreateFromResource(PartResource resource)
         {
-            // todo - move this to a new method that doesn
             if (resource.CreateFromSourceSheet)
             {
                 return this.partService.CreateFromSource(resource.SourceId, resource.SourceCreatedBy);
@@ -269,7 +268,6 @@
                                           resource.MadeLiveBy != null
                                               ? this.employeeRepository.FindById((int)resource.MadeLiveBy)
                                               : null
-
                                   };
 
             this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList());
@@ -289,6 +287,5 @@
 
             return (bool)booleanRepresentation ? "Y" : "N";
         }
-
     }
 }

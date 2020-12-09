@@ -44,7 +44,11 @@ function MechPartSource({
                   proposedBy: userNumber,
                   proposedByName: userName,
                   dateEntered: new Date(),
-                  createPart: true
+                  createPart: true,
+                  mechPartAlts: [],
+                  mechPartManufacturerAlts: [],
+                  mechanicalOrElectrical: 'E',
+                  samplesRequired: 'N'
               }
             : null
     );
@@ -62,11 +66,16 @@ function MechPartSource({
 
     const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
 
+    const [newManufacturersRow, setNewManufacturersRow] = useState({});
+    const [newSuppliersRow, setNewSuppliersRow] = useState({});
+
     const handleTabChange = (_, value) => {
         setTab(value);
     };
 
-    const mechPartSourceInvalid = () => !mechPartSource.assemblyType;
+    const mechPartSourceInvalid = () =>
+        !mechPartSource.samplesRequired ||
+        (mechPartSource.mechanicalOrElectrical === 'E' && !mechPartSource.partType);
 
     useEffect(() => {
         if (item !== prevMechPartSource && editStatus !== 'create') {
@@ -266,30 +275,36 @@ function MechPartSource({
                                 onClose={() => setSnackbarVisible(false)}
                                 message="Save Successful"
                             />
-                            <Grid item xs={3}>
-                                <InputField
-                                    fullWidth
-                                    disabled={!creating()}
-                                    value={mechPartSource.partNumber}
-                                    label="Part Number"
-                                    maxLength={14}
-                                    helperText={!creating() ? 'This field cannot be changed' : ''}
-                                    required
-                                    onChange={handleFieldChange}
-                                    propertyName="partNumber"
-                                />
-                            </Grid>
-                            <Grid item xs={8}>
-                                <InputField
-                                    fullWidth
-                                    value={mechPartSource.part?.description}
-                                    label="Description"
-                                    maxLength={200}
-                                    required
-                                    onChange={handlePartFieldChange}
-                                    propertyName="description"
-                                />
-                            </Grid>
+                            {!creating() && (
+                                <>
+                                    <Grid item xs={3}>
+                                        <InputField
+                                            fullWidth
+                                            disabled={!creating()}
+                                            value={mechPartSource.partNumber}
+                                            label="Part Number"
+                                            maxLength={14}
+                                            helperText={
+                                                !creating() ? 'This field cannot be changed' : ''
+                                            }
+                                            required
+                                            onChange={handleFieldChange}
+                                            propertyName="partNumber"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                        <InputField
+                                            fullWidth
+                                            value={mechPartSource.part?.description}
+                                            label="Description"
+                                            maxLength={200}
+                                            required
+                                            onChange={handlePartFieldChange}
+                                            propertyName="description"
+                                        />
+                                    </Grid>
+                                </>
+                            )}
                             <Tabs
                                 value={tab}
                                 onChange={handleTabChange}
@@ -349,7 +364,7 @@ function MechPartSource({
                                         mechPartSource.drawingsPackageAvailable
                                     }
                                     drawingsPackageDate={mechPartSource.drawingsPackageDate}
-                                    drawingfile={mechPartSource.drawingFile}
+                                    drawingFile={mechPartSource.drawingFile}
                                     checklistCreated={mechPartSource.checklistCreated}
                                     checklistAvailable={mechPartSource.checklistAvailable}
                                     checklistDate={mechPartSource.checklistDate}
@@ -384,6 +399,8 @@ function MechPartSource({
                                     suppliers={mechPartSource.mechPartAlts}
                                     saveRow={saveSuppliersRow}
                                     deleteRow={deleteSuppliersRow}
+                                    newRow={newSuppliersRow}
+                                    setNewRow={setNewSuppliersRow}
                                 />
                             )}
                             {tab === 4 && (
@@ -393,6 +410,8 @@ function MechPartSource({
                                     manufacturers={mechPartSource.mechPartManufacturerAlts}
                                     saveRow={saveManufacturersRow}
                                     deleteRow={deleteManufacturersRow}
+                                    newRow={newManufacturersRow}
+                                    setNewRow={setNewManufacturersRow}
                                 />
                             )}
                             {tab === 5 && mechPartSource.mechanicalOrElectrical === 'E' && (
