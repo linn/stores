@@ -10,7 +10,19 @@ import {
 } from '@linn-it/linn-form-components-library';
 import Typography from '@material-ui/core/Typography';
 
-function SosAllocDetails({ itemError, loading, items, updateDetail, header, displayOnly }) {
+function SosAllocDetails({
+    itemError,
+    loading,
+    items,
+    updateDetail,
+    header,
+    displayOnly,
+    pickItemsAllocation,
+    pickItemsAllocationWorking,
+    unpickItemsAllocation,
+    unpickItemsAllocationWorking,
+    fetchSosAllocDetails
+}) {
     const [internalError, setInternalError] = useState(null);
 
     const editableColumns = [
@@ -76,20 +88,24 @@ function SosAllocDetails({ itemError, loading, items, updateDetail, header, disp
     };
 
     const pickAll = () => {
-        items.forEach(item => {
-            updateDetail(item.id, { quantityToAllocate: item.maximumQuantityToAllocate });
+        pickItemsAllocation({
+            jobId: header.jobId,
+            accountId: header.accountId,
+            outletNumber: header.outletNumber
         });
     };
 
     const unpickAll = () => {
-        items.forEach(item => {
-            updateDetail(item.id, { quantityToAllocate: 0 });
+        unpickItemsAllocation({
+            jobId: header.jobId,
+            accountId: header.accountId,
+            outletNumber: header.outletNumber
         });
     };
 
     return (
         <Grid container spacing={3}>
-            {loading ? (
+            {loading || pickItemsAllocationWorking || unpickItemsAllocationWorking ? (
                 <Loading />
             ) : (
                 <>
@@ -143,10 +159,16 @@ SosAllocDetails.propTypes = {
             outletNumber: PropTypes.number
         })
     ),
+    pickItemsAllocation: PropTypes.func.isRequired,
+    pickItemsAllocationWorking: PropTypes.func.isRequired,
+    unpickItemsAllocation: PropTypes.func.isRequired,
+    unpickItemsAllocationWorking: PropTypes.func.isRequired,
+    fetchSosAllocDetails: PropTypes.func.isRequired,
     displayOnly: PropTypes.bool,
     loading: PropTypes.bool,
     updateDetail: PropTypes.func.isRequired,
     header: PropTypes.shape({
+        jobId: PropTypes.number,
         accountId: PropTypes.number,
         outletNumber: PropTypes.number,
         valueToAllocate: PropTypes.number
