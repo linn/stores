@@ -70,9 +70,10 @@ function MechPartSource({
         setTab(value);
     };
 
-    const mechPartSourceInvalid = () =>
-        !mechPartSource.samplesRequired ||
-        (mechPartSource.mechanicalOrElectrical === 'E' && !mechPartSource.partType);
+    const mechPartSourceInvalid = () => false;
+    // () =>
+    //     !mechPartSource.samplesRequired ||
+    //     (mechPartSource.mechanicalOrElectrical === 'E' && !mechPartSource.partType);
 
     useEffect(() => {
         if (item !== prevMechPartSource && editStatus !== 'create') {
@@ -361,7 +362,7 @@ function MechPartSource({
                                         mechPartSource.drawingsPackageAvailable
                                     }
                                     drawingsPackageDate={mechPartSource.drawingsPackageDate}
-                                    drawingfile={mechPartSource.drawingFile}
+                                    drawingFile={mechPartSource.drawingFile}
                                     checklistCreated={mechPartSource.checklistCreated}
                                     checklistAvailable={mechPartSource.checklistAvailable}
                                     checklistDate={mechPartSource.checklistDate}
