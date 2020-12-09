@@ -50,8 +50,6 @@
 
         private readonly IPartDataSheetValuesService dataSheetsValuesService;
 
-        private readonly IPartPack partPack;
-
         public PartsModule(
             IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
@@ -65,12 +63,10 @@
             IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> mechPartSourceService,
             IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> manufacturerService,
             IPartDataSheetValuesService dataSheetsValuesService,
-            IPartPack partPack,
             IAuthorisationService authService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
-            this.partPack = partPack;
             this.authService = authService;
             this.Get("/parts/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/parts/sources/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
