@@ -321,7 +321,7 @@ function Part({
                     </Grid>
                 ) : (
                     part &&
-                    itemError?.part !== 404 && (
+                    itemError?.status !== 404 && (
                         <>
                             <SnackbarMessage
                                 visible={snackbarVisible}
@@ -511,7 +511,8 @@ Part.propTypes = {
         description: PropTypes.string,
         nextSerialNumber: PropTypes.number,
         dateClosed: PropTypes.string,
-        dateLive: PropTypes.string
+        dateLive: PropTypes.string,
+        department: PropTypes.string
     }),
     partsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,
@@ -519,8 +520,10 @@ Part.propTypes = {
     itemError: PropTypes.shape({
         status: PropTypes.number,
         statusText: PropTypes.string,
-        details: PropTypes.shape({}),
-        item: PropTypes.string
+        item: PropTypes.string,
+        details: PropTypes.shape({
+            errors: PropTypes.arrayOf(PropTypes.shape({}))
+        })
     }),
     itemId: PropTypes.string,
     snackbarVisible: PropTypes.bool,

@@ -325,7 +325,8 @@ GeneralTab.propTypes = {
     cccCriticalPart: PropTypes.bool,
     psuPart: PropTypes.bool,
     safetyCertificateExpirationDate: PropTypes.string,
-    safetyDataDirectory: PropTypes.string
+    safetyDataDirectory: PropTypes.string,
+    safetyCriticalHelperText: PropTypes.string
 };
 
 GeneralTab.defaultProps = {
@@ -354,7 +355,8 @@ GeneralTab.defaultProps = {
     cccCriticalPart: null,
     psuPart: null,
     safetyCertificateExpirationDate: null,
-    safetyDataDirectory: null
+    safetyDataDirectory: null,
+    safetyCriticalHelperText: null
 };
 
 export default GeneralTab;
