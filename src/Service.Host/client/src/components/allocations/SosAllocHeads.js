@@ -26,7 +26,11 @@ function SosAllocHeads({
     finishAllocation,
     allocationError,
     finishAllocationWorking,
-    initialise
+    initialise,
+    pickItemsAllocation,
+    pickItemsAllocationWorking,
+    unpickItemsAllocation,
+    unpickItemsAllocationWorking
 }) {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectedDetails, setSelectedDetails] = useState([]);
@@ -119,7 +123,7 @@ function SosAllocHeads({
                         Allocate
                     </Button>
                 </Grid>
-                {loading && (
+                {(loading || finishAllocationWorking) && (
                     <Grid item xs={12}>
                         <Loading />
                     </Grid>
@@ -191,6 +195,10 @@ function SosAllocHeads({
                                     loading={detailsLoading}
                                     displayOnly={alloctionHasFinished}
                                     items={utilities.sortEntityList(selectedDetails, 'orderNumber')}
+                                    pickItemsAllocation={pickItemsAllocation}
+                                    pickItemsAllocationWorking={pickItemsAllocationWorking}
+                                    unpickItemsAllocation={unpickItemsAllocation}
+                                    unpickItemsAllocationWorking={unpickItemsAllocationWorking}
                                 />
                             </>
                         </Grid>
@@ -213,7 +221,11 @@ SosAllocHeads.propTypes = {
     finishAllocation: PropTypes.func.isRequired,
     allocationError: PropTypes.string,
     finishAllocationWorking: PropTypes.bool,
-    initialise: PropTypes.func.isRequired
+    initialise: PropTypes.func.isRequired,
+    pickItemsAllocation: PropTypes.func.isRequired,
+    pickItemsAllocationWorking: PropTypes.func.isRequired,
+    unpickItemsAllocation: PropTypes.func.isRequired,
+    unpickItemsAllocationWorking: PropTypes.func.isRequired
 };
 
 SosAllocHeads.defaultProps = {

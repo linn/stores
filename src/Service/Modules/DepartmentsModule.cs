@@ -1,7 +1,7 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
     using Linn.Stores.Facade.Services;
-    using Linn.Stores.Resources;
+    using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Service.Models;
 
     using Nancy;

@@ -1,6 +1,8 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Allocation
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
@@ -14,15 +16,19 @@
 
         private readonly IRepository<SosOption, int> sosOptionRepository;
 
+        private readonly IRepository<SosAllocDetail, int> sosAllocDetailRepository;
+
         private readonly ITransactionManager transactionManager;
 
         public AllocationService(
             IAllocPack allocPack,
             IRepository<SosOption, int> sosOptionRepository,
+            IRepository<SosAllocDetail, int> sosAllocDetailRepository,
             ITransactionManager transactionManager)
         {
             this.allocPack = allocPack;
             this.sosOptionRepository = sosOptionRepository;
+            this.sosAllocDetailRepository = sosAllocDetailRepository;
             this.transactionManager = transactionManager;
         }
 
@@ -86,6 +92,44 @@
             }
 
             return new AllocationResult(jobId) { AllocationNotes = notes };
+        }
+
+        public IEnumerable<SosAllocDetail> PickItems(int jobId, int accountId, int outletNumber)
+        {
+            var details = this.sosAllocDetailRepository.FilterBy(
+                a => a.JobId == jobId && a.AccountId == accountId && a.OutletNumber == outletNumber);
+
+            if (details.Any(a => !string.IsNullOrEmpty(a.AllocationSuccessful) || !string.IsNullOrEmpty(a.AllocationMessage)))
+            {
+                throw new PickItemsException("You cannot pick items on an allocation that has been completed");
+            }
+
+            foreach (var sosAllocDetail in details)
+            {
+                sosAllocDetail.QuantityToAllocate = sosAllocDetail.MaximumQuantityToAllocate;
+            }
+
+            this.transactionManager.Commit();
+            return details;
+        }
+
+        public IEnumerable<SosAllocDetail> UnpickItems(int jobId, int accountId, int outletNumber)
+        {
+            var details = this.sosAllocDetailRepository.FilterBy(
+                a => a.JobId == jobId && a.AccountId == accountId && a.OutletNumber == outletNumber);
+
+            if (details.Any(a => !string.IsNullOrEmpty(a.AllocationSuccessful) || !string.IsNullOrEmpty(a.AllocationMessage)))
+            {
+                throw new UnpickItemsException("You cannot unpick items on an allocation that has been completed");
+            }
+
+            foreach (var sosAllocDetail in details)
+            {
+                sosAllocDetail.QuantityToAllocate = 0;
+            }
+
+            this.transactionManager.Commit();
+            return details;
         }
     }
 }

@@ -40,6 +40,8 @@ import manufacturers from './manufacturers';
 import employees from './employees';
 import partDataSheetValues from './partDataSheetValues';
 import finishAllocation from './finishAllocation';
+import pickItemsAllocation from './pickItemsAllocation';
+import unpickItemsAllocation from './unpickItemsAllocation';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -66,6 +68,7 @@ const rootReducer = combineReducers({
     partDataSheetValues,
     partLiveTest,
     partTemplates,
+    pickItemsAllocation,
     productAnalysisCodes,
     rootProducts,
     sernosSequences,
@@ -77,6 +80,7 @@ const rootReducer = combineReducers({
     storagePlaceAuditReport,
     suppliers,
     unitsOfMeasure,
+    unpickItemsAllocation,
     wwdReport,
     ...sharedLibraryReducers,
     errors

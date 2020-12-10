@@ -12,6 +12,10 @@ import sosAllocDetailsSelectors from '../../selectors/sosAllocDetailsSelectors';
 import finishAllocationActions from '../../actions/finishAllocationActions';
 import finishAllocationSelectors from '../../selectors/finishAllocationSelectors';
 import * as processTypes from '../../processTypes';
+import pickItemsAllocationActions from '../../actions/pickItemsAllocationActions';
+import pickItemsAllocationSelectors from '../../selectors/pickItemsAllocationSelectors';
+import unpickItemsAllocationActions from '../../actions/unpickItemsAllocationActions';
+import unpickItemsAllocationSelectors from '../../selectors/unpickItemsAllocationSelectors';
 
 const mapStateToProps = (state, { match }) => ({
     jobId: match.params.jobId,
@@ -20,7 +24,9 @@ const mapStateToProps = (state, { match }) => ({
     details: sosAllocDetailsSelectors.getSearchItems(state),
     detailsLoading: sosAllocDetailsSelectors.getSearchLoading(state),
     allocationError: getItemErrorDetailMessage(state, processTypes.finishAllocation.item),
-    finishAllocationWorking: finishAllocationSelectors.getWorking(state)
+    finishAllocationWorking: finishAllocationSelectors.getWorking(state),
+    pickItemsAllocationWorking: pickItemsAllocationSelectors.getWorking(state),
+    unpickItemsAllocationWorking: unpickItemsAllocationSelectors.getWorking(state)
 });
 
 const initialise = ({ jobId }) => dispatch => {
@@ -32,7 +38,9 @@ const initialise = ({ jobId }) => dispatch => {
 const mapDispatchToProps = {
     initialise,
     updateDetail: sosAllocDetailActions.update,
-    finishAllocation: finishAllocationActions.requestProcessStart
+    finishAllocation: finishAllocationActions.requestProcessStart,
+    pickItemsAllocation: pickItemsAllocationActions.requestProcessStart,
+    unpickItemsAllocation: unpickItemsAllocationActions.requestProcessStart
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(SosAllocHeads));

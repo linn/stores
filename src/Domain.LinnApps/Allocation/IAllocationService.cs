@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Allocation
 {
     using System;
+    using System.Collections.Generic;
 
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
 
@@ -20,5 +21,9 @@
             bool excludeNorthAmerica);
 
         AllocationResult FinishAllocation(int jobId);
+
+        IEnumerable<SosAllocDetail> PickItems(int jobId, int accountId, int outletNumber);
+
+        IEnumerable<SosAllocDetail> UnpickItems(int jobId, int accountId, int outletNumber);
     }
 }

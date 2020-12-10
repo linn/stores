@@ -87,3 +87,11 @@ export const partDataSheetValuesActionTypes = makeActionTypes(
 export const finishAllocationActionTypes = makeActionTypes(
     processTypes.finishAllocation.actionType
 );
+
+export const pickItemsAllocationActionTypes = makeActionTypes(
+    processTypes.pickItemsAllocation.actionType
+);
+
+export const unpickItemsAllocationActionTypes = makeActionTypes(
+    processTypes.unpickItemsAllocation.actionType
+);
