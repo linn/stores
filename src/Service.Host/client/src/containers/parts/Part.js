@@ -24,6 +24,7 @@ import { getPrivileges, getUserName, getUserNumber } from '../../selectors/userS
 import * as itemTypes from '../../itemTypes';
 import partLiveTestSelectors from '../../selectors/partLiveTestSelectors';
 import partLiveTestActions from '../../actions/partLiveTestActions';
+import partsActions from '../../actions/partsActions';
 
 const creating = match => match?.url?.endsWith('/create');
 
@@ -64,6 +65,7 @@ const mapDispatchToProps = dispatch => {
             dispatch(unitsOfMeasureActions.fetch());
             dispatch(partTemplatesActions.fetch());
         },
+        fetchParts: searchTerm => dispatch(partsActions.search(searchTerm)),
         addItem: item => dispatch(partActions.add(item)),
         updateItem: (itemId, item) => dispatch(partActions.update(itemId, item)),
         setEditStatus: status => dispatch(partActions.setEditStatus(status)),

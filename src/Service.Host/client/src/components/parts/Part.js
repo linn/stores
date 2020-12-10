@@ -38,7 +38,8 @@ function Part({
     options,
     partTemplates,
     liveTest,
-    fetchLiveTest
+    fetchLiveTest,
+    fetchParts
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -156,6 +157,11 @@ function Part({
     };
 
     const handleFieldChange = (propertyName, newValue) => {
+        if (propertyName === 'partNumber' && creating()) {
+            if (newValue.match(/\/[0-9]$/)) {
+                console.log(newValue.split('/')[0]);
+            }
+        }
         if (viewing() && propertyName !== 'reasonPhasedOut') {
             setEditStatus('edit');
         }
@@ -495,7 +501,8 @@ Part.propTypes = {
     options: PropTypes.shape({ template: PropTypes.string }),
     partTemplates: PropTypes.arrayOf(PropTypes.shape({ partRoot: PropTypes.string })),
     liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
-    fetchLiveTest: PropTypes.func.isRequired
+    fetchLiveTest: PropTypes.func.isRequired,
+    fetchParts: PropTypes.func.isRequired
 };
 
 Part.defaultProps = {
