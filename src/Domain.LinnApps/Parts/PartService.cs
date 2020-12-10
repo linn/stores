@@ -238,7 +238,7 @@
 
         private static int FindRealNextNumber(string newestPartOfThisType)
         {
-            var highestNumber = newestPartOfThisType?.Split(" ").Last();
+            var highestNumber = newestPartOfThisType?.Split(" ").Last().Split("/")[0];
             return int.Parse(highestNumber ?? throw new InvalidOperationException()) + 1;
         }
     }
