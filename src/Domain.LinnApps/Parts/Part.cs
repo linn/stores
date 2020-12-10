@@ -55,6 +55,8 @@
 
         public string OurUnitOfMeasure { get; set; }
 
+        public int? PreferredSupplierId { get; set; }
+
         public Supplier PreferredSupplier { get; set; }
 
         public string Currency { get; set; }
@@ -142,5 +144,7 @@
         public IEnumerable<PartDataSheet> DataSheets { get; set; }
 
         public IEnumerable<MechPartSource> ReplacementParts { get; set; }
+
+        public PartParamData ParamData { get; set; }
     }
 }

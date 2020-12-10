@@ -97,5 +97,69 @@
         public ICollection<MechPartAlt> MechPartAlts { get; set; }
 
         public ICollection<MechPartManufacturerAlt> MechPartManufacturerAlts { get; set; }
+
+        public int? CapacitorRippleCurrent { get; set; } 
+
+        public decimal? Capacitance { get; set; }
+
+        public decimal? CapacitorVoltageRating { get; set; }
+
+        public int? CapacitorPositiveTolerance { get; set; }
+
+        public int? CapacitorNegativeTolerance { get; set; }
+
+        public string CapacitorDielectric { get; set; }
+
+        public string Package { get; set; }
+
+        public decimal? CapacitorPitch { get; set; }
+
+        public decimal? CapacitorLength { get; set; }
+
+        public decimal? CapacitorWidth { get; set; }
+
+        public decimal? CapacitorHeight { get; set; }
+
+        public decimal? CapacitorDiameter { get; set; }
+
+        public string CapacitanceLetterAndNumeralCode { get; set; }
+
+        public decimal? Resistance { get; set; }
+
+        public decimal? ResistorTolerance { get; set; }
+
+        public string Construction { get; set; }
+
+        public decimal? ResistorLength { get; set; }
+
+        public decimal? ResistorWidth { get; set; }
+
+        public decimal? ResistorHeight { get; set; }
+
+        public int? ResistorPowerRating { get; set; }
+
+        public int? ResistorVoltageRating { get; set; }
+
+        public int? TemperatureCoefficient { get; set; }
+
+        public string TransistorType { get; set; }
+
+        public string TransistorDeviceName { get; set; }
+
+        public string TransistorPolarity { get; set; }
+
+        public int? TransistorVoltage { get; set; }
+
+        public decimal? TransistorCurrent { get; set; }
+
+        public string IcType { get; set; }
+
+        public string IcFunction { get; set; }
+
+        public string LibraryRef { get; set; }
+
+        public string FootprintRef { get; set; }
+
+        public string RkmCode { get; set; }
     }
 }

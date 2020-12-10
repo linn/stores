@@ -79,7 +79,6 @@
         public DbSet<Carrier> Carriers { get; set; }
 
         public DbSet<Parcel> Parcels { get; set; }
-
         public DbSet<SosAllocDetail> SosAllocDetails { get; set; }
 
         public DbSet<MechPartAlt> MechPartAlts { get; set; }
@@ -87,6 +86,10 @@
         public DbSet<Manufacturer> Manufacturers { get; set; }
 
         public DbSet<MechPartManufacturerAlt> MechPartManufacturerAlts { get; set; }
+
+        public DbSet<PartParamData> PartParamDataSheets { get; set; }
+
+        public DbQuery<PartDataSheetValues> PartDataSheetValues { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -123,10 +126,12 @@
             this.BuildSosAllocHeads(builder);
             this.BuildCarriers(builder);
             this.BuildParcels(builder);
-            this.BuildSosAllocDetails(builder);
             this.BuildMechPartAlts(builder);
             this.BuildManufacturers(builder);
             this.BuildMechPartManufacturerAlts(builder);
+            this.BuildPartParamDataSheets(builder);
+            this.QueryPartDataSheetValues(builder);
+            this.BuildSosAllocDetails(builder);
             base.OnModelCreating(builder);
         }
 
@@ -251,7 +256,8 @@
             e.HasOne<Employee>(p => p.CreatedBy).WithMany(m => m.PartsCreated).HasForeignKey("CREATED_BY");
             e.HasOne(p => p.AccountingCompany).WithMany(c => c.PartsResponsibleFor).HasForeignKey("ACCOUNTING_COMPANY");
             e.HasOne(p => p.PreferredSupplier).WithMany(s => s.PartsPreferredSupplierOf)
-                .HasForeignKey("PREFERRED_SUPPLIER");
+                .HasForeignKey(p => p.PreferredSupplierId);
+            e.Property(p => p.PreferredSupplierId).HasColumnName("PREFERRED_SUPPLIER");
             e.HasOne<ParetoClass>(p => p.ParetoClass).WithMany(c => c.Parts).HasForeignKey("PARETO_CODE");
             e.HasOne<ProductAnalysisCode>(p => p.ProductAnalysisCode).WithMany(c => c.Parts)
                 .HasForeignKey("PRODUCT_ANALYSIS_CODE");
@@ -260,6 +266,7 @@
             e.HasOne(p => p.SernosSequence).WithMany(s => s.Parts).HasForeignKey("SERNOS_SEQUENCE");
             e.HasOne(p => p.AssemblyTechnology).WithMany(s => s.Parts).HasForeignKey("ASSEMBLY_TECHNOLOGY");
             e.HasOne(p => p.DecrementRule).WithMany(s => s.Parts).HasForeignKey("DECREMENT_RULE");
+            e.HasOne(p => p.MechPartSource).WithOne(m => m.Part);
         }
 
         private void BuildPartDataSheets(ModelBuilder builder)
@@ -294,10 +301,11 @@
             e.Property(s => s.EmcCritical).HasColumnName("EMC_CRITICAL").HasMaxLength(1);
             e.Property(s => s.PerformanceCritical).HasColumnName("PERFORMANCE_CRITICAL").HasMaxLength(1);
             e.Property(s => s.SafetyCritical).HasColumnName("SAFETY_CRITICAL").HasMaxLength(1);
-            e.HasOne(s => s.Part).WithOne(p => p.MechPartSource).HasForeignKey<MechPartSource>(s => s.PartNumber);
+            e.HasOne<Part>(s => s.Part).WithOne(p => p.MechPartSource).HasForeignKey<MechPartSource>(s => s.PartNumber);
             e.HasOne(s => s.PartToBeReplaced).WithMany(p => p.ReplacementParts).HasForeignKey(s => s.LinnPartNumber);
             e.Property(s => s.SafetyDataDirectory).HasColumnName("SAFETY_DATA_DIRECTORY").HasMaxLength(500);
             e.Property(s => s.ProductionDate).HasColumnName("PRODUCTION_DATE");
+            e.Property(s => s.CapacitorRippleCurrent).HasColumnName("CAP_RIPPLE_CURRENT");
             e.Property(s => s.DrawingsPackage).HasColumnName("DRAWINGS_PACKAGE").HasMaxLength(200);
             e.Property(s => s.DrawingsPackageAvailable).HasColumnName("DRAWINGS_PACKAGE_AVAILABLE").HasMaxLength(1);
             e.Property(s => s.DrawingsPackageDate).HasColumnName("DRAWINGS_PACKAGE_DATE");
@@ -320,6 +328,37 @@
             e.Property(s => s.ProcessEvaluation).HasColumnName("PROCESS_EVALUATION").HasMaxLength(200);
             e.Property(s => s.ProcessEvaluationAvailable).HasColumnName("PROCESS_EVALUATION_AVAILABLE").HasMaxLength(1);
             e.Property(s => s.ProcessEvaluationDate).HasColumnName("PROCESS_EVALUATION_DATE");
+            e.Property(s => s.Capacitance).HasColumnName("CAP_CAPACITANCE");
+            e.Property(s => s.CapacitorVoltageRating).HasColumnName("CAP_VOLTAGE_RATING");
+            e.Property(s => s.CapacitorPositiveTolerance).HasColumnName("CAP_POSITIVE_TOLERANCE");
+            e.Property(s => s.CapacitorNegativeTolerance).HasColumnName("CAP_NEGATIVE_TOLERANCE");
+            e.Property(s => s.CapacitorDielectric).HasColumnName("CAP_DIELECTRIC").HasMaxLength(40);
+            e.Property(s => s.Package).HasColumnName("PACKAGE").HasMaxLength(14);
+            e.Property(s => s.CapacitorPitch).HasColumnName("CAP_PITCH");
+            e.Property(s => s.CapacitorLength).HasColumnName("CAP_LENGTH");
+            e.Property(s => s.CapacitorWidth).HasColumnName("CAP_WIDTH");
+            e.Property(s => s.CapacitorHeight).HasColumnName("CAP_HEIGHT");
+            e.Property(s => s.CapacitorDiameter).HasColumnName("CAP_DIAMETER");
+            e.Property(s => s.CapacitanceLetterAndNumeralCode).HasColumnName("CAPACITANCE_CHAR");
+            e.Property(s => s.Resistance).HasColumnName("RES_RESISTANCE");
+            e.Property(s => s.ResistorTolerance).HasColumnName("RES_TOLERANCE");
+            e.Property(s => s.Construction).HasColumnName("CONSTRUCTION").HasMaxLength(14);
+            e.Property(s => s.ResistorLength).HasColumnName("RES_LENGTH");
+            e.Property(s => s.ResistorWidth).HasColumnName("RES_WIDTH");
+            e.Property(s => s.ResistorHeight).HasColumnName("RES_HEIGHT");
+            e.Property(s => s.ResistorPowerRating).HasColumnName("RES_POWER_RATING");
+            e.Property(s => s.ResistorVoltageRating).HasColumnName("RES_VOLTAGE_RATING");
+            e.Property(s => s.TemperatureCoefficient).HasColumnName("TEMP_COEFF");
+            e.Property(s => s.TransistorType).HasColumnName("TRAN_TYPE").HasMaxLength(10);
+            e.Property(s => s.TransistorDeviceName).HasColumnName("TRAN_DEVICE_NAME").HasMaxLength(50);
+            e.Property(s => s.TransistorPolarity).HasColumnName("TRAN_POLARITY").HasMaxLength(30);
+            e.Property(s => s.TransistorVoltage).HasColumnName("TRAN_VOLTAGE_RATING");
+            e.Property(s => s.TransistorCurrent).HasColumnName("TRAN_AMPS");
+            e.Property(s => s.IcType).HasColumnName("IC_TYPE").HasMaxLength(50);
+            e.Property(s => s.IcFunction).HasColumnName("IC_FUNCTION").HasMaxLength(50);
+            e.Property(s => s.FootprintRef).HasColumnName("FOOTPRINT_REF").HasMaxLength(30);
+            e.Property(s => s.LibraryRef).HasColumnName("LIBRARY_REF").HasMaxLength(30);
+            e.Property(s => s.RkmCode).HasColumnName("RESISTANCE_CHAR").HasMaxLength(18);
         }
 
         private void BuildMechPartAlts(ModelBuilder builder)
@@ -658,6 +697,44 @@
             e.Property(c => c.DateCancelled).HasColumnName("DATE_CANCELLED");
             e.Property(c => c.CancellationReason).HasColumnName("REASON_CANCELLED");
             e.Property(c => c.CancelledBy).HasColumnName("CANCELLED_BY");
+        }
+
+        private void BuildPartParamDataSheets(ModelBuilder builder)
+        {
+            var e = builder.Entity<PartParamData>().ToTable("PART_DATA_SHEETS");
+            e.HasKey(d => d.PartNumber);
+            e.Property(d => d.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            e.HasOne(d => d.Part).WithOne(p => p.ParamData).HasForeignKey<PartParamData>(s => s.PartNumber);
+            e.Property(d => d.AttributeSet).HasColumnName("ATTRIBUTE_SET").HasMaxLength(14);
+            e.Property(d => d.Capacitance).HasColumnName("CAPACITANCE");
+            e.Property(d => d.Construction).HasColumnName("CONSTRUCTION").HasMaxLength(14);
+            e.Property(d => d.Current).HasColumnName("AMPS");
+            e.Property(d => d.Diameter).HasColumnName("DIAMETER");
+            e.Property(d => d.Dielectric).HasColumnName("DIELECTRIC").HasMaxLength(14);
+            e.Property(d => d.Height).HasColumnName("HEIGHT");
+            e.Property(d => d.IcFunction).HasColumnName("IC_FUNCTION");
+            e.Property(d => d.IcType).HasColumnName("IC_TYPE").HasMaxLength(14);
+            e.Property(d => d.Length).HasColumnName("LENGTH");
+            e.Property(d => d.NegativeTolerance).HasColumnName("NEG_TOLERANCE");
+            e.Property(d => d.Package).HasColumnName("PACKAGE_NAME").HasMaxLength(14);
+            e.Property(d => d.Pitch).HasColumnName("PITCH");
+            e.Property(d => d.Polarity).HasColumnName("POLARITY").HasMaxLength(14);
+            e.Property(d => d.PositiveTolerance).HasColumnName("POS_TOLERANCE");
+            e.Property(d => d.Power).HasColumnName("POWER");
+            e.Property(d => d.Voltage).HasColumnName("VOLTAGE");
+            e.Property(d => d.Resistance).HasColumnName("RESISTANCE");
+            e.Property(d => d.TemperatureCoefficient).HasColumnName("TEMP_COEFF");
+            e.Property(d => d.TransistorType).HasColumnName("TRANSISTOR_TYPE").HasMaxLength(10);
+            e.Property(d => d.Width).HasColumnName("WIDTH");
+        }
+
+        private void QueryPartDataSheetValues(ModelBuilder builder)
+        {
+            var q = builder.Query<PartDataSheetValues>().ToView("PART_DATA_SHEET_VALUES");
+            q.Property(v => v.AttributeSet).HasColumnName("ATTRIBUTE_SET");
+            q.Property(v => v.Description).HasColumnName("DESCRIPTION");
+            q.Property(v => v.Field).HasColumnName("FIELD");
+            q.Property(v => v.Value).HasColumnName("VALUE");
         }
     }
 }

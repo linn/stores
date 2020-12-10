@@ -38,6 +38,7 @@ import sosAllocDetails from './sosAllocDetails';
 import mechPartSource from './parts/mechPartSource';
 import manufacturers from './manufacturers';
 import employees from './employees';
+import partDataSheetValues from './partDataSheetValues';
 import finishAllocation from './finishAllocation';
 import pickItemsAllocation from './pickItemsAllocation';
 import unpickItemsAllocation from './unpickItemsAllocation';
@@ -64,6 +65,7 @@ const rootReducer = combineReducers({
     part,
     partCategories,
     parts,
+    partDataSheetValues,
     partLiveTest,
     partTemplates,
     pickItemsAllocation,
