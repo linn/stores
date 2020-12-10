@@ -744,6 +744,7 @@
         private void BuildTqmsCategories(ModelBuilder builder)
         {
             var e = builder.Entity<TqmsCategory>().ToTable("TQMS_CATEGORIES");
+            e.HasKey(c => c.Name);
             e.Property(c => c.Name).HasColumnName("TQMS_CATEGORY");
             e.Property(c => c.Description).HasColumnName("DESCRIPTION");
         }
