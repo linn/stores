@@ -453,7 +453,7 @@ function Part({
                                 <StoresTab
                                     handleFieldChange={handleFieldChange}
                                     qcOnReceipt={part.qcOnReceipt}
-                                    qcInfo={part.qcInfo}
+                                    qcInformation={part.qcInformation}
                                     rawOrFinished={part.rawOrFinished}
                                     ourInspectionWeeks={part.ourInspectionWeeks}
                                     safetyWeeks={part.safetyWeeks}

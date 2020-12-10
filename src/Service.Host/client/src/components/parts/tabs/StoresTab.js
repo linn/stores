@@ -6,7 +6,7 @@ import { InputField, Dropdown } from '@linn-it/linn-form-components-library';
 function StoresTab({
     handleFieldChange,
     qcOnReceipt,
-    qcInfo,
+    qcInformation,
     rawOrFinished,
     ourInspectionWeeks,
     safetyWeeks,
@@ -41,10 +41,10 @@ function StoresTab({
             <Grid item xs={8}>
                 <InputField
                     fullWidth
-                    value={qcInfo}
+                    value={qcInformation}
                     label="QC Info"
                     onChange={handleFieldChange}
-                    propertyName="qcInfo"
+                    propertyName="qcInformation"
                 />
             </Grid>
             <Grid item xs={4}>
@@ -164,7 +164,7 @@ function StoresTab({
 StoresTab.propTypes = {
     handleFieldChange: PropTypes.func.isRequired,
     qcOnReceipt: PropTypes.bool,
-    qcInfo: PropTypes.string,
+    qcInformation: PropTypes.string,
     rawOrFinished: PropTypes.string,
     ourInspectionWeeks: PropTypes.number,
     safetyWeeks: PropTypes.number,
@@ -182,7 +182,7 @@ StoresTab.propTypes = {
 
 StoresTab.defaultProps = {
     qcOnReceipt: null,
-    qcInfo: null,
+    qcInformation: null,
     rawOrFinished: null,
     ourInspectionWeeks: null,
     safetyWeeks: null,
