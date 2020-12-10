@@ -79,6 +79,7 @@
         public DbSet<Carrier> Carriers { get; set; }
 
         public DbSet<Parcel> Parcels { get; set; }
+
         public DbSet<SosAllocDetail> SosAllocDetails { get; set; }
 
         public DbSet<MechPartAlt> MechPartAlts { get; set; }
@@ -90,6 +91,8 @@
         public DbSet<PartParamData> PartParamDataSheets { get; set; }
 
         public DbQuery<PartDataSheetValues> PartDataSheetValues { get; set; }
+
+        public DbSet<TqmsCategory> TqmsCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -132,6 +135,7 @@
             this.BuildPartParamDataSheets(builder);
             this.QueryPartDataSheetValues(builder);
             this.BuildSosAllocDetails(builder);
+            this.BuildTqmsCategories(builder);
             base.OnModelCreating(builder);
         }
 
@@ -735,6 +739,13 @@
             q.Property(v => v.Description).HasColumnName("DESCRIPTION");
             q.Property(v => v.Field).HasColumnName("FIELD");
             q.Property(v => v.Value).HasColumnName("VALUE");
+        }
+
+        private void BuildTqmsCategories(ModelBuilder builder)
+        {
+            var e = builder.Entity<TqmsCategory>().ToTable("TQMS_CATEGORIES");
+            e.Property(c => c.Name).HasColumnName("TQMS_CATEGORY");
+            e.Property(c => c.Description).HasColumnName("DESCRIPTION");
         }
     }
 }
