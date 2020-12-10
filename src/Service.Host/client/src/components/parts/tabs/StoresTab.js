@@ -16,7 +16,8 @@ function StoresTab({
     secondStageBoard,
     secondStageDescription,
     tqmsCategoryOverride,
-    stockNotes
+    stockNotes,
+    tqmsCategories
 }) {
     const convertToYOrNString = booleanValue => {
         if (booleanValue === '' || booleanValue === null) {
@@ -134,14 +135,7 @@ function StoresTab({
                 <Dropdown
                     label="TQMS Override"
                     propertyName="tqmsCategoryOverride"
-                    items={[
-                        // TODO  - Get these from Database Table
-                        { displayText: 'SLOW MOVING LEGACY STOCK', id: 'LEGACYSLOW' },
-                        { displayText: 'BULK SALE', id: 'BULKSALE' },
-                        { displayText: 'PURCHASING MOQ OVERSTOCK', id: 'MOQOVER' },
-                        { displayText: 'R&D STOCK', id: 'PROTOTYPE' },
-                        { displayText: 'GRADED STOCK', id: 'SLASHX' }
-                    ]}
+                    items={tqmsCategories.map(c => ({ id: c.name, displayText: c.description }))}
                     fullWidth
                     allowNoValue
                     value={tqmsCategoryOverride}
@@ -180,7 +174,10 @@ StoresTab.propTypes = {
     secondStageBoard: PropTypes.string,
     secondStageDescription: PropTypes.string,
     tqmsCategoryOverride: PropTypes.string,
-    stockNotes: PropTypes.string
+    stockNotes: PropTypes.string,
+    tqmsCategories: PropTypes.arrayOf(
+        PropTypes.shape({ name: PropTypes.string, description: PropTypes.string })
+    )
 };
 
 StoresTab.defaultProps = {
@@ -195,7 +192,8 @@ StoresTab.defaultProps = {
     secondStageBoard: null,
     secondStageDescription: null,
     tqmsCategoryOverride: null,
-    stockNotes: null
+    stockNotes: null,
+    tqmsCategories: []
 };
 
 export default StoresTab;

@@ -149,3 +149,9 @@ export const partDataSheetValues = new ItemType(
     'PART_DATA_SHEET_VALUES',
     '/inventory/parts/data-sheet-values'
 );
+
+export const tqmsCategories = new ItemType(
+    'tqmsCategories',
+    'TQMS_CATEGORIES',
+    '/inventory/parts/tqms-categories'
+);
