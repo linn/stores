@@ -32,6 +32,7 @@ function GeneralTab({
     nominalDescription,
     stockControlled,
     safetyCriticalPart,
+    safetyCriticalHelperText,
     performanceCriticalPart,
     emcCriticalPart,
     singleSourcePart,
@@ -181,6 +182,7 @@ function GeneralTab({
                     propertyName="safetyCriticalPart"
                     items={['Yes', 'No']}
                     fullWidth
+                    helperText={safetyCriticalHelperText}
                     allowNoValue={false}
                     value={convertToYOrNString(safetyCriticalPart)}
                     onChange={handleFieldChange}

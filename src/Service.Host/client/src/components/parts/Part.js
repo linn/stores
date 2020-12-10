@@ -136,6 +136,22 @@ function Part({
         return '';
     };
 
+    const getSafetyCriticalHelperText = () => {
+        const prevRevision = partsSearchResults.find(
+            p => p.partNumber === part.partNumber.toUpperCase().split('/')[0]
+        );
+
+        if (prevRevision?.safetyCriticalPart === true) {
+            return 'Note: Previous Revision Was Safety Critical';
+        }
+
+        if (prevRevision?.safetyCriticalPart === false) {
+            return 'Note: Previous Revision Was NOT Safety Critical';
+        }
+
+        return '';
+    };
+
     const handleSaveClick = () => {
         const partResource = part;
         // convert Yes/No to true/false for resource to send
@@ -322,7 +338,7 @@ function Part({
                                             ? 'This field cannot be changed'
                                             : getPartNumberHelperText()
                                     }
-                                    error={!!getPartNumberHelperText()}
+                                    error={creating() && !!getPartNumberHelperText()}
                                     required
                                     onChange={handleFieldChange}
                                     propertyName="partNumber"
@@ -373,6 +389,9 @@ function Part({
                                     nominalDescription={part.nominalDescription}
                                     stockControlled={part.stockControlled}
                                     safetyCriticalPart={part.safetyCriticalPart}
+                                    safetyCriticalHelperText={
+                                        creating() && getSafetyCriticalHelperText()
+                                    }
                                     performanceCriticalPart={part.performanceCriticalPart}
                                     emcCriticalPart={part.emcCriticalPart}
                                     singleSourcePart={part.singleSourcePart}
