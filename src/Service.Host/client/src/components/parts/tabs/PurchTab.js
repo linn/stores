@@ -253,7 +253,7 @@ function PurchTab({
                 <Dropdown
                     label="Mechanical Or Electronic"
                     propertyName="mechanicalOrElectronic"
-                    items={['Mechanical', 'Electronic']}
+                    items={['M', 'E']}
                     fullWidth
                     allowNoValue
                     value={mechanicalOrElectronic}

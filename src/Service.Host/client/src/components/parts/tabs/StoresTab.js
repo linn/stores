@@ -83,7 +83,7 @@ function StoresTab({
                 <Dropdown
                     label="Rail Method"
                     propertyName="railMethod"
-                    items={['MR9', 'SMM', 'POLICY', 'FIXED RAILS', 'OVERRIDE SAFETY']}
+                    items={['MR9', 'SMM', 'POLICY', 'FIXED', 'OVERRIDE']}
                     fullWidth
                     allowNoValue
                     value={railMethod}
@@ -135,11 +135,12 @@ function StoresTab({
                     label="TQMS Override"
                     propertyName="tqmsCategoryOverride"
                     items={[
-                        'SLOW MOVING LEGACY STOCK',
-                        'BULK SALE',
-                        'PURCHASING MOQ OVERSTOCK',
-                        'R&D STOCK',
-                        'GRADED STOCK'
+                        // TODO  - Get these from Database Table
+                        { displayText: 'SLOW MOVING LEGACY STOCK', id: 'LEGACYSLOW' },
+                        { displayText: 'BULK SALE', id: 'BULKSALE' },
+                        { displayText: 'PURCHASING MOQ OVERSTOCK', id: 'MOQOVER' },
+                        { displayText: 'R&D STOCK', id: 'PROTOTYPE' },
+                        { displayText: 'GRADED STOCK', id: 'SLASHX' }
                     ]}
                     fullWidth
                     allowNoValue
