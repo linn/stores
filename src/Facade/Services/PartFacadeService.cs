@@ -275,7 +275,7 @@
 
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)
         {
-            return part => part.PartNumber.ToUpper().Equals(searchTerm.ToUpper());
+            return part => part.PartNumber.ToUpper().Contains(searchTerm.ToUpper());
         }
 
         private string ToYesOrNoString(bool? booleanRepresentation)

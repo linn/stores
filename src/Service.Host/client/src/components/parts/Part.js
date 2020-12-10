@@ -39,7 +39,8 @@ function Part({
     partTemplates,
     liveTest,
     fetchLiveTest,
-    fetchParts
+    fetchParts,
+    partsSearchResults
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -128,6 +129,13 @@ function Part({
 
     const partInvalid = () => !part.partNumber || !part.description;
 
+    const getPartNumberHelperText = () => {
+        if (partsSearchResults.some(p => p.partNumber === part.partNumber.toUpperCase())) {
+            return 'REVISION OF THAT NUMBER ALREADY EXISTS.';
+        }
+        return '';
+    };
+
     const handleSaveClick = () => {
         const partResource = part;
         // convert Yes/No to true/false for resource to send
@@ -158,8 +166,9 @@ function Part({
 
     const handleFieldChange = (propertyName, newValue) => {
         if (propertyName === 'partNumber' && creating()) {
-            if (newValue.match(/\/[0-9]$/)) {
-                console.log(newValue.split('/')[0]);
+            if (newValue.match(/\/[1-9]$/)) {
+                //if new partNumber ends in /[1-9] then user is creating a new revision of existing part
+                fetchParts(newValue.split('/')[0]); // so fetch the existing parts for any crosschecking we need to do
             }
         }
         if (viewing() && propertyName !== 'reasonPhasedOut') {
@@ -308,7 +317,12 @@ function Part({
                                     value={part.partNumber}
                                     label="Part Number"
                                     maxLength={14}
-                                    helperText={!creating() ? 'This field cannot be changed' : ''}
+                                    helperText={
+                                        !creating()
+                                            ? 'This field cannot be changed'
+                                            : getPartNumberHelperText()
+                                    }
+                                    error={!!getPartNumberHelperText()}
                                     required
                                     onChange={handleFieldChange}
                                     propertyName="partNumber"
@@ -478,6 +492,7 @@ Part.propTypes = {
         dateClosed: PropTypes.string,
         dateLive: PropTypes.string
     }),
+    partsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,
     editStatus: PropTypes.string.isRequired,
     itemError: PropTypes.shape({
@@ -517,7 +532,8 @@ Part.defaultProps = {
     userNumber: null,
     options: null,
     partTemplates: [],
-    liveTest: null
+    liveTest: null,
+    partsSearchResults: []
 };
 
 export default Part;
