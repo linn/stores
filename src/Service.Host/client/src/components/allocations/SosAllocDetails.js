@@ -49,16 +49,16 @@ function SosAllocDetails({
             id: 'quantityToAllocate',
             type: 'text',
             editable: true
-        },
+        }
+    ];
+
+    const displayOnlyColumns = editableColumns.concat([
         {
             title: 'Allocated',
             id: 'quantityAllocated',
             type: 'text',
             editable: false
-        }
-    ];
-
-    const displayOnlyColumns = editableColumns.concat([
+        },
         {
             title: 'Success',
             id: 'allocationSuccessful',
@@ -137,6 +137,7 @@ function SosAllocDetails({
                             rows={items}
                             saveRow={updateRow}
                             editable={!displayOnly}
+                            allowNewRowCreation={false}
                         />
                     </Grid>
                 </>

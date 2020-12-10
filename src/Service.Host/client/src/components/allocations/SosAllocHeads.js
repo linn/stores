@@ -123,7 +123,7 @@ function SosAllocHeads({
                         Allocate
                     </Button>
                 </Grid>
-                {loading && (
+                {(loading || finishAllocationWorking) && (
                     <Grid item xs={12}>
                         <Loading />
                     </Grid>
