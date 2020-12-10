@@ -131,7 +131,7 @@ function Part({
 
     const getPartNumberHelperText = () => {
         if (partsSearchResults.some(p => p.partNumber === part.partNumber.toUpperCase())) {
-            return 'REVISION OF THAT NUMBER ALREADY EXISTS.';
+            return 'PART NUMBER ALREADY EXISTS.';
         }
         return '';
     };
@@ -185,6 +185,8 @@ function Part({
             if (newValue.match(/\/[1-9]$/)) {
                 //if new partNumber ends in /[1-9] then user is creating a new revision of existing part
                 fetchParts(newValue.split('/')[0]); // so fetch the existing parts for any crosschecking we need to do
+            } else {
+                fetchParts(newValue); // else they are creating a new part entirely. Check to see if it already exists.
             }
         }
         if (viewing() && propertyName !== 'reasonPhasedOut') {
