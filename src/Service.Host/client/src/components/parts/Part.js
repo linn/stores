@@ -38,7 +38,9 @@ function Part({
     options,
     partTemplates,
     liveTest,
-    fetchLiveTest
+    fetchLiveTest,
+    fetchParts,
+    partsSearchResults
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -127,6 +129,29 @@ function Part({
 
     const partInvalid = () => !part.partNumber || !part.description;
 
+    const getPartNumberHelperText = () => {
+        if (partsSearchResults.some(p => p.partNumber === part.partNumber.toUpperCase())) {
+            return 'PART NUMBER ALREADY EXISTS.';
+        }
+        return '';
+    };
+
+    const getSafetyCriticalHelperText = () => {
+        const prevRevision = partsSearchResults.find(
+            p => p.partNumber === part.partNumber.toUpperCase().split('/')[0]
+        );
+
+        if (prevRevision?.safetyCriticalPart === true) {
+            return 'Note: Previous Revision Was Safety Critical';
+        }
+
+        if (prevRevision?.safetyCriticalPart === false) {
+            return 'Note: Previous Revision Was NOT Safety Critical';
+        }
+
+        return '';
+    };
+
     const handleSaveClick = () => {
         const partResource = part;
         // convert Yes/No to true/false for resource to send
@@ -156,6 +181,14 @@ function Part({
     };
 
     const handleFieldChange = (propertyName, newValue) => {
+        if (propertyName === 'partNumber' && creating()) {
+            if (newValue.match(/\/[1-9]$/)) {
+                //if new partNumber ends in /[1-9] then user is creating a new revision of existing part
+                fetchParts(newValue.split('/')[0]); // so fetch the existing parts for any crosschecking we need to do
+            } else {
+                fetchParts(newValue); // else they are creating a new part entirely. Check to see if it already exists.
+            }
+        }
         if (viewing() && propertyName !== 'reasonPhasedOut') {
             setEditStatus('edit');
         }
@@ -288,7 +321,7 @@ function Part({
                     </Grid>
                 ) : (
                     part &&
-                    itemError?.part !== 404 && (
+                    itemError?.status !== 404 && (
                         <>
                             <SnackbarMessage
                                 visible={snackbarVisible}
@@ -302,7 +335,12 @@ function Part({
                                     value={part.partNumber}
                                     label="Part Number"
                                     maxLength={14}
-                                    helperText={!creating() ? 'This field cannot be changed' : ''}
+                                    helperText={
+                                        !creating()
+                                            ? 'This field cannot be changed'
+                                            : getPartNumberHelperText()
+                                    }
+                                    error={creating() && !!getPartNumberHelperText()}
                                     required
                                     onChange={handleFieldChange}
                                     propertyName="partNumber"
@@ -353,6 +391,9 @@ function Part({
                                     nominalDescription={part.nominalDescription}
                                     stockControlled={part.stockControlled}
                                     safetyCriticalPart={part.safetyCriticalPart}
+                                    safetyCriticalHelperText={
+                                        creating() && getSafetyCriticalHelperText()
+                                    }
                                     performanceCriticalPart={part.performanceCriticalPart}
                                     emcCriticalPart={part.emcCriticalPart}
                                     singleSourcePart={part.singleSourcePart}
@@ -470,15 +511,19 @@ Part.propTypes = {
         description: PropTypes.string,
         nextSerialNumber: PropTypes.number,
         dateClosed: PropTypes.string,
-        dateLive: PropTypes.string
+        dateLive: PropTypes.string,
+        department: PropTypes.string
     }),
+    partsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,
     editStatus: PropTypes.string.isRequired,
     itemError: PropTypes.shape({
         status: PropTypes.number,
         statusText: PropTypes.string,
-        details: PropTypes.shape({}),
-        item: PropTypes.string
+        item: PropTypes.string,
+        details: PropTypes.shape({
+            errors: PropTypes.arrayOf(PropTypes.shape({}))
+        })
     }),
     itemId: PropTypes.string,
     snackbarVisible: PropTypes.bool,
@@ -495,7 +540,8 @@ Part.propTypes = {
     options: PropTypes.shape({ template: PropTypes.string }),
     partTemplates: PropTypes.arrayOf(PropTypes.shape({ partRoot: PropTypes.string })),
     liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
-    fetchLiveTest: PropTypes.func.isRequired
+    fetchLiveTest: PropTypes.func.isRequired,
+    fetchParts: PropTypes.func.isRequired
 };
 
 Part.defaultProps = {
@@ -510,7 +556,8 @@ Part.defaultProps = {
     userNumber: null,
     options: null,
     partTemplates: [],
-    liveTest: null
+    liveTest: null,
+    partsSearchResults: []
 };
 
 export default Part;
