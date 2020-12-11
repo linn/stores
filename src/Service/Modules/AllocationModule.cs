@@ -92,7 +92,10 @@
 
         private object GetAllocHeads(int jobId)
         {
-            return this.Negotiate.WithModel(this.sosAllocHeadFacadeService.GetAllocHeads(jobId));
+            return this.Negotiate
+                .WithModel(this.sosAllocHeadFacadeService.GetAllocHeads(jobId))
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
 
         private object GetDespatchLocations()

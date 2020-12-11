@@ -12,6 +12,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import { Loading, Title, utilities, ErrorCard } from '@linn-it/linn-form-components-library';
 import { Link } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
 import SosAllocDetails from './SosAllocDetails';
 
 import Page from '../../containers/Page';
@@ -189,17 +190,26 @@ function SosAllocHeads({
                                 {allocationError && (
                                     <ErrorCard errorMessage={`${allocationError}`} />
                                 )}
-                                <SosAllocDetails
-                                    header={items[selectedIndex]}
-                                    updateDetail={updateDetail}
-                                    loading={detailsLoading}
-                                    displayOnly={alloctionHasFinished}
-                                    items={utilities.sortEntityList(selectedDetails, 'orderNumber')}
-                                    pickItemsAllocation={pickItemsAllocation}
-                                    pickItemsAllocationWorking={pickItemsAllocationWorking}
-                                    unpickItemsAllocation={unpickItemsAllocation}
-                                    unpickItemsAllocationWorking={unpickItemsAllocationWorking}
-                                />
+                                {items.length ? (
+                                    <SosAllocDetails
+                                        header={items[selectedIndex]}
+                                        updateDetail={updateDetail}
+                                        loading={detailsLoading}
+                                        displayOnly={alloctionHasFinished}
+                                        items={utilities.sortEntityList(
+                                            selectedDetails,
+                                            'orderNumber'
+                                        )}
+                                        pickItemsAllocation={pickItemsAllocation}
+                                        pickItemsAllocationWorking={pickItemsAllocationWorking}
+                                        unpickItemsAllocation={unpickItemsAllocation}
+                                        unpickItemsAllocationWorking={unpickItemsAllocationWorking}
+                                    />
+                                ) : (
+                                    <Typography variant="h6" gutterBottom>
+                                        There were no items found to be allocated.
+                                    </Typography>
+                                )}
                             </>
                         </Grid>
                     </>
