@@ -10,6 +10,8 @@
 
         public int OutletNumber { get; set; }
 
+        public string OutletName { get; set; }
+
         public string EarliestRequestedDate { get; set; }
 
         public int OldestOrder { get; set; }

@@ -20,12 +20,14 @@
 
         public SosAllocHead FindBy(Expression<Func<SosAllocHead, bool>> expression)
         {
-            return this.serviceDbContext.SosAllocHeads.Where(expression).ToList().FirstOrDefault();
+            return this.serviceDbContext.SosAllocHeads.Where(expression)
+                .Include(a => a.SalesOutlet).ToList()
+                .FirstOrDefault();
         }
 
         public IQueryable<SosAllocHead> FilterBy(Expression<Func<SosAllocHead, bool>> expression)
         {
-            return this.serviceDbContext.SosAllocHeads.Where(expression);
+            return this.serviceDbContext.SosAllocHeads.Where(expression).Include(a => a.SalesOutlet);
         }
 
         public IQueryable<SosAllocHead> FindAll()

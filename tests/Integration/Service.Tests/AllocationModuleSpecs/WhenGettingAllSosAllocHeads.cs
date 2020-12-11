@@ -6,6 +6,7 @@
     using FluentAssertions;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Resources.Allocation;
 
@@ -25,8 +26,8 @@
         [SetUp]
         public void SetUp()
         {
-            this.sosAllocHead1 = new SosAllocHead { AccountId = 1, JobId = 222 };
-            this.sosAllocHead2 = new SosAllocHead { AccountId = 2, JobId = 222 };
+            this.sosAllocHead1 = new SosAllocHead { AccountId = 1, JobId = 222, SalesOutlet = new SalesOutlet(1, 2) };
+            this.sosAllocHead2 = new SosAllocHead { AccountId = 2, JobId = 222, SalesOutlet = new SalesOutlet(2, 4) };
 
             this.SosAllocHeadFacadeService.GetAllAllocHeads()
                 .Returns(new SuccessResult<IEnumerable<SosAllocHead>>(new List<SosAllocHead>
