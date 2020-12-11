@@ -111,9 +111,9 @@ function SosAllocDetails({
                     <Grid item xs={8}>
                         <Typography variant="h6">{header.outletName}</Typography>
                         <Typography variant="subtitle1">
-                            {`Account Id ${header.accountId} Outlet ${
+                            {`Account Id: ${header.accountId} Outlet: ${
                                 header.outletNumber
-                            } - Value To Allocate ${Math.round(header.valueToAllocate, 0)} `}
+                            } Value To Allocate: ${Math.round(header.valueToAllocate, 0)} `}
                         </Typography>
                     </Grid>
                     <Grid item xs={4}>
