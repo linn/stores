@@ -79,6 +79,7 @@
         public DbSet<Carrier> Carriers { get; set; }
 
         public DbSet<Parcel> Parcels { get; set; }
+
         public DbSet<SosAllocDetail> SosAllocDetails { get; set; }
 
         public DbSet<MechPartAlt> MechPartAlts { get; set; }
@@ -132,6 +133,7 @@
             this.BuildPartParamDataSheets(builder);
             this.QueryPartDataSheetValues(builder);
             this.BuildSosAllocDetails(builder);
+            this.BuildSalesOutlets(builder);
             base.OnModelCreating(builder);
         }
 
@@ -634,10 +636,12 @@
         private void BuildSosAllocHeads(ModelBuilder builder)
         {
             var table = builder.Entity<SosAllocHead>().ToTable("SOS_ALLOC_HEADS");
-            table.HasKey(s => new { s.JobId, s.AccountId, s.OutletNumber });
+            table.HasKey(s => s.Id);
+            table.Property(s => s.Id).HasColumnName("BRIDGE_ID");
             table.Property(s => s.JobId).HasColumnName("JOB_ID");
             table.Property(s => s.AccountId).HasColumnName("ACCOUNT_ID");
             table.Property(s => s.OutletNumber).HasColumnName("OUTLET_NUMBER");
+            table.HasOne(s => s.SalesOutlet).WithMany(o => o.SosAllocHeads).HasForeignKey(a => new { a.AccountId, a.OutletNumber });
             table.Property(s => s.EarliestRequestedDate).HasColumnName("EARLIEST_REQUESTED_DATE");
             table.Property(s => s.OldestOrder).HasColumnName("OLDEST_ORDER_NUMBER");
             table.Property(s => s.ValueToAllocate).HasColumnName("VALUE_TO_ALLOCATE");
@@ -676,6 +680,16 @@
             table.Property(s => s.MaximumQuantityToAllocate).HasColumnName("MAX_QTY_TO_ALLOCATE");
             table.Property(s => s.AllocationMessage).HasColumnName("ALLOCATION_MESSAGE").HasMaxLength(2000);
             table.Property(s => s.AllocationSuccessful).HasColumnName("ALLOCATION_SUCCESSFUL").HasMaxLength(1);
+        }
+
+        private void BuildSalesOutlets(ModelBuilder builder)
+        {
+            var table = builder.Entity<SalesOutlet>().ToTable("SALES_OUTLETS");
+            table.HasKey(s => new { s.AccountId, s.OutletNumber });
+            table.Property(s => s.AccountId).HasColumnName("ACCOUNT_ID");
+            table.Property(s => s.OutletNumber).HasColumnName("OUTLET_NUMBER");
+            table.Property(s => s.Name).HasColumnName("NAME").HasMaxLength(50);
+            table.Property(s => s.SalesCustomerId).HasColumnName("SALES_CUSTOMER_ID");
         }
 
         private void BuildParcels(ModelBuilder builder)

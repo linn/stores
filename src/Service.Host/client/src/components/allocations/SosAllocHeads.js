@@ -133,7 +133,7 @@ function SosAllocHeads({
             <Grid container spacing={3}>
                 {!loading && !finishAllocationWorking && (
                     <>
-                        <Grid item xs={2}>
+                        <Grid item xs={2} style={{ paddingRight: '20px' }}>
                             <Grid container>
                                 <Grid item xs={12}>
                                     <Button
@@ -176,8 +176,7 @@ function SosAllocHeads({
                                                         fontSize: '0.9rem'
                                                     }
                                                 }}
-                                                secondary={`Value ${item.valueToAllocate} `}
-                                                primary={`Account Id ${item.accountId} Outlet ${item.outletNumber}`}
+                                                primary={item.outletName}
                                             />
                                         </ListItem>
                                         <Divider />
@@ -224,7 +223,11 @@ SosAllocHeads.propTypes = {
     loading: PropTypes.bool,
     detailsLoading: PropTypes.bool,
     items: PropTypes.arrayOf(
-        PropTypes.shape({ accountId: PropTypes.number, outletNumber: PropTypes.number })
+        PropTypes.shape({
+            accountId: PropTypes.number,
+            outletNumber: PropTypes.number,
+            outletName: PropTypes.string
+        })
     ),
     details: PropTypes.arrayOf(PropTypes.shape({})),
     updateDetail: PropTypes.func.isRequired,

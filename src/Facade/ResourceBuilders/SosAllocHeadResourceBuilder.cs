@@ -14,13 +14,14 @@
         {
             return new SosAllocHeadResource
                        {
-                           AccountId = sosAllocHead.AccountId,
+                           AccountId = sosAllocHead.SalesOutlet.AccountId,
                            EarliestRequestedDate = sosAllocHead.EarliestRequestedDate.ToString("o"),
                            JobId = sosAllocHead.JobId,
                            OldestOrder = sosAllocHead.OldestOrder,
                            OutletHoldStatus = sosAllocHead.OutletHoldStatus,
-                           OutletNumber = sosAllocHead.OutletNumber,
+                           OutletNumber = sosAllocHead.SalesOutlet.OutletNumber,
                            ValueToAllocate = sosAllocHead.ValueToAllocate,
+                           OutletName = sosAllocHead.SalesOutlet.Name,
                            Links = this.BuildLinks(sosAllocHead).ToArray()
                        };
         }
