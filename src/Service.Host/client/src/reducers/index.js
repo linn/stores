@@ -42,6 +42,7 @@ import partDataSheetValues from './partDataSheetValues';
 import finishAllocation from './finishAllocation';
 import pickItemsAllocation from './pickItemsAllocation';
 import unpickItemsAllocation from './unpickItemsAllocation';
+import tqmsCategories from './tqmsCategories';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -79,6 +80,7 @@ const rootReducer = combineReducers({
     storagePlaces,
     storagePlaceAuditReport,
     suppliers,
+    tqmsCategories,
     unitsOfMeasure,
     unpickItemsAllocation,
     wwdReport,

@@ -9,7 +9,8 @@ import {
     Loading,
     Title,
     ErrorCard,
-    SnackbarMessage
+    SnackbarMessage,
+    smartGoBack
 } from '@linn-it/linn-form-components-library';
 import Page from '../../../containers/Page';
 import DataSheetsTab from './tabs/DataSheetsTab';
@@ -34,7 +35,8 @@ function MechPartSource({
     setSnackbarVisible,
     options,
     userName,
-    userNumber
+    userNumber,
+    previousPaths
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -99,10 +101,6 @@ function MechPartSource({
     const handleCancelClick = () => {
         setMechPartSource(item);
         setEditStatus('view');
-    };
-
-    const handleBackClick = () => {
-        history.push('/inventory/stores/parts/sources');
     };
 
     const handleDatasheetsChange = dataSheets => {
@@ -481,7 +479,9 @@ function MechPartSource({
                                     saveDisabled={viewing() || mechPartSourceInvalid()}
                                     saveClick={handleSaveClick}
                                     cancelClick={handleCancelClick}
-                                    backClick={handleBackClick}
+                                    backClick={() => {
+                                        smartGoBack(previousPaths, history.goBack);
+                                    }}
                                 />
                             </Grid>
                         </>
@@ -494,7 +494,7 @@ function MechPartSource({
 
 MechPartSource.propTypes = {
     item: PropTypes.shape({}),
-    history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+    history: PropTypes.shape({ goBack: PropTypes.func }).isRequired,
     editStatus: PropTypes.string.isRequired,
     itemError: PropTypes.shape({
         status: PropTypes.number,
@@ -513,7 +513,8 @@ MechPartSource.propTypes = {
     userName: PropTypes.string,
     userNumber: PropTypes.number,
     options: PropTypes.shape({ tab: PropTypes.string }),
-    liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string })
+    liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
+    previousPaths: PropTypes.arrayOf(PropTypes.string)
 };
 
 MechPartSource.defaultProps = {
@@ -525,7 +526,8 @@ MechPartSource.defaultProps = {
     options: null,
     liveTest: null,
     userName: null,
-    userNumber: null
+    userNumber: null,
+    previousPaths: []
 };
 
 export default MechPartSource;

@@ -105,6 +105,10 @@
             builder.RegisterType<PartDataSheetValuesListResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<PartDataSheetValues>>>();
             builder.RegisterType<ErrorResourceBuilder>().As<IResourceBuilder<Error>>();
+            builder.RegisterType<TqmsCategoryResourceBuilder>()
+                .As<IResourceBuilder<TqmsCategory>>();
+            builder.RegisterType<TqmsCategoriesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<TqmsCategory>>>();
         }
     }
 }

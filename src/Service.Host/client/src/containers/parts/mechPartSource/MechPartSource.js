@@ -1,5 +1,9 @@
 import { connect } from 'react-redux';
-import { getItemError, initialiseOnMount } from '@linn-it/linn-form-components-library';
+import {
+    getItemError,
+    initialiseOnMount,
+    getPreviousPaths
+} from '@linn-it/linn-form-components-library';
 import queryString from 'query-string';
 import mechPartSourceActions from '../../../actions/mechPartSourceActions';
 import mechPartSourceSelectors from '../../../selectors/mechPartSourceSelectors';
@@ -19,7 +23,8 @@ const mapStateToProps = (state, { match, location }) => ({
     options: queryString.parse(location?.search),
     privileges: getPrivileges(state),
     userName: getUserName(state),
-    userNumber: getUserNumber(state)
+    userNumber: getUserNumber(state),
+    previousPaths: getPreviousPaths(state)
 });
 
 const initialise = ({ itemId }) => dispatch => {

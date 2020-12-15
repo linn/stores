@@ -9,13 +9,14 @@ import {
     Loading,
     Title,
     ErrorCard,
-    SnackbarMessage
+    SnackbarMessage,
+    LinkButton
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 import GeneralTab from '../../containers/parts/tabs/GeneralTab';
 import BuildTab from '../../containers/parts/tabs/BuildTab';
 import PurchTab from '../../containers/parts/tabs/PurchTab';
-import StoresTab from './tabs/StoresTab';
+import StoresTab from '../../containers/parts/tabs/StoresTab';
 import LifeCycleTab from './tabs/LifeCycleTab';
 
 function Part({
@@ -96,7 +97,7 @@ function Part({
     useEffect(() => {
         setPart(p => ({
             ...p,
-            nominalCode: nominal?.nominalCode,
+            nominal: nominal?.nominalCode,
             nominalDescription: nominal?.description
         }));
     }, [nominal, setPart]);
@@ -305,9 +306,16 @@ function Part({
     return (
         <Page>
             <Grid container spacing={3}>
-                <Grid item xs={12}>
+                <Grid item xs={10}>
                     {creating() ? <Title text="Create Part" /> : <Title text="Part Details" />}
                 </Grid>
+                {creating() ? (
+                    <Grid item xs={2} />
+                ) : (
+                    <Grid item xs={2}>
+                        <LinkButton to={'/inventory/parts/create'} text="Copy" />{' '}
+                    </Grid>
+                )}
                 {itemError && (
                     <Grid item xs={12}>
                         <ErrorCard
@@ -346,7 +354,7 @@ function Part({
                                     propertyName="partNumber"
                                 />
                             </Grid>
-                            <Grid item xs={8}>
+                            <Grid item xs={7}>
                                 <InputField
                                     fullWidth
                                     value={part.description}
@@ -356,6 +364,21 @@ function Part({
                                     onChange={handleFieldChange}
                                     propertyName="description"
                                 />
+                            </Grid>
+                            <Grid item xs={2}>
+                                {!creating() &&
+                                    item?.links.some(
+                                        l => l.rel === 'mechanical-sourcing-sheet'
+                                    ) && (
+                                        <LinkButton
+                                            text="Datasheets"
+                                            to={`${
+                                                item.links.find(
+                                                    l => l.rel === 'mechanical-sourcing-sheet'
+                                                ).href
+                                            }?tab=dataSheets`}
+                                        />
+                                    )}
                             </Grid>
                             <Tabs
                                 value={tab}
@@ -387,7 +410,7 @@ function Part({
                                     handleDepartmentChange={handleDepartmentChange}
                                     paretoCode={part.paretoCode}
                                     handleAccountingCompanyChange={handleAccountingCompanyChange}
-                                    nominal={part.nominalCode}
+                                    nominal={part.nominal}
                                     nominalDescription={part.nominalDescription}
                                     stockControlled={part.stockControlled}
                                     safetyCriticalPart={part.safetyCriticalPart}
@@ -453,12 +476,12 @@ function Part({
                                 <StoresTab
                                     handleFieldChange={handleFieldChange}
                                     qcOnReceipt={part.qcOnReceipt}
-                                    qcInfo={part.qcInfo}
+                                    qcInformation={part.qcInformation}
                                     rawOrFinished={part.rawOrFinished}
                                     ourInspectionWeeks={part.ourInspectionWeeks}
                                     safetyWeeks={part.safetyWeeks}
                                     railMethod={part.railMethod}
-                                    minStockrail={part.minstockrail}
+                                    minStockrail={part.minStockrail}
                                     maxStockRail={part.maxStockRail}
                                     secondStageBoard={part.secondStageBoard}
                                     secondStageDescription={part.secondStageDescription}
@@ -512,7 +535,8 @@ Part.propTypes = {
         nextSerialNumber: PropTypes.number,
         dateClosed: PropTypes.string,
         dateLive: PropTypes.string,
-        department: PropTypes.string
+        department: PropTypes.string,
+        links: PropTypes.arrayOf(PropTypes.shape({ href: PropTypes.string, rel: PropTypes.string }))
     }),
     partsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,

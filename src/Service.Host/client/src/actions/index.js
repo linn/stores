@@ -95,3 +95,5 @@ export const pickItemsAllocationActionTypes = makeActionTypes(
 export const unpickItemsAllocationActionTypes = makeActionTypes(
     processTypes.unpickItemsAllocation.actionType
 );
+
+export const tqmsCategoriesActionTypes = makeActionTypes(itemTypes.tqmsCategories.actionType);

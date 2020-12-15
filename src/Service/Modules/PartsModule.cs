@@ -51,6 +51,9 @@
 
         private readonly IPartDataSheetValuesService dataSheetsValuesService;
 
+        private readonly IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>
+            tqmsCategoriesService;
+
         public PartsModule(
             IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
@@ -64,7 +67,8 @@
             IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> mechPartSourceService,
             IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> manufacturerService,
             IPartDataSheetValuesService dataSheetsValuesService,
-            IAuthorisationService authService)
+            IAuthorisationService authService,
+            IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource> tqmsCategoriesService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
@@ -108,6 +112,10 @@
             
             this.dataSheetsValuesService = dataSheetsValuesService;
             this.Get("/inventory/parts/data-sheet-values", _ => this.GetPartDataSheetValues());
+
+            this.tqmsCategoriesService = tqmsCategoriesService;
+            this.Get("/inventory/parts/tqms-categories", _ => this.GetTqmsCategories());
+
         }
 
         private object GetPart(int id)
@@ -136,6 +144,7 @@
             this.RequiresAuthentication();
             var resource = this.Bind<PartResource>();
             resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
+            resource.BomType = "C";
             var result = this.partsFacadeService.Add(resource);
             if (resource.QcOnReceipt != null && (bool)resource.QcOnReceipt)
             {
@@ -273,6 +282,13 @@
         {
             var result = this.dataSheetsValuesService.GetAll();
             return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetTqmsCategories()
+        {
+            return this.Negotiate.WithModel(
+                    this.tqmsCategoriesService.GetAll())
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
     }

@@ -89,6 +89,9 @@
 
         protected IAuthorisationService AuthService { get; private set; }
 
+        protected IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>
+            TqmsCategoriesService { get; private set; }
+
         [SetUp]
         public void EstablishContext()
         {
@@ -118,6 +121,8 @@
             this.DataSheetValuesService = Substitute.For<IPartDataSheetValuesService>();
             this.PartPack = Substitute.For<IPartPack>();
             this.AuthService = Substitute.For<IAuthorisationService>();
+            this.TqmsCategoriesService = Substitute
+                .For<IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>>();
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
@@ -140,6 +145,7 @@
                         with.Dependency(this.DataSheetValuesService);
                         with.Dependency(this.PartPack);
                         with.Dependency(this.AuthService);
+                        with.Dependency(this.TqmsCategoriesService);
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());
                         with.Dependency<IResourceBuilder<PartTemplate>>(new PartTemplateResourceBuilder());
@@ -165,6 +171,9 @@
                         with.Dependency<IResourceBuilder<Manufacturer>>(new ManufacturerResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Manufacturer>>>(
                             new ManufacturersResourceBuilder());
+                        with.Dependency<IResourceBuilder<TqmsCategory>>(new TqmsCategoryResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<TqmsCategory>>>(
+                            new TqmsCategoriesResourceBuilder());
                         with.ResponseProcessor<PartResponseProcessor>();
                         with.ResponseProcessor<PartsResponseProcessor>();
                         with.ResponseProcessor<UnitsOfMeasureResponseProcessor>();
@@ -176,6 +185,7 @@
                         with.ResponseProcessor<PartLiveTestResponseProcessor>();
                         with.ResponseProcessor<MechPartSourceResponseProcessor>();
                         with.ResponseProcessor<ManufacturersResponseProcessor>();
+                        with.ResponseProcessor<TqmsCategoriesResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
                                 {

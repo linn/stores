@@ -217,7 +217,7 @@
 
         private static void Validate(Part to)
         {
-            if (to.ScrapOrConvert != null && to.DatePhasedOut == null)
+            if (!string.IsNullOrEmpty(to.ScrapOrConvert)  && to.DatePhasedOut == null)
             {
                 throw new UpdatePartException("A part must be obsolete to be convertible or to be scrapped.");
             }
@@ -238,7 +238,7 @@
 
         private static int FindRealNextNumber(string newestPartOfThisType)
         {
-            var highestNumber = newestPartOfThisType?.Split(" ").Last();
+            var highestNumber = newestPartOfThisType?.Split(" ").Last().Split("/")[0];
             return int.Parse(highestNumber ?? throw new InvalidOperationException()) + 1;
         }
     }
