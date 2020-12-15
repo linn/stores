@@ -9,7 +9,8 @@ import {
     Loading,
     Title,
     ErrorCard,
-    SnackbarMessage
+    SnackbarMessage,
+    LinkButton
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 import GeneralTab from '../../containers/parts/tabs/GeneralTab';
@@ -346,7 +347,7 @@ function Part({
                                     propertyName="partNumber"
                                 />
                             </Grid>
-                            <Grid item xs={8}>
+                            <Grid item xs={7}>
                                 <InputField
                                     fullWidth
                                     value={part.description}
@@ -356,6 +357,21 @@ function Part({
                                     onChange={handleFieldChange}
                                     propertyName="description"
                                 />
+                            </Grid>
+                            <Grid item xs={2}>
+                                {!creating() &&
+                                    item?.links.some(
+                                        l => l.rel === 'mechanical-sourcing-sheet'
+                                    ) && (
+                                        <LinkButton
+                                            text="Datasheets"
+                                            to={`${
+                                                item.links.find(
+                                                    l => l.rel === 'mechanical-sourcing-sheet'
+                                                ).href
+                                            }?tab=dataSheets`}
+                                        />
+                                    )}
                             </Grid>
                             <Tabs
                                 value={tab}
@@ -512,7 +528,8 @@ Part.propTypes = {
         nextSerialNumber: PropTypes.number,
         dateClosed: PropTypes.string,
         dateLive: PropTypes.string,
-        department: PropTypes.string
+        department: PropTypes.string,
+        links: PropTypes.arrayOf(PropTypes.shape({ href: PropTypes.string, rel: PropTypes.string }))
     }),
     partsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,
