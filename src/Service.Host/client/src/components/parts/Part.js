@@ -306,9 +306,16 @@ function Part({
     return (
         <Page>
             <Grid container spacing={3}>
-                <Grid item xs={12}>
+                <Grid item xs={10}>
                     {creating() ? <Title text="Create Part" /> : <Title text="Part Details" />}
                 </Grid>
+                {creating() ? (
+                    <Grid item xs={2} />
+                ) : (
+                    <Grid item xs={2}>
+                        <LinkButton to={'/inventory/parts/create'} text="Copy" />{' '}
+                    </Grid>
+                )}
                 {itemError && (
                     <Grid item xs={12}>
                         <ErrorCard
