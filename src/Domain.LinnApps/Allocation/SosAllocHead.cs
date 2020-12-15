@@ -6,9 +6,11 @@
     {
         public int JobId { get; set; }
 
-        public int  AccountId { get; set; }
+        public int AccountId { get; set; }
 
         public int OutletNumber { get; set; }
+
+        public SalesOutlet SalesOutlet { get; set; }
 
         public DateTime EarliestRequestedDate { get; set; }
 
@@ -17,5 +19,7 @@
         public decimal ValueToAllocate { get; set; }
 
         public string OutletHoldStatus { get; set; }
+
+        public int Id { get; set; }
     }
 }

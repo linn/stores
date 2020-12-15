@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import {
     initialiseOnMount,
-    getItemErrorDetailMessage
+    getItemErrorDetailMessage,
+    utilities
 } from '@linn-it/linn-form-components-library';
 import sosAllocHeadsActions from '../../actions/sosAllocHeadsActions';
 import sosAllocHeadsSelectors from '../../selectors/sosAllocHeadsSelectors';
@@ -19,7 +20,7 @@ import unpickItemsAllocationSelectors from '../../selectors/unpickItemsAllocatio
 
 const mapStateToProps = (state, { match }) => ({
     jobId: match.params.jobId,
-    items: sosAllocHeadsSelectors.getSearchItems(state),
+    items: utilities.sortEntityList(sosAllocHeadsSelectors.getSearchItems(state), 'outletName'),
     loading: sosAllocHeadsSelectors.getSearchLoading(state),
     details: sosAllocDetailsSelectors.getSearchItems(state),
     detailsLoading: sosAllocDetailsSelectors.getSearchLoading(state),

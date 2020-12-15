@@ -109,8 +109,11 @@ function SosAllocDetails({
             ) : (
                 <>
                     <Grid item xs={8}>
-                        <Typography variant="h6" gutterBottom>
-                            {`Account ${header.accountId} Outlet ${header.outletNumber} - Value To Allocate ${header.valueToAllocate} `}
+                        <Typography variant="h6">{header.outletName}</Typography>
+                        <Typography variant="subtitle1">
+                            {`Account Id: ${header.accountId} Outlet: ${
+                                header.outletNumber
+                            } Value To Allocate: ${Math.round(header.valueToAllocate, 0)} `}
                         </Typography>
                     </Grid>
                     <Grid item xs={4}>
@@ -170,6 +173,7 @@ SosAllocDetails.propTypes = {
         jobId: PropTypes.number,
         accountId: PropTypes.number,
         outletNumber: PropTypes.number,
+        outletName: PropTypes.string,
         valueToAllocate: PropTypes.number
     })
 };
