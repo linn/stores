@@ -96,7 +96,7 @@ function Part({
     useEffect(() => {
         setPart(p => ({
             ...p,
-            nominalCode: nominal?.nominalCode,
+            nominal: nominal?.nominalCode,
             nominalDescription: nominal?.description
         }));
     }, [nominal, setPart]);
@@ -387,7 +387,7 @@ function Part({
                                     handleDepartmentChange={handleDepartmentChange}
                                     paretoCode={part.paretoCode}
                                     handleAccountingCompanyChange={handleAccountingCompanyChange}
-                                    nominal={part.nominalCode}
+                                    nominal={part.nominal}
                                     nominalDescription={part.nominalDescription}
                                     stockControlled={part.stockControlled}
                                     safetyCriticalPart={part.safetyCriticalPart}
