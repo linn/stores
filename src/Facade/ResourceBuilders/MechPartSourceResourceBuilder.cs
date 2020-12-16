@@ -17,6 +17,11 @@
         private readonly MechPartManufacturerAltResourceBuilder manufacturerAltResourceBuilder = 
             new MechPartManufacturerAltResourceBuilder();
 
+        private readonly MechPartUsageResourceBuilder usageResourceBuilder = new MechPartUsageResourceBuilder();
+
+        private readonly MechPartPurchasingQuoteResourceBuilder purchasingQuotesResourceBuilder = 
+            new MechPartPurchasingQuoteResourceBuilder();
+
         public MechPartSourceResource Build(MechPartSource model)
         {
             return new MechPartSourceResource
@@ -102,6 +107,12 @@
                             FootprintRef = model.FootprintRef,
                             RkmCode = model.RkmCode,
                             CapacitanceLetterAndNumeralCode = model.CapacitanceLetterAndNumeralCode,
+                            PurchasingQuotes = model.PurchasingQuotes?.Select(
+                                q => this.purchasingQuotesResourceBuilder.Build(q))
+                                .ToList(),
+                            Usages = model.Usages?.Select(
+                                u => this.usageResourceBuilder.Build(u))
+                                .ToList(),
                             Links = this.BuildLinks(model).ToArray()
             };
         }

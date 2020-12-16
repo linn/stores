@@ -212,6 +212,8 @@
 
         public string DateCancelled { get; set; }
 
-        private List<MechPartPurchasingQuoteResource> PurchasingQuotes { get; set; }
+        public List<MechPartPurchasingQuoteResource> PurchasingQuotes { get; set; }
+
+        public List<MechPartUsageResource> Usages { get; set; }
     }
 }
