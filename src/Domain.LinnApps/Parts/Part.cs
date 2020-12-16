@@ -146,7 +146,5 @@
         public IEnumerable<MechPartSource> ReplacementParts { get; set; }
 
         public PartParamData ParamData { get; set; }
-
-        public IEnumerable<MechPartUsage> UsagesRootProductOn { get; set; }
     }
 }

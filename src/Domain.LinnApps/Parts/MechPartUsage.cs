@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Parts
 {
+    using System.Collections.Generic;
+
     public class MechPartUsage
     {
         public int SourceId { get; set; }
@@ -10,6 +12,6 @@
 
         public string RootProductPartNumber { get; set; }
 
-        public Part RootProduct { get; set; }
+        public RootProduct RootProduct { get; set; }
     }
 }

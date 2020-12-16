@@ -175,7 +175,18 @@
                 LibraryRef = resource.LibraryRef,
                 FootprintRef = resource.FootprintRef,
                 RkmCode = resource.Resistance == null ? null :
-                                     this.domainService.GetRkmCode(resource.ResistanceUnits, (decimal)resource.Resistance)
+                                     this.domainService.GetRkmCode(resource.ResistanceUnits, (decimal)resource.Resistance),
+                Usages = resource.Usages?.Select(u => new MechPartUsage
+                                                          {
+                                                              QuantityUsed = u.QuantityUsed,
+                                                              RootProductPartNumber = u.RootProductPartNumber,
+                                                              RootProduct = u.RootProduct == null ? new RootProduct
+                                                                                {
+                                                                                    Name = u.RootProductPartNumber,
+                                                                                    Description = u.RootProductDescription
+                                                                                } 
+                                                                                : null
+                                                          })
             };
         }
 
@@ -310,6 +321,20 @@
             entity.IcFunction = resource.IcFunction;
             entity.LibraryRef = resource.LibraryRef;
             entity.FootprintRef = resource.FootprintRef;
+
+            entity.Usages = resource.Usages?.Select(
+                u => new MechPartUsage
+                         {
+                             QuantityUsed = u.QuantityUsed,
+                             RootProductPartNumber = u.RootProductPartNumber,
+                             RootProduct = u.RootProduct == null
+                                               ? new RootProduct
+                                                     {
+                                                         Name = u.RootProductPartNumber,
+                                                         Description = u.RootProductDescription
+                                                     }
+                                               : null
+                         });
         }
 
         protected override Expression<Func<MechPartSource, bool>> SearchExpression(string searchTerm)

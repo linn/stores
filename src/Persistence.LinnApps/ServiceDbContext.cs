@@ -22,7 +22,7 @@
 
         public DbSet<Department> Departments { get; set; }
 
-        public DbQuery<RootProduct> RootProducts { get; set; }
+        public DbSet<RootProduct> RootProducts { get; set; }
 
         public DbSet<AccountingCompany> AccountingCompanies { get; set; }
 
@@ -107,7 +107,7 @@
             this.BuildProductAnalysisCodes(builder);
             this.BuildAccountingCompanies(builder);
             this.BuildEmployees(builder);
-            this.QueryRootProducts(builder);
+            this.BuildRootProducts(builder);
             this.BuildSosOptions(builder);
             this.BuildSernosSequences(builder);
             this.QueryUnitsOfMeasure(builder);
@@ -385,7 +385,7 @@
 
             e.HasOne(s => s.QualityVerifiedBy).WithMany(m => m.SourcesQualityVerified)
                 .HasForeignKey(s => s.QualityVerifiedById);
-            e.Property(s => s.QualityVerifiedById).HasColumnName("QUALITTY_VERIFIED_BY");
+            e.Property(s => s.QualityVerifiedById).HasColumnName("QUALITY_VERIFIED_BY");
             e.Property(s => s.QualityVerifiedDate).HasColumnName("QUALITY_VERIFIED_DATE");
 
 
@@ -402,7 +402,7 @@
 
             e.HasOne(s => s.RemoveTCodeBy).WithMany(m => m.SourcesTCodeRemoved)
                 .HasForeignKey(s => s.RemoveTCodeId);
-            e.Property(s => s.ApplyTCodeId).HasColumnName("REMOVE_T_CODE_BY");
+            e.Property(s => s.RemoveTCodeId).HasColumnName("REMOVE_T_CODE_BY");
             e.Property(s => s.RemoveTCodeDate).HasColumnName("REMOVE_T_CODE_DATE");
 
             e.HasOne(s => s.CancelledBy).WithMany(m => m.SourcesCancelled)
@@ -522,10 +522,11 @@
             e.Property(p => p.Description).HasColumnName("DESCRIPTION").HasMaxLength(100);
         }
 
-        private void QueryRootProducts(ModelBuilder builder)
+        private void BuildRootProducts(ModelBuilder builder)
         {
-            var q = builder.Query<RootProduct>().ToView("ROOT_PRODS");
+            var q = builder.Entity<RootProduct>().ToTable("ROOT_PRODS");
             q.Property(p => p.Name).HasColumnName("ROOT_PRODUCT");
+            q.HasKey(p => p.Name);
             q.Property(p => p.Description).HasColumnName("DESCRIPTION");
             q.Property(p => p.DateInvalid).HasColumnName("DATE_INVALID");
         }
@@ -824,11 +825,11 @@
         private void BuildMechPartUsages(ModelBuilder builder)
         {
             var e = builder.Entity<MechPartUsage>().ToTable("MECH_PART_USAGES");
-            e.HasKey(u => new { u.SourceId, u.RootProduct });
+            e.Property(u => u.RootProductPartNumber).HasColumnName("ROOT_PRODUCT").HasMaxLength(14);
+            e.HasKey(u => new { u.SourceId, u.RootProductPartNumber });
             e.Property(u => u.SourceId).HasColumnName("MS_ID");
             e.HasOne(u => u.Source).WithMany(s => s.Usages).HasForeignKey(u => u.SourceId);
             e.Property(u => u.QuantityUsed).HasColumnName("QTY_USED");
-            e.Property(u => u.RootProductPartNumber).HasColumnName("ROOT_PRODUCT").HasMaxLength(14);
             e.HasOne(u => u.RootProduct).WithMany(p => p.UsagesRootProductOn)
                 .HasForeignKey(u => u.RootProductPartNumber);
         }
