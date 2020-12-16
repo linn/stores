@@ -97,6 +97,8 @@
 
         public DbSet<TqmsCategory> TqmsCategories { get; set; }
 
+        public DbSet<MechPartUsage> MechPartUsages { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -141,6 +143,7 @@
             this.BuildTqmsCategories(builder);
             this.BuildSalesOutlets(builder);
             this.BuildMechPartPurchasingQuotes(builder);
+            this.BuildMechPartUsages(builder);
             base.OnModelCreating(builder);
         }
 
@@ -815,6 +818,18 @@
             e.Property(q => q.ManufacturersPartNumber).HasColumnName("MANUFACTURERS_PART_NUMBER").HasMaxLength(30);
             e.Property(q => q.RohsCompliant).HasColumnName("ROHS_COMPLIANT").HasMaxLength(1);
             e.Property(q => q.UnitPrice).HasColumnName("UNIT_PRICE");
+        }
+
+        private void BuildMechPartUsages(ModelBuilder builder)
+        {
+            var e = builder.Entity<MechPartUsage>().ToTable("MECH_PART_USAGES");
+            e.HasKey(u => new { u.SourceId, u.RootProduct });
+            e.Property(u => u.SourceId).HasColumnName("MS_ID");
+            e.HasOne(u => u.Source).WithMany(s => s.Usages).HasForeignKey(u => u.SourceId);
+            e.Property(u => u.QuantityUsed).HasColumnName("QTY_USED");
+            e.Property(u => u.RootProductPartNumber).HasColumnName("ROOT_PRODUCT").HasMaxLength(14);
+            e.HasOne(u => u.RootProduct).WithMany(p => p.UsagesRootProductOn)
+                .HasForeignKey(u => u.RootProductPartNumber);
         }
     }
 }

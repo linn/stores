@@ -205,5 +205,7 @@
         public int? CancelledById { get; set; }
 
         public DateTime DateCancelled { get; set; }
+
+        public IEnumerable<MechPartUsage> Usages { get; set; }
     }
 }
