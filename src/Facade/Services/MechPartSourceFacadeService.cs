@@ -179,8 +179,8 @@
                 Usages = resource.Usages?.Select(u => new MechPartUsage
                                                           {
                                                               QuantityUsed = u.QuantityUsed,
-                                                              RootProductPartNumber = u.RootProductPartNumber,
-                                                              RootProduct = u.RootProduct == null ? new RootProduct
+                                                              RootProductName = u.RootProductPartNumber,
+                                                              RootProduct = u.RootProductPartNumber == null ? new RootProduct
                                                                                 {
                                                                                     Name = u.RootProductPartNumber,
                                                                                     Description = u.RootProductDescription
@@ -326,8 +326,8 @@
                 u => new MechPartUsage
                          {
                              QuantityUsed = u.QuantityUsed,
-                             RootProductPartNumber = u.RootProductPartNumber,
-                             RootProduct = u.RootProduct == null
+                             RootProductName = u.RootProductPartNumber,
+                             RootProduct = u.RootProductPartNumber == null
                                                ? new RootProduct
                                                      {
                                                          Name = u.RootProductPartNumber,

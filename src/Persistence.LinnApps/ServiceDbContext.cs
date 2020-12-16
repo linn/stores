@@ -825,13 +825,13 @@
         private void BuildMechPartUsages(ModelBuilder builder)
         {
             var e = builder.Entity<MechPartUsage>().ToTable("MECH_PART_USAGES");
-            e.Property(u => u.RootProductPartNumber).HasColumnName("ROOT_PRODUCT").HasMaxLength(14);
-            e.HasKey(u => new { u.SourceId, u.RootProductPartNumber });
+            e.Property(u => u.RootProductName).HasColumnName("ROOT_PRODUCT").HasMaxLength(14);
+            e.HasKey(u => new { u.SourceId, RootProductPartNumber = u.RootProductName });
             e.Property(u => u.SourceId).HasColumnName("MS_ID");
             e.HasOne(u => u.Source).WithMany(s => s.Usages).HasForeignKey(u => u.SourceId);
             e.Property(u => u.QuantityUsed).HasColumnName("QTY_USED");
             e.HasOne(u => u.RootProduct).WithMany(p => p.UsagesRootProductOn)
-                .HasForeignKey(u => u.RootProductPartNumber);
+                .HasForeignKey(u => u.RootProductName);
         }
     }
 }

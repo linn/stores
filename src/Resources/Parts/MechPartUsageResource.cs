@@ -8,9 +8,6 @@
 
         public string RootProductPartNumber { get; set; }
 
-        public string RootProduct { get; set; }
-
         public string RootProductDescription { get; set; }
-
     }
 }
