@@ -813,6 +813,7 @@
             e.HasKey(q => new { q.SourceId, q.SupplierId });
             e.Property(q => q.SourceId).HasColumnName("MS_ID");
             e.Property(q => q.SupplierId).HasColumnName("SUPPLIER_ID");
+            e.HasOne(q => q.Supplier).WithMany(s => s.PurchasingQuotesSupplierOn).HasForeignKey(q => q.SupplierId);
             e.Property(q => q.LeadTime).HasColumnName("LEAD_TIME");
             e.Property(q => q.ManufacturersCode).HasColumnName("MANUFACTURERS_CODE").HasMaxLength(6);
             e.Property(q => q.ManufacturersPartNumber).HasColumnName("MANUFACTURERS_PART_NUMBER").HasMaxLength(30);
