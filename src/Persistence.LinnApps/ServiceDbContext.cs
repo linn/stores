@@ -90,6 +90,9 @@
 
         public DbSet<PartParamData> PartParamDataSheets { get; set; }
 
+        public DbSet<MechPartPurchasingQuote> MechPartPurchasingQuotes { get; set; }
+
+
         public DbQuery<PartDataSheetValues> PartDataSheetValues { get; set; }
 
         public DbSet<TqmsCategory> TqmsCategories { get; set; }
@@ -137,6 +140,7 @@
             this.BuildSosAllocDetails(builder);
             this.BuildTqmsCategories(builder);
             this.BuildSalesOutlets(builder);
+            this.BuildMechPartPurchasingQuotes(builder);
             base.OnModelCreating(builder);
         }
 
@@ -364,6 +368,7 @@
             e.Property(s => s.FootprintRef).HasColumnName("FOOTPRINT_REF").HasMaxLength(30);
             e.Property(s => s.LibraryRef).HasColumnName("LIBRARY_REF").HasMaxLength(30);
             e.Property(s => s.RkmCode).HasColumnName("RESISTANCE_CHAR").HasMaxLength(18);
+            e.HasMany(s => s.PurchasingQuotes).WithOne(q => q.Source).HasForeignKey(q => q.SourceId);
         }
 
         private void BuildMechPartAlts(ModelBuilder builder)
@@ -760,6 +765,19 @@
             e.HasKey(c => c.Name);
             e.Property(c => c.Name).HasColumnName("TQMS_CATEGORY");
             e.Property(c => c.Description).HasColumnName("DESCRIPTION");
+        }
+
+        private void BuildMechPartPurchasingQuotes(ModelBuilder builder)
+        {
+            var e = builder.Entity<MechPartPurchasingQuote>().ToTable("MECH_PART_QUOTES");
+            e.HasKey(q => new { q.SourceId, q.SupplierId });
+            e.Property(q => q.SourceId).HasColumnName("MS_ID");
+            e.Property(q => q.SupplierId).HasColumnName("SUPPLIER_ID");
+            e.Property(q => q.LeadTime).HasColumnName("LEAD_TIME");
+            e.Property(q => q.ManufacturersCode).HasColumnName("MANUFACTURERS_CODE").HasMaxLength(6);
+            e.Property(q => q.ManufacturersPartNumber).HasColumnName("MANUFACTURERS_PART_NUMBER").HasMaxLength(30);
+            e.Property(q => q.RohsCompliant).HasColumnName("ROHS_COMPLIANT").HasMaxLength(1);
+            e.Property(q => q.UnitPrice).HasColumnName("UNIT_PRICE");
         }
     }
 }

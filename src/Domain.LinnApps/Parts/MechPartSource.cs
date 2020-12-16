@@ -161,5 +161,7 @@
         public string FootprintRef { get; set; }
 
         public string RkmCode { get; set; }
+
+        public IEnumerable<MechPartPurchasingQuote> PurchasingQuotes { get; set; }
     }
 }
