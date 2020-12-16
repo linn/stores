@@ -101,7 +101,7 @@
                             LibraryRef = model.LibraryRef,
                             FootprintRef = model.FootprintRef,
                             RkmCode = model.RkmCode,
-                            CapictanceLetterAndNumeralCode = model.CapacitanceLetterAndNumeralCode,
+                            CapacitanceLetterAndNumeralCode = model.CapacitanceLetterAndNumeralCode,
                             Links = this.BuildLinks(model).ToArray()
             };
         }
