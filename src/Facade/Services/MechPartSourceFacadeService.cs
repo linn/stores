@@ -179,10 +179,10 @@
                 Usages = resource.Usages?.Select(u => new MechPartUsage
                                                           {
                                                               QuantityUsed = u.QuantityUsed,
-                                                              RootProductName = u.RootProductPartNumber,
-                                                              RootProduct = u.RootProductPartNumber == null ? new RootProduct
+                                                              RootProductName = u.RootProductName,
+                                                              RootProduct = u.RootProductName == null ? new RootProduct
                                                                                 {
-                                                                                    Name = u.RootProductPartNumber,
+                                                                                    Name = u.RootProductName,
                                                                                     Description = u.RootProductDescription
                                                                                 } 
                                                                                 : null
@@ -326,11 +326,11 @@
                 u => new MechPartUsage
                          {
                              QuantityUsed = u.QuantityUsed,
-                             RootProductName = u.RootProductPartNumber,
-                             RootProduct = u.RootProductPartNumber == null
+                             RootProductName = u.RootProductName,
+                             RootProduct = u.RootProductName == null
                                                ? new RootProduct
                                                      {
-                                                         Name = u.RootProductPartNumber,
+                                                         Name = u.RootProductName,
                                                          Description = u.RootProductDescription
                                                      }
                                                : null

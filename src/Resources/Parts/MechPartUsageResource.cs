@@ -6,7 +6,7 @@
 
         public int QuantityUsed { get; set; }
 
-        public string RootProductPartNumber { get; set; }
+        public string RootProductName { get; set; }
 
         public string RootProductDescription { get; set; }
     }

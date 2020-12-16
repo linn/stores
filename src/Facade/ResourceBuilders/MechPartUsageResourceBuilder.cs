@@ -10,7 +10,7 @@
         {
             return new MechPartUsageResource
                        {
-                          RootProductPartNumber = model.RootProductName,
+                          RootProductName = model.RootProductName,
                           RootProductDescription = model.RootProduct.Description,
                           QuantityUsed = model.QuantityUsed,
                           SourceId = model.SourceId
