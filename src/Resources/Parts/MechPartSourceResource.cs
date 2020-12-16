@@ -170,23 +170,23 @@
 
         public bool CreatePart { get; set; }
 
-        public int? CreatedBy { get; set; }
+        public int? PartCreatedBy { get; set; }
 
-        public string CreatedByName { get; set; }
+        public string PartCreatedByName { get; set; }
 
-        public string CreatedByDate { get; set; }
+        public string PartCreatedDate { get; set; }
 
         public int? VerifiedBy { get; set; }
 
         public string VerifiedByName { get; set; }
 
-        public string VerifiedByDate { get; set; }
+        public string VerifiedDate { get; set; }
 
         public int? QualityVerifiedBy { get; set; }
 
         public string QualityVerifiedByName { get; set; }
 
-        public string QualityVerifiedByDate { get; set; }
+        public string QualityVerifiedDate { get; set; }
 
         public int? McitVerifiedBy { get; set; }
 
