@@ -20,6 +20,7 @@ import Manufacturerstab from '../../../containers/parts/mechPartSource/tabs/Manu
 import SuppliersTab from '../../../containers/parts/mechPartSource/tabs/SuppliersTab';
 import ParamDataTab from '../../../containers/parts/mechPartSource/tabs/ParamDataTab';
 import CadDataTab from './tabs/CadDataTab';
+import UsagesTab from '../../../containers/parts/tabs/UsagesTab';
 
 function MechPartSource({
     editStatus,
@@ -63,13 +64,15 @@ function MechPartSource({
         suppliers: 3,
         manufacturers: 4,
         paramData: 5,
-        cadData: 6
+        cadData: 6,
+        usages: 7
     };
 
     const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
 
     const [newManufacturersRow, setNewManufacturersRow] = useState({});
     const [newSuppliersRow, setNewSuppliersRow] = useState({});
+    const [newUsagesRow, setNewUsagesRow] = useState({});
 
     const handleTabChange = (_, value) => {
         setTab(value);
@@ -148,6 +151,14 @@ function MechPartSource({
         }));
     };
 
+    const deleteUsagesRow = row => {
+        setEditStatus('edit');
+        setMechPartSource(m => ({
+            ...m,
+            usages: m.usages.filter(a => a.rootProductName === row.rootProductName)
+        }));
+    };
+
     const deleteSuppliersRow = row => {
         setEditStatus('edit');
         setMechPartSource(m => ({
@@ -212,6 +223,16 @@ function MechPartSource({
         }));
     };
 
+    const saveUsagesRow = row => {
+        // we are adding a new row
+        // ?
+        // or we are updating an existing row
+        setMechPartSource(m => ({
+            ...m,
+            usages: m.usages.map(x => (x.rootProductName === row.rootProductName ? row : x))
+        }));
+    };
+
     const handleApprovedByChange = (sequence, newValue) => {
         setMechPartSource(m => ({
             ...m,
@@ -229,6 +250,21 @@ function MechPartSource({
             mechPartAlts: m.mechPartAlts.map(x =>
                 x.sequence === sequence
                     ? { ...x, supplierId: newValue.name, supplierName: newValue.description }
+                    : x
+            )
+        }));
+    };
+
+    const handleRootProductChange = (rootProductName, newValue) => {
+        setMechPartSource(m => ({
+            ...m,
+            usages: m.usages.map(x =>
+                x.rootProductName === rootProductName
+                    ? {
+                          ...x,
+                          rootProduct: newValue.name,
+                          rootProductDescription: newValue.description
+                      }
                     : x
             )
         }));
@@ -321,6 +357,7 @@ function MechPartSource({
                                     disabled={mechPartSource.mechanicalOrElectrical !== 'E'}
                                 />
                                 <Tab label="Cad Data" />
+                                <Tab label="Usages" />
                             </Tabs>
                             {tab === 0 && (
                                 <ProposalTab
@@ -472,6 +509,16 @@ function MechPartSource({
                                     libraryRef={mechPartSource.libraryRef}
                                     footprintRef={mechPartSource.footprintRef}
                                     handleFieldChange={handleFieldChange}
+                                />
+                            )}
+                            {tab === 7 && (
+                                <UsagesTab
+                                    handleRootProductChange={handleRootProductChange}
+                                    usages={mechPartSource.usages}
+                                    saveRow={saveUsagesRow}
+                                    deleteRow={deleteUsagesRow}
+                                    newRow={newUsagesRow}
+                                    setNewRow={setNewUsagesRow}
                                 />
                             )}
                             <Grid item xs={12}>
