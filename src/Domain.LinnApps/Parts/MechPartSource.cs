@@ -207,5 +207,9 @@
         public DateTime? DateCancelled { get; set; }
 
         public ICollection<MechPartUsage> Usages { get; set; }
+
+        public string LifeExpectancyPart { get; set; }
+
+        public string Configuration { get; set; }
     }
 }

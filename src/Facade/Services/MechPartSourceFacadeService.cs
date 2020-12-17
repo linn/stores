@@ -21,6 +21,8 @@
 
         private readonly IQueryRepository<Supplier> supplierRepository;
 
+        private readonly IRepository<Manufacturer, string> manufacturerRepository;
+
         private readonly IMechPartSourceService domainService;
 
         private readonly IDatabaseService databaseService;
@@ -33,6 +35,7 @@
             IDatabaseService databaseService,
             IQueryRepository<Supplier> supplierRepository,
             IQueryRepository<RootProduct> rootProductRepository,
+            IRepository<Manufacturer, string> manufacturerRepository,
             IRepository<Employee, int> employeeRepository) : base(repository, transactionManager)
         {
             this.employeeRepository = employeeRepository;
@@ -41,6 +44,7 @@
             this.databaseService = databaseService;
             this.supplierRepository = supplierRepository;
             this.rootProductRepository = rootProductRepository;
+            this.manufacturerRepository = manufacturerRepository;
         }
 
         protected override MechPartSource CreateFromResource(MechPartSourceResource resource)
@@ -219,7 +223,8 @@
                 PurchasingQuotes = resource.PurchasingQuotes?.Select(q => new MechPartPurchasingQuote
                                                                               {
                                                                                   LeadTime = q.LeadTime,
-                                                                                  ManufacturersCode = q.ManufacturersCode,
+                                                                                  Manufacturer = q.ManufacturerCode != null ? 
+                                                                                  this.manufacturerRepository.FindById(q.ManufacturerCode) : null,
                                                                                   ManufacturersPartNumber = q.ManufacturersPartNumber,
                                                                                   Moq = q.Moq,
                                                                                   RohsCompliant = q.RohsCompliant,
@@ -234,7 +239,9 @@
                                                               RootProduct = u.RootProductName == null ? this.rootProductRepository
                                                                                     .FindBy(p => p.Name == u.RootProductName)
                                                                                 : null
-                                                          }).ToList()
+                                                          }).ToList(),
+                LifeExpectancyPart = resource.LifeExpectancyPart,
+                Configuration = resource.Configuration
             };
         }
 
@@ -410,7 +417,8 @@
                 q => new MechPartPurchasingQuote
                          {
                              LeadTime = q.LeadTime,
-                             ManufacturersCode = q.ManufacturersCode,
+                             Manufacturer = q.ManufacturerCode != null ?
+                                       this.manufacturerRepository.FindById(q.ManufacturerCode) : null,
                              ManufacturersPartNumber = q.ManufacturersPartNumber,
                              Moq = q.Moq,
                              RohsCompliant = q.RohsCompliant,
@@ -427,6 +435,8 @@
                                                ? this.rootProductRepository.FindBy(p => p.Name == u.RootProductName)
                                                : null
                          }).ToList();
+            entity.LifeExpectancyPart = resource.LifeExpectancyPart;
+            entity.Configuration = resource.Configuration;
         }
 
         protected override Expression<Func<MechPartSource, bool>> SearchExpression(string searchTerm)

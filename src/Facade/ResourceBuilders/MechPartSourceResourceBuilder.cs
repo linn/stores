@@ -134,7 +134,9 @@
                             Usages = model.Usages?.Select(
                                 u => this.usageResourceBuilder.Build(u))
                                 .ToList(),
-                            Links = this.BuildLinks(model).ToArray()
+                            Links = this.BuildLinks(model).ToArray(),
+                            LifeExpectancyPart = model.LifeExpectancyPart,
+                            Configuration = model.Configuration
             };
         }
 

@@ -409,6 +409,8 @@
                 .HasForeignKey(s => s.CancelledById);
             e.Property(s => s.CancelledById).HasColumnName("CANCELLED_BY");
             e.Property(s => s.DateCancelled).HasColumnName("DATE_CANCELLED");
+            e.Property(s => s.LifeExpectancyPart).HasColumnName("LIFE_EXPECTANCY_PART").HasMaxLength(50);
+            e.Property(s => s.Configuration).HasColumnName("CONFIGURATION").HasMaxLength(200);
         }
 
         private void BuildMechPartAlts(ModelBuilder builder)
@@ -816,7 +818,8 @@
             e.Property(q => q.SupplierId).HasColumnName("SUPPLIER_ID");
             e.HasOne(q => q.Supplier).WithMany(s => s.PurchasingQuotesSupplierOn).HasForeignKey(q => q.SupplierId);
             e.Property(q => q.LeadTime).HasColumnName("LEAD_TIME");
-            e.Property(q => q.ManufacturersCode).HasColumnName("MANUFACTURERS_CODE").HasMaxLength(6);
+            e.Property(q => q.ManufacturerCode).HasColumnName("MANUFACTURERS_CODE").HasMaxLength(6);
+            e.HasOne(q => q.Manufacturer).WithMany(m => m.PurchasingQuotes).HasForeignKey(q => q.ManufacturerCode);
             e.Property(q => q.ManufacturersPartNumber).HasColumnName("MANUFACTURERS_PART_NUMBER").HasMaxLength(30);
             e.Property(q => q.RohsCompliant).HasColumnName("ROHS_COMPLIANT").HasMaxLength(1);
             e.Property(q => q.UnitPrice).HasColumnName("UNIT_PRICE");

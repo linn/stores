@@ -9,5 +9,7 @@
         public string Description { get; set; }
 
         public IEnumerable<MechPartManufacturerAlt> MechPartManufacturerAlts { get; set; }
+
+        public IEnumerable<MechPartPurchasingQuote> PurchasingQuotes { get; set; }
     }
 }

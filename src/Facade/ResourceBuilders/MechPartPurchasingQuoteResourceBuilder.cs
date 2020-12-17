@@ -12,7 +12,8 @@
                        {
                            SupplierId = model.SupplierId,
                            LeadTime = model.LeadTime,
-                           ManufacturersCode = model.ManufacturersCode,
+                           ManufacturerCode = model.ManufacturerCode,
+                           ManufacturerDescription = model.Manufacturer?.Description,
                            ManufacturersPartNumber = model.ManufacturersPartNumber,
                            Moq = model.Moq,
                            RohsCompliant = model.RohsCompliant,

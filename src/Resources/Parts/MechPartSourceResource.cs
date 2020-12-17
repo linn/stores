@@ -215,5 +215,9 @@
         public List<MechPartPurchasingQuoteResource> PurchasingQuotes { get; set; }
 
         public List<MechPartUsageResource> Usages { get; set; }
+
+        public string LifeExpectancyPart { get; set; }
+
+        public string Configuration { get; set; }
     }
 }
