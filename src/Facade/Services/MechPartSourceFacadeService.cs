@@ -17,6 +17,8 @@
 
         private readonly IRepository<Part, int> partRepository;
 
+        private readonly IQueryRepository<RootProduct> rootProductRepository;
+
         private readonly IQueryRepository<Supplier> supplierRepository;
 
         private readonly IMechPartSourceService domainService;
@@ -30,6 +32,7 @@
             IRepository<Part, int> partRepository,
             IDatabaseService databaseService,
             IQueryRepository<Supplier> supplierRepository,
+            IQueryRepository<RootProduct> rootProductRepository,
             IRepository<Employee, int> employeeRepository) : base(repository, transactionManager)
         {
             this.employeeRepository = employeeRepository;
@@ -37,6 +40,7 @@
             this.partRepository = partRepository;
             this.databaseService = databaseService;
             this.supplierRepository = supplierRepository;
+            this.rootProductRepository = rootProductRepository;
         }
 
         protected override MechPartSource CreateFromResource(MechPartSourceResource resource)
@@ -180,13 +184,10 @@
                                                           {
                                                               QuantityUsed = u.QuantityUsed,
                                                               RootProductName = u.RootProductName,
-                                                              RootProduct = u.RootProductName == null ? new RootProduct
-                                                                                {
-                                                                                    Name = u.RootProductName,
-                                                                                    Description = u.RootProductDescription
-                                                                                } 
+                                                              RootProduct = u.RootProductName == null ? this.rootProductRepository
+                                                                                    .FindBy(p => p.Name == u.RootProductName)
                                                                                 : null
-                                                          })
+                                                          }).ToList()
             };
         }
 
@@ -328,13 +329,9 @@
                              QuantityUsed = u.QuantityUsed,
                              RootProductName = u.RootProductName,
                              RootProduct = u.RootProductName == null
-                                               ? new RootProduct
-                                                     {
-                                                         Name = u.RootProductName,
-                                                         Description = u.RootProductDescription
-                                                     }
+                                               ? this.rootProductRepository.FindBy(p => p.Name == u.RootProductName)
                                                : null
-                         });
+                         }).ToList();
         }
 
         protected override Expression<Func<MechPartSource, bool>> SearchExpression(string searchTerm)

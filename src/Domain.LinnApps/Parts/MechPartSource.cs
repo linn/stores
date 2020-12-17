@@ -206,6 +206,6 @@
 
         public DateTime? DateCancelled { get; set; }
 
-        public IEnumerable<MechPartUsage> Usages { get; set; }
+        public ICollection<MechPartUsage> Usages { get; set; }
     }
 }
