@@ -180,6 +180,53 @@
                 FootprintRef = resource.FootprintRef,
                 RkmCode = resource.Resistance == null ? null :
                                      this.domainService.GetRkmCode(resource.ResistanceUnits, (decimal)resource.Resistance),
+
+                ApplyTCodeBy = resource.ApplyTCodeBy != null ? 
+                                   this.employeeRepository.FindById((int)resource.ApplyTCodeBy) : null,
+                ApplyTCodeDate = resource.ApplyTCodeDate != null ? 
+                DateTime.Parse(resource.ApplyTCodeDate) : (DateTime?)null,
+
+                CancelledBy = resource.CancelledBy != null ?
+                                   this.employeeRepository.FindById((int)resource.CancelledBy) : null,
+                DateCancelled = resource.DateCancelled != null ?
+                                     DateTime.Parse(resource.DateCancelled) : (DateTime?)null,
+
+                McitVerifiedBy = resource.McitVerifiedBy != null ?
+                                  this.employeeRepository.FindById((int)resource.McitVerifiedBy) : null,
+                McitVerifiedDate = resource.McitVerifiedDate != null ?
+                                    DateTime.Parse(resource.McitVerifiedDate) : (DateTime?)null,
+
+                PartCreatedBy = resource.PartCreatedBy != null ?
+                                     this.employeeRepository.FindById((int)resource.PartCreatedBy) : null,
+                PartCreatedDate = resource.PartCreatedDate != null ?
+                                       DateTime.Parse(resource.PartCreatedDate) : (DateTime?)null,
+
+                QualityVerifiedBy = resource.QualityVerifiedBy != null ?
+                                    this.employeeRepository.FindById((int)resource.QualityVerifiedBy) : null,
+                QualityVerifiedDate = resource.QualityVerifiedDate != null ?
+                                      DateTime.Parse(resource.QualityVerifiedDate) : (DateTime?)null,
+
+                RemoveTCodeBy = resource.RemoveTCodeBy != null ?
+                                     this.employeeRepository.FindById((int)resource.RemoveTCodeBy) : null,
+                RemoveTCodeDate = resource.RemoveTCodeDate != null ?
+                                          DateTime.Parse(resource.RemoveTCodeDate) : (DateTime?)null,
+
+                VerifiedBy = resource.VerifiedBy != null ?
+                                    this.employeeRepository.FindById((int)resource.VerifiedBy) : null,
+                VerifiedDate = resource.VerifiedDate != null ?
+                                      DateTime.Parse(resource.VerifiedDate) : (DateTime?)null,
+
+                PurchasingQuotes = resource.PurchasingQuotes?.Select(q => new MechPartPurchasingQuote
+                                                                              {
+                                                                                  LeadTime = q.LeadTime,
+                                                                                  ManufacturersCode = q.ManufacturersCode,
+                                                                                  ManufacturersPartNumber = q.ManufacturersPartNumber,
+                                                                                  Moq = q.Moq,
+                                                                                  RohsCompliant = q.RohsCompliant,
+                                                                                  UnitPrice = q.UnitPrice,
+                                                                                  Supplier = this.supplierRepository.FindBy(s => s.Id == q.SupplierId)
+                                                                              }),
+
                 Usages = resource.Usages?.Select(u => new MechPartUsage
                                                           {
                                                               QuantityUsed = u.QuantityUsed,
@@ -322,6 +369,54 @@
             entity.IcFunction = resource.IcFunction;
             entity.LibraryRef = resource.LibraryRef;
             entity.FootprintRef = resource.FootprintRef;
+            entity.ApplyTCodeBy = resource.ApplyTCodeBy != null
+                               ? this.employeeRepository.FindById((int)resource.ApplyTCodeBy)
+                               : null;
+            entity.ApplyTCodeDate = resource.ApplyTCodeDate != null
+                                        ? DateTime.Parse(resource.ApplyTCodeDate)
+                                        : (DateTime?)null;
+            entity.CancelledBy = resource.CancelledBy != null
+                                     ? this.employeeRepository.FindById((int)resource.CancelledBy)
+                                     : null;
+            entity.DateCancelled = resource.DateCancelled != null ? DateTime.Parse(resource.DateCancelled) : (DateTime?)null;
+            entity.McitVerifiedBy = resource.McitVerifiedBy != null
+                                        ? this.employeeRepository.FindById((int)resource.McitVerifiedBy)
+                                        : null;
+            entity.McitVerifiedDate = resource.McitVerifiedDate != null
+                                          ? DateTime.Parse(resource.McitVerifiedDate)
+                                          : (DateTime?)null;
+
+            entity.PartCreatedBy = resource.PartCreatedBy != null
+                                       ? this.employeeRepository.FindById((int)resource.PartCreatedBy)
+                                       : null;
+            entity.PartCreatedDate = resource.PartCreatedDate != null
+                                         ? DateTime.Parse(resource.PartCreatedDate)
+                                         : (DateTime?)null;
+            entity.QualityVerifiedBy = resource.QualityVerifiedBy != null
+                                           ? this.employeeRepository.FindById((int)resource.QualityVerifiedBy) : null;
+            entity.QualityVerifiedDate = resource.QualityVerifiedDate != null
+                                             ? DateTime.Parse(resource.QualityVerifiedDate)
+                                             : (DateTime?)null;
+            entity.RemoveTCodeBy = resource.RemoveTCodeBy != null
+                                       ? this.employeeRepository.FindById((int)resource.RemoveTCodeBy) : null;
+            entity.RemoveTCodeDate = resource.RemoveTCodeDate != null
+                                         ? DateTime.Parse(resource.RemoveTCodeDate)
+                                         : (DateTime?)null;
+            entity.VerifiedBy = resource.VerifiedBy != null
+                                    ? this.employeeRepository.FindById((int)resource.VerifiedBy)
+                                    : null;
+            entity.VerifiedDate = resource.VerifiedDate != null ? DateTime.Parse(resource.VerifiedDate) : (DateTime?)null;
+            entity.PurchasingQuotes = resource.PurchasingQuotes?.Select(
+                q => new MechPartPurchasingQuote
+                         {
+                             LeadTime = q.LeadTime,
+                             ManufacturersCode = q.ManufacturersCode,
+                             ManufacturersPartNumber = q.ManufacturersPartNumber,
+                             Moq = q.Moq,
+                             RohsCompliant = q.RohsCompliant,
+                             UnitPrice = q.UnitPrice,
+                             Supplier = this.supplierRepository.FindBy(s => s.Id == q.SupplierId)
+                         });
 
             entity.Usages = resource.Usages?.Select(
                 u => new MechPartUsage
