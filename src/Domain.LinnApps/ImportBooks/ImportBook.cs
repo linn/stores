@@ -116,10 +116,10 @@
 
         public string CustomsEntryCodePrefix { get; set; }
 
-        public ImportBookOrderDetail ImportBookOrderDetail { get; set; }
+        public ImpBookOrderDetail OrderDetail { get; set; }
         
-        public ImportBookPostEntry ImportBookPostEntry { get; set; }
+        public ImpBookPostEntry PostEntry { get; set; }
         
-        public ImportBookInvoiceDetail ImportBookInvoiceDetail { get; set; }
+        public ImpBookInvoiceDetail InvoiceDetail { get; set; }
     }
 }

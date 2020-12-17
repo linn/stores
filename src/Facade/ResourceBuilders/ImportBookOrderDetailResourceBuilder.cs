@@ -4,13 +4,13 @@
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Resources.Parts;
 
-    public class ImportBookOrderDetailResourceBuilder : IResourceBuilder<ImportBookOrderDetail>
+    public class ImportBookOrderDetailResourceBuilder : IResourceBuilder<ImpBookOrderDetail>
     {
-        public ImportBookOrderDetailResource Build(ImportBookOrderDetail model)
+        public ImportBookOrderDetailResource Build(ImpBookOrderDetail model)
         {
             return new ImportBookOrderDetailResource
                        {
-                           ImportBookId = model.ImportBookId,
+                           ImportBookId = model.ImpBookId,
                            LineNumber = model.LineNumber,
                            OrderNumber = model.OrderNumber,
                            RsnNumber = model.RsnNumber,
@@ -30,9 +30,9 @@
                        };
         }
 
-        object IResourceBuilder<ImportBookOrderDetail>.Build(ImportBookOrderDetail model) => this.Build(model);
+        object IResourceBuilder<ImpBookOrderDetail>.Build(ImpBookOrderDetail model) => this.Build(model);
 
-        public string GetLocation(ImportBookOrderDetail model)
+        public string GetLocation(ImpBookOrderDetail model)
         {
             throw new System.NotImplementedException();
         }

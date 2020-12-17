@@ -8,7 +8,7 @@
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
 
-    public class ImportBookOrderDetailsRepository : IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey>
+    public class ImportBookOrderDetailsRepository : IRepository<ImpBookOrderDetail, ImportBookOrderDetailKey>
     {
         private readonly ServiceDbContext serviceDbContext;
 
@@ -17,32 +17,32 @@
             this.serviceDbContext = serviceDbContext;
         }
 
-        public ImportBookOrderDetail FindById(ImportBookOrderDetailKey key)
+        public ImpBookOrderDetail FindById(ImportBookOrderDetailKey key)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<ImportBookOrderDetail> FindAll()
+        public IQueryable<ImpBookOrderDetail> FindAll()
         {
             throw new NotImplementedException();
         }
 
-        public void Add(ImportBookOrderDetail entity)
+        public void Add(ImpBookOrderDetail entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(ImportBookOrderDetail entity)
+        public void Remove(ImpBookOrderDetail entity)
         {
             throw new NotImplementedException();
         }
 
-        public ImportBookOrderDetail FindBy(Expression<Func<ImportBookOrderDetail, bool>> expression)
+        public ImpBookOrderDetail FindBy(Expression<Func<ImpBookOrderDetail, bool>> expression)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<ImportBookOrderDetail> FilterBy(Expression<Func<ImportBookOrderDetail, bool>> expression)
+        public IQueryable<ImpBookOrderDetail> FilterBy(Expression<Func<ImpBookOrderDetail, bool>> expression)
         {
             throw new NotImplementedException();
         }

@@ -8,7 +8,7 @@
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
 
-    public class ImportBookPostEntryRepository : IRepository<ImportBookPostEntry, ImportBookPostEntryKey>
+    public class ImportBookPostEntryRepository : IRepository<ImpBookPostEntry, ImportBookPostEntryKey>
     {
         private readonly ServiceDbContext serviceDbContext;
 
@@ -17,32 +17,32 @@
             this.serviceDbContext = serviceDbContext;
         }
 
-        public ImportBookPostEntry FindById(ImportBookPostEntryKey key)
+        public ImpBookPostEntry FindById(ImportBookPostEntryKey key)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<ImportBookPostEntry> FindAll()
+        public IQueryable<ImpBookPostEntry> FindAll()
         {
             throw new NotImplementedException();
         }
 
-        public void Add(ImportBookPostEntry entity)
+        public void Add(ImpBookPostEntry entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(ImportBookPostEntry entity)
+        public void Remove(ImpBookPostEntry entity)
         {
             throw new NotImplementedException();
         }
 
-        public ImportBookPostEntry FindBy(Expression<Func<ImportBookPostEntry, bool>> expression)
+        public ImpBookPostEntry FindBy(Expression<Func<ImpBookPostEntry, bool>> expression)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<ImportBookPostEntry> FilterBy(Expression<Func<ImportBookPostEntry, bool>> expression)
+        public IQueryable<ImpBookPostEntry> FilterBy(Expression<Func<ImpBookPostEntry, bool>> expression)
         {
             throw new NotImplementedException();
         }

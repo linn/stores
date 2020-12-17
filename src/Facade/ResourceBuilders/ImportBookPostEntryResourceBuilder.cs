@@ -6,13 +6,13 @@
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Resources.Parts;
 
-    public class ImportBookPostEntryResourceBuilder : IResourceBuilder<ImportBookPostEntry>
+    public class ImportBookPostEntryResourceBuilder : IResourceBuilder<ImpBookPostEntry>
     {
-        public ImportBookPostEntryResource Build(ImportBookPostEntry model)
+        public ImportBookPostEntryResource Build(ImpBookPostEntry model)
         {
             return new ImportBookPostEntryResource
                        {
-                           ImportBookId = model.ImportBookId,
+                           ImportBookId = model.ImpBookId,
                            LineNumber = model.LineNumber,
                            EntryCodePrefix = model.EntryCodePrefix,
                            EntryCode = model.EntryCode,
@@ -23,9 +23,9 @@
                        };
         }
 
-        object IResourceBuilder<ImportBookPostEntry>.Build(ImportBookPostEntry model) => this.Build(model);
+        object IResourceBuilder<ImpBookPostEntry>.Build(ImpBookPostEntry model) => this.Build(model);
 
-        public string GetLocation(ImportBookPostEntry model)
+        public string GetLocation(ImpBookPostEntry model)
         {
             throw new System.NotImplementedException();
         }

@@ -105,9 +105,9 @@
             builder.RegisterType<ErrorResourceBuilder>().As<IResourceBuilder<Error>>();
             builder.RegisterType<ImportBookResourceBuilder>().As<IResourceBuilder<ImportBook>>();
             builder.RegisterType<ImportBookInvoiceDetailResourceBuilder>()
-                .As<IResourceBuilder<ImportBookInvoiceDetail>>();
-            builder.RegisterType<ImportBookOrderDetailResourceBuilder>().As<IResourceBuilder<ImportBookOrderDetail>>();
-            builder.RegisterType<ImportBookPostEntryResourceBuilder>().As<IResourceBuilder<ImportBookPostEntry>>();
+                .As<IResourceBuilder<ImpBookInvoiceDetail>>();
+            builder.RegisterType<ImportBookOrderDetailResourceBuilder>().As<IResourceBuilder<ImpBookOrderDetail>>();
+            builder.RegisterType<ImportBookPostEntryResourceBuilder>().As<IResourceBuilder<ImpBookPostEntry>>();
         }
     }
 }

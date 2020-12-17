@@ -80,16 +80,16 @@
                            PortCode = model.PortCode,
                            CustomsEntryCodePrefix = model.CustomsEntryCodePrefix,
                            ImportBookOrderDetail =
-                               model.ImportBookOrderDetail != null
-                                   ? this.importBookOrderDetailResourceBuilder.Build(model.ImportBookOrderDetail)
+                               model.OrderDetail != null
+                                   ? this.importBookOrderDetailResourceBuilder.Build(model.OrderDetail)
                                    : null,
                            ImportBookPostEntry =
-                               model.ImportBookPostEntry != null
-                                   ? this.importBookPostEntryResourceBuilder.Build(model.ImportBookPostEntry)
+                               model.PostEntry != null
+                                   ? this.importBookPostEntryResourceBuilder.Build(model.PostEntry)
                                    : null,
                            ImportBookInvoiceDetail =
-                               model.ImportBookInvoiceDetail != null
-                                   ? this.importBookInvoiceDetailResourceBuilder.Build(model.ImportBookInvoiceDetail)
+                               model.InvoiceDetail != null
+                                   ? this.importBookInvoiceDetailResourceBuilder.Build(model.InvoiceDetail)
                                    : null,
                            Links = this.BuildLinks(model).ToArray()
                        };
