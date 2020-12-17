@@ -20,7 +20,8 @@ import Manufacturerstab from '../../../containers/parts/mechPartSource/tabs/Manu
 import SuppliersTab from '../../../containers/parts/mechPartSource/tabs/SuppliersTab';
 import ParamDataTab from '../../../containers/parts/mechPartSource/tabs/ParamDataTab';
 import CadDataTab from './tabs/CadDataTab';
-import UsagesTab from '../../../containers/parts/tabs/UsagesTab';
+import UsagesTab from '../../../containers/parts/mechPartSource/tabs/UsagesTab';
+import VerificationTab from './tabs/VerificationTab';
 
 function MechPartSource({
     editStatus,
@@ -65,7 +66,8 @@ function MechPartSource({
         manufacturers: 4,
         paramData: 5,
         cadData: 6,
-        usages: 7
+        usages: 7,
+        verification: 8
     };
 
     const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
@@ -358,6 +360,7 @@ function MechPartSource({
                                 />
                                 <Tab label="Cad Data" />
                                 <Tab label="Usages" />
+                                <Tab label="Verification" />
                             </Tabs>
                             {tab === 0 && (
                                 <ProposalTab
@@ -519,6 +522,32 @@ function MechPartSource({
                                     deleteRow={deleteUsagesRow}
                                     newRow={newUsagesRow}
                                     setNewRow={setNewUsagesRow}
+                                />
+                            )}
+                            {tab === 8 && (
+                                <VerificationTab
+                                    handleFieldChange={handleFieldChange}
+                                    partCreatedBy={mechPartSource.partCreatedBy}
+                                    partCreatedByName={mechPartSource.partCreatedByName}
+                                    partCreatedDate={mechPartSource.partCreatedDate}
+                                    verifiedBy={mechPartSource.verifiedBy}
+                                    verifiedByName={mechPartSource.verifiedByName}
+                                    verifiedDate={mechPartSource.verifiedDate}
+                                    qualityVerifiedBy={mechPartSource.qualityVerifiedBy}
+                                    qualityVerifiedByName={mechPartSource.qualityVerifiedByName}
+                                    qualityVerifiedDate={mechPartSource.qualityVerifiedDate}
+                                    mcitVerifiedBy={mechPartSource.mcitVerifiedBy}
+                                    mcitVerifiedByName={mechPartSource.mcitVerifiedByName}
+                                    mcitVerifiedDate={mechPartSource.mcitVerifiedDate}
+                                    applyTCodeBy={mechPartSource.applyTCodeBy}
+                                    applyTCodeName={mechPartSource.applyTCodeName}
+                                    applyTCodeDate={mechPartSource.applyTCodeDate}
+                                    removeTCodeBy={mechPartSource.removeTCodeBy}
+                                    removeTCodeName={mechPartSource.removeTCodeName}
+                                    removeTCodeDate={mechPartSource.removeTCodeDate}
+                                    cancelledBy={mechPartSource.cancelledBy}
+                                    cancelledByName={mechPartSource.cancelledByName}
+                                    dateCancelled={mechPartSource.dateCancelled}
                                 />
                             )}
                             <Grid item xs={12}>

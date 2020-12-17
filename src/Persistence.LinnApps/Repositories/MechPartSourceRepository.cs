@@ -27,6 +27,12 @@
                 .Include(s => s.MechPartManufacturerAlts).ThenInclude(m => m.Manufacturer)
                 .Include(s => s.MechPartManufacturerAlts).ThenInclude(m => m.ApprovedBy)
                 .Include(s => s.Usages).ThenInclude(u => u.RootProduct)
+                .Include(s => s.PartCreatedBy)
+                .Include(s => s.VerifiedBy)
+                .Include(s => s.McitVerifiedBy)
+                .Include(s => s.ApplyTCodeBy)
+                .Include(s => s.RemoveTCodeBy)
+                .Include(s => s.CancelledBy)
                 .Include(s => s.MechPartAlts).ThenInclude(a => a.Supplier);
 
             return result.ToList().FirstOrDefault();
