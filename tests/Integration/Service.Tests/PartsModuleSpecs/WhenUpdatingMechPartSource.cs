@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Service.Tests.PartsModuleSpecs
 {
     using System;
+    using System.Collections.Generic;
 
     using FluentAssertions;
 
@@ -16,7 +17,7 @@
 
     using NUnit.Framework;
 
-    public class WhenUpdatingMechMechPartSourceSource : ContextBase
+    public class WhenUpdatingMechMechPartSource: ContextBase
     {
         private MechPartSourceResource requestResource;
 
@@ -49,7 +50,7 @@
                 DateEntered = DateTime.Today
             };
             this.MechPartSourceService.Update(1, Arg.Any<MechPartSourceResource>()).Returns(new SuccessResult<MechPartSource>(p));
-
+            this.AuthService.HasPermissionFor(Arg.Any<string>(), Arg.Any<IEnumerable<string>>()).Returns(true);
             this.Response = this.Browser.Put(
                 "inventory/parts/sources/1",
                 with =>

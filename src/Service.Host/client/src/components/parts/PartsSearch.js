@@ -24,14 +24,20 @@ function PartsSearch({
             ? `/inventory/parts/create?template=${template}`
             : '/inventory/parts/create';
     };
-    const searchItems = items.map(item => ({
-        ...item,
-        name: item.partNumber.toString(),
-        description: item.description,
-        href: linkToSources
-            ? item.links.find(l => l.rel === 'mechanical-sourcing-sheet').href
-            : item.href
-    }));
+    const searchItems = () => {
+        const result = linkToSources
+            ? items.filter(i => i.links.find(l => l.rel === 'mechanical-sourcing-sheet'))
+            : items;
+
+        return result?.map(item => ({
+            ...item,
+            name: item.partNumber.toString(),
+            description: item.description,
+            href: linkToSources
+                ? item.links.find(l => l.rel === 'mechanical-sourcing-sheet')?.href
+                : item.href
+        }));
+    };
 
     const canCreate = () => {
         if (!(privileges.length < 1)) {
@@ -75,7 +81,7 @@ function PartsSearch({
                 <Grid item xs={1} />
                 <Grid item xs={12}>
                     <Typeahead
-                        items={searchItems}
+                        items={searchItems()}
                         fetchItems={fetchItems}
                         clearSearch={clearSearch}
                         loading={loading}

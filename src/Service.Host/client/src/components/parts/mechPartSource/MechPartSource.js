@@ -9,7 +9,8 @@ import {
     Loading,
     Title,
     ErrorCard,
-    SnackbarMessage
+    SnackbarMessage,
+    smartGoBack
 } from '@linn-it/linn-form-components-library';
 import Page from '../../../containers/Page';
 import DataSheetsTab from './tabs/DataSheetsTab';
@@ -17,6 +18,8 @@ import ProposalTab from '../../../containers/parts/mechPartSource/tabs/ProposalT
 import QualityRequirementsTab from './tabs/QualityRequirementsTab';
 import Manufacturerstab from '../../../containers/parts/mechPartSource/tabs/ManufacturersTab';
 import SuppliersTab from '../../../containers/parts/mechPartSource/tabs/SuppliersTab';
+import ParamDataTab from '../../../containers/parts/mechPartSource/tabs/ParamDataTab';
+import CadDataTab from './tabs/CadDataTab';
 
 function MechPartSource({
     editStatus,
@@ -32,13 +35,23 @@ function MechPartSource({
     setSnackbarVisible,
     options,
     userName,
-    userNumber
+    userNumber,
+    previousPaths
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
     const [mechPartSource, setMechPartSource] = useState(
         creating()
-            ? { proposedBy: userNumber, proposedByName: userName, dateEntered: new Date() }
+            ? {
+                  proposedBy: userNumber,
+                  proposedByName: userName,
+                  dateEntered: new Date(),
+                  createPart: true,
+                  mechPartAlts: [],
+                  mechPartManufacturerAlts: [],
+                  mechanicalOrElectrical: 'E',
+                  samplesRequired: 'N'
+              }
             : null
     );
     const [prevMechPartSource, setPrevMechPartSource] = useState({});
@@ -48,29 +61,39 @@ function MechPartSource({
         dataSheets: 1,
         qualityRequirements: 2,
         suppliers: 3,
-        manufacturers: 4
+        manufacturers: 4,
+        paramData: 5,
+        cadData: 6
     };
 
     const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
+
+    const [newManufacturersRow, setNewManufacturersRow] = useState({});
+    const [newSuppliersRow, setNewSuppliersRow] = useState({});
 
     const handleTabChange = (_, value) => {
         setTab(value);
     };
 
-    const mechPartSourceInvalid = () => !mechPartSource.assemblyType;
+    const mechPartSourceInvalid = () =>
+        !mechPartSource.samplesRequired ||
+        (mechPartSource.mechanicalOrElectrical === 'E' && !mechPartSource.partType);
 
     useEffect(() => {
         if (item !== prevMechPartSource && editStatus !== 'create') {
-            setMechPartSource(item);
+            setMechPartSource({ ...item, resistanceUnits: 'KΩ', capacitanceUnits: 'uF' });
             setPrevMechPartSource(item);
         }
     }, [item, prevMechPartSource, editStatus, itemId]);
 
     const handleSaveClick = () => {
+        const body = mechPartSource;
+        const rkmLetters = { KΩ: 'K', MΩ: 'M', Ω: '' };
+        body.resistanceUnits = rkmLetters[mechPartSource.resistanceUnits];
         if (creating()) {
-            addItem(mechPartSource);
+            addItem(body);
         } else {
-            updateItem(itemId, mechPartSource);
+            updateItem(itemId, body);
         }
         setEditStatus('view');
     };
@@ -78,10 +101,6 @@ function MechPartSource({
     const handleCancelClick = () => {
         setMechPartSource(item);
         setEditStatus('view');
-    };
-
-    const handleBackClick = () => {
-        history.push('/inventory/stores/parts/sources');
     };
 
     const handleDatasheetsChange = dataSheets => {
@@ -96,6 +115,16 @@ function MechPartSource({
             setEditStatus('editing');
         }
         setMechPartSource({ ...mechPartSource, [propertyName]: newValue });
+    };
+
+    const handlePartFieldChange = (propertyName, newValue) => {
+        if (viewing) {
+            setEditStatus('editing');
+        }
+        setMechPartSource({
+            ...mechPartSource,
+            part: { ...mechPartSource.part, [propertyName]: newValue }
+        });
     };
 
     const handleLinnPartChange = newValue => {
@@ -157,9 +186,8 @@ function MechPartSource({
     };
 
     const saveSuppliersRow = row => {
-        console.log(row);
-        setEditStatus('edit');
         // we are adding a new row
+        setEditStatus('edit');
         if (!row.sequence) {
             setMechPartSource(m => ({
                 ...m,
@@ -245,47 +273,60 @@ function MechPartSource({
                                 onClose={() => setSnackbarVisible(false)}
                                 message="Save Successful"
                             />
-                            <Grid item xs={3}>
-                                <InputField
-                                    fullWidth
-                                    disabled={!creating()}
-                                    value={mechPartSource.partNumber}
-                                    label="Part Number"
-                                    maxLength={14}
-                                    helperText={!creating() ? 'This field cannot be changed' : ''}
-                                    required
-                                    onChange={handleFieldChange}
-                                    propertyName="partNumber"
-                                />
-                            </Grid>
-                            <Grid item xs={8}>
-                                <InputField
-                                    fullWidth
-                                    value={mechPartSource.part?.description}
-                                    label="Description"
-                                    maxLength={200}
-                                    required
-                                    onChange={handleFieldChange} // todo - how to handle change?
-                                    propertyName="part.description"
-                                />
-                            </Grid>
+                            {!creating() && (
+                                <>
+                                    <Grid item xs={3}>
+                                        <InputField
+                                            fullWidth
+                                            disabled={!creating()}
+                                            value={mechPartSource.partNumber}
+                                            label="Part Number"
+                                            maxLength={14}
+                                            helperText={
+                                                !creating() ? 'This field cannot be changed' : ''
+                                            }
+                                            required
+                                            onChange={handleFieldChange}
+                                            propertyName="partNumber"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                        <InputField
+                                            fullWidth
+                                            value={mechPartSource.part?.description}
+                                            label="Description"
+                                            maxLength={200}
+                                            required
+                                            onChange={handlePartFieldChange}
+                                            propertyName="description"
+                                        />
+                                    </Grid>
+                                </>
+                            )}
                             <Tabs
                                 value={tab}
                                 onChange={handleTabChange}
                                 indicatorColor="primary"
+                                scrollButtons="on"
                                 textColor="primary"
                                 style={{ paddingBottom: '40px' }}
                             >
                                 <Tab label="Proposal" />
-                                <Tab label="DataSheets" />
+                                <Tab label="DataSheets" disabled={!mechPartSource.part} />
                                 <Tab label="Quality Requirements" />
                                 <Tab label="Suppliers" />
                                 <Tab label="Manufacturers" />
+                                <Tab
+                                    label="Param Data"
+                                    disabled={mechPartSource.mechanicalOrElectrical !== 'E'}
+                                />
+                                <Tab label="Cad Data" />
                             </Tabs>
                             {tab === 0 && (
                                 <ProposalTab
                                     handleFieldChange={handleFieldChange}
                                     notes={mechPartSource.notes}
+                                    partType={mechPartSource.partType}
                                     proposedBy={mechPartSource.proposedBy}
                                     proposedByName={mechPartSource.proposedByName}
                                     dateEntered={mechPartSource.dateEntered}
@@ -307,7 +348,7 @@ function MechPartSource({
                                     handleLinnPartChange={handleLinnPartChange}
                                 />
                             )}
-                            {tab === 1 && (
+                            {tab === 1 && mechPartSource.part && (
                                 <DataSheetsTab
                                     dataSheets={mechPartSource.part?.dataSheets}
                                     handleDataSheetsChange={handleDatasheetsChange}
@@ -321,7 +362,7 @@ function MechPartSource({
                                         mechPartSource.drawingsPackageAvailable
                                     }
                                     drawingsPackageDate={mechPartSource.drawingsPackageDate}
-                                    drawingfile={mechPartSource.drawingFile}
+                                    drawingFile={mechPartSource.drawingFile}
                                     checklistCreated={mechPartSource.checklistCreated}
                                     checklistAvailable={mechPartSource.checklistAvailable}
                                     checklistDate={mechPartSource.checklistDate}
@@ -356,6 +397,8 @@ function MechPartSource({
                                     suppliers={mechPartSource.mechPartAlts}
                                     saveRow={saveSuppliersRow}
                                     deleteRow={deleteSuppliersRow}
+                                    newRow={newSuppliersRow}
+                                    setNewRow={setNewSuppliersRow}
                                 />
                             )}
                             {tab === 4 && (
@@ -365,15 +408,80 @@ function MechPartSource({
                                     manufacturers={mechPartSource.mechPartManufacturerAlts}
                                     saveRow={saveManufacturersRow}
                                     deleteRow={deleteManufacturersRow}
+                                    newRow={newManufacturersRow}
+                                    setNewRow={setNewManufacturersRow}
                                 />
                             )}
-                            {tab === 5 && <></>}
+                            {tab === 5 && mechPartSource.mechanicalOrElectrical === 'E' && (
+                                <ParamDataTab
+                                    partType={mechPartSource.partType}
+                                    resistance={mechPartSource.resistance}
+                                    resistanceUnits={
+                                        creating()
+                                            ? mechPartSource.resistanceUnits
+                                            : mechPartSource?.rkmCode
+                                                  ?.replace(/[^a-zA-Z]/g, '')
+                                                  .concat('Ω')
+                                    }
+                                    handleFieldChange={handleFieldChange}
+                                    capacitorRippleCurrent={mechPartSource.capacitorRippleCurrent}
+                                    capacitance={mechPartSource.capacitance}
+                                    capacitanceUnits={
+                                        creating()
+                                            ? mechPartSource.capacitanceUnits
+                                            : mechPartSource?.capacitanceLetterAndNumeralCodestring?.replace(
+                                                  /[^a-zA-Z]/g,
+                                                  ''
+                                              )
+                                    }
+                                    capacitorVoltageRating={mechPartSource.capacitorVoltageRating}
+                                    capacitorPositiveTolerance={
+                                        mechPartSource.capacitorPositiveTolerance
+                                    }
+                                    capacitorNegativeTolerance={
+                                        mechPartSource.capacitorNegativeTolerance
+                                    }
+                                    creating={creating}
+                                    capacitorDielectric={mechPartSource.capacitorDielectric}
+                                    packageName={mechPartSource.packageName}
+                                    capacitorPitch={mechPartSource.capacitorPitch}
+                                    capacitorLength={mechPartSource.capacitorLength}
+                                    capacitorWidth={mechPartSource.capacitorWidth}
+                                    capacitorHeight={mechPartSource.capacitorHeight}
+                                    capacitorDiameter={mechPartSource.capacitorDiameter}
+                                    resistorTolerance={mechPartSource.resistorTolerance}
+                                    construction={mechPartSource.construction}
+                                    resistorLength={mechPartSource.resistorLength}
+                                    resistorWidth={mechPartSource.resistorWidth}
+                                    resistorHeight={mechPartSource.resistorHeight}
+                                    resistorPowerRating={mechPartSource.resistorPowerRating}
+                                    resistorVoltageRating={mechPartSource.resistorVoltageRating}
+                                    temperatureCoefficient={mechPartSource.temperatureCoefficient}
+                                    transistorDeviceName={mechPartSource.transistorDeviceName}
+                                    transistorPolarity={mechPartSource.transistorPolarity}
+                                    transistorVoltage={mechPartSource.transistorVoltage}
+                                    transistorCurrent={mechPartSource.transistorCurrent}
+                                    icType={mechPartSource.icType}
+                                    icFunction={mechPartSource.icFunction}
+                                    libraryRef={mechPartSource.libraryRef}
+                                    footPrintRef={mechPartSource.footPrintRef}
+                                />
+                            )}
+                            {tab === 6 && (
+                                <CadDataTab
+                                    libraryRef={mechPartSource.libraryRef}
+                                    footprintRef={mechPartSource.footprintRef}
+                                    handleFieldChange={handleFieldChange}
+                                />
+                            )}
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons
                                     saveDisabled={viewing() || mechPartSourceInvalid()}
                                     saveClick={handleSaveClick}
                                     cancelClick={handleCancelClick}
-                                    backClick={handleBackClick}
+                                    backClick={() => {
+                                        smartGoBack(previousPaths, history.goBack);
+                                    }}
                                 />
                             </Grid>
                         </>
@@ -386,13 +494,14 @@ function MechPartSource({
 
 MechPartSource.propTypes = {
     item: PropTypes.shape({}),
-    history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+    history: PropTypes.shape({ goBack: PropTypes.func }).isRequired,
     editStatus: PropTypes.string.isRequired,
     itemError: PropTypes.shape({
         status: PropTypes.number,
         statusText: PropTypes.string,
-        details: PropTypes.shape({}),
-        item: PropTypes.string
+        details: PropTypes.shape(),
+        item: PropTypes.string,
+        mechPartSource: PropTypes.number
     }),
     itemId: PropTypes.string,
     snackbarVisible: PropTypes.bool,
@@ -403,8 +512,9 @@ MechPartSource.propTypes = {
     setSnackbarVisible: PropTypes.func.isRequired,
     userName: PropTypes.string,
     userNumber: PropTypes.number,
-    options: PropTypes.shape({ template: PropTypes.string }),
-    liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string })
+    options: PropTypes.shape({ tab: PropTypes.string }),
+    liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
+    previousPaths: PropTypes.arrayOf(PropTypes.string)
 };
 
 MechPartSource.defaultProps = {
@@ -416,7 +526,8 @@ MechPartSource.defaultProps = {
     options: null,
     liveTest: null,
     userName: null,
-    userNumber: null
+    userNumber: null,
+    previousPaths: []
 };
 
 export default MechPartSource;

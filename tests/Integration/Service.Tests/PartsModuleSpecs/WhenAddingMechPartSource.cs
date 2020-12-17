@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Service.Tests.PartsModuleSpecs
 {
+    using System.Collections.Generic;
+
     using FluentAssertions;
 
     using Linn.Common.Facade;
@@ -39,6 +41,7 @@
 
             this.MechPartSourceService.Add(Arg.Any<MechPartSourceResource>())
                 .Returns(new CreatedResult<MechPartSource>(source));
+            this.AuthService.HasPermissionFor(Arg.Any<string>(), Arg.Any<IEnumerable<string>>()).Returns(true);
 
             this.Response = this.Browser.Post(
                 "/inventory/parts/sources",

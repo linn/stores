@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Resources
+﻿namespace Linn.Stores.Resources.RequestResources
 {
     public class SearchRequestResource
     {

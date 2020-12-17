@@ -13,8 +13,6 @@
 
     public class WhenFinishingAllocationFails : ContextBase
     {
-        private AllocationResult allocationResult;
-
         private IResult<AllocationResult> result;
 
         private int jobId;
@@ -23,7 +21,6 @@
         public void SetUp()
         {
             this.jobId = 1234;
-            this.allocationResult = new AllocationResult(this.jobId);
 
             this.AllocationService.FinishAllocation(this.jobId)
                 .Throws(new FinishAllocationException("alarm"));

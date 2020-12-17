@@ -18,11 +18,11 @@
 
         private readonly DateTime? cutOffDate = 1.December(2021);
 
-        private readonly string stockPoolCode = "stores";
+        private readonly string stockPoolCode = "STORES";
 
-        private readonly string despatchLocation = "loc1";
+        private readonly string despatchLocation = "LOC1";
 
-        private readonly string articleNumber = "article";
+        private readonly string articleNumber = "ARTICLE";
 
         private readonly string accountingCompany = "LINN";
 

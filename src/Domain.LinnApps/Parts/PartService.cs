@@ -25,12 +25,15 @@
 
         private readonly IPartPack partPack;
 
+        private readonly IRepository<MechPartSource, int> sourceRepository;
+
         public PartService(
             IAuthorisationService authService,
             IRepository<QcControl, int> qcControlRepository,
             IQueryRepository<Supplier> supplierRepository,
             IRepository<Part, int> partRepository,
             IRepository<PartTemplate, string> templateRepository,
+            IRepository<MechPartSource, int> sourceRepository,
             IPartPack partPack)
         {
             this.authService = authService;
@@ -38,6 +41,7 @@
             this.qcControlRepository = qcControlRepository;
             this.partRepository = partRepository;
             this.partPack = partPack;
+            this.sourceRepository = sourceRepository;
             this.templateRepository = templateRepository;
         }
 
@@ -141,7 +145,6 @@
                 throw new CreatePartException("You are not authorised to create parts.");
             }
 
-
             var partRoot = this.partPack.PartRoot(partToCreate.PartNumber);
 
             if (partRoot != null && this.templateRepository.FindById(partRoot) != null)
@@ -198,9 +201,23 @@
                                              });
         }
 
+        public Part CreateFromSource(int sourceId, int createdBy)
+        {
+            var source = this.sourceRepository.FindById(sourceId);
+            source.PartNumber = 
+                this.partPack.CreatePartFromSourceSheet(sourceId, createdBy, out var message);
+            
+            if (message != $"Created part {source.PartNumber}")
+            {
+                throw new CreatePartException(message);
+            }
+
+            return this.partRepository.FindBy(p => p.PartNumber == source.PartNumber);
+        }
+
         private static void Validate(Part to)
         {
-            if (to.ScrapOrConvert != null && to.DatePhasedOut == null)
+            if (!string.IsNullOrEmpty(to.ScrapOrConvert)  && to.DatePhasedOut == null)
             {
                 throw new UpdatePartException("A part must be obsolete to be convertible or to be scrapped.");
             }
@@ -221,7 +238,7 @@
 
         private static int FindRealNextNumber(string newestPartOfThisType)
         {
-            var highestNumber = newestPartOfThisType?.Split(" ").Last();
+            var highestNumber = newestPartOfThisType?.Split(" ").Last().Split("/")[0];
             return int.Parse(highestNumber ?? throw new InvalidOperationException()) + 1;
         }
     }

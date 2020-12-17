@@ -17,6 +17,8 @@
 
         private readonly IRepository<Part, int> partRepository;
 
+        private readonly IQueryRepository<Supplier> supplierRepository;
+
         private readonly IMechPartSourceService domainService;
 
         private readonly IDatabaseService databaseService;
@@ -27,17 +29,19 @@
             IMechPartSourceService domainService,
             IRepository<Part, int> partRepository,
             IDatabaseService databaseService,
+            IQueryRepository<Supplier> supplierRepository,
             IRepository<Employee, int> employeeRepository) : base(repository, transactionManager)
         {
             this.employeeRepository = employeeRepository;
             this.domainService = domainService;
             this.partRepository = partRepository;
             this.databaseService = databaseService;
+            this.supplierRepository = supplierRepository;
         }
 
         protected override MechPartSource CreateFromResource(MechPartSourceResource resource)
         {
-            var part = resource.LinnPartNumber == null
+            var part = resource.PartNumber == null
                 ? null
                 : this.partRepository.FindBy(p => p.PartNumber == resource.PartNumber);
 
@@ -52,110 +56,127 @@
             }
 
             return new MechPartSource
-                       {
-                           Id = this.databaseService.GetIdSequence("MECH_SOURCE_SEQ"),
-                           PartNumber = resource.PartNumber,
-                           AssemblyType = resource.AssemblyType,
-                           DateEntered =
-                               resource.DateEntered == null ? (DateTime?)null : DateTime.Parse(resource.DateEntered),
-                           DateSamplesRequired =
-                               resource.DateSamplesRequired == null
-                                   ? (DateTime?)null
-                                   : DateTime.Parse(resource.DateSamplesRequired),
-                           EmcCritical = resource.EmcCritical,
-                           EstimatedVolume = resource.EstimatedVolume,
-                           LinnPartNumber = resource.LinnPartNumber,
-                           MechanicalOrElectrical = resource.MechanicalOrElectrical,
-                           Notes = resource.Notes,
-                           ProposedBy =
-                               resource.ProposedBy == null
-                                   ? null
-                                   : this.employeeRepository.FindById((int)resource.ProposedBy),
-                           PerformanceCritical = resource.PerformanceCritical,
-                           SafetyCritical = resource.SafetyCritical,
-                           SingleSource = resource.SingleSource,
-                           PartType = resource.PartType,
-                           RohsReplace = resource.RohsReplace,
-                           SampleQuantity = resource.SampleQuantity,
-                           SamplesRequired = resource.SamplesRequired,
-                           PartToBeReplaced =
-                               resource.LinnPartNumber == null
-                                   ? null
-                                   : this.partRepository.FindBy(p => p.PartNumber == resource.LinnPartNumber),
-                           ProductionDate =
-                               resource.DateSamplesRequired == null
-                                   ? (DateTime?)null
-                                   : DateTime.Parse(resource.ProductionDate),
-                           SafetyDataDirectory = resource.SafetyDataDirectory,
-                           Part = part,
-                           MechPartManufacturerAlts =
-                               resource.MechPartManufacturerAlts.Select(
-                                   a => new MechPartManufacturerAlt
-                                            {
-                                                Sequence = a.Sequence,
-                                                PartNumber = a.PartNumber,
-                                                DateApproved =
-                                                    a.DateApproved != null
-                                                        ? DateTime.Parse(a.DateApproved)
-                                                        : (DateTime?)null,
-                                                ApprovedBy =
-                                                    a.ApprovedBy != null
-                                                        ? this.employeeRepository.FindById((int)a.ApprovedBy)
-                                                        : null,
-                                                ManufacturerCode = a.ManufacturerCode,
-                                                Preference = a.Preference,
-                                                ReelSuffix = a.ReelSuffix,
-                                                RohsCompliant = a.RohsCompliant
-                                            }).ToList(),
-                           MechPartAlts =
-                               resource.MechPartAlts.Select(
-                                   a => new MechPartAlt
-                                            {
-                                                PartNumber = a.PartNumber,
-                                                Sequence = a.Sequence,
-                                                Supplier = new Supplier { Id = a.SupplierId, Name = a.SupplierName }
-                                            }).ToList(),
-                           ApprovedReferenceStandards = resource.ApprovedReferenceStandards,
-                           ApprovedReferencesAvailable = resource.ApprovedReferencesAvailable,
-                           ApprovedReferencesDate =
-                               resource.ApprovedReferencesDate != null
-                                   ? DateTime.Parse(resource.ApprovedReferencesDate)
-                                   : (DateTime?)null,
-                           ChecklistAvailable = resource.ChecklistAvailable,
-                           ChecklistCreated = resource.ChecklistCreated,
-                           ChecklistDate =
-                               resource.ChecklistDate != null
-                                   ? DateTime.Parse(resource.ChecklistDate)
-                                   : (DateTime?)null,
-                           DrawingFile = resource.DrawingFile,
-                           DrawingsPackage = resource.DrawingsPackage,
-                           DrawingsPackageAvailable = resource.DrawingsPackageAvailable,
-                           DrawingsPackageDate =
-                               resource.DrawingsPackageDate != null
-                                   ? DateTime.Parse(resource.DrawingsPackageDate)
-                                   : (DateTime?)null,
-                           PackingAvailable = resource.PackingAvailable,
-                           PackingDate =
-                               resource.PackingDate != null ? DateTime.Parse(resource.PackingDate) : (DateTime?)null,
-                           PackingRequired = resource.PackingRequired,
-                           ProcessEvaluation = resource.ProcessEvaluation,
-                           ProcessEvaluationAvailable = resource.ProcessEvaluationAvailable,
-                           ProcessEvaluationDate =
-                               resource.ProcessEvaluationDate != null
-                                   ? DateTime.Parse(resource.ProcessEvaluationDate)
-                                   : (DateTime?)null,
-                           ProductKnowledge = resource.ProductKnowledge,
-                           ProductKnowledgeAvailable = resource.ProductKnowledgeAvailable,
-                           ProductKnowledgeDate =
-                               resource.ProductKnowledgeDate != null
-                                   ? DateTime.Parse(resource.ProductKnowledgeDate)
-                                   : (DateTime?)null,
-                           TestEquipment = resource.TestEquipment,
-                           TestEquipmentAvailable = resource.TestEquipmentAvailable,
-                           TestEquipmentDate = resource.TestEquipmentDate != null
-                                                   ? DateTime.Parse(resource.TestEquipmentDate)
-                                                   : (DateTime?)null,
-                       };
+            {
+                Id = this.databaseService.GetIdSequence("MECH_SOURCE_SEQ"),
+                PartNumber = resource.PartNumber,
+                AssemblyType = resource.AssemblyType,
+                DateEntered = resource.DateEntered == null ? (DateTime?)null : DateTime.Parse(resource.DateEntered),
+                DateSamplesRequired = resource.DateSamplesRequired == null
+                    ? (DateTime?)null
+                    : DateTime.Parse(resource.DateSamplesRequired),
+                EmcCritical = resource.EmcCritical,
+                EstimatedVolume = resource.EstimatedVolume,
+                LinnPartNumber = resource.LinnPartNumber,
+                MechanicalOrElectrical = resource.MechanicalOrElectrical,
+                Notes = resource.Notes,
+                ProposedBy = resource.ProposedBy == null
+                    ? null
+                    : this.employeeRepository.FindById((int)resource.ProposedBy),
+                PerformanceCritical = resource.PerformanceCritical,
+                SafetyCritical = resource.SafetyCritical,
+                SingleSource = resource.SingleSource,
+                PartType = resource.PartType,
+                RohsReplace = resource.RohsReplace,
+                SampleQuantity = resource.SampleQuantity,
+                SamplesRequired = resource.SamplesRequired,
+                PartToBeReplaced = resource.LinnPartNumber == null
+                    ? null
+                    : this.partRepository.FindBy(p => p.PartNumber == resource.LinnPartNumber),
+                ProductionDate = resource.ProductionDate == null
+                    ? (DateTime?)null
+                    : DateTime.Parse(resource.ProductionDate),
+                SafetyDataDirectory = resource.SafetyDataDirectory,
+                Part = part,
+                MechPartManufacturerAlts = resource.MechPartManufacturerAlts?.Select(
+                    a => new MechPartManufacturerAlt
+                                     {
+                                         Sequence = a.Sequence,
+                                         PartNumber = a.PartNumber,
+                                         DateApproved = a.DateApproved != null 
+                                                            ? DateTime.Parse(a.DateApproved) : (DateTime?)null,
+                                         ApprovedBy = a.ApprovedBy != null ? this.employeeRepository.FindById((int)a.ApprovedBy) : null,
+                                         ManufacturerCode = a.ManufacturerCode,
+                                         Preference = a.Preference,
+                                         ReelSuffix = a.ReelSuffix,
+                                         RohsCompliant = a.RohsCompliant
+                                     }).ToList(),
+                MechPartAlts = resource.MechPartAlts?.Select(a => new MechPartAlt
+                                                                     {
+                                                                         PartNumber = a.PartNumber,
+                                                                         Sequence = a.Sequence,
+                                                                         Supplier = a.SupplierId == null ? null :
+                                                                             new Supplier
+                                                                             {
+                                                                                 Id = (int)a.SupplierId,
+                                                                                 Name = a.SupplierName
+                                                                             }
+                                                                     }).ToList(),
+                ApprovedReferenceStandards = resource.ApprovedReferenceStandards,
+                ApprovedReferencesAvailable = resource.ApprovedReferencesAvailable,
+                ApprovedReferencesDate = resource.ApprovedReferencesDate != null
+                                         ? DateTime.Parse(resource.ApprovedReferencesDate) : (DateTime?)null,
+                ChecklistAvailable = resource.ChecklistAvailable,
+                ChecklistCreated = resource.ChecklistCreated,
+                ChecklistDate = resource.ChecklistDate != null
+                                    ? DateTime.Parse(resource.ChecklistDate) : (DateTime?)null,
+                DrawingFile = resource.DrawingFile,
+                DrawingsPackage = resource.DrawingsPackage,
+                DrawingsPackageAvailable = resource.DrawingsPackageAvailable,
+                DrawingsPackageDate = resource.DrawingsPackageDate != null
+                                          ? DateTime.Parse(resource.DrawingsPackageDate) : (DateTime?)null,
+                PackingAvailable = resource.PackingAvailable,
+                PackingDate = resource.PackingDate != null
+                                  ? DateTime.Parse(resource.PackingDate) : (DateTime?)null,
+                PackingRequired = resource.PackingRequired,
+                ProcessEvaluation = resource.ProcessEvaluation,
+                ProcessEvaluationAvailable = resource.ProcessEvaluationAvailable,
+                ProcessEvaluationDate = resource.ProcessEvaluationDate != null
+                                            ? DateTime.Parse(resource.ProcessEvaluationDate) : (DateTime?)null,
+                ProductKnowledge = resource.ProductKnowledge,
+                ProductKnowledgeAvailable = resource.ProductKnowledgeAvailable,
+                ProductKnowledgeDate = resource.ProductKnowledgeDate != null
+                                           ? DateTime.Parse(resource.ProductKnowledgeDate) : (DateTime?)null,
+                TestEquipment = resource.TestEquipment,
+                TestEquipmentAvailable = resource.TestEquipmentAvailable,
+                TestEquipmentDate = resource.TestEquipmentDate != null
+                                        ? DateTime.Parse(resource.TestEquipmentDate) : (DateTime?)null,
+                CapacitorRippleCurrent = resource.CapacitorRippleCurrent,
+                Capacitance = resource.Capacitance,
+                CapacitorVoltageRating = resource.CapacitorVoltageRating,
+                CapacitorPositiveTolerance = resource.CapacitorPositiveTolerance,
+                CapacitorNegativeTolerance = resource.CapacitorNegativeTolerance,
+                CapacitorDielectric = resource.CapacitorDielectric,
+                Package = resource.PackageName,
+                CapacitorPitch = resource.CapacitorPitch,
+                CapacitorLength = resource.CapacitorLength,
+                CapacitorWidth = resource.CapacitorWidth,
+                CapacitorHeight = resource.CapacitorHeight,
+                CapacitorDiameter = resource.CapacitorDiameter,
+                CapacitanceLetterAndNumeralCode = resource.Capacitance == null 
+                                                      ? null : this.domainService.GetCapacitanceLetterAndNumeralCode(
+                                                          resource.CapacitanceUnit, 
+                                                          (decimal)resource.Capacitance),
+                Resistance = resource.Resistance,
+                ResistorTolerance = resource.ResistorTolerance,
+                Construction = resource.Construction,
+                ResistorLength = resource.ResistorLength,
+                ResistorHeight = resource.ResistorHeight,
+                ResistorWidth = resource.ResistorWidth,
+                ResistorPowerRating = resource.ResistorPowerRating,
+                ResistorVoltageRating = resource.ResistorVoltageRating,
+                TemperatureCoefficient = resource.TemperatureCoefficient,
+                TransistorType = resource.TransistorType,
+                TransistorDeviceName = resource.TransistorDeviceName,
+                TransistorCurrent = resource.TransistorCurrent,
+                TransistorVoltage = resource.TransistorVoltage,
+                TransistorPolarity = resource.TransistorPolarity,
+                IcType = resource.IcType,
+                IcFunction = resource.IcFunction,
+                LibraryRef = resource.LibraryRef,
+                FootprintRef = resource.FootprintRef,
+                RkmCode = resource.Resistance == null ? null :
+                                     this.domainService.GetRkmCode(resource.ResistanceUnits, (decimal)resource.Resistance)
+            };
         }
 
         protected override void UpdateFromResource(MechPartSource entity, MechPartSourceResource resource)
@@ -187,15 +208,20 @@
                 ? null
                 : this.partRepository.FindBy(p => p.PartNumber == resource.LinnPartNumber);
 
-            var currentDataSheets = entity.Part.DataSheets;
+            var currentDataSheets = entity.Part?.DataSheets;
 
-            var newDataSheets = resource.Part.DataSheets.Select(s => new PartDataSheet
+            var newDataSheets = resource.Part?.DataSheets.Select(s => new PartDataSheet
                                                                         {
                                                                             Part = entity.Part,
                                                                             Sequence = s.Sequence,
                                                                             PdfFilePath = s.PdfFilePath
                                                                         });
-            entity.Part.DataSheets = this.domainService.GetUpdatedDataSheets(currentDataSheets, newDataSheets);
+            if (entity.Part != null)
+            {
+                entity.Part.DataSheets = 
+                    this.domainService.GetUpdatedDataSheets(currentDataSheets, newDataSheets);
+            }
+
             entity.MechPartManufacturerAlts = resource.MechPartManufacturerAlts?.Select(
                 a => new MechPartManufacturerAlt
                          {
@@ -214,7 +240,8 @@
                          {
                              PartNumber = a.PartNumber,
                              Sequence = a.Sequence,
-                             Supplier = new Supplier { Id = a.SupplierId, Name = a.SupplierName }
+                             Supplier = a.SupplierId == null ? null :
+                                            this.supplierRepository.FindBy(s => s.Id == (int)a.SupplierId)
                          }).ToList();
             entity.ApprovedReferenceStandards = resource.ApprovedReferenceStandards;
             entity.ApprovedReferencesAvailable = resource.ApprovedReferencesAvailable;
@@ -247,6 +274,42 @@
             entity.TestEquipmentAvailable = resource.TestEquipmentAvailable;
             entity.TestEquipmentDate = resource.TestEquipmentDate != null
                                            ? DateTime.Parse(resource.TestEquipmentDate) : (DateTime?)null;
+            entity.CapacitorRippleCurrent = resource.CapacitorRippleCurrent;
+            entity.Capacitance = resource.Capacitance;
+            entity.CapacitorVoltageRating = resource.CapacitorVoltageRating;
+            entity.CapacitorPositiveTolerance = resource.CapacitorPositiveTolerance;
+            entity.CapacitorNegativeTolerance = resource.CapacitorNegativeTolerance;
+            entity.CapacitorDielectric = resource.CapacitorDielectric;
+            entity.Package = resource.PackageName;
+            entity.CapacitorPitch = resource.CapacitorPitch;
+            entity.CapacitorLength = resource.CapacitorLength;
+            entity.CapacitorWidth = resource.CapacitorWidth;
+            entity.CapacitorHeight = resource.CapacitorHeight;
+            entity.CapacitorDiameter = resource.CapacitorDiameter;
+            entity.CapacitanceLetterAndNumeralCode = resource.Capacitance == null
+                                                         ? null
+                                                         : this.domainService
+                                                             .GetCapacitanceLetterAndNumeralCode(
+                                                             resource.CapacitanceUnit,
+                                                             (decimal)resource.Capacitance);
+            entity.Resistance = resource.Resistance;
+            entity.ResistorWidth = resource.ResistorWidth;
+            entity.ResistorTolerance = resource.ResistorTolerance;
+            entity.Construction = resource.Construction;
+            entity.ResistorLength = resource.ResistorLength;
+            entity.ResistorHeight = resource.ResistorHeight;
+            entity.ResistorPowerRating = resource.ResistorPowerRating;
+            entity.ResistorVoltageRating = resource.ResistorVoltageRating;
+            entity.TemperatureCoefficient = resource.TemperatureCoefficient;
+            entity.TransistorType = resource.TransistorType;
+            entity.TransistorDeviceName = resource.TransistorDeviceName;
+            entity.TransistorCurrent = resource.TransistorCurrent;
+            entity.TransistorVoltage = resource.TransistorVoltage;
+            entity.TransistorPolarity = resource.TransistorPolarity;
+            entity.IcType = resource.IcType;
+            entity.IcFunction = resource.IcFunction;
+            entity.LibraryRef = resource.LibraryRef;
+            entity.FootprintRef = resource.FootprintRef;
         }
 
         protected override Expression<Func<MechPartSource, bool>> SearchExpression(string searchTerm)

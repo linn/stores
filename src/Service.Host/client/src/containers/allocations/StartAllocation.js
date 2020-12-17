@@ -17,7 +17,12 @@ const mapStateToProps = state => ({
     item: {},
     editStatus: 'create',
     itemError: getItemError(state, itemTypes.allocation.item),
-    loading: allocationSelectors.getLoading(state) || stockPoolsSelectors.getLoading(state),
+    loading:
+        allocationSelectors.getLoading(state) ||
+        stockPoolsSelectors.getLoading(state) ||
+        despatchLocationsSelectors.getLoading(state) ||
+        accountingCompaniesSelectors.getLoading(state) ||
+        countriesSelectors.getLoading(state),
     accountingCompanies: accountingCompaniesSelectors.getItems(state),
     stockPools: stockPoolsSelectors.getItems(state),
     despatchLocations: despatchLocationsSelectors.getItems(state),

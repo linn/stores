@@ -17,6 +17,7 @@
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Allocation;
     using Linn.Stores.Resources.Parts;
+    using Linn.Stores.Resources.RequestResources;
 
     public class ServiceModule : Module
     {
@@ -73,6 +74,9 @@
             builder.RegisterType<ManufacturerService>()
                 .As<IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>>();
             builder.RegisterType<EmployeesService>().As<IEmployeeService>();
+            builder.RegisterType<PartDataSheetValuesService>().As<IPartDataSheetValuesService>();
+            builder.RegisterType<TqmsCategoriesService>()
+                .As<IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

@@ -169,5 +169,13 @@
         public IEnumerable<string> UserPrivileges { get; set; }
 
         public IEnumerable<PartDataSheetResource> DataSheets { get; set; }
+
+        public PartParamDataResource ParamData { get; set; }
+
+        public bool CreateFromSourceSheet { get; set; }
+
+        public int SourceId { get; set; }
+
+        public int SourceCreatedBy { get; set; }
     }
 }

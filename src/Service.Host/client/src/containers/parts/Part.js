@@ -24,6 +24,8 @@ import { getPrivileges, getUserName, getUserNumber } from '../../selectors/userS
 import * as itemTypes from '../../itemTypes';
 import partLiveTestSelectors from '../../selectors/partLiveTestSelectors';
 import partLiveTestActions from '../../actions/partLiveTestActions';
+import partsActions from '../../actions/partsActions';
+import partsSelectors from '../../selectors/partsSelectors';
 
 const creating = match => match?.url?.endsWith('/create');
 
@@ -46,7 +48,8 @@ const mapStateToProps = (state, { match, location }) => ({
     userNumber: getUserNumber(state),
     options: queryString.parse(location?.search),
     partTemplates: partTemplateSelectors.getItems(state),
-    liveTest: creating(match) ? null : partLiveTestSelectors.getItem(state)
+    liveTest: creating(match) ? null : partLiveTestSelectors.getItem(state),
+    partsSearchResults: partsSelectors.getSearchItems(state)
 });
 
 const mapDispatchToProps = dispatch => {
@@ -64,6 +67,7 @@ const mapDispatchToProps = dispatch => {
             dispatch(unitsOfMeasureActions.fetch());
             dispatch(partTemplatesActions.fetch());
         },
+        fetchParts: searchTerm => dispatch(partsActions.search(searchTerm)),
         addItem: item => dispatch(partActions.add(item)),
         updateItem: (itemId, item) => dispatch(partActions.update(itemId, item)),
         setEditStatus: status => dispatch(partActions.setEditStatus(status)),

@@ -6,7 +6,7 @@ import { InputField, Dropdown } from '@linn-it/linn-form-components-library';
 function StoresTab({
     handleFieldChange,
     qcOnReceipt,
-    qcInfo,
+    qcInformation,
     rawOrFinished,
     ourInspectionWeeks,
     safetyWeeks,
@@ -16,7 +16,8 @@ function StoresTab({
     secondStageBoard,
     secondStageDescription,
     tqmsCategoryOverride,
-    stockNotes
+    stockNotes,
+    tqmsCategories
 }) {
     const convertToYOrNString = booleanValue => {
         if (booleanValue === '' || booleanValue === null) {
@@ -40,10 +41,10 @@ function StoresTab({
             <Grid item xs={8}>
                 <InputField
                     fullWidth
-                    value={qcInfo}
+                    value={qcInformation}
                     label="QC Info"
                     onChange={handleFieldChange}
-                    propertyName="qcInfo"
+                    propertyName="qcInformation"
                 />
             </Grid>
             <Grid item xs={4}>
@@ -83,7 +84,7 @@ function StoresTab({
                 <Dropdown
                     label="Rail Method"
                     propertyName="railMethod"
-                    items={['MR9', 'SMM', 'POLICY', 'FIXED RAILS', 'OVERRIDE SAFETY']}
+                    items={['MR9', 'SMM', 'POLICY', 'FIXED', 'OVERRIDE']}
                     fullWidth
                     allowNoValue
                     value={railMethod}
@@ -134,13 +135,7 @@ function StoresTab({
                 <Dropdown
                     label="TQMS Override"
                     propertyName="tqmsCategoryOverride"
-                    items={[
-                        'SLOW MOVING LEGACY STOCK',
-                        'BULK SALE',
-                        'PURCHASING MOQ OVERSTOCK',
-                        'R&D STOCK',
-                        'GRADED STOCK'
-                    ]}
+                    items={tqmsCategories.map(c => ({ id: c.name, displayText: c.description }))}
                     fullWidth
                     allowNoValue
                     value={tqmsCategoryOverride}
@@ -169,7 +164,7 @@ function StoresTab({
 StoresTab.propTypes = {
     handleFieldChange: PropTypes.func.isRequired,
     qcOnReceipt: PropTypes.bool,
-    qcInfo: PropTypes.string,
+    qcInformation: PropTypes.string,
     rawOrFinished: PropTypes.string,
     ourInspectionWeeks: PropTypes.number,
     safetyWeeks: PropTypes.number,
@@ -179,12 +174,15 @@ StoresTab.propTypes = {
     secondStageBoard: PropTypes.string,
     secondStageDescription: PropTypes.string,
     tqmsCategoryOverride: PropTypes.string,
-    stockNotes: PropTypes.string
+    stockNotes: PropTypes.string,
+    tqmsCategories: PropTypes.arrayOf(
+        PropTypes.shape({ name: PropTypes.string, description: PropTypes.string })
+    )
 };
 
 StoresTab.defaultProps = {
     qcOnReceipt: null,
-    qcInfo: null,
+    qcInformation: null,
     rawOrFinished: null,
     ourInspectionWeeks: null,
     safetyWeeks: null,
@@ -194,7 +192,8 @@ StoresTab.defaultProps = {
     secondStageBoard: null,
     secondStageDescription: null,
     tqmsCategoryOverride: null,
-    stockNotes: null
+    stockNotes: null,
+    tqmsCategories: []
 };
 
 export default StoresTab;

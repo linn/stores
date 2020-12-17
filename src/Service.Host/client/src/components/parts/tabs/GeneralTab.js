@@ -32,6 +32,7 @@ function GeneralTab({
     nominalDescription,
     stockControlled,
     safetyCriticalPart,
+    safetyCriticalHelperText,
     performanceCriticalPart,
     emcCriticalPart,
     singleSourcePart,
@@ -181,6 +182,7 @@ function GeneralTab({
                     propertyName="safetyCriticalPart"
                     items={['Yes', 'No']}
                     fullWidth
+                    helperText={safetyCriticalHelperText}
                     allowNoValue={false}
                     value={convertToYOrNString(safetyCriticalPart)}
                     onChange={handleFieldChange}
@@ -323,7 +325,8 @@ GeneralTab.propTypes = {
     cccCriticalPart: PropTypes.bool,
     psuPart: PropTypes.bool,
     safetyCertificateExpirationDate: PropTypes.string,
-    safetyDataDirectory: PropTypes.string
+    safetyDataDirectory: PropTypes.string,
+    safetyCriticalHelperText: PropTypes.string
 };
 
 GeneralTab.defaultProps = {
@@ -352,7 +355,8 @@ GeneralTab.defaultProps = {
     cccCriticalPart: null,
     psuPart: null,
     safetyCertificateExpirationDate: null,
-    safetyDataDirectory: null
+    safetyDataDirectory: null,
+    safetyCriticalHelperText: null
 };
 
 export default GeneralTab;

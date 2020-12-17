@@ -1,10 +1,14 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using Linn.Common.Authorisation;
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Parts;
+    using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Service.Extensions;
     using Linn.Stores.Service.Models;
 
@@ -23,6 +27,8 @@
         private readonly IPartCategoryService partCategoryService;
 
         private readonly IProductAnalysisCodeService productAnalysisCodeService;
+
+        private readonly IAuthorisationService authService;
 
         private readonly
             IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>
@@ -43,6 +49,11 @@
         private readonly IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>
             manufacturerService;
 
+        private readonly IPartDataSheetValuesService dataSheetsValuesService;
+
+        private readonly IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>
+            tqmsCategoriesService;
+
         public PartsModule(
             IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
@@ -54,11 +65,16 @@
             IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> partTemplateService,
             IPartLiveService partLiveService,
             IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> mechPartSourceService,
-            IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> manufacturerService)
+            IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> manufacturerService,
+            IPartDataSheetValuesService dataSheetsValuesService,
+            IAuthorisationService authService,
+            IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource> tqmsCategoriesService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
+            this.authService = authService;
             this.Get("/parts/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
+            this.Get("/parts/sources/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/parts/{id}", parameters => this.GetPart(parameters.id));
             this.Put("/parts/{id}", parameters => this.UpdatePart(parameters.id));
             this.Get("/parts", _ => this.GetParts());
@@ -93,6 +109,13 @@
 
             this.manufacturerService = manufacturerService;
             this.Get("/inventory/manufacturers", _ => this.GetManufacturers());
+            
+            this.dataSheetsValuesService = dataSheetsValuesService;
+            this.Get("/inventory/parts/data-sheet-values", _ => this.GetPartDataSheetValues());
+
+            this.tqmsCategoriesService = tqmsCategoriesService;
+            this.Get("/inventory/parts/tqms-categories", _ => this.GetTqmsCategories());
+
         }
 
         private object GetPart(int id)
@@ -121,6 +144,7 @@
             this.RequiresAuthentication();
             var resource = this.Bind<PartResource>();
             resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
+            resource.BomType = "C";
             var result = this.partsFacadeService.Add(resource);
             if (resource.QcOnReceipt != null && (bool)resource.QcOnReceipt)
             {
@@ -202,6 +226,14 @@
 
         private object UpdateMechPartSource(int id)
         {
+            if (!this.authService
+                    .HasPermissionFor(
+                        AuthorisedAction.PartAdmin,
+                        this.Context.CurrentUser.GetPrivileges()))
+            {
+                return new UnauthorisedResult<MechPartSource>("You are not authorised to update.");
+            }
+
             var resource = this.Bind<MechPartSourceResource>();
             var result = this.mechPartSourceService.Update(id, resource);
             return this.Negotiate.WithModel(result)
@@ -211,10 +243,30 @@
         private object AddMechPartSource()
         {
             this.RequiresAuthentication();
-            // todo - privileges check
+
+            if (!this.authService
+                    .HasPermissionFor(
+                        AuthorisedAction.PartAdmin, 
+                        this.Context.CurrentUser.GetPrivileges()))
+            {
+                return new UnauthorisedResult<MechPartSource>("You are not authorised to create.");
+            }
+            
             var resource = this.Bind<MechPartSourceResource>();
+            
             var result = this.mechPartSourceService.Add(resource);
-            return this.Negotiate.WithModel(result)
+
+            if (result.GetType() != typeof(CreatedResult<MechPartSource>) || !resource.CreatePart)
+            {
+                return this.Negotiate
+                    .WithModel(result).WithMediaRangeModel("text/html", ApplicationSettings.Get);
+            }
+
+            var created = ((CreatedResult<MechPartSource>)result).Data;
+
+            this.partDomainService.CreateFromSource(created.Id, created.ProposedBy.Id);
+
+            return this.Negotiate.WithModel(this.mechPartSourceService.GetById(created.Id))
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
 
@@ -223,6 +275,20 @@
             var resource = this.Bind<SearchRequestResource>();
             var result = this.manufacturerService.Search(resource.SearchTerm);
             return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetPartDataSheetValues()
+        {
+            var result = this.dataSheetsValuesService.GetAll();
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetTqmsCategories()
+        {
+            return this.Negotiate.WithModel(
+                    this.tqmsCategoriesService.GetAll())
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
     }

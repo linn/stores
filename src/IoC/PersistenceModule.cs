@@ -17,8 +17,7 @@
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<ServiceDbContext>().AsSelf()
-                .As<DbContext>().InstancePerRequest();
+            builder.RegisterType<ServiceDbContext>().AsSelf().As<DbContext>().InstancePerRequest();
             builder.RegisterType<TransactionManager>().As<ITransactionManager>();
 
             builder.RegisterType<PartRepository>().As<IRepository<Part, int>>();
@@ -51,11 +50,13 @@
             builder.RegisterType<MechPartSourceRepository>().As<IRepository<MechPartSource, int>>();
             builder.RegisterType<ParcelRepository>().As<IRepository<Parcel, int>>();
             builder.RegisterType<CarrierRepository>().As<IRepository<Carrier, string>>();
+            builder.RegisterType<PartDataSheetValuesRepository>().As<IQueryRepository<PartDataSheetValues>>();
             builder.RegisterType<StockLocatorRepository>().As<IQueryRepository<StockLocator>>();
             builder.RegisterType<StoragePlaceRepository>().As<IQueryRepository<StoragePlace>>();
             builder.RegisterType<StoresBugetRepository>().As<IQueryRepository<StoresBudget>>();
             builder.RegisterType<AuditLocationRepository>().As<IQueryRepository<AuditLocation>>();
             builder.RegisterType<ManufacturerRepository>().As<IRepository<Manufacturer, string>>();
+            builder.RegisterType<TqmsCategoriesRepository>().As<IRepository<TqmsCategory, string>>();
         }
     }
 }
