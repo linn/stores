@@ -4,6 +4,7 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Sos;
 
     using Microsoft.EntityFrameworkCore;
@@ -93,6 +94,8 @@
         public DbQuery<PartDataSheetValues> PartDataSheetValues { get; set; }
 
         public DbSet<TqmsCategory> TqmsCategories { get; set; }
+        
+        public DbSet<PtlMaster> PtlMaster { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -137,6 +140,7 @@
             this.BuildSosAllocDetails(builder);
             this.BuildTqmsCategories(builder);
             this.BuildSalesOutlets(builder);
+            this.BuildPtlMaster(builder);
             base.OnModelCreating(builder);
         }
 
@@ -760,6 +764,17 @@
             e.HasKey(c => c.Name);
             e.Property(c => c.Name).HasColumnName("TQMS_CATEGORY");
             e.Property(c => c.Description).HasColumnName("DESCRIPTION");
+        }
+
+        private void BuildPtlMaster(ModelBuilder builder)
+        {
+            var table = builder.Entity<PtlMaster>().ToTable("PTL_MASTER");
+            table.HasKey(a => a.LastFullJobRef);
+            table.Property(s => s.LastFullJobRef).HasColumnName("LAST_FULL_RUN_JOBREF").HasMaxLength(6);
+            table.Property(s => s.LastFullRunDate).HasColumnName("LAST_FULL_RUN_DATE");
+            table.Property(s => s.LastFullRunMinutesTaken).HasColumnName("LAST_FULL_RUN_MINUTES_TAKEN");
+            table.Property(s => s.LastDaysToLookAhead).HasColumnName("LAST_DAYS_TO_LOOK_AHEAD");
+            table.Property(s => s.Status).HasColumnName("STATUS").HasMaxLength(2000);
         }
     }
 }

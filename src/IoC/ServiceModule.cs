@@ -77,6 +77,7 @@
             builder.RegisterType<PartDataSheetValuesService>().As<IPartDataSheetValuesService>();
             builder.RegisterType<TqmsCategoriesService>()
                 .As<IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>>();
+            builder.RegisterType<WorkstationFacadeService>().As<IWorkstationFacadeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
