@@ -1,12 +1,12 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Reports
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using Linn.Common.Persistence;
     using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
-    using Linn.Stores.Domain.LinnApps.Parts;
 
     public class WhatWillDecrementReportService : IWhatWillDecrementReportService
     {
@@ -20,8 +20,6 @@
 
         private readonly IQueryRepository<ChangeRequest> changeRequestRepository;
 
-        private readonly IRepository<Part, int> partsRepository;
-
         private readonly IReportingHelper reportingHelper;
 
         public WhatWillDecrementReportService(
@@ -30,7 +28,6 @@
             IQueryRepository<WwdWork> wwdWorkRepository,
             IQueryRepository<WwdWorkDetail> wwdWorkDetailsRepository,
             IQueryRepository<ChangeRequest> changeRequestRepository,
-            IRepository<Part, int> partsRepository,
             IReportingHelper reportingHelper)
         {
             this.productionTriggerLevelsService = productionTriggerLevelsService;
@@ -38,7 +35,6 @@
             this.wwdWorkRepository = wwdWorkRepository;
             this.wwdWorkDetailsRepository = wwdWorkDetailsRepository;
             this.changeRequestRepository = changeRequestRepository;
-            this.partsRepository = partsRepository;
             this.reportingHelper = reportingHelper;
         }
 
@@ -56,9 +52,6 @@
             var changeRequests = this.changeRequestRepository.FilterBy(c => c.ChangeState == "ACCEPT").ToList();
 
             var wwdWorks = this.wwdWorkRepository.FilterBy(w => w.JobId == jobId).ToList();
-
-            var parts = this.partsRepository.FilterBy(
-                p => wwdWorks.Any(w => w.PartNumber == p.PartNumber) && (p.BomType == "A" || p.BomType == "C")).ToList();
 
             if (typeOfRun == "SHORTAGES ONLY")
             {
@@ -81,7 +74,7 @@
 
             model.AddSortedColumns(columns);
 
-            var values = this.SetModelRows(wwdWorks, wwdWorkDetails, parts, changeRequests);
+            var values = this.SetModelRows(wwdWorks, wwdWorkDetails, changeRequests);
 
             this.reportingHelper.AddResultsToModel(model, values, CalculationValueModelType.Quantity, true);
 
@@ -91,26 +84,20 @@
         private List<CalculationValueModel> SetModelRows(
             IEnumerable<WwdWork> wwdWorks,
             IEnumerable<WwdWorkDetail> wwdWorkDetails,
-            IEnumerable<Part> parts, 
             IEnumerable<ChangeRequest> changeRequests)
         {
             var values = new List<CalculationValueModel>();
 
             foreach (var wwdWork in wwdWorks)
             {
-                var part = parts.FirstOrDefault(p => p.PartNumber == wwdWork.PartNumber);
-
                 var wwdWorkDetail = wwdWorkDetails.FirstOrDefault(
                     w => w.JobId == wwdWork.JobId && w.PartNumber == wwdWork.PartNumber);
 
                 var changeRequest = changeRequests.FirstOrDefault(c => c.OldPartNumber == wwdWork.PartNumber);
 
-                string changeRemarks = string.Empty;
-
-                if (changeRequest != null)
-                {
-                    changeRemarks = $"{changeRequest.OldPartNumber} change to {changeRequest.NewPartNumber}";
-                }
+                var changeRemarks = changeRequest != null
+                                        ? $"{changeRequest.OldPartNumber} change to {changeRequest.NewPartNumber}"
+                                        : string.Empty;
 
                 values.Add(
                     new CalculationValueModel
@@ -120,7 +107,7 @@
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = wwdWork.PartNumber, TextDisplay = part.Description, ColumnId = "Description"
+                            RowId = wwdWork.PartNumber, TextDisplay = wwdWork.Part.Description, ColumnId = "Description"
                         });
                 values.Add(
                     new CalculationValueModel

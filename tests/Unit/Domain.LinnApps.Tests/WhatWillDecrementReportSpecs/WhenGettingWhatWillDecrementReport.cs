@@ -45,7 +45,8 @@
                                 LocationId = 1,
                                 QuantityKitted = 2,
                                 Remarks = "REM 1",
-                                PalletNumber = 1
+                                PalletNumber = 1,
+                                Part = new Part { PartNumber = "PART 1", Description = "DESC 1" }
                             },
                         new WwdWork
                             {
@@ -56,7 +57,8 @@
                                 LocationId = 2,
                                 QuantityKitted = 2,
                                 Remarks = "REM 2",
-                                PalletNumber = 2
+                                PalletNumber = 2,
+                                Part = new Part { PartNumber = "PART 2", Description = "DESC 2" }
                             },
                     }.AsQueryable());
 
@@ -79,13 +81,6 @@
                                 Quantity = 2,
                                 State = "STATE 2"
                             }
-                    }.AsQueryable());
-
-            this.PartsRepository.FilterBy(Arg.Any<Expression<Func<Part, bool>>>()).Returns(
-                new List<Part>
-                    {
-                        new Part { PartNumber = "PART 1", Description = "DESC 1" },
-                        new Part { PartNumber = "PART 2", Description = "DESC 2" }
                     }.AsQueryable());
 
             this.result = this.Sut.WhatWillDecrementReport(this.partNumber, this.quantity, null, null);

@@ -54,13 +54,13 @@
                     PdfFilePath = s.PdfFilePath
                 });
             }
-            
+
             return new MechPartSource
             {
                 Id = this.databaseService.GetIdSequence("MECH_SOURCE_SEQ"),
                 PartNumber = resource.PartNumber,
                 AssemblyType = resource.AssemblyType,
-                DateEntered = DateTime.Parse(resource.DateEntered),
+                DateEntered = resource.DateEntered == null ? (DateTime?)null : DateTime.Parse(resource.DateEntered),
                 DateSamplesRequired = resource.DateSamplesRequired == null
                     ? (DateTime?)null
                     : DateTime.Parse(resource.DateSamplesRequired),

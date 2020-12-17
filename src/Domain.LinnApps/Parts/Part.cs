@@ -145,6 +145,8 @@
 
         public IEnumerable<MechPartSource> ReplacementParts { get; set; }
 
+        public IEnumerable<WwdWork> WwdWorks { get; set; }
+        
         public PartParamData ParamData { get; set; }
     }
 }

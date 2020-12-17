@@ -22,7 +22,7 @@
             return new MechPartSourceResource
                         {
                             AssemblyType = model.AssemblyType,
-                            DateEntered = model.DateEntered.ToString("o"),
+                            DateEntered = model.DateEntered?.ToString("o"),
                             DateSamplesRequired = model.DateSamplesRequired?.ToString("o"),
                             EstimatedVolume = model.EstimatedVolume,
                             Id = model.Id,
