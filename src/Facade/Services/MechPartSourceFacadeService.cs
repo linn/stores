@@ -341,7 +341,7 @@
             entity.TestEquipmentDate = resource.TestEquipmentDate != null
                                            ? DateTime.Parse(resource.TestEquipmentDate) : (DateTime?)null;
             entity.CapacitorRippleCurrent = resource.CapacitorRippleCurrent;
-            entity.Capacitance = resource.Capacitance;
+            //entity.Capacitance = resource.Capacitance;
             entity.CapacitorVoltageRating = resource.CapacitorVoltageRating;
             entity.CapacitorPositiveTolerance = resource.CapacitorPositiveTolerance;
             entity.CapacitorNegativeTolerance = resource.CapacitorNegativeTolerance;
@@ -352,12 +352,6 @@
             entity.CapacitorWidth = resource.CapacitorWidth;
             entity.CapacitorHeight = resource.CapacitorHeight;
             entity.CapacitorDiameter = resource.CapacitorDiameter;
-            entity.CapacitanceLetterAndNumeralCode = resource.Capacitance == null
-                                                         ? null
-                                                         : this.domainService
-                                                             .GetCapacitanceLetterAndNumeralCode(
-                                                             resource.CapacitanceUnit,
-                                                             (decimal)resource.Capacitance);
             entity.Resistance = resource.Resistance;
             entity.ResistorWidth = resource.ResistorWidth;
             entity.ResistorTolerance = resource.ResistorTolerance;

@@ -16,25 +16,16 @@ function ManufacturersTab({
     handleApprovedByChange,
     handleManufacturerChange,
     deleteRow,
-    newRow,
-    setNewRow,
-    saveRow
+    resetRow,
+    addNewRow,
+    updateRow
 }) {
     const selectApprovedBySearchResult = (_propertyName, approvedBy, updatedItem) => {
         handleApprovedByChange(updatedItem.sequence, approvedBy);
-        setNewRow(() => ({
-            ...updatedItem,
-            approvedBy: approvedBy.name,
-            approvedByName: approvedBy.description
-        }));
     };
 
     const selectManufacturerSearchResult = (_propertyName, manufacturer, updatedItem) => {
         handleManufacturerChange(updatedItem.sequence, manufacturer);
-        setNewRow(() => ({
-            ...updatedItem,
-            manufacturerCode: manufacturer.name
-        }));
     };
 
     const columns = [
@@ -104,13 +95,16 @@ function ManufacturersTab({
     return (
         <Grid item xs={12}>
             <EditableTable
+                groupEdit
                 columns={columns}
                 rows={manufacturers.map(m => ({ ...m, id: m.sequence }))}
-                newRow={newRow}
-                createRow={saveRow}
-                saveRow={saveRow}
-                deleteRow={deleteRow}
-                closeEditingOnSave
+                deleteRow={() => true}
+                removeRow={deleteRow}
+                resetRow={resetRow}
+                addRow={addNewRow}
+                tableValid={() => true}
+                updateRow={updateRow}
+                closeRowOnClickAway
             />
         </Grid>
     );
@@ -118,7 +112,7 @@ function ManufacturersTab({
 
 ManufacturersTab.propTypes = {
     handleManufacturerChange: PropTypes.func.isRequired,
-    saveRow: PropTypes.func.isRequired,
+    updateRow: PropTypes.func.isRequired,
     deleteRow: PropTypes.func.isRequired,
     manufacturers: PropTypes.arrayOf(PropTypes.shape({})),
     searchManufacturers: PropTypes.func.isRequired,
@@ -130,8 +124,8 @@ ManufacturersTab.propTypes = {
     employeesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     employeesSearchLoading: PropTypes.bool,
     handleApprovedByChange: PropTypes.func.isRequired,
-    setNewRow: PropTypes.func.isRequired,
-    newRow: PropTypes.arrayOf(PropTypes.shape({}))
+    resetRow: PropTypes.func.isRequired,
+    addNewRow: PropTypes.func.isRequired
 };
 
 ManufacturersTab.defaultProps = {
@@ -139,8 +133,7 @@ ManufacturersTab.defaultProps = {
     manufacturersSearchResults: [],
     manufacturersSearchLoading: false,
     employeesSearchResults: [],
-    employeesSearchLoading: false,
-    newRow: []
+    employeesSearchLoading: false
 };
 
 export default ManufacturersTab;

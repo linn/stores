@@ -71,10 +71,6 @@ function MechPartSource({
     };
 
     const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
-
-    const [newManufacturersRow, setNewManufacturersRow] = useState({});
-    const [newSuppliersRow, setNewSuppliersRow] = useState({});
-    const [countNewSuppliersRow, setCountNewSuppliersRow] = useState(0);
     const [newUsagesRow, setNewUsagesRow] = useState({});
 
     const handleTabChange = (_, value) => {
@@ -144,16 +140,6 @@ function MechPartSource({
         });
     };
 
-    const deleteManufacturersRow = row => {
-        setEditStatus('edit');
-        setMechPartSource(m => ({
-            ...m,
-            mechPartManufacturerAlts: m.mechPartManufacturerAlts.filter(
-                a => a.sequence === row.sequence
-            )
-        }));
-    };
-
     const deleteUsagesRow = row => {
         setEditStatus('edit');
         setMechPartSource(m => ({
@@ -200,14 +186,13 @@ function MechPartSource({
         setEditStatus('edit');
         setMechPartSource(m => ({
             ...m,
-            mechPartAlts: [
-                ...m.mechPartAlts.filter(s => s.sequence !== row.sequence),
-                { ...row, [propertyName]: newValue }
-            ]
+            mechPartAlts: m.mechPartAlts.map(e =>
+                e.sequence === row.sequence ? { ...e, [propertyName]: newValue } : e
+            )
         }));
     };
 
-    const resetRow = i => {
+    const resetSuppliersRow = i => {
         setMechPartSource(m => ({
             ...m,
             mechPartAlts: [
@@ -217,32 +202,54 @@ function MechPartSource({
         }));
     };
 
-    const saveManufacturersRow = row => {
+    const addManufacturersRow = () => {
         setEditStatus('edit');
-        // we are adding a new row
-        if (!row.sequence) {
-            setMechPartSource(m => ({
-                ...m,
-                mechPartManufacturerAlts: [
-                    ...m.mechPartManufacturerAlts,
-                    {
-                        ...row,
-                        sequence:
-                            m.mechPartManufacturerAlts?.length > 0
-                                ? m.mechPartManufacturerAlts.reduce((prev, current) =>
-                                      prev.sequence > current.sequence ? prev : current
-                                  ).sequence + 1
-                                : 1
-                    }
-                ]
-            }));
-        }
-        // or we are updating an existing row
         setMechPartSource(m => ({
             ...m,
-            mechPartManufacturerAlts: m.mechPartManufacturerAlts.map(x =>
-                x.sequence === row.sequence ? row : x
+            mechPartManufacturerAlts: [
+                ...m.mechPartManufacturerAlts,
+                {
+                    sequence:
+                        getMaxFieldValue(mechPartSource.mechPartManufacturerAlts, 'sequence') + 1,
+                    manufacturerCode: null,
+                    manufacturerDescription: null,
+                    preference: null,
+                    partNumber: null,
+                    reelSuffix: null,
+                    rohsCompliant: null,
+                    approvedBy: null,
+                    approvedByName: null,
+                    dateApproved: null
+                }
+            ]
+        }));
+    };
+
+    const deleteManufacturersRow = id => {
+        setEditStatus('edit');
+        setMechPartSource(m => ({
+            ...m,
+            mechPartManufacturerAlts: m.mechPartManufacturerAlts.filter(a => a.sequence !== id)
+        }));
+    };
+
+    const updateManufacturersRow = (row, _, propertyName, newValue) => {
+        setEditStatus('edit');
+        setMechPartSource(m => ({
+            ...m,
+            mechPartManufacturerAlts: m.mechPartManufacturerAlts.map(e =>
+                e.sequence === row.sequence ? { ...e, [propertyName]: newValue } : e
             )
+        }));
+    };
+
+    const resetManufacturersRow = i => {
+        setMechPartSource(m => ({
+            ...m,
+            mechPartManufacturerAlts: [
+                ...m.mechPartManufacturerAlts.filter(a => a.sequence !== i.id),
+                { ...item.mechPartManufacturerAlts?.find(s => s.sequence === i.id) }
+            ]
         }));
     };
 
@@ -448,7 +455,7 @@ function MechPartSource({
                                     suppliers={mechPartSource.mechPartAlts}
                                     deleteRow={deleteSuppliersRow}
                                     addNewRow={addSuppliersRow}
-                                    resetRow={resetRow}
+                                    resetRow={resetSuppliersRow}
                                     updateRow={updateSuppliersRow}
                                 />
                             )}
@@ -457,10 +464,10 @@ function MechPartSource({
                                     handleApprovedByChange={handleApprovedByChange}
                                     handleManufacturerChange={handleManufacturerChange}
                                     manufacturers={mechPartSource.mechPartManufacturerAlts}
-                                    saveRow={saveManufacturersRow}
                                     deleteRow={deleteManufacturersRow}
-                                    newRow={newManufacturersRow}
-                                    setNewRow={setNewManufacturersRow}
+                                    addNewRow={addManufacturersRow}
+                                    resetRow={resetManufacturersRow}
+                                    updateRow={updateManufacturersRow}
                                 />
                             )}
                             {tab === 5 && mechPartSource.mechanicalOrElectrical === 'E' && (
