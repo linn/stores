@@ -301,7 +301,7 @@ ProposalTab.propTypes = {
     safetyDataDirectory: PropTypes.string,
     productionDate: PropTypes.string,
     estimatedVolume: PropTypes.number,
-    samplesRequired: PropTypes.number,
+    samplesRequired: PropTypes.string,
     sampleQuantity: PropTypes.number,
     dateSamplesRequired: PropTypes.string,
     rohsReplace: PropTypes.string,
