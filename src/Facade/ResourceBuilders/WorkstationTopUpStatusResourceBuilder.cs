@@ -32,6 +32,6 @@
             yield return new LinkResource { Rel = "start-top-up", Href = this.GetLocation(workstationTopUpStatus) };
             yield return new LinkResource { Rel = "self", Href = this.GetLocation(workstationTopUpStatus) };
             yield return new LinkResource { Rel = "status", Href = "/logistics/workstations/top-up" };
-            }
+        }
     }
 }

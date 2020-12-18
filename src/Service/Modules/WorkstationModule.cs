@@ -1,6 +1,9 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System.Linq;
+
     using Linn.Stores.Facade.Services;
+    using Linn.Stores.Service.Extensions;
     using Linn.Stores.Service.Models;
 
     using Nancy;
@@ -17,7 +20,9 @@
 
         private object GetStatus()
         {
-            var results = this.workstationFacadeService.GetStatus();
+            var privileges = this.Context?.CurrentUser?.GetPrivileges().ToList();
+
+            var results = this.workstationFacadeService.GetStatus(privileges);
             return this.Negotiate
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)

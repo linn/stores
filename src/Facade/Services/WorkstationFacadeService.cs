@@ -1,13 +1,26 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
+    using System.Collections.Generic;
+
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
 
     public class WorkstationFacadeService : IWorkstationFacadeService
     {
-        public IResult<ResponseModel<WorkstationTopUpStatus>> GetStatus()
+        private readonly IWorkstationService workstationService;
+
+        public WorkstationFacadeService(IWorkstationService workstationService)
         {
-            throw new System.NotImplementedException();
+            this.workstationService = workstationService;
+        }
+
+        public IResult<ResponseModel<WorkstationTopUpStatus>> GetStatus(IEnumerable<string> privileges)
+        {
+            return new SuccessResult<ResponseModel<WorkstationTopUpStatus>>(
+                new ResponseModel<WorkstationTopUpStatus>(
+                    this.workstationService.GetTopUpStatus(),
+                    privileges));
         }
     }
 }

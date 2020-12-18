@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Service.Tests.WorkstationModuleSpecs
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using FluentAssertions;
 
@@ -25,7 +26,7 @@
             this.workstationStatus = new ResponseModel<WorkstationTopUpStatus>(
                 new WorkstationTopUpStatus { ProductionTriggerRunJobRef = "a", WorkstationTopUpJobRef = "b" },
                 new List<string>());
-            this.WorkstationFacadeService.GetStatus()
+            this.WorkstationFacadeService.GetStatus(Arg.Any<IEnumerable<string>>())
                 .Returns(new SuccessResult<ResponseModel<WorkstationTopUpStatus>>(this.workstationStatus));
 
             this.Response = this.Browser.Get(
@@ -45,7 +46,8 @@
         [Test]
         public void ShouldCallService()
         {
-            this.WorkstationFacadeService.Received().GetStatus();
+            this.WorkstationFacadeService.Received()
+                .GetStatus(Arg.Is<IEnumerable<string>>(s => s.Contains("p1")));
         }
 
         [Test]
