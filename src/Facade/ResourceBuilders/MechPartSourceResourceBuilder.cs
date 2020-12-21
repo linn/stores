@@ -129,7 +129,12 @@
                             CancelledByName = model.CancelledBy?.FullName,
                             CancelledDate = model.DateCancelled?.ToString("o"),
                             PurchasingQuotes = model.PurchasingQuotes?.Select(
-                                q => this.purchasingQuotesResourceBuilder.Build(q))
+                                (q, i) =>
+                                    {
+                                        var resource = this.purchasingQuotesResourceBuilder.Build(q);
+                                        resource.Id = 1;
+                                        return resource;
+                                    })
                                 .ToList(),
                             Usages = model.Usages?.Select(
                                 (u, i) => new MechPartUsageResource

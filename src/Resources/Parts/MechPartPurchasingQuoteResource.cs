@@ -21,5 +21,7 @@
         public string SupplierName { get; set; }
 
         public decimal? UnitPrice { get; set; }
+
+        public int Id { get; set; }
     }
 }
