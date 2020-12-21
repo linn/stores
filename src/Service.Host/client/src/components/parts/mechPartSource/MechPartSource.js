@@ -140,14 +140,6 @@ function MechPartSource({
         });
     };
 
-    const deleteUsagesRow = row => {
-        setEditStatus('edit');
-        setMechPartSource(m => ({
-            ...m,
-            usages: m.usages.filter(a => a.rootProductName === row.rootProductName)
-        }));
-    };
-
     // this function gets the current max val for a specified field in an array of objects with a value for that field
     // useful for getting the next 'id' for a new row added to a table, as seen below where 'sequence' is the id field
     // returns 0 if no entries
@@ -158,97 +150,43 @@ function MechPartSource({
               )[fieldName]
             : 0;
 
-    const addSuppliersRow = () => {
+    const addRow = (collectionName, idFieldName) => {
         setEditStatus('edit');
         setMechPartSource(m => ({
             ...m,
-            mechPartAlts: [
-                ...m.mechPartAlts,
+            [collectionName]: [
+                ...m[collectionName],
                 {
-                    sequence: getMaxFieldValue(mechPartSource.mechPartAlts, 'sequence') + 1,
-                    supplierId: null,
-                    supplierName: null,
-                    partNumber: null
+                    sequence: getMaxFieldValue(mechPartSource[collectionName], idFieldName) + 1
                 }
             ]
         }));
     };
 
-    const deleteSuppliersRow = id => {
+    const deleteRow = (collectionName, idFieldName, deleteId) => {
         setEditStatus('edit');
         setMechPartSource(m => ({
             ...m,
-            mechPartAlts: m.mechPartAlts.filter(a => a.sequence !== id)
+            [collectionName]: m[collectionName].filter(a => a[idFieldName] !== deleteId)
         }));
     };
 
-    const updateSuppliersRow = (row, _, propertyName, newValue) => {
+    const updateRow = (row, propertyName, newValue, collectionName, idFieldName) => {
         setEditStatus('edit');
         setMechPartSource(m => ({
             ...m,
-            mechPartAlts: m.mechPartAlts.map(e =>
-                e.sequence === row.sequence ? { ...e, [propertyName]: newValue } : e
+            [collectionName]: m[collectionName].map(e =>
+                e[idFieldName] === row[idFieldName] ? { ...e, [propertyName]: newValue } : e
             )
         }));
     };
 
-    const resetSuppliersRow = i => {
+    const resetRow = (current, collectionName, idFieldName) => {
         setMechPartSource(m => ({
             ...m,
-            mechPartAlts: [
-                ...m.mechPartAlts.filter(a => a.sequence !== i.id),
-                { ...item.mechPartAlts?.find(s => s.sequence === i.id) }
-            ]
-        }));
-    };
-
-    const addManufacturersRow = () => {
-        setEditStatus('edit');
-        setMechPartSource(m => ({
-            ...m,
-            mechPartManufacturerAlts: [
-                ...m.mechPartManufacturerAlts,
-                {
-                    sequence:
-                        getMaxFieldValue(mechPartSource.mechPartManufacturerAlts, 'sequence') + 1,
-                    manufacturerCode: null,
-                    manufacturerDescription: null,
-                    preference: null,
-                    partNumber: null,
-                    reelSuffix: null,
-                    rohsCompliant: null,
-                    approvedBy: null,
-                    approvedByName: null,
-                    dateApproved: null
-                }
-            ]
-        }));
-    };
-
-    const deleteManufacturersRow = id => {
-        setEditStatus('edit');
-        setMechPartSource(m => ({
-            ...m,
-            mechPartManufacturerAlts: m.mechPartManufacturerAlts.filter(a => a.sequence !== id)
-        }));
-    };
-
-    const updateManufacturersRow = (row, _, propertyName, newValue) => {
-        setEditStatus('edit');
-        setMechPartSource(m => ({
-            ...m,
-            mechPartManufacturerAlts: m.mechPartManufacturerAlts.map(e =>
-                e.sequence === row.sequence ? { ...e, [propertyName]: newValue } : e
-            )
-        }));
-    };
-
-    const resetManufacturersRow = i => {
-        setMechPartSource(m => ({
-            ...m,
-            mechPartManufacturerAlts: [
-                ...m.mechPartManufacturerAlts.filter(a => a.sequence !== i.id),
-                { ...item.mechPartManufacturerAlts?.find(s => s.sequence === i.id) }
+            [collectionName]: [
+                ...m[collectionName].filter(a => a[idFieldName] !== current.id),
+                { ...item[collectionName]?.find(s => s[idFieldName] === current.id) }
             ]
         }));
     };
@@ -453,10 +391,20 @@ function MechPartSource({
                                 <SuppliersTab
                                     handleSupplierChange={handleSupplierChange}
                                     suppliers={mechPartSource.mechPartAlts}
-                                    deleteRow={deleteSuppliersRow}
-                                    addNewRow={addSuppliersRow}
-                                    resetRow={resetSuppliersRow}
-                                    updateRow={updateSuppliersRow}
+                                    deleteRow={id => deleteRow('mechPartAlts', 'sequence', id)}
+                                    addNewRow={() => addRow('mechPartAlts', 'sequence')}
+                                    resetRow={current =>
+                                        resetRow(current, 'mechPartAlts', 'sequence')
+                                    }
+                                    updateRow={(row, _, propertyName, newValue) =>
+                                        updateRow(
+                                            row,
+                                            propertyName,
+                                            newValue,
+                                            'mechPartAlts',
+                                            'sequence'
+                                        )
+                                    }
                                 />
                             )}
                             {tab === 4 && (
@@ -464,10 +412,22 @@ function MechPartSource({
                                     handleApprovedByChange={handleApprovedByChange}
                                     handleManufacturerChange={handleManufacturerChange}
                                     manufacturers={mechPartSource.mechPartManufacturerAlts}
-                                    deleteRow={deleteManufacturersRow}
-                                    addNewRow={addManufacturersRow}
-                                    resetRow={resetManufacturersRow}
-                                    updateRow={updateManufacturersRow}
+                                    deleteRow={id =>
+                                        deleteRow('mechPartManufacturerAlts', 'sequence', id)
+                                    }
+                                    addNewRow={() => addRow('mechPartManufacturerAlts', 'sequence')}
+                                    resetRow={current =>
+                                        resetRow(current, 'mechPartManufacturerAlts', 'sequence')
+                                    }
+                                    updateRow={(row, _, propertyName, newValue) =>
+                                        updateRow(
+                                            row,
+                                            propertyName,
+                                            newValue,
+                                            'mechPartManufacturerAlts',
+                                            'sequence'
+                                        )
+                                    }
                                 />
                             )}
                             {tab === 5 && mechPartSource.mechanicalOrElectrical === 'E' && (
