@@ -185,8 +185,11 @@ function MechPartSource({
         setMechPartSource(m => ({
             ...m,
             [collectionName]: [
-                ...m[collectionName].filter(a => a[idFieldName] !== current.id),
-                { ...item[collectionName]?.find(s => s[idFieldName] === current.id) }
+                ...m[collectionName].map(a =>
+                    a[idFieldName] === current.id
+                        ? { ...item[collectionName]?.find(s => s[idFieldName] === current.id) }
+                        : a
+                )
             ]
         }));
     };
