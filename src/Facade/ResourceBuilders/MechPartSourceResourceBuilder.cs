@@ -120,14 +120,14 @@
                             McitVerifiedByName = model.McitVerifiedBy?.FullName,
                             McitVerifiedDate = model.McitVerifiedDate?.ToString("o"),
                             ApplyTCodeBy = model.ApplyTCodeId,
-                            ApplyTCodeName = model.ApplyTCodeBy?.FullName,
+                            ApplyTCodeByName = model.ApplyTCodeBy?.FullName,
                             ApplyTCodeDate = model.ApplyTCodeDate?.ToString("o"),
                             RemoveTCodeBy = model.RemoveTCodeId,
-                            RemoveTCodeName = model.RemoveTCodeBy?.FullName,
+                            RemoveTCodeByName = model.RemoveTCodeBy?.FullName,
                             RemoveTCodeDate = model.RemoveTCodeDate?.ToString("o"),
                             CancelledBy = model.CancelledById,
                             CancelledByName = model.CancelledBy?.FullName,
-                            DateCancelled = model.DateCancelled?.ToString("o"),
+                            CancelledDate = model.DateCancelled?.ToString("o"),
                             PurchasingQuotes = model.PurchasingQuotes?.Select(
                                 q => this.purchasingQuotesResourceBuilder.Build(q))
                                 .ToList(),

@@ -192,8 +192,8 @@
 
                 CancelledBy = resource.CancelledBy != null ?
                                    this.employeeRepository.FindById((int)resource.CancelledBy) : null,
-                DateCancelled = resource.DateCancelled != null ?
-                                     DateTime.Parse(resource.DateCancelled) : (DateTime?)null,
+                DateCancelled = resource.CancelledDate != null ?
+                                     DateTime.Parse(resource.CancelledDate) : (DateTime?)null,
 
                 McitVerifiedBy = resource.McitVerifiedBy != null ?
                                   this.employeeRepository.FindById((int)resource.McitVerifiedBy) : null,
@@ -379,7 +379,7 @@
             entity.CancelledBy = resource.CancelledBy != null
                                      ? this.employeeRepository.FindById((int)resource.CancelledBy)
                                      : null;
-            entity.DateCancelled = resource.DateCancelled != null ? DateTime.Parse(resource.DateCancelled) : (DateTime?)null;
+            entity.DateCancelled = resource.CancelledDate != null ? DateTime.Parse(resource.CancelledDate) : (DateTime?)null;
             entity.McitVerifiedBy = resource.McitVerifiedBy != null
                                         ? this.employeeRepository.FindById((int)resource.McitVerifiedBy)
                                         : null;

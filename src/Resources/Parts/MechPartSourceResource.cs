@@ -196,13 +196,13 @@
 
         public int? ApplyTCodeBy { get; set; }
 
-        public string ApplyTCodeName { get; set; }
+        public string ApplyTCodeByName { get; set; }
 
         public string ApplyTCodeDate { get; set; }
 
         public int? RemoveTCodeBy { get; set; }
 
-        public string RemoveTCodeName { get; set; }
+        public string RemoveTCodeByName { get; set; }
 
         public string RemoveTCodeDate { get; set; }
 
@@ -210,7 +210,7 @@
 
         public string CancelledByName { get; set; }
 
-        public string DateCancelled { get; set; }
+        public string CancelledDate { get; set; }
 
         public List<MechPartPurchasingQuoteResource> PurchasingQuotes { get; set; }
 

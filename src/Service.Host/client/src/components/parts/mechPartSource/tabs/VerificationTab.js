@@ -18,14 +18,14 @@ export default function VerificationTab({
     mcitVerifiedByName,
     mcitVerifiedDate,
     applyTCodeBy,
-    applyTCodeName,
+    applyTCodeByName,
     applyTCodeDate,
     removeTCodeBy,
-    removeTCodeName,
+    removeTCodeByName,
     removeTCodeDate,
     cancelledBy,
     cancelledByName,
-    dateCancelled
+    cancelledDate
 }) {
     return (
         <Grid container spacing={3}>
@@ -166,8 +166,8 @@ export default function VerificationTab({
             <Grid item xs={4}>
                 <InputField
                     label="Name"
-                    value={applyTCodeName}
-                    propertyName="applyTCodeName"
+                    value={applyTCodeByName}
+                    propertyName="applyTCodeByName"
                     disabled
                     fullWidth
                     onChange={handleFieldChange}
@@ -197,8 +197,8 @@ export default function VerificationTab({
             <Grid item xs={4}>
                 <InputField
                     label="Name"
-                    value={removeTCodeName}
-                    propertyName="removeTCodeName"
+                    value={removeTCodeByName}
+                    propertyName="removeTCodeByName"
                     fullWidth
                     disabled
                     onChange={handleFieldChange}
@@ -238,9 +238,9 @@ export default function VerificationTab({
             <Grid item xs={3}>
                 <DatePicker
                     label="Date"
-                    value={dateCancelled}
+                    value={cancelledDate}
                     onChange={value => {
-                        handleFieldChange('dateCancelled', value);
+                        handleFieldChange('cancelledDate', value);
                     }}
                 />
             </Grid>
@@ -264,14 +264,14 @@ VerificationTab.propTypes = {
     mcitVerifiedByName: PropTypes.string,
     mcitVerifiedDate: PropTypes.string,
     applyTCodeBy: PropTypes.number,
-    applyTCodeName: PropTypes.string,
+    applyTCodeByName: PropTypes.string,
     applyTCodeDate: PropTypes.string,
     removeTCodeBy: PropTypes.number,
-    removeTCodeName: PropTypes.string,
+    removeTCodeByName: PropTypes.string,
     removeTCodeDate: PropTypes.string,
     cancelledBy: PropTypes.number,
     cancelledByName: PropTypes.string,
-    dateCancelled: PropTypes.string
+    cancelledDate: PropTypes.string
 };
 
 VerificationTab.defaultProps = {
@@ -288,12 +288,12 @@ VerificationTab.defaultProps = {
     mcitVerifiedByName: null,
     mcitVerifiedDate: null,
     applyTCodeBy: null,
-    applyTCodeName: null,
+    applyTCodeByName: null,
     applyTCodeDate: null,
     removeTCodeBy: null,
-    removeTCodeName: null,
+    removeTCodeByName: null,
     removeTCodeDate: null,
     cancelledBy: null,
     cancelledByName: null,
-    dateCancelled: null
+    cancelledDate: null
 };

@@ -71,7 +71,6 @@ function MechPartSource({
     };
 
     const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
-    const [newUsagesRow, setNewUsagesRow] = useState({});
 
     const handleTabChange = (_, value) => {
         setTab(value);
@@ -117,6 +116,18 @@ function MechPartSource({
             setEditStatus('editing');
         }
         setMechPartSource({ ...mechPartSource, [propertyName]: newValue });
+    };
+
+    const handleVerificationFieldChange = (propertyName, newValue) => {
+        // user will change Date field of some base property
+        // remove Date from end of that property to work out which property they changed
+        const basePropertyName = propertyName.substring(0, propertyName.indexOf('Date'));
+        setMechPartSource({
+            ...mechPartSource,
+            [propertyName]: newValue,
+            [`${basePropertyName}By`]: userNumber, // mark their userNumber against the associate changedBy field
+            [`${basePropertyName}ByName`]: userName // mark their userName against the associated changedByName field
+        });
     };
 
     const handlePartFieldChange = (propertyName, newValue) => {
@@ -509,7 +520,7 @@ function MechPartSource({
                             )}
                             {tab === 8 && (
                                 <VerificationTab
-                                    handleFieldChange={handleFieldChange}
+                                    handleFieldChange={handleVerificationFieldChange}
                                     partCreatedBy={mechPartSource.partCreatedBy}
                                     partCreatedByName={mechPartSource.partCreatedByName}
                                     partCreatedDate={mechPartSource.partCreatedDate}
@@ -523,14 +534,16 @@ function MechPartSource({
                                     mcitVerifiedByName={mechPartSource.mcitVerifiedByName}
                                     mcitVerifiedDate={mechPartSource.mcitVerifiedDate}
                                     applyTCodeBy={mechPartSource.applyTCodeBy}
-                                    applyTCodeName={mechPartSource.applyTCodeName}
+                                    applyTCodeByName={mechPartSource.applyTCodeByName}
                                     applyTCodeDate={mechPartSource.applyTCodeDate}
                                     removeTCodeBy={mechPartSource.removeTCodeBy}
-                                    removeTCodeName={mechPartSource.removeTCodeName}
+                                    removeTCodeByName={mechPartSource.removeTCodeByName}
                                     removeTCodeDate={mechPartSource.removeTCodeDate}
                                     cancelledBy={mechPartSource.cancelledBy}
                                     cancelledByName={mechPartSource.cancelledByName}
-                                    dateCancelled={mechPartSource.dateCancelled}
+                                    cancelledDate={mechPartSource.cancelledDate}
+                                    userNumber={userNumber}
+                                    userName={userName}
                                 />
                             )}
                             <Grid item xs={12}>
