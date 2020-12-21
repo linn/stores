@@ -9,5 +9,7 @@
         public string RootProductName { get; set; }
 
         public string RootProductDescription { get; set; }
+
+        public int Id { get; set; }
     }
 }

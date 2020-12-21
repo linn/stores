@@ -132,7 +132,14 @@
                                 q => this.purchasingQuotesResourceBuilder.Build(q))
                                 .ToList(),
                             Usages = model.Usages?.Select(
-                                u => this.usageResourceBuilder.Build(u))
+                                (u, i) => new MechPartUsageResource
+                                         {
+                                             Id = i,
+                                             QuantityUsed = u.QuantityUsed,
+                                             RootProductName = u.RootProductName,
+                                             RootProductDescription = u.RootProduct?.Description,
+                                             SourceId = u.SourceId
+                                         })
                                 .ToList(),
                             Links = this.BuildLinks(model).ToArray(),
                             LifeExpectancyPart = model.LifeExpectancyPart,
