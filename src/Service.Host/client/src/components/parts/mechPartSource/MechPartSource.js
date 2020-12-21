@@ -157,7 +157,7 @@ function MechPartSource({
             [collectionName]: [
                 ...m[collectionName],
                 {
-                    sequence: getMaxFieldValue(mechPartSource[collectionName], idFieldName) + 1
+                    [idFieldName]: getMaxFieldValue(mechPartSource[collectionName], idFieldName) + 1
                 }
             ]
         }));
@@ -180,7 +180,6 @@ function MechPartSource({
             )
         }));
     };
-
     const resetRow = (current, collectionName, idFieldName) => {
         setMechPartSource(m => ({
             ...m,
@@ -217,13 +216,14 @@ function MechPartSource({
     };
 
     const handleRootProductChange = (rootProductName, newValue) => {
+        console.log(rootProductName, newValue);
         setMechPartSource(m => ({
             ...m,
             usages: m.usages.map(x =>
                 x.rootProductName === rootProductName
                     ? {
                           ...x,
-                          rootProduct: newValue.name,
+                          rootProductName: newValue.name,
                           rootProductDescription: newValue.description
                       }
                     : x
@@ -499,10 +499,12 @@ function MechPartSource({
                                 <UsagesTab
                                     handleRootProductChange={handleRootProductChange}
                                     usages={mechPartSource.usages}
-                                    saveRow={saveUsagesRow}
-                                    deleteRow={deleteUsagesRow}
-                                    newRow={newUsagesRow}
-                                    setNewRow={setNewUsagesRow}
+                                    deleteRow={id => deleteRow('usages', 'id', id)}
+                                    addNewRow={() => addRow('usages', 'id')}
+                                    resetRow={current => resetRow(current, 'usages', 'id')}
+                                    updateRow={(row, _, propertyName, newValue) =>
+                                        updateRow(row, propertyName, newValue, 'usages', 'id')
+                                    }
                                 />
                             )}
                             {tab === 8 && (

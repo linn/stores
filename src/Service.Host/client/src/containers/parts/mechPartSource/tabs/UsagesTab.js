@@ -10,8 +10,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-    searchParts: rootProductsActions.search,
-    clearPartsSearch: rootProductsActions.clearSearch
+    searchRootProducts: rootProductsActions.search,
+    clearRootProductsSearch: rootProductsActions.clearSearch
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(UsagesTab));

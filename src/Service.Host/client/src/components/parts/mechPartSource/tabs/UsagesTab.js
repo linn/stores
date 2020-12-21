@@ -6,22 +6,17 @@ import Grid from '@material-ui/core/Grid';
 function UsagesTab({
     usages,
     searchRootProducts,
-    clearhRootProductsSearch,
+    clearRootProductsSearch,
     rootProductsSearchResults,
     rootProductsSearchLoading,
     handleRootProductChange,
     deleteRow,
-    saveRow,
-    newRow,
-    setNewRow
+    resetRow,
+    addNewRow,
+    updateRow
 }) {
-    const selectRootProductSearchResult = (_propertyName, part, updatedItem) => {
-        handleRootProductChange(updatedItem.sequence, part);
-        setNewRow(() => ({
-            ...updatedItem,
-            partNumber: part.partNumber,
-            supplierName: part.description
-        }));
+    const selectRootProductSearchResult = (_propertyName, rootProduct, updatedItem) => {
+        handleRootProductChange(updatedItem.rootProductName, rootProduct);
     };
 
     const columns = [
@@ -31,8 +26,10 @@ function UsagesTab({
             type: 'search',
             editable: true,
             search: searchRootProducts,
-            clearSearch: clearhRootProductsSearch,
-            searchResults: rootProductsSearchResults,
+            clearSearch: clearRootProductsSearch,
+            searchResults: rootProductsSearchResults.filter(
+                p => !usages.some(u => u.rootProductName === p.name)
+            ),
             searchLoading: rootProductsSearchLoading,
             selectSearchResult: selectRootProductSearchResult,
             searchTitle: 'Search Parts'
@@ -54,13 +51,16 @@ function UsagesTab({
     return (
         <Grid item xs={12}>
             <EditableTable
+                groupEdit
                 columns={columns}
-                rows={usages.map(m => ({ ...m, id: m.rootProduct }))}
-                newRow={newRow}
-                createRow={saveRow}
-                saveRow={saveRow}
-                deleteRow={deleteRow}
-                closeEditingOnSave
+                rows={usages.map(m => ({ ...m, id: m.id }))}
+                deleteRow
+                removeRow={deleteRow}
+                resetRow={resetRow}
+                addRow={addNewRow}
+                tableValid={() => true}
+                updateRow={updateRow}
+                closeRowOnClickAway
             />
         </Grid>
     );
@@ -68,22 +68,21 @@ function UsagesTab({
 
 UsagesTab.propTypes = {
     handleRootProductChange: PropTypes.func.isRequired,
-    saveRow: PropTypes.func.isRequired,
     deleteRow: PropTypes.func.isRequired,
     usages: PropTypes.arrayOf(PropTypes.shape({})),
     searchRootProducts: PropTypes.func.isRequired,
-    clearhRootProductsSearch: PropTypes.func.isRequired,
+    clearRootProductsSearch: PropTypes.func.isRequired,
     rootProductsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     rootProductsSearchLoading: PropTypes.bool,
-    setNewRow: PropTypes.func.isRequired,
-    newRow: PropTypes.arrayOf(PropTypes.shape({}))
+    resetRow: PropTypes.func.isRequired,
+    addNewRow: PropTypes.func.isRequired,
+    updateRow: PropTypes.func.isRequired
 };
 
 UsagesTab.defaultProps = {
     usages: [],
     rootProductsSearchResults: [],
-    rootProductsSearchLoading: false,
-    newRow: []
+    rootProductsSearchLoading: false
 };
 
 export default UsagesTab;
