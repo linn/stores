@@ -425,7 +425,7 @@
                          {
                              QuantityUsed = u.QuantityUsed,
                              RootProductName = u.RootProductName,
-                             RootProduct = u.RootProductName == null
+                             RootProduct = u.RootProductName != null
                                                ? this.rootProductRepository.FindBy(p => p.Name == u.RootProductName)
                                                : null
                          }).ToList();
