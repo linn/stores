@@ -56,8 +56,7 @@ function SuppliersTab({
                     id: m.sequence,
                     supplierId: m.supplierId?.toString()
                 }))}
-                deleteRow
-                removeRow={deleteRow}
+                deleteRow={deleteRow}
                 resetRow={resetRow}
                 addRow={addNewRow}
                 tableValid={() => true}

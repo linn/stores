@@ -119,14 +119,18 @@ function MechPartSource({
     };
 
     const handleVerificationFieldChange = (propertyName, newValue) => {
+        setEditStatus('edit');
+
         // user will change Date field of some base property
-        // remove Date from end of that property to work out which property they changed
+        // remove Date from end of that propertyName to work out which property they changed
         const basePropertyName = propertyName.substring(0, propertyName.indexOf('Date'));
+
+        // now upate the changeBy and changedByName fields that correspond to that date
         setMechPartSource({
             ...mechPartSource,
             [propertyName]: newValue,
-            [`${basePropertyName}By`]: userNumber, // mark their userNumber against the associate changedBy field
-            [`${basePropertyName}ByName`]: userName // mark their userName against the associated changedByName field
+            [`${basePropertyName}By`]: userNumber,
+            [`${basePropertyName}ByName`]: userName
         });
     };
 
