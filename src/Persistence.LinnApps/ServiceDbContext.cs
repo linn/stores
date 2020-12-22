@@ -372,7 +372,6 @@
             e.Property(s => s.LibraryRef).HasColumnName("LIBRARY_REF").HasMaxLength(30);
             e.Property(s => s.RkmCode).HasColumnName("RESISTANCE_CHAR").HasMaxLength(18);
             e.HasMany(s => s.PurchasingQuotes).WithOne(q => q.Source).HasForeignKey(q => q.SourceId);
-            
             e.HasOne(s => s.PartCreatedBy).WithMany(m => m.PartsCreatedSourceRecords)
                 .HasForeignKey(s => s.PartCreatedById);
             e.Property(s => s.PartCreatedById).HasColumnName("PCIT_PART_CREATED_BY");
@@ -382,29 +381,22 @@
                 .HasForeignKey(s => s.VerifiedById);
             e.Property(s => s.VerifiedById).HasColumnName("PURCH_VERIFIED_BY");
             e.Property(s => s.VerifiedDate).HasColumnName("PURCH_VERIFIED_DATE");
-
             e.HasOne(s => s.QualityVerifiedBy).WithMany(m => m.SourcesQualityVerified)
                 .HasForeignKey(s => s.QualityVerifiedById);
             e.Property(s => s.QualityVerifiedById).HasColumnName("QUALITY_VERIFIED_BY");
             e.Property(s => s.QualityVerifiedDate).HasColumnName("QUALITY_VERIFIED_DATE");
-
-
             e.HasOne(s => s.McitVerifiedBy).WithMany(m => m.SourcesVerifiedMcit)
                 .HasForeignKey(s => s.McitVerifiedById);
             e.Property(s => s.McitVerifiedById).HasColumnName("MCIT_VERIFIED_BY");
             e.Property(s => s.McitVerifiedDate).HasColumnName("MCIT_VERIFIED_DATE");
-
             e.HasOne(s => s.ApplyTCodeBy).WithMany(m => m.SourcesTCodeApplied)
                 .HasForeignKey(s => s.ApplyTCodeId);
             e.Property(s => s.ApplyTCodeId).HasColumnName("APPLY_T_CODE_BY");
             e.Property(s => s.ApplyTCodeDate).HasColumnName("APPLY_T_CODE_DATE");
-
-
             e.HasOne(s => s.RemoveTCodeBy).WithMany(m => m.SourcesTCodeRemoved)
                 .HasForeignKey(s => s.RemoveTCodeId);
             e.Property(s => s.RemoveTCodeId).HasColumnName("REMOVE_T_CODE_BY");
             e.Property(s => s.RemoveTCodeDate).HasColumnName("REMOVE_T_CODE_DATE");
-
             e.HasOne(s => s.CancelledBy).WithMany(m => m.SourcesCancelled)
                 .HasForeignKey(s => s.CancelledById);
             e.Property(s => s.CancelledById).HasColumnName("CANCELLED_BY");
