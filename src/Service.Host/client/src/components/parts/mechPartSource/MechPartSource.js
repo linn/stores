@@ -529,6 +529,9 @@ function MechPartSource({
                                             'id'
                                         );
                                     }}
+                                    handleFieldChange={handleFieldChange}
+                                    configuration={mechPartSource.configuration}
+                                    lifeExpectancyPart={mechPartSource.lifeExpectancyPart}
                                 />
                             )}
                             {tab === 8 && (

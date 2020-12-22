@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EditableTable } from '@linn-it/linn-form-components-library';
+import { EditableTable, InputField } from '@linn-it/linn-form-components-library';
 import Grid from '@material-ui/core/Grid';
 
 function PurchasingQuotesTab({
@@ -18,7 +18,10 @@ function PurchasingQuotesTab({
     deleteRow,
     resetRow,
     addNewRow,
-    updateRow
+    updateRow,
+    handleFieldChange,
+    configuration,
+    lifeExpectancyPart
 }) {
     const selectSupplierSearchResult = (_propertyName, supplier, updatedItem) => {
         handleSupplierChange(updatedItem.id, supplier);
@@ -94,23 +97,43 @@ function PurchasingQuotesTab({
     ];
 
     return (
-        <Grid item xs={12}>
-            <EditableTable
-                groupEdit
-                columns={columns}
-                rows={purchasingQuotes.map(m => ({
-                    ...m,
-                    id: m.id,
-                    name: m.id.toString()
-                }))}
-                removeRow={deleteRow}
-                resetRow={resetRow}
-                addRow={addNewRow}
-                tableValid={() => true}
-                updateRow={updateRow}
-                closeRowOnClickAway
-            />
-        </Grid>
+        <>
+            <Grid item xs={12}>
+                <EditableTable
+                    groupEdit
+                    columns={columns}
+                    rows={purchasingQuotes.map(m => ({
+                        ...m,
+                        id: m.id,
+                        name: m.id.toString()
+                    }))}
+                    removeRow={deleteRow}
+                    resetRow={resetRow}
+                    addRow={addNewRow}
+                    tableValid={() => true}
+                    updateRow={updateRow}
+                    closeRowOnClickAway
+                />
+            </Grid>
+            <Grid item xs={6}>
+                <InputField
+                    value={configuration}
+                    propertyName="configuration"
+                    fullWidth
+                    onChange={handleFieldChange}
+                    label="Configuration"
+                />
+            </Grid>
+            <Grid item xs={6}>
+                <InputField
+                    value={lifeExpectancyPart}
+                    propertyName="lifeExpectancyPart"
+                    fullWidth
+                    onChange={handleFieldChange}
+                    label="Life Expectancy Part"
+                />
+            </Grid>{' '}
+        </>
     );
 }
 
@@ -129,7 +152,10 @@ PurchasingQuotesTab.propTypes = {
     manufacturersSearchLoading: PropTypes.bool,
     suppliersSearchLoading: PropTypes.bool,
     updateRow: PropTypes.func.isRequired,
-    addNewRow: PropTypes.func.isRequired
+    addNewRow: PropTypes.func.isRequired,
+    handleFieldChange: PropTypes.func.isRequired,
+    configuration: PropTypes.string,
+    lifeExpectancyPart: PropTypes.string
 };
 
 PurchasingQuotesTab.defaultProps = {
@@ -137,7 +163,9 @@ PurchasingQuotesTab.defaultProps = {
     suppliersSearchResults: [],
     suppliersSearchLoading: false,
     manufacturersSearchResults: [],
-    manufacturersSearchLoading: false
+    manufacturersSearchLoading: false,
+    configuration: null,
+    lifeExpectancyPart: null
 };
 
 export default PurchasingQuotesTab;
