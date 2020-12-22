@@ -31,7 +31,6 @@
 
         public IEnumerable<MechPartSource> SourcesQualityVerified { get; set; }
 
-
         public IEnumerable<MechPartSource> SourcesTCodeApplied { get; set; }
 
         public IEnumerable<MechPartSource> SourcesTCodeRemoved { get; set; }
