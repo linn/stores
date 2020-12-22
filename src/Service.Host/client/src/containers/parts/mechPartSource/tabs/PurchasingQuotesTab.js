@@ -9,12 +9,12 @@ const mapStateToProps = state => ({
     suppliersLoading: suppliersSelectors.getLoading(state),
     suppliersSearchResults: suppliersSelectors
         .getSearchItems(state)
-        .map(c => ({ name: c.id, description: c.name })),
+        .map(c => ({ name: c.id.toString(), id: c.id, description: c.name })),
     suppliersSearchLoading: suppliersSelectors.getSearchLoading(state),
     manufacturersLoading: manufacturersSelectors.getLoading(state),
     manufacturersSearchResults: manufacturersSelectors
         .getSearchItems(state)
-        .map(c => ({ name: c.id, description: c.name })),
+        .map(c => ({ name: c.code, id: c.code, description: c.name })),
     manufacturersSearchLoading: manufacturersSelectors.getSearchLoading(state)
 });
 

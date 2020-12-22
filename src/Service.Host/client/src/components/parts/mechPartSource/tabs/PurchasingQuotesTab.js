@@ -66,7 +66,7 @@ function PurchasingQuotesTab({
             editable: true,
             search: searchManufacturers,
             clearSearch: clearManufacturersSearch,
-            searchResults: manufacturersSearchResults.map(m => ({ ...m, id: m.code })),
+            searchResults: manufacturersSearchResults,
             searchLoading: manufacturersSearchLoading,
             selectSearchResult: selectManufacturerSearchResult,
             searchTitle: 'Search Manufacturers',
@@ -100,10 +100,10 @@ function PurchasingQuotesTab({
                 columns={columns}
                 rows={purchasingQuotes.map(m => ({
                     ...m,
-                    id: m.id
+                    id: m.id,
+                    name: m.id.toString()
                 }))}
                 removeRow={deleteRow}
-                deleteRow={() => true}
                 resetRow={resetRow}
                 addRow={addNewRow}
                 tableValid={() => true}

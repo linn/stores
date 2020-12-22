@@ -189,7 +189,6 @@ function MechPartSource({
     };
 
     const updateRow = (row, propertyName, newValue, collectionName, idFieldName) => {
-        console.log(row, propertyName, newValue, collectionName, idFieldName);
         setEditStatus('edit');
         setMechPartSource(m => ({
             ...m,
@@ -321,6 +320,7 @@ function MechPartSource({
                                 value={tab}
                                 onChange={handleTabChange}
                                 indicatorColor="primary"
+                                variant="scrollable"
                                 scrollButtons="on"
                                 textColor="primary"
                                 style={{ paddingBottom: '40px' }}
@@ -524,7 +524,6 @@ function MechPartSource({
                                         resetRow(current, 'purchasingQuotes', 'id')
                                     }
                                     updateRow={(row, _, propertyName, newValue) => {
-                                        console.log(propertyName, newValue);
                                         updateRow(
                                             row,
                                             propertyName,

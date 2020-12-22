@@ -18,7 +18,7 @@
 
         public Manufacturer FindById(string key)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.Manufacturers.Where(m => m.Code == key).ToList().FirstOrDefault();
         }
 
         public IQueryable<Manufacturer> FindAll()

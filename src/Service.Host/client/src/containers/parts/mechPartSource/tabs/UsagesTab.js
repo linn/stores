@@ -5,7 +5,9 @@ import rootProductsSelectors from '../../../../selectors/rootProductsSelectors';
 import UsagesTab from '../../../../components/parts/mechPartSource/tabs/UsagesTab';
 
 const mapStateToProps = state => ({
-    rootProductsSearchResults: rootProductsSelectors.getSearchItems(state),
+    rootProductsSearchResults: rootProductsSelectors
+        .getSearchItems(state)
+        .map(p => ({ id: p.name, name: p.name, description: p.description })),
     rootProductsSearchLoading: rootProductsSelectors.getSearchLoading(state)
 });
 

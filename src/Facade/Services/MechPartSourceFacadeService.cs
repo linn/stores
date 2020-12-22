@@ -230,7 +230,7 @@
                                                                                   RohsCompliant = q.RohsCompliant,
                                                                                   UnitPrice = q.UnitPrice,
                                                                                   Supplier = this.supplierRepository.FindBy(s => s.Id == q.SupplierId)
-                                                                              }),
+                                                                              }).ToList(),
 
                 Usages = resource.Usages?.Select(u => new MechPartUsage
                                                           {
@@ -418,7 +418,7 @@
                              RohsCompliant = q.RohsCompliant,
                              UnitPrice = q.UnitPrice,
                              Supplier = this.supplierRepository.FindBy(s => s.Id == q.SupplierId)
-                         });
+                         }).ToList();
 
             entity.Usages = resource.Usages?.Select(
                 u => new MechPartUsage

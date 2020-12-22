@@ -162,7 +162,7 @@
 
         public string RkmCode { get; set; }
 
-        public IEnumerable<MechPartPurchasingQuote> PurchasingQuotes { get; set; }
+        public ICollection<MechPartPurchasingQuote> PurchasingQuotes { get; set; }
 
         public Employee PartCreatedBy { get; set; } 
 

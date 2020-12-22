@@ -98,7 +98,6 @@ function ManufacturersTab({
                 groupEdit
                 columns={columns}
                 rows={manufacturers.map(m => ({ ...m, id: m.sequence }))}
-                deleteRow={() => true}
                 removeRow={deleteRow}
                 resetRow={resetRow}
                 addRow={addNewRow}
