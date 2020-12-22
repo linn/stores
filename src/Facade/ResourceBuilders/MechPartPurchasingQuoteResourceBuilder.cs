@@ -25,7 +25,6 @@
 
         object IResourceBuilder<MechPartPurchasingQuote>.Build(MechPartPurchasingQuote q) => this.Build(q);
 
-
         public string GetLocation(MechPartPurchasingQuote model)
         {
             throw new System.NotImplementedException();
