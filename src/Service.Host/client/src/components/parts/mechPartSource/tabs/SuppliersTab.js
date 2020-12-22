@@ -56,12 +56,13 @@ function SuppliersTab({
                     id: m.sequence,
                     supplierId: m.supplierId?.toString()
                 }))}
-                deleteRow={deleteRow}
+                removeRow={deleteRow}
+                //deleteRow={() => true}
                 resetRow={resetRow}
                 addRow={addNewRow}
                 tableValid={() => true}
                 updateRow={updateRow}
-                closeRowOnClickAway
+                //closeRowOnClickAway
             />
         </Grid>
     );

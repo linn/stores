@@ -22,6 +22,7 @@ import ParamDataTab from '../../../containers/parts/mechPartSource/tabs/ParamDat
 import CadDataTab from './tabs/CadDataTab';
 import UsagesTab from '../../../containers/parts/mechPartSource/tabs/UsagesTab';
 import VerificationTab from './tabs/VerificationTab';
+import PurchasingQuotesTab from '../../../containers/parts/mechPartSource/tabs/PurchasingQuotesTab';
 
 function MechPartSource({
     editStatus,
@@ -66,8 +67,9 @@ function MechPartSource({
         manufacturers: 4,
         paramData: 5,
         cadData: 6,
-        usages: 7,
-        verification: 8
+        quotes: 7,
+        usages: 8,
+        verification: 9
     };
 
     const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
@@ -187,6 +189,7 @@ function MechPartSource({
     };
 
     const updateRow = (row, propertyName, newValue, collectionName, idFieldName) => {
+        console.log(row, propertyName, newValue, collectionName, idFieldName);
         setEditStatus('edit');
         setMechPartSource(m => ({
             ...m,
@@ -231,7 +234,6 @@ function MechPartSource({
     };
 
     const handleRootProductChange = (rootProductName, newValue) => {
-        console.log(rootProductName, newValue);
         setMechPartSource(m => ({
             ...m,
             usages: m.usages.map(x =>
@@ -333,6 +335,7 @@ function MechPartSource({
                                     disabled={mechPartSource.mechanicalOrElectrical !== 'E'}
                                 />
                                 <Tab label="Cad Data" />
+                                <Tab label="Quotes" />
                                 <Tab label="Usages" />
                                 <Tab label="Verification" />
                             </Tabs>
@@ -511,6 +514,28 @@ function MechPartSource({
                                 />
                             )}
                             {tab === 7 && (
+                                <PurchasingQuotesTab
+                                    handleManufacturerChange={handleManufacturerChange}
+                                    handleSupplierChange={handleSupplierChange}
+                                    purchasingQuotes={mechPartSource.purchasingQuotes}
+                                    deleteRow={id => deleteRow('purchasingQuotes', 'id', id)}
+                                    addNewRow={() => addRow('purchasingQuotes', 'id')}
+                                    resetRow={current =>
+                                        resetRow(current, 'purchasingQuotes', 'id')
+                                    }
+                                    updateRow={(row, _, propertyName, newValue) => {
+                                        console.log(propertyName, newValue);
+                                        updateRow(
+                                            row,
+                                            propertyName,
+                                            newValue,
+                                            'purchasingQuotes',
+                                            'id'
+                                        );
+                                    }}
+                                />
+                            )}
+                            {tab === 8 && (
                                 <UsagesTab
                                     handleRootProductChange={handleRootProductChange}
                                     usages={mechPartSource.usages}
@@ -522,7 +547,7 @@ function MechPartSource({
                                     }
                                 />
                             )}
-                            {tab === 8 && (
+                            {tab === 9 && (
                                 <VerificationTab
                                     handleFieldChange={handleVerificationFieldChange}
                                     partCreatedBy={mechPartSource.partCreatedBy}

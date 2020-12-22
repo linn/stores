@@ -132,19 +132,17 @@
                                 (q, i) =>
                                     {
                                         var resource = this.purchasingQuotesResourceBuilder.Build(q);
-                                        resource.Id = 1;
+                                        resource.Id = i;
                                         return resource;
                                     })
                                 .ToList(),
                             Usages = model.Usages?.Select(
-                                (u, i) => new MechPartUsageResource
-                                         {
-                                             Id = i,
-                                             QuantityUsed = u.QuantityUsed,
-                                             RootProductName = u.RootProductName,
-                                             RootProductDescription = u.RootProduct?.Description,
-                                             SourceId = u.SourceId
-                                         })
+                                    (u, i) =>
+                                        {
+                                            var resource = this.usageResourceBuilder.Build(u);
+                                            resource.Id = i;
+                                            return resource;
+                                        })
                                 .ToList(),
                             Links = this.BuildLinks(model).ToArray(),
                             LifeExpectancyPart = model.LifeExpectancyPart,

@@ -11,6 +11,7 @@
             return new MechPartPurchasingQuoteResource
                        {
                            SupplierId = model.SupplierId,
+                           SupplierName = model.Supplier?.Name,
                            LeadTime = model.LeadTime,
                            ManufacturerCode = model.ManufacturerCode,
                            ManufacturerDescription = model.Manufacturer?.Description,

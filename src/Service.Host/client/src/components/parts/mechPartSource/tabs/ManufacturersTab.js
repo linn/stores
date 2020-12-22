@@ -65,7 +65,7 @@ function ManufacturersTab({
             id: 'rohsCompliant',
             type: 'dropdown',
             editable: true,
-            options: ['Y', 'N']
+            options: ['Y', 'N', 'F']
         },
         {
             title: 'Approved By',
@@ -98,7 +98,7 @@ function ManufacturersTab({
                 groupEdit
                 columns={columns}
                 rows={manufacturers.map(m => ({ ...m, id: m.sequence }))}
-                deleteRow
+                deleteRow={() => true}
                 removeRow={deleteRow}
                 resetRow={resetRow}
                 addRow={addNewRow}

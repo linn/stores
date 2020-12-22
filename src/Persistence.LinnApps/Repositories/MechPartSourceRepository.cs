@@ -19,21 +19,18 @@
 
         public MechPartSource FindById(int key)
         {
-            var result = 
-                this.serviceDbContext.MechPartSources.Where(s => s.Id == key)
-                .Include(s => s.ProposedBy)
-                .Include(s => s.PartToBeReplaced)
-                .Include(s => s.Part).ThenInclude(p => p.DataSheets)
+            // for some reason the query doesn't bring back the usages without this line
+            var usages = this.serviceDbContext.MechPartUsages.Where(u => u.SourceId == key);
+
+            var result = this.serviceDbContext.MechPartSources.Where(s => s.Id == key).Include(s => s.ProposedBy)
+                .Include(s => s.PartToBeReplaced).Include(s => s.Part).ThenInclude(p => p.DataSheets)
                 .Include(s => s.MechPartManufacturerAlts).ThenInclude(m => m.Manufacturer)
-                .Include(s => s.MechPartManufacturerAlts).ThenInclude(m => m.ApprovedBy)
-                .Include(s => s.Usages).ThenInclude(u => u.RootProduct)
-                .Include(s => s.PartCreatedBy)
-                .Include(s => s.VerifiedBy)
-                .Include(s => s.McitVerifiedBy)
-                .Include(s => s.ApplyTCodeBy)
-                .Include(s => s.RemoveTCodeBy)
-                .Include(s => s.CancelledBy)
-                .Include(s => s.MechPartAlts).ThenInclude(a => a.Supplier);
+                .Include(s => s.MechPartManufacturerAlts).ThenInclude(m => m.ApprovedBy).Include(s => s.Usages)
+                .ThenInclude(u => u.RootProduct).Include(s => s.PartCreatedBy).Include(s => s.VerifiedBy)
+                .Include(s => s.McitVerifiedBy).Include(s => s.ApplyTCodeBy).Include(s => s.RemoveTCodeBy)
+                .Include(s => s.CancelledBy).Include(s => s.MechPartAlts).ThenInclude(a => a.Supplier)
+                .Include(s => s.PurchasingQuotes).ThenInclude(q => q.Supplier)
+                .Include(s => s.PurchasingQuotes).ThenInclude(q => q.Manufacturer);
 
             return result.ToList().FirstOrDefault();
         }

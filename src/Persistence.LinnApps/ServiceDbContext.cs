@@ -823,6 +823,7 @@
             e.Property(q => q.ManufacturersPartNumber).HasColumnName("MANUFACTURERS_PART_NUMBER").HasMaxLength(30);
             e.Property(q => q.RohsCompliant).HasColumnName("ROHS_COMPLIANT").HasMaxLength(1);
             e.Property(q => q.UnitPrice).HasColumnName("UNIT_PRICE");
+            e.Property(q => q.Moq).HasColumnName("MOQ");
         }
 
         private void BuildMechPartUsages(ModelBuilder builder)
