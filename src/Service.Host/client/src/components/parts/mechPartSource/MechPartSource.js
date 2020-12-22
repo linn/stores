@@ -157,9 +157,6 @@ function MechPartSource({
         });
     };
 
-    // this function gets the current max val for a specified field in an array of objects with a value for that field
-    // useful for getting the next 'id' for a new row added to a table, as seen below where 'sequence' is the id field
-    // returns 0 if no entries
     const getMaxFieldValue = (objectArray, fieldName) =>
         objectArray?.length > 0
             ? objectArray.reduce((prev, current) =>

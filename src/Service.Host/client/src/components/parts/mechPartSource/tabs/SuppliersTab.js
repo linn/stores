@@ -57,12 +57,11 @@ function SuppliersTab({
                     supplierId: m.supplierId?.toString()
                 }))}
                 removeRow={deleteRow}
-                //deleteRow={() => true}
                 resetRow={resetRow}
                 addRow={addNewRow}
                 tableValid={() => true}
                 updateRow={updateRow}
-                //closeRowOnClickAway
+                closeRowOnClickAway
             />
         </Grid>
     );

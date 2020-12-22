@@ -131,6 +131,7 @@ PurchasingQuotesTab.propTypes = {
     updateRow: PropTypes.func.isRequired,
     addNewRow: PropTypes.func.isRequired
 };
+
 PurchasingQuotesTab.defaultProps = {
     purchasingQuotes: [],
     suppliersSearchResults: [],

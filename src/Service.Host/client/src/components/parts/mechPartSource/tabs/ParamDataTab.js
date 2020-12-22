@@ -48,7 +48,7 @@ function ParamDataTab({
     const ohmUnitMultipliers = {
         KΩ: 1000,
         MΩ: 1000000,
-        Ω: 10
+        Ω: 1
     };
     const faradUnitMultipliers = {
         F: 1,

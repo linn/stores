@@ -19,7 +19,6 @@
 
         object IResourceBuilder<MechPartUsage>.Build(MechPartUsage q) => this.Build(q);
 
-
         public string GetLocation(MechPartUsage model)
         {
             throw new System.NotImplementedException();

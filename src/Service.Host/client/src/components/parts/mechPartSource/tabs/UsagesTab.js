@@ -55,7 +55,6 @@ function UsagesTab({
                 columns={columns}
                 rows={usages.map(m => ({ ...m, id: m.id }))}
                 removeRow={deleteRow}
-                deleteRow={() => true}
                 resetRow={resetRow}
                 addRow={addNewRow}
                 tableValid={() => true}
