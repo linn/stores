@@ -48,7 +48,7 @@ function MechPartSource({
             ? {
                   proposedBy: userNumber,
                   proposedByName: userName,
-                  dateEntered: new Date(),
+                  dateEntered: new Date().toISOString(),
                   createPart: true,
                   mechPartAlts: [],
                   mechPartManufacturerAlts: [],
