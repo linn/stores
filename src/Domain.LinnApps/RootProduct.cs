@@ -13,6 +13,6 @@
 
         public DateTime? DateInvalid { get; set; }
 
-        public IEnumerable<MechPartUsage> UsagesRootProductOn { get; set; }
+        public ICollection<MechPartUsage> UsagesRootProductOn { get; set; }
     }
 }

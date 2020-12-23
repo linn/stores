@@ -822,7 +822,7 @@
         {
             var e = builder.Entity<MechPartUsage>().ToTable("MECH_PART_USAGES");
             e.Property(u => u.RootProductName).HasColumnName("ROOT_PRODUCT").HasMaxLength(14);
-            e.HasKey(u => new { u.SourceId, RootProductPartNumber = u.RootProductName });
+            e.HasKey(u => new { u.SourceId, u.RootProductName });
             e.Property(u => u.SourceId).HasColumnName("MS_ID");
             e.HasOne(u => u.Source).WithMany(s => s.Usages).HasForeignKey(u => u.SourceId);
             e.Property(u => u.QuantityUsed).HasColumnName("QTY_USED");
