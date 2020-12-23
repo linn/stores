@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
+    using Linn.Stores.Domain.LinnApps.Parts;
+
     public class WwdWork
     {
         public int JobId { get; set; }
@@ -17,5 +19,7 @@
         public int? LocationId { get; set; }
 
         public string Remarks { get; set; }
+
+        public Part Part { get; set; }
     }
 }

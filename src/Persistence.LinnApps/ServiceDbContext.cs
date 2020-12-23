@@ -602,6 +602,7 @@
             q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
             q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
             q.Property(e => e.Remarks).HasColumnName("REMARKS");
+            q.HasOne(e => e.Part).WithMany(p => p.WwdWorks).HasForeignKey("PART_NUMBER");
         }
 
         private void QueryStockLocators(ModelBuilder builder)
