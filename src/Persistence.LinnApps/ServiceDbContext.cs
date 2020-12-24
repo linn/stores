@@ -92,7 +92,6 @@
 
         public DbSet<MechPartPurchasingQuote> MechPartPurchasingQuotes { get; set; }
 
-
         public DbQuery<PartDataSheetValues> PartDataSheetValues { get; set; }
 
         public DbSet<TqmsCategory> TqmsCategories { get; set; }
