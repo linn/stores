@@ -212,9 +212,9 @@
 
         public string CancelledDate { get; set; }
 
-        public List<MechPartPurchasingQuoteResource> PurchasingQuotes { get; set; }
+        public IEnumerable<MechPartPurchasingQuoteResource> PurchasingQuotes { get; set; }
 
-        public List<MechPartUsageResource> Usages { get; set; }
+        public IEnumerable<MechPartUsageResource> Usages { get; set; }
 
         public string LifeExpectancyPart { get; set; }
 
