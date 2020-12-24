@@ -13,7 +13,6 @@
         {
             return new ParcelResource
             {
-
                 ParcelNumber = parcel.ParcelNumber,
                 SupplierId = parcel.SupplierId,
                 SupplierName = parcel.SupplierName,
@@ -33,7 +32,7 @@
                 DateCancelled = parcel.DateCancelled.ToString("o"),
                 CancellationReason = parcel.CancellationReason,
                 CancelledBy = parcel.CancelledBy,
-                Links = BuildLinks(parcel).ToArray()
+                Links = this.BuildLinks(parcel).ToArray()
             };
         }
 

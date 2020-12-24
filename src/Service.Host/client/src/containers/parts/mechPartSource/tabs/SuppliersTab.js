@@ -7,7 +7,7 @@ const mapStateToProps = state => ({
     loading: suppliersSelectors.getLoading(state),
     suppliersSearchResults: suppliersSelectors
         .getSearchItems(state)
-        .map(c => ({ name: c.id, description: c.name })),
+        .map(c => ({ id: c.id, name: c.id.toString(), description: c.name })),
     suppliersSearchLoading: suppliersSelectors.getSearchLoading(state)
 });
 

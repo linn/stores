@@ -115,7 +115,6 @@
 
             this.tqmsCategoriesService = tqmsCategoriesService;
             this.Get("/inventory/parts/tqms-categories", _ => this.GetTqmsCategories());
-
         }
 
         private object GetPart(int id)

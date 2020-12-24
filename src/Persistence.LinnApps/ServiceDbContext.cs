@@ -22,7 +22,7 @@
 
         public DbSet<Department> Departments { get; set; }
 
-        public DbQuery<RootProduct> RootProducts { get; set; }
+        public DbSet<RootProduct> RootProducts { get; set; }
 
         public DbSet<AccountingCompany> AccountingCompanies { get; set; }
 
@@ -90,9 +90,13 @@
 
         public DbSet<PartParamData> PartParamDataSheets { get; set; }
 
+        public DbSet<MechPartPurchasingQuote> MechPartPurchasingQuotes { get; set; }
+
         public DbQuery<PartDataSheetValues> PartDataSheetValues { get; set; }
 
         public DbSet<TqmsCategory> TqmsCategories { get; set; }
+
+        public DbSet<MechPartUsage> MechPartUsages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -102,7 +106,7 @@
             this.BuildProductAnalysisCodes(builder);
             this.BuildAccountingCompanies(builder);
             this.BuildEmployees(builder);
-            this.QueryRootProducts(builder);
+            this.BuildRootProducts(builder);
             this.BuildSosOptions(builder);
             this.BuildSernosSequences(builder);
             this.QueryUnitsOfMeasure(builder);
@@ -137,6 +141,8 @@
             this.BuildSosAllocDetails(builder);
             this.BuildTqmsCategories(builder);
             this.BuildSalesOutlets(builder);
+            this.BuildMechPartPurchasingQuotes(builder);
+            this.BuildMechPartUsages(builder);
             base.OnModelCreating(builder);
         }
 
@@ -364,6 +370,38 @@
             e.Property(s => s.FootprintRef).HasColumnName("FOOTPRINT_REF").HasMaxLength(30);
             e.Property(s => s.LibraryRef).HasColumnName("LIBRARY_REF").HasMaxLength(30);
             e.Property(s => s.RkmCode).HasColumnName("RESISTANCE_CHAR").HasMaxLength(18);
+            e.HasMany(s => s.PurchasingQuotes).WithOne(q => q.Source).HasForeignKey(q => q.SourceId);
+            e.HasOne(s => s.PartCreatedBy).WithMany(m => m.PartsCreatedSourceRecords)
+                .HasForeignKey(s => s.PartCreatedById);
+            e.Property(s => s.PartCreatedById).HasColumnName("PCIT_PART_CREATED_BY");
+            e.Property(s => s.PartCreatedDate).HasColumnName("PCIT_PART_CREATED_DATE");
+
+            e.HasOne(s => s.VerifiedBy).WithMany(m => m.SourcesVerified)
+                .HasForeignKey(s => s.VerifiedById);
+            e.Property(s => s.VerifiedById).HasColumnName("PURCH_VERIFIED_BY");
+            e.Property(s => s.VerifiedDate).HasColumnName("PURCH_VERIFIED_DATE");
+            e.HasOne(s => s.QualityVerifiedBy).WithMany(m => m.SourcesQualityVerified)
+                .HasForeignKey(s => s.QualityVerifiedById);
+            e.Property(s => s.QualityVerifiedById).HasColumnName("QUALITY_VERIFIED_BY");
+            e.Property(s => s.QualityVerifiedDate).HasColumnName("QUALITY_VERIFIED_DATE");
+            e.HasOne(s => s.McitVerifiedBy).WithMany(m => m.SourcesVerifiedMcit)
+                .HasForeignKey(s => s.McitVerifiedById);
+            e.Property(s => s.McitVerifiedById).HasColumnName("MCIT_VERIFIED_BY");
+            e.Property(s => s.McitVerifiedDate).HasColumnName("MCIT_VERIFIED_DATE");
+            e.HasOne(s => s.ApplyTCodeBy).WithMany(m => m.SourcesTCodeApplied)
+                .HasForeignKey(s => s.ApplyTCodeId);
+            e.Property(s => s.ApplyTCodeId).HasColumnName("APPLY_T_CODE_BY");
+            e.Property(s => s.ApplyTCodeDate).HasColumnName("APPLY_T_CODE_DATE");
+            e.HasOne(s => s.RemoveTCodeBy).WithMany(m => m.SourcesTCodeRemoved)
+                .HasForeignKey(s => s.RemoveTCodeId);
+            e.Property(s => s.RemoveTCodeId).HasColumnName("REMOVE_T_CODE_BY");
+            e.Property(s => s.RemoveTCodeDate).HasColumnName("REMOVE_T_CODE_DATE");
+            e.HasOne(s => s.CancelledBy).WithMany(m => m.SourcesCancelled)
+                .HasForeignKey(s => s.CancelledById);
+            e.Property(s => s.CancelledById).HasColumnName("CANCELLED_BY");
+            e.Property(s => s.DateCancelled).HasColumnName("DATE_CANCELLED");
+            e.Property(s => s.LifeExpectancyPart).HasColumnName("LIFE_EXPECTANCY_PART").HasMaxLength(50);
+            e.Property(s => s.Configuration).HasColumnName("CONFIGURATION").HasMaxLength(200);
         }
 
         private void BuildMechPartAlts(ModelBuilder builder)
@@ -477,10 +515,11 @@
             e.Property(p => p.Description).HasColumnName("DESCRIPTION").HasMaxLength(100);
         }
 
-        private void QueryRootProducts(ModelBuilder builder)
+        private void BuildRootProducts(ModelBuilder builder)
         {
-            var q = builder.Query<RootProduct>().ToView("ROOT_PRODS");
+            var q = builder.Entity<RootProduct>().ToTable("ROOT_PRODS");
             q.Property(p => p.Name).HasColumnName("ROOT_PRODUCT");
+            q.HasKey(p => p.Name);
             q.Property(p => p.Description).HasColumnName("DESCRIPTION");
             q.Property(p => p.DateInvalid).HasColumnName("DATE_INVALID");
         }
@@ -761,6 +800,34 @@
             e.HasKey(c => c.Name);
             e.Property(c => c.Name).HasColumnName("TQMS_CATEGORY");
             e.Property(c => c.Description).HasColumnName("DESCRIPTION");
+        }
+
+        private void BuildMechPartPurchasingQuotes(ModelBuilder builder)
+        {
+            var e = builder.Entity<MechPartPurchasingQuote>().ToTable("MECH_PART_QUOTES");
+            e.HasKey(q => new { q.SourceId, q.SupplierId });
+            e.Property(q => q.SourceId).HasColumnName("MS_ID");
+            e.Property(q => q.SupplierId).HasColumnName("SUPPLIER_ID");
+            e.HasOne(q => q.Supplier).WithMany(s => s.PurchasingQuotesSupplierOn).HasForeignKey(q => q.SupplierId);
+            e.Property(q => q.LeadTime).HasColumnName("LEAD_TIME");
+            e.Property(q => q.ManufacturerCode).HasColumnName("MANUFACTURERS_CODE").HasMaxLength(6);
+            e.HasOne(q => q.Manufacturer).WithMany(m => m.PurchasingQuotes).HasForeignKey(q => q.ManufacturerCode);
+            e.Property(q => q.ManufacturersPartNumber).HasColumnName("MANUFACTURERS_PART_NUMBER").HasMaxLength(30);
+            e.Property(q => q.RohsCompliant).HasColumnName("ROHS_COMPLIANT").HasMaxLength(1);
+            e.Property(q => q.UnitPrice).HasColumnName("UNIT_PRICE");
+            e.Property(q => q.Moq).HasColumnName("MOQ");
+        }
+
+        private void BuildMechPartUsages(ModelBuilder builder)
+        {
+            var e = builder.Entity<MechPartUsage>().ToTable("MECH_PART_USAGES");
+            e.Property(u => u.RootProductName).HasColumnName("ROOT_PRODUCT").HasMaxLength(14);
+            e.HasKey(u => new { u.SourceId, u.RootProductName });
+            e.Property(u => u.SourceId).HasColumnName("MS_ID");
+            e.HasOne(u => u.Source).WithMany(s => s.Usages).HasForeignKey(u => u.SourceId);
+            e.Property(u => u.QuantityUsed).HasColumnName("QTY_USED");
+            e.HasOne(u => u.RootProduct).WithMany(p => p.UsagesRootProductOn)
+                .HasForeignKey(u => u.RootProductName);
         }
     }
 }

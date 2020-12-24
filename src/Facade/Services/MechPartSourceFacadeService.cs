@@ -17,7 +17,11 @@
 
         private readonly IRepository<Part, int> partRepository;
 
+        private readonly IQueryRepository<RootProduct> rootProductRepository;
+
         private readonly IQueryRepository<Supplier> supplierRepository;
+
+        private readonly IRepository<Manufacturer, string> manufacturerRepository;
 
         private readonly IMechPartSourceService domainService;
 
@@ -30,6 +34,8 @@
             IRepository<Part, int> partRepository,
             IDatabaseService databaseService,
             IQueryRepository<Supplier> supplierRepository,
+            IQueryRepository<RootProduct> rootProductRepository,
+            IRepository<Manufacturer, string> manufacturerRepository,
             IRepository<Employee, int> employeeRepository) : base(repository, transactionManager)
         {
             this.employeeRepository = employeeRepository;
@@ -37,6 +43,8 @@
             this.partRepository = partRepository;
             this.databaseService = databaseService;
             this.supplierRepository = supplierRepository;
+            this.rootProductRepository = rootProductRepository;
+            this.manufacturerRepository = manufacturerRepository;
         }
 
         protected override MechPartSource CreateFromResource(MechPartSourceResource resource)
@@ -175,7 +183,65 @@
                 LibraryRef = resource.LibraryRef,
                 FootprintRef = resource.FootprintRef,
                 RkmCode = resource.Resistance == null ? null :
-                                     this.domainService.GetRkmCode(resource.ResistanceUnits, (decimal)resource.Resistance)
+                                     this.domainService.GetRkmCode(resource.ResistanceUnits, (decimal)resource.Resistance),
+
+                ApplyTCodeBy = resource.ApplyTCodeBy != null ? 
+                                   this.employeeRepository.FindById((int)resource.ApplyTCodeBy) : null,
+                ApplyTCodeDate = resource.ApplyTCodeDate != null ? 
+                DateTime.Parse(resource.ApplyTCodeDate) : (DateTime?)null,
+
+                CancelledBy = resource.CancelledBy != null ?
+                                   this.employeeRepository.FindById((int)resource.CancelledBy) : null,
+                DateCancelled = resource.CancelledDate != null ?
+                                     DateTime.Parse(resource.CancelledDate) : (DateTime?)null,
+
+                McitVerifiedBy = resource.McitVerifiedBy != null ?
+                                  this.employeeRepository.FindById((int)resource.McitVerifiedBy) : null,
+                McitVerifiedDate = resource.McitVerifiedDate != null ?
+                                    DateTime.Parse(resource.McitVerifiedDate) : (DateTime?)null,
+
+                PartCreatedBy = resource.PartCreatedBy != null ?
+                                     this.employeeRepository.FindById((int)resource.PartCreatedBy) : null,
+                PartCreatedDate = resource.PartCreatedDate != null ?
+                                       DateTime.Parse(resource.PartCreatedDate) : (DateTime?)null,
+
+                QualityVerifiedBy = resource.QualityVerifiedBy != null ?
+                                    this.employeeRepository.FindById((int)resource.QualityVerifiedBy) : null,
+                QualityVerifiedDate = resource.QualityVerifiedDate != null ?
+                                      DateTime.Parse(resource.QualityVerifiedDate) : (DateTime?)null,
+
+                RemoveTCodeBy = resource.RemoveTCodeBy != null ?
+                                     this.employeeRepository.FindById((int)resource.RemoveTCodeBy) : null,
+                RemoveTCodeDate = resource.RemoveTCodeDate != null ?
+                                          DateTime.Parse(resource.RemoveTCodeDate) : (DateTime?)null,
+
+                VerifiedBy = resource.VerifiedBy != null ?
+                                    this.employeeRepository.FindById((int)resource.VerifiedBy) : null,
+                VerifiedDate = resource.VerifiedDate != null ?
+                                      DateTime.Parse(resource.VerifiedDate) : (DateTime?)null,
+
+                PurchasingQuotes = resource.PurchasingQuotes?.Select(q => new MechPartPurchasingQuote
+                                                                              {
+                                                                                  LeadTime = q.LeadTime,
+                                                                                  Manufacturer = q.ManufacturerCode != null ? 
+                                                                                  this.manufacturerRepository.FindById(q.ManufacturerCode) : null,
+                                                                                  ManufacturersPartNumber = q.ManufacturersPartNumber,
+                                                                                  Moq = q.Moq,
+                                                                                  RohsCompliant = q.RohsCompliant,
+                                                                                  UnitPrice = q.UnitPrice,
+                                                                                  Supplier = this.supplierRepository.FindBy(s => s.Id == q.SupplierId)
+                                                                              }).ToList(),
+
+                Usages = resource.Usages?.Select(u => new MechPartUsage
+                                                          {
+                                                              QuantityUsed = u.QuantityUsed,
+                                                              RootProductName = u.RootProductName,
+                                                              RootProduct = u.RootProductName == null ? this.rootProductRepository
+                                                                                    .FindBy(p => p.Name == u.RootProductName)
+                                                                                : null
+                                                          }).ToList(),
+                LifeExpectancyPart = resource.LifeExpectancyPart,
+                Configuration = resource.Configuration
             };
         }
 
@@ -286,12 +352,6 @@
             entity.CapacitorWidth = resource.CapacitorWidth;
             entity.CapacitorHeight = resource.CapacitorHeight;
             entity.CapacitorDiameter = resource.CapacitorDiameter;
-            entity.CapacitanceLetterAndNumeralCode = resource.Capacitance == null
-                                                         ? null
-                                                         : this.domainService
-                                                             .GetCapacitanceLetterAndNumeralCode(
-                                                             resource.CapacitanceUnit,
-                                                             (decimal)resource.Capacitance);
             entity.Resistance = resource.Resistance;
             entity.ResistorWidth = resource.ResistorWidth;
             entity.ResistorTolerance = resource.ResistorTolerance;
@@ -310,6 +370,67 @@
             entity.IcFunction = resource.IcFunction;
             entity.LibraryRef = resource.LibraryRef;
             entity.FootprintRef = resource.FootprintRef;
+            entity.ApplyTCodeBy = resource.ApplyTCodeBy != null
+                               ? this.employeeRepository.FindById((int)resource.ApplyTCodeBy)
+                               : null;
+            entity.ApplyTCodeDate = resource.ApplyTCodeDate != null
+                                        ? DateTime.Parse(resource.ApplyTCodeDate)
+                                        : (DateTime?)null;
+            entity.CancelledBy = resource.CancelledBy != null
+                                     ? this.employeeRepository.FindById((int)resource.CancelledBy)
+                                     : null;
+            entity.DateCancelled = resource.CancelledDate != null ? DateTime.Parse(resource.CancelledDate) : (DateTime?)null;
+            entity.McitVerifiedBy = resource.McitVerifiedBy != null
+                                        ? this.employeeRepository.FindById((int)resource.McitVerifiedBy)
+                                        : null;
+            entity.McitVerifiedDate = resource.McitVerifiedDate != null
+                                          ? DateTime.Parse(resource.McitVerifiedDate)
+                                          : (DateTime?)null;
+
+            entity.PartCreatedBy = resource.PartCreatedBy != null
+                                       ? this.employeeRepository.FindById((int)resource.PartCreatedBy)
+                                       : null;
+            entity.PartCreatedDate = resource.PartCreatedDate != null
+                                         ? DateTime.Parse(resource.PartCreatedDate)
+                                         : (DateTime?)null;
+            entity.QualityVerifiedBy = resource.QualityVerifiedBy != null
+                                           ? this.employeeRepository.FindById((int)resource.QualityVerifiedBy) : null;
+            entity.QualityVerifiedDate = resource.QualityVerifiedDate != null
+                                             ? DateTime.Parse(resource.QualityVerifiedDate)
+                                             : (DateTime?)null;
+            entity.RemoveTCodeBy = resource.RemoveTCodeBy != null
+                                       ? this.employeeRepository.FindById((int)resource.RemoveTCodeBy) : null;
+            entity.RemoveTCodeDate = resource.RemoveTCodeDate != null
+                                         ? DateTime.Parse(resource.RemoveTCodeDate)
+                                         : (DateTime?)null;
+            entity.VerifiedBy = resource.VerifiedBy != null
+                                    ? this.employeeRepository.FindById((int)resource.VerifiedBy)
+                                    : null;
+            entity.VerifiedDate = resource.VerifiedDate != null ? DateTime.Parse(resource.VerifiedDate) : (DateTime?)null;
+            entity.PurchasingQuotes = resource.PurchasingQuotes?.Select(
+                q => new MechPartPurchasingQuote
+                         {
+                             LeadTime = q.LeadTime,
+                             Manufacturer = q.ManufacturerCode != null ?
+                                       this.manufacturerRepository.FindById(q.ManufacturerCode) : null,
+                             ManufacturersPartNumber = q.ManufacturersPartNumber,
+                             Moq = q.Moq,
+                             RohsCompliant = q.RohsCompliant,
+                             UnitPrice = q.UnitPrice,
+                             Supplier = this.supplierRepository.FindBy(s => s.Id == q.SupplierId)
+                         }).ToList();
+
+            entity.Usages = resource.Usages?.Select(
+                u => new MechPartUsage
+                         {
+                             QuantityUsed = u.QuantityUsed,
+                             RootProductName = u.RootProductName,
+                             RootProduct = u.RootProductName != null
+                                               ? this.rootProductRepository.FindBy(p => p.Name == u.RootProductName)
+                                               : null
+                         }).ToList();
+            entity.LifeExpectancyPart = resource.LifeExpectancyPart;
+            entity.Configuration = resource.Configuration;
         }
 
         protected override Expression<Func<MechPartSource, bool>> SearchExpression(string searchTerm)

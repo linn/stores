@@ -46,7 +46,7 @@ function QualityRequirementsTab({
                     items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={drawingsPackageAvailable}
+                    value={drawingsPackageAvailable || ''}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -84,7 +84,7 @@ function QualityRequirementsTab({
                     items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={checklistAvailable}
+                    value={checklistAvailable || ''}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -114,7 +114,7 @@ function QualityRequirementsTab({
                     items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={packingAvailable}
+                    value={packingAvailable || ''}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -144,7 +144,7 @@ function QualityRequirementsTab({
                     items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={productKnowledgeAvailable}
+                    value={productKnowledgeAvailable || ''}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -174,7 +174,7 @@ function QualityRequirementsTab({
                     items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={testEquipmentAvailable}
+                    value={testEquipmentAvailable || ''}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -204,7 +204,7 @@ function QualityRequirementsTab({
                     items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={approvedReferencesAvailable}
+                    value={approvedReferencesAvailable || ''}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -234,7 +234,7 @@ function QualityRequirementsTab({
                     items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={processEvaluationAvailable}
+                    value={processEvaluationAvailable || ''}
                     onChange={handleFieldChange}
                 />
             </Grid>

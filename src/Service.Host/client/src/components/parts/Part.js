@@ -313,7 +313,7 @@ function Part({
                     <Grid item xs={2} />
                 ) : (
                     <Grid item xs={2}>
-                        <LinkButton to={'/inventory/parts/create'} text="Copy" />{' '}
+                        <LinkButton to="/inventory/parts/create" text="Copy" />{' '}
                     </Grid>
                 )}
                 {itemError && (

@@ -18,5 +18,7 @@
         public DateTime? DateClosed { get; set; }
 
         public IEnumerable<MechPartAlt> MechPartAlts { get; set; }
+
+        public IEnumerable<MechPartPurchasingQuote> PurchasingQuotesSupplierOn { get; set; }
     }
 }

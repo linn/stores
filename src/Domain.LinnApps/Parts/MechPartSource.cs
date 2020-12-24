@@ -161,5 +161,55 @@
         public string FootprintRef { get; set; }
 
         public string RkmCode { get; set; }
+
+        public ICollection<MechPartPurchasingQuote> PurchasingQuotes { get; set; }
+
+        public Employee PartCreatedBy { get; set; } 
+
+        public int? PartCreatedById { get; set; }
+
+        public DateTime? PartCreatedDate { get; set; }
+
+        public Employee VerifiedBy { get; set; } 
+
+        public int? VerifiedById { get; set; }
+
+        public DateTime? VerifiedDate { get; set; }
+
+        public Employee QualityVerifiedBy { get; set; }
+
+        public int? QualityVerifiedById { get; set; }
+
+        public DateTime? QualityVerifiedDate { get; set; }
+
+        public Employee McitVerifiedBy { get; set; }
+
+        public int? McitVerifiedById { get; set; }
+
+        public DateTime? McitVerifiedDate { get; set; }
+
+        public Employee ApplyTCodeBy { get; set; }
+
+        public int? ApplyTCodeId { get; set; }
+
+        public DateTime? ApplyTCodeDate { get; set; }
+
+        public Employee RemoveTCodeBy { get; set; }
+
+        public int? RemoveTCodeId { get; set; }
+
+        public DateTime? RemoveTCodeDate { get; set; }
+
+        public Employee CancelledBy { get; set; }
+
+        public int? CancelledById { get; set; }
+
+        public DateTime? DateCancelled { get; set; }
+
+        public ICollection<MechPartUsage> Usages { get; set; }
+
+        public string LifeExpectancyPart { get; set; }
+
+        public string Configuration { get; set; }
     }
 }
