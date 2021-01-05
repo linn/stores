@@ -20,11 +20,20 @@
     {
         private ResponseModel<WorkstationTopUpStatus> workstationStatus;
 
+        private WorkstationTopUpStatus status;
+
         [SetUp]
         public void SetUp()
         {
+            this.status = new WorkstationTopUpStatus
+                              {
+                                  ProductionTriggerRunJobRef = "a",
+                                  WorkstationTopUpJobRef = "b",
+                                  ProductionTriggerRunMessage = "it was run",
+                                  WorkstationTopUpMessage = "so was this"
+                              };
             this.workstationStatus = new ResponseModel<WorkstationTopUpStatus>(
-                new WorkstationTopUpStatus { ProductionTriggerRunJobRef = "a", WorkstationTopUpJobRef = "b" },
+                this.status,
                 new List<string>());
             this.WorkstationFacadeService.GetStatus(Arg.Any<IEnumerable<string>>())
                 .Returns(new SuccessResult<ResponseModel<WorkstationTopUpStatus>>(this.workstationStatus));
@@ -54,8 +63,10 @@
         public void ShouldReturnResource()
         {
             var resultResource = this.Response.Body.DeserializeJson<WorkstationTopUpStatusResource>();
-            resultResource.ProductionTriggerRunJobRef.Should().Be("a");
-            resultResource.WorkstationTopUpJobRef.Should().Be("b");
+            resultResource.ProductionTriggerRunJobRef.Should().Be(this.status.ProductionTriggerRunJobRef);
+            resultResource.ProductionTriggerRunMessage.Should().Be(this.status.ProductionTriggerRunMessage);
+            resultResource.WorkstationTopUpJobRef.Should().Be(this.status.WorkstationTopUpJobRef);
+            resultResource.WorkstationTopUpMessage.Should().Be(this.status.WorkstationTopUpMessage);
         }
     }
 }

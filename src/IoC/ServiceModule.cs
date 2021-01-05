@@ -12,6 +12,7 @@
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Reports;
+    using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
@@ -31,6 +32,7 @@
             builder.RegisterType<WhatWillDecrementReportService>().As<IWhatWillDecrementReportService>();
             builder.RegisterType<StoragePlaceAuditReportService>().As<IStoragePlaceAuditReportService>();
             builder.RegisterType<MechPartSourceService>().As<IMechPartSourceService>();
+            builder.RegisterType<WorkstationService>().As<IWorkstationService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()

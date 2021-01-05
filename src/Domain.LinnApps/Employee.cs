@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
 
     using Linn.Stores.Domain.LinnApps.Parts;

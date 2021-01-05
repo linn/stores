@@ -14,11 +14,14 @@
 
         protected ISingleRecordRepository<PtlMaster> PtlRepository { get; private set; }
 
+        protected IRepository<TopUpListJobRef, string> TopUpListJobRefRepository { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
             this.PtlRepository = Substitute.For<ISingleRecordRepository<PtlMaster>>();
-            this.Sut = new WorkstationService(this.PtlRepository);
+            this.TopUpListJobRefRepository = Substitute.For<IRepository<TopUpListJobRef, string>>();
+            this.Sut = new WorkstationService(this.PtlRepository, this.TopUpListJobRefRepository);
         }
     }
 }

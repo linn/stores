@@ -14,7 +14,9 @@
             return new WorkstationTopUpStatusResource
             {
                 ProductionTriggerRunJobRef = workstationTopUpStatus.ProductionTriggerRunJobRef,
-                WorkstationTopUpJobRef = workstationTopUpStatus.WorkstationTopUpJobRef
+                ProductionTriggerRunMessage = workstationTopUpStatus.ProductionTriggerRunMessage,
+                WorkstationTopUpJobRef = workstationTopUpStatus.WorkstationTopUpJobRef,
+                WorkstationTopUpMessage = workstationTopUpStatus.WorkstationTopUpMessage
             };
         }
 

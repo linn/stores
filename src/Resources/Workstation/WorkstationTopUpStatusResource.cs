@@ -6,6 +6,10 @@
     {
         public string WorkstationTopUpJobRef { get; set; }
 
+        public string WorkstationTopUpMessage { get; set; }
+
         public string ProductionTriggerRunJobRef { get; set; }
+
+        public string ProductionTriggerRunMessage { get; set; }
     }
 }

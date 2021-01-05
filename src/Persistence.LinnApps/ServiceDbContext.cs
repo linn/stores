@@ -6,6 +6,7 @@
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Sos;
+    using Linn.Stores.Domain.LinnApps.Workstation;
 
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
@@ -97,6 +98,8 @@
         
         public DbSet<PtlMaster> PtlMaster { get; set; }
 
+        public DbSet<TopUpListJobRef> TopUpListJobRefs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -141,6 +144,7 @@
             this.BuildTqmsCategories(builder);
             this.BuildSalesOutlets(builder);
             this.BuildPtlMaster(builder);
+            this.BuildTopUpJobRefs(builder);
             base.OnModelCreating(builder);
         }
 
@@ -776,6 +780,15 @@
             table.Property(s => s.LastFullRunMinutesTaken).HasColumnName("LAST_FULL_RUN_MINUTES_TAKEN");
             table.Property(s => s.LastDaysToLookAhead).HasColumnName("LAST_DAYS_TO_LOOK_AHEAD");
             table.Property(s => s.Status).HasColumnName("STATUS").HasMaxLength(2000);
+        }
+
+        private void BuildTopUpJobRefs(ModelBuilder builder)
+        {
+            var table = builder.Entity<TopUpListJobRef>().ToTable("WS_TOP_UP_LIST_JOBREFS");
+            table.HasKey(a => a.JobRef);
+            table.Property(s => s.JobRef).HasColumnName("JOBREF").HasMaxLength(6);
+            table.Property(s => s.DateRun).HasColumnName("DATE_RUN");
+            table.Property(s => s.FullRun).HasColumnName("FULL_RUN").HasMaxLength(1);
         }
     }
 }
