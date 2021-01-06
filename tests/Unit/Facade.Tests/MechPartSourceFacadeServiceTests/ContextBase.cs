@@ -28,6 +28,10 @@
 
         protected ITransactionManager TransactionManager { get; private set; }
 
+        protected IRepository<Manufacturer, string> ManufacturerRepository { get; set; }
+
+        protected IQueryRepository<RootProduct> RootProductRepository { get; set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -38,6 +42,8 @@
             this.DatabaseService = Substitute.For<IDatabaseService>();
             this.SupplierRepository = Substitute.For<IQueryRepository<Supplier>>();
             this.TransactionManager = Substitute.For<ITransactionManager>();
+            this.ManufacturerRepository = Substitute.For<IRepository<Manufacturer, string>>();
+            this.RootProductRepository = Substitute.For<IQueryRepository<RootProduct>>();
             this.Sut = new MechPartSourceFacadeService(
                 this.MechPartSourceRepository, 
                 this.TransactionManager, 
@@ -45,6 +51,8 @@
                 this.PartRepository,
                 this.DatabaseService,
                 this.SupplierRepository,
+                this.RootProductRepository,
+                this.ManufacturerRepository,
                 this.EmployeeRepository);
         }
     }

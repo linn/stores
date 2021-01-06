@@ -166,8 +166,58 @@
 
         public string RkmCode { get; set; }
 
-        public string CapictanceLetterAndNumeralCode { get; set; }
+        public string CapacitanceLetterAndNumeralCode { get; set; }
 
         public bool CreatePart { get; set; }
+
+        public int? PartCreatedBy { get; set; }
+
+        public string PartCreatedByName { get; set; }
+
+        public string PartCreatedDate { get; set; }
+
+        public int? VerifiedBy { get; set; }
+
+        public string VerifiedByName { get; set; }
+
+        public string VerifiedDate { get; set; }
+
+        public int? QualityVerifiedBy { get; set; }
+
+        public string QualityVerifiedByName { get; set; }
+
+        public string QualityVerifiedDate { get; set; }
+
+        public int? McitVerifiedBy { get; set; }
+
+        public string McitVerifiedByName { get; set; }
+
+        public string McitVerifiedDate { get; set; }
+
+        public int? ApplyTCodeBy { get; set; }
+
+        public string ApplyTCodeByName { get; set; }
+
+        public string ApplyTCodeDate { get; set; }
+
+        public int? RemoveTCodeBy { get; set; }
+
+        public string RemoveTCodeByName { get; set; }
+
+        public string RemoveTCodeDate { get; set; }
+
+        public int? CancelledBy { get; set; }
+
+        public string CancelledByName { get; set; }
+
+        public string CancelledDate { get; set; }
+
+        public IEnumerable<MechPartPurchasingQuoteResource> PurchasingQuotes { get; set; }
+
+        public IEnumerable<MechPartUsageResource> Usages { get; set; }
+
+        public string LifeExpectancyPart { get; set; }
+
+        public string Configuration { get; set; }
     }
 }

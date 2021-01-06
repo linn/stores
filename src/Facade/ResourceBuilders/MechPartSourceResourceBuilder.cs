@@ -17,6 +17,11 @@
         private readonly MechPartManufacturerAltResourceBuilder manufacturerAltResourceBuilder = 
             new MechPartManufacturerAltResourceBuilder();
 
+        private readonly MechPartUsageResourceBuilder usageResourceBuilder = new MechPartUsageResourceBuilder();
+
+        private readonly MechPartPurchasingQuoteResourceBuilder purchasingQuotesResourceBuilder = 
+            new MechPartPurchasingQuoteResourceBuilder();
+
         public MechPartSourceResource Build(MechPartSource model)
         {
             return new MechPartSourceResource
@@ -101,8 +106,47 @@
                             LibraryRef = model.LibraryRef,
                             FootprintRef = model.FootprintRef,
                             RkmCode = model.RkmCode,
-                            CapictanceLetterAndNumeralCode = model.CapacitanceLetterAndNumeralCode,
-                            Links = this.BuildLinks(model).ToArray()
+                            CapacitanceLetterAndNumeralCode = model.CapacitanceLetterAndNumeralCode,
+                            PartCreatedBy = model.PartCreatedBy?.Id,
+                            PartCreatedByName = model.PartCreatedBy?.FullName,
+                            PartCreatedDate = model.PartCreatedDate?.ToString("o"),
+                            VerifiedBy = model.VerifiedById,
+                            VerifiedByName = model.VerifiedBy?.FullName,
+                            VerifiedDate = model.VerifiedDate?.ToString("o"),
+                            QualityVerifiedBy = model.QualityVerifiedById,
+                            QualityVerifiedByName = model.QualityVerifiedBy?.FullName,
+                            QualityVerifiedDate = model.QualityVerifiedDate?.ToString("o"),
+                            McitVerifiedBy = model.McitVerifiedById,
+                            McitVerifiedByName = model.McitVerifiedBy?.FullName,
+                            McitVerifiedDate = model.McitVerifiedDate?.ToString("o"),
+                            ApplyTCodeBy = model.ApplyTCodeId,
+                            ApplyTCodeByName = model.ApplyTCodeBy?.FullName,
+                            ApplyTCodeDate = model.ApplyTCodeDate?.ToString("o"),
+                            RemoveTCodeBy = model.RemoveTCodeId,
+                            RemoveTCodeByName = model.RemoveTCodeBy?.FullName,
+                            RemoveTCodeDate = model.RemoveTCodeDate?.ToString("o"),
+                            CancelledBy = model.CancelledById,
+                            CancelledByName = model.CancelledBy?.FullName,
+                            CancelledDate = model.DateCancelled?.ToString("o"),
+                            PurchasingQuotes = model.PurchasingQuotes?.Select(
+                                (q, i) =>
+                                    {
+                                        var resource = this.purchasingQuotesResourceBuilder.Build(q);
+                                        resource.Id = i;
+                                        return resource;
+                                    })
+                                .ToList(),
+                            Usages = model.Usages?.Select(
+                                    (u, i) =>
+                                        {
+                                            var resource = this.usageResourceBuilder.Build(u);
+                                            resource.Id = i;
+                                            return resource;
+                                        })
+                                .ToList(),
+                            Links = this.BuildLinks(model).ToArray(),
+                            LifeExpectancyPart = model.LifeExpectancyPart,
+                            Configuration = model.Configuration
             };
         }
 

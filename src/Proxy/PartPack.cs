@@ -63,13 +63,13 @@
 
                 var arg = new OracleParameter("part_number", OracleDbType.Varchar2)
                               {
-                                  Direction = ParameterDirection.Input, Size = 14, Value = partNumber
+                                  Direction = ParameterDirection.Input, Size = 50, Value = partNumber
                               };
                 cmd.Parameters.Add(arg);
 
                 var msg = new OracleParameter("p_working", OracleDbType.Varchar2)
                               {
-                                  Direction = ParameterDirection.InputOutput, Size = 100
+                                  Direction = ParameterDirection.InputOutput, Size = 2000, Value = string.Empty
                               };
                 cmd.Parameters.Add(msg);
 

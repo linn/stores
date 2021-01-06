@@ -9,11 +9,11 @@ const mapStateToProps = state => ({
     loading: manufacturersSelectors.getLoading(state),
     manufacturersSearchResults: manufacturersSelectors
         .getSearchItems(state)
-        .map(c => ({ name: c.code, description: c.description })),
+        .map(c => ({ name: c.code, id: c.code, description: c.description })),
     manufacturersSearchLoading: manufacturersSelectors.getSearchLoading(state),
     employeesSearchResults: employeesSelectors
         .getSearchItems(state)
-        .map(c => ({ name: c.id, description: c.fullName })),
+        .map(c => ({ name: c.id.toString(), description: c.fullName, id: c.id })),
     employeesSearchLoading: employeesSelectors.getSearchLoading(state)
 });
 
