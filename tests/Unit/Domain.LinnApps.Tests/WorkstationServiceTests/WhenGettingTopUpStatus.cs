@@ -59,8 +59,8 @@
         {
             this.result.ProductionTriggerRunJobRef.Should().Be(this.ptlMaster.LastFullJobRef);
             this.result.WorkstationTopUpJobRef.Should().Be("G");
-            this.result.ProductionTriggerRunMessage.Should().Be("The last run was on 01/12/2022 at 01:00 and took 5 minutes.");
-            this.result.WorkstationTopUpMessage.Should().Be("The last run was on 01/12/2022 at 02:00");
+            this.result.ProductionTriggerRunMessage.Should().Be("The last run was on 01-Dec-2022 at 1:00 AM and took 5 minutes.");
+            this.result.WorkstationTopUpMessage.Should().Be("The last run was on 01-Dec-2022 at 2:00 AM");
         }
     }
 }
