@@ -33,6 +33,7 @@
             builder.RegisterType<StoragePlaceAuditReportService>().As<IStoragePlaceAuditReportService>();
             builder.RegisterType<MechPartSourceService>().As<IMechPartSourceService>();
             builder.RegisterType<WorkstationService>().As<IWorkstationService>();
+            builder.RegisterType<AuthorisationService>().As<IAuthorisationService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()

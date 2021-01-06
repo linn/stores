@@ -6,6 +6,7 @@
     using FluentAssertions;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Resources.Workstation;
 
@@ -16,7 +17,7 @@
 
     using NUnit.Framework;
 
-    public class WhenGettingStatus : ContextBase
+    public class WhenGettingStatusWithPrivileges : ContextBase
     {
         private ResponseModel<WorkstationTopUpStatus> workstationStatus;
 
@@ -37,6 +38,8 @@
                 new List<string>());
             this.WorkstationFacadeService.GetStatus(Arg.Any<IEnumerable<string>>())
                 .Returns(new SuccessResult<ResponseModel<WorkstationTopUpStatus>>(this.workstationStatus));
+            this.AuthorisationService.HasPermissionFor(AuthorisedAction.WorkstationAdmin, Arg.Any<List<string>>())
+                .Returns(true);
 
             this.Response = this.Browser.Get(
                 "/logistics/workstations/top-up",
@@ -53,13 +56,6 @@
         }
 
         [Test]
-        public void ShouldCallService()
-        {
-            this.WorkstationFacadeService.Received()
-                .GetStatus(Arg.Is<IEnumerable<string>>(s => s.Contains("p1")));
-        }
-
-        [Test]
         public void ShouldReturnResource()
         {
             var resultResource = this.Response.Body.DeserializeJson<WorkstationTopUpStatusResource>();
@@ -67,9 +63,10 @@
             resultResource.ProductionTriggerRunMessage.Should().Be(this.status.ProductionTriggerRunMessage);
             resultResource.WorkstationTopUpJobRef.Should().Be(this.status.WorkstationTopUpJobRef);
             resultResource.WorkstationTopUpMessage.Should().Be(this.status.WorkstationTopUpMessage);
-            resultResource.Links.Length.Should().Be(2);
+            resultResource.Links.Length.Should().Be(3);
             resultResource.Links.First(a => a.Rel == "self").Href.Should().Be("/logistics/workstations/top-up/b");
             resultResource.Links.First(a => a.Rel == "status").Href.Should().Be("/logistics/workstations/top-up");
+            resultResource.Links.First(a => a.Rel == "start-top-up").Href.Should().Be("/logistics/workstations/top-up/b");
         }
     }
 }
