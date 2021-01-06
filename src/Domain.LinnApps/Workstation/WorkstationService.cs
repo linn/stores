@@ -29,7 +29,7 @@
             return new WorkstationTopUpStatus
                        {
                            ProductionTriggerRunJobRef = triggerRunStatus.LastFullJobRef,
-                           ProductionTriggerRunMessage = $"'The last run was on {triggerRunStatus.LastFullRunDate.ToShortDateString()} at {triggerRunStatus.LastFullRunDate.ToShortTimeString()} and took {triggerRunStatus.LastFullRunMinutesTaken} minutes.'",
+                           ProductionTriggerRunMessage = $"The last run was on {triggerRunStatus.LastFullRunDate.ToShortDateString()} at {triggerRunStatus.LastFullRunDate.ToShortTimeString()} and took {triggerRunStatus.LastFullRunMinutesTaken} minutes.",
                            WorkstationTopUpJobRef = topUpRun != null ? topUpRun.JobRef : "No run today",
                            WorkstationTopUpMessage = topUpRun != null ? $"The last run was on {topUpRun.DateRun.ToShortDateString()} at {topUpRun.DateRun.ToShortTimeString()}" : string.Empty
                        };
