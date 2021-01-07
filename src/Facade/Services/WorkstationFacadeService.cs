@@ -22,5 +22,10 @@
                     this.workstationService.GetTopUpStatus(),
                     privileges));
         }
+
+        public IResult<ResponseModel<WorkstationTopUpStatus>> StartTopUpRun(IEnumerable<string> privileges)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

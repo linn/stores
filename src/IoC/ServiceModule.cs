@@ -89,6 +89,7 @@
             builder.RegisterType<WwdPack>().As<IWwdPack>();
             builder.RegisterType<StoragePlaceAuditPack>().As<IStoragePlaceAuditPack>();
             builder.RegisterType<AllocPack>().As<IAllocPack>();
+            builder.RegisterType<WorkstationPackProxy>().As<IWorkstationPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();
