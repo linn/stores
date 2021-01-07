@@ -11,6 +11,7 @@
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Facade;
     using Linn.Stores.Facade.ResourceBuilders;
 
@@ -109,6 +110,8 @@
                 .As<IResourceBuilder<TqmsCategory>>();
             builder.RegisterType<TqmsCategoriesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<TqmsCategory>>>();
+            builder.RegisterType<WorkstationTopUpStatusResourceBuilder>()
+                .As<IResourceBuilder<ResponseModel<WorkstationTopUpStatus>>>();
         }
     }
 }

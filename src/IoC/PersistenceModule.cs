@@ -7,7 +7,9 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Sos;
+    using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Persistence.LinnApps;
     using Linn.Stores.Persistence.LinnApps.Repositories;
 
@@ -57,6 +59,8 @@
             builder.RegisterType<AuditLocationRepository>().As<IQueryRepository<AuditLocation>>();
             builder.RegisterType<ManufacturerRepository>().As<IRepository<Manufacturer, string>>();
             builder.RegisterType<TqmsCategoriesRepository>().As<IRepository<TqmsCategory, string>>();
+            builder.RegisterType<PtlMasterRepository>().As<ISingleRecordRepository<PtlMaster>>();
+            builder.RegisterType<TopUpListJobRefRepository>().As<IRepository<TopUpListJobRef, string>>();
         }
     }
 }

@@ -4,7 +4,9 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Sos;
+    using Linn.Stores.Domain.LinnApps.Workstation;
 
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
@@ -95,6 +97,10 @@
         public DbQuery<PartDataSheetValues> PartDataSheetValues { get; set; }
 
         public DbSet<TqmsCategory> TqmsCategories { get; set; }
+        
+        public DbSet<PtlMaster> PtlMaster { get; set; }
+
+        public DbSet<TopUpListJobRef> TopUpListJobRefs { get; set; }
 
         public DbSet<MechPartUsage> MechPartUsages { get; set; }
 
@@ -143,6 +149,8 @@
             this.BuildSalesOutlets(builder);
             this.BuildMechPartPurchasingQuotes(builder);
             this.BuildMechPartUsages(builder);
+            this.BuildPtlMaster(builder);
+            this.BuildTopUpJobRefs(builder);
             base.OnModelCreating(builder);
         }
 
@@ -828,6 +836,26 @@
             e.Property(u => u.QuantityUsed).HasColumnName("QTY_USED");
             e.HasOne(u => u.RootProduct).WithMany(p => p.UsagesRootProductOn)
                 .HasForeignKey(u => u.RootProductName);
+        }
+
+        private void BuildPtlMaster(ModelBuilder builder)
+        {
+            var table = builder.Entity<PtlMaster>().ToTable("PTL_MASTER");
+            table.HasKey(a => a.LastFullJobRef);
+            table.Property(s => s.LastFullJobRef).HasColumnName("LAST_FULL_RUN_JOBREF").HasMaxLength(6);
+            table.Property(s => s.LastFullRunDate).HasColumnName("LAST_FULL_RUN_DATE");
+            table.Property(s => s.LastFullRunMinutesTaken).HasColumnName("LAST_FULL_RUN_MINUTES_TAKEN");
+            table.Property(s => s.LastDaysToLookAhead).HasColumnName("LAST_DAYS_TO_LOOK_AHEAD");
+            table.Property(s => s.Status).HasColumnName("STATUS").HasMaxLength(2000);
+        }
+
+        private void BuildTopUpJobRefs(ModelBuilder builder)
+        {
+            var table = builder.Entity<TopUpListJobRef>().ToTable("WS_TOP_UP_LIST_JOBREFS");
+            table.HasKey(a => a.JobRef);
+            table.Property(s => s.JobRef).HasColumnName("JOBREF").HasMaxLength(6);
+            table.Property(s => s.DateRun).HasColumnName("DATE_RUN");
+            table.Property(s => s.FullRun).HasColumnName("FULL_RUN").HasMaxLength(1);
         }
     }
 }
