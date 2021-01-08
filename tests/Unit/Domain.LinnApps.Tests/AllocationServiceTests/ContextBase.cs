@@ -17,7 +17,7 @@
 
         protected IRepository<SosOption, int> SosOptionRepository { get; private set; }
 
-        protected ISosPack SosPack { get; private set; }
+        protected IRepository<SosAllocDetail, int> SosAllocDetailRepository { get; private set; }
 
         protected IAllocPack AllocPack { get; private set; }
 
@@ -25,14 +25,14 @@
         public void SetUpContext()
         {
             this.SosOptionRepository = Substitute.For<IRepository<SosOption, int>>();
+            this.SosAllocDetailRepository = Substitute.For<IRepository<SosAllocDetail, int>>();
             this.TransactionManager = Substitute.For<ITransactionManager>();
-            this.SosPack = Substitute.For<ISosPack>();
             this.AllocPack = Substitute.For<IAllocPack>();
 
             this.Sut = new AllocationService(
-                this.SosPack,
                 this.AllocPack,
                 this.SosOptionRepository,
+                this.SosAllocDetailRepository,
                 this.TransactionManager);
         }
     }

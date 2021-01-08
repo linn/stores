@@ -6,11 +6,12 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.RequestResources;
+
     using Nancy;
     using Nancy.Testing;
     using NSubstitute;
     using NUnit.Framework;
- 
 
     public class WhenSearching : ContextBase
     {
@@ -22,7 +23,6 @@
                 CarrierCode = "code numma 1",
                 Name = "Carrier A",
                 OrganisationId = 112
-
             };
 
             var carrierB = new Carrier

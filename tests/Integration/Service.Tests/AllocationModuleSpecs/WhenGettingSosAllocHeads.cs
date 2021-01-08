@@ -6,6 +6,7 @@
     using FluentAssertions;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Resources.Allocation;
 
@@ -25,8 +26,19 @@
         [SetUp]
         public void SetUp()
         {
-            this.sosAllocHead1 = new SosAllocHead { AccountId = 1, JobId = 222 };
-            this.sosAllocHead2 = new SosAllocHead { AccountId = 2, JobId = 222 };
+            this.sosAllocHead1 = new SosAllocHead
+                                     {
+                                         AccountId = 1,
+                                         OutletNumber = 1,
+                                         JobId = 222,
+                                         SalesOutlet = new SalesOutlet { AccountId = 1, OutletNumber = 1, Name = "dom" }
+                                     };
+            this.sosAllocHead2 = new SosAllocHead
+                                     {
+                                         AccountId = 2,
+                                         JobId = 222,
+                                         SalesOutlet = new SalesOutlet { AccountId = 2, OutletNumber = 2, Name = "two" }
+                                     };
 
             this.SosAllocHeadFacadeService.GetAllocHeads(222)
                 .Returns(new SuccessResult<IEnumerable<SosAllocHead>>(new List<SosAllocHead>
@@ -60,6 +72,7 @@
             var resultResource = this.Response.Body.DeserializeJson<IEnumerable<SosAllocHeadResource>>().ToList();
             resultResource.Should().HaveCount(2);
             resultResource.First(a => a.AccountId == 1).JobId.Should().Be(222);
+            resultResource.First(a => a.AccountId == 1).OutletName.Should().Be(this.sosAllocHead1.SalesOutlet.Name);
             resultResource.First(a => a.AccountId == 2).JobId.Should().Be(222);
         }
     }

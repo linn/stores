@@ -1,7 +1,5 @@
 ﻿namespace Linn.Stores.Resources.Parts
 {
-    using System;
-    using System.Collections;
     using System.Collections.Generic;
 
     using Linn.Common.Resources;
@@ -169,5 +167,15 @@
         public string AssemblyTechnologyDescription { get; set; }
 
         public IEnumerable<string> UserPrivileges { get; set; }
+
+        public IEnumerable<PartDataSheetResource> DataSheets { get; set; }
+
+        public PartParamDataResource ParamData { get; set; }
+
+        public bool CreateFromSourceSheet { get; set; }
+
+        public int SourceId { get; set; }
+
+        public int SourceCreatedBy { get; set; }
     }
 }

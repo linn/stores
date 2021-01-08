@@ -23,7 +23,7 @@
             this.departmentRepository = departmentRepository;
             this.nominalAccountRepository = nominalAccountRepository;
         }
-                             
+
         public IResult<Nominal> GetNominalForDepartment(string department)
         {
             var nominal = this.departmentRepository.FindAll()

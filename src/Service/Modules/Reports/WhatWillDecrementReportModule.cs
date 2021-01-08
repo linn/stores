@@ -7,7 +7,7 @@
     using Nancy;
     using Nancy.ModelBinding;
 
-    public class WhatWillDecrementReportModule : NancyModule
+    public sealed class WhatWillDecrementReportModule : NancyModule
     {
         private readonly IWhatWillDecrementReportFacadeService reportService;
 

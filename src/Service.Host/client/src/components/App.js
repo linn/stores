@@ -16,6 +16,21 @@ function App() {
                 <ListItem component={Link} to="/logistics/parcels" button>
                     <Typography color="primary">Parcel Ut</Typography>
                 </ListItem>
+                <ListItem component={Link} to="/inventory/parts" button>
+                    <Typography color="primary">Parts Utility</Typography>
+                </ListItem>
+                <ListItem component={Link} to="/inventory/parts/sources" button>
+                    <Typography color="primary">Mech Part Sources Utility</Typography>
+                </ListItem>
+            </List>
+            <Typography variant="h6">Reports</Typography>
+            <List>
+                <ListItem component={Link} to="/inventory/reports/storage-place-audit" button>
+                    <Typography color="primary">Storage Place Audit Report</Typography>
+                </ListItem>
+                <ListItem component={Link} to="/inventory/reports/what-will-decrement" button>
+                    <Typography color="primary">What Will Decrement Report</Typography>
+                </ListItem>
             </List>
         </Page>
     );

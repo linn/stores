@@ -71,3 +71,6 @@ config.env
 local-update.sh
 
 .vscode/
+
+# StyleCop caches
+*StyleCop.Cache

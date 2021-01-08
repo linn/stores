@@ -22,40 +22,72 @@ import unitsOfMeasure from './unitsOfMeasure';
 import allocation from './allocation';
 import wwdReport from './wwdReport';
 import * as itemTypes from '../itemTypes';
+import * as reportTypes from '../reportTypes';
+import * as processTypes from '../processTypes';
 import stockPools from './stockPools';
 import despatchLocations from './despatchLocations';
 import countries from './countries';
+import storagePlaceAuditReport from './storagePlaceAuditReport';
+import storagePlace from './storagePlace';
+import storagePlaces from './storagePlaces';
+import auditLocation from './auditLocation';
+import auditLocations from './auditLocations';
+import createAuditReqs from './createAuditReqs';
 import sosAllocHeads from './sosAllocHeads';
+import sosAllocDetails from './sosAllocDetails';
+import mechPartSource from './parts/mechPartSource';
+import manufacturers from './manufacturers';
+import employees from './employees';
+import partDataSheetValues from './partDataSheetValues';
+import finishAllocation from './finishAllocation';
+import pickItemsAllocation from './pickItemsAllocation';
+import unpickItemsAllocation from './unpickItemsAllocation';
+import tqmsCategories from './tqmsCategories';
 import parcels from './parcels/parcels';
 import parcel from './parcels/parcel';
 import employees from './employees';
 
-const errors = fetchErrorReducer({ ...itemTypes });
+const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
 const rootReducer = combineReducers({
     accountingCompanies,
-    assemblyTechnologies,
     allocation,
+    assemblyTechnologies,
+    auditLocation,
+    auditLocations,
     countries,
+    createAuditReqs,
     departments,
     decrementRules,
     despatchLocations,
-    oidc,
+    employees,
+    finishAllocation,
+    manufacturers,
+    mechPartSource,
     nominal,
+    oidc,
     parcel,
     parcels,
     part,
     partCategories,
     parts,
+    partDataSheetValues,
     partLiveTest,
     partTemplates,
+    pickItemsAllocation,
     productAnalysisCodes,
     rootProducts,
     sernosSequences,
+    sosAllocDetails,
     sosAllocHeads,
     stockPools,
+    storagePlace,
+    storagePlaces,
+    storagePlaceAuditReport,
     suppliers,
+    tqmsCategories,
     unitsOfMeasure,
+    unpickItemsAllocation,
     wwdReport,
     employees,
     ...sharedLibraryReducers,

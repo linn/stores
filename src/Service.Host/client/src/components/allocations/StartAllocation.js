@@ -1,58 +1,61 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/styles';
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import {
-    SaveBackCancelButtons,
     InputField,
     Loading,
     Title,
     ErrorCard,
     Dropdown,
-    SnackbarMessage,
     utilities,
     DatePicker,
     OnOffSwitch
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 
+const useStyles = makeStyles({
+    runButton: {
+        float: 'right',
+        width: '100%'
+    }
+});
+
 function StartAllocation({
     editStatus,
     itemError,
-    history,
     loading,
     addItem,
     setEditStatus,
-    snackbarVisible,
     accountingCompanies,
-    setSnackbarVisible,
     stockPools,
     despatchLocations,
     countries
 }) {
     const [allocationOptions, setAllocationOptions] = useState({
         accountingCompany: 'LINN',
-        despatchLocation: 'LINN',
-        stockPool: 'LINN',
+        despatchLocationCode: 'LINN',
+        stockPoolCode: 'LINN',
+        accountId: null,
+        articleNumber: null,
+        countryCode: null,
         excludeUnsuppliableLines: true,
         excludeOverCreditLimit: true,
         excludeOnHold: true,
+        excludeNorthAmerica: false,
         cutOffDate: new Date().toISOString()
-});
+    });
 
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
+    const classes = useStyles();
 
     const handleSaveClick = () => {
         if (creating()) {
             addItem(allocationOptions);
             setEditStatus('view');
         }
-    };
-
-    const handleCancelClick = () => {};
-
-    const handleBackClick = () => {
-        history.push('/logistics/allocations');
     };
 
     const handleFieldChange = (propertyName, newValue) => {
@@ -104,11 +107,6 @@ function StartAllocation({
                     </Grid>
                 ) : (
                     <>
-                        <SnackbarMessage
-                            visible={snackbarVisible}
-                            onClose={() => setSnackbarVisible(false)}
-                            message="Allocation Successful"
-                        />
                         <Grid item xs={4}>
                             <Dropdown
                                 label="Company"
@@ -122,10 +120,10 @@ function StartAllocation({
                         <Grid item xs={4}>
                             <Dropdown
                                 label="Stock Pool"
-                                propertyName="stockPool"
+                                propertyName="stockPoolCode"
                                 items={stockPoolOptions()}
                                 fullWidth
-                                value={allocationOptions.stockPool}
+                                value={allocationOptions.stockPoolCode}
                                 onChange={handleFieldChange}
                             />
                         </Grid>
@@ -133,10 +131,10 @@ function StartAllocation({
                         <Grid item xs={4}>
                             <Dropdown
                                 label="Despatch Location"
-                                propertyName="despatchLocation"
+                                propertyName="despatchLocationCode"
                                 items={despatchLocationOptions()}
                                 fullWidth
-                                value={allocationOptions.despatchLocation}
+                                value={allocationOptions.despatchLocationCode}
                                 onChange={handleFieldChange}
                             />
                         </Grid>
@@ -195,6 +193,7 @@ function StartAllocation({
                                 propertyName="excludeOnHold"
                             />
                         </Grid>
+                        <Grid item xs={4} />
                         <Grid item xs={4}>
                             <OnOffSwitch
                                 label="Exclude Over Credit Limit"
@@ -209,6 +208,20 @@ function StartAllocation({
                             />
                         </Grid>
                         <Grid item xs={4}>
+                            <OnOffSwitch
+                                label="Exclude North America"
+                                value={allocationOptions.excludeNorthAmerica}
+                                onChange={() => {
+                                    handleFieldChange(
+                                        'excludeNorthAmerica',
+                                        !allocationOptions.excludeNorthAmerica
+                                    );
+                                }}
+                                propertyName="excludeNorthAmerica"
+                            />
+                        </Grid>
+                        <Grid item xs={4} />
+                        <Grid item xs={4}>
                             <DatePicker
                                 label="Cut Off Date"
                                 value={
@@ -222,14 +235,19 @@ function StartAllocation({
                             />
                         </Grid>
                         <Grid item xs={8} />
-                        <Grid item xs={12}>
-                            <SaveBackCancelButtons
-                                saveDisabled={viewing()}
-                                saveClick={handleSaveClick}
-                                cancelClick={handleCancelClick}
-                                backClick={handleBackClick}
-                            />
+                        <Grid item xs={6} />
+                        <Grid item xs={2}>
+                            <Button
+                                className={classes.runButton}
+                                disabled={viewing()}
+                                onClick={handleSaveClick}
+                                variant="contained"
+                                color="primary"
+                            >
+                                Run Allocation
+                            </Button>
                         </Grid>
+                        <Grid item xs={4} />
                     </>
                 )}
             </Grid>
@@ -250,15 +268,12 @@ StartAllocation.propTypes = {
     countries: PropTypes.arrayOf(PropTypes.shape({})),
     despatchLocations: PropTypes.arrayOf(PropTypes.shape({})),
     stockPools: PropTypes.arrayOf(PropTypes.shape({})),
-    snackbarVisible: PropTypes.bool,
     addItem: PropTypes.func,
     loading: PropTypes.bool,
-    setEditStatus: PropTypes.func.isRequired,
-    setSnackbarVisible: PropTypes.func.isRequired
+    setEditStatus: PropTypes.func.isRequired
 };
 
 StartAllocation.defaultProps = {
-    snackbarVisible: false,
     addItem: null,
     loading: null,
     itemError: null,

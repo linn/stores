@@ -5,9 +5,11 @@
 
     using Domain.LinnApps.Parts;
 
+    using Linn.Common.Authorisation;
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
@@ -54,6 +56,8 @@
 
         protected IRepository<QcControl, int> QcControlRepository { get; private set; }
 
+        protected IRepository<MechPartSource, int> MechPartSourceRepository { get; private set; }
+
         protected IPartService PartsDomainService { get; private set; }
 
         protected IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> PartTemplateService
@@ -61,7 +65,32 @@
             get; private set;
         }
 
-        protected IPartLiveService PartLiveService;
+        protected IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
+            MechPartSourceService
+        {
+            get; private set;
+        }
+
+        protected IPartLiveService PartLiveService { get; private set; }
+
+        protected IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> ManufacturerService
+        {
+            get; private set;
+        }
+
+        protected IRepository<Manufacturer, string> ManufacturerRepository
+        {
+            get; private set;
+        }
+
+        protected IPartDataSheetValuesService DataSheetValuesService { get; private set; }
+
+        protected IPartPack PartPack { get; private set; }
+
+        protected IAuthorisationService AuthService { get; private set; }
+
+        protected IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>
+            TqmsCategoriesService { get; private set; }
 
         [SetUp]
         public void EstablishContext()
@@ -74,6 +103,7 @@
             this.UnitsOfMeasureService = Substitute.For<IUnitsOfMeasureService>();
             this.ProductAnalysisCodeService = Substitute.For<IProductAnalysisCodeService>();
             this.PartRepository = Substitute.For<IRepository<Part, int>>();
+            this.MechPartSourceRepository = Substitute.For<IRepository<MechPartSource, int>>();
             this.ParetoClassRepository = Substitute.For<IRepository<ParetoClass, string>>();
             this.QcControlRepository = Substitute.For<IRepository<QcControl, int>>();
             this.ProductAnalysisCodeRepository = Substitute.For<IRepository<ProductAnalysisCode, string>>();
@@ -83,6 +113,16 @@
                 .For<IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>>();
             this.PartTemplateService = Substitute
                 .For<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
+            this.MechPartSourceService = Substitute
+                .For<IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>>();
+            this.ManufacturerService = Substitute
+                .For<IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>>();
+            this.ManufacturerRepository = Substitute.For<IRepository<Manufacturer, string>>();
+            this.DataSheetValuesService = Substitute.For<IPartDataSheetValuesService>();
+            this.PartPack = Substitute.For<IPartPack>();
+            this.AuthService = Substitute.For<IAuthorisationService>();
+            this.TqmsCategoriesService = Substitute
+                .For<IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>>();
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
@@ -99,6 +139,13 @@
                         with.Dependency(this.DecrementRuleService);
                         with.Dependency(this.PartsDomainService);
                         with.Dependency(this.PartTemplateService);
+                        with.Dependency(this.MechPartSourceService);
+                        with.Dependency(this.MechPartSourceRepository);
+                        with.Dependency(this.ManufacturerService);
+                        with.Dependency(this.DataSheetValuesService);
+                        with.Dependency(this.PartPack);
+                        with.Dependency(this.AuthService);
+                        with.Dependency(this.TqmsCategoriesService);
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());
                         with.Dependency<IResourceBuilder<PartTemplate>>(new PartTemplateResourceBuilder());
@@ -119,6 +166,14 @@
                             new DecrementRulesResourceBuilder());
                         with.Dependency<IResourceBuilder<PartLiveTest>>(
                             new PartLiveTestResourceBuilder());
+                        with.Dependency<IResourceBuilder<MechPartSource>>(new MechPartSourceResourceBuilder());
+                        with.Dependency<IResourceBuilder<PartDataSheet>>(new PartDataSheetResourceBuilder());
+                        with.Dependency<IResourceBuilder<Manufacturer>>(new ManufacturerResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<Manufacturer>>>(
+                            new ManufacturersResourceBuilder());
+                        with.Dependency<IResourceBuilder<TqmsCategory>>(new TqmsCategoryResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<TqmsCategory>>>(
+                            new TqmsCategoriesResourceBuilder());
                         with.ResponseProcessor<PartResponseProcessor>();
                         with.ResponseProcessor<PartsResponseProcessor>();
                         with.ResponseProcessor<UnitsOfMeasureResponseProcessor>();
@@ -128,6 +183,9 @@
                         with.ResponseProcessor<ProductAnalysisCodesResponseProcessor>();
                         with.ResponseProcessor<PartTemplatesResponseProcessor>();
                         with.ResponseProcessor<PartLiveTestResponseProcessor>();
+                        with.ResponseProcessor<MechPartSourceResponseProcessor>();
+                        with.ResponseProcessor<ManufacturersResponseProcessor>();
+                        with.ResponseProcessor<TqmsCategoriesResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
                                 {

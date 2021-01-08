@@ -7,7 +7,9 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Sos;
+    using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Persistence.LinnApps;
     using Linn.Stores.Persistence.LinnApps.Repositories;
 
@@ -17,8 +19,7 @@
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<ServiceDbContext>().AsSelf()
-                .As<DbContext>().InstancePerRequest();
+            builder.RegisterType<ServiceDbContext>().AsSelf().As<DbContext>().InstancePerRequest();
             builder.RegisterType<TransactionManager>().As<ITransactionManager>();
 
             builder.RegisterType<PartRepository>().As<IRepository<Part, int>>();
@@ -45,11 +46,21 @@
             builder.RegisterType<CountryRepository>().As<IRepository<Country, string>>();
             builder.RegisterType<QcControlRepository>().As<IRepository<QcControl, int>>();
             builder.RegisterType<PartTemplateRepository>().As<IRepository<PartTemplate, string>>();
-            builder.RegisterType<MechPartSourcesRepository>()
-                .As<IRepository<MechPartSource, MechPartSourceKey>>();
             builder.RegisterType<SosAllocHeadRepository>().As<IQueryRepository<SosAllocHead>>();
+            builder.RegisterType<SosAllocDetailRepository>().As<IRepository<SosAllocDetail, int>>();
+            builder.RegisterType<PartDataSheetRepository>().As<IRepository<PartDataSheet, PartDataSheetKey>>();
+            builder.RegisterType<MechPartSourceRepository>().As<IRepository<MechPartSource, int>>();
             builder.RegisterType<ParcelRepository>().As<IRepository<Parcel, int>>();
             builder.RegisterType<CarrierRepository>().As<IRepository<Carrier, string>>();
+            builder.RegisterType<PartDataSheetValuesRepository>().As<IQueryRepository<PartDataSheetValues>>();
+            builder.RegisterType<StockLocatorRepository>().As<IQueryRepository<StockLocator>>();
+            builder.RegisterType<StoragePlaceRepository>().As<IQueryRepository<StoragePlace>>();
+            builder.RegisterType<StoresBugetRepository>().As<IQueryRepository<StoresBudget>>();
+            builder.RegisterType<AuditLocationRepository>().As<IQueryRepository<AuditLocation>>();
+            builder.RegisterType<ManufacturerRepository>().As<IRepository<Manufacturer, string>>();
+            builder.RegisterType<TqmsCategoriesRepository>().As<IRepository<TqmsCategory, string>>();
+            builder.RegisterType<PtlMasterRepository>().As<ISingleRecordRepository<PtlMaster>>();
+            builder.RegisterType<TopUpListJobRefRepository>().As<IRepository<TopUpListJobRef, string>>();
         }
     }
 }

@@ -43,7 +43,7 @@
 
         public IQueryable<Employee> FilterBy(Expression<Func<Employee, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.Employees.Where(expression);
         }
     }
 }

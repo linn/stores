@@ -17,6 +17,8 @@
 
         public string SafetyCriticalPart { get; set; }
 
+        public int? NominalAccountId { get; set; }
+
         public NominalAccount NominalAccount { get; set; }
 
         public ProductAnalysisCode ProductAnalysisCode { get; set; }
@@ -52,6 +54,8 @@
         public int? BomId { get; set; }
 
         public string OurUnitOfMeasure { get; set; }
+
+        public int? PreferredSupplierId { get; set; }
 
         public Supplier PreferredSupplier { get; set; }
 
@@ -135,6 +139,14 @@
 
         public DecrementRule DecrementRule { get; set; }
 
+        public MechPartSource MechPartSource { get; set; }
+
         public IEnumerable<PartDataSheet> DataSheets { get; set; }
+
+        public IEnumerable<MechPartSource> ReplacementParts { get; set; }
+
+        public IEnumerable<WwdWork> WwdWorks { get; set; }
+        
+        public PartParamData ParamData { get; set; }
     }
 }

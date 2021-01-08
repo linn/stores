@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
+    using System.Linq;
+
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
@@ -19,14 +21,15 @@
 
         public IResult<PartLiveTest> CheckIfPartCanBeMadeLive(int id)
         {
-            var partNumber = this.partRepository.FindBy(p => p.Id == id)?.PartNumber;
-            if (partNumber == null)
+            var part = this.partRepository.FilterBy(p => p.Id == id).ToList().FirstOrDefault();
+            var partNumber = part?.PartNumber;
+            if (part?.PartNumber == null)
             {
                 return new NotFoundResult<PartLiveTest>("Part Not Found");
             }
 
             var result = this.partPack.PartLiveTest(partNumber, out var message);
-            return new SuccessResult<PartLiveTest>(new PartLiveTest()
+            return new SuccessResult<PartLiveTest>(new PartLiveTest
                                                                    {
                                                                        Result = result,
                                                                        Message = message

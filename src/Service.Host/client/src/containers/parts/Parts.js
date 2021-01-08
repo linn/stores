@@ -7,7 +7,8 @@ import { getPrivileges } from '../../selectors/userSelectors';
 import partTemplatesActions from '../../actions/partTemplatesActions';
 import partTemplatesSelectors from '../../selectors/partTemplatesSelectors';
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, { match }) => ({
+    linkToSources: match?.url?.endsWith('/sources'),
     items: partsSelectors.getSearchItems(state),
     loading: partsSelectors.getSearchLoading(state),
     privileges: getPrivileges(state),

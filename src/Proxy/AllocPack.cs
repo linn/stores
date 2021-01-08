@@ -174,5 +174,39 @@
                 return int.Parse(returnJobId.Value.ToString());
             }
         }
+
+        public void FinishAllocation(int jobId, out string notes, out string success)
+        {
+            using (var connection = this.databaseService.GetConnection())
+            {
+                connection.Open();
+                var cmd = new OracleCommand("alloc_pack.finish_allocation", connection)
+                              {
+                                  CommandType = CommandType.StoredProcedure
+                              };
+
+                cmd.Parameters.Add(
+                    new OracleParameter("p_job_id", OracleDbType.Int32)
+                        {
+                            Direction = ParameterDirection.Input, Value = jobId
+                        });
+                var notesParam = cmd.Parameters.Add(
+                    new OracleParameter("p_notes", OracleDbType.Varchar2)
+                        {
+                            Direction = ParameterDirection.Output, Size = 4000
+                        });
+                var successParam = cmd.Parameters.Add(
+                    new OracleParameter("p_success", OracleDbType.Varchar2)
+                        {
+                            Direction = ParameterDirection.Output, Size = 1
+                        });
+
+                cmd.ExecuteNonQuery();
+                connection.Close();
+
+                notes = notesParam.Value.ToString();
+                success = successParam.Value.ToString();
+            }
+        }
     }
 }

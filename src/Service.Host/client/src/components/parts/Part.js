@@ -9,13 +9,14 @@ import {
     Loading,
     Title,
     ErrorCard,
-    SnackbarMessage
+    SnackbarMessage,
+    LinkButton
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 import GeneralTab from '../../containers/parts/tabs/GeneralTab';
 import BuildTab from '../../containers/parts/tabs/BuildTab';
 import PurchTab from '../../containers/parts/tabs/PurchTab';
-import StoresTab from './tabs/StoresTab';
+import StoresTab from '../../containers/parts/tabs/StoresTab';
 import LifeCycleTab from './tabs/LifeCycleTab';
 
 function Part({
@@ -38,7 +39,9 @@ function Part({
     options,
     partTemplates,
     liveTest,
-    fetchLiveTest
+    fetchLiveTest,
+    fetchParts,
+    partsSearchResults
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -54,6 +57,7 @@ function Part({
                   safetyCriticalPart: false,
                   paretoCode: 'U',
                   createdBy: userNumber,
+                  createdByName: userName,
                   dateCreated: new Date(),
                   railMethod: 'POLICY',
                   preferredSupplier: 4415,
@@ -93,7 +97,7 @@ function Part({
     useEffect(() => {
         setPart(p => ({
             ...p,
-            nominalCode: nominal?.nominalCode,
+            nominal: nominal?.nominalCode,
             nominalDescription: nominal?.description
         }));
     }, [nominal, setPart]);
@@ -105,7 +109,7 @@ function Part({
                 if (template.nextNumber < 1000) {
                     return template.nextNumber.toString().padStart(3, 0);
                 }
-                return template.nextNumber().toString();
+                return template.nextNumber.toString();
             };
             setPart(p => ({
                 ...p,
@@ -125,6 +129,29 @@ function Part({
     }, [options, partTemplates]);
 
     const partInvalid = () => !part.partNumber || !part.description;
+
+    const getPartNumberHelperText = () => {
+        if (partsSearchResults.some(p => p.partNumber === part.partNumber.toUpperCase())) {
+            return 'PART NUMBER ALREADY EXISTS.';
+        }
+        return '';
+    };
+
+    const getSafetyCriticalHelperText = () => {
+        const prevRevision = partsSearchResults.find(
+            p => p.partNumber === part.partNumber.toUpperCase().split('/')[0]
+        );
+
+        if (prevRevision?.safetyCriticalPart === true) {
+            return 'Note: Previous Revision Was Safety Critical';
+        }
+
+        if (prevRevision?.safetyCriticalPart === false) {
+            return 'Note: Previous Revision Was NOT Safety Critical';
+        }
+
+        return '';
+    };
 
     const handleSaveClick = () => {
         const partResource = part;
@@ -155,6 +182,14 @@ function Part({
     };
 
     const handleFieldChange = (propertyName, newValue) => {
+        if (propertyName === 'partNumber' && creating()) {
+            if (newValue.match(/\/[1-9]$/)) {
+                //if new partNumber ends in /[1-9] then user is creating a new revision of existing part
+                fetchParts(newValue.split('/')[0]); // so fetch the existing parts for any crosschecking we need to do
+            } else {
+                fetchParts(newValue); // else they are creating a new part entirely. Check to see if it already exists.
+            }
+        }
         if (viewing() && propertyName !== 'reasonPhasedOut') {
             setEditStatus('edit');
         }
@@ -177,9 +212,7 @@ function Part({
     };
 
     const handleChangeLiveness = () => {
-        console.log('0');
         if (!item.dateLive) {
-            console.log('1');
             updateItem(itemId, {
                 ...part,
                 dateLive: new Date(),
@@ -187,8 +220,6 @@ function Part({
                 madeLiveByName: userName
             });
         } else {
-            console.log('2');
-
             updateItem(itemId, {
                 ...part,
                 dateLive: null,
@@ -275,9 +306,16 @@ function Part({
     return (
         <Page>
             <Grid container spacing={3}>
-                <Grid item xs={12}>
+                <Grid item xs={10}>
                     {creating() ? <Title text="Create Part" /> : <Title text="Part Details" />}
                 </Grid>
+                {creating() ? (
+                    <Grid item xs={2} />
+                ) : (
+                    <Grid item xs={2}>
+                        <LinkButton to="/inventory/parts/create" text="Copy" />{' '}
+                    </Grid>
+                )}
                 {itemError && (
                     <Grid item xs={12}>
                         <ErrorCard
@@ -291,7 +329,7 @@ function Part({
                     </Grid>
                 ) : (
                     part &&
-                    itemError?.part !== 404 && (
+                    itemError?.status !== 404 && (
                         <>
                             <SnackbarMessage
                                 visible={snackbarVisible}
@@ -305,13 +343,18 @@ function Part({
                                     value={part.partNumber}
                                     label="Part Number"
                                     maxLength={14}
-                                    helperText={!creating() ? 'This field cannot be changed' : ''}
+                                    helperText={
+                                        !creating()
+                                            ? 'This field cannot be changed'
+                                            : getPartNumberHelperText()
+                                    }
+                                    error={creating() && !!getPartNumberHelperText()}
                                     required
                                     onChange={handleFieldChange}
                                     propertyName="partNumber"
                                 />
                             </Grid>
-                            <Grid item xs={8}>
+                            <Grid item xs={7}>
                                 <InputField
                                     fullWidth
                                     value={part.description}
@@ -321,6 +364,21 @@ function Part({
                                     onChange={handleFieldChange}
                                     propertyName="description"
                                 />
+                            </Grid>
+                            <Grid item xs={2}>
+                                {!creating() &&
+                                    item?.links.some(
+                                        l => l.rel === 'mechanical-sourcing-sheet'
+                                    ) && (
+                                        <LinkButton
+                                            text="Datasheets"
+                                            to={`${
+                                                item.links.find(
+                                                    l => l.rel === 'mechanical-sourcing-sheet'
+                                                ).href
+                                            }?tab=dataSheets`}
+                                        />
+                                    )}
                             </Grid>
                             <Tabs
                                 value={tab}
@@ -352,10 +410,13 @@ function Part({
                                     handleDepartmentChange={handleDepartmentChange}
                                     paretoCode={part.paretoCode}
                                     handleAccountingCompanyChange={handleAccountingCompanyChange}
-                                    nominal={part.nominalCode}
+                                    nominal={part.nominal}
                                     nominalDescription={part.nominalDescription}
                                     stockControlled={part.stockControlled}
                                     safetyCriticalPart={part.safetyCriticalPart}
+                                    safetyCriticalHelperText={
+                                        creating() && getSafetyCriticalHelperText()
+                                    }
                                     performanceCriticalPart={part.performanceCriticalPart}
                                     emcCriticalPart={part.emcCriticalPart}
                                     singleSourcePart={part.singleSourcePart}
@@ -415,12 +476,12 @@ function Part({
                                 <StoresTab
                                     handleFieldChange={handleFieldChange}
                                     qcOnReceipt={part.qcOnReceipt}
-                                    qcInfo={part.qcInfo}
+                                    qcInformation={part.qcInformation}
                                     rawOrFinished={part.rawOrFinished}
                                     ourInspectionWeeks={part.ourInspectionWeeks}
                                     safetyWeeks={part.safetyWeeks}
                                     railMethod={part.railMethod}
-                                    minStockrail={part.minstockrail}
+                                    minStockrail={part.minStockrail}
                                     maxStockRail={part.maxStockRail}
                                     secondStageBoard={part.secondStageBoard}
                                     secondStageDescription={part.secondStageDescription}
@@ -473,15 +534,20 @@ Part.propTypes = {
         description: PropTypes.string,
         nextSerialNumber: PropTypes.number,
         dateClosed: PropTypes.string,
-        dateLive: PropTypes.string
+        dateLive: PropTypes.string,
+        department: PropTypes.string,
+        links: PropTypes.arrayOf(PropTypes.shape({ href: PropTypes.string, rel: PropTypes.string }))
     }),
+    partsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,
     editStatus: PropTypes.string.isRequired,
     itemError: PropTypes.shape({
         status: PropTypes.number,
         statusText: PropTypes.string,
-        details: PropTypes.shape({}),
-        item: PropTypes.string
+        item: PropTypes.string,
+        details: PropTypes.shape({
+            errors: PropTypes.arrayOf(PropTypes.shape({}))
+        })
     }),
     itemId: PropTypes.string,
     snackbarVisible: PropTypes.bool,
@@ -498,7 +564,8 @@ Part.propTypes = {
     options: PropTypes.shape({ template: PropTypes.string }),
     partTemplates: PropTypes.arrayOf(PropTypes.shape({ partRoot: PropTypes.string })),
     liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
-    fetchLiveTest: PropTypes.func.isRequired
+    fetchLiveTest: PropTypes.func.isRequired,
+    fetchParts: PropTypes.func.isRequired
 };
 
 Part.defaultProps = {
@@ -513,7 +580,8 @@ Part.defaultProps = {
     userNumber: null,
     options: null,
     partTemplates: [],
-    liveTest: null
+    liveTest: null,
+    partsSearchResults: []
 };
 
 export default Part;

@@ -18,13 +18,15 @@
 
         private readonly DateTime? cutOffDate = 1.December(2021);
 
-        private readonly string stockPoolCode = "stores";
+        private readonly string stockPoolCode = "STORES";
 
-        private readonly string despatchLocation = "loc1";
+        private readonly string despatchLocation = "LOC1";
 
-        private readonly string articleNumber = "article";
+        private readonly string articleNumber = "ARTICLE";
 
         private readonly string accountingCompany = "LINN";
+
+        private readonly string countryCode = "FR";
 
         private readonly bool excludeUnsuppliable = true;
 
@@ -32,7 +34,9 @@
 
         private readonly bool excludeOverCredit = true;
 
-        private AllocationStart result;
+        private readonly bool excludeNorthAmerica = true;
+
+        private AllocationResult result;
 
         [SetUp]
         public void SetUp()
@@ -45,11 +49,11 @@
                 this.articleNumber,
                 this.accountingCompany,
                 this.cutOffDate,
-                null,
+                this.countryCode,
                 this.excludeUnsuppliable,
                 this.excludeHold,
                 this.excludeOverCredit,
-                false,
+                this.excludeNorthAmerica,
                 out _,
                 out _).Returns(808);
 
@@ -59,10 +63,12 @@
                 this.accountId,
                 this.articleNumber,
                 this.accountingCompany,
+                this.countryCode,
                 this.cutOffDate,
                 this.excludeUnsuppliable,
                 this.excludeHold,
-                this.excludeOverCredit);
+                this.excludeOverCredit,
+                this.excludeNorthAmerica);
         }
 
         [Test]
@@ -74,6 +80,7 @@
                          && o.AccountId == this.accountId
                          && o.DespatchLocationCode == this.despatchLocation
                          && o.StockPoolCode == this.stockPoolCode
+                         && o.CountryCode == this.countryCode
                          && o.AccountingCompany == this.accountingCompany
                          && o.CutOffDate == this.cutOffDate));
         }
