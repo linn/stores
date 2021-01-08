@@ -30,36 +30,29 @@ function Parcel({
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
-    const [parcel, setPart] = useState(
+    const [parcel, setParcel] = useState(
         creating()
             ? {
-                  partNumber: '',
-                  description: '',
-                  accountingCompany: 'LINN',
-                  psuPart: false,
-                  stockControlled: true,
-                  cccCriticalPart: false,
-                  safetyCriticalPart: false,
-                  paretoCode: 'U',
-                  createdBy: userNumber,
+                  parcelNumber: '',
+                  supplierId: '',
+                  supplierName: '',
+                  supplierCountry: 'GB',
                   dateCreated: new Date(),
-                  railMethod: 'POLICY',
-                  preferredSupplier: 4415,
-                  preferredSupplierName: 'Linn Products Ltd',
-                  qcInformation: '',
-                  qcOnReceipt: false,
-                  orderHold: false
+                  carrierId: 0,
+                  carrierName: '',
+                  supplierInvoiceNo: 0,
+                  consignmentNo: 0,
+                  cartonCount: 0,
+                  palletCount: 0,
+                  weight: 0.0,
+                  dateReceived: new Date(),
+                  checkedById: 0,
+                  checkedByName: 0,
+                  comments: ''
               }
             : null
     );
-    const [prevPart, setPrevPart] = useState({});
-
-    const canPhaseOut = () => {
-        if (!(privileges.length < 1)) {
-            return privileges.some(priv => priv === 'part.admin');
-        }
-        return false;
-    };
+    const [prevParcel, setPrevParcel] = useState({});
 
     const handleSaveClick = () => {
         if (creating()) {
@@ -80,123 +73,18 @@ function Parcel({
     };
 
     const handleFieldChange = (propertyName, newValue) => {
-        if (viewing() && propertyName !== 'reasonPhasedOut') {
-            setEditStatus('edit');
-        }
-
-        setPart({ ...part, [propertyName]: newValue });
-    };
-
-    const handlePhaseOutClick = () => {
-        updateItem(itemId, {
-            ...part,
-            datePhasedOut: new Date(),
-            phasedOutBy: userNumber,
-            phasedOutByName: userName
-        });
-    };
-
-    const handleChangeLiveness = () => {
-        console.log('0');
-        if (!item.dateLive) {
-            console.log('1');
-            updateItem(itemId, {
-                ...part,
-                dateLive: new Date(),
-                madeLiveBy: userNumber,
-                madeLiveByName: userName
-            });
-        } else {
-            console.log('2');
-
-            updateItem(itemId, {
-                ...part,
-                dateLive: null,
-                madeLiveBy: null,
-                madeLiveByName: null
-            });
-        }
-    };
-
-    const handleIgnoreWorkstationStockChange = (_, newValue) => {
         if (viewing()) {
             setEditStatus('edit');
         }
-        if (newValue === 'Yes') {
-            setPart({ ...part, ignoreWorkstationStock: newValue === 'Yes' });
-        } else {
-            setPart({ ...part, ignoreWorkstationStock: null });
-        }
-    };
 
-    const handleDepartmentChange = newValue => {
-        if (viewing()) {
-            setEditStatus('edit');
-        }
-        fetchNominal(newValue.name);
-        setPart({
-            ...part,
-            department: newValue.name,
-            departmentDescription: newValue.description
-        });
-    };
-
-    const handleProductAnalysisCodeChange = newValue => {
-        if (viewing()) {
-            setEditStatus('edit');
-        }
-        setPart({
-            ...part,
-            productAnalysisCode: newValue.name,
-            productAnalysisCodeDescription: newValue.description
-        });
-    };
-
-    const handleSernosSequenceChange = newValue => {
-        if (viewing()) {
-            setEditStatus('edit');
-        }
-        setPart({
-            ...part,
-            sernosSequenceName: newValue.name,
-            sernosSequenceDescription: newValue.description
-        });
-    };
-
-    const handlePrefferedSupplierChange = newValue => {
-        if (viewing()) {
-            setEditStatus('edit');
-        }
-        setPart({
-            ...part,
-            preferredSupplier: newValue.name,
-            preferredSupplierName: newValue.description
-        });
-    };
-
-    const handleAccountingCompanyChange = newValue => {
-        if (viewing()) {
-            setEditStatus('edit');
-        }
-        if (newValue === 'RECORDS') {
-            setPart({
-                ...part,
-                accountingCompany: newValue,
-                paretoCode: 'R',
-                bomType: 'C',
-                linnProduced: 'No',
-                qcOnReceipt: 'No'
-            });
-        } else {
-            setPart({ ...part, accountingCompany: newValue, paretoCode: 'U' });
-        }
+        setParcel({ ...parcel, [propertyName]: newValue });
     };
 
     return (
         <Page>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    {creating() ? <Title text="Create Part" /> : <Title text="Part Details" />}
+                    {creating() ? <Title text="Create Parcel" /> : <Title text="Parcel Details" />}
                 </Grid>
                 {itemError && (
                     <Grid item xs={12}>
@@ -210,8 +98,7 @@ function Parcel({
                         <Loading />
                     </Grid>
                 ) : (
-                    part &&
-                    itemError?.part !== 404 && (
+                    parcel && (
                         <>
                             <SnackbarMessage
                                 visible={snackbarVisible}
@@ -222,25 +109,25 @@ function Parcel({
                                 <InputField
                                     fullWidth
                                     disabled={!creating()}
-                                    value={part.partNumber}
-                                    label="Part Number"
-                                    maxLength={14}
+                                    value={parcel.parcelNumber}
+                                    label="Parcel Number"
+                                    maxLength={10}
                                     helperText={!creating() ? 'This field cannot be changed' : ''}
                                     required
                                     onChange={handleFieldChange}
-                                    propertyName="partNumber"
+                                    propertyName="parcelNumber"
                                 />
                             </Grid>
+                            <Grid item xs={9} />
                             <Grid item xs={8}>
-                                <InputField
-                                    fullWidth
-                                    value={part.description}
-                                    label="Description"
-                                    maxLength={200}
-                                    required
-                                    onChange={handleFieldChange}
-                                    propertyName="description"
-                                />
+                                {/* <Typeahead
+                                    items={searchItems}
+                                    fetchItems={fetchItems}
+                                    clearSearch={clearSearch}
+                                    loading={loading}
+                                    title="Supplier"
+                                    history={history}
+                                /> */}
                             </Grid>
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons

@@ -99,3 +99,5 @@ export const sosAllocHeads = new ItemType(
 export const parcel = new ItemType('parcel', 'PARCEL', '/parcels');
 
 export const parcels = new ItemType('parcels', 'PARCELS', '/parcels');
+
+export const employees = new ItemType('employees', 'EMPLOYEES', '/employees');

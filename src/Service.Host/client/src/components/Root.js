@@ -20,6 +20,8 @@ import SosAllocHeads from '../containers/allocations/SosAllocHeads';
 import WwdReportOptions from '../containers/reports/WwdReportOptions';
 import WwdReport from '../containers/reports/WwdReport';
 import NotFoundPage from './NotFoundPage';
+import Parcel from '../containers/parcels/Parcel';
+import Parcels from '../containers/parcels/Parcels';
 
 const Root = ({ store }) => (
     <div>
@@ -60,7 +62,11 @@ const Root = ({ store }) => (
                                         path="/logistics/allocations"
                                         component={StartAllocation}
                                     />
-                                    <Route exact path="/logistics/sos-alloc-heads/:jobId" component={SosAllocHeads} />
+                                    <Route
+                                        exact
+                                        path="/logistics/sos-alloc-heads/:jobId"
+                                        component={SosAllocHeads}
+                                    />
 
                                     <Route
                                         exact
@@ -72,6 +78,14 @@ const Root = ({ store }) => (
                                         path="/inventory/reports/what-will-decrement"
                                         component={WwdReportOptions}
                                     />
+
+                                    <Route exact path="/inventory/parcels" component={Parcels} />
+                                    <Route
+                                        exact
+                                        path="/inventory/parcels/create"
+                                        component={Parcel}
+                                    />
+                                    <Route exact path="/inventory/parcels/:id" component={Parcel} />
                                     <Route component={NotFoundPage} />
                                 </Switch>
                             </div>
