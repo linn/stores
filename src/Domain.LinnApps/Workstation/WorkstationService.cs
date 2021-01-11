@@ -3,6 +3,7 @@
     using System.Linq;
 
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
 
@@ -12,12 +13,16 @@
 
         private readonly IRepository<TopUpListJobRef, string> topUpListJobRefRepository;
 
+        private readonly IWorkstationPack workstationPack;
+
         public WorkstationService(
             ISingleRecordRepository<PtlMaster> ptlMasterRepository,
-            IRepository<TopUpListJobRef, string> topUpListJobRefRepository)
+            IRepository<TopUpListJobRef, string> topUpListJobRefRepository,
+            IWorkstationPack workstationPack)
         {
             this.ptlMasterRepository = ptlMasterRepository;
             this.topUpListJobRefRepository = topUpListJobRefRepository;
+            this.workstationPack = workstationPack;
         }
 
         public WorkstationTopUpStatus GetTopUpStatus()
@@ -33,6 +38,21 @@
                            WorkstationTopUpJobRef = topUpRun != null ? topUpRun.JobRef : "No run today",
                            WorkstationTopUpMessage = topUpRun != null ? $"The last run was on {topUpRun.DateRun:dd-MMM-yyyy} at {topUpRun.DateRun:h:mm tt}" : string.Empty
                        };
+        }
+
+        public WorkstationTopUpStatus StartTopUpRun()
+        {
+            var status = this.GetTopUpStatus();
+            if (status.ProductionTriggerRunJobRef == status.WorkstationTopUpJobRef)
+            {
+                status.StatusMessage = "The workstation top up has already been run";
+                return status;
+            }
+
+            this.workstationPack.StartTopUpRun();
+
+            status.StatusMessage = "Workstation top up run has been started";
+            return status;
         }
     }
 }

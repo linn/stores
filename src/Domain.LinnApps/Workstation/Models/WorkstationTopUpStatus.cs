@@ -9,5 +9,7 @@
         public string ProductionTriggerRunJobRef { get; set; }
 
         public string ProductionTriggerRunMessage { get; set; }
+
+        public string StatusMessage { get; set; }
     }
 }

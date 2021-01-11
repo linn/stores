@@ -25,7 +25,10 @@
 
         public IResult<ResponseModel<WorkstationTopUpStatus>> StartTopUpRun(IEnumerable<string> privileges)
         {
-            throw new System.NotImplementedException();
+            return new SuccessResult<ResponseModel<WorkstationTopUpStatus>>(
+                new ResponseModel<WorkstationTopUpStatus>(
+                    this.workstationService.StartTopUpRun(),
+                    privileges));
         }
     }
 }

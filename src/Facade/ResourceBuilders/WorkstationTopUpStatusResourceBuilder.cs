@@ -27,6 +27,7 @@
                 ProductionTriggerRunMessage = workstationTopUpStatus.ResponseData.ProductionTriggerRunMessage,
                 WorkstationTopUpJobRef = workstationTopUpStatus.ResponseData.WorkstationTopUpJobRef,
                 WorkstationTopUpMessage = workstationTopUpStatus.ResponseData.WorkstationTopUpMessage,
+                StatusMessage = workstationTopUpStatus.ResponseData.StatusMessage,
                 Links = this.BuildLinks(workstationTopUpStatus).ToArray()
             };
         }
