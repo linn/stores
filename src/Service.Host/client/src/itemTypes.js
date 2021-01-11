@@ -155,3 +155,9 @@ export const tqmsCategories = new ItemType(
     'TQMS_CATEGORIES',
     '/inventory/parts/tqms-categories'
 );
+
+export const workstationTopUpStatus = new ItemType(
+    'workstationTopUpStatus',
+    'WORKSTATION_TOP_UP_STATUS',
+    '/logistics/workstations/top-up'
+);

@@ -23,6 +23,7 @@ import StoragePlaceAuditReportOptions from '../containers/reports/StoragePlaceAu
 import StoragePlaceAuditReport from '../containers/reports/StoragePlaceAuditReport';
 import NotFoundPage from './NotFoundPage';
 import MechPartSource from '../containers/parts/mechPartSource/MechPartSource';
+import WorkstationTopUpStatus from '../containers/workstations/WorkstationTopUpStatus';
 
 const Root = ({ store }) => (
     <div>
@@ -112,6 +113,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/reports/storage-place-audit"
                                         component={StoragePlaceAuditReportOptions}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/workstations/top-up"
+                                        component={WorkstationTopUpStatus}
                                     />
 
                                     <Route component={NotFoundPage} />

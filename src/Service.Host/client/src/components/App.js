@@ -13,6 +13,9 @@ function App() {
                 <ListItem component={Link} to="/logistics/allocations" button>
                     <Typography color="primary">Start Allocation</Typography>
                 </ListItem>
+                <ListItem component={Link} to="/logistics/workstations/top-up" button>
+                    <Typography color="primary">Workstation Run</Typography>
+                </ListItem>
                 <ListItem component={Link} to="/inventory/parts" button>
                     <Typography color="primary">Parts Utility</Typography>
                 </ListItem>
