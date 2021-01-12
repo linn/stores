@@ -7,5 +7,9 @@
         WorkstationTopUpStatus GetTopUpStatus();
 
         WorkstationTopUpStatus StartTopUpRun();
+
+        bool CanStartNewRun();
+
+        bool CanStartNewRun(WorkstationTopUpStatus status);
     }
 }

@@ -119,7 +119,11 @@ const Root = ({ store }) => (
                                         path="/logistics/workstations/top-up"
                                         component={WorkstationTopUpStatus}
                                     />
-
+                                    <Route
+                                        exact
+                                        path="/logistics/workstations/top-up/:jobRef"
+                                        component={WorkstationTopUpStatus}
+                                    />
                                     <Route component={NotFoundPage} />
                                 </Switch>
                             </div>

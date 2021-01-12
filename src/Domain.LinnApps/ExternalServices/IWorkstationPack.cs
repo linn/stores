@@ -3,5 +3,7 @@
     public interface IWorkstationPack
     {
         void StartTopUpRun();
+
+        string TopUpRunProgressStatus();
     }
 }

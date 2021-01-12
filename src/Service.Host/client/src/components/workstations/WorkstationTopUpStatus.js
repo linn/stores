@@ -1,26 +1,16 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { Link } from 'react-router-dom';
 import { Loading, Title, utilities } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 
-const useStyles = makeStyles({
-    nounderline: {
-        textDecoration: 'none'
-    }
-});
-
-function WorkstationTopUpStatus({ item, loading }) {
-    const classes = useStyles();
-
+function WorkstationTopUpStatus({ item, loading, startTopUpRun }) {
     const [startHref, setStartHref] = useState(null);
 
     useEffect(() => {
-        setStartHref(utilities.getHref(item, 'start-top-up'))
+        setStartHref(utilities.getHref(item, 'start-top-up'));
     }, [item, setStartHref]);
 
     return (
@@ -31,11 +21,14 @@ function WorkstationTopUpStatus({ item, loading }) {
                     <Title text="Workstation Top Up" />
                 </Grid>
                 <Grid item xs={2}>
-                    <Link className={classes.nounderline} to={startHref}>
-                        <Button disabled={!startHref} color="secondary" variant="contained">
-                            Start New Run
-                        </Button>
-                    </Link>
+                    <Button
+                        disabled={!startHref}
+                        onClick={() => startTopUpRun({})}
+                        color="secondary"
+                        variant="contained"
+                    >
+                        Start New Run
+                    </Button>
                 </Grid>
                 {loading || !item ? (
                     <Loading />
@@ -57,7 +50,7 @@ function WorkstationTopUpStatus({ item, loading }) {
                         </Grid>
                         <Grid item xs={2} />
                         <Grid item xs={10}>
-                            <Typography variant="h4">{item.statusMessage}</Typography>
+                            <Typography variant="h6">{item.statusMessage}</Typography>
                         </Grid>
                     </>
                 )}
@@ -81,7 +74,8 @@ WorkstationTopUpStatus.propTypes = {
         workstationTopUpMessage: PropTypes.string,
         statusMessage: PropTypes.string
     }),
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
+    startTopUpRun: PropTypes.func.isRequired
 };
 
 WorkstationTopUpStatus.defaultProps = {

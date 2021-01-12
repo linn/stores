@@ -7,6 +7,7 @@
     using Linn.Common.Facade;
     using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Resources.Workstation;
 
@@ -14,9 +15,14 @@
     {
         private readonly IAuthorisationService authorisationService;
 
-        public WorkstationTopUpStatusResourceBuilder(IAuthorisationService authorisationService)
+        private readonly IWorkstationPack workstationPack;
+
+        public WorkstationTopUpStatusResourceBuilder(
+            IAuthorisationService authorisationService,
+            IWorkstationPack workstationPack)
         {
             this.authorisationService = authorisationService;
+            this.workstationPack = workstationPack;
         }
 
         public WorkstationTopUpStatusResource Build(ResponseModel<WorkstationTopUpStatus> workstationTopUpStatus)
@@ -43,9 +49,12 @@
 
         private IEnumerable<LinkResource> BuildLinks(ResponseModel<WorkstationTopUpStatus> workstationTopUpStatus)
         {
-            if (this.authorisationService.HasPermissionFor(AuthorisedAction.WorkstationAdmin, workstationTopUpStatus.Privileges))
+            if (string.IsNullOrEmpty(this.workstationPack.TopUpRunProgressStatus())
+                && this.authorisationService.HasPermissionFor(
+                    AuthorisedAction.WorkstationAdmin,
+                    workstationTopUpStatus.Privileges))
             {
-                yield return new LinkResource { Rel = "start-top-up", Href = this.GetLocation(workstationTopUpStatus) };
+                yield return new LinkResource { Rel = "start-top-up", Href = "/logistics/workstations/top-up" };
             }
 
             yield return new LinkResource { Rel = "self", Href = this.GetLocation(workstationTopUpStatus) };

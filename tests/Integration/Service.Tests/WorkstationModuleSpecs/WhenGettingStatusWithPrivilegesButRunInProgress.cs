@@ -17,7 +17,7 @@
 
     using NUnit.Framework;
 
-    public class WhenGettingStatusWithPrivileges : ContextBase
+    public class WhenGettingStatusWithPrivilegesButRunInProgress : ContextBase
     {
         private ResponseModel<WorkstationTopUpStatus> workstationStatus;
 
@@ -31,7 +31,8 @@
                                   ProductionTriggerRunJobRef = "a",
                                   WorkstationTopUpJobRef = "b",
                                   ProductionTriggerRunMessage = "it was run",
-                                  WorkstationTopUpMessage = "so was this"
+                                  WorkstationTopUpMessage = "so was this",
+                                  StatusMessage = "in progress"
                               };
             this.workstationStatus = new ResponseModel<WorkstationTopUpStatus>(
                 this.status,
@@ -40,7 +41,7 @@
                 .Returns(new SuccessResult<ResponseModel<WorkstationTopUpStatus>>(this.workstationStatus));
             this.AuthorisationService.HasPermissionFor(AuthorisedAction.WorkstationAdmin, Arg.Any<List<string>>())
                 .Returns(true);
-
+            this.WorkstationPack.TopUpRunProgressStatus().Returns("in progress");
             this.Response = this.Browser.Get(
                 "/logistics/workstations/top-up",
                 with =>
@@ -63,10 +64,9 @@
             resultResource.ProductionTriggerRunMessage.Should().Be(this.status.ProductionTriggerRunMessage);
             resultResource.WorkstationTopUpJobRef.Should().Be(this.status.WorkstationTopUpJobRef);
             resultResource.WorkstationTopUpMessage.Should().Be(this.status.WorkstationTopUpMessage);
-            resultResource.Links.Length.Should().Be(3);
+            resultResource.Links.Length.Should().Be(2);
             resultResource.Links.First(a => a.Rel == "self").Href.Should().Be("/logistics/workstations/top-up/b");
             resultResource.Links.First(a => a.Rel == "status").Href.Should().Be("/logistics/workstations/top-up");
-            resultResource.Links.First(a => a.Rel == "start-top-up").Href.Should().Be("/logistics/workstations/top-up/b");
         }
     }
 }

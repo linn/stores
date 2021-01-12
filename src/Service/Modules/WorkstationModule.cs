@@ -16,7 +16,7 @@
         {
             this.workstationFacadeService = workstationFacadeService;
             this.Get("/logistics/workstations/top-up", _ => this.GetStatus());
-            this.Post("/logistics/workstations/top-up/{jobRef}", _ => this.RunTopUp());
+            this.Post("/logistics/workstations/top-up", _ => this.RunTopUp());
         }
 
         private object RunTopUp()

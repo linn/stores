@@ -29,5 +29,28 @@
                 connection.Close();
             }
         }
+
+        public string TopUpRunProgressStatus()
+        {
+            using (var connection = this.databaseService.GetConnection())
+            {
+                connection.Open();
+                var cmd = new OracleCommand("workstation_pack.top_up_run_progress_status", connection)
+                              {
+                                  CommandType = CommandType.StoredProcedure
+                              };
+
+                var result = new OracleParameter(null, OracleDbType.Varchar2)
+                                 {
+                                     Direction = ParameterDirection.ReturnValue,
+                                     Size = 100
+                                 };
+                cmd.Parameters.Add(result);
+
+                cmd.ExecuteNonQuery();
+                connection.Close();
+                return result.Value.ToString();
+            }
+        }
     }
 }

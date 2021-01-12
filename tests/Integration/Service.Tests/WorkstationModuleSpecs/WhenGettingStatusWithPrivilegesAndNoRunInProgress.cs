@@ -6,6 +6,7 @@
     using FluentAssertions;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Resources.Workstation;
 
@@ -16,7 +17,7 @@
 
     using NUnit.Framework;
 
-    public class WhenStartingTopUp : ContextBase
+    public class WhenGettingStatusWithPrivilegesAndNoRunInProgress : ContextBase
     {
         private ResponseModel<WorkstationTopUpStatus> workstationStatus;
 
@@ -27,16 +28,20 @@
         {
             this.status = new WorkstationTopUpStatus
                               {
+                                  ProductionTriggerRunJobRef = "a",
                                   WorkstationTopUpJobRef = "b",
-                                  WorkstationTopUpMessage = "run started"
+                                  ProductionTriggerRunMessage = "it was run",
+                                  WorkstationTopUpMessage = "so was this"
                               };
             this.workstationStatus = new ResponseModel<WorkstationTopUpStatus>(
                 this.status,
                 new List<string>());
-            this.WorkstationFacadeService.StartTopUpRun(Arg.Any<IEnumerable<string>>())
+            this.WorkstationFacadeService.GetStatus(Arg.Any<IEnumerable<string>>())
                 .Returns(new SuccessResult<ResponseModel<WorkstationTopUpStatus>>(this.workstationStatus));
-
-            this.Response = this.Browser.Post(
+            this.AuthorisationService.HasPermissionFor(AuthorisedAction.WorkstationAdmin, Arg.Any<List<string>>())
+                .Returns(true);
+            this.WorkstationPack.TopUpRunProgressStatus().Returns(string.Empty);
+            this.Response = this.Browser.Get(
                 "/logistics/workstations/top-up",
                 with =>
                 {
@@ -51,13 +56,6 @@
         }
 
         [Test]
-        public void ShouldCallService()
-        {
-            this.WorkstationFacadeService.Received()
-                .StartTopUpRun(Arg.Is<IEnumerable<string>>(s => s.Contains("p1")));
-        }
-
-        [Test]
         public void ShouldReturnResource()
         {
             var resultResource = this.Response.Body.DeserializeJson<WorkstationTopUpStatusResource>();
@@ -65,9 +63,10 @@
             resultResource.ProductionTriggerRunMessage.Should().Be(this.status.ProductionTriggerRunMessage);
             resultResource.WorkstationTopUpJobRef.Should().Be(this.status.WorkstationTopUpJobRef);
             resultResource.WorkstationTopUpMessage.Should().Be(this.status.WorkstationTopUpMessage);
-            resultResource.Links.Length.Should().Be(2);
+            resultResource.Links.Length.Should().Be(3);
             resultResource.Links.First(a => a.Rel == "self").Href.Should().Be("/logistics/workstations/top-up/b");
             resultResource.Links.First(a => a.Rel == "status").Href.Should().Be("/logistics/workstations/top-up");
+            resultResource.Links.First(a => a.Rel == "start-top-up").Href.Should().Be("/logistics/workstations/top-up");
         }
     }
 }

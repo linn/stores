@@ -22,9 +22,12 @@
 
         private PtlMaster ptlMaster;
 
+        private string progressMessage;
+
         [SetUp]
         public void SetUp()
         {
+            this.progressMessage = "in progress";
             this.ptlMaster = new PtlMaster
                                  {
                                      LastFullJobRef = "G",
@@ -33,6 +36,8 @@
                                  };
             this.PtlRepository.GetRecord()
                 .Returns(this.ptlMaster);
+            this.WorkstationPack.TopUpRunProgressStatus()
+                .Returns(this.progressMessage);
             this.topUpList = new List<TopUpListJobRef>
                                  {
                                      new TopUpListJobRef { JobRef = "F", DateRun = 1.December(2022).AddHours(1) },
@@ -55,12 +60,19 @@
         }
 
         [Test]
+        public void ShouldGetInProgressMessage()
+        {
+            this.WorkstationPack.Received().TopUpRunProgressStatus();
+        }
+
+        [Test]
         public void ShouldReturnStatus()
         {
             this.result.ProductionTriggerRunJobRef.Should().Be(this.ptlMaster.LastFullJobRef);
             this.result.WorkstationTopUpJobRef.Should().Be("G");
             this.result.ProductionTriggerRunMessage.Should().Be("The last run was on 01-Dec-2022 at 1:00 AM and took 5 minutes.");
             this.result.WorkstationTopUpMessage.Should().Be("The last run was on 01-Dec-2022 at 2:00 AM.");
+            this.result.StatusMessage.Should().Be(this.progressMessage);
         }
     }
 }

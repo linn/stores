@@ -17,7 +17,8 @@ const initialise = () => dispatch => {
 };
 
 const mapDispatchToProps = {
-    initialise
+    initialise,
+    startTopUpRun: workstationTopUpStatusActions.add
 };
 
 export default connect(
