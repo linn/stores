@@ -8,4 +8,8 @@ const defaultState = {
     editStatus: 'view'
 };
 
-export default itemStoreFactory(itemTypes.workstationTopUpStatus.actionType, actionTypes, defaultState);
+export default itemStoreFactory(
+    itemTypes.workstationTopUpStatus.actionType,
+    actionTypes,
+    defaultState
+);

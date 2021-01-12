@@ -37,7 +37,7 @@
                 .Returns(new SuccessResult<ResponseModel<WorkstationTopUpStatus>>(this.workstationStatus));
 
             this.Response = this.Browser.Post(
-                "/logistics/workstations/top-up/b/start",
+                "/logistics/workstations/top-up/b",
                 with =>
                 {
                     with.Header("Accept", "application/json");

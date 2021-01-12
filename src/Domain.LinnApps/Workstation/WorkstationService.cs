@@ -36,7 +36,7 @@
                            ProductionTriggerRunJobRef = triggerRunStatus.LastFullJobRef,
                            ProductionTriggerRunMessage = $"The last run was on {triggerRunStatus.LastFullRunDate:dd-MMM-yyyy} at {triggerRunStatus.LastFullRunDate:h:mm tt} and took {triggerRunStatus.LastFullRunMinutesTaken} minutes.",
                            WorkstationTopUpJobRef = topUpRun != null ? topUpRun.JobRef : "No run today",
-                           WorkstationTopUpMessage = topUpRun != null ? $"The last run was on {topUpRun.DateRun:dd-MMM-yyyy} at {topUpRun.DateRun:h:mm tt}" : string.Empty
+                           WorkstationTopUpMessage = topUpRun != null ? $"The last run was on {topUpRun.DateRun:dd-MMM-yyyy} at {topUpRun.DateRun:h:mm tt}." : string.Empty
                        };
         }
 
