@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { Loading, Title, utilities } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 
-function WorkstationTopUpStatus({ item, loading, startTopUpRun }) {
+function WorkstationTopUpStatus({ item, loading, startTopUpRun, refreshStatus }) {
     const [startHref, setStartHref] = useState(null);
 
     useEffect(() => {
@@ -16,9 +16,14 @@ function WorkstationTopUpStatus({ item, loading, startTopUpRun }) {
     return (
         <Page>
             <Grid container spacing={3}>
-                <Grid item xs={2} />
-                <Grid item xs={8}>
+                <Grid item xs={1} />
+                <Grid item xs={7}>
                     <Title text="Workstation Top Up" />
+                </Grid>
+                <Grid item xs={2}>
+                    <Button onClick={() => refreshStatus()} variant="contained">
+                        Refresh Status
+                    </Button>
                 </Grid>
                 <Grid item xs={2}>
                     <Button
@@ -34,22 +39,33 @@ function WorkstationTopUpStatus({ item, loading, startTopUpRun }) {
                     <Loading />
                 ) : (
                     <>
-                        <Grid item xs={2} />
-                        <Grid item xs={10}>
+                        <Grid item xs={1} />
+                        <Grid item xs={11}>
                             <Typography variant="subtitle1">
-                                Last Trigger Run : {item.productionTriggerRunJobRef}{' '}
+                                Last Trigger Run : {item.productionTriggerRunJobRef}
+                            </Typography>
+                        </Grid>
+
+                        <Grid item xs={1} />
+                        <Grid item xs={11}>
+                            <Typography variant="subtitle1">
                                 {item.productionTriggerRunMessage}
                             </Typography>
                         </Grid>
-                        <Grid item xs={2} />
-                        <Grid item xs={10}>
+                        <Grid item xs={1} />
+                        <Grid item xs={11}>
                             <Typography variant="subtitle1">
-                                Last Workstation Run : {item.workstationTopUpJobRef}{' '}
+                                Last Workstation Run : {item.workstationTopUpJobRef}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={1} />
+                        <Grid item xs={11}>
+                            <Typography variant="subtitle1">
                                 {item.workstationTopUpMessage}
                             </Typography>
                         </Grid>
-                        <Grid item xs={2} />
-                        <Grid item xs={10}>
+                        <Grid item xs={1} />
+                        <Grid item xs={11}>
                             <Typography variant="h6">{item.statusMessage}</Typography>
                         </Grid>
                     </>
@@ -75,7 +91,8 @@ WorkstationTopUpStatus.propTypes = {
         statusMessage: PropTypes.string
     }),
     loading: PropTypes.bool,
-    startTopUpRun: PropTypes.func.isRequired
+    startTopUpRun: PropTypes.func.isRequired,
+    refreshStatus: PropTypes.func.isRequired
 };
 
 WorkstationTopUpStatus.defaultProps = {

@@ -18,7 +18,9 @@ const initialise = () => dispatch => {
 
 const mapDispatchToProps = {
     initialise,
-    startTopUpRun: workstationTopUpStatusActions.add
+    startTopUpRun: workstationTopUpStatusActions.add,
+    refreshStatus: () =>
+        workstationTopUpStatusActions.fetchByHref(itemTypes.workstationTopUpStatus.uri)
 };
 
 export default connect(
