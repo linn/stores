@@ -25,6 +25,16 @@
             this.workstationPack = workstationPack;
         }
 
+        public static bool CanStartNewRun(WorkstationTopUpStatus status, string progressStatus)
+        {
+            if (status.ProductionTriggerRunJobRef == status.WorkstationTopUpJobRef)
+            {
+                return false;
+            }
+
+            return string.IsNullOrEmpty(progressStatus);
+        }
+
         public WorkstationTopUpStatus GetTopUpStatus()
         {
             var triggerRunStatus = this.ptlMasterRepository.GetRecord();
@@ -44,9 +54,10 @@
         public WorkstationTopUpStatus StartTopUpRun()
         {
             var status = this.GetTopUpStatus();
-            if (status.ProductionTriggerRunJobRef == status.WorkstationTopUpJobRef)
+
+            if (!CanStartNewRun(status, this.workstationPack.TopUpRunProgressStatus()))
             {
-                status.StatusMessage = "The workstation top up has already been run";
+                status.StatusMessage = "Workstation top run is in progress or already completed";
                 return status;
             }
 
@@ -58,22 +69,7 @@
 
         public bool CanStartNewRun()
         {
-            return this.CanStartNewRun(this.GetTopUpStatus());
-        }
-
-        public bool CanStartNewRun(WorkstationTopUpStatus status)
-        {
-            if (status.ProductionTriggerRunJobRef == status.WorkstationTopUpJobRef)
-            {
-                return false;
-            }
-
-            if (!string.IsNullOrEmpty(this.workstationPack.TopUpRunProgressStatus()))
-            {
-                return false;
-            }
-
-            return true;
+            return CanStartNewRun(this.GetTopUpStatus(), this.workstationPack.TopUpRunProgressStatus());
         }
     }
 }

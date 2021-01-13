@@ -1,7 +1,13 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.WorkstationServiceTests
 {
-    using FluentAssertions;
+    using System.Collections.Generic;
+    using System.Linq;
 
+    using FluentAssertions;
+    using FluentAssertions.Extensions;
+
+    using Linn.Stores.Domain.LinnApps.ProductionTriggers;
+    using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
 
     using NSubstitute;
@@ -12,14 +18,32 @@
     {
         private bool result;
 
-        private WorkstationTopUpStatus status;
+        private PtlMaster ptlMaster;
+
+        private List<TopUpListJobRef> topUpList;
+
+        private string progressMessage;
 
         [SetUp]
         public void SetUp()
         {
-            this.status = new WorkstationTopUpStatus { ProductionTriggerRunJobRef = "a", WorkstationTopUpJobRef = "b" };
-            this.WorkstationPack.TopUpRunProgressStatus().Returns(string.Empty);
-            this.result = this.Sut.CanStartNewRun(this.status);
+            this.progressMessage = string.Empty;
+            this.ptlMaster = new PtlMaster
+                                 {
+                                     LastFullJobRef = "G",
+                                     LastFullRunDate = 1.December(2022).AddHours(1),
+                                     LastFullRunMinutesTaken = 5
+                                 };
+            this.PtlRepository.GetRecord()
+                .Returns(this.ptlMaster);
+            this.WorkstationPack.TopUpRunProgressStatus()
+                .Returns(this.progressMessage);
+            this.topUpList = new List<TopUpListJobRef>
+                                 {
+                                     new TopUpListJobRef { JobRef = "F", DateRun = 1.December(2022).AddHours(1) }
+                                 };
+            this.TopUpListJobRefRepository.FindAll().Returns(this.topUpList.AsQueryable());
+            this.result = this.Sut.CanStartNewRun();
         }
         
         [Test]

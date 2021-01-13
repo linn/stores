@@ -8,6 +8,7 @@
     using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
+    using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Resources.Workstation;
 
@@ -49,10 +50,10 @@
 
         private IEnumerable<LinkResource> BuildLinks(ResponseModel<WorkstationTopUpStatus> workstationTopUpStatus)
         {
-            if (string.IsNullOrEmpty(this.workstationPack.TopUpRunProgressStatus())
-                && this.authorisationService.HasPermissionFor(
-                    AuthorisedAction.WorkstationAdmin,
-                    workstationTopUpStatus.Privileges))
+            if (WorkstationService.CanStartNewRun(
+                    workstationTopUpStatus.ResponseData,
+                    this.workstationPack.TopUpRunProgressStatus())
+                && this.authorisationService.HasPermissionFor(AuthorisedAction.WorkstationAdmin, workstationTopUpStatus.Privileges))
             {
                 yield return new LinkResource { Rel = "start-top-up", Href = "/logistics/workstations/top-up" };
             }

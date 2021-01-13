@@ -8,25 +8,23 @@
 
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Workstation;
+    using Linn.Stores.Domain.LinnApps.Workstation.Models;
 
     using NSubstitute;
 
     using NUnit.Framework;
 
-    public class WhenGettingCanStartAndRunInProgress : ContextBase
+    public class WhenStartingTopUpRunButAlreadyRun : ContextBase
     {
-        private bool result;
-
-        private PtlMaster ptlMaster;
+        private WorkstationTopUpStatus result;
 
         private List<TopUpListJobRef> topUpList;
 
-        private string progressMessage;
+        private PtlMaster ptlMaster;
 
         [SetUp]
         public void SetUp()
         {
-            this.progressMessage = "in progress";
             this.ptlMaster = new PtlMaster
                                  {
                                      LastFullJobRef = "G",
@@ -35,21 +33,27 @@
                                  };
             this.PtlRepository.GetRecord()
                 .Returns(this.ptlMaster);
-            this.WorkstationPack.TopUpRunProgressStatus()
-                .Returns(this.progressMessage);
             this.topUpList = new List<TopUpListJobRef>
                                  {
-                                     new TopUpListJobRef { JobRef = "F", DateRun = 1.December(2022).AddHours(1) }
+                                     new TopUpListJobRef { JobRef = "G", DateRun = 1.December(2022).AddHours(1) }
                                  };
             this.TopUpListJobRefRepository.FindAll().Returns(this.topUpList.AsQueryable());
-            this.WorkstationPack.TopUpRunProgressStatus().Returns("in progress");
-            this.result = this.Sut.CanStartNewRun();
+
+            this.result = this.Sut.StartTopUpRun();
         }
-        
+
         [Test]
-        public void ShouldReturnFalse()
+        public void ShouldNotCallProxy()
         {
-            this.result.Should().BeFalse();
+            this.WorkstationPack.DidNotReceive().StartTopUpRun();
+        }
+
+        [Test]
+        public void ShouldReturnStatus()
+        {
+            this.result.ProductionTriggerRunJobRef.Should().Be(this.ptlMaster.LastFullJobRef);
+            this.result.WorkstationTopUpJobRef.Should().Be("G");
+            this.result.StatusMessage.Should().Be("Workstation top run is in progress or already completed");
         }
     }
 }
