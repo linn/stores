@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Proxy
 {
+    using System;
     using System.Data;
 
     using Linn.Stores.Domain.LinnApps.ExternalServices;
@@ -49,7 +50,7 @@
 
                 cmd.ExecuteNonQuery();
                 connection.Close();
-                return result.Value.ToString();
+                return result.Value?.ToString() == "null" ? null : result.Value?.ToString();
             }
         }
     }
