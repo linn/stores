@@ -33,7 +33,6 @@
             builder.RegisterType<StoragePlaceAuditReportService>().As<IStoragePlaceAuditReportService>();
             builder.RegisterType<MechPartSourceService>().As<IMechPartSourceService>();
             builder.RegisterType<WorkstationService>().As<IWorkstationService>();
-            builder.RegisterType<AuthorisationService>().As<IAuthorisationService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -89,6 +88,7 @@
             builder.RegisterType<WwdPack>().As<IWwdPack>();
             builder.RegisterType<StoragePlaceAuditPack>().As<IStoragePlaceAuditPack>();
             builder.RegisterType<AllocPack>().As<IAllocPack>();
+            builder.RegisterType<WorkstationPackProxy>().As<IWorkstationPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

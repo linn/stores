@@ -97,3 +97,7 @@ export const unpickItemsAllocationActionTypes = makeActionTypes(
 );
 
 export const tqmsCategoriesActionTypes = makeActionTypes(itemTypes.tqmsCategories.actionType);
+
+export const workstationTopUpStatusActionTypes = makeActionTypes(
+    itemTypes.workstationTopUpStatus.actionType
+);

@@ -8,26 +8,25 @@
 
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Workstation;
-    using Linn.Stores.Domain.LinnApps.Workstation.Models;
 
     using NSubstitute;
 
     using NUnit.Framework;
 
-    public class WhenGettingTopUpStatus : ContextBase
+    public class WhenGettingCanStartAndJobRefsMatch : ContextBase
     {
-        private WorkstationTopUpStatus result;
-
-        private List<TopUpListJobRef> topUpList;
+        private bool result;
 
         private PtlMaster ptlMaster;
+
+        private List<TopUpListJobRef> topUpList;
 
         private string progressMessage;
 
         [SetUp]
         public void SetUp()
         {
-            this.progressMessage = "in progress";
+            this.progressMessage = string.Empty;
             this.ptlMaster = new PtlMaster
                                  {
                                      LastFullJobRef = "G",
@@ -41,38 +40,16 @@
             this.topUpList = new List<TopUpListJobRef>
                                  {
                                      new TopUpListJobRef { JobRef = "F", DateRun = 1.December(2022).AddHours(1) },
-                                     new TopUpListJobRef { JobRef = "G", DateRun = 1.December(2022).AddHours(2) }
+                                     new TopUpListJobRef { JobRef = "G", DateRun = 1.December(2022).AddHours(1) }
                                  };
             this.TopUpListJobRefRepository.FindAll().Returns(this.topUpList.AsQueryable());
-            this.result = this.Sut.GetTopUpStatus();
+            this.result = this.Sut.CanStartNewRun();
         }
-
+        
         [Test]
-        public void ShouldCallTriggerRepository()
+        public void ShouldReturnFalse()
         {
-            this.PtlRepository.Received().GetRecord();
-        }
-
-        [Test]
-        public void ShouldCallTopUpRepository()
-        {
-            this.TopUpListJobRefRepository.Received().FindAll();
-        }
-
-        [Test]
-        public void ShouldGetInProgressMessage()
-        {
-            this.WorkstationPack.Received().TopUpRunProgressStatus();
-        }
-
-        [Test]
-        public void ShouldReturnStatus()
-        {
-            this.result.ProductionTriggerRunJobRef.Should().Be(this.ptlMaster.LastFullJobRef);
-            this.result.WorkstationTopUpJobRef.Should().Be("G");
-            this.result.ProductionTriggerRunMessage.Should().Be("The last run was on 01-Dec-2022 at 1:00 AM and took 5 minutes.");
-            this.result.WorkstationTopUpMessage.Should().Be("The last run was on 01-Dec-2022 at 2:00 AM.");
-            this.result.StatusMessage.Should().Be(this.progressMessage);
+            this.result.Should().BeFalse();
         }
     }
 }
