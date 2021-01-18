@@ -36,7 +36,7 @@
 
             // facade services
             builder.RegisterType<PartFacadeService>()
-                .As<IFacadeService<Part, int, PartResource, PartResource>>();
+                .As<IPartsFacadeService>();
             builder.RegisterType<AccountingCompanyService>().As<IAccountingCompanyService>();
             builder.RegisterType<RootProductsService>().As<IRootProductService>();
             builder.RegisterType<DepartmentService>().As<IDepartmentsService>();

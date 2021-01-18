@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Net.Sockets;
 
     using Exceptions;
 
@@ -27,6 +28,8 @@
 
         private readonly IRepository<MechPartSource, int> sourceRepository;
 
+        private readonly IQueryRepository<StockLocator> stockLocatorRepository;
+
         public PartService(
             IAuthorisationService authService,
             IRepository<QcControl, int> qcControlRepository,
@@ -34,6 +37,7 @@
             IRepository<Part, int> partRepository,
             IRepository<PartTemplate, string> templateRepository,
             IRepository<MechPartSource, int> sourceRepository,
+            IQueryRepository<StockLocator> stockLocatorRepository,
             IPartPack partPack)
         {
             this.authService = authService;
@@ -43,6 +47,7 @@
             this.partPack = partPack;
             this.sourceRepository = sourceRepository;
             this.templateRepository = templateRepository;
+            this.stockLocatorRepository = stockLocatorRepository;
         }
 
         public void UpdatePart(Part from, Part to, List<string> privileges)
@@ -213,6 +218,27 @@
             }
 
             return this.partRepository.FindBy(p => p.PartNumber == source.PartNumber);
+        }
+
+        public IEnumerable<Part> GetDeptStockPalletParts()
+        {
+            var parts = this.partRepository.FindAll();
+            var stockLocators = this.stockLocatorRepository.FindAll();
+            var codes = new[] { "LINN DEPT", "LS DEPT" }; //linnsight? obsolete?
+            return from p in parts
+                    where (from s in stockLocators 
+                           where (s.PartNumber == p.PartNumber && codes.Contains(s.StockPoolCode))
+                           select s.PartNumber)
+                        .Contains(p.PartNumber)
+                        ||
+                        ((p.StockControlled.Equals("N") && (p.BaseUnitPrice == 0 || p.BaseUnitPrice == null) 
+                                                       && (p.LinnProduced.Equals("N") || p.LinnProduced == null))
+                        &&
+                        !(from s in stockLocators
+                         where s.PartNumber == p.PartNumber
+                         select s.PartNumber)
+                        .Contains(p.PartNumber))
+                    select p;
         }
 
         private static void Validate(Part to)

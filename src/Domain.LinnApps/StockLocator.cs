@@ -13,5 +13,7 @@
         public string PartNumber { get; set; }
 
         public int? QuantityAllocated { get; set; }
+
+        public string StockPoolCode { get; set; }
     }
 }

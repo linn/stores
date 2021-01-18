@@ -658,6 +658,7 @@
             q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
             q.Property(e => e.Quantity).HasColumnName("QTY");
             q.Property(e => e.QuantityAllocated).HasColumnName("QTY_ALLOCATED");
+            q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE");
         }
 
         private void QueryStoragePlaces(ModelBuilder builder)

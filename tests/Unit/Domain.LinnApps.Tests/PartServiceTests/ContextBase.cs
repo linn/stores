@@ -29,6 +29,8 @@
 
         protected IPartPack PartPack { get; private set; }
 
+        protected IQueryRepository<StockLocator> StockLocatorRepository { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -47,6 +49,7 @@
                 this.PartRepository,
                 this.TemplateRepository,
                 this.SourceRepository,
+                this.StockLocatorRepository,
                 this.PartPack);
         }
     }
