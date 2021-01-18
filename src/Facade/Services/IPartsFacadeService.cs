@@ -8,6 +8,6 @@
 
     public interface IPartsFacadeService : IFacadeService<Part, int, PartResource, PartResource>
     {
-        IResult<IEnumerable<Part>> GetDeptStockPalletParts();
+        IResult<IEnumerable<Part>> GetDeptStockPalletParts(string partNumber);
     }
 }

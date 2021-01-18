@@ -17,37 +17,37 @@
 
     using NUnit.Framework;
 
-    public class WhenSearching : ContextBase
+    public class WhenSearchingDeptStockPalletParts : ContextBase
     {
         [SetUp]
         public void SetUp()
         {
             var partA = new Part
-                            {
-                                PartNumber = "PART/A",
-                                Description = "description A",
-                                StockControlled = "Y",
-                                CreatedBy = new Employee { Id = 1 }
-                            };
+            {
+                PartNumber = "PART/A",
+                Description = "description A",
+                StockControlled = "Y",
+                CreatedBy = new Employee { Id = 1 }
+            };
             var partB = new Part
-                            {
-                                PartNumber = "PART/B",
-                                Description = "description B",
-                                StockControlled = "Y",
-                                CreatedBy = new Employee { Id = 1 }
-                            };
+            {
+                PartNumber = "PART/B",
+                Description = "description B",
+                StockControlled = "Y",
+                CreatedBy = new Employee { Id = 1 }
+            };
 
-            this.PartsFacadeService.Search("P")
+            this.PartsFacadeService.GetDeptStockPalletParts("P")
                 .Returns(new SuccessResult<IEnumerable<Part>>(new List<Part> { partA, partB }));
 
 
             this.Response = this.Browser.Get(
-                "/parts",
+                "/parts/dept-stock-pallets",
                 with =>
-                    {
-                        with.Header("Accept", "application/json");
-                        with.Query("searchTerm", "P");
-                    }).Result;
+                {
+                    with.Header("Accept", "application/json");
+                    with.Query("searchTerm", "P");
+                }).Result;
         }
 
         [Test]
@@ -59,7 +59,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.PartsFacadeService.Received().Search("P");
+            this.PartsFacadeService.Received().GetDeptStockPalletParts("P");
         }
 
         [Test]

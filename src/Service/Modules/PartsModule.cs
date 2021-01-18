@@ -140,7 +140,8 @@
 
         private object GetDeptStockParts()
         {
-            var results = this.partsFacadeService.GetDeptStockPalletParts();
+            var resource = this.Bind<SearchRequestResource>();
+            var results = this.partsFacadeService.GetDeptStockPalletParts(resource.SearchTerm);
             return this.Negotiate
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)

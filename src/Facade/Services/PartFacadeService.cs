@@ -64,9 +64,10 @@
             this.databaseService = databaseService;
         }
 
-        public IResult<IEnumerable<Part>> GetDeptStockPalletParts()
+        public IResult<IEnumerable<Part>> GetDeptStockPalletParts(string partNumber)
         {
-            return new SuccessResult<IEnumerable<Part>>(this.partService.GetDeptStockPalletParts());
+            return new SuccessResult<IEnumerable<Part>>(this.partService.GetDeptStockPalletParts()
+                .Where(p => p.PartNumber.Contains(partNumber.ToUpper())));
         }
 
         protected override Part CreateFromResource(PartResource resource)
