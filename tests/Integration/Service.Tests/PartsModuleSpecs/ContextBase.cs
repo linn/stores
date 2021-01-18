@@ -25,7 +25,7 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IFacadeService<Part, int, PartResource, PartResource> PartsFacadeService
+        protected IPartsFacadeService PartsFacadeService
         {
             get; private set;
         }
@@ -96,7 +96,7 @@
         public void EstablishContext()
         {
             this.PartsFacadeService = Substitute
-                .For<IFacadeService<Part, int, PartResource, PartResource>>();
+                .For<IPartsFacadeService>();
             this.PartLiveService = Substitute.For<IPartLiveService>();
             this.PartsDomainService = Substitute.For<IPartService>();
             this.PartCategoriesService = Substitute.For<IPartCategoryService>();
