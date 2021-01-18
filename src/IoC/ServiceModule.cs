@@ -80,6 +80,8 @@
             builder.RegisterType<TqmsCategoriesService>()
                 .As<IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>>();
             builder.RegisterType<WorkstationFacadeService>().As<IWorkstationFacadeService>();
+            builder.RegisterType<StockLocatorsFacadeService>()
+                .As<IFacadeFilterService<StockLocator, int, StockLocatorResource, StockLocatorResource, SearchRequestResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

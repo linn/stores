@@ -13,7 +13,7 @@
 
         private readonly IRepository<Part, int> partsRepository;
 
-        private readonly IQueryRepository<StockLocator> stockLocatorRepository;
+        private readonly IRepository<StockLocator, int> stockLocatorRepository;
 
         private readonly IQueryRepository<StoragePlace> storagePlaceRepository;
 
@@ -22,7 +22,7 @@
         public StoragePlaceAuditReportService(
             IReportingHelper reportingHelper,
             IRepository<Part, int> partsRepository,
-            IQueryRepository<StockLocator> stockLocatorRepository,
+            IRepository<StockLocator, int> stockLocatorRepository,
             IQueryRepository<StoragePlace> storagePlaceRepository,
             IQueryRepository<StoresBudget> storesBudgetsRepository)
         {

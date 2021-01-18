@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
+    using System;
+
     public class StockLocator
     {
         public int? Quantity { get; set; }
@@ -15,5 +17,11 @@
         public int? QuantityAllocated { get; set; }
 
         public string StockPoolCode { get; set; }
+
+        public string Remarks { get; set; }
+
+        public DateTime? StockRotationDate { get; set; }
+
+        public string BatchRef { get; set; }
     }
 }

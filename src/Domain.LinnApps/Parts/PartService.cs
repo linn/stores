@@ -28,7 +28,7 @@
 
         private readonly IRepository<MechPartSource, int> sourceRepository;
 
-        private readonly IQueryRepository<StockLocator> stockLocatorRepository;
+        private readonly IRepository<StockLocator, int> stockLocatorRepository;
 
         public PartService(
             IAuthorisationService authService,
@@ -37,7 +37,7 @@
             IRepository<Part, int> partRepository,
             IRepository<PartTemplate, string> templateRepository,
             IRepository<MechPartSource, int> sourceRepository,
-            IQueryRepository<StockLocator> stockLocatorRepository,
+            IRepository<StockLocator, int> stockLocatorRepository,
             IPartPack partPack)
         {
             this.authService = authService;

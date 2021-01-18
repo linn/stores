@@ -112,6 +112,8 @@
                 .As<IResourceBuilder<IEnumerable<TqmsCategory>>>();
             builder.RegisterType<WorkstationTopUpStatusResourceBuilder>()
                 .As<IResourceBuilder<ResponseModel<WorkstationTopUpStatus>>>();
+            builder.RegisterType<StockLocatorResourceBuilder>().As<IResourceBuilder<StockLocator>>();
+            builder.RegisterType<StockLocatorsResourceBuilder>().As<IResourceBuilder<IEnumerable<StockLocator>>>();
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Persistence.LinnApps
 {
+    using System.Threading;
+
     using Linn.Common.Configuration;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
@@ -659,6 +661,9 @@
             q.Property(e => e.Quantity).HasColumnName("QTY");
             q.Property(e => e.QuantityAllocated).HasColumnName("QTY_ALLOCATED");
             q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE");
+            q.Property(e => e.Remarks).HasColumnName("REMARKS");
+            q.Property(e => e.StockRotationDate).HasColumnName("STOCK_ROTATION_DATE");
+            q.Property(e => e.BatchRef).HasColumnName("BATCH_REF");
         }
 
         private void QueryStoragePlaces(ModelBuilder builder)
