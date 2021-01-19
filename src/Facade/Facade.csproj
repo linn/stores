@@ -23,8 +23,4 @@
     <ProjectReference Include="..\Resources\Resources.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Results\" />
-  </ItemGroup>
-
 </Project>
