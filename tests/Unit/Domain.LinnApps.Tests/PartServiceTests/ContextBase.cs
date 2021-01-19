@@ -29,7 +29,7 @@
 
         protected IPartPack PartPack { get; private set; }
 
-        protected IQueryRepository<StockLocator> StockLocatorRepository { get; private set; }
+        protected IRepository<StockLocator, int> StockLocatorRepository { get; private set; }
 
         [SetUp]
         public void SetUpContext()
@@ -41,6 +41,7 @@
             this.TemplateRepository = Substitute.For<IRepository<PartTemplate, string>>();
             this.SourceRepository = Substitute.For<IRepository<MechPartSource, int>>();
             this.TransactionManager = Substitute.For<ITransactionManager>();
+            this.StockLocatorRepository = Substitute.For<IRepository<StockLocator, int>>();
             this.PartPack = Substitute.For<IPartPack>();
             this.Sut = new PartService(
                 this.AuthService,
