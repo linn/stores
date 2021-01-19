@@ -72,6 +72,11 @@
 
         public IResult<StoragePlace> GetStoragePlace(StoragePlaceRequestResource resource)
         {
+            if (resource.LocationId.HasValue == resource.PalletNumber.HasValue)
+            {
+                return new BadRequestResult<StoragePlace>("Must supply EITHER Location Id or Pallet Number");
+            }
+
             if (resource.PalletNumber.HasValue)
             {
                 return new SuccessResult<StoragePlace>(this
@@ -79,14 +84,8 @@
                     .FindBy(p => p.PalletNumber == resource.PalletNumber));
             } 
 
-            if (resource.LocationId.HasValue)
-            {
-                return new SuccessResult<StoragePlace>(this
-                    .storagePlaceRepository
-                    .FindBy(p => p.LocationId == resource.LocationId));
-            }
-
-            return new NotFoundResult<StoragePlace>();
+            return new SuccessResult<StoragePlace>(this
+                    .storagePlaceRepository.FindBy(p => p.LocationId == resource.LocationId));
         }
     }
 }
