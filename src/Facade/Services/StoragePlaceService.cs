@@ -9,6 +9,7 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Facade.Extensions;
+    using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
 
     public class StoragePlaceService : IStoragePlaceService
@@ -67,6 +68,25 @@
                     throw new InvalidOperationException(result);
                 }
             }
+        }
+
+        public IResult<StoragePlace> GetStoragePlace(StoragePlaceRequestResource resource)
+        {
+            if (resource.PalletNumber.HasValue)
+            {
+                return new SuccessResult<StoragePlace>(this
+                    .storagePlaceRepository
+                    .FindBy(p => p.PalletNumber == resource.PalletNumber));
+            } 
+
+            if (resource.LocationId.HasValue)
+            {
+                return new SuccessResult<StoragePlace>(this
+                    .storagePlaceRepository
+                    .FindBy(p => p.LocationId == resource.LocationId));
+            }
+
+            return new NotFoundResult<StoragePlace>();
         }
     }
 }

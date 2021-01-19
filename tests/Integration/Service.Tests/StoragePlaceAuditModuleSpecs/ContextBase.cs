@@ -42,11 +42,14 @@
                         with.Dependency<IResourceBuilder<ResultsModel>>(new ResultsModelResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<AuditLocation>>>(
                             new AuditLocationsResourceBuilder());
+                        with.Dependency<IResourceBuilder<StoragePlace>>(
+                            new StoragePlaceResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<StoragePlace>>>(
                             new StoragePlacesResourceBuilder());
                         with.Dependency<IResourceBuilder<Error>>(new ErrorResourceBuilder());
                         with.ResponseProcessor<AuditLocationsResponseProcessor>();
                         with.ResponseProcessor<StoragePlacesResponseProcessor>();
+                        with.ResponseProcessor<StoragePlaceResponseProcessor>();
                         with.ResponseProcessor<ResultsModelJsonResponseProcessor>();
                         with.ResponseProcessor<ErrorResponseProcessor>();
                         with.Module<StoragePlaceModule>();

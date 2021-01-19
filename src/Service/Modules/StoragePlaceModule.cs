@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
     using System;
+    using System.Runtime.CompilerServices;
 
     using Linn.Common.Facade;
     using Linn.Common.Resources;
@@ -34,6 +35,8 @@
             this.Get("/inventory/reports/storage-place-audit", _ => this.StoragePlaceAuditReportOptions());
             this.Get("/inventory/audit-locations", _ => this.GetAuditLocations());
             this.Get("/inventory/storage-places", _ => this.GetStoragePlaces());
+            this.Get("/inventory/storage-place", _ => this.GetStoragePlace());
+
             this.Post("/inventory/storage-places/create-audit-reqs", _ => this.CreateAuditReqs());
         }
 
@@ -94,6 +97,16 @@
             }
 
             return HttpStatusCode.OK;
+        }
+
+        private object GetStoragePlace()
+        {
+            var resource = this.Bind<StoragePlaceRequestResource>();
+            var result = this.storagePlaceService.GetStoragePlace(resource);
+            return this.Negotiate
+                .WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
     }
 }

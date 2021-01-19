@@ -1,17 +1,12 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Linq.Expressions;
-    using System.Reflection;
-    using System.Runtime.InteropServices.WindowsRuntime;
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
-    using Linn.Stores.Resources.RequestResources;
 
     public class StockLocatorsFacadeService : 
         FacadeFilterService<StockLocator, int, StockLocatorResource, StockLocatorResource, StockLocatorResource>
