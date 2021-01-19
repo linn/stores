@@ -2,9 +2,9 @@
 {
     public class StockLocatorResource
     {
-        public string StoragePlaceName { get; set; }
+        public string PartNumber { get; set; }
 
-        public string StoragePlaceDescription { get; set; }
+        public int? LocationId { get; set; }
 
         public string BatchRef { get; set; }
 
