@@ -161,3 +161,9 @@ export const workstationTopUpStatus = new ItemType(
     'WORKSTATION_TOP_UP_STATUS',
     '/logistics/workstations/top-up'
 );
+
+export const deptStockParts = new ItemType(
+    'deptStockParts',
+    'DEPT_STOCK_PARTS',
+    '/parts/dept-stock-parts'
+);

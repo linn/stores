@@ -78,7 +78,7 @@
             this.Put("/parts/{id}", parameters => this.UpdatePart(parameters.id));
             this.Get("/parts", _ => this.GetParts());
             this.Post("/parts", _ => this.AddPart());
-            this.Get("/parts/dept-stock-pallets", _ => this.GetDeptStockParts());
+            this.Get("/parts/dept-stock-parts", _ => this.GetDeptStockParts());
 
             this.unitsOfMeasureService = unitsOfMeasureService;
             this.Get("inventory/units-of-measure", _ => this.GetUnitsOfMeasure());

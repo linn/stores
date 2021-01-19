@@ -44,6 +44,7 @@ import pickItemsAllocation from './pickItemsAllocation';
 import unpickItemsAllocation from './unpickItemsAllocation';
 import tqmsCategories from './tqmsCategories';
 import workstationTopUpStatus from './workstationTopUpStatus';
+import deptStockParts from './parts/deptStockParts';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -57,6 +58,7 @@ const rootReducer = combineReducers({
     createAuditReqs,
     departments,
     decrementRules,
+    deptStockParts,
     despatchLocations,
     employees,
     finishAllocation,

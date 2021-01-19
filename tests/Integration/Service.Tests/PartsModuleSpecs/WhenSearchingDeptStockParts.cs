@@ -17,7 +17,7 @@
 
     using NUnit.Framework;
 
-    public class WhenSearchingDeptStockPalletParts : ContextBase
+    public class WhenSearchingDeptStockParts : ContextBase
     {
         [SetUp]
         public void SetUp()
@@ -42,7 +42,7 @@
 
 
             this.Response = this.Browser.Get(
-                "/parts/dept-stock-pallets",
+                "/parts/dept-stock-parts",
                 with =>
                 {
                     with.Header("Accept", "application/json");
