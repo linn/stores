@@ -40,7 +40,6 @@
             this.PartsFacadeService.GetDeptStockPalletParts("P")
                 .Returns(new SuccessResult<IEnumerable<Part>>(new List<Part> { partA, partB }));
 
-
             this.Response = this.Browser.Get(
                 "/parts/dept-stock-parts",
                 with =>
