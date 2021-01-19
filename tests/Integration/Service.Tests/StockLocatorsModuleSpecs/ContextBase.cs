@@ -6,7 +6,7 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.ResourceBuilders;
-    using Linn.Stores.Resources;
+    using Linn.Stores.Facade.Services;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
     using Linn.Stores.Service.Tests;
@@ -19,7 +19,7 @@
 
     public abstract class ContextBase : NancyContextBase
     {
-        protected IFacadeFilterService<StockLocator, int, StockLocatorResource, StockLocatorResource, StockLocatorResource> 
+        protected IStockLocatorFacadeService 
             StockLocatorFacadeService
         {
             get; private set;
@@ -30,7 +30,7 @@
         {
             this.StockLocatorFacadeService = 
                 Substitute
-                    .For<IFacadeFilterService<StockLocator, int, StockLocatorResource, StockLocatorResource, StockLocatorResource>>();
+                    .For<IStockLocatorFacadeService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
@@ -40,6 +40,7 @@
                     with.Dependency<IResourceBuilder<IEnumerable<StockLocator>>>(new StockLocatorsResourceBuilder());
                     with.Module<StockLocatorsModule>();
                     with.ResponseProcessor<StockLocatorsResponseProcessor>();
+                    with.ResponseProcessor<StockLocatorResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {

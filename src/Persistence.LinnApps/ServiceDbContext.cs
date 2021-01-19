@@ -70,7 +70,7 @@
 
         public DbSet<MechPartSource> MechPartSources { get; set; }
         
-        public DbQuery<StockLocator> StockLocators { get; set; }
+        public DbSet<StockLocator> StockLocators { get; set; }
 
         public DbQuery<StoragePlace> StoragePlaces { get; set; }
 
@@ -134,7 +134,7 @@
             this.BuildPartTemplates(builder);
             this.BuildPartDataSheets(builder);
             this.BuildMechPartSources(builder);
-            this.QueryStockLocators(builder);
+            this.BuildStockLocators(builder);
             this.QueryStoragePlaces(builder);
             this.QueryStoresBudgets(builder);
             this.QueryAuditLocations(builder);
@@ -650,10 +650,12 @@
             q.HasOne(e => e.Part).WithMany(p => p.WwdWorks).HasForeignKey("PART_NUMBER");
         }
 
-        private void QueryStockLocators(ModelBuilder builder)
+        private void BuildStockLocators(ModelBuilder builder)
         {
-            var q = builder.Query<StockLocator>();
-            q.ToView("STOCK_LOCATORS");
+            var q = builder.Entity<StockLocator>();
+            q.ToTable("STOCK_LOCATORS");
+            q.HasKey(s => s.Id);
+            q.Property(s => s.Id).HasColumnName("STOCK_LOCATOR_ID");
             q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER");
             q.Property(e => e.BudgetId).HasColumnName("BUDGET_ID");
             q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");

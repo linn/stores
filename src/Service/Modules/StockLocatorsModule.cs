@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
-    using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
 
     using Nancy;
@@ -9,19 +8,26 @@
 
     public sealed class StockLocatorsModule : NancyModule
     {
-        private readonly IFacadeFilterService<StockLocator, int, StockLocatorResource, StockLocatorResource, StockLocatorResource> service;
+        private readonly IStockLocatorFacadeService service;
 
         public StockLocatorsModule(
-            IFacadeFilterService<StockLocator, int, StockLocatorResource, StockLocatorResource, StockLocatorResource> service)
+            IStockLocatorFacadeService service)
         {
             this.service = service;
             this.Get("/inventory/stock-locators", _ => this.GetStockLocators());
+            this.Delete("/inventory/stock-locators", _ => this.DeleteStockLocator());
         }
 
         private object GetStockLocators()
         {
             var resource = this.Bind<StockLocatorResource>();
             return this.Negotiate.WithModel(this.service.FilterBy(resource));
+        }
+
+        private object DeleteStockLocator()
+        {
+            var resource = this.Bind<StockLocatorResource>();
+            return this.Negotiate.WithModel(this.service.Delete(resource.Id));
         }
     }
 }

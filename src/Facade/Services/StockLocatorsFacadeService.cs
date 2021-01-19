@@ -9,11 +9,27 @@
     using Linn.Stores.Resources;
 
     public class StockLocatorsFacadeService : 
-        FacadeFilterService<StockLocator, int, StockLocatorResource, StockLocatorResource, StockLocatorResource>
+        FacadeFilterService<StockLocator, int, StockLocatorResource, StockLocatorResource, StockLocatorResource>,
+        IStockLocatorFacadeService
     {
-        public StockLocatorsFacadeService(IRepository<StockLocator, int> repository, ITransactionManager transactionManager)
+        private readonly IStockLocatorService domainService;
+
+        private readonly IRepository<StockLocator, int> repository;
+
+        public StockLocatorsFacadeService(
+            IRepository<StockLocator, int> repository, 
+            ITransactionManager transactionManager,
+            IStockLocatorService domainService)
             : base(repository, transactionManager)
         {
+            this.domainService = domainService;
+            this.repository = repository;
+        }
+
+        public IResult<StockLocator> Delete(int id)
+        {
+            this.domainService.DeleteStockLocator(this.repository.FindById(id));
+            return new SuccessResult<StockLocator>(null);
         }
 
         protected override StockLocator CreateFromResource(StockLocatorResource resource)
@@ -21,7 +37,9 @@
             throw new NotImplementedException();
         }
 
-        protected override void UpdateFromResource(StockLocator entity, StockLocatorResource updateResource)
+        protected override void UpdateFromResource(
+            StockLocator entity, 
+            StockLocatorResource updateResource)
         {
             throw new NotImplementedException();
         }

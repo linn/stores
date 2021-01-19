@@ -42,7 +42,8 @@
         [Test]
         public void ShouldCallService()
         {
-            this.StoragePlaceService.Received().GetStoragePlace(Arg.Any<StoragePlaceRequestResource>());
+            this.StoragePlaceService
+                .Received().GetStoragePlace(Arg.Any<StoragePlaceRequestResource>());
         }
 
         [Test]

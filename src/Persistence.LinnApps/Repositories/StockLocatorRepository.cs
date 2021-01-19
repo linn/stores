@@ -18,7 +18,8 @@
 
         public void Remove(StockLocator entity)
         {
-            throw new NotImplementedException();
+            this.serviceDbContext.StockLocators.Remove(entity);
+            this.serviceDbContext.SaveChanges();
         }
 
         public StockLocator FindBy(Expression<Func<StockLocator, bool>> expression)
@@ -33,7 +34,8 @@
 
         public StockLocator FindById(int key)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.StockLocators
+                .Where(s => s.Id == key).ToList().FirstOrDefault();
         }
 
         public IQueryable<StockLocator> FindAll()

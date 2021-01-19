@@ -2,6 +2,8 @@
 {
     public class StockLocatorResource
     {
+        public int Id { get; set; }
+
         public string PartNumber { get; set; }
 
         public int? LocationId { get; set; }
