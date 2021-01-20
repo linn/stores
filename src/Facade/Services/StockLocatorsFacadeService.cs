@@ -34,7 +34,18 @@
 
         protected override StockLocator CreateFromResource(StockLocatorResource resource)
         {
-            throw new NotImplementedException();
+            var toCreate = new StockLocator
+                               {
+                                   LocationId = resource.LocationId, // what is this?
+                                   BatchRef = resource.BatchRef,
+                                   StockRotationDate = resource.StockRotationDate != null ?
+                                                           DateTime.Parse(resource.StockRotationDate) 
+                                                           : (DateTime?)null,
+                                   Quantity = resource.Quantity,
+                                   Remarks = resource.Remarks
+                               };
+
+            return this.domainService.CreateStockLocator(toCreate);
         }
 
         protected override void UpdateFromResource(

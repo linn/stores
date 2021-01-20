@@ -3,6 +3,7 @@
     using System.Linq;
 
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
 
     public class StockLocatorService : IStockLocatorService
     {
@@ -23,9 +24,28 @@
             throw new System.NotImplementedException();
         }
 
-        public StockLocator CreateStockLocator(StockLocator partToCreate)
+        public StockLocator CreateStockLocator(StockLocator toCreate, string auditDepartmentCode)
         {
-            throw new System.NotImplementedException();
+            var pallets = this.palletRepository.FilterBy(p => p.PalletNumber == toCreate.PalletNumber);
+            foreach (var storesPallet in pallets)
+            {
+                if ((storesPallet.AuditedByDepartmentCode == null 
+                    || storesPallet.AuditFrequencyWeeks == null
+                    || storesPallet.AuditFrequencyWeeks != 26)
+                    && auditDepartmentCode == null)
+                {
+                    throw new CreateStockLocatorException("Audit department must be entered");
+                }
+
+                if (auditDepartmentCode != null)
+                {
+                    storesPallet.AuditFrequencyWeeks = 26;
+                    storesPallet.AuditedByDepartmentCode = auditDepartmentCode;
+                }
+                // do these updates persist to db?
+            }
+
+            return toCreate;
         }
 
         public void DeleteStockLocator(StockLocator toDelete)
