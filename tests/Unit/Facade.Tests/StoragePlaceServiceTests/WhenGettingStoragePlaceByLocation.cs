@@ -18,7 +18,11 @@
         private readonly StoragePlaceRequestResource requestResource =
             new StoragePlaceRequestResource { LocationId = 100 };
 
-        private readonly StoragePlace repositoryResult = new StoragePlace { LocationId = 100, Name = "L100" };
+        private readonly StoragePlace repositoryResult = new StoragePlace
+                                                             {
+                                                                 LocationId = 100, 
+                                                                 Name = "L100"
+                                                             };
 
         private IResult<StoragePlace> result;
 
