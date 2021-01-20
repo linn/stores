@@ -9,7 +9,7 @@
 
     using NUnit.Framework;
 
-    public class WhenDeletingAndEmptyPallet : ContextBase
+    public class WhenDeletingAndNotEmptyPallet : ContextBase
     {
         private readonly StockLocator toDelete = new StockLocator
                                                      {
