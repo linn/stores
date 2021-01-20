@@ -4,6 +4,7 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Facade.Services;
+    using Linn.Stores.Proxy;
 
     using NSubstitute;
 
@@ -22,7 +23,9 @@
         {
             this.StoragePlaceRepository = Substitute.For<IQueryRepository<StoragePlace>>();
             this.StoragePlaceAuditPack = Substitute.For<IStoragePlaceAuditPack>();
-            this.Sut = new StoragePlaceService(this.StoragePlaceRepository, this.StoragePlaceAuditPack);
+            this.Sut = new StoragePlaceService(
+                this.StoragePlaceRepository, 
+                this.StoragePlaceAuditPack);
         }
     }
 }

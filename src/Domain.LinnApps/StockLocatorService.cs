@@ -37,6 +37,11 @@
                     throw new CreateStockLocatorException("Audit department must be entered");
                 }
 
+                if (toCreate.LocationId.HasValue == toCreate.PalletNumber.HasValue)
+                {
+                    throw new CreateStockLocatorException("Must Supply EITHER Location Id OR Pallet Number");
+                }
+
                 if (auditDepartmentCode != null)
                 {
                     storesPallet.AuditFrequencyWeeks = 26;

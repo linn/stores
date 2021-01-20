@@ -6,6 +6,7 @@
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
 
     public class StockLocatorsFacadeService : 
@@ -16,14 +17,18 @@
 
         private readonly IRepository<StockLocator, int> repository;
 
+        private readonly IDatabaseService databaseService;
+
         public StockLocatorsFacadeService(
             IRepository<StockLocator, int> repository, 
             ITransactionManager transactionManager,
-            IStockLocatorService domainService)
+            IStockLocatorService domainService,
+            IDatabaseService databaseService)
             : base(repository, transactionManager)
         {
             this.domainService = domainService;
             this.repository = repository;
+            this.databaseService = databaseService;
         }
 
         public IResult<StockLocator> Delete(int id)
@@ -36,7 +41,9 @@
         {
             var toCreate = new StockLocator
                                {
+                                   Id = this.databaseService.GetNextVal("LOCA_SEQ"),
                                    LocationId = resource.LocationId, // what is this?
+                                   PalletNumber = resource.PalletNumber,
                                    BatchRef = resource.BatchRef,
                                    StockRotationDate = resource.StockRotationDate != null ?
                                                            DateTime.Parse(resource.StockRotationDate) 
@@ -45,7 +52,7 @@
                                    Remarks = resource.Remarks
                                };
 
-            return this.domainService.CreateStockLocator(toCreate);
+            return this.domainService.CreateStockLocator(toCreate, resource.AuditDepartmentCode);
         }
 
         protected override void UpdateFromResource(
