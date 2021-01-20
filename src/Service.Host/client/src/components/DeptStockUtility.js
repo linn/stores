@@ -1,6 +1,6 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import { Typeahead } from '@linn-it/linn-form-components-library';
+import { Title, Typeahead } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Page from '../containers/Page';
 
@@ -18,52 +18,11 @@ function DeptStockUtility({
     searchStoragePlaces,
     storagePlacesLoading
 }) {
-    // need to do some useEffect magic on items and when they arrive 
-    //use the pallet number or loc id to fill in storage place name and description
     return (
         <Page>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <Typeahead
-                        items={departments}
-                        fetchItems={searchDepartments}
-                        clearSearch={clearDepartmentsSearch}
-                        modal
-                        links={false}
-                        loading={departmentsLoading}
-                        title="Search Departments"
-                        onSelect={newValue => {
-                            console.log(newValue.name);
-                        }}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <Typeahead
-                        items={items}
-                        fetchItems={fetchItems}
-                        clearSearch={clearSearch}
-                        modal
-                        links={false}
-                        loading={itemsLoading}
-                        title="Search Parts"
-                        onSelect={newValue => {
-                            console.log(newValue.name);
-                        }}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <Typeahead
-                        items={storagePlaces}
-                        fetchItems={searchStoragePlaces}
-                        clearSearch={clearStoragePlacesSearch}
-                        modal
-                        links={false}
-                        loading={storagePlacesLoading}
-                        title="Search Storage Places"
-                        onSelect={newValue => {
-                            console.log(newValue.name);
-                        }}
-                    />
+                  <Title text="Departmental Pallets" />
                 </Grid>
             </Grid>
         </Page>

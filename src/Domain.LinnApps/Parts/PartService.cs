@@ -224,15 +224,15 @@
         {
             var parts = this.partRepository.FindAll();
             var stockLocators = this.stockLocatorRepository.FindAll();
-            var codes = new[] { "LINN DEPT", "LS DEPT" }; //linnsight? obsolete?
             return from p in parts
                     where (from s in stockLocators 
-                           where (s.PartNumber == p.PartNumber && codes.Contains(s.StockPoolCode))
+                           where (s.PartNumber == p.PartNumber && s.StockPoolCode.Equals("LINN DEPT"))
                            select s.PartNumber)
                         .Contains(p.PartNumber)
                         ||
-                        ((p.StockControlled.Equals("N") && (p.BaseUnitPrice == 0 || p.BaseUnitPrice == null) 
-                                                       && (p.LinnProduced.Equals("N") || p.LinnProduced == null))
+                        ((p.StockControlled.Equals("N") 
+                          && (p.BaseUnitPrice == 0 || p.BaseUnitPrice == null)
+                          && (p.LinnProduced.Equals("N") || p.LinnProduced == null))
                         &&
                         !(from s in stockLocators
                          where s.PartNumber == p.PartNumber

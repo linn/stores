@@ -42,7 +42,7 @@
             var toCreate = new StockLocator
                                {
                                    Id = this.databaseService.GetNextVal("LOCA_SEQ"),
-                                   LocationId = resource.LocationId, // what is this?
+                                   LocationId = resource.LocationId,
                                    PalletNumber = resource.PalletNumber,
                                    BatchRef = resource.BatchRef,
                                    StockRotationDate = resource.StockRotationDate != null ?

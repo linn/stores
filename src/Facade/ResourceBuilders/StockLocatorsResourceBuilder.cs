@@ -15,7 +15,7 @@
         public IEnumerable<StockLocatorResource> Build(IEnumerable<StockLocator> stockLocators)
         {
             return stockLocators
-                .Select(a => this.stockLocatorResourceBuilder.Build(a)); // order?
+                .Select(a => this.stockLocatorResourceBuilder.Build(a));
         }
 
         object IResourceBuilder<IEnumerable<StockLocator>>.Build(IEnumerable<StockLocator> stockLocators) => this.Build(stockLocators);

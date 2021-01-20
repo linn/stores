@@ -49,7 +49,6 @@
                         storesPallet.AuditFrequencyWeeks = 26;
                         storesPallet.AuditedByDepartmentCode = auditDepartmentCode;
                     }
-                    // do these updates persist to db?
                 }
             }
             
