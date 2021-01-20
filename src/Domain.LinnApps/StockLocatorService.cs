@@ -26,31 +26,41 @@
 
         public StockLocator CreateStockLocator(StockLocator toCreate, string auditDepartmentCode)
         {
-            var pallets = this.palletRepository.FilterBy(p => p.PalletNumber == toCreate.PalletNumber);
-            foreach (var storesPallet in pallets)
+            if (toCreate.LocationId.HasValue == toCreate.PalletNumber.HasValue)
             {
-                if ((storesPallet.AuditedByDepartmentCode == null 
-                    || storesPallet.AuditFrequencyWeeks == null
-                    || storesPallet.AuditFrequencyWeeks != 26)
-                    && auditDepartmentCode == null)
-                {
-                    throw new CreateStockLocatorException("Audit department must be entered");
-                }
-
-                if (toCreate.LocationId.HasValue == toCreate.PalletNumber.HasValue)
-                {
-                    throw new CreateStockLocatorException("Must Supply EITHER Location Id OR Pallet Number");
-                }
-
-                if (auditDepartmentCode != null)
-                {
-                    storesPallet.AuditFrequencyWeeks = 26;
-                    storesPallet.AuditedByDepartmentCode = auditDepartmentCode;
-                }
-                // do these updates persist to db?
+                throw new CreateStockLocatorException("Must Supply EITHER Location Id OR Pallet Number");
             }
 
+            if (toCreate.PalletNumber != null)
+            {
+                var pallets = this.palletRepository.FilterBy(p => p.PalletNumber == toCreate.PalletNumber);
+                foreach (var storesPallet in pallets)
+                {
+                    if ((storesPallet.AuditedByDepartmentCode == null
+                         || storesPallet.AuditFrequencyWeeks == null
+                         || storesPallet.AuditFrequencyWeeks != 26)
+                        && auditDepartmentCode == null)
+                    {
+                        throw new CreateStockLocatorException("Audit department must be entered");
+                    }
+
+                    if (auditDepartmentCode != null)
+                    {
+                        storesPallet.AuditFrequencyWeeks = 26;
+                        storesPallet.AuditedByDepartmentCode = auditDepartmentCode;
+                    }
+                    // do these updates persist to db?
+                }
+            }
+            
             toCreate.StockPoolCode = "LINN DEPT";
+            toCreate.State = "STORES";
+            toCreate.Category = "FREE";
+
+            if (!toCreate.Quantity.HasValue || toCreate.Quantity == 0)
+            {
+                toCreate.Quantity = 1;
+            }
 
             return toCreate;
         }

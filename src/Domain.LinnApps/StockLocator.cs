@@ -25,5 +25,9 @@
         public DateTime? StockRotationDate { get; set; }
 
         public string BatchRef { get; set; }
+
+        public string State { get; set; }
+
+        public string Category { get; set; }
     }
 }

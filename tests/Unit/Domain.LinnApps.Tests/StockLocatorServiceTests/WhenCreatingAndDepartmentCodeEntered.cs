@@ -53,11 +53,5 @@
             this.pallets.All(p => p.AuditedByDepartmentCode.Equals("1234") 
             && p.AuditFrequencyWeeks == 26).Should().BeTrue();
         }
-
-        [Test]
-        public void ShouldSetStockPoolCode()
-        {
-            this.result.StockPoolCode.Should().Be("LINN DEPT");
-        }
     }
 }
