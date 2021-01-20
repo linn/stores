@@ -18,6 +18,8 @@ function DeptStockUtility({
     searchStoragePlaces,
     storagePlacesLoading
 }) {
+    // need to do some useEffect magic on items and when they arrive 
+    //use the pallet number or loc id to fill in storage place name and description
     return (
         <Page>
             <Grid container spacing={3}>

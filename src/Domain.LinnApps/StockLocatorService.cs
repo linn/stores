@@ -50,6 +50,8 @@
                 // do these updates persist to db?
             }
 
+            toCreate.StockPoolCode = "LINN DEPT";
+
             return toCreate;
         }
 

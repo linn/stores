@@ -22,7 +22,9 @@
                            Remarks = stockLocator.Remarks,
                            StockRotationDate = stockLocator.StockRotationDate?.ToString("o"),
                            Quantity = stockLocator.Quantity,
-                           LocationId = stockLocator.LocationId
+                           LocationId = stockLocator.LocationId,
+                           PalletNumber = stockLocator.PalletNumber
+
                        };
         }
 
