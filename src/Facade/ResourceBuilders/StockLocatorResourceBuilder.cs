@@ -10,13 +10,17 @@
     {
         public StockLocatorResource Build(StockLocator stockLocator)
         {
-            if (stockLocator == null) return null;
+            if (stockLocator == null)
+            {
+                return null;
+            }
+
             return new StockLocatorResource
                        {
                            Id = stockLocator.Id,
                            BatchRef = stockLocator.BatchRef,
                            Remarks = stockLocator.Remarks,
-                           BatchDate = stockLocator.StockRotationDate?.ToString("o"),
+                           StockRotationDate = stockLocator.StockRotationDate?.ToString("o"),
                            Quantity = stockLocator.Quantity,
                            LocationId = stockLocator.LocationId
                        };
