@@ -106,6 +106,8 @@
 
         public DbSet<MechPartUsage> MechPartUsages { get; set; }
 
+        public DbSet<StoresPallet> StoresPallets { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -153,6 +155,7 @@
             this.BuildMechPartUsages(builder);
             this.BuildPtlMaster(builder);
             this.BuildTopUpJobRefs(builder);
+            this.BuildStoresPallets(builder);
             base.OnModelCreating(builder);
         }
 
@@ -864,6 +867,17 @@
             table.Property(s => s.JobRef).HasColumnName("JOBREF").HasMaxLength(6);
             table.Property(s => s.DateRun).HasColumnName("DATE_RUN");
             table.Property(s => s.FullRun).HasColumnName("FULL_RUN").HasMaxLength(1);
+        }
+
+        private void BuildStoresPallets(ModelBuilder builder)
+        {
+            var e = builder.Entity<StoresPallet>().ToTable("STORES_PALLETS");
+            e.HasKey(p => p.PalletNumber);
+            e.Property(p => p.PalletNumber).HasColumnName("PALLET_NUMBER").HasMaxLength(6);
+            e.Property(p => p.AuditFrequencyWeeks)
+                .HasColumnName("AUDIT_FREQUENCY_WEEKS").HasMaxLength(10);
+            e.Property(p => p.AuditedByDepartmentCode)
+                .HasColumnName("AUDITED_BY_DEPARTMENT_CODE").HasMaxLength(10);
         }
     }
 }
