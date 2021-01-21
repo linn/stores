@@ -22,7 +22,7 @@
                            ProductAnalysisCode = part.ProductAnalysisCode?.ProductCode,
                            ProductAnalysisCodeDescription = part.ProductAnalysisCode?.Description,
                            SafetyCertificateExpirationDate = part.SafetyCertificateExpirationDate?.ToString("o"),
-                           SafetyCriticalPart = this.ToNullableBool(part.SafetyCriticalPart),
+                           SafetyCriticalPart = ToNullableBool(part.SafetyCriticalPart),
                            ImdsIdNumber = part.ImdsIdNumber,
                            ParetoCode = part.ParetoClass?.ParetoCode,
                            ParetoDescription = part.ParetoClass?.Description,
@@ -35,26 +35,26 @@
                            AccountingCompanyDescription = part.AccountingCompany?.Description,
                            OptionSet = part.OptionSet,
                            MaterialPrice = part.MaterialPrice,
-                           SingleSourcePart = this.ToNullableBool(part.SingleSourcePart),
+                           SingleSourcePart = ToNullableBool(part.SingleSourcePart),
                            StockControlled = part.StockControlled.Equals("Y"),
-                           LinnProduced = this.ToNullableBool(part.LinnProduced),
+                           LinnProduced = ToNullableBool(part.LinnProduced),
                            PartCategory = part.PartCategory,
-                           IgnoreWorkstationStock = this.ToNullableBool(part.IgnoreWorkstationStock),
-                           EmcCriticalPart = this.ToNullableBool(part.EmcCriticalPart),
+                           IgnoreWorkstationStock = ToNullableBool(part.IgnoreWorkstationStock),
+                           EmcCriticalPart = ToNullableBool(part.EmcCriticalPart),
                            Currency = part.Currency,
                            LabourPrice = part.LabourPrice,
                            CostingPrice = part.CostingPrice,
-                           OrderHold = this.ToNullableBool(part.OrderHold),
-                           PlannedSurplus = this.ToNullableBool(part.PlannedSurplus),
-                           PsuPart = this.ToNullableBool(part.PsuPart),
+                           OrderHold = ToNullableBool(part.OrderHold),
+                           PlannedSurplus = ToNullableBool(part.PlannedSurplus),
+                           PsuPart = ToNullableBool(part.PsuPart),
                            CurrencyUnitPrice = part.CurrencyUnitPrice,
-                           CccCriticalPart = this.ToNullableBool(part.CccCriticalPart),
+                           CccCriticalPart = ToNullableBool(part.CccCriticalPart),
                            DrawingReference = part.DrawingReference,
                            SafetyDataDirectory = part.SafetyDataDirectory,
                            BomId = part.BomId,
                            BaseUnitPrice = part.BaseUnitPrice,
                            OurUnitOfMeasure = part.OurUnitOfMeasure,
-                           PerformanceCriticalPart = this.ToNullableBool(part.PerformanceCriticalPart),
+                           PerformanceCriticalPart = ToNullableBool(part.PerformanceCriticalPart),
                            MechanicalOrElectronic = part.MechanicalOrElectronic,
                            RootProduct = part.RootProduct,
                            PreferredSupplier = part.PreferredSupplier?.Id,
@@ -76,10 +76,10 @@
                            PhasedOutByName = part.PhasedOutBy?.FullName,
                            MadeLiveBy = part.MadeLiveBy?.Id,
                            MadeLiveByName = part.MadeLiveBy?.FullName,
-                           SecondStageBoard = this.ToNullableBool(part.SecondStageBoard),
+                           SecondStageBoard = ToNullableBool(part.SecondStageBoard),
                            ReasonPhasedOut = part.ReasonPhasedOut,
                            DateCreated = part.DateCreated?.ToString("o"),
-                           QcOnReceipt = this.ToNullableBool(part.QcOnReceipt),
+                           QcOnReceipt = ToNullableBool(part.QcOnReceipt),
                            TqmsCategoryOverride = part.TqmsCategoryOverride,
                            OurInspectionWeeks = part.OurInspectionWeeks,
                            MaxStockRail = part.MaxStockRail,
@@ -108,6 +108,16 @@
 
         object IResourceBuilder<Part>.Build(Part part) => this.Build(part);
 
+        private static bool? ToNullableBool(string yesOrNoString)
+        {
+            if (yesOrNoString == null)
+            {
+                return null;
+            }
+
+            return yesOrNoString == "Y";
+        }
+
         private IEnumerable<LinkResource> BuildLinks(Part part)
         {
             yield return new LinkResource { Rel = "self", Href = this.GetLocation(part) };
@@ -125,16 +135,6 @@
                                  Rel = "stock-locators",
                                  Href = $"/inventory/stock-locators?partNumber={part.PartNumber}"
                              };
-        }
-
-        private bool? ToNullableBool(string yesOrNoString)
-        {
-            if (yesOrNoString == null)
-            {
-                return null;
-            }
-
-            return yesOrNoString == "Y";
         }
 
         private PartParamDataResource BuildParamDataResource(PartParamData entity)

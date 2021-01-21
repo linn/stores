@@ -59,7 +59,12 @@
             StockLocator entity, 
             StockLocatorResource updateResource)
         {
-            throw new NotImplementedException();
+            entity.BatchRef = updateResource.BatchRef;
+            entity.StockRotationDate = updateResource.StockRotationDate == null
+                                           ? (DateTime?)null
+                                           : DateTime.Parse(updateResource.StockRotationDate);
+            entity.Quantity = updateResource.Quantity;
+            entity.Remarks = updateResource.Remarks;
         }
 
         protected override Expression<Func<StockLocator, bool>> SearchExpression(string searchTerm)
