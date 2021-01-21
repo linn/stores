@@ -1,8 +1,8 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import { Title, Typeahead } from '@linn-it/linn-form-components-library';
+import { Title } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
-import Page from '../containers/Page';
+import Page from '../../containers/Page';
 
 function DeptStockUtility({
     items,
@@ -22,7 +22,7 @@ function DeptStockUtility({
         <Page>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                  <Title text="Departmental Pallets" />
+                    <Title text="Departmental Pallets" />
                 </Grid>
             </Grid>
         </Page>
@@ -37,7 +37,7 @@ DeptStockUtility.propTypes = {
             description: PropTypes.string,
             href: PropTypes.string
         })
-    ).isRequired,
+    ),
     itemsLoading: PropTypes.bool,
     fetchItems: PropTypes.func.isRequired,
     clearSearch: PropTypes.func.isRequired,
@@ -53,6 +53,7 @@ DeptStockUtility.propTypes = {
 
 DeptStockUtility.defaultProps = {
     itemsLoading: false,
+    items: [],
     departments: [],
     departmentsLoading: false,
     storagePlacesLoading: false,

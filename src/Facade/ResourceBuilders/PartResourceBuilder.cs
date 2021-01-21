@@ -119,6 +119,12 @@
                     Href = $"/inventory/parts/sources/{part.MechPartSource.Id}"
                 };
             }
+
+            yield return new LinkResource 
+                             {
+                                 Rel = "stock-locators",
+                                 Href = $"/inventory/stock-locators?partNumber={part.PartNumber}"
+                             };
         }
 
         private bool? ToNullableBool(string yesOrNoString)
