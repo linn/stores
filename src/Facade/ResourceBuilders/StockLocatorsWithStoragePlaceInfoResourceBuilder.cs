@@ -10,7 +10,7 @@
 
     public class StockLocatorsWithStoragePlaceInfResourceBuilder : IResourceBuilder<IEnumerable<StockLocatorWithStoragePlaceInfo>>
     {
-    private readonly StockLocatorResourceBuilder stockLocatorResourceBuilder = new StockLocatorResourceBuilder();
+    private readonly StockLocatorWithStoragePlaceInfoResourceBuilder stockLocatorResourceBuilder = new StockLocatorWithStoragePlaceInfoResourceBuilder();
 
     public IEnumerable<StockLocatorResource> Build(IEnumerable<StockLocatorWithStoragePlaceInfo> stockLocators)
     {

@@ -91,25 +91,23 @@
             var stockLocators = this.repository
                 .FilterBy(s => s.PartNumber == partNumber);
 
-            return stockLocators.Select(s => 
-                new StockLocatorWithStoragePlaceInfo
+            return stockLocators.ToList().Select(
+                s =>
                     {
-                        StoragePlaceDescription =
-                            this.storagePlaceRepository.FindBy(p =>
-                                s.PalletNumber == null 
-                                    ? p.LocationId == s.LocationId
-                                    : s.PalletNumber == p.PalletNumber).Description,
-                        StoragePlaceName =
-                            this.storagePlaceRepository.FindBy(p =>
-                                s.PalletNumber == null
-                                    ? p.LocationId == s.LocationId
-                                    : s.PalletNumber == p.PalletNumber).Name,
-
-                        PartNumber = s.PartNumber,
-                        BatchRef = s.BatchRef,
-                        Quantity = s.Quantity,
-                        StockRotationDate = s.StockRotationDate
-                });
+                        var l = this.storagePlaceRepository.FindBy(
+                            p => s.PalletNumber == null
+                                     ? p.LocationId == s.LocationId
+                                     : s.PalletNumber == p.PalletNumber);
+                        return new StockLocatorWithStoragePlaceInfo
+                                   {
+                                       StoragePlaceDescription = l.Description,
+                                       StoragePlaceName = l.Name,
+                                       PartNumber = s.PartNumber,
+                                       BatchRef = s.BatchRef,
+                                       Quantity = s.Quantity,
+                                       StockRotationDate = s.StockRotationDate,
+                                   };
+                    });
         }
     }
 }
