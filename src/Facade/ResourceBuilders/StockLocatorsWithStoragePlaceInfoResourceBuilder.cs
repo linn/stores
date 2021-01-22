@@ -8,7 +8,7 @@
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Resources;
 
-    public class StockLocatorsWithStoragePlaceInfResourceBuilder : IResourceBuilder<IEnumerable<StockLocatorWithStoragePlaceInfo>>
+    public class StockLocatorsWithStoragePlaceInfoResourceBuilder : IResourceBuilder<IEnumerable<StockLocatorWithStoragePlaceInfo>>
     {
     private readonly StockLocatorWithStoragePlaceInfoResourceBuilder stockLocatorResourceBuilder = new StockLocatorWithStoragePlaceInfoResourceBuilder();
 

@@ -6,7 +6,6 @@
     using FluentAssertions;
 
     using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Resources;
 
@@ -19,18 +18,19 @@
 
     public class WhenGettingByPart : ContextBase
     {
-        private StockLocator stockLocator1;
+        private StockLocatorWithStoragePlaceInfo stockLocator1;
 
-        private StockLocator stockLocator2;
+        private StockLocatorWithStoragePlaceInfo stockLocator2;
 
         [SetUp]
         public void SetUp()
         {
-            this.stockLocator1 = new StockLocator { LocationId = 1, PartNumber = "A" };
-            this.stockLocator2 = new StockLocator { LocationId = 2, PartNumber = "A" };
+            this.stockLocator1 = new StockLocatorWithStoragePlaceInfo { LocationId = 1, PartNumber = "A" };
+            this.stockLocator2 = new StockLocatorWithStoragePlaceInfo { LocationId = 2, PartNumber = "A" };
 
-            this.StockLocatorFacadeService.FilterBy(Arg.Any<StockLocatorResource>())
-                .Returns(new SuccessResult<IEnumerable<StockLocator>>(new List<StockLocator>
+            this.StockLocatorFacadeService.GetStockLocatorsForPart(Arg.Any<string>())
+                .Returns(new 
+                    SuccessResult<IEnumerable<StockLocatorWithStoragePlaceInfo>>(new List<StockLocatorWithStoragePlaceInfo>
                                                                           {
                                                                               this.stockLocator1, this.stockLocator2
                                                                           }));
@@ -53,13 +53,13 @@
         [Test]
         public void ShouldCallService()
         {
-            this.StockLocatorFacadeService.Received().FilterBy(Arg.Any<StockLocatorResource>());
+            this.StockLocatorFacadeService.Received().GetStockLocatorsForPart(Arg.Any<string>());
         }
 
         [Test]
         public void ShouldReturnResource()
         {
-            var resultResource = this.Response.Body.DeserializeJson<IEnumerable<StockLocator>>().ToList();
+            var resultResource = this.Response.Body.DeserializeJson<IEnumerable<StockLocatorWithStoragePlaceInfo>>().ToList();
             resultResource.Should().HaveCount(2);
         }
     }

@@ -116,7 +116,7 @@
             builder.RegisterType<StockLocatorResourceBuilder>().As<IResourceBuilder<StockLocator>>();
             builder.RegisterType<StockLocatorsResourceBuilder>().As<IResourceBuilder<IEnumerable<StockLocator>>>();
             builder.RegisterType<StockLocatorWithStoragePlaceInfoResourceBuilder>().As<IResourceBuilder<StockLocatorWithStoragePlaceInfo>>();
-            builder.RegisterType<StockLocatorsWithStoragePlaceInfResourceBuilder>()
+            builder.RegisterType<StockLocatorsWithStoragePlaceInfoResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<StockLocatorWithStoragePlaceInfo>>>();
         }
     }

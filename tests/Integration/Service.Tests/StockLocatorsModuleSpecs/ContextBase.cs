@@ -4,7 +4,6 @@
     using System.Security.Claims;
 
     using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
@@ -39,9 +38,14 @@
                     with.Dependency(this.StockLocatorFacadeService);
                     with.Dependency<IResourceBuilder<StockLocator>>(new StockLocatorResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<StockLocator>>>(new StockLocatorsResourceBuilder());
+                    with.Dependency<IResourceBuilder<StockLocatorWithStoragePlaceInfo>>(
+                        new StockLocatorResourceBuilder());
+                    with.Dependency<IResourceBuilder<IEnumerable<StockLocatorWithStoragePlaceInfo>>>(
+                        new StockLocatorsWithStoragePlaceInfoResourceBuilder());
                     with.Module<StockLocatorsModule>();
                     with.ResponseProcessor<StockLocatorsResponseProcessor>();
                     with.ResponseProcessor<StockLocatorResponseProcessor>();
+                    with.ResponseProcessor<StockLocatorsWithStoragePlaceInfoResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {

@@ -13,6 +13,8 @@
 
         protected IRepository<StoresPallet, int> StoresPalletRepository { get; private set; }
 
+        protected IQueryRepository<StoragePlace> StoragePlaceRepository { get; private set; }
+
         protected IStockLocatorService Sut { get; private set; }
 
         [SetUp]
@@ -20,9 +22,11 @@
         {
             this.StockLocatorRepository = Substitute.For<IRepository<StockLocator, int>>();
             this.StoresPalletRepository = Substitute.For<IRepository<StoresPallet, int>>();
+            this.StoragePlaceRepository = Substitute.For<IQueryRepository<StoragePlace>>();
             this.Sut = new StockLocatorService(
                 this.StockLocatorRepository, 
-                this.StoresPalletRepository);
+                this.StoresPalletRepository,
+                this.StoragePlaceRepository);
         }
     }
 }
