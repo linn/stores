@@ -8,6 +8,7 @@
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Sos;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.Workstation;
 
     using Microsoft.EntityFrameworkCore;
@@ -678,7 +679,7 @@
         {
             var q = builder.Query<StoragePlace>();
             q.ToView("V_STORAGE_PLACES");
-            q.Property(e => e.StoragePlaceDescription).HasColumnName("STORAGE_PLACE_DESCRIPTION");
+            q.Property(e => e.Description).HasColumnName("STORAGE_PLACE_DESCRIPTION");
             q.Property(e => e.Name).HasColumnName("STORAGE_PLACE");
             q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
             q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");

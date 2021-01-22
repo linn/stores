@@ -25,5 +25,9 @@
         public string BatchRef { get; set; }
 
         public string AuditDepartmentCode { get; set; }
+
+        public string StoragePlaceName { get; set; }
+
+        public string StoragePlaceDescription { get; set; }
     }
 }

@@ -167,3 +167,9 @@ export const deptStockParts = new ItemType(
     'DEPT_STOCK_PARTS',
     '/parts/dept-stock-parts'
 );
+
+export const stockLocators = new ItemType(
+    'stockLocators',
+    'STOCK_LOCATORS',
+    '/inventory/stock-locators'
+);

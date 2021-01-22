@@ -4,6 +4,7 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
 
     using Nancy;
 

@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.StockLocatorServiceTests
 {
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
 
     using NSubstitute;
 

@@ -8,6 +8,7 @@
     using FluentAssertions;
 
     using Linn.Stores.Domain.LinnApps.Exceptions;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
 
     using NSubstitute;
 

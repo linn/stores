@@ -6,15 +6,10 @@
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Resources;
 
-    public class StockLocatorResourceBuilder : IResourceBuilder<StockLocator>
+    public class StockLocatorWithStoragePlaceInfoResourceBuilder : IResourceBuilder<StockLocatorWithStoragePlaceInfo>
     {
-        public StockLocatorResource Build(StockLocator stockLocator)
+        public StockLocatorResource Build(StockLocatorWithStoragePlaceInfo stockLocator)
         {
-            if (stockLocator == null)
-            {
-                return null;
-            }
-
             return new StockLocatorResource
                        {
                            Id = stockLocator.Id,
@@ -24,14 +19,16 @@
                            Quantity = stockLocator.Quantity,
                            LocationId = stockLocator.LocationId,
                            PalletNumber = stockLocator.PalletNumber,
+                           StoragePlaceName = stockLocator.StoragePlaceName,
+                           StoragePlaceDescription = stockLocator.StoragePlaceDescription
                        };
         }
 
-        public string GetLocation(StockLocator stockLocator)
+        public string GetLocation(StockLocatorWithStoragePlaceInfo stockLocator)
         {
             throw new NotImplementedException();
         }
 
-        object IResourceBuilder<StockLocator>.Build(StockLocator stockLocator) => this.Build(stockLocator);
+        object IResourceBuilder<StockLocatorWithStoragePlaceInfo>.Build(StockLocatorWithStoragePlaceInfo stockLocator) => this.Build(stockLocator);
     }
 }

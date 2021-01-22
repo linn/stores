@@ -6,6 +6,7 @@
     using Linn.Common.Persistence;
     using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
 
     public class StoragePlaceAuditReportService : IStoragePlaceAuditReportService
     {
@@ -100,7 +101,7 @@
                     new CalculationValueModel
                         {
                             RowId = storagePlace.Name,
-                            TextDisplay = storagePlace.StoragePlaceDescription,
+                            TextDisplay = storagePlace.Description,
                             ColumnId = "Description"
                         });
                 values.Add(

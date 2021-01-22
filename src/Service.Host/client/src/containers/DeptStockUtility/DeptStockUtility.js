@@ -2,15 +2,16 @@ import { connect } from 'react-redux';
 import { initialiseOnMount } from '@linn-it/linn-form-components-library';
 import queryString from 'query-string';
 import DeptStockUtility from '../../components/DeptStockUtility/DeptStockUtility';
-import deptStockPartsActions from '../../actions/deptStockPartsActions';
 import departmentsSelectors from '../../selectors/departmentsSelectors';
 import departmentsActions from '../../actions/departmentsActions';
 import storagePlacesSelectors from '../../selectors/storagePlacesSelectors';
 import storagePlacesActions from '../../actions/storagePlacesActions';
-import deptStockPartsSelectors from '../../selectors/deptStockPartsSelectors';
+import stockLocatorsActions from '../../actions/stockLocatorsActions';
+import stockLocatorsSelectors from '../../selectors/stockLocatorsSelectors';
 
 const mapStateToProps = (state, { location }) => ({
-    items: deptStockPartsSelectors.getItems(state),
+    items: stockLocatorsSelectors.getSearchItems(state),
+    itemsLoading: stockLocatorsSelectors.getSearchLoading(state),
     departments: departmentsSelectors
         .getSearchItems(state)
         .map(i => ({ ...i, name: i.departmentCode, id: i.departmentCode })),
@@ -21,14 +22,12 @@ const mapStateToProps = (state, { location }) => ({
 });
 
 const initialise = ({ options }) => dispatch => {
-    dispatch(deptStockPartsActions.search(options.partNumber));
+    dispatch(stockLocatorsActions.searchWithOptions(null, `&partNumber=${options.partNumber}`));
 };
 
 const mapDispatchToProps = {
     initialise,
-    fetchItems: deptStockPartsActions.search,
     searchDepartments: departmentsActions.search,
-    clearSearch: deptStockPartsActions.clearSearch,
     clearDepartmentsSearch: departmentsActions.clearSearch,
     clearStoragePlacesSearch: storagePlacesActions.clearSearch,
     searchStoragePlaces: storagePlacesActions.search

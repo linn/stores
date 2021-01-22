@@ -45,6 +45,7 @@ import unpickItemsAllocation from './unpickItemsAllocation';
 import tqmsCategories from './tqmsCategories';
 import workstationTopUpStatus from './workstationTopUpStatus';
 import deptStockParts from './parts/deptStockParts';
+import stockLocators from './stockLocators/stockLocators';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -78,6 +79,7 @@ const rootReducer = combineReducers({
     sernosSequences,
     sosAllocDetails,
     sosAllocHeads,
+    stockLocators,
     stockPools,
     storagePlace,
     storagePlaces,

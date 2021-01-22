@@ -6,6 +6,9 @@
     using System.Linq.Expressions;
 
     using FluentAssertions;
+
+    using Linn.Stores.Domain.LinnApps.StockLocators;
+
     using NSubstitute;
 
     using NUnit.Framework;

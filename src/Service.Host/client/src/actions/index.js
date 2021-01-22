@@ -103,3 +103,5 @@ export const workstationTopUpStatusActionTypes = makeActionTypes(
 );
 
 export const deptStockPartsActionTypes = makeActionTypes(itemTypes.deptStockParts.actionType);
+
+export const stockLocatorsActionTypes = makeActionTypes(itemTypes.stockLocators.actionType);

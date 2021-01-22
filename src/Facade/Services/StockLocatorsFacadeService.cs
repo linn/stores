@@ -1,16 +1,18 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq.Expressions;
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
 
     public class StockLocatorsFacadeService : 
-        FacadeFilterService<StockLocator, int, StockLocatorResource, StockLocatorResource, StockLocatorResource>,
+        FacadeService<StockLocator, int, StockLocatorResource, StockLocatorResource>,
         IStockLocatorFacadeService
     {
         private readonly IStockLocatorService domainService;
@@ -35,6 +37,23 @@
         {
             this.domainService.DeleteStockLocator(this.repository.FindById(id));
             return new SuccessResult<StockLocator>(null);
+        }
+
+        public IResult<IEnumerable<StockLocatorWithStoragePlaceInfo>> 
+            GetStockLocatorsForPart(string partNumber)
+        {
+            return new SuccessResult<IEnumerable<StockLocatorWithStoragePlaceInfo>>(
+                this.domainService.GetStockLocatorsWithStoragePlaceInfoForPart(partNumber));
+        }
+
+        public IResult<IEnumerable<StockLocator>> FilterBy(StockLocatorResource searchResource)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IResult<ResponseModel<IEnumerable<StockLocator>>> FilterBy(StockLocatorResource searchResource, IEnumerable<string> privileges)
+        {
+            throw new NotImplementedException();
         }
 
         protected override StockLocator CreateFromResource(StockLocatorResource resource)
@@ -70,11 +89,6 @@
         protected override Expression<Func<StockLocator, bool>> SearchExpression(string searchTerm)
         {
             throw new NotImplementedException();
-        }
-
-        protected override Expression<Func<StockLocator, bool>> FilterExpression(StockLocatorResource filterResource)
-        {
-            return x => x.PartNumber == filterResource.PartNumber;
         }
     }
 }

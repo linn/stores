@@ -10,6 +10,7 @@
 
     using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
 
     public class PartService : IPartService
     {

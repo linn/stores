@@ -1,5 +1,6 @@
-﻿namespace Linn.Stores.Domain.LinnApps
+﻿namespace Linn.Stores.Domain.LinnApps.StockLocators
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using Linn.Common.Persistence;
@@ -11,12 +12,16 @@
 
         private readonly IRepository<StoresPallet, int> palletRepository;
 
+        private readonly IQueryRepository<StoragePlace> storagePlaceRepository;
+
         public StockLocatorService(
             IRepository<StockLocator, int> repository,
-            IRepository<StoresPallet, int> palletRepository)
+            IRepository<StoresPallet, int> palletRepository,
+            IQueryRepository<StoragePlace> storagePlaceRepository)
         {
             this.repository = repository;
             this.palletRepository = palletRepository;
+            this.storagePlaceRepository = storagePlaceRepository;
         }
 
         public void UpdateStockLocator(StockLocator @from, StockLocator to)
@@ -79,6 +84,32 @@
                 storesPallet.AuditFrequencyWeeks = null;
                 storesPallet.AuditedByDepartmentCode = null;
             }
+        }
+
+        public IEnumerable<StockLocatorWithStoragePlaceInfo> GetStockLocatorsWithStoragePlaceInfoForPart(string partNumber)
+        {
+            var stockLocators = this.repository
+                .FilterBy(s => s.PartNumber == partNumber);
+
+            return stockLocators.Select(s => 
+                new StockLocatorWithStoragePlaceInfo
+                    {
+                        StoragePlaceDescription =
+                            this.storagePlaceRepository.FindBy(p =>
+                                s.PalletNumber == null 
+                                    ? p.LocationId == s.LocationId
+                                    : s.PalletNumber == p.PalletNumber).Description,
+                        StoragePlaceName =
+                            this.storagePlaceRepository.FindBy(p =>
+                                s.PalletNumber == null
+                                    ? p.LocationId == s.LocationId
+                                    : s.PalletNumber == p.PalletNumber).Name,
+
+                        PartNumber = s.PartNumber,
+                        BatchRef = s.BatchRef,
+                        Quantity = s.Quantity,
+                        StockRotationDate = s.StockRotationDate
+                });
         }
     }
 }

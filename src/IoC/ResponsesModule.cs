@@ -11,6 +11,7 @@
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Facade;
     using Linn.Stores.Facade.ResourceBuilders;
@@ -114,6 +115,9 @@
                 .As<IResourceBuilder<ResponseModel<WorkstationTopUpStatus>>>();
             builder.RegisterType<StockLocatorResourceBuilder>().As<IResourceBuilder<StockLocator>>();
             builder.RegisterType<StockLocatorsResourceBuilder>().As<IResourceBuilder<IEnumerable<StockLocator>>>();
+            builder.RegisterType<StockLocatorWithStoragePlaceInfoResourceBuilder>().As<IResourceBuilder<StockLocatorWithStoragePlaceInfo>>();
+            builder.RegisterType<StockLocatorsWithStoragePlaceInfResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<StockLocatorWithStoragePlaceInfo>>>();
         }
     }
 }

@@ -1,5 +1,10 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
 
@@ -22,7 +27,8 @@
         private object GetStockLocators()
         {
             var resource = this.Bind<StockLocatorResource>();
-            return this.Negotiate.WithModel(this.service.FilterBy(resource));
+            var result = this.service.GetStockLocatorsForPart(resource.PartNumber);
+            return this.Negotiate.WithModel(result);
         }
 
         private object DeleteStockLocator()
