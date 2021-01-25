@@ -46,7 +46,7 @@
 
         public void Add(StockLocator entity)
         {
-            throw new NotImplementedException();
+            this.serviceDbContext.StockLocators.Add(entity);
         }
     }
 }

@@ -30,7 +30,7 @@
 
         public string GetLocation(StockLocator stockLocator)
         {
-            throw new NotImplementedException();
+           return $"inventory/stock-locators/{stockLocator.Id}";
         }
 
         object IResourceBuilder<StockLocator>.Build(StockLocator stockLocator) => this.Build(stockLocator);

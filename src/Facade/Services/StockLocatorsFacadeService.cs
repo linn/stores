@@ -69,7 +69,8 @@
                                                            DateTime.Parse(resource.StockRotationDate) 
                                                            : (DateTime?)null,
                                    Quantity = resource.Quantity,
-                                   Remarks = resource.Remarks
+                                   Remarks = resource.Remarks,
+                                   PartNumber = resource.PartNumber
                                };
 
             return this.domainService.CreateStockLocator(toCreate, resource.AuditDepartmentCode);

@@ -18,11 +18,16 @@ function DeptStockUtility({
     storagePlaces,
     clearStoragePlacesSearch,
     searchStoragePlaces,
-    storagePlacesLoading
+    storagePlacesLoading,
+    options
 }) {
     const [prevStockLocators, setPrevStockLocators] = useState([]);
     const [stockLocators, setStockLocators] = useState(null);
-    const [newRow, setNewRow] = useState({ id: 0 });
+    const [newRow, setNewRow] = useState({
+        id: -1,
+        partNumber: options.partNumber,
+        stockRotationDate: new Date()
+    });
     useEffect(() => {
         if (items !== prevStockLocators) {
             if (items.length > 0) {
