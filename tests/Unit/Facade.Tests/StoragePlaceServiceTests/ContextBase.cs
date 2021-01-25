@@ -4,7 +4,6 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Facade.Services;
-    using Linn.Stores.Proxy;
 
     using NSubstitute;
 
