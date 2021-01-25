@@ -24,6 +24,7 @@
                            Quantity = stockLocator.Quantity,
                            LocationId = stockLocator.LocationId,
                            PalletNumber = stockLocator.PalletNumber,
+                           PartNumber = stockLocator.PartNumber
                        };
         }
 

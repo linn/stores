@@ -20,7 +20,8 @@
                            LocationId = stockLocator.LocationId,
                            PalletNumber = stockLocator.PalletNumber,
                            StoragePlaceName = stockLocator.StoragePlaceName,
-                           StoragePlaceDescription = stockLocator.StoragePlaceDescription
+                           StoragePlaceDescription = stockLocator.StoragePlaceDescription,
+                           PartNumber = stockLocator.PartNumber
                        };
         }
 

@@ -8,6 +8,8 @@ import storagePlacesSelectors from '../../selectors/storagePlacesSelectors';
 import storagePlacesActions from '../../actions/storagePlacesActions';
 import stockLocatorsActions from '../../actions/stockLocatorsActions';
 import stockLocatorsSelectors from '../../selectors/stockLocatorsSelectors';
+import stockLocatorActions from '../../actions/stockLocatorActions';
+import stockLocatorSelectors from '../../selectors/stockLocatorSelectors';
 
 const mapStateToProps = (state, { location }) => ({
     items: stockLocatorsSelectors.getSearchItems(state),
@@ -18,7 +20,8 @@ const mapStateToProps = (state, { location }) => ({
     departmentsLoading: departmentsSelectors.getSearchLoading(state),
     storagePlaces: storagePlacesSelectors.getSearchItems(state).map(i => ({ ...i, id: i.name })),
     storagePlacesLoading: storagePlacesSelectors.getSearchLoading(state),
-    options: queryString.parse(location?.search)
+    options: queryString.parse(location?.search),
+    stockLocatorLoading: stockLocatorSelectors.getLoading(state)
 });
 
 const initialise = ({ options }) => dispatch => {
@@ -30,7 +33,8 @@ const mapDispatchToProps = {
     searchDepartments: departmentsActions.search,
     clearDepartmentsSearch: departmentsActions.clearSearch,
     clearStoragePlacesSearch: storagePlacesActions.clearSearch,
-    searchStoragePlaces: storagePlacesActions.search
+    searchStoragePlaces: storagePlacesActions.search,
+    updateStockLocator: stockLocatorActions.update
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(DeptStockUtility));

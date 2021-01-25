@@ -100,6 +100,7 @@
                                      : s.PalletNumber == p.PalletNumber);
                         return new StockLocatorWithStoragePlaceInfo
                                    {
+                                       Id = s.Id,
                                        StoragePlaceDescription = l.Description,
                                        StoragePlaceName = l.Name,
                                        PartNumber = s.PartNumber,
