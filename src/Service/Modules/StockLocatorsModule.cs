@@ -1,10 +1,5 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
 

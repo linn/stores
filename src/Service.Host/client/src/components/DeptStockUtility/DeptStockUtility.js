@@ -36,7 +36,9 @@ function DeptStockUtility({
                     ? {
                           ...x,
                           storagePlaceName: storagePlace.name,
-                          storagePlaceDescription: storagePlace.description
+                          storagePlaceDescription: storagePlace.description,
+                          palletNumber: storagePlace.palletNumber,
+                          locationId: storagePlace.locationId
                       }
                     : x;
             })
@@ -71,19 +73,19 @@ function DeptStockUtility({
         {
             title: 'Batch Date',
             id: 'stockRotationDate',
-            type: 'text', //date
+            type: 'date',
             editable: true
         },
         {
             title: 'Qty',
             id: 'quantity',
-            type: 'text', //date
+            type: 'text', 
             editable: true
         },
         {
             title: 'Remarks',
             id: 'remarks',
-            type: 'text', //date
+            type: 'text', 
             editable: true
         }
     ];

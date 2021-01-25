@@ -84,6 +84,8 @@
                                            : DateTime.Parse(updateResource.StockRotationDate);
             entity.Quantity = updateResource.Quantity;
             entity.Remarks = updateResource.Remarks;
+            entity.PalletNumber = updateResource.PalletNumber;
+            entity.LocationId = updateResource.LocationId;
         }
 
         protected override Expression<Func<StockLocator, bool>> SearchExpression(string searchTerm)
