@@ -37,6 +37,16 @@ function DeptStockUtility({
         }
     }, [items, stockLocators, prevStockLocators]);
 
+    const selectDepartmentsSearchResult = (_propertyName, department, updatedItem) => {
+        setStockLocators(s =>
+            s.map(x =>
+                x.id === updatedItem.id
+                    ? { ...x, AuditDepartmentCode: department.departmentCode }
+                    : x
+            )
+        );
+    };
+
     const selectStoragePlaceSearchResult = (_propertyName, storagePlace, updatedItem) =>
         setStockLocators(s => {
             let updatedExisting = false;
@@ -108,6 +118,18 @@ function DeptStockUtility({
             id: 'remarks',
             type: 'text',
             editable: true
+        },
+        {
+            title: 'Audit Dept',
+            id: 'auditDepartmentCode',
+            type: 'search',
+            editable: true,
+            search: searchDepartments,
+            clearSearch: clearDepartmentsSearch,
+            searchResults: departments,
+            searchLoading: departmentsLoading,
+            selectSearchResult: selectDepartmentsSearchResult,
+            searchTitle: 'Search Storage Places'
         }
     ];
     return (
@@ -162,7 +184,10 @@ DeptStockUtility.propTypes = {
     searchStoragePlaces: PropTypes.func.isRequired,
     storagePlacesLoading: PropTypes.bool,
     updateStockLocator: PropTypes.func.isRequired,
-    createStockLocator: PropTypes.func.isRequired
+    createStockLocator: PropTypes.func.isRequired,
+    deleteStockLocator: PropTypes.func.isRequired,
+    stockLocatorLoading: PropTypes.bool,
+    options: PropTypes.shape({ partNumber: PropTypes.string }).isRequired
 };
 
 DeptStockUtility.defaultProps = {
@@ -171,7 +196,8 @@ DeptStockUtility.defaultProps = {
     departments: [],
     departmentsLoading: false,
     storagePlacesLoading: false,
-    storagePlaces: []
+    storagePlaces: [],
+    stockLocatorLoading: false
 };
 
 export default DeptStockUtility;

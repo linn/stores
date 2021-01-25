@@ -88,6 +88,8 @@
             var stockLocators = this.repository
                 .FilterBy(s => s.PartNumber == partNumber);
 
+            string auditDept = string.Empty;
+
             return stockLocators.ToList().Select(
                 s =>
                     {
@@ -95,6 +97,13 @@
                             p => s.PalletNumber == null
                                      ? p.LocationId == s.LocationId
                                      : s.PalletNumber == p.PalletNumber);
+                        if (l.PalletNumber.HasValue)
+                        {
+                            var pallet = this.palletRepository.FindById((int)l.PalletNumber);
+                            auditDept = 
+                                this.palletRepository.FindById((int)l.PalletNumber).AuditedByDepartmentCode;
+                        }
+
                         return new StockLocatorWithStoragePlaceInfo
                                    {
                                        Id = s.Id,
@@ -104,7 +113,8 @@
                                        BatchRef = s.BatchRef,
                                        Quantity = s.Quantity,
                                        StockRotationDate = s.StockRotationDate,
-                                       Remarks = s.Remarks
+                                       Remarks = s.Remarks,
+                                       AuditDepartmentCode = auditDept
                                    };
                     });
         }

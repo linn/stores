@@ -5,5 +5,7 @@
         public string StoragePlaceName { get; set; }
 
         public string StoragePlaceDescription { get; set; }
+
+        public string AuditDepartmentCode { get; set; }
     }
 }
