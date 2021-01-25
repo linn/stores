@@ -5,8 +5,10 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Resources;
 
     using Nancy;
+    using Nancy.Testing;
 
     using NSubstitute;
 
@@ -18,14 +20,16 @@
         public void SetUp()
         {
             this.StockLocatorFacadeService.Delete(Arg.Any<int>())
-                .Returns(new SuccessResult<StockLocator>(null));
+                .Returns(new SuccessResult<StockLocator>(new StockLocator
+                                                             {
+                                                                 Id = 1
+                                                             }));
 
             this.Response = this.Browser.Delete(
-                "/inventory/stock-locators",
+                "/inventory/stock-locators/1",
                 with =>
                 {
                     with.Header("Accept", "application/json");
-                    with.Query("id", "1");
                 }).Result;
         }
 
@@ -42,9 +46,10 @@
         }
 
         [Test]
-        public void ShouldReturnEmpty()
+        public void ShouldReturnDeleted()
         {
-           this.Response.Body.Should().BeEmpty();
+            var resource = this.Response.Body.DeserializeJson<StockLocatorResource>();
+            resource.Id.Should().Be(1);
         }
     }
 }

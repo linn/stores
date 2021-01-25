@@ -13,6 +13,7 @@ function DeptStockUtility({
     departmentsLoading,
     updateStockLocator,
     createStockLocator,
+    deleteStockLocator,
     stockLocatorLoading,
     storagePlaces,
     clearStoragePlacesSearch,
@@ -127,6 +128,7 @@ function DeptStockUtility({
                                 newRow={newRow}
                                 editable
                                 allowNewRowCreations
+                                deleteRow={deleteStockLocator}
                             />
                         )}
                     </Grid>

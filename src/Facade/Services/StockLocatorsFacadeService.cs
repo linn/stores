@@ -35,8 +35,9 @@
 
         public IResult<StockLocator> Delete(int id)
         {
-            this.domainService.DeleteStockLocator(this.repository.FindById(id));
-            return new SuccessResult<StockLocator>(null);
+            var toDelete = this.repository.FindById(id);
+            this.domainService.DeleteStockLocator(toDelete);
+            return new SuccessResult<StockLocator>(toDelete);
         }
 
         public IResult<IEnumerable<StockLocatorWithStoragePlaceInfo>> 

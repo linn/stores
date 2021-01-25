@@ -106,4 +106,8 @@ export const deptStockPartsActionTypes = makeActionTypes(itemTypes.deptStockPart
 
 export const stockLocatorsActionTypes = makeActionTypes(itemTypes.stockLocators.actionType);
 
-export const stockLocatorActionTypes = makeActionTypes(itemTypes.stockLocator.actionType);
+export const stockLocatorActionTypes = makeActionTypes(
+    itemTypes.stockLocator.actionType,
+    true,
+    true
+);

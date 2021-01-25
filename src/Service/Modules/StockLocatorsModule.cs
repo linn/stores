@@ -15,7 +15,7 @@
         {
             this.service = service;
             this.Get("/inventory/stock-locators", _ => this.GetStockLocators());
-            this.Delete("/inventory/stock-locators", _ => this.DeleteStockLocator());
+            this.Delete("/inventory/stock-locators/{id}", parameters => this.DeleteStockLocator(parameters.id));
             this.Put("/inventory/stock-locators/{id}", parameters => this.UpdateStockLocator(parameters.id));
             this.Post("/inventory/stock-locators", _ => this.AddStockLocator());
         }
@@ -27,10 +27,9 @@
             return this.Negotiate.WithModel(result);
         }
 
-        private object DeleteStockLocator()
+        private object DeleteStockLocator(int id)
         {
-            var resource = this.Bind<StockLocatorResource>();
-            return this.Negotiate.WithModel(this.service.Delete(resource.Id));
+            return this.Negotiate.WithModel(this.service.Delete(id));
         }
 
         private object UpdateStockLocator(int id)
