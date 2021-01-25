@@ -41,10 +41,7 @@
                 var pallets = this.palletRepository.FilterBy(p => p.PalletNumber == toCreate.PalletNumber);
                 foreach (var storesPallet in pallets)
                 {
-                    if ((storesPallet.AuditedByDepartmentCode == null
-                         || storesPallet.AuditFrequencyWeeks == null
-                         || storesPallet.AuditFrequencyWeeks != 26)
-                        && auditDepartmentCode == null)
+                    if (storesPallet.AuditedByDepartmentCode == null && auditDepartmentCode == null)
                     {
                         throw new CreateStockLocatorException("Audit department must be entered");
                     }
