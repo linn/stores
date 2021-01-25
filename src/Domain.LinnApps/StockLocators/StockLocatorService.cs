@@ -107,6 +107,7 @@
                                        BatchRef = s.BatchRef,
                                        Quantity = s.Quantity,
                                        StockRotationDate = s.StockRotationDate,
+                                       Remarks = s.Remarks
                                    };
                     });
         }
