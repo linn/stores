@@ -34,7 +34,8 @@ const mapDispatchToProps = {
     clearDepartmentsSearch: departmentsActions.clearSearch,
     clearStoragePlacesSearch: storagePlacesActions.clearSearch,
     searchStoragePlaces: storagePlacesActions.search,
-    updateStockLocator: stockLocatorActions.update
+    updateStockLocator: stockLocatorActions.update,
+    createStockLocator: stockLocatorActions.add
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(DeptStockUtility));

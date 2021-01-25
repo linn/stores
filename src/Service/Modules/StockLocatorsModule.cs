@@ -17,6 +17,7 @@
             this.Get("/inventory/stock-locators", _ => this.GetStockLocators());
             this.Delete("/inventory/stock-locators", _ => this.DeleteStockLocator());
             this.Put("/inventory/stock-locators/{id}", parameters => this.UpdateStockLocator(parameters.id));
+            this.Post("/inventory/stock-locators", _ => this.AddStockLocator());
         }
 
         private object GetStockLocators()
@@ -36,6 +37,12 @@
         {
             var resource = this.Bind<StockLocatorResource>();
             return this.Negotiate.WithModel(this.service.Update(id, resource));
+        }
+
+        private object AddStockLocator()
+        {
+            var resource = this.Bind<StockLocatorResource>();
+            return this.Negotiate.WithModel(this.service.Add(resource));
         }
     }
 }

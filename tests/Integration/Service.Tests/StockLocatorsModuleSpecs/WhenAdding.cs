@@ -3,7 +3,6 @@
     using FluentAssertions;
 
     using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Resources;
 
@@ -14,7 +13,7 @@
 
     using NUnit.Framework;
 
-    public class WhenUpdating : ContextBase
+    public class WhenAdding : ContextBase
     {
         private StockLocatorResource requestResource;
 
@@ -24,18 +23,19 @@
             this.requestResource = new StockLocatorResource
                                        {
                                            PartNumber = "PART",
-                                           Id = 1,
                                            Remarks = "Desc",
                                        };
             var stockLocator = new StockLocator
                                    {
-                                       PartNumber = "PART", Id = 1, Remarks = "Desc",
+                                       PartNumber = "PART",
+                                       Id = 1,
+                                       Remarks = "Desc",
                                    };
-            this.StockLocatorFacadeService.Update(1, Arg.Any<StockLocatorResource>())
+            this.StockLocatorFacadeService.Add(Arg.Any<StockLocatorResource>())
                 .Returns(new SuccessResult<StockLocator>(stockLocator));
 
-            this.Response = this.Browser.Put(
-                "inventory/stock-locators/1",
+            this.Response = this.Browser.Post(
+                "inventory/stock-locators",
                 with =>
                     {
                         with.Header("Accept", "application/json");
@@ -55,7 +55,7 @@
         {
             this.StockLocatorFacadeService
                 .Received()
-                .Update(1, Arg.Is<StockLocatorResource>(r => r.Id == this.requestResource.Id));
+                .Add(Arg.Any<StockLocatorResource>());
         }
 
         [Test]

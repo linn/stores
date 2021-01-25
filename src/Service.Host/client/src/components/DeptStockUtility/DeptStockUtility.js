@@ -12,6 +12,7 @@ function DeptStockUtility({
     searchDepartments,
     departmentsLoading,
     updateStockLocator,
+    createStockLocator,
     stockLocatorLoading,
     storagePlaces,
     clearStoragePlacesSearch,
@@ -20,6 +21,7 @@ function DeptStockUtility({
 }) {
     const [prevStockLocators, setPrevStockLocators] = useState([]);
     const [stockLocators, setStockLocators] = useState(null);
+    const [newRow, setNewRow] = useState({ id: 0 });
     useEffect(() => {
         if (items !== prevStockLocators) {
             if (items.length > 0) {
@@ -29,21 +31,34 @@ function DeptStockUtility({
         }
     }, [items, stockLocators, prevStockLocators]);
 
-    const selectStoragePlaceSearchResult = (_propertyName, storagePlace, updatedItem) => {
-        setStockLocators(s =>
-            s.map(x => {
-                return x.id === updatedItem.id
-                    ? {
-                          ...x,
-                          storagePlaceName: storagePlace.name,
-                          storagePlaceDescription: storagePlace.description,
-                          palletNumber: storagePlace.palletNumber,
-                          locationId: storagePlace.locationId
-                      }
-                    : x;
-            })
-        );
-    };
+    const selectStoragePlaceSearchResult = (_propertyName, storagePlace, updatedItem) =>
+        setStockLocators(s => {
+            let updatedExisting = false;
+            const updatedStockLocators = s.map(x => {
+                if (x.id === updatedItem.id) {
+                    updatedExisting = true;
+                    return {
+                        ...x,
+                        storagePlaceName: storagePlace.name,
+                        storagePlaceDescription: storagePlace.description,
+                        palletNumber: storagePlace.palletNumber,
+                        locationId: storagePlace.locationId
+                    };
+                }
+                return x;
+            });
+            if (!updatedExisting) {
+                setNewRow(x => ({
+                    ...x,
+                    storagePlaceName: storagePlace.name,
+                    storagePlaceDescription: storagePlace.description,
+                    palletNumber: storagePlace.palletNumber,
+                    locationId: storagePlace.locationId
+                }));
+            }
+            return updatedStockLocators;
+        });
+
     const editableColumns = [
         {
             title: 'Storage Place',
@@ -79,13 +94,13 @@ function DeptStockUtility({
         {
             title: 'Qty',
             id: 'quantity',
-            type: 'text', 
+            type: 'text',
             editable: true
         },
         {
             title: 'Remarks',
             id: 'remarks',
-            type: 'text', 
+            type: 'text',
             editable: true
         }
     ];
@@ -105,10 +120,11 @@ function DeptStockUtility({
                             <SingleEditTable
                                 columns={editableColumns}
                                 rows={stockLocators}
-                                //updateRow={updateStockLocator}
                                 saveRow={item => {
                                     updateStockLocator(item.id, item);
-                                }} // updateRow Functions
+                                }}
+                                createRow={item => createStockLocator(item)}
+                                newRow={newRow}
                                 editable
                                 allowNewRowCreations
                             />
@@ -138,7 +154,8 @@ DeptStockUtility.propTypes = {
     clearStoragePlacesSearch: PropTypes.func.isRequired,
     searchStoragePlaces: PropTypes.func.isRequired,
     storagePlacesLoading: PropTypes.bool,
-    updateStockLocator: PropTypes.func.isRequired
+    updateStockLocator: PropTypes.func.isRequired,
+    createStockLocator: PropTypes.func.isRequired
 };
 
 DeptStockUtility.defaultProps = {

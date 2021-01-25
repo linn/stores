@@ -53,7 +53,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.StockLocatorFacadeService.Received() sr.GetStockLocatorsForPart(Arg.Any<string>());
+            this.StockLocatorFacadeService.Received().GetStockLocatorsForPart(Arg.Any<string>());
         }
 
         [Test]
