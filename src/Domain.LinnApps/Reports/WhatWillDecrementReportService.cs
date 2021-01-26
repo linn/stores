@@ -1,6 +1,5 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Reports
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -51,7 +50,8 @@
 
             var changeRequests = this.changeRequestRepository.FilterBy(c => c.ChangeState == "ACCEPT").ToList();
 
-            var wwdWorks = this.wwdWorkRepository.FilterBy(w => w.JobId == jobId).ToList();
+            var wwdWorks = this.wwdWorkRepository
+                .FilterBy(w => w.JobId == jobId && (w.Part.BomType == "A" || w.Part.BomType == "C")).ToList();
 
             if (typeOfRun == "SHORTAGES ONLY")
             {
