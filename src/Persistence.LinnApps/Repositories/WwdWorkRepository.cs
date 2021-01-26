@@ -7,6 +7,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class WwdWorkRepository : IQueryRepository<WwdWork>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -23,7 +25,7 @@
 
         public IQueryable<WwdWork> FilterBy(Expression<Func<WwdWork, bool>> expression)
         {
-            return this.serviceDbContext.WwdWorks.Where(expression);
+            return this.serviceDbContext.WwdWorks.Where(expression).Include(w => w.Part);
         }
 
         public IQueryable<WwdWork> FindAll()

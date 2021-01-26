@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import {
     initialiseOnMount,
-    getItemErrorDetailMessage
+    getItemErrorDetailMessage,
+    utilities
 } from '@linn-it/linn-form-components-library';
 import sosAllocHeadsActions from '../../actions/sosAllocHeadsActions';
 import sosAllocHeadsSelectors from '../../selectors/sosAllocHeadsSelectors';
@@ -10,15 +11,23 @@ import sosAllocDetailActions from '../../actions/sosAllocDetailActions';
 import sosAllocDetailsActions from '../../actions/sosAllocDetailsActions';
 import sosAllocDetailsSelectors from '../../selectors/sosAllocDetailsSelectors';
 import finishAllocationActions from '../../actions/finishAllocationActions';
+import finishAllocationSelectors from '../../selectors/finishAllocationSelectors';
 import * as processTypes from '../../processTypes';
+import pickItemsAllocationActions from '../../actions/pickItemsAllocationActions';
+import pickItemsAllocationSelectors from '../../selectors/pickItemsAllocationSelectors';
+import unpickItemsAllocationActions from '../../actions/unpickItemsAllocationActions';
+import unpickItemsAllocationSelectors from '../../selectors/unpickItemsAllocationSelectors';
 
 const mapStateToProps = (state, { match }) => ({
     jobId: match.params.jobId,
-    items: sosAllocHeadsSelectors.getSearchItems(state),
+    items: utilities.sortEntityList(sosAllocHeadsSelectors.getSearchItems(state), 'outletName'),
     loading: sosAllocHeadsSelectors.getSearchLoading(state),
     details: sosAllocDetailsSelectors.getSearchItems(state),
     detailsLoading: sosAllocDetailsSelectors.getSearchLoading(state),
-    allocationError: getItemErrorDetailMessage(state, processTypes.finishAllocation.item)
+    allocationError: getItemErrorDetailMessage(state, processTypes.finishAllocation.item),
+    finishAllocationWorking: finishAllocationSelectors.getWorking(state),
+    pickItemsAllocationWorking: pickItemsAllocationSelectors.getWorking(state),
+    unpickItemsAllocationWorking: unpickItemsAllocationSelectors.getWorking(state)
 });
 
 const initialise = ({ jobId }) => dispatch => {
@@ -30,7 +39,9 @@ const initialise = ({ jobId }) => dispatch => {
 const mapDispatchToProps = {
     initialise,
     updateDetail: sosAllocDetailActions.update,
-    finishAllocation: finishAllocationActions.requestProcessStart
+    finishAllocation: finishAllocationActions.requestProcessStart,
+    pickItemsAllocation: pickItemsAllocationActions.requestProcessStart,
+    unpickItemsAllocation: unpickItemsAllocationActions.requestProcessStart
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(SosAllocHeads));

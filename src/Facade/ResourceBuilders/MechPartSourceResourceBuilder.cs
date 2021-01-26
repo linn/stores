@@ -17,12 +17,17 @@
         private readonly MechPartManufacturerAltResourceBuilder manufacturerAltResourceBuilder = 
             new MechPartManufacturerAltResourceBuilder();
 
+        private readonly MechPartUsageResourceBuilder usageResourceBuilder = new MechPartUsageResourceBuilder();
+
+        private readonly MechPartPurchasingQuoteResourceBuilder purchasingQuotesResourceBuilder = 
+            new MechPartPurchasingQuoteResourceBuilder();
+
         public MechPartSourceResource Build(MechPartSource model)
         {
             return new MechPartSourceResource
                         {
                             AssemblyType = model.AssemblyType,
-                            DateEntered = model.DateEntered.ToString("o"),
+                            DateEntered = model.DateEntered?.ToString("o"),
                             DateSamplesRequired = model.DateSamplesRequired?.ToString("o"),
                             EstimatedVolume = model.EstimatedVolume,
                             Id = model.Id,
@@ -70,7 +75,78 @@
                             ProductKnowledge = model.ProductKnowledge,
                             ProductKnowledgeAvailable = model.ProductKnowledgeAvailable,
                             TestEquipment = model.TestEquipment,
-                            Links = this.BuildLinks(model).ToArray()
+                            CapacitorRippleCurrent = model.CapacitorRippleCurrent,
+                            Capacitance = model.Capacitance,
+                            CapacitorVoltageRating = model.CapacitorVoltageRating,
+                            CapacitorPositiveTolerance = model.CapacitorPositiveTolerance,
+                            CapacitorNegativeTolerance = model.CapacitorNegativeTolerance,
+                            CapacitorDielectric = model.CapacitorDielectric,
+                            PackageName = model.Package,
+                            CapacitorPitch = model.CapacitorPitch,
+                            CapacitorLength = model.CapacitorLength,
+                            CapacitorWidth = model.CapacitorWidth,
+                            CapacitorHeight = model.CapacitorHeight,
+                            CapacitorDiameter = model.CapacitorDiameter,
+                            Resistance = model.Resistance,
+                            ResistorTolerance = model.ResistorTolerance,
+                            Construction = model.Construction,
+                            ResistorLength = model.ResistorLength,
+                            ResistorHeight = model.ResistorHeight,
+                            ResistorWidth = model.ResistorWidth,
+                            ResistorPowerRating = model.ResistorPowerRating,
+                            ResistorVoltageRating = model.ResistorVoltageRating,
+                            TemperatureCoefficient = model.TemperatureCoefficient,
+                            TransistorType = model.TransistorType,
+                            TransistorDeviceName = model.TransistorDeviceName,
+                            TransistorCurrent = model.TransistorCurrent,
+                            TransistorVoltage = model.TransistorVoltage,
+                            TransistorPolarity = model.TransistorPolarity,
+                            IcType = model.IcType,
+                            IcFunction = model.IcFunction,
+                            LibraryRef = model.LibraryRef,
+                            FootprintRef = model.FootprintRef,
+                            RkmCode = model.RkmCode,
+                            CapacitanceLetterAndNumeralCode = model.CapacitanceLetterAndNumeralCode,
+                            PartCreatedBy = model.PartCreatedBy?.Id,
+                            PartCreatedByName = model.PartCreatedBy?.FullName,
+                            PartCreatedDate = model.PartCreatedDate?.ToString("o"),
+                            VerifiedBy = model.VerifiedById,
+                            VerifiedByName = model.VerifiedBy?.FullName,
+                            VerifiedDate = model.VerifiedDate?.ToString("o"),
+                            QualityVerifiedBy = model.QualityVerifiedById,
+                            QualityVerifiedByName = model.QualityVerifiedBy?.FullName,
+                            QualityVerifiedDate = model.QualityVerifiedDate?.ToString("o"),
+                            McitVerifiedBy = model.McitVerifiedById,
+                            McitVerifiedByName = model.McitVerifiedBy?.FullName,
+                            McitVerifiedDate = model.McitVerifiedDate?.ToString("o"),
+                            ApplyTCodeBy = model.ApplyTCodeId,
+                            ApplyTCodeByName = model.ApplyTCodeBy?.FullName,
+                            ApplyTCodeDate = model.ApplyTCodeDate?.ToString("o"),
+                            RemoveTCodeBy = model.RemoveTCodeId,
+                            RemoveTCodeByName = model.RemoveTCodeBy?.FullName,
+                            RemoveTCodeDate = model.RemoveTCodeDate?.ToString("o"),
+                            CancelledBy = model.CancelledById,
+                            CancelledByName = model.CancelledBy?.FullName,
+                            CancelledDate = model.DateCancelled?.ToString("o"),
+                            PurchasingQuotes = model.PurchasingQuotes?.Select(
+                                (q, i) =>
+                                    {
+                                        var resource = this.purchasingQuotesResourceBuilder.Build(q);
+                                        resource.Id = i;
+                                        return resource;
+                                    })
+                                .ToList(),
+                            Usages = model.Usages?.Select(
+                                    (u, i) =>
+                                        {
+                                            var resource = this.usageResourceBuilder.Build(u);
+                                            resource.Id = i;
+                                            return resource;
+                                        })
+                                .ToList(),
+                            Links = this.BuildLinks(model).ToArray(),
+                            LifeExpectancyPart = model.LifeExpectancyPart,
+                            Configuration = model.Configuration
             };
         }
 

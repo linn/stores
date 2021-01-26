@@ -10,7 +10,7 @@
 
         public Employee ProposedBy { get; set; }
 
-        public DateTime DateEntered { get; set; }
+        public DateTime? DateEntered { get; set; }
 
         public string PartNumber { get; set; }
 
@@ -97,5 +97,119 @@
         public ICollection<MechPartAlt> MechPartAlts { get; set; }
 
         public ICollection<MechPartManufacturerAlt> MechPartManufacturerAlts { get; set; }
+
+        public int? CapacitorRippleCurrent { get; set; } 
+
+        public decimal? Capacitance { get; set; }
+
+        public decimal? CapacitorVoltageRating { get; set; }
+
+        public int? CapacitorPositiveTolerance { get; set; }
+
+        public int? CapacitorNegativeTolerance { get; set; }
+
+        public string CapacitorDielectric { get; set; }
+
+        public string Package { get; set; }
+
+        public decimal? CapacitorPitch { get; set; }
+
+        public decimal? CapacitorLength { get; set; }
+
+        public decimal? CapacitorWidth { get; set; }
+
+        public decimal? CapacitorHeight { get; set; }
+
+        public decimal? CapacitorDiameter { get; set; }
+
+        public string CapacitanceLetterAndNumeralCode { get; set; }
+
+        public decimal? Resistance { get; set; }
+
+        public decimal? ResistorTolerance { get; set; }
+
+        public string Construction { get; set; }
+
+        public decimal? ResistorLength { get; set; }
+
+        public decimal? ResistorWidth { get; set; }
+
+        public decimal? ResistorHeight { get; set; }
+
+        public int? ResistorPowerRating { get; set; }
+
+        public int? ResistorVoltageRating { get; set; }
+
+        public int? TemperatureCoefficient { get; set; }
+
+        public string TransistorType { get; set; }
+
+        public string TransistorDeviceName { get; set; }
+
+        public string TransistorPolarity { get; set; }
+
+        public int? TransistorVoltage { get; set; }
+
+        public decimal? TransistorCurrent { get; set; }
+
+        public string IcType { get; set; }
+
+        public string IcFunction { get; set; }
+
+        public string LibraryRef { get; set; }
+
+        public string FootprintRef { get; set; }
+
+        public string RkmCode { get; set; }
+
+        public ICollection<MechPartPurchasingQuote> PurchasingQuotes { get; set; }
+
+        public Employee PartCreatedBy { get; set; } 
+
+        public int? PartCreatedById { get; set; }
+
+        public DateTime? PartCreatedDate { get; set; }
+
+        public Employee VerifiedBy { get; set; } 
+
+        public int? VerifiedById { get; set; }
+
+        public DateTime? VerifiedDate { get; set; }
+
+        public Employee QualityVerifiedBy { get; set; }
+
+        public int? QualityVerifiedById { get; set; }
+
+        public DateTime? QualityVerifiedDate { get; set; }
+
+        public Employee McitVerifiedBy { get; set; }
+
+        public int? McitVerifiedById { get; set; }
+
+        public DateTime? McitVerifiedDate { get; set; }
+
+        public Employee ApplyTCodeBy { get; set; }
+
+        public int? ApplyTCodeId { get; set; }
+
+        public DateTime? ApplyTCodeDate { get; set; }
+
+        public Employee RemoveTCodeBy { get; set; }
+
+        public int? RemoveTCodeId { get; set; }
+
+        public DateTime? RemoveTCodeDate { get; set; }
+
+        public Employee CancelledBy { get; set; }
+
+        public int? CancelledById { get; set; }
+
+        public DateTime? DateCancelled { get; set; }
+
+        public ICollection<MechPartUsage> Usages { get; set; }
+
+        public string LifeExpectancyPart { get; set; }
+
+        public string Configuration { get; set; }
     }
 }

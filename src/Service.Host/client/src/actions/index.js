@@ -80,6 +80,24 @@ export const manufacturersActionTypes = makeActionTypes(itemTypes.manufacturers.
 
 export const employeesActionTypes = makeActionTypes(itemTypes.employees.actionType);
 
+export const partDataSheetValuesActionTypes = makeActionTypes(
+    itemTypes.partDataSheetValues.actionType
+);
+
 export const finishAllocationActionTypes = makeActionTypes(
     processTypes.finishAllocation.actionType
+);
+
+export const pickItemsAllocationActionTypes = makeActionTypes(
+    processTypes.pickItemsAllocation.actionType
+);
+
+export const unpickItemsAllocationActionTypes = makeActionTypes(
+    processTypes.unpickItemsAllocation.actionType
+);
+
+export const tqmsCategoriesActionTypes = makeActionTypes(itemTypes.tqmsCategories.actionType);
+
+export const workstationTopUpStatusActionTypes = makeActionTypes(
+    itemTypes.workstationTopUpStatus.actionType
 );

@@ -18,7 +18,7 @@
 
         public RootProduct FindBy(Expression<Func<RootProduct, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.RootProducts.Where(expression).ToList().FirstOrDefault();
         }
 
         public IQueryable<RootProduct> FilterBy(Expression<Func<RootProduct, bool>> expression)

@@ -6,6 +6,8 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.RequestResources;
+
     using Nancy;
     using Nancy.Testing;
     using NSubstitute;

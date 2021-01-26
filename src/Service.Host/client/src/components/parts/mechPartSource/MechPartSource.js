@@ -9,7 +9,8 @@ import {
     Loading,
     Title,
     ErrorCard,
-    SnackbarMessage
+    SnackbarMessage,
+    smartGoBack
 } from '@linn-it/linn-form-components-library';
 import Page from '../../../containers/Page';
 import DataSheetsTab from './tabs/DataSheetsTab';
@@ -17,6 +18,11 @@ import ProposalTab from '../../../containers/parts/mechPartSource/tabs/ProposalT
 import QualityRequirementsTab from './tabs/QualityRequirementsTab';
 import Manufacturerstab from '../../../containers/parts/mechPartSource/tabs/ManufacturersTab';
 import SuppliersTab from '../../../containers/parts/mechPartSource/tabs/SuppliersTab';
+import ParamDataTab from '../../../containers/parts/mechPartSource/tabs/ParamDataTab';
+import CadDataTab from './tabs/CadDataTab';
+import UsagesTab from '../../../containers/parts/mechPartSource/tabs/UsagesTab';
+import VerificationTab from './tabs/VerificationTab';
+import PurchasingQuotesTab from '../../../containers/parts/mechPartSource/tabs/PurchasingQuotesTab';
 
 function MechPartSource({
     editStatus,
@@ -32,13 +38,23 @@ function MechPartSource({
     setSnackbarVisible,
     options,
     userName,
-    userNumber
+    userNumber,
+    previousPaths
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
     const [mechPartSource, setMechPartSource] = useState(
         creating()
-            ? { proposedBy: userNumber, proposedByName: userName, dateEntered: new Date() }
+            ? {
+                  proposedBy: userNumber,
+                  proposedByName: userName,
+                  dateEntered: new Date().toISOString(),
+                  createPart: true,
+                  mechPartAlts: [],
+                  mechPartManufacturerAlts: [],
+                  mechanicalOrElectrical: 'E',
+                  samplesRequired: 'N'
+              }
             : null
     );
     const [prevMechPartSource, setPrevMechPartSource] = useState({});
@@ -48,7 +64,12 @@ function MechPartSource({
         dataSheets: 1,
         qualityRequirements: 2,
         suppliers: 3,
-        manufacturers: 4
+        manufacturers: 4,
+        paramData: 5,
+        cadData: 6,
+        quotes: 7,
+        usages: 8,
+        verification: 9
     };
 
     const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
@@ -57,20 +78,25 @@ function MechPartSource({
         setTab(value);
     };
 
-    const mechPartSourceInvalid = () => !mechPartSource.assemblyType;
+    const mechPartSourceInvalid = () =>
+        !mechPartSource.samplesRequired ||
+        (mechPartSource.mechanicalOrElectrical === 'E' && !mechPartSource.partType);
 
     useEffect(() => {
         if (item !== prevMechPartSource && editStatus !== 'create') {
-            setMechPartSource(item);
+            setMechPartSource({ ...item, resistanceUnits: 'KΩ', capacitanceUnits: 'uF' });
             setPrevMechPartSource(item);
         }
     }, [item, prevMechPartSource, editStatus, itemId]);
 
     const handleSaveClick = () => {
+        const body = mechPartSource;
+        const rkmLetters = { KΩ: 'K', MΩ: 'M', Ω: '' };
+        body.resistanceUnits = rkmLetters[mechPartSource.resistanceUnits];
         if (creating()) {
-            addItem(mechPartSource);
+            addItem(body);
         } else {
-            updateItem(itemId, mechPartSource);
+            updateItem(itemId, body);
         }
         setEditStatus('view');
     };
@@ -78,10 +104,6 @@ function MechPartSource({
     const handleCancelClick = () => {
         setMechPartSource(item);
         setEditStatus('view');
-    };
-
-    const handleBackClick = () => {
-        history.push('/inventory/stores/parts/sources');
     };
 
     const handleDatasheetsChange = dataSheets => {
@@ -98,6 +120,32 @@ function MechPartSource({
         setMechPartSource({ ...mechPartSource, [propertyName]: newValue });
     };
 
+    const handleVerificationFieldChange = (propertyName, newValue) => {
+        setEditStatus('edit');
+
+        // user will change Date field of some base property
+        // remove Date from end of that propertyName to work out which property they changed
+        const basePropertyName = propertyName.substring(0, propertyName.indexOf('Date'));
+
+        // now upate the changeBy and changedByName fields that correspond to that date
+        setMechPartSource({
+            ...mechPartSource,
+            [propertyName]: newValue,
+            [`${basePropertyName}By`]: userNumber,
+            [`${basePropertyName}ByName`]: userName
+        });
+    };
+
+    const handlePartFieldChange = (propertyName, newValue) => {
+        if (viewing) {
+            setEditStatus('editing');
+        }
+        setMechPartSource({
+            ...mechPartSource,
+            part: { ...mechPartSource.part, [propertyName]: newValue }
+        });
+    };
+
     const handleLinnPartChange = newValue => {
         if (viewing()) {
             setEditStatus('edit');
@@ -109,78 +157,53 @@ function MechPartSource({
         });
     };
 
-    const deleteManufacturersRow = row => {
+    const getMaxFieldValue = (objectArray, fieldName) =>
+        objectArray?.length > 0
+            ? objectArray.reduce((prev, current) =>
+                  prev[fieldName] > current[fieldName] ? prev : current
+              )[fieldName]
+            : 0;
+
+    const addRow = (collectionName, idFieldName) => {
         setEditStatus('edit');
         setMechPartSource(m => ({
             ...m,
-            mechPartManufacturerAlts: m.mechPartManufacturerAlts.filter(
-                a => a.sequence === row.sequence
+            [collectionName]: [
+                ...m[collectionName],
+                {
+                    [idFieldName]: getMaxFieldValue(mechPartSource[collectionName], idFieldName) + 1
+                }
+            ]
+        }));
+    };
+
+    const deleteRow = (collectionName, idFieldName, deleteId) => {
+        setEditStatus('edit');
+        setMechPartSource(m => ({
+            ...m,
+            [collectionName]: m[collectionName].filter(a => a[idFieldName] !== deleteId)
+        }));
+    };
+
+    const updateRow = (row, propertyName, newValue, collectionName, idFieldName) => {
+        setEditStatus('edit');
+        setMechPartSource(m => ({
+            ...m,
+            [collectionName]: m[collectionName].map(e =>
+                e[idFieldName] === row[idFieldName] ? { ...e, [propertyName]: newValue } : e
             )
         }));
     };
-
-    const deleteSuppliersRow = row => {
-        setEditStatus('edit');
+    const resetRow = (current, collectionName, idFieldName) => {
         setMechPartSource(m => ({
             ...m,
-            mechPartAlts: m.mechPartAlts.filter(a => a.sequence === row.sequence)
-        }));
-    };
-
-    const saveManufacturersRow = row => {
-        setEditStatus('edit');
-        // we are adding a new row
-        if (!row.sequence) {
-            setMechPartSource(m => ({
-                ...m,
-                mechPartManufacturerAlts: [
-                    ...m.mechPartManufacturerAlts,
-                    {
-                        ...row,
-                        sequence:
-                            m.mechPartManufacturerAlts?.length > 0
-                                ? m.mechPartManufacturerAlts.reduce((prev, current) =>
-                                      prev.sequence > current.sequence ? prev : current
-                                  ).sequence + 1
-                                : 1
-                    }
-                ]
-            }));
-        }
-        // or we are updating an existing row
-        setMechPartSource(m => ({
-            ...m,
-            mechPartManufacturerAlts: m.mechPartManufacturerAlts.map(x =>
-                x.sequence === row.sequence ? row : x
-            )
-        }));
-    };
-
-    const saveSuppliersRow = row => {
-        console.log(row);
-        setEditStatus('edit');
-        // we are adding a new row
-        if (!row.sequence) {
-            setMechPartSource(m => ({
-                ...m,
-                mechPartAlts: [
-                    ...m.mechPartAlts,
-                    {
-                        ...row,
-                        sequence:
-                            m.mechPartAlts?.length > 0
-                                ? m.mechPartAlts.reduce((prev, current) =>
-                                      prev.sequence > current.sequence ? prev : current
-                                  ).sequence + 1
-                                : 1
-                    }
-                ]
-            }));
-        }
-        // or we are updating an existing row
-        setMechPartSource(m => ({
-            ...m,
-            mechPartAlts: m.mechPartAlts.map(x => (x.sequence === row.sequence ? row : x))
+            [collectionName]: [
+                ...m[collectionName].map(a =>
+                    a[idFieldName] === current.id
+                        ? { ...item[collectionName]?.find(s => s[idFieldName] === current.id) }
+                        : a
+                )
+            ]
         }));
     };
 
@@ -201,6 +224,21 @@ function MechPartSource({
             mechPartAlts: m.mechPartAlts.map(x =>
                 x.sequence === sequence
                     ? { ...x, supplierId: newValue.name, supplierName: newValue.description }
+                    : x
+            )
+        }));
+    };
+
+    const handleRootProductChange = (rootProductName, newValue) => {
+        setMechPartSource(m => ({
+            ...m,
+            usages: m.usages.map(x =>
+                x.rootProductName === rootProductName
+                    ? {
+                          ...x,
+                          rootProductName: newValue.name,
+                          rootProductDescription: newValue.description
+                      }
                     : x
             )
         }));
@@ -245,47 +283,64 @@ function MechPartSource({
                                 onClose={() => setSnackbarVisible(false)}
                                 message="Save Successful"
                             />
-                            <Grid item xs={3}>
-                                <InputField
-                                    fullWidth
-                                    disabled={!creating()}
-                                    value={mechPartSource.partNumber}
-                                    label="Part Number"
-                                    maxLength={14}
-                                    helperText={!creating() ? 'This field cannot be changed' : ''}
-                                    required
-                                    onChange={handleFieldChange}
-                                    propertyName="partNumber"
-                                />
-                            </Grid>
-                            <Grid item xs={8}>
-                                <InputField
-                                    fullWidth
-                                    value={mechPartSource.part?.description}
-                                    label="Description"
-                                    maxLength={200}
-                                    required
-                                    onChange={handleFieldChange} // todo - how to handle change?
-                                    propertyName="part.description"
-                                />
-                            </Grid>
+                            {!creating() && (
+                                <>
+                                    <Grid item xs={3}>
+                                        <InputField
+                                            fullWidth
+                                            disabled={!creating()}
+                                            value={mechPartSource.partNumber}
+                                            label="Part Number"
+                                            maxLength={14}
+                                            helperText={
+                                                !creating() ? 'This field cannot be changed' : ''
+                                            }
+                                            required
+                                            onChange={handleFieldChange}
+                                            propertyName="partNumber"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                        <InputField
+                                            fullWidth
+                                            value={mechPartSource.part?.description}
+                                            label="Description"
+                                            maxLength={200}
+                                            required
+                                            onChange={handlePartFieldChange}
+                                            propertyName="description"
+                                        />
+                                    </Grid>
+                                </>
+                            )}
                             <Tabs
                                 value={tab}
                                 onChange={handleTabChange}
                                 indicatorColor="primary"
+                                variant="scrollable"
+                                scrollButtons="on"
                                 textColor="primary"
                                 style={{ paddingBottom: '40px' }}
                             >
                                 <Tab label="Proposal" />
-                                <Tab label="DataSheets" />
+                                <Tab label="DataSheets" disabled={!mechPartSource.part} />
                                 <Tab label="Quality Requirements" />
                                 <Tab label="Suppliers" />
                                 <Tab label="Manufacturers" />
+                                <Tab
+                                    label="Param Data"
+                                    disabled={mechPartSource.mechanicalOrElectrical !== 'E'}
+                                />
+                                <Tab label="Cad Data" />
+                                <Tab label="Quotes" />
+                                <Tab label="Usages" />
+                                <Tab label="Verification" />
                             </Tabs>
                             {tab === 0 && (
                                 <ProposalTab
                                     handleFieldChange={handleFieldChange}
                                     notes={mechPartSource.notes}
+                                    partType={mechPartSource.partType}
                                     proposedBy={mechPartSource.proposedBy}
                                     proposedByName={mechPartSource.proposedByName}
                                     dateEntered={mechPartSource.dateEntered}
@@ -307,7 +362,7 @@ function MechPartSource({
                                     handleLinnPartChange={handleLinnPartChange}
                                 />
                             )}
-                            {tab === 1 && (
+                            {tab === 1 && mechPartSource.part && (
                                 <DataSheetsTab
                                     dataSheets={mechPartSource.part?.dataSheets}
                                     handleDataSheetsChange={handleDatasheetsChange}
@@ -321,7 +376,7 @@ function MechPartSource({
                                         mechPartSource.drawingsPackageAvailable
                                     }
                                     drawingsPackageDate={mechPartSource.drawingsPackageDate}
-                                    drawingfile={mechPartSource.drawingFile}
+                                    drawingFile={mechPartSource.drawingFile}
                                     checklistCreated={mechPartSource.checklistCreated}
                                     checklistAvailable={mechPartSource.checklistAvailable}
                                     checklistDate={mechPartSource.checklistDate}
@@ -354,8 +409,20 @@ function MechPartSource({
                                 <SuppliersTab
                                     handleSupplierChange={handleSupplierChange}
                                     suppliers={mechPartSource.mechPartAlts}
-                                    saveRow={saveSuppliersRow}
-                                    deleteRow={deleteSuppliersRow}
+                                    deleteRow={id => deleteRow('mechPartAlts', 'sequence', id)}
+                                    addNewRow={() => addRow('mechPartAlts', 'sequence')}
+                                    resetRow={current =>
+                                        resetRow(current, 'mechPartAlts', 'sequence')
+                                    }
+                                    updateRow={(row, _, propertyName, newValue) =>
+                                        updateRow(
+                                            row,
+                                            propertyName,
+                                            newValue,
+                                            'mechPartAlts',
+                                            'sequence'
+                                        )
+                                    }
                                 />
                             )}
                             {tab === 4 && (
@@ -363,17 +430,158 @@ function MechPartSource({
                                     handleApprovedByChange={handleApprovedByChange}
                                     handleManufacturerChange={handleManufacturerChange}
                                     manufacturers={mechPartSource.mechPartManufacturerAlts}
-                                    saveRow={saveManufacturersRow}
-                                    deleteRow={deleteManufacturersRow}
+                                    deleteRow={id =>
+                                        deleteRow('mechPartManufacturerAlts', 'sequence', id)
+                                    }
+                                    addNewRow={() => addRow('mechPartManufacturerAlts', 'sequence')}
+                                    resetRow={current =>
+                                        resetRow(current, 'mechPartManufacturerAlts', 'sequence')
+                                    }
+                                    updateRow={(row, _, propertyName, newValue) =>
+                                        updateRow(
+                                            row,
+                                            propertyName,
+                                            newValue,
+                                            'mechPartManufacturerAlts',
+                                            'sequence'
+                                        )
+                                    }
                                 />
                             )}
-                            {tab === 5 && <></>}
+                            {tab === 5 && mechPartSource.mechanicalOrElectrical === 'E' && (
+                                <ParamDataTab
+                                    partType={mechPartSource.partType}
+                                    resistance={mechPartSource.resistance}
+                                    resistanceUnits={
+                                        creating()
+                                            ? mechPartSource.resistanceUnits
+                                            : mechPartSource?.rkmCode
+                                                  ?.replace(/[^a-zA-Z]/g, '')
+                                                  .concat('Ω')
+                                    }
+                                    handleFieldChange={handleFieldChange}
+                                    capacitorRippleCurrent={mechPartSource.capacitorRippleCurrent}
+                                    capacitance={mechPartSource.capacitance}
+                                    capacitanceUnits={
+                                        creating()
+                                            ? mechPartSource.capacitanceUnits
+                                            : mechPartSource?.capacitanceLetterAndNumeralCodestring?.replace(
+                                                  /[^a-zA-Z]/g,
+                                                  ''
+                                              )
+                                    }
+                                    capacitorVoltageRating={mechPartSource.capacitorVoltageRating}
+                                    capacitorPositiveTolerance={
+                                        mechPartSource.capacitorPositiveTolerance
+                                    }
+                                    capacitorNegativeTolerance={
+                                        mechPartSource.capacitorNegativeTolerance
+                                    }
+                                    creating={creating}
+                                    capacitorDielectric={mechPartSource.capacitorDielectric}
+                                    packageName={mechPartSource.packageName}
+                                    capacitorPitch={mechPartSource.capacitorPitch}
+                                    capacitorLength={mechPartSource.capacitorLength}
+                                    capacitorWidth={mechPartSource.capacitorWidth}
+                                    capacitorHeight={mechPartSource.capacitorHeight}
+                                    capacitorDiameter={mechPartSource.capacitorDiameter}
+                                    resistorTolerance={mechPartSource.resistorTolerance}
+                                    construction={mechPartSource.construction}
+                                    resistorLength={mechPartSource.resistorLength}
+                                    resistorWidth={mechPartSource.resistorWidth}
+                                    resistorHeight={mechPartSource.resistorHeight}
+                                    resistorPowerRating={mechPartSource.resistorPowerRating}
+                                    resistorVoltageRating={mechPartSource.resistorVoltageRating}
+                                    temperatureCoefficient={mechPartSource.temperatureCoefficient}
+                                    transistorDeviceName={mechPartSource.transistorDeviceName}
+                                    transistorPolarity={mechPartSource.transistorPolarity}
+                                    transistorVoltage={mechPartSource.transistorVoltage}
+                                    transistorCurrent={mechPartSource.transistorCurrent}
+                                    icType={mechPartSource.icType}
+                                    icFunction={mechPartSource.icFunction}
+                                    libraryRef={mechPartSource.libraryRef}
+                                    footPrintRef={mechPartSource.footPrintRef}
+                                />
+                            )}
+                            {tab === 6 && (
+                                <CadDataTab
+                                    libraryRef={mechPartSource.libraryRef}
+                                    footprintRef={mechPartSource.footprintRef}
+                                    handleFieldChange={handleFieldChange}
+                                />
+                            )}
+                            {tab === 7 && (
+                                <PurchasingQuotesTab
+                                    handleManufacturerChange={handleManufacturerChange}
+                                    handleSupplierChange={handleSupplierChange}
+                                    purchasingQuotes={mechPartSource.purchasingQuotes}
+                                    deleteRow={id => deleteRow('purchasingQuotes', 'id', id)}
+                                    addNewRow={() => addRow('purchasingQuotes', 'id')}
+                                    resetRow={current =>
+                                        resetRow(current, 'purchasingQuotes', 'id')
+                                    }
+                                    updateRow={(row, _, propertyName, newValue) => {
+                                        updateRow(
+                                            row,
+                                            propertyName,
+                                            newValue,
+                                            'purchasingQuotes',
+                                            'id'
+                                        );
+                                    }}
+                                    handleFieldChange={handleFieldChange}
+                                    configuration={mechPartSource.configuration}
+                                    lifeExpectancyPart={mechPartSource.lifeExpectancyPart}
+                                />
+                            )}
+                            {tab === 8 && (
+                                <UsagesTab
+                                    handleRootProductChange={handleRootProductChange}
+                                    usages={mechPartSource.usages}
+                                    deleteRow={id => deleteRow('usages', 'id', id)}
+                                    addNewRow={() => addRow('usages', 'id')}
+                                    resetRow={current => resetRow(current, 'usages', 'id')}
+                                    updateRow={(row, _, propertyName, newValue) =>
+                                        updateRow(row, propertyName, newValue, 'usages', 'id')
+                                    }
+                                />
+                            )}
+                            {tab === 9 && (
+                                <VerificationTab
+                                    handleFieldChange={handleVerificationFieldChange}
+                                    partCreatedBy={mechPartSource.partCreatedBy}
+                                    partCreatedByName={mechPartSource.partCreatedByName}
+                                    partCreatedDate={mechPartSource.partCreatedDate}
+                                    verifiedBy={mechPartSource.verifiedBy}
+                                    verifiedByName={mechPartSource.verifiedByName}
+                                    verifiedDate={mechPartSource.verifiedDate}
+                                    qualityVerifiedBy={mechPartSource.qualityVerifiedBy}
+                                    qualityVerifiedByName={mechPartSource.qualityVerifiedByName}
+                                    qualityVerifiedDate={mechPartSource.qualityVerifiedDate}
+                                    mcitVerifiedBy={mechPartSource.mcitVerifiedBy}
+                                    mcitVerifiedByName={mechPartSource.mcitVerifiedByName}
+                                    mcitVerifiedDate={mechPartSource.mcitVerifiedDate}
+                                    applyTCodeBy={mechPartSource.applyTCodeBy}
+                                    applyTCodeByName={mechPartSource.applyTCodeByName}
+                                    applyTCodeDate={mechPartSource.applyTCodeDate}
+                                    removeTCodeBy={mechPartSource.removeTCodeBy}
+                                    removeTCodeByName={mechPartSource.removeTCodeByName}
+                                    removeTCodeDate={mechPartSource.removeTCodeDate}
+                                    cancelledBy={mechPartSource.cancelledBy}
+                                    cancelledByName={mechPartSource.cancelledByName}
+                                    cancelledDate={mechPartSource.cancelledDate}
+                                    userNumber={userNumber}
+                                    userName={userName}
+                                />
+                            )}
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons
                                     saveDisabled={viewing() || mechPartSourceInvalid()}
                                     saveClick={handleSaveClick}
                                     cancelClick={handleCancelClick}
-                                    backClick={handleBackClick}
+                                    backClick={() => {
+                                        smartGoBack(previousPaths, history.goBack);
+                                    }}
                                 />
                             </Grid>
                         </>
@@ -386,13 +594,14 @@ function MechPartSource({
 
 MechPartSource.propTypes = {
     item: PropTypes.shape({}),
-    history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+    history: PropTypes.shape({ goBack: PropTypes.func }).isRequired,
     editStatus: PropTypes.string.isRequired,
     itemError: PropTypes.shape({
         status: PropTypes.number,
         statusText: PropTypes.string,
-        details: PropTypes.shape({}),
-        item: PropTypes.string
+        details: PropTypes.shape(),
+        item: PropTypes.string,
+        mechPartSource: PropTypes.number
     }),
     itemId: PropTypes.string,
     snackbarVisible: PropTypes.bool,
@@ -403,8 +612,9 @@ MechPartSource.propTypes = {
     setSnackbarVisible: PropTypes.func.isRequired,
     userName: PropTypes.string,
     userNumber: PropTypes.number,
-    options: PropTypes.shape({ template: PropTypes.string }),
-    liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string })
+    options: PropTypes.shape({ tab: PropTypes.string }),
+    liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
+    previousPaths: PropTypes.arrayOf(PropTypes.string)
 };
 
 MechPartSource.defaultProps = {
@@ -416,7 +626,8 @@ MechPartSource.defaultProps = {
     options: null,
     liveTest: null,
     userName: null,
-    userNumber: null
+    userNumber: null,
+    previousPaths: []
 };
 
 export default MechPartSource;

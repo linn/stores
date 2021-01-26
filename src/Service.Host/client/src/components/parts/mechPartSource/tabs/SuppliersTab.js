@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { EditableTable } from '@linn-it/linn-form-components-library';
 import Grid from '@material-ui/core/Grid';
@@ -11,17 +11,12 @@ function SuppliersTab({
     suppliersSearchLoading,
     handleSupplierChange,
     deleteRow,
-    saveRow
+    resetRow,
+    addNewRow,
+    updateRow
 }) {
-    const [newRow, setNewRow] = useState({});
-
     const selectSupplierSearchResult = (_propertyName, supplier, updatedItem) => {
         handleSupplierChange(updatedItem.sequence, supplier);
-        setNewRow(() => ({
-            ...updatedItem,
-            supplierId: supplier.name,
-            supplierName: supplier.description
-        }));
     };
 
     const columns = [
@@ -54,12 +49,19 @@ function SuppliersTab({
     return (
         <Grid item xs={12}>
             <EditableTable
+                groupEdit
                 columns={columns}
-                rows={suppliers.map(m => ({ ...m, id: m.sequence }))}
-                newRow={newRow}
-                createRow={saveRow}
-                saveRow={saveRow}
-                deleteRow={deleteRow}
+                rows={suppliers.map(m => ({
+                    ...m,
+                    id: m.sequence,
+                    supplierId: m.supplierId?.toString()
+                }))}
+                removeRow={deleteRow}
+                resetRow={resetRow}
+                addRow={addNewRow}
+                tableValid={() => true}
+                updateRow={updateRow}
+                closeRowOnClickAway
             />
         </Grid>
     );
@@ -67,15 +69,16 @@ function SuppliersTab({
 
 SuppliersTab.propTypes = {
     handleSupplierChange: PropTypes.func.isRequired,
-    saveRow: PropTypes.func.isRequired,
+    resetRow: PropTypes.func.isRequired,
     deleteRow: PropTypes.func.isRequired,
     suppliers: PropTypes.arrayOf(PropTypes.shape({})),
     searchSuppliers: PropTypes.func.isRequired,
     clearSuppliersSearch: PropTypes.func.isRequired,
     suppliersSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
-    suppliersSearchLoading: PropTypes.bool
+    suppliersSearchLoading: PropTypes.bool,
+    updateRow: PropTypes.func.isRequired,
+    addNewRow: PropTypes.func.isRequired
 };
-
 SuppliersTab.defaultProps = {
     suppliers: [],
     suppliersSearchResults: [],

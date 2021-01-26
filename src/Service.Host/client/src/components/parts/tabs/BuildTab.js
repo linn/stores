@@ -120,7 +120,11 @@ function BuildTab({
                 <Dropdown
                     label="Bom type"
                     propertyName="bomType"
-                    items={['Component', 'Assembly', 'Phantom']}
+                    items={[
+                        { id: 'C', displayText: 'Component' },
+                        { id: 'A', displayText: 'Assembly' },
+                        { id: 'P', displayText: 'Phantom' }
+                    ]}
                     fullWidth
                     allowNoValue={false}
                     value={bomType}
@@ -151,6 +155,7 @@ function BuildTab({
                     fullWidth
                     value={optionSet}
                     label="option Set"
+                    disabled
                     onChange={handleFieldChange}
                     propertyName="optionSet"
                 />

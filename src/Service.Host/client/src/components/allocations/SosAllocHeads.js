@@ -12,6 +12,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { makeStyles } from '@material-ui/core/styles';
 import { Loading, Title, utilities, ErrorCard } from '@linn-it/linn-form-components-library';
 import { Link } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
 import SosAllocDetails from './SosAllocDetails';
 
 import Page from '../../containers/Page';
@@ -24,12 +25,19 @@ function SosAllocHeads({
     detailsLoading,
     updateDetail,
     finishAllocation,
-    allocationError
+    allocationError,
+    finishAllocationWorking,
+    initialise,
+    pickItemsAllocation,
+    pickItemsAllocationWorking,
+    unpickItemsAllocation,
+    unpickItemsAllocationWorking
 }) {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectedDetails, setSelectedDetails] = useState([]);
     const [progress, setProgress] = useState(50);
     const [alloctionHasFinished, setAllocationHasFinished] = useState(false);
+    const [allocationHasStarted, setAllocationHasStarted] = useState(false);
 
     useEffect(() => {
         if (items.length > 0 && details.length > 0) {
@@ -44,10 +52,19 @@ function SosAllocHeads({
     }, [selectedIndex, items, details, setSelectedDetails]);
 
     useEffect(() => {
-        if (details.length > 0 && details.some(detail => detail.allocationSuccessful)) {
-            setAllocationHasFinished(true);
+        setAllocationHasFinished(
+            details.length > 0 && details.some(detail => detail.allocationSuccessful)
+        );
+    }, [details, items, jobId, setAllocationHasFinished]);
+
+    useEffect(() => {
+        if (allocationHasStarted && !finishAllocationWorking) {
+            setAllocationHasStarted(false);
+            initialise({ jobId });
+        } else {
+            setAllocationHasStarted(finishAllocationWorking);
         }
-    }, [details, setAllocationHasFinished]);
+    }, [finishAllocationWorking, jobId, setAllocationHasStarted, allocationHasStarted, initialise]);
 
     useEffect(() => {
         if (selectedIndex === 0) {
@@ -107,16 +124,16 @@ function SosAllocHeads({
                         Allocate
                     </Button>
                 </Grid>
-                {loading && (
+                {(loading || finishAllocationWorking) && (
                     <Grid item xs={12}>
                         <Loading />
                     </Grid>
                 )}
             </Grid>
             <Grid container spacing={3}>
-                {!loading && (
+                {!loading && !finishAllocationWorking && (
                     <>
-                        <Grid item xs={2}>
+                        <Grid item xs={2} style={{ paddingRight: '20px' }}>
                             <Grid container>
                                 <Grid item xs={12}>
                                     <Button
@@ -159,8 +176,7 @@ function SosAllocHeads({
                                                         fontSize: '0.9rem'
                                                     }
                                                 }}
-                                                secondary={`Value ${item.valueToAllocate} `}
-                                                primary={`Account Id ${item.accountId} Outlet ${item.outletNumber}`}
+                                                primary={item.outletName}
                                             />
                                         </ListItem>
                                         <Divider />
@@ -173,13 +189,26 @@ function SosAllocHeads({
                                 {allocationError && (
                                     <ErrorCard errorMessage={`${allocationError}`} />
                                 )}
-                                <SosAllocDetails
-                                    header={items[selectedIndex]}
-                                    updateDetail={updateDetail}
-                                    loading={detailsLoading}
-                                    displayOnly={alloctionHasFinished}
-                                    items={utilities.sortEntityList(selectedDetails, 'orderNumber')}
-                                />
+                                {items.length ? (
+                                    <SosAllocDetails
+                                        header={items[selectedIndex]}
+                                        updateDetail={updateDetail}
+                                        loading={detailsLoading}
+                                        displayOnly={alloctionHasFinished}
+                                        items={utilities.sortEntityList(
+                                            selectedDetails,
+                                            'orderNumber'
+                                        )}
+                                        pickItemsAllocation={pickItemsAllocation}
+                                        pickItemsAllocationWorking={pickItemsAllocationWorking}
+                                        unpickItemsAllocation={unpickItemsAllocation}
+                                        unpickItemsAllocationWorking={unpickItemsAllocationWorking}
+                                    />
+                                ) : (
+                                    <Typography variant="h6" gutterBottom>
+                                        There were no items found to be allocated.
+                                    </Typography>
+                                )}
                             </>
                         </Grid>
                     </>
@@ -194,12 +223,22 @@ SosAllocHeads.propTypes = {
     loading: PropTypes.bool,
     detailsLoading: PropTypes.bool,
     items: PropTypes.arrayOf(
-        PropTypes.shape({ accountId: PropTypes.number, outletNumber: PropTypes.number })
+        PropTypes.shape({
+            accountId: PropTypes.number,
+            outletNumber: PropTypes.number,
+            outletName: PropTypes.string
+        })
     ),
     details: PropTypes.arrayOf(PropTypes.shape({})),
     updateDetail: PropTypes.func.isRequired,
     finishAllocation: PropTypes.func.isRequired,
-    allocationError: PropTypes.string
+    allocationError: PropTypes.string,
+    finishAllocationWorking: PropTypes.bool,
+    initialise: PropTypes.func.isRequired,
+    pickItemsAllocation: PropTypes.func.isRequired,
+    pickItemsAllocationWorking: PropTypes.func.isRequired,
+    unpickItemsAllocation: PropTypes.func.isRequired,
+    unpickItemsAllocationWorking: PropTypes.func.isRequired
 };
 
 SosAllocHeads.defaultProps = {
@@ -207,7 +246,8 @@ SosAllocHeads.defaultProps = {
     items: [],
     details: [],
     detailsLoading: null,
-    allocationError: null
+    allocationError: null,
+    finishAllocationWorking: false
 };
 
 export default SosAllocHeads;

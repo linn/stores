@@ -8,7 +8,7 @@ function QualityRequirementsTab({
     drawingsPackage,
     drawingsPackageAvailable,
     drawingsPackageDate,
-    drawingfile,
+    drawingFile,
     checklistCreated,
     checklistAvailable,
     checklistDate,
@@ -46,7 +46,7 @@ function QualityRequirementsTab({
                     items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={drawingsPackageAvailable}
+                    value={drawingsPackageAvailable || ''}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -61,8 +61,8 @@ function QualityRequirementsTab({
             </Grid>
             <Grid item xs={12}>
                 <InputField
-                    value={drawingfile}
-                    propertyName="drawingfile"
+                    value={drawingFile}
+                    propertyName="drawingFile"
                     fullWidth
                     onChange={handleFieldChange}
                     label="Drawing File"
@@ -71,7 +71,7 @@ function QualityRequirementsTab({
             <Grid item xs={7}>
                 <InputField
                     value={checklistCreated}
-                    propertyName="checklistCreateed"
+                    propertyName="checklistCreated"
                     fullWidth
                     onChange={handleFieldChange}
                     label="Checklist Created"
@@ -80,11 +80,11 @@ function QualityRequirementsTab({
             <Grid item xs={2}>
                 <Dropdown
                     label="Available"
-                    propertyName="ChecklistAvailable"
+                    propertyName="checklistAvailable"
                     items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={checklistAvailable}
+                    value={checklistAvailable || ''}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -114,7 +114,7 @@ function QualityRequirementsTab({
                     items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={packingAvailable}
+                    value={packingAvailable || ''}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -144,7 +144,7 @@ function QualityRequirementsTab({
                     items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={productKnowledgeAvailable}
+                    value={productKnowledgeAvailable || ''}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -174,7 +174,7 @@ function QualityRequirementsTab({
                     items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={testEquipmentAvailable}
+                    value={testEquipmentAvailable || ''}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -204,7 +204,7 @@ function QualityRequirementsTab({
                     items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={approvedReferencesAvailable}
+                    value={approvedReferencesAvailable || ''}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -234,7 +234,7 @@ function QualityRequirementsTab({
                     items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={processEvaluationAvailable}
+                    value={processEvaluationAvailable || ''}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -256,7 +256,7 @@ QualityRequirementsTab.propTypes = {
     drawingsPackage: PropTypes.string,
     drawingsPackageAvailable: PropTypes.string,
     drawingsPackageDate: PropTypes.string,
-    drawingfile: PropTypes.string,
+    drawingFile: PropTypes.string,
     checklistCreated: PropTypes.string,
     checklistAvailable: PropTypes.string,
     checklistDate: PropTypes.string,
@@ -281,7 +281,7 @@ QualityRequirementsTab.defaultProps = {
     drawingsPackage: null,
     drawingsPackageAvailable: null,
     drawingsPackageDate: null,
-    drawingfile: null,
+    drawingFile: null,
     checklistCreated: null,
     checklistAvailable: null,
     checklistDate: null,

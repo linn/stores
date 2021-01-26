@@ -8,7 +8,9 @@
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Sos;
+    using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Persistence.LinnApps;
     using Linn.Stores.Persistence.LinnApps.Repositories;
 
@@ -18,8 +20,7 @@
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<ServiceDbContext>().AsSelf()
-                .As<DbContext>().InstancePerRequest();
+            builder.RegisterType<ServiceDbContext>().AsSelf().As<DbContext>().InstancePerRequest();
             builder.RegisterType<TransactionManager>().As<ITransactionManager>();
 
             builder.RegisterType<PartRepository>().As<IRepository<Part, int>>();
@@ -52,6 +53,7 @@
             builder.RegisterType<MechPartSourceRepository>().As<IRepository<MechPartSource, int>>();
             builder.RegisterType<ParcelRepository>().As<IRepository<Parcel, int>>();
             builder.RegisterType<CarrierRepository>().As<IRepository<Carrier, string>>();
+            builder.RegisterType<PartDataSheetValuesRepository>().As<IQueryRepository<PartDataSheetValues>>();
             builder.RegisterType<StockLocatorRepository>().As<IQueryRepository<StockLocator>>();
             builder.RegisterType<StoragePlaceRepository>().As<IQueryRepository<StoragePlace>>();
             builder.RegisterType<StoresBugetRepository>().As<IQueryRepository<StoresBudget>>();
@@ -72,6 +74,9 @@
                 .As<IRepository<ImportBookTransactionCode, int>>();
             builder.RegisterType<ImportBookTransportCodeRepository>().As<IRepository<ImportBookTransportCode, int>>();
             builder.RegisterType<PortRepository>().As<IQueryRepository<Port>>();
+            builder.RegisterType<TqmsCategoriesRepository>().As<IRepository<TqmsCategory, string>>();
+            builder.RegisterType<PtlMasterRepository>().As<ISingleRecordRepository<PtlMaster>>();
+            builder.RegisterType<TopUpListJobRefRepository>().As<IRepository<TopUpListJobRef, string>>();
         }
     }
 }

@@ -5,6 +5,7 @@ import { InputField, DatePicker, Dropdown, Typeahead } from '@linn-it/linn-form-
 
 function ProposalTab({
     handleFieldChange,
+    partType,
     notes,
     proposedBy,
     proposedByName,
@@ -30,6 +31,24 @@ function ProposalTab({
     clearPartsSearch,
     assemblyType
 }) {
+    const partTypes = [
+        'CAP',
+        'CONN',
+        'CRYS',
+        'FAN',
+        'IC',
+        'IND',
+        'MCAS',
+        'MISS',
+        'PCB',
+        'RES',
+        'SWRL',
+        'TRAN',
+        'DIO',
+        'PROT',
+        'ANT',
+        'MOD'
+    ];
     return (
         <Grid container spacing={3}>
             <Grid item xs={4}>
@@ -68,12 +87,25 @@ function ProposalTab({
                     propertyName="mechanicalOrElectrical"
                     items={['M', 'E']}
                     fullWidth
-                    disabled
                     value={mechanicalOrElectrical}
                     onChange={handleFieldChange}
                 />
             </Grid>
-            <Grid item xs={9} />
+            {mechanicalOrElectrical === 'E' ? (
+                <Grid item xs={3}>
+                    <Dropdown
+                        label="Part Type"
+                        propertyName="partType"
+                        items={partTypes}
+                        fullWidth
+                        value={partType}
+                        onChange={handleFieldChange}
+                    />
+                </Grid>
+            ) : (
+                <Grid item xs={3} />
+            )}
+            <Grid item xs={6} />
 
             <Grid item xs={3}>
                 <Dropdown
@@ -142,7 +174,6 @@ function ProposalTab({
                     onChange={value => {
                         handleFieldChange('productionDate', value);
                     }}
-                    disabled
                 />
             </Grid>
             <Grid item xs={8} />
@@ -163,7 +194,8 @@ function ProposalTab({
                     propertyName="samplesRequired"
                     items={['Y', 'N']}
                     fullWidth
-                    allowNoValue
+                    allowNoValue={false}
+                    required
                     value={samplesRequired}
                     onChange={handleFieldChange}
                 />
@@ -185,7 +217,6 @@ function ProposalTab({
                     onChange={value => {
                         handleFieldChange('dateSamplesRequired', value);
                     }}
-                    disabled
                 />
             </Grid>
             <Grid item xs={3} />
@@ -258,6 +289,7 @@ function ProposalTab({
 ProposalTab.propTypes = {
     handleFieldChange: PropTypes.func.isRequired,
     notes: PropTypes.string,
+    partType: PropTypes.string,
     proposedBy: PropTypes.number,
     proposedByName: PropTypes.string,
     dateEntered: PropTypes.string,
@@ -269,7 +301,7 @@ ProposalTab.propTypes = {
     safetyDataDirectory: PropTypes.string,
     productionDate: PropTypes.string,
     estimatedVolume: PropTypes.number,
-    samplesRequired: PropTypes.number,
+    samplesRequired: PropTypes.string,
     sampleQuantity: PropTypes.number,
     dateSamplesRequired: PropTypes.string,
     rohsReplace: PropTypes.string,
@@ -285,6 +317,7 @@ ProposalTab.propTypes = {
 
 ProposalTab.defaultProps = {
     notes: null,
+    partType: null,
     proposedBy: null,
     proposedByName: null,
     dateEntered: null,

@@ -38,7 +38,12 @@ import sosAllocDetails from './sosAllocDetails';
 import mechPartSource from './parts/mechPartSource';
 import manufacturers from './manufacturers';
 import employees from './employees';
+import partDataSheetValues from './partDataSheetValues';
 import finishAllocation from './finishAllocation';
+import pickItemsAllocation from './pickItemsAllocation';
+import unpickItemsAllocation from './unpickItemsAllocation';
+import tqmsCategories from './tqmsCategories';
+import workstationTopUpStatus from './workstationTopUpStatus';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -62,8 +67,10 @@ const rootReducer = combineReducers({
     part,
     partCategories,
     parts,
+    partDataSheetValues,
     partLiveTest,
     partTemplates,
+    pickItemsAllocation,
     productAnalysisCodes,
     rootProducts,
     sernosSequences,
@@ -74,7 +81,10 @@ const rootReducer = combineReducers({
     storagePlaces,
     storagePlaceAuditReport,
     suppliers,
+    tqmsCategories,
     unitsOfMeasure,
+    unpickItemsAllocation,
+    workstationTopUpStatus,
     wwdReport,
     ...sharedLibraryReducers,
     errors

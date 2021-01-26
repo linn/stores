@@ -33,7 +33,7 @@ export default function StoragePlaceAuditReport({ reportData, loading, error }) 
 }
 
 StoragePlaceAuditReport.propTypes = {
-    reportData: PropTypes.shape({}),
+    reportData: PropTypes.shape({ title: PropTypes.shape({ displayString: PropTypes.string }) }),
     loading: PropTypes.bool,
     error: PropTypes.string
 };

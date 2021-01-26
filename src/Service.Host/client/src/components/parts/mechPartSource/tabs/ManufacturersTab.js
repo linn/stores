@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { EditableTable } from '@linn-it/linn-form-components-library';
 import Grid from '@material-ui/core/Grid';
@@ -16,30 +16,21 @@ function ManufacturersTab({
     handleApprovedByChange,
     handleManufacturerChange,
     deleteRow,
-    saveRow
+    resetRow,
+    addNewRow,
+    updateRow
 }) {
-    const [newRow, setNewRow] = useState({});
-
     const selectApprovedBySearchResult = (_propertyName, approvedBy, updatedItem) => {
         handleApprovedByChange(updatedItem.sequence, approvedBy);
-        setNewRow(() => ({
-            ...updatedItem,
-            approvedBy: approvedBy.name,
-            approvedByName: approvedBy.description
-        }));
     };
 
     const selectManufacturerSearchResult = (_propertyName, manufacturer, updatedItem) => {
         handleManufacturerChange(updatedItem.sequence, manufacturer);
-        setNewRow(() => ({
-            ...updatedItem,
-            manufacturerCode: manufacturer.name
-        }));
     };
 
     const columns = [
         {
-            title: 'Preferece',
+            title: 'Preference',
             id: 'preference',
             type: 'number',
             editable: true,
@@ -74,7 +65,7 @@ function ManufacturersTab({
             id: 'rohsCompliant',
             type: 'dropdown',
             editable: true,
-            options: ['Y', 'N']
+            options: ['Y', 'N', 'F']
         },
         {
             title: 'Approved By',
@@ -104,12 +95,15 @@ function ManufacturersTab({
     return (
         <Grid item xs={12}>
             <EditableTable
+                groupEdit
                 columns={columns}
                 rows={manufacturers.map(m => ({ ...m, id: m.sequence }))}
-                newRow={newRow}
-                createRow={saveRow}
-                saveRow={saveRow}
-                deleteRow={deleteRow}
+                removeRow={deleteRow}
+                resetRow={resetRow}
+                addRow={addNewRow}
+                tableValid={() => true}
+                updateRow={updateRow}
+                closeRowOnClickAway
             />
         </Grid>
     );
@@ -117,7 +111,7 @@ function ManufacturersTab({
 
 ManufacturersTab.propTypes = {
     handleManufacturerChange: PropTypes.func.isRequired,
-    saveRow: PropTypes.func.isRequired,
+    updateRow: PropTypes.func.isRequired,
     deleteRow: PropTypes.func.isRequired,
     manufacturers: PropTypes.arrayOf(PropTypes.shape({})),
     searchManufacturers: PropTypes.func.isRequired,
@@ -128,7 +122,9 @@ ManufacturersTab.propTypes = {
     clearEmployeesSearch: PropTypes.func.isRequired,
     employeesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     employeesSearchLoading: PropTypes.bool,
-    handleApprovedByChange: PropTypes.func.isRequired
+    handleApprovedByChange: PropTypes.func.isRequired,
+    resetRow: PropTypes.func.isRequired,
+    addNewRow: PropTypes.func.isRequired
 };
 
 ManufacturersTab.defaultProps = {

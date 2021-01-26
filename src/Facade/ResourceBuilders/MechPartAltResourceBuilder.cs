@@ -11,8 +11,8 @@
             return new MechPartAltResource
                        {
                            Sequence = model.Sequence,
-                           SupplierId = model.Supplier.Id,
-                           SupplierName = model.Supplier.Name,
+                           SupplierId = model.Supplier?.Id,
+                           SupplierName = model.Supplier?.Name,
                            PartNumber = model.PartNumber
                        };
         }

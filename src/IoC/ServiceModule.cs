@@ -13,11 +13,13 @@
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Reports;
+    using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Allocation;
     using Linn.Stores.Resources.Parts;
+    using Linn.Stores.Resources.RequestResources;
 
     public class ServiceModule : Module
     {
@@ -31,6 +33,7 @@
             builder.RegisterType<WhatWillDecrementReportService>().As<IWhatWillDecrementReportService>();
             builder.RegisterType<StoragePlaceAuditReportService>().As<IStoragePlaceAuditReportService>();
             builder.RegisterType<MechPartSourceService>().As<IMechPartSourceService>();
+            builder.RegisterType<WorkstationService>().As<IWorkstationService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -76,6 +79,10 @@
             builder.RegisterType<EmployeesService>().As<IEmployeeService>();
             builder.RegisterType<ImportBookFacadeService>()
                 .As<IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource>>();
+            builder.RegisterType<PartDataSheetValuesService>().As<IPartDataSheetValuesService>();
+            builder.RegisterType<TqmsCategoriesService>()
+                .As<IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>>();
+            builder.RegisterType<WorkstationFacadeService>().As<IWorkstationFacadeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
@@ -84,6 +91,7 @@
             builder.RegisterType<WwdPack>().As<IWwdPack>();
             builder.RegisterType<StoragePlaceAuditPack>().As<IStoragePlaceAuditPack>();
             builder.RegisterType<AllocPack>().As<IAllocPack>();
+            builder.RegisterType<WorkstationPackProxy>().As<IWorkstationPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

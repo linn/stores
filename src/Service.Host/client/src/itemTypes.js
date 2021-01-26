@@ -143,3 +143,21 @@ export const manufacturers = new ItemType(
 );
 
 export const employees = new ItemType('employees', 'EMPLOYEES', '/inventory/employees');
+
+export const partDataSheetValues = new ItemType(
+    'partDataSheetValues',
+    'PART_DATA_SHEET_VALUES',
+    '/inventory/parts/data-sheet-values'
+);
+
+export const tqmsCategories = new ItemType(
+    'tqmsCategories',
+    'TQMS_CATEGORIES',
+    '/inventory/parts/tqms-categories'
+);
+
+export const workstationTopUpStatus = new ItemType(
+    'workstationTopUpStatus',
+    'WORKSTATION_TOP_UP_STATUS',
+    '/logistics/workstations/top-up'
+);

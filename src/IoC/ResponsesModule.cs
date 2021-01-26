@@ -12,6 +12,7 @@
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Facade;
     using Linn.Stores.Facade.ResourceBuilders;
 
@@ -88,7 +89,7 @@
                 .As<IResourceBuilder<Parcel>>();
             builder.RegisterType<ParcelsResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<Parcel>>>();
-                builder.RegisterType<AuditLocationResourceBuilder>().As<IResourceBuilder<AuditLocation>>();
+            builder.RegisterType<AuditLocationResourceBuilder>().As<IResourceBuilder<AuditLocation>>();
             builder.RegisterType<AuditLocationsResourceBuilder>().As<IResourceBuilder<IEnumerable<AuditLocation>>>();
             builder.RegisterType<StoragePlaceResourceBuilder>().As<IResourceBuilder<StoragePlace>>();
             builder.RegisterType<StoragePlacesResourceBuilder>().As<IResourceBuilder<IEnumerable<StoragePlace>>>();
@@ -102,12 +103,21 @@
                 .As<IResourceBuilder<Employee>>();
             builder.RegisterType<EmployeesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<Employee>>>();
+            builder.RegisterType<PartDataSheetValuesResourceBuilder>().As<IResourceBuilder<PartDataSheetValues>>();
+            builder.RegisterType<PartDataSheetValuesListResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<PartDataSheetValues>>>();
             builder.RegisterType<ErrorResourceBuilder>().As<IResourceBuilder<Error>>();
             builder.RegisterType<ImportBookResourceBuilder>().As<IResourceBuilder<ImportBook>>();
             builder.RegisterType<ImportBookInvoiceDetailResourceBuilder>()
                 .As<IResourceBuilder<ImpBookInvoiceDetail>>();
             builder.RegisterType<ImportBookOrderDetailResourceBuilder>().As<IResourceBuilder<ImpBookOrderDetail>>();
             builder.RegisterType<ImportBookPostEntryResourceBuilder>().As<IResourceBuilder<ImpBookPostEntry>>();
+            builder.RegisterType<TqmsCategoryResourceBuilder>()
+                .As<IResourceBuilder<TqmsCategory>>();
+            builder.RegisterType<TqmsCategoriesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<TqmsCategory>>>();
+            builder.RegisterType<WorkstationTopUpStatusResourceBuilder>()
+                .As<IResourceBuilder<ResponseModel<WorkstationTopUpStatus>>>();
         }
     }
 }

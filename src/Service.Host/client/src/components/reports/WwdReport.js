@@ -41,7 +41,7 @@ export default function WwdReport({ reportData, loading, error, options }) {
 }
 
 WwdReport.propTypes = {
-    reportData: PropTypes.shape({}),
+    reportData: PropTypes.shape({ title: PropTypes.shape({ displayString: PropTypes.string }) }),
     loading: PropTypes.bool,
     error: PropTypes.string,
     options: PropTypes.shape({
