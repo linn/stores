@@ -6,7 +6,6 @@
     using Linn.Common.Persistence;
     using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
-    using Linn.Stores.Domain.LinnApps.Parts;
 
     public class WhatWillDecrementReportService : IWhatWillDecrementReportService
     {
