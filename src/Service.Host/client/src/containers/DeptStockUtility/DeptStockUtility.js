@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { initialiseOnMount } from '@linn-it/linn-form-components-library';
+import { initialiseOnMount, getItemError } from '@linn-it/linn-form-components-library';
 import queryString from 'query-string';
 import DeptStockUtility from '../../components/DeptStockUtility/DeptStockUtility';
 import departmentsSelectors from '../../selectors/departmentsSelectors';
@@ -10,6 +10,7 @@ import stockLocatorsActions from '../../actions/stockLocatorsActions';
 import stockLocatorsSelectors from '../../selectors/stockLocatorsSelectors';
 import stockLocatorActions from '../../actions/stockLocatorActions';
 import stockLocatorSelectors from '../../selectors/stockLocatorSelectors';
+import * as itemTypes from '../../itemTypes';
 
 const mapStateToProps = (state, { location }) => ({
     items: stockLocatorsSelectors.getSearchItems(state),
@@ -21,7 +22,9 @@ const mapStateToProps = (state, { location }) => ({
     storagePlaces: storagePlacesSelectors.getSearchItems(state).map(i => ({ ...i, id: i.name })),
     storagePlacesLoading: storagePlacesSelectors.getSearchLoading(state),
     options: queryString.parse(location?.search),
-    stockLocatorLoading: stockLocatorSelectors.getLoading(state)
+    stockLocatorLoading: stockLocatorSelectors.getLoading(state),
+    snackbarVisible: stockLocatorSelectors.getSnackbarVisible(state),
+    itemError: getItemError(state, itemTypes.stockLocator.item)
 });
 
 const initialise = ({ options }) => dispatch => {
@@ -36,7 +39,8 @@ const mapDispatchToProps = {
     searchStoragePlaces: storagePlacesActions.search,
     updateStockLocator: stockLocatorActions.update,
     createStockLocator: stockLocatorActions.add,
-    deleteStockLocator: stockLocatorActions.delete
+    deleteStockLocator: stockLocatorActions.delete,
+    setSnackbarVisible: stockLocatorActions.setSnackbarVisible
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(DeptStockUtility));
