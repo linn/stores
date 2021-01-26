@@ -49,9 +49,9 @@
         }
 
         [Test]
-        public void ShouldUpdatePallets()
+        public void ShouldNotUpdatePallets()
         {
-            this.StoresPalletRepository.Received()
+            this.StoresPalletRepository.DidNotReceive()
                 .FilterBy(Arg.Any<Expression<Func<StoresPallet, bool>>>());
         }
     }

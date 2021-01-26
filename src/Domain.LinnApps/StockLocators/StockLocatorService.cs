@@ -10,13 +10,13 @@
     {
         private readonly IRepository<StockLocator, int> repository;
 
-        private readonly IRepository<StoresPallet, int> palletRepository;
+        private readonly IStoresPalletRepository palletRepository;
 
         private readonly IQueryRepository<StoragePlace> storagePlaceRepository;
 
         public StockLocatorService(
             IRepository<StockLocator, int> repository,
-            IRepository<StoresPallet, int> palletRepository,
+            IStoresPalletRepository palletRepository,
             IQueryRepository<StoragePlace> storagePlaceRepository)
         {
             this.repository = repository;
@@ -72,14 +72,11 @@
             if (!this.repository
                     .FilterBy(l => l.PalletNumber == toDelete.PalletNumber && l.Quantity > 0).Any())
             {
-                return;
-            }
-
-            foreach (var storesPallet in 
-                this.palletRepository.FilterBy(p => p.PalletNumber == toDelete.PalletNumber))
-            {
-                storesPallet.AuditFrequencyWeeks = null;
-                storesPallet.AuditedByDepartmentCode = null;
+                foreach (var storesPallet in
+                    this.palletRepository.FilterBy(p => p.PalletNumber == toDelete.PalletNumber))
+                {
+                    this.palletRepository.UpdatePallet(storesPallet.PalletNumber, null, null);
+                }
             }
         }
 
@@ -99,7 +96,6 @@
                                      : s.PalletNumber == p.PalletNumber);
                         if (l.PalletNumber.HasValue)
                         {
-                            var pallet = this.palletRepository.FindById((int)l.PalletNumber);
                             auditDept = 
                                 this.palletRepository.FindById((int)l.PalletNumber).AuditedByDepartmentCode;
                         }

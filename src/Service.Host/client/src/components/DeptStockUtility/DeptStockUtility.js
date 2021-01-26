@@ -30,8 +30,8 @@ function DeptStockUtility({
     setSnackbarVisible,
     itemError
 }) {
-    const [prevStockLocators, setPrevStockLocators] = useState([]);
-    const [stockLocators, setStockLocators] = useState(null);
+    const [prevStockLocators, setPrevStockLocators] = useState(null);
+    const [stockLocators, setStockLocators] = useState([]);
     const [newRow, setNewRow] = useState({
         id: -1,
         partNumber: options.partNumber,
@@ -39,7 +39,7 @@ function DeptStockUtility({
     });
     useEffect(() => {
         if (items !== prevStockLocators) {
-            if (items.length > 0) {
+            if (items) {
                 setPrevStockLocators(items);
                 setStockLocators(items);
             }
@@ -50,10 +50,11 @@ function DeptStockUtility({
         setStockLocators(s =>
             s.map(x =>
                 x.id === updatedItem.id
-                    ? { ...x, AuditDepartmentCode: department.departmentCode }
+                    ? { ...x, auditDepartmentCode: department.departmentCode }
                     : x
             )
         );
+        setNewRow(x => ({ ...x, auditDepartmentCode: department.departmentCode }));
     };
 
     const selectStoragePlaceSearchResult = (_propertyName, storagePlace, updatedItem) =>
@@ -95,7 +96,9 @@ function DeptStockUtility({
             searchResults: storagePlaces,
             searchLoading: storagePlacesLoading,
             selectSearchResult: selectStoragePlaceSearchResult,
-            searchTitle: 'Search Storage Places'
+            searchTitle: 'Search Storage Places',
+            minimumSearchTermLength: 3,
+            required: true
         },
         {
             title: 'Description',
@@ -138,7 +141,9 @@ function DeptStockUtility({
             searchResults: departments,
             searchLoading: departmentsLoading,
             selectSearchResult: selectDepartmentsSearchResult,
-            searchTitle: 'Search Storage Places'
+            searchTitle: 'Search Departments',
+            minimumSearchTermLength: 3,
+            required: true
         }
     ];
     return (
@@ -223,7 +228,7 @@ DeptStockUtility.propTypes = {
 
 DeptStockUtility.defaultProps = {
     itemsLoading: false,
-    items: null,
+    items: [],
     departments: [],
     departmentsLoading: false,
     storagePlacesLoading: false,

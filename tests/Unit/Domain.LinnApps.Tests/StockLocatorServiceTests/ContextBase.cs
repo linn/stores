@@ -11,7 +11,7 @@
     {
         protected IRepository<StockLocator, int> StockLocatorRepository { get; private set; }
 
-        protected IRepository<StoresPallet, int> StoresPalletRepository { get; private set; }
+        protected IStoresPalletRepository StoresPalletRepository { get; private set; }
 
         protected IQueryRepository<StoragePlace> StoragePlaceRepository { get; private set; }
 
@@ -21,7 +21,7 @@
         public void SetUpContext()
         {
             this.StockLocatorRepository = Substitute.For<IRepository<StockLocator, int>>();
-            this.StoresPalletRepository = Substitute.For<IRepository<StoresPallet, int>>();
+            this.StoresPalletRepository = Substitute.For<IStoresPalletRepository>();
             this.StoragePlaceRepository = Substitute.For<IQueryRepository<StoragePlace>>();
             this.Sut = new StockLocatorService(
                 this.StockLocatorRepository, 

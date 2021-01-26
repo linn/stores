@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.StockLocatorServiceTests
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
 
@@ -17,11 +18,20 @@
                                                          Id = 1,
                                                          PalletNumber = 1
                                                      };
+
         [SetUp]
         public void SetUp()
         {
             this.StockLocatorRepository.FilterBy(Arg.Any<Expression<Func<StockLocator, bool>>>())
                 .Returns(Enumerable.Empty<StockLocator>().AsQueryable());
+            this.StoresPalletRepository.FilterBy(Arg.Any<Expression<Func<StoresPallet, bool>>>())
+                .Returns(new List<StoresPallet> 
+                             { 
+                                 new StoresPallet
+                                     {
+                                         PalletNumber = 1,
+                                     }
+                             }.AsQueryable());
             this.Sut.DeleteStockLocator(this.toDelete);
         }
 
@@ -32,10 +42,10 @@
         }
 
         [Test]
-        public void ShouldNotUpdatePallets()
+        public void ShouldUpdatePallets()
         {
-            this.StoresPalletRepository.DidNotReceive()
-                .FilterBy(Arg.Any<Expression<Func<StoresPallet, bool>>>());
+            this.StoresPalletRepository.Received()
+                .UpdatePallet(1, null, null);
         }
     }
 }

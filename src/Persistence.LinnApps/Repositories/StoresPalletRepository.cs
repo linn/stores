@@ -6,8 +6,9 @@
 
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
 
-    public class StoresPalletRepository : IRepository<StoresPallet, int>
+    public class StoresPalletRepository : IStoresPalletRepository
     {
         private readonly ServiceDbContext serviceDbContext;
 
@@ -46,6 +47,18 @@
         public IQueryable<StoresPallet> FilterBy(Expression<Func<StoresPallet, bool>> expression)
         {
             return this.serviceDbContext.StoresPallets.Where(expression);
+        }
+
+        public void UpdatePallet(int id, string auditDepartmentCode, int? auditFrequencyWeeks)
+        {
+            var pallet = 
+                this.serviceDbContext.StoresPallets
+                    .Where(p => p.PalletNumber == id).ToList().First();
+                
+            pallet.AuditedByDepartmentCode = auditDepartmentCode;
+            pallet.AuditFrequencyWeeks = auditFrequencyWeeks;
+
+            this.serviceDbContext.SaveChanges();
         }
     }
 }

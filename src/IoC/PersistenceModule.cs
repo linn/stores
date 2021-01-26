@@ -62,7 +62,7 @@
             builder.RegisterType<TqmsCategoriesRepository>().As<IRepository<TqmsCategory, string>>();
             builder.RegisterType<PtlMasterRepository>().As<ISingleRecordRepository<PtlMaster>>();
             builder.RegisterType<TopUpListJobRefRepository>().As<IRepository<TopUpListJobRef, string>>();
-            builder.RegisterType<StoresPalletRepository>().As<IRepository<StoresPallet, int>>();
+            builder.RegisterType<StoresPalletRepository>().As<IStoresPalletRepository>();
         }
     }
 }
