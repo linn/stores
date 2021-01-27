@@ -58,8 +58,6 @@
                 wwdWorks = wwdWorks.Where(w => w.QuantityKitted > w.QuantityAtLocation).ToList();
             }
 
-            wwdWorks.OrderBy(w => w.StoragePlace).ThenBy(w => w.PartNumber);
-
             var wwdWorkDetails = this.wwdWorkDetailsRepository.FilterBy(w => w.JobId == jobId).ToList();
 
             changeRequests = changeRequests.Where(c => wwdWorks.Any(w => w.PartNumber == c.OldPartNumber)).ToList();
@@ -74,7 +72,10 @@
 
             model.AddSortedColumns(columns);
 
-            var values = this.SetModelRows(wwdWorks, wwdWorkDetails, changeRequests);
+            var values = this.SetModelRows(
+                wwdWorks.OrderBy(w => w.StoragePlace == null).ThenBy(w => w.StoragePlace).ThenBy(w => w.PartNumber),
+                wwdWorkDetails,
+                changeRequests);
 
             this.reportingHelper.AddResultsToModel(model, values, CalculationValueModelType.Quantity, true);
 
