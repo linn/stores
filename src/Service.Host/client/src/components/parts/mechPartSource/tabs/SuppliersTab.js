@@ -1,19 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EditableTable } from '@linn-it/linn-form-components-library';
+import { GroupEditTable } from '@linn-it/linn-form-components-library';
 import Grid from '@material-ui/core/Grid';
 
 function SuppliersTab({
-    suppliers,
     searchSuppliers,
     clearSuppliersSearch,
     suppliersSearchResults,
     suppliersSearchLoading,
     handleSupplierChange,
-    deleteRow,
-    resetRow,
-    addNewRow,
-    updateRow
+    rows,
+    setRowToBeDeleted,
+    setRowToBeSaved,
+    setEditing,
+    removeRow,
+    addRow,
+    updateRow,
+    resetRow
 }) {
     const selectSupplierSearchResult = (_propertyName, supplier, updatedItem) => {
         handleSupplierChange(updatedItem.sequence, supplier);
@@ -30,7 +33,8 @@ function SuppliersTab({
             searchResults: suppliersSearchResults,
             searchLoading: suppliersSearchLoading,
             selectSearchResult: selectSupplierSearchResult,
-            searchTitle: 'Search Suppliers'
+            searchTitle: 'Search Suppliers',
+            minimumSearchTermLength: 4
         },
         {
             title: 'Name',
@@ -48,21 +52,25 @@ function SuppliersTab({
 
     return (
         <Grid item xs={12}>
-            <EditableTable
-                groupEdit
-                columns={columns}
-                rows={suppliers.map(m => ({
-                    ...m,
-                    id: m.sequence,
-                    supplierId: m.supplierId?.toString()
-                }))}
-                removeRow={deleteRow}
-                resetRow={resetRow}
-                addRow={addNewRow}
-                tableValid={() => true}
-                updateRow={updateRow}
-                closeRowOnClickAway
-            />
+            {rows && (
+                <GroupEditTable
+                    columns={columns}
+                    rows={rows}
+                    updateRow={updateRow}
+                    addRow={addRow}
+                    removeRow={removeRow}
+                    resetRow={resetRow}
+                    handleEditClick={setEditing}
+                    tableValid={() => true}
+                    editable
+                    allowNewRowCreation
+                    deleteRowPreEdit={false}
+                    setRowToBeSaved={setRowToBeSaved}
+                    setRowToBeDeleted={setRowToBeDeleted}
+                    closeRowOnClickAway={false}
+                    removeRowOnDelete
+                />
+            )}
         </Grid>
     );
 }
@@ -70,17 +78,21 @@ function SuppliersTab({
 SuppliersTab.propTypes = {
     handleSupplierChange: PropTypes.func.isRequired,
     resetRow: PropTypes.func.isRequired,
-    deleteRow: PropTypes.func.isRequired,
-    suppliers: PropTypes.arrayOf(PropTypes.shape({})),
     searchSuppliers: PropTypes.func.isRequired,
     clearSuppliersSearch: PropTypes.func.isRequired,
     suppliersSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     suppliersSearchLoading: PropTypes.bool,
     updateRow: PropTypes.func.isRequired,
-    addNewRow: PropTypes.func.isRequired
+    rows: PropTypes.arrayOf(PropTypes.shape({})),
+    setRowToBeDeleted: PropTypes.func.isRequired,
+    setRowToBeSaved: PropTypes.func.isRequired,
+    setEditing: PropTypes.func.isRequired,
+    removeRow: PropTypes.func.isRequired,
+    addRow: PropTypes.func.isRequired
 };
+
 SuppliersTab.defaultProps = {
-    suppliers: [],
+    rows: [],
     suppliersSearchResults: [],
     suppliersSearchLoading: false
 };
