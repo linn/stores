@@ -72,10 +72,10 @@
 
             model.AddSortedColumns(columns);
 
-            var values = this.SetModelRows(
-                wwdWorks.OrderBy(w => w.StoragePlace == null).ThenBy(w => w.StoragePlace).ThenBy(w => w.PartNumber),
-                wwdWorkDetails,
-                changeRequests);
+            var sortedWwdWorks = wwdWorks.OrderBy(w => w.StoragePlace == null).ThenBy(w => w.StoragePlace)
+                .ThenBy(w => w.PartNumber);
+
+            var values = this.SetModelRows(sortedWwdWorks, wwdWorkDetails, changeRequests);
 
             this.reportingHelper.AddResultsToModel(model, values, CalculationValueModelType.Quantity, true);
 
