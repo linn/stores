@@ -36,6 +36,8 @@
 
         private readonly bool excludeNorthAmerica = true;
 
+        private readonly bool excludeEuropeanUnion = true;
+
         private AllocationResult result;
 
         [SetUp]
@@ -54,6 +56,7 @@
                 this.excludeHold,
                 this.excludeOverCredit,
                 this.excludeNorthAmerica,
+                this.excludeEuropeanUnion,
                 out _,
                 out _).Returns(808);
 
@@ -68,7 +71,8 @@
                 this.excludeUnsuppliable,
                 this.excludeHold,
                 this.excludeOverCredit,
-                this.excludeNorthAmerica);
+                this.excludeNorthAmerica,
+                this.excludeEuropeanUnion);
         }
 
         [Test]
