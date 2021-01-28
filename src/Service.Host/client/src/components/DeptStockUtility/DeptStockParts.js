@@ -19,6 +19,7 @@ function DeptStockParts({ items, fetchItems, itemsLoading, clearSearch, history 
                         loading={itemsLoading}
                         title="Search Part"
                         history={history}
+                        minimumSearchTermLength={3}
                     />
                 </Grid>
             </Grid>

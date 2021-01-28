@@ -24,7 +24,9 @@
         {
             var resource = this.Bind<StockLocatorResource>();
             var result = this.service.GetStockLocatorsForPart(resource.PartNumber);
-            return this.Negotiate.WithModel(result);
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");;
         }
 
         private object DeleteStockLocator(int id)
