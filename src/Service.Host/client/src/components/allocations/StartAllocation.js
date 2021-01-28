@@ -44,6 +44,7 @@ function StartAllocation({
         excludeOverCreditLimit: true,
         excludeOnHold: true,
         excludeNorthAmerica: false,
+        excludeEuropeanUnion: false,
         cutOffDate: new Date().toISOString()
     });
 
@@ -207,6 +208,7 @@ function StartAllocation({
                                 propertyName="excludeOverCreditLimit"
                             />
                         </Grid>
+                        <Grid item xs={8} />
                         <Grid item xs={4}>
                             <OnOffSwitch
                                 label="Exclude North America"
@@ -218,6 +220,19 @@ function StartAllocation({
                                     );
                                 }}
                                 propertyName="excludeNorthAmerica"
+                            />
+                        </Grid>
+                        <Grid item xs={4}>
+                            <OnOffSwitch
+                                label="Exclude EU"
+                                value={allocationOptions.excludeEuropeanUnion}
+                                onChange={() => {
+                                    handleFieldChange(
+                                        'excludeEuropeanUnion',
+                                        !allocationOptions.excludeEuropeanUnion
+                                    );
+                                }}
+                                propertyName="excludeEuropeanUnion"
                             />
                         </Grid>
                         <Grid item xs={4} />

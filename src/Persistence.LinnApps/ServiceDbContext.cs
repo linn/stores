@@ -735,12 +735,14 @@
 
         private void BuildSalesOutlets(ModelBuilder builder)
         {
-            var table = builder.Entity<SalesOutlet>().ToTable("SALES_OUTLETS");
+            var table = builder.Entity<SalesOutlet>().ToTable("V_SALES_OUTLETS");
             table.HasKey(s => new { s.AccountId, s.OutletNumber });
             table.Property(s => s.AccountId).HasColumnName("ACCOUNT_ID");
             table.Property(s => s.OutletNumber).HasColumnName("OUTLET_NUMBER");
             table.Property(s => s.Name).HasColumnName("NAME").HasMaxLength(50);
             table.Property(s => s.SalesCustomerId).HasColumnName("SALES_CUSTOMER_ID");
+            table.Property(s => s.CountryCode).HasColumnName("COUNTRY_CODE").HasMaxLength(2);
+            table.Property(s => s.CountryName).HasColumnName("COUNTRY_NAME").HasMaxLength(50);
         }
 
         private void BuildParcels(ModelBuilder builder)

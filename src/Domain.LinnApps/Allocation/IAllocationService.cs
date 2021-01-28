@@ -18,7 +18,8 @@
             bool excludeUnsuppliableLines,
             bool excludeOnHold,
             bool excludeOverCreditLimit,
-            bool excludeNorthAmerica);
+            bool excludeNorthAmerica,
+            bool excludeEuropeanUnion);
 
         AllocationResult FinishAllocation(int jobId);
 

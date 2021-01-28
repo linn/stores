@@ -43,7 +43,8 @@
             bool excludeUnsuppliableLines,
             bool excludeOnHold,
             bool excludeOverCreditLimit,
-            bool excludeNorthAmerica)
+            bool excludeNorthAmerica,
+            bool excludeEuropeanUnion)
         {
             var results = new AllocationResult
                               {
@@ -60,6 +61,7 @@
                                       excludeOnHold,
                                       excludeOverCreditLimit,
                                       excludeNorthAmerica,
+                                      excludeEuropeanUnion,
                                       out var notes,
                                       out var sosNotes),
                                   SosNotes = sosNotes,

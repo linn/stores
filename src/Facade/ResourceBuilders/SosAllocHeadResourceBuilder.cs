@@ -22,6 +22,8 @@
                            OutletNumber = sosAllocHead.SalesOutlet.OutletNumber,
                            ValueToAllocate = sosAllocHead.ValueToAllocate,
                            OutletName = sosAllocHead.SalesOutlet.Name,
+                           CountryCode = sosAllocHead.SalesOutlet.CountryCode,
+                           CountryName = sosAllocHead.SalesOutlet.CountryName,
                            Links = this.BuildLinks(sosAllocHead).ToArray()
                        };
         }

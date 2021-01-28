@@ -36,7 +36,8 @@
                 allocationOptionsResource.ExcludeUnsuppliableLines,
                 allocationOptionsResource.ExcludeOnHold,
                 allocationOptionsResource.ExcludeOverCreditLimit,
-                allocationOptionsResource.ExcludeNorthAmerica));
+                allocationOptionsResource.ExcludeNorthAmerica,
+                allocationOptionsResource.ExcludeEuropeanUnion));
         }
 
         public IResult<AllocationResult> FinishAllocation(int jobId)
