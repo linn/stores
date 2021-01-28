@@ -6,6 +6,7 @@
     using Linn.Common.Persistence;
     using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
 
     public class StoragePlaceAuditReportService : IStoragePlaceAuditReportService
     {
@@ -13,7 +14,7 @@
 
         private readonly IRepository<Part, int> partsRepository;
 
-        private readonly IQueryRepository<StockLocator> stockLocatorRepository;
+        private readonly IRepository<StockLocator, int> stockLocatorRepository;
 
         private readonly IQueryRepository<StoragePlace> storagePlaceRepository;
 
@@ -22,7 +23,7 @@
         public StoragePlaceAuditReportService(
             IReportingHelper reportingHelper,
             IRepository<Part, int> partsRepository,
-            IQueryRepository<StockLocator> stockLocatorRepository,
+            IRepository<StockLocator, int> stockLocatorRepository,
             IQueryRepository<StoragePlace> storagePlaceRepository,
             IQueryRepository<StoresBudget> storesBudgetsRepository)
         {
@@ -100,7 +101,7 @@
                     new CalculationValueModel
                         {
                             RowId = storagePlace.Name,
-                            TextDisplay = storagePlace.StoragePlaceDescription,
+                            TextDisplay = storagePlace.Description,
                             ColumnId = "Description"
                         });
                 values.Add(

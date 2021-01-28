@@ -5,8 +5,8 @@ import Button from '@material-ui/core/Button';
 import {
     Loading,
     ErrorCard,
-    EditableTable,
-    SnackbarMessage
+    SnackbarMessage,
+    SingleEditTable
 } from '@linn-it/linn-form-components-library';
 import Typography from '@material-ui/core/Typography';
 
@@ -138,7 +138,7 @@ function SosAllocDetails({
                         message={internalError}
                     />
                     <Grid item xs={12}>
-                        <EditableTable
+                        <SingleEditTable
                             columns={displayOnly ? displayOnlyColumns : editableColumns}
                             rows={items}
                             saveRow={updateRow}

@@ -101,3 +101,13 @@ export const tqmsCategoriesActionTypes = makeActionTypes(itemTypes.tqmsCategorie
 export const workstationTopUpStatusActionTypes = makeActionTypes(
     itemTypes.workstationTopUpStatus.actionType
 );
+
+export const deptStockPartsActionTypes = makeActionTypes(itemTypes.deptStockParts.actionType);
+
+export const stockLocatorsActionTypes = makeActionTypes(itemTypes.stockLocators.actionType);
+
+export const stockLocatorActionTypes = makeActionTypes(
+    itemTypes.stockLocator.actionType,
+    true,
+    true
+);

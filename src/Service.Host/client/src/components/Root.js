@@ -24,6 +24,8 @@ import StoragePlaceAuditReport from '../containers/reports/StoragePlaceAuditRepo
 import NotFoundPage from './NotFoundPage';
 import MechPartSource from '../containers/parts/mechPartSource/MechPartSource';
 import WorkstationTopUpStatus from '../containers/workstations/WorkstationTopUpStatus';
+import DeptStockUtility from '../containers/DeptStockUtility/DeptStockUtility';
+import DeptStockParts from '../containers/DeptStockUtility/DeptStockParts';
 
 const Root = ({ store }) => (
     <div>
@@ -103,7 +105,16 @@ const Root = ({ store }) => (
                                         path="/inventory/reports/what-will-decrement"
                                         component={WwdReportOptions}
                                     />
-
+                                    <Route
+                                        exact
+                                        path="/inventory/stock-locators"
+                                        component={DeptStockUtility}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/dept-stock-parts"
+                                        component={DeptStockParts}
+                                    />
                                     <Route
                                         exact
                                         path="/inventory/reports/storage-place-audit/report"

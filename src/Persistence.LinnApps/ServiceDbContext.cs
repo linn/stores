@@ -1,11 +1,14 @@
 ﻿namespace Linn.Stores.Persistence.LinnApps
 {
+    using System.Threading;
+
     using Linn.Common.Configuration;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Sos;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.Workstation;
 
     using Microsoft.EntityFrameworkCore;
@@ -68,7 +71,7 @@
 
         public DbSet<MechPartSource> MechPartSources { get; set; }
         
-        public DbQuery<StockLocator> StockLocators { get; set; }
+        public DbSet<StockLocator> StockLocators { get; set; }
 
         public DbQuery<StoragePlace> StoragePlaces { get; set; }
 
@@ -104,6 +107,8 @@
 
         public DbSet<MechPartUsage> MechPartUsages { get; set; }
 
+        public DbSet<StoresPallet> StoresPallets { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -132,7 +137,7 @@
             this.BuildPartTemplates(builder);
             this.BuildPartDataSheets(builder);
             this.BuildMechPartSources(builder);
-            this.QueryStockLocators(builder);
+            this.BuildStockLocators(builder);
             this.QueryStoragePlaces(builder);
             this.QueryStoresBudgets(builder);
             this.QueryAuditLocations(builder);
@@ -151,6 +156,7 @@
             this.BuildMechPartUsages(builder);
             this.BuildPtlMaster(builder);
             this.BuildTopUpJobRefs(builder);
+            this.BuildStoresPallets(builder);
             base.OnModelCreating(builder);
         }
 
@@ -648,23 +654,32 @@
             q.HasOne(e => e.Part).WithMany(p => p.WwdWorks).HasForeignKey("PART_NUMBER");
         }
 
-        private void QueryStockLocators(ModelBuilder builder)
+        private void BuildStockLocators(ModelBuilder builder)
         {
-            var q = builder.Query<StockLocator>();
-            q.ToView("STOCK_LOCATORS");
+            var q = builder.Entity<StockLocator>();
+            q.ToTable("STOCK_LOCATORS");
+            q.HasKey(s => s.Id);
+            q.Property(s => s.Id).HasColumnName("STOCK_LOCATOR_ID");
             q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER");
             q.Property(e => e.BudgetId).HasColumnName("BUDGET_ID");
             q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
             q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
             q.Property(e => e.Quantity).HasColumnName("QTY");
             q.Property(e => e.QuantityAllocated).HasColumnName("QTY_ALLOCATED");
+            q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE");
+            q.Property(e => e.Remarks).HasColumnName("REMARKS");
+            q.Property(e => e.StockRotationDate).HasColumnName("STOCK_ROTATION_DATE");
+            q.Property(e => e.BatchRef).HasColumnName("BATCH_REF");
+            q.Property(e => e.State).HasColumnName("STATE").HasMaxLength(6).IsRequired();
+            q.Property(e => e.Category).HasColumnName("CATEGORY").HasMaxLength(6).IsRequired();
         }
+
 
         private void QueryStoragePlaces(ModelBuilder builder)
         {
             var q = builder.Query<StoragePlace>();
             q.ToView("V_STORAGE_PLACES");
-            q.Property(e => e.StoragePlaceDescription).HasColumnName("STORAGE_PLACE_DESCRIPTION");
+            q.Property(e => e.Description).HasColumnName("STORAGE_PLACE_DESCRIPTION");
             q.Property(e => e.Name).HasColumnName("STORAGE_PLACE");
             q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
             q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
@@ -858,6 +873,17 @@
             table.Property(s => s.JobRef).HasColumnName("JOBREF").HasMaxLength(6);
             table.Property(s => s.DateRun).HasColumnName("DATE_RUN");
             table.Property(s => s.FullRun).HasColumnName("FULL_RUN").HasMaxLength(1);
+        }
+
+        private void BuildStoresPallets(ModelBuilder builder)
+        {
+            var e = builder.Entity<StoresPallet>().ToTable("STORES_PALLETS");
+            e.HasKey(p => p.PalletNumber);
+            e.Property(p => p.PalletNumber).HasColumnName("PALLET_NUMBER").HasMaxLength(6);
+            e.Property(p => p.AuditFrequencyWeeks)
+                .HasColumnName("AUDIT_FREQUENCY_WEEKS").HasMaxLength(10);
+            e.Property(p => p.AuditedByDepartmentCode)
+                .HasColumnName("AUDITED_BY_DEPARTMENT_CODE").HasMaxLength(10);
         }
     }
 }
