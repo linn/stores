@@ -19,5 +19,9 @@
         public decimal ValueToAllocate { get; set; }
 
         public string OutletHoldStatus { get; set; }
+
+        public string CountryCode { get; set; }
+
+        public string CountryName { get; set; }
     }
 }
