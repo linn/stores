@@ -2,6 +2,7 @@
 {
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
+    using Linn.Stores.Service.Models;
 
     using Nancy;
     using Nancy.ModelBinding;
@@ -26,7 +27,7 @@
             var result = this.service.GetStockLocatorsForPart(resource.PartNumber);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
-                .WithView("Index");;
+                .WithView("Index");
         }
 
         private object DeleteStockLocator(int id)
