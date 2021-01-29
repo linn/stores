@@ -103,7 +103,7 @@
             this.Get("inventory/parts/can-be-made-live/{id}", parameters => this.CheckCanBeMadeLive(parameters.id));
 
             this.mechPartSourceService = mechPartSourceService;
-            this.Get("inventroy/parts/sources/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
+            this.Get("inventory/parts/sources/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("inventory/parts/sources/{id}", parameters => this.GetMechPartSource(parameters.id));
             this.Put("inventory/parts/sources/{id}", parameters => this.UpdateMechPartSource(parameters.id));
             this.Post("inventory/parts/sources", _ => this.AddMechPartSource());
