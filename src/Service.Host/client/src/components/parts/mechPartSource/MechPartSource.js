@@ -108,6 +108,7 @@ function MechPartSource({
         updateRow: updateManufacturersRow,
         removeRow: removeManufacturersRow,
         setEditing: setManufacturersEditing,
+        setData: setManufacturersData,
         //setTableValid,
         setRowToBeDeleted: setManufacturersRowToBeDeleted,
         setRowToBeSaved: setManufacturersRowToBeSaved
@@ -292,12 +293,9 @@ function MechPartSource({
     };
 
     const handleManufacturerChange = (sequence, newValue) => {
-        setMechPartSource(m => ({
-            ...m,
-            mechPartManufacturerAlts: m.mechPartManufacturerAlts.map(x =>
-                x.sequence === sequence ? { ...x, manufacturerCode: newValue.name } : x
-            )
-        }));
+        setManufacturersData(m =>
+            m.map(x => (x.sequence === sequence ? { ...x, manufacturerCode: newValue.name } : x))
+        );
     };
 
     return (
@@ -313,7 +311,11 @@ function MechPartSource({
                 {itemError && (
                     <Grid item xs={12}>
                         <ErrorCard
-                            errorMessage={itemError?.details?.errors?.[0] || itemError.statusText}
+                            errorMessage={
+                                itemError?.details?.errors?.[0] ||
+                                itemError?.details?.details ||
+                                itemError?.statusText
+                            }
                         />
                     </Grid>
                 )}
@@ -388,6 +390,7 @@ function MechPartSource({
                                     handleFieldChange={handleFieldChange}
                                     notes={mechPartSource.notes}
                                     partType={mechPartSource.partType}
+                                    description={mechPartSource.description}
                                     proposedBy={mechPartSource.proposedBy}
                                     proposedByName={mechPartSource.proposedByName}
                                     dateEntered={mechPartSource.dateEntered}
