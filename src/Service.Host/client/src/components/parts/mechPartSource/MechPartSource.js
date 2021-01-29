@@ -260,7 +260,6 @@ function MechPartSource({
     };
 
     const handleSupplierChange = (sequence, newValue) => {
-        console.log(sequence);
         setSuppliersData(s =>
             s.map(x =>
                 x.sequence === sequence
