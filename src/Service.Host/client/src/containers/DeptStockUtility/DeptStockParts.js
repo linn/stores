@@ -5,16 +5,16 @@ import deptStockPartsSelectors from '../../selectors/deptStockPartsSelectors';
 import deptStockPartsActions from '../../actions/deptStockPartsActions';
 
 const mapStateToProps = state => ({
-    items: deptStockPartsSelectors.getSearchItems(state).map(i => ({
+    items: deptStockPartsSelectors.getItems(state).map(i => ({
         ...i,
         name: i.partNumber,
         href: i.links.find(l => l.rel === 'stock-locators')?.href
     })),
-    itemsLoading: deptStockPartsSelectors.getSearchLoading(state)
+    itemsLoading: deptStockPartsSelectors.getLoading(state)
 });
 
 const initialise = () => dispatch => {
-    dispatch(deptStockPartsActions.search());
+    dispatch(deptStockPartsActions.fetch());
 };
 
 const mapDispatchToProps = {
