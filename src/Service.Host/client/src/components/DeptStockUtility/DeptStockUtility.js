@@ -189,7 +189,7 @@ function DeptStockUtility({
                     </Grid>
                 )}
                 <Grid item xs={12}>
-                    <BackButton backClick={() => history.goBack()} />
+                    <BackButton backClick={() => history.push('/inventory/dept-stock-parts')} />
                 </Grid>
             </Grid>
         </Page>
@@ -229,7 +229,7 @@ DeptStockUtility.propTypes = {
             errors: PropTypes.arrayOf(PropTypes.shape({}))
         })
     }),
-    history: PropTypes.shape({ goBack: PropTypes.func }).isRequired
+    history: PropTypes.shape({ push: PropTypes.func }).isRequired
 };
 
 DeptStockUtility.defaultProps = {
