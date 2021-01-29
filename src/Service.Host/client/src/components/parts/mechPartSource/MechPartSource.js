@@ -287,18 +287,6 @@ function MechPartSource({
                     : x
             )
         );
-        // setMechPartSource(m => ({
-        //     ...m,
-        //     usages: m.usages.map(x =>
-        //         x.rootProductName === rootProductName
-        //             ? {
-        //                   ...x,
-        //                   rootProductName: newValue.name,
-        //                   rootProductDescription: newValue.description
-        //               }
-        //             : x
-        //     )
-        // }));
     };
 
     const handleManufacturerChange = (sequence, newValue) => {
