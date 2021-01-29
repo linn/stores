@@ -17,7 +17,7 @@
 
     using NUnit.Framework;
 
-    public class WhenSearchingDeptStockParts : ContextBase
+    public class WhenGettingDeptStockParts : ContextBase
     {
         [SetUp]
         public void SetUp()
@@ -37,7 +37,7 @@
                 CreatedBy = new Employee { Id = 1 }
             };
 
-            this.PartsFacadeService.GetDeptStockPalletParts("P")
+            this.PartsFacadeService.GetDeptStockPalletParts()
                 .Returns(new SuccessResult<IEnumerable<Part>>(new List<Part> { partA, partB }));
 
             this.Response = this.Browser.Get(
@@ -45,7 +45,6 @@
                 with =>
                 {
                     with.Header("Accept", "application/json");
-                    with.Query("searchTerm", "P");
                 }).Result;
         }
 
@@ -58,7 +57,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.PartsFacadeService.Received().GetDeptStockPalletParts("P");
+            this.PartsFacadeService.Received().GetDeptStockPalletParts();
         }
 
         [Test]
