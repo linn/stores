@@ -73,7 +73,7 @@
             this.partDomainService = partDomainService;
             this.authService = authService;
             this.Get("/parts/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
-            this.Get("/parts/sources/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
+            this.Get("/inventory/parts/sources/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/parts/{id}", parameters => this.GetPart(parameters.id));
             this.Put("/parts/{id}", parameters => this.UpdatePart(parameters.id));
             this.Get("/parts", _ => this.GetParts());
@@ -103,7 +103,6 @@
             this.Get("inventory/parts/can-be-made-live/{id}", parameters => this.CheckCanBeMadeLive(parameters.id));
 
             this.mechPartSourceService = mechPartSourceService;
-            this.Get("inventory/parts/sources/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("inventory/parts/sources/{id}", parameters => this.GetMechPartSource(parameters.id));
             this.Put("inventory/parts/sources/{id}", parameters => this.UpdateMechPartSource(parameters.id));
             this.Post("inventory/parts/sources", _ => this.AddMechPartSource());
