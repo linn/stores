@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
+import { initialiseOnMount } from '@linn-it/linn-form-components-library';
 import DeptStockParts from '../../components/DeptStockUtility/DeptStockParts';
 import deptStockPartsSelectors from '../../selectors/deptStockPartsSelectors';
 import deptStockPartsActions from '../../actions/deptStockPartsActions';
-import departmentsActions from '../../actions/departmentsActions';
 
 const mapStateToProps = state => ({
     items: deptStockPartsSelectors.getSearchItems(state).map(i => ({
@@ -13,10 +13,12 @@ const mapStateToProps = state => ({
     itemsLoading: deptStockPartsSelectors.getSearchLoading(state)
 });
 
-const mapDispatchToProps = {
-    fetchItems: deptStockPartsActions.search,
-    searchDepartments: departmentsActions.search,
-    clearSearch: deptStockPartsActions.clearSearch
+const initialise = () => dispatch => {
+    dispatch(deptStockPartsActions.search());
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DeptStockParts);
+const mapDispatchToProps = {
+    initialise
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(DeptStockParts));
