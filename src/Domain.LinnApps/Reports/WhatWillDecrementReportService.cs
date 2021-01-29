@@ -1,6 +1,5 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Reports
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -51,14 +50,13 @@
 
             var changeRequests = this.changeRequestRepository.FilterBy(c => c.ChangeState == "ACCEPT").ToList();
 
-            var wwdWorks = this.wwdWorkRepository.FilterBy(w => w.JobId == jobId).ToList();
+            var wwdWorks = this.wwdWorkRepository
+                .FilterBy(w => w.JobId == jobId && (w.Part.BomType == "A" || w.Part.BomType == "C")).ToList();
 
             if (typeOfRun == "SHORTAGES ONLY")
             {
                 wwdWorks = wwdWorks.Where(w => w.QuantityKitted > w.QuantityAtLocation).ToList();
             }
-
-            wwdWorks.OrderBy(w => w.StoragePlace).ThenBy(w => w.PartNumber);
 
             var wwdWorkDetails = this.wwdWorkDetailsRepository.FilterBy(w => w.JobId == jobId).ToList();
 
@@ -74,7 +72,10 @@
 
             model.AddSortedColumns(columns);
 
-            var values = this.SetModelRows(wwdWorks, wwdWorkDetails, changeRequests);
+            var sortedWwdWorks = wwdWorks.OrderBy(w => w.StoragePlace == null).ThenBy(w => w.StoragePlace)
+                .ThenBy(w => w.PartNumber);
+
+            var values = this.SetModelRows(sortedWwdWorks, wwdWorkDetails, changeRequests);
 
             this.reportingHelper.AddResultsToModel(model, values, CalculationValueModelType.Quantity, true);
 

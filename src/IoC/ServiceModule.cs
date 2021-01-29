@@ -12,6 +12,7 @@
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Reports;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Proxy;
@@ -33,11 +34,11 @@
             builder.RegisterType<StoragePlaceAuditReportService>().As<IStoragePlaceAuditReportService>();
             builder.RegisterType<MechPartSourceService>().As<IMechPartSourceService>();
             builder.RegisterType<WorkstationService>().As<IWorkstationService>();
-            builder.RegisterType<AuthorisationService>().As<IAuthorisationService>();
+            builder.RegisterType<StockLocatorService>().As<IStockLocatorService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
-                .As<IFacadeService<Part, int, PartResource, PartResource>>();
+                .As<IPartsFacadeService>();
             builder.RegisterType<AccountingCompanyService>().As<IAccountingCompanyService>();
             builder.RegisterType<RootProductsService>().As<IRootProductService>();
             builder.RegisterType<DepartmentService>().As<IDepartmentsService>();
@@ -81,6 +82,8 @@
             builder.RegisterType<TqmsCategoriesService>()
                 .As<IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>>();
             builder.RegisterType<WorkstationFacadeService>().As<IWorkstationFacadeService>();
+            builder.RegisterType<StockLocatorsFacadeService>()
+                .As<IStockLocatorFacadeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
@@ -89,6 +92,7 @@
             builder.RegisterType<WwdPack>().As<IWwdPack>();
             builder.RegisterType<StoragePlaceAuditPack>().As<IStoragePlaceAuditPack>();
             builder.RegisterType<AllocPack>().As<IAllocPack>();
+            builder.RegisterType<WorkstationPackProxy>().As<IWorkstationPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

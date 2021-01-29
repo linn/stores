@@ -4,7 +4,7 @@
     {
         public string Name { get; set; }
 
-        public string StoragePlaceDescription { get; set; }
+        public string Description { get; set; }
 
         public int? LocationId { get; set; }
 

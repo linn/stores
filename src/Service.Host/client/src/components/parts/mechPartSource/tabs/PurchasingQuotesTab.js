@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EditableTable, InputField } from '@linn-it/linn-form-components-library';
+import { GroupEditTable, InputField } from '@linn-it/linn-form-components-library';
 import Grid from '@material-ui/core/Grid';
 
 function PurchasingQuotesTab({
-    purchasingQuotes,
+    rows,
     searchSuppliers,
     clearSuppliersSearch,
     suppliersSearchResults,
@@ -15,9 +15,12 @@ function PurchasingQuotesTab({
     manufacturersSearchResults,
     manufacturersSearchLoading,
     handleManufacturerChange,
-    deleteRow,
     resetRow,
-    addNewRow,
+    setRowToBeDeleted,
+    setRowToBeSaved,
+    setEditing,
+    removeRow,
+    addRow,
     updateRow,
     handleFieldChange,
     configuration,
@@ -73,7 +76,8 @@ function PurchasingQuotesTab({
             searchLoading: manufacturersSearchLoading,
             selectSearchResult: selectManufacturerSearchResult,
             searchTitle: 'Search Manufacturers',
-            tooltip: row => row?.manufacturerDescription
+            tooltip: row => row?.manufacturerDescription,
+            minimumSearchTermLength: 3
         },
         {
             title: 'MOQ',
@@ -99,20 +103,22 @@ function PurchasingQuotesTab({
     return (
         <>
             <Grid item xs={12}>
-                <EditableTable
-                    groupEdit
+                <GroupEditTable
                     columns={columns}
-                    rows={purchasingQuotes.map(m => ({
-                        ...m,
-                        id: m.id,
-                        name: m.id.toString()
-                    }))}
-                    removeRow={deleteRow}
-                    resetRow={resetRow}
-                    addRow={addNewRow}
-                    tableValid={() => true}
+                    rows={rows}
                     updateRow={updateRow}
-                    closeRowOnClickAway
+                    addRow={addRow}
+                    removeRow={removeRow}
+                    resetRow={resetRow}
+                    handleEditClick={setEditing}
+                    tableValid={() => true}
+                    editable
+                    allowNewRowCreation
+                    deleteRowPreEdit={false}
+                    setRowToBeSaved={setRowToBeSaved}
+                    setRowToBeDeleted={setRowToBeDeleted}
+                    closeRowOnClickAway={false}
+                    removeRowOnDelete
                 />
             </Grid>
             <Grid item xs={6}>
@@ -132,7 +138,7 @@ function PurchasingQuotesTab({
                     onChange={handleFieldChange}
                     label="Life Expectancy Part"
                 />
-            </Grid>{' '}
+            </Grid>
         </>
     );
 }
@@ -141,8 +147,13 @@ PurchasingQuotesTab.propTypes = {
     handleSupplierChange: PropTypes.func.isRequired,
     handleManufacturerChange: PropTypes.func.isRequired,
     resetRow: PropTypes.func.isRequired,
-    deleteRow: PropTypes.func.isRequired,
-    purchasingQuotes: PropTypes.arrayOf(PropTypes.shape({})),
+    updateRow: PropTypes.func.isRequired,
+    rows: PropTypes.arrayOf(PropTypes.shape({})),
+    setRowToBeDeleted: PropTypes.func.isRequired,
+    setRowToBeSaved: PropTypes.func.isRequired,
+    setEditing: PropTypes.func.isRequired,
+    removeRow: PropTypes.func.isRequired,
+    addRow: PropTypes.func.isRequired,
     searchSuppliers: PropTypes.func.isRequired,
     clearSuppliersSearch: PropTypes.func.isRequired,
     suppliersSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
@@ -151,15 +162,13 @@ PurchasingQuotesTab.propTypes = {
     manufacturersSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     manufacturersSearchLoading: PropTypes.bool,
     suppliersSearchLoading: PropTypes.bool,
-    updateRow: PropTypes.func.isRequired,
-    addNewRow: PropTypes.func.isRequired,
     handleFieldChange: PropTypes.func.isRequired,
     configuration: PropTypes.string,
     lifeExpectancyPart: PropTypes.string
 };
 
 PurchasingQuotesTab.defaultProps = {
-    purchasingQuotes: [],
+    rows: [],
     suppliersSearchResults: [],
     suppliersSearchLoading: false,
     manufacturersSearchResults: [],

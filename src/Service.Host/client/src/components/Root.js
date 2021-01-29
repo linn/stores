@@ -25,6 +25,9 @@ import NotFoundPage from './NotFoundPage';
 import Parcel from '../containers/parcels/Parcel';
 import Parcels from '../containers/parcels/Parcels';
 import MechPartSource from '../containers/parts/mechPartSource/MechPartSource';
+import WorkstationTopUpStatus from '../containers/workstations/WorkstationTopUpStatus';
+import DeptStockUtility from '../containers/DeptStockUtility/DeptStockUtility';
+import DeptStockParts from '../containers/DeptStockUtility/DeptStockParts';
 
 const Root = ({ store }) => (
     <div>
@@ -104,6 +107,16 @@ const Root = ({ store }) => (
                                         path="/inventory/reports/what-will-decrement"
                                         component={WwdReportOptions}
                                     />
+                                    <Route
+                                        exact
+                                        path="/inventory/stock-locators"
+                                        component={DeptStockUtility}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/dept-stock-parts"
+                                        component={DeptStockParts}
+                                    />
 
                                     <Route exact path="/inventory/parcels" component={Parcels} />
                                     <Route
@@ -123,7 +136,16 @@ const Root = ({ store }) => (
                                         path="/inventory/reports/storage-place-audit"
                                         component={StoragePlaceAuditReportOptions}
                                     />
-
+                                    <Route
+                                        exact
+                                        path="/logistics/workstations/top-up"
+                                        component={WorkstationTopUpStatus}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/workstations/top-up/:jobRef"
+                                        component={WorkstationTopUpStatus}
+                                    />
                                     <Route component={NotFoundPage} />
                                 </Switch>
                             </div>

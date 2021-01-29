@@ -11,5 +11,7 @@
         void AddQcControl(string partNumber, int? createdBy, string qcInfo);
 
         Part CreateFromSource(int sourceId, int createdBy);
+
+        IEnumerable<Part> GetDeptStockPalletParts();
     }
 }

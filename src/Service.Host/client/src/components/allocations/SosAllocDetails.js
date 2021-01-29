@@ -5,8 +5,8 @@ import Button from '@material-ui/core/Button';
 import {
     Loading,
     ErrorCard,
-    EditableTable,
-    SnackbarMessage
+    SnackbarMessage,
+    SingleEditTable
 } from '@linn-it/linn-form-components-library';
 import Typography from '@material-ui/core/Typography';
 
@@ -115,6 +115,9 @@ function SosAllocDetails({
                                 header.outletNumber
                             } Value To Allocate: ${Math.round(header.valueToAllocate, 0)} `}
                         </Typography>
+                        <Typography variant="subtitle1">
+                            {`Country: ${header.countryName} (${header.countryCode}) `}
+                        </Typography>
                     </Grid>
                     <Grid item xs={4}>
                         <>
@@ -135,7 +138,7 @@ function SosAllocDetails({
                         message={internalError}
                     />
                     <Grid item xs={12}>
-                        <EditableTable
+                        <SingleEditTable
                             columns={displayOnly ? displayOnlyColumns : editableColumns}
                             rows={items}
                             saveRow={updateRow}
@@ -174,7 +177,9 @@ SosAllocDetails.propTypes = {
         accountId: PropTypes.number,
         outletNumber: PropTypes.number,
         outletName: PropTypes.string,
-        valueToAllocate: PropTypes.number
+        valueToAllocate: PropTypes.number,
+        countryCode: PropTypes.string,
+        countryName: PropTypes.string
     })
 };
 

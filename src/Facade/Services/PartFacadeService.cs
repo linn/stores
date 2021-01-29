@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
     using Linn.Common.Facade;
@@ -10,7 +11,7 @@
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources.Parts;
 
-    public class PartFacadeService : FacadeService<Part, int, PartResource, PartResource>
+    public class PartFacadeService : FacadeService<Part, int, PartResource, PartResource>, IPartsFacadeService
     {
         private readonly IRepository<ParetoClass, string> paretoClassRepository;
 
@@ -61,6 +62,12 @@
             this.employeeRepository = employeeRepository;
             this.partService = partService;
             this.databaseService = databaseService;
+        }
+
+        public IResult<IEnumerable<Part>> GetDeptStockPalletParts(string partNumber)
+        {
+            return new SuccessResult<IEnumerable<Part>>(this.partService.GetDeptStockPalletParts()
+                .Where(p => p.PartNumber.Contains(partNumber.ToUpper())));
         }
 
         protected override Part CreateFromResource(PartResource resource)

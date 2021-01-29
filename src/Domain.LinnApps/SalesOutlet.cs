@@ -24,6 +24,10 @@
 
         public int SalesCustomerId { get; set; }
 
+        public string CountryCode { get; set; }
+
+        public string CountryName { get; set; }
+
         public IEnumerable<SosAllocHead> SosAllocHeads { get; set; }
     }
 }

@@ -31,7 +31,8 @@
                                     ExcludeOverCreditLimit = true,
                                     ExcludeUnsuppliableLines = true,
                                     ExcludeOnHold = true,
-                                    ExcludeNorthAmerica = true
+                                    ExcludeNorthAmerica = true,
+                                    ExcludeEuropeanUnion = true
                                 };
 
             this.AllocationService.StartAllocation(
@@ -42,6 +43,7 @@
                     Arg.Any<string>(),
                     Arg.Any<string>(),
                     Arg.Any<DateTime?>(),
+                    Arg.Any<bool>(),
                     Arg.Any<bool>(),
                     Arg.Any<bool>(),
                     Arg.Any<bool>(),
@@ -65,7 +67,8 @@
                 this.resource.ExcludeOverCreditLimit,
                 this.resource.ExcludeUnsuppliableLines,
                 this.resource.ExcludeOnHold,
-                this.resource.ExcludeNorthAmerica);
+                this.resource.ExcludeNorthAmerica,
+                this.resource.ExcludeEuropeanUnion);
         }
     }
 }

@@ -8,7 +8,6 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Parts;
-    using Linn.Stores.Resources;
     using Linn.Stores.Resources.Parts;
 
     using Nancy;

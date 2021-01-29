@@ -16,6 +16,18 @@
         {
             this.workstationFacadeService = workstationFacadeService;
             this.Get("/logistics/workstations/top-up", _ => this.GetStatus());
+            this.Post("/logistics/workstations/top-up", _ => this.RunTopUp());
+        }
+
+        private object RunTopUp()
+        {
+            var privileges = this.Context?.CurrentUser?.GetPrivileges().ToList();
+
+            var results = this.workstationFacadeService.StartTopUpRun(privileges);
+            return this.Negotiate
+                .WithModel(results)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
 
         private object GetStatus()

@@ -22,5 +22,13 @@
                     this.workstationService.GetTopUpStatus(),
                     privileges));
         }
+
+        public IResult<ResponseModel<WorkstationTopUpStatus>> StartTopUpRun(IEnumerable<string> privileges)
+        {
+            return new SuccessResult<ResponseModel<WorkstationTopUpStatus>>(
+                new ResponseModel<WorkstationTopUpStatus>(
+                    this.workstationService.StartTopUpRun(),
+                    privileges));
+        }
     }
 }

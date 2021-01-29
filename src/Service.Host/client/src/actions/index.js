@@ -98,8 +98,20 @@ export const unpickItemsAllocationActionTypes = makeActionTypes(
 
 export const tqmsCategoriesActionTypes = makeActionTypes(itemTypes.tqmsCategories.actionType);
 
+export const workstationTopUpStatusActionTypes = makeActionTypes(
+    itemTypes.workstationTopUpStatus.actionType
+);
+
+export const deptStockPartsActionTypes = makeActionTypes(itemTypes.deptStockParts.actionType);
+
+export const stockLocatorsActionTypes = makeActionTypes(itemTypes.stockLocators.actionType);
+
+export const stockLocatorActionTypes = makeActionTypes(
+    itemTypes.stockLocator.actionType,
+    true,
+    true
+);
+
 export const parcelActionTypes = makeActionTypes(itemTypes.parcel.actionType);
 
 export const parcelsActionTypes = makeActionTypes(itemTypes.parcels.actionType, false);
-
-export const employeesActionTypes = makeActionTypes(itemTypes.employees.actionType, false);

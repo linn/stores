@@ -17,6 +17,7 @@
             bool excludeHold,
             bool excludeOverCredit,
             bool excludeNorthAmerica,
+            bool excludeEuropeanUnion,
             out string notes,
             out string sosNotes);
 

@@ -31,7 +31,14 @@
                                          AccountId = 1,
                                          OutletNumber = 1,
                                          JobId = 222,
-                                         SalesOutlet = new SalesOutlet { AccountId = 1, OutletNumber = 1, Name = "dom" }
+                                         SalesOutlet = new SalesOutlet
+                                                           {
+                                                               AccountId = 1,
+                                                               OutletNumber = 1,
+                                                               Name = "dom",
+                                                               CountryCode = "GB",
+                                                               CountryName = "UK"
+                                                           }
                                      };
             this.sosAllocHead2 = new SosAllocHead
                                      {
@@ -73,6 +80,8 @@
             resultResource.Should().HaveCount(2);
             resultResource.First(a => a.AccountId == 1).JobId.Should().Be(222);
             resultResource.First(a => a.AccountId == 1).OutletName.Should().Be(this.sosAllocHead1.SalesOutlet.Name);
+            resultResource.First(a => a.AccountId == 1).CountryCode.Should().Be(this.sosAllocHead1.SalesOutlet.CountryCode);
+            resultResource.First(a => a.AccountId == 1).CountryName.Should().Be(this.sosAllocHead1.SalesOutlet.CountryName);
             resultResource.First(a => a.AccountId == 2).JobId.Should().Be(222);
         }
     }

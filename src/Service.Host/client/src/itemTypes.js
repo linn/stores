@@ -156,8 +156,30 @@ export const tqmsCategories = new ItemType(
     '/inventory/parts/tqms-categories'
 );
 
+export const workstationTopUpStatus = new ItemType(
+    'workstationTopUpStatus',
+    'WORKSTATION_TOP_UP_STATUS',
+    '/logistics/workstations/top-up'
+);
+
+export const deptStockParts = new ItemType(
+    'deptStockParts',
+    'DEPT_STOCK_PARTS',
+    '/parts/dept-stock-parts'
+);
+
+export const stockLocator = new ItemType(
+    'stockLocator',
+    'STOCK_LOCATOR',
+    '/inventory/stock-locators'
+);
+
+export const stockLocators = new ItemType(
+    'stockLocators',
+    'STOCK_LOCATORS',
+    '/inventory/stock-locators'
+);
+
 export const parcel = new ItemType('parcel', 'PARCEL', '/parcels');
 
 export const parcels = new ItemType('parcels', 'PARCELS', '/parcels');
-
-export const employees = new ItemType('employees', 'EMPLOYEES', '/employees');

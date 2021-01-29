@@ -16,7 +16,7 @@
                        {
                            LocationId = storagePlace.LocationId,
                            PalletNumber = storagePlace.PalletNumber,
-                           StoragePlaceDescription = storagePlace.StoragePlaceDescription,
+                           Description = storagePlace.Description,
                            Name = storagePlace.Name
                        };
         }

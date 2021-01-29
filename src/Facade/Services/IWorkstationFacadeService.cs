@@ -8,5 +8,7 @@
     public interface IWorkstationFacadeService
     {
         IResult<ResponseModel<WorkstationTopUpStatus>> GetStatus(IEnumerable<string> privileges);
+
+        IResult<ResponseModel<WorkstationTopUpStatus>> StartTopUpRun(IEnumerable<string> privileges);
     }
 }

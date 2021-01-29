@@ -4,6 +4,7 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
 
     using NSubstitute;
 
@@ -29,6 +30,8 @@
 
         protected IPartPack PartPack { get; private set; }
 
+        protected IRepository<StockLocator, int> StockLocatorRepository { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -39,6 +42,7 @@
             this.TemplateRepository = Substitute.For<IRepository<PartTemplate, string>>();
             this.SourceRepository = Substitute.For<IRepository<MechPartSource, int>>();
             this.TransactionManager = Substitute.For<ITransactionManager>();
+            this.StockLocatorRepository = Substitute.For<IRepository<StockLocator, int>>();
             this.PartPack = Substitute.For<IPartPack>();
             this.Sut = new PartService(
                 this.AuthService,
@@ -47,6 +51,7 @@
                 this.PartRepository,
                 this.TemplateRepository,
                 this.SourceRepository,
+                this.StockLocatorRepository,
                 this.PartPack);
         }
     }

@@ -10,8 +10,6 @@
     using Linn.Stores.Resources.RequestResources;
 
     using NSubstitute;
-    using NSubstitute.ExceptionExtensions;
-
     using NUnit.Framework;
 
     public class WhenCreatingAuditReqs : ContextBase

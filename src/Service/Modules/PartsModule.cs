@@ -3,7 +3,6 @@
     using Linn.Common.Authorisation;
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
-    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
@@ -18,7 +17,7 @@
 
     public sealed class PartsModule : NancyModule
     {
-        private readonly IFacadeService<Part, int, PartResource, PartResource> partsFacadeService;
+        private readonly IPartsFacadeService partsFacadeService;
 
         private readonly IPartService partDomainService;
 
@@ -55,7 +54,7 @@
             tqmsCategoriesService;
 
         public PartsModule(
-            IFacadeService<Part, int, PartResource, PartResource> partsFacadeService,
+            IPartsFacadeService partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
             IPartCategoryService partCategoryService,
             IProductAnalysisCodeService productAnalysisCodeService,
@@ -79,6 +78,7 @@
             this.Put("/parts/{id}", parameters => this.UpdatePart(parameters.id));
             this.Get("/parts", _ => this.GetParts());
             this.Post("/parts", _ => this.AddPart());
+            this.Get("/parts/dept-stock-parts", _ => this.GetDeptStockParts());
 
             this.unitsOfMeasureService = unitsOfMeasureService;
             this.Get("inventory/units-of-measure", _ => this.GetUnitsOfMeasure());
@@ -132,6 +132,16 @@
             var results = string.IsNullOrEmpty(resource.SearchTerm)
                               ? this.partsFacadeService.GetAll()
                               : this.partsFacadeService.Search(resource.SearchTerm);
+            return this.Negotiate
+                .WithModel(results)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
+        }
+
+        private object GetDeptStockParts()
+        {
+            var resource = this.Bind<SearchRequestResource>();
+            var results = this.partsFacadeService.GetDeptStockPalletParts(resource.SearchTerm);
             return this.Negotiate
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)

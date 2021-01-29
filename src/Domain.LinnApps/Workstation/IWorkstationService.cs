@@ -5,5 +5,9 @@
     public interface IWorkstationService
     {
         WorkstationTopUpStatus GetTopUpStatus();
+
+        WorkstationTopUpStatus StartTopUpRun();
+
+        bool CanStartNewRun();
     }
 }

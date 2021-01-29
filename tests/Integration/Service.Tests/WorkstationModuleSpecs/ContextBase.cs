@@ -5,6 +5,7 @@
 
     using Linn.Common.Authorisation;
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
@@ -24,17 +25,21 @@
 
         protected IAuthorisationService AuthorisationService { get; private set; }
 
+        protected IWorkstationPack WorkstationPack { get; private set; }
+
         [SetUp]
         public void EstablishContext()
         {
             this.WorkstationFacadeService = Substitute.For<IWorkstationFacadeService>();
+            this.WorkstationPack = Substitute.For<IWorkstationPack>();
             this.AuthorisationService = Substitute.For<IAuthorisationService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                 {
                     with.Dependency(this.WorkstationFacadeService);
-                    with.Dependency<IResourceBuilder<ResponseModel<WorkstationTopUpStatus>>>(new WorkstationTopUpStatusResourceBuilder(this.AuthorisationService));
+                    with.Dependency<IResourceBuilder<ResponseModel<WorkstationTopUpStatus>>>(
+                        new WorkstationTopUpStatusResourceBuilder(this.AuthorisationService, this.WorkstationPack));
                     with.Module<WorkstationModule>();
                     with.ResponseProcessor<WorkstationTopUpStatusResponseProcessor>();
                     with.RequestStartup(
