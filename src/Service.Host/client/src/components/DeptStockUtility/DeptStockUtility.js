@@ -5,7 +5,8 @@ import {
     SingleEditTable,
     Loading,
     SnackbarMessage,
-    ErrorCard
+    ErrorCard,
+    BackButton
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Page from '../../containers/Page';
@@ -28,7 +29,8 @@ function DeptStockUtility({
     options,
     snackbarVisible,
     setSnackbarVisible,
-    itemError
+    itemError,
+    history
 }) {
     const [prevStockLocators, setPrevStockLocators] = useState(null);
     const [stockLocators, setStockLocators] = useState([]);
@@ -186,6 +188,9 @@ function DeptStockUtility({
                         )}
                     </Grid>
                 )}
+                <Grid item xs={12}>
+                    <BackButton backClick={() => history.push('/inventory/dept-stock-parts')} />
+                </Grid>
             </Grid>
         </Page>
     );
@@ -223,7 +228,8 @@ DeptStockUtility.propTypes = {
         details: PropTypes.shape({
             errors: PropTypes.arrayOf(PropTypes.shape({}))
         })
-    })
+    }),
+    history: PropTypes.shape({ push: PropTypes.func }).isRequired
 };
 
 DeptStockUtility.defaultProps = {

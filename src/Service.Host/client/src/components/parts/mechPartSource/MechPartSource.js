@@ -53,6 +53,7 @@ function MechPartSource({
                   createPart: true,
                   mechPartAlts: [],
                   mechPartManufacturerAlts: [],
+                  usages: [],
                   mechanicalOrElectrical: 'E',
                   samplesRequired: 'N'
               }
@@ -108,6 +109,7 @@ function MechPartSource({
         updateRow: updateManufacturersRow,
         removeRow: removeManufacturersRow,
         setEditing: setManufacturersEditing,
+        setData: setManufacturersData,
         //setTableValid,
         setRowToBeDeleted: setManufacturersRowToBeDeleted,
         setRowToBeSaved: setManufacturersRowToBeSaved
@@ -122,6 +124,7 @@ function MechPartSource({
         updateRow: updateQuotesRow,
         removeRow: removeQuotesRow,
         setEditing: setQuotesEditing,
+        setData: setQuotesData,
         //setTableValid,
         setRowToBeDeleted: setQuotesRowToBeDeleted,
         setRowToBeSaved: setQuotesRowToBeSaved
@@ -136,6 +139,7 @@ function MechPartSource({
         updateRow: updateUsagesRow,
         removeRow: removeUsagesRow,
         setEditing: setUsagesEditing,
+        setData: setUsagesData,
         //setTableValid,
         setRowToBeDeleted: setUsagesRowToBeDeleted,
         setRowToBeSaved: setUsagesRowToBeSaved
@@ -151,6 +155,7 @@ function MechPartSource({
         removeRow: removeSuppliersRow,
         setEditing: setSuppliersEditing,
         //setTableValid,
+        setData: setSuppliersData,
         setRowToBeDeleted: setSuppliersRowToBeDeleted,
         setRowToBeSaved: setSuppliersRowToBeSaved
     } = useGroupEditTable({
@@ -230,11 +235,6 @@ function MechPartSource({
         });
     };
 
-    const updateUsagesRowAndSetEditStatus = (row, setItem, propertyName, newValue) => {
-        setEditStatus('edit');
-        updateUsagesRow(row, setItem, propertyName, newValue);
-    };
-
     const resetRow = (current, collectionName, idFieldName) => {
         setMechPartSource(m => ({
             ...m,
@@ -260,9 +260,8 @@ function MechPartSource({
     };
 
     const handleSupplierChange = (sequence, newValue) => {
-        setMechPartSource(m => ({
-            ...m,
-            mechPartAlts: m.mechPartAlts.map(x =>
+        setSuppliersData(s =>
+            s.map(x =>
                 x.sequence === sequence
                     ? {
                           ...x,
@@ -272,32 +271,47 @@ function MechPartSource({
                       }
                     : x
             )
-        }));
+        );
     };
 
     const handleRootProductChange = (rootProductName, newValue) => {
-        setMechPartSource(m => ({
-            ...m,
-            usages: m.usages.map(x =>
+        setUsagesData(u =>
+            u.map(x =>
                 x.rootProductName === rootProductName
                     ? {
                           ...x,
                           rootProductName: newValue.name,
-                          rootProductDescription: newValue.description,
-                          editing: true
+                          rootProductDescription: newValue.description
                       }
                     : x
             )
-        }));
+        );
     };
 
     const handleManufacturerChange = (sequence, newValue) => {
-        setMechPartSource(m => ({
-            ...m,
-            mechPartManufacturerAlts: m.mechPartManufacturerAlts.map(x =>
-                x.sequence === sequence ? { ...x, manufacturerCode: newValue.name } : x
+        setManufacturersData(m =>
+            m.map(x => (x.sequence === sequence ? { ...x, manufacturerCode: newValue.name } : x))
+        );
+    };
+
+    const handleQuotesManufacturerChange = (supplierId, newValue) => {
+        setQuotesData(q =>
+            q.map(x => (x.id === supplierId ? { ...x, manufacturerCode: newValue.name } : x))
+        );
+    };
+
+    const handleQuotesSupplierChange = (supplierId, newValue) => {
+        setQuotesData(q =>
+            q.map(x =>
+                x.id === supplierId
+                    ? {
+                          ...x,
+                          supplierId: newValue.name,
+                          supplierName: newValue.description
+                      }
+                    : x
             )
-        }));
+        );
     };
 
     return (
@@ -313,7 +327,11 @@ function MechPartSource({
                 {itemError && (
                     <Grid item xs={12}>
                         <ErrorCard
-                            errorMessage={itemError?.details?.errors?.[0] || itemError.statusText}
+                            errorMessage={
+                                itemError?.details?.errors?.[0] ||
+                                itemError?.details?.details ||
+                                itemError?.statusText
+                            }
                         />
                     </Grid>
                 )}
@@ -388,6 +406,7 @@ function MechPartSource({
                                     handleFieldChange={handleFieldChange}
                                     notes={mechPartSource.notes}
                                     partType={mechPartSource.partType}
+                                    description={mechPartSource.description}
                                     proposedBy={mechPartSource.proposedBy}
                                     proposedByName={mechPartSource.proposedByName}
                                     dateEntered={mechPartSource.dateEntered}
@@ -545,11 +564,12 @@ function MechPartSource({
                             )}
                             {tab === 7 && (
                                 <PurchasingQuotesTab
-                                    handleManufacturerChange={handleManufacturerChange}
-                                    handleSupplierChange={handleSupplierChange}
+                                    handleManufacturerChange={handleQuotesManufacturerChange}
+                                    handleSupplierChange={handleQuotesSupplierChange}
                                     setRowToBeDeleted={setQuotesRowToBeDeleted}
                                     setRowToBeSaved={setQuotesRowToBeSaved}
                                     setEditing={setQuotesEditing}
+                                    handleFieldChange={handleFieldChange}
                                     resetRow={row => resetRow(row, 'purchasingQuotes', 'id')}
                                     removeRow={removeQuotesRow}
                                     addRow={addQuotesRow}
@@ -567,7 +587,7 @@ function MechPartSource({
                                     resetRow={row => resetRow(row, 'usages', 'id')}
                                     removeRow={removeUsagesRow}
                                     addRow={addUsagesRow}
-                                    updateRow={updateUsagesRowAndSetEditStatus}
+                                    updateRow={updateUsagesRow}
                                     handleRootProductChange={handleRootProductChange}
                                     rows={usagesData}
                                 />

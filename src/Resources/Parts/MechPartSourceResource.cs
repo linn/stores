@@ -8,6 +8,8 @@
     {
         public int Id { get; set; }
 
+        public string Description { get; set; }
+
         public int? ProposedBy { get; set; }
 
         public string ProposedByName { get; set; }

@@ -87,6 +87,7 @@ function PartsSearch({
                         loading={loading}
                         title="Part"
                         history={history}
+                        debounce={1000}
                     />
                 </Grid>
             </Grid>
