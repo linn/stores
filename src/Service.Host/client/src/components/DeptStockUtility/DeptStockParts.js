@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
-import { Loading, Title, Typeahead } from '@linn-it/linn-form-components-library';
+import { BackButton, Loading, Title, Typeahead } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Page from '../../containers/Page';
 
