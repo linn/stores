@@ -81,9 +81,9 @@ function MechPartSource({
     };
 
     const mechPartSourceInvalid = () =>
-        !mechPartSource.samplesRequired || !mechPartSource.assemblyType
+        !mechPartSource.samplesRequired ||
+        !mechPartSource.assemblyType ||
         (mechPartSource.mechanicalOrElectrical === 'E' && !mechPartSource.partType);
-
     useEffect(() => {
         if (item !== prevMechPartSource && editStatus !== 'create') {
             setMechPartSource({

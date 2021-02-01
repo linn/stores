@@ -40,7 +40,7 @@ function PurchTab({
         }
         return booleanValue ? 'Yes' : 'No';
     };
-    const [manufacturerSelected, setManufacturerSelected] = useState(manufacturers[0]);
+    const [manufacturerSelected, setManufacturerSelected] = useState(manufacturers?.[0]);
 
     return (
         <Grid container spacing={3}>
