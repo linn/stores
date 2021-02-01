@@ -81,7 +81,7 @@ function MechPartSource({
     };
 
     const mechPartSourceInvalid = () =>
-        !mechPartSource.samplesRequired ||
+        !mechPartSource.samplesRequired || !mechPartSource.assemblyType
         (mechPartSource.mechanicalOrElectrical === 'E' && !mechPartSource.partType);
 
     useEffect(() => {

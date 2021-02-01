@@ -272,6 +272,7 @@ function ProposalTab({
                     label="Assembly Type"
                     propertyName="assemblyType"
                     items={['SM', 'TH']}
+                    required
                     fullWidth
                     allowNoValue
                     value={assemblyType}
