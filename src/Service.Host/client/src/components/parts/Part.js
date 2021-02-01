@@ -304,6 +304,7 @@ function Part({
     };
 
     const handleManufacturersPartNumberChange = (manufacturerCode, newValue) => {
+        setEditStatus('edit');
         setPart(p => ({
             ...p,
             manufacturers: p.manufacturers.map(m =>
