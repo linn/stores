@@ -13,11 +13,14 @@
 
         protected IAllocationService AllocationService { get;  private set; }
 
+        protected IAllocationReportsService AllocationReportsService { get;  private set; }
+
         [SetUp]
         public void SetUpContext()
         {
             this.AllocationService = Substitute.For<IAllocationService>();
-            this.Sut = new AllocationFacadeService(this.AllocationService);
+            this.AllocationReportsService = Substitute.For<IAllocationReportsService>();
+            this.Sut = new AllocationFacadeService(this.AllocationService, this.AllocationReportsService);
         }
     }
 }
