@@ -149,7 +149,7 @@ function GeneralTab({
                     loading={productAnalysisCodesSearchLoading}
                     fetchItems={searchProductAnalysisCodes}
                     links={false}
-                    clearSearch={() => clearProductAnalysisCodesSearch}
+                    clearSearch={clearProductAnalysisCodesSearch}
                     placeholder="Search Codes"
                 />
             </Grid>
@@ -291,7 +291,7 @@ const productAnalysisCodeShape = PropTypes.shape({
 });
 
 GeneralTab.propTypes = {
-    accountingCompany: accountingCompanyShape,
+    accountingCompany: PropTypes.string,
     accountingCompanies: PropTypes.arrayOf(accountingCompanyShape),
     handleFieldChange: PropTypes.func.isRequired,
     rootProduct: rootProductShape,
@@ -299,22 +299,22 @@ GeneralTab.propTypes = {
     rootProductsSearchResults: PropTypes.arrayOf(rootProductShape),
     rootProductsSearchLoading: PropTypes.bool,
     clearRootProductsSearch: PropTypes.func.isRequired,
-    productAnalysisCode: productAnalysisCodeShape,
+    productAnalysisCode: PropTypes.string,
     productAnalysisCodeSearchResults: PropTypes.arrayOf(productAnalysisCodeShape),
     productAnalysisCodesSearchLoading: PropTypes.bool,
     productAnalysisCodeDescription: PropTypes.string,
-    department: departmentShape,
+    department: PropTypes.string,
     departmentDescription: PropTypes.string,
     departmentsSearchResults: PropTypes.arrayOf(departmentShape),
     departmentsSearchLoading: PropTypes.bool,
     paretoCode: PropTypes.string,
     searchDepartments: PropTypes.func.isRequired,
-    clearDepartmentsSearch: PropTypes.func.isRequired,
+    clearDepartmentsSearch: PropTypes.func,
     handleDepartmentChange: PropTypes.func.isRequired,
     handleProductAnalysisCodeChange: PropTypes.func.isRequired,
     handleAccountingCompanyChange: PropTypes.func.isRequired,
     searchProductAnalysisCodes: PropTypes.func.isRequired,
-    clearProductAnalysisCodesSearch: PropTypes.func.isRequired,
+    clearProductAnalysisCodesSearch: PropTypes.func,
     nominal: PropTypes.string,
     nominalDescription: PropTypes.string,
     stockControlled: PropTypes.bool,
@@ -356,7 +356,9 @@ GeneralTab.defaultProps = {
     psuPart: null,
     safetyCertificateExpirationDate: null,
     safetyDataDirectory: null,
-    safetyCriticalHelperText: null
+    safetyCriticalHelperText: null,
+    clearProductAnalysisCodesSearch: () => {},
+    clearDepartmentsSearch: () => {}
 };
 
 export default GeneralTab;
