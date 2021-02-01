@@ -32,7 +32,8 @@ function PurchTab({
     mechanicalOrElectronic,
     partCategories,
     manufacturers,
-    handleManufacturersPartNumberChange
+    handleManufacturersPartNumberChange,
+    links
 }) {
     const convertToYOrNString = booleanValue => {
         if (booleanValue === '' || booleanValue === null) {
@@ -127,7 +128,15 @@ function PurchTab({
                             propertyName="manufacturersPartNumber"
                         />
                     </Grid>
-                    <Grid item xs={4} />
+                    <Grid item xs={3}>
+                        <LinkButton
+                            text="Edit Manufacturers"
+                            to={`${
+                                links.find(l => l.rel === 'mechanical-sourcing-sheet').href
+                            }?tab=manufacturers`}
+                        />
+                    </Grid>
+                    <Grid item xs={1} />
                 </>
             )}
             <Grid item xs={2}>
@@ -351,10 +360,12 @@ PurchTab.propTypes = {
     mechanicalOrElectronic: PropTypes.string,
     partCategories: PropTypes.arrayOf(partCategoryShape),
     manufacturers: PropTypes.arrayOf(PropTypes.shape({})),
-    handleManufacturersPartNumberChange: PropTypes.func.isRequired
+    handleManufacturersPartNumberChange: PropTypes.func.isRequired,
+    links: PropTypes.arrayOf(PropTypes.shape({ href: PropTypes.string, rel: PropTypes.string }))
 };
 
 PurchTab.defaultProps = {
+    links: [],
     unitsOfMeasure: [],
     ourUnitOfMeasure: null,
     preferredSupplier: null,

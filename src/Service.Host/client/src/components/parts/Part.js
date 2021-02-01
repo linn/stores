@@ -484,6 +484,7 @@ function Part({
                                     handleManufacturersPartNumberChange={
                                         handleManufacturersPartNumberChange
                                     }
+                                    links={item?.links}
                                 />
                             )}
                             {tab === 3 && (
