@@ -34,7 +34,7 @@
         [Test]
         public void ShouldThrowException()
         {
-            var ex = Assert.Throws<UpdatePartException>(() => this.Sut.UpdatePart(this.from, this.to, this.privileges));
+            var ex = Assert.Throws<UpdatePartException>(() => this.Sut.UpdatePart(this.from, this.to, this.privileges, null));
             ex.Message.Should().Be("Rail method SMM with 0 min/max rails is not a valid stocking policy.");
         }
     }
