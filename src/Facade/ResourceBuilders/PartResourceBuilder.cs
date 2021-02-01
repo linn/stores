@@ -97,6 +97,13 @@
                            OneOffRequirement = part.OneOffRequirement,
                            DataSheets = part.DataSheets?.Select(s => this.dataSheetResourceBuilder.Build(s)).OrderBy(s => s.Sequence),
                            ParamData = this.BuildParamDataResource(part.ParamData),
+                           Manufacturers = part.MechPartSource?.MechPartManufacturerAlts?.Select(
+                               m => new MechPartManufacturerAltResource
+                                        {
+                                            PartNumber = m.PartNumber,
+                                            ManufacturerCode = m.ManufacturerCode,
+                                            Preference = m.Preference
+                                        }).OrderBy(m => m.Preference),
                            Links = this.BuildLinks(part).ToArray()
                        };
         }
