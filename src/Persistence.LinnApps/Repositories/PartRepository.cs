@@ -35,6 +35,7 @@
                 .Include(p => p.NominalAccount).ThenInclude(a => a.Nominal)
                 .Include(p => p.DataSheets)
                 .Include(p => p.MechPartSource)
+                .ThenInclude(m => m.MechPartManufacturerAlts)
                 .ToList().FirstOrDefault();
         }
 

@@ -50,7 +50,7 @@
             this.stockLocatorRepository = stockLocatorRepository;
         }
 
-        public void UpdatePart(Part from, Part to, List<string> privileges)
+        public void UpdatePart(Part from, Part to, List<string> privileges, IEnumerable<MechPartManufacturerAlt> manufacturers)
         {
             if (from.DatePhasedOut == null && to.DatePhasedOut != null)
             {
@@ -81,6 +81,20 @@
 
                 from.DateLive = to.DateLive;
                 from.MadeLiveBy = to.MadeLiveBy;
+            }
+
+            if (manufacturers != null)
+            {
+                var source = this.sourceRepository.FindById(from.MechPartSource.Id);
+                source.MechPartManufacturerAlts = manufacturers.Select(
+                    m =>
+                        {
+                            var manufacturer =
+                                from.MechPartSource.MechPartManufacturerAlts.First(
+                                    i => i.ManufacturerCode == m.ManufacturerCode);
+                            manufacturer.PartNumber = m.PartNumber;
+                            return manufacturer;
+                        }).ToList();
             }
 
             Validate(to);
