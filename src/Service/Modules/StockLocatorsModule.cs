@@ -2,6 +2,7 @@
 {
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
+    using Linn.Stores.Service.Extensions;
     using Linn.Stores.Service.Models;
 
     using Nancy;
@@ -32,18 +33,25 @@
 
         private object DeleteStockLocator(int id)
         {
-            return this.Negotiate.WithModel(this.service.Delete(id));
+            var resource = new StockLocatorResource
+                               {
+                                   Id = id, UserPrivileges = this.Context.CurrentUser.GetPrivileges()
+                               };
+       
+            return this.Negotiate.WithModel(this.service.Delete(resource));
         }
 
         private object UpdateStockLocator(int id)
         {
             var resource = this.Bind<StockLocatorResource>();
+            resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
             return this.Negotiate.WithModel(this.service.Update(id, resource));
         }
 
         private object AddStockLocator()
         {
             var resource = this.Bind<StockLocatorResource>();
+            resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
             return this.Negotiate.WithModel(this.service.Add(resource));
         }
     }

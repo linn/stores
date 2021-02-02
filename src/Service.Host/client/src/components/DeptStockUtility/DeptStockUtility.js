@@ -112,7 +112,8 @@ function DeptStockUtility({
             title: 'Batch Ref',
             id: 'batchRef',
             type: 'text',
-            required: false
+            required: false,
+            editable: true
         },
         {
             title: 'Batch Date',
@@ -123,7 +124,7 @@ function DeptStockUtility({
         {
             title: 'Qty',
             id: 'quantity',
-            type: 'text',
+            type: 'number',
             editable: true
         },
         {
@@ -144,7 +145,7 @@ function DeptStockUtility({
             selectSearchResult: selectDepartmentsSearchResult,
             searchTitle: 'Search Departments',
             minimumSearchTermLength: 3,
-            required: true
+            required: false
         }
     ];
     return (
