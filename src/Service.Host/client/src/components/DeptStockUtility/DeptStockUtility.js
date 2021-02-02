@@ -145,7 +145,7 @@ function DeptStockUtility({
             selectSearchResult: selectDepartmentsSearchResult,
             searchTitle: 'Search Departments',
             minimumSearchTermLength: 3,
-            required: true
+            required: false
         }
     ];
     return (
