@@ -143,7 +143,7 @@
                                        Remarks = s.Remarks,
                                        AuditDepartmentCode = auditDept
                                    };
-                    });
+                    }).OrderBy(p => p.PalletNumber);
         }
     }
 }
