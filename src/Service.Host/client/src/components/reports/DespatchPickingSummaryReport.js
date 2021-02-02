@@ -1,12 +1,20 @@
 ﻿import React from 'react';
 import { Loading, ReportTable } from '@linn-it/linn-form-components-library';
 import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
-import Page from '../../containers/Page';
 
-const DespatchPickingSummaryReport = ({ reportData, loading }) => (
-    <Page>
-        <Grid container spacing={3} justify="center">
+const useStyles = makeStyles(theme => ({
+    grid: {
+        marginTop: theme.spacing(4),
+        width: '100%'
+    }
+}));
+
+function DespatchPickingSummaryReport({ reportData, loading }) {
+    const classes = useStyles();
+    return (
+        <Grid className={classes.grid} container spacing={3} justify="center">
             <Grid item xs={12}>
                 {loading || !reportData ? (
                     <Loading />
@@ -23,8 +31,8 @@ const DespatchPickingSummaryReport = ({ reportData, loading }) => (
                 )}
             </Grid>
         </Grid>
-    </Page>
-);
+    );
+}
 
 DespatchPickingSummaryReport.propTypes = {
     reportData: PropTypes.shape({ title: PropTypes.string }),
