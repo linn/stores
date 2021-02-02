@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Resources
 {
+    using System.Collections.Generic;
+
     public class StockLocatorResource
     {
         public int Id { get; set; }
@@ -29,5 +31,7 @@
         public string StoragePlaceName { get; set; }
 
         public string StoragePlaceDescription { get; set; }
+
+        public IEnumerable<string> UserPrivileges { get; set; }
     }
 }

@@ -124,7 +124,7 @@ function DeptStockUtility({
         {
             title: 'Qty',
             id: 'quantity',
-            type: 'text',
+            type: 'number',
             editable: true
         },
         {

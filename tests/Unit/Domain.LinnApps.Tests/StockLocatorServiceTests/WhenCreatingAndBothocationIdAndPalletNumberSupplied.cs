@@ -46,7 +46,7 @@
         [Test]
         public void ShouldThrowException()
         {
-            var ex = Assert.Throws<CreateStockLocatorException>(()
+            var ex = Assert.Throws<StockLocatorException>(()
                 => this.Sut.CreateStockLocator(this.toCreate, this.auditDepartmentCode));
             ex.Message.Should().Be("Must Supply EITHER Location Id OR Pallet Number");
         }
@@ -54,7 +54,7 @@
         [Test]
         public void ShouldNotUpdatePallets()
         {
-            Assert.Throws<CreateStockLocatorException>(()
+            Assert.Throws<StockLocatorException>(()
                 => this.Sut.CreateStockLocator(this.toCreate, this.auditDepartmentCode));
             this.pallets.All(p => p.AuditFrequencyWeeks != 26).Should().Be(true);
         }

@@ -4,14 +4,14 @@
 
     using Linn.Common.Domain.Exceptions;
 
-    public class CreateStockLocatorException : DomainException
+    public class StockLocatorException : DomainException
     {
-        public CreateStockLocatorException(string message)
+        public StockLocatorException(string message)
             : base(message)
         {
         }
 
-        public CreateStockLocatorException(string message, Exception innerException)
+        public StockLocatorException(string message, Exception innerException)
             : base(message, innerException)
         {
         }
