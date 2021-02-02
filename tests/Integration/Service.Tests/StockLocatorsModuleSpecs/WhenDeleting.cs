@@ -19,7 +19,7 @@
         [SetUp]
         public void SetUp()
         {
-            this.StockLocatorFacadeService.Delete(Arg.Any<int>())
+            this.StockLocatorFacadeService.Delete(Arg.Any<StockLocatorResource>())
                 .Returns(new SuccessResult<StockLocator>(new StockLocator
                                                              {
                                                                  Id = 1
@@ -42,7 +42,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.StockLocatorFacadeService.Received().Delete(Arg.Any<int>());
+            this.StockLocatorFacadeService.Received().Delete(Arg.Any<StockLocatorResource>());
         }
 
         [Test]

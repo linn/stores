@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
+    using System.Runtime.CompilerServices;
 
     using FluentAssertions;
 
@@ -16,6 +17,8 @@
 
     public class WhenCreatingAndAuditDepartmentNotEntered : ContextBase
     {
+        private readonly IEnumerable<string> privileges = new[] { AuthorisedAction.CreateStockLocator };
+
         private readonly StockLocator toCreate = new StockLocator
                                                      {
                                                          Id = 1,
@@ -38,6 +41,9 @@
         [SetUp]
         public void SetUp()
         {
+            this.AuthService
+                .HasPermissionFor(AuthorisedAction.CreateStockLocator , Arg.Any<IEnumerable<string>>())
+                .Returns(true);
             this.StoresPalletRepository.FilterBy(Arg.Any<Expression<Func<StoresPallet, bool>>>())
                 .Returns(this.pallets.AsQueryable());
         }
@@ -46,7 +52,7 @@
         public void ShouldThrowException()
         {
             var ex = Assert.Throws<StockLocatorException>(()
-                => this.Sut.CreateStockLocator(this.toCreate, this.auditDepartmentCode));
+                => this.Sut.CreateStockLocator(this.toCreate, this.auditDepartmentCode, this.privileges));
             ex.Message.Should().Be("Audit department must be entered");
         }
 
@@ -54,7 +60,7 @@
         public void ShouldNotUpdatePallets()
         {
              Assert.Throws<StockLocatorException>(()
-                => this.Sut.CreateStockLocator(this.toCreate, this.auditDepartmentCode));
+                => this.Sut.CreateStockLocator(this.toCreate, this.auditDepartmentCode, this.privileges));
             this.pallets.All(p => p.AuditFrequencyWeeks != 26).Should().Be(true);
         }
     }

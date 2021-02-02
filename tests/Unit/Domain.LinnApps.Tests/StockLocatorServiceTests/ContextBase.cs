@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.StockLocatorServiceTests
 {
+    using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
@@ -17,16 +18,20 @@
 
         protected IStockLocatorService Sut { get; private set; }
 
+        protected IAuthorisationService AuthService { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
             this.StockLocatorRepository = Substitute.For<IRepository<StockLocator, int>>();
             this.StoresPalletRepository = Substitute.For<IStoresPalletRepository>();
             this.StoragePlaceRepository = Substitute.For<IQueryRepository<StoragePlace>>();
+            this.AuthService = Substitute.For<IAuthorisationService>();
             this.Sut = new StockLocatorService(
                 this.StockLocatorRepository, 
                 this.StoresPalletRepository,
-                this.StoragePlaceRepository);
+                this.StoragePlaceRepository,
+                this.AuthService);
         }
     }
 }
