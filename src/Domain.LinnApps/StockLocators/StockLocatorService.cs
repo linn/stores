@@ -107,6 +107,8 @@
                                        StoragePlaceDescription = l.Description,
                                        StoragePlaceName = l.Name,
                                        PartNumber = s.PartNumber,
+                                       PalletNumber = s.PalletNumber,
+                                       LocationId = s.LocationId,
                                        BatchRef = s.BatchRef,
                                        Quantity = s.Quantity,
                                        StockRotationDate = s.StockRotationDate,
