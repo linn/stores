@@ -112,7 +112,8 @@ function DeptStockUtility({
             title: 'Batch Ref',
             id: 'batchRef',
             type: 'text',
-            required: false
+            required: false,
+            editable: true
         },
         {
             title: 'Batch Date',
