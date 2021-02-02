@@ -111,3 +111,7 @@ export const stockLocatorActionTypes = makeActionTypes(
     true,
     true
 );
+
+export const despatchPickingSummaryReportActionTypes = makeReportActionTypes(
+    reportTypes.despatchPickingSummaryReport.actionType
+);

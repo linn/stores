@@ -29,6 +29,7 @@
             builder.RegisterType<AuthorisationService>().As<IAuthorisationService>();
             builder.RegisterType<ReportingHelper>().As<IReportingHelper>();
             builder.RegisterType<AllocationService>().As<IAllocationService>();
+            builder.RegisterType<AllocationReportsService>().As<IAllocationReportsService>();
             builder.RegisterType<PartService>().As<IPartService>();
             builder.RegisterType<WhatWillDecrementReportService>().As<IWhatWillDecrementReportService>();
             builder.RegisterType<StoragePlaceAuditReportService>().As<IStoragePlaceAuditReportService>();

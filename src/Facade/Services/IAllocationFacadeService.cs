@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using Linn.Common.Facade;
+    using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Resources.Allocation;
@@ -17,5 +18,7 @@
         IResult<IEnumerable<SosAllocDetail>> PickItems(AccountOutletRequestResource requestResource);
 
         IResult<IEnumerable<SosAllocDetail>> UnpickItems(AccountOutletRequestResource requestResource);
+
+        IResult<ResultsModel> DespatchPickingSummaryReport();
     }
 }
