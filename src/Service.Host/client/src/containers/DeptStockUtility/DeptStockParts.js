@@ -1,22 +1,24 @@
 import { connect } from 'react-redux';
+import { initialiseOnMount } from '@linn-it/linn-form-components-library';
 import DeptStockParts from '../../components/DeptStockUtility/DeptStockParts';
 import deptStockPartsSelectors from '../../selectors/deptStockPartsSelectors';
 import deptStockPartsActions from '../../actions/deptStockPartsActions';
-import departmentsActions from '../../actions/departmentsActions';
 
 const mapStateToProps = state => ({
-    items: deptStockPartsSelectors.getSearchItems(state).map(i => ({
+    items: deptStockPartsSelectors.getItems(state).map(i => ({
         ...i,
         name: i.partNumber,
         href: i.links.find(l => l.rel === 'stock-locators')?.href
     })),
-    itemsLoading: deptStockPartsSelectors.getSearchLoading(state)
+    itemsLoading: deptStockPartsSelectors.getLoading(state)
 });
 
-const mapDispatchToProps = {
-    fetchItems: deptStockPartsActions.search,
-    searchDepartments: departmentsActions.search,
-    clearSearch: deptStockPartsActions.clearSearch
+const initialise = () => dispatch => {
+    dispatch(deptStockPartsActions.fetch());
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DeptStockParts);
+const mapDispatchToProps = {
+    initialise
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(DeptStockParts));

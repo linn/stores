@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
-import { Title, Typeahead } from '@linn-it/linn-form-components-library';
+import { Loading, Title, Typeahead } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Page from '../../containers/Page';
 
-function DeptStockParts({ items, fetchItems, itemsLoading, clearSearch, history }) {
+function DeptStockParts({ items, itemsLoading, history }) {
+    const [searchResults, setSearchResults] = useState([]);
+    const [hasSearched, setHasSearched] = useState(false);
+
+    useEffect(() => {
+        if (hasSearched) {
+            setSearchResults(items);
+        }
+    }, [items, hasSearched]);
+
     return (
         <Page>
             <Grid container spacing={3}>
@@ -12,15 +21,27 @@ function DeptStockParts({ items, fetchItems, itemsLoading, clearSearch, history 
                     <Title text="Departmental Pallets" />
                 </Grid>
                 <Grid item xs={12}>
-                    <Typeahead
-                        items={items}
-                        fetchItems={fetchItems}
-                        clearSearch={clearSearch}
-                        loading={itemsLoading}
-                        title="Search Part"
-                        history={history}
-                        minimumSearchTermLength={3}
-                    />
+                    {itemsLoading ? (
+                        <Loading />
+                    ) : (
+                        <Typeahead
+                            items={searchResults.slice(0, 10)}
+                            fetchItems={searchTerm => {
+                                setHasSearched(true);
+                                setSearchResults(
+                                    items?.filter(i =>
+                                        i.partNumber.includes(searchTerm?.toUpperCase())
+                                    )
+                                );
+                            }}
+                            clearSearch={() => {}}
+                            loading={itemsLoading}
+                            title="Filter Dept Stock Parts"
+                            history={history}
+                            minimumSearchTermLength={2}
+                            debounce={1}
+                        />
+                    )}
                 </Grid>
             </Grid>
         </Page>
@@ -37,8 +58,6 @@ DeptStockParts.propTypes = {
         })
     ).isRequired,
     itemsLoading: PropTypes.bool,
-    fetchItems: PropTypes.func.isRequired,
-    clearSearch: PropTypes.func.isRequired,
     history: PropTypes.shape({}).isRequired
 };
 

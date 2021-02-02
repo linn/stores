@@ -67,6 +67,7 @@
             {
                 Id = this.databaseService.GetIdSequence("MECH_SOURCE_SEQ"),
                 PartNumber = resource.PartNumber,
+                PartDescription = resource.Description,
                 AssemblyType = resource.AssemblyType,
                 DateEntered = resource.DateEntered == null ? (DateTime?)null : DateTime.Parse(resource.DateEntered),
                 DateSamplesRequired = resource.DateSamplesRequired == null

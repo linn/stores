@@ -97,7 +97,8 @@
                         if (l.PalletNumber.HasValue)
                         {
                             auditDept = 
-                                this.palletRepository.FindById((int)l.PalletNumber).AuditedByDepartmentCode;
+                                this.palletRepository.FindById((int)l.PalletNumber)
+                                    .AuditedByDepartmentCode;
                         }
 
                         return new StockLocatorWithStoragePlaceInfo

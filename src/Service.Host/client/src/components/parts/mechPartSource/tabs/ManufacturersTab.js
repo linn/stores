@@ -7,8 +7,8 @@ function ManufacturersTab({
     rows,
     searchManufacturers,
     clearManufacturersSearch,
-    rowsSearchResults,
-    rowsSearchLoading,
+    manufacturersSearchResults,
+    manufacturersSearchLoading,
     searchEmployees,
     clearEmployeesSearch,
     employeesSearchResults,
@@ -46,8 +46,8 @@ function ManufacturersTab({
             editable: true,
             search: searchManufacturers,
             clearSearch: clearManufacturersSearch,
-            searchResults: rowsSearchResults,
-            searchLoading: rowsSearchLoading,
+            searchResults: manufacturersSearchResults,
+            searchLoading: manufacturersSearchLoading,
             selectSearchResult: selectManufacturerSearchResult,
             searchTitle: 'Search Manufacturers',
             minimumSearchTermLength: 4
@@ -130,8 +130,8 @@ ManufacturersTab.propTypes = {
     rows: PropTypes.arrayOf(PropTypes.shape({})),
     searchManufacturers: PropTypes.func.isRequired,
     clearManufacturersSearch: PropTypes.func.isRequired,
-    rowsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
-    rowsSearchLoading: PropTypes.bool,
+    manufacturersSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
+    manufacturersSearchLoading: PropTypes.bool,
     searchEmployees: PropTypes.func.isRequired,
     clearEmployeesSearch: PropTypes.func.isRequired,
     employeesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
@@ -142,8 +142,8 @@ ManufacturersTab.propTypes = {
 
 ManufacturersTab.defaultProps = {
     rows: [],
-    rowsSearchResults: [],
-    rowsSearchLoading: false,
+    manufacturersSearchResults: [],
+    manufacturersSearchLoading: false,
     employeesSearchResults: [],
     employeesSearchLoading: false
 };

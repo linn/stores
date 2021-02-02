@@ -64,10 +64,9 @@
             this.databaseService = databaseService;
         }
 
-        public IResult<IEnumerable<Part>> GetDeptStockPalletParts(string partNumber)
+        public IResult<IEnumerable<Part>> GetDeptStockPalletParts()
         {
-            return new SuccessResult<IEnumerable<Part>>(this.partService.GetDeptStockPalletParts()
-                .Where(p => p.PartNumber.Contains(partNumber.ToUpper())));
+            return new SuccessResult<IEnumerable<Part>>(this.partService.GetDeptStockPalletParts());
         }
 
         protected override Part CreateFromResource(PartResource resource)
@@ -277,13 +276,18 @@
                                       DateLive = string.IsNullOrEmpty(resource.DateLive)
                                                      ? (DateTime?)null
                                                      : DateTime.Parse(resource.DateLive),
-                                     MadeLiveBy = 
+                                      MadeLiveBy = 
                                           resource.MadeLiveBy != null
                                               ? this.employeeRepository.FindById((int)resource.MadeLiveBy)
                                               : null
                                   };
-
-            this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList());
+            var manufacturers = resource
+                .Manufacturers
+                ?.Select(m => new MechPartManufacturerAlt
+                                  {
+                                      ManufacturerCode = m.ManufacturerCode, PartNumber = m.PartNumber
+                                  });
+            this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList(), manufacturers);
         }
 
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)

@@ -73,7 +73,7 @@
             this.partDomainService = partDomainService;
             this.authService = authService;
             this.Get("/parts/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
-            this.Get("/parts/sources/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
+            this.Get("/inventory/parts/sources/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/parts/{id}", parameters => this.GetPart(parameters.id));
             this.Put("/parts/{id}", parameters => this.UpdatePart(parameters.id));
             this.Get("/parts", _ => this.GetParts());
@@ -140,8 +140,7 @@
 
         private object GetDeptStockParts()
         {
-            var resource = this.Bind<SearchRequestResource>();
-            var results = this.partsFacadeService.GetDeptStockPalletParts(resource.SearchTerm);
+            var results = this.partsFacadeService.GetDeptStockPalletParts();
             return this.Negotiate
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)

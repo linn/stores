@@ -32,6 +32,7 @@
                             EstimatedVolume = model.EstimatedVolume,
                             Id = model.Id,
                             LinnPartNumber = model.PartToBeReplaced?.PartNumber,
+                            Description = model.PartDescription,
                             LinnPartDescription = model.PartToBeReplaced?.Description,
                             MechanicalOrElectrical = model.MechanicalOrElectrical,
                             Notes = model.Notes,
