@@ -7,14 +7,15 @@ import PropTypes from 'prop-types';
 const useStyles = makeStyles(theme => ({
     grid: {
         marginTop: theme.spacing(4),
-        width: '100%'
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1)
     }
 }));
 
 function DespatchPickingSummaryReport({ reportData, loading }) {
     const classes = useStyles();
     return (
-        <Grid className={classes.grid} container spacing={3} justify="center">
+        <Grid className={classes.grid} container justify="center">
             <Grid item xs={12}>
                 {loading || !reportData ? (
                     <Loading />

@@ -31,7 +31,10 @@
                               {
                                   new AxisDetailsModel("From", GridDisplayType.TextValue),
                                   new AxisDetailsModel("Qty", GridDisplayType.Value),
-                                  new AxisDetailsModel("Article Number", GridDisplayType.TextValue),
+                                  new AxisDetailsModel("Article Number", GridDisplayType.TextValue)
+                                      {
+                                          AllowWrap = false
+                                      },
                                   new AxisDetailsModel("Invoice Description", GridDisplayType.TextValue),
                                   new AxisDetailsModel("Addressee", GridDisplayType.TextValue),
                                   new AxisDetailsModel("Location", GridDisplayType.TextValue),
