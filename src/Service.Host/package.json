@@ -88,6 +88,7 @@
     "notistack": "^0.9.9",
     "oidc-client": "^1.10.1",
     "prop-types": "^15.7.2",
+    "query-string": "^6.13.8",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-hot-loader": "^4.12.19",

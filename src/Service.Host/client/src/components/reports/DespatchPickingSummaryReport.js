@@ -1,4 +1,4 @@
-﻿import React from 'react';
+﻿import React, { useEffect } from 'react';
 import { Loading, ReportTable } from '@linn-it/linn-form-components-library';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/styles';
@@ -12,8 +12,15 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function DespatchPickingSummaryReport({ reportData, loading }) {
+function DespatchPickingSummaryReport({ reportData, loading, runOptions }) {
+    useEffect(() => {
+        if (!loading && reportData && runOptions && runOptions.print === 'true') {
+            window.print();
+        }
+    }, [runOptions, loading, reportData]);
+
     const classes = useStyles();
+
     return (
         <Grid className={classes.grid} container justify="center">
             <Grid item xs={12}>
@@ -39,12 +46,12 @@ DespatchPickingSummaryReport.propTypes = {
     reportData: PropTypes.shape({ title: PropTypes.string }),
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,
     loading: PropTypes.bool,
-    options: PropTypes.shape({})
+    runOptions: PropTypes.shape({ print: PropTypes.string })
 };
 
 DespatchPickingSummaryReport.defaultProps = {
     reportData: {},
-    options: {},
+    runOptions: { print: 'false' },
     loading: false
 };
 
