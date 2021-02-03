@@ -93,5 +93,10 @@
         {
             return new SuccessResult<ResultsModel>(this.allocationReportsService.DespatchPickingSummary());
         }
+
+        public IResult<DespatchPalletQueueResult> DespatchPalletQueueReport()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
