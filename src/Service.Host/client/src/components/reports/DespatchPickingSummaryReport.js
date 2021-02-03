@@ -3,17 +3,13 @@ import { Loading, ReportTable } from '@linn-it/linn-form-components-library';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
+import '../../css/landscapePrint.css';
 
 const useStyles = makeStyles(theme => ({
     grid: {
         marginTop: theme.spacing(4),
         paddingLeft: theme.spacing(1),
         paddingRight: theme.spacing(1)
-    },
-    dateOverride: {
-        fontSize: 'small',
-        right: '10px',
-        top: '10px'
     }
 }));
 
@@ -36,7 +32,7 @@ function DespatchPickingSummaryReport({ reportData, loading, runOptions }) {
     return (
         <Grid className={classes.grid} container justify="center">
             <Grid item xs={12}>
-                <span className={`date-for-printing ${classes.dateOverride}`}>{date}</span>
+                <span className="date-for-printing">{date}</span>
             </Grid>
             <Grid item xs={12}>
                 {loading || !reportData ? (

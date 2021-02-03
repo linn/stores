@@ -1,0 +1,16 @@
+@media print {
+    @page {
+        size: 297mm 210mm ; 
+        
+        margin: 0mm;
+        margin-right: 0mm; 
+      }
+}
+
+.date-for-printing {
+    display: none;
+    right: 40px;
+    top: 40px;
+    position: absolute;
+    font-size: small;
+}
