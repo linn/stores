@@ -3,6 +3,7 @@ import { Loading, ReportTable } from '@linn-it/linn-form-components-library';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
+import '../../css/landscapePrint.css';
 
 const useStyles = makeStyles(theme => ({
     grid: {
@@ -20,9 +21,19 @@ function DespatchPickingSummaryReport({ reportData, loading, runOptions }) {
     }, [runOptions, loading, reportData]);
 
     const classes = useStyles();
+    const date = new Date().toLocaleString('en-GB', {
+        month: 'short',
+        year: 'numeric',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
 
     return (
         <Grid className={classes.grid} container justify="center">
+            <Grid item xs={12}>
+                <span className="date-for-printing">{date}</span>
+            </Grid>
             <Grid item xs={12}>
                 {loading || !reportData ? (
                     <Loading />
