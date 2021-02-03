@@ -1,7 +1,5 @@
 ﻿namespace Linn.Stores.Persistence.LinnApps
 {
-    using System.Threading;
-
     using Linn.Common.Configuration;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
@@ -111,6 +109,8 @@
 
         public DbQuery<DespatchPickingSummary> DespatchPickingSummary { get; set; }
 
+        public DbQuery<DespatchPalletQueueDetail> DespatchPalletQueueDetails { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -160,6 +160,7 @@
             this.BuildTopUpJobRefs(builder);
             this.BuildStoresPallets(builder);
             this.QueryDespatchPickingSummary(builder);
+            this.QueryDespatchPalletQueueDetails(builder);
             base.OnModelCreating(builder);
         }
 
@@ -904,6 +905,15 @@
             q.Property(v => v.Location).HasColumnName("LOCATION");
             q.Property(v => v.QuantityOfItemsAtLocation).HasColumnName("QTY_AT_LOCATION");
             q.Property(v => v.QtyNeededFromLocation).HasColumnName("DPS_QTY_AT_LOCATION");
+        }
+
+        private void QueryDespatchPalletQueueDetails(ModelBuilder builder)
+        {
+            var q = builder.Query<DespatchPalletQueueDetail>().ToView("V_DPQ_SUMMARY");
+            q.Property(v => v.KittedFromTime).HasColumnName("KITTED_FROM");
+            q.Property(v => v.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(v => v.PickingSequence).HasColumnName("PICKING_SEQUENCE");
+            q.Property(v => v.WarehouseInformation).HasColumnName("WAREHOUSE_INFO");
         }
     }
 }

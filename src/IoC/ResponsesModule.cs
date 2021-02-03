@@ -118,6 +118,8 @@
             builder.RegisterType<StockLocatorWithStoragePlaceInfoResourceBuilder>().As<IResourceBuilder<StockLocatorWithStoragePlaceInfo>>();
             builder.RegisterType<StockLocatorsWithStoragePlaceInfoResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<StockLocatorWithStoragePlaceInfo>>>();
+            builder.RegisterType<DespatchPalletQueueResultResourceBuilder>()
+                .As<IResourceBuilder<DespatchPalletQueueResult>>();
         }
     }
 }

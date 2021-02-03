@@ -8,6 +8,6 @@
 
         public int NumberOfPalletsToMove { get; set; }
 
-        public IEnumerable<DespatchPalletQueueDetail> DespatchPalletQueueDetails { get; set; }
+        public IEnumerable<DespatchPalletQueueResultDetail> DespatchPalletQueueResultDetails { get; set; }
     }
 }

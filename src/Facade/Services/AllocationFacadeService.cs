@@ -96,7 +96,7 @@
 
         public IResult<DespatchPalletQueueResult> DespatchPalletQueueReport()
         {
-            throw new NotImplementedException();
+            return new SuccessResult<DespatchPalletQueueResult>(this.allocationReportsService.DespatchPalletQueue());
         }
     }
 }

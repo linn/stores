@@ -20,14 +20,14 @@
     {
         private DespatchPalletQueueResult result;
 
-        private DespatchPalletQueueDetail detail;
+        private DespatchPalletQueueResultDetail detail;
 
         [SetUp]
         public void SetUp()
         {
-            this.detail = new DespatchPalletQueueDetail
+            this.detail = new DespatchPalletQueueResultDetail
                               {
-                                  KittedFrom = "e",
+                                  KittedFromTime = "e",
                                   PalletNumber = 234,
                                   PickingSequence = 54,
                                   WarehouseInformation = "at SA"
@@ -36,10 +36,10 @@
                               {
                                   TotalNumberOfPallets = 10,
                                   NumberOfPalletsToMove = 8,
-                                  DespatchPalletQueueDetails = new List<DespatchPalletQueueDetail>
-                                                                   {
-                                                                       this.detail
-                                                                   }
+                                  DespatchPalletQueueResultDetails = new List<DespatchPalletQueueResultDetail>
+                                                                         {
+                                                                             this.detail
+                                                                         }
                               };
             this.AllocationFacadeService.DespatchPalletQueueReport()
                 .Returns(new SuccessResult<DespatchPalletQueueResult>(this.result));
@@ -68,7 +68,7 @@
             resultResource.NumberOfPalletsToMove.Should().Be(this.result.NumberOfPalletsToMove);
             resultResource.TotalNumberOfPallets.Should().Be(this.result.TotalNumberOfPallets);
             resultResource.DespatchPalletQueueDetails.Should().HaveCount(1);
-            resultResource.DespatchPalletQueueDetails.First().KittedFrom.Should().Be(this.detail.KittedFrom);
+            resultResource.DespatchPalletQueueDetails.First().KittedFromTime.Should().Be(this.detail.KittedFromTime);
             resultResource.DespatchPalletQueueDetails.First().PalletNumber.Should().Be(this.detail.PalletNumber);
             resultResource.DespatchPalletQueueDetails.First().WarehouseInformation.Should().Be(this.detail.WarehouseInformation);
             resultResource.DespatchPalletQueueDetails.First().PickingSequence.Should().Be(this.detail.PickingSequence);

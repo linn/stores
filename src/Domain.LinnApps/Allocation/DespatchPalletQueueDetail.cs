@@ -1,6 +1,6 @@
-﻿namespace Linn.Stores.Resources.Allocation
+﻿namespace Linn.Stores.Domain.LinnApps.Allocation
 {
-    public class DespatchPalletQueueDetailResource
+    public class DespatchPalletQueueDetail
     {
         public int PalletNumber { get; set; }
 
@@ -9,7 +9,5 @@
         public int PickingSequence { get; set; }
 
         public string WarehouseInformation { get; set; }
-
-        public bool CanMoveToUpper { get; set; }
     }
 }

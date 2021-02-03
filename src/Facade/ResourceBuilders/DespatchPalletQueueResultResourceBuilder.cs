@@ -16,13 +16,14 @@
                        {
                            TotalNumberOfPallets = despatchPalletQueueResult.TotalNumberOfPallets,
                            NumberOfPalletsToMove = despatchPalletQueueResult.NumberOfPalletsToMove,
-                           DespatchPalletQueueDetails = despatchPalletQueueResult.DespatchPalletQueueDetails?.Select(
+                           DespatchPalletQueueDetails = despatchPalletQueueResult.DespatchPalletQueueResultDetails?.Select(
                                a => new DespatchPalletQueueDetailResource
                                         {
-                                            KittedFrom = a.KittedFrom,
+                                            KittedFromTime = a.KittedFromTime,
                                             PalletNumber = a.PalletNumber,
                                             PickingSequence = a.PickingSequence,
-                                            WarehouseInformation = a.WarehouseInformation
+                                            WarehouseInformation = a.WarehouseInformation,
+                                            CanMoveToUpper = a.CanMoveToUpper
                                         }),
                            Links = this.BuildLinks(despatchPalletQueueResult).ToArray()
                        };
