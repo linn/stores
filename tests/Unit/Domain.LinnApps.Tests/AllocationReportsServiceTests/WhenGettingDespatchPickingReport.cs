@@ -98,7 +98,7 @@
             this.result.GetGridTextValue(this.result.RowIndex("002"), this.result.ColumnIndex("Empty"))
                 .Should().Be("Empty");
             this.result.GetGridTextValue(this.result.RowIndex("003"), this.result.ColumnIndex("From"))
-                .Should().Be("From2");
+                .Should().BeNullOrEmpty("because duplicate from locations are hidden");
             this.result.GetGridTextValue(this.result.RowIndex("003"), this.result.ColumnIndex("Article Number"))
                 .Should().Be("an3");
         }

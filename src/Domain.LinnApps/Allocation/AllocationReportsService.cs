@@ -105,6 +105,7 @@
             }
 
             this.reportingHelper.AddResultsToModel(resultsModel, models, CalculationValueModelType.Value, true);
+            this.reportingHelper.RemovedRepeatedValues(resultsModel, 0, new[] { 0 });
 
             return resultsModel;
         }
