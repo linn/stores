@@ -6,7 +6,6 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
-    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
@@ -45,6 +44,12 @@
         {
             return new SuccessResult<IEnumerable<StockLocatorWithStoragePlaceInfo>>(
                 this.domainService.GetStockLocatorsWithStoragePlaceInfoForPart(partNumber));
+        }
+
+        public IResult<IEnumerable<StockLocator>> GetBatches(string batchRef)
+        {
+            return new SuccessResult<IEnumerable<StockLocator>>(
+                this.domainService.GetBatches(batchRef));
         }
 
         public IResult<IEnumerable<StockLocator>> FilterBy(StockLocatorResource searchResource)

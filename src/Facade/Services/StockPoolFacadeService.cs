@@ -27,7 +27,8 @@
 
         protected override Expression<Func<StockPool, bool>> SearchExpression(string searchTerm)
         {
-            throw new NotImplementedException();
+            return pool => pool.DateInvalid == null && (pool.StockPoolCode.ToUpper().Contains(searchTerm) ||
+                                                                pool.Description.ToUpper().Contains(searchTerm));
         }
     }
 }
