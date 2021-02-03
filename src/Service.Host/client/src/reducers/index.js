@@ -48,6 +48,7 @@ import deptStockParts from './parts/deptStockParts';
 import stockLocators from './stockLocators/stockLocators';
 import stockLocator from './stockLocators/stockLocator';
 import despatchPickingSummaryReport from './despatchPickingSummaryReport';
+import despatchPalletQueueReport from './despatchPalletQueueReport';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -63,6 +64,7 @@ const rootReducer = combineReducers({
     decrementRules,
     deptStockParts,
     despatchLocations,
+    despatchPalletQueueReport,
     despatchPickingSummaryReport,
     employees,
     finishAllocation,
