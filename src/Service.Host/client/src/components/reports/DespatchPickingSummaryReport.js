@@ -9,6 +9,11 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(4),
         paddingLeft: theme.spacing(1),
         paddingRight: theme.spacing(1)
+    },
+    dateOverride: {
+        fontSize: 'small',
+        right: '10px',
+        top: '10px'
     }
 }));
 
@@ -20,9 +25,19 @@ function DespatchPickingSummaryReport({ reportData, loading, runOptions }) {
     }, [runOptions, loading, reportData]);
 
     const classes = useStyles();
+    const date = new Date().toLocaleString('en-GB', {
+        month: 'short',
+        year: 'numeric',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
 
     return (
         <Grid className={classes.grid} container justify="center">
+            <Grid item xs={12}>
+                <span className={`date-for-printing ${classes.dateOverride}`}>{date}</span>
+            </Grid>
             <Grid item xs={12}>
                 {loading || !reportData ? (
                     <Loading />
