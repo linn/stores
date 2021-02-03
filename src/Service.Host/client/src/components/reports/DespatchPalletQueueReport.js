@@ -1,6 +1,11 @@
 ﻿import React from 'react';
-import { Loading, Title } from '@linn-it/linn-form-components-library';
+import { Loading } from '@linn-it/linn-form-components-library';
 import Grid from '@material-ui/core/Grid';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import Button from '@material-ui/core/Button';
+import TableRow from '@material-ui/core/TableRow';
 import { makeStyles } from '@material-ui/styles';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
@@ -10,6 +15,9 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(4),
         paddingLeft: theme.spacing(1),
         paddingRight: theme.spacing(1)
+    },
+    tableCell: {
+        borderBottom: 'none'
     }
 }));
 
@@ -31,21 +39,53 @@ function DespatchPalletQueueReport({ reportData, loading }) {
                 </Typography>
                 <span className="date-for-printing">{date}</span>
             </Grid>
-            <Grid item xs={12}>
-                {loading || !reportData ? <Loading /> : <span>running</span>}
-            </Grid>
+            {loading || !reportData ? (
+                <Loading />
+            ) : (
+                <>
+                    <Grid item xs={6}>
+                        <Table size="small">
+                            <TableBody>
+                                <TableRow key={1}>
+                                    <TableCell className={classes.tableCell}>
+                                        Total number of pallets in queue
+                                    </TableCell>
+                                    <TableCell className={classes.tableCell}>
+                                        {reportData.totalNumberOfPallets}
+                                    </TableCell>
+                                    <TableCell className={classes.tableCell} />
+                                </TableRow>
+                                <TableRow key={1}>
+                                    <TableCell className={classes.tableCell}>
+                                        Total number of pallets to come out
+                                    </TableCell>
+                                    <TableCell className={classes.tableCell}>
+                                        {reportData.numberOfPalletsToMove}
+                                    </TableCell>
+                                    <TableCell className={classes.tableCell}>
+                                        <Button>Pick Them All</Button>
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                    </Grid>
+                    <Grid item xs={6} />
+                </>
+            )}
         </Grid>
     );
 }
 
 DespatchPalletQueueReport.propTypes = {
-    reportData: PropTypes.shape({ title: PropTypes.string }),
-    history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+    reportData: PropTypes.shape({
+        totalNumberOfPallets: PropTypes.number,
+        numberOfPalletsToMove: PropTypes.number
+    }),
     loading: PropTypes.bool
 };
 
 DespatchPalletQueueReport.defaultProps = {
-    reportData: {},
+    reportData: null,
     loading: false
 };
 
