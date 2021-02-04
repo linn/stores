@@ -13,5 +13,7 @@
 
         IResult<IEnumerable<StockLocatorWithStoragePlaceInfo>> 
             GetStockLocatorsForPart(string partNumber);
+
+        IResult<IEnumerable<StockLocator>> GetBatches(string batchRef);
     }
 }

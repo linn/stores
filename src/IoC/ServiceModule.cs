@@ -14,6 +14,7 @@
     using Linn.Stores.Domain.LinnApps.Reports;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.Workstation;
+    using Linn.Stores.Facade;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
@@ -85,7 +86,11 @@
             builder.RegisterType<WorkstationFacadeService>().As<IWorkstationFacadeService>();
             builder.RegisterType<StockLocatorsFacadeService>()
                 .As<IStockLocatorFacadeService>();
-
+            builder.RegisterType<StorageLocationService>()
+                .As<IFacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource>>();
+            builder.RegisterType<InspectedStateService>()
+                .As<IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource>>();
+               
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
             builder.RegisterType<PartPack>().As<IPartPack>();

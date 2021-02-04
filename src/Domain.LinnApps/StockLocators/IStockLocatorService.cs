@@ -1,8 +1,6 @@
-﻿namespace Linn.Stores.Domain.LinnApps
+﻿namespace Linn.Stores.Domain.LinnApps.StockLocators
 {
     using System.Collections.Generic;
-
-    using Linn.Stores.Domain.LinnApps.StockLocators;
 
     public interface IStockLocatorService
     {
@@ -17,5 +15,7 @@
 
         IEnumerable<StockLocatorWithStoragePlaceInfo> 
             GetStockLocatorsWithStoragePlaceInfoForPart(string partNumber);
+
+        IEnumerable<StockLocator> GetBatches(string batches);
     }
 }

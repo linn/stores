@@ -25,7 +25,7 @@
 
         object IResourceBuilder<Manufacturer>.Build(Manufacturer manufacturer) => this.Build(manufacturer);
 
-        private IEnumerable<LinkResource> BuildLinks(Manufacturer Manufacturer)
+        private IEnumerable<LinkResource> BuildLinks(Manufacturer manufacturer)
         {
             throw new NotImplementedException();
         }

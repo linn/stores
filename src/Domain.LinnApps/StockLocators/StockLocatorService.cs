@@ -9,23 +9,27 @@
 
     public class StockLocatorService : IStockLocatorService
     {
-        private readonly IRepository<StockLocator, int> repository;
+        private readonly IRepository<StockLocator, int> stockLocatorRepository;
 
         private readonly IStoresPalletRepository palletRepository;
 
         private readonly IQueryRepository<StoragePlace> storagePlaceRepository;
 
+        private readonly IRepository<StorageLocation, int> storageLocationRepository;
+
         private readonly IAuthorisationService authService;
 
         public StockLocatorService(
-            IRepository<StockLocator, int> repository,
+            IRepository<StockLocator, int> stockLocatorRepository,
             IStoresPalletRepository palletRepository,
             IQueryRepository<StoragePlace> storagePlaceRepository,
+            IRepository<StorageLocation, int> storageLocationRepository,
             IAuthorisationService authService)
         {
-            this.repository = repository;
+            this.stockLocatorRepository = stockLocatorRepository;
             this.palletRepository = palletRepository;
             this.storagePlaceRepository = storagePlaceRepository;
+            this.storageLocationRepository = storageLocationRepository;
             this.authService = authService;
         }
 
@@ -96,8 +100,8 @@
                 throw new StockLocatorException("You are not authorised to delete.");
             }
 
-            this.repository.Remove(toDelete);
-            if (!this.repository
+            this.stockLocatorRepository.Remove(toDelete);
+            if (!this.stockLocatorRepository
                     .FilterBy(l => l.PalletNumber == toDelete.PalletNumber && l.Quantity > 0).Any())
             {
                 foreach (var storesPallet in
@@ -110,7 +114,7 @@
 
         public IEnumerable<StockLocatorWithStoragePlaceInfo> GetStockLocatorsWithStoragePlaceInfoForPart(string partNumber)
         {
-            var stockLocators = this.repository
+            var stockLocators = this.stockLocatorRepository
                 .FilterBy(s => s.PartNumber == partNumber);
 
             string auditDept = string.Empty;
@@ -144,6 +148,31 @@
                                        AuditDepartmentCode = auditDept
                                    };
                     }).OrderBy(p => p.PalletNumber);
+        }
+
+        public IEnumerable<StockLocator> GetBatches(string batchRef)
+        {
+           var result = (from stockLocator in this.stockLocatorRepository.FilterBy(l => 
+                             l.BatchRef.ToUpper().Equals(batchRef.ToUpper()))
+                   join storageLocation in this.storageLocationRepository.FindAll() 
+                       on stockLocator.LocationId equals
+                       storageLocation.LocationId into gj
+                   from storageLocation in gj.DefaultIfEmpty()
+                   select new StockLocator
+                              {
+                                  BatchRef = stockLocator.BatchRef,
+                                  StockRotationDate = stockLocator.StockRotationDate,
+                                  PartNumber = stockLocator.PartNumber,
+                                  PalletNumber = stockLocator.PalletNumber,
+                                  Category = stockLocator.Category,
+                                  State = stockLocator.State,
+                                  StorageLocation = new StorageLocation
+                                                        {
+                                                            LocationCode = storageLocation.LocationCode,
+                                                            Description = storageLocation.Description
+                                                        }
+                              }).AsEnumerable().Distinct(new StockLocatorEquals());
+           return result;
         }
     }
 }

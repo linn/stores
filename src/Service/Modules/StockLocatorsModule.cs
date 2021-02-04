@@ -1,7 +1,10 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Service.Extensions;
     using Linn.Stores.Service.Models;
 
@@ -12,20 +15,59 @@
     {
         private readonly IStockLocatorFacadeService service;
 
+        private readonly IFacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource>
+            storageLocationService;
+
+        private readonly IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource>
+            inspectedStateService;
+
         public StockLocatorsModule(
-            IStockLocatorFacadeService service)
+            IStockLocatorFacadeService service,
+            IFacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource> storageLocationService,
+            IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource> inspectedStateService)
         {
             this.service = service;
+            this.storageLocationService = storageLocationService;
+            this.inspectedStateService = inspectedStateService;
             this.Get("/inventory/stock-locators", _ => this.GetStockLocators());
+            this.Get("/inventory/stock-locators/batches", _ => this.GetBatches());
             this.Delete("/inventory/stock-locators/{id}", parameters => this.DeleteStockLocator(parameters.id));
             this.Put("/inventory/stock-locators/{id}", parameters => this.UpdateStockLocator(parameters.id));
+            this.Get("/inventory/storage-locations", _ => this.GetStorageLocations());
             this.Post("/inventory/stock-locators", _ => this.AddStockLocator());
+            this.Get("/inventory/stock-locators/states", _ => this.GetStates());
         }
 
         private object GetStockLocators()
         {
             var resource = this.Bind<StockLocatorResource>();
             var result = this.service.GetStockLocatorsForPart(resource.PartNumber);
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
+        }
+
+        private object GetBatches()
+        {
+            var resource = this.Bind<SearchRequestResource>();
+            var result = this.service.GetBatches(resource.SearchTerm);
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
+        }
+
+        private object GetStates()
+        {
+            var result = this.inspectedStateService.GetAll();
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
+        }
+
+        private object GetStorageLocations()
+        {
+            var resource = this.Bind<SearchRequestResource>();
+            var result = this.storageLocationService.Search(resource.SearchTerm);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");

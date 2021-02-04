@@ -7,6 +7,7 @@
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
+    using Linn.Stores.Resources;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
     using Linn.Stores.Service.Tests;
@@ -25,6 +26,19 @@
             get; private set;
         }
 
+        protected IFacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource>
+            StorageLocationService
+        {
+            get;
+
+            private set;
+        }
+
+        protected IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource> StateService
+        {
+            get; private set;
+        }
+
         [SetUp]
         public void EstablishContext()
         {
@@ -32,12 +46,24 @@
                 Substitute
                     .For<IStockLocatorFacadeService>();
 
+            this.StorageLocationService = Substitute
+                .For<IFacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource>>();
+
+            this.StateService = Substitute
+                .For<IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource>>();
+
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                 {
                     with.Dependency(this.StockLocatorFacadeService);
+                    with.Dependency(this.StorageLocationService);
+                    with.Dependency(this.StateService);
+                    with.Dependency<IResourceBuilder<InspectedState>>(new InspectedStateResourceBuilder());
+                    with.Dependency<IResourceBuilder<IEnumerable<InspectedState>>>(new InspectedStatesResourceBuilder());
                     with.Dependency<IResourceBuilder<StockLocator>>(new StockLocatorResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<StockLocator>>>(new StockLocatorsResourceBuilder());
+                    with.Dependency<IResourceBuilder<StorageLocation>>(new StorageLocationResourceBuilder());
+                    with.Dependency<IResourceBuilder<IEnumerable<StorageLocation>>>(new StorageLocationsResourceBuilder());
                     with.Dependency<IResourceBuilder<StockLocatorWithStoragePlaceInfo>>(
                         new StockLocatorResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<StockLocatorWithStoragePlaceInfo>>>(
@@ -46,6 +72,8 @@
                     with.ResponseProcessor<StockLocatorsResponseProcessor>();
                     with.ResponseProcessor<StockLocatorResponseProcessor>();
                     with.ResponseProcessor<StockLocatorsWithStoragePlaceInfoResponseProcessor>();
+                    with.ResponseProcessor<StorageLocationsResponseProcessor>();
+                    with.ResponseProcessor<InspectedStatesResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {

@@ -12,6 +12,8 @@
 
         public int? LocationId { get; set; }
 
+        public StorageLocation StorageLocation { get; set; }
+
         public int? BudgetId { get; set; }
 
         public string PartNumber { get; set; }
