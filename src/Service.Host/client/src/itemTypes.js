@@ -180,6 +180,24 @@ export const stockLocators = new ItemType(
     '/inventory/stock-locators'
 );
 
+export const stockLocatorBatches = new ItemType(
+    'stockLocatorBatches',
+    'STOCK_LOCATOR_BATCHES',
+    '/inventory/stock-locators/batches'
+);
+
+export const storageLocations = new ItemType(
+    'storageLocations',
+    'STORAGE_LOCATIONS',
+    '/inventory/storage-locations'
+);
+
+export const inspectedStates = new ItemType(
+    'inspectedStates',
+    'INSPECTED_STATES',
+    '/inventory/stock-locators/states'
+);
+
 export const parcel = new ItemType('parcel', 'PARCEL', '/parcels');
 
 export const parcels = new ItemType('parcels', 'PARCELS', '/parcels');

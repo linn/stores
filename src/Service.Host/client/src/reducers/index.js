@@ -48,6 +48,9 @@ import deptStockParts from './parts/deptStockParts';
 import stockLocators from './stockLocators/stockLocators';
 import stockLocator from './stockLocators/stockLocator';
 import despatchPickingSummaryReport from './despatchPickingSummaryReport';
+import stockLocatorBatches from './stockLocators/stockLocatorBatches';
+import storageLocations from './stockLocators/storageLocations';
+import inspectedStates from './stockLocators/inspectedStates';
 import parcels from './parcels/parcels';
 import parcel from './parcels/parcel';
 
@@ -68,6 +71,7 @@ const rootReducer = combineReducers({
     despatchPickingSummaryReport,
     employees,
     finishAllocation,
+    inspectedStates,
     manufacturers,
     mechPartSource,
     nominal,
@@ -87,8 +91,10 @@ const rootReducer = combineReducers({
     sosAllocDetails,
     sosAllocHeads,
     stockLocator,
+    stockLocatorBatches,
     stockLocators,
     stockPools,
+    storageLocations,
     storagePlace,
     storagePlaces,
     storagePlaceAuditReport,
