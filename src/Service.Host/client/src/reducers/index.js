@@ -49,7 +49,7 @@ import stockLocators from './stockLocators/stockLocators';
 import stockLocator from './stockLocators/stockLocator';
 import despatchPickingSummaryReport from './despatchPickingSummaryReport';
 import stockLocatorBatches from './stockLocators/stockLocatorBatches';
-import storageLocaitons from './stockLocators/storageLocations';
+import storageLocations from './stockLocators/storageLocations';
 import inspectedStates from './stockLocators/inspectedStates';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
@@ -90,7 +90,7 @@ const rootReducer = combineReducers({
     stockLocatorBatches,
     stockLocators,
     stockPools,
-    storageLocaitons,
+    storageLocations,
     storagePlace,
     storagePlaces,
     storagePlaceAuditReport,

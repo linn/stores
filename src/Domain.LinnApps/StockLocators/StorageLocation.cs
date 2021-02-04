@@ -11,7 +11,7 @@
 
         public string Description { get; set; }
 
-        public DateTime DateInvalid { get; set; }
+        public DateTime? DateInvalid { get; set; }
 
         public IEnumerable<StockLocator> StockLocators { get; set; }
     }
