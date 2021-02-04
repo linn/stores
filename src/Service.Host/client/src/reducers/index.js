@@ -48,6 +48,9 @@ import deptStockParts from './parts/deptStockParts';
 import stockLocators from './stockLocators/stockLocators';
 import stockLocator from './stockLocators/stockLocator';
 import despatchPickingSummaryReport from './despatchPickingSummaryReport';
+import stockLocatorBatches from './stockLocators/stockLocatorBatches';
+import storageLocaitons from './stockLocators/storageLocations';
+import inspectedStates from './stockLocators/inspectedStates';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -66,6 +69,7 @@ const rootReducer = combineReducers({
     despatchPickingSummaryReport,
     employees,
     finishAllocation,
+    inspectedStates,
     manufacturers,
     mechPartSource,
     nominal,
@@ -83,8 +87,10 @@ const rootReducer = combineReducers({
     sosAllocDetails,
     sosAllocHeads,
     stockLocator,
+    stockLocatorBatches,
     stockLocators,
     stockPools,
+    storageLocaitons,
     storagePlace,
     storagePlaces,
     storagePlaceAuditReport,
