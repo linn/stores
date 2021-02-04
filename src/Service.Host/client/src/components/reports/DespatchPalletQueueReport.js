@@ -3,6 +3,7 @@ import { Loading } from '@linn-it/linn-form-components-library';
 import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
+import { DataGrid } from '@material-ui/data-grid';
 import TableCell from '@material-ui/core/TableCell';
 import Button from '@material-ui/core/Button';
 import TableRow from '@material-ui/core/TableRow';
@@ -31,6 +32,19 @@ function DespatchPalletQueueReport({ reportData, loading }) {
         minute: '2-digit'
     });
 
+    const columns = [
+        { field: 'palletNumber', headerName: 'Pallet No', width: 130 },
+        { field: 'pickingSequence', headerName: 'Picking Seq', width: 130 }
+    ];
+
+    const getDetailRows = details => {
+        if (!details) {
+            return [];
+        }
+
+        return details.map((d, i) => ({ id: i, ...d }));
+    };
+
     return (
         <Grid className={classes.grid} container justify="center">
             <Grid item xs={12}>
@@ -43,10 +57,10 @@ function DespatchPalletQueueReport({ reportData, loading }) {
                 <Loading />
             ) : (
                 <>
-                    <Grid item xs={6}>
+                    <Grid item xs={6} style={{ paddingTop: 20, paddingBottom: 20 }}>
                         <Table size="small">
                             <TableBody>
-                                <TableRow key={1}>
+                                <TableRow key="totalRow">
                                     <TableCell className={classes.tableCell}>
                                         Total number of pallets in queue
                                     </TableCell>
@@ -55,7 +69,7 @@ function DespatchPalletQueueReport({ reportData, loading }) {
                                     </TableCell>
                                     <TableCell className={classes.tableCell} />
                                 </TableRow>
-                                <TableRow key={1}>
+                                <TableRow key="movableRow">
                                     <TableCell className={classes.tableCell}>
                                         Total number of pallets to come out
                                     </TableCell>
@@ -70,6 +84,17 @@ function DespatchPalletQueueReport({ reportData, loading }) {
                         </Table>
                     </Grid>
                     <Grid item xs={6} />
+                    <Grid item xs={12}>
+                        <div style={{ width: 300 }}>
+                            <DataGrid
+                                rows={getDetailRows(reportData.despatchPalletQueueDetails)}
+                                columns={columns}
+                                density="compact"
+                                autoHeight
+                                hideFooter
+                            />
+                        </div>
+                    </Grid>
                 </>
             )}
         </Grid>
@@ -79,7 +104,8 @@ function DespatchPalletQueueReport({ reportData, loading }) {
 DespatchPalletQueueReport.propTypes = {
     reportData: PropTypes.shape({
         totalNumberOfPallets: PropTypes.number,
-        numberOfPalletsToMove: PropTypes.number
+        numberOfPalletsToMove: PropTypes.number,
+        despatchPalletQueueDetails: PropTypes.arrayOf(PropTypes.shape({}))
     }),
     loading: PropTypes.bool
 };
