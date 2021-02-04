@@ -16,6 +16,8 @@
 
         protected IQueryRepository<StoragePlace> StoragePlaceRepository { get; private set; }
 
+        protected IRepository<StorageLocation, int> StorageLocationRepository { get; private set; }
+
         protected IStockLocatorService Sut { get; private set; }
 
         protected IAuthorisationService AuthService { get; private set; }
@@ -26,11 +28,13 @@
             this.StockLocatorRepository = Substitute.For<IRepository<StockLocator, int>>();
             this.StoresPalletRepository = Substitute.For<IStoresPalletRepository>();
             this.StoragePlaceRepository = Substitute.For<IQueryRepository<StoragePlace>>();
+            this.StorageLocationRepository = Substitute.For<IRepository<StorageLocation, int>>();
             this.AuthService = Substitute.For<IAuthorisationService>();
             this.Sut = new StockLocatorService(
                 this.StockLocatorRepository, 
                 this.StoresPalletRepository,
                 this.StoragePlaceRepository,
+                this.StorageLocationRepository,
                 this.AuthService);
         }
     }

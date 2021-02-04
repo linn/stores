@@ -120,6 +120,10 @@
                 .As<IResourceBuilder<IEnumerable<StockLocatorWithStoragePlaceInfo>>>();
             builder.RegisterType<DespatchPalletQueueResultResourceBuilder>()
                 .As<IResourceBuilder<DespatchPalletQueueResult>>();
+            builder.RegisterType<StorageLocationResourceBuilder>().As<IResourceBuilder<StorageLocation>>();
+            builder.RegisterType<StorageLocationsResourceBuilder>().As<IResourceBuilder<IEnumerable<StorageLocation>>>();
+            builder.RegisterType<InspectedStateResourceBuilder>().As<IResourceBuilder<InspectedState>>();
+            builder.RegisterType<InspectedStatesResourceBuilder>().As<IResourceBuilder<IEnumerable<InspectedState>>>();
         }
     }
 }

@@ -3,8 +3,10 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.RequestResources;
 
     using Nancy;
+    using Nancy.ModelBinding;
 
     public sealed class StockPoolModule : NancyModule
     {
@@ -18,6 +20,13 @@
 
         private object GetStockPools()
         {
+            var resource = this.Bind <SearchRequestResource>();
+            
+            if (resource?.SearchTerm != null)
+            {
+                return this.Negotiate.WithModel(this.stockPoolFacadeService.Search(resource.SearchTerm));
+            }
+
             return this.Negotiate.WithModel(this.stockPoolFacadeService.GetAll());
         }
     }

@@ -77,7 +77,7 @@ function DespatchPalletQueueReport({ reportData, loading }) {
                                         {reportData.numberOfPalletsToMove}
                                     </TableCell>
                                     <TableCell className={classes.tableCell}>
-                                        <Button>Pick Them All</Button>
+                                        <Button variant="contained">Pick Them All</Button>
                                     </TableCell>
                                 </TableRow>
                             </TableBody>

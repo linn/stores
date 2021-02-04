@@ -119,3 +119,11 @@ export const despatchPickingSummaryReportActionTypes = makeReportActionTypes(
 export const despatchPalletQueueReportActionTypes = makeReportActionTypes(
     reportTypes.despatchPalletQueueReport.actionType
 );
+
+export const stockLocatorBatchesActionTypes = makeActionTypes(
+    itemTypes.stockLocatorBatches.actionType
+);
+
+export const storageLocationsActionTypes = makeActionTypes(itemTypes.storageLocations.actionType);
+
+export const inspectedStatesActionTypes = makeActionTypes(itemTypes.inspectedStates.actionType);

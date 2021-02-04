@@ -28,6 +28,7 @@ import DeptStockUtility from '../containers/DeptStockUtility/DeptStockUtility';
 import DeptStockParts from '../containers/DeptStockUtility/DeptStockParts';
 import DespatchPickingSummaryReport from '../containers/reports/DespatchPickingSummaryReport';
 import DespatchPalletQueueReport from '../containers/reports/DespatchPalletQueueReport';
+import StockViewerOptions from '../containers/stockLocatorUtility/StockViewerOptions';
 
 const Root = ({ store }) => (
     <div>
@@ -141,6 +142,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/logistics/allocations/despatch-picking-summary"
                                         component={DespatchPickingSummaryReport}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/stock-viewer"
+                                        component={StockViewerOptions}
                                     />
                                     <Route
                                         exact

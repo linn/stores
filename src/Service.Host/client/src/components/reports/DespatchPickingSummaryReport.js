@@ -3,7 +3,6 @@ import { Loading, ReportTable } from '@linn-it/linn-form-components-library';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
-import '../../css/landscapePrint.css';
 
 const useStyles = makeStyles(theme => ({
     grid: {
@@ -30,26 +29,28 @@ function DespatchPickingSummaryReport({ reportData, loading, runOptions }) {
     });
 
     return (
-        <Grid className={classes.grid} container justify="center">
-            <Grid item xs={12}>
-                <span className="date-for-printing">{date}</span>
+        <div className="print-landscape">
+            <Grid className={classes.grid} container justify="center">
+                <Grid item xs={12}>
+                    <span className="date-for-printing">{date}</span>
+                </Grid>
+                <Grid item xs={12}>
+                    {loading || !reportData ? (
+                        <Loading />
+                    ) : (
+                        <ReportTable
+                            reportData={reportData}
+                            title={reportData.title}
+                            showTitle
+                            showTotals={false}
+                            placeholderRows={4}
+                            placeholderColumns={4}
+                            showRowTitles={false}
+                        />
+                    )}
+                </Grid>
             </Grid>
-            <Grid item xs={12}>
-                {loading || !reportData ? (
-                    <Loading />
-                ) : (
-                    <ReportTable
-                        reportData={reportData}
-                        title={reportData.title}
-                        showTitle
-                        showTotals={false}
-                        placeholderRows={4}
-                        placeholderColumns={4}
-                        showRowTitles={false}
-                    />
-                )}
-            </Grid>
-        </Grid>
+        </div>
     );
 }
 

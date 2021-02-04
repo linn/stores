@@ -5,8 +5,9 @@
     using System.Linq.Expressions;
 
     using Linn.Common.Persistence;
-    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+
+    using Microsoft.EntityFrameworkCore;
 
     public class StockLocatorRepository : IRepository<StockLocator, int>
     {
@@ -41,7 +42,7 @@
 
         public IQueryable<StockLocator> FindAll()
         {
-            return this.serviceDbContext.StockLocators;
+            return this.serviceDbContext.StockLocators.AsNoTracking().Include(s => s.StorageLocation); // is anyone updating these from a findAll()?
         }
 
         public void Add(StockLocator entity)

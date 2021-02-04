@@ -111,6 +111,10 @@
 
         public DbQuery<DespatchPalletQueueDetail> DespatchPalletQueueDetails { get; set; }
 
+        public DbSet<StorageLocation> StorageLocations { get; set; }
+
+        public DbSet<InspectedState> InspectedStates { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -161,6 +165,8 @@
             this.BuildStoresPallets(builder);
             this.QueryDespatchPickingSummary(builder);
             this.QueryDespatchPalletQueueDetails(builder);
+            this.BuildStorageLocations(builder);
+            this.BuildInspectedStates(builder);
             base.OnModelCreating(builder);
         }
 
@@ -668,6 +674,7 @@
             q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER");
             q.Property(e => e.BudgetId).HasColumnName("BUDGET_ID");
             q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
+            q.HasOne(l => l.StorageLocation).WithMany(s => s.StockLocators).HasForeignKey(l => l.LocationId);
             q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
             q.Property(e => e.Quantity).HasColumnName("QTY");
             q.Property(e => e.QuantityAllocated).HasColumnName("QTY_ALLOCATED");
@@ -914,6 +921,24 @@
             q.Property(v => v.PalletNumber).HasColumnName("PALLET_NUMBER");
             q.Property(v => v.PickingSequence).HasColumnName("PICKING_SEQUENCE");
             q.Property(v => v.WarehouseInformation).HasColumnName("WAREHOUSE_INFO");
+        }
+
+        private void BuildStorageLocations(ModelBuilder builder)
+        {
+            var e = builder.Entity<StorageLocation>().ToTable("STORAGE_LOCATIONS");
+            e.HasKey(l => l.LocationId);
+            e.Property(l => l.LocationId).HasColumnName("LOCATION_ID").HasMaxLength(8);
+            e.Property(l => l.LocationCode).HasColumnName("LOCATION_CODE").HasMaxLength(16);
+            e.Property(l => l.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
+            e.Property(l => l.DateInvalid).HasColumnName("DATE_INVALID");
+        }
+
+        private void BuildInspectedStates(ModelBuilder builder)
+        {
+            var e = builder.Entity<InspectedState>().ToTable("INSPECTED_STATES");
+            e.HasKey(l => l.State);
+            e.Property(l => l.State).HasColumnName("STATE").HasMaxLength(6);
+            e.Property(l => l.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
         }
     }
 }

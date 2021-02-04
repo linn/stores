@@ -66,6 +66,8 @@
             builder.RegisterType<StoresPalletRepository>().As<IStoresPalletRepository>();
             builder.RegisterType<DespatchPickingSummaryRepository>().As<IQueryRepository<DespatchPickingSummary>>();
             builder.RegisterType<DespatchPalletQueueDetailsRepository>().As<IQueryRepository<DespatchPalletQueueDetail>>();
+            builder.RegisterType<StorageLocationRepository>().As<IRepository<StorageLocation, int>>();
+            builder.RegisterType<InspectedStatesRepository>().As<IRepository<InspectedState, string>>();
         }
     }
 }
