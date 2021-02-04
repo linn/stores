@@ -34,6 +34,27 @@ function DespatchPalletQueueReport({ reportData, loading }) {
 
     const columns = [
         { field: 'palletNumber', headerName: 'Pallet No', width: 130 },
+        { field: 'warehouseInformation', headerName: 'Warehouse Info', width: 180 },
+        {
+            field: 'canMoveToUpper',
+            headerName: ' ',
+            width: 130,
+            renderCell: params =>
+                params.value ? (
+                    <Button
+                        className="hide-when-printing"
+                        variant="contained"
+                        color="default"
+                        size="small"
+                        style={{ marginLeft: 16 }}
+                    >
+                        Pick
+                    </Button>
+                ) : (
+                    <span />
+                )
+        },
+        { field: 'kittedFromTime', headerName: 'Time Kitted From', width: 180 },
         { field: 'pickingSequence', headerName: 'Picking Seq', width: 130 }
     ];
 
@@ -77,7 +98,9 @@ function DespatchPalletQueueReport({ reportData, loading }) {
                                         {reportData.numberOfPalletsToMove}
                                     </TableCell>
                                     <TableCell className={classes.tableCell}>
-                                        <Button variant="contained">Pick Them All</Button>
+                                        <Button variant="contained" color="primary">
+                                            Pick Them All
+                                        </Button>
                                     </TableCell>
                                 </TableRow>
                             </TableBody>
@@ -85,7 +108,7 @@ function DespatchPalletQueueReport({ reportData, loading }) {
                     </Grid>
                     <Grid item xs={6} />
                     <Grid item xs={12}>
-                        <div style={{ width: 300 }}>
+                        <div style={{ width: 760 }}>
                             <DataGrid
                                 rows={getDetailRows(reportData.despatchPalletQueueDetails)}
                                 columns={columns}
