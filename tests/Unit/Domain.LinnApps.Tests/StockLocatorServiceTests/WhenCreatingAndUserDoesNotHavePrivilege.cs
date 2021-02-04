@@ -14,26 +14,26 @@
 
     using NUnit.Framework;
 
-    public class WhenCreatingAndAuditDepartmentNotEntered : ContextBase
+    public class WhenCreatingAndUserDoesNotHavePrivilege : ContextBase
     {
-        private readonly IEnumerable<string> privileges = new[] { AuthorisedAction.CreateStockLocator };
+        private readonly IEnumerable<string> privileges = new[] { AuthorisedAction.UpdateStockLocator };
 
         private readonly StockLocator toCreate = new StockLocator
-                                                     {
-                                                         Id = 1,
-                                                         PalletNumber = 1
-                                                     };
+        {
+            Id = 1,
+            PalletNumber = 1
+        };
 
         private readonly string auditDepartmentCode = null;
 
-        private readonly IEnumerable<StoresPallet> 
+        private readonly IEnumerable<StoresPallet>
             pallets = new List<StoresPallet>
                           {
                               new StoresPallet
                                   {
                                         PalletNumber = 1,
-                                        AuditedByDepartmentCode = null,
-                                        AuditFrequencyWeeks = null
+                                        AuditedByDepartmentCode = "CODE",
+                                        AuditFrequencyWeeks = 26
                                   }
                           };
 
@@ -41,8 +41,8 @@
         public void SetUp()
         {
             this.AuthService
-                .HasPermissionFor(AuthorisedAction.CreateStockLocator , Arg.Any<IEnumerable<string>>())
-                .Returns(true);
+                .HasPermissionFor(AuthorisedAction.CreateStockLocator, Arg.Any<IEnumerable<string>>())
+                .Returns(false);
             this.StoresPalletRepository.FilterBy(Arg.Any<Expression<Func<StoresPallet, bool>>>())
                 .Returns(this.pallets.AsQueryable());
         }
@@ -52,15 +52,7 @@
         {
             var ex = Assert.Throws<StockLocatorException>(()
                 => this.Sut.CreateStockLocator(this.toCreate, this.auditDepartmentCode, this.privileges));
-            ex.Message.Should().Be("Audit department must be entered");
-        }
-
-        [Test]
-        public void ShouldNotUpdatePallets()
-        {
-             Assert.Throws<StockLocatorException>(()
-                => this.Sut.CreateStockLocator(this.toCreate, this.auditDepartmentCode, this.privileges));
-            this.pallets.All(p => p.AuditFrequencyWeeks != 26).Should().Be(true);
+            ex.Message.Should().Be("You are not authorised to create.");
         }
     }
 }

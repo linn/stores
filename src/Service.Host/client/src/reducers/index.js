@@ -47,6 +47,7 @@ import workstationTopUpStatus from './workstationTopUpStatus';
 import deptStockParts from './parts/deptStockParts';
 import stockLocators from './stockLocators/stockLocators';
 import stockLocator from './stockLocators/stockLocator';
+import despatchPickingSummaryReport from './despatchPickingSummaryReport';
 import parcels from './parcels/parcels';
 import parcel from './parcels/parcel';
 
@@ -64,6 +65,7 @@ const rootReducer = combineReducers({
     decrementRules,
     deptStockParts,
     despatchLocations,
+    despatchPickingSummaryReport,
     employees,
     finishAllocation,
     manufacturers,

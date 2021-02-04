@@ -41,6 +41,15 @@
             this.Get("/logistics/sos-alloc-heads/{jobId:int}", p => this.GetAllocHeads(p.jobId));
             this.Get("/logistics/sos-alloc-details", _ => this.GetAllocDetails());
             this.Put("/logistics/sos-alloc-details/{id:int}", p => this.UpdateAllocDetail(p.id));
+            this.Get("/logistics/allocations/despatch-picking-summary", _ => this.GetPickingSummaryReport());
+        }
+
+        private object GetPickingSummaryReport()
+        {
+            return this.Negotiate
+                .WithModel(this.allocationFacadeService.DespatchPickingSummaryReport())
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
 
         private object PickItems()

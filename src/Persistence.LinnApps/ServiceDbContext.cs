@@ -109,6 +109,8 @@
 
         public DbSet<StoresPallet> StoresPallets { get; set; }
 
+        public DbQuery<DespatchPickingSummary> DespatchPickingSummary { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -157,6 +159,7 @@
             this.BuildPtlMaster(builder);
             this.BuildTopUpJobRefs(builder);
             this.BuildStoresPallets(builder);
+            this.QueryDespatchPickingSummary(builder);
             base.OnModelCreating(builder);
         }
 
@@ -885,6 +888,22 @@
                 .HasColumnName("AUDIT_FREQUENCY_WEEKS").HasMaxLength(10);
             e.Property(p => p.AuditedByDepartmentCode)
                 .HasColumnName("AUDITED_BY_DEPARTMENT_CODE").HasMaxLength(10);
+        }
+
+        private void QueryDespatchPickingSummary(ModelBuilder builder)
+        {
+            var q = builder.Query<DespatchPickingSummary>().ToView("V_DPS_LINN");
+            q.Property(v => v.FromPlace).HasColumnName("FROM_PLACE");
+            q.Property(v => v.Addressee).HasColumnName("ADDRESSEE");
+            q.Property(v => v.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(v => v.LocationId).HasColumnName("LOCATION_ID");
+            q.Property(v => v.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
+            q.Property(v => v.InvoiceDescription).HasColumnName("INVOICE_DESCRIPTION");
+            q.Property(v => v.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            q.Property(v => v.Quantity).HasColumnName("QTY");
+            q.Property(v => v.Location).HasColumnName("LOCATION");
+            q.Property(v => v.QuantityOfItemsAtLocation).HasColumnName("QTY_AT_LOCATION");
+            q.Property(v => v.QtyNeededFromLocation).HasColumnName("DPS_QTY_AT_LOCATION");
         }
     }
 }

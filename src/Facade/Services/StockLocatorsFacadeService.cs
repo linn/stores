@@ -33,10 +33,10 @@
             this.databaseService = databaseService;
         }
 
-        public IResult<StockLocator> Delete(int id)
+        public IResult<StockLocator> Delete(StockLocatorResource resource)
         {
-            var toDelete = this.repository.FindById(id);
-            this.domainService.DeleteStockLocator(toDelete);
+            var toDelete = this.repository.FindById(resource.Id);
+            this.domainService.DeleteStockLocator(toDelete, resource.UserPrivileges);
             return new SuccessResult<StockLocator>(toDelete);
         }
 
@@ -73,21 +73,28 @@
                                    PartNumber = resource.PartNumber
                                };
 
-            return this.domainService.CreateStockLocator(toCreate, resource.AuditDepartmentCode);
+            return this.domainService.CreateStockLocator(
+                toCreate, 
+                resource.AuditDepartmentCode, 
+                resource.UserPrivileges);
         }
 
         protected override void UpdateFromResource(
             StockLocator entity, 
             StockLocatorResource updateResource)
         {
-            entity.BatchRef = updateResource.BatchRef;
-            entity.StockRotationDate = updateResource.StockRotationDate == null
-                                           ? (DateTime?)null
-                                           : DateTime.Parse(updateResource.StockRotationDate);
-            entity.Quantity = updateResource.Quantity;
-            entity.Remarks = updateResource.Remarks;
-            entity.PalletNumber = updateResource.PalletNumber;
-            entity.LocationId = updateResource.LocationId;
+            var updated = new StockLocator 
+                              {
+                                BatchRef = updateResource.BatchRef,
+                                StockRotationDate = updateResource.StockRotationDate == null
+                                                        ? (DateTime?)null
+                                                        : DateTime.Parse(updateResource.StockRotationDate),
+                                Quantity = updateResource.Quantity,
+                                Remarks = updateResource.Remarks,
+                                PalletNumber = updateResource.PalletNumber,
+                                LocationId = updateResource.LocationId,
+                              };
+            this.domainService.UpdateStockLocator(entity, updated, updateResource.UserPrivileges);
         }
 
         protected override Expression<Func<StockLocator, bool>> SearchExpression(string searchTerm)

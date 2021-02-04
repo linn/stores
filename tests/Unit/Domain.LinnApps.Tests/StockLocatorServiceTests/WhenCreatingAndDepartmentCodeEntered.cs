@@ -21,6 +21,8 @@
             PalletNumber = 1
         };
 
+        private readonly IEnumerable<string> privileges = new[] { AuthorisedAction.CreateStockLocator };
+
         private readonly string auditDepartmentCode = "1234";
 
         private readonly IEnumerable<StoresPallet>
@@ -39,9 +41,13 @@
         [SetUp]
         public void SetUp()
         {
+            this.AuthService
+                .HasPermissionFor(AuthorisedAction.CreateStockLocator, Arg.Any<IEnumerable<string>>())
+                .Returns(true);
             this.StoresPalletRepository.FilterBy(Arg.Any<Expression<Func<StoresPallet, bool>>>())
                 .Returns(this.pallets.AsQueryable());
-            this.result = this.Sut.CreateStockLocator(this.toCreate, this.auditDepartmentCode);
+            this.result = this.Sut
+                .CreateStockLocator(this.toCreate, this.auditDepartmentCode, this.privileges);
         }
 
         [Test]

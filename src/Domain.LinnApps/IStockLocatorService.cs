@@ -6,11 +6,14 @@
 
     public interface IStockLocatorService
     {
-        void UpdateStockLocator(StockLocator from, StockLocator to);
+        void UpdateStockLocator(StockLocator from, StockLocator to, IEnumerable<string> privileges);
 
-        StockLocator CreateStockLocator(StockLocator toCreate, string auditDepartmentCode);
+        StockLocator CreateStockLocator(
+            StockLocator toCreate, 
+            string auditDepartmentCode, 
+            IEnumerable<string> privileges);
 
-        void DeleteStockLocator(StockLocator toDelete);
+        void DeleteStockLocator(StockLocator toDelete, IEnumerable<string> privileges);
 
         IEnumerable<StockLocatorWithStoragePlaceInfo> 
             GetStockLocatorsWithStoragePlaceInfoForPart(string partNumber);

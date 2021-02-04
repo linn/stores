@@ -112,6 +112,10 @@ export const stockLocatorActionTypes = makeActionTypes(
     true
 );
 
+export const despatchPickingSummaryReportActionTypes = makeReportActionTypes(
+    reportTypes.despatchPickingSummaryReport.actionType
+);
+
 export const parcelActionTypes = makeActionTypes(itemTypes.parcel.actionType);
 
 export const parcelsActionTypes = makeActionTypes(itemTypes.parcels.actionType, false);
