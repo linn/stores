@@ -56,6 +56,8 @@ function DeptStockUtility({
                     : x
             )
         );
+
+        console.log(newRow);
         setNewRow(x => ({ ...x, auditDepartmentCode: department.departmentCode }));
     };
 
@@ -86,6 +88,16 @@ function DeptStockUtility({
             }
             return updatedStockLocators;
         });
+
+    const handleValueChange = (item, propertyName, newValue) => {
+        if (item.id === -1) {
+            setNewRow(row => ({ ...row, [propertyName]: newValue }));
+        } else {
+            setStockLocators(s =>
+                s.map(row => (row.id === item.id ? { ...row, [propertyName]: newValue } : row))
+            );
+        }
+    };
 
     const editableColumns = [
         {
@@ -178,6 +190,9 @@ function DeptStockUtility({
                                 rows={stockLocators}
                                 saveRow={item => {
                                     updateStockLocator(item.id, item);
+                                }}
+                                updateRow={(item, _setItem, propertyName, newValue) => {
+                                    handleValueChange(item, propertyName, newValue);
                                 }}
                                 createRow={item => createStockLocator(item)}
                                 newRow={newRow}
