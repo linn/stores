@@ -44,9 +44,14 @@ function DeptStockUtility({
             if (items) {
                 setPrevStockLocators(items);
                 setStockLocators(items);
+                setNewRow({
+                    id: -1,
+                    partNumber: options.partNumber,
+                    stockRotationDate: new Date()
+                });
             }
         }
-    }, [items, stockLocators, prevStockLocators]);
+    }, [items, stockLocators, prevStockLocators, setNewRow, options]);
 
     const selectDepartmentsSearchResult = (_propertyName, department, updatedItem) => {
         setStockLocators(s =>
