@@ -104,7 +104,6 @@ const rootReducer = combineReducers({
     unpickItemsAllocation,
     workstationTopUpStatus,
     wwdReport,
-    employees,
     ...sharedLibraryReducers,
     errors
 });

@@ -198,6 +198,6 @@ export const inspectedStates = new ItemType(
     '/inventory/stock-locators/states'
 );
 
-export const parcel = new ItemType('parcel', 'PARCEL', '/parcels');
+export const parcel = new ItemType('parcel', 'PARCEL', '/logistics/parcels');
 
-export const parcels = new ItemType('parcels', 'PARCELS', '/parcels');
+export const parcels = new ItemType('parcels', 'PARCELS', '/logistics/parcels');

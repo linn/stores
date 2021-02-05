@@ -51,7 +51,7 @@ function DespatchPickingSummaryReport({ reportData, loading, runOptions }) {
                 </Grid>
             </Grid>
         </div>
-    ); 
+    );
 }
 
 DespatchPickingSummaryReport.propTypes = {
