@@ -16,5 +16,11 @@
         {
             return new SuccessResult<string>(this.warehouseService.MoveAllPalletsToUpper());
         }
+
+        public IResult<string> MovePalletToUpper(int palletNumber, string reference)
+        {
+            return new SuccessResult<string>(
+                this.warehouseService.MovePalletToUpper(palletNumber, reference));
+        }
     }
 }
