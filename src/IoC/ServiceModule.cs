@@ -99,6 +99,7 @@
             builder.RegisterType<StoragePlaceAuditPack>().As<IStoragePlaceAuditPack>();
             builder.RegisterType<AllocPack>().As<IAllocPack>();
             builder.RegisterType<WorkstationPackProxy>().As<IWorkstationPack>();
+            builder.RegisterType<WcsPack>().As<IWcsPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();
