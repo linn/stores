@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
-import { Dropdown, Loading, Title, Typeahead } from '@linn-it/linn-form-components-library';
+import {
+    Dropdown,
+    Loading,
+    Title,
+    Typeahead,
+    TypeaheadTable
+} from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Page from '../../containers/Page';
 
@@ -30,6 +36,21 @@ function StockViewerOptions({
     const [stockPool, setStockPool] = useState('');
     const [batcheRef, setBatchRef] = useState('');
     const [inspectedState, setInspectedState] = useState('');
+
+    const table = {
+        totalItemCount: stockLocatorBatches.length,
+        rows: stockLocatorBatches?.map((item, i) => ({
+            id: `${item.id}`,
+            values: [
+                { id: `${i}-0`, value: `${item.batchRef}` },
+                { id: `${i}-1`, value: `${item.partNumber || ''}` },
+                { id: `${i}-1`, value: `${item.palletNumber || ''}` },
+                { id: `${i}-1`, value: `${item.storagePlaceName || ''}` },
+                { id: `${i}-1`, value: `${item.stockRotationDate.split('T')[0] || ''}` }
+            ],
+            links: item.links
+        }))
+    };
 
     return (
         <Page>
@@ -92,9 +113,10 @@ function StockViewerOptions({
                     />
                 </Grid>
                 <Grid item xs={9} />
-                <Grid item xs={3}>
-                    <Typeahead
-                        items={stockLocatorBatches}
+                <Grid item xs={12}>
+                    <TypeaheadTable
+                        table={table}
+                        columnNames={['Name', 'Part', 'Pallet', 'Location', 'Date']}
                         fetchItems={searchStockLocatorBatches}
                         modal
                         links={false}
@@ -103,13 +125,14 @@ function StockViewerOptions({
                         label="Batch"
                         title="Search Batch Refs"
                         value={batcheRef}
-                        onSelect={newValue => setBatchRef(newValue.batchRef)}
+                        onSelect={newValue => {
+                            setBatchRef(newValue.values[0].value);
+                        }}
                         history={history}
                         debounce={1000}
                         minimumSearchTermLength={2}
                     />
                 </Grid>
-                <Grid item xs={9} />
                 <Grid item xs={3}>
                     {inspectedStatesLoading ? (
                         <Loading />
@@ -121,6 +144,7 @@ function StockViewerOptions({
                             }))}
                             value={inspectedState}
                             label="State"
+                            propertyName="inspectedState"
                             fullWidth
                             onChange={(_propertyName, newValue) => setInspectedState(newValue)}
                             allowNoValue
