@@ -145,6 +145,7 @@ function DeptStockUtility({
         {
             title: 'Remarks',
             id: 'remarks',
+            textFieldRows: 3,
             type: 'text',
             editable: true
         },
@@ -189,6 +190,7 @@ function DeptStockUtility({
                     <Grid item xs={12}>
                         {stockLocators && (
                             <SingleEditTable
+                                newRowPosition="top"
                                 columns={editableColumns}
                                 rows={stockLocators}
                                 saveRow={item => {
