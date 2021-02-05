@@ -104,9 +104,6 @@ module.exports = {
             '@material-ui/pickers': path.resolve('./node_modules/@material-ui/pickers'),
             'react-redux': path.resolve('./node_modules/react-redux'),
             react: path.resolve('./node_modules/react'),
-            'redux-api-middleware': path.resolve('./node_modules/redux-api-middleware'),
-            'react-router': path.resolve('./node_modules/react-router'),
-            'react-router-dom': path.resolve('./node_modules/react-router-dom'),
             notistack: path.resolve('./node_modules/notistack'),
             '@material-ui/styles': path.resolve('./node_modules/@material-ui/styles')
         }
