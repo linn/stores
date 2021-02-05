@@ -3,6 +3,8 @@
     using FluentAssertions;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps.Models;
+    using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
 
     using Nancy;
@@ -21,7 +23,7 @@
         {
             this.resource = new PalletMoveRequestResource { PalletNumber = 1, Reference = "3" };
             this.WarehouseFacadeService.MovePalletToUpper(this.resource.PalletNumber, this.resource.Reference)
-                .Returns(new SuccessResult<string>("ok"));
+                .Returns(new SuccessResult<MessageResult>(new MessageResult("ok")));
 
             this.Response = this.Browser.Post(
                 $"/logistics/wcs/move-to-upper",
@@ -49,8 +51,8 @@
         [Test]
         public void ShouldReturnResource()
         {
-            var resultResource = this.Response.Body.DeserializeJson<SuccessResult<string>>();
-            resultResource.Data.Should().Be("ok");
+            var resultResource = this.Response.Body.DeserializeJson<MessageResource>();
+            resultResource.Message.Should().Be("ok");
         }
     }
 }

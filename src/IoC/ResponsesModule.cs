@@ -10,6 +10,7 @@
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Domain.LinnApps.Exceptions;
+    using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
@@ -124,6 +125,7 @@
             builder.RegisterType<StorageLocationsResourceBuilder>().As<IResourceBuilder<IEnumerable<StorageLocation>>>();
             builder.RegisterType<InspectedStateResourceBuilder>().As<IResourceBuilder<InspectedState>>();
             builder.RegisterType<InspectedStatesResourceBuilder>().As<IResourceBuilder<IEnumerable<InspectedState>>>();
+            builder.RegisterType<MessageResourceBuilder>().As<IResourceBuilder<MessageResult>>();
         }
     }
 }

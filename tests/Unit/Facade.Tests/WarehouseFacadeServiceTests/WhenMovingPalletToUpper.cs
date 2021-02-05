@@ -3,6 +3,7 @@
     using FluentAssertions;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps.Models;
 
     using NSubstitute;
 
@@ -10,7 +11,7 @@
 
     public class WhenMovingPalletToUpper : ContextBase
     {
-        private IResult<string> result;
+        private IResult<MessageResult> result;
 
         private string reference;
 
@@ -23,7 +24,7 @@
             this.reference = "567";
 
             this.WarehouseService.MovePalletToUpper(this.palletNumber, this.reference)
-                .Returns("ok");
+                .Returns(new MessageResult("ok"));
 
             this.result = this.Sut.MovePalletToUpper(this.palletNumber, this.reference);
         }
@@ -37,9 +38,9 @@
         [Test]
         public void ShouldReturnSuccess()
         {
-            this.result.Should().BeOfType<SuccessResult<string>>();
-            var dataResult = ((SuccessResult<string>)this.result).Data;
-            dataResult.Should().Be("ok");
+            this.result.Should().BeOfType<SuccessResult<MessageResult>>();
+            var dataResult = ((SuccessResult<MessageResult>)this.result).Data;
+            dataResult.Message.Should().Be("ok");
         }
     }
 }

@@ -2,17 +2,19 @@
 {
     using FluentAssertions;
 
+    using Linn.Stores.Domain.LinnApps.Models;
+
     using NSubstitute;
 
     using NUnit.Framework;
 
     public class WhenMovingPalletToUpper : ContextBase
     {
-        private string result;
-
         private string reference;
 
         private int palletNumber;
+
+        private MessageResult result;
 
         [SetUp]
         public void SetUp()
@@ -38,7 +40,7 @@
         [Test]
         public void ShouldReturnOkMessage()
         {
-            this.result.Should().Be("Pallet 123 move to upper called successfully");
+            this.result.Message.Should().Be("Pallet 123 move to upper called successfully");
         }
     }
 }

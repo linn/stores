@@ -3,6 +3,8 @@
     using FluentAssertions;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps.Models;
+    using Linn.Stores.Resources;
 
     using Nancy;
     using Nancy.Testing;
@@ -17,7 +19,7 @@
         public void SetUp()
         {
             this.WarehouseFacadeService.MoveAllPalletsToUpper()
-                .Returns(new SuccessResult<string>("ok"));
+                .Returns(new SuccessResult<MessageResult>(new MessageResult("ok")));
 
             this.Response = this.Browser.Post(
                 $"/logistics/wcs/move-all-to-upper",
@@ -44,8 +46,8 @@
         [Test]
         public void ShouldReturnResource()
         {
-            var resultResource = this.Response.Body.DeserializeJson<SuccessResult<string>>();
-            resultResource.Data.Should().Be("ok");
+            var resultResource = this.Response.Body.DeserializeJson<MessageResource>();
+            resultResource.Message.Should().Be("ok");
         }
     }
 }

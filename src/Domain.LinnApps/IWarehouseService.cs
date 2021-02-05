@@ -1,9 +1,11 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
+    using Linn.Stores.Domain.LinnApps.Models;
+
     public interface IWarehouseService
     {
-        string MoveAllPalletsToUpper();
+        MessageResult MoveAllPalletsToUpper();
 
-        string MovePalletToUpper(int palletNumber, string reference);
+        MessageResult MovePalletToUpper(int palletNumber, string reference);
     }
 }

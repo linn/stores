@@ -2,17 +2,19 @@
 {
     using FluentAssertions;
 
+    using Linn.Stores.Domain.LinnApps.Models;
+
     using NSubstitute;
 
     using NUnit.Framework;
 
     public class WhenMovingPalletToUpperButNoLongerPossible : ContextBase
     {
-        private string result;
-
         private string reference;
 
         private int palletNumber;
+
+        private MessageResult result;
 
         [SetUp]
         public void SetUp()
@@ -38,7 +40,7 @@
         [Test]
         public void ShouldReturnMessage()
         {
-            this.result.Should().Be("Pallet 123 can no longer be moved to upper");
+            this.result.Message.Should().Be("Pallet 123 can no longer be moved to upper");
         }
     }
 }

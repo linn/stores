@@ -2,6 +2,7 @@
 {
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Models;
 
     public class WarehouseFacadeService : IWarehouseFacadeService
     {
@@ -12,14 +13,14 @@
             this.warehouseService = warehouseService;
         }
 
-        public IResult<string> MoveAllPalletsToUpper()
+        public IResult<MessageResult> MoveAllPalletsToUpper()
         {
-            return new SuccessResult<string>(this.warehouseService.MoveAllPalletsToUpper());
+            return new SuccessResult<MessageResult>(this.warehouseService.MoveAllPalletsToUpper());
         }
 
-        public IResult<string> MovePalletToUpper(int palletNumber, string reference)
+        public IResult<MessageResult> MovePalletToUpper(int palletNumber, string reference)
         {
-            return new SuccessResult<string>(
+            return new SuccessResult<MessageResult>(
                 this.warehouseService.MovePalletToUpper(palletNumber, reference));
         }
     }
