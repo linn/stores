@@ -44,9 +44,9 @@ function StockViewerOptions({
             values: [
                 { id: `${i}-0`, value: `${item.batchRef}` },
                 { id: `${i}-1`, value: `${item.partNumber || ''}` },
-                { id: `${i}-1`, value: `${item.palletNumber || ''}` },
-                { id: `${i}-1`, value: `${item.storagePlaceName || ''}` },
-                { id: `${i}-1`, value: `${item.stockRotationDate.split('T')[0] || ''}` }
+                { id: `${i}-2`, value: `${item.palletNumber || ''}` },
+                { id: `${i}-3`, value: `${item.storagePlaceName || ''}` },
+                { id: `${i}-4`, value: `${item.stockRotationDate.split('T')[0] || ''}` }
             ],
             links: item.links
         }))
