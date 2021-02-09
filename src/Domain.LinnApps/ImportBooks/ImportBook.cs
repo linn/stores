@@ -115,11 +115,5 @@
         public string PortCode { get; set; }
 
         public string CustomsEntryCodePrefix { get; set; }
-
-        public ImpBookOrderDetail OrderDetail { get; set; }
-        
-        public ImpBookPostEntry PostEntry { get; set; }
-        
-        public ImpBookInvoiceDetail InvoiceDetail { get; set; }
     }
 }

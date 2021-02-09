@@ -9,7 +9,5 @@
         public string InvoiceNumber { get; set; }
 
         public int InvoiceValue { get; set; }
-
-        public ImportBook ImportBook { get; set; }
     }
 }

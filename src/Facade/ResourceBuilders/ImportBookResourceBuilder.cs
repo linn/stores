@@ -10,15 +10,6 @@
 
     public class ImportBookResourceBuilder : IResourceBuilder<ImportBook>
     {
-        private readonly ImportBookOrderDetailResourceBuilder importBookOrderDetailResourceBuilder =
-            new ImportBookOrderDetailResourceBuilder();
-
-        private readonly ImportBookInvoiceDetailResourceBuilder importBookInvoiceDetailResourceBuilder =
-            new ImportBookInvoiceDetailResourceBuilder();
-
-        private readonly ImportBookPostEntryResourceBuilder importBookPostEntryResourceBuilder =
-            new ImportBookPostEntryResourceBuilder();
-
         public ImportBookResource Build(ImportBook model)
         {
             return new ImportBookResource
@@ -79,18 +70,6 @@
                            CreatedBy = model.CreatedBy,
                            PortCode = model.PortCode,
                            CustomsEntryCodePrefix = model.CustomsEntryCodePrefix,
-                           ImportBookOrderDetail =
-                               model.OrderDetail != null
-                                   ? this.importBookOrderDetailResourceBuilder.Build(model.OrderDetail)
-                                   : null,
-                           ImportBookPostEntry =
-                               model.PostEntry != null
-                                   ? this.importBookPostEntryResourceBuilder.Build(model.PostEntry)
-                                   : null,
-                           ImportBookInvoiceDetail =
-                               model.InvoiceDetail != null
-                                   ? this.importBookInvoiceDetailResourceBuilder.Build(model.InvoiceDetail)
-                                   : null,
                            Links = this.BuildLinks(model).ToArray()
                        };
         }

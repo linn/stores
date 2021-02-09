@@ -19,7 +19,5 @@
         public int? Duty { get; set; }
         
         public int? Vat { get; set; }
-
-        public ImportBook ImportBook { get; set; }
     }
 }

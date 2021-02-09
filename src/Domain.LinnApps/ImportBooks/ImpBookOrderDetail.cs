@@ -35,7 +35,5 @@
         public int? InsNumber { get; set; }
         
         public int? VatRate { get; set; }
-
-        public ImportBook ImportBook { get; set; }
     }
 }

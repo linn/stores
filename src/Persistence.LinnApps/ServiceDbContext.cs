@@ -882,13 +882,6 @@
             q.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
             q.Property(e => e.PortCode).HasColumnName("PORT_CODE").HasMaxLength(3);
             q.Property(e => e.CustomsEntryCodePrefix).HasColumnName("CUSTOMS_ENTRY_CODE_PREFIX").HasMaxLength(3);
-            q.HasOne(e => e.OrderDetail).WithOne(b => b.ImportBook)
-                .HasForeignKey<ImpBookOrderDetail>("IMPBOOK_ID");
-            q.HasOne(e => e.PostEntry).WithOne(b => b.ImportBook)
-                .HasForeignKey<ImpBookPostEntry>("IMPBOOK_ID");
-            q.HasOne(e => e.InvoiceDetail).WithOne(b => b.ImportBook)
-                .HasForeignKey<ImpBookInvoiceDetail>("IMPBOOK_ID");
-            // e.HasMany(n => n.NominalAccounts).WithOne(a => a.Department).HasForeignKey("DEPARTMENT");
         }
 
         private void BuildImportBookInvoiceDetails(ModelBuilder builder)
@@ -936,7 +929,7 @@
         private void BuildImportBookPostEntries(ModelBuilder builder)
         {
             var q = builder.Entity<ImpBookPostEntry>().ToTable("IMPBOOK_POST_ENTRIES");
-            q.HasKey(e => new { ImportBookId = e.ImpBookId, e.LineNumber });
+            q.HasKey(e => new { e.ImpBookId, e.LineNumber });
             q.Property(e => e.ImpBookId).HasColumnName("IMPBOOK_ID");
             q.Property(e => e.LineNumber).HasColumnName("LINE_NO");
             q.Property(e => e.EntryCodePrefix).HasColumnName("ENTRY_CODE_PREFIX").HasMaxLength(3);
