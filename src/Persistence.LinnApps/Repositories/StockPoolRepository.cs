@@ -43,7 +43,7 @@
 
         public IQueryable<StockPool> FilterBy(Expression<Func<StockPool, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.StockPools.Where(expression);
         }
     }
 }

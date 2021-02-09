@@ -9,9 +9,11 @@
     public interface IStockLocatorFacadeService 
         : IFacadeFilterService<StockLocator, int, StockLocatorResource, StockLocatorResource, StockLocatorResource>
     {
-        IResult<StockLocator> Delete(int id);
+        IResult<StockLocator> Delete(StockLocatorResource resource);
 
         IResult<IEnumerable<StockLocatorWithStoragePlaceInfo>> 
             GetStockLocatorsForPart(string partNumber);
+
+        IResult<IEnumerable<StockLocator>> GetBatches(string batchRef);
     }
 }

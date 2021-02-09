@@ -31,6 +31,13 @@ function App() {
                 <ListItem component={Link} to="/inventory/reports/what-will-decrement" button>
                     <Typography color="primary">What Will Decrement Report</Typography>
                 </ListItem>
+                <ListItem
+                    component={Link}
+                    to="/logistics/allocations/despatch-picking-summary"
+                    button
+                >
+                    <Typography color="primary">Despatch Picking Summary Report</Typography>
+                </ListItem>
             </List>
         </Page>
     );

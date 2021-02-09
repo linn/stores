@@ -13,6 +13,8 @@
 
     public class WhenDeletingAndNotEmptyPallet : ContextBase
     {
+        private readonly IEnumerable<string> privileges = new[] { AuthorisedAction.CreateStockLocator };
+
         private readonly StockLocator toDelete = new StockLocator
                                                      {
                                                          Id = 1,
@@ -37,9 +39,12 @@
         [SetUp]
         public void SetUp()
         {
+            this.AuthService
+                .HasPermissionFor(AuthorisedAction.CreateStockLocator, Arg.Any<IEnumerable<string>>())
+                .Returns(true);
             this.StockLocatorRepository.FilterBy(Arg.Any<Expression<Func<StockLocator, bool>>>())
                 .Returns(this.otherThingsInPallet.AsQueryable());
-            this.Sut.DeleteStockLocator(this.toDelete);
+            this.Sut.DeleteStockLocator(this.toDelete, this.privileges);
         }
 
         [Test]

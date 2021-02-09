@@ -26,6 +26,8 @@ import MechPartSource from '../containers/parts/mechPartSource/MechPartSource';
 import WorkstationTopUpStatus from '../containers/workstations/WorkstationTopUpStatus';
 import DeptStockUtility from '../containers/DeptStockUtility/DeptStockUtility';
 import DeptStockParts from '../containers/DeptStockUtility/DeptStockParts';
+import DespatchPickingSummaryReport from '../containers/reports/DespatchPickingSummaryReport';
+import StockViewerOptions from '../containers/stockLocatorUtility/StockViewerOptions';
 
 const Root = ({ store }) => (
     <div>
@@ -134,6 +136,16 @@ const Root = ({ store }) => (
                                         exact
                                         path="/logistics/workstations/top-up/:jobRef"
                                         component={WorkstationTopUpStatus}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/allocations/despatch-picking-summary"
+                                        component={DespatchPickingSummaryReport}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/stock-viewer"
+                                        component={StockViewerOptions}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>

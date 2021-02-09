@@ -12,3 +12,9 @@ export const storagePlaceAuditReport = new ItemType(
     'STORAGE_PLACE_AUDIT_REPORT',
     '/inventory/reports/storage-place-audit/report'
 );
+
+export const despatchPickingSummaryReport = new ItemType(
+    'despatchPickingSummaryReport',
+    'DESPATCH_PICKING_SUMMARY_REPORT',
+    '/logistics/allocations/despatch-picking-summary'
+);

@@ -63,6 +63,9 @@
             builder.RegisterType<PtlMasterRepository>().As<ISingleRecordRepository<PtlMaster>>();
             builder.RegisterType<TopUpListJobRefRepository>().As<IRepository<TopUpListJobRef, string>>();
             builder.RegisterType<StoresPalletRepository>().As<IStoresPalletRepository>();
+            builder.RegisterType<DespatchPickingSummaryRepository>().As<IQueryRepository<DespatchPickingSummary>>();
+            builder.RegisterType<StorageLocationRepository>().As<IRepository<StorageLocation, int>>();
+            builder.RegisterType<InspectedStatesRepository>().As<IRepository<InspectedState, string>>();
         }
     }
 }

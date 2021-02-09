@@ -13,6 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Loading, Title, utilities, ErrorCard } from '@linn-it/linn-form-components-library';
 import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
 import SosAllocDetails from './SosAllocDetails';
 
 import Page from '../../containers/Page';
@@ -81,7 +82,8 @@ function SosAllocHeads({
             top: '50%'
         },
         nounderline: {
-            textDecoration: 'none'
+            textDecoration: 'none',
+            paddingRight: 10
         }
     });
 
@@ -106,23 +108,35 @@ function SosAllocHeads({
         <Page>
             <Grid container spacing={3}>
                 <Grid item xs={2} />
-                <Grid item xs={6}>
+                <Grid item xs={4}>
                     <Title text="Allocation" />
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={4}>
+                    <Link
+                        className={classes.nounderline}
+                        to="/logistics/allocations/despatch-picking-summary?print=true"
+                    >
+                        <Tooltip title="Print Despatch Picking Summary">
+                            <Button variant="outlined">Run DPS</Button>
+                        </Tooltip>
+                    </Link>
                     <Link className={classes.nounderline} to="/logistics/allocations">
-                        <Button variant="outlined">Start New Run</Button>
+                        <Tooltip title="Return To Allocation Options Page">
+                            <Button variant="outlined">Start New Run</Button>
+                        </Tooltip>
                     </Link>
                 </Grid>
                 <Grid item xs={2}>
-                    <Button
-                        color="secondary"
-                        variant="contained"
-                        onClick={doFinishAllocation}
-                        disabled={alloctionHasFinished}
-                    >
-                        Allocate
-                    </Button>
+                    <Tooltip title="Allocate selected items for despatch">
+                        <Button
+                            color="secondary"
+                            variant="contained"
+                            onClick={doFinishAllocation}
+                            disabled={alloctionHasFinished}
+                        >
+                            Allocate
+                        </Button>
+                    </Tooltip>
                 </Grid>
                 {(loading || finishAllocationWorking) && (
                     <Grid item xs={12}>

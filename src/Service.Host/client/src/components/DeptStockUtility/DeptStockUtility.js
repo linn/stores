@@ -44,9 +44,14 @@ function DeptStockUtility({
             if (items) {
                 setPrevStockLocators(items);
                 setStockLocators(items);
+                setNewRow({
+                    id: -1,
+                    partNumber: options?.partNumber,
+                    stockRotationDate: new Date()
+                });
             }
         }
-    }, [items, stockLocators, prevStockLocators]);
+    }, [items, stockLocators, prevStockLocators, setNewRow, options]);
 
     const selectDepartmentsSearchResult = (_propertyName, department, updatedItem) => {
         setStockLocators(s =>
@@ -87,6 +92,16 @@ function DeptStockUtility({
             return updatedStockLocators;
         });
 
+    const handleValueChange = (item, propertyName, newValue) => {
+        if (item.id === -1) {
+            setNewRow(row => ({ ...row, [propertyName]: newValue }));
+        } else {
+            setStockLocators(s =>
+                s.map(row => (row.id === item.id ? { ...row, [propertyName]: newValue } : row))
+            );
+        }
+    };
+
     const editableColumns = [
         {
             title: 'Storage Place',
@@ -112,7 +127,8 @@ function DeptStockUtility({
             title: 'Batch Ref',
             id: 'batchRef',
             type: 'text',
-            required: false
+            required: false,
+            editable: true
         },
         {
             title: 'Batch Date',
@@ -123,12 +139,13 @@ function DeptStockUtility({
         {
             title: 'Qty',
             id: 'quantity',
-            type: 'text',
+            type: 'number',
             editable: true
         },
         {
             title: 'Remarks',
             id: 'remarks',
+            textFieldRows: 3,
             type: 'text',
             editable: true
         },
@@ -144,7 +161,7 @@ function DeptStockUtility({
             selectSearchResult: selectDepartmentsSearchResult,
             searchTitle: 'Search Departments',
             minimumSearchTermLength: 3,
-            required: true
+            required: false
         }
     ];
     return (
@@ -156,7 +173,7 @@ function DeptStockUtility({
             />
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <Title text="Departmental Pallets Utility" />
+                    <Title text={`Departmental Pallets Utility - ${options.partNumber}`} />
                 </Grid>
                 {itemError && (
                     <Grid item xs={12}>
@@ -173,12 +190,30 @@ function DeptStockUtility({
                     <Grid item xs={12}>
                         {stockLocators && (
                             <SingleEditTable
+                                newRowPosition="top"
                                 columns={editableColumns}
                                 rows={stockLocators}
                                 saveRow={item => {
-                                    updateStockLocator(item.id, item);
+                                    const body = item;
+                                    if (!body.partNumber) {
+                                        body.partNumber = stockLocators.first(
+                                            l => l.partNumber
+                                        ).partNumber;
+                                    }
+                                    updateStockLocator(body.id, body);
                                 }}
-                                createRow={item => createStockLocator(item)}
+                                updateRow={(item, _setItem, propertyName, newValue) => {
+                                    handleValueChange(item, propertyName, newValue);
+                                }}
+                                createRow={item => {
+                                    const body = item;
+                                    if (!body.partNumber) {
+                                        body.partNumber = stockLocators.first(
+                                            l => l.partNumber
+                                        ).partNumber;
+                                    }
+                                    createStockLocator(body);
+                                }}
                                 newRow={newRow}
                                 editable
                                 allowNewRowCreations
