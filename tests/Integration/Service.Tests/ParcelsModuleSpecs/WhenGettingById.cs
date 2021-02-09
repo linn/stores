@@ -19,19 +19,15 @@
             {
                 ParcelNumber = 1,
                 SupplierId = 2,
-                SupplierName = "bathroom cabinet company",
-                SupplierCountry = "UK",
                 DateCreated = new DateTime(),
                 CarrierId = 4,
-                CarrierName = "DHL",
                 SupplierInvoiceNo = "Bond, James Bond",
-                ConsignmentNo = 007,
+                ConsignmentNo = "007",
                 CartonCount = 0,
                 PalletCount = 0,
                 Weight = (decimal)00.70,
                 DateReceived = new DateTime(),
                 CheckedById = 123456,
-                CheckedByName = "DJ badboy",
                 Comments = "RSN 212, RSN 118"
             };
 
@@ -65,8 +61,6 @@
             var resource = this.Response.Body.DeserializeJson<ParcelResource>();
             resource.ParcelNumber.Should().Be(1);
             resource.SupplierId.Should().Be(2);
-            resource.SupplierCountry.Should().Be("UK");
-            resource.SupplierName.Should().Be("bathroom cabinet company");
             resource.CarrierId.Should().Be(4);
         }
     }

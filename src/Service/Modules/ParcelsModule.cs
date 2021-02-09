@@ -40,7 +40,7 @@
                               ? this.parcelsFacadeService.GetAll()
                               : this.parcelsFacadeService.Search(resource.SearchTerm);
 
-            return this.Negotiate
+return this.Negotiate
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

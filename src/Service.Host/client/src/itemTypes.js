@@ -12,6 +12,8 @@ export const sernosSequences = new ItemType(
 
 export const suppliers = new ItemType('suppliers', 'SUPPLIERS', '/inventory/suppliers');
 
+export const carriers = new ItemType('carriers', 'CARRIERS', '/inventory/carriers');
+
 export const partCategories = new ItemType(
     'partCategories',
     'PART_CATEGORIES',

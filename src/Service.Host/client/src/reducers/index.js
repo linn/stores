@@ -53,6 +53,7 @@ import storageLocations from './stockLocators/storageLocations';
 import inspectedStates from './stockLocators/inspectedStates';
 import parcels from './parcels/parcels';
 import parcel from './parcels/parcel';
+import carriers from './carriers';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -62,6 +63,7 @@ const rootReducer = combineReducers({
     assemblyTechnologies,
     auditLocation,
     auditLocations,
+    carriers,
     countries,
     createAuditReqs,
     departments,

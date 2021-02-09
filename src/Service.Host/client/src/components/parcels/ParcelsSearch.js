@@ -8,16 +8,34 @@ import {
     Loading,
     utilities
 } from '@linn-it/linn-form-components-library';
+import { makeStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
-import Page from '../../containers/Page';
 
-function ParcelsSearch({ items, fetchItems, loading, clearSearch, applicationState, history }) {
+const useStyles = makeStyles(theme => ({
+    grid: {
+        marginTop: theme.spacing(4),
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1)
+    }
+}));
+
+function ParcelsSearch({
+    items,
+    fetchItems,
+    loading,
+    suppliers,
+    carriers,
+    applicationState,
+    history
+}) {
     const [pageOptions, setPageOptions] = useState({
         orderBy: '',
         orderAscending: false,
         currentPage: 0,
         rowsPerPage: 10
     });
+
+    const classes = useStyles();
 
     const [rowsToDisplay, setRowsToDisplay] = useState([]);
     const [allowedToCreate, setAllowedToCreate] = useState(false);
@@ -28,32 +46,62 @@ function ParcelsSearch({ items, fetchItems, loading, clearSearch, applicationSta
     const [supplierIdSearch, setSupplierIdSearch] = useState('');
     const [carrierIdSearch, setCarrierIdSearch] = useState('');
     const [dateCreatedSearch, setDateCreatedSearch] = useState(null);
-    const [supplerInvNoSearch, setSupplerInvNoSearch] = useState('');
+    const [supplierInvNoSearch, setSupplierInvNoSearch] = useState('');
     const [consignmentNoSearch, setConsignmentNoSearch] = useState('');
-    const [commentsSearch, setcommentsSearch] = useState('');
+    const [commentsSearch, setCommentsSearch] = useState('');
 
     useSearch(fetchItems, searchTerm, null, 'searchTerm');
 
     const handleRowLinkClick = href => history.push(href);
 
-
     const handleParcelNumberSearchChange = (...args) => {
         setParcelNumberSearch(args[1]);
         setSearchTerm(
-            `${args[1]}&supplierIdSearchTerm=${supplierIdSearch}&carrierIdSearchTerm=${carrierIdSearch}
-            &dateCreatedSearchTerm=${dateCreatedSearch}&supplerInvNoSearchTerm=${supplerInvNoSearch}
-            &consignmentNoSearchTerm=${consignmentNoSearch}&commentsSearchTerm=${commentsSearch}`
+            `${args[1]}&supplierIdSearchTerm=${supplierIdSearch}&carrierIdSearchTerm=${carrierIdSearch}&dateCreatedSearchTerm=${dateCreatedSearch}&supplierInvNoSearchTerm=${supplierInvNoSearch}&consignmentNoSearchTerm=${consignmentNoSearch}&commentsSearchTerm=${commentsSearch}`
         );
     };
 
-    // const handleSupplierIdSearchChange = (...args) => {
-    //     setSupplierIdSearch(args[1]);
-    //     setSearchTerm(
-    //         `${parcelNumberSearch}&supplierIdSearchTerm=${args[1]}&carrierIdSearchTerm=${carrierIdSearch}
-    //         &dateCreatedSearchTerm=${dateCreatedSearch}&supplerInvNoSearchTerm=${supplerInvNoSearch}
-    //         &consignmentNoSearchTerm=${consignmentNoSearch}&commentsSearchTerm=${commentsSearch}`
-    //     );
-    // };
+    const handleSupplierSearchChange = (...args) => {
+        setSupplierIdSearch(args[1]);
+        setSearchTerm(
+            `${parcelNumberSearch}&supplierIdSearchTerm=${args[1]}&carrierIdSearchTerm=${carrierIdSearch}&dateCreatedSearchTerm=${dateCreatedSearch}&supplierInvNoSearchTerm=${supplierInvNoSearch}&consignmentNoSearchTerm=${consignmentNoSearch}&commentsSearchTerm=${commentsSearch}`
+        );
+    };
+
+    const handleCarrierSearchChange = (...args) => {
+        setCarrierIdSearch(args[1]);
+        setSearchTerm(
+            `${parcelNumberSearch}&supplierIdSearchTerm=${supplierIdSearch}&carrierIdSearchTerm=${args[1]}&dateCreatedSearchTerm=${dateCreatedSearch}&supplierInvNoSearchTerm=${supplierInvNoSearch}&consignmentNoSearchTerm=${consignmentNoSearch}&commentsSearchTerm=${commentsSearch}`
+        );
+    };
+
+    const handleDateSearchChange = (...args) => {
+        setDateCreatedSearch(args[1]);
+        setSearchTerm(
+            `${parcelNumberSearch}&supplierIdSearchTerm=${supplierIdSearch}&carrierIdSearchTerm=${carrierIdSearch}&dateCreatedSearchTerm=${args[1]}&supplierInvNoSearchTerm=${supplierInvNoSearch}&consignmentNoSearchTerm=${consignmentNoSearch}&commentsSearchTerm=${commentsSearch}`
+        );
+    };
+
+    const handleSupplierInvSearchChange = (...args) => {
+        setSupplierInvNoSearch(args[1]);
+        setSearchTerm(
+            `${parcelNumberSearch}&supplierIdSearchTerm=${supplierIdSearch}&carrierIdSearchTerm=${carrierIdSearch}&dateCreatedSearchTerm=${dateCreatedSearch}&supplierInvNoSearchTerm=${args[1]}&consignmentNoSearchTerm=${consignmentNoSearch}&commentsSearchTerm=${commentsSearch}`
+        );
+    };
+
+    const handleConsignmentNoSearchChange = (...args) => {
+        setConsignmentNoSearch(args[1]);
+        setSearchTerm(
+            `${parcelNumberSearch}&supplierIdSearchTerm=${supplierIdSearch}&carrierIdSearchTerm=${carrierIdSearch}&dateCreatedSearchTerm=${dateCreatedSearch}&supplierInvNoSearchTerm=${supplierInvNoSearch}&consignmentNoSearchTerm=${args[1]}&commentsSearchTerm=${commentsSearch}`
+        );
+    };
+
+    const handleCommentSearchChange = (...args) => {
+        setCommentsSearch(args[1]);
+        setSearchTerm(
+            `${parcelNumberSearch}&supplierIdSearchTerm=${supplierIdSearch}&carrierIdSearchTerm=${carrierIdSearch}&dateCreatedSearchTerm=${dateCreatedSearch}&supplierInvNoSearchTerm=${supplierInvNoSearch}&consignmentNoSearchTerm=${consignmentNoSearch}&commentsSearchTerm=${args[1]}`
+        );
+    };
 
     useEffect(() => {
         const compare = (field, orderAscending) => (a, b) => {
@@ -77,10 +125,11 @@ function ParcelsSearch({ items, fetchItems, loading, clearSearch, applicationSta
                   supplier: `${el.supplierId} - ${el.supplierName}`,
                   carrier: `${el.carrierId} - ${el.carrierName}`,
                   dateCreated: el.dateCreated,
-                  comments: el.comments,
                   supplerInvNo: el.supplerInvNo,
                   consignmentNo: el.consignmentNo,
-                  id: el.parcelNumber
+                  comments: el.comments,
+                  id: el.parcelNumber,
+                  href: el.links.find(l => l.rel === 'self')?.href
               }))
             : [];
 
@@ -97,7 +146,7 @@ function ParcelsSearch({ items, fetchItems, loading, clearSearch, applicationSta
             );
         }
 
-        // setAllowedToCreate(utilities.getHref(applicationState, 'edit') !== null);
+        setAllowedToCreate(utilities.getHref(applicationState, 'edit') !== null);
     }, [
         pageOptions.currentPage,
         pageOptions.rowsPerPage,
@@ -112,55 +161,125 @@ function ParcelsSearch({ items, fetchItems, loading, clearSearch, applicationSta
         supplier: 'supplier',
         carrier: 'carrier',
         dateCreated: 'date created',
-        comments: 'comments',
         supplerInvNo: 'suppler invoice number',
-        consignmentNo: 'consignment number'
+        consignmentNo: 'consignment number',
+        comments: 'comments'
     };
 
-    setAllowedToCreate(utilities.getHref(applicationState, 'edit') !== null);
+    // setAllowedToCreate(utilities.getHref(applicationState, 'edit') !== null);
 
     return (
-        <Page>
-            <Grid container spacing={3}>
-                <Grid item xs={7} />
-                <Grid item xs={1}>
-                    <LinkButton text="Create" to="/inventory/parcels/create" />
-                </Grid>
-                <Grid item xs={1} />
-                <Grid item xs={12}>
-                    <SearchInputField
-                        label="Parcels"
-                        fullWidth
-                        placeholder="search.."
-                        onChange={handleParcelNumberSearchChange}
-                        propertyName="parcelSearchTerm"
-                        type="text"
-                        value={parcelNumberSearch}
-                        debounce={5000}
-                    />
-                </Grid>
-
-                <Grid item xs={12}>
-                    {loading ? (
-                        <Loading />
-                    ) : (
-                        <>
-                            {rowsToDisplay.length > 0 && (
-                                <PaginatedTable
-                                    columns={columns}
-                                    handleRowLinkClick={handleRowLinkClick}
-                                    rows={rowsToDisplay}
-                                    pageOptions={pageOptions}
-                                    setPageOptions={setPageOptions}
-                                    totalItemCount={items ? items.length : 0}
-                                    expandable={false}
-                                />
-                            )}
-                        </>
-                    )}
-                </Grid>
+        <Grid className={classes.grid} spacing={3} container justify="center">
+            <Grid item xs={11} />
+            <Grid item xs={1}>
+                <LinkButton text="Create" to="/inventory/parcels/create" />
             </Grid>
-        </Page>
+            <Grid item xs={1}>
+                <SearchInputField
+                    label="Parcels"
+                    fullWidth
+                    placeholder="search.."
+                    onChange={handleParcelNumberSearchChange}
+                    propertyName="parcelSearchTerm"
+                    type="text"
+                    value={parcelNumberSearch}
+                    debounce={5000}
+                />
+            </Grid>
+
+            <Grid item xs={2}>
+                <SearchInputField
+                    label="Supplier"
+                    fullWidth
+                    onChange={handleSupplierSearchChange}
+                    propertyName="supplierSearchTerm"
+                    type="text"
+                    value={supplierIdSearch}
+                    debounce={5000}
+                />
+            </Grid>
+
+            <Grid item xs={2}>
+                <SearchInputField
+                    label="Carrier"
+                    fullWidth
+                    onChange={handleCarrierSearchChange}
+                    propertyName="carrierSearchTerm"
+                    type="text"
+                    value={carrierIdSearch}
+                    debounce={5000}
+                />
+            </Grid>
+
+            <Grid item xs={2}>
+                <SearchInputField
+                    label="Date Created"
+                    fullWidth
+                    placeholder="search.."
+                    onChange={handleDateSearchChange}
+                    propertyName="dateCreatedSearchTerm"
+                    type="date"
+                    value={dateCreatedSearch}
+                    debounce={5000}
+                />
+            </Grid>
+
+            <Grid item xs={1}>
+                <SearchInputField
+                    label="Supplier Inv No"
+                    fullWidth
+                    onChange={handleSupplierInvSearchChange}
+                    propertyName="supplierInvNoSearchTerm"
+                    type="text"
+                    value={supplierInvNoSearch}
+                    debounce={5000}
+                />
+            </Grid>
+
+            <Grid item xs={2}>
+                <SearchInputField
+                    label="Consignment Number"
+                    fullWidth
+                    onChange={handleConsignmentNoSearchChange}
+                    propertyName="consingmentNoSearchTerm"
+                    type="text"
+                    value={consignmentNoSearch}
+                    debounce={5000}
+                />
+            </Grid>
+
+            <Grid item xs={2}>
+                <SearchInputField
+                    label="Comments"
+                    fullWidth
+                    onChange={handleCommentSearchChange}
+                    propertyName="commentSearchTerm"
+                    type="text"
+                    value={commentsSearch}
+                    debounce={5000}
+                />
+            </Grid>
+
+            <Grid item xs={12}>
+                {loading ? (
+                    <Loading />
+                ) : (
+                    <>
+                        {rowsToDisplay.length > 0 && (
+                            <PaginatedTable
+                                columns={columns}
+                                handleRowLinkClick={handleRowLinkClick}
+                                rows={rowsToDisplay}
+                                pageOptions={pageOptions}
+                                setPageOptions={setPageOptions}
+                                totalItemCount={items ? items.length : 0}
+                                expandable={false}
+                            />
+                        )}
+                    </>
+                )}
+            </Grid>
+        </Grid>
     );
 }
 
@@ -172,7 +291,6 @@ ParcelsSearch.propTypes = {
     ).isRequired,
     loading: PropTypes.bool,
     fetchItems: PropTypes.func.isRequired,
-    clearSearch: PropTypes.func.isRequired,
     history: PropTypes.shape({}).isRequired
 };
 

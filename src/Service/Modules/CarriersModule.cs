@@ -13,7 +13,7 @@
         public CarriersModule(ICarriersService carriersService)
         {
             this.carriersService = carriersService;
-            this.Get("/logistics/carriers", _ => this.GetCarriers());
+            this.Get("/inventory/carriers", _ => this.GetCarriers());
         }
 
         private object GetCarriers()

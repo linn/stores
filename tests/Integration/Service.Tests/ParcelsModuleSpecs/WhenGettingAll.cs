@@ -23,38 +23,30 @@
                                       {
                                           ParcelNumber = 1,
                                         SupplierId = 2,
-                                        SupplierName = "bathroom cabinet company",
-                                        SupplierCountry = "UK",
                                         DateCreated = new DateTime(),
                                         CarrierId = 4,
-                                        CarrierName = "DHL",
                                         SupplierInvoiceNo = "Bond, James Bond",
-                                        ConsignmentNo = 007,
+                                        ConsignmentNo = "007",
                                         CartonCount = 0,
                                         PalletCount = 0,
                                         Weight = (decimal)00.70,
                                         DateReceived = new DateTime(),
                                         CheckedById = 123456,
-                                        CheckedByName = "DJ badboy",
                                         Comments = "RSN 212, RSN 118"
                                       },
                                   new Parcel
                                       {
                                           ParcelNumber = 22,
                                           SupplierId = 3,
-                                          SupplierName = "electric things company",
-                                          SupplierCountry = "UK",
                                           DateCreated = new DateTime(),
                                           CarrierId = 4,
-                                          CarrierName = "DHL",
                                           SupplierInvoiceNo = "swift, t swift",
-                                          ConsignmentNo = 222,
+                                          ConsignmentNo = "222",
                                           CartonCount = 15,
                                           PalletCount = 1,
                                           Weight = (decimal)02.20,
                                           DateReceived = new DateTime(),
                                           CheckedById = 123456,
-                                          CheckedByName = "partridge alan",
                                           Comments = "sent"
                                       }
                                     };

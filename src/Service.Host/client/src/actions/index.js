@@ -26,6 +26,8 @@ export const partLiveTestActionTypes = makeActionTypes(itemTypes.partLiveTest.ac
 
 export const suppliersActionTypes = makeActionTypes(itemTypes.suppliers.actionType);
 
+export const carriersActionTypes = makeActionTypes(itemTypes.carriers.actionType);
+
 export const sernosSequencesActionTypes = makeActionTypes(itemTypes.sernosSequences.actionType);
 
 export const unitsOfMeasureActionTypes = makeActionTypes(itemTypes.unitsOfMeasure.actionType);

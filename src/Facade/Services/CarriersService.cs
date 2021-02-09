@@ -1,8 +1,7 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq.Expressions;
+
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
@@ -18,19 +17,19 @@
 
         public IResult<IEnumerable<Carrier>> SearchCarriers(string searchTerm)
         {
-            try
+            if (searchTerm == null)
             {
-                return new SuccessResult<IEnumerable<Carrier>>(this.repository.FilterBy(this.SearchExpression(searchTerm)));
+                return new SuccessResult<IEnumerable<Carrier>>(this.repository.FindAll());
             }
-            catch (NotImplementedException)
-            {
-                return new BadRequestResult<IEnumerable<Carrier>>("Search is not implemented");
-            }
-        }
 
-        private Expression<Func<Carrier, bool>> SearchExpression(string searchTerm)
-        {
-            return w => !w.DateInvalid.HasValue && (w.Name.ToUpper().Contains(searchTerm.ToUpper()) || w.OrganisationId.ToString().Contains(searchTerm));
+            searchTerm = searchTerm.ToUpper();
+
+            return new SuccessResult<IEnumerable<Carrier>>(
+                this.repository.FilterBy(
+                    c => (c.Name.ToUpper().Contains(searchTerm) || c.Name.ToUpper().Equals(searchTerm)
+                                                                || c.CarrierCode.ToString().Contains(searchTerm)
+                                                                || c.CarrierCode.ToString().Equals(searchTerm))));
+
         }
     }
 }
