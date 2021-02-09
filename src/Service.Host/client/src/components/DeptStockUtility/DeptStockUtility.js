@@ -46,7 +46,7 @@ function DeptStockUtility({
                 setStockLocators(items);
                 setNewRow({
                     id: -1,
-                    partNumber: options.partNumber,
+                    partNumber: options?.partNumber,
                     stockRotationDate: new Date()
                 });
             }
@@ -61,8 +61,6 @@ function DeptStockUtility({
                     : x
             )
         );
-
-        console.log(newRow);
         setNewRow(x => ({ ...x, auditDepartmentCode: department.departmentCode }));
     };
 
@@ -147,6 +145,7 @@ function DeptStockUtility({
         {
             title: 'Remarks',
             id: 'remarks',
+            textFieldRows: 3,
             type: 'text',
             editable: true
         },
@@ -174,7 +173,7 @@ function DeptStockUtility({
             />
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <Title text="Departmental Pallets Utility" />
+                    <Title text={`Departmental Pallets Utility - ${options.partNumber}`} />
                 </Grid>
                 {itemError && (
                     <Grid item xs={12}>
@@ -191,15 +190,30 @@ function DeptStockUtility({
                     <Grid item xs={12}>
                         {stockLocators && (
                             <SingleEditTable
+                                newRowPosition="top"
                                 columns={editableColumns}
                                 rows={stockLocators}
                                 saveRow={item => {
-                                    updateStockLocator(item.id, item);
+                                    const body = item;
+                                    if (!body.partNumber) {
+                                        body.partNumber = stockLocators.first(
+                                            l => l.partNumber
+                                        ).partNumber;
+                                    }
+                                    updateStockLocator(body.id, body);
                                 }}
                                 updateRow={(item, _setItem, propertyName, newValue) => {
                                     handleValueChange(item, propertyName, newValue);
                                 }}
-                                createRow={item => createStockLocator(item)}
+                                createRow={item => {
+                                    const body = item;
+                                    if (!body.partNumber) {
+                                        body.partNumber = stockLocators.first(
+                                            l => l.partNumber
+                                        ).partNumber;
+                                    }
+                                    createStockLocator(body);
+                                }}
                                 newRow={newRow}
                                 editable
                                 allowNewRowCreations
