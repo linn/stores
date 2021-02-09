@@ -28,7 +28,7 @@
 
         public IQueryable<StoresBudget> FindAll()
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.StoresBudgets;
         }
     }
 }

@@ -1,18 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EditableTable } from '@linn-it/linn-form-components-library';
+import { GroupEditTable } from '@linn-it/linn-form-components-library';
 import Grid from '@material-ui/core/Grid';
 
 function UsagesTab({
-    usages,
+    rows,
     searchRootProducts,
     clearRootProductsSearch,
     rootProductsSearchResults,
     rootProductsSearchLoading,
     handleRootProductChange,
-    deleteRow,
     resetRow,
-    addNewRow,
+    setRowToBeDeleted,
+    setRowToBeSaved,
+    setEditing,
+    removeRow,
+    addRow,
     updateRow
 }) {
     const selectRootProductSearchResult = (_propertyName, rootProduct, updatedItem) => {
@@ -28,11 +31,12 @@ function UsagesTab({
             search: searchRootProducts,
             clearSearch: clearRootProductsSearch,
             searchResults: rootProductsSearchResults.filter(
-                p => !usages.some(u => u.rootProductName === p.name)
+                p => !rows.some(u => u.rootProductName === p.name)
             ),
             searchLoading: rootProductsSearchLoading,
             selectSearchResult: selectRootProductSearchResult,
-            searchTitle: 'Search Parts'
+            searchTitle: 'Search Parts',
+            minimumSearchTermLength: 3
         },
         {
             title: 'Description',
@@ -50,16 +54,22 @@ function UsagesTab({
 
     return (
         <Grid item xs={12}>
-            <EditableTable
-                groupEdit
+            <GroupEditTable
                 columns={columns}
-                rows={usages.map(m => ({ ...m, id: m.id }))}
-                removeRow={deleteRow}
-                resetRow={resetRow}
-                addRow={addNewRow}
-                tableValid={() => true}
+                rows={rows}
                 updateRow={updateRow}
-                closeRowOnClickAway
+                addRow={addRow}
+                removeRow={removeRow}
+                resetRow={resetRow}
+                handleEditClick={setEditing}
+                tableValid={() => true}
+                editable
+                allowNewRowCreation
+                deleteRowPreEdit={false}
+                setRowToBeSaved={setRowToBeSaved}
+                setRowToBeDeleted={setRowToBeDeleted}
+                removeRowOnDelete
+                closeRowOnClickAway={false}
             />
         </Grid>
     );
@@ -67,19 +77,22 @@ function UsagesTab({
 
 UsagesTab.propTypes = {
     handleRootProductChange: PropTypes.func.isRequired,
-    deleteRow: PropTypes.func.isRequired,
-    usages: PropTypes.arrayOf(PropTypes.shape({})),
+    rows: PropTypes.arrayOf(PropTypes.shape({})),
     searchRootProducts: PropTypes.func.isRequired,
     clearRootProductsSearch: PropTypes.func.isRequired,
     rootProductsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     rootProductsSearchLoading: PropTypes.bool,
     resetRow: PropTypes.func.isRequired,
-    addNewRow: PropTypes.func.isRequired,
-    updateRow: PropTypes.func.isRequired
+    updateRow: PropTypes.func.isRequired,
+    setRowToBeDeleted: PropTypes.func.isRequired,
+    setRowToBeSaved: PropTypes.func.isRequired,
+    setEditing: PropTypes.func.isRequired,
+    removeRow: PropTypes.func.isRequired,
+    addRow: PropTypes.func.isRequired
 };
 
 UsagesTab.defaultProps = {
-    usages: [],
+    rows: [],
     rootProductsSearchResults: [],
     rootProductsSearchLoading: false
 };

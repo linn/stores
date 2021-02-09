@@ -29,7 +29,8 @@ function ProposalTab({
     partsSearchResults,
     partsSearchLoading,
     clearPartsSearch,
-    assemblyType
+    assemblyType,
+    description
 }) {
     const partTypes = [
         'CAP',
@@ -105,7 +106,15 @@ function ProposalTab({
             ) : (
                 <Grid item xs={3} />
             )}
-            <Grid item xs={6} />
+            <Grid item xs={6}>
+                <InputField
+                    onChange={handleFieldChange}
+                    propertyName="description"
+                    fullWidth
+                    value={description}
+                    label="description"
+                />
+            </Grid>
 
             <Grid item xs={3}>
                 <Dropdown
@@ -263,6 +272,7 @@ function ProposalTab({
                     label="Assembly Type"
                     propertyName="assemblyType"
                     items={['SM', 'TH']}
+                    required
                     fullWidth
                     allowNoValue
                     value={assemblyType}
@@ -312,7 +322,8 @@ ProposalTab.propTypes = {
     searchParts: PropTypes.func.isRequired,
     partsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     partsSearchLoading: PropTypes.bool,
-    clearPartsSearch: PropTypes.func.isRequired
+    clearPartsSearch: PropTypes.func.isRequired,
+    description: PropTypes.string
 };
 
 ProposalTab.defaultProps = {
@@ -337,7 +348,8 @@ ProposalTab.defaultProps = {
     linnPartDescription: null,
     assemblyType: null,
     partsSearchResults: [],
-    partsSearchLoading: false
+    partsSearchLoading: false,
+    description: null
 };
 
 export default ProposalTab;

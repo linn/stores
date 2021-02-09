@@ -75,6 +75,7 @@
             bool excludeHold,
             bool excludeOverCredit,
             bool excludeNorthAmerica,
+            bool excludeEuropeanUnion,
             out string notes,
             out string sosNotes)
         {
@@ -151,6 +152,13 @@
                     new OracleParameter("p_exclude_north_america", OracleDbType.Varchar2)
                         {
                             Direction = ParameterDirection.Input, Value = excludeNorthAmerica ? "Y" : "N", Size = 1
+                        });
+                cmd.Parameters.Add(
+                    new OracleParameter("p_exclude_eu", OracleDbType.Varchar2)
+                        {
+                            Direction = ParameterDirection.Input,
+                            Value = excludeEuropeanUnion ? "Y" : "N",
+                            Size = 1
                         });
                 var notesParam = cmd.Parameters.Add(
                     new OracleParameter("p_notes", OracleDbType.Varchar2)

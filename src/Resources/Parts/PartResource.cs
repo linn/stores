@@ -177,5 +177,7 @@
         public int SourceId { get; set; }
 
         public int SourceCreatedBy { get; set; }
+
+        public IEnumerable<MechPartManufacturerAltResource> Manufacturers { get; set; }
     }
 }

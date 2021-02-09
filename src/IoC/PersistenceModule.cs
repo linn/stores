@@ -10,6 +10,7 @@
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Sos;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Persistence.LinnApps;
     using Linn.Stores.Persistence.LinnApps.Repositories;
@@ -54,7 +55,7 @@
             builder.RegisterType<ParcelRepository>().As<IRepository<Parcel, int>>();
             builder.RegisterType<CarrierRepository>().As<IRepository<Carrier, string>>();
             builder.RegisterType<PartDataSheetValuesRepository>().As<IQueryRepository<PartDataSheetValues>>();
-            builder.RegisterType<StockLocatorRepository>().As<IQueryRepository<StockLocator>>();
+            builder.RegisterType<StockLocatorRepository>().As<IRepository<StockLocator, int>>();
             builder.RegisterType<StoragePlaceRepository>().As<IQueryRepository<StoragePlace>>();
             builder.RegisterType<StoresBugetRepository>().As<IQueryRepository<StoresBudget>>();
             builder.RegisterType<AuditLocationRepository>().As<IQueryRepository<AuditLocation>>();
@@ -77,6 +78,10 @@
             builder.RegisterType<TqmsCategoriesRepository>().As<IRepository<TqmsCategory, string>>();
             builder.RegisterType<PtlMasterRepository>().As<ISingleRecordRepository<PtlMaster>>();
             builder.RegisterType<TopUpListJobRefRepository>().As<IRepository<TopUpListJobRef, string>>();
+            builder.RegisterType<StoresPalletRepository>().As<IStoresPalletRepository>();
+            builder.RegisterType<DespatchPickingSummaryRepository>().As<IQueryRepository<DespatchPickingSummary>>();
+            builder.RegisterType<StorageLocationRepository>().As<IRepository<StorageLocation, int>>();
+            builder.RegisterType<InspectedStatesRepository>().As<IRepository<InspectedState, string>>();
         }
     }
 }

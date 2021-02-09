@@ -161,3 +161,39 @@ export const workstationTopUpStatus = new ItemType(
     'WORKSTATION_TOP_UP_STATUS',
     '/logistics/workstations/top-up'
 );
+
+export const deptStockParts = new ItemType(
+    'deptStockParts',
+    'DEPT_STOCK_PARTS',
+    '/parts/dept-stock-parts'
+);
+
+export const stockLocator = new ItemType(
+    'stockLocator',
+    'STOCK_LOCATOR',
+    '/inventory/stock-locators'
+);
+
+export const stockLocators = new ItemType(
+    'stockLocators',
+    'STOCK_LOCATORS',
+    '/inventory/stock-locators'
+);
+
+export const stockLocatorBatches = new ItemType(
+    'stockLocatorBatches',
+    'STOCK_LOCATOR_BATCHES',
+    '/inventory/stock-locators/batches'
+);
+
+export const storageLocations = new ItemType(
+    'storageLocations',
+    'STORAGE_LOCATIONS',
+    '/inventory/storage-locations'
+);
+
+export const inspectedStates = new ItemType(
+    'inspectedStates',
+    'INSPECTED_STATES',
+    '/inventory/stock-locators/states'
+);

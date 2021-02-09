@@ -10,6 +10,7 @@
 
     using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
 
     public class PartService : IPartService
     {
@@ -27,6 +28,8 @@
 
         private readonly IRepository<MechPartSource, int> sourceRepository;
 
+        private readonly IRepository<StockLocator, int> stockLocatorRepository;
+
         public PartService(
             IAuthorisationService authService,
             IRepository<QcControl, int> qcControlRepository,
@@ -34,6 +37,7 @@
             IRepository<Part, int> partRepository,
             IRepository<PartTemplate, string> templateRepository,
             IRepository<MechPartSource, int> sourceRepository,
+            IRepository<StockLocator, int> stockLocatorRepository,
             IPartPack partPack)
         {
             this.authService = authService;
@@ -43,9 +47,10 @@
             this.partPack = partPack;
             this.sourceRepository = sourceRepository;
             this.templateRepository = templateRepository;
+            this.stockLocatorRepository = stockLocatorRepository;
         }
 
-        public void UpdatePart(Part from, Part to, List<string> privileges)
+        public void UpdatePart(Part from, Part to, List<string> privileges, IEnumerable<MechPartManufacturerAlt> manufacturers)
         {
             if (from.DatePhasedOut == null && to.DatePhasedOut != null)
             {
@@ -76,6 +81,20 @@
 
                 from.DateLive = to.DateLive;
                 from.MadeLiveBy = to.MadeLiveBy;
+            }
+
+            if (manufacturers != null)
+            {
+                var source = this.sourceRepository.FindById(from.MechPartSource.Id);
+                source.MechPartManufacturerAlts = manufacturers.Select(
+                    m =>
+                        {
+                            var manufacturer =
+                                from.MechPartSource.MechPartManufacturerAlts.First(
+                                    i => i.ManufacturerCode == m.ManufacturerCode);
+                            manufacturer.PartNumber = m.PartNumber;
+                            return manufacturer;
+                        }).ToList();
             }
 
             Validate(to);
@@ -213,6 +232,20 @@
             }
 
             return this.partRepository.FindBy(p => p.PartNumber == source.PartNumber);
+        }
+
+        public IEnumerable<Part> GetDeptStockPalletParts()
+        {
+            return from p in this.partRepository.FindAll()
+                   where (from s in this.stockLocatorRepository.FindAll()
+                           where (s.PartNumber == p.PartNumber && s.StockPoolCode.Equals("LINN DEPT"))
+                           select s.PartNumber)
+                        .Contains(p.PartNumber)
+                        ||
+                        (p.StockControlled.Equals("N") 
+                          && (p.BaseUnitPrice == 0 || p.BaseUnitPrice == null)
+                          && (p.LinnProduced.Equals("N") || p.LinnProduced == null))
+                   select p;
         }
 
         private static void Validate(Part to)

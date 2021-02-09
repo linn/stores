@@ -5,15 +5,23 @@
     using System.Linq.Expressions;
 
     using Linn.Common.Persistence;
-    using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
 
-    public class StockLocatorRepository : IQueryRepository<StockLocator>
+    using Microsoft.EntityFrameworkCore;
+
+    public class StockLocatorRepository : IRepository<StockLocator, int>
     {
         private readonly ServiceDbContext serviceDbContext;
 
         public StockLocatorRepository(ServiceDbContext serviceDbContext)
         {
             this.serviceDbContext = serviceDbContext;
+        }
+
+        public void Remove(StockLocator entity)
+        {
+            this.serviceDbContext.StockLocators.Remove(entity);
+            this.serviceDbContext.SaveChanges();
         }
 
         public StockLocator FindBy(Expression<Func<StockLocator, bool>> expression)
@@ -26,9 +34,20 @@
             return this.serviceDbContext.StockLocators.Where(expression);
         }
 
+        public StockLocator FindById(int key)
+        {
+            return this.serviceDbContext.StockLocators
+                .Where(s => s.Id == key).ToList().FirstOrDefault();
+        }
+
         public IQueryable<StockLocator> FindAll()
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.StockLocators.AsNoTracking().Include(s => s.StorageLocation); // is anyone updating these from a findAll()?
+        }
+
+        public void Add(StockLocator entity)
+        {
+            this.serviceDbContext.StockLocators.Add(entity);
         }
     }
 }

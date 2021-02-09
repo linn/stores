@@ -23,5 +23,7 @@
         public bool ExcludeOverCreditLimit { get; set; }
 
         public bool ExcludeNorthAmerica { get; set; }
+
+        public bool ExcludeEuropeanUnion { get; set; }
     }
 }

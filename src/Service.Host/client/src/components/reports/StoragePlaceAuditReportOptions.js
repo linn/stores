@@ -72,7 +72,7 @@ export default function StoragePlaceAuditReportOptions({
 
         if (searchType === 'Storage Place') {
             options.storagePlaces.forEach((s, i) => {
-                search += i === 0 ? `?parts=${s}` : `&parts=${s}`;
+                search += i === 0 ? `?locationList=${s}` : `&locationList=${s}`;
             });
         } else {
             search = `?locationRange=${options.auditLocation}`;

@@ -12,6 +12,7 @@
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Facade;
     using Linn.Stores.Facade.ResourceBuilders;
@@ -118,6 +119,15 @@
                 .As<IResourceBuilder<IEnumerable<TqmsCategory>>>();
             builder.RegisterType<WorkstationTopUpStatusResourceBuilder>()
                 .As<IResourceBuilder<ResponseModel<WorkstationTopUpStatus>>>();
+            builder.RegisterType<StockLocatorResourceBuilder>().As<IResourceBuilder<StockLocator>>();
+            builder.RegisterType<StockLocatorsResourceBuilder>().As<IResourceBuilder<IEnumerable<StockLocator>>>();
+            builder.RegisterType<StockLocatorWithStoragePlaceInfoResourceBuilder>().As<IResourceBuilder<StockLocatorWithStoragePlaceInfo>>();
+            builder.RegisterType<StockLocatorsWithStoragePlaceInfoResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<StockLocatorWithStoragePlaceInfo>>>();
+            builder.RegisterType<StorageLocationResourceBuilder>().As<IResourceBuilder<StorageLocation>>();
+            builder.RegisterType<StorageLocationsResourceBuilder>().As<IResourceBuilder<IEnumerable<StorageLocation>>>();
+            builder.RegisterType<InspectedStateResourceBuilder>().As<IResourceBuilder<InspectedState>>();
+            builder.RegisterType<InspectedStatesResourceBuilder>().As<IResourceBuilder<IEnumerable<InspectedState>>>();
         }
     }
 }

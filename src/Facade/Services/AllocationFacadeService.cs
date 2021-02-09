@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using Linn.Common.Facade;
+    using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Domain.LinnApps.Exceptions;
@@ -14,9 +15,12 @@
     {
         private readonly IAllocationService allocationService;
 
-        public AllocationFacadeService(IAllocationService allocationService)
+        private readonly IAllocationReportsService allocationReportsService;
+
+        public AllocationFacadeService(IAllocationService allocationService, IAllocationReportsService allocationReportsService)
         {
             this.allocationService = allocationService;
+            this.allocationReportsService = allocationReportsService;
         }
 
         public IResult<AllocationResult> StartAllocation(AllocationOptionsResource allocationOptionsResource)
@@ -36,7 +40,8 @@
                 allocationOptionsResource.ExcludeUnsuppliableLines,
                 allocationOptionsResource.ExcludeOnHold,
                 allocationOptionsResource.ExcludeOverCreditLimit,
-                allocationOptionsResource.ExcludeNorthAmerica));
+                allocationOptionsResource.ExcludeNorthAmerica,
+                allocationOptionsResource.ExcludeEuropeanUnion));
         }
 
         public IResult<AllocationResult> FinishAllocation(int jobId)
@@ -82,6 +87,11 @@
             {
                 return new BadRequestResult<IEnumerable<SosAllocDetail>>(ex.Message);
             }
+        }
+
+        public IResult<ResultsModel> DespatchPickingSummaryReport()
+        {
+            return new SuccessResult<ResultsModel>(this.allocationReportsService.DespatchPickingSummary());
         }
     }
 }

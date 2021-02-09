@@ -303,6 +303,16 @@ function Part({
         }
     };
 
+    const handleManufacturersPartNumberChange = (manufacturerCode, newValue) => {
+        setEditStatus('edit');
+        setPart(p => ({
+            ...p,
+            manufacturers: p.manufacturers.map(m =>
+                m.manufacturerCode === manufacturerCode ? { ...m, partNumber: newValue } : m
+            )
+        }));
+    };
+
     return (
         <Page>
             <Grid container spacing={3}>
@@ -415,7 +425,7 @@ function Part({
                                     stockControlled={part.stockControlled}
                                     safetyCriticalPart={part.safetyCriticalPart}
                                     safetyCriticalHelperText={
-                                        creating() && getSafetyCriticalHelperText()
+                                        creating() ? getSafetyCriticalHelperText() : null
                                     }
                                     performanceCriticalPart={part.performanceCriticalPart}
                                     emcCriticalPart={part.emcCriticalPart}
@@ -470,6 +480,11 @@ function Part({
                                     imdsIdNumber={part.imdsIdNumber}
                                     imdsWeight={part.imdsWeight}
                                     mechanicalOrElectronic={part.mechanicalOrElectronic}
+                                    manufacturers={part.manufacturers}
+                                    handleManufacturersPartNumberChange={
+                                        handleManufacturersPartNumberChange
+                                    }
+                                    links={item?.links}
                                 />
                             )}
                             {tab === 3 && (

@@ -4,6 +4,7 @@
     using System.Security.Claims;
 
     using Linn.Common.Facade;
+    using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Facade.ResourceBuilders;
@@ -50,6 +51,7 @@
                     with.Dependency<IResourceBuilder<SosAllocHead>>(new SosAllocHeadResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<SosAllocHead>>>(new SosAllocHeadsResourceBuilder());
                     with.Dependency<IResourceBuilder<SosAllocDetail>>(new SosAllocDetailResourceBuilder());
+                    with.Dependency<IResourceBuilder<ResultsModel>>(new ResultsModelResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<SosAllocDetail>>>(new SosAllocDetailsResourceBuilder());
                     with.Module<AllocationModule>();
                     with.ResponseProcessor<AllocationStartResponseProcessor>();
@@ -57,6 +59,7 @@
                     with.ResponseProcessor<SosAllocHeadsResponseProcessor>();
                     with.ResponseProcessor<SosAllocDetailResponseProcessor>();
                     with.ResponseProcessor<SosAllocDetailsResponseProcessor>();
+                    with.ResponseProcessor<ResultsModelJsonResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {

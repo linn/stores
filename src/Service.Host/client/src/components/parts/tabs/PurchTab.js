@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { InputField, Dropdown, Typeahead, LinkButton } from '@linn-it/linn-form-components-library';
@@ -30,7 +30,10 @@ function PurchTab({
     imdsIdNumber,
     imdsWeight,
     mechanicalOrElectronic,
-    partCategories
+    partCategories,
+    manufacturers,
+    handleManufacturersPartNumberChange,
+    links
 }) {
     const convertToYOrNString = booleanValue => {
         if (booleanValue === '' || booleanValue === null) {
@@ -38,6 +41,8 @@ function PurchTab({
         }
         return booleanValue ? 'Yes' : 'No';
     };
+    const [manufacturerSelected, setManufacturerSelected] = useState(manufacturers?.[0]);
+
     return (
         <Grid container spacing={3}>
             <Grid item xs={4}>
@@ -87,6 +92,53 @@ function PurchTab({
                     disabled
                 />
             </Grid>
+            {manufacturers && manufacturers?.length > 0 && (
+                <>
+                    <Grid item xs={4}>
+                        <Dropdown
+                            label="Manufacturers"
+                            propertyName="manufacurerSelected"
+                            items={manufacturers?.map(u => u.manufacturerCode)}
+                            fullWidth
+                            allowNoValue={false}
+                            value={manufacturerSelected.manufacturerCode}
+                            onChange={(_propertyName, newValue) =>
+                                setManufacturerSelected(
+                                    manufacturers?.find(m => m.manufacturerCode === newValue)
+                                )
+                            }
+                        />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <InputField
+                            fullWidth
+                            value={
+                                manufacturers?.find(
+                                    m =>
+                                        m.manufacturerCode === manufacturerSelected.manufacturerCode
+                                )?.partNumber
+                            }
+                            label="Their Part Number"
+                            onChange={(_propertyName, newValue) =>
+                                handleManufacturersPartNumberChange(
+                                    manufacturerSelected.manufacturerCode,
+                                    newValue
+                                )
+                            }
+                            propertyName="manufacturersPartNumber"
+                        />
+                    </Grid>
+                    <Grid item xs={3}>
+                        <LinkButton
+                            text="Edit Manufacturers"
+                            to={`${
+                                links.find(l => l.rel === 'mechanical-sourcing-sheet').href
+                            }?tab=manufacturers`}
+                        />
+                    </Grid>
+                    <Grid item xs={1} />
+                </>
+            )}
             <Grid item xs={2}>
                 <InputField
                     fullWidth
@@ -283,7 +335,7 @@ PurchTab.propTypes = {
     handleFieldChange: PropTypes.func.isRequired,
     unitsOfMeasure: PropTypes.arrayOf(unitOfMeasureShape),
     ourUnitOfMeasure: PropTypes.string,
-    preferredSupplier: supplierShape,
+    preferredSupplier: PropTypes.string,
     handlePrefferedSupplierChange: PropTypes.func.isRequired,
     preferredSupplierName: PropTypes.string,
     suppliersSearchResults: PropTypes.arrayOf(supplierShape),
@@ -306,10 +358,14 @@ PurchTab.propTypes = {
     imdsIdNumber: PropTypes.number,
     imdsWeight: PropTypes.number,
     mechanicalOrElectronic: PropTypes.string,
-    partCategories: PropTypes.arrayOf(partCategoryShape)
+    partCategories: PropTypes.arrayOf(partCategoryShape),
+    manufacturers: PropTypes.arrayOf(PropTypes.shape({})),
+    handleManufacturersPartNumberChange: PropTypes.func.isRequired,
+    links: PropTypes.arrayOf(PropTypes.shape({ href: PropTypes.string, rel: PropTypes.string }))
 };
 
 PurchTab.defaultProps = {
+    links: [],
     unitsOfMeasure: [],
     ourUnitOfMeasure: null,
     preferredSupplier: null,
@@ -331,7 +387,8 @@ PurchTab.defaultProps = {
     imdsIdNumber: null,
     imdsWeight: null,
     mechanicalOrElectronic: null,
-    partCategories: []
+    partCategories: [],
+    manufacturers: null
 };
 
 export default PurchTab;

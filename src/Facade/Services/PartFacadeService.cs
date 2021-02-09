@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
     using Linn.Common.Facade;
@@ -10,7 +11,7 @@
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources.Parts;
 
-    public class PartFacadeService : FacadeService<Part, int, PartResource, PartResource>
+    public class PartFacadeService : FacadeService<Part, int, PartResource, PartResource>, IPartsFacadeService
     {
         private readonly IRepository<ParetoClass, string> paretoClassRepository;
 
@@ -61,6 +62,11 @@
             this.employeeRepository = employeeRepository;
             this.partService = partService;
             this.databaseService = databaseService;
+        }
+
+        public IResult<IEnumerable<Part>> GetDeptStockPalletParts()
+        {
+            return new SuccessResult<IEnumerable<Part>>(this.partService.GetDeptStockPalletParts());
         }
 
         protected override Part CreateFromResource(PartResource resource)
@@ -270,13 +276,18 @@
                                       DateLive = string.IsNullOrEmpty(resource.DateLive)
                                                      ? (DateTime?)null
                                                      : DateTime.Parse(resource.DateLive),
-                                     MadeLiveBy = 
+                                      MadeLiveBy = 
                                           resource.MadeLiveBy != null
                                               ? this.employeeRepository.FindById((int)resource.MadeLiveBy)
                                               : null
                                   };
-
-            this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList());
+            var manufacturers = resource
+                .Manufacturers
+                ?.Select(m => new MechPartManufacturerAlt
+                                  {
+                                      ManufacturerCode = m.ManufacturerCode, PartNumber = m.PartNumber
+                                  });
+            this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList(), manufacturers);
         }
 
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)

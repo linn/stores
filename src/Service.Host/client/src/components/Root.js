@@ -24,6 +24,10 @@ import StoragePlaceAuditReport from '../containers/reports/StoragePlaceAuditRepo
 import NotFoundPage from './NotFoundPage';
 import MechPartSource from '../containers/parts/mechPartSource/MechPartSource';
 import WorkstationTopUpStatus from '../containers/workstations/WorkstationTopUpStatus';
+import DeptStockUtility from '../containers/DeptStockUtility/DeptStockUtility';
+import DeptStockParts from '../containers/DeptStockUtility/DeptStockParts';
+import DespatchPickingSummaryReport from '../containers/reports/DespatchPickingSummaryReport';
+import StockViewerOptions from '../containers/stockLocatorUtility/StockViewerOptions';
 
 const Root = ({ store }) => (
     <div>
@@ -103,7 +107,16 @@ const Root = ({ store }) => (
                                         path="/inventory/reports/what-will-decrement"
                                         component={WwdReportOptions}
                                     />
-
+                                    <Route
+                                        exact
+                                        path="/inventory/stock-locators"
+                                        component={DeptStockUtility}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/dept-stock-parts"
+                                        component={DeptStockParts}
+                                    />
                                     <Route
                                         exact
                                         path="/inventory/reports/storage-place-audit/report"
@@ -123,6 +136,16 @@ const Root = ({ store }) => (
                                         exact
                                         path="/logistics/workstations/top-up/:jobRef"
                                         component={WorkstationTopUpStatus}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/allocations/despatch-picking-summary"
+                                        component={DespatchPickingSummaryReport}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/stock-viewer"
+                                        component={StockViewerOptions}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>

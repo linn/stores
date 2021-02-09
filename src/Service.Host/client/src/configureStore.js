@@ -6,6 +6,7 @@ import authorization from './middleware/authorization';
 import itemCreated from './middleware/itemCreated';
 import receiveSosDetail from './middleware/receiveSosDetail';
 import allocationStarted from './middleware/allocationStarted';
+import receiveStockLocator from './middleware/receiveStockLocator';
 
 // eslint-disable-next-line no-underscore-dangle
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -16,6 +17,7 @@ const middleware = [
     thunkMiddleware,
     itemCreated,
     receiveSosDetail,
+    receiveStockLocator,
     allocationStarted
 ];
 

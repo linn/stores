@@ -44,6 +44,13 @@ import pickItemsAllocation from './pickItemsAllocation';
 import unpickItemsAllocation from './unpickItemsAllocation';
 import tqmsCategories from './tqmsCategories';
 import workstationTopUpStatus from './workstationTopUpStatus';
+import deptStockParts from './parts/deptStockParts';
+import stockLocators from './stockLocators/stockLocators';
+import stockLocator from './stockLocators/stockLocator';
+import despatchPickingSummaryReport from './despatchPickingSummaryReport';
+import stockLocatorBatches from './stockLocators/stockLocatorBatches';
+import storageLocations from './stockLocators/storageLocations';
+import inspectedStates from './stockLocators/inspectedStates';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -57,9 +64,12 @@ const rootReducer = combineReducers({
     createAuditReqs,
     departments,
     decrementRules,
+    deptStockParts,
     despatchLocations,
+    despatchPickingSummaryReport,
     employees,
     finishAllocation,
+    inspectedStates,
     manufacturers,
     mechPartSource,
     nominal,
@@ -76,7 +86,11 @@ const rootReducer = combineReducers({
     sernosSequences,
     sosAllocDetails,
     sosAllocHeads,
+    stockLocator,
+    stockLocatorBatches,
+    stockLocators,
     stockPools,
+    storageLocations,
     storagePlace,
     storagePlaces,
     storagePlaceAuditReport,
