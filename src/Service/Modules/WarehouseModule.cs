@@ -22,7 +22,7 @@
             var resource = this.Bind<PalletMoveRequestResource>();
 
             return this.Negotiate.WithModel(
-                this.warehouseFacadeService.MovePalletToUpper(resource.PalletNumber, resource.Reference));
+                this.warehouseFacadeService.MovePalletToUpper(resource.PalletNumber, resource.PickingReference));
         }
 
         private object MoveAllPalletsToUpper()

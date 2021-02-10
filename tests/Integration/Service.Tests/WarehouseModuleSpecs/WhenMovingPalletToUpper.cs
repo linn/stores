@@ -21,8 +21,8 @@
         [SetUp]
         public void SetUp()
         {
-            this.resource = new PalletMoveRequestResource { PalletNumber = 1, Reference = "3" };
-            this.WarehouseFacadeService.MovePalletToUpper(this.resource.PalletNumber, this.resource.Reference)
+            this.resource = new PalletMoveRequestResource { PalletNumber = 1, PickingReference = "3" };
+            this.WarehouseFacadeService.MovePalletToUpper(this.resource.PalletNumber, this.resource.PickingReference)
                 .Returns(new SuccessResult<MessageResult>(new MessageResult("ok")));
 
             this.Response = this.Browser.Post(
@@ -45,7 +45,7 @@
         public void ShouldCallService()
         {
             this.WarehouseFacadeService.Received()
-                .MovePalletToUpper(this.resource.PalletNumber, this.resource.Reference);
+                .MovePalletToUpper(this.resource.PalletNumber, this.resource.PickingReference);
         }
 
         [Test]

@@ -52,6 +52,8 @@ import stockLocatorBatches from './stockLocators/stockLocatorBatches';
 import storageLocations from './stockLocators/storageLocations';
 import inspectedStates from './stockLocators/inspectedStates';
 import despatchPalletQueueReport from './despatchPalletQueueReport';
+import movePalletToUpper from './movePalletToUpper';
+import movePalletsToUpper from './movePalletsToUpper';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -74,6 +76,8 @@ const rootReducer = combineReducers({
     inspectedStates,
     manufacturers,
     mechPartSource,
+    movePalletsToUpper,
+    movePalletToUpper,
     nominal,
     oidc,
     part,

@@ -4,6 +4,6 @@
     {
         public int PalletNumber { get; set; }
 
-        public string Reference { get; set; }
+        public string PickingReference { get; set; }
     }
 }

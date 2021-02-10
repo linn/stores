@@ -127,3 +127,11 @@ export const stockLocatorBatchesActionTypes = makeActionTypes(
 export const storageLocationsActionTypes = makeActionTypes(itemTypes.storageLocations.actionType);
 
 export const inspectedStatesActionTypes = makeActionTypes(itemTypes.inspectedStates.actionType);
+
+export const movePalletToUpperActionTypes = makeActionTypes(
+    processTypes.movePalletToUpper.actionType
+);
+
+export const movePalletsToUpperActionTypes = makeActionTypes(
+    processTypes.movePalletsToUpper.actionType
+);

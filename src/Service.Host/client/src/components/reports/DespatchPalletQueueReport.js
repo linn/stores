@@ -22,7 +22,14 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function DespatchPalletQueueReport({ reportData, loading }) {
+function DespatchPalletQueueReport({
+    reportData,
+    loading,
+    movePalletToUpper,
+    movePalletsToUpper,
+    movePalletWorking,
+    movePalletsWorking
+}) {
     const classes = useStyles();
     const date = new Date().toLocaleString('en-GB', {
         month: 'short',
@@ -31,6 +38,15 @@ function DespatchPalletQueueReport({ reportData, loading }) {
         hour: '2-digit',
         minute: '2-digit'
     });
+
+    const onMovePallet = params => {
+        if (params && params.row) {
+            movePalletToUpper({
+                palletNumber: params.row.palletNumber,
+                pickingReference: params.row.pickingSequence.toString()
+            });
+        }
+    };
 
     const columns = [
         { field: 'palletNumber', headerName: 'Pallet No', width: 130 },
@@ -46,6 +62,7 @@ function DespatchPalletQueueReport({ reportData, loading }) {
                         variant="contained"
                         color="default"
                         size="small"
+                        onClick={() => onMovePallet(params)}
                         style={{ marginLeft: 16 }}
                     >
                         Pick
@@ -66,6 +83,10 @@ function DespatchPalletQueueReport({ reportData, loading }) {
         return details.map((d, i) => ({ id: i, ...d }));
     };
 
+    const onMovePallets = () => {
+        movePalletsToUpper();
+    };
+
     return (
         <Grid className={classes.grid} container justify="center">
             <Grid item xs={12}>
@@ -74,7 +95,7 @@ function DespatchPalletQueueReport({ reportData, loading }) {
                 </Typography>
                 <span className="date-for-printing">{date}</span>
             </Grid>
-            {loading || !reportData ? (
+            {loading || movePalletWorking || movePalletsWorking || !reportData ? (
                 <Loading />
             ) : (
                 <>
@@ -98,7 +119,11 @@ function DespatchPalletQueueReport({ reportData, loading }) {
                                         {reportData.numberOfPalletsToMove}
                                     </TableCell>
                                     <TableCell className={classes.tableCell}>
-                                        <Button variant="contained" color="primary">
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={onMovePallets}
+                                        >
                                             Pick Them All
                                         </Button>
                                     </TableCell>
@@ -130,12 +155,18 @@ DespatchPalletQueueReport.propTypes = {
         numberOfPalletsToMove: PropTypes.number,
         despatchPalletQueueDetails: PropTypes.arrayOf(PropTypes.shape({}))
     }),
+    movePalletToUpper: PropTypes.func.isRequired,
+    movePalletsToUpper: PropTypes.func.isRequired,
+    movePalletWorking: PropTypes.bool,
+    movePalletsWorking: PropTypes.bool,
     loading: PropTypes.bool
 };
 
 DespatchPalletQueueReport.defaultProps = {
     reportData: null,
-    loading: false
+    loading: false,
+    movePalletWorking: false,
+    movePalletsWorking: false
 };
 
 export default DespatchPalletQueueReport;
