@@ -2,6 +2,7 @@
 {
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Service.Models;
@@ -10,9 +11,9 @@
 
     public sealed class ParcelsModule : NancyModule
     {
-        private readonly IFacadeService<Parcel, int, ParcelResource, ParcelResource> parcelsFacadeService;
+        private readonly IParcelService parcelsFacadeService;
 
-        public ParcelsModule(IFacadeService<Parcel, int, ParcelResource, ParcelResource> parcelsFacadeService)
+        public ParcelsModule(IParcelService parcelsFacadeService)
         {
             this.parcelsFacadeService = parcelsFacadeService;
             this.Get("/logistics/parcels", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
@@ -34,13 +35,11 @@
 
         private object GetParcels()
         {
-            var resource = this.Bind<SearchRequestResource>();
+            var resource = this.Bind<ParcelSearchRequestResource>();
 
-            var results = string.IsNullOrEmpty(resource.SearchTerm)
-                              ? this.parcelsFacadeService.GetAll()
-                              : this.parcelsFacadeService.Search(resource.SearchTerm);
+            var results = this.parcelsFacadeService.Search(resource);
 
-return this.Negotiate
+            return this.Negotiate
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

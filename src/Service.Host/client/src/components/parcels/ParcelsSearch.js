@@ -10,14 +10,7 @@ import {
 } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
-
-const useStyles = makeStyles(theme => ({
-    grid: {
-        marginTop: theme.spacing(4),
-        paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1)
-    }
-}));
+import Page from '../../containers/Page';
 
 function ParcelsSearch({
     items,
@@ -35,8 +28,6 @@ function ParcelsSearch({
         rowsPerPage: 10
     });
 
-    const classes = useStyles();
-
     const [rowsToDisplay, setRowsToDisplay] = useState([]);
     const [allowedToCreate, setAllowedToCreate] = useState(false);
     // const [snackbarVisible, setSnackbarVisible] = useState(editStatus === 'deleted');
@@ -45,7 +36,7 @@ function ParcelsSearch({
     const [parcelNumberSearch, setParcelNumberSearch] = useState('');
     const [supplierIdSearch, setSupplierIdSearch] = useState('');
     const [carrierIdSearch, setCarrierIdSearch] = useState('');
-    const [dateCreatedSearch, setDateCreatedSearch] = useState(null);
+    const [dateCreatedSearch, setDateCreatedSearch] = useState('');
     const [supplierInvNoSearch, setSupplierInvNoSearch] = useState('');
     const [consignmentNoSearch, setConsignmentNoSearch] = useState('');
     const [commentsSearch, setCommentsSearch] = useState('');
@@ -129,7 +120,7 @@ function ParcelsSearch({
                   consignmentNo: el.consignmentNo,
                   comments: el.comments,
                   id: el.parcelNumber,
-                  href: el.links.find(l => l.rel === 'self')?.href
+                  links: el.links
               }))
             : [];
 
@@ -161,7 +152,7 @@ function ParcelsSearch({
         supplier: 'supplier',
         carrier: 'carrier',
         dateCreated: 'date created',
-        supplerInvNo: 'suppler invoice number',
+        supplierInvNo: 'supplier invoice number',
         consignmentNo: 'consignment number',
         comments: 'comments'
     };
@@ -169,117 +160,119 @@ function ParcelsSearch({
     // setAllowedToCreate(utilities.getHref(applicationState, 'edit') !== null);
 
     return (
-        <Grid className={classes.grid} spacing={3} container justify="center">
-            <Grid item xs={11} />
-            <Grid item xs={1}>
-                <LinkButton text="Create" to="/inventory/parcels/create" />
-            </Grid>
-            <Grid item xs={1}>
-                <SearchInputField
-                    label="Parcels"
-                    fullWidth
-                    placeholder="search.."
-                    onChange={handleParcelNumberSearchChange}
-                    propertyName="parcelSearchTerm"
-                    type="text"
-                    value={parcelNumberSearch}
-                    debounce={5000}
-                />
-            </Grid>
+        <Page>
+            <Grid spacing={3} container justify="center">
+                <Grid item xs={11} />
+                <Grid item xs={1}>
+                    <LinkButton text="Create" to="/inventory/parcels/create" />
+                </Grid>
+                <Grid item xs={1}>
+                    <SearchInputField
+                        label="Parcels"
+                        fullWidth
+                        placeholder="search.."
+                        onChange={handleParcelNumberSearchChange}
+                        propertyName="parcelSearchTerm"
+                        type="text"
+                        value={parcelNumberSearch}
+                        debounce={5000}
+                    />
+                </Grid>
 
-            <Grid item xs={2}>
-                <SearchInputField
-                    label="Supplier"
-                    fullWidth
-                    onChange={handleSupplierSearchChange}
-                    propertyName="supplierSearchTerm"
-                    type="text"
-                    value={supplierIdSearch}
-                    debounce={5000}
-                />
-            </Grid>
+                <Grid item xs={2}>
+                    <SearchInputField
+                        label="Supplier"
+                        fullWidth
+                        onChange={handleSupplierSearchChange}
+                        propertyName="supplierSearchTerm"
+                        type="text"
+                        value={supplierIdSearch}
+                        debounce={5000}
+                    />
+                </Grid>
 
-            <Grid item xs={2}>
-                <SearchInputField
-                    label="Carrier"
-                    fullWidth
-                    onChange={handleCarrierSearchChange}
-                    propertyName="carrierSearchTerm"
-                    type="text"
-                    value={carrierIdSearch}
-                    debounce={5000}
-                />
-            </Grid>
+                <Grid item xs={2}>
+                    <SearchInputField
+                        label="Carrier"
+                        fullWidth
+                        onChange={handleCarrierSearchChange}
+                        propertyName="carrierSearchTerm"
+                        type="text"
+                        value={carrierIdSearch}
+                        debounce={5000}
+                    />
+                </Grid>
 
-            <Grid item xs={2}>
-                <SearchInputField
-                    label="Date Created"
-                    fullWidth
-                    placeholder="search.."
-                    onChange={handleDateSearchChange}
-                    propertyName="dateCreatedSearchTerm"
-                    type="date"
-                    value={dateCreatedSearch}
-                    debounce={5000}
-                />
-            </Grid>
+                <Grid item xs={2}>
+                    <SearchInputField
+                        label="Date Created"
+                        fullWidth
+                        placeholder="search.."
+                        onChange={handleDateSearchChange}
+                        propertyName="dateCreatedSearchTerm"
+                        type="date"
+                        value={dateCreatedSearch}
+                        debounce={5000}
+                    />
+                </Grid>
 
-            <Grid item xs={1}>
-                <SearchInputField
-                    label="Supplier Inv No"
-                    fullWidth
-                    onChange={handleSupplierInvSearchChange}
-                    propertyName="supplierInvNoSearchTerm"
-                    type="text"
-                    value={supplierInvNoSearch}
-                    debounce={5000}
-                />
-            </Grid>
+                <Grid item xs={1}>
+                    <SearchInputField
+                        label="Supplier Inv No"
+                        fullWidth
+                        onChange={handleSupplierInvSearchChange}
+                        propertyName="supplierInvNoSearchTerm"
+                        type="text"
+                        value={supplierInvNoSearch}
+                        debounce={5000}
+                    />
+                </Grid>
 
-            <Grid item xs={2}>
-                <SearchInputField
-                    label="Consignment Number"
-                    fullWidth
-                    onChange={handleConsignmentNoSearchChange}
-                    propertyName="consingmentNoSearchTerm"
-                    type="text"
-                    value={consignmentNoSearch}
-                    debounce={5000}
-                />
-            </Grid>
+                <Grid item xs={2}>
+                    <SearchInputField
+                        label="Consignment Number"
+                        fullWidth
+                        onChange={handleConsignmentNoSearchChange}
+                        propertyName="consingmentNoSearchTerm"
+                        type="text"
+                        value={consignmentNoSearch}
+                        debounce={5000}
+                    />
+                </Grid>
 
-            <Grid item xs={2}>
-                <SearchInputField
-                    label="Comments"
-                    fullWidth
-                    onChange={handleCommentSearchChange}
-                    propertyName="commentSearchTerm"
-                    type="text"
-                    value={commentsSearch}
-                    debounce={5000}
-                />
-            </Grid>
+                <Grid item xs={2}>
+                    <SearchInputField
+                        label="Comments"
+                        fullWidth
+                        onChange={handleCommentSearchChange}
+                        propertyName="commentSearchTerm"
+                        type="text"
+                        value={commentsSearch}
+                        debounce={5000}
+                    />
+                </Grid>
 
-            <Grid item xs={12}>
-                {loading ? (
-                    <Loading />
-                ) : (
-                    <>
-                        {rowsToDisplay.length > 0 && (
-                            <PaginatedTable
-                                columns={columns}
-                                handleRowLinkClick={handleRowLinkClick}
-                                rows={rowsToDisplay}
-                                pageOptions={pageOptions}
-                                setPageOptions={setPageOptions}
-                                totalItemCount={items ? items.length : 0}
-                                expandable={false}
-                            />
-                        )}
-                    </>
-                )}
+                <Grid item xs={12}>
+                    {loading ? (
+                        <Loading />
+                    ) : (
+                        <>
+                            {rowsToDisplay.length > 0 && (
+                                <PaginatedTable
+                                    columns={columns}
+                                    handleRowLinkClick={handleRowLinkClick}
+                                    rows={rowsToDisplay}
+                                    pageOptions={pageOptions}
+                                    setPageOptions={setPageOptions}
+                                    totalItemCount={items ? items.length : 0}
+                                    expandable={false}
+                                />
+                            )}
+                        </>
+                    )}
+                </Grid>
             </Grid>
-        </Grid>
+        </Page>
     );
 }
 
