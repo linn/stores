@@ -6,9 +6,9 @@ import {
     useSearch,
     PaginatedTable,
     Loading,
-    utilities
+    utilities,
+    Dropdown
 } from '@linn-it/linn-form-components-library';
-import { makeStyles } from '@material-ui/styles';
 import PropTypes from 'prop-types';
 import Page from '../../containers/Page';
 
@@ -113,8 +113,12 @@ function ParcelsSearch({
         const rows = items
             ? items.map(el => ({
                   parcelNumber: el.parcelNumber,
-                  supplier: `${el.supplierId} - ${el.supplierName}`,
-                  carrier: `${el.carrierId} - ${el.carrierName}`,
+                  supplier: `${el.supplierId} - ${
+                      suppliers.find(x => x.id === el.supplierId)?.name
+                  }`,
+                  carrier: `${el.carrierId} - ${
+                      carriers.find(x => x.organisationId === el.carrierId)?.carrierCode
+                  }`,
                   dateCreated: el.dateCreated,
                   supplerInvNo: el.supplerInvNo,
                   consignmentNo: el.consignmentNo,
@@ -180,26 +184,40 @@ function ParcelsSearch({
                 </Grid>
 
                 <Grid item xs={2}>
-                    <SearchInputField
-                        label="Supplier"
-                        fullWidth
+                    <Dropdown
                         onChange={handleSupplierSearchChange}
-                        propertyName="supplierSearchTerm"
-                        type="text"
+                        items={suppliers
+                            .map(s => ({
+                                ...s,
+                                id: s.id,
+                                displayText: `${s.name} ( ${s.id} )`
+                            }))
+                            .sort((a, b) => (a.id > b.id ? 1 : -1))}
                         value={supplierIdSearch}
-                        debounce={5000}
+                        propertyName="supplierIdSearch"
+                        required
+                        fullWidth
+                        label="Supplier"
+                        allowNoValue
                     />
                 </Grid>
 
                 <Grid item xs={2}>
-                    <SearchInputField
-                        label="Carrier"
-                        fullWidth
+                    <Dropdown
                         onChange={handleCarrierSearchChange}
-                        propertyName="carrierSearchTerm"
-                        type="text"
+                        items={carriers
+                            .map(s => ({
+                                ...s,
+                                id: s.carrierCode,
+                                displayText: `${s.carrierCode} ( ${s.organisationId} )`
+                            }))
+                            .sort((a, b) => (a.id > b.id ? 1 : -1))}
                         value={carrierIdSearch}
-                        debounce={5000}
+                        propertyName="carrierIdSearch"
+                        required
+                        fullWidth
+                        label="Carrier"
+                        allowNoValue
                     />
                 </Grid>
 
