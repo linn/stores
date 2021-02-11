@@ -18,3 +18,9 @@ export const despatchPickingSummaryReport = new ItemType(
     'DESPATCH_PICKING_SUMMARY_REPORT',
     '/logistics/allocations/despatch-picking-summary'
 );
+
+export const despatchPalletQueueReport = new ItemType(
+    'despatchPalletQueueReport',
+    'DESPATCH_PALLET_QUEUE_REPORT',
+    '/logistics/allocations/despatch-pallet-queue'
+);

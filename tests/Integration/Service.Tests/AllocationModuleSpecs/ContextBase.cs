@@ -53,6 +53,8 @@
                     with.Dependency<IResourceBuilder<SosAllocDetail>>(new SosAllocDetailResourceBuilder());
                     with.Dependency<IResourceBuilder<ResultsModel>>(new ResultsModelResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<SosAllocDetail>>>(new SosAllocDetailsResourceBuilder());
+                    with.Dependency<IResourceBuilder<DespatchPalletQueueResult>>(
+                        new DespatchPalletQueueResultResourceBuilder());
                     with.Module<AllocationModule>();
                     with.ResponseProcessor<AllocationStartResponseProcessor>();
                     with.ResponseProcessor<DespatchLocationsResponseProcessor>();
@@ -60,6 +62,7 @@
                     with.ResponseProcessor<SosAllocDetailResponseProcessor>();
                     with.ResponseProcessor<SosAllocDetailsResponseProcessor>();
                     with.ResponseProcessor<ResultsModelJsonResponseProcessor>();
+                    with.ResponseProcessor<DespatchPalletQueueResultProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {
