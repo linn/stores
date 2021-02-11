@@ -109,6 +109,8 @@
 
         public DbQuery<DespatchPickingSummary> DespatchPickingSummary { get; set; }
 
+        public DbQuery<DespatchPalletQueueDetail> DespatchPalletQueueDetails { get; set; }
+
         public DbSet<StorageLocation> StorageLocations { get; set; }
 
         public DbSet<InspectedState> InspectedStates { get; set; }
@@ -162,6 +164,7 @@
             this.BuildTopUpJobRefs(builder);
             this.BuildStoresPallets(builder);
             this.QueryDespatchPickingSummary(builder);
+            this.QueryDespatchPalletQueueDetails(builder);
             this.BuildStorageLocations(builder);
             this.BuildInspectedStates(builder);
             base.OnModelCreating(builder);
@@ -909,6 +912,15 @@
             q.Property(v => v.Location).HasColumnName("LOCATION");
             q.Property(v => v.QuantityOfItemsAtLocation).HasColumnName("QTY_AT_LOCATION");
             q.Property(v => v.QtyNeededFromLocation).HasColumnName("DPS_QTY_AT_LOCATION");
+        }
+
+        private void QueryDespatchPalletQueueDetails(ModelBuilder builder)
+        {
+            var q = builder.Query<DespatchPalletQueueDetail>().ToView("V_DPQ_SUMMARY");
+            q.Property(v => v.KittedFromTime).HasColumnName("KITTED_FROM");
+            q.Property(v => v.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(v => v.PickingSequence).HasColumnName("PICKING_SEQUENCE");
+            q.Property(v => v.WarehouseInformation).HasColumnName("WAREHOUSE_INFO");
         }
 
         private void BuildStorageLocations(ModelBuilder builder)

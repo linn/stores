@@ -36,36 +36,35 @@
                                           PalletNumber = null
                                       },
                                   new DespatchPickingSummary
-                                     {
-                                         Addressee = "a",
-                                         ArticleNumber = "an1",
-                                         ConsignmentId = 1,
-                                         FromPlace = "From1",
-                                         Quantity = 2,
-                                         QtyNeededFromLocation = 44,
-                                         Location = "From1",
-                                         LocationId = 2,
-                                         QuantityOfItemsAtLocation = 723,
-                                         InvoiceDescription = "Thing 1",
-                                         PalletNumber = 4
-                                     },
+                                      {
+                                          Addressee = "a",
+                                          ArticleNumber = "an1",
+                                          ConsignmentId = 1,
+                                          FromPlace = "From1",
+                                          Quantity = 2,
+                                          QtyNeededFromLocation = 44,
+                                          Location = "From1",
+                                          LocationId = 2,
+                                          QuantityOfItemsAtLocation = 723,
+                                          InvoiceDescription = "Thing 1",
+                                          PalletNumber = 4
+                                      },
                                   new DespatchPickingSummary
-                                     {
-                                         Addressee = "c",
-                                         ArticleNumber = "an3",
-                                         ConsignmentId = 1,
-                                         FromPlace = "From2",
-                                         Quantity = 10,
-                                         QtyNeededFromLocation = 44,
-                                         Location = "From2",
-                                         LocationId = 23,
-                                         QuantityOfItemsAtLocation = 44,
-                                         InvoiceDescription = "Thing 3",
-                                         PalletNumber = null
-                                     }
+                                      {
+                                          Addressee = "c",
+                                          ArticleNumber = "an3",
+                                          ConsignmentId = 1,
+                                          FromPlace = "From2",
+                                          Quantity = 10,
+                                          QtyNeededFromLocation = 44,
+                                          Location = "From2",
+                                          LocationId = 23,
+                                          QuantityOfItemsAtLocation = 44,
+                                          InvoiceDescription = "Thing 3",
+                                          PalletNumber = null
+                                      }
                               };
-            this.DespatchPickingSummaryRepository.FindAll()
-                .Returns(summary.AsQueryable());
+            this.DespatchPickingSummaryRepository.FindAll().Returns(summary.AsQueryable());
             this.result = this.Sut.DespatchPickingSummary();
         }
 

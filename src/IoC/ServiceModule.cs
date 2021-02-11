@@ -37,6 +37,7 @@
             builder.RegisterType<MechPartSourceService>().As<IMechPartSourceService>();
             builder.RegisterType<WorkstationService>().As<IWorkstationService>();
             builder.RegisterType<StockLocatorService>().As<IStockLocatorService>();
+            builder.RegisterType<WarehouseService>().As<IWarehouseService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -90,7 +91,8 @@
                 .As<IFacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource>>();
             builder.RegisterType<InspectedStateService>()
                 .As<IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource>>();
-               
+            builder.RegisterType<WarehouseFacadeService>().As<IWarehouseFacadeService>();
+
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
             builder.RegisterType<PartPack>().As<IPartPack>();
@@ -99,6 +101,7 @@
             builder.RegisterType<StoragePlaceAuditPack>().As<IStoragePlaceAuditPack>();
             builder.RegisterType<AllocPack>().As<IAllocPack>();
             builder.RegisterType<WorkstationPackProxy>().As<IWorkstationPack>();
+            builder.RegisterType<WcsPack>().As<IWcsPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

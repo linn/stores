@@ -5,18 +5,23 @@
 
     using Linn.Common.Persistence;
     using Linn.Common.Reporting.Models;
+    using Linn.Stores.Domain.LinnApps.Allocation.Models;
 
     public class AllocationReportsService : IAllocationReportsService
     {
         private readonly IQueryRepository<DespatchPickingSummary> despatchPickingSummaryRepository;
 
+        private readonly IQueryRepository<DespatchPalletQueueDetail> despatchPalletQueueRepository;
+
         private readonly IReportingHelper reportingHelper;
 
         public AllocationReportsService(
             IQueryRepository<DespatchPickingSummary> despatchPickingSummaryRepository,
+            IQueryRepository<DespatchPalletQueueDetail> despatchPalletQueueRepository,
             IReportingHelper reportingHelper)
         {
             this.despatchPickingSummaryRepository = despatchPickingSummaryRepository;
+            this.despatchPalletQueueRepository = despatchPalletQueueRepository;
             this.reportingHelper = reportingHelper;
         }
 
@@ -108,6 +113,36 @@
             this.reportingHelper.RemovedRepeatedValues(resultsModel, 0, new[] { 0 });
 
             return resultsModel;
+        }
+
+        public DespatchPalletQueueResult DespatchPalletQueue()
+        {
+            var details = this.despatchPalletQueueRepository.FindAll().ToList();
+            var resultDetails = new List<DespatchPalletQueueResultDetail>();
+            foreach (var despatchPalletQueueDetail in details)
+            {
+               resultDetails.Add(new DespatchPalletQueueResultDetail
+                                     {
+                                         KittedFromTime = despatchPalletQueueDetail.KittedFromTime,
+                                         PalletNumber = despatchPalletQueueDetail.PalletNumber,
+                                         PickingSequence = despatchPalletQueueDetail.PickingSequence,
+                                         WarehouseInformation = despatchPalletQueueDetail.WarehouseInformation,
+                                         CanMoveToUpper = this.CanMoveUpper(despatchPalletQueueDetail.WarehouseInformation)
+                                     });
+            }
+
+            return new DespatchPalletQueueResult
+                       {
+                           DespatchPalletQueueResultDetails = resultDetails,
+                           TotalNumberOfPallets = resultDetails.Count,
+                           NumberOfPalletsToMove = resultDetails.Count(a => a.CanMoveToUpper)
+                       };
+        }
+
+        private bool CanMoveUpper(string warehouseInformation)
+        {
+            var moveOptions = new[] { "at SA", "at SB", "at SC" };
+            return moveOptions.Contains(warehouseInformation);
         }
     }
 }

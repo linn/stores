@@ -20,5 +20,7 @@
         IResult<IEnumerable<SosAllocDetail>> UnpickItems(AccountOutletRequestResource requestResource);
 
         IResult<ResultsModel> DespatchPickingSummaryReport();
+
+        IResult<DespatchPalletQueueResult> DespatchPalletQueueReport();
     }
 }

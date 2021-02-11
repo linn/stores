@@ -51,6 +51,9 @@ import despatchPickingSummaryReport from './despatchPickingSummaryReport';
 import stockLocatorBatches from './stockLocators/stockLocatorBatches';
 import storageLocations from './stockLocators/storageLocations';
 import inspectedStates from './stockLocators/inspectedStates';
+import despatchPalletQueueReport from './despatchPalletQueueReport';
+import movePalletToUpper from './movePalletToUpper';
+import movePalletsToUpper from './movePalletsToUpper';
 import parcels from './parcels/parcels';
 import parcel from './parcels/parcel';
 import carriers from './carriers';
@@ -70,12 +73,15 @@ const rootReducer = combineReducers({
     decrementRules,
     deptStockParts,
     despatchLocations,
+    despatchPalletQueueReport,
     despatchPickingSummaryReport,
     employees,
     finishAllocation,
     inspectedStates,
     manufacturers,
     mechPartSource,
+    movePalletsToUpper,
+    movePalletToUpper,
     nominal,
     oidc,
     parcel,

@@ -108,16 +108,24 @@ function SosAllocHeads({
         <Page>
             <Grid container spacing={3}>
                 <Grid item xs={2} />
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                     <Title text="Allocation" />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={5}>
                     <Link
                         className={classes.nounderline}
                         to="/logistics/allocations/despatch-picking-summary?print=true"
                     >
                         <Tooltip title="Print Despatch Picking Summary">
                             <Button variant="outlined">Run DPS</Button>
+                        </Tooltip>
+                    </Link>
+                    <Link
+                        className={classes.nounderline}
+                        to="/logistics/allocations/despatch-pallet-queue"
+                    >
+                        <Tooltip title="Despatch Pallet Queue (Upper)">
+                            <Button variant="outlined">Pallet Queue</Button>
                         </Tooltip>
                     </Link>
                     <Link className={classes.nounderline} to="/logistics/allocations">
