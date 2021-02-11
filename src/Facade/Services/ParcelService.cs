@@ -69,15 +69,7 @@
         protected Expression<Func<Parcel, bool>> SearchExpression(ParcelSearchRequestResource searchTerms)
         {
             return x => (string.IsNullOrWhiteSpace(searchTerms.SearchTerm)
-                         || (x.ParcelNumber.ToString().Equals(searchTerms.SearchTerm)
-                             || x.ParcelNumber.ToString().Contains(searchTerms.SearchTerm)));
-            //&& (string.IsNullOrWhiteSpace(searchTerms.CarrierIdSearchTerm) || (x.CarrierId.HasValue && x.CarrierId.Value.ToString().Contains(searchTerms.CarrierIdSearchTerm)))
-            //    || x.SupplierId.HasValue && (x.SupplierId.ToString().Equals(searchTerms.SupplierIdSearchTerm) || x.SupplierId.ToString().Contains(searchTerms.SupplierIdSearchTerm))
-            //        || x.SupplierId.HasValue && (x.SupplierId.ToString().Equals(searchTerms.SupplierIdSearchTerm) || x.SupplierId.ToString().Contains(searchTerms.SupplierIdSearchTerm))
-            //            || (Convert.ToDateTime(searchTerms.DateCreatedSearchTerm).AddDays(-1) < x.DateCreated && x.DateCreated > Convert.ToDateTime(searchTerms.DateCreatedSearchTerm).AddDays(1))
-            //            || x.SupplierInvoiceNo.Equals(searchTerms.SupplierInvNoSearchTerm) || x.SupplierInvoiceNo.Contains(searchTerms.SupplierInvNoSearchTerm)
-            //            || x.ConsignmentNo.Equals(searchTerms.ConsignmentNoSearchTerm) || x.ConsignmentNo.Contains(searchTerms.ConsignmentNoSearchTerm)
-            //            || x.Comments.Equals(searchTerms.CommentsSearchTerm) || x.Comments.Contains(searchTerms.CommentsSearchTerm);
+                             || x.ParcelNumber.ToString().Contains(searchTerms.SearchTerm));
         }
 
         public IResult<IEnumerable<Parcel>> Search(ParcelSearchRequestResource resource)
