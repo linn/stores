@@ -115,6 +115,8 @@
 
         public DbSet<InspectedState> InspectedStates { get; set; }
 
+        public DbQuery<StockLocatorLocationsViewModel> StockLocatorLocationsView { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -167,6 +169,7 @@
             this.QueryDespatchPalletQueueDetails(builder);
             this.BuildStorageLocations(builder);
             this.BuildInspectedStates(builder);
+            this.QueryStockLocatorLocationsView(builder);
             base.OnModelCreating(builder);
         }
 
@@ -939,6 +942,23 @@
             e.HasKey(l => l.State);
             e.Property(l => l.State).HasColumnName("STATE").HasMaxLength(6);
             e.Property(l => l.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
+        }
+
+        private void QueryStockLocatorLocationsView(ModelBuilder builder)
+        {
+            var q = builder.Query<StockLocatorLocationsViewModel>().ToView("STOCK_LOCATOR_LOC_VIEW");
+            q.Property(e => e.Quantity).HasColumnName("QTY");
+            q.Property(e => e.StorageLocationId).HasColumnName("LOCATION_ID");
+            q.Property(e => e.StorageLocationCode).HasColumnName("LOCATION_CODE").HasMaxLength(16);
+            q.Property(e => e.StorageLocationDescription).HasColumnName("DESCRIPTION").HasMaxLength(50);
+            q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(e => e.LocationType).HasColumnName("LOCATION_TYPE").HasMaxLength(1);
+            q.Property(e => e.State).HasColumnName("STATE").HasMaxLength(6);
+            q.Property(e => e.Category).HasColumnName("CATEGORY").HasMaxLength(6);
+            q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE").HasMaxLength(10);
+            q.Property(e => e.OurUnitOfMeasure).HasColumnName("OUR_UNIT_OF_MEASURE").HasMaxLength(14);
+            q.Property(e => e.QuantityAllocated).HasColumnName("QTY_ALLOCATED");
         }
     }
 }

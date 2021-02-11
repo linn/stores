@@ -68,6 +68,8 @@
             builder.RegisterType<DespatchPalletQueueDetailsRepository>().As<IQueryRepository<DespatchPalletQueueDetail>>();
             builder.RegisterType<StorageLocationRepository>().As<IRepository<StorageLocation, int>>();
             builder.RegisterType<InspectedStatesRepository>().As<IRepository<InspectedState, string>>();
+            builder.RegisterType<StockLocatorLocationsRepository>()
+                .As<IQueryRepository<StockLocatorLocationsViewModel>>();
         }
     }
 }

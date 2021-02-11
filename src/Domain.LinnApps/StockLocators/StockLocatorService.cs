@@ -17,6 +17,8 @@
 
         private readonly IRepository<StorageLocation, int> storageLocationRepository;
 
+        private readonly IQueryRepository<StockLocatorLocationsViewModel> stockLocatorLocationsView;
+
         private readonly IAuthorisationService authService;
 
         public StockLocatorService(
@@ -24,12 +26,14 @@
             IStoresPalletRepository palletRepository,
             IQueryRepository<StoragePlace> storagePlaceRepository,
             IRepository<StorageLocation, int> storageLocationRepository,
+            IQueryRepository<StockLocatorLocationsViewModel> stockLocatorLocationsView,
             IAuthorisationService authService)
         {
             this.stockLocatorRepository = stockLocatorRepository;
             this.palletRepository = palletRepository;
             this.storagePlaceRepository = storagePlaceRepository;
             this.storageLocationRepository = storageLocationRepository;
+            this.stockLocatorLocationsView = stockLocatorLocationsView;
             this.authService = authService;
         }
 
@@ -164,6 +168,7 @@
                                   StockRotationDate = stockLocator.StockRotationDate,
                                   PartNumber = stockLocator.PartNumber,
                                   PalletNumber = stockLocator.PalletNumber,
+                                  Id = stockLocator.Id,
                                   Category = stockLocator.Category,
                                   State = stockLocator.State,
                                   StorageLocation = new StorageLocation
@@ -173,6 +178,21 @@
                                                         }
                               }).AsEnumerable().Distinct(new StockLocatorEquals());
            return result;
+        }
+
+        public IEnumerable<StockLocator> GetStockLocatorLocationsView(
+            string partNumber,
+            string location,
+            string stockPool,
+            string stockState,
+            string batchRef)
+        {
+            return this.stockLocatorLocationsView.FilterBy(x => x.PartNumber == partNumber)
+                .Select(x => new StockLocator
+                                 {
+                                     StorageLocation = this.storageLocationRepository.FindById(x.StorageLocationId) 
+                                 });
+
         }
     }
 }

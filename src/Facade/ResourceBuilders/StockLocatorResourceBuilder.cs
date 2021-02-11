@@ -1,7 +1,5 @@
 ﻿namespace Linn.Stores.Facade.ResourceBuilders
 {
-    using System;
-
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Resources;
@@ -19,7 +17,8 @@
                            Quantity = stockLocator.Quantity,
                            LocationId = stockLocator.LocationId,
                            PalletNumber = stockLocator.PalletNumber,
-                           PartNumber = stockLocator.PartNumber
+                           PartNumber = stockLocator.PartNumber,
+                           StoragePlaceName = stockLocator.StorageLocation?.LocationCode
                        };
         }
 
