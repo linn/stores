@@ -30,7 +30,6 @@ function ParcelsSearch({
 
     const [rowsToDisplay, setRowsToDisplay] = useState([]);
     const [allowedToCreate, setAllowedToCreate] = useState(false);
-    // const [snackbarVisible, setSnackbarVisible] = useState(editStatus === 'deleted');
 
     const [searchTerm, setSearchTerm] = useState(null);
     const [parcelNumberSearch, setParcelNumberSearch] = useState('');
@@ -148,6 +147,8 @@ function ParcelsSearch({
         pageOptions.orderBy,
         pageOptions.orderAscending,
         items,
+        carriers,
+        suppliers,
         applicationState
     ]);
 
@@ -161,14 +162,15 @@ function ParcelsSearch({
         comments: 'comments'
     };
 
-    // setAllowedToCreate(utilities.getHref(applicationState, 'edit') !== null);
-
     return (
         <Page>
             <Grid spacing={3} container justify="center">
                 <Grid item xs={11} />
                 <Grid item xs={1}>
-                    <LinkButton text="Create" to="/inventory/parcels/create" />
+                    {/* todo: add if allowedToCreate properly, still needs pulled in from backend */}
+                    {(allowedToCreate || true) && (
+                        <LinkButton text="Create" to="/inventory/parcels/create" />
+                    )}
                 </Grid>
                 <Grid item xs={1}>
                     <SearchInputField
@@ -300,13 +302,28 @@ ParcelsSearch.propTypes = {
             parcelNumber: PropTypes.int
         })
     ).isRequired,
+    carriers: PropTypes.arrayOf(
+        PropTypes.shape({
+            carrierCode: PropTypes.string,
+            organisationId: PropTypes.int
+        })
+    ),
+    suppliers: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.int,
+            name: PropTypes.string
+        })
+    ),
+    applicationState: PropTypes.shape().isRequired,
     loading: PropTypes.bool,
     fetchItems: PropTypes.func.isRequired,
-    history: PropTypes.shape({}).isRequired
+    history: PropTypes.shape({ push: PropTypes.func }).isRequired
 };
 
 ParcelsSearch.defaultProps = {
-    loading: false
+    loading: false,
+    carriers: [{ carrierCode: 'loading..', organisationId: -1 }],
+    suppliers: [{ id: -1, name: 'loading..' }]
 };
 
 export default ParcelsSearch;
