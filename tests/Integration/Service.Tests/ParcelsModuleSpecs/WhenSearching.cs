@@ -8,11 +8,11 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
-
     using Nancy;
     using Nancy.Testing;
     using NSubstitute;
     using NUnit.Framework;
+   
 
     public class WhenSearching : ContextBase
     {
@@ -53,17 +53,18 @@
                                       }
                                     };
 
-            this.ParcelsService.Search(Arg.Any<string>()) 
-                .Returns(new SuccessResult<IEnumerable<Parcel>>(parcels));
-
-            var searchRequestResource = new SearchRequestResource { SearchTerm = "22" };
+            this.ParcelsFacadeService.Search(Arg.Any<ParcelSearchRequestResource>())
+             .Returns(new SuccessResult<IEnumerable<Parcel>>(parcels));
 
             this.Response = this.Browser.Get(
                 "/logistics/parcels",
                 with =>
                 {
                     with.Header("Accept", "application/json");
-                    with.JsonBody(searchRequestResource);
+                    with.Query("searchTerm", "22");
+                    with.Query("supplierIdSearchTerm", "22");
+                    with.Query("carrierIdSearchTerm", "22");
+
                 }).Result;
         }
 
@@ -76,7 +77,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ParcelsService.Received().Search(Arg.Any<string>());
+            this.ParcelsFacadeService.Received().Search(Arg.Any<ParcelSearchRequestResource>());
         }
 
         [Test]

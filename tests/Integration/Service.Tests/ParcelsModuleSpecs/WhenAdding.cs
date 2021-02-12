@@ -46,7 +46,7 @@
                                  Comments = "RSN 212, RSN 118"
                              };
 
-            this.ParcelsService.Add(Arg.Any<ParcelResource>()) 
+            this.ParcelsFacadeService.Add(Arg.Any<ParcelResource>()) 
                 .Returns(new SuccessResult<Parcel>(parcel));
 
 
@@ -68,7 +68,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ParcelsService.Received().Add(Arg.Any<ParcelResource>());
+            this.ParcelsFacadeService.Received().Add(Arg.Any<ParcelResource>());
         }
 
         [Test]

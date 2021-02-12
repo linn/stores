@@ -17,7 +17,7 @@
 
         public IResult<IEnumerable<Carrier>> SearchCarriers(string searchTerm)
         {
-            if (searchTerm == null)
+            if (string.IsNullOrWhiteSpace(searchTerm))
             {
                 return new SuccessResult<IEnumerable<Carrier>>(this.repository.FindAll());
             }
@@ -29,7 +29,6 @@
                     c => (c.Name.ToUpper().Contains(searchTerm) || c.Name.ToUpper().Equals(searchTerm)
                                                                 || c.CarrierCode.ToString().Contains(searchTerm)
                                                                 || c.CarrierCode.ToString().Equals(searchTerm))));
-
         }
     }
 }

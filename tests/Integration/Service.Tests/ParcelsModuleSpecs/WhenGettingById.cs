@@ -31,7 +31,7 @@
                 Comments = "RSN 212, RSN 118"
             };
 
-            this.ParcelsService.GetById(Arg.Any<int>()) 
+            this.ParcelsFacadeService.GetById(Arg.Any<int>()) 
                 .Returns(new SuccessResult<Parcel>(parcel));
 
 
@@ -52,7 +52,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ParcelsService.Received().GetById(Arg.Any<int>());
+            this.ParcelsFacadeService.Received().GetById(Arg.Any<int>());
         }
 
         [Test]

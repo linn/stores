@@ -25,8 +25,7 @@ function Parcel({
     setSnackbarVisible,
     employees,
     suppliers,
-    carriers,
-    options
+    carriers
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -64,7 +63,7 @@ function Parcel({
     };
 
     const handleCancelClick = () => {
-        setPart(item);
+        setParcel(item);
         setEditStatus('view');
     };
 
@@ -145,13 +144,9 @@ function Parcel({
     );
 }
 
-Part.propTypes = {
+Parcel.propTypes = {
     item: PropTypes.shape({
-        part: PropTypes.string,
-        description: PropTypes.string,
-        nextSerialNumber: PropTypes.number,
-        dateClosed: PropTypes.string,
-        dateLive: PropTypes.string
+        parcelNumber: PropTypes.number
     }),
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,
     editStatus: PropTypes.string.isRequired,
@@ -168,30 +163,30 @@ Part.propTypes = {
     loading: PropTypes.bool,
     setEditStatus: PropTypes.func.isRequired,
     setSnackbarVisible: PropTypes.func.isRequired,
-    nominal: PropTypes.shape({ nominalCode: PropTypes.string, description: PropTypes.string }),
-    fetchNominal: PropTypes.func.isRequired,
-    privileges: PropTypes.arrayOf(PropTypes.string),
-    userName: PropTypes.string,
-    userNumber: PropTypes.number,
-    options: PropTypes.shape({ template: PropTypes.string }),
-    partTemplates: PropTypes.arrayOf(PropTypes.shape({ partRoot: PropTypes.string })),
-    liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
-    fetchLiveTest: PropTypes.func.isRequired
+    employees: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string, id: PropTypes.number })),
+    carriers: PropTypes.arrayOf(
+        PropTypes.shape({
+            carrierCode: PropTypes.string,
+            organisationId: PropTypes.number
+        })
+    ),
+    suppliers: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number,
+            name: PropTypes.string
+        })
+    )
 };
 
-Part.defaultProps = {
+Parcel.defaultProps = {
     item: {},
     snackbarVisible: false,
     loading: null,
     itemError: null,
     itemId: null,
-    nominal: null,
-    privileges: null,
-    userName: null,
-    userNumber: null,
-    options: null,
-    partTemplates: [],
-    liveTest: null
+    employees: [{ id: -1, name: 'loading..' }],
+    carriers: [{ carrierCode: 'loading..', organisationId: -1 }],
+    suppliers: [{ id: -1, name: 'loading..' }]
 };
 
 export default Parcel;

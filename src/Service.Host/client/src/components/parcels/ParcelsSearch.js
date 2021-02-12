@@ -299,18 +299,18 @@ function ParcelsSearch({
 ParcelsSearch.propTypes = {
     items: PropTypes.arrayOf(
         PropTypes.shape({
-            parcelNumber: PropTypes.int
+            parcelNumber: PropTypes.number
         })
     ).isRequired,
     carriers: PropTypes.arrayOf(
         PropTypes.shape({
             carrierCode: PropTypes.string,
-            organisationId: PropTypes.int
+            organisationId: PropTypes.number
         })
     ),
     suppliers: PropTypes.arrayOf(
         PropTypes.shape({
-            id: PropTypes.int,
+            id: PropTypes.number,
             name: PropTypes.string
         })
     ),

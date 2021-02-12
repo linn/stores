@@ -13,7 +13,7 @@
     using NSubstitute;
     using NUnit.Framework;
 
-    public class WhenSearching : ContextBase
+    public class WhenSearching: ContextBase
     {
         [SetUp]
         public void SetUp()
@@ -38,7 +38,7 @@
             var searchRequestResource = new SearchRequestResource { SearchTerm = "code numma" };
 
             this.Response = this.Browser.Get(
-                "/logistics/carriers",
+                "/inventory/carriers",
                 with =>
                 {
                     with.Header("Accept", "application/json");

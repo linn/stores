@@ -7,13 +7,16 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.RequestResources;
     using Nancy;
     using Nancy.Testing;
     using NSubstitute;
     using NUnit.Framework;
+ 
 
     public class WhenGettingAll : ContextBase
     {
+        ParcelSearchRequestResource requestResource;
         [SetUp]
         public void SetUp()
         {
@@ -36,7 +39,7 @@
                                       },
                                   new Parcel
                                       {
-                                          ParcelNumber = 22,
+                                          ParcelNumber = 21,
                                           SupplierId = 3,
                                           DateCreated = new DateTime(),
                                           CarrierId = 4,
@@ -51,7 +54,9 @@
                                       }
                                     };
 
-            this.ParcelsService.GetAll() 
+            this.requestResource = new ParcelSearchRequestResource();
+
+            this.ParcelsFacadeService.Search(Arg.Any<ParcelSearchRequestResource>())
                 .Returns(new SuccessResult<IEnumerable<Parcel>>(parcels));
 
             this.Response = this.Browser.Get(
@@ -59,6 +64,7 @@
                 with =>
                 {
                     with.Header("Accept", "application/json");
+                    with.Query("searchTerm", String.Empty);
                 }).Result;
         }
 
@@ -71,14 +77,14 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ParcelsService.Received().GetAll();
+            this.ParcelsFacadeService.Received().Search(Arg.Any<ParcelSearchRequestResource>());
         }
 
         [Test]
         public void ShouldReturnResources()
         {
             var resources = this.Response.Body.DeserializeJson<IEnumerable<ParcelResource>>();
-            resources.Count(x => x.ParcelNumber == 22).Should().Be(1);
+            resources.Count(x => x.ParcelNumber == 21).Should().Be(1);
             resources.Count(x => x.ParcelNumber == 1).Should().Be(1);
             resources.Count().Should().Be(2);
         }
