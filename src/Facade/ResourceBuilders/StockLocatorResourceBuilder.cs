@@ -24,6 +24,7 @@
                            LocationName = stockLocator.StorageLocation?.LocationCode,
                            StockPoolCode = stockLocator.StockPoolCode,
                            LocationDescription = stockLocator.StorageLocation?.Description,
+                           State = stockLocator.State
                        };
         }
 

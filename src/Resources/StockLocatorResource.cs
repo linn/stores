@@ -43,5 +43,7 @@
         public string StoragePlaceDescription { get; set; }
 
         public IEnumerable<string> UserPrivileges { get; set; }
+
+        public string State { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.StockLocators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -193,7 +194,12 @@
             string batchRef)
         {
             var part = this.partRepository.FindBy(p => p.PartNumber == partNumber);
-            return this.stockLocatorLocationsView.FilterBy(x => x.PartNumber == partNumber)
+            return this.stockLocatorLocationsView.FilterBy(x =>
+                    (string.IsNullOrEmpty(partNumber) || x.PartNumber == partNumber) 
+                 && (string.IsNullOrEmpty(location) || x.StorageLocation.LocationCode == location)
+                 && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
+                 && (string.IsNullOrEmpty(stockState) || x.State == stockState)
+                 && (string.IsNullOrEmpty(batchRef) || x.BatchRef == batchRef))
                 .Select(x => new StockLocator
                                  {
                                      StorageLocation = x.StorageLocation,
