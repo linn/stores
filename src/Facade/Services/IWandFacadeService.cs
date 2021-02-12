@@ -8,5 +8,7 @@
     public interface IWandFacadeService
     {
         IResult<IEnumerable<WandConsignment>> GetWandConsignments();
+
+        IResult<IEnumerable<WandItem>> GetWandItems(int consignmentId);
     }
 }

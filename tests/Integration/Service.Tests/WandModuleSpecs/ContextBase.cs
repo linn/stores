@@ -31,8 +31,10 @@
                 {
                     with.Dependency(this.WandFacadeService);
                     with.Dependency<IResourceBuilder<IEnumerable<WandConsignment>>>(new WandConsignmentsResourceBuilder());
+                    with.Dependency<IResourceBuilder<IEnumerable<WandItem>>>(new WandItemsResourceBuilder());
                     with.Module<WandModule>();
                     with.ResponseProcessor<WandConsignmentsResponseProcessor>();
+                    with.ResponseProcessor<WandItemsResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {

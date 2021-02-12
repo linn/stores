@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import { Title, Dropdown } from '@linn-it/linn-form-components-library';
+import { Title, Dropdown, Loading } from '@linn-it/linn-form-components-library';
 import Page from '../containers/Page';
 
 const useStyles = makeStyles({
@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     }
 });
 
-function Wand({ wandConsignments }) {
+function Wand({ wandConsignments, loadingWandConsignments }) {
     const [consignmentId, setConsignmentId] = useState(null);
 
     const classes = useStyles();
@@ -37,26 +37,34 @@ function Wand({ wandConsignments }) {
                 <Grid item xs={12}>
                     <Title text="Wand" />
                 </Grid>
-                <Grid item xs={12}>
-                    <Dropdown
-                        label="Consignment"
-                        propertyName="consignment"
-                        items={consignmentOptions()}
-                        value={consignmentId}
-                        onChange={handleConsignmentChange}
-                    />
-                </Grid>
             </Grid>
+            {loadingWandConsignments ? (
+                <Loading />
+            ) : (
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <Dropdown
+                            label="Consignment"
+                            propertyName="consignment"
+                            items={consignmentOptions()}
+                            value={consignmentId}
+                            onChange={handleConsignmentChange}
+                        />
+                    </Grid>
+                </Grid>
+            )}
         </Page>
     );
 }
 
 Wand.propTypes = {
-    wandConsignments: PropTypes.arrayOf(PropTypes.shape({}))
+    wandConsignments: PropTypes.arrayOf(PropTypes.shape({})),
+    loadingWandConsignments: PropTypes.bool
 };
 
 Wand.defaultProps = {
-    wandConsignments: []
+    wandConsignments: [],
+    loadingWandConsignments: false
 };
 
 export default Wand;

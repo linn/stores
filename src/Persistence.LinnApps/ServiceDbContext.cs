@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Persistence.LinnApps
 {
+    using System.Runtime.InteropServices.ComTypes;
+
     using Linn.Common.Configuration;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
@@ -118,6 +120,8 @@
 
         public DbQuery<WandConsignment> WandConsignments { get; set; }
 
+        public DbQuery<WandItem> WandItems { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -171,6 +175,7 @@
             this.BuildStorageLocations(builder);
             this.BuildInspectedStates(builder);
             this.QueryWandConsignments(builder);
+            this.QueryWandItems(builder);
             base.OnModelCreating(builder);
         }
 
@@ -951,6 +956,22 @@
             q.Property(v => v.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
             q.Property(v => v.Addressee).HasColumnName("ADDRESSEE");
             q.Property(v => v.IsDone).HasColumnName("DONE");
+            q.Property(v => v.CountryCode).HasColumnName("COUNTRY");
+        }
+
+        private void QueryWandItems(ModelBuilder builder)
+        {
+            var q = builder.Query<WandItem>().ToView("WAND_ITEMS_VIEW");
+            q.Property(v => v.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            q.Property(v => v.PartNumber).HasColumnName("PART_NUMBER");
+            q.Property(v => v.PartDescription).HasColumnName("INVOICE_DESCRIPTION");
+            q.Property(v => v.Quantity).HasColumnName("QTY");
+            q.Property(v => v.QuantityScanned).HasColumnName("RL_QTY_WANDED");
+            q.Property(v => v.OrderNumber).HasColumnName("ORDER_NUMBER");
+            q.Property(v => v.OrderLine).HasColumnName("ORDER_LINE");
+            q.Property(v => v.LinnBarCode).HasColumnName("LINN_BAR_CODE");
+            q.Property(v => v.RequisitionNumber).HasColumnName("REQ_NUMBER");
+            q.Property(v => v.RequisitionLine).HasColumnName("LINE_NUMBER");
             q.Property(v => v.CountryCode).HasColumnName("COUNTRY");
         }
     }

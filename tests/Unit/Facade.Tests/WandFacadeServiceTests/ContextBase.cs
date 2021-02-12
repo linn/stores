@@ -14,11 +14,14 @@
 
         protected IQueryRepository<WandConsignment> WandConsignmentsRepository { get; private set; }
 
+        protected IQueryRepository<WandItem> WandItemsRepository { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
             this.WandConsignmentsRepository = Substitute.For<IQueryRepository<WandConsignment>>();
-            this.Sut = new WandFacadeService(this.WandConsignmentsRepository);
+            this.WandItemsRepository = Substitute.For<IQueryRepository<WandItem>>();
+            this.Sut = new WandFacadeService(this.WandConsignmentsRepository, this.WandItemsRepository);
         }
     }
 }

@@ -69,6 +69,7 @@
             builder.RegisterType<StorageLocationRepository>().As<IRepository<StorageLocation, int>>();
             builder.RegisterType<InspectedStatesRepository>().As<IRepository<InspectedState, string>>();
             builder.RegisterType<WandConsignmentsRepository>().As<IQueryRepository<WandConsignment>>();
+            builder.RegisterType<WandItemsRepository>().As<IQueryRepository<WandItem>>();
         }
     }
 }
