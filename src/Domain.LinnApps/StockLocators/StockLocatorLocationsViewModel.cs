@@ -6,13 +6,11 @@
 
         public int StorageLocationId { get; set; }
 
-        public string StorageLocationCode { get; set; }
-
-        public string StorageLocationDescription { get; set; }
+        public StorageLocation StorageLocation { get; set; }
 
         public string PartNumber { get; set; }
 
-        public string PalletNumber { get; set; }
+        public int? PalletNumber { get; set; }
 
         public string LocationType { get; set; }
 

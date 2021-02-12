@@ -15,10 +15,15 @@
                            Remarks = stockLocator.Remarks,
                            StockRotationDate = stockLocator.StockRotationDate?.ToString("o"),
                            Quantity = stockLocator.Quantity,
+                           QuantityAllocated = stockLocator.QuantityAllocated,
                            LocationId = stockLocator.LocationId,
                            PalletNumber = stockLocator.PalletNumber,
                            PartNumber = stockLocator.PartNumber,
-                           StoragePlaceName = stockLocator.StorageLocation?.LocationCode
+                           PartDescription = stockLocator.Part?.Description,
+                           PartUnitOfMeasure = stockLocator.Part?.OurUnitOfMeasure,
+                           LocationName = stockLocator.StorageLocation?.LocationCode,
+                           StockPoolCode = stockLocator.StockPoolCode,
+                           LocationDescription = stockLocator.StorageLocation?.Description,
                        };
         }
 

@@ -934,6 +934,7 @@
             e.Property(l => l.LocationCode).HasColumnName("LOCATION_CODE").HasMaxLength(16);
             e.Property(l => l.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
             e.Property(l => l.DateInvalid).HasColumnName("DATE_INVALID");
+            e.Property(l => l.LocationType).HasColumnName("LOCATION_TYPE").HasMaxLength(1);
         }
 
         private void BuildInspectedStates(ModelBuilder builder)
@@ -949,8 +950,8 @@
             var q = builder.Query<StockLocatorLocationsViewModel>().ToView("STOCK_LOCATOR_LOC_VIEW");
             q.Property(e => e.Quantity).HasColumnName("QTY");
             q.Property(e => e.StorageLocationId).HasColumnName("LOCATION_ID");
-            q.Property(e => e.StorageLocationCode).HasColumnName("LOCATION_CODE").HasMaxLength(16);
-            q.Property(e => e.StorageLocationDescription).HasColumnName("DESCRIPTION").HasMaxLength(50);
+            q.HasOne(e => e.StorageLocation).WithMany(s => s.StockLocatorLocations)
+                .HasForeignKey("LOCATION_ID");
             q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
             q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
             q.Property(e => e.LocationType).HasColumnName("LOCATION_TYPE").HasMaxLength(1);

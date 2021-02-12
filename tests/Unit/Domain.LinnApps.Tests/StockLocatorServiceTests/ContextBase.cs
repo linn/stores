@@ -2,6 +2,7 @@
 {
     using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
     using NSubstitute;
@@ -20,6 +21,8 @@
 
         protected IQueryRepository<StockLocatorLocationsViewModel> StockLocatorLocationsView { get; private set; }
 
+        protected IRepository<Part, int> PartRepository { get; private set; }
+
         protected IStockLocatorService Sut { get; private set; }
 
         protected IAuthorisationService AuthService { get; private set; }
@@ -32,6 +35,7 @@
             this.StoragePlaceRepository = Substitute.For<IQueryRepository<StoragePlace>>();
             this.StorageLocationRepository = Substitute.For<IRepository<StorageLocation, int>>();
             this.StockLocatorLocationsView = Substitute.For<IQueryRepository<StockLocatorLocationsViewModel>>();
+            this.PartRepository = Substitute.For<IRepository<Part, int>>();
             this.AuthService = Substitute.For<IAuthorisationService>();
             this.Sut = new StockLocatorService(
                 this.StockLocatorRepository, 
@@ -39,6 +43,7 @@
                 this.StoragePlaceRepository,
                 this.StorageLocationRepository,
                 this.StockLocatorLocationsView,
+                this.PartRepository,
                 this.AuthService);
         }
     }

@@ -7,6 +7,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class StockLocatorLocationsRepository : IQueryRepository<StockLocatorLocationsViewModel>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -23,7 +25,9 @@
 
         public IQueryable<StockLocatorLocationsViewModel> FilterBy(Expression<Func<StockLocatorLocationsViewModel, bool>> expression)
         {
-            return this.serviceDbContext.StockLocatorLocationsView.Where(expression);
+            return this.serviceDbContext.StockLocatorLocationsView
+                .Where(expression)
+                .Include(l => l.StorageLocation);
         }
 
         public IQueryable<StockLocatorLocationsViewModel> FindAll()

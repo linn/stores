@@ -6,6 +6,7 @@
     using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Exceptions;
+    using Linn.Stores.Domain.LinnApps.Parts;
 
     public class StockLocatorService : IStockLocatorService
     {
@@ -19,6 +20,8 @@
 
         private readonly IQueryRepository<StockLocatorLocationsViewModel> stockLocatorLocationsView;
 
+        private readonly IRepository<Part, int> partRepository;
+
         private readonly IAuthorisationService authService;
 
         public StockLocatorService(
@@ -27,6 +30,7 @@
             IQueryRepository<StoragePlace> storagePlaceRepository,
             IRepository<StorageLocation, int> storageLocationRepository,
             IQueryRepository<StockLocatorLocationsViewModel> stockLocatorLocationsView,
+            IRepository<Part, int> partRepository,
             IAuthorisationService authService)
         {
             this.stockLocatorRepository = stockLocatorRepository;
@@ -34,6 +38,7 @@
             this.storagePlaceRepository = storagePlaceRepository;
             this.storageLocationRepository = storageLocationRepository;
             this.stockLocatorLocationsView = stockLocatorLocationsView;
+            this.partRepository = partRepository;
             this.authService = authService;
         }
 
@@ -187,12 +192,20 @@
             string stockState,
             string batchRef)
         {
+            var part = this.partRepository.FindBy(p => p.PartNumber == partNumber);
             return this.stockLocatorLocationsView.FilterBy(x => x.PartNumber == partNumber)
                 .Select(x => new StockLocator
                                  {
-                                     StorageLocation = this.storageLocationRepository.FindById(x.StorageLocationId) 
+                                     StorageLocation = x.StorageLocation,
+                                     PartNumber = x.PartNumber,
+                                     Part = part,
+                                     Id = x.StorageLocationId,
+                                     Quantity = x.Quantity,
+                                     PalletNumber = x.PalletNumber,
+                                     State = x.State,
+                                     QuantityAllocated = x.QuantityAllocated,
+                                     StockPoolCode = x.StockPoolCode
                                  });
-
         }
     }
 }

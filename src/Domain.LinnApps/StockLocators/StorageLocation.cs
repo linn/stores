@@ -11,9 +11,12 @@
 
         public string Description { get; set; }
 
+        public string LocationType { get; set; }
+
         public DateTime? DateInvalid { get; set; }
 
         public IEnumerable<StockLocator> StockLocators { get; set; }
 
+        public IEnumerable<StockLocatorLocationsViewModel> StockLocatorLocations { get; set; }
     }
 }
