@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
+import queryString from 'query-string';
 import {
     Dropdown,
+    LinkButton,
     Loading,
     Title,
     Typeahead,
@@ -31,11 +33,13 @@ function StockViewerOptions({
     inspectedStatesLoading,
     history
 }) {
-    const [partNumber, setPartNumber] = useState('');
-    const [storageLocation, setStorageLocation] = useState('');
-    const [stockPool, setStockPool] = useState('');
-    const [batcheRef, setBatchRef] = useState('');
-    const [inspectedState, setInspectedState] = useState('');
+    const [options, setOptions] = useState({
+        partNumber: '',
+        storageLocation: '',
+        stockPool: '',
+        batchRef: '',
+        inspectedState: ''
+    });
 
     const table = {
         totalItemCount: stockLocatorBatches.length,
@@ -68,14 +72,23 @@ function StockViewerOptions({
                         loading={partsLoading}
                         label="Part Number"
                         title="Search Parts"
-                        value={partNumber}
-                        onSelect={newValue => setPartNumber(newValue.partNumber)}
+                        value={options.partNumber}
+                        onSelect={newValue =>
+                            setOptions({ ...options, partNumber: newValue.partNumber })
+                        }
                         history={history}
                         debounce={1000}
                         minimumSearchTermLength={2}
                     />
                 </Grid>
-                <Grid item xs={9} />
+                <Grid item xs={2} />
+                <Grid item xs={2}>
+                    <LinkButton
+                        text="VIEW STOCK LOCATORS"
+                        to={`/invetory/stock-locators?${queryString.stringify(options)}`}
+                    />
+                </Grid>
+                <Grid item xs={5} />
 
                 <Grid item xs={3}>
                     <Typeahead
@@ -87,8 +100,10 @@ function StockViewerOptions({
                         loading={storageLocationsLoading}
                         label="Storage Location"
                         title="Search Storage Locations"
-                        value={storageLocation}
-                        onSelect={newValue => setStorageLocation(newValue.locationCode)}
+                        value={options.storageLocation}
+                        onSelect={newValue =>
+                            setOptions({ ...options, storageLocation: newValue.locationCode })
+                        }
                         history={history}
                         debounce={1000}
                         minimumSearchTermLength={2}
@@ -105,8 +120,10 @@ function StockViewerOptions({
                         loading={stockPoolsLoading}
                         label="Stock Pool"
                         title="Search Stock Pools"
-                        value={stockPool}
-                        onSelect={newValue => setStockPool(newValue.stockPoolCode)}
+                        value={options.stockPool}
+                        onSelect={newValue =>
+                            setOptions({ ...options, stockPool: newValue.stockPoolCode })
+                        }
                         history={history}
                         debounce={1000}
                         minimumSearchTermLength={2}
@@ -124,9 +141,9 @@ function StockViewerOptions({
                         loading={stockLocatorBatchesLoading}
                         label="Batch"
                         title="Search Batch Refs"
-                        value={batcheRef}
+                        value={options.batchRef}
                         onSelect={newValue => {
-                            setBatchRef(newValue.values[0].value);
+                            setOptions({ ...options, batchRef: newValue?.values?.[0].value });
                         }}
                         history={history}
                         debounce={1000}
@@ -142,11 +159,13 @@ function StockViewerOptions({
                                 id: v.state,
                                 displayText: v.description
                             }))}
-                            value={inspectedState}
+                            value={options.inspectedState}
                             label="State"
                             propertyName="inspectedState"
                             fullWidth
-                            onChange={(_propertyName, newValue) => setInspectedState(newValue)}
+                            onChange={(_propertyName, newValue) =>
+                                setOptions({ ...options, inspectedState: newValue })
+                            }
                             allowNoValue
                         />
                     )}
