@@ -7,6 +7,7 @@
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation;
 
     using Microsoft.EntityFrameworkCore;
@@ -115,6 +116,8 @@
 
         public DbSet<InspectedState> InspectedStates { get; set; }
 
+        public DbQuery<WandConsignment> WandConsignments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -167,6 +170,7 @@
             this.QueryDespatchPalletQueueDetails(builder);
             this.BuildStorageLocations(builder);
             this.BuildInspectedStates(builder);
+            this.QueryWandConsignments(builder);
             base.OnModelCreating(builder);
         }
 
@@ -939,6 +943,15 @@
             e.HasKey(l => l.State);
             e.Property(l => l.State).HasColumnName("STATE").HasMaxLength(6);
             e.Property(l => l.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
+        }
+
+        private void QueryWandConsignments(ModelBuilder builder)
+        {
+            var q = builder.Query<WandConsignment>().ToView("WAND_CONSIGNMENTS_VIEW");
+            q.Property(v => v.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            q.Property(v => v.Addressee).HasColumnName("ADDRESSEE");
+            q.Property(v => v.IsDone).HasColumnName("DONE");
+            q.Property(v => v.CountryCode).HasColumnName("COUNTRY");
         }
     }
 }

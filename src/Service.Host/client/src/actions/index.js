@@ -135,3 +135,5 @@ export const movePalletToUpperActionTypes = makeActionTypes(
 export const movePalletsToUpperActionTypes = makeActionTypes(
     processTypes.movePalletsToUpper.actionType
 );
+
+export const wandConsignmentsActionTypes = makeActionTypes(itemTypes.wandConsignments.actionType);

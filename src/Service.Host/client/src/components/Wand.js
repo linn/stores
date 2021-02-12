@@ -3,16 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import {
-    InputField,
-    Loading,
-    Title,
-    ErrorCard,
-    Dropdown,
-    utilities,
-    DatePicker,
-    OnOffSwitch
-} from '@linn-it/linn-form-components-library';
+import { Title, Dropdown } from '@linn-it/linn-form-components-library';
 import Page from '../containers/Page';
 
 const useStyles = makeStyles({
@@ -22,8 +13,23 @@ const useStyles = makeStyles({
     }
 });
 
-function Wand({}) {
+function Wand({ wandConsignments }) {
+    const [consignmentId, setConsignmentId] = useState(null);
+
     const classes = useStyles();
+
+    const handleConsignmentChange = (propertyName, newValue) => {
+        setConsignmentId(newValue);
+    };
+
+    const consignmentOptions = () => {
+        return wandConsignments?.map(c => ({
+            id: c.consignmentId,
+            displayText: `Consignment: ${c.consignmentId} Addressee: ${c.addressee} Country: ${
+                c.countryCode
+            } ${c.isDone ? c.isDone : ' '} `
+        }));
+    };
 
     return (
         <Page>
@@ -31,13 +37,26 @@ function Wand({}) {
                 <Grid item xs={12}>
                     <Title text="Wand" />
                 </Grid>
+                <Grid item xs={12}>
+                    <Dropdown
+                        label="Consignment"
+                        propertyName="consignment"
+                        items={consignmentOptions()}
+                        value={consignmentId}
+                        onChange={handleConsignmentChange}
+                    />
+                </Grid>
             </Grid>
         </Page>
     );
 }
 
-Wand.propTypes = {};
+Wand.propTypes = {
+    wandConsignments: PropTypes.arrayOf(PropTypes.shape({}))
+};
 
-Wand.defaultProps = {};
+Wand.defaultProps = {
+    wandConsignments: []
+};
 
 export default Wand;

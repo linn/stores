@@ -6,11 +6,11 @@
     using Linn.Common.Persistence.EntityFramework;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
-    using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Persistence.LinnApps;
     using Linn.Stores.Persistence.LinnApps.Repositories;
@@ -68,6 +68,7 @@
             builder.RegisterType<DespatchPalletQueueDetailsRepository>().As<IQueryRepository<DespatchPalletQueueDetail>>();
             builder.RegisterType<StorageLocationRepository>().As<IRepository<StorageLocation, int>>();
             builder.RegisterType<InspectedStatesRepository>().As<IRepository<InspectedState, string>>();
+            builder.RegisterType<WandConsignmentsRepository>().As<IQueryRepository<WandConsignment>>();
         }
     }
 }

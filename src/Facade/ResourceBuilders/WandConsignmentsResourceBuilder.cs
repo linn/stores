@@ -15,7 +15,10 @@
             return wandConsignments
                 .Select(w => new WandConsignmentResource
                                  {
-                                     ConsignmentId = w.ConsignmentId, Addressee = w.Addressee
+                                     ConsignmentId = w.ConsignmentId,
+                                     Addressee = w.Addressee,
+                                     CountryCode = w.CountryCode,
+                                     IsDone = w.IsDone
                                  });
         }
 
