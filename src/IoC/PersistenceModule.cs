@@ -7,6 +7,7 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
+    using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Sos;
@@ -80,6 +81,7 @@
             builder.RegisterType<TopUpListJobRefRepository>().As<IRepository<TopUpListJobRef, string>>();
             builder.RegisterType<StoresPalletRepository>().As<IStoresPalletRepository>();
             builder.RegisterType<DespatchPickingSummaryRepository>().As<IQueryRepository<DespatchPickingSummary>>();
+            builder.RegisterType<DespatchPalletQueueDetailsRepository>().As<IQueryRepository<DespatchPalletQueueDetail>>();
             builder.RegisterType<StorageLocationRepository>().As<IRepository<StorageLocation, int>>();
             builder.RegisterType<InspectedStatesRepository>().As<IRepository<InspectedState, string>>();
         }

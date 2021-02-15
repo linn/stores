@@ -7,6 +7,7 @@ import itemCreated from './middleware/itemCreated';
 import receiveSosDetail from './middleware/receiveSosDetail';
 import allocationStarted from './middleware/allocationStarted';
 import receiveStockLocator from './middleware/receiveStockLocator';
+import receivePalletMove from './middleware/receivePalletMove';
 
 // eslint-disable-next-line no-underscore-dangle
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -18,7 +19,8 @@ const middleware = [
     itemCreated,
     receiveSosDetail,
     receiveStockLocator,
-    allocationStarted
+    allocationStarted,
+    receivePalletMove
 ];
 
 const configureStore = initialState => {

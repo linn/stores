@@ -27,6 +27,7 @@ import WorkstationTopUpStatus from '../containers/workstations/WorkstationTopUpS
 import DeptStockUtility from '../containers/DeptStockUtility/DeptStockUtility';
 import DeptStockParts from '../containers/DeptStockUtility/DeptStockParts';
 import DespatchPickingSummaryReport from '../containers/reports/DespatchPickingSummaryReport';
+import DespatchPalletQueueReport from '../containers/reports/DespatchPalletQueueReport';
 import StockViewerOptions from '../containers/stockLocatorUtility/StockViewerOptions';
 
 const Root = ({ store }) => (
@@ -146,6 +147,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/stock-viewer"
                                         component={StockViewerOptions}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/allocations/despatch-pallet-queue"
+                                        component={DespatchPalletQueueReport}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>

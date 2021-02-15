@@ -29,3 +29,15 @@ export const unpickItemsAllocation = new ItemType(
     'UNPICK_ITEMS_ALLOCATION',
     '/logistics/allocations/unpick'
 );
+
+export const movePalletToUpper = new ItemType(
+    'movePalletToUpper',
+    'MOVE_PALLET_TO_UPPER',
+    '/logistics/wcs/move-to-upper'
+);
+
+export const movePalletsToUpper = new ItemType(
+    'movePalletsToUpper',
+    'MOVE_PALLETS_TO_UPPER',
+    '/logistics/wcs/move-all-to-upper'
+);
