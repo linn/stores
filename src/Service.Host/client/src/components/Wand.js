@@ -1,31 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/styles';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 import { DataGrid } from '@material-ui/data-grid';
 import { Title, Dropdown, Loading, InputField } from '@linn-it/linn-form-components-library';
 import Page from '../containers/Page';
 
-const useStyles = makeStyles({
-    runButton: {
-        float: 'right',
-        width: '100%'
-    }
-});
+function Wand({
+    wandConsignments,
+    loadingWandConsignments,
+    getItems,
+    items,
+    itemsLoading,
+    clearItems
+}) {
+    const [consignmentId, setConsignmentId] = useState('');
+    const [wandAction, setWandAction] = useState('W');
+    const [wandString, setWandString] = useState(null);
 
-function Wand({ wandConsignments, loadingWandConsignments, getItems, items, itemsLoading }) {
-    const [consignmentId, setConsignmentId] = useState(null);
-    const [wandAction, setwandAction] = useState('W');
+    const wandStringInput = useRef(null);
 
-    const classes = useStyles();
+    useEffect(() => {
+        setWandString(null);
+    }, [items]);
 
     const handleConsignmentChange = (_propertyName, newValue) => {
         setConsignmentId(newValue);
-        getItems(newValue);
+        if (newValue) {
+            getItems(newValue);
+        } else {
+            clearItems();
+        }
+        wandStringInput.current.focus();
     };
 
     const handlewandActionChange = (_propertyName, newValue) => {
-        setwandAction(newValue);
+        setWandAction(newValue);
+        wandStringInput.current.focus();
     };
 
     const consignmentOptions = () => {
@@ -35,6 +46,18 @@ function Wand({ wandConsignments, loadingWandConsignments, getItems, items, item
                 c.countryCode
             } ${c.isDone ? c.isDone : ' '} `
         }));
+    };
+
+    const handleOnWandChange = (_propertyName, newValue) => {
+        setWandString(newValue);
+    };
+
+    const handleWand = () => {};
+
+    const handleOnKeyPress = data => {
+        if (data.keyCode === 13 || data.keyCode === 9) {
+            handleWand();
+        }
     };
 
     const getDetailRows = details => {
@@ -54,6 +77,7 @@ function Wand({ wandConsignments, loadingWandConsignments, getItems, items, item
         { field: 'orderLine', headerName: 'Line', width: 80 },
         { field: 'linnBarCode', headerName: 'Bar Code', width: 120, hide: true }
     ];
+    const focusProp = { inputRef: wandStringInput, onKeyDown: handleOnKeyPress };
 
     return (
         <Page>
@@ -88,9 +112,25 @@ function Wand({ wandConsignments, loadingWandConsignments, getItems, items, item
                         />
                     </Grid>
                     <Grid item xs={8}>
-                        <InputField fullWidth autoFocus label="Wand String" />
+                        <InputField
+                            fullWidth
+                            autoFocus
+                            value={wandString}
+                            label="Wand String"
+                            onChange={handleOnWandChange}
+                            textFieldProps={focusProp}
+                        />
                     </Grid>
-                    <Grid item xs={2} />
+                    <Grid item xs={2}>
+                        <Button
+                            style={{ marginTop: '22px' }}
+                            className="hide-when-printing"
+                            variant="contained"
+                            onClick={handleWand}
+                        >
+                            {wandAction === 'W' ? 'Wand' : 'Unwand'}
+                        </Button>
+                    </Grid>
                     <Grid item xs={12}>
                         <div style={{ display: 'flex', height: 600 }}>
                             <div style={{ flexGrow: 1 }}>
@@ -115,6 +155,7 @@ Wand.propTypes = {
     wandConsignments: PropTypes.arrayOf(PropTypes.shape({})),
     loadingWandConsignments: PropTypes.bool,
     getItems: PropTypes.func.isRequired,
+    clearItems: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({})),
     itemsLoading: PropTypes.bool
 };

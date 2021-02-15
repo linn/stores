@@ -19,7 +19,8 @@ const initialise = () => dispatch => {
 
 const mapDispatchToProps = {
     initialise,
-    getItems: wandItemsActions.search
+    getItems: wandItemsActions.search,
+    clearItems: wandItemsActions.clearSearch
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Wand));
