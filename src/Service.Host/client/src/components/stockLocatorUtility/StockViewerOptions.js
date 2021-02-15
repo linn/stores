@@ -82,13 +82,14 @@ function StockViewerOptions({
                     />
                 </Grid>
                 <Grid item xs={2} />
-                <Grid item xs={2}>
+                <Grid item xs={5}>
                     <LinkButton
                         text="VIEW STOCK LOCATORS"
+                        disabled={!options.batchRef && !options.partNumber}
                         to={`/inventory/stock-locator-utility?${queryString.stringify(options)}`}
                     />
                 </Grid>
-                <Grid item xs={5} />
+                <Grid item xs={2} />
 
                 <Grid item xs={3}>
                     <Typeahead

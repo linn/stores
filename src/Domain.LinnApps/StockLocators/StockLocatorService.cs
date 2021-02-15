@@ -218,9 +218,11 @@
                                          StockPoolCode = x.StockPoolCode
                                      });
             }
+
             return this.stockLocatorBatchesView.FilterBy(x =>
                     (string.IsNullOrEmpty(partNumber) || x.PartNumber == partNumber)
                     && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
+                    && (string.IsNullOrEmpty(location) || x.LocationCode == location)
                     && (string.IsNullOrEmpty(stockState) || x.State == stockState)
                     && x.BatchRef == batchRef)
                 .Select(x => new StockLocator

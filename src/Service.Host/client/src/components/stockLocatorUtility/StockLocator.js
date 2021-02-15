@@ -1,27 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import {
-    Title,
-    SingleEditTable,
-    Loading,
-    SnackbarMessage,
-    ErrorCard,
-    BackButton
-} from '@linn-it/linn-form-components-library';
+import { Title, SingleEditTable, Loading, BackButton } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Page from '../../containers/Page';
 
-function StockLocator({ items, itemsLoading, history }) {
+function StockLocator({ items, itemsLoading, history, options }) {
+    const variableColumns = options?.batchRef
+        ? [
+              {
+                  title: 'Batch Ref',
+                  id: 'batchRef',
+                  type: 'text',
+                  editable: false
+              },
+              {
+                  title: 'Batch Date',
+                  id: 'stockRotationDate',
+                  type: 'date',
+                  editable: false
+              }
+          ]
+        : [
+              {
+                  title: 'Location Code',
+                  id: 'locationName',
+                  type: 'text',
+                  editable: false
+              },
+              {
+                  title: 'UOM',
+                  id: 'partUnitOfMeasure',
+                  type: 'text',
+                  editable: false
+              }
+          ];
+
     const columns = [
         {
             title: 'Part',
             id: 'partNumber',
-            type: 'text',
-            editable: false
-        },
-        {
-            title: 'UOM',
-            id: 'partUnitOfMeasure',
             type: 'text',
             editable: false
         },
@@ -49,12 +66,7 @@ function StockLocator({ items, itemsLoading, history }) {
             type: 'text',
             editable: false
         },
-        {
-            title: 'Qty To Pick',
-            id: 'quantityToPick',
-            type: 'number',
-            editable: false // true?
-        },
+        ...variableColumns,
         {
             title: 'Stock Pool',
             id: 'stockPoolCode',
@@ -66,39 +78,14 @@ function StockLocator({ items, itemsLoading, history }) {
             id: 'palletNumber',
             type: 'text',
             editable: false
-        },
-        {
-            title: 'Location',
-            id: 'locationName',
-            type: 'text',
-            editable: false
-        },
-        {
-            title: 'Trigger Level',
-            id: 'triggerLevel',
-            type: 'number',
-            editable: false // true?
-        },
-        {
-            title: 'Max Capacity',
-            id: 'maxCapacity',
-            type: 'number',
-            editable: false // true?
         }
     ];
     return (
         <Page>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <Title text="Stock Locations" />
+                    <Title text={options?.batchRef ? 'Locator Batches' : 'Stock Locations'} />
                 </Grid>
-                {/* {itemError && (
-                    <Grid item xs={12}>
-                        <ErrorCard
-                            errorMessage={itemError?.details?.errors?.[0] || itemError.statusText}
-                        />
-                    </Grid>
-                )} */}
                 {itemsLoading ? (
                     <Grid item xs={12}>
                         <Loading />
@@ -109,7 +96,10 @@ function StockLocator({ items, itemsLoading, history }) {
                             <SingleEditTable
                                 newRowPosition="top"
                                 columns={columns}
-                                rows={items}
+                                rows={items.map(i => ({
+                                    ...i,
+                                    id: i.id + i.batchRef + i.partNumber
+                                }))}
                                 allowNewRowCreation={false}
                                 editable
                                 allowNewRowCreations
@@ -124,5 +114,23 @@ function StockLocator({ items, itemsLoading, history }) {
         </Page>
     );
 }
+
+StockLocator.propTypes = {
+    items: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        })
+    ),
+    options: PropTypes.shape({
+        batchRef: PropTypes.string
+    }).isRequired,
+    itemsLoading: PropTypes.bool,
+    history: PropTypes.shape({ push: PropTypes.func }).isRequired
+};
+
+StockLocator.defaultProps = {
+    items: [],
+    itemsLoading: true
+};
 
 export default StockLocator;
