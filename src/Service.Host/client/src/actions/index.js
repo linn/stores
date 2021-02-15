@@ -135,3 +135,7 @@ export const movePalletToUpperActionTypes = makeActionTypes(
 export const movePalletsToUpperActionTypes = makeActionTypes(
     processTypes.movePalletsToUpper.actionType
 );
+
+export const stockLocatorLocationsActionTypes = makeActionTypes(
+    itemTypes.stockLocatorLocations.actionType
+);

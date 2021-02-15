@@ -85,7 +85,7 @@ function StockViewerOptions({
                 <Grid item xs={2}>
                     <LinkButton
                         text="VIEW STOCK LOCATORS"
-                        to={`/invetory/stock-locators?${queryString.stringify(options)}`}
+                        to={`/inventory/stock-locator-utility?${queryString.stringify(options)}`}
                     />
                 </Grid>
                 <Grid item xs={5} />

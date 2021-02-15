@@ -29,6 +29,7 @@ import DeptStockParts from '../containers/DeptStockUtility/DeptStockParts';
 import DespatchPickingSummaryReport from '../containers/reports/DespatchPickingSummaryReport';
 import DespatchPalletQueueReport from '../containers/reports/DespatchPalletQueueReport';
 import StockViewerOptions from '../containers/stockLocatorUtility/StockViewerOptions';
+import StockLocator from '../containers/stockLocatorUtility/StockLocator';
 
 const Root = ({ store }) => (
     <div>
@@ -147,6 +148,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/stock-viewer"
                                         component={StockViewerOptions}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/stock-locator-utility"
+                                        component={StockLocator}
                                     />
                                     <Route
                                         exact

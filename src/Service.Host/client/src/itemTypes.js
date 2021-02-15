@@ -197,3 +197,9 @@ export const inspectedStates = new ItemType(
     'INSPECTED_STATES',
     '/inventory/stock-locators/states'
 );
+
+export const stockLocatorLocations = new ItemType(
+    'stockLocatorLocations',
+    'STOCK_LOCATOR_LOCATIONS',
+    '/inventory/stock-locators-by-location'
+);
