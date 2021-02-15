@@ -54,6 +54,8 @@ import inspectedStates from './stockLocators/inspectedStates';
 import despatchPalletQueueReport from './despatchPalletQueueReport';
 import movePalletToUpper from './movePalletToUpper';
 import movePalletsToUpper from './movePalletsToUpper';
+import wandConsignments from './wandConsignments';
+import wandItems from './wandItems';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -104,6 +106,8 @@ const rootReducer = combineReducers({
     tqmsCategories,
     unitsOfMeasure,
     unpickItemsAllocation,
+    wandConsignments,
+    wandItems,
     workstationTopUpStatus,
     wwdReport,
     ...sharedLibraryReducers,

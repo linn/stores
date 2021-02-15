@@ -197,3 +197,11 @@ export const inspectedStates = new ItemType(
     'INSPECTED_STATES',
     '/inventory/stock-locators/states'
 );
+
+export const wandConsignments = new ItemType(
+    'wandConsignments',
+    'WAND_CONSIGNMENTS',
+    '/logistics/wand/consignments'
+);
+
+export const wandItems = new ItemType('wandItems', 'WAND_ITEMS', '/logistics/wand/items');

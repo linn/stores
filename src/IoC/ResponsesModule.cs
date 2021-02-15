@@ -14,6 +14,7 @@
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Facade;
     using Linn.Stores.Facade.ResourceBuilders;
@@ -132,6 +133,8 @@
             builder.RegisterType<InspectedStateResourceBuilder>().As<IResourceBuilder<InspectedState>>();
             builder.RegisterType<InspectedStatesResourceBuilder>().As<IResourceBuilder<IEnumerable<InspectedState>>>();
             builder.RegisterType<MessageResourceBuilder>().As<IResourceBuilder<MessageResult>>();
+            builder.RegisterType<WandConsignmentsResourceBuilder>().As<IResourceBuilder<IEnumerable<WandConsignment>>>();
+            builder.RegisterType<WandItemsResourceBuilder>().As<IResourceBuilder<IEnumerable<WandItem>>>();
         }
     }
 }
