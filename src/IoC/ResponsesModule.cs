@@ -10,6 +10,7 @@
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Domain.LinnApps.Exceptions;
+    using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.StockLocators;
@@ -109,6 +110,11 @@
             builder.RegisterType<PartDataSheetValuesListResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<PartDataSheetValues>>>();
             builder.RegisterType<ErrorResourceBuilder>().As<IResourceBuilder<Error>>();
+            builder.RegisterType<ImportBookResourceBuilder>().As<IResourceBuilder<ImportBook>>();
+            builder.RegisterType<ImportBookInvoiceDetailResourceBuilder>()
+                .As<IResourceBuilder<ImpBookInvoiceDetail>>();
+            builder.RegisterType<ImportBookOrderDetailResourceBuilder>().As<IResourceBuilder<ImpBookOrderDetail>>();
+            builder.RegisterType<ImportBookPostEntryResourceBuilder>().As<IResourceBuilder<ImpBookPostEntry>>();
             builder.RegisterType<TqmsCategoryResourceBuilder>()
                 .As<IResourceBuilder<TqmsCategory>>();
             builder.RegisterType<TqmsCategoriesResourceBuilder>()
