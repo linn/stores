@@ -26,7 +26,7 @@
             throw new NotImplementedException();
         }
 
-        IQueryable<WandConsignment> IQueryRepository<WandConsignment>.FindAll()
+        public IQueryable<WandConsignment> FindAll()
         {
             return this.serviceDbContext.WandConsignments;
         }

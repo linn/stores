@@ -26,7 +26,7 @@
             return this.serviceDbContext.WandItems.Where(expression);
         }
 
-        IQueryable<WandItem> IQueryRepository<WandItem>.FindAll()
+        public IQueryable<WandItem> FindAll()
         {
             return this.serviceDbContext.WandItems;
         }
