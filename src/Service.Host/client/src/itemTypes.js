@@ -203,3 +203,5 @@ export const wandConsignments = new ItemType(
     'WAND_CONSIGNMENTS',
     '/logistics/wand/consignments'
 );
+
+export const wandItems = new ItemType('wandItems', 'WAND_ITEMS', '/logistics/wand/items');

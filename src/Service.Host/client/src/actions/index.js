@@ -137,3 +137,5 @@ export const movePalletsToUpperActionTypes = makeActionTypes(
 );
 
 export const wandConsignmentsActionTypes = makeActionTypes(itemTypes.wandConsignments.actionType);
+
+export const wandItemsActionTypes = makeActionTypes(itemTypes.wandItems.actionType);
