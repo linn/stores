@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import { DataGrid } from '@material-ui/data-grid';
 import { Title, Dropdown, Loading, InputField } from '@linn-it/linn-form-components-library';
 import Page from '../containers/Page';
@@ -17,6 +20,7 @@ function Wand({
     const [consignmentId, setConsignmentId] = useState('');
     const [wandAction, setWandAction] = useState('W');
     const [wandString, setWandString] = useState(null);
+    const [showAlert, setShowAlert] = useState(false);
 
     const wandStringInput = useRef(null);
 
@@ -52,7 +56,9 @@ function Wand({
         setWandString(newValue);
     };
 
-    const handleWand = () => {};
+    const handleWand = () => {
+        setShowAlert(wandString);
+    };
 
     const handleOnKeyPress = data => {
         if (data.keyCode === 13 || data.keyCode === 9) {
@@ -81,6 +87,11 @@ function Wand({
 
     return (
         <Page>
+            <Dialog open={showAlert} onClose={() => setShowAlert(false)}>
+                <DialogContent>
+                    <DialogContentText>{wandString}</DialogContentText>
+                </DialogContent>
+            </Dialog>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Title text="Wand" />
