@@ -21,6 +21,8 @@
 
         private readonly IQueryRepository<StockLocatorLocationsViewModel> stockLocatorLocationsView;
 
+        private readonly IQueryRepository<StockLocatorBatchesViewModel> stockLocatorBatchesView;
+
         private readonly IRepository<Part, int> partRepository;
 
         private readonly IAuthorisationService authService;
@@ -31,6 +33,7 @@
             IQueryRepository<StoragePlace> storagePlaceRepository,
             IRepository<StorageLocation, int> storageLocationRepository,
             IQueryRepository<StockLocatorLocationsViewModel> stockLocatorLocationsView,
+            IQueryRepository<StockLocatorBatchesViewModel> stockLocatorBatchesView,
             IRepository<Part, int> partRepository,
             IAuthorisationService authService)
         {
@@ -39,6 +42,7 @@
             this.storagePlaceRepository = storagePlaceRepository;
             this.storageLocationRepository = storageLocationRepository;
             this.stockLocatorLocationsView = stockLocatorLocationsView;
+            this.stockLocatorBatchesView = stockLocatorBatchesView;
             this.partRepository = partRepository;
             this.authService = authService;
         }
@@ -194,18 +198,38 @@
             string batchRef)
         {
             var part = this.partRepository.FindBy(p => p.PartNumber == partNumber);
-            return this.stockLocatorLocationsView.FilterBy(x =>
-                    (string.IsNullOrEmpty(partNumber) || x.PartNumber == partNumber) 
-                 && (string.IsNullOrEmpty(location) || x.StorageLocation.LocationCode == location)
-                 && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
-                 && (string.IsNullOrEmpty(stockState) || x.State == stockState)
-                 && (string.IsNullOrEmpty(batchRef) || x.BatchRef == batchRef))
+            if (string.IsNullOrEmpty(batchRef))
+            {
+                return this.stockLocatorLocationsView.FilterBy(x =>
+                        (string.IsNullOrEmpty(partNumber) || x.PartNumber == partNumber)
+                        && (string.IsNullOrEmpty(location) || x.StorageLocation.LocationCode == location)
+                        && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
+                        && (string.IsNullOrEmpty(stockState) || x.State == stockState))
+                    .Select(x => new StockLocator
+                                     {
+                                         StorageLocation = x.StorageLocation,
+                                         PartNumber = x.PartNumber,
+                                         Part = part,
+                                         Id = x.StorageLocationId,
+                                         Quantity = x.Quantity,
+                                         PalletNumber = x.PalletNumber,
+                                         State = x.State,
+                                         QuantityAllocated = x.QuantityAllocated,
+                                         StockPoolCode = x.StockPoolCode
+                                     });
+            }
+            return this.stockLocatorBatchesView.FilterBy(x =>
+                    (string.IsNullOrEmpty(partNumber) || x.PartNumber == partNumber)
+                    && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
+                    && (string.IsNullOrEmpty(stockState) || x.State == stockState)
+                    && x.BatchRef == batchRef)
                 .Select(x => new StockLocator
                                  {
-                                     StorageLocation = x.StorageLocation,
                                      PartNumber = x.PartNumber,
                                      Part = part,
-                                     Id = x.StorageLocationId,
+                                     Id = x.LocationId,
+                                     BatchRef = x.BatchRef,
+                                     StockRotationDate = x.StockRotationDate,
                                      Quantity = x.Quantity,
                                      PalletNumber = x.PalletNumber,
                                      State = x.State,

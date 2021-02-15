@@ -117,6 +117,9 @@
 
         public DbQuery<StockLocatorLocationsViewModel> StockLocatorLocationsView { get; set; }
 
+        public DbQuery<StockLocatorBatchesViewModel> StockLocatorBatchesView { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -170,6 +173,7 @@
             this.BuildStorageLocations(builder);
             this.BuildInspectedStates(builder);
             this.QueryStockLocatorLocationsView(builder);
+            this.QueryStockLocatorBatches(builder);
             base.OnModelCreating(builder);
         }
 
@@ -959,6 +963,24 @@
             q.Property(e => e.Category).HasColumnName("CATEGORY").HasMaxLength(6);
             q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE").HasMaxLength(10);
             q.Property(e => e.OurUnitOfMeasure).HasColumnName("OUR_UNIT_OF_MEASURE").HasMaxLength(14);
+            q.Property(e => e.QuantityAllocated).HasColumnName("QTY_ALLOCATED");
+        }
+
+        private void QueryStockLocatorBatches(ModelBuilder builder)
+        {
+            var q = builder.Query<StockLocatorBatchesViewModel>().ToView("STOCK_LOCATOR_BATCH_VIEW");
+            q.Property(e => e.Quantity).HasColumnName("QTY");
+            q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
+            q.Property(e => e.LocationCode).HasColumnName("LOCATION_CODE").HasMaxLength(16);
+            q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(e => e.LocationType).HasColumnName("LOCATION_TYPE").HasMaxLength(1);
+            q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            q.Property(e => e.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
+            q.Property(e => e.BatchRef).HasColumnName("BATCH_REF").HasMaxLength(20);
+            q.Property(e => e.State).HasColumnName("STATE").HasMaxLength(6);
+            q.Property(e => e.Category).HasColumnName("CATEGORY").HasMaxLength(6);
+            q.Property(e => e.StockRotationDate).HasColumnName("STOCK_ROTATION_DATE");
+            q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE").HasMaxLength(10);
             q.Property(e => e.QuantityAllocated).HasColumnName("QTY_ALLOCATED");
         }
     }

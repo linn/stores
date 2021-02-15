@@ -70,6 +70,8 @@
             builder.RegisterType<InspectedStatesRepository>().As<IRepository<InspectedState, string>>();
             builder.RegisterType<StockLocatorLocationsRepository>()
                 .As<IQueryRepository<StockLocatorLocationsViewModel>>();
+            builder.RegisterType<StockLocatorBatchesRepository>()
+                .As<IQueryRepository<StockLocatorBatchesViewModel>>();
         }
     }
 }
