@@ -92,14 +92,6 @@ function Part({
         }
     }, [item, prevPart, editStatus, fetchLiveTest, itemId]);
 
-    // useEffect(() => {
-    //     setPart(p => ({
-    //         ...p,
-    //         nominal: nominal?.nominalCode,
-    //         nominalDescription: nominal?.description
-    //     }));
-    // }, [nominal, setPart]);
-
     useEffect(() => {
         if (options?.template && partTemplates.length) {
             const template = partTemplates.find(t => t.partRoot === options.template);
