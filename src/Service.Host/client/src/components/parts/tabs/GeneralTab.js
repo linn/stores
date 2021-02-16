@@ -300,7 +300,9 @@ const accountingCompanyShape = PropTypes.shape({
 
 const nominalShape = PropTypes.shape({
     nominalCode: PropTypes.string,
-    description: PropTypes.string
+    description: PropTypes.string,
+    departmentCode: PropTypes.string,
+    departmentDescription: PropTypes.string
 });
 
 const rootProductShape = PropTypes.shape({
