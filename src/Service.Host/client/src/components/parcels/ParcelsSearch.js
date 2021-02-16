@@ -44,6 +44,8 @@ function ParcelsSearch({
 
     const handleRowLinkClick = href => history.push(href);
 
+    //TODO use query-string to reduce these
+
     const handleParcelNumberSearchChange = (...args) => {
         setParcelNumberSearch(args[1]);
         setSearchTerm(
