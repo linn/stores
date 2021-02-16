@@ -50,7 +50,7 @@ function GeneralTab({
     const nominalAccountsTable = {
         totalItemCount: nominalAccountsSearchResults.length,
         rows: nominalAccountsSearchResults?.map((item, i) => ({
-            id: `${item.nominalCode}-${item.departmentCode}`,
+            id: item.nominalAccountId,
             values: [
                 { id: `${i}-0`, value: `${item.nominalCode}` },
                 { id: `${i}-1`, value: `${item.description || ''}` },
@@ -127,27 +127,10 @@ function GeneralTab({
                     title="Search Nominals"
                     value={nominal}
                     onSelect={newValue => handleNominalAccountChange(newValue)}
-                    //history={history}
                     debounce={1000}
                     minimumSearchTermLength={2}
                 />
             </Grid>
-            {/* <Grid item xs={4}>
-                <Typeahead
-                    onSelect={newValue => {
-                        console.log(newValue);
-                    }}
-                    label="Nominal"
-                    modal
-                    items={nominalAccountsSearchResults}
-                    value={nominal}
-                    loading={nominalAccountsSearchLoading}
-                    fetchItems={searchNominalAccounts}
-                    links={false}
-                    clearSearch={() => clearNominalAccountsSearch}
-                    placeholder="Search Code or Description"
-                />
-            </Grid> */}
             <Grid item xs={8}>
                 <InputField
                     fullWidth

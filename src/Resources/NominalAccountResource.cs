@@ -2,6 +2,8 @@
 {
     public class NominalAccountResource
     {
+        public int NominalAccountId { get; set; }
+
         public string NominalCode { get; set; }
 
         public string Description { get; set; }

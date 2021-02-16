@@ -14,6 +14,7 @@
         {
             return new NominalAccountResource
                        {
+                           NominalAccountId = account.NominalAccountId,
                            NominalCode = account.Nominal.NominalCode,
                            Description = account.Nominal.Description,
                            DepartmentCode = account.Department.DepartmentCode,

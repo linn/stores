@@ -244,6 +244,7 @@ function Part({
         }
         setPart({
             ...part,
+            nominalAccount: newValue.id,
             nominal: newValue.values[0].value,
             nominalDescription: newValue.values[1].value,
             department: newValue.values[2].value,
