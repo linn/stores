@@ -97,13 +97,13 @@ function Part({
         }
     }, [item, prevPart, fetchNominal, editStatus, fetchLiveTest, itemId]);
 
-    useEffect(() => {
-        setPart(p => ({
-            ...p,
-            nominal: nominal?.nominalCode,
-            nominalDescription: nominal?.description
-        }));
-    }, [nominal, setPart]);
+    // useEffect(() => {
+    //     setPart(p => ({
+    //         ...p,
+    //         nominal: nominal?.nominalCode,
+    //         nominalDescription: nominal?.description
+    //     }));
+    // }, [nominal, setPart]);
 
     useEffect(() => {
         if (options?.template && partTemplates.length) {
@@ -247,7 +247,7 @@ function Part({
         if (viewing()) {
             setEditStatus('edit');
         }
-        fetchNominal(newValue.name);
+        //fetchNominal(newValue.name);
         setPart({
             ...part,
             department: newValue.name,

@@ -15,7 +15,7 @@
             return new NominalResource
                        {
                            NominalCode = nominal.NominalCode,
-                           Description = nominal.Description,
+                           Description = nominal.Description
                        };
         }
 
