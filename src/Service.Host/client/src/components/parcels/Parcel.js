@@ -25,7 +25,8 @@ function Parcel({
     setSnackbarVisible,
     employees,
     suppliers,
-    carriers
+    carriers,
+    privileges
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -35,7 +36,7 @@ function Parcel({
                   parcelNumber: '',
                   supplierId: '',
                   supplierName: '',
-                  supplierCountry: 'GB',
+                  supplierCountry: '',
                   dateCreated: new Date(),
                   carrierId: 0,
                   carrierName: '',
@@ -175,7 +176,8 @@ Parcel.propTypes = {
             id: PropTypes.number,
             name: PropTypes.string
         })
-    )
+    ),
+    privileges: PropTypes.arrayOf(PropTypes.string)
 };
 
 Parcel.defaultProps = {
@@ -186,7 +188,8 @@ Parcel.defaultProps = {
     itemId: null,
     employees: [{ id: -1, name: 'loading..' }],
     carriers: [{ carrierCode: 'loading..', organisationId: -1 }],
-    suppliers: [{ id: -1, name: 'loading..' }]
+    suppliers: [{ id: -1, name: 'loading..' }],
+    privileges: null
 };
 
 export default Parcel;

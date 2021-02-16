@@ -2,7 +2,7 @@
 {
     public class ParcelSearchRequestResource
     {
-        public string SearchTerm { get; set; }
+        public string ParcelNumberSearchTerm { get; set; }
 
         public string SupplierIdSearchTerm { get; set; }
 

@@ -10,6 +10,7 @@ import {
     Dropdown
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
+import queryString from 'query-string';
 import Page from '../../containers/Page';
 
 function ParcelsSearch({
@@ -19,7 +20,8 @@ function ParcelsSearch({
     suppliers,
     carriers,
     applicationState,
-    history
+    history,
+    privileges
 }) {
     const [pageOptions, setPageOptions] = useState({
         orderBy: '',
@@ -29,70 +31,50 @@ function ParcelsSearch({
     });
 
     const [rowsToDisplay, setRowsToDisplay] = useState([]);
-    const [allowedToCreate, setAllowedToCreate] = useState(false);
+
+    const allowedToCreate = () => {
+        if (!(privileges.length < 1)) {
+            return privileges.some(priv => priv === 'parcel.admin');
+        }
+        return false;
+    };
 
     const [searchTerm, setSearchTerm] = useState(null);
-    const [parcelNumberSearch, setParcelNumberSearch] = useState('');
-    const [supplierIdSearch, setSupplierIdSearch] = useState('');
-    const [carrierIdSearch, setCarrierIdSearch] = useState('');
-    const [dateCreatedSearch, setDateCreatedSearch] = useState('');
-    const [supplierInvNoSearch, setSupplierInvNoSearch] = useState('');
-    const [consignmentNoSearch, setConsignmentNoSearch] = useState('');
-    const [commentsSearch, setCommentsSearch] = useState('');
 
-    useSearch(fetchItems, searchTerm, null, 'searchTerm');
+    const [searchTerms, setSearchTerms] = useState({
+        parcelNumberSearchTerm: '',
+        supplierIdSearchTerm: '',
+        carrierIdSearchTerm: '',
+        dateCreatedSearchTerm: '',
+        supplierInvNoSearchTerm: '',
+        consignmentNoSearchTerm: '',
+        commentsSearchTerm: ''
+    });
+    useSearch(fetchItems, searchTerm, null, 'searchTerm', null, 1500, 1);
 
     const handleRowLinkClick = href => history.push(href);
 
-    //TODO use query-string to reduce these
+    const handleSearchTermChange = (propertyName, newValue) => {
+        setSearchTerms({ ...searchTerms, [propertyName]: newValue });
+        setSearchTerm(queryString.stringify(searchTerms, '&&', '=');
+        // setTimeout(() => {
+        let stringifiedquery = queryString.stringify(searchTerms, '&&', '=');
+        console.log(stringifiedquery);
+        console.log("property name is " + propertyName);
+        const queryBeforeParam = stringifiedquery.split(`${propertyName}=`)[0];
+        const paramToEndOfQuery = stringifiedquery.split(`${propertyName}=`)[1];
+        const newlyUpdatedParam = paramToEndOfQuery.split('&')[0];
+        const restOfQuery = paramToEndOfQuery.split('&')[1];
 
-    const handleParcelNumberSearchChange = (...args) => {
-        setParcelNumberSearch(args[1]);
-        setSearchTerm(
-            `${args[1]}&supplierIdSearchTerm=${supplierIdSearch}&carrierIdSearchTerm=${carrierIdSearch}&dateCreatedSearchTerm=${dateCreatedSearch}&supplierInvNoSearchTerm=${supplierInvNoSearch}&consignmentNoSearchTerm=${consignmentNoSearch}&commentsSearchTerm=${commentsSearch}`
+        console.log(
+            `before is ${queryBeforeParam}, newlyupdated is ${newlyUpdatedParam}, rest of query is ${restOfQuery}`
         );
-    };
-
-    const handleSupplierSearchChange = (...args) => {
-        setSupplierIdSearch(args[1]);
-        setSearchTerm(
-            `${parcelNumberSearch}&supplierIdSearchTerm=${args[1]}&carrierIdSearchTerm=${carrierIdSearch}&dateCreatedSearchTerm=${dateCreatedSearch}&supplierInvNoSearchTerm=${supplierInvNoSearch}&consignmentNoSearchTerm=${consignmentNoSearch}&commentsSearchTerm=${commentsSearch}`
-        );
-    };
-
-    const handleCarrierSearchChange = (...args) => {
-        setCarrierIdSearch(args[1]);
-        setSearchTerm(
-            `${parcelNumberSearch}&supplierIdSearchTerm=${supplierIdSearch}&carrierIdSearchTerm=${args[1]}&dateCreatedSearchTerm=${dateCreatedSearch}&supplierInvNoSearchTerm=${supplierInvNoSearch}&consignmentNoSearchTerm=${consignmentNoSearch}&commentsSearchTerm=${commentsSearch}`
-        );
-    };
-
-    const handleDateSearchChange = (...args) => {
-        setDateCreatedSearch(args[1]);
-        setSearchTerm(
-            `${parcelNumberSearch}&supplierIdSearchTerm=${supplierIdSearch}&carrierIdSearchTerm=${carrierIdSearch}&dateCreatedSearchTerm=${args[1]}&supplierInvNoSearchTerm=${supplierInvNoSearch}&consignmentNoSearchTerm=${consignmentNoSearch}&commentsSearchTerm=${commentsSearch}`
-        );
-    };
-
-    const handleSupplierInvSearchChange = (...args) => {
-        setSupplierInvNoSearch(args[1]);
-        setSearchTerm(
-            `${parcelNumberSearch}&supplierIdSearchTerm=${supplierIdSearch}&carrierIdSearchTerm=${carrierIdSearch}&dateCreatedSearchTerm=${dateCreatedSearch}&supplierInvNoSearchTerm=${args[1]}&consignmentNoSearchTerm=${consignmentNoSearch}&commentsSearchTerm=${commentsSearch}`
-        );
-    };
-
-    const handleConsignmentNoSearchChange = (...args) => {
-        setConsignmentNoSearch(args[1]);
-        setSearchTerm(
-            `${parcelNumberSearch}&supplierIdSearchTerm=${supplierIdSearch}&carrierIdSearchTerm=${carrierIdSearch}&dateCreatedSearchTerm=${dateCreatedSearch}&supplierInvNoSearchTerm=${supplierInvNoSearch}&consignmentNoSearchTerm=${args[1]}&commentsSearchTerm=${commentsSearch}`
-        );
-    };
-
-    const handleCommentSearchChange = (...args) => {
-        setCommentsSearch(args[1]);
-        setSearchTerm(
-            `${parcelNumberSearch}&supplierIdSearchTerm=${supplierIdSearch}&carrierIdSearchTerm=${carrierIdSearch}&dateCreatedSearchTerm=${dateCreatedSearch}&supplierInvNoSearchTerm=${supplierInvNoSearch}&consignmentNoSearchTerm=${consignmentNoSearch}&commentsSearchTerm=${args[1]}`
-        );
+        if (newlyUpdatedParam !== newValue) {
+            stringifiedquery = `${queryBeforeParam}${propertyName}${newValue}&&${restOfQuery}`;
+        }
+        console.log(stringifiedquery);
+        setSearchTerm(stringifiedquery);
+        // }, 500);
     };
 
     useEffect(() => {
@@ -141,8 +123,6 @@ function ParcelsSearch({
                     )
             );
         }
-
-        setAllowedToCreate(utilities.getHref(applicationState, 'edit') !== null);
     }, [
         pageOptions.currentPage,
         pageOptions.rowsPerPage,
@@ -179,17 +159,16 @@ function ParcelsSearch({
                         label="Parcels"
                         fullWidth
                         placeholder="search.."
-                        onChange={handleParcelNumberSearchChange}
-                        propertyName="parcelSearchTerm"
+                        onChange={handleSearchTermChange}
+                        propertyName="parcelNumberSearchTerm"
                         type="text"
-                        value={parcelNumberSearch}
-                        debounce={5000}
+                        value={searchTerms.parcelNumberSearchTerm}
                     />
                 </Grid>
 
                 <Grid item xs={2}>
                     <Dropdown
-                        onChange={handleSupplierSearchChange}
+                        onChange={handleSearchTermChange}
                         items={suppliers
                             .map(s => ({
                                 ...s,
@@ -197,8 +176,8 @@ function ParcelsSearch({
                                 displayText: `${s.name} ( ${s.id} )`
                             }))
                             .sort((a, b) => (a.id > b.id ? 1 : -1))}
-                        value={supplierIdSearch}
-                        propertyName="supplierIdSearch"
+                        value={searchTerms.supplierIdSearchTerm}
+                        propertyName="supplierIdSearchTerm"
                         required
                         fullWidth
                         label="Supplier"
@@ -208,7 +187,7 @@ function ParcelsSearch({
 
                 <Grid item xs={2}>
                     <Dropdown
-                        onChange={handleCarrierSearchChange}
+                        onChange={handleSearchTermChange}
                         items={carriers
                             .map(s => ({
                                 ...s,
@@ -216,8 +195,8 @@ function ParcelsSearch({
                                 displayText: `${s.carrierCode} ( ${s.organisationId} )`
                             }))
                             .sort((a, b) => (a.id > b.id ? 1 : -1))}
-                        value={carrierIdSearch}
-                        propertyName="carrierIdSearch"
+                        value={searchTerms.carrierIdSearchTerm}
+                        propertyName="carrierIdSearchTerm"
                         required
                         fullWidth
                         label="Carrier"
@@ -230,11 +209,10 @@ function ParcelsSearch({
                         label="Date Created"
                         fullWidth
                         placeholder="search.."
-                        onChange={handleDateSearchChange}
+                        onChange={handleSearchTermChange}
                         propertyName="dateCreatedSearchTerm"
                         type="date"
-                        value={dateCreatedSearch}
-                        debounce={5000}
+                        value={searchTerms.dateCreatedSearchTerm}
                     />
                 </Grid>
 
@@ -242,11 +220,10 @@ function ParcelsSearch({
                     <SearchInputField
                         label="Supplier Inv No"
                         fullWidth
-                        onChange={handleSupplierInvSearchChange}
+                        onChange={handleSearchTermChange}
                         propertyName="supplierInvNoSearchTerm"
                         type="text"
-                        value={supplierInvNoSearch}
-                        debounce={5000}
+                        value={searchTerms.supplierInvNoSearchTerm}
                     />
                 </Grid>
 
@@ -254,11 +231,10 @@ function ParcelsSearch({
                     <SearchInputField
                         label="Consignment Number"
                         fullWidth
-                        onChange={handleConsignmentNoSearchChange}
-                        propertyName="consingmentNoSearchTerm"
+                        onChange={handleSearchTermChange}
+                        propertyName="consignmentNoSearchTerm"
                         type="text"
-                        value={consignmentNoSearch}
-                        debounce={5000}
+                        value={searchTerms.consignmentNoSearchTerm}
                     />
                 </Grid>
 
@@ -266,11 +242,10 @@ function ParcelsSearch({
                     <SearchInputField
                         label="Comments"
                         fullWidth
-                        onChange={handleCommentSearchChange}
+                        onChange={handleSearchTermChange}
                         propertyName="commentSearchTerm"
                         type="text"
-                        value={commentsSearch}
-                        debounce={5000}
+                        value={searchTerms.commentSearchTerm}
                     />
                 </Grid>
 
@@ -319,13 +294,15 @@ ParcelsSearch.propTypes = {
     applicationState: PropTypes.shape().isRequired,
     loading: PropTypes.bool,
     fetchItems: PropTypes.func.isRequired,
-    history: PropTypes.shape({ push: PropTypes.func }).isRequired
+    history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+    privileges: PropTypes.arrayOf(PropTypes.string)
 };
 
 ParcelsSearch.defaultProps = {
     loading: false,
     carriers: [{ carrierCode: 'loading..', organisationId: -1 }],
-    suppliers: [{ id: -1, name: 'loading..' }]
+    suppliers: [{ id: -1, name: 'loading..' }],
+    privileges: null
 };
 
 export default ParcelsSearch;

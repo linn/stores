@@ -68,8 +68,8 @@
 
         protected Expression<Func<Parcel, bool>> SearchExpression(ParcelSearchRequestResource searchTerms)
         {
-            return x => (string.IsNullOrWhiteSpace(searchTerms.SearchTerm)
-                             || x.ParcelNumber.ToString().Contains(searchTerms.SearchTerm));
+            return x => (string.IsNullOrWhiteSpace(searchTerms.ParcelNumberSearchTerm)
+                             || x.ParcelNumber.ToString().Contains(searchTerms.ParcelNumberSearchTerm));
         }
 
         public IResult<IEnumerable<Parcel>> Search(ParcelSearchRequestResource resource)

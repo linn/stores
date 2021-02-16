@@ -7,13 +7,15 @@ import suppliersSelectors from '../../selectors/suppliersSelectors';
 import carriersActions from '../../actions/carriersActions';
 import carriersSelectors from '../../selectors/carriersSelectors';
 import ParcelsSearch from '../../components/parcels/ParcelsSearch';
+import { getPrivileges } from '../../selectors/userSelectors';
 
 const mapStateToProps = state => ({
     items: parcelsSelectors.getItems(state),
     loading: parcelsSelectors.getLoading(state),
     applicationState: parcelsSelectors.getApplicationState(state),
     suppliers: suppliersSelectors.getItems(state),
-    carriers: carriersSelectors.getItems(state)
+    carriers: carriersSelectors.getItems(state),
+    privileges: getPrivileges(state)
     // editStatus: parcelSelectors.getEditStatus(state)
 });
 
