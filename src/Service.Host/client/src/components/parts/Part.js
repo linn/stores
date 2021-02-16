@@ -199,7 +199,7 @@ function Part({
         if (newValue === 'Yes' || newValue === 'No') {
             setPart({ ...part, [propertyName]: newValue === 'Yes' });
         } else if (typeof newValue === 'string') {
-            setPart({ ...part, [propertyName]: newValue.toUpperCase() });
+            setPart({ ...part, [propertyName]: newValue });
         } else {
             setPart({ ...part, [propertyName]: newValue });
         }
