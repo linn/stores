@@ -92,6 +92,9 @@ function Part({
             setPrevPart(item);
             fetchLiveTest(itemId);
         }
+        if (editStatus === 'create') {
+            setPart(p => ({ ...p, bomId: null }));
+        }
     }, [item, prevPart, fetchNominal, editStatus, fetchLiveTest, itemId]);
 
     useEffect(() => {
@@ -323,7 +326,7 @@ function Part({
                     <Grid item xs={2} />
                 ) : (
                     <Grid item xs={2}>
-                        <LinkButton to="/inventory/parts/create" text="Copy" />{' '}
+                        <LinkButton to="/inventory/parts/create" text="Copy" />
                     </Grid>
                 )}
                 {itemError && (
