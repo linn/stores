@@ -25,10 +25,5 @@
         }
 
         object IResourceBuilder<Nominal>.Build(Nominal nominal) => this.Build(nominal);
-
-        private IEnumerable<LinkResource> BuildLinks(Nominal nominal)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

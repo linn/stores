@@ -16,7 +16,7 @@
                        {
                            NominalCode = account.Nominal.NominalCode,
                            Description = account.Nominal.Description,
-                           DepartmentCode = account.Department.Description,
+                           DepartmentCode = account.Department.DepartmentCode,
                            DepartmentDescription = account.Department.Description
                        };
         }
@@ -27,10 +27,5 @@
         }
 
         object IResourceBuilder<NominalAccount>.Build(NominalAccount account) => this.Build(account);
-
-        private IEnumerable<LinkResource> BuildLinks(NominalAccount account)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -1,7 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import { InputField, Dropdown, Typeahead, DatePicker } from '@linn-it/linn-form-components-library';
+import {
+    InputField,
+    Dropdown,
+    Typeahead,
+    DatePicker,
+    TypeaheadTable
+} from '@linn-it/linn-form-components-library';
 
 function GeneralTab({
     accountingCompany,
@@ -18,19 +24,19 @@ function GeneralTab({
     rootProductsSearchResults,
     rootProductsSearchLoading,
     clearRootProductsSearch,
-    department,
-    departmentDescription,
-    departmentsSearchResults,
-    departmentsSearchLoading,
-    searchDepartments,
-    clearDepartmentsSearch,
-    handleDepartmentChange,
+    nominal,
+    nominalDescription,
+    nominalAccountsSearchResults,
+    nominalAccountsSearchLoading,
+    searchNominalAccounts,
+    clearNominalAccountsSearch,
+    handleNominalAccountChange,
     handleProductAnalysisCodeChange,
     handleAccountingCompanyChange,
     paretoCode,
-    nominal,
-    nominalDescription,
     stockControlled,
+    department,
+    departmentDescription,
     safetyCriticalPart,
     safetyCriticalHelperText,
     performanceCriticalPart,
@@ -41,6 +47,20 @@ function GeneralTab({
     safetyCertificateExpirationDate,
     safetyDataDirectory
 }) {
+    const nominalAccountsTable = {
+        totalItemCount: nominalAccountsSearchResults.length,
+        rows: nominalAccountsSearchResults?.map((item, i) => ({
+            id: `${item.nominalCode}-${item.departmentCode}`,
+            values: [
+                { id: `${i}-0`, value: `${item.nominalCode}` },
+                { id: `${i}-1`, value: `${item.description || ''}` },
+                { id: `${i}-2`, value: `${item.departmentCode || ''}` },
+                { id: `${i}-3`, value: `${item.departmentDescription || ''}` }
+            ],
+            links: item.links
+        }))
+    };
+
     const convertToYOrNString = booleanValue => {
         if (booleanValue === '' || booleanValue === null) {
             return null;
@@ -94,44 +114,64 @@ function GeneralTab({
             </Grid>
             <Grid item xs={8} />
             <Grid item xs={4}>
+                <TypeaheadTable
+                    table={nominalAccountsTable}
+                    columnNames={['Nominal', 'Description', 'Dept', 'Name']}
+                    fetchItems={searchNominalAccounts}
+                    modal
+                    placeholder="Search Nominal/Dept"
+                    links={false}
+                    clearSearch={clearNominalAccountsSearch}
+                    loading={nominalAccountsSearchLoading}
+                    label="Nominal"
+                    title="Search Nominals"
+                    value={nominal}
+                    onSelect={newValue => handleNominalAccountChange(newValue)}
+                    //history={history}
+                    debounce={1000}
+                    minimumSearchTermLength={2}
+                />
+            </Grid>
+            {/* <Grid item xs={4}>
                 <Typeahead
                     onSelect={newValue => {
-                        handleDepartmentChange(newValue);
+                        console.log(newValue);
                     }}
-                    label="Department"
+                    label="Nominal"
                     modal
-                    items={departmentsSearchResults}
-                    value={department}
-                    loading={departmentsSearchLoading}
-                    fetchItems={searchDepartments}
+                    items={nominalAccountsSearchResults}
+                    value={nominal}
+                    loading={nominalAccountsSearchLoading}
+                    fetchItems={searchNominalAccounts}
                     links={false}
-                    clearSearch={() => clearDepartmentsSearch}
+                    clearSearch={() => clearNominalAccountsSearch}
                     placeholder="Search Code or Description"
+                />
+            </Grid> */}
+            <Grid item xs={8}>
+                <InputField
+                    fullWidth
+                    value={nominalDescription}
+                    label="Description"
+                    disabled
+                    onChange={handleFieldChange}
+                    propertyName="nominalDescription"
+                />
+            </Grid>
+            <Grid item xs={4}>
+                <InputField
+                    fullWidth
+                    value={department}
+                    label="Dept"
+                    onChange={handleFieldChange}
+                    propertyName="department"
+                    disabled
                 />
             </Grid>
             <Grid item xs={8}>
                 <InputField
                     fullWidth
                     value={departmentDescription}
-                    label="Description"
-                    disabled
-                    onChange={handleFieldChange}
-                    propertyName="departmentDescription"
-                />
-            </Grid>
-            <Grid item xs={4}>
-                <InputField
-                    fullWidth
-                    value={nominal}
-                    label="Nominal"
-                    onChange={handleFieldChange}
-                    propertyName="nominal"
-                />
-            </Grid>
-            <Grid item xs={8}>
-                <InputField
-                    fullWidth
-                    value={nominalDescription}
                     label="Description"
                     disabled
                     onChange={handleFieldChange}
@@ -275,8 +315,8 @@ const accountingCompanyShape = PropTypes.shape({
     description: PropTypes.string
 });
 
-const departmentShape = PropTypes.shape({
-    departmentCode: PropTypes.string,
+const nominalShape = PropTypes.shape({
+    nominalCode: PropTypes.string,
     description: PropTypes.string
 });
 
@@ -303,20 +343,18 @@ GeneralTab.propTypes = {
     productAnalysisCodeSearchResults: PropTypes.arrayOf(productAnalysisCodeShape),
     productAnalysisCodesSearchLoading: PropTypes.bool,
     productAnalysisCodeDescription: PropTypes.string,
-    department: PropTypes.string,
-    departmentDescription: PropTypes.string,
-    departmentsSearchResults: PropTypes.arrayOf(departmentShape),
-    departmentsSearchLoading: PropTypes.bool,
+    nominal: PropTypes.string,
+    nominalDescription: PropTypes.string,
+    nominalAccountsSearchResults: PropTypes.arrayOf(nominalShape),
+    nominalAccountsSearchLoading: PropTypes.bool,
     paretoCode: PropTypes.string,
-    searchDepartments: PropTypes.func.isRequired,
-    clearDepartmentsSearch: PropTypes.func,
-    handleDepartmentChange: PropTypes.func.isRequired,
+    searchNominalAccounts: PropTypes.func.isRequired,
+    clearNominalAccountsSearch: PropTypes.func,
+    handleNominalAccountChange: PropTypes.func.isRequired,
     handleProductAnalysisCodeChange: PropTypes.func.isRequired,
     handleAccountingCompanyChange: PropTypes.func.isRequired,
     searchProductAnalysisCodes: PropTypes.func.isRequired,
     clearProductAnalysisCodesSearch: PropTypes.func,
-    nominal: PropTypes.string,
-    nominalDescription: PropTypes.string,
     stockControlled: PropTypes.bool,
     safetyCriticalPart: PropTypes.bool,
     performanceCriticalPart: PropTypes.bool,
@@ -326,7 +364,9 @@ GeneralTab.propTypes = {
     psuPart: PropTypes.bool,
     safetyCertificateExpirationDate: PropTypes.string,
     safetyDataDirectory: PropTypes.string,
-    safetyCriticalHelperText: PropTypes.string
+    safetyCriticalHelperText: PropTypes.string,
+    department: PropTypes.string,
+    departmentDescription: PropTypes.string
 };
 
 GeneralTab.defaultProps = {
@@ -340,13 +380,11 @@ GeneralTab.defaultProps = {
     productAnalysisCodeSearchResults: [],
     productAnalysisCodesSearchLoading: false,
     productAnalysisCodeDescription: null,
-    department: null,
-    departmentDescription: null,
-    departmentsSearchResults: [],
-    departmentsSearchLoading: false,
-    paretoCode: null,
     nominal: null,
     nominalDescription: null,
+    nominalAccountsSearchResults: [],
+    nominalAccountsSearchLoading: false,
+    paretoCode: null,
     stockControlled: null,
     safetyCriticalPart: null,
     performanceCriticalPart: null,
@@ -358,7 +396,9 @@ GeneralTab.defaultProps = {
     safetyDataDirectory: null,
     safetyCriticalHelperText: null,
     clearProductAnalysisCodesSearch: () => {},
-    clearDepartmentsSearch: () => {}
+    clearNominalAccountsSearch: () => {},
+    department: null,
+    departmentDescription: null
 };
 
 export default GeneralTab;

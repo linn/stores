@@ -55,6 +55,7 @@ import despatchPalletQueueReport from './despatchPalletQueueReport';
 import movePalletToUpper from './movePalletToUpper';
 import movePalletsToUpper from './movePalletsToUpper';
 import stockLocatorLocations from './stockLocators/stockLocatorLocations';
+import nominalAccounts from './nominalAccounts';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -80,6 +81,7 @@ const rootReducer = combineReducers({
     movePalletsToUpper,
     movePalletToUpper,
     nominal,
+    nominalAccounts,
     oidc,
     part,
     partCategories,

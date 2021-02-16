@@ -203,3 +203,9 @@ export const stockLocatorLocations = new ItemType(
     'STOCK_LOCATOR_LOCATIONS',
     '/inventory/stock-locators-by-location'
 );
+
+export const nominalAccounts = new ItemType(
+    'nominalAccounts',
+    'NOMINAL_ACCOUNTS',
+    '/inventory/nominal-accounts'
+);

@@ -30,8 +30,6 @@ function Part({
     addItem,
     updateItem,
     setEditStatus,
-    nominal,
-    fetchNominal,
     setSnackbarVisible,
     privileges,
     userName,
@@ -84,9 +82,6 @@ function Part({
     };
 
     useEffect(() => {
-        if (item?.department) {
-            fetchNominal(item?.department);
-        }
         if (item !== prevPart && editStatus !== 'create') {
             setPart(item);
             setPrevPart(item);
@@ -95,7 +90,7 @@ function Part({
         if (editStatus === 'create') {
             setPart(p => ({ ...p, bomId: null }));
         }
-    }, [item, prevPart, fetchNominal, editStatus, fetchLiveTest, itemId]);
+    }, [item, prevPart, editStatus, fetchLiveTest, itemId]);
 
     // useEffect(() => {
     //     setPart(p => ({
@@ -243,15 +238,16 @@ function Part({
         }
     };
 
-    const handleDepartmentChange = newValue => {
+    const handleNominalAccountChange = newValue => {
         if (viewing()) {
             setEditStatus('edit');
         }
-        //fetchNominal(newValue.name);
         setPart({
             ...part,
-            department: newValue.name,
-            departmentDescription: newValue.description
+            nominal: newValue.values[0].value,
+            nominalDescription: newValue.values[1].value,
+            department: newValue.values[2].value,
+            departmentDescription: newValue.values[3].value
         });
     };
 
@@ -420,7 +416,7 @@ function Part({
                                     rootProduct={part.rootProduct}
                                     department={part.department}
                                     departmentDescription={part.departmentDescription}
-                                    handleDepartmentChange={handleDepartmentChange}
+                                    handleNominalAccountChange={handleNominalAccountChange}
                                     paretoCode={part.paretoCode}
                                     handleAccountingCompanyChange={handleAccountingCompanyChange}
                                     nominal={part.nominal}
@@ -575,7 +571,6 @@ Part.propTypes = {
     setEditStatus: PropTypes.func.isRequired,
     setSnackbarVisible: PropTypes.func.isRequired,
     nominal: PropTypes.shape({ nominalCode: PropTypes.string, description: PropTypes.string }),
-    fetchNominal: PropTypes.func.isRequired,
     privileges: PropTypes.arrayOf(PropTypes.string),
     userName: PropTypes.string,
     userNumber: PropTypes.number,

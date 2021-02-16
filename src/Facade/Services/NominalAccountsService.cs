@@ -13,8 +13,6 @@
         private readonly IQueryRepository<NominalAccount> nominalAccountRepository;
 
         public NominalAccountsService(
-            IQueryRepository<Nominal> nominalRepository,
-            IQueryRepository<Department> departmentRepository,
             IQueryRepository<NominalAccount> nominalAccountRepository)
         {
             this.nominalAccountRepository = nominalAccountRepository;
@@ -27,7 +25,7 @@
                     => n.Department.DepartmentCode.ContainsIgnoringCase(searchTerm)
                     || n.Department.DepartmentCode.ContainsIgnoringCase(searchTerm)
                     || n.Nominal.NominalCode.ContainsIgnoringCase(searchTerm)
-                    || n.Nominal.Description.ContainsIgnoringCase(searchTerm));
+                    || n.Nominal.Description.ContainsIgnoringCase(searchTerm)).Take(50);
             return new SuccessResult<IEnumerable<NominalAccount>>(result);
         }
     }
