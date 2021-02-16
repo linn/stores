@@ -120,6 +120,7 @@ function DespatchPalletQueueReport({
                                     </TableCell>
                                     <TableCell className={classes.tableCell}>
                                         <Button
+                                            className="hide-when-printing"
                                             variant="contained"
                                             color="primary"
                                             onClick={onMovePallets}

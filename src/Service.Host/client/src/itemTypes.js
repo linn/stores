@@ -200,6 +200,14 @@ export const inspectedStates = new ItemType(
     '/inventory/stock-locators/states'
 );
 
+export const wandConsignments = new ItemType(
+    'wandConsignments',
+    'WAND_CONSIGNMENTS',
+    '/logistics/wand/consignments'
+);
+
+export const wandItems = new ItemType('wandItems', 'WAND_ITEMS', '/logistics/wand/items');
+
 export const parcel = new ItemType('parcel', 'PARCEL', '/logistics/parcels');
 
 export const parcels = new ItemType('parcels', 'PARCELS', '/logistics/parcels');

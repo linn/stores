@@ -6,11 +6,12 @@
     using Linn.Common.Persistence.EntityFramework;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
-    using Linn.Stores.Domain.LinnApps.Allocation.Models;
+    using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Persistence.LinnApps;
     using Linn.Stores.Persistence.LinnApps.Repositories;
@@ -60,6 +61,21 @@
             builder.RegisterType<StoresBugetRepository>().As<IQueryRepository<StoresBudget>>();
             builder.RegisterType<AuditLocationRepository>().As<IQueryRepository<AuditLocation>>();
             builder.RegisterType<ManufacturerRepository>().As<IRepository<Manufacturer, string>>();
+            builder.RegisterType<ImportBookCpcNumberRepository>().As<IRepository<ImportBookCpcNumber, int>>();
+            builder.RegisterType<ImportBookDeliveryTermsRepository>().As<IRepository<ImportBookDeliveryTerm, string>>();
+            builder.RegisterType<ImportBookExhangeRateRepository>()
+                .As<IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey>>();
+            builder.RegisterType<ImportBookInvoiceDetailsRepository>()
+                .As<IRepository<ImpBookInvoiceDetail, ImportBookInvoiceDetailKey>>();
+            builder.RegisterType<ImportBookOrderDetailsRepository>()
+                .As<IRepository<ImpBookOrderDetail, ImportBookOrderDetailKey>>();
+            builder.RegisterType<ImportBookPostEntryRepository>()
+                .As<IRepository<ImpBookPostEntry, ImportBookPostEntryKey>>();
+            builder.RegisterType<ImportBookRepository>().As<IRepository<ImportBook, int>>();
+            builder.RegisterType<ImportBookTransactionCodeRepository>()
+                .As<IRepository<ImportBookTransactionCode, int>>();
+            builder.RegisterType<ImportBookTransportCodeRepository>().As<IRepository<ImportBookTransportCode, int>>();
+            builder.RegisterType<PortRepository>().As<IQueryRepository<Port>>();
             builder.RegisterType<TqmsCategoriesRepository>().As<IRepository<TqmsCategory, string>>();
             builder.RegisterType<PtlMasterRepository>().As<ISingleRecordRepository<PtlMaster>>();
             builder.RegisterType<TopUpListJobRefRepository>().As<IRepository<TopUpListJobRef, string>>();
@@ -68,6 +84,8 @@
             builder.RegisterType<DespatchPalletQueueDetailsRepository>().As<IQueryRepository<DespatchPalletQueueDetail>>();
             builder.RegisterType<StorageLocationRepository>().As<IRepository<StorageLocation, int>>();
             builder.RegisterType<InspectedStatesRepository>().As<IRepository<InspectedState, string>>();
+            builder.RegisterType<WandConsignmentsRepository>().As<IQueryRepository<WandConsignment>>();
+            builder.RegisterType<WandItemsRepository>().As<IQueryRepository<WandItem>>();
         }
     }
 }

@@ -1,0 +1,40 @@
+﻿namespace Linn.Stores.Facade.ResourceBuilders
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps.Wand.Models;
+    using Linn.Stores.Resources.Wand;
+
+    public class WandItemsResourceBuilder : IResourceBuilder<IEnumerable<WandItem>>
+    {
+        public IEnumerable<WandItemResource> Build(IEnumerable<WandItem> wandItems)
+        {
+            return wandItems?.Select(
+                w => new WandItemResource
+                         {
+                             ConsignmentId = w.ConsignmentId,
+                             PartNumber = w.PartNumber,
+                             PartDescription = w.PartDescription,
+                             Quantity = w.Quantity,
+                             QuantityScanned = w.QuantityScanned,
+                             OrderNumber = w.OrderNumber,
+                             OrderLine = w.OrderLine,
+                             CountryCode = w.CountryCode,
+                             LinnBarCode = w.LinnBarCode,
+                             RequisitionNumber = w.RequisitionNumber,
+                             RequisitionLine = w.RequisitionLine
+                         });
+        }
+
+        public string GetLocation(IEnumerable<WandItem> model)
+        {
+            throw new NotImplementedException();
+        }
+
+        object IResourceBuilder<IEnumerable<WandItem>>.Build(IEnumerable<WandItem> wandItems) =>
+            this.Build(wandItems);
+    }
+}

@@ -138,6 +138,10 @@ export const movePalletsToUpperActionTypes = makeActionTypes(
     processTypes.movePalletsToUpper.actionType
 );
 
+export const wandConsignmentsActionTypes = makeActionTypes(itemTypes.wandConsignments.actionType);
+
+export const wandItemsActionTypes = makeActionTypes(itemTypes.wandItems.actionType);
+
 export const parcelActionTypes = makeActionTypes(itemTypes.parcel.actionType);
 
 export const parcelsActionTypes = makeActionTypes(itemTypes.parcels.actionType, false);

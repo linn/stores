@@ -10,9 +10,11 @@
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Domain.LinnApps.Exceptions;
+    using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Facade;
     using Linn.Stores.Facade.ResourceBuilders;
@@ -108,6 +110,11 @@
             builder.RegisterType<PartDataSheetValuesListResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<PartDataSheetValues>>>();
             builder.RegisterType<ErrorResourceBuilder>().As<IResourceBuilder<Error>>();
+            builder.RegisterType<ImportBookResourceBuilder>().As<IResourceBuilder<ImportBook>>();
+            builder.RegisterType<ImportBookInvoiceDetailResourceBuilder>()
+                .As<IResourceBuilder<ImpBookInvoiceDetail>>();
+            builder.RegisterType<ImportBookOrderDetailResourceBuilder>().As<IResourceBuilder<ImpBookOrderDetail>>();
+            builder.RegisterType<ImportBookPostEntryResourceBuilder>().As<IResourceBuilder<ImpBookPostEntry>>();
             builder.RegisterType<TqmsCategoryResourceBuilder>()
                 .As<IResourceBuilder<TqmsCategory>>();
             builder.RegisterType<TqmsCategoriesResourceBuilder>()
@@ -126,6 +133,8 @@
             builder.RegisterType<InspectedStateResourceBuilder>().As<IResourceBuilder<InspectedState>>();
             builder.RegisterType<InspectedStatesResourceBuilder>().As<IResourceBuilder<IEnumerable<InspectedState>>>();
             builder.RegisterType<MessageResourceBuilder>().As<IResourceBuilder<MessageResult>>();
+            builder.RegisterType<WandConsignmentsResourceBuilder>().As<IResourceBuilder<IEnumerable<WandConsignment>>>();
+            builder.RegisterType<WandItemsResourceBuilder>().As<IResourceBuilder<IEnumerable<WandItem>>>();
         }
     }
 }

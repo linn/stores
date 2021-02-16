@@ -54,6 +54,8 @@ import inspectedStates from './stockLocators/inspectedStates';
 import despatchPalletQueueReport from './despatchPalletQueueReport';
 import movePalletToUpper from './movePalletToUpper';
 import movePalletsToUpper from './movePalletsToUpper';
+import wandConsignments from './wandConsignments';
+import wandItems from './wandItems';
 import parcels from './parcels/parcels';
 import parcel from './parcels/parcel';
 import carriers from './carriers';
@@ -110,6 +112,8 @@ const rootReducer = combineReducers({
     tqmsCategories,
     unitsOfMeasure,
     unpickItemsAllocation,
+    wandConsignments,
+    wandItems,
     workstationTopUpStatus,
     wwdReport,
     ...sharedLibraryReducers,
