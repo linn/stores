@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.Facade.Extensions
 {
     using System.Linq;
-    using System.Runtime.CompilerServices;
 
     public static class StringExtensions
     {
