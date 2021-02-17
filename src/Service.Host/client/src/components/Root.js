@@ -29,11 +29,8 @@ import DeptStockParts from '../containers/DeptStockUtility/DeptStockParts';
 import DespatchPickingSummaryReport from '../containers/reports/DespatchPickingSummaryReport';
 import DespatchPalletQueueReport from '../containers/reports/DespatchPalletQueueReport';
 import StockViewerOptions from '../containers/stockLocatorUtility/StockViewerOptions';
-<<<<<<< HEAD
 import StockLocator from '../containers/stockLocatorUtility/StockLocator';
-=======
 import Wand from '../containers/Wand';
->>>>>>> master
 
 const Root = ({ store }) => (
     <div>
