@@ -84,15 +84,12 @@
             builder.RegisterType<DespatchPalletQueueDetailsRepository>().As<IQueryRepository<DespatchPalletQueueDetail>>();
             builder.RegisterType<StorageLocationRepository>().As<IRepository<StorageLocation, int>>();
             builder.RegisterType<InspectedStatesRepository>().As<IRepository<InspectedState, string>>();
-<<<<<<< HEAD
             builder.RegisterType<StockLocatorLocationsRepository>()
                 .As<IQueryRepository<StockLocatorLocationsViewModel>>();
             builder.RegisterType<StockLocatorBatchesRepository>()
                 .As<IQueryRepository<StockLocatorBatchesViewModel>>();
-=======
             builder.RegisterType<WandConsignmentsRepository>().As<IQueryRepository<WandConsignment>>();
             builder.RegisterType<WandItemsRepository>().As<IQueryRepository<WandItem>>();
->>>>>>> master
         }
     }
 }
