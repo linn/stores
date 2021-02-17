@@ -209,3 +209,10 @@ export const nominalAccounts = new ItemType(
     'NOMINAL_ACCOUNTS',
     '/inventory/nominal-accounts'
 );
+export const wandConsignments = new ItemType(
+    'wandConsignments',
+    'WAND_CONSIGNMENTS',
+    '/logistics/wand/consignments'
+);
+
+export const wandItems = new ItemType('wandItems', 'WAND_ITEMS', '/logistics/wand/items');
