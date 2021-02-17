@@ -178,6 +178,8 @@ function Part({
         }
     }
 
+    // this useReducer call replaces all the old useState calls
+    // we now have one state object and one consistent method of updating it
     const [state, dispatch] = useReducer(partReducer, {
         part: creating() ? defaultPart : { partNumber: '' },
         prevPart: { partNumber: '' }
