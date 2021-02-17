@@ -17,5 +17,12 @@
             GetStockLocatorsWithStoragePlaceInfoForPart(string partNumber);
 
         IEnumerable<StockLocator> GetBatches(string batches);
+
+        IEnumerable<StockLocator> GetStockLocatorLocationsView(
+            string partNumber,
+            string location,
+            string stockPool,
+            string stockState,
+            string batchRef);
     }
 }

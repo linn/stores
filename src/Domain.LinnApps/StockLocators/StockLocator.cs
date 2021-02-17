@@ -2,6 +2,8 @@
 {
     using System;
 
+    using Linn.Stores.Domain.LinnApps.Parts;
+
     public class StockLocator
     {
         public int Id { get; set; }
@@ -17,6 +19,8 @@
         public int? BudgetId { get; set; }
 
         public string PartNumber { get; set; }
+
+        public Part Part { get; set; }
 
         public int? QuantityAllocated { get; set; }
 

@@ -30,8 +30,6 @@ function Part({
     addItem,
     updateItem,
     setEditStatus,
-    nominal,
-    fetchNominal,
     setSnackbarVisible,
     privileges,
     userName,
@@ -84,23 +82,15 @@ function Part({
     };
 
     useEffect(() => {
-        if (item?.department) {
-            fetchNominal(item?.department);
-        }
         if (item !== prevPart && editStatus !== 'create') {
             setPart(item);
             setPrevPart(item);
             fetchLiveTest(itemId);
         }
-    }, [item, prevPart, fetchNominal, editStatus, fetchLiveTest, itemId]);
-
-    useEffect(() => {
-        setPart(p => ({
-            ...p,
-            nominal: nominal?.nominalCode,
-            nominalDescription: nominal?.description
-        }));
-    }, [nominal, setPart]);
+        if (editStatus === 'create') {
+            setPart(p => ({ ...p, bomId: null }));
+        }
+    }, [item, prevPart, editStatus, fetchLiveTest, itemId]);
 
     useEffect(() => {
         if (options?.template && partTemplates.length) {
@@ -196,9 +186,45 @@ function Part({
         if (newValue === 'Yes' || newValue === 'No') {
             setPart({ ...part, [propertyName]: newValue === 'Yes' });
         } else if (typeof newValue === 'string') {
-            setPart({ ...part, [propertyName]: newValue.toUpperCase() });
+            setPart({ ...part, [propertyName]: newValue });
         } else {
             setPart({ ...part, [propertyName]: newValue });
+        }
+    };
+
+    const handleLinnProducedChange = (_, newValue) => {
+        const linnProduced = newValue === 'Yes';
+        if (linnProduced) {
+            setPart({
+                ...part,
+                linnProduced,
+                sernosSequenceName: 'SERIAL 1',
+                sernosSequenceDescription: 'MASTER SERIAL NUMBER RECORDS.'
+            });
+        } else {
+            setPart({
+                ...part,
+                linnProduced
+            });
+        }
+    };
+
+    const handleRawOrFinishedChange = (_, newValue) => {
+        if (newValue === 'F') {
+            setPart({
+                ...part,
+                rawOrFinished: 'F',
+                nominalAccount: 564,
+                nominal: '0000000417',
+                nominalDescription: 'TOTAL COST OF SALES',
+                department: '0000002106',
+                departmentDescription: 'GROSS PROFIT'
+            });
+        } else {
+            setPart({
+                ...part,
+                rawOrFinished: newValue
+            });
         }
     };
 
@@ -240,15 +266,17 @@ function Part({
         }
     };
 
-    const handleDepartmentChange = newValue => {
+    const handleNominalAccountChange = newValue => {
         if (viewing()) {
             setEditStatus('edit');
         }
-        fetchNominal(newValue.name);
         setPart({
             ...part,
-            department: newValue.name,
-            departmentDescription: newValue.description
+            nominalAccount: newValue.id,
+            nominal: newValue.values[0].value,
+            nominalDescription: newValue.values[1].value,
+            department: newValue.values[2].value,
+            departmentDescription: newValue.values[3].value
         });
     };
 
@@ -323,7 +351,7 @@ function Part({
                     <Grid item xs={2} />
                 ) : (
                     <Grid item xs={2}>
-                        <LinkButton to="/inventory/parts/create" text="Copy" />{' '}
+                        <LinkButton to="/inventory/parts/create" text="Copy" />
                     </Grid>
                 )}
                 {itemError && (
@@ -417,7 +445,7 @@ function Part({
                                     rootProduct={part.rootProduct}
                                     department={part.department}
                                     departmentDescription={part.departmentDescription}
-                                    handleDepartmentChange={handleDepartmentChange}
+                                    handleNominalAccountChange={handleNominalAccountChange}
                                     paretoCode={part.paretoCode}
                                     handleAccountingCompanyChange={handleAccountingCompanyChange}
                                     nominal={part.nominal}
@@ -435,7 +463,9 @@ function Part({
                                     safetyCertificateExpirationDate={
                                         part.safetyCertificateExpirationDate
                                     }
+                                    handleRawOrFinishedChange={handleRawOrFinishedChange}
                                     safetyDataDirectory={part.safetyDataDirectory}
+                                    rawOrFinished={part.rawOrFinished}
                                 />
                             )}
                             {tab === 1 && (
@@ -453,6 +483,7 @@ function Part({
                                     drawingReference={part.drawingReference}
                                     safetyCriticalPart={part.safetyCriticalPart}
                                     plannedSurplus={part.plannedSurplus}
+                                    handleLinnProducedChange={handleLinnProducedChange}
                                 />
                             )}
                             {tab === 2 && (
@@ -572,7 +603,6 @@ Part.propTypes = {
     setEditStatus: PropTypes.func.isRequired,
     setSnackbarVisible: PropTypes.func.isRequired,
     nominal: PropTypes.shape({ nominalCode: PropTypes.string, description: PropTypes.string }),
-    fetchNominal: PropTypes.func.isRequired,
     privileges: PropTypes.arrayOf(PropTypes.string),
     userName: PropTypes.string,
     userNumber: PropTypes.number,

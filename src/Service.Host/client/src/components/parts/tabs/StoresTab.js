@@ -7,7 +7,6 @@ function StoresTab({
     handleFieldChange,
     qcOnReceipt,
     qcInformation,
-    rawOrFinished,
     ourInspectionWeeks,
     safetyWeeks,
     railMethod,
@@ -45,17 +44,6 @@ function StoresTab({
                     label="QC Info"
                     onChange={handleFieldChange}
                     propertyName="qcInformation"
-                />
-            </Grid>
-            <Grid item xs={4}>
-                <Dropdown
-                    label="Raw/Finished"
-                    propertyName="rawOrFinished"
-                    items={['R', 'F']}
-                    fullWidth
-                    allowNoValue
-                    value={rawOrFinished}
-                    onChange={handleFieldChange}
                 />
             </Grid>
             <Grid item xs={8} />
@@ -165,7 +153,6 @@ StoresTab.propTypes = {
     handleFieldChange: PropTypes.func.isRequired,
     qcOnReceipt: PropTypes.bool,
     qcInformation: PropTypes.string,
-    rawOrFinished: PropTypes.string,
     ourInspectionWeeks: PropTypes.number,
     safetyWeeks: PropTypes.number,
     railMethod: PropTypes.string,
@@ -183,7 +170,6 @@ StoresTab.propTypes = {
 StoresTab.defaultProps = {
     qcOnReceipt: null,
     qcInformation: null,
-    rawOrFinished: null,
     ourInspectionWeeks: null,
     safetyWeeks: null,
     railMethod: null,

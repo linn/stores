@@ -26,6 +26,7 @@
                                                              .ToUpper()
                                                              .Contains(searchTerm.ToUpper()))));
             }
+
             return new SuccessResult<IEnumerable<Department>>(
                 this.repository.FilterBy(d => !d.DateClosed.HasValue));
         }

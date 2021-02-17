@@ -15,7 +15,7 @@
             return new NominalResource
                        {
                            NominalCode = nominal.NominalCode,
-                           Description = nominal.Description,
+                           Description = nominal.Description
                        };
         }
 
@@ -25,10 +25,5 @@
         }
 
         object IResourceBuilder<Nominal>.Build(Nominal nominal) => this.Build(nominal);
-
-        private IEnumerable<LinkResource> BuildLinks(Nominal nominal)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

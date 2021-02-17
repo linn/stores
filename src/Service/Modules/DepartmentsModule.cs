@@ -11,19 +11,19 @@
     {
         private readonly IDepartmentsService departmentsService;
 
-        private readonly INominalService nominalService;
+        private readonly INominalAccountsService nominalAccountsService;
 
         public DepartmentsModule(
             IDepartmentsService departmentsFacadeService,
-            INominalService nominalService)
+            INominalAccountsService nominalAccountsService)
         {
             this.departmentsService = departmentsFacadeService;
             this.Get("inventory/departments", _ => this.GetDepartments());
 
-            this.nominalService = nominalService;
+            this.nominalAccountsService = nominalAccountsService;
             this.Get(
-                "inventory/nominal-for-department/{dept}", 
-                parameters => this.GetNominalForDepartment(parameters.dept));
+                "inventory/nominal-accounts", 
+                parameters => this.GetNominalForDepartment());
         }
 
         private object GetDepartments()
@@ -36,9 +36,10 @@
                 .WithView("Index");
         }
 
-        private object GetNominalForDepartment(string dept)
+        private object GetNominalForDepartment()
         {
-            var result = this.nominalService.GetNominalForDepartment(dept);
+            var resource = this.Bind<SearchRequestResource>();
+            var result = this.nominalAccountsService.GetNominalAccounts(resource.SearchTerm);
             return this.Negotiate
                 .WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)

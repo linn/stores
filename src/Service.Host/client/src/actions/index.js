@@ -136,6 +136,11 @@ export const movePalletsToUpperActionTypes = makeActionTypes(
     processTypes.movePalletsToUpper.actionType
 );
 
+export const stockLocatorLocationsActionTypes = makeActionTypes(
+    itemTypes.stockLocatorLocations.actionType
+);
+
+export const nominalAccountsActionTypes = makeActionTypes(itemTypes.nominalAccounts.actionType);
 export const wandConsignmentsActionTypes = makeActionTypes(itemTypes.wandConsignments.actionType);
 
 export const wandItemsActionTypes = makeActionTypes(itemTypes.wandItems.actionType);

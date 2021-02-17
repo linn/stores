@@ -15,5 +15,7 @@
             GetStockLocatorsForPart(string partNumber);
 
         IResult<IEnumerable<StockLocator>> GetBatches(string batchRef);
+
+        IResult<IEnumerable<StockLocator>> GetStockLocations(StockLocatorResource searchResource);
     }
 }

@@ -133,6 +133,8 @@
             builder.RegisterType<InspectedStateResourceBuilder>().As<IResourceBuilder<InspectedState>>();
             builder.RegisterType<InspectedStatesResourceBuilder>().As<IResourceBuilder<IEnumerable<InspectedState>>>();
             builder.RegisterType<MessageResourceBuilder>().As<IResourceBuilder<MessageResult>>();
+            builder.RegisterType<NominalAccountResourceBuilder>().As<IResourceBuilder<NominalAccount>>();
+            builder.RegisterType<NominalAccountsResourceBuilder>().As<IResourceBuilder<IEnumerable<NominalAccount>>>();
             builder.RegisterType<WandConsignmentsResourceBuilder>().As<IResourceBuilder<IEnumerable<WandConsignment>>>();
             builder.RegisterType<WandItemsResourceBuilder>().As<IResourceBuilder<IEnumerable<WandItem>>>();
         }
