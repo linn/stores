@@ -193,9 +193,6 @@ function Part({
         prevPart: { partNumber: '' }
     });
 
-
-    console.log(state.part);
-
     // checking whether partNumber already exists when partNumber is entered
     useEffect(() => {
         if (editStatus === 'create') {
@@ -301,11 +298,11 @@ function Part({
             p => p.partNumber === state?.part?.partNumber.toUpperCase().split('/')[0]
         );
 
-        if (prevRevision?.safetyCriticalPart === true) {
+        if (prevRevision?.safetyCriticalPart === 'Y') {
             return 'Note: Previous Revision Was Safety Critical';
         }
 
-        if (prevRevision?.safetyCriticalPart === false) {
+        if (prevRevision?.safetyCriticalPart === 'N') {
             return 'Note: Previous Revision Was NOT Safety Critical';
         }
 
