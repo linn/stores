@@ -198,6 +198,17 @@ export const inspectedStates = new ItemType(
     '/inventory/stock-locators/states'
 );
 
+export const stockLocatorLocations = new ItemType(
+    'stockLocatorLocations',
+    'STOCK_LOCATOR_LOCATIONS',
+    '/inventory/stock-locators-by-location'
+);
+
+export const nominalAccounts = new ItemType(
+    'nominalAccounts',
+    'NOMINAL_ACCOUNTS',
+    '/inventory/nominal-accounts'
+);
 export const wandConsignments = new ItemType(
     'wandConsignments',
     'WAND_CONSIGNMENTS',

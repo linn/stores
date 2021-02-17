@@ -23,7 +23,8 @@ function BuildTab({
     safetyCriticalPart,
     plannedSurplus,
     decrementRules,
-    assemblyTechnologies
+    assemblyTechnologies,
+    handleLinnProducedChange
 }) {
     const convertToYOrNString = booleanValue => {
         if (booleanValue === '' || booleanValue === null) {
@@ -41,7 +42,7 @@ function BuildTab({
                     fullWidth
                     allowNoValue
                     value={convertToYOrNString(linnProduced)}
-                    onChange={handleFieldChange}
+                    onChange={handleLinnProducedChange}
                 />
             </Grid>
             <Grid item xs={4} />
@@ -219,7 +220,8 @@ BuildTab.propTypes = {
     searchSernosSequences: PropTypes.func.isRequired,
     clearSernosSequencesSearch: PropTypes.func.isRequired,
     decrementRules: PropTypes.arrayOf(PropTypes.shape({})),
-    assemblyTechnologies: PropTypes.arrayOf(PropTypes.shape({}))
+    assemblyTechnologies: PropTypes.arrayOf(PropTypes.shape({})),
+    handleLinnProducedChange: PropTypes.func.isRequired
 };
 
 BuildTab.defaultProps = {
