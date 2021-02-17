@@ -19,9 +19,9 @@
 
         private readonly IRepository<StorageLocation, int> storageLocationRepository;
 
-        private readonly IQueryRepository<StockLocatorLocationsViewModel> stockLocatorLocationsView;
+        private readonly IQueryRepository<StockLocatorLocation> stockLocatorLocationsView;
 
-        private readonly IQueryRepository<StockLocatorBatchesViewModel> stockLocatorBatchesView;
+        private readonly IQueryRepository<StockLocatorBatch> stockLocatorBatchesView;
 
         private readonly IRepository<Part, int> partRepository;
 
@@ -32,8 +32,8 @@
             IStoresPalletRepository palletRepository,
             IQueryRepository<StoragePlace> storagePlaceRepository,
             IRepository<StorageLocation, int> storageLocationRepository,
-            IQueryRepository<StockLocatorLocationsViewModel> stockLocatorLocationsView,
-            IQueryRepository<StockLocatorBatchesViewModel> stockLocatorBatchesView,
+            IQueryRepository<StockLocatorLocation> stockLocatorLocationsView,
+            IQueryRepository<StockLocatorBatch> stockLocatorBatchesView,
             IRepository<Part, int> partRepository,
             IAuthorisationService authService)
         {

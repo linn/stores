@@ -139,9 +139,9 @@
 
         public DbSet<InspectedState> InspectedStates { get; set; }
 
-        public DbQuery<StockLocatorLocationsViewModel> StockLocatorLocationsView { get; set; }
+        public DbQuery<StockLocatorLocation> StockLocatorLocationsView { get; set; }
 
-        public DbQuery<StockLocatorBatchesViewModel> StockLocatorBatchesView { get; set; }
+        public DbQuery<StockLocatorBatch> StockLocatorBatchesView { get; set; }
 
         public DbQuery<WandConsignment> WandConsignments { get; set; }
 
@@ -1150,7 +1150,7 @@
 
         private void QueryStockLocatorLocationsView(ModelBuilder builder)
         {
-            var q = builder.Query<StockLocatorLocationsViewModel>().ToView("STOCK_LOCATOR_LOC_VIEW");
+            var q = builder.Query<StockLocatorLocation>().ToView("STOCK_LOCATOR_LOC_VIEW");
             q.Property(e => e.Quantity).HasColumnName("QTY");
             q.Property(e => e.StorageLocationId).HasColumnName("LOCATION_ID");
             q.HasOne(e => e.StorageLocation).WithMany(s => s.StockLocatorLocations)
@@ -1167,7 +1167,7 @@
 
         private void QueryStockLocatorBatches(ModelBuilder builder)
         {
-            var q = builder.Query<StockLocatorBatchesViewModel>().ToView("STOCK_LOCATOR_BATCH_VIEW");
+            var q = builder.Query<StockLocatorBatch>().ToView("STOCK_LOCATOR_BATCH_VIEW");
             q.Property(e => e.Quantity).HasColumnName("QTY");
             q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
             q.Property(e => e.LocationCode).HasColumnName("LOCATION_CODE").HasMaxLength(16);

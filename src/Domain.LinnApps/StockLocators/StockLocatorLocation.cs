@@ -1,6 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.StockLocators
 {
-    public class StockLocatorLocationsViewModel
+    public class StockLocatorLocation
     {
         public int Quantity { get; set; }
 

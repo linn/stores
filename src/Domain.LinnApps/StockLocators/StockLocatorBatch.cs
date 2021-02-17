@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class StockLocatorBatchesViewModel
+    public class StockLocatorBatch
     {
         public int? Quantity { get; set; }
         

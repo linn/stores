@@ -13,14 +13,14 @@
 
     public class WhenViewingStockLocatorsAndBatchRefInQuery : ContextBase
     {
-        private readonly IQueryable<StockLocatorBatchesViewModel> repositoryResult =
-            new List<StockLocatorBatchesViewModel>().AsQueryable();
+        private readonly IQueryable<StockLocatorBatch> repositoryResult =
+            new List<StockLocatorBatch>().AsQueryable();
 
         [SetUp]
         public void SetUp()
         {
             this.StockLocatorBatchesView
-                .FilterBy(Arg.Any<Expression<Func<StockLocatorBatchesViewModel, bool>>>())
+                .FilterBy(Arg.Any<Expression<Func<StockLocatorBatch, bool>>>())
                 .Returns(this.repositoryResult);
             this.Sut.GetStockLocatorLocationsView("PART", null, null, null, "ref");
         }
@@ -29,7 +29,7 @@
         public void ShouldQueryBatchesView()
         {
             this.StockLocatorBatchesView.Received()
-                .FilterBy(Arg.Any<Expression<Func<StockLocatorBatchesViewModel, bool>>>());
+                .FilterBy(Arg.Any<Expression<Func<StockLocatorBatch, bool>>>());
         }
     }
 }

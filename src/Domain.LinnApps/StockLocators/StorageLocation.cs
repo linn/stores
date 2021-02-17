@@ -17,6 +17,6 @@
 
         public IEnumerable<StockLocator> StockLocators { get; set; }
 
-        public IEnumerable<StockLocatorLocationsViewModel> StockLocatorLocations { get; set; }
+        public IEnumerable<StockLocatorLocation> StockLocatorLocations { get; set; }
     }
 }

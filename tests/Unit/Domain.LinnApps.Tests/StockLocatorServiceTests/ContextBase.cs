@@ -19,9 +19,9 @@
 
         protected IRepository<StorageLocation, int> StorageLocationRepository { get; private set; }
 
-        protected IQueryRepository<StockLocatorLocationsViewModel> StockLocatorLocationsView { get; private set; }
+        protected IQueryRepository<StockLocatorLocation> StockLocatorLocationsView { get; private set; }
 
-        protected IQueryRepository<StockLocatorBatchesViewModel> StockLocatorBatchesView { get; private set; }
+        protected IQueryRepository<StockLocatorBatch> StockLocatorBatchesView { get; private set; }
 
 
         protected IRepository<Part, int> PartRepository { get; private set; }
@@ -37,8 +37,8 @@
             this.StoresPalletRepository = Substitute.For<IStoresPalletRepository>();
             this.StoragePlaceRepository = Substitute.For<IQueryRepository<StoragePlace>>();
             this.StorageLocationRepository = Substitute.For<IRepository<StorageLocation, int>>();
-            this.StockLocatorLocationsView = Substitute.For<IQueryRepository<StockLocatorLocationsViewModel>>();
-            this.StockLocatorBatchesView = Substitute.For<IQueryRepository<StockLocatorBatchesViewModel>>();
+            this.StockLocatorLocationsView = Substitute.For<IQueryRepository<StockLocatorLocation>>();
+            this.StockLocatorBatchesView = Substitute.For<IQueryRepository<StockLocatorBatch>>();
             this.PartRepository = Substitute.For<IRepository<Part, int>>();
             this.AuthService = Substitute.For<IAuthorisationService>();
             this.Sut = new StockLocatorService(

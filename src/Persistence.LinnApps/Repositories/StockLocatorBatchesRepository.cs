@@ -7,7 +7,7 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
-    public class StockLocatorBatchesRepository : IQueryRepository<StockLocatorBatchesViewModel>
+    public class StockLocatorBatchesRepository : IQueryRepository<StockLocatorBatch>
     {
         private readonly ServiceDbContext serviceDbContext;
 
@@ -16,17 +16,17 @@
             this.serviceDbContext = serviceDbContext;
         }
 
-        public StockLocatorBatchesViewModel FindBy(Expression<Func<StockLocatorBatchesViewModel, bool>> expression)
+        public StockLocatorBatch FindBy(Expression<Func<StockLocatorBatch, bool>> expression)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<StockLocatorBatchesViewModel> FilterBy(Expression<Func<StockLocatorBatchesViewModel, bool>> expression)
+        public IQueryable<StockLocatorBatch> FilterBy(Expression<Func<StockLocatorBatch, bool>> expression)
         {
             return this.serviceDbContext.StockLocatorBatchesView.Where(expression);
         }
 
-        public IQueryable<StockLocatorBatchesViewModel> FindAll()
+        public IQueryable<StockLocatorBatch> FindAll()
         {
             throw new NotImplementedException();
         }
