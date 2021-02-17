@@ -169,16 +169,6 @@ function Part({
                         }
                     };
                 }
-                if (action.fieldName === 'manufacturersPartNumber') {
-                    return {
-                        ...state,
-                        part: {
-                            ...state.part,
-                            preferredSupplier: action.payload.name,
-                            preferredSupplierName: action.payload.description
-                        }
-                    };
-                }
                 return {
                     ...state,
                     part: { ...state.part, [action.fieldName]: action.payload }
