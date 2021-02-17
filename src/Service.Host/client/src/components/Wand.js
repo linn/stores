@@ -81,7 +81,9 @@ function Wand({
         { field: 'partDescription', headerName: 'Description', width: 230 },
         { field: 'orderNumber', headerName: 'Order', width: 100 },
         { field: 'orderLine', headerName: 'Line', width: 80 },
-        { field: 'linnBarCode', headerName: 'Bar Code', width: 120, hide: true }
+        { field: 'linnBarCode', headerName: 'Bar Code', width: 120, hide: true },
+        { field: 'requisitionNumber', headerName: 'Req No', width: 100, hide: true },
+        { field: 'requisitionLine', headerName: 'Req Line', width: 110, hide: true }
     ];
     const focusProp = { inputRef: wandStringInput, onKeyDown: handleOnKeyPress };
 
