@@ -85,9 +85,9 @@
             builder.RegisterType<StorageLocationRepository>().As<IRepository<StorageLocation, int>>();
             builder.RegisterType<InspectedStatesRepository>().As<IRepository<InspectedState, string>>();
             builder.RegisterType<StockLocatorLocationsRepository>()
-                .As<IQueryRepository<StockLocatorLocationsViewModel>>();
+                .As<IQueryRepository<StockLocatorLocation>>();
             builder.RegisterType<StockLocatorBatchesRepository>()
-                .As<IQueryRepository<StockLocatorBatchesViewModel>>();
+                .As<IQueryRepository<StockLocatorBatch>>();
             builder.RegisterType<WandConsignmentsRepository>().As<IQueryRepository<WandConsignment>>();
             builder.RegisterType<WandItemsRepository>().As<IQueryRepository<WandItem>>();
         }

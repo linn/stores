@@ -192,6 +192,23 @@ function Part({
         }
     };
 
+    const handleLinnProducedChange = (_, newValue) => {
+        const linnProduced = newValue === 'Yes';
+        if (linnProduced) {
+            setPart({
+                ...part,
+                linnProduced,
+                sernosSequenceName: 'SERIAL 1',
+                sernosSequenceDescription: 'MASTER SERIAL NUMBER RECORDS.'
+            });
+        } else {
+            setPart({
+                ...part,
+                linnProduced
+            });
+        }
+    };
+
     const handlePhaseOutClick = () => {
         updateItem(itemId, {
             ...part,
@@ -445,6 +462,7 @@ function Part({
                                     drawingReference={part.drawingReference}
                                     safetyCriticalPart={part.safetyCriticalPart}
                                     plannedSurplus={part.plannedSurplus}
+                                    handleLinnProducedChange={handleLinnProducedChange}
                                 />
                             )}
                             {tab === 2 && (
