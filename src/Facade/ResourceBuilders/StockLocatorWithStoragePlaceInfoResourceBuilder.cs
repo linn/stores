@@ -22,6 +22,8 @@
                            StoragePlaceName = stockLocator.StoragePlaceName,
                            StoragePlaceDescription = stockLocator.StoragePlaceDescription,
                            PartNumber = stockLocator.PartNumber,
+                           PartDescription = stockLocator.Part?.Description,
+                           UnitOfMeasure = stockLocator.Part?.OurUnitOfMeasure,
                            AuditDepartmentCode = stockLocator.AuditDepartmentCode
                        };
         }

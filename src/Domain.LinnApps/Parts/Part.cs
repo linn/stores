@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
 
+    using Linn.Stores.Domain.LinnApps.StockLocators;
+
     public class Part
     {
         public int Id { get; set; }

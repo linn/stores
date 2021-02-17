@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Persistence.LinnApps
 {
+    using System.Runtime.InteropServices.ComTypes;
+
     using Linn.Common.Configuration;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
@@ -8,6 +10,7 @@
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation;
 
     using Microsoft.EntityFrameworkCore;
@@ -136,6 +139,14 @@
 
         public DbSet<InspectedState> InspectedStates { get; set; }
 
+        public DbQuery<StockLocatorLocation> StockLocatorLocationsView { get; set; }
+
+        public DbQuery<StockLocatorBatch> StockLocatorBatchesView { get; set; }
+
+        public DbQuery<WandConsignment> WandConsignments { get; set; }
+
+        public DbQuery<WandItem> WandItems { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -199,6 +210,10 @@
             this.QueryDespatchPalletQueueDetails(builder);
             this.BuildStorageLocations(builder);
             this.BuildInspectedStates(builder);
+            this.QueryStockLocatorLocationsView(builder);
+            this.QueryStockLocatorBatches(builder);
+            this.QueryWandConsignments(builder);
+            this.QueryWandItems(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1122,6 +1137,7 @@
             e.Property(l => l.LocationCode).HasColumnName("LOCATION_CODE").HasMaxLength(16);
             e.Property(l => l.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
             e.Property(l => l.DateInvalid).HasColumnName("DATE_INVALID");
+            e.Property(l => l.LocationType).HasColumnName("LOCATION_TYPE").HasMaxLength(1);
         }
 
         private void BuildInspectedStates(ModelBuilder builder)
@@ -1130,6 +1146,66 @@
             e.HasKey(l => l.State);
             e.Property(l => l.State).HasColumnName("STATE").HasMaxLength(6);
             e.Property(l => l.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
+        }
+
+        private void QueryStockLocatorLocationsView(ModelBuilder builder)
+        {
+            var q = builder.Query<StockLocatorLocation>().ToView("STOCK_LOCATOR_LOC_VIEW");
+            q.Property(e => e.Quantity).HasColumnName("QTY");
+            q.Property(e => e.StorageLocationId).HasColumnName("LOCATION_ID");
+            q.HasOne(e => e.StorageLocation).WithMany(s => s.StockLocatorLocations)
+                .HasForeignKey("LOCATION_ID");
+            q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(e => e.LocationType).HasColumnName("LOCATION_TYPE").HasMaxLength(1);
+            q.Property(e => e.State).HasColumnName("STATE").HasMaxLength(6);
+            q.Property(e => e.Category).HasColumnName("CATEGORY").HasMaxLength(6);
+            q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE").HasMaxLength(10);
+            q.Property(e => e.OurUnitOfMeasure).HasColumnName("OUR_UNIT_OF_MEASURE").HasMaxLength(14);
+            q.Property(e => e.QuantityAllocated).HasColumnName("QTY_ALLOCATED");
+        }
+
+        private void QueryStockLocatorBatches(ModelBuilder builder)
+        {
+            var q = builder.Query<StockLocatorBatch>().ToView("STOCK_LOCATOR_BATCH_VIEW");
+            q.Property(e => e.Quantity).HasColumnName("QTY");
+            q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
+            q.Property(e => e.LocationCode).HasColumnName("LOCATION_CODE").HasMaxLength(16);
+            q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(e => e.LocationType).HasColumnName("LOCATION_TYPE").HasMaxLength(1);
+            q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            q.Property(e => e.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
+            q.Property(e => e.BatchRef).HasColumnName("BATCH_REF").HasMaxLength(20);
+            q.Property(e => e.State).HasColumnName("STATE").HasMaxLength(6);
+            q.Property(e => e.Category).HasColumnName("CATEGORY").HasMaxLength(6);
+            q.Property(e => e.StockRotationDate).HasColumnName("STOCK_ROTATION_DATE");
+            q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE").HasMaxLength(10);
+            q.Property(e => e.QuantityAllocated).HasColumnName("QTY_ALLOCATED");
+        }
+    
+        private void QueryWandConsignments(ModelBuilder builder)
+        {
+            var q = builder.Query<WandConsignment>().ToView("WAND_CONSIGNMENTS_VIEW");
+            q.Property(v => v.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            q.Property(v => v.Addressee).HasColumnName("ADDRESSEE");
+            q.Property(v => v.IsDone).HasColumnName("DONE");
+            q.Property(v => v.CountryCode).HasColumnName("COUNTRY");
+        }
+
+        private void QueryWandItems(ModelBuilder builder)
+        {
+            var q = builder.Query<WandItem>().ToView("WAND_ITEMS_VIEW");
+            q.Property(v => v.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            q.Property(v => v.PartNumber).HasColumnName("PART_NUMBER");
+            q.Property(v => v.PartDescription).HasColumnName("INVOICE_DESCRIPTION");
+            q.Property(v => v.Quantity).HasColumnName("QTY");
+            q.Property(v => v.QuantityScanned).HasColumnName("RL_QTY_WANDED");
+            q.Property(v => v.OrderNumber).HasColumnName("ORDER_NUMBER");
+            q.Property(v => v.OrderLine).HasColumnName("ORDER_LINE");
+            q.Property(v => v.LinnBarCode).HasColumnName("LINN_BAR_CODE");
+            q.Property(v => v.RequisitionNumber).HasColumnName("REQ_NUMBER");
+            q.Property(v => v.RequisitionLine).HasColumnName("LINE_NUMBER");
+            q.Property(v => v.CountryCode).HasColumnName("COUNTRY");
         }
     }
 }

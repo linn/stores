@@ -54,6 +54,10 @@ import inspectedStates from './stockLocators/inspectedStates';
 import despatchPalletQueueReport from './despatchPalletQueueReport';
 import movePalletToUpper from './movePalletToUpper';
 import movePalletsToUpper from './movePalletsToUpper';
+import stockLocatorLocations from './stockLocators/stockLocatorLocations';
+import nominalAccounts from './nominalAccounts';
+import wandConsignments from './wandConsignments';
+import wandItems from './wandItems';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -79,6 +83,7 @@ const rootReducer = combineReducers({
     movePalletsToUpper,
     movePalletToUpper,
     nominal,
+    nominalAccounts,
     oidc,
     part,
     partCategories,
@@ -94,6 +99,7 @@ const rootReducer = combineReducers({
     sosAllocHeads,
     stockLocator,
     stockLocatorBatches,
+    stockLocatorLocations,
     stockLocators,
     stockPools,
     storageLocations,
@@ -104,6 +110,8 @@ const rootReducer = combineReducers({
     tqmsCategories,
     unitsOfMeasure,
     unpickItemsAllocation,
+    wandConsignments,
+    wandItems,
     workstationTopUpStatus,
     wwdReport,
     ...sharedLibraryReducers,

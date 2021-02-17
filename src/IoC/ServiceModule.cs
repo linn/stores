@@ -53,7 +53,7 @@
             builder.RegisterType<SuppliersService>().As<ISuppliersService>();
             builder.RegisterType<ProductAnalysisCodeService>()
                 .As<IProductAnalysisCodeService>();
-            builder.RegisterType<NominalService>().As<INominalService>();
+            builder.RegisterType<NominalAccountsService>().As<INominalAccountsService>();
             builder.RegisterType<DespatchLocationFacadeService>()
                 .As<IFacadeService<DespatchLocation, int, DespatchLocationResource, DespatchLocationResource>>();
             builder.RegisterType<StockPoolFacadeService>()
@@ -95,6 +95,7 @@
             builder.RegisterType<InspectedStateService>()
                 .As<IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource>>();
             builder.RegisterType<WarehouseFacadeService>().As<IWarehouseFacadeService>();
+            builder.RegisterType<WandFacadeService>().As<IWandFacadeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

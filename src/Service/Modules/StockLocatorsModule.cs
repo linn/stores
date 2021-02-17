@@ -36,12 +36,22 @@
             this.Get("/inventory/storage-locations", _ => this.GetStorageLocations());
             this.Post("/inventory/stock-locators", _ => this.AddStockLocator());
             this.Get("/inventory/stock-locators/states", _ => this.GetStates());
+            this.Get("inventory/stock-locators-by-location/", _ => this.GetStockLocatorsByLocation());
         }
 
         private object GetStockLocators()
         {
             var resource = this.Bind<StockLocatorResource>();
             var result = this.service.GetStockLocatorsForPart(resource.PartNumber);
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
+        }
+
+        private object GetStockLocatorsByLocation()
+        {
+            var resource = this.Bind<StockLocatorResource>();
+            var result = this.service.GetStockLocations(resource);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");

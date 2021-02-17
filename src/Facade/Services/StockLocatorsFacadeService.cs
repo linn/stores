@@ -52,6 +52,16 @@
                 this.domainService.GetBatches(batchRef));
         }
 
+        public IResult<IEnumerable<StockLocator>> GetStockLocations(StockLocatorResource searchResource)
+        {
+            return new SuccessResult<IEnumerable<StockLocator>>(this.domainService.GetStockLocatorLocationsView(
+                searchResource.PartNumber,
+                searchResource.LocationName,
+                searchResource.StockPoolCode,
+                searchResource.State,
+                searchResource.BatchRef));
+        }
+
         public IResult<IEnumerable<StockLocator>> FilterBy(StockLocatorResource searchResource)
         {
             throw new NotImplementedException();

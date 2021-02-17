@@ -21,7 +21,9 @@
         public NominalAccount FindBy(Expression<Func<NominalAccount, bool>> expression)
         {
             return this.serviceDbContext.NominalAccounts.Where(expression)
-                .Include(a => a.Department).ToList().FirstOrDefault();
+                .Include(a => a.Department)
+                .Include(a => a.Nominal)
+                .ToList().FirstOrDefault();
         }
 
         public IQueryable<NominalAccount> FilterBy(Expression<Func<NominalAccount, bool>> expression)
