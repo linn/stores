@@ -30,9 +30,7 @@ function GeneralTab({
     nominalAccountsSearchLoading,
     searchNominalAccounts,
     clearNominalAccountsSearch,
-    handleNominalAccountChange,
     handleProductAnalysisCodeChange,
-    handleAccountingCompanyChange,
     paretoCode,
     stockControlled,
     department,
@@ -46,8 +44,7 @@ function GeneralTab({
     psuPart,
     safetyCertificateExpirationDate,
     safetyDataDirectory,
-    rawOrFinished,
-    handleRawOrFinishedChange
+    rawOrFinished
 }) {
     const nominalAccountsTable = {
         totalItemCount: nominalAccountsSearchResults.length,
@@ -63,12 +60,6 @@ function GeneralTab({
         }))
     };
 
-    const convertToYOrNString = booleanValue => {
-        if (booleanValue === '' || booleanValue === null) {
-            return null;
-        }
-        return booleanValue ? 'Yes' : 'No';
-    };
     return (
         <Grid container spacing={3}>
             <Grid item xs={4}>
@@ -82,9 +73,7 @@ function GeneralTab({
                     fullWidth
                     allowNoValue
                     value={accountingCompany}
-                    onChange={(_, newValue) => {
-                        handleAccountingCompanyChange(newValue);
-                    }}
+                    onChange={handleFieldChange}
                 />
             </Grid>
             <Grid item xs={2}>
@@ -123,7 +112,7 @@ function GeneralTab({
                     fullWidth
                     allowNoValue
                     value={rawOrFinished}
-                    onChange={handleRawOrFinishedChange}
+                    onChange={handleFieldChange}
                 />
             </Grid>
             <Grid item xs={8} />
@@ -141,7 +130,7 @@ function GeneralTab({
                     label="Nominal"
                     title="Search Nominals"
                     value={nominal}
-                    onSelect={newValue => handleNominalAccountChange(newValue)}
+                    onSelect={newValue => handleFieldChange('nominalAccount', newValue)}
                     debounce={1000}
                     minimumSearchTermLength={2}
                 />
@@ -205,10 +194,10 @@ function GeneralTab({
                 <Dropdown
                     label="Stores Controlled?"
                     propertyName="stockControlled"
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     fullWidth
                     allowNoValue={false}
-                    value={convertToYOrNString(stockControlled)}
+                    value={stockControlled}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -218,11 +207,11 @@ function GeneralTab({
                 <Dropdown
                     label="Safety Critical?"
                     propertyName="safetyCriticalPart"
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     fullWidth
                     helperText={safetyCriticalHelperText}
                     allowNoValue={false}
-                    value={convertToYOrNString(safetyCriticalPart)}
+                    value={safetyCriticalPart}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -230,10 +219,10 @@ function GeneralTab({
                 <Dropdown
                     label="Performance Critical?"
                     propertyName="performanceCriticalPart"
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={convertToYOrNString(performanceCriticalPart)}
+                    value={performanceCriticalPart}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -243,10 +232,10 @@ function GeneralTab({
                 <Dropdown
                     label="EMC Critical?"
                     propertyName="emcCriticalPart"
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={convertToYOrNString(emcCriticalPart)}
+                    value={emcCriticalPart}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -254,10 +243,10 @@ function GeneralTab({
                 <Dropdown
                     label="Single Source?"
                     propertyName="singleSourcePart"
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={convertToYOrNString(singleSourcePart)}
+                    value={singleSourcePart}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -267,10 +256,10 @@ function GeneralTab({
                 <Dropdown
                     label="CCC Critical?"
                     propertyName="cccCriticalPart"
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     allowNoValue={false}
                     fullWidth
-                    value={convertToYOrNString(cccCriticalPart)}
+                    value={cccCriticalPart}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -279,9 +268,9 @@ function GeneralTab({
                     label="Approved  PSU?"
                     propertyName="psuPart"
                     allowNoValue={false}
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     fullWidth
-                    value={convertToYOrNString(psuPart)}
+                    value={psuPart}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -350,25 +339,22 @@ GeneralTab.propTypes = {
     paretoCode: PropTypes.string,
     searchNominalAccounts: PropTypes.func.isRequired,
     clearNominalAccountsSearch: PropTypes.func,
-    handleNominalAccountChange: PropTypes.func.isRequired,
     handleProductAnalysisCodeChange: PropTypes.func.isRequired,
-    handleAccountingCompanyChange: PropTypes.func.isRequired,
     searchProductAnalysisCodes: PropTypes.func.isRequired,
     clearProductAnalysisCodesSearch: PropTypes.func,
-    stockControlled: PropTypes.bool,
-    safetyCriticalPart: PropTypes.bool,
-    performanceCriticalPart: PropTypes.bool,
-    emcCriticalPart: PropTypes.bool,
-    singleSourcePart: PropTypes.bool,
-    cccCriticalPart: PropTypes.bool,
-    psuPart: PropTypes.bool,
+    stockControlled: PropTypes.string,
+    safetyCriticalPart: PropTypes.string,
+    performanceCriticalPart: PropTypes.string,
+    emcCriticalPart: PropTypes.string,
+    singleSourcePart: PropTypes.string,
+    cccCriticalPart: PropTypes.string,
+    psuPart: PropTypes.string,
     safetyCertificateExpirationDate: PropTypes.string,
     safetyDataDirectory: PropTypes.string,
     safetyCriticalHelperText: PropTypes.string,
     department: PropTypes.string,
     departmentDescription: PropTypes.string,
-    rawOrFinished: PropTypes.string,
-    handleRawOrFinishedChange: PropTypes.func.isRequired
+    rawOrFinished: PropTypes.string
 };
 
 GeneralTab.defaultProps = {

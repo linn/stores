@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { InputField, Dropdown, Typeahead, LinkButton } from '@linn-it/linn-form-components-library';
@@ -8,7 +8,6 @@ function PurchTab({
     unitsOfMeasure,
     ourUnitOfMeasure,
     preferredSupplier,
-    handlePrefferedSupplierChange,
     preferredSupplierName,
     suppliersSearchResults,
     suppliersSearchLoading,
@@ -26,23 +25,12 @@ function PurchTab({
     oneOffRequirement,
     sparesRequirement,
     ignoreWorkstationStock,
-    handleIgnoreWorkstationStockChange,
     imdsIdNumber,
     imdsWeight,
     mechanicalOrElectronic,
     partCategories,
-    manufacturers,
-    handleManufacturersPartNumberChange,
     links
 }) {
-    const convertToYOrNString = booleanValue => {
-        if (booleanValue === '' || booleanValue === null) {
-            return null;
-        }
-        return booleanValue ? 'Yes' : 'No';
-    };
-    const [manufacturerSelected, setManufacturerSelected] = useState(manufacturers?.[0]);
-
     return (
         <Grid container spacing={3}>
             <Grid item xs={4}>
@@ -60,7 +48,7 @@ function PurchTab({
             <Grid item xs={4}>
                 <Typeahead
                     onSelect={newValue => {
-                        handlePrefferedSupplierChange(newValue);
+                        handleFieldChange('preferredSupplier', newValue);
                     }}
                     label="Preferred Supplier"
                     modal
@@ -92,42 +80,8 @@ function PurchTab({
                     disabled
                 />
             </Grid>
-            {manufacturers && manufacturers?.length > 0 && (
+            {links.find(l => l.rel === 'mechanical-sourcing-sheet') && (
                 <>
-                    <Grid item xs={4}>
-                        <Dropdown
-                            label="Manufacturers"
-                            propertyName="manufacurerSelected"
-                            items={manufacturers?.map(u => u.manufacturerCode)}
-                            fullWidth
-                            allowNoValue={false}
-                            value={manufacturerSelected.manufacturerCode}
-                            onChange={(_propertyName, newValue) =>
-                                setManufacturerSelected(
-                                    manufacturers?.find(m => m.manufacturerCode === newValue)
-                                )
-                            }
-                        />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <InputField
-                            fullWidth
-                            value={
-                                manufacturers?.find(
-                                    m =>
-                                        m.manufacturerCode === manufacturerSelected.manufacturerCode
-                                )?.partNumber
-                            }
-                            label="Their Part Number"
-                            onChange={(_propertyName, newValue) =>
-                                handleManufacturersPartNumberChange(
-                                    manufacturerSelected.manufacturerCode,
-                                    newValue
-                                )
-                            }
-                            propertyName="manufacturersPartNumber"
-                        />
-                    </Grid>
                     <Grid item xs={3}>
                         <LinkButton
                             text="Edit Manufacturers"
@@ -136,7 +90,7 @@ function PurchTab({
                             }?tab=manufacturers`}
                         />
                     </Grid>
-                    <Grid item xs={1} />
+                    <Grid item xs={9} />
                 </>
             )}
             <Grid item xs={2}>
@@ -236,11 +190,11 @@ function PurchTab({
                 <Dropdown
                     label="Ignore Workstation Stock?"
                     propertyName="ignoreWorkstationStock"
-                    items={['Yes', '']}
+                    items={['Y', '']}
                     fullWidth
                     allowNoValue={false}
-                    value={convertToYOrNString(ignoreWorkstationStock)}
-                    onChange={handleIgnoreWorkstationStockChange}
+                    value={ignoreWorkstationStock}
+                    onChange={handleFieldChange}
                 />
             </Grid>
             <Grid item xs={4}>
@@ -279,10 +233,10 @@ function PurchTab({
                 <Dropdown
                     label="Order Hold"
                     propertyName="orderHold"
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     fullWidth
                     allowNoValue={false}
-                    value={convertToYOrNString(orderHold)}
+                    value={orderHold}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -336,7 +290,6 @@ PurchTab.propTypes = {
     unitsOfMeasure: PropTypes.arrayOf(unitOfMeasureShape),
     ourUnitOfMeasure: PropTypes.string,
     preferredSupplier: PropTypes.string,
-    handlePrefferedSupplierChange: PropTypes.func.isRequired,
     preferredSupplierName: PropTypes.string,
     suppliersSearchResults: PropTypes.arrayOf(supplierShape),
     suppliersSearchLoading: PropTypes.bool,
@@ -354,13 +307,10 @@ PurchTab.propTypes = {
     oneOffRequirement: PropTypes.number,
     sparesRequirement: PropTypes.number,
     ignoreWorkstationStock: PropTypes.bool,
-    handleIgnoreWorkstationStockChange: PropTypes.func.isRequired,
     imdsIdNumber: PropTypes.number,
     imdsWeight: PropTypes.number,
     mechanicalOrElectronic: PropTypes.string,
     partCategories: PropTypes.arrayOf(partCategoryShape),
-    manufacturers: PropTypes.arrayOf(PropTypes.shape({})),
-    handleManufacturersPartNumberChange: PropTypes.func.isRequired,
     links: PropTypes.arrayOf(PropTypes.shape({ href: PropTypes.string, rel: PropTypes.string }))
 };
 
@@ -387,8 +337,7 @@ PurchTab.defaultProps = {
     imdsIdNumber: null,
     imdsWeight: null,
     mechanicalOrElectronic: null,
-    partCategories: [],
-    manufacturers: null
+    partCategories: []
 };
 
 export default PurchTab;
