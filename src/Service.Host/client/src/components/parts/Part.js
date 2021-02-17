@@ -63,7 +63,7 @@ function Part({
     const creating = () => editStatus === 'create';
 
     const initialState = {
-        part: creating() ? defaultPart : null,
+        part: creating() ? defaultPart : { partNumber: '' },
         prevPart: null
     };
 
@@ -397,7 +397,7 @@ function Part({
                         <Loading />
                     </Grid>
                 ) : (
-                    state.part &&
+                    (state.part.partNumber || creating()) &&
                     itemError?.status !== 404 && (
                         <>
                             <SnackbarMessage

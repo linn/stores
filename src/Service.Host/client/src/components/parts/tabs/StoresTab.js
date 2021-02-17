@@ -145,7 +145,7 @@ function StoresTab({
 
 StoresTab.propTypes = {
     handleFieldChange: PropTypes.func.isRequired,
-    qcOnReceipt: PropTypes.bool,
+    qcOnReceipt: PropTypes.string,
     qcInformation: PropTypes.string,
     ourInspectionWeeks: PropTypes.number,
     safetyWeeks: PropTypes.number,
