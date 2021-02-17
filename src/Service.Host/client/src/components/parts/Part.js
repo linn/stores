@@ -195,8 +195,6 @@ function Part({
 
     const [state, dispatch] = useReducer(partReducer, initialState);
 
-    // sideEffects are actioned here, not in the reducer to keep it pure
-
     // checking whether partNumber already exists when partNumber is entered
     useEffect(() => {
         if (editStatus === 'create') {
@@ -217,7 +215,6 @@ function Part({
     }, [fetchLiveTest, itemId]);
 
     useEffect(() => {
-        console.log('re render');
         if (templateName && partTemplates.length) {
             const template = partTemplates.find(t => t.partRoot === templateName);
             const formatNextNumber = () => {
@@ -284,13 +281,9 @@ function Part({
     };
 
     useEffect(() => {
-        console.log(' re render');
         if (item !== state.prevPart) {
             dispatch({ type: 'initialise', payload: item });
         }
-        // if (editStatus === 'create') {
-        //     dispatch({ type: 'initialise', payload: defaultPart });
-        // }
     }, [item, state.prevPart, editStatus]);
 
     const partInvalid = () => !state.part?.partNumber || !state.part?.description;
@@ -339,10 +332,6 @@ function Part({
     const handleFieldChange = (propertyName, newValue) => {
         setEditStatus('edit');
         dispatch({ type: 'fieldChange', fieldName: propertyName, payload: newValue });
-
-        // if (viewing() && propertyName !== 'reasonPhasedOut') {
-        //     setEditStatus('edit');
-        // } // do this in an effect on reasonPhased out
     };
 
     const handlePhaseOutClick = () => {
