@@ -62,11 +62,6 @@ function Part({
     };
     const creating = () => editStatus === 'create';
 
-    const initialState = {
-        part: creating() ? defaultPart : { partNumber: '' },
-        prevPart: null
-    };
-
     // all updates to state are now enacted by dispatching actions
     // and processing them with this reducer, just like redux does
     function partReducer(state, action) {
@@ -193,7 +188,13 @@ function Part({
         }
     }
 
-    const [state, dispatch] = useReducer(partReducer, initialState);
+    const [state, dispatch] = useReducer(partReducer, {
+        part: creating() ? defaultPart : { partNumber: '' },
+        prevPart: { partNumber: '' }
+    });
+
+
+    console.log(state.part);
 
     // checking whether partNumber already exists when partNumber is entered
     useEffect(() => {
@@ -281,7 +282,7 @@ function Part({
     };
 
     useEffect(() => {
-        if (item !== state.prevPart) {
+        if (item && item !== state.prevPart) {
             dispatch({ type: 'initialise', payload: item });
         }
     }, [item, state.prevPart, editStatus]);
