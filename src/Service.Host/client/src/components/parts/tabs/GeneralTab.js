@@ -45,7 +45,9 @@ function GeneralTab({
     cccCriticalPart,
     psuPart,
     safetyCertificateExpirationDate,
-    safetyDataDirectory
+    safetyDataDirectory,
+    rawOrFinished,
+    handleRawOrFinishedChange
 }) {
     const nominalAccountsTable = {
         totalItemCount: nominalAccountsSearchResults.length,
@@ -113,6 +115,19 @@ function GeneralTab({
                 />
             </Grid>
             <Grid item xs={8} />
+            <Grid item xs={4}>
+                <Dropdown
+                    label="Raw/Finished"
+                    propertyName="rawOrFinished"
+                    items={['R', 'F']}
+                    fullWidth
+                    allowNoValue
+                    value={rawOrFinished}
+                    onChange={handleRawOrFinishedChange}
+                />
+            </Grid>
+            <Grid item xs={8} />
+
             <Grid item xs={4}>
                 <TypeaheadTable
                     table={nominalAccountsTable}
@@ -351,7 +366,9 @@ GeneralTab.propTypes = {
     safetyDataDirectory: PropTypes.string,
     safetyCriticalHelperText: PropTypes.string,
     department: PropTypes.string,
-    departmentDescription: PropTypes.string
+    departmentDescription: PropTypes.string,
+    rawOrFinished: PropTypes.string,
+    handleRawOrFinishedChange: PropTypes.func.isRequired
 };
 
 GeneralTab.defaultProps = {
@@ -383,7 +400,8 @@ GeneralTab.defaultProps = {
     clearProductAnalysisCodesSearch: () => {},
     clearNominalAccountsSearch: () => {},
     department: null,
-    departmentDescription: null
+    departmentDescription: null,
+    rawOrFinished: null
 };
 
 export default GeneralTab;

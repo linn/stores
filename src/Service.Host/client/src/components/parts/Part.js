@@ -209,6 +209,25 @@ function Part({
         }
     };
 
+    const handleRawOrFinishedChange = (_, newValue) => {
+        if (newValue === 'F') {
+            setPart({
+                ...part,
+                rawOrFinished: 'F',
+                nominalAccount: 564,
+                nominal: '0000000417',
+                nominalDescription: 'TOTAL COST OF SALES',
+                department: '0000002106',
+                departmentDescription: 'GROSS PROFIT'
+            });
+        } else {
+            setPart({
+                ...part,
+                rawOrFinished: newValue
+            });
+        }
+    };
+
     const handlePhaseOutClick = () => {
         updateItem(itemId, {
             ...part,
@@ -444,7 +463,9 @@ function Part({
                                     safetyCertificateExpirationDate={
                                         part.safetyCertificateExpirationDate
                                     }
+                                    handleRawOrFinishedChange={handleRawOrFinishedChange}
                                     safetyDataDirectory={part.safetyDataDirectory}
+                                    rawOrFinished={part.rawOrFinished}
                                 />
                             )}
                             {tab === 1 && (
