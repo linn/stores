@@ -578,7 +578,7 @@ function Part({
                                     createdByName={state.part.createdByName}
                                     dateLive={state.part.dateLive}
                                     madeLiveBy={state.part.madeLiveBy}
-                                    madeLiveByName={part.madeLiveByName}
+                                    madeLiveByName={state.part.madeLiveByName}
                                     phasedOutBy={state.part.phasedOutBy}
                                     phasedOutByName={state.part.phasedOutByName}
                                     reasonPhasedOut={state.part.reasonPhasedOut}
@@ -590,79 +590,6 @@ function Part({
                                     handleChangeLiveness={handleChangeLiveness}
                                 />
                             )}
-                            {/* 
-                            {tab === 2 && (
-                                <PurchTab
-                                    handleFieldChange={handleFieldChange}
-                                    ourUnitOfMeasure={part.ourUnitOfMeasure}
-                                    preferredSupplier={part.preferredSupplier}
-                                    handlePrefferedSupplierChange={handlePrefferedSupplierChange}
-                                    preferredSupplierName={part.preferredSupplierName}
-                                    currency={part.currency}
-                                    currencyUnitPrice={part.currencyUnitPrice}
-                                    baseUnitPrice={part.baseUnitPrice}
-                                    materialPrice={part.materialPrice}
-                                    labourPrice={part.labourPrice}
-                                    costingPrice={part.costingPrice}
-                                    orderHold={part.orderHold}
-                                    partCategory={part.partCategory}
-                                    nonForecastRequirement={part.nonForecastRequirement}
-                                    oneOffRequirement={part.oneOffRequirement}
-                                    sparesRequirement={part.sparesRequirement}
-                                    ignoreWorkstationStock={part.ignoreWorkstationStock}
-                                    handleIgnoreWorkstationStockChange={
-                                        handleIgnoreWorkstationStockChange
-                                    }
-                                    imdsIdNumber={part.imdsIdNumber}
-                                    imdsWeight={part.imdsWeight}
-                                    mechanicalOrElectronic={part.mechanicalOrElectronic}
-                                    manufacturers={part.manufacturers}
-                                    handleManufacturersPartNumberChange={
-                                        handleManufacturersPartNumberChange
-                                    }
-                                    links={item?.links}
-                                />
-                            )}
-                            {tab === 3 && (
-                                <StoresTab
-                                    handleFieldChange={handleFieldChange}
-                                    qcOnReceipt={part.qcOnReceipt}
-                                    qcInformation={part.qcInformation}
-                                    rawOrFinished={part.rawOrFinished}
-                                    ourInspectionWeeks={part.ourInspectionWeeks}
-                                    safetyWeeks={part.safetyWeeks}
-                                    railMethod={part.railMethod}
-                                    minStockrail={part.minStockrail}
-                                    maxStockRail={part.maxStockRail}
-                                    secondStageBoard={part.secondStageBoard}
-                                    secondStageDescription={part.secondStageDescription}
-                                    tqmsCategoryOverride={part.tqmsCategoryOverride}
-                                    stockNotes={part.stockNotes}
-                                />
-                            )}
-                            {tab === 4 && (
-                                <LifeCycleTab
-                                    handleFieldChange={handleFieldChange}
-                                    handlePhaseOutClick={handlePhaseOutClick}
-                                    editStatus={editStatus}
-                                    canPhaseOut={canPhaseOut()}
-                                    dateCreated={part.dateCreated}
-                                    createdBy={part.createdBy}
-                                    createdByName={part.createdByName}
-                                    dateLive={part.dateLive}
-                                    madeLiveBy={part.madeLiveBy}
-                                    madeLiveByName={part.madeLiveByName}
-                                    phasedOutBy={part.phasedOutBy}
-                                    phasedOutByName={part.phasedOutByName}
-                                    reasonPhasedOut={part.reasonPhasedOut}
-                                    scrapOrConvert={part.scrapOrConvert}
-                                    purchasingPhaseOutType={part.purchasingPhaseOutType}
-                                    datePhasedOut={part.datePhasedOut}
-                                    dateDesignObsolete={part.dateDesignObsolete}
-                                    liveTest={liveTest}
-                                    handleChangeLiveness={handleChangeLiveness}
-                                />
-                            )} */}
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons
                                     saveDisabled={viewing() || partInvalid()}
