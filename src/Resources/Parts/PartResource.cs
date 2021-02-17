@@ -16,9 +16,9 @@
 
         public string RootProductDescription { get; set; }
 
-        public bool StockControlled { get; set; }
+        public string StockControlled { get; set; }
 
-        public bool? SafetyCriticalPart { get; set; }
+        public string SafetyCriticalPart { get; set; }
 
         public string ProductAnalysisCode { get; set; }
 
@@ -32,21 +32,21 @@
 
         public string AccountingCompanyDescription { get; set; }
 
-        public bool? EmcCriticalPart { get; set; }
+        public string EmcCriticalPart { get; set; }
 
-        public bool? SingleSourcePart { get; set; }
+        public string SingleSourcePart { get; set; }
 
-        public bool? PerformanceCriticalPart { get; set; }
+        public string PerformanceCriticalPart { get; set; }
 
         public string SafetyDataDirectory { get; set; }
 
-        public bool? CccCriticalPart { get; set; }
+        public string CccCriticalPart { get; set; }
 
-        public bool? PsuPart { get; set; }
+        public string PsuPart { get; set; }
 
         public string SafetyCertificateExpirationDate { get; set; }
 
-        public bool? LinnProduced { get; set; }
+        public string LinnProduced { get; set; }
 
         public string DecrementRuleName { get; set; }
 
@@ -58,7 +58,7 @@
 
         public string DrawingReference { get; set; }
 
-        public bool? PlannedSurplus { get; set; }
+        public string PlannedSurplus { get; set; }
 
         public int? BomId { get; set; }
 
@@ -80,7 +80,7 @@
 
         public decimal? CostingPrice { get; set; }
 
-        public bool? OrderHold { get; set; }
+        public string OrderHold { get; set; }
 
         public string PartCategory { get; set; }
 
@@ -90,7 +90,7 @@
 
         public decimal? NonForecastRequirement { get; set; }
 
-        public bool? IgnoreWorkstationStock { get; set; }
+        public string IgnoreWorkstationStock { get; set; }
 
         public int? ImdsIdNumber { get; set; }
 
@@ -98,7 +98,7 @@
 
         public string MechanicalOrElectronic { get; set; }
 
-        public bool? QcOnReceipt { get; set; }
+        public string QcOnReceipt { get; set; }
 
         public string QcInformation { get; set; }
 
@@ -114,7 +114,7 @@
 
         public decimal? MaxStockRail { get; set; }
 
-        public bool? SecondStageBoard { get; set; }
+        public string SecondStageBoard { get; set; }
 
         public string SecondStageDescription { get; set; }
 

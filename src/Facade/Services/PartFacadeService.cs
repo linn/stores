@@ -81,24 +81,24 @@
                                          Id = this.databaseService.GetIdSequence("PARTS_ID_SEQ"),
                                          PartNumber = resource.PartNumber,
                                          Description = resource.Description,
-                                         PsuPart = this.ToYesOrNoString(resource.PsuPart),
+                                         PsuPart = resource.PsuPart,
                                          CreatedBy = resource.CreatedBy != null ?
                                                          this.employeeRepository.FindById((int)resource.CreatedBy) : null,
                                          DateCreated = DateTime.Parse(resource.DateCreated),
-                                         StockControlled = this.ToYesOrNoString(resource.StockControlled),
-                                         CccCriticalPart = this.ToYesOrNoString(resource.CccCriticalPart),
+                                         StockControlled = resource.StockControlled,
+                                         CccCriticalPart = resource.CccCriticalPart,
                                          AccountingCompany =
                                              this.accountingCompanyRepository.FindBy(c => c.Name == resource.AccountingCompany),
                                          ParetoClass = this.paretoClassRepository.FindById(resource.ParetoCode),
                                          BomType = resource.BomType,
-                                         LinnProduced = this.ToYesOrNoString(resource.LinnProduced),
-                                         QcOnReceipt = this.ToYesOrNoString(resource.QcOnReceipt),
-                                         EmcCriticalPart = this.ToYesOrNoString(resource.EmcCriticalPart),
-                                         SafetyCriticalPart = this.ToYesOrNoString(resource.SafetyCriticalPart),
-                                         PlannedSurplus = this.ToYesOrNoString(resource.PlannedSurplus),
+                                         LinnProduced = resource.LinnProduced,
+                                         QcOnReceipt = resource.QcOnReceipt,
+                                         EmcCriticalPart = resource.EmcCriticalPart,
+                                         SafetyCriticalPart = resource.SafetyCriticalPart,
+                                         PlannedSurplus = resource.PlannedSurplus,
                                          OurUnitOfMeasure = resource.OurUnitOfMeasure,
-                                         SingleSourcePart = this.ToYesOrNoString(resource.SingleSourcePart),
-                                         PerformanceCriticalPart = this.ToYesOrNoString(resource.PerformanceCriticalPart),
+                                         SingleSourcePart = resource.SingleSourcePart,
+                                         PerformanceCriticalPart = resource.PerformanceCriticalPart,
                                          ProductAnalysisCode =
                                              resource.ProductAnalysisCode != null
                                                  ? this.productAnalysisCodeRepository.FindBy(
@@ -132,12 +132,12 @@
                                                  ? this.sernosSequenceRepository.FindBy(
                                                      c => c.Sequence == resource.SernosSequenceName)
                                                  : null,
-                                         IgnoreWorkstationStock = this.ToYesOrNoString(resource.IgnoreWorkstationStock),
+                                         IgnoreWorkstationStock = resource.IgnoreWorkstationStock,
                                          MechanicalOrElectronic = resource.MechanicalOrElectronic,
                                          ImdsIdNumber = resource.ImdsIdNumber,
                                          ImdsWeight = resource.ImdsWeight,
                                          PartCategory = resource.PartCategory,
-                                         OrderHold = this.ToYesOrNoString(resource.OrderHold),
+                                         OrderHold = resource.OrderHold,
                                          MaterialPrice = resource.MaterialPrice,
                                          SparesRequirement = resource.SparesRequirement,
                                          CurrencyUnitPrice = resource.CurrencyUnitPrice,
@@ -154,7 +154,7 @@
                                          RailMethod = resource.RailMethod,
                                          MinStockRail = resource.MinStockRail,
                                          MaxStockRail = resource.MaxStockRail,
-                                         SecondStageBoard = this.ToYesOrNoString(resource.SecondStageBoard),
+                                         SecondStageBoard = resource.SecondStageBoard,
                                          SecondStageDescription = resource.SecondStageDescription,
                                          TqmsCategoryOverride = resource.TqmsCategoryOverride,
                                          StockNotes = resource.StockNotes,
@@ -184,24 +184,24 @@
                                       AccountingCompany =
                                           this.accountingCompanyRepository.FindBy(
                                               c => c.Name == resource.AccountingCompany),
-                                      CccCriticalPart = this.ToYesOrNoString(resource.CccCriticalPart),
-                                      EmcCriticalPart = this.ToYesOrNoString(resource.EmcCriticalPart),
-                                      SafetyCriticalPart = this.ToYesOrNoString(resource.SafetyCriticalPart),
-                                      PlannedSurplus = this.ToYesOrNoString(resource.PlannedSurplus),
+                                      CccCriticalPart = resource.CccCriticalPart,
+                                      EmcCriticalPart = resource.EmcCriticalPart,
+                                      SafetyCriticalPart = resource.SafetyCriticalPart,
+                                      PlannedSurplus = resource.PlannedSurplus,
                                       OurUnitOfMeasure = resource.OurUnitOfMeasure,
-                                      SingleSourcePart = this.ToYesOrNoString(resource.SingleSourcePart),
-                                      StockControlled = this.ToYesOrNoString(resource.StockControlled),
+                                      SingleSourcePart = resource.SingleSourcePart,
+                                      StockControlled = resource.StockControlled,
                                       ParetoClass =
                                           resource.ParetoCode != null
                                               ? this.paretoClassRepository.FindById(resource.ParetoCode)
                                               : null,
-                                      PerformanceCriticalPart = this.ToYesOrNoString(resource.PerformanceCriticalPart),
+                                      PerformanceCriticalPart = resource.PerformanceCriticalPart,
                                       ProductAnalysisCode =
                                           resource.ProductAnalysisCode != null
                                               ? this.productAnalysisCodeRepository.FindBy(
                                                   c => c.ProductCode == resource.ProductAnalysisCode)
                                               : null,
-                                      PsuPart = this.ToYesOrNoString(resource.PsuPart),
+                                      PsuPart = resource.PsuPart,
                                       RootProduct = resource.RootProduct,
                                       SafetyCertificateExpirationDate =
                                           string.IsNullOrEmpty(resource.SafetyCertificateExpirationDate)
@@ -231,12 +231,12 @@
                                               ? this.sernosSequenceRepository.FindBy(
                                                   c => c.Sequence == resource.SernosSequenceName)
                                               : null,
-                                      IgnoreWorkstationStock = this.ToYesOrNoString(resource.IgnoreWorkstationStock),
+                                      IgnoreWorkstationStock = resource.IgnoreWorkstationStock,
                                       MechanicalOrElectronic = resource.MechanicalOrElectronic,
                                       ImdsIdNumber = resource.ImdsIdNumber,
                                       ImdsWeight = resource.ImdsWeight,
                                       PartCategory = resource.PartCategory,
-                                      OrderHold = this.ToYesOrNoString(resource.OrderHold),
+                                      OrderHold = resource.OrderHold,
                                       MaterialPrice = resource.MaterialPrice,
                                       SparesRequirement = resource.SparesRequirement,
                                       CurrencyUnitPrice = resource.CurrencyUnitPrice,
@@ -244,10 +244,10 @@
                                       BaseUnitPrice = resource.BaseUnitPrice,
                                       OneOffRequirement = resource.OneOffRequirement,
                                       LabourPrice = resource.LabourPrice,
-                                      LinnProduced = this.ToYesOrNoString(resource.LinnProduced),
+                                      LinnProduced = resource.LinnProduced,
                                       PreferredSupplier =
                                           this.supplierRepository.FindBy(s => s.Id == resource.PreferredSupplier),
-                                      QcOnReceipt = this.ToYesOrNoString(resource.QcOnReceipt),
+                                      QcOnReceipt = resource.QcOnReceipt,
                                       QcInformation = resource.QcInformation,
                                       RawOrFinished = resource.RawOrFinished,
                                       OurInspectionWeeks = resource.OurInspectionWeeks,
@@ -255,7 +255,7 @@
                                       RailMethod = resource.RailMethod,
                                       MinStockRail = resource.MinStockRail,
                                       MaxStockRail = resource.MaxStockRail,
-                                      SecondStageBoard = this.ToYesOrNoString(resource.SecondStageBoard),
+                                      SecondStageBoard = resource.SecondStageBoard,
                                       SecondStageDescription = resource.SecondStageDescription,
                                       TqmsCategoryOverride = resource.TqmsCategoryOverride,
                                       StockNotes = resource.StockNotes,
@@ -293,16 +293,6 @@
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)
         {
             return part => part.PartNumber.ToUpper().Contains(searchTerm.ToUpper());
-        }
-
-        private string ToYesOrNoString(bool? booleanRepresentation)
-        {
-            if (booleanRepresentation == null)
-            {
-                return null;
-            }
-
-            return (bool)booleanRepresentation ? "Y" : "N";
         }
     }
 }
