@@ -34,7 +34,7 @@ function Part({
     privileges,
     userName,
     userNumber,
-    options,
+    templateName,
     partTemplates,
     liveTest,
     fetchLiveTest,
@@ -73,9 +73,11 @@ function Part({
         switch (action.type) {
             case 'initialise':
                 if (creating()) {
-                    return { ...state, part: action.payload, prevPart: action.payload };
+                    return { ...state, part: defaultPart };
                 }
                 return { ...state, part: action.payload, prevPart: action.payload };
+            case 'loadTemplate':
+                return { ...state, part: action.payload };
             case 'fieldChange':
                 if (action.fieldName === 'rawOrFinished') {
                     return {
@@ -205,7 +207,7 @@ function Part({
                 fetchParts(state.part.partNumber); // else they are creating a new part entirely. Check to see if it already exists.
             }
         }
-    }, [state.part, fetchParts, editStatus]);
+    }, [state.part.partNumber, fetchParts, editStatus]);
 
     // checking whether part can be made live
     useEffect(() => {
@@ -215,8 +217,9 @@ function Part({
     }, [fetchLiveTest, itemId]);
 
     useEffect(() => {
-        if (options?.template && partTemplates.length) {
-            const template = partTemplates.find(t => t.partRoot === options.template);
+        console.log('re render');
+        if (templateName && partTemplates.length) {
+            const template = partTemplates.find(t => t.partRoot === templateName);
             const formatNextNumber = () => {
                 if (template.nextNumber < 1000) {
                     return template.nextNumber.toString().padStart(3, 0);
@@ -224,9 +227,8 @@ function Part({
                 return template.nextNumber.toString();
             };
             dispatch({
-                type: 'initialise',
+                type: 'loadTemplate',
                 payload: {
-                    ...defaultPart,
                     description: template.description,
                     partNumber:
                         template.hasNumberSequence === 'Y'
@@ -241,7 +243,7 @@ function Part({
                 }
             });
         }
-    }, [options, partTemplates, defaultPart]);
+    }, [templateName, partTemplates]);
 
     const viewing = () => editStatus === 'view';
 
@@ -282,13 +284,14 @@ function Part({
     };
 
     useEffect(() => {
-        if (item !== state.prevPart && editStatus !== 'create') {
+        console.log(' re render');
+        if (item !== state.prevPart) {
             dispatch({ type: 'initialise', payload: item });
         }
-        if (editStatus === 'create') {
-            dispatch({ type: 'initialise', payload: defaultPart });
-        }
-    }, [item, state.prevPart, editStatus, fetchLiveTest, itemId, defaultPart]);
+        // if (editStatus === 'create') {
+        //     dispatch({ type: 'initialise', payload: defaultPart });
+        // }
+    }, [item, state.prevPart, editStatus]);
 
     const partInvalid = () => !state.part?.partNumber || !state.part?.description;
 
@@ -633,7 +636,7 @@ Part.propTypes = {
     privileges: PropTypes.arrayOf(PropTypes.string),
     userName: PropTypes.string,
     userNumber: PropTypes.number,
-    options: PropTypes.shape({ template: PropTypes.string }),
+    templateName: PropTypes.string,
     partTemplates: PropTypes.arrayOf(PropTypes.shape({ partRoot: PropTypes.string })),
     liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
     fetchLiveTest: PropTypes.func.isRequired,
@@ -650,7 +653,7 @@ Part.defaultProps = {
     privileges: null,
     userName: null,
     userNumber: null,
-    options: null,
+    templateName: null,
     partTemplates: [],
     liveTest: null,
     partsSearchResults: []
