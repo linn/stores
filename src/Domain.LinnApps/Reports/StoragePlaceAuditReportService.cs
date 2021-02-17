@@ -95,7 +95,7 @@
 
             foreach (var stockLocator in stockLocators)
             {
-                var storagePlace = storagePlaces.FirstOrDefault(
+                var storagePlace = storagePlaces.First(
                     sp => sp.LocationId == stockLocator.LocationId && sp.PalletNumber == stockLocator.PalletNumber);
 
                 var quantity = stockLocator.Quantity;
