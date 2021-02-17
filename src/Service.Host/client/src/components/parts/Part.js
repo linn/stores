@@ -73,7 +73,7 @@ function Part({
         switch (action.type) {
             case 'initialise':
                 if (creating()) {
-                    return { ...state, part: defaultPart, prevPart: action.payload };
+                    return { ...state, part: action.payload, prevPart: action.payload };
                 }
                 return { ...state, part: action.payload, prevPart: action.payload };
             case 'fieldChange':
@@ -101,6 +101,16 @@ function Part({
                             nominalDescription: action.payload.values[1].value,
                             department: action.payload.values[2].value,
                             departmentDescription: action.payload.values[3].value
+                        }
+                    };
+                }
+                if (action.fieldName === 'productAnalysisCode') {
+                    return {
+                        ...state,
+                        part: {
+                            ...state.part,
+                            productAnalysisCode: action.payload.name,
+                            productAnalysisCodeDescription: action.payload.description
                         }
                     };
                 }
@@ -183,9 +193,9 @@ function Part({
 
     const [state, dispatch] = useReducer(partReducer, initialState);
 
-    // all sideEffects are now clearly outlined here
+    // sideEffects are actioned here, not in the reducer to keep it pure
 
-    // checking whether partNumber already exists
+    // checking whether partNumber already exists when partNumber is entered
     useEffect(() => {
         if (editStatus === 'create') {
             if (state.part.partNumber.match(/\/[1-9]$/)) {
@@ -203,6 +213,35 @@ function Part({
             fetchLiveTest(itemId);
         }
     }, [fetchLiveTest, itemId]);
+
+    useEffect(() => {
+        if (options?.template && partTemplates.length) {
+            const template = partTemplates.find(t => t.partRoot === options.template);
+            const formatNextNumber = () => {
+                if (template.nextNumber < 1000) {
+                    return template.nextNumber.toString().padStart(3, 0);
+                }
+                return template.nextNumber.toString();
+            };
+            dispatch({
+                type: 'initialise',
+                payload: {
+                    ...defaultPart,
+                    description: template.description,
+                    partNumber:
+                        template.hasNumberSequence === 'Y'
+                            ? `${template.partRoot} ${formatNextNumber()}`
+                            : template.partRoot,
+                    accountingCompany: template.accountingCompany,
+                    assemblyTechnologyName: template.assemblyTechnologyName,
+                    bomType: template.bomType,
+                    linnProduced: template.linnProduced,
+                    paretoCode: template.paretoCode,
+                    stockControlled: template.stockControlled
+                }
+            });
+        }
+    }, [options, partTemplates, defaultPart]);
 
     const viewing = () => editStatus === 'view';
 
@@ -247,35 +286,9 @@ function Part({
             dispatch({ type: 'initialise', payload: item });
         }
         if (editStatus === 'create') {
-            setPart(p => ({ ...p, bomId: null }));
+            dispatch({ type: 'initialise', payload: defaultPart });
         }
-    }, [item, state.prevPart, editStatus, fetchLiveTest, itemId]);
-
-    useEffect(() => {
-        if (options?.template && partTemplates.length) {
-            const template = partTemplates.find(t => t.partRoot === options.template);
-            const formatNextNumber = () => {
-                if (template.nextNumber < 1000) {
-                    return template.nextNumber.toString().padStart(3, 0);
-                }
-                return template.nextNumber.toString();
-            };
-            setPart(p => ({
-                ...p,
-                description: template.description,
-                partNumber:
-                    template.hasNumberSequence === 'Y'
-                        ? `${template.partRoot} ${formatNextNumber()}`
-                        : template.partRoot,
-                accountingCompany: template.accountingCompany,
-                assemblyTechnologyName: template.assemblyTechnologyName,
-                bomType: template.bomType,
-                linnProduced: template.linnProduced,
-                paretoCode: template.paretoCode,
-                stockControlled: template.stockControlled
-            }));
-        }
-    }, [options, partTemplates]);
+    }, [item, state.prevPart, editStatus, fetchLiveTest, itemId, defaultPart]);
 
     const partInvalid = () => !state.part?.partNumber || !state.part?.description;
 
@@ -327,23 +340,6 @@ function Part({
         // if (viewing() && propertyName !== 'reasonPhasedOut') {
         //     setEditStatus('edit');
         // } // do this in an effect on reasonPhased out
-    };
-
-    const handleLinnProducedChange = (_, newValue) => {
-        const linnProduced = newValue === 'Y';
-        if (linnProduced) {
-            setPart({
-                ...part,
-                linnProduced,
-                sernosSequenceName: 'SERIAL 1',
-                sernosSequenceDescription: 'MASTER SERIAL NUMBER RECORDS.'
-            });
-        } else {
-            setPart({
-                ...part,
-                linnProduced
-            });
-        }
     };
 
     const handlePhaseOutClick = () => {
@@ -522,7 +518,6 @@ function Part({
                                     drawingReference={state.part.drawingReference}
                                     safetyCriticalPart={state.part.safetyCriticalPart}
                                     plannedSurplus={state.part.plannedSurplus}
-                                    handleLinnProducedChange={handleLinnProducedChange}
                                 />
                             )}
                             {tab === 2 && (

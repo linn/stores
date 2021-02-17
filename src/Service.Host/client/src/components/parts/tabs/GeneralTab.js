@@ -30,7 +30,6 @@ function GeneralTab({
     nominalAccountsSearchLoading,
     searchNominalAccounts,
     clearNominalAccountsSearch,
-    handleProductAnalysisCodeChange,
     paretoCode,
     stockControlled,
     department,
@@ -167,7 +166,7 @@ function GeneralTab({
             <Grid item xs={4}>
                 <Typeahead
                     onSelect={newValue => {
-                        handleProductAnalysisCodeChange(newValue);
+                        handleFieldChange('productAnalysisCode', newValue);
                     }}
                     label="Product Analysis Code"
                     modal
@@ -339,7 +338,6 @@ GeneralTab.propTypes = {
     paretoCode: PropTypes.string,
     searchNominalAccounts: PropTypes.func.isRequired,
     clearNominalAccountsSearch: PropTypes.func,
-    handleProductAnalysisCodeChange: PropTypes.func.isRequired,
     searchProductAnalysisCodes: PropTypes.func.isRequired,
     clearProductAnalysisCodesSearch: PropTypes.func,
     stockControlled: PropTypes.string,
