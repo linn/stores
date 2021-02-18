@@ -147,6 +147,12 @@
 
         public DbQuery<WandItem> WandItems { get; set; }
 
+        public DbQuery<ExportRsn> ExportRsns { get; set; }
+
+        public DbQuery<SalesAccount> SalesAccounts { get; set; }
+
+        public DbQuery<SalesOutlet> SalesOutlets { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -214,6 +220,8 @@
             this.QueryStockLocatorBatches(builder);
             this.QueryWandConsignments(builder);
             this.QueryWandItems(builder);
+            this.QueryExportRsns(builder);
+            this.QuerySalesAccounts(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1206,6 +1214,30 @@
             q.Property(v => v.RequisitionNumber).HasColumnName("REQ_NUMBER");
             q.Property(v => v.RequisitionLine).HasColumnName("LINE_NUMBER");
             q.Property(v => v.CountryCode).HasColumnName("COUNTRY");
+        }
+
+        private void QueryExportRsns(ModelBuilder builder)
+        {
+            var q = builder.Query<ExportRsn>().ToView("EXPORT_RSNS_VIEW");
+            q.Property(e => e.RsnNumber).HasColumnName("RSN_NUMBER");
+            q.Property(e => e.ReasonCodeAlleged).HasColumnName("REASON_CODE_ALLEGED").HasMaxLength(10);
+            q.Property(e => e.DateEntered).HasColumnName("DATE_ENTERED");
+            q.Property(e => e.Quantity).HasColumnName("QUANTITY");
+            q.Property(e => e.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
+            q.Property(e => e.AccountId).HasColumnName("ACCOUNT_ID");
+            q.Property(e => e.OutletNumber).HasColumnName("OUTLET_NUMBER");
+            q.Property(e => e.OutletName).HasColumnName("OUTLET_NAME").HasMaxLength(50);
+            q.Property(e => e.Country).HasColumnName("COUNTRY").HasMaxLength(2);
+            q.Property(e => e.CountryName).HasColumnName("COUNTRY_NAME").HasMaxLength(50);
+            q.Property(e => e.AccountType).HasColumnName("ACCOUNT_TYPE").HasMaxLength(10);
+            q.HasOne(e => e.SalesOutlet).WithMany(o => o.Rsns).HasForeignKey(a => new { a.AccountId, a.OutletNumber });
+        }
+
+        private void QuerySalesAccounts(ModelBuilder builder)
+        {
+            var q = builder.Query<SalesAccount>().ToView("SALES_ACCOUNT");
+            q.Property(e => e.AccountId).HasColumnName("ACCOUNT_ID");
+            q.Property(e => e.AccountName).HasColumnName("ACCOUNT_NAME").HasMaxLength(50);
         }
     }
 }

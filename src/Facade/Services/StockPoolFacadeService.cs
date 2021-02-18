@@ -31,4 +31,6 @@
                                                                 pool.Description.ToUpper().Contains(searchTerm.ToUpper()));
         }
     }
+
+    //public class SalesOutletFacadeService : FacadeService<SalesOutlet>
 }
