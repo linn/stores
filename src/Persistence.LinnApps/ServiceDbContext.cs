@@ -5,6 +5,7 @@
     using Linn.Common.Configuration;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
+    using Linn.Stores.Domain.LinnApps.Exports;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
@@ -84,6 +85,8 @@
         public DbSet<SosAllocHead> SosAllocHeads { get; set; }
 
         public DbSet<Carrier> Carriers { get; set; }
+
+        public DbSet<Hub> Hubs { get; set; }
 
         public DbSet<Parcel> Parcels { get; set; }
 
@@ -177,6 +180,7 @@
             this.QueryAuditLocations(builder);
             this.BuildSosAllocHeads(builder);
             this.BuildCarriers(builder);
+            this.BuildHubs(builder);
             this.BuildParcels(builder);
             this.BuildMechPartAlts(builder);
             this.BuildManufacturers(builder);
@@ -208,6 +212,9 @@
             this.BuildInspectedStates(builder);
             this.QueryWandConsignments(builder);
             this.QueryWandItems(builder);
+            this.QueryTariffs(builder);
+            this.BuildExportReturns(builder);
+            this.BuildExportReturnDetails(builder);
             base.OnModelCreating(builder);
         }
 
@@ -777,6 +784,15 @@
             e.Property(c => c.DateInvalid).HasColumnName("DATE_INVALID");
         }
 
+        private void BuildHubs(ModelBuilder builder)
+        {
+            var e = builder.Entity<Hub>().ToTable("HUBS");
+            e.HasKey(h => h.HubId);
+            e.Property(h => h.HubId).HasColumnName("HUB_ID");
+            e.Property(h => h.Description).HasColumnName("DESCRIPTION").HasMaxLength(240); 
+            e.Property(h => h.CarrierCode).HasColumnName("CARRIER_CODE").HasMaxLength(10);
+        }
+
         private void BuildSosAllocDetails(ModelBuilder builder)
         {
             var table = builder.Entity<SosAllocDetail>().ToTable("SOS_ALLOC_DETAILS");
@@ -1164,6 +1180,52 @@
             q.Property(v => v.RequisitionNumber).HasColumnName("REQ_NUMBER");
             q.Property(v => v.RequisitionLine).HasColumnName("LINE_NUMBER");
             q.Property(v => v.CountryCode).HasColumnName("COUNTRY");
+        }
+        private void QueryTariffs(ModelBuilder builder)
+        {
+            var q = builder.Query<TariffCode>();
+            q.ToView("TARIFFS");
+            q.Property(t => t.TariffId).HasColumnName("TARIFF_ID");
+            q.Property(t => t.Code).HasColumnName("TARIFF_CODE").HasMaxLength(14);
+            q.Property(t => t.Description).HasColumnName("DESCRIPTION").HasMaxLength(2000);
+        }
+
+        private void BuildExportReturns(ModelBuilder builder)
+        {
+            var e = builder.Entity<ExportReturn>().ToTable("EXPORT_RETURNS");
+            e.HasKey(r => r.ReturnId);
+            e.Property(r => r.ReturnId).HasColumnName("RETURN_ID").HasMaxLength(8);
+            e.Property(r => r.DateCreated).HasColumnName("DATE_CREATED");
+            e.HasOne<Employee>(r => r.RaisedBy).WithMany(m => m.ExportReturnsRaised).HasForeignKey("RAISED_BY");
+            e.Property(r => r.Currency).HasColumnName("CURRENCY").HasMaxLength(4);
+            e.Property(r => r.DateDispatched).HasColumnName("DATE_DISPATCHED");
+            e.Property(r => r.DateCancelled).HasColumnName("DATE_CANCELLED");
+            e.Property(r => r.AccountId).HasColumnName("ACCOUNT_ID");
+            e.Property(r => r.OutletNumber).HasColumnName("OUTLET_NUMBER");
+            e.HasOne(r => r.SalesOutlet).WithMany(o => o.ExportReturns).HasForeignKey(a => new { a.AccountId, a.OutletNumber });
+            e.HasOne<Carrier>(r => r.Carrier).WithMany(m => m.ExportReturns).HasForeignKey("CARRIER_CODE");
+            e.HasOne<Hub>(r => r.Hub).WithMany(m => m.ExportReturns).HasForeignKey("HUB_ID");
+            e.Property(r => r.CarrierRef).HasColumnName("CARRIER_REF").HasMaxLength(32);
+            e.Property(r => r.Terms).HasColumnName("TERMS").HasMaxLength(30);
+            e.Property(r => r.NumPallets).HasColumnName("NUM_PALLETS");
+            e.Property(r => r.NumCartons).HasColumnName("NUM_CARTONS");
+            e.Property(r => r.GrossWeightKg).HasColumnName("GROSS_WEIGHT_KG");
+            e.Property(r => r.GrossDimsM3).HasColumnName("GROSS_DIMS_M3");
+            e.Property(r => r.InterCompany_Doc_Number).HasColumnName("INTERCO_DOC_NUMBER");
+            e.HasMany(r => r.Details).WithOne(r => r.ExportReturn).HasForeignKey("RETURN_ID");
+        }
+
+        private void BuildExportReturnDetails(ModelBuilder builder)
+        {
+            var e = builder.Entity<ExportReturnDetail>().ToTable("EXP_RETURN_DETAILS");
+            e.HasKey(r => new { ReturnId = r.ReturnId, r.LineNo });
+            e.Property(r => r.ReturnId).HasColumnName("RETURN_ID").HasMaxLength(8);
+            e.Property(r => r.Quantity).HasColumnName("QTY");
+            e.Property(r => r.Description).HasColumnName("ARTICLE_NUMBER").HasMaxLength(200);
+            e.Property(r => r.CustomsValue).HasColumnName("CUSTOMS_VALUE");
+            e.Property(r => r.BaseCustomsValue).HasColumnName("BASE_CUSTOMS_VALUE");
+            e.HasOne<TariffCode>(r => r.TariffCode).WithMany(m => m.ExportReturnDetails).HasForeignKey("TARIFF_ID");
+            e.HasOne<ExportReturn>(r => r.ExportReturn).WithMany(m => m.Details).HasForeignKey("RETURN_ID");
         }
     }
 }

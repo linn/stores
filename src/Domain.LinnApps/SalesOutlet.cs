@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using Linn.Stores.Domain.LinnApps.Allocation;
+    using Linn.Stores.Domain.LinnApps.Exports;
 
     public class SalesOutlet
     {
@@ -29,5 +30,7 @@
         public string CountryName { get; set; }
 
         public IEnumerable<SosAllocHead> SosAllocHeads { get; set; }
+
+        public IEnumerable<ExportReturn> ExportReturns { get; set; }
     }
 }

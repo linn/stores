@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-
+    using Linn.Stores.Domain.LinnApps.Exports;
     using Linn.Stores.Domain.LinnApps.Parts;
 
     public class Employee
@@ -36,5 +36,7 @@
         public IEnumerable<MechPartSource> SourcesTCodeRemoved { get; set; }
 
         public IEnumerable<MechPartSource> SourcesCancelled { get; set; }
+
+        public IEnumerable<ExportReturn> ExportReturnsRaised { get; set; }
     }
 }
