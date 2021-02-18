@@ -234,29 +234,6 @@ function Part({
 
     const viewing = () => editStatus === 'view';
 
-    const [part, setPart] = useState(
-        creating()
-            ? {
-                  partNumber: '',
-                  description: '',
-                  accountingCompany: 'LINN',
-                  psuPart: false,
-                  stockControlled: true,
-                  cccCriticalPart: false,
-                  safetyCriticalPart: false,
-                  paretoCode: 'U',
-                  createdBy: userNumber,
-                  createdByName: userName,
-                  dateCreated: new Date(),
-                  railMethod: 'POLICY',
-                  preferredSupplier: 4415,
-                  preferredSupplierName: 'Linn Products Ltd',
-                  qcInformation: '',
-                  qcOnReceipt: false,
-                  orderHold: false
-              }
-            : null
-    );
     const [tab, setTab] = useState(0);
 
     const handleTabChange = (event, value) => {
@@ -349,17 +326,6 @@ function Part({
                 madeLiveByName: null
             });
         }
-    };
-
-    const handleProductAnalysisCodeChange = newValue => {
-        if (viewing()) {
-            setEditStatus('edit');
-        }
-        setPart({
-            ...part,
-            productAnalysisCode: newValue.name,
-            productAnalysisCodeDescription: newValue.description
-        });
     };
 
     return (
@@ -459,9 +425,6 @@ function Part({
                                     productAnalysisCode={state.part.productAnalysisCode}
                                     productAnalysisCodeDescription={
                                         state.part.productAnalysisCodeDescription
-                                    }
-                                    handleProductAnalysisCodeChange={
-                                        handleProductAnalysisCodeChange
                                     }
                                     rootProduct={state.part.rootProduct}
                                     department={state.part.department}
