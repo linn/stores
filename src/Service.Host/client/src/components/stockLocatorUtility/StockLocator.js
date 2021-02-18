@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { Title, SingleEditTable, Loading, BackButton } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
+import queryString from 'query-string';
 import Page from '../../containers/Page';
 
 function StockLocator({ items, itemsLoading, history, fetchItems, options }) {
     const [batchView, setBatchView] = useState(false);
+    const [hasDrilledDown, setHasDrilledDown] = useState(false);
 
     const variableColumns =
         options?.batchRef || batchView
@@ -112,11 +114,26 @@ function StockLocator({ items, itemsLoading, history, fetchItems, options }) {
                                 rows={items.map(i => ({
                                     ...i,
                                     id: i.id + i.batchRef + i.partNumber,
-                                    component: (
+                                    component: hasDrilledDown ? (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setBatchView(false);
+                                                setHasDrilledDown(false);
+                                                fetchItems(
+                                                    null,
+                                                    `&${queryString.stringify(options)}`
+                                                );
+                                            }}
+                                        >
+                                            -
+                                        </button>
+                                    ) : (
                                         <button
                                             type="button"
                                             onClick={() => {
                                                 setBatchView(true);
+                                                setHasDrilledDown(true);
                                                 fetchItems(
                                                     null,
                                                     `&locationId=${i.id}&queryBatchView=${true}`
