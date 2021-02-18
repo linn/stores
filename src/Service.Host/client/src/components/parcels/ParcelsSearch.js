@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useReducer } from 'react';
 import Grid from '@material-ui/core/Grid';
 import {
     SearchInputField,
@@ -6,7 +6,6 @@ import {
     useSearch,
     PaginatedTable,
     Loading,
-    utilities,
     Dropdown
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
@@ -39,43 +38,44 @@ function ParcelsSearch({
         return false;
     };
 
-    const [searchTerm, setSearchTerm] = useState(null);
+    function parcelReducer(state, action) {
+        switch (action.type) {
+            case 'updateSearchTerms': {
+                const newSearchTerms = {
+                    ...state.searchTerms,
+                    [action.searchTermName]: action.newValue
+                };
+                return {
+                    ...state,
+                    searchTerms: newSearchTerms,
+                    stringifiedSearch: `&${queryString.stringify(newSearchTerms, '&', '=')}`
+                };
+            }
+            default:
+                return state;
+        }
+    }
 
-    const [searchTerms, setSearchTerms] = useState({
-        parcelNumberSearchTerm: '',
-        supplierIdSearchTerm: '',
-        carrierIdSearchTerm: '',
-        dateCreatedSearchTerm: '',
-        supplierInvNoSearchTerm: '',
-        consignmentNoSearchTerm: '',
-        commentsSearchTerm: ''
+    const [state, dispatch] = useReducer(parcelReducer, {
+        stringifiedSearch: '',
+        searchTerms: {
+            parcelNumberSearchTerm: '',
+            supplierIdSearchTerm: '',
+            carrierIdSearchTerm: '',
+            dateCreatedSearchTerm: '',
+            supplierInvNoSearchTerm: '',
+            consignmentNoSearchTerm: '',
+            commentsSearchTerm: ''
+        }
     });
-    useSearch(fetchItems, searchTerm, null, 'searchTerm', null, 1500, 1);
-
-    const handleRowLinkClick = href => history.push(href);
 
     const handleSearchTermChange = (propertyName, newValue) => {
-        setSearchTerms({ ...searchTerms, [propertyName]: newValue });
-        setSearchTerm(queryString.stringify(searchTerms, '&&', '=');
-        // setTimeout(() => {
-        let stringifiedquery = queryString.stringify(searchTerms, '&&', '=');
-        console.log(stringifiedquery);
-        console.log("property name is " + propertyName);
-        const queryBeforeParam = stringifiedquery.split(`${propertyName}=`)[0];
-        const paramToEndOfQuery = stringifiedquery.split(`${propertyName}=`)[1];
-        const newlyUpdatedParam = paramToEndOfQuery.split('&')[0];
-        const restOfQuery = paramToEndOfQuery.split('&')[1];
-
-        console.log(
-            `before is ${queryBeforeParam}, newlyupdated is ${newlyUpdatedParam}, rest of query is ${restOfQuery}`
-        );
-        if (newlyUpdatedParam !== newValue) {
-            stringifiedquery = `${queryBeforeParam}${propertyName}${newValue}&&${restOfQuery}`;
-        }
-        console.log(stringifiedquery);
-        setSearchTerm(stringifiedquery);
-        // }, 500);
+        dispatch({ type: 'updateSearchTerms', searchTermName: propertyName, newValue });
     };
+
+    useSearch(fetchItems, state.stringifiedSearch, null, 'searchTerm');
+
+    const handleRowLinkClick = href => history.push(href);
 
     useEffect(() => {
         const compare = (field, orderAscending) => (a, b) => {
@@ -99,9 +99,7 @@ function ParcelsSearch({
                   supplier: `${el.supplierId} - ${
                       suppliers.find(x => x.id === el.supplierId)?.name
                   }`,
-                  carrier: `${el.carrierId} - ${
-                      carriers.find(x => x.organisationId === el.carrierId)?.carrierCode
-                  }`,
+                  carrier: `${el.carrierId} - ${carriers.find(x => x.id === el.carrierId)?.name}`,
                   dateCreated: el.dateCreated,
                   supplerInvNo: el.supplerInvNo,
                   consignmentNo: el.consignmentNo,
@@ -162,21 +160,19 @@ function ParcelsSearch({
                         onChange={handleSearchTermChange}
                         propertyName="parcelNumberSearchTerm"
                         type="text"
-                        value={searchTerms.parcelNumberSearchTerm}
+                        value={state.searchTerms.parcelNumberSearchTerm}
                     />
                 </Grid>
 
                 <Grid item xs={2}>
                     <Dropdown
                         onChange={handleSearchTermChange}
-                        items={suppliers
-                            .map(s => ({
-                                ...s,
-                                id: s.id,
-                                displayText: `${s.name} ( ${s.id} )`
-                            }))
-                            .sort((a, b) => (a.id > b.id ? 1 : -1))}
-                        value={searchTerms.supplierIdSearchTerm}
+                        items={suppliers.map(s => ({
+                            ...s,
+                            id: s.id,
+                            displayText: `${s.name} ( ${s.id} ), ${s.countryCode}`
+                        }))}
+                        value={state.searchTerms.supplierIdSearchTerm}
                         propertyName="supplierIdSearchTerm"
                         required
                         fullWidth
@@ -188,14 +184,12 @@ function ParcelsSearch({
                 <Grid item xs={2}>
                     <Dropdown
                         onChange={handleSearchTermChange}
-                        items={carriers
-                            .map(s => ({
-                                ...s,
-                                id: s.carrierCode,
-                                displayText: `${s.carrierCode} ( ${s.organisationId} )`
-                            }))
-                            .sort((a, b) => (a.id > b.id ? 1 : -1))}
-                        value={searchTerms.carrierIdSearchTerm}
+                        items={carriers.map(s => ({
+                            ...s,
+                            id: s.id,
+                            displayText: `${s.name} ( ${s.id} )`
+                        }))}
+                        value={state.searchTerms.carrierIdSearchTerm}
                         propertyName="carrierIdSearchTerm"
                         required
                         fullWidth
@@ -212,7 +206,7 @@ function ParcelsSearch({
                         onChange={handleSearchTermChange}
                         propertyName="dateCreatedSearchTerm"
                         type="date"
-                        value={searchTerms.dateCreatedSearchTerm}
+                        value={state.searchTerms.dateCreatedSearchTerm}
                     />
                 </Grid>
 
@@ -223,7 +217,7 @@ function ParcelsSearch({
                         onChange={handleSearchTermChange}
                         propertyName="supplierInvNoSearchTerm"
                         type="text"
-                        value={searchTerms.supplierInvNoSearchTerm}
+                        value={state.searchTerms.supplierInvNoSearchTerm}
                     />
                 </Grid>
 
@@ -234,7 +228,7 @@ function ParcelsSearch({
                         onChange={handleSearchTermChange}
                         propertyName="consignmentNoSearchTerm"
                         type="text"
-                        value={searchTerms.consignmentNoSearchTerm}
+                        value={state.searchTerms.consignmentNoSearchTerm}
                     />
                 </Grid>
 
@@ -243,9 +237,9 @@ function ParcelsSearch({
                         label="Comments"
                         fullWidth
                         onChange={handleSearchTermChange}
-                        propertyName="commentSearchTerm"
+                        propertyName="commentsSearchTerm"
                         type="text"
-                        value={searchTerms.commentSearchTerm}
+                        value={state.searchTerms.commentsSearchTerm}
                     />
                 </Grid>
 

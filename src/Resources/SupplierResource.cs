@@ -7,5 +7,7 @@
         public string Name { get; set; }
 
         public string CountryCode { get; set; }
+
+        public string ApprovedCarrier { get; set; }
     }
 }

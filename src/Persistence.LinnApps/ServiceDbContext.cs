@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Persistence.LinnApps
 {
     using System.Runtime.InteropServices.ComTypes;
+    using System.Security.Cryptography.X509Certificates;
 
     using Linn.Common.Configuration;
     using Linn.Stores.Domain.LinnApps;
@@ -267,6 +268,7 @@
             q.Property(e => e.Name).HasColumnName("SUPPLIER_NAME").HasMaxLength(50);
             q.Property(e => e.CountryCode).HasColumnName("COUNTRY");
             q.Property(e => e.DateClosed).HasColumnName("DATE_CLOSED");
+            q.Property(s => s.ApprovedCarrier).HasColumnName("APPROVED_CARRIER");
         }
 
         private void BuildParts(ModelBuilder builder)
