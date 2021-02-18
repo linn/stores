@@ -138,7 +138,9 @@ function StockLocator({ items, itemsLoading, history, fetchItems, options }) {
                                                     null,
                                                     `&locationId=${i.id}&partNumber=${
                                                         i.partNumber
-                                                    }&queryBatchView=${true}`
+                                                    }&queryBatchView=${true}&batchRef=${
+                                                        i.batchRef ? i.batchRef : ''
+                                                    }`
                                                 );
                                             }}
                                         >
@@ -147,7 +149,7 @@ function StockLocator({ items, itemsLoading, history, fetchItems, options }) {
                                     )
                                 }))}
                                 allowNewRowCreation={false}
-                                editable
+                                editable={false}
                                 allowNewRowCreations
                             />
                         )}

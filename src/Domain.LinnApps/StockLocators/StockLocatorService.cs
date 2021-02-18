@@ -201,11 +201,6 @@
             var part = this.partRepository.FindBy(p => p.PartNumber == partNumber);
             if (!string.IsNullOrEmpty(batchRef) || queryBatchView)
             {
-                var b = this.stockLocatorBatchesView.FilterBy(
-                    x => (string.IsNullOrEmpty(partNumber) || x.PartNumber == partNumber)
-                         && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
-                         && (locationId == null || x.LocationId == locationId)
-                         && (string.IsNullOrEmpty(stockState) || x.State == stockState) && x.BatchRef == batchRef);
                 return this.stockLocatorBatchesView.FilterBy(x =>
                         (string.IsNullOrEmpty(partNumber) || x.PartNumber == partNumber)
                         && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
