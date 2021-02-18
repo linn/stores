@@ -18,6 +18,7 @@ import BuildTab from '../../containers/parts/tabs/BuildTab';
 import PurchTab from '../../containers/parts/tabs/PurchTab';
 import StoresTab from '../../containers/parts/tabs/StoresTab';
 import LifeCycleTab from './tabs/LifeCycleTab';
+import partReducer from './partReducer';
 
 function Part({
     editStatus,
@@ -62,124 +63,6 @@ function Part({
     };
     const creating = () => editStatus === 'create';
 
-    // all updates to state are now enacted by dispatching actions
-    // and processing them with this reducer, just like redux does
-    function partReducer(state, action) {
-        switch (action.type) {
-            case 'initialise':
-                if (creating()) {
-                    return { ...state, part: defaultPart };
-                }
-                return { ...state, part: action.payload, prevPart: action.payload };
-            case 'loadTemplate':
-                return { ...state, part: action.payload };
-            case 'fieldChange':
-                if (action.fieldName === 'rawOrFinished') {
-                    return {
-                        ...state,
-                        part: {
-                            ...state.part,
-                            rawOrFinished: 'F',
-                            nominalAccount: 564,
-                            nominal: '0000000417',
-                            nominalDescription: 'TOTAL COST OF SALES',
-                            department: '0000002106',
-                            departmentDescription: 'GROSS PROFIT'
-                        }
-                    };
-                }
-                if (action.fieldName === 'nominalAccount') {
-                    return {
-                        ...state,
-                        part: {
-                            ...state.part,
-                            nominalAccount: action.payload.id,
-                            nominal: action.payload.values[0].value,
-                            nominalDescription: action.payload.values[1].value,
-                            department: action.payload.values[2].value,
-                            departmentDescription: action.payload.values[3].value
-                        }
-                    };
-                }
-                if (action.fieldName === 'productAnalysisCode') {
-                    return {
-                        ...state,
-                        part: {
-                            ...state.part,
-                            productAnalysisCode: action.payload.name,
-                            productAnalysisCodeDescription: action.payload.description
-                        }
-                    };
-                }
-                if (action.fieldName === 'accountingCompany') {
-                    const updated =
-                        action.payload === 'RECORDS'
-                            ? {
-                                  ...state.part,
-                                  accountingCompany: action.payload,
-                                  paretoCode: 'R',
-                                  bomType: 'C',
-                                  linnProduced: 'N',
-                                  qcOnReceipt: 'N'
-                              }
-                            : { ...state.part, accountingCompany: action.payload, paretoCode: 'U' };
-                    return {
-                        ...state,
-                        part: updated
-                    };
-                }
-                if (action.fieldName === 'sernosSequenceName') {
-                    return {
-                        ...state,
-                        part: {
-                            ...state.part,
-                            sernosSequenceName: action.payload.name,
-                            sernosSequenceDescription: action.payload.description
-                        }
-                    };
-                }
-                if (action.fieldName === 'linnProduced') {
-                    const linnProduced = action.payload === 'Y';
-                    if (linnProduced) {
-                        return {
-                            ...state,
-                            part: {
-                                ...state.part,
-                                linnProduced,
-                                sernosSequenceName: 'SERIAL 1',
-                                sernosSequenceDescription: 'MASTER SERIAL NUMBER RECORDS.'
-                            }
-                        };
-                    }
-                    return {
-                        ...state,
-                        part: {
-                            ...state.part,
-                            linnProduced
-                        }
-                    };
-                }
-                if (action.fieldName === 'preferredSupplier') {
-                    return {
-                        ...state,
-                        part: {
-                            ...state.part,
-                            preferredSupplier: action.payload.name,
-                            preferredSupplierName: action.payload.description
-                        }
-                    };
-                }
-                return {
-                    ...state,
-                    part: { ...state.part, [action.fieldName]: action.payload }
-                };
-            default:
-                return state;
-        }
-    }
-
-    // this useReducer call replaces all the old useState calls
-    // we now have one state object and one consistent method of updating it
     const [state, dispatch] = useReducer(partReducer, {
         part: creating() ? defaultPart : { partNumber: '' },
         prevPart: { partNumber: '' }
@@ -197,7 +80,6 @@ function Part({
         }
     }, [state.part.partNumber, fetchParts, editStatus]);
 
-    // checking whether part can be made live
     useEffect(() => {
         if (itemId) {
             fetchLiveTest(itemId);
@@ -214,7 +96,7 @@ function Part({
                 return template.nextNumber.toString();
             };
             dispatch({
-                type: 'loadTemplate',
+                type: 'initialise',
                 payload: {
                     description: template.description,
                     partNumber:
@@ -249,9 +131,13 @@ function Part({
 
     useEffect(() => {
         if (item && item !== state.prevPart) {
-            dispatch({ type: 'initialise', payload: item });
+            if (editStatus === 'create') {
+                dispatch({ type: 'initialise', payload: defaultPart });
+            } else {
+                dispatch({ type: 'initialise', payload: item });
+            }
         }
-    }, [item, state.prevPart, editStatus]);
+    }, [item, state.prevPart, editStatus, defaultPart]);
 
     const partInvalid = () => !state.part?.partNumber || !state.part?.description;
 
@@ -288,7 +174,11 @@ function Part({
     };
 
     const handleCancelClick = () => {
-        dispatch({ type: 'initialise', payload: item });
+        if (editStatus === 'create') {
+            dispatch({ type: 'initialise', payload: defaultPart });
+        } else {
+            dispatch({ type: 'initialise', payload: item });
+        }
         setEditStatus('view');
     };
 
