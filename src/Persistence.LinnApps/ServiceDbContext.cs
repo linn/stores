@@ -1,7 +1,5 @@
 ﻿namespace Linn.Stores.Persistence.LinnApps
 {
-    using System.Runtime.InteropServices.ComTypes;
-
     using Linn.Common.Configuration;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
@@ -147,7 +145,7 @@
 
         public DbQuery<WandItem> WandItems { get; set; }
 
-        public DbQuery<ExportRsn> ExportRsns { get; set; }
+        public DbQuery<Rsn> Rsns { get; set; }
 
         public DbQuery<SalesAccount> SalesAccounts { get; set; }
 
@@ -220,7 +218,7 @@
             this.QueryStockLocatorBatches(builder);
             this.QueryWandConsignments(builder);
             this.QueryWandItems(builder);
-            this.QueryExportRsns(builder);
+            this.QueryRsns(builder);
             this.QuerySalesAccounts(builder);
             base.OnModelCreating(builder);
         }
@@ -1216,9 +1214,9 @@
             q.Property(v => v.CountryCode).HasColumnName("COUNTRY");
         }
 
-        private void QueryExportRsns(ModelBuilder builder)
+        private void QueryRsns(ModelBuilder builder)
         {
-            var q = builder.Query<ExportRsn>().ToView("EXPORT_RSNS_VIEW");
+            var q = builder.Query<Rsn>().ToView("EXPORT_RSNS_VIEW");
             q.Property(e => e.RsnNumber).HasColumnName("RSN_NUMBER");
             q.Property(e => e.ReasonCodeAlleged).HasColumnName("REASON_CODE_ALLEGED").HasMaxLength(10);
             q.Property(e => e.DateEntered).HasColumnName("DATE_ENTERED");

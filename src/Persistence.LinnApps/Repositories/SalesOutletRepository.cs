@@ -25,7 +25,17 @@
 
         public IQueryable<SalesOutlet> FilterBy(Expression<Func<SalesOutlet, bool>> expression)
         {
-            return this.serviceDbContext.SalesOutlets.Where(expression).AsNoTracking().Include(s => s.Rsns);
+            return this.serviceDbContext.SalesOutlets.Where(expression).AsNoTracking().Include(s => s.Rsns).Select(
+                so => new SalesOutlet
+                          {
+                              AccountId = so.AccountId,
+                              OutletNumber = so.OutletNumber,
+                              Name = so.Name,
+                              SalesCustomerId = so.SalesCustomerId,
+                              CountryName = so.CountryName,
+                              CountryCode = so.CountryCode,
+                              Rsns = so.Rsns
+                          });
         }
 
         public IQueryable<SalesOutlet> FindAll()

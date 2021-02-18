@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class ExportRsn
+    public class Rsn
     {
         public int RsnNumber { get; set; }
 

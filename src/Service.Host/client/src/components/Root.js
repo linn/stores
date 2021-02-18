@@ -31,6 +31,7 @@ import DespatchPalletQueueReport from '../containers/reports/DespatchPalletQueue
 import StockViewerOptions from '../containers/stockLocatorUtility/StockViewerOptions';
 import StockLocator from '../containers/stockLocatorUtility/StockLocator';
 import Wand from '../containers/Wand';
+import SalesOutlets from '../containers/SalesOutlets';
 
 const Root = ({ store }) => (
     <div>
@@ -161,6 +162,12 @@ const Root = ({ store }) => (
                                         component={DespatchPalletQueueReport}
                                     />
                                     <Route exact path="/logistics/wand" component={Wand} />
+                                    {/* TODO change this route */}
+                                    <Route
+                                        exact
+                                        path="/inventory/sales-outlets"
+                                        component={SalesOutlets}
+                                    />
                                     <Route component={NotFoundPage} />
                                 </Switch>
                             </div>

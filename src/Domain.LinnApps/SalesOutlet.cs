@@ -30,6 +30,6 @@
 
         public IEnumerable<SosAllocHead> SosAllocHeads { get; set; }
 
-        public IEnumerable<ExportRsn> Rsns { get; set; }
+        public IEnumerable<Rsn> Rsns { get; set; }
     }
 }
