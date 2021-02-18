@@ -136,7 +136,9 @@ function StockLocator({ items, itemsLoading, history, fetchItems, options }) {
                                                 setHasDrilledDown(true);
                                                 fetchItems(
                                                     null,
-                                                    `&locationId=${i.id}&queryBatchView=${true}`
+                                                    `&locationId=${i.id}&partNumber=${
+                                                        i.partNumber
+                                                    }&queryBatchView=${true}`
                                                 );
                                             }}
                                         >
