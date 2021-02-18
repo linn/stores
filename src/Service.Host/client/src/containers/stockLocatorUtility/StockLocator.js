@@ -12,7 +12,7 @@ const mapStateToProps = (state, { location }) => ({
     itemsLoading: stockLocatorLocationsSelectors.getSearchLoading(state),
     options: queryString.parse(location?.search),
     loading: stockLocatorLocationsSelectors.getLoading(state),
-    itemError: getItemError(state, itemTypes.stockLocator.item)
+    itemError: getItemError(state, itemTypes.stockLocator.item),
 });
 
 const initialise = ({ options }) => dispatch => {
@@ -22,7 +22,8 @@ const initialise = ({ options }) => dispatch => {
 };
 
 const mapDispatchToProps = {
-    initialise
+    initialise,
+    fetchItems: stockLocatorLocationsActions.searchWithOptions
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(StockLocator));

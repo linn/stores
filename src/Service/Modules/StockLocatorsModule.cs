@@ -50,7 +50,7 @@
 
         private object GetStockLocatorsByLocation()
         {
-            var resource = this.Bind<StockLocatorResource>();
+            var resource = this.Bind<StockLocatorQueryResource>();
             var result = this.service.GetStockLocations(resource);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)

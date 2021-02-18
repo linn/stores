@@ -1,39 +1,42 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { Title, SingleEditTable, Loading, BackButton } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Page from '../../containers/Page';
 
-function StockLocator({ items, itemsLoading, history, options }) {
-    const variableColumns = options?.batchRef
-        ? [
-              {
-                  title: 'Batch Ref',
-                  id: 'batchRef',
-                  type: 'text',
-                  editable: false
-              },
-              {
-                  title: 'Batch Date',
-                  id: 'stockRotationDate',
-                  type: 'date',
-                  editable: false
-              }
-          ]
-        : [
-              {
-                  title: 'Location Code',
-                  id: 'locationName',
-                  type: 'text',
-                  editable: false
-              },
-              {
-                  title: 'UOM',
-                  id: 'partUnitOfMeasure',
-                  type: 'text',
-                  editable: false
-              }
-          ];
+function StockLocator({ items, itemsLoading, history, fetchItems, options }) {
+    const [batchView, setBatchView] = useState(false);
+
+    const variableColumns =
+        options?.batchRef || batchView
+            ? [
+                  {
+                      title: 'Batch Ref',
+                      id: 'batchRef',
+                      type: 'text',
+                      editable: false
+                  },
+                  {
+                      title: 'Batch Date',
+                      id: 'stockRotationDate',
+                      type: 'date',
+                      editable: false
+                  }
+              ]
+            : [
+                  {
+                      title: 'Location Code',
+                      id: 'locationName',
+                      type: 'text',
+                      editable: false
+                  },
+                  {
+                      title: 'UOM',
+                      id: 'partUnitOfMeasure',
+                      type: 'text',
+                      editable: false
+                  }
+              ];
 
     const columns = [
         {
@@ -61,6 +64,12 @@ function StockLocator({ items, itemsLoading, history, options }) {
             editable: false
         },
         {
+            title: 'Expand',
+            id: 'component',
+            type: 'component',
+            editable: false
+        },
+        {
             title: 'State',
             id: 'state',
             type: 'text',
@@ -84,7 +93,11 @@ function StockLocator({ items, itemsLoading, history, options }) {
         <Page>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <Title text={options?.batchRef ? 'Locator Batches' : 'Stock Locations'} />
+                    <Title
+                        text={
+                            options?.batchRef || batchView ? 'Locator Batches' : 'Stock Locations'
+                        }
+                    />
                 </Grid>
                 {itemsLoading ? (
                     <Grid item xs={12}>
@@ -98,7 +111,21 @@ function StockLocator({ items, itemsLoading, history, options }) {
                                 columns={columns}
                                 rows={items.map(i => ({
                                     ...i,
-                                    id: i.id + i.batchRef + i.partNumber
+                                    id: i.id + i.batchRef + i.partNumber,
+                                    component: (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setBatchView(true);
+                                                fetchItems(
+                                                    null,
+                                                    `&locationId=${i.id}&queryBatchView=${true}`
+                                                );
+                                            }}
+                                        >
+                                            +
+                                        </button>
+                                    )
                                 }))}
                                 allowNewRowCreation={false}
                                 editable
@@ -125,7 +152,8 @@ StockLocator.propTypes = {
         batchRef: PropTypes.string
     }).isRequired,
     itemsLoading: PropTypes.bool,
-    history: PropTypes.shape({ push: PropTypes.func }).isRequired
+    history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+    fetchItems: PropTypes.func.isRequired
 };
 
 StockLocator.defaultProps = {
