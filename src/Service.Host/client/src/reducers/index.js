@@ -55,6 +55,7 @@ import despatchPalletQueueReport from './despatchPalletQueueReport';
 import movePalletToUpper from './movePalletToUpper';
 import movePalletsToUpper from './movePalletsToUpper';
 import stockLocatorLocations from './stockLocators/stockLocatorLocations';
+import stockQuantities from './stockLocators/stockQuantities';
 import nominalAccounts from './nominalAccounts';
 import wandConsignments from './wandConsignments';
 import wandItems from './wandItems';
@@ -102,6 +103,7 @@ const rootReducer = combineReducers({
     stockLocatorLocations,
     stockLocators,
     stockPools,
+    stockQuantities,
     storageLocations,
     storagePlace,
     storagePlaces,

@@ -96,6 +96,7 @@
                 .As<IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource>>();
             builder.RegisterType<WarehouseFacadeService>().As<IWarehouseFacadeService>();
             builder.RegisterType<WandFacadeService>().As<IWandFacadeService>();
+            builder.RegisterType<StockQuantitiesService>().As<IStockQuantitiesService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
