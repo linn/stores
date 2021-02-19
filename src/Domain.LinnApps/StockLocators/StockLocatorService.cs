@@ -1,6 +1,5 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.StockLocators
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 

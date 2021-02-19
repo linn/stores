@@ -33,7 +33,7 @@
                     PartNumber = "PART",
                     Id = 1,
                     Description = "Desc",
-                    StockControlled = true,
+                    StockControlled = "Y",
                     CreatedBy = 1
                 },
             };
