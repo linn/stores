@@ -59,6 +59,7 @@ import wandItems from './wandItems';
 import parcels from './parcels/parcels';
 import parcel from './parcels/parcel';
 import carriers from './carriers';
+import suppliersApprovedCarrier from './suppliersApprovedCarrier';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -109,6 +110,7 @@ const rootReducer = combineReducers({
     storagePlaces,
     storagePlaceAuditReport,
     suppliers,
+    suppliersApprovedCarrier,
     tqmsCategories,
     unitsOfMeasure,
     unpickItemsAllocation,

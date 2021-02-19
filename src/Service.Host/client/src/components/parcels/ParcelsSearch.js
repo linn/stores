@@ -1,14 +1,18 @@
 import React, { useEffect, useState, useReducer } from 'react';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
 import {
     SearchInputField,
     LinkButton,
     useSearch,
     PaginatedTable,
     Loading,
-    Dropdown
+    TypeaheadDialog,
+    InputField
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/styles';
 import queryString from 'query-string';
 import Page from '../../containers/Page';
 
@@ -17,7 +21,14 @@ function ParcelsSearch({
     fetchItems,
     loading,
     suppliers,
-    carriers,
+    suppliersSearchResults,
+    suppliersSearchLoading,
+    searchSuppliers,
+    clearSuppliersSearch,
+    carriersSearchResults,
+    carriersSearchLoading,
+    searchCarriers,
+    clearCarriersSearch,
     applicationState,
     history,
     privileges
@@ -38,6 +49,19 @@ function ParcelsSearch({
         return false;
     };
 
+    const useStyles = makeStyles(theme => ({
+        marginTop2: {
+            marginTop: theme.spacing(2)
+        },
+        marginTop3: {
+            marginTop: theme.spacing(3)
+        },
+        displayInline: {
+            display: 'inline-block'
+        }
+    }));
+    const classes = useStyles();
+
     function parcelReducer(state, action) {
         switch (action.type) {
             case 'updateSearchTerms': {
@@ -45,6 +69,22 @@ function ParcelsSearch({
                     ...state.searchTerms,
                     [action.searchTermName]: action.newValue
                 };
+                if (action.carrierDisplayName) {
+                    return {
+                        ...state,
+                        searchTerms: newSearchTerms,
+                        stringifiedSearch: `&${queryString.stringify(newSearchTerms, '&', '=')}`,
+                        carrierDisplayName: action.carrierDisplayName
+                    };
+                }
+                if (action.supplierDisplayName) {
+                    return {
+                        ...state,
+                        searchTerms: newSearchTerms,
+                        stringifiedSearch: `&${queryString.stringify(newSearchTerms, '&', '=')}`,
+                        supplierDisplayName: action.supplierDisplayName
+                    };
+                }
                 return {
                     ...state,
                     searchTerms: newSearchTerms,
@@ -66,11 +106,49 @@ function ParcelsSearch({
             supplierInvNoSearchTerm: '',
             consignmentNoSearchTerm: '',
             commentsSearchTerm: ''
-        }
+        },
+        supplierDisplayName: '-',
+        carrierDisplayName: '-'
     });
 
     const handleSearchTermChange = (propertyName, newValue) => {
         dispatch({ type: 'updateSearchTerms', searchTermName: propertyName, newValue });
+    };
+
+    const handleSupplierChange = supplier => {
+        dispatch({
+            type: 'updateSearchTerms',
+            searchTermName: 'supplierIdSearchTerm',
+            newValue: supplier.id,
+            supplierDisplayName: `${supplier.id} - ${supplier.description}`
+        });
+    };
+
+    const handleCarrierChange = carrier => {
+        dispatch({
+            type: 'updateSearchTerms',
+            searchTermName: 'carrierIdSearchTerm',
+            newValue: carrier.id,
+            carrierDisplayName: `${carrier.id} - ${carrier.description}`
+        });
+    };
+
+    const resetSuppliersSearchTerms = () => {
+        dispatch({
+            type: 'updateSearchTerms',
+            searchTermName: 'supplierIdSearchTerm',
+            newValue: '',
+            supplierDisplayName: '-'
+        });
+    };
+
+    const resetCarriersSearchTerms = () => {
+        dispatch({
+            type: 'updateSearchTerms',
+            searchTermName: 'carrierIdSearchTerm',
+            newValue: '',
+            carrierDisplayName: '-'
+        });
     };
 
     useSearch(fetchItems, state.stringifiedSearch, null, 'searchTerm');
@@ -99,9 +177,9 @@ function ParcelsSearch({
                   supplier: `${el.supplierId} - ${
                       suppliers.find(x => x.id === el.supplierId)?.name
                   }`,
-                  carrier: `${el.carrierId} - ${carriers.find(x => x.id === el.carrierId)?.name}`,
+                  carrier: `${el.carrierId} - ${suppliers.find(x => x.id === el.carrierId)?.name}`,
                   dateCreated: el.dateCreated,
-                  supplerInvNo: el.supplerInvNo,
+                  supplierInvoiceNo: el.supplierInvoiceNo,
                   consignmentNo: el.consignmentNo,
                   comments: el.comments,
                   id: el.parcelNumber,
@@ -127,7 +205,6 @@ function ParcelsSearch({
         pageOptions.orderBy,
         pageOptions.orderAscending,
         items,
-        carriers,
         suppliers,
         applicationState
     ]);
@@ -137,7 +214,7 @@ function ParcelsSearch({
         supplier: 'supplier',
         carrier: 'carrier',
         dateCreated: 'date created',
-        supplierInvNo: 'supplier invoice number',
+        supplierInvoiceNo: 'supplier invoice number',
         consignmentNo: 'consignment number',
         comments: 'comments'
     };
@@ -147,12 +224,11 @@ function ParcelsSearch({
             <Grid spacing={3} container justify="center">
                 <Grid item xs={11} />
                 <Grid item xs={1}>
-                    {/* todo: add if allowedToCreate properly, still needs pulled in from backend */}
                     {(allowedToCreate || true) && (
                         <LinkButton text="Create" to="/inventory/parcels/create" />
                     )}
                 </Grid>
-                <Grid item xs={1}>
+                <Grid item xs={2}>
                     <SearchInputField
                         label="Parcels"
                         fullWidth
@@ -163,39 +239,75 @@ function ParcelsSearch({
                         value={state.searchTerms.parcelNumberSearchTerm}
                     />
                 </Grid>
+                <Grid item xs={1} />
 
-                <Grid item xs={2}>
-                    <Dropdown
-                        onChange={handleSearchTermChange}
-                        items={suppliers.map(s => ({
-                            ...s,
-                            id: s.id,
-                            displayText: `${s.name} ( ${s.id} ), ${s.countryCode}`
-                        }))}
-                        value={state.searchTerms.supplierIdSearchTerm}
-                        propertyName="supplierIdSearchTerm"
-                        required
-                        fullWidth
-                        label="Supplier"
-                        allowNoValue
-                    />
+                <Grid item xs={1}>
+                    <div className={classes.marginTop2}>
+                        <TypeaheadDialog
+                            title="Search for a supplier"
+                            onSelect={handleSupplierChange}
+                            searchItems={suppliersSearchResults}
+                            loading={suppliersSearchLoading}
+                            fetchItems={searchSuppliers}
+                            clearSearch={() => clearSuppliersSearch}
+                        />
+                    </div>
                 </Grid>
-
                 <Grid item xs={2}>
-                    <Dropdown
-                        onChange={handleSearchTermChange}
-                        items={carriers.map(s => ({
-                            ...s,
-                            id: s.id,
-                            displayText: `${s.name} ( ${s.id} )`
-                        }))}
-                        value={state.searchTerms.carrierIdSearchTerm}
-                        propertyName="carrierIdSearchTerm"
-                        required
-                        fullWidth
-                        label="Carrier"
-                        allowNoValue
-                    />
+                    <div className={classes.displayInline}>
+                        <InputField
+                            value={state.supplierDisplayName}
+                            label="Supplier"
+                            propertyName="supplier"
+                            disabled
+                        />
+                    </div>
+                </Grid>
+                <Grid item xs={1}>
+                    <div className={classes.marginTop3}>
+                        <Tooltip title="Clear Supplier search">
+                            <Button
+                                variant="outlined"
+                                onClick={resetSuppliersSearchTerms}
+                                title="Clear search"
+                            >
+                                X
+                            </Button>
+                        </Tooltip>
+                    </div>
+                </Grid>
+                <Grid item xs={1} />
+
+                <Grid item xs={1}>
+                    <div className={classes.marginTop2}>
+                        <TypeaheadDialog
+                            title="Search for a Carrier"
+                            onSelect={handleCarrierChange}
+                            searchItems={carriersSearchResults}
+                            loading={carriersSearchLoading}
+                            fetchItems={searchCarriers}
+                            clearSearch={() => clearCarriersSearch}
+                        />
+                    </div>
+                </Grid>
+                <Grid item xs={2}>
+                    <div className={classes.displayInline}>
+                        <InputField
+                            value={state.carrierDisplayName}
+                            label="Carrier"
+                            propertyName="carrier"
+                            disabled
+                        />
+                    </div>
+                </Grid>
+                <Grid item xs={1}>
+                    <div className={classes.marginTop3}>
+                        <Tooltip title="Clear Carrier search">
+                            <Button variant="outlined" onClick={resetCarriersSearchTerms}>
+                                X
+                            </Button>
+                        </Tooltip>
+                    </div>
                 </Grid>
 
                 <Grid item xs={2}>
@@ -210,7 +322,7 @@ function ParcelsSearch({
                     />
                 </Grid>
 
-                <Grid item xs={1}>
+                <Grid item xs={3}>
                     <SearchInputField
                         label="Supplier Inv No"
                         fullWidth
@@ -221,7 +333,7 @@ function ParcelsSearch({
                     />
                 </Grid>
 
-                <Grid item xs={2}>
+                <Grid item xs={3}>
                     <SearchInputField
                         label="Consignment Number"
                         fullWidth
@@ -232,7 +344,7 @@ function ParcelsSearch({
                     />
                 </Grid>
 
-                <Grid item xs={2}>
+                <Grid item xs={4}>
                     <SearchInputField
                         label="Comments"
                         fullWidth
@@ -273,12 +385,6 @@ ParcelsSearch.propTypes = {
             parcelNumber: PropTypes.number
         })
     ).isRequired,
-    carriers: PropTypes.arrayOf(
-        PropTypes.shape({
-            carrierCode: PropTypes.string,
-            organisationId: PropTypes.number
-        })
-    ),
     suppliers: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.number,
@@ -289,14 +395,37 @@ ParcelsSearch.propTypes = {
     loading: PropTypes.bool,
     fetchItems: PropTypes.func.isRequired,
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,
-    privileges: PropTypes.arrayOf(PropTypes.string)
+    privileges: PropTypes.arrayOf(PropTypes.string),
+    suppliersSearchResults: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number,
+            name: PropTypes.number,
+            description: PropTypes.string
+        })
+    ),
+    suppliersSearchLoading: PropTypes.bool,
+    searchSuppliers: PropTypes.func.isRequired,
+    clearSuppliersSearch: PropTypes.func.isRequired,
+    carriersSearchResults: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number,
+            name: PropTypes.number,
+            description: PropTypes.string
+        })
+    ),
+    carriersSearchLoading: PropTypes.bool,
+    searchCarriers: PropTypes.func.isRequired,
+    clearCarriersSearch: PropTypes.func.isRequired
 };
 
 ParcelsSearch.defaultProps = {
     loading: false,
-    carriers: [{ carrierCode: 'loading..', organisationId: -1 }],
+    carriersSearchResults: [{ id: -1, name: '', description: '' }],
+    suppliersSearchResults: [{ id: -1, name: '', description: '' }],
     suppliers: [{ id: -1, name: 'loading..' }],
-    privileges: null
+    privileges: null,
+    carriersSearchLoading: false,
+    suppliersSearchLoading: false
 };
 
 export default ParcelsSearch;

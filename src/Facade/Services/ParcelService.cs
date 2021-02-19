@@ -68,14 +68,27 @@
 
         protected Expression<Func<Parcel, bool>> SearchExpression(ParcelSearchRequestResource searchTerms)
         {
-            return x => (string.IsNullOrWhiteSpace(searchTerms.ParcelNumberSearchTerm)
-                             || x.ParcelNumber.ToString().Contains(searchTerms.ParcelNumberSearchTerm));
+            return x =>
+                (string.IsNullOrWhiteSpace(searchTerms.ParcelNumberSearchTerm)
+                 || x.ParcelNumber.ToString().Contains(searchTerms.ParcelNumberSearchTerm))
+                && (string.IsNullOrWhiteSpace(searchTerms.SupplierIdSearchTerm)
+                    || (x.SupplierId.HasValue && x.SupplierId.ToString().Contains(searchTerms.SupplierIdSearchTerm)))
+                && (string.IsNullOrWhiteSpace(searchTerms.CarrierIdSearchTerm)
+                    || (x.CarrierId.HasValue && x.CarrierId.ToString().Contains(searchTerms.CarrierIdSearchTerm)))
+                && (string.IsNullOrWhiteSpace(searchTerms.ConsignmentNoSearchTerm)
+                    || x.ConsignmentNo.Contains(searchTerms.ConsignmentNoSearchTerm))
+                && (string.IsNullOrWhiteSpace(searchTerms.SupplierInvNoSearchTerm)
+                    || x.SupplierInvoiceNo.Contains(searchTerms.SupplierInvNoSearchTerm))
+                && (string.IsNullOrWhiteSpace(searchTerms.CommentsSearchTerm)
+                    || x.Comments.Contains(searchTerms.CommentsSearchTerm))
+                && (string.IsNullOrWhiteSpace(searchTerms.DateCreatedSearchTerm)
+                    || (DateTime.Parse(searchTerms.DateCreatedSearchTerm).AddDays(-1) < x.DateCreated
+                        && x.DateCreated < DateTime.Parse(searchTerms.DateCreatedSearchTerm).AddDays(1)));
         }
 
         public IResult<IEnumerable<Parcel>> Search(ParcelSearchRequestResource resource)
         {
             return new SuccessResult<IEnumerable<Parcel>>(this.Repository.FilterBy(this.SearchExpression(resource)));
-
         }
     }
 

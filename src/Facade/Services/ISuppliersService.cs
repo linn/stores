@@ -6,6 +6,6 @@
 
     public interface ISuppliersService
     {
-        IResult<IEnumerable<Supplier>> GetSuppliers(string searchTerm = null, bool returnClosed = false);
+        IResult<IEnumerable<Supplier>> GetSuppliers(string searchTerm = null, bool returnClosed = false, bool returnOnlyApprovedCarriers = false);
     }
 }

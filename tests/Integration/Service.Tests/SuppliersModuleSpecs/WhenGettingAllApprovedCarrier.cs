@@ -2,21 +2,17 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-
     using FluentAssertions;
-
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
-
     using Nancy;
     using Nancy.Testing;
-
     using NSubstitute;
-
     using NUnit.Framework;
 
-    public class WhenGettingAll : ContextBase
+
+    public class WhenGettingAllApprovedCarrier : ContextBase
     {
         [SetUp]
         public void SetUp()
@@ -25,21 +21,23 @@
             {
                 Id = 1,
                 Name = "Supplier A",
-                CountryCode = "DE"
+                CountryCode = "DE",
+                ApprovedCarrier = "Y"
             };
             var supplierB = new Supplier
             {
                 Id = 2,
                 Name = "Supplier B",
-                CountryCode = "RU"
+                CountryCode = "RU",
+                ApprovedCarrier = "Y"
             };
 
-            this.SuppliersService.GetSuppliers()
+            this.SuppliersService.GetSuppliers(Arg.Any<string>(), false, true)
                 .Returns(new SuccessResult<IEnumerable<Supplier>>(new List<Supplier> { supplierA, supplierB }));
 
 
             this.Response = this.Browser.Get(
-                "/inventory/suppliers",
+                "/inventory/suppliers-approved-carrier",
                 with =>
                 {
                     with.Header("Accept", "application/json");
@@ -55,7 +53,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.SuppliersService.Received().GetSuppliers(Arg.Any<string>(), false, false);
+            this.SuppliersService.Received().GetSuppliers(Arg.Any<string>(), false, true);
         }
 
         [Test]
