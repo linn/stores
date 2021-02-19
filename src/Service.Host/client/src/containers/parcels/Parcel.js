@@ -4,10 +4,10 @@ import Parcel from '../../components/parcels/Parcel';
 import parcelSelectors from '../../selectors/parcelSelectors';
 import parcelActions from '../../actions/parcelActions';
 import suppliersSelectors from '../../selectors/suppliersSelectors';
-import carriersSelectors from '../../selectors/carriersSelectors';
 import employeesSelectors from '../../selectors/employeesSelectors';
 import suppliersActions from '../../actions/suppliersActions';
-import carriersActions from '../../actions/carriersActions';
+import suppliersApprovedCarrierActions from '../../actions/suppliersApprovedCarrierActions';
+import suppliersApprovedCarrierSelectors from '../../selectors/suppliersApprovedCarrierSelectors';
 import employeesActions from '../../actions/employeesActions';
 import { getPrivileges } from '../../selectors/userSelectors';
 import * as itemTypes from '../../itemTypes';
@@ -21,18 +21,22 @@ const mapStateToProps = (state, { match }) => ({
     loading: parcelSelectors.getLoading(state),
     snackbarVisible: parcelSelectors.getSnackbarVisible(state),
     itemError: getItemError(state, itemTypes.part.item),
-    suppliers: suppliersSelectors.getItems(state),
-    carriers: carriersSelectors.getItems(state),
+    suppliersSearchResults: suppliersSelectors
+        .getSearchItems(state)
+        .map(c => ({ id: c.id, name: c.id.toString(), description: c.name })),
+    suppliersSearchLoading: suppliersSelectors.getSearchLoading(state),
+    carriersSearchResults: suppliersApprovedCarrierSelectors
+        .getSearchItems(state)
+        .map(c => ({ id: c.id, name: c.id.toString(), description: c.name })),
+    carriersSearchLoading: suppliersApprovedCarrierSelectors.getSearchLoading(state),
     employees: employeesSelectors.getItems(state),
     privileges: getPrivileges(state)
 });
 
-const initialise = itemId => dispatch => {
-    if (itemId) {
-        dispatch(parcelActions.fetch(itemId));
+const initialise = item => dispatch => {
+    if (item) {
+        dispatch(parcelActions.fetch(item.itemId));
     }
-    dispatch(suppliersActions.fetch());
-    dispatch(carriersActions.fetch());
     dispatch(employeesActions.fetch());
 };
 
@@ -41,7 +45,11 @@ const mapDispatchToProps = {
     addItem: parcelActions.add,
     updateItem: parcelActions.update,
     setEditStatus: parcelActions.setEditStatus,
-    setSnackbarVisible: parcelActions.setSnackbarVisible
+    setSnackbarVisible: parcelActions.setSnackbarVisible,
+    searchSuppliers: suppliersActions.search,
+    clearSuppliersSearch: suppliersActions.clearSearch,
+    searchCarriers: suppliersApprovedCarrierActions.search,
+    clearCarriersSearch: suppliersApprovedCarrierActions.clearSearch
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Parcel));

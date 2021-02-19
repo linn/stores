@@ -266,11 +266,7 @@ function ParcelsSearch({
                 <Grid item xs={1}>
                     <div className={classes.marginTop3}>
                         <Tooltip title="Clear Supplier search">
-                            <Button
-                                variant="outlined"
-                                onClick={resetSuppliersSearchTerms}
-                                title="Clear search"
-                            >
+                            <Button variant="outlined" onClick={resetSuppliersSearchTerms}>
                                 X
                             </Button>
                         </Tooltip>

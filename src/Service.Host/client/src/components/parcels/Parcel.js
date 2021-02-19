@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
 import {
     SaveBackCancelButtons,
     InputField,
     Loading,
     Title,
     ErrorCard,
-    SnackbarMessage
+    SearchInputField,
+    SnackbarMessage,
+    TypeaheadDialog
 } from '@linn-it/linn-form-components-library';
+import { makeStyles } from '@material-ui/styles';
+
 import Page from '../../containers/Page';
 
 function Parcel({
@@ -24,9 +30,15 @@ function Parcel({
     setEditStatus,
     setSnackbarVisible,
     employees,
-    suppliers,
-    carriers,
-    privileges
+    privileges,
+    suppliersSearchResults,
+    suppliersSearchLoading,
+    searchSuppliers,
+    clearSuppliersSearch,
+    carriersSearchResults,
+    carriersSearchLoading,
+    searchCarriers,
+    clearCarriersSearch
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -54,6 +66,26 @@ function Parcel({
     );
     const [prevParcel, setPrevParcel] = useState({});
 
+    useEffect(() => {
+        if (item !== prevParcel) {
+            setParcel(item);
+            setPrevParcel(item);
+        }
+    }, [item, prevParcel]);
+
+    const useStyles = makeStyles(theme => ({
+        marginTop2: {
+            marginTop: theme.spacing(2)
+        },
+        marginTop3: {
+            marginTop: theme.spacing(3)
+        },
+        displayInline: {
+            display: 'inline-block'
+        }
+    }));
+    const classes = useStyles();
+
     const handleSaveClick = () => {
         if (creating()) {
             addItem(parcel);
@@ -78,6 +110,28 @@ function Parcel({
         }
 
         setParcel({ ...parcel, [propertyName]: newValue });
+    };
+
+    const handleSupplierChange = supplier => {
+        handleFieldChange('supplierId', supplier.Id);
+        handleFieldChange('supplierName', supplier.description);
+        handleFieldChange('supplierCountry', supplier.country);
+    };
+
+    const handleCarrierChange = carrier => {
+        handleFieldChange('carrierId', carrier.Id);
+        handleFieldChange('carrierName', carrier.description);
+    };
+
+    const clearSupplier = () => {
+        handleFieldChange('supplierId', '');
+        handleFieldChange('supplierName', '');
+        handleFieldChange('supplierCountry', '');
+    };
+
+    const clearCarrier = () => {
+        handleFieldChange('carrierId', '');
+        handleFieldChange('carrierName', '');
     };
 
     return (
@@ -118,17 +172,113 @@ function Parcel({
                                     propertyName="parcelNumber"
                                 />
                             </Grid>
-                            <Grid item xs={9} />
-                            <Grid item xs={8}>
-                                {/* <Typeahead
-                                    items={searchItems}
-                                    fetchItems={fetchItems}
-                                    clearSearch={clearSearch}
-                                    loading={loading}
-                                    title="Supplier"
-                                    history={history}
-                                /> */}
+                            <Grid item xs={3} />
+
+                            <Grid item xs={3}>
+                                <SearchInputField
+                                    label="Date Created"
+                                    fullWidth
+                                    onChange={handleFieldChange}
+                                    propertyName="dateCreated"
+                                    type="date"
+                                    value={parcel.dateCreated}
+                                />
                             </Grid>
+
+                            <Grid item xs={3} />
+
+                            <Grid item xs={1}>
+                                <div className={classes.marginTop2}>
+                                    <TypeaheadDialog
+                                        title="Search for a supplier"
+                                        onSelect={handleSupplierChange}
+                                        searchItems={suppliersSearchResults}
+                                        loading={suppliersSearchLoading}
+                                        fetchItems={searchSuppliers}
+                                        clearSearch={() => clearSuppliersSearch}
+                                    />
+                                </div>
+                            </Grid>
+                            <Grid item xs={2}>
+                                <div className={classes.displayInline}>
+                                    <InputField
+                                        value={parcel.supplierId}
+                                        label="Supplier"
+                                        propertyName="supplierId"
+                                        disabled
+                                    />
+                                </div>
+                            </Grid>
+                            <Grid item xs={1}>
+                                <div className={classes.marginTop3}>
+                                    <Tooltip title="Clear Supplier">
+                                        <Button variant="outlined" onClick={clearSupplier}>
+                                            X
+                                        </Button>
+                                    </Tooltip>
+                                </div>
+                            </Grid>
+                            <Grid item xs={2} />
+
+                            <Grid item xs={1}>
+                                <div className={classes.marginTop2}>
+                                    <TypeaheadDialog
+                                        title="Search for a Carrier"
+                                        onSelect={handleCarrierChange}
+                                        searchItems={carriersSearchResults}
+                                        loading={carriersSearchLoading}
+                                        fetchItems={searchCarriers}
+                                        clearSearch={() => clearCarriersSearch}
+                                    />
+                                </div>
+                            </Grid>
+                            <Grid item xs={2}>
+                                <div className={classes.displayInline}>
+                                    <InputField
+                                        value={parcel.carrierId}
+                                        label="Carrier"
+                                        propertyName="carrier"
+                                        disabled
+                                    />
+                                </div>
+                            </Grid>
+                            <Grid item xs={1}>
+                                <div className={classes.marginTop3}>
+                                    <Tooltip title="Clear Carrier">
+                                        <Button variant="outlined" onClick={clearCarrier}>
+                                            X
+                                        </Button>
+                                    </Tooltip>
+                                </div>
+                            </Grid>
+
+                            <Grid item xs={2} />
+
+                            <Grid item xs={3}>
+                                <InputField
+                                    fullWidth
+                                    value={parcel.supplierInvoiceNo}
+                                    label="Supplier Invoice Number(s)"
+                                    maxLength={500}
+                                    required
+                                    onChange={handleFieldChange}
+                                    propertyName="supplierInvoiceNo"
+                                />
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <InputField
+                                    fullWidth
+                                    value={parcel.comments}
+                                    label="Comments"
+                                    maxLength={2000}
+                                    required
+                                    onChange={handleFieldChange}
+                                    propertyName="comments"
+                                    rows={3}
+                                />
+                            </Grid>
+
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons
                                     saveDisabled={viewing()}
@@ -165,31 +315,41 @@ Parcel.propTypes = {
     setEditStatus: PropTypes.func.isRequired,
     setSnackbarVisible: PropTypes.func.isRequired,
     employees: PropTypes.arrayOf(PropTypes.shape({ name: PropTypes.string, id: PropTypes.number })),
-    carriers: PropTypes.arrayOf(
-        PropTypes.shape({
-            carrierCode: PropTypes.string,
-            organisationId: PropTypes.number
-        })
-    ),
-    suppliers: PropTypes.arrayOf(
+    suppliersSearchResults: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.number,
-            name: PropTypes.string
+            name: PropTypes.number,
+            description: PropTypes.string
         })
     ),
+    suppliersSearchLoading: PropTypes.bool,
+    searchSuppliers: PropTypes.func.isRequired,
+    clearSuppliersSearch: PropTypes.func.isRequired,
+    carriersSearchResults: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number,
+            name: PropTypes.number,
+            description: PropTypes.string
+        })
+    ),
+    carriersSearchLoading: PropTypes.bool,
+    searchCarriers: PropTypes.func.isRequired,
+    clearCarriersSearch: PropTypes.func.isRequired,
     privileges: PropTypes.arrayOf(PropTypes.string)
 };
 
 Parcel.defaultProps = {
     item: {},
     snackbarVisible: false,
-    loading: null,
+    loading: false,
     itemError: null,
     itemId: null,
     employees: [{ id: -1, name: 'loading..' }],
-    carriers: [{ carrierCode: 'loading..', organisationId: -1 }],
-    suppliers: [{ id: -1, name: 'loading..' }],
-    privileges: null
+    carriersSearchResults: [{ id: -1, name: '', description: '' }],
+    suppliersSearchResults: [{ id: -1, name: '', description: '' }],
+    privileges: null,
+    carriersSearchLoading: false,
+    suppliersSearchLoading: false
 };
 
 export default Parcel;
