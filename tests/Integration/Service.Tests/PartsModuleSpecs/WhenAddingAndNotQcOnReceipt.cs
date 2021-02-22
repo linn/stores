@@ -21,7 +21,7 @@
         [SetUp]
         public void SetUp()
         {
-            this.requestResource = new PartResource { Id = 1, StockControlled = true, CreatedBy = 1 };
+            this.requestResource = new PartResource { Id = 1, StockControlled = "Y", CreatedBy = 1 };
             var part = new Part
                               {
                                  Id = 1,

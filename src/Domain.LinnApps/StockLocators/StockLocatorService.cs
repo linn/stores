@@ -1,6 +1,5 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.StockLocators
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -192,25 +191,28 @@
 
         public IEnumerable<StockLocator> GetStockLocatorLocationsView(
             string partNumber,
-            string location,
+            int? locationId,
             string stockPool,
             string stockState,
-            string batchRef)
+            string batchRef,
+            bool queryBatchView)
         {
             var part = this.partRepository.FindBy(p => p.PartNumber == partNumber);
-            if (string.IsNullOrEmpty(batchRef))
+            if (!string.IsNullOrEmpty(batchRef) || queryBatchView)
             {
-                return this.stockLocatorLocationsView.FilterBy(x =>
+                return this.stockLocatorBatchesView.FilterBy(x =>
                         (string.IsNullOrEmpty(partNumber) || x.PartNumber == partNumber)
-                        && (string.IsNullOrEmpty(location) || x.StorageLocation.LocationCode == location)
                         && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
-                        && (string.IsNullOrEmpty(stockState) || x.State == stockState))
+                        && (locationId == null || x.LocationId == locationId)
+                        && (string.IsNullOrEmpty(stockState) || x.State == stockState)
+                        && (string.IsNullOrEmpty(batchRef) || x.BatchRef == batchRef))
                     .Select(x => new StockLocator
                                      {
-                                         StorageLocation = x.StorageLocation,
                                          PartNumber = x.PartNumber,
                                          Part = part,
-                                         Id = x.StorageLocationId,
+                                         Id = x.LocationId,
+                                         BatchRef = x.BatchRef,
+                                         StockRotationDate = x.StockRotationDate,
                                          Quantity = x.Quantity,
                                          PalletNumber = x.PalletNumber,
                                          State = x.State,
@@ -219,21 +221,20 @@
                                      });
             }
 
-            return this.stockLocatorBatchesView.FilterBy(x =>
+            return this.stockLocatorLocationsView.FilterBy(x =>
                     (string.IsNullOrEmpty(partNumber) || x.PartNumber == partNumber)
+                    && (locationId == null || x.StorageLocation.LocationId == locationId)
                     && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
-                    && (string.IsNullOrEmpty(location) || x.LocationCode == location)
-                    && (string.IsNullOrEmpty(stockState) || x.State == stockState)
-                    && x.BatchRef == batchRef)
+                    && (string.IsNullOrEmpty(stockState) || x.State == stockState))
                 .Select(x => new StockLocator
                                  {
+                                     StorageLocation = x.StorageLocation,
                                      PartNumber = x.PartNumber,
                                      Part = part,
-                                     Id = x.LocationId,
-                                     BatchRef = x.BatchRef,
-                                     StockRotationDate = x.StockRotationDate,
+                                     Id = x.StorageLocationId,
                                      Quantity = x.Quantity,
                                      PalletNumber = x.PalletNumber,
+                                     LocationId = x.StorageLocationId,
                                      State = x.State,
                                      QuantityAllocated = x.QuantityAllocated,
                                      StockPoolCode = x.StockPoolCode

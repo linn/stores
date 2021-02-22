@@ -18,22 +18,16 @@ function StoresTab({
     stockNotes,
     tqmsCategories
 }) {
-    const convertToYOrNString = booleanValue => {
-        if (booleanValue === '' || booleanValue === null) {
-            return null;
-        }
-        return booleanValue ? 'Yes' : 'No';
-    };
     return (
         <Grid container spacing={3}>
             <Grid item xs={4}>
                 <Dropdown
                     label="QC On Receipt"
                     propertyName="qcOnReceipt"
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     fullWidth
                     allowNoValue={false}
-                    value={convertToYOrNString(qcOnReceipt)}
+                    value={qcOnReceipt}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -103,10 +97,10 @@ function StoresTab({
                 <Dropdown
                     label="Second Stage Board"
                     propertyName="secondStageBoard"
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={convertToYOrNString(secondStageBoard)}
+                    value={secondStageBoard}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -151,7 +145,7 @@ function StoresTab({
 
 StoresTab.propTypes = {
     handleFieldChange: PropTypes.func.isRequired,
-    qcOnReceipt: PropTypes.bool,
+    qcOnReceipt: PropTypes.string,
     qcInformation: PropTypes.string,
     ourInspectionWeeks: PropTypes.number,
     safetyWeeks: PropTypes.number,

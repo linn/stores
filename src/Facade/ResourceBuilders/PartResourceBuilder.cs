@@ -22,7 +22,7 @@
                            ProductAnalysisCode = part.ProductAnalysisCode?.ProductCode,
                            ProductAnalysisCodeDescription = part.ProductAnalysisCode?.Description,
                            SafetyCertificateExpirationDate = part.SafetyCertificateExpirationDate?.ToString("o"),
-                           SafetyCriticalPart = ToNullableBool(part.SafetyCriticalPart),
+                           SafetyCriticalPart = part.SafetyCriticalPart,
                            ImdsIdNumber = part.ImdsIdNumber,
                            ParetoCode = part.ParetoClass?.ParetoCode,
                            ParetoDescription = part.ParetoClass?.Description,
@@ -35,26 +35,26 @@
                            AccountingCompanyDescription = part.AccountingCompany?.Description,
                            OptionSet = part.OptionSet,
                            MaterialPrice = part.MaterialPrice,
-                           SingleSourcePart = ToNullableBool(part.SingleSourcePart),
-                           StockControlled = part.StockControlled.Equals("Y"),
-                           LinnProduced = ToNullableBool(part.LinnProduced),
+                           SingleSourcePart = part.SingleSourcePart,
+                           StockControlled = part.StockControlled,
+                           LinnProduced = part.LinnProduced,
                            PartCategory = part.PartCategory,
-                           IgnoreWorkstationStock = ToNullableBool(part.IgnoreWorkstationStock),
-                           EmcCriticalPart = ToNullableBool(part.EmcCriticalPart),
+                           IgnoreWorkstationStock = part.IgnoreWorkstationStock,
+                           EmcCriticalPart = part.EmcCriticalPart,
                            Currency = part.Currency,
                            LabourPrice = part.LabourPrice,
                            CostingPrice = part.CostingPrice,
-                           OrderHold = ToNullableBool(part.OrderHold),
-                           PlannedSurplus = ToNullableBool(part.PlannedSurplus),
-                           PsuPart = ToNullableBool(part.PsuPart),
+                           OrderHold = part.OrderHold,
+                           PlannedSurplus = part.PlannedSurplus,
+                           PsuPart = part.PsuPart,
                            CurrencyUnitPrice = part.CurrencyUnitPrice,
-                           CccCriticalPart = ToNullableBool(part.CccCriticalPart),
+                           CccCriticalPart = part.CccCriticalPart,
                            DrawingReference = part.DrawingReference,
                            SafetyDataDirectory = part.SafetyDataDirectory,
                            BomId = part.BomId,
                            BaseUnitPrice = part.BaseUnitPrice,
                            OurUnitOfMeasure = part.OurUnitOfMeasure,
-                           PerformanceCriticalPart = ToNullableBool(part.PerformanceCriticalPart),
+                           PerformanceCriticalPart = part.PerformanceCriticalPart,
                            MechanicalOrElectronic = part.MechanicalOrElectronic,
                            RootProduct = part.RootProduct,
                            PreferredSupplier = part.PreferredSupplier?.Id,
@@ -76,10 +76,10 @@
                            PhasedOutByName = part.PhasedOutBy?.FullName,
                            MadeLiveBy = part.MadeLiveBy?.Id,
                            MadeLiveByName = part.MadeLiveBy?.FullName,
-                           SecondStageBoard = ToNullableBool(part.SecondStageBoard),
+                           SecondStageBoard = part.SecondStageBoard,
                            ReasonPhasedOut = part.ReasonPhasedOut,
                            DateCreated = part.DateCreated?.ToString("o"),
-                           QcOnReceipt = ToNullableBool(part.QcOnReceipt),
+                           QcOnReceipt = part.QcOnReceipt,
                            TqmsCategoryOverride = part.TqmsCategoryOverride,
                            OurInspectionWeeks = part.OurInspectionWeeks,
                            MaxStockRail = part.MaxStockRail,
@@ -114,16 +114,6 @@
         }
 
         object IResourceBuilder<Part>.Build(Part part) => this.Build(part);
-
-        private static bool? ToNullableBool(string yesOrNoString)
-        {
-            if (yesOrNoString == null)
-            {
-                return null;
-            }
-
-            return yesOrNoString == "Y";
-        }
 
         private IEnumerable<LinkResource> BuildLinks(Part part)
         {

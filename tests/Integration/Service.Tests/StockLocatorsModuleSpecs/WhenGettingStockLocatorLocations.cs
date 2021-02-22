@@ -8,6 +8,7 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.RequestResources;
 
     using Nancy;
     using Nancy.Testing;
@@ -28,7 +29,7 @@
             this.stockLocator1 = new StockLocatorWithStoragePlaceInfo { LocationId = 1, PartNumber = "A" };
             this.stockLocator2 = new StockLocatorWithStoragePlaceInfo { LocationId = 2, PartNumber = "A" };
 
-            this.StockLocatorFacadeService.GetStockLocations(Arg.Any<StockLocatorResource>())
+            this.StockLocatorFacadeService.GetStockLocations(Arg.Any<StockLocatorQueryResource>())
                 .Returns(new
                     SuccessResult<IEnumerable<StockLocator>>(new List<StockLocator>
                                                                           {
@@ -53,7 +54,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.StockLocatorFacadeService.Received().GetStockLocations(Arg.Any<StockLocatorResource>());
+            this.StockLocatorFacadeService.Received().GetStockLocations(Arg.Any<StockLocatorQueryResource>());
         }
 
         [Test]
