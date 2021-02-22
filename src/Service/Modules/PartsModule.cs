@@ -154,7 +154,7 @@
             resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
             resource.BomType = "C";
             var result = this.partsFacadeService.Add(resource);
-            if (resource.QcOnReceipt != null && (bool)resource.QcOnReceipt)
+            if (!string.IsNullOrEmpty(resource.QcOnReceipt))
             {
                 this.partDomainService.AddQcControl(resource.PartNumber, resource.CreatedBy, resource.QcInformation);
             }

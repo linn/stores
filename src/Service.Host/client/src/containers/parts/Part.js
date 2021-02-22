@@ -43,7 +43,7 @@ const mapStateToProps = (state, { match, location }) => ({
     privileges: getPrivileges(state),
     userName: getUserName(state),
     userNumber: getUserNumber(state),
-    options: queryString.parse(location?.search),
+    templateName: queryString.parse(location?.search)?.template,
     partTemplates: partTemplateSelectors.getItems(state),
     liveTest: creating(match) ? null : partLiveTestSelectors.getItem(state),
     partsSearchResults: partsSelectors.getSearchItems(state)
