@@ -7,7 +7,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import { DataGrid } from '@material-ui/data-grid';
 import { Title, Dropdown, Loading, InputField } from '@linn-it/linn-form-components-library';
+import { useReactToPrint } from 'react-to-print';
 import Page from '../containers/Page';
+import Label from './Label2';
 
 function Wand({
     wandConsignments,
@@ -22,11 +24,16 @@ function Wand({
     const [wandString, setWandString] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
 
+    const componentRef = useRef();
     const wandStringInput = useRef(null);
 
     useEffect(() => {
         setWandString(null);
     }, [items]);
+
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current
+    });
 
     const handleConsignmentChange = (_propertyName, newValue) => {
         setConsignmentId(newValue);
@@ -57,7 +64,8 @@ function Wand({
     };
 
     const handleWand = () => {
-        setShowAlert(wandString);
+        handlePrint();
+        // setShowAlert(wandString);
     };
 
     const handleOnKeyPress = data => {
@@ -89,6 +97,7 @@ function Wand({
 
     return (
         <Page>
+            <Label ref={componentRef} text="hello" />
             <Dialog open={showAlert} onClose={() => setShowAlert(false)}>
                 <DialogContent>
                     <DialogContentText>{wandString}</DialogContentText>
