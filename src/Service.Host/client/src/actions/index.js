@@ -144,3 +144,7 @@ export const nominalAccountsActionTypes = makeActionTypes(itemTypes.nominalAccou
 export const wandConsignmentsActionTypes = makeActionTypes(itemTypes.wandConsignments.actionType);
 
 export const wandItemsActionTypes = makeActionTypes(itemTypes.wandItems.actionType);
+
+export const stockQuantitiesActionTypes = makeReportActionTypes(
+    itemTypes.stockQuantities.actionType
+);
