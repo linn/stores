@@ -7,7 +7,7 @@ const mapStateToProps = state => ({
     searchResults: salesOutletsSelectors
         .getSearchItems(state)
         .map(s => ({ ...s, id: `${s.accountId}${s.outletNumber}`, displayText: s.name })),
-    searchLoading: salesOutletsSelectors.getLoading(state)
+    searchLoading: salesOutletsSelectors.getSearchLoading(state)
 });
 
 const mapDispatchToProps = {

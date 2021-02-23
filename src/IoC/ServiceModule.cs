@@ -97,6 +97,8 @@
             builder.RegisterType<WarehouseFacadeService>().As<IWarehouseFacadeService>();
             builder.RegisterType<WandFacadeService>().As<IWandFacadeService>();
             builder.RegisterType<SalesOutletService>().As<ISalesOutletService>();
+            builder.RegisterType<SalesAccountService>().As<ISalesAccountService>();
+            builder.RegisterType<RsnService>().As<IRsnService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

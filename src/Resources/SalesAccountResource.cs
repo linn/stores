@@ -1,8 +1,6 @@
-﻿namespace Linn.Stores.Domain.LinnApps
+﻿namespace Linn.Stores.Resources
 {
-    using System;
-
-    public class SalesAccount
+    public class SalesAccountResource
     {
         public int AccountId { get; set; }
 
@@ -10,6 +8,6 @@
 
         public string AccountType { get; set; }
 
-        public DateTime? DateClosed { get; set; }
+        public string DateClosed { get; set; }
     }
 }

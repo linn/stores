@@ -58,6 +58,7 @@ import stockLocatorLocations from './stockLocators/stockLocatorLocations';
 import nominalAccounts from './nominalAccounts';
 import wandConsignments from './wandConsignments';
 import wandItems from './wandItems';
+import salesOutlets from './salesOutlets';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -94,6 +95,7 @@ const rootReducer = combineReducers({
     pickItemsAllocation,
     productAnalysisCodes,
     rootProducts,
+    salesOutlets,
     sernosSequences,
     sosAllocDetails,
     sosAllocHeads,

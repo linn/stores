@@ -5,8 +5,8 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
 
-    public interface ISalesOutletService
+    public interface ISalesAccountService
     {
-        IResult<IEnumerable<SalesOutlet>> SearchSalesOutlets(string searchTerm);
+        IResult<IEnumerable<SalesAccount>> SearchSalesAccounts(string searchTerm);
     }
 }

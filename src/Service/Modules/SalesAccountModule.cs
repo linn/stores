@@ -7,21 +7,21 @@
     using Nancy;
     using Nancy.ModelBinding;
 
-    public sealed class SalesOutletModule : NancyModule
+    public sealed class SalesAccountModule : NancyModule
     {
-        private readonly ISalesOutletService salesOutletService;
+        private readonly ISalesAccountService salesAccountService;
 
-        public SalesOutletModule(ISalesOutletService salesOutletService)
+        public SalesAccountModule(ISalesAccountService salesAccountService)
         {
-            this.salesOutletService = salesOutletService;
-            this.Get("/inventory/sales-outlets", parameters => this.GetSalesOutlets());
+            this.salesAccountService = salesAccountService;
+            this.Get("/inventory/sales-accounts", parameters => this.GetSalesAccounts());
         }
 
-        private object GetSalesOutlets()
+        private object GetSalesAccounts()
         {
             var resource = this.Bind<SearchRequestResource>();
 
-            var results = this.salesOutletService.SearchSalesOutlets(resource.SearchTerm);
+            var results = this.salesAccountService.SearchSalesAccounts(resource.SearchTerm);
 
             return this.Negotiate
                 .WithModel(results)

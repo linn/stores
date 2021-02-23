@@ -139,6 +139,10 @@
             builder.RegisterType<WandItemsResourceBuilder>().As<IResourceBuilder<IEnumerable<WandItem>>>();
             builder.RegisterType<SalesOutletResourceBuilder>().As<IResourceBuilder<SalesOutlet>>();
             builder.RegisterType<SalesOutletsResourceBuilder>().As<IResourceBuilder<IEnumerable<SalesOutlet>>>();
+            builder.RegisterType<SalesAccountResourceBuilder>().As<IResourceBuilder<SalesAccount>>();
+            builder.RegisterType<SalesAccountsResourceBuilder>().As<IResourceBuilder<IEnumerable<SalesAccount>>>();
+            builder.RegisterType<RsnResourceBuilder>().As<IResourceBuilder<Rsn>>();
+            builder.RegisterType<RsnsResourceBuilder>().As<IResourceBuilder<IEnumerable<Rsn>>>();
         }
     }
 }

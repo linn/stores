@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Service.Tests.SalesOutletModule
+﻿namespace Linn.Stores.Service.Tests.RsnModuleSpecs
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -16,23 +16,24 @@
 
     using NUnit.Framework;
 
-    public class WhenGettingSalesOutlets : ContextBase
+    public class WhenGettingRsns : ContextBase
     {
         [SetUp]
         public void SetUp()
         {
-            var outlet1 = new SalesOutlet { AccountId = 1, OutletNumber = 1, Name = "so1" };
-            var outlet2 = new SalesOutlet { AccountId = 2, OutletNumber = 2, Name = "so2" };
+            var rsn1 = new Rsn { RsnNumber = 1, AccountId = 123, OutletNumber = 1 };
+            var rsn2 = new Rsn { RsnNumber = 2, AccountId = 123, OutletNumber = 1 };
 
-            this.SalesOutletService.SearchSalesOutlets("so").Returns(
-                new SuccessResult<IEnumerable<SalesOutlet>>(new List<SalesOutlet> { outlet1, outlet2 }));
+            this.RsnService.SearchRsns(123, 1)
+                .Returns(new SuccessResult<IEnumerable<Rsn>>(new List<Rsn> { rsn1, rsn2 }));
 
             this.Response = this.Browser.Get(
-                "/inventory/sales-outlets",
+                "/inventory/rsns",
                 with =>
                     {
                         with.Header("Accept", "application/json");
-                        with.Query("searchTerm", "so");
+                        with.Query("accountId", "123");
+                        with.Query("outletNumber", "1");
                     }).Result;
         }
 
@@ -45,16 +46,16 @@
         [Test]
         public void ShouldCallService()
         {
-            this.SalesOutletService.Received().SearchSalesOutlets("so");
+            this.RsnService.Received().SearchRsns(123, 1);
         }
 
         [Test]
         public void ShouldReturnResource()
         {
-            var resource = this.Response.Body.DeserializeJson<IEnumerable<SalesOutletResource>>().ToList();
+            var resource = this.Response.Body.DeserializeJson<IEnumerable<RsnResource>>().ToList();
             resource.Should().HaveCount(2);
-            resource.Should().Contain(s => s.Name == "so1");
-            resource.Should().Contain(s => s.Name == "so2");
+            resource.Should().Contain(r => r.RsnNumber == 1);
+            resource.Should().Contain(r => r.RsnNumber == 2);
         }
     }
 }

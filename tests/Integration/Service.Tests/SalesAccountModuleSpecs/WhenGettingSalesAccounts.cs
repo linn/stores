@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Service.Tests.SalesOutletModule
+﻿namespace Linn.Stores.Service.Tests.SalesAccountModuleSpecs
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -16,23 +16,23 @@
 
     using NUnit.Framework;
 
-    public class WhenGettingSalesOutlets : ContextBase
+    public class WhenGettingSalesAccounts : ContextBase
     {
         [SetUp]
         public void SetUp()
         {
-            var outlet1 = new SalesOutlet { AccountId = 1, OutletNumber = 1, Name = "so1" };
-            var outlet2 = new SalesOutlet { AccountId = 2, OutletNumber = 2, Name = "so2" };
+            var acct1 = new SalesAccount { AccountId = 1, AccountName = "acct1" };
+            var acct2 = new SalesAccount { AccountId = 2, AccountName = "acct2" };
 
-            this.SalesOutletService.SearchSalesOutlets("so").Returns(
-                new SuccessResult<IEnumerable<SalesOutlet>>(new List<SalesOutlet> { outlet1, outlet2 }));
+            this.SalesAccountService.SearchSalesAccounts("acct").Returns(
+                new SuccessResult<IEnumerable<SalesAccount>>(new List<SalesAccount> { acct1, acct2 }));
 
             this.Response = this.Browser.Get(
-                "/inventory/sales-outlets",
+                "/inventory/sales-accounts",
                 with =>
                     {
                         with.Header("Accept", "application/json");
-                        with.Query("searchTerm", "so");
+                        with.Query("searchTerm", "acct");
                     }).Result;
         }
 
@@ -45,16 +45,16 @@
         [Test]
         public void ShouldCallService()
         {
-            this.SalesOutletService.Received().SearchSalesOutlets("so");
+            this.SalesAccountService.Received().SearchSalesAccounts("acct");
         }
 
         [Test]
         public void ShouldReturnResource()
         {
-            var resource = this.Response.Body.DeserializeJson<IEnumerable<SalesOutletResource>>().ToList();
+            var resource = this.Response.Body.DeserializeJson<IEnumerable<SalesAccountResource>>().ToList();
             resource.Should().HaveCount(2);
-            resource.Should().Contain(s => s.Name == "so1");
-            resource.Should().Contain(s => s.Name == "so2");
+            resource.Should().Contain(s => s.AccountName == "acct1");
+            resource.Should().Contain(s => s.AccountName == "acct2");
         }
     }
 }

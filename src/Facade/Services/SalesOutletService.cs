@@ -15,7 +15,7 @@
             this.repository = repository;
         }
 
-        public IResult<IEnumerable<SalesOutlet>> GetSalesOutlets(string searchTerm)
+        public IResult<IEnumerable<SalesOutlet>> SearchSalesOutlets(string searchTerm)
         {
             return new SuccessResult<IEnumerable<SalesOutlet>>(
                 this.repository.FilterBy(s => s.Name.ToUpper().Contains(searchTerm.ToUpper())));

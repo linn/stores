@@ -149,7 +149,7 @@
 
         public DbQuery<SalesAccount> SalesAccounts { get; set; }
 
-        public DbQuery<SalesOutlet> SalesOutlets { get; set; }
+        public DbSet<SalesOutlet> SalesOutlets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -1228,14 +1228,15 @@
             q.Property(e => e.Country).HasColumnName("COUNTRY").HasMaxLength(2);
             q.Property(e => e.CountryName).HasColumnName("COUNTRY_NAME").HasMaxLength(50);
             q.Property(e => e.AccountType).HasColumnName("ACCOUNT_TYPE").HasMaxLength(10);
-            q.HasOne(e => e.SalesOutlet).WithMany(o => o.Rsns).HasForeignKey(a => new { a.AccountId, a.OutletNumber });
         }
 
         private void QuerySalesAccounts(ModelBuilder builder)
         {
-            var q = builder.Query<SalesAccount>().ToView("SALES_ACCOUNT");
+            var q = builder.Query<SalesAccount>().ToView("SALES_ACCOUNTS");
             q.Property(e => e.AccountId).HasColumnName("ACCOUNT_ID");
             q.Property(e => e.AccountName).HasColumnName("ACCOUNT_NAME").HasMaxLength(50);
+            q.Property(e => e.AccountType).HasColumnName("ACCOUNT_TYPE");
+            q.Property(e => e.DateClosed).HasColumnName("DATE_CLOSED");
         }
     }
 }

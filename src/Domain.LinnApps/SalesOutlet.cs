@@ -29,7 +29,5 @@
         public string CountryName { get; set; }
 
         public IEnumerable<SosAllocHead> SosAllocHeads { get; set; }
-
-        public IEnumerable<Rsn> Rsns { get; set; }
     }
 }
