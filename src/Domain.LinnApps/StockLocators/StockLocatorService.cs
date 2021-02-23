@@ -192,24 +192,24 @@
         public IEnumerable<StockLocator> GetStockLocatorLocationsView(
             string partNumber,
             int? locationId,
+            int? palletNumber,
             string stockPool,
             string stockState,
             string batchRef,
             bool queryBatchView)
         {
-            var part = this.partRepository.FindBy(p => p.PartNumber == partNumber);
             if (!string.IsNullOrEmpty(batchRef) || queryBatchView)
             {
                 return this.stockLocatorBatchesView.FilterBy(x =>
                         (string.IsNullOrEmpty(partNumber) || x.PartNumber == partNumber)
                         && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
                         && (locationId == null || x.LocationId == locationId)
+                        && (palletNumber == null || x.PalletNumber == palletNumber)
                         && (string.IsNullOrEmpty(stockState) || x.State == stockState)
                         && (string.IsNullOrEmpty(batchRef) || x.BatchRef == batchRef))
                     .Select(x => new StockLocator
                                      {
                                          PartNumber = x.PartNumber,
-                                         Part = part,
                                          Id = x.LocationId,
                                          BatchRef = x.BatchRef,
                                          StockRotationDate = x.StockRotationDate,
@@ -224,13 +224,14 @@
             return this.stockLocatorLocationsView.FilterBy(x =>
                     (string.IsNullOrEmpty(partNumber) || x.PartNumber == partNumber)
                     && (locationId == null || x.StorageLocation.LocationId == locationId)
+                    && (palletNumber == null || x.PalletNumber == palletNumber)
                     && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
                     && (string.IsNullOrEmpty(stockState) || x.State == stockState))
                 .Select(x => new StockLocator
                                  {
                                      StorageLocation = x.StorageLocation,
                                      PartNumber = x.PartNumber,
-                                     Part = part,
+                                     Part = x.Part,
                                      Id = x.StorageLocationId,
                                      Quantity = x.Quantity,
                                      PalletNumber = x.PalletNumber,

@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import queryString from 'query-string';
 import {
     Dropdown,
+    InputField,
     LinkButton,
     Loading,
     Title,
@@ -37,6 +38,7 @@ function StockViewerOptions({
         partNumber: '',
         storageLocation: '',
         locationId: '',
+        palletNumber: null,
         stockPool: '',
         batchRef: '',
         inspectedState: ''
@@ -86,7 +88,11 @@ function StockViewerOptions({
                 <Grid item xs={5}>
                     <LinkButton
                         text="VIEW STOCK LOCATORS"
-                        disabled={!options.batchRef && !options.partNumber}
+                        disabled={
+                            !options.batchRef &&
+                            !options.partNumber &&
+                            !(options.storageLocation || options.palletNumber)
+                        }
                         to={`/inventory/stock-locator-utility?${queryString.stringify(options)}`}
                     />
                 </Grid>
@@ -115,7 +121,21 @@ function StockViewerOptions({
                         minimumSearchTermLength={2}
                     />
                 </Grid>
-                <Grid item xs={9} />
+                <Grid item xs={1}>
+                    Or
+                </Grid>
+                <Grid item xs={3}>
+                    <InputField
+                        label="Pallett Number"
+                        type="number"
+                        propertyName="palletNumber"
+                        onChange={(_, newValue) =>
+                            setOptions({ ...options, palletNumber: newValue })
+                        }
+                        value={options.palletNumber}
+                    />
+                </Grid>
+                <Grid item xs={5} />
                 <Grid item xs={3}>
                     <Typeahead
                         items={stockPools}

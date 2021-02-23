@@ -58,6 +58,7 @@
             return new SuccessResult<IEnumerable<StockLocator>>(this.domainService.GetStockLocatorLocationsView(
                 searchResource.PartNumber,
                 searchResource.LocationId,
+                searchResource.PalletNumber,
                 searchResource.StockPoolCode,
                 searchResource.State,
                 searchResource.BatchRef,
