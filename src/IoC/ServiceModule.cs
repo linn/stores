@@ -76,7 +76,6 @@
                 .As<IFacadeFilterService<SosAllocDetail, int, SosAllocDetailResource, SosAllocDetailResource, JobIdRequestResource>>();
             builder.RegisterType<MechPartSourceFacadeService>()
                 .As<IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>>();
-            builder.RegisterType<CarriersService>().As<ICarriersService>();
             builder.RegisterType<ParcelService>()
                 .As<IParcelService>();
             builder.RegisterType<ManufacturerService>()

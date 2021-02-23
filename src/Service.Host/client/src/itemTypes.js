@@ -17,8 +17,6 @@ export const suppliersApprovedCarrier = new ItemType(
     '/inventory/suppliers-approved-carrier'
 );
 
-export const carriers = new ItemType('carriers', 'CARRIERS', '/inventory/carriers');
-
 export const partCategories = new ItemType(
     'partCategories',
     'PART_CATEGORIES',

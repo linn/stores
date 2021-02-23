@@ -58,7 +58,6 @@ import wandConsignments from './wandConsignments';
 import wandItems from './wandItems';
 import parcels from './parcels/parcels';
 import parcel from './parcels/parcel';
-import carriers from './carriers';
 import suppliersApprovedCarrier from './suppliersApprovedCarrier';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
@@ -69,7 +68,6 @@ const rootReducer = combineReducers({
     assemblyTechnologies,
     auditLocation,
     auditLocations,
-    carriers,
     countries,
     createAuditReqs,
     departments,

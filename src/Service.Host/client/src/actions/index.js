@@ -30,8 +30,6 @@ export const suppliersApprovedCarrierActionTypes = makeActionTypes(
     itemTypes.suppliersApprovedCarrier.actionType
 );
 
-export const carriersActionTypes = makeActionTypes(itemTypes.carriers.actionType);
-
 export const sernosSequencesActionTypes = makeActionTypes(itemTypes.sernosSequences.actionType);
 
 export const unitsOfMeasureActionTypes = makeActionTypes(itemTypes.unitsOfMeasure.actionType);

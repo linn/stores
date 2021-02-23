@@ -83,9 +83,7 @@
         public DbQuery<AuditLocation> AuditLocations { get; set; }
 
         public DbSet<SosAllocHead> SosAllocHeads { get; set; }
-
-        public DbSet<Carrier> Carriers { get; set; }
-
+        
         public DbSet<Parcel> Parcels { get; set; }
 
         public DbSet<SosAllocDetail> SosAllocDetails { get; set; }
@@ -177,7 +175,6 @@
             this.QueryStoresBudgets(builder);
             this.QueryAuditLocations(builder);
             this.BuildSosAllocHeads(builder);
-            this.BuildCarriers(builder);
             this.BuildParcels(builder);
             this.BuildMechPartAlts(builder);
             this.BuildManufacturers(builder);
@@ -767,16 +764,6 @@
             table.Property(s => s.OldestOrder).HasColumnName("OLDEST_ORDER_NUMBER");
             table.Property(s => s.ValueToAllocate).HasColumnName("VALUE_TO_ALLOCATE");
             table.Property(s => s.OutletHoldStatus).HasColumnName("OUTLET_HOLD_STATUS").HasMaxLength(200);
-        }
-
-        private void BuildCarriers(ModelBuilder builder)
-        {
-            var e = builder.Entity<Carrier>().ToTable("CARRIERS");
-            e.HasKey(c => c.CarrierCode);
-            e.Property(c => c.CarrierCode).HasColumnName("CARRIER_CODE").HasMaxLength(10);
-            e.Property(c => c.Name).HasColumnName("NAME");
-            e.Property(c => c.OrganisationId).HasColumnName("ORG_ID");
-            e.Property(c => c.DateInvalid).HasColumnName("DATE_INVALID");
         }
 
         private void BuildSosAllocDetails(ModelBuilder builder)
