@@ -1166,6 +1166,7 @@
             q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE").HasMaxLength(10);
             q.Property(e => e.OurUnitOfMeasure).HasColumnName("OUR_UNIT_OF_MEASURE").HasMaxLength(14);
             q.Property(e => e.QuantityAllocated).HasColumnName("QTY_ALLOCATED");
+            q.HasOne(e => e.Part).WithMany(p => p.Locations).HasForeignKey(l => l.PartNumber);
         }
 
         private void QueryStockLocatorBatches(ModelBuilder builder)

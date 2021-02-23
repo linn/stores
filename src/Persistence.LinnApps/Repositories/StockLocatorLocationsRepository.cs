@@ -27,7 +27,9 @@
         {
             return this.serviceDbContext.StockLocatorLocationsView
                 .Where(expression)
-                .Include(l => l.StorageLocation);
+                .Include(l => l.StorageLocation)
+                .Include(l => l.Part)
+                .AsNoTracking();
         }
 
         public IQueryable<StockLocatorLocation> FindAll()
