@@ -138,6 +138,7 @@
             builder.RegisterType<WandConsignmentsResourceBuilder>().As<IResourceBuilder<IEnumerable<WandConsignment>>>();
             builder.RegisterType<WandItemsResourceBuilder>().As<IResourceBuilder<IEnumerable<WandItem>>>();
             builder.RegisterType<StockQuantitiesResourceBuilder>().As<IResourceBuilder<StockQuantities>>();
+            builder.RegisterType<WandItemResultResourceBuilder>().As<IResourceBuilder<WandResult>>();
         }
     }
 }

@@ -6,7 +6,9 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
+    using Linn.Stores.Resources.Wand;
 
     public class WandFacadeService : IWandFacadeService
     {
@@ -14,12 +16,16 @@
 
         private readonly IQueryRepository<WandItem> wandItemRepository;
 
+        private readonly IWandService wandService;
+
         public WandFacadeService(
             IQueryRepository<WandConsignment> wandConsignmentRepository,
-            IQueryRepository<WandItem> wandItemRepository)
+            IQueryRepository<WandItem> wandItemRepository,
+            IWandService wandService)
         {
             this.wandConsignmentRepository = wandConsignmentRepository;
             this.wandItemRepository = wandItemRepository;
+            this.wandService = wandService;
         }
 
         public IResult<IEnumerable<WandConsignment>> GetWandConsignments() =>
@@ -35,6 +41,19 @@
             catch (Exception ex)
             {
                 return new BadRequestResult<IEnumerable<WandItem>>(ex.Message);
+            }
+        }
+
+        public IResult<WandResult> WandItem(WandItemRequestResource resource)
+        {
+            try
+            {
+                var result = this.wandService.Wand(resource.WandAction, resource.WandString, resource.ConsignmentId);
+                return new SuccessResult<WandResult>(result);
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestResult<WandResult>(ex.Message);
             }
         }
     }
