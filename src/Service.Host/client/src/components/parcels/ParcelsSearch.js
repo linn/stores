@@ -8,8 +8,7 @@ import {
     useSearch,
     PaginatedTable,
     Loading,
-    TypeaheadDialog,
-    InputField
+    Typeahead
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
@@ -53,11 +52,13 @@ function ParcelsSearch({
         marginTop2: {
             marginTop: theme.spacing(2)
         },
-        marginTop3: {
-            marginTop: theme.spacing(3)
+        marginTop1: {
+            marginTop: theme.spacing(1),
+            display: 'inline-block',
+            width: '2em'
         },
         displayInline: {
-            display: 'inline-block'
+            display: 'inline'
         }
     }));
     const classes = useStyles();
@@ -107,8 +108,8 @@ function ParcelsSearch({
             consignmentNoSearchTerm: '',
             commentsSearchTerm: ''
         },
-        supplierDisplayName: '-',
-        carrierDisplayName: '-'
+        supplierDisplayName: '',
+        carrierDisplayName: ''
     });
 
     const handleSearchTermChange = (propertyName, newValue) => {
@@ -138,7 +139,7 @@ function ParcelsSearch({
             type: 'updateSearchTerms',
             searchTermName: 'supplierIdSearchTerm',
             newValue: '',
-            supplierDisplayName: '-'
+            supplierDisplayName: ''
         });
     };
 
@@ -147,7 +148,7 @@ function ParcelsSearch({
             type: 'updateSearchTerms',
             searchTermName: 'carrierIdSearchTerm',
             newValue: '',
-            carrierDisplayName: '-'
+            carrierDisplayName: ''
         });
     };
 
@@ -228,7 +229,7 @@ function ParcelsSearch({
                         <LinkButton text="Create" to="/inventory/parcels/create" />
                     )}
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={3}>
                     <SearchInputField
                         label="Parcels"
                         fullWidth
@@ -239,32 +240,26 @@ function ParcelsSearch({
                         value={state.searchTerms.parcelNumberSearchTerm}
                     />
                 </Grid>
-                <Grid item xs={1} />
 
-                <Grid item xs={1}>
-                    <div className={classes.marginTop2}>
-                        <TypeaheadDialog
+                <Grid item xs={3}>
+                    <div className={classes.displayInline}>
+                        <Typeahead
+                            label="Supplier"
                             title="Search for a supplier"
                             onSelect={handleSupplierChange}
-                            searchItems={suppliersSearchResults}
+                            items={suppliersSearchResults}
                             loading={suppliersSearchLoading}
                             fetchItems={searchSuppliers}
                             clearSearch={() => clearSuppliersSearch}
-                        />
-                    </div>
-                </Grid>
-                <Grid item xs={2}>
-                    <div className={classes.displayInline}>
-                        <InputField
                             value={state.supplierDisplayName}
-                            label="Supplier"
-                            propertyName="supplier"
-                            disabled
+                            modal
+                            links={false}
+                            history={history}
+                            debounce={1000}
+                            minimumSearchTermLength={2}
                         />
                     </div>
-                </Grid>
-                <Grid item xs={1}>
-                    <div className={classes.marginTop3}>
+                    <div className={classes.marginTop1}>
                         <Tooltip title="Clear Supplier search">
                             <Button variant="outlined" onClick={resetSuppliersSearchTerms}>
                                 X
@@ -272,32 +267,26 @@ function ParcelsSearch({
                         </Tooltip>
                     </div>
                 </Grid>
-                <Grid item xs={1} />
 
-                <Grid item xs={1}>
-                    <div className={classes.marginTop2}>
-                        <TypeaheadDialog
+                <Grid item xs={3}>
+                    <div className={classes.displayInline}>
+                        <Typeahead
+                            label="Carrier"
                             title="Search for a Carrier"
                             onSelect={handleCarrierChange}
-                            searchItems={carriersSearchResults}
+                            items={carriersSearchResults}
                             loading={carriersSearchLoading}
                             fetchItems={searchCarriers}
                             clearSearch={() => clearCarriersSearch}
-                        />
-                    </div>
-                </Grid>
-                <Grid item xs={2}>
-                    <div className={classes.displayInline}>
-                        <InputField
                             value={state.carrierDisplayName}
-                            label="Carrier"
-                            propertyName="carrier"
-                            disabled
+                            modal
+                            links={false}
+                            history={history}
+                            debounce={1000}
+                            minimumSearchTermLength={2}
                         />
                     </div>
-                </Grid>
-                <Grid item xs={1}>
-                    <div className={classes.marginTop3}>
+                    <div className={classes.marginTop1}>
                         <Tooltip title="Clear Carrier search">
                             <Button variant="outlined" onClick={resetCarriersSearchTerms}>
                                 X
@@ -306,7 +295,7 @@ function ParcelsSearch({
                     </div>
                 </Grid>
 
-                <Grid item xs={2}>
+                <Grid item xs={3}>
                     <SearchInputField
                         label="Date Created"
                         fullWidth

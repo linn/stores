@@ -11,7 +11,7 @@ import {
     ErrorCard,
     SearchInputField,
     SnackbarMessage,
-    TypeaheadDialog
+    Typeahead
 } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
 
@@ -182,36 +182,32 @@ function Parcel({
                                     propertyName="dateCreated"
                                     type="date"
                                     value={parcel.dateCreated}
+                                    required
                                 />
                             </Grid>
 
                             <Grid item xs={3} />
 
                             <Grid item xs={1}>
-                                <div className={classes.marginTop2}>
-                                    <TypeaheadDialog
+                                <div className={classes.displayInline}>
+                                    <Typeahead
+                                        label="Supplier"
                                         title="Search for a supplier"
                                         onSelect={handleSupplierChange}
-                                        searchItems={suppliersSearchResults}
+                                        items={suppliersSearchResults}
                                         loading={suppliersSearchLoading}
                                         fetchItems={searchSuppliers}
                                         clearSearch={() => clearSuppliersSearch}
+                                        value={parcel.supplier}
+                                        modal
+                                        links={false}
+                                        history={history}
+                                        debounce={1000}
+                                        minimumSearchTermLength={2}
                                     />
                                 </div>
-                            </Grid>
-                            <Grid item xs={2}>
-                                <div className={classes.displayInline}>
-                                    <InputField
-                                        value={parcel.supplierId}
-                                        label="Supplier"
-                                        propertyName="supplierId"
-                                        disabled
-                                    />
-                                </div>
-                            </Grid>
-                            <Grid item xs={1}>
-                                <div className={classes.marginTop3}>
-                                    <Tooltip title="Clear Supplier">
+                                <div className={classes.marginTop1}>
+                                    <Tooltip title="Clear Supplier search">
                                         <Button variant="outlined" onClick={clearSupplier}>
                                             X
                                         </Button>
@@ -220,31 +216,26 @@ function Parcel({
                             </Grid>
                             <Grid item xs={2} />
 
-                            <Grid item xs={1}>
-                                <div className={classes.marginTop2}>
-                                    <TypeaheadDialog
+                            <Grid item xs={3}>
+                                <div className={classes.displayInline}>
+                                    <Typeahead
+                                        label="Carrier"
                                         title="Search for a Carrier"
                                         onSelect={handleCarrierChange}
-                                        searchItems={carriersSearchResults}
+                                        items={carriersSearchResults}
                                         loading={carriersSearchLoading}
                                         fetchItems={searchCarriers}
                                         clearSearch={() => clearCarriersSearch}
+                                        value={parcel.carrier}
+                                        modal
+                                        links={false}
+                                        history={history}
+                                        debounce={1000}
+                                        minimumSearchTermLength={2}
                                     />
                                 </div>
-                            </Grid>
-                            <Grid item xs={2}>
-                                <div className={classes.displayInline}>
-                                    <InputField
-                                        value={parcel.carrierId}
-                                        label="Carrier"
-                                        propertyName="carrier"
-                                        disabled
-                                    />
-                                </div>
-                            </Grid>
-                            <Grid item xs={1}>
-                                <div className={classes.marginTop3}>
-                                    <Tooltip title="Clear Carrier">
+                                <div className={classes.marginTop1}>
+                                    <Tooltip title="Clear Carrier search">
                                         <Button variant="outlined" onClick={clearCarrier}>
                                             X
                                         </Button>
@@ -260,9 +251,64 @@ function Parcel({
                                     value={parcel.supplierInvoiceNo}
                                     label="Supplier Invoice Number(s)"
                                     maxLength={500}
-                                    required
                                     onChange={handleFieldChange}
                                     propertyName="supplierInvoiceNo"
+                                />
+                            </Grid>
+
+                            <Grid item xs={3}>
+                                <InputField
+                                    fullWidth
+                                    value={parcel.consignmentNo}
+                                    label="Consignment Number"
+                                    maxLength={20}
+                                    required
+                                    onChange={handleFieldChange}
+                                    propertyName="consignmentNo"
+                                />
+                            </Grid>
+
+                            <Grid item xs={3}>
+                                <InputField
+                                    fullWidth
+                                    value={parcel.cartonCount}
+                                    label="Number of cartons"
+                                    maxLength={6}
+                                    onChange={handleFieldChange}
+                                    propertyName="cartonCount"
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <InputField
+                                    fullWidth
+                                    value={parcel.palletCount}
+                                    label="Number of pallets"
+                                    maxLength={6}
+                                    onChange={handleFieldChange}
+                                    propertyName="palletCount"
+                                />
+                            </Grid>
+
+                            <Grid item xs={3}>
+                                <InputField
+                                    fullWidth
+                                    value={parcel.weight}
+                                    label="Weight"
+                                    maxLength={12}
+                                    onChange={handleFieldChange}
+                                    propertyName="weight"
+                                    decimalPlaces={2}
+                                />
+                            </Grid>
+
+                            <Grid item xs={3}>
+                                <SearchInputField
+                                    label="Date Received"
+                                    fullWidth
+                                    onChange={handleFieldChange}
+                                    propertyName="dateCreated"
+                                    type="date"
+                                    value={parcel.dateCreated}
                                 />
                             </Grid>
 
@@ -277,6 +323,35 @@ function Parcel({
                                     propertyName="comments"
                                     rows={3}
                                 />
+                            </Grid>
+
+                            <Grid item xs={1}>
+                                <Typeahead
+                                    label="Checked By"
+                                    title="Search for an employee"
+                                    onSelect={handleCheckedByChange}
+                                    items={employeesSearchResults}
+                                    loading={employeesSearchLoading}
+                                    fetchItems={searchEmployees}
+                                    clearSearch={() => clearEmployeesSearch}
+                                    value={parcel.checkedById}
+                                    modal
+                                    links={false}
+                                    history={history}
+                                    debounce={1000}
+                                    minimumSearchTermLength={2}
+                                />
+                            </Grid>
+                            <Grid item xs={2}>
+                                <div className={classes.displayInline}>
+                                    <InputField
+                                        value={parcel.carrierId}
+                                        label="Carrier"
+                                        propertyName="checkedBy"
+                                        required
+                                        disabled
+                                    />
+                                </div>
                             </Grid>
 
                             <Grid item xs={12}>

@@ -21,9 +21,12 @@ const mapStateToProps = (state, { match }) => ({
     loading: parcelSelectors.getLoading(state),
     snackbarVisible: parcelSelectors.getSnackbarVisible(state),
     itemError: getItemError(state, itemTypes.part.item),
-    suppliersSearchResults: suppliersSelectors
-        .getSearchItems(state)
-        .map(c => ({ id: c.id, name: c.id.toString(), description: c.name })),
+    suppliersSearchResults: suppliersSelectors.getSearchItems(state).map(c => ({
+        id: c.id,
+        name: c.id.toString(),
+        description: c.name,
+        country: c.countryCode
+    })),
     suppliersSearchLoading: suppliersSelectors.getSearchLoading(state),
     carriersSearchResults: suppliersApprovedCarrierSelectors
         .getSearchItems(state)
