@@ -48,7 +48,11 @@
         {
             try
             {
-                var result = this.wandService.Wand(resource.WandAction, resource.WandString, resource.ConsignmentId);
+                var result = this.wandService.Wand(
+                    resource.WandAction,
+                    resource.WandString,
+                    resource.ConsignmentId,
+                    resource.UserNumber);
                 return new SuccessResult<WandResult>(result);
             }
             catch (Exception ex)

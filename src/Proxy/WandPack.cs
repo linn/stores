@@ -48,24 +48,33 @@
                         Direction = ParameterDirection.Input,
                         Value = 0
                     });
-            cmd.Parameters.Add(
-                new OracleParameter("p_message", OracleDbType.Varchar2)
-                    {
-                        Direction = ParameterDirection.Output,
-                        Value = wandResult.Message
-                    });
-            cmd.Parameters.Add(
-                new OracleParameter("p_success", OracleDbType.Int32)
-                    {
-                        Direction = ParameterDirection.Output,
-                        Value = success
-                    });
+            var messageParameter = new OracleParameter("p_message", OracleDbType.Varchar2)
+                                       {
+                                           Direction = ParameterDirection.Output,
+                                           Value = wandResult.Message,
+                                           Size = 4000
+                                       };
+            cmd.Parameters.Add(messageParameter);
+
+            var successParameter = new OracleParameter("p_success", OracleDbType.Int32)
+                                       {
+                                           Direction = ParameterDirection.Output, Value = success
+                                       };
+            cmd.Parameters.Add(successParameter);
 
             connection.Open();
             cmd.ExecuteNonQuery();
             connection.Close();
-
-            return wandResult;
+            var thisWandResult = new WandResult
+                        {
+                            Message = messageParameter.Value.ToString(),
+                            Success = int.Parse(successParameter.Value.ToString()) == 1
+                        };
+            return new WandResult
+                       {
+                           Message = messageParameter.Value.ToString(),
+                           Success = int.Parse(successParameter.Value.ToString()) == 1
+                       };
         }
     }
 }

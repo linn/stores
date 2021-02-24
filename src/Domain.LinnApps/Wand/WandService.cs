@@ -12,9 +12,9 @@
             this.wandPack = wandPack;
         }
 
-        public WandResult Wand(string wandAction, string wandString, int consignmentId)
+        public WandResult Wand(string wandAction, string wandString, int consignmentId, int userNumber)
         {
-            return this.wandPack.Wand(wandAction, 100, consignmentId, wandString);
+            return this.wandPack.Wand(wandAction, userNumber, consignmentId, wandString);
         }
     }
 }

@@ -20,23 +20,26 @@
 
         private WandResult wandPackResult;
 
+        private int userNumber;
+
         [SetUp]
         public void SetUp()
         {
             this.wandAction = "W";
             this.consignmentId = 134;
             this.wandString = "flajdlfjd1312";
+            this.userNumber = 35345;
             this.wandPackResult = new WandResult { Message = "ok", Success = true };
-            this.WandPack.Wand(this.wandAction, 100, this.consignmentId, this.wandString)
+            this.WandPack.Wand(this.wandAction, this.userNumber, this.consignmentId, this.wandString)
                 .Returns(this.wandPackResult);
 
-            this.result = this.Sut.Wand(this.wandAction, this.wandString, this.consignmentId);
+            this.result = this.Sut.Wand(this.wandAction, this.wandString, this.consignmentId, this.userNumber);
         }
 
         [Test]
         public void ShouldCallProxy()
         {
-            this.WandPack.Received().Wand(this.wandAction, 100, this.consignmentId, this.wandString);
+            this.WandPack.Received().Wand(this.wandAction, this.userNumber, this.consignmentId, this.wandString);
         }
 
         [Test]

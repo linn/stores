@@ -7,5 +7,7 @@
         public string WandString { get; set; }
 
         public int ConsignmentId { get; set; }
+
+        public int UserNumber { get; set; }
     }
 }

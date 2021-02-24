@@ -21,9 +21,16 @@
         [SetUp]
         public void SetUp()
         {
-            this.resource = new WandItemRequestResource { ConsignmentId = 1, WandString = "wa", WandAction = "W" };
+            this.resource = new WandItemRequestResource
+                                {
+                                    ConsignmentId = 1, WandString = "wa", WandAction = "W", UserNumber = 234
+                                };
             this.wandServiceResult = new WandResult { Message = "ok", Success = true };
-            this.WandService.Wand(this.resource.WandAction, this.resource.WandString, this.resource.ConsignmentId)
+            this.WandService.Wand(
+                    this.resource.WandAction,
+                    this.resource.WandString,
+                    this.resource.ConsignmentId,
+                    this.resource.UserNumber)
                 .Returns(this.wandServiceResult);
 
             this.result = this.Sut.WandItem(this.resource);
@@ -35,7 +42,8 @@
             this.WandService.Received().Wand(
                 this.resource.WandAction,
                 this.resource.WandString,
-                this.resource.ConsignmentId);
+                this.resource.ConsignmentId,
+                this.resource.UserNumber);
         }
 
         [Test]

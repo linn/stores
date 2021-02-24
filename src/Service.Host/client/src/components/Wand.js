@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
+import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import { DataGrid } from '@material-ui/data-grid';
 import { Title, Dropdown, Loading, InputField } from '@linn-it/linn-form-components-library';
+import { makeStyles } from "@material-ui/core/styles";
 import Page from '../containers/Page';
 
 function Wand({
@@ -15,12 +17,16 @@ function Wand({
     getItems,
     items,
     itemsLoading,
-    clearItems
+    clearItems,
+    userNumber,
+    doWandItemWorking,
+    doWandItem
 }) {
     const [consignmentId, setConsignmentId] = useState('');
     const [wandAction, setWandAction] = useState('W');
     const [wandString, setWandString] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
+    const [wandMessage, setWandMessage] = useState(null);
 
     const wandStringInput = useRef(null);
 
@@ -37,6 +43,21 @@ function Wand({
         }
         wandStringInput.current.focus();
     };
+
+    const useStyles = makeStyles({
+        ok: {
+            color: 'black',
+            backgroundColor: 'lightGreen'
+        },
+        notOk: {
+            color: 'black',
+            backgroundColor: 'red'
+        },
+        noMessage:{
+            color: 'black',
+            backgroundColor: 'white'
+        }
+    });
 
     const handlewandActionChange = (_propertyName, newValue) => {
         setWandAction(newValue);
@@ -57,7 +78,12 @@ function Wand({
     };
 
     const handleWand = () => {
-        setShowAlert(wandString);
+        if (wandString && consignmentId) {
+            doWandItem({ consignmentId, userNumber, wandAction, wandString });
+            //setShowAlert(wandString);
+            setWandMessage(`Wanded ${wandString}`);
+            wandStringInput.current.focus();
+        }
     };
 
     const handleOnKeyPress = data => {
@@ -86,6 +112,7 @@ function Wand({
         { field: 'requisitionLine', headerName: 'Req Line', width: 110, hide: true }
     ];
     const focusProp = { inputRef: wandStringInput, onKeyDown: handleOnKeyPress };
+    const classes = useStyles();
 
     return (
         <Page>
@@ -145,6 +172,19 @@ function Wand({
                         </Button>
                     </Grid>
                     <Grid item xs={12}>
+                        <TextField
+                            style={{ padding: 10 }}
+                            className={classes.ok}
+                            id="wand-status"
+                            fullWidth
+                            value={wandMessage}
+                            InputProps={{
+                                readOnly: true,
+                                disableUnderline: true
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
                         <div style={{ display: 'flex', height: 600 }}>
                             <div style={{ flexGrow: 1 }}>
                                 <DataGrid
@@ -170,14 +210,18 @@ Wand.propTypes = {
     getItems: PropTypes.func.isRequired,
     clearItems: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({})),
-    itemsLoading: PropTypes.bool
+    itemsLoading: PropTypes.bool,
+    userNumber: PropTypes.number.isRequired,
+    doWandItemWorking: PropTypes.bool,
+    doWandItem: PropTypes.func.isRequired
 };
 
 Wand.defaultProps = {
     wandConsignments: [],
     loadingWandConsignments: false,
     items: [],
-    itemsLoading: false
+    itemsLoading: false,
+    doWandItemWorking: false
 };
 
 export default Wand;

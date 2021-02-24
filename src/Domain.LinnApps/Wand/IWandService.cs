@@ -4,6 +4,6 @@
 
     public interface IWandService
     {
-        WandResult Wand(string wandAction, string wandString, int consignmentId);
+        WandResult Wand(string wandAction, string wandString, int consignmentId, int userNumber);
     }
 }

@@ -148,3 +148,5 @@ export const wandItemsActionTypes = makeActionTypes(itemTypes.wandItems.actionTy
 export const stockQuantitiesActionTypes = makeReportActionTypes(
     itemTypes.stockQuantities.actionType
 );
+
+export const doWandItemActionTypes = makeActionTypes(processTypes.doWandItem.actionType);
