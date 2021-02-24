@@ -8,7 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import { DataGrid } from '@material-ui/data-grid';
 import { Title, Dropdown, Loading, InputField } from '@linn-it/linn-form-components-library';
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from '@material-ui/core/styles';
 import Page from '../containers/Page';
 
 function Wand({
@@ -53,7 +53,7 @@ function Wand({
             color: 'black',
             backgroundColor: 'red'
         },
-        noMessage:{
+        noMessage: {
             color: 'black',
             backgroundColor: 'white'
         }
@@ -172,17 +172,21 @@ function Wand({
                         </Button>
                     </Grid>
                     <Grid item xs={12}>
-                        <TextField
-                            style={{ padding: 10 }}
-                            className={classes.ok}
-                            id="wand-status"
-                            fullWidth
-                            value={wandMessage}
-                            InputProps={{
-                                readOnly: true,
-                                disableUnderline: true
-                            }}
-                        />
+                        {doWandItemWorking ? (
+                            <Loading />
+                        ) : (
+                            <TextField
+                                style={{ padding: 10 }}
+                                className={doWandItemWorking ? classes.noMessage : classes.ok}
+                                id="wand-status"
+                                fullWidth
+                                value={wandMessage}
+                                InputProps={{
+                                    readOnly: true,
+                                    disableUnderline: true
+                                }}
+                            />
+                        )}
                     </Grid>
                     <Grid item xs={12}>
                         <div style={{ display: 'flex', height: 600 }}>
