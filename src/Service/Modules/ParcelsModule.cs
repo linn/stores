@@ -14,6 +14,7 @@
         public ParcelsModule(IParcelService parcelsFacadeService)
         {
             this.parcelsFacadeService = parcelsFacadeService;
+            this.Get("/logistics/parcels/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/logistics/parcels", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/logistics/parcels/{id}", parameters => this.GetParcel(parameters.id));
             this.Put("/logistics/parcels/{id}", parameters => this.UpdateParcel(parameters.id));

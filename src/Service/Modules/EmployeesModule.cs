@@ -20,7 +20,10 @@
         private object GetEmployees()
         {
             var resource = this.Bind<SearchRequestResource>();
-            var results = this.employeesService.SearchEmployees(resource.SearchTerm);
+            var results = string.IsNullOrEmpty(resource.SearchTerm) ?
+                              this.employeesService.GetAllEmployees() :
+            this.employeesService.SearchEmployees(resource.SearchTerm);
+
             return this.Negotiate
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)

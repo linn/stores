@@ -22,7 +22,7 @@
                 CartonCount = parcel.CartonCount,
                 PalletCount = parcel.PalletCount,
                 Weight = parcel.Weight,
-                DateReceived = parcel.DateReceived?.ToString("o"),
+                DateReceived = parcel.DateReceived.ToString("o"),
                 CheckedById = parcel.CheckedById,
                 Comments = parcel.Comments,
                 DateCancelled = parcel.DateCancelled?.ToString("o"),

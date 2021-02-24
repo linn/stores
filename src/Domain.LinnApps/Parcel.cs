@@ -22,7 +22,7 @@
 
         public decimal Weight { get; set; }
 
-        public DateTime? DateReceived { get; set; }
+        public DateTime DateReceived { get; set; }
 
         public int CheckedById { get; set; }
 

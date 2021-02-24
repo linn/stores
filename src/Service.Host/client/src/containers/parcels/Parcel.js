@@ -9,7 +9,7 @@ import suppliersActions from '../../actions/suppliersActions';
 import suppliersApprovedCarrierActions from '../../actions/suppliersApprovedCarrierActions';
 import suppliersApprovedCarrierSelectors from '../../selectors/suppliersApprovedCarrierSelectors';
 import employeesActions from '../../actions/employeesActions';
-import { getPrivileges } from '../../selectors/userSelectors';
+import { getPrivileges, getUserNumber } from '../../selectors/userSelectors';
 import * as itemTypes from '../../itemTypes';
 
 const creating = match => match?.url?.endsWith('/create');
@@ -20,7 +20,7 @@ const mapStateToProps = (state, { match }) => ({
     editStatus: creating(match) ? 'create' : parcelSelectors.getEditStatus(state),
     loading: parcelSelectors.getLoading(state),
     snackbarVisible: parcelSelectors.getSnackbarVisible(state),
-    itemError: getItemError(state, itemTypes.part.item),
+    itemError: getItemError(state, itemTypes.parcel.item),
     suppliersSearchResults: suppliersSelectors.getSearchItems(state).map(c => ({
         id: c.id,
         name: c.id.toString(),
@@ -33,13 +33,17 @@ const mapStateToProps = (state, { match }) => ({
         .map(c => ({ id: c.id, name: c.id.toString(), description: c.name })),
     carriersSearchLoading: suppliersApprovedCarrierSelectors.getSearchLoading(state),
     employees: employeesSelectors.getItems(state),
-    privileges: getPrivileges(state)
+    privileges: getPrivileges(state),
+    suppliers: suppliersSelectors.getItems(state),
+    userNumber: getUserNumber(state)
 });
 
 const initialise = item => dispatch => {
-    if (item) {
+    if (!item.editStatus === 'create') {
+        console.info(item.editStatus);
         dispatch(parcelActions.fetch(item.itemId));
     }
+    dispatch(suppliersActions.fetch());
     dispatch(employeesActions.fetch());
 };
 

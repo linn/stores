@@ -58,7 +58,7 @@
             entity.Weight = updateResource.Weight;
             entity.CancelledBy = updateResource.CancelledBy;
             entity.CancellationReason = updateResource.CancellationReason;
-            entity.DateCancelled = DateTime.Parse(updateResource.DateCancelled);
+            entity.DateCancelled = string.IsNullOrWhiteSpace(updateResource.DateCancelled) ? (DateTime?)null : DateTime.Parse(updateResource.DateCancelled);
         }
 
         protected override Expression<Func<Parcel, bool>> SearchExpression(string searchTerms)

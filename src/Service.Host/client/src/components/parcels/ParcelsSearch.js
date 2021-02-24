@@ -49,9 +49,6 @@ function ParcelsSearch({
     };
 
     const useStyles = makeStyles(theme => ({
-        marginTop2: {
-            marginTop: theme.spacing(2)
-        },
         marginTop1: {
             marginTop: theme.spacing(1),
             display: 'inline-block',
@@ -226,7 +223,7 @@ function ParcelsSearch({
                 <Grid item xs={11} />
                 <Grid item xs={1}>
                     {(allowedToCreate || true) && (
-                        <LinkButton text="Create" to="/inventory/parcels/create" />
+                        <LinkButton text="Create" to="/logistics/parcels/create" />
                     )}
                 </Grid>
                 <Grid item xs={3}>
