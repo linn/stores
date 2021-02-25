@@ -90,7 +90,7 @@
                 .As<IQueryRepository<StockLocatorBatch>>();
             builder.RegisterType<WandConsignmentsRepository>().As<IQueryRepository<WandConsignment>>();
             builder.RegisterType<WandItemsRepository>().As<IQueryRepository<WandItem>>();
-            builder.RegisterType<RsnRepository>().As<IQueryRepository<Rsn>>();
+            builder.RegisterType<ExportRsnRepository>().As<IQueryRepository<ExportRsn>>();
             builder.RegisterType<SalesAccountRepository>().As<IQueryRepository<SalesAccount>>();
             builder.RegisterType<SalesOutletRepository>().As<IQueryRepository<SalesOutlet>>();
         }

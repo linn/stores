@@ -149,4 +149,4 @@ export const salesOutletsActionTypes = makeActionTypes(itemTypes.salesOutlets.ac
 
 export const salesAccountsActionTypes = makeActionTypes(itemTypes.salesAccounts.actionType);
 
-export const rsnsActionTypes = makeActionTypes(itemTypes.rsns.actionType);
+export const exportRsnsActionTypes = makeActionTypes(itemTypes.exportRsns.actionType);

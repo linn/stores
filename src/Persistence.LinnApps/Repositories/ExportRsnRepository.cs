@@ -9,26 +9,26 @@
 
     using Microsoft.EntityFrameworkCore;
 
-    public class RsnRepository : IQueryRepository<Rsn>
+    public class ExportRsnRepository : IQueryRepository<ExportRsn>
     {
         private readonly ServiceDbContext serviceDbContext;
 
-        public RsnRepository(ServiceDbContext serviceDbContext)
+        public ExportRsnRepository(ServiceDbContext serviceDbContext)
         {
             this.serviceDbContext = serviceDbContext;
         }
 
-        public Rsn FindBy(Expression<Func<Rsn, bool>> expression)
+        public ExportRsn FindBy(Expression<Func<ExportRsn, bool>> expression)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<Rsn> FilterBy(Expression<Func<Rsn, bool>> expression)
+        public IQueryable<ExportRsn> FilterBy(Expression<Func<ExportRsn, bool>> expression)
         {
             return this.serviceDbContext.Rsns.Where(expression).AsNoTracking();
         }
 
-        public IQueryable<Rsn> FindAll()
+        public IQueryable<ExportRsn> FindAll()
         {
             throw new NotImplementedException();
         }

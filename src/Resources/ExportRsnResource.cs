@@ -1,14 +1,12 @@
-﻿namespace Linn.Stores.Domain.LinnApps
+﻿namespace Linn.Stores.Resources
 {
-    using System;
-
-    public class Rsn
+    public class ExportRsnResource
     {
         public int? RsnNumber { get; set; }
 
         public string ReasonCodeAlleged { get; set; }
 
-        public DateTime? DateEntered { get; set; }
+        public string DateEntered { get; set; }
 
         public int? Quantity { get; set; }
 

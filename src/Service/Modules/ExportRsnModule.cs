@@ -7,21 +7,21 @@
     using Nancy;
     using Nancy.ModelBinding;
 
-    public sealed class RsnModule : NancyModule
+    public sealed class ExportRsnModule : NancyModule
     {
-        private readonly IRsnService rsnService;
+        private readonly IExportRsnService exportRsnService;
 
-        public RsnModule(IRsnService rsnService)
+        public ExportRsnModule(IExportRsnService exportRsnService)
         {
-            this.rsnService = rsnService;
-            this.Get("/inventory/rsns", parameters => this.GetRsns());
+            this.exportRsnService = exportRsnService;
+            this.Get("/inventory/export-rsns", parameters => this.GetRsns());
         }
 
         private object GetRsns()
         {
-            var resource = this.Bind<RsnSearchRequestResource>();
+            var resource = this.Bind<ExportRsnSearchRequestResource>();
 
-            var results = this.rsnService.SearchRsns(resource.AccountId, resource.OutletNumber);
+            var results = this.exportRsnService.SearchRsns(resource.AccountId, resource.OutletNumber);
 
             return this.Negotiate
                 .WithModel(results)

@@ -1,6 +1,6 @@
 ﻿namespace Linn.Stores.Resources.RequestResources
 {
-    public class RsnSearchRequestResource
+    public class ExportRsnSearchRequestResource
     {
         public int AccountId { get; set; }
 

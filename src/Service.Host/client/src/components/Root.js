@@ -165,7 +165,7 @@ const Root = ({ store }) => (
                                     {/* TODO change this route */}
                                     <Route
                                         exact
-                                        path="/inventory/sales-outlets"
+                                        path="/inventory/export-rsns"
                                         component={ExportRsns}
                                     />
                                     <Route component={NotFoundPage} />
