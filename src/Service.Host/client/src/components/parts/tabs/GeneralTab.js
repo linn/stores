@@ -41,6 +41,7 @@ function GeneralTab({
     singleSourcePart,
     cccCriticalPart,
     psuPart,
+    editStatus,
     safetyCertificateExpirationDate,
     safetyDataDirectory,
     rawOrFinished
@@ -111,6 +112,7 @@ function GeneralTab({
                     fullWidth
                     allowNoValue
                     value={rawOrFinished}
+                    disabled={editStatus !== 'create'}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -352,7 +354,8 @@ GeneralTab.propTypes = {
     safetyCriticalHelperText: PropTypes.string,
     department: PropTypes.string,
     departmentDescription: PropTypes.string,
-    rawOrFinished: PropTypes.string
+    rawOrFinished: PropTypes.string,
+    editStatus: PropTypes.string
 };
 
 GeneralTab.defaultProps = {
@@ -385,7 +388,8 @@ GeneralTab.defaultProps = {
     clearNominalAccountsSearch: () => {},
     department: null,
     departmentDescription: null,
-    rawOrFinished: null
+    rawOrFinished: null,
+    editStatus: null
 };
 
 export default GeneralTab;
