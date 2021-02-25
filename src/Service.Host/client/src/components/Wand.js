@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
+import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import { DataGrid } from '@material-ui/data-grid';
 import { Title, Dropdown, Loading, InputField } from '@linn-it/linn-form-components-library';
 import { useReactToPrint } from 'react-to-print';
+import { makeStyles } from '@material-ui/core/styles';
 import Page from '../containers/Page';
 import Label from './Label2';
 
@@ -17,12 +19,18 @@ function Wand({
     getItems,
     items,
     itemsLoading,
-    clearItems
+    clearItems,
+    userNumber,
+    doWandItemWorking,
+    doWandItem,
+    wandResult
 }) {
     const [consignmentId, setConsignmentId] = useState('');
     const [wandAction, setWandAction] = useState('W');
     const [wandString, setWandString] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
+    const [resultStyle, setResultStyle] = useState('noMessage');
+    const [wandMessage, setWandMessage] = useState('');
 
     const componentRef = useRef();
     const wandStringInput = useRef(null);
@@ -30,6 +38,43 @@ function Wand({
     useEffect(() => {
         setWandString(null);
     }, [items]);
+
+    useEffect(() => {
+        if (!wandString) {
+            setResultStyle('noMessage');
+            setWandMessage('');
+        }
+    }, [wandString]);
+
+    useEffect(() => {
+        if (!wandResult || !wandResult.message) {
+            setResultStyle('noMessage');
+            setWandMessage('');
+        } else if (wandResult.success) {
+            setResultStyle('ok');
+            setWandMessage('Success');
+        } else {
+            setResultStyle('notOk');
+            setWandMessage(wandResult.message);
+        }
+    }, [wandResult]);
+
+    const useStyles = makeStyles({
+        ok: {
+            color: 'black',
+            backgroundColor: 'lightGreen'
+        },
+        notOk: {
+            color: 'black',
+            backgroundColor: 'red'
+        },
+        noMessage: {
+            color: 'black',
+            backgroundColor: 'white'
+        }
+    });
+
+    const classes = useStyles();
 
     const handlePrint = useReactToPrint({
         content: () => componentRef.current
@@ -64,8 +109,12 @@ function Wand({
     };
 
     const handleWand = () => {
-        handlePrint();
-        // setShowAlert(wandString);
+        if (wandString && consignmentId) {
+            doWandItem({ consignmentId, userNumber, wandAction, wandString });
+            setWandString(null);
+            wandStringInput.current.focus();
+            handlePrint();
+        }
     };
 
     const handleOnKeyPress = data => {
@@ -94,6 +143,17 @@ function Wand({
         { field: 'requisitionLine', headerName: 'Req Line', width: 110, hide: true }
     ];
     const focusProp = { inputRef: wandStringInput, onKeyDown: handleOnKeyPress };
+
+    const getResultClass = style => {
+        switch (style) {
+            case 'ok':
+                return classes.ok;
+            case 'notOk':
+                return classes.notOk;
+            default:
+                return classes.noMessage;
+        }
+    };
 
     return (
         <Page>
@@ -154,6 +214,23 @@ function Wand({
                         </Button>
                     </Grid>
                     <Grid item xs={12}>
+                        {doWandItemWorking ? (
+                            <Loading />
+                        ) : (
+                            <TextField
+                                style={{ padding: 10 }}
+                                className={getResultClass(resultStyle)}
+                                id="wand-status"
+                                fullWidth
+                                value={wandMessage}
+                                InputProps={{
+                                    readOnly: true,
+                                    disableUnderline: true
+                                }}
+                            />
+                        )}
+                    </Grid>
+                    <Grid item xs={12}>
                         <div style={{ display: 'flex', height: 600 }}>
                             <div style={{ flexGrow: 1 }}>
                                 <DataGrid
@@ -179,14 +256,26 @@ Wand.propTypes = {
     getItems: PropTypes.func.isRequired,
     clearItems: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({})),
-    itemsLoading: PropTypes.bool
+    itemsLoading: PropTypes.bool,
+    userNumber: PropTypes.number.isRequired,
+    doWandItemWorking: PropTypes.bool,
+    doWandItem: PropTypes.func.isRequired,
+    wandResult: PropTypes.shape({
+        success: PropTypes.bool,
+        message: PropTypes.string
+    })
 };
 
 Wand.defaultProps = {
     wandConsignments: [],
     loadingWandConsignments: false,
     items: [],
-    itemsLoading: false
+    itemsLoading: false,
+    doWandItemWorking: false,
+    wandResult: {
+        message: null,
+        success: true
+    }
 };
 
 export default Wand;

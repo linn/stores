@@ -39,12 +39,16 @@
             get; private set;
         }
 
+        protected IStockQuantitiesService QuantitiesService { get; private set; }
+
         [SetUp]
         public void EstablishContext()
         {
             this.StockLocatorFacadeService = 
                 Substitute
                     .For<IStockLocatorFacadeService>();
+
+            this.QuantitiesService = Substitute.For<IStockQuantitiesService>();
 
             this.StorageLocationService = Substitute
                 .For<IFacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource>>();
@@ -58,6 +62,8 @@
                     with.Dependency(this.StockLocatorFacadeService);
                     with.Dependency(this.StorageLocationService);
                     with.Dependency(this.StateService);
+                    with.Dependency(this.QuantitiesService);
+                    with.Dependency<IResourceBuilder<StockQuantities>>(new StockQuantitiesResourceBuilder());
                     with.Dependency<IResourceBuilder<InspectedState>>(new InspectedStateResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<InspectedState>>>(new InspectedStatesResourceBuilder());
                     with.Dependency<IResourceBuilder<StockLocator>>(new StockLocatorResourceBuilder());
@@ -72,6 +78,7 @@
                     with.ResponseProcessor<StockLocatorsResponseProcessor>();
                     with.ResponseProcessor<StockLocatorResponseProcessor>();
                     with.ResponseProcessor<StockLocatorsWithStoragePlaceInfoResponseProcessor>();
+                    with.ResponseProcessor<StockQuantitiesResponseProcessor>();
                     with.ResponseProcessor<StorageLocationsResponseProcessor>();
                     with.ResponseProcessor<InspectedStatesResponseProcessor>();
                     with.RequestStartup(

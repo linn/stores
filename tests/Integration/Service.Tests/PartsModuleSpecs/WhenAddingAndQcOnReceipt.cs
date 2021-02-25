@@ -24,9 +24,9 @@
             this.requestResource = new PartResource
                                        {
                                            Id = 1,
-                                           StockControlled = true,
+                                           StockControlled = "Y",
                                            CreatedBy = 1,
-                                           QcOnReceipt = true
+                                           QcOnReceipt = "Y"
                                        };
             var part = new Part
                            {

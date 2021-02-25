@@ -36,6 +36,7 @@ function StockViewerOptions({
     const [options, setOptions] = useState({
         partNumber: '',
         storageLocation: '',
+        locationId: '',
         stockPool: '',
         batchRef: '',
         inspectedState: ''
@@ -103,7 +104,11 @@ function StockViewerOptions({
                         title="Search Storage Locations"
                         value={options.storageLocation}
                         onSelect={newValue =>
-                            setOptions({ ...options, storageLocation: newValue.locationCode })
+                            setOptions({
+                                ...options,
+                                storageLocation: newValue.locationCode,
+                                locationId: newValue.id
+                            })
                         }
                         history={history}
                         debounce={1000}

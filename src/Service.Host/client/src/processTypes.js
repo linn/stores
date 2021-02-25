@@ -41,3 +41,5 @@ export const movePalletsToUpper = new ItemType(
     'MOVE_PALLETS_TO_UPPER',
     '/logistics/wcs/move-all-to-upper'
 );
+
+export const doWandItem = new ItemType('doWandItem', 'DO_WAND_ITEM', '/logistics/wand/items');

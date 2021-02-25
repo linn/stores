@@ -3,7 +3,7 @@ import React from 'react';
 export default class ComponentToPrint extends React.PureComponent {
     render() {
         return (
-            <div>
+            <div className="show-only-when-printing">
                 <table>
                     <thead>
                         <th>column 1</th>

@@ -14,6 +14,7 @@
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Reports;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Facade;
     using Linn.Stores.Facade.Services;
@@ -39,6 +40,7 @@
             builder.RegisterType<WorkstationService>().As<IWorkstationService>();
             builder.RegisterType<StockLocatorService>().As<IStockLocatorService>();
             builder.RegisterType<WarehouseService>().As<IWarehouseService>();
+            builder.RegisterType<WandService>().As<IWandService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -96,6 +98,7 @@
                 .As<IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource>>();
             builder.RegisterType<WarehouseFacadeService>().As<IWarehouseFacadeService>();
             builder.RegisterType<WandFacadeService>().As<IWandFacadeService>();
+            builder.RegisterType<StockQuantitiesService>().As<IStockQuantitiesService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
@@ -106,6 +109,7 @@
             builder.RegisterType<AllocPack>().As<IAllocPack>();
             builder.RegisterType<WorkstationPackProxy>().As<IWorkstationPack>();
             builder.RegisterType<WcsPack>().As<IWcsPack>();
+            builder.RegisterType<WandPack>().As<IWandPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();
