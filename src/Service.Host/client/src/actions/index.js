@@ -146,3 +146,7 @@ export const wandConsignmentsActionTypes = makeActionTypes(itemTypes.wandConsign
 export const wandItemsActionTypes = makeActionTypes(itemTypes.wandItems.actionType);
 
 export const salesOutletsActionTypes = makeActionTypes(itemTypes.salesOutlets.actionType);
+
+export const salesAccountsActionTypes = makeActionTypes(itemTypes.salesAccounts.actionType);
+
+export const rsnsActionTypes = makeActionTypes(itemTypes.rsns.actionType);

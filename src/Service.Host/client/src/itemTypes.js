@@ -222,3 +222,11 @@ export const salesOutlets = new ItemType(
     'SALES_OUTLETS',
     '/inventory/sales-outlets'
 );
+
+export const salesAccounts = new ItemType(
+    'salesAccounts',
+    'SALES_ACCOUNTS',
+    '/inventory/sales-accounts'
+);
+
+export const rsns = new ItemType('rsns', 'RSNS', '/inventory/rsns');
