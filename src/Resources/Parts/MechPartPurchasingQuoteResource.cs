@@ -4,7 +4,7 @@
     {
         public int SourceId { get; set; }
 
-        public int LeadTime { get; set; }
+        public int? LeadTime { get; set; }
 
         public string ManufacturerCode { get; set; }
 

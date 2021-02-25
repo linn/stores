@@ -121,18 +121,41 @@ function StockViewerOptions({
                         minimumSearchTermLength={2}
                     />
                 </Grid>
-                <Grid item xs={1}>
-                    Or
-                </Grid>
                 <Grid item xs={3}>
                     <InputField
-                        label="Pallett Number"
+                        label="Pallet Number"
                         type="number"
                         propertyName="palletNumber"
                         onChange={(_, newValue) =>
                             setOptions({ ...options, palletNumber: newValue })
                         }
                         value={options.palletNumber}
+                    />
+                </Grid>
+                <Grid item xs={1}>
+                    Or
+                </Grid>
+                <Grid item xs={3}>
+                    <Typeahead
+                        items={storageLocations}
+                        fetchItems={searchStorageLocations}
+                        modal
+                        links={false}
+                        clearSearch={clearStorageLocationsSearch}
+                        loading={storageLocationsLoading}
+                        label="Storage Location"
+                        title="Search Storage Locations"
+                        value={options.storageLocation}
+                        onSelect={newValue =>
+                            setOptions({
+                                ...options,
+                                storageLocation: newValue.locationCode,
+                                locationId: newValue.id
+                            })
+                        }
+                        history={history}
+                        debounce={1000}
+                        minimumSearchTermLength={2}
                     />
                 </Grid>
                 <Grid item xs={5} />

@@ -6,16 +6,25 @@ export default function partReducer(state = initialState, action) {
             return { ...state, part: action.payload, prevPart: action.payload };
         case 'fieldChange':
             if (action.fieldName === 'rawOrFinished') {
+                if (action.payload === 'F') {
+                    return {
+                        ...state,
+                        part: {
+                            ...state.part,
+                            rawOrFinished: 'F',
+                            nominalAccount: 564,
+                            nominal: '0000000417',
+                            nominalDescription: 'TOTAL COST OF SALES',
+                            department: '0000002106',
+                            departmentDescription: 'GROSS PROFIT'
+                        }
+                    };
+                }
                 return {
                     ...state,
                     part: {
                         ...state.part,
-                        rawOrFinished: 'F',
-                        nominalAccount: 564,
-                        nominal: '0000000417',
-                        nominalDescription: 'TOTAL COST OF SALES',
-                        department: '0000002106',
-                        departmentDescription: 'GROSS PROFIT'
+                        rawOrFinished: action.payload
                     }
                 };
             }
