@@ -53,6 +53,11 @@
 
             var result = (value / units[unit]).ToString("G");
 
+            if (result.EndsWith(".0"))
+            {
+                result = result.Split(".0")[0];
+            }
+
             if (result.Contains("."))
             {
                 return result.Replace(".", unit) + "F";
