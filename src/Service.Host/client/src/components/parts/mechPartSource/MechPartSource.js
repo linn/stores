@@ -172,6 +172,7 @@ function MechPartSource({
         body.capacitanceUnit = capacitanceUnits[mechPartSource.capacitanceUnits];
         body.mechPartAlts = suppliersData;
         body.mechPartManufacturerAlts = manufacturersData;
+        body.capacitance = mechPartSource.capacitance?.toFixed(13);
         body.usages = usagesData;
         body.purchasingQuotes = quotesData;
         if (creating()) {
