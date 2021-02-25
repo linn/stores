@@ -41,7 +41,8 @@ const mapDispatchToProps = {
     updateDetail: sosAllocDetailActions.update,
     finishAllocation: finishAllocationActions.requestProcessStart,
     pickItemsAllocation: pickItemsAllocationActions.requestProcessStart,
-    unpickItemsAllocation: unpickItemsAllocationActions.requestProcessStart
+    unpickItemsAllocation: unpickItemsAllocationActions.requestProcessStart,
+    clearAllocationError: finishAllocationActions.clearErrorsForItem
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(SosAllocHeads));

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Tabs from '@material-ui/core/Tabs';
@@ -18,6 +18,7 @@ import BuildTab from '../../containers/parts/tabs/BuildTab';
 import PurchTab from '../../containers/parts/tabs/PurchTab';
 import StoresTab from '../../containers/parts/tabs/StoresTab';
 import LifeCycleTab from './tabs/LifeCycleTab';
+import partReducer from './partReducer';
 
 function Part({
     editStatus,
@@ -34,39 +35,86 @@ function Part({
     privileges,
     userName,
     userNumber,
-    options,
+    templateName,
     partTemplates,
     liveTest,
     fetchLiveTest,
     fetchParts,
     partsSearchResults
 }) {
+    const defaultPart = {
+        partNumber: '',
+        description: '',
+        accountingCompany: 'LINN',
+        psuPart: false,
+        stockControlled: true,
+        cccCriticalPart: false,
+        safetyCriticalPart: false,
+        paretoCode: 'U',
+        createdBy: userNumber,
+        createdByName: userName,
+        dateCreated: new Date(),
+        railMethod: 'POLICY',
+        preferredSupplier: 4415,
+        preferredSupplierName: 'Linn Products Ltd',
+        qcInformation: '',
+        qcOnReceipt: false,
+        orderHold: false
+    };
     const creating = () => editStatus === 'create';
+
+    const [state, dispatch] = useReducer(partReducer, {
+        part: creating() ? defaultPart : { partNumber: '' },
+        prevPart: { partNumber: '' }
+    });
+
+    // checking whether partNumber already exists when partNumber is entered
+    useEffect(() => {
+        if (editStatus === 'create') {
+            if (state.part.partNumber.match(/\/[1-9]$/)) {
+                //if new partNumber ends in /[1-9] then user is creating a new revision of existing part
+                fetchParts(state.part.partNumber.split('/')[0]); // so fetch the existing parts for any crosschecking we need to do
+            } else {
+                fetchParts(state.part.partNumber); // else they are creating a new part entirely. Check to see if it already exists.
+            }
+        }
+    }, [state.part.partNumber, fetchParts, editStatus]);
+
+    useEffect(() => {
+        if (itemId) {
+            fetchLiveTest(itemId);
+        }
+    }, [fetchLiveTest, itemId]);
+
+    useEffect(() => {
+        if (templateName && partTemplates.length) {
+            const template = partTemplates.find(t => t.partRoot === templateName);
+            const formatNextNumber = () => {
+                if (template.nextNumber < 1000) {
+                    return template.nextNumber.toString().padStart(3, 0);
+                }
+                return template.nextNumber.toString();
+            };
+            dispatch({
+                type: 'initialise',
+                payload: {
+                    description: template.description,
+                    partNumber:
+                        template.hasNumberSequence === 'Y'
+                            ? `${template.partRoot} ${formatNextNumber()}`
+                            : template.partRoot,
+                    accountingCompany: template.accountingCompany,
+                    assemblyTechnologyName: template.assemblyTechnologyName,
+                    bomType: template.bomType,
+                    linnProduced: template.linnProduced,
+                    paretoCode: template.paretoCode,
+                    stockControlled: template.stockControlled
+                }
+            });
+        }
+    }, [templateName, partTemplates]);
+
     const viewing = () => editStatus === 'view';
-    const [part, setPart] = useState(
-        creating()
-            ? {
-                  partNumber: '',
-                  description: '',
-                  accountingCompany: 'LINN',
-                  psuPart: false,
-                  stockControlled: true,
-                  cccCriticalPart: false,
-                  safetyCriticalPart: false,
-                  paretoCode: 'U',
-                  createdBy: userNumber,
-                  createdByName: userName,
-                  dateCreated: new Date(),
-                  railMethod: 'POLICY',
-                  preferredSupplier: 4415,
-                  preferredSupplierName: 'Linn Products Ltd',
-                  qcInformation: '',
-                  qcOnReceipt: false,
-                  orderHold: false
-              }
-            : null
-    );
-    const [prevPart, setPrevPart] = useState({});
 
     const [tab, setTab] = useState(0);
 
@@ -82,46 +130,19 @@ function Part({
     };
 
     useEffect(() => {
-        if (item !== prevPart && editStatus !== 'create') {
-            setPart(item);
-            setPrevPart(item);
-            fetchLiveTest(itemId);
+        if (item && item !== state.prevPart) {
+            if (editStatus === 'create') {
+                dispatch({ type: 'initialise', payload: defaultPart });
+            } else {
+                dispatch({ type: 'initialise', payload: item });
+            }
         }
-        if (editStatus === 'create') {
-            setPart(p => ({ ...p, bomId: null }));
-        }
-    }, [item, prevPart, editStatus, fetchLiveTest, itemId]);
+    }, [item, state.prevPart, editStatus, defaultPart]);
 
-    useEffect(() => {
-        if (options?.template && partTemplates.length) {
-            const template = partTemplates.find(t => t.partRoot === options.template);
-            const formatNextNumber = () => {
-                if (template.nextNumber < 1000) {
-                    return template.nextNumber.toString().padStart(3, 0);
-                }
-                return template.nextNumber.toString();
-            };
-            setPart(p => ({
-                ...p,
-                description: template.description,
-                partNumber:
-                    template.hasNumberSequence === 'Y'
-                        ? `${template.partRoot} ${formatNextNumber()}`
-                        : template.partRoot,
-                accountingCompany: template.accountingCompany,
-                assemblyTechnologyName: template.assemblyTechnologyName,
-                bomType: template.bomType,
-                linnProduced: template.linnProduced,
-                paretoCode: template.paretoCode,
-                stockControlled: template.stockControlled
-            }));
-        }
-    }, [options, partTemplates]);
-
-    const partInvalid = () => !part.partNumber || !part.description;
+    const partInvalid = () => !state.part?.partNumber || !state.part?.description;
 
     const getPartNumberHelperText = () => {
-        if (partsSearchResults.some(p => p.partNumber === part.partNumber.toUpperCase())) {
+        if (partsSearchResults.some(p => p.partNumber === state.part?.partNumber?.toUpperCase())) {
             return 'PART NUMBER ALREADY EXISTS.';
         }
         return '';
@@ -129,14 +150,14 @@ function Part({
 
     const getSafetyCriticalHelperText = () => {
         const prevRevision = partsSearchResults.find(
-            p => p.partNumber === part.partNumber.toUpperCase().split('/')[0]
+            p => p.partNumber === state?.part?.partNumber.toUpperCase().split('/')[0]
         );
 
-        if (prevRevision?.safetyCriticalPart === true) {
+        if (prevRevision?.safetyCriticalPart === 'Y') {
             return 'Note: Previous Revision Was Safety Critical';
         }
 
-        if (prevRevision?.safetyCriticalPart === false) {
+        if (prevRevision?.safetyCriticalPart === 'N') {
             return 'Note: Previous Revision Was NOT Safety Critical';
         }
 
@@ -144,26 +165,20 @@ function Part({
     };
 
     const handleSaveClick = () => {
-        const partResource = part;
-        // convert Yes/No to true/false for resource to send
-        Object.keys(partResource).forEach(k => {
-            if (partResource[k] === 'Yes' || partResource[k] === 'Y') {
-                partResource[k] = true;
-            }
-            if (partResource[k] === 'No' || partResource[k] === 'N') {
-                partResource[k] = false;
-            }
-        });
         if (creating()) {
-            addItem(partResource);
+            addItem(state.part);
         } else {
-            updateItem(itemId, partResource);
+            updateItem(itemId, state.part);
         }
         setEditStatus('view');
     };
 
     const handleCancelClick = () => {
-        setPart(item);
+        if (editStatus === 'create') {
+            dispatch({ type: 'initialise', payload: defaultPart });
+        } else {
+            dispatch({ type: 'initialise', payload: item });
+        }
         setEditStatus('view');
     };
 
@@ -172,65 +187,13 @@ function Part({
     };
 
     const handleFieldChange = (propertyName, newValue) => {
-        if (propertyName === 'partNumber' && creating()) {
-            if (newValue.match(/\/[1-9]$/)) {
-                //if new partNumber ends in /[1-9] then user is creating a new revision of existing part
-                fetchParts(newValue.split('/')[0]); // so fetch the existing parts for any crosschecking we need to do
-            } else {
-                fetchParts(newValue); // else they are creating a new part entirely. Check to see if it already exists.
-            }
-        }
-        if (viewing() && propertyName !== 'reasonPhasedOut') {
-            setEditStatus('edit');
-        }
-        if (newValue === 'Yes' || newValue === 'No') {
-            setPart({ ...part, [propertyName]: newValue === 'Yes' });
-        } else if (typeof newValue === 'string') {
-            setPart({ ...part, [propertyName]: newValue });
-        } else {
-            setPart({ ...part, [propertyName]: newValue });
-        }
-    };
-
-    const handleLinnProducedChange = (_, newValue) => {
-        const linnProduced = newValue === 'Yes';
-        if (linnProduced) {
-            setPart({
-                ...part,
-                linnProduced,
-                sernosSequenceName: 'SERIAL 1',
-                sernosSequenceDescription: 'MASTER SERIAL NUMBER RECORDS.'
-            });
-        } else {
-            setPart({
-                ...part,
-                linnProduced
-            });
-        }
-    };
-
-    const handleRawOrFinishedChange = (_, newValue) => {
-        if (newValue === 'F') {
-            setPart({
-                ...part,
-                rawOrFinished: 'F',
-                nominalAccount: 564,
-                nominal: '0000000417',
-                nominalDescription: 'TOTAL COST OF SALES',
-                department: '0000002106',
-                departmentDescription: 'GROSS PROFIT'
-            });
-        } else {
-            setPart({
-                ...part,
-                rawOrFinished: newValue
-            });
-        }
+        setEditStatus('edit');
+        dispatch({ type: 'fieldChange', fieldName: propertyName, payload: newValue });
     };
 
     const handlePhaseOutClick = () => {
         updateItem(itemId, {
-            ...part,
+            ...state.part,
             datePhasedOut: new Date(),
             phasedOutBy: userNumber,
             phasedOutByName: userName
@@ -240,105 +203,19 @@ function Part({
     const handleChangeLiveness = () => {
         if (!item.dateLive) {
             updateItem(itemId, {
-                ...part,
+                ...state.part,
                 dateLive: new Date(),
                 madeLiveBy: userNumber,
                 madeLiveByName: userName
             });
         } else {
             updateItem(itemId, {
-                ...part,
+                ...state.part,
                 dateLive: null,
                 madeLiveBy: null,
                 madeLiveByName: null
             });
         }
-    };
-
-    const handleIgnoreWorkstationStockChange = (_, newValue) => {
-        if (viewing()) {
-            setEditStatus('edit');
-        }
-        if (newValue === 'Yes') {
-            setPart({ ...part, ignoreWorkstationStock: newValue === 'Yes' });
-        } else {
-            setPart({ ...part, ignoreWorkstationStock: null });
-        }
-    };
-
-    const handleNominalAccountChange = newValue => {
-        if (viewing()) {
-            setEditStatus('edit');
-        }
-        setPart({
-            ...part,
-            nominalAccount: newValue.id,
-            nominal: newValue.values[0].value,
-            nominalDescription: newValue.values[1].value,
-            department: newValue.values[2].value,
-            departmentDescription: newValue.values[3].value
-        });
-    };
-
-    const handleProductAnalysisCodeChange = newValue => {
-        if (viewing()) {
-            setEditStatus('edit');
-        }
-        setPart({
-            ...part,
-            productAnalysisCode: newValue.name,
-            productAnalysisCodeDescription: newValue.description
-        });
-    };
-
-    const handleSernosSequenceChange = newValue => {
-        if (viewing()) {
-            setEditStatus('edit');
-        }
-        setPart({
-            ...part,
-            sernosSequenceName: newValue.name,
-            sernosSequenceDescription: newValue.description
-        });
-    };
-
-    const handlePrefferedSupplierChange = newValue => {
-        if (viewing()) {
-            setEditStatus('edit');
-        }
-        setPart({
-            ...part,
-            preferredSupplier: newValue.name,
-            preferredSupplierName: newValue.description
-        });
-    };
-
-    const handleAccountingCompanyChange = newValue => {
-        if (viewing()) {
-            setEditStatus('edit');
-        }
-        if (newValue === 'RECORDS') {
-            setPart({
-                ...part,
-                accountingCompany: newValue,
-                paretoCode: 'R',
-                bomType: 'C',
-                linnProduced: 'No',
-                qcOnReceipt: 'No'
-            });
-        } else {
-            setPart({ ...part, accountingCompany: newValue, paretoCode: 'U' });
-        }
-    };
-
-    const handleManufacturersPartNumberChange = (manufacturerCode, newValue) => {
-        setEditStatus('edit');
-        setPart(p => ({
-            ...p,
-            manufacturers: p.manufacturers.map(m =>
-                m.manufacturerCode === manufacturerCode ? { ...m, partNumber: newValue } : m
-            )
-        }));
     };
 
     return (
@@ -366,7 +243,7 @@ function Part({
                         <Loading />
                     </Grid>
                 ) : (
-                    part &&
+                    (state.part.partNumber || creating()) &&
                     itemError?.status !== 404 && (
                         <>
                             <SnackbarMessage
@@ -378,7 +255,7 @@ function Part({
                                 <InputField
                                     fullWidth
                                     disabled={!creating()}
-                                    value={part.partNumber}
+                                    value={state.part?.partNumber}
                                     label="Part Number"
                                     maxLength={14}
                                     helperText={
@@ -395,7 +272,7 @@ function Part({
                             <Grid item xs={7}>
                                 <InputField
                                     fullWidth
-                                    value={part.description}
+                                    value={state.part?.description}
                                     label="Description"
                                     maxLength={200}
                                     required
@@ -433,106 +310,92 @@ function Part({
                             </Tabs>
                             {tab === 0 && (
                                 <GeneralTab
-                                    accountingCompany={part.accountingCompany}
+                                    accountingCompany={state.part.accountingCompany}
                                     handleFieldChange={handleFieldChange}
-                                    productAnalysisCode={part.productAnalysisCode}
+                                    productAnalysisCode={state.part.productAnalysisCode}
                                     productAnalysisCodeDescription={
-                                        part.productAnalysisCodeDescription
+                                        state.part.productAnalysisCodeDescription
                                     }
-                                    handleProductAnalysisCodeChange={
-                                        handleProductAnalysisCodeChange
-                                    }
-                                    rootProduct={part.rootProduct}
-                                    department={part.department}
-                                    departmentDescription={part.departmentDescription}
-                                    handleNominalAccountChange={handleNominalAccountChange}
-                                    paretoCode={part.paretoCode}
-                                    handleAccountingCompanyChange={handleAccountingCompanyChange}
-                                    nominal={part.nominal}
-                                    nominalDescription={part.nominalDescription}
-                                    stockControlled={part.stockControlled}
-                                    safetyCriticalPart={part.safetyCriticalPart}
+                                    rootProduct={state.part.rootProduct}
+                                    department={state.part.department}
+                                    departmentDescription={state.part.departmentDescription}
+                                    paretoCode={state.part.paretoCode}
+                                    nominal={state.part.nominal}
+                                    nominalDescription={state.part.nominalDescription}
+                                    stockControlled={state.part.stockControlled}
+                                    safetyCriticalPart={state.part.safetyCriticalPart}
                                     safetyCriticalHelperText={
                                         creating() ? getSafetyCriticalHelperText() : null
                                     }
-                                    performanceCriticalPart={part.performanceCriticalPart}
-                                    emcCriticalPart={part.emcCriticalPart}
-                                    singleSourcePart={part.singleSourcePart}
-                                    cccCriticalPart={part.cccCriticalPart}
-                                    psuPart={part.psuPart}
+                                    performanceCriticalPart={state.part.performanceCriticalPart}
+                                    emcCriticalPart={state.part.emcCriticalPart}
+                                    singleSourcePart={state.part.singleSourcePart}
+                                    cccCriticalPart={state.part.cccCriticalPart}
+                                    psuPart={state.part.psuPart}
                                     safetyCertificateExpirationDate={
-                                        part.safetyCertificateExpirationDate
+                                        state.part.safetyCertificateExpirationDate
                                     }
-                                    handleRawOrFinishedChange={handleRawOrFinishedChange}
-                                    safetyDataDirectory={part.safetyDataDirectory}
-                                    rawOrFinished={part.rawOrFinished}
+                                    safetyDataDirectory={state.part.safetyDataDirectory}
+                                    rawOrFinished={state.part.rawOrFinished}
+                                    editStatus={editStatus}
                                 />
                             )}
                             {tab === 1 && (
                                 <BuildTab
                                     handleFieldChange={handleFieldChange}
-                                    linnProduced={part.linnProduced}
-                                    sernosSequenceName={part.sernosSequenceName}
-                                    sernosSequenceDescription={part.sernosSequenceDescription}
-                                    handleSernosSequenceChange={handleSernosSequenceChange}
-                                    decrementRuleName={part.decrementRuleName}
-                                    assemblyTechnologyName={part.assemblyTechnologyName}
-                                    bomType={part.bomType}
-                                    bomId={part.bomId}
-                                    optionSet={part.optionSet}
-                                    drawingReference={part.drawingReference}
-                                    safetyCriticalPart={part.safetyCriticalPart}
-                                    plannedSurplus={part.plannedSurplus}
-                                    handleLinnProducedChange={handleLinnProducedChange}
+                                    linnProduced={state.part.linnProduced}
+                                    sernosSequenceName={state.part.sernosSequenceName}
+                                    sernosSequenceDescription={state.part.sernosSequenceDescription}
+                                    decrementRuleName={state.part.decrementRuleName}
+                                    assemblyTechnologyName={state.part.assemblyTechnologyName}
+                                    bomType={state.part.bomType}
+                                    bomId={state.part.bomId}
+                                    optionSet={state.part.optionSet}
+                                    drawingReference={state.part.drawingReference}
+                                    safetyCriticalPart={state.part.safetyCriticalPart}
+                                    plannedSurplus={state.part.plannedSurplus}
                                 />
                             )}
                             {tab === 2 && (
                                 <PurchTab
                                     handleFieldChange={handleFieldChange}
-                                    ourUnitOfMeasure={part.ourUnitOfMeasure}
-                                    preferredSupplier={part.preferredSupplier}
-                                    handlePrefferedSupplierChange={handlePrefferedSupplierChange}
-                                    preferredSupplierName={part.preferredSupplierName}
-                                    currency={part.currency}
-                                    currencyUnitPrice={part.currencyUnitPrice}
-                                    baseUnitPrice={part.baseUnitPrice}
-                                    materialPrice={part.materialPrice}
-                                    labourPrice={part.labourPrice}
-                                    costingPrice={part.costingPrice}
-                                    orderHold={part.orderHold}
-                                    partCategory={part.partCategory}
-                                    nonForecastRequirement={part.nonForecastRequirement}
-                                    oneOffRequirement={part.oneOffRequirement}
-                                    sparesRequirement={part.sparesRequirement}
-                                    ignoreWorkstationStock={part.ignoreWorkstationStock}
-                                    handleIgnoreWorkstationStockChange={
-                                        handleIgnoreWorkstationStockChange
-                                    }
-                                    imdsIdNumber={part.imdsIdNumber}
-                                    imdsWeight={part.imdsWeight}
-                                    mechanicalOrElectronic={part.mechanicalOrElectronic}
-                                    manufacturers={part.manufacturers}
-                                    handleManufacturersPartNumberChange={
-                                        handleManufacturersPartNumberChange
-                                    }
+                                    ourUnitOfMeasure={state.part.ourUnitOfMeasure}
+                                    preferredSupplier={state.part.preferredSupplier}
+                                    preferredSupplierName={state.part.preferredSupplierName}
+                                    currency={state.part.currency}
+                                    currencyUnitPrice={state.part.currencyUnitPrice}
+                                    baseUnitPrice={state.part.baseUnitPrice}
+                                    materialPrice={state.part.materialPrice}
+                                    labourPrice={state.part.labourPrice}
+                                    costingPrice={state.part.costingPrice}
+                                    orderHold={state.part.orderHold}
+                                    partCategory={state.part.partCategory}
+                                    nonForecastRequirement={state.part.nonForecastRequirement}
+                                    oneOffRequirement={state.part.oneOffRequirement}
+                                    sparesRequirement={state.part.sparesRequirement}
+                                    ignoreWorkstationStock={state.part.ignoreWorkstationStock}
+                                    imdsIdNumber={state.part.imdsIdNumber}
+                                    imdsWeight={state.part.imdsWeight}
+                                    mechanicalOrElectronic={state.part.mechanicalOrElectronic}
+                                    manufacturers={state.part.manufacturers}
                                     links={item?.links}
                                 />
                             )}
                             {tab === 3 && (
                                 <StoresTab
                                     handleFieldChange={handleFieldChange}
-                                    qcOnReceipt={part.qcOnReceipt}
-                                    qcInformation={part.qcInformation}
-                                    rawOrFinished={part.rawOrFinished}
-                                    ourInspectionWeeks={part.ourInspectionWeeks}
-                                    safetyWeeks={part.safetyWeeks}
-                                    railMethod={part.railMethod}
-                                    minStockrail={part.minStockrail}
-                                    maxStockRail={part.maxStockRail}
-                                    secondStageBoard={part.secondStageBoard}
-                                    secondStageDescription={part.secondStageDescription}
-                                    tqmsCategoryOverride={part.tqmsCategoryOverride}
-                                    stockNotes={part.stockNotes}
+                                    qcOnReceipt={state.part.qcOnReceipt}
+                                    qcInformation={state.part.qcInformation}
+                                    rawOrFinished={state.part.rawOrFinished}
+                                    ourInspectionWeeks={state.part.ourInspectionWeeks}
+                                    safetyWeeks={state.part.safetyWeeks}
+                                    railMethod={state.part.railMethod}
+                                    minStockrail={state.part.minStockrail}
+                                    maxStockRail={state.part.maxStockRail}
+                                    secondStageBoard={state.part.secondStageBoard}
+                                    secondStageDescription={state.part.secondStageDescription}
+                                    tqmsCategoryOverride={state.part.tqmsCategoryOverride}
+                                    stockNotes={state.part.stockNotes}
                                 />
                             )}
                             {tab === 4 && (
@@ -541,19 +404,19 @@ function Part({
                                     handlePhaseOutClick={handlePhaseOutClick}
                                     editStatus={editStatus}
                                     canPhaseOut={canPhaseOut()}
-                                    dateCreated={part.dateCreated}
-                                    createdBy={part.createdBy}
-                                    createdByName={part.createdByName}
-                                    dateLive={part.dateLive}
-                                    madeLiveBy={part.madeLiveBy}
-                                    madeLiveByName={part.madeLiveByName}
-                                    phasedOutBy={part.phasedOutBy}
-                                    phasedOutByName={part.phasedOutByName}
-                                    reasonPhasedOut={part.reasonPhasedOut}
-                                    scrapOrConvert={part.scrapOrConvert}
-                                    purchasingPhaseOutType={part.purchasingPhaseOutType}
-                                    datePhasedOut={part.datePhasedOut}
-                                    dateDesignObsolete={part.dateDesignObsolete}
+                                    dateCreated={state.part.dateCreated}
+                                    createdBy={state.part.createdBy}
+                                    createdByName={state.part.createdByName}
+                                    dateLive={state.part.dateLive}
+                                    madeLiveBy={state.part.madeLiveBy}
+                                    madeLiveByName={state.part.madeLiveByName}
+                                    phasedOutBy={state.part.phasedOutBy}
+                                    phasedOutByName={state.part.phasedOutByName}
+                                    reasonPhasedOut={state.part.reasonPhasedOut}
+                                    scrapOrConvert={state.part.scrapOrConvert}
+                                    purchasingPhaseOutType={state.part.purchasingPhaseOutType}
+                                    datePhasedOut={state.part.datePhasedOut}
+                                    dateDesignObsolete={state.part.dateDesignObsolete}
                                     liveTest={liveTest}
                                     handleChangeLiveness={handleChangeLiveness}
                                 />
@@ -606,7 +469,7 @@ Part.propTypes = {
     privileges: PropTypes.arrayOf(PropTypes.string),
     userName: PropTypes.string,
     userNumber: PropTypes.number,
-    options: PropTypes.shape({ template: PropTypes.string }),
+    templateName: PropTypes.string,
     partTemplates: PropTypes.arrayOf(PropTypes.shape({ partRoot: PropTypes.string })),
     liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
     fetchLiveTest: PropTypes.func.isRequired,
@@ -614,16 +477,16 @@ Part.propTypes = {
 };
 
 Part.defaultProps = {
-    item: {},
+    item: null,
     snackbarVisible: false,
-    loading: null,
+    loading: true,
     itemError: null,
     itemId: null,
     nominal: null,
     privileges: null,
     userName: null,
     userNumber: null,
-    options: null,
+    templateName: null,
     partTemplates: [],
     liveTest: null,
     partsSearchResults: []

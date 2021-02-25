@@ -331,9 +331,10 @@ function ParamDataTab({
                         <InputField
                             value={capacitorWidth}
                             propertyName="capacitorWidth"
-                            label="Height (mm)"
+                            label="Width (mm)"
                             onChange={handleFieldChange}
                             type="number"
+                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={3}>

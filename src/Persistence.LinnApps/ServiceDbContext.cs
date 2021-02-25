@@ -147,6 +147,8 @@
 
         public DbQuery<WandItem> WandItems { get; set; }
 
+        public DbQuery<StockQuantities> StockQuantitiesForMrView { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -214,6 +216,7 @@
             this.QueryStockLocatorBatches(builder);
             this.QueryWandConsignments(builder);
             this.QueryWandItems(builder);
+            this.QueryStockQuantitIesForMrView(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1163,6 +1166,7 @@
             q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE").HasMaxLength(10);
             q.Property(e => e.OurUnitOfMeasure).HasColumnName("OUR_UNIT_OF_MEASURE").HasMaxLength(14);
             q.Property(e => e.QuantityAllocated).HasColumnName("QTY_ALLOCATED");
+            q.HasOne(e => e.Part).WithMany(p => p.Locations).HasForeignKey(l => l.PartNumber);
         }
 
         private void QueryStockLocatorBatches(ModelBuilder builder)
@@ -1206,6 +1210,24 @@
             q.Property(v => v.RequisitionNumber).HasColumnName("REQ_NUMBER");
             q.Property(v => v.RequisitionLine).HasColumnName("LINE_NUMBER");
             q.Property(v => v.CountryCode).HasColumnName("COUNTRY");
+        }
+
+        private void QueryStockQuantitIesForMrView(ModelBuilder builder)
+        {
+            var q = builder.Query<StockQuantities>().ToView("V_STOCK_QTIES_FOR_MR");
+            q.Property(s => s.PartNumber).HasColumnName("PART_NUMBER");
+            q.Property(s => s.GoodStock).HasColumnName("GOOD_STOCK");
+            q.Property(s => s.GoodStockAllocated).HasColumnName("GOOD_STOCK_ALLOCATED");
+            q.Property(s => s.UninspectedStock).HasColumnName("UNINSPECTED_STOCK");
+            q.Property(s => s.UninspectedStockAllocated).HasColumnName("UNINSP_STOCK_ALLOCATED");
+            q.Property(s => s.FaultyStock).HasColumnName("FAULTY_STOCK");
+            q.Property(s => s.FaultyStockAllocated).HasColumnName("FAULTY_STOCK_ALLOCATED");
+            q.Property(s => s.DistributorStock).HasColumnName("DISTRIBUTOR_STOCK");
+            q.Property(s => s.DistributorStockAllocated).HasColumnName("DISTRIB_STOCK_ALLOCATED");
+            q.Property(s => s.SupplierStock).HasColumnName("SUPPLIER_STOCK");
+            q.Property(s => s.SupplierStockAllocated).HasColumnName("SUPPLIER_STOCK_ALLOCATED");
+            q.Property(s => s.OtherStock).HasColumnName("OTHER_STOCK");
+            q.Property(s => s.OtherStockAllocated).HasColumnName("OTHER_STOCK_ALLOCATED");
         }
     }
 }

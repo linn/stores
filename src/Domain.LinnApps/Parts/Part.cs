@@ -150,5 +150,7 @@
         public IEnumerable<WwdWork> WwdWorks { get; set; }
         
         public PartParamData ParamData { get; set; }
+
+        public IEnumerable<StockLocatorLocation> Locations { get; set; }
     }
 }

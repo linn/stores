@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.StockLocators
 {
+    using Linn.Stores.Domain.LinnApps.Parts;
+
     public class StockLocatorLocation
     {
         public int Quantity { get; set; }
@@ -9,6 +11,8 @@
         public StorageLocation StorageLocation { get; set; }
 
         public string PartNumber { get; set; }
+
+        public Part Part { get; set; }
 
         public int? PalletNumber { get; set; }
 

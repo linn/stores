@@ -20,9 +20,11 @@
 
         IEnumerable<StockLocator> GetStockLocatorLocationsView(
             string partNumber,
-            string location,
+            int? locationId,
+            int? palletNumber,
             string stockPool,
             string stockState,
-            string batchRef);
+            string batchRef,
+            bool queryBatchView);
     }
 }

@@ -90,6 +90,7 @@
                 .As<IQueryRepository<StockLocatorBatch>>();
             builder.RegisterType<WandConsignmentsRepository>().As<IQueryRepository<WandConsignment>>();
             builder.RegisterType<WandItemsRepository>().As<IQueryRepository<WandItem>>();
+            builder.RegisterType<StockQuantitiesRepository>().As<IQueryRepository<StockQuantities>>();
         }
     }
 }
