@@ -18,20 +18,20 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IRsnService RsnService { get; set; }
+        protected IExportRsnService ExportRsnService { get; set; }
 
         [SetUp]
         public void EstablishContext()
         {
-            this.RsnService = Substitute.For<IRsnService>();
+            this.ExportRsnService = Substitute.For<IExportRsnService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
-                        with.Dependency(this.RsnService);
-                        with.Dependency<IResourceBuilder<IEnumerable<Rsn>>>(new RsnsResourceBuilder());
-                        with.Module<RsnModule>();
-                        with.ResponseProcessor<RsnsResponseProcessor>();
+                        with.Dependency(this.ExportRsnService);
+                        with.Dependency<IResourceBuilder<IEnumerable<ExportRsn>>>(new ExportRsnsResourceBuilder());
+                        with.Module<ExportRsnModule>();
+                        with.ResponseProcessor<ExportRsnsResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
                                 {
