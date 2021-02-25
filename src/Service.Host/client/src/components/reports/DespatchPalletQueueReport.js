@@ -123,6 +123,7 @@ function DespatchPalletQueueReport({
                                             className="hide-when-printing"
                                             variant="contained"
                                             color="primary"
+                                            disabled={!reportData.numberOfPalletsToMove}
                                             onClick={onMovePallets}
                                         >
                                             Pick Them All
