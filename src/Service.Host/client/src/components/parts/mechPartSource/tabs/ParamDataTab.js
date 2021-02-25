@@ -334,6 +334,7 @@ function ParamDataTab({
                             label="Width (mm)"
                             onChange={handleFieldChange}
                             type="number"
+                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={3}>
