@@ -38,7 +38,6 @@ function StockViewerOptions({
         partNumber: '',
         storageLocation: '',
         locationId: '',
-        palletNumber: null,
         stockPool: '',
         batchRef: '',
         inspectedState: ''
