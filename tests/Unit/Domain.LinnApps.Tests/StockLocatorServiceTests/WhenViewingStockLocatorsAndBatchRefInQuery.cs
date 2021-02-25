@@ -22,7 +22,7 @@
             this.StockLocatorBatchesView
                 .FilterBy(Arg.Any<Expression<Func<StockLocatorBatch, bool>>>())
                 .Returns(this.repositoryResult);
-            this.Sut.GetStockLocatorLocationsView("PART", null, null, null, "ref");
+            this.Sut.GetStockLocatorLocationsView("PART", null, null, null, null, "ref", false);
         }
 
         [Test]

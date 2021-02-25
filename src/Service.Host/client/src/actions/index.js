@@ -150,3 +150,9 @@ export const salesOutletsActionTypes = makeActionTypes(itemTypes.salesOutlets.ac
 export const salesAccountsActionTypes = makeActionTypes(itemTypes.salesAccounts.actionType);
 
 export const exportRsnsActionTypes = makeActionTypes(itemTypes.exportRsns.actionType);
+
+export const stockQuantitiesActionTypes = makeReportActionTypes(
+    itemTypes.stockQuantities.actionType
+);
+
+export const doWandItemActionTypes = makeActionTypes(processTypes.doWandItem.actionType);

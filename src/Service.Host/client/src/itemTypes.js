@@ -230,3 +230,9 @@ export const salesAccounts = new ItemType(
 );
 
 export const exportRsns = new ItemType('exportRsns', 'EXPORT_RSNS', '/inventory/export-rsns');
+
+export const stockQuantities = new ItemType(
+    'stockQuantities',
+    'STOCK_QUANTITIES',
+    '/inventory/stock-quantities'
+);

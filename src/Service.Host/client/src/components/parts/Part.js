@@ -337,6 +337,7 @@ function Part({
                                     }
                                     safetyDataDirectory={state.part.safetyDataDirectory}
                                     rawOrFinished={state.part.rawOrFinished}
+                                    editStatus={editStatus}
                                 />
                             )}
                             {tab === 1 && (

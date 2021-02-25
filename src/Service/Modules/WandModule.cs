@@ -2,6 +2,7 @@
 {
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources.RequestResources;
+    using Linn.Stores.Resources.Wand;
     using Linn.Stores.Service.Models;
 
     using Nancy;
@@ -17,6 +18,13 @@
             this.Get("/logistics/wand", _ => this.GetApp());
             this.Get("/logistics/wand/consignments", _ => this.GetConsignments());
             this.Get("/logistics/wand/items", _ => this.GetItems());
+            this.Post("/logistics/wand/items", _ => this.WandItem());
+        }
+
+        private object WandItem()
+        {
+            var resource = this.Bind<WandItemRequestResource>();
+            return this.Negotiate.WithModel(this.wandFacadeService.WandItem(resource));
         }
 
         private object GetItems()

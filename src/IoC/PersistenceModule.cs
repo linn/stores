@@ -93,6 +93,7 @@
             builder.RegisterType<ExportRsnRepository>().As<IQueryRepository<ExportRsn>>();
             builder.RegisterType<SalesAccountRepository>().As<IQueryRepository<SalesAccount>>();
             builder.RegisterType<SalesOutletRepository>().As<IQueryRepository<SalesOutlet>>();
+            builder.RegisterType<StockQuantitiesRepository>().As<IQueryRepository<StockQuantities>>();
         }
     }
 }

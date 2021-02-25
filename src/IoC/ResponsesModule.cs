@@ -143,6 +143,8 @@
             builder.RegisterType<SalesAccountsResourceBuilder>().As<IResourceBuilder<IEnumerable<SalesAccount>>>();
             builder.RegisterType<ExportRsnResourceBuilder>().As<IResourceBuilder<ExportRsn>>();
             builder.RegisterType<ExportRsnsResourceBuilder>().As<IResourceBuilder<IEnumerable<ExportRsn>>>();
+            builder.RegisterType<StockQuantitiesResourceBuilder>().As<IResourceBuilder<StockQuantities>>();
+            builder.RegisterType<WandItemResultResourceBuilder>().As<IResourceBuilder<WandResult>>();
         }
     }
 }

@@ -55,12 +55,14 @@ import despatchPalletQueueReport from './despatchPalletQueueReport';
 import movePalletToUpper from './movePalletToUpper';
 import movePalletsToUpper from './movePalletsToUpper';
 import stockLocatorLocations from './stockLocators/stockLocatorLocations';
+import stockQuantities from './stockLocators/stockQuantities';
 import nominalAccounts from './nominalAccounts';
 import wandConsignments from './wandConsignments';
 import wandItems from './wandItems';
 import salesOutlets from './salesOutlets';
 import salesAccounts from './salesAccounts';
 import exportRsns from './exportRsns';
+import doWandItem from './doWandItem';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -78,6 +80,7 @@ const rootReducer = combineReducers({
     despatchLocations,
     despatchPalletQueueReport,
     despatchPickingSummaryReport,
+    doWandItem,
     employees,
     exportRsns,
     finishAllocation,
@@ -108,6 +111,7 @@ const rootReducer = combineReducers({
     stockLocatorLocations,
     stockLocators,
     stockPools,
+    stockQuantities,
     storageLocations,
     storagePlace,
     storagePlaces,

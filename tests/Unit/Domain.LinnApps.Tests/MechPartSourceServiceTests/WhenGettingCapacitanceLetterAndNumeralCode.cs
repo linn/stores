@@ -27,6 +27,7 @@
         public void WhenUnitIsPico()
         {
             this.Sut.GetCapacitanceLetterAndNumeralCode("p", 0.000000000220m).Should().Be("220pF");
+            this.Sut.GetCapacitanceLetterAndNumeralCode("p", 0.0000000000680m).Should().Be("68pF");
             this.Sut.GetCapacitanceLetterAndNumeralCode("p", 0.0000000000022m).Should().Be("2p2F");
             this.Sut.GetCapacitanceLetterAndNumeralCode("p", 0.000220000000m).Should().Be("220000000pF");
         }
