@@ -80,6 +80,9 @@ function Wand({
         } else {
             clearItems();
         }
+
+        setResultStyle('noMessage');
+        setWandMessage('');
         wandStringInput.current.focus();
     };
 

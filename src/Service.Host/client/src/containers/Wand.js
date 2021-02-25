@@ -16,7 +16,6 @@ const mapStateToProps = state => ({
     itemsLoading: wandItemsSelectors.getSearchLoading(state),
     userNumber: getUserNumber(state),
     doWandItemWorking: doWandItemSelectors.getWorking(state),
-    doWandItemMessage: doWandItemSelectors.getMessageText(state),
     wandResult: doWandItemSelectors.getData(state)
 });
 
