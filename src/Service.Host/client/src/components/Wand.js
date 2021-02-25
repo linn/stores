@@ -20,13 +20,15 @@ function Wand({
     clearItems,
     userNumber,
     doWandItemWorking,
-    doWandItem
+    doWandItem,
+    wandResult
 }) {
     const [consignmentId, setConsignmentId] = useState('');
     const [wandAction, setWandAction] = useState('W');
     const [wandString, setWandString] = useState(null);
     const [showAlert, setShowAlert] = useState(false);
-    const [wandMessage, setWandMessage] = useState(null);
+    const [resultStyle, setResultStyle] = useState('noMessage');
+    const [wandMessage, setWandMessage] = useState('');
 
     const wandStringInput = useRef(null);
 
@@ -34,15 +36,25 @@ function Wand({
         setWandString(null);
     }, [items]);
 
-    const handleConsignmentChange = (_propertyName, newValue) => {
-        setConsignmentId(newValue);
-        if (newValue) {
-            getItems(newValue);
-        } else {
-            clearItems();
+    useEffect(() => {
+        if (!wandString) {
+            setResultStyle('noMessage');
+            setWandMessage('');
         }
-        wandStringInput.current.focus();
-    };
+    }, [wandString]);
+
+    useEffect(() => {
+        if (!wandResult || !wandResult.message) {
+            setResultStyle('noMessage');
+            setWandMessage('');
+        } else if (wandResult.success) {
+            setResultStyle('ok');
+            setWandMessage('Success');
+        } else {
+            setResultStyle('notOk');
+            setWandMessage(wandResult.message);
+        }
+    }, [wandResult]);
 
     const useStyles = makeStyles({
         ok: {
@@ -58,6 +70,18 @@ function Wand({
             backgroundColor: 'white'
         }
     });
+
+    const classes = useStyles();
+
+    const handleConsignmentChange = (_propertyName, newValue) => {
+        setConsignmentId(newValue);
+        if (newValue) {
+            getItems(newValue);
+        } else {
+            clearItems();
+        }
+        wandStringInput.current.focus();
+    };
 
     const handlewandActionChange = (_propertyName, newValue) => {
         setWandAction(newValue);
@@ -80,8 +104,6 @@ function Wand({
     const handleWand = () => {
         if (wandString && consignmentId) {
             doWandItem({ consignmentId, userNumber, wandAction, wandString });
-            //setShowAlert(wandString);
-            setWandMessage(`Wanded ${wandString}`);
             wandStringInput.current.focus();
         }
     };
@@ -112,7 +134,17 @@ function Wand({
         { field: 'requisitionLine', headerName: 'Req Line', width: 110, hide: true }
     ];
     const focusProp = { inputRef: wandStringInput, onKeyDown: handleOnKeyPress };
-    const classes = useStyles();
+
+    const getResultClass = style => {
+        switch (style) {
+            case 'ok':
+                return classes.ok;
+            case 'notOk':
+                return classes.notOk;
+            default:
+                return classes.noMessage;
+        }
+    };
 
     return (
         <Page>
@@ -177,7 +209,7 @@ function Wand({
                         ) : (
                             <TextField
                                 style={{ padding: 10 }}
-                                className={doWandItemWorking ? classes.noMessage : classes.ok}
+                                className={getResultClass(resultStyle)}
                                 id="wand-status"
                                 fullWidth
                                 value={wandMessage}
@@ -217,7 +249,11 @@ Wand.propTypes = {
     itemsLoading: PropTypes.bool,
     userNumber: PropTypes.number.isRequired,
     doWandItemWorking: PropTypes.bool,
-    doWandItem: PropTypes.func.isRequired
+    doWandItem: PropTypes.func.isRequired,
+    wandResult: PropTypes.shape({
+        success: PropTypes.bool,
+        message: PropTypes.string
+    })
 };
 
 Wand.defaultProps = {
@@ -225,7 +261,11 @@ Wand.defaultProps = {
     loadingWandConsignments: false,
     items: [],
     itemsLoading: false,
-    doWandItemWorking: false
+    doWandItemWorking: false,
+    wandResult: {
+        message: null,
+        success: true
+    }
 };
 
 export default Wand;
