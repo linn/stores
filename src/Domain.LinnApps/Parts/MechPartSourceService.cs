@@ -37,8 +37,8 @@
             }
 
             var result = value / units[unit];
-            return result % 1m == 0 ? 
-                       result.ToString("G") + unit 
+            return result % 1m == 0 ?
+                       result.ToString("G") + unit
                        : result.ToString("G").Replace(".", unit);
         }
 
@@ -51,12 +51,7 @@
                                 { "p", 0.000000000001m },
                             };
 
-            var result = (value / units[unit]).ToString("G");
-
-            if (result.EndsWith(".0"))
-            {
-                result = result.Split(".0")[0];
-            }
+            var result = (value / units[unit]).ToString("G29");
 
             if (result.Contains("."))
             {
