@@ -104,6 +104,7 @@ function Wand({
     const handleWand = () => {
         if (wandString && consignmentId) {
             doWandItem({ consignmentId, userNumber, wandAction, wandString });
+            setWandString(null);
             wandStringInput.current.focus();
         }
     };

@@ -47,6 +47,8 @@
         {
             this.result.Message.Should().Be(this.wandPackResult.Message);
             this.result.Success.Should().BeTrue();
+            this.result.ConsignmentId.Should().Be(this.consignmentId);
+            this.result.WandString.Should().Be(this.wandString);
         }
     }
 }

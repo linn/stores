@@ -13,7 +13,9 @@
             return new WandItemResultResource
                        {
                            Message = wandResult.Message,
-                           Success = wandResult.Success
+                           Success = wandResult.Success,
+                           ConsignmentId = wandResult.ConsignmentId,
+                           WandString = wandResult.WandString
                        };
         }
 

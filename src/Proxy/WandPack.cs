@@ -65,11 +65,7 @@
             connection.Open();
             cmd.ExecuteNonQuery();
             connection.Close();
-            var thisWandResult = new WandResult
-                        {
-                            Message = messageParameter.Value.ToString(),
-                            Success = int.Parse(successParameter.Value.ToString()) == 1
-                        };
+
             return new WandResult
                        {
                            Message = messageParameter.Value.ToString(),
