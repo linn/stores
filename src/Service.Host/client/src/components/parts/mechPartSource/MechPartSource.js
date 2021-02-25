@@ -53,8 +53,6 @@ function MechPartSource({
                   createPart: true,
                   mechPartAlts: [],
                   mechPartManufacturerAlts: [],
-                  capacitanceUnits: 'uF',
-                  resistanceUnits: 'KΩ',
                   usages: [],
                   mechanicalOrElectrical: 'E',
                   samplesRequired: 'N'
@@ -522,7 +520,7 @@ function MechPartSource({
                                     capacitanceUnits={
                                         creating()
                                             ? mechPartSource.capacitanceUnits
-                                            : mechPartSource?.capacitanceLetterAndNumeralCodestring?.replace(
+                                            : mechPartSource?.capacitanceLetterAndNumeralCode?.replace(
                                                   /[^a-zA-Z]/g,
                                                   ''
                                               )
