@@ -53,6 +53,8 @@ function MechPartSource({
                   createPart: true,
                   mechPartAlts: [],
                   mechPartManufacturerAlts: [],
+                  capacitanceUnits: 'uF',
+                  resistanceUnits: 'KΩ',
                   usages: [],
                   mechanicalOrElectrical: 'E',
                   samplesRequired: 'N'
@@ -166,7 +168,10 @@ function MechPartSource({
     const handleSaveClick = () => {
         const body = mechPartSource;
         const rkmLetters = { KΩ: 'K', MΩ: 'M', Ω: '' };
+        const capacitanceUnits = { uF: 'u', nF: 'n', pF: 'p' };
+
         body.resistanceUnits = rkmLetters[mechPartSource.resistanceUnits];
+        body.capacitanceUnit = capacitanceUnits[mechPartSource.capacitanceUnits];
         body.mechPartAlts = suppliersData;
         body.mechPartManufacturerAlts = manufacturersData;
         body.usages = usagesData;
