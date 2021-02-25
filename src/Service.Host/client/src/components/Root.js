@@ -162,7 +162,6 @@ const Root = ({ store }) => (
                                         component={DespatchPalletQueueReport}
                                     />
                                     <Route exact path="/logistics/wand" component={Wand} />
-                                    {/* TODO change this route */}
                                     <Route
                                         exact
                                         path="/inventory/export-rsns"
