@@ -49,9 +49,14 @@
                                 { "u", 0.000001m },
                                 { "n", 0.000000001m },
                                 { "p", 0.000000000001m },
-                            };
+                            }; 
 
             var result = (value / units[unit]).ToString("G");
+
+            if (result.EndsWith(".0"))
+            {
+                result = result.Split(".0")[0];
+            }
 
             if (result.Contains("."))
             {
