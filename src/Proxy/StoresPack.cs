@@ -37,10 +37,10 @@
                 });
 
             cmd.Parameters.Add(
-                new OracleParameter("p_commit", OracleDbType.Varchar2)
+                new OracleParameter("p_commit", OracleDbType.Int32)
                 {
                     Direction = ParameterDirection.Input,
-                    Value = "N"
+                    Value = 0
                 });
             var messageParameter = new OracleParameter("p_message", OracleDbType.Varchar2)
                                        {
@@ -50,9 +50,9 @@
             cmd.Parameters.Add(messageParameter);
 
             var successParameter = new OracleParameter("p_success", OracleDbType.Int32)
-            {
-                Direction = ParameterDirection.Output,
-            };
+                                       {
+                                           Direction = ParameterDirection.Output
+                                       };
             cmd.Parameters.Add(successParameter);
 
             connection.Open();

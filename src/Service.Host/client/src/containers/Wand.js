@@ -4,6 +4,7 @@ import Wand from '../components/Wand';
 import wandConsignmentsActions from '../actions/wandConsignmentsActions';
 import wandConsignmentsSelectors from '../selectors/wandConsignmentsSelectors';
 import wandItemsActions from '../actions/wandItemsActions';
+import requisitionUnallocateActions from '../actions/requisitionUnallocateActions';
 import wandItemsSelectors from '../selectors/wandItemsSelectors';
 import { getUserNumber } from '../selectors/userSelectors';
 import doWandItemSelectors from '../selectors/doWandItemSelectors';
@@ -28,7 +29,7 @@ const mapDispatchToProps = {
     getItems: wandItemsActions.search,
     clearItems: wandItemsActions.clearSearch,
     doWandItem: doWandItemActions.requestProcessStart,
-    unallocateRequisition: doWandItemActions.requestProcessStart
+    unallocateRequisition: requisitionUnallocateActions.requestProcessStart
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Wand));

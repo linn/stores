@@ -94,13 +94,17 @@ function Wand({
 
     const handleUnallocateConsignment = () => {
         if (items && items.length > 0) {
-            unallocateRequisition(items[0].requisitionNumber);
+            unallocateRequisition({ requisitionNumber: items[0].requisitionNumber, userNumber });
         }
     };
 
     const handleUnallocateLine = () => {
         if (selectedRow) {
-            unallocateRequisition(selectedRow.requisitionNumber, selectedRow.requisitionLine);
+            unallocateRequisition({
+                requisitionNumber: selectedRow.requisitionNumber,
+                requisitionLine: selectedRow.requisitionLine,
+                userNumber
+            });
         }
     };
 
