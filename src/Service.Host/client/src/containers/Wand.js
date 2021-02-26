@@ -27,7 +27,8 @@ const mapDispatchToProps = {
     initialise,
     getItems: wandItemsActions.search,
     clearItems: wandItemsActions.clearSearch,
-    doWandItem: doWandItemActions.requestProcessStart
+    doWandItem: doWandItemActions.requestProcessStart,
+    unallocateRequisition: doWandItemActions.requestProcessStart
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Wand));

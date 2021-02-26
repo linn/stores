@@ -21,7 +21,8 @@ function Wand({
     userNumber,
     doWandItemWorking,
     doWandItem,
-    wandResult
+    wandResult,
+    unallocateRequisition
 }) {
     const [consignmentId, setConsignmentId] = useState('');
     const [wandAction, setWandAction] = useState('W');
@@ -29,6 +30,7 @@ function Wand({
     const [showAlert, setShowAlert] = useState(false);
     const [resultStyle, setResultStyle] = useState('noMessage');
     const [wandMessage, setWandMessage] = useState('');
+    const [selectedRow, setSelectedRow] = useState(null);
 
     const wandStringInput = useRef(null);
 
@@ -86,6 +88,22 @@ function Wand({
         wandStringInput.current.focus();
     };
 
+    const handleSelectRow = row => {
+        setSelectedRow(items[row.rowIds[0]]);
+    };
+
+    const handleUnallocateConsignment = () => {
+        if (items && items.length > 0) {
+            unallocateRequisition(items[0].requisitionNumber);
+        }
+    };
+
+    const handleUnallocateLine = () => {
+        if (selectedRow) {
+            unallocateRequisition(selectedRow.requisitionNumber, selectedRow.requisitionLine);
+        }
+    };
+
     const handlewandActionChange = (_propertyName, newValue) => {
         setWandAction(newValue);
         wandStringInput.current.focus();
@@ -129,7 +147,14 @@ function Wand({
     const columns = [
         { field: 'partNumber', headerName: 'Article No', width: 140 },
         { field: 'quantity', headerName: 'Qty', width: 100 },
-        { field: 'quantityScanned', headerName: 'Scanned', width: 120 },
+        {
+            field: 'quantityScanned',
+            headerName: 'Scanned',
+            width: 120,
+            cellClassName: params => {
+                return params.row.allWanded ? classes.ok : classes.noMessage;
+            }
+        },
         { field: 'partDescription', headerName: 'Description', width: 230 },
         { field: 'orderNumber', headerName: 'Order', width: 100 },
         { field: 'orderLine', headerName: 'Line', width: 80 },
@@ -234,9 +259,28 @@ function Wand({
                                     autoHeight
                                     loading={itemsLoading}
                                     hideFooter
+                                    onSelectionChange={handleSelectRow}
                                 />
                             </div>
                         </div>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button
+                            style={{ marginTop: '22px' }}
+                            className="hide-when-printing"
+                            variant="contained"
+                            onClick={handleUnallocateConsignment}
+                        >
+                            Unallocate Consignment
+                        </Button>
+                        <Button
+                            style={{ marginTop: '22px' }}
+                            className="hide-when-printing"
+                            variant="contained"
+                            onClick={handleUnallocateLine}
+                        >
+                            Unallocate Line
+                        </Button>
                     </Grid>
                 </Grid>
             )}
@@ -249,7 +293,9 @@ Wand.propTypes = {
     loadingWandConsignments: PropTypes.bool,
     getItems: PropTypes.func.isRequired,
     clearItems: PropTypes.func.isRequired,
-    items: PropTypes.arrayOf(PropTypes.shape({})),
+    items: PropTypes.arrayOf(
+        PropTypes.shape({ requisitionNumber: PropTypes.number, requisitionLine: PropTypes.number })
+    ),
     itemsLoading: PropTypes.bool,
     userNumber: PropTypes.number.isRequired,
     doWandItemWorking: PropTypes.bool,
@@ -257,7 +303,8 @@ Wand.propTypes = {
     wandResult: PropTypes.shape({
         success: PropTypes.bool,
         message: PropTypes.string
-    })
+    }),
+    unallocateRequisition: PropTypes.func.isRequired
 };
 
 Wand.defaultProps = {

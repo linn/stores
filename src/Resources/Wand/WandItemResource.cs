@@ -23,5 +23,9 @@
         public string LinnBarCode { get; set; }
 
         public string CountryCode { get; set; }
+
+        public bool AllWanded { get; set; }
+
+        public int BoxesPerProduct { get; set; }
     }
 }

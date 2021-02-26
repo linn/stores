@@ -8,6 +8,7 @@
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
+    using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
@@ -149,6 +150,8 @@
 
         public DbQuery<StockQuantities> StockQuantitiesForMrView { get; set; }
 
+        public DbSet<RequisitionHeader> RequisitionHeaders { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -217,6 +220,7 @@
             this.QueryWandConsignments(builder);
             this.QueryWandItems(builder);
             this.QueryStockQuantitIesForMrView(builder);
+            this.BuildRequisitionHeaders(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1210,6 +1214,8 @@
             q.Property(v => v.RequisitionNumber).HasColumnName("REQ_NUMBER");
             q.Property(v => v.RequisitionLine).HasColumnName("LINE_NUMBER");
             q.Property(v => v.CountryCode).HasColumnName("COUNTRY");
+            q.Property(v => v.BoxesPerProduct).HasColumnName("BOXES_PER_PRODUCT");
+            q.Property(v => v.AllWanded).HasColumnName("ALL_WANDED");
         }
 
         private void QueryStockQuantitIesForMrView(ModelBuilder builder)
@@ -1228,6 +1234,14 @@
             q.Property(s => s.SupplierStockAllocated).HasColumnName("SUPPLIER_STOCK_ALLOCATED");
             q.Property(s => s.OtherStock).HasColumnName("OTHER_STOCK");
             q.Property(s => s.OtherStockAllocated).HasColumnName("OTHER_STOCK_ALLOCATED");
+        }
+
+        private void BuildRequisitionHeaders(ModelBuilder builder)
+        {
+            var r = builder.Entity<RequisitionHeader>().ToTable("REQUISITION_HEADERS");
+            r.HasKey(l => l.ReqNumber);
+            r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
+            r.Property(l => l.Document1).HasColumnName("DOCUMENT_1");
         }
     }
 }

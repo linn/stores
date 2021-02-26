@@ -12,8 +12,6 @@
         public WandResult Wand(string transType, int userNumber, int consignmentId, string wandString)
         {
             var connection = new OracleConnection(ConnectionStrings.ManagedConnectionString());
-            var wandResult = new WandResult();
-            var success = 0;
 
             var cmd = new OracleCommand("wand_pack.wand_remote", connection)
                           {
@@ -51,14 +49,13 @@
             var messageParameter = new OracleParameter("p_message", OracleDbType.Varchar2)
                                        {
                                            Direction = ParameterDirection.Output,
-                                           Value = wandResult.Message,
                                            Size = 4000
                                        };
             cmd.Parameters.Add(messageParameter);
 
             var successParameter = new OracleParameter("p_success", OracleDbType.Int32)
                                        {
-                                           Direction = ParameterDirection.Output, Value = success
+                                           Direction = ParameterDirection.Output
                                        };
             cmd.Parameters.Add(successParameter);
 
