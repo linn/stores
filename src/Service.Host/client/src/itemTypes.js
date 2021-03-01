@@ -217,6 +217,20 @@ export const wandConsignments = new ItemType(
 
 export const wandItems = new ItemType('wandItems', 'WAND_ITEMS', '/logistics/wand/items');
 
+export const salesOutlets = new ItemType(
+    'salesOutlets',
+    'SALES_OUTLETS',
+    '/inventory/sales-outlets'
+);
+
+export const salesAccounts = new ItemType(
+    'salesAccounts',
+    'SALES_ACCOUNTS',
+    '/inventory/sales-accounts'
+);
+
+export const exportRsns = new ItemType('exportRsns', 'EXPORT_RSNS', '/inventory/exports/rsns');
+
 export const stockQuantities = new ItemType(
     'stockQuantities',
     'STOCK_QUANTITIES',

@@ -59,6 +59,9 @@ import stockQuantities from './stockLocators/stockQuantities';
 import nominalAccounts from './nominalAccounts';
 import wandConsignments from './wandConsignments';
 import wandItems from './wandItems';
+import salesOutlets from './salesOutlets';
+import salesAccounts from './salesAccounts';
+import exportRsns from './exportRsns';
 import doWandItem from './doWandItem';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
@@ -79,6 +82,7 @@ const rootReducer = combineReducers({
     despatchPickingSummaryReport,
     doWandItem,
     employees,
+    exportRsns,
     finishAllocation,
     inspectedStates,
     manufacturers,
@@ -97,6 +101,8 @@ const rootReducer = combineReducers({
     pickItemsAllocation,
     productAnalysisCodes,
     rootProducts,
+    salesAccounts,
+    salesOutlets,
     sernosSequences,
     sosAllocDetails,
     sosAllocHeads,
