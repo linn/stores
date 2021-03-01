@@ -160,3 +160,7 @@ export const doWandItemActionTypes = makeActionTypes(processTypes.doWandItem.act
 export const requisitionUnallocateActionTypes = makeActionTypes(
     processTypes.requisitionUnallocate.actionType
 );
+
+export const makeExportReturnActionTypes = makeActionTypes(
+    processTypes.makeExportReturn.actionType
+);

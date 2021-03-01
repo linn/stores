@@ -37,7 +37,8 @@ export default function ExportRsns({
     rsnsSearchLoading,
     searchSalesOutlets,
     searchSalesAccounts,
-    searchRsns
+    searchRsns,
+    makeExportReturnProcess
 }) {
     const [state, dispatch] = useReducer(reducer, {
         searchResults: [],
@@ -82,6 +83,13 @@ export default function ExportRsns({
         } else {
             searchRsns(null, `&accountId=${item.accountId}&outletNumber=${item.outletNumber}`);
         }
+    };
+
+    const handleMakeExportReturn = () => {
+        makeExportReturnProcess({
+            rsns: state.rsns,
+            hubReturn: state.belgiumShipping
+        });
     };
 
     const OutletTable = () => (
@@ -220,6 +228,7 @@ export default function ExportRsns({
                                 variant="outlined"
                                 color="primary"
                                 disabled={!state.rsns.some(rsn => rsn.selected)}
+                                onClick={() => handleMakeExportReturn()}
                             >
                                 Make Export Return
                             </Button>
@@ -240,7 +249,8 @@ ExportRsns.propTypes = {
     rsnsSearchLoading: PropTypes.bool,
     searchSalesOutlets: PropTypes.func.isRequired,
     searchSalesAccounts: PropTypes.func.isRequired,
-    searchRsns: PropTypes.func.isRequired
+    searchRsns: PropTypes.func.isRequired,
+    makeExportReturnProcess: PropTypes.func.isRequired
 };
 
 ExportRsns.defaultProps = {

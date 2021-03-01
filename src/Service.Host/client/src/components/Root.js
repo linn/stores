@@ -32,6 +32,7 @@ import StockViewerOptions from '../containers/stockLocatorUtility/StockViewerOpt
 import StockLocator from '../containers/stockLocatorUtility/StockLocator';
 import Wand from '../containers/Wand';
 import ExportRsns from '../containers/ExportRsns';
+import CreateRep25 from '../containers/CreateRep25';
 
 const Root = ({ store }) => (
     <div>
@@ -61,7 +62,6 @@ const Root = ({ store }) => (
 
                                 <Switch>
                                     <Route exact path="/inventory" component={App} />
-
                                     <Route
                                         exact
                                         path="/inventory/signin-oidc-client"
@@ -95,7 +95,6 @@ const Root = ({ store }) => (
                                         path="/logistics/sos-alloc-heads/:jobId"
                                         component={SosAllocHeads}
                                     />
-
                                     <Route
                                         exact
                                         path="/logistics/sos-alloc-heads/:jobId"
@@ -166,6 +165,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/exports/rsns"
                                         component={ExportRsns}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/exports/rep-25"
+                                        component={CreateRep25}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>
