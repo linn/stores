@@ -14,7 +14,7 @@
         public ExportRsnModule(IExportRsnService exportRsnService)
         {
             this.exportRsnService = exportRsnService;
-            this.Get("/inventory/export-rsns", parameters => this.GetRsns());
+            this.Get("/inventory/exports/rsns", parameters => this.GetRsns());
         }
 
         private object GetRsns()

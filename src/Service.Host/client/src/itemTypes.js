@@ -229,7 +229,7 @@ export const salesAccounts = new ItemType(
     '/inventory/sales-accounts'
 );
 
-export const exportRsns = new ItemType('exportRsns', 'EXPORT_RSNS', '/inventory/export-rsns');
+export const exportRsns = new ItemType('exportRsns', 'EXPORT_RSNS', '/inventory/exports/rsns');
 
 export const stockQuantities = new ItemType(
     'stockQuantities',

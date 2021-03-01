@@ -28,7 +28,7 @@
                 .Returns(new SuccessResult<IEnumerable<ExportRsn>>(new List<ExportRsn> { rsn1, rsn2 }));
 
             this.Response = this.Browser.Get(
-                "/inventory/export-rsns",
+                "/inventory/exports/rsns",
                 with =>
                     {
                         with.Header("Accept", "application/json");

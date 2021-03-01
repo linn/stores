@@ -164,7 +164,7 @@ const Root = ({ store }) => (
                                     <Route exact path="/logistics/wand" component={Wand} />
                                     <Route
                                         exact
-                                        path="/inventory/export-rsns"
+                                        path="/inventory/exports/rsns"
                                         component={ExportRsns}
                                     />
                                     <Route component={NotFoundPage} />
