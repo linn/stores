@@ -254,18 +254,17 @@ function Wand({
                         )}
                     </Grid>
                     <Grid item xs={12}>
-                        <div style={{ display: 'flex', height: 600 }}>
-                            <div style={{ flexGrow: 1 }}>
-                                <DataGrid
-                                    rows={getDetailRows(items)}
-                                    columns={columns}
-                                    density="compact"
-                                    autoHeight
-                                    loading={itemsLoading}
-                                    hideFooter
-                                    onSelectionChange={handleSelectRow}
-                                />
-                            </div>
+                        <div style={{ height: 500, width: '100%' }}>
+                            <DataGrid
+                                rows={getDetailRows(items)}
+                                columns={columns}
+                                density="compact"
+                                rowHeight={34}
+                                loading={itemsLoading}
+                                hideFooter
+                                pagination={false}
+                                onSelectionChange={handleSelectRow}
+                            />
                         </div>
                     </Grid>
                     <Grid item xs={12}>
