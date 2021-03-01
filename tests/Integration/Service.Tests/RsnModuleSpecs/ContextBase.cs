@@ -5,6 +5,7 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Service.Modules;
@@ -30,8 +31,11 @@
                     {
                         with.Dependency(this.ExportRsnService);
                         with.Dependency<IResourceBuilder<IEnumerable<ExportRsn>>>(new ExportRsnsResourceBuilder());
+                        with.Dependency<IResourceBuilder<MakeExportReturnResult>>(
+                            new MakeExportReturnResultResourceBuilder());
                         with.Module<ExportRsnModule>();
                         with.ResponseProcessor<ExportRsnsResponseProcessor>();
+                        with.ResponseProcessor<MakeExportReturnResultResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
                                 {

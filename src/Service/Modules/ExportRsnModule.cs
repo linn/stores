@@ -15,6 +15,7 @@
         {
             this.exportRsnService = exportRsnService;
             this.Get("/inventory/exports/rsns", parameters => this.GetRsns());
+            this.Post("/inventory/exports/make-export-return", parameters => this.MakeExportReturn());
         }
 
         private object GetRsns()
@@ -25,6 +26,18 @@
 
             return this.Negotiate
                 .WithModel(results)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get())
+                .WithView("Index");
+        }
+
+        private object MakeExportReturn()
+        {
+            var resource = this.Bind<MakeExportReturnRequestResource>();
+
+            var result = this.exportRsnService.MakeExportReturn(resource.Rsns, resource.HubReturn);
+
+            return this.Negotiate
+                .WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get())
                 .WithView("Index");
         }

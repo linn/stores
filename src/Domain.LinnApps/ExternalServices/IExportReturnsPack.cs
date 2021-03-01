@@ -1,7 +1,9 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.ExternalServices
 {
+    using Linn.Stores.Domain.LinnApps.Models;
+
     public interface IExportReturnsPack
     {
-        int MakeExportReturn(string rsns, string hubReturn);
+        MakeExportReturnResult MakeExportReturn(string rsns, string hubReturn);
     }
 }
