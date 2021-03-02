@@ -1,5 +1,8 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
+    using System.Collections.Generic;
+    using System.Text.RegularExpressions;
+
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.StockLocators;
@@ -13,11 +16,14 @@
             this.repository = repository;
         }
 
-        public IResult<StockQuantities> GetStockQuantities(string partNumber)
+        public IResult<IEnumerable<StockQuantities>> GetStockQuantities(string partNumber)
         {
+            var partNumberPattern = Regex.Escape(partNumber).Replace("\\*", ".*?");
+            var r = new Regex(partNumberPattern, RegexOptions.IgnoreCase);
+
             var result = this.repository
-                .FindBy(x => x.PartNumber.ToUpper().Equals(partNumber.ToUpper()));
-            return new SuccessResult<StockQuantities>(result);
+                .FilterBy(x => r.IsMatch(x.PartNumber));
+            return new SuccessResult<IEnumerable<StockQuantities>>(result);
         }
     }
 }

@@ -65,22 +65,11 @@ function StockViewerOptions({
                     <Title text="Stock Viewer" />
                 </Grid>
                 <Grid item xs={3}>
-                    <Typeahead
-                        items={parts}
-                        fetchItems={searchParts}
-                        modal
-                        links={false}
-                        clearSearch={clearPartsSearch}
-                        loading={partsLoading}
+                    <InputField
                         label="Part Number"
-                        title="Search Parts"
+                        propertyName="partNumber"
+                        onChange={(_, newValue) => setOptions({ ...options, partNumber: newValue })}
                         value={options.partNumber}
-                        onSelect={newValue =>
-                            setOptions({ ...options, partNumber: newValue.partNumber })
-                        }
-                        history={history}
-                        debounce={1000}
-                        minimumSearchTermLength={2}
                     />
                 </Grid>
                 <Grid item xs={2} />

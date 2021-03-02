@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
     using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
@@ -198,10 +199,13 @@
             string batchRef,
             bool queryBatchView)
         {
+            var partNumberPattern = Regex.Escape(partNumber).Replace("\\*", ".*?");
+            var r = new Regex(partNumberPattern, RegexOptions.IgnoreCase);
+
             if (!string.IsNullOrEmpty(batchRef) || queryBatchView)
             {
                 return this.stockLocatorBatchesView.FilterBy(x =>
-                        (string.IsNullOrEmpty(partNumber) || x.PartNumber == partNumber)
+                        (string.IsNullOrEmpty(partNumber) || r.IsMatch(x.PartNumber))
                         && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
                         && (locationId == null || x.LocationId == locationId)
                         && (palletNumber == null || x.PalletNumber == palletNumber)
@@ -222,7 +226,7 @@
             }
 
             return this.stockLocatorLocationsView.FilterBy(x =>
-                    (string.IsNullOrEmpty(partNumber) || x.PartNumber == partNumber)
+                    (string.IsNullOrEmpty(partNumber) || r.IsMatch(x.PartNumber))
                     && (locationId == null || x.StorageLocation.LocationId == locationId)
                     && (palletNumber == null || x.PalletNumber == palletNumber)
                     && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
