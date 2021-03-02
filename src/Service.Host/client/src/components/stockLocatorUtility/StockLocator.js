@@ -130,7 +130,7 @@ function StockLocator({
                     </Grid>
                 ) : (
                     <>
-                        {quantities && selectedQuantities && !batchView && (
+                        {quantities?.length && selectedQuantities && !batchView && (
                             <>
                                 <Grid item xs={3}>
                                     <Dropdown
@@ -204,7 +204,7 @@ function StockLocator({
                                     <InputField
                                         label="Good (Allocated)"
                                         propertyName="otherStock"
-                                        value={`${quantities.otherStock} (${quantities.otherStockAllocated})`}
+                                        value={`${selectedQuantities.otherStock} (${selectedQuantities.otherStockAllocated})`}
                                         disabled
                                     />
                                 </Grid>

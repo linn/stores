@@ -14,10 +14,6 @@ import PropTypes from 'prop-types';
 import Page from '../../containers/Page';
 
 function StockViewerOptions({
-    parts,
-    partsLoading,
-    searchParts,
-    clearPartsSearch,
     storageLocations,
     storageLocationsLoading,
     searchStorageLocations,
@@ -190,17 +186,7 @@ function StockViewerOptions({
 }
 
 StockViewerOptions.propTypes = {
-    parts: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-            name: PropTypes.string,
-            description: PropTypes.string
-        })
-    ),
-    partsLoading: PropTypes.bool,
     history: PropTypes.shape({}).isRequired,
-    searchParts: PropTypes.func.isRequired,
-    clearPartsSearch: PropTypes.func.isRequired,
     storageLocations: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -242,8 +228,6 @@ StockViewerOptions.propTypes = {
 };
 
 StockViewerOptions.defaultProps = {
-    partsLoading: false,
-    parts: [],
     storageLocations: [],
     storageLocationsLoading: false,
     inspectedStates: [],
