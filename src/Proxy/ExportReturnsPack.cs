@@ -3,7 +3,6 @@
     using System.Data;
 
     using Linn.Stores.Domain.LinnApps.ExternalServices;
-    using Linn.Stores.Domain.LinnApps.Models;
 
     using Oracle.ManagedDataAccess.Client;
 
@@ -16,7 +15,7 @@
             this.databaseService = databaseService;
         }
 
-        public MakeExportReturnResult MakeExportReturn(string rsns, string hubReturn)
+        public int MakeExportReturn(string rsns, string hubReturn)
         {
             using (var connection = this.databaseService.GetConnection())
             {
@@ -48,7 +47,7 @@
                 cmd.ExecuteNonQuery();
                 connection.Close();
 
-                return new MakeExportReturnResult { ExportReturnId = int.Parse(result.Value.ToString()) };
+                return int.Parse(result.Value.ToString());
             }
         }
     }

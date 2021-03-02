@@ -161,6 +161,4 @@ export const requisitionUnallocateActionTypes = makeActionTypes(
     processTypes.requisitionUnallocate.actionType
 );
 
-export const makeExportReturnActionTypes = makeActionTypes(
-    processTypes.makeExportReturn.actionType
-);
+export const exportReturnActionTypes = makeActionTypes(itemTypes.exportReturn.actionType);

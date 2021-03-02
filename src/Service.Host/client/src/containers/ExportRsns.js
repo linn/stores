@@ -6,8 +6,8 @@ import salesAccountsActions from '../actions/salesAccountsActions';
 import salesAccountsSelectors from '../selectors/salesAccountsSelectors';
 import exportRsnsActions from '../actions/exportRsnsActions';
 import exportRsnsSelectors from '../selectors/exportRsnsSelectors';
-import makeExportReturnActions from '../actions/makeExportReturnActions';
-import makeExportReturnSelectors from '../selectors/makeExportReturnSelectors';
+import exportReturnActions from '../actions/exportReturnActions';
+import exportReturnSelectors from '../selectors/exportReturnSelectors';
 
 const mapStateToProps = state => ({
     salesOutletsSearchResults: salesOutletsSelectors.getSearchItems(state),
@@ -16,7 +16,7 @@ const mapStateToProps = state => ({
     salesAccountsSearchLoading: salesAccountsSelectors.getSearchLoading(state),
     rsnsSearchResults: exportRsnsSelectors.getSearchItems(state),
     rsnsSearchLoading: exportRsnsSelectors.getSearchLoading(state),
-    makeExportReturnLoading: makeExportReturnSelectors.getWorking(state)
+    exportReturnLoading: exportReturnSelectors.getWorking(state)
 });
 
 const mapDispatchToProps = {
@@ -26,7 +26,7 @@ const mapDispatchToProps = {
     clearSalesAccountsSearch: salesAccountsActions.clearSearch,
     searchRsns: exportRsnsActions.searchWithOptions,
     clearRsnsSearch: exportRsnsActions.clearSearch,
-    makeExportReturnProcess: makeExportReturnActions.requestProcessStart
+    createExportReturn: exportReturnActions.add
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExportRsns);

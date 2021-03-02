@@ -38,7 +38,7 @@ export default function ExportRsns({
     searchSalesOutlets,
     searchSalesAccounts,
     searchRsns,
-    makeExportReturnProcess
+    createExportReturn
 }) {
     const [state, dispatch] = useReducer(reducer, {
         searchResults: [],
@@ -85,8 +85,8 @@ export default function ExportRsns({
         }
     };
 
-    const handleMakeExportReturn = () => {
-        makeExportReturnProcess({
+    const handleCreateExportReturn = () => {
+        createExportReturn({
             rsns: state.rsns,
             hubReturn: state.belgiumShipping
         });
@@ -228,7 +228,7 @@ export default function ExportRsns({
                                 variant="outlined"
                                 color="primary"
                                 disabled={!state.rsns.some(rsn => rsn.selected)}
-                                onClick={() => handleMakeExportReturn()}
+                                onClick={() => handleCreateExportReturn()}
                             >
                                 Make Export Return
                             </Button>
@@ -250,7 +250,7 @@ ExportRsns.propTypes = {
     searchSalesOutlets: PropTypes.func.isRequired,
     searchSalesAccounts: PropTypes.func.isRequired,
     searchRsns: PropTypes.func.isRequired,
-    makeExportReturnProcess: PropTypes.func.isRequired
+    createExportReturn: PropTypes.func.isRequired
 };
 
 ExportRsns.defaultProps = {

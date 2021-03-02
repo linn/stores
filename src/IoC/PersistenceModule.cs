@@ -96,6 +96,7 @@
             builder.RegisterType<SalesOutletRepository>().As<IQueryRepository<SalesOutlet>>();
             builder.RegisterType<StockQuantitiesRepository>().As<IQueryRepository<StockQuantities>>();
             builder.RegisterType<RequisitionHeaderRepository>().As<IRepository<RequisitionHeader, int>>();
+            builder.RegisterType<ExportReturnRepository>().As<IRepository<ExportReturn, int>>();
         }
     }
 }

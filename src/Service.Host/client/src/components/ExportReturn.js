@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { Loading, InputField, Page, DatePicker } from '@linn-it/linn-form-components-library';
 
-export default function CreateRep25({ makeExportReturnLoading }) {
+export default function ExportReturn({ makeExportReturnLoading }) {
     const [options, setOptions] = useState({
         invoiceNumber: '',
         numberOfCartons: '',
@@ -123,10 +123,10 @@ export default function CreateRep25({ makeExportReturnLoading }) {
     );
 }
 
-CreateRep25.propTypes = {
+ExportReturn.propTypes = {
     makeExportReturnLoading: PropTypes.bool
 };
 
-CreateRep25.defaultProps = {
+ExportReturn.defaultProps = {
     makeExportReturnLoading: false
 };

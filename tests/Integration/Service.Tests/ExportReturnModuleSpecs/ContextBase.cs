@@ -19,23 +19,22 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IExportRsnService ExportRsnService { get; set; }
+        protected IExportReturnService ExportReturnService { get; set; }
 
         [SetUp]
         public void EstablishContext()
         {
-            this.ExportRsnService = Substitute.For<IExportRsnService>();
+            this.ExportReturnService = Substitute.For<IExportReturnService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
-                        with.Dependency(this.ExportRsnService);
+                        with.Dependency(this.ExportReturnService);
                         with.Dependency<IResourceBuilder<IEnumerable<ExportRsn>>>(new ExportRsnsResourceBuilder());
-                        with.Dependency<IResourceBuilder<MakeExportReturnResult>>(
-                            new MakeExportReturnResultResourceBuilder());
-                        with.Module<ExportRsnModule>();
+                        with.Dependency<IResourceBuilder<ExportReturn>>(new ExportReturnResourceBuilder());
+                        with.Module<ExportReturnModule>();
                         with.ResponseProcessor<ExportRsnsResponseProcessor>();
-                        with.ResponseProcessor<MakeExportReturnResultResponseProcessor>();
+                        with.ResponseProcessor<ExportReturnResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
                                 {

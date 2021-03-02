@@ -11,9 +11,10 @@
 
     using NUnit.Framework;
 
-    public class WhenMakingExportReturn : ContextBase
+    public class WhenMakingExportReturnAndExportReturnNotFound : ContextBase
     {
         private IResult<ExportReturn> result;
+
 
         [SetUp]
         public void SetUp()
@@ -23,7 +24,7 @@
             this.ExportReturnsPack.MakeExportReturn("123,456", "Y")
                 .Returns(111);
 
-            this.ExportReturnRepository.FindById(111).Returns(new ExportReturn { ReturnId = 111 });
+            this.ExportReturnRepository.FindById(111).Returns((ExportReturn)null);
 
             this.result = this.Sut.MakeExportReturn(rsns, true);
         }
@@ -43,7 +44,7 @@
         [Test]
         public void ShouldReturnSuccess()
         {
-            this.result.Should().BeOfType<SuccessResult<ExportReturn>>();
+            this.result.Should().BeOfType<BadRequestResult<ExportReturn>>();
         }
     }
 }

@@ -156,6 +156,10 @@
 
         public DbSet<RequisitionHeader> RequisitionHeaders { get; set; }
 
+        public DbSet<ExportReturn> ExportReturns { get; set; }
+
+        public DbSet<ExportReturnDetail> ExportReturnDetails { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -227,6 +231,8 @@
             this.QuerySalesAccounts(builder);
             this.QueryStockQuantitIesForMrView(builder);
             this.BuildRequisitionHeaders(builder);
+            this.BuildExportReturns(builder);
+            this.BuildExportReturnDetails(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1273,6 +1279,49 @@
             r.HasKey(l => l.ReqNumber);
             r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
             r.Property(l => l.Document1).HasColumnName("DOCUMENT_1");
+        }
+
+        private void BuildExportReturns(ModelBuilder builder)
+        {
+            var q = builder.Entity<ExportReturn>().ToTable("EXPORT_RETURNS");
+            q.HasKey(e => e.ReturnId);
+            q.Property(e => e.CarrierCode).HasColumnName("CARRIER_CODE").HasMaxLength(10);
+            q.Property(e => e.ReturnId).HasColumnName("RETURN_ID");
+            q.Property(e => e.DateCreated).HasColumnName("DATE_CREATED");
+            q.Property(e => e.Currency).HasColumnName("CURRENCY").HasMaxLength(4);
+            q.Property(e => e.AccountId).HasColumnName("ACCOUNT_ID");
+            q.Property(e => e.HubId).HasColumnName("HUB_ID");
+            q.Property(e => e.OutletNumber).HasColumnName("OUTLET_NUMBER");
+            q.Property(e => e.DateDispatched).HasColumnName("DATE_DISPATCHED");
+            q.Property(e => e.DateCancelled).HasColumnName("DATE_CANCELLED");
+            q.Property(e => e.CarrierRef).HasColumnName("CARRIER_REF").HasMaxLength(32);
+            q.Property(e => e.Terms).HasColumnName("TERMS").HasMaxLength(30);
+            q.Property(e => e.NumPallets).HasColumnName("NUM_PALLETS");
+            q.Property(e => e.NumCartons).HasColumnName("NUM_CARTONS");
+            q.Property(e => e.GrossWeightKg).HasColumnName("GROSS_WEIGHT_KG");
+            q.Property(e => e.GrossDimsM3).HasColumnName("GROSS_DIMS_M3");
+            q.Property(e => e.RaisedBy).HasColumnName("RAISED_BY");
+            q.Property(e => e.IntercoDocType).HasColumnName("INTERCO_DOC_TYPE").HasMaxLength(1);
+            q.Property(e => e.IntercoDocNumber).HasColumnName("INTERCO_DOC_NUMBER");
+            q.HasMany(e => e.ExportReturnDetails).WithOne(e => e.ExportReturn).HasForeignKey(e => e.ReturnId);
+        }
+
+        private void BuildExportReturnDetails(ModelBuilder builder)
+        {
+            var q = builder.Entity<ExportReturnDetail>().ToTable("EXP_RETURN_DETAILS");
+            q.HasKey(e => new { e.ReturnId, e.RsnNumber });
+            q.Property(e => e.ReturnId).HasColumnName("RETURN_ID");
+            q.Property(e => e.RsnNumber).HasColumnName("RSN_NUMBER");
+            q.Property(e => e.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
+            q.Property(e => e.LineNo).HasColumnName("LINE_NO");
+            q.Property(e => e.Qty).HasColumnName("QTY");
+            q.Property(e => e.Description).HasColumnName("DESCRIPTION").HasMaxLength(200);
+            q.Property(e => e.CustomsValue).HasColumnName("CUSTOMS_VALUE");
+            q.Property(e => e.BaseCustomsValue).HasColumnName("BASE_CUSTOMS_VALUE");
+            q.Property(e => e.TariffId).HasColumnName("TARIFF_ID");
+            q.Property(e => e.ExpinvDocumentType).HasColumnName("EXPINV_DOCUMENT_TYPE").HasMaxLength(1);
+            q.Property(e => e.ExpinvDocumentNumber).HasColumnName("EXPINV_DOCUMENT_NUMBER");
+            q.Property(e => e.ExpinvDate).HasColumnName("EXPINV_DATE");
         }
     }
 }

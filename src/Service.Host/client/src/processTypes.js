@@ -49,9 +49,3 @@ export const requisitionUnallocate = new ItemType(
     'REQUISTION_UNALLOCATE',
     '/logistics/requisitions/actions/un-allocate'
 );
-
-export const makeExportReturn = new ItemType(
-    'makeExportReturn',
-    'MAKE_EXPORT_RETURN',
-    '/inventory/exports/make-export-return'
-);

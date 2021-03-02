@@ -6,6 +6,9 @@
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Resources;
 
+    /// <summary>
+    ///  TODO delete
+    /// </summary>
     public class MakeExportReturnResultResourceBuilder : IResourceBuilder<MakeExportReturnResult>
     {
         public MakeExportReturnResource Build(MakeExportReturnResult result)

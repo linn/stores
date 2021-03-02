@@ -11,18 +11,24 @@
 
     public class ContextBase
     {
-        protected ExportRsnService Sut { get; private set; }
+        protected ExportReturnService Sut { get; private set; }
 
         protected IQueryRepository<ExportRsn> ExportRsnRepository { get; private set; }
 
         protected IExportReturnsPack ExportReturnsPack { get; private set; }
+
+        protected IRepository<ExportReturn, int> ExportReturnRepository { get; private set; }
 
         [SetUp]
         public void SetUpContext()
         {
             this.ExportRsnRepository = Substitute.For<IQueryRepository<ExportRsn>>();
             this.ExportReturnsPack = Substitute.For<IExportReturnsPack>();
-            this.Sut = new ExportRsnService(this.ExportRsnRepository, this.ExportReturnsPack);
+            this.ExportReturnRepository = Substitute.For<IRepository<ExportReturn, int>>();
+            this.Sut = new ExportReturnService(
+                this.ExportRsnRepository,
+                this.ExportReturnsPack,
+                this.ExportReturnRepository);
         }
     }
 }

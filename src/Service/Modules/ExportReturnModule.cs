@@ -7,23 +7,23 @@
     using Nancy;
     using Nancy.ModelBinding;
 
-    public sealed class ExportRsnModule : NancyModule
+    public sealed class ExportReturnModule : NancyModule
     {
-        private readonly IExportRsnService exportRsnService;
+        private readonly IExportReturnService exportReturnService;
 
-        public ExportRsnModule(IExportRsnService exportRsnService)
+        public ExportReturnModule(IExportReturnService exportReturnService)
         {
-            this.exportRsnService = exportRsnService;
+            this.exportReturnService = exportReturnService;
             this.Get("/inventory/exports/rsns", parameters => this.GetRsns());
-            this.Post("/inventory/exports/make-export-return", parameters => this.MakeExportReturn());
-            this.Get("/inventory/exports/rep-25", _ => this.GetRep25());
+            this.Post("/inventory/exports/returns", parameters => this.CreateExportReturn());
+            this.Get("/inventory/exports/returns/{id}", parameters => this.GetExportReturn(parameters.id));
         }
 
         private object GetRsns()
         {
             var resource = this.Bind<ExportRsnSearchRequestResource>();
 
-            var results = this.exportRsnService.SearchRsns(resource.AccountId, resource.OutletNumber);
+            var results = this.exportReturnService.SearchRsns(resource.AccountId, resource.OutletNumber);
 
             return this.Negotiate
                 .WithModel(results)
@@ -31,11 +31,11 @@
                 .WithView("Index");
         }
 
-        private object MakeExportReturn()
+        private object CreateExportReturn()
         {
             var resource = this.Bind<MakeExportReturnRequestResource>();
 
-            var result = this.exportRsnService.MakeExportReturn(resource.Rsns, resource.HubReturn);
+            var result = this.exportReturnService.MakeExportReturn(resource.Rsns, resource.HubReturn);
 
             return this.Negotiate
                 .WithModel(result)
@@ -43,7 +43,7 @@
                 .WithView("Index");
         }
 
-        private object GetRep25()
+        private object GetExportReturn(int id)
         {
             return this.Negotiate
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get())

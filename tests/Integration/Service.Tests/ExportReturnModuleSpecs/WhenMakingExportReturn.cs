@@ -5,6 +5,7 @@
     using FluentAssertions;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
@@ -25,11 +26,11 @@
 
             var requestResource = new MakeExportReturnRequestResource { HubReturn = true, Rsns = rsns };
 
-            this.ExportRsnService.MakeExportReturn(Arg.Any<IEnumerable<int>>(), true).Returns(
-                new SuccessResult<MakeExportReturnResult>(new MakeExportReturnResult { ExportReturnId = 1111 }));
+            this.ExportReturnService.MakeExportReturn(Arg.Any<IEnumerable<int>>(), true).Returns(
+                new SuccessResult<ExportReturn>(new ExportReturn { ReturnId = 111 }));
 
             this.Response = this.Browser.Post(
-                "/inventory/exports/make-export-return",
+                "/inventory/exports/returns",
                 with =>
                     {
                         with.Header("Accept", "application/json");
@@ -47,14 +48,14 @@
         [Test]
         public void ShouldMakeExportReturn()
         {
-            this.ExportRsnService.Received().MakeExportReturn(Arg.Any<IEnumerable<int>>(), true);
+            this.ExportReturnService.Received().MakeExportReturn(Arg.Any<IEnumerable<int>>(), true);
         }
 
         [Test]
         public void ShouldReturnResource()
         {
-            var resource = this.Response.Body.DeserializeJson<MakeExportReturnResource>();
-            resource.ExportReturnId.Should().Be(1111);
+            var resource = this.Response.Body.DeserializeJson<ExportReturnResource>();
+            resource.ReturnId.Should().Be(111);
         }
     }
 }

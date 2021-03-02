@@ -63,7 +63,7 @@ import salesOutlets from './salesOutlets';
 import salesAccounts from './salesAccounts';
 import exportRsns from './exportRsns';
 import doWandItem from './doWandItem';
-import makeExportReturn from './makeExportReturn';
+import exportReturn from './exportReturn';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -86,7 +86,7 @@ const rootReducer = combineReducers({
     exportRsns,
     finishAllocation,
     inspectedStates,
-    makeExportReturn,
+    exportReturn,
     manufacturers,
     mechPartSource,
     movePalletsToUpper,
