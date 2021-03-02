@@ -32,7 +32,7 @@ import StockViewerOptions from '../containers/stockLocatorUtility/StockViewerOpt
 import StockLocator from '../containers/stockLocatorUtility/StockLocator';
 import Wand from '../containers/Wand';
 import ExportRsns from '../containers/ExportRsns';
-import CreateRep25 from '../containers/CreateRep25';
+import ExportReturn from '../containers/ExportReturn';
 
 const Root = ({ store }) => (
     <div>
@@ -168,8 +168,8 @@ const Root = ({ store }) => (
                                     />
                                     <Route
                                         exact
-                                        path="/inventory/exports/rep-25"
-                                        component={CreateRep25}
+                                        path="/inventory/exports/returns"
+                                        component={ExportReturn}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>

@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import exportReturnSelectors from '../selectors/exportReturnSelectors';
-import CreateRep25 from '../components/CreateRep25';
+import ExportReturn from '../components/ExportReturn';
 
 const mapStateToProps = state => ({
     exportReturnLoading: exportReturnSelectors.getWorking(state)
 });
 
-export default connect(mapStateToProps)(CreateRep25);
+export default connect(mapStateToProps)(ExportReturn);
