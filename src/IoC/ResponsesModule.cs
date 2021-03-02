@@ -148,8 +148,10 @@
             builder.RegisterType<StockQuantitiesResourceBuilder>().As<IResourceBuilder<StockQuantities>>();
             builder.RegisterType<WandItemResultResourceBuilder>().As<IResourceBuilder<WandResult>>();
             builder.RegisterType<RequisitionActionResourceBuilder>().As<IResourceBuilder<RequisitionActionResult>>();
-            builder.RegisterType<MakeExportReturnResultResourceBuilder>()
-                .As<IResourceBuilder<MakeExportReturnResult>>();
+            builder.RegisterType<ExportReturnResourceBuilder>().As<IResourceBuilder<ExportReturn>>();
+            builder.RegisterType<ExportReturnDetailResourceBuilder>().As<IResourceBuilder<ExportReturnDetail>>();
+            builder.RegisterType<ExportReturnDetailsResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<ExportReturnDetail>>>();
         }
     }
 }
