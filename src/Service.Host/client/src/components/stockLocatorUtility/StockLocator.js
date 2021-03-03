@@ -6,7 +6,8 @@ import {
     Loading,
     BackButton,
     Dropdown,
-    InputField
+    InputField,
+    smartGoBack
 } from '@linn-it/linn-form-components-library';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
@@ -20,7 +21,8 @@ function StockLocator({
     fetchItems,
     options,
     quantities,
-    quantitiesLoading
+    quantitiesLoading,
+    previousPaths
 }) {
     const [batchView, setBatchView] = useState(false);
     const [hasDrilledDown, setHasDrilledDown] = useState(false);
@@ -260,7 +262,7 @@ function StockLocator({
                     </>
                 )}
                 <Grid item xs={12}>
-                    <BackButton backClick={() => history.push('/inventory/stock-viewer')} />
+                    <BackButton backClick={() => smartGoBack(previousPaths, history.goBack)} />
                 </Grid>
             </Grid>
         </Page>
@@ -277,7 +279,7 @@ StockLocator.propTypes = {
         batchRef: PropTypes.string
     }).isRequired,
     itemsLoading: PropTypes.bool,
-    history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+    history: PropTypes.shape({ goBack: PropTypes.func }).isRequired,
     fetchItems: PropTypes.func.isRequired,
     quantities: PropTypes.arrayOf(
         PropTypes.shape({
@@ -296,14 +298,16 @@ StockLocator.propTypes = {
             otherStockAllocated: PropTypes.number
         })
     ),
-    quantitiesLoading: PropTypes.bool
+    quantitiesLoading: PropTypes.bool,
+    previousPaths: PropTypes.arrayOf(PropTypes.string)
 };
 
 StockLocator.defaultProps = {
     items: [],
     itemsLoading: true,
     quantities: null,
-    quantitiesLoading: false
+    quantitiesLoading: false,
+    previousPaths: []
 };
 
 export default StockLocator;
