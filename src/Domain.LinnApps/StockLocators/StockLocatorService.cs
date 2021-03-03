@@ -212,6 +212,7 @@
                                      { 
                                          PartNumber = x.PartNumber,
                                          Id = x.LocationId,
+                                         LocationId = x.LocationId,
                                          BatchRef = x.BatchRef,
                                          StockRotationDate = x.StockRotationDate,
                                          Quantity = x.Quantity,
@@ -230,6 +231,7 @@
                                      {
                                          PartNumber = x.PartNumber,
                                          Id = x.StorageLocationId,
+                                         LocationId = x.StorageLocationId,
                                          Quantity = x.Quantity,
                                          PalletNumber = x.PalletNumber,
                                          State = x.State,
@@ -240,7 +242,7 @@
 
             // apply filters common to all use cases
             result = result.Where(
-                x => (locationId == null || x.StorageLocation.LocationId == locationId)
+                x => (locationId == null || x.LocationId == locationId)
                      && (palletNumber == null || x.PalletNumber == palletNumber)
                      && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
                      && (string.IsNullOrEmpty(stockState) || x.State == stockState));
