@@ -199,20 +199,16 @@
             string batchRef,
             bool queryBatchView)
         {
-            var partNumberPattern = Regex.Escape(partNumber).Replace("\\*", ".*?");
-            var r = new Regex(partNumberPattern, RegexOptions.IgnoreCase);
+            IEnumerable<StockLocator> result;
 
             if (!string.IsNullOrEmpty(batchRef) || queryBatchView)
             {
-                return this.stockLocatorBatchesView.FilterBy(x =>
-                        (string.IsNullOrEmpty(partNumber) || r.IsMatch(x.PartNumber))
-                        && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
-                        && (locationId == null || x.LocationId == locationId)
-                        && (palletNumber == null || x.PalletNumber == palletNumber)
-                        && (string.IsNullOrEmpty(stockState) || x.State == stockState)
-                        && (string.IsNullOrEmpty(batchRef) || x.BatchRef == batchRef))
-                    .Select(x => new StockLocator
-                                     {
+                result = this
+                    .stockLocatorBatchesView
+                    .FindAll()
+                    .Where(b => (string.IsNullOrEmpty(batchRef) || b.BatchRef == batchRef))
+                    .Select(x => new StockLocator 
+                                     { 
                                          PartNumber = x.PartNumber,
                                          Id = x.LocationId,
                                          BatchRef = x.BatchRef,
@@ -224,26 +220,37 @@
                                          StockPoolCode = x.StockPoolCode
                                      });
             }
+            else
+            {
+                result = this
+                    .stockLocatorLocationsView
+                    .FindAll()
+                    .Select(x => new StockLocator
+                                     {
+                                         PartNumber = x.PartNumber,
+                                         Id = x.StorageLocationId,
+                                         Quantity = x.Quantity,
+                                         PalletNumber = x.PalletNumber,
+                                         State = x.State,
+                                         QuantityAllocated = x.QuantityAllocated,
+                                         StockPoolCode = x.StockPoolCode
+                                     });
+            }
 
-            return this.stockLocatorLocationsView.FilterBy(x =>
-                    (string.IsNullOrEmpty(partNumber) || r.IsMatch(x.PartNumber))
-                    && (locationId == null || x.StorageLocation.LocationId == locationId)
-                    && (palletNumber == null || x.PalletNumber == palletNumber)
-                    && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
-                    && (string.IsNullOrEmpty(stockState) || x.State == stockState))
-                .Select(x => new StockLocator
-                                 {
-                                     StorageLocation = x.StorageLocation,
-                                     PartNumber = x.PartNumber,
-                                     Part = x.Part,
-                                     Id = x.StorageLocationId,
-                                     Quantity = x.Quantity,
-                                     PalletNumber = x.PalletNumber,
-                                     LocationId = x.StorageLocationId,
-                                     State = x.State,
-                                     QuantityAllocated = x.QuantityAllocated,
-                                     StockPoolCode = x.StockPoolCode
-                                 });
+            result = result.Where(
+                x => (locationId == null || x.StorageLocation.LocationId == locationId)
+                     && (palletNumber == null || x.PalletNumber == palletNumber)
+                     && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
+                     && (string.IsNullOrEmpty(stockState) || x.State == stockState));
+
+            if (partNumber.Contains("*"))
+            {
+                var partNumberPattern = Regex.Escape(partNumber).Replace("\\*", ".*?");
+                var r = new Regex(partNumberPattern, RegexOptions.IgnoreCase);
+                return result.Where(x => (string.IsNullOrEmpty(partNumber) || r.IsMatch(x.PartNumber.ToUpper())));
+            }
+
+            return result.Where(x => x.PartNumber.ToUpper().Equals(partNumber.ToUpper()));
         }
     }
 }

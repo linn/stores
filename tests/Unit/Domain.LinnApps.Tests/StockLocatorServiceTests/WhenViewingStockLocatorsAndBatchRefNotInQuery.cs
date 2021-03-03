@@ -28,8 +28,7 @@
         [Test]
         public void ShouldQueryLocationsView()
         {
-            this.StockLocatorLocationsView.Received()
-                .FilterBy(Arg.Any<Expression<Func<StockLocatorLocation, bool>>>());
+            this.StockLocatorLocationsView.Received().FindAll();
         }
     }
 }

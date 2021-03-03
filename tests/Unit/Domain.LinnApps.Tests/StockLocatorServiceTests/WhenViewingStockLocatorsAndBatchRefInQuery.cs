@@ -29,7 +29,7 @@
         public void ShouldQueryBatchesView()
         {
             this.StockLocatorBatchesView.Received()
-                .FilterBy(Arg.Any<Expression<Func<StockLocatorBatch, bool>>>());
+                .FindAll();
         }
     }
 }
