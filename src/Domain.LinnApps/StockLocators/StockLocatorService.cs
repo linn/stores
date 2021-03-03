@@ -190,7 +190,7 @@
            return result;
         }
 
-        public IEnumerable<StockLocator> GetStockLocatorLocationsView(
+        public IEnumerable<StockLocator> SearchStockLocators(
             string partNumber,
             int? locationId,
             int? palletNumber,
@@ -201,6 +201,7 @@
         {
             IEnumerable<StockLocator> result;
 
+            // decide which view we want to query
             if (!string.IsNullOrEmpty(batchRef) || queryBatchView)
             {
                 result = this
@@ -237,12 +238,14 @@
                                      });
             }
 
+            // apply filters common to all use cases
             result = result.Where(
                 x => (locationId == null || x.StorageLocation.LocationId == locationId)
                      && (palletNumber == null || x.PalletNumber == palletNumber)
                      && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
                      && (string.IsNullOrEmpty(stockState) || x.State == stockState));
 
+            // apply either regex filter if wildcard is used
             if (partNumber.Contains("*"))
             {
                 var partNumberPattern = Regex.Escape(partNumber).Replace("\\*", ".*?");
@@ -250,6 +253,7 @@
                 return result.Where(x => (string.IsNullOrEmpty(partNumber) || r.IsMatch(x.PartNumber.ToUpper())));
             }
 
+            // else just use simple .Equals() filter
             return result.Where(x => x.PartNumber.ToUpper().Equals(partNumber.ToUpper()));
         }
     }
