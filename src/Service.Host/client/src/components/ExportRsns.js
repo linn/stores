@@ -38,7 +38,8 @@ export default function ExportRsns({
     searchSalesOutlets,
     searchSalesAccounts,
     searchRsns,
-    createExportReturn
+    createExportReturn,
+    exportReturnLoading
 }) {
     const [state, dispatch] = useReducer(reducer, {
         searchResults: [],
@@ -87,7 +88,7 @@ export default function ExportRsns({
 
     const handleCreateExportReturn = () => {
         createExportReturn({
-            rsns: state.rsns,
+            rsns: state.rsns.filter(rsn => rsn.selected).map(rsn => rsn.rsnNumber),
             hubReturn: state.belgiumShipping
         });
     };
@@ -190,49 +191,58 @@ export default function ExportRsns({
                 <Grid item xs={12}>
                     <Title text="Make Export Return" />
                 </Grid>
-                <Grid item xs={12}>
-                    <FormControlLabel
-                        label="Search for Sales Outlet or Account"
-                        classes={{ label: classes.label }}
-                        control={
-                            <TypeaheadDialog
-                                searchItems={state.searchResults}
-                                fetchItems={searchAccountsAndOultets}
-                                clearSearch={() => dispatch({ type: 'clearSearchResults' })}
-                                loading={salesAccountsSearchLoading || salesOutletsSearchLoading}
-                                title="Search Accounts and Outlets"
-                                onSelect={item => handleSelectAccount(item)}
-                            />
-                        }
-                    />
-                </Grid>
-                {state.selectedAccount?.type === 'outlet' && <OutletTable />}
-                {state.selectedAccount?.type === 'account' && <AccountTable />}
-                {rsnsSearchLoading && (
-                    <div data-testid="rsnsLoading">
-                        <Loading />
-                    </div>
-                )}
-                {!!state.rsns.length && (
+                {exportReturnLoading ? (
+                    <Loading />
+                ) : (
                     <>
-                        <RsnsTable />
+                        {' '}
                         <Grid item xs={12}>
-                            <CheckboxWithLabel
-                                label="Pick up from Belgium hub"
-                                onChange={() => dispatch({ type: 'setBelgiumShipping' })}
-                                checked={state.belgiumShipping}
+                            <FormControlLabel
+                                label="Search for Sales Outlet or Account"
+                                classes={{ label: classes.label }}
+                                control={
+                                    <TypeaheadDialog
+                                        searchItems={state.searchResults}
+                                        fetchItems={searchAccountsAndOultets}
+                                        clearSearch={() => dispatch({ type: 'clearSearchResults' })}
+                                        loading={
+                                            salesAccountsSearchLoading || salesOutletsSearchLoading
+                                        }
+                                        title="Search Accounts and Outlets"
+                                        onSelect={item => handleSelectAccount(item)}
+                                    />
+                                }
                             />
                         </Grid>
-                        <Grid item xs={12}>
-                            <Button
-                                variant="outlined"
-                                color="primary"
-                                disabled={!state.rsns.some(rsn => rsn.selected)}
-                                onClick={() => handleCreateExportReturn()}
-                            >
-                                Make Export Return
-                            </Button>
-                        </Grid>
+                        {state.selectedAccount?.type === 'outlet' && <OutletTable />}
+                        {state.selectedAccount?.type === 'account' && <AccountTable />}
+                        {rsnsSearchLoading && (
+                            <div data-testid="rsnsLoading">
+                                <Loading />
+                            </div>
+                        )}
+                        {!!state.rsns.length && (
+                            <>
+                                <RsnsTable />
+                                <Grid item xs={12}>
+                                    <CheckboxWithLabel
+                                        label="Pick up from Belgium hub"
+                                        onChange={() => dispatch({ type: 'setBelgiumShipping' })}
+                                        checked={state.belgiumShipping}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button
+                                        variant="outlined"
+                                        color="primary"
+                                        disabled={!state.rsns.some(rsn => rsn.selected)}
+                                        onClick={() => handleCreateExportReturn()}
+                                    >
+                                        Make Export Return
+                                    </Button>
+                                </Grid>
+                            </>
+                        )}{' '}
                     </>
                 )}
             </Grid>
@@ -250,7 +260,8 @@ ExportRsns.propTypes = {
     searchSalesOutlets: PropTypes.func.isRequired,
     searchSalesAccounts: PropTypes.func.isRequired,
     searchRsns: PropTypes.func.isRequired,
-    createExportReturn: PropTypes.func.isRequired
+    createExportReturn: PropTypes.func.isRequired,
+    exportReturnLoading: PropTypes.bool
 };
 
 ExportRsns.defaultProps = {
@@ -259,5 +270,6 @@ ExportRsns.defaultProps = {
     salesAccountsSearchResults: [],
     salesAccountsSearchLoading: false,
     rsnsSearchResults: [],
-    rsnsSearchLoading: false
+    rsnsSearchLoading: false,
+    exportReturnLoading: false
 };

@@ -19,16 +19,20 @@
 
         protected IRepository<ExportReturn, int> ExportReturnRepository { get; private set; }
 
+        protected ITransactionManager TransactionManager { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
             this.ExportRsnRepository = Substitute.For<IQueryRepository<ExportRsn>>();
             this.ExportReturnsPack = Substitute.For<IExportReturnsPack>();
             this.ExportReturnRepository = Substitute.For<IRepository<ExportReturn, int>>();
+            this.TransactionManager = Substitute.For<ITransactionManager>();
             this.Sut = new ExportReturnService(
                 this.ExportRsnRepository,
                 this.ExportReturnsPack,
-                this.ExportReturnRepository);
+                this.ExportReturnRepository,
+                this.TransactionManager);
         }
     }
 }

@@ -20,8 +20,8 @@
 
         public ExportReturn FindById(int id)
         {
-            return this.serviceDbContext.ExportReturns.Include(e => e.ExportReturnDetails)
-                .FirstOrDefault(e => e.ReturnId == id);
+            return this.serviceDbContext.ExportReturns.Where(e => e.ReturnId == id).Include(e => e.ExportReturnDetails)
+                .ToList().FirstOrDefault();
         }
 
         public IQueryable<ExportReturn> FindAll()

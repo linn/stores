@@ -31,8 +31,6 @@
                            GrossWeightKg = exportReturn.GrossWeightKg,
                            GrossDimsM3 = exportReturn.GrossDimsM3,
                            RaisedBy = exportReturn.RaisedBy,
-                           IntercoDocType = exportReturn.IntercoDocType,
-                           IntercoDocNumber = exportReturn.IntercoDocNumber,
                            ExportReturnDetails = exportReturn.ExportReturnDetails?.Select(
                                e => this.exportReturnDetailResourceBuilder.Build(e))
                        };

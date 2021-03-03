@@ -240,5 +240,5 @@ export const stockQuantities = new ItemType(
 export const exportReturn = new ItemType(
     'exportReturn',
     'EXPORT_RETURN',
-    '/inventory/exports/export-return'
+    '/inventory/exports/returns'
 );

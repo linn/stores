@@ -4,8 +4,9 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Resources;
 
-    public interface IExportReturnService
+    public interface IExportReturnService : IFacadeService<ExportReturn, int, ExportReturnResource, ExportReturnResource>
     {
         IResult<IEnumerable<ExportRsn>> SearchRsns(int accountId, int? outletNumber);
 

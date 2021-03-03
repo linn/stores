@@ -16,7 +16,7 @@ const mapStateToProps = state => ({
     salesAccountsSearchLoading: salesAccountsSelectors.getSearchLoading(state),
     rsnsSearchResults: exportRsnsSelectors.getSearchItems(state),
     rsnsSearchLoading: exportRsnsSelectors.getSearchLoading(state),
-    exportReturnLoading: exportReturnSelectors.getWorking(state)
+    exportReturnLoading: exportReturnSelectors.getLoading(state)
 });
 
 const mapDispatchToProps = {

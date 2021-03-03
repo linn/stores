@@ -36,10 +36,6 @@
         public int? GrossDimsM3 { get; set; }
         
         public int RaisedBy { get; set; }
-        
-        public string IntercoDocType { get; set; }
-        
-        public int? IntercoDocNumber { get; set; }
 
         public IEnumerable<ExportReturnDetail> ExportReturnDetails { get; set; }
     }

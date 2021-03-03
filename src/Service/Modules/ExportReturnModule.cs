@@ -45,7 +45,10 @@
 
         private object GetExportReturn(int id)
         {
+            var result = this.exportReturnService.GetById(id);
+
             return this.Negotiate
+                .WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get())
                 .WithView("Index");
         }

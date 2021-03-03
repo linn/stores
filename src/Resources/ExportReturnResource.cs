@@ -36,10 +36,6 @@
 
         public int RaisedBy { get; set; }
 
-        public string IntercoDocType { get; set; }
-
-        public int? IntercoDocNumber { get; set; }
-
         public IEnumerable<ExportReturnDetailResource> ExportReturnDetails { get; set; }
     }
 }

@@ -1301,8 +1301,6 @@
             q.Property(e => e.GrossWeightKg).HasColumnName("GROSS_WEIGHT_KG");
             q.Property(e => e.GrossDimsM3).HasColumnName("GROSS_DIMS_M3");
             q.Property(e => e.RaisedBy).HasColumnName("RAISED_BY");
-            q.Property(e => e.IntercoDocType).HasColumnName("INTERCO_DOC_TYPE").HasMaxLength(1);
-            q.Property(e => e.IntercoDocNumber).HasColumnName("INTERCO_DOC_NUMBER");
             q.HasMany(e => e.ExportReturnDetails).WithOne(e => e.ExportReturn).HasForeignKey(e => e.ReturnId);
         }
 
