@@ -1,9 +1,5 @@
 import { connect } from 'react-redux';
-import {
-    initialiseOnMount,
-    getItemError,
-    getPreviousPaths
-} from '@linn-it/linn-form-components-library';
+import { initialiseOnMount, getItemError } from '@linn-it/linn-form-components-library';
 import queryString from 'query-string';
 import StockLocator from '../../components/stockLocatorUtility/StockLocator';
 import stockLocatorLocationsSelectors from '../../selectors/stockLocatorLocationsSelectors';
@@ -19,8 +15,7 @@ const mapStateToProps = (state, { location }) => ({
     loading: stockLocatorLocationsSelectors.getLoading(state),
     quantities: stockQuantitiesSelectors.getItem(state),
     quantitiesLoading: stockQuantitiesSelectors.getLoading(state),
-    itemError: getItemError(state, itemTypes.stockLocator.item),
-    previousPaths: getPreviousPaths(state)
+    itemError: getItemError(state, itemTypes.stockLocator.item)
 });
 
 const initialise = ({ options }) => dispatch => {

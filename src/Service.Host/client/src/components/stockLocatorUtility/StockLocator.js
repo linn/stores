@@ -4,26 +4,15 @@ import {
     Title,
     SingleEditTable,
     Loading,
-    BackButton,
     Dropdown,
-    InputField,
-    smartGoBack
+    InputField
 } from '@linn-it/linn-form-components-library';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import Page from '../../containers/Page';
 
-function StockLocator({
-    items,
-    itemsLoading,
-    history,
-    fetchItems,
-    options,
-    quantities,
-    quantitiesLoading,
-    previousPaths
-}) {
+function StockLocator({ items, itemsLoading, fetchItems, options, quantities, quantitiesLoading }) {
     const [batchView, setBatchView] = useState(false);
     const [hasDrilledDown, setHasDrilledDown] = useState(false);
     const [selectedQuantities, setSelectQuantities] = useState();
@@ -295,16 +284,14 @@ StockLocator.propTypes = {
             otherStockAllocated: PropTypes.number
         })
     ),
-    quantitiesLoading: PropTypes.bool,
-    previousPaths: PropTypes.arrayOf(PropTypes.string)
+    quantitiesLoading: PropTypes.bool
 };
 
 StockLocator.defaultProps = {
     items: [],
     itemsLoading: true,
     quantities: null,
-    quantitiesLoading: false,
-    previousPaths: []
+    quantitiesLoading: false
 };
 
 export default StockLocator;
