@@ -23,7 +23,7 @@ export default function ExportReturnDetail({ exportReturnDetail }) {
                         fullWidth
                         value={item.rsnNumber}
                         label="RSN Number"
-                        propertyName="detail.rsnNumber"
+                        propertyName="rsnNumber"
                         onChange={handleFieldChange}
                         type="number"
                         disabled
@@ -37,7 +37,7 @@ export default function ExportReturnDetail({ exportReturnDetail }) {
                         fullWidth
                         value={item.articleNumber}
                         label="Article Number"
-                        propertyName="detail.articleNumber"
+                        propertyName="articleNumber"
                         onChange={handleFieldChange}
                         disabled
                         margin="dense"
@@ -48,7 +48,7 @@ export default function ExportReturnDetail({ exportReturnDetail }) {
                         fullWidth
                         value={item.description}
                         label="Description"
-                        propertyName="detail.description"
+                        propertyName="description"
                         onChange={handleFieldChange}
                         disabled
                         margin="dense"
@@ -61,7 +61,7 @@ export default function ExportReturnDetail({ exportReturnDetail }) {
                         fullWidth
                         value={item.quantity}
                         label="Quantity"
-                        propertyName="detail.quantity"
+                        propertyName="quantity"
                         onChange={handleFieldChange}
                         margin="dense"
                     />
@@ -71,7 +71,7 @@ export default function ExportReturnDetail({ exportReturnDetail }) {
                         fullWidth
                         value={item.lineNo}
                         label="Line Number"
-                        propertyName="detail.lineNo"
+                        propertyName="lineNo"
                         onChange={handleFieldChange}
                         disabled
                         margin="dense"
@@ -84,7 +84,7 @@ export default function ExportReturnDetail({ exportReturnDetail }) {
                         fullWidth
                         value={item.customsValue}
                         label="Customs Value"
-                        propertyName="detail.customsValue"
+                        propertyName="customsValue"
                         onChange={handleFieldChange}
                         margin="dense"
                         type="number"
@@ -95,7 +95,7 @@ export default function ExportReturnDetail({ exportReturnDetail }) {
                         fullWidth
                         value={item.baseCustomsValue}
                         label="Base Customs Value"
-                        propertyName="detail.baseCustomsValue"
+                        propertyName="baseCustomsValue"
                         onChange={handleFieldChange}
                         margin="dense"
                         type="number"
@@ -108,31 +108,20 @@ export default function ExportReturnDetail({ exportReturnDetail }) {
                         fullWidth
                         value={item.tariffId}
                         label="Tariff ID"
-                        propertyName="detail.tariffId"
+                        propertyName="tariffId"
                         onChange={handleFieldChange}
                         margin="dense"
                         type="number"
                     />
                 </Grid>
-                <Grid item xs={4}>
-                    <InputField
-                        fullWidth
-                        value={item.baseCustomsValue}
-                        label="Base Customs Value"
-                        propertyName="detail.baseCustomsValue"
-                        onChange={handleFieldChange}
-                        margin="dense"
-                        type="number"
-                    />
-                </Grid>
-                <Grid item xs={4} />
+                <Grid item xs={8} />
 
                 <Grid item xs={4}>
                     <InputField
                         fullWidth
                         value={item.expinvDocumentType}
                         label="Export Invoice Document Type"
-                        propertyName="detail.expinvDocumentType"
+                        propertyName="expinvDocumentType"
                         onChange={handleFieldChange}
                         margin="dense"
                         type="number"
@@ -143,7 +132,7 @@ export default function ExportReturnDetail({ exportReturnDetail }) {
                         fullWidth
                         value={item.expinvDocumentNumber}
                         label="Export Invoice Document Number"
-                        propertyName="detail.expinvDocumentNumber"
+                        propertyName="expinvDocumentNumber"
                         onChange={handleFieldChange}
                         margin="dense"
                         type="number"
