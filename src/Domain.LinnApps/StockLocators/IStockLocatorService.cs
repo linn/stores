@@ -18,7 +18,7 @@
 
         IEnumerable<StockLocator> GetBatches(string batches);
 
-        IEnumerable<StockLocator> GetStockLocatorLocationsView(
+        IEnumerable<StockLocator> SearchStockLocators(
             string partNumber,
             int? locationId,
             int? palletNumber,

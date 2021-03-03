@@ -5,6 +5,8 @@
     using System.Linq;
     using System.Linq.Expressions;
 
+    using FluentAssertions;
+
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
     using NSubstitute;
@@ -14,22 +16,48 @@
     public class WhenViewingStockLocatorsAndBatchRefInQuery : ContextBase
     {
         private readonly IQueryable<StockLocatorBatch> repositoryResult =
-            new List<StockLocatorBatch>().AsQueryable();
+            new List<StockLocatorBatch>
+                {
+                    new StockLocatorBatch
+                        {
+                            StockPoolCode = "LINN", 
+                            LocationId = 1,
+                            State = "FREE", 
+                            BatchRef = "BATCH",
+                            PartNumber = "PART"
+                        },
+                }.AsQueryable();
+
+        private IEnumerable<StockLocator> testResult;
 
         [SetUp]
         public void SetUp()
         {
             this.StockLocatorBatchesView
-                .FilterBy(Arg.Any<Expression<Func<StockLocatorBatch, bool>>>())
+                .FindAll()
                 .Returns(this.repositoryResult);
-            this.Sut.GetStockLocatorLocationsView("PART", null, null, null, null, "ref", false);
+            
+            this.testResult = this.Sut.SearchStockLocators(
+                partNumber: "PART", 
+                locationId: 1, 
+                palletNumber: null, 
+                stockPool: "LINN", 
+                stockState: "FREE", 
+                batchRef: "BATCH", 
+                queryBatchView: true);
         }
 
         [Test]
         public void ShouldQueryBatchesView()
         {
             this.StockLocatorBatchesView.Received()
-                .FilterBy(Arg.Any<Expression<Func<StockLocatorBatch, bool>>>());
+                .FindAll();
+        }
+
+        [Test]
+        public void ShouldReturnCorrectResult()
+        {
+            this.testResult.Count().Should().Be(1);
         }
     }
 }

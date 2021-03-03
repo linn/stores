@@ -28,7 +28,7 @@
 
         public IQueryable<StockLocatorBatch> FindAll()
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.StockLocatorBatchesView;
         }
     }
 }

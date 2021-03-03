@@ -55,7 +55,7 @@
 
         public IResult<IEnumerable<StockLocator>> GetStockLocations(StockLocatorQueryResource searchResource)
         {
-            return new SuccessResult<IEnumerable<StockLocator>>(this.domainService.GetStockLocatorLocationsView(
+            return new SuccessResult<IEnumerable<StockLocator>>(this.domainService.SearchStockLocators(
                 searchResource.PartNumber,
                 searchResource.LocationId,
                 searchResource.PalletNumber,
