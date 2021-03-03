@@ -245,12 +245,18 @@
                      && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
                      && (string.IsNullOrEmpty(stockState) || x.State == stockState));
 
+            // if no partNumber in search then we are done
+            if (string.IsNullOrEmpty(partNumber))
+            {
+                return result;
+            }
+
             // apply either regex filter if wildcard is used
             if (partNumber.Contains("*"))
             {
                 var partNumberPattern = Regex.Escape(partNumber).Replace("\\*", ".*?");
                 var r = new Regex(partNumberPattern, RegexOptions.IgnoreCase);
-                return result.Where(x => (string.IsNullOrEmpty(partNumber) || r.IsMatch(x.PartNumber.ToUpper())));
+                return result.Where(x => r.IsMatch(x.PartNumber.ToUpper()));
             }
 
             // else just use simple .Equals() filter
