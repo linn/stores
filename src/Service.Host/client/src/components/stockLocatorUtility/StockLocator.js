@@ -261,9 +261,6 @@ function StockLocator({
                         )}
                     </>
                 )}
-                <Grid item xs={12}>
-                    <BackButton backClick={() => smartGoBack(previousPaths, history.goBack)} />
-                </Grid>
             </Grid>
         </Page>
     );
