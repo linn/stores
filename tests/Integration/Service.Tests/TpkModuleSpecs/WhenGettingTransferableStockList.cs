@@ -7,6 +7,7 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Resources;
 
     using Nancy;

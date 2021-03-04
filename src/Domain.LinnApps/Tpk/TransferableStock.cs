@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Domain.LinnApps
+﻿namespace Linn.Stores.Domain.LinnApps.Tpk
 {
     public class TransferableStock
     {

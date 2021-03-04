@@ -9,6 +9,7 @@
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation;
 

@@ -4,7 +4,9 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
-    using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Tpk;
+    using Linn.Stores.Domain.LinnApps.Tpk.Models;
+    using Linn.Stores.Resources;
 
     public class TpkService : ITpkService
     {
@@ -18,6 +20,11 @@
         public IResult<IEnumerable<TransferableStock>> GetTransferableStock()
         {
             return new SuccessResult<IEnumerable<TransferableStock>>(this.repository.FindAll());
+        }
+
+        public IResult<TpkResult> TransferStock(IEnumerable<TransferableStockResource> toTransfer)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
