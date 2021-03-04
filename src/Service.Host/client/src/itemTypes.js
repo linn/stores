@@ -236,3 +236,9 @@ export const stockQuantities = new ItemType(
     'STOCK_QUANTITIES',
     '/inventory/stock-quantities'
 );
+
+export const transferableStock = new ItemType(
+    'transferableStock',
+    'TRANSFERABLE_STOCK',
+    '/logistics/tpk/items'
+);

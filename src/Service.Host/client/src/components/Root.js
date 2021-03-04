@@ -32,6 +32,7 @@ import StockViewerOptions from '../containers/stockLocatorUtility/StockViewerOpt
 import StockLocator from '../containers/stockLocatorUtility/StockLocator';
 import Wand from '../containers/Wand';
 import ExportRsns from '../containers/ExportRsns';
+import Tpk from '../containers/Tpk';
 
 const Root = ({ store }) => (
     <div>
@@ -167,6 +168,9 @@ const Root = ({ store }) => (
                                         path="/inventory/exports/rsns"
                                         component={ExportRsns}
                                     />
+
+                                    <Route exact path="/logistics/tpk" component={Tpk} />
+
                                     <Route component={NotFoundPage} />
                                 </Switch>
                             </div>
