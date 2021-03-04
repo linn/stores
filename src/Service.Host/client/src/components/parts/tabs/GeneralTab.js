@@ -1,7 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import { InputField, Dropdown, Typeahead, DatePicker } from '@linn-it/linn-form-components-library';
+import {
+    InputField,
+    Dropdown,
+    Typeahead,
+    DatePicker,
+    TypeaheadTable
+} from '@linn-it/linn-form-components-library';
 
 function GeneralTab({
     accountingCompany,
@@ -18,19 +24,16 @@ function GeneralTab({
     rootProductsSearchResults,
     rootProductsSearchLoading,
     clearRootProductsSearch,
-    department,
-    departmentDescription,
-    departmentsSearchResults,
-    departmentsSearchLoading,
-    searchDepartments,
-    clearDepartmentsSearch,
-    handleDepartmentChange,
-    handleProductAnalysisCodeChange,
-    handleAccountingCompanyChange,
-    paretoCode,
     nominal,
     nominalDescription,
+    nominalAccountsSearchResults,
+    nominalAccountsSearchLoading,
+    searchNominalAccounts,
+    clearNominalAccountsSearch,
+    paretoCode,
     stockControlled,
+    department,
+    departmentDescription,
     safetyCriticalPart,
     safetyCriticalHelperText,
     performanceCriticalPart,
@@ -38,15 +41,25 @@ function GeneralTab({
     singleSourcePart,
     cccCriticalPart,
     psuPart,
+    editStatus,
     safetyCertificateExpirationDate,
-    safetyDataDirectory
+    safetyDataDirectory,
+    rawOrFinished
 }) {
-    const convertToYOrNString = booleanValue => {
-        if (booleanValue === '' || booleanValue === null) {
-            return null;
-        }
-        return booleanValue ? 'Yes' : 'No';
+    const nominalAccountsTable = {
+        totalItemCount: nominalAccountsSearchResults.length,
+        rows: nominalAccountsSearchResults?.map((item, i) => ({
+            id: item.nominalAccountId,
+            values: [
+                { id: `${i}-0`, value: `${item.nominalCode}` },
+                { id: `${i}-1`, value: `${item.description || ''}` },
+                { id: `${i}-2`, value: `${item.departmentCode || ''}` },
+                { id: `${i}-3`, value: `${item.departmentDescription || ''}` }
+            ],
+            links: item.links
+        }))
     };
+
     return (
         <Grid container spacing={3}>
             <Grid item xs={4}>
@@ -60,9 +73,7 @@ function GeneralTab({
                     fullWidth
                     allowNoValue
                     value={accountingCompany}
-                    onChange={(_, newValue) => {
-                        handleAccountingCompanyChange(newValue);
-                    }}
+                    onChange={handleFieldChange}
                 />
             </Grid>
             <Grid item xs={2}>
@@ -94,38 +105,35 @@ function GeneralTab({
             </Grid>
             <Grid item xs={8} />
             <Grid item xs={4}>
-                <Typeahead
-                    onSelect={newValue => {
-                        handleDepartmentChange(newValue);
-                    }}
-                    label="Department"
-                    modal
-                    items={departmentsSearchResults}
-                    value={department}
-                    loading={departmentsSearchLoading}
-                    fetchItems={searchDepartments}
-                    links={false}
-                    clearSearch={() => clearDepartmentsSearch}
-                    placeholder="Search Code or Description"
-                />
-            </Grid>
-            <Grid item xs={8}>
-                <InputField
+                <Dropdown
+                    label="Raw/Finished"
+                    propertyName="rawOrFinished"
+                    items={['R', 'F']}
                     fullWidth
-                    value={departmentDescription}
-                    label="Description"
-                    disabled
+                    allowNoValue
+                    value={rawOrFinished}
+                    disabled={editStatus !== 'create'}
                     onChange={handleFieldChange}
-                    propertyName="departmentDescription"
                 />
             </Grid>
+            <Grid item xs={8} />
+
             <Grid item xs={4}>
-                <InputField
-                    fullWidth
-                    value={nominal}
+                <TypeaheadTable
+                    table={nominalAccountsTable}
+                    columnNames={['Nominal', 'Description', 'Dept', 'Name']}
+                    fetchItems={searchNominalAccounts}
+                    modal
+                    placeholder="Search Nominal/Dept"
+                    links={false}
+                    clearSearch={clearNominalAccountsSearch}
+                    loading={nominalAccountsSearchLoading}
                     label="Nominal"
-                    onChange={handleFieldChange}
-                    propertyName="nominal"
+                    title="Search Nominals"
+                    value={nominal}
+                    onSelect={newValue => handleFieldChange('nominalAccount', newValue)}
+                    debounce={1000}
+                    minimumSearchTermLength={2}
                 />
             </Grid>
             <Grid item xs={8}>
@@ -135,12 +143,32 @@ function GeneralTab({
                     label="Description"
                     disabled
                     onChange={handleFieldChange}
+                    propertyName="nominalDescription"
+                />
+            </Grid>
+            <Grid item xs={4}>
+                <InputField
+                    fullWidth
+                    value={department}
+                    label="Dept"
+                    onChange={handleFieldChange}
+                    propertyName="department"
+                    disabled
+                />
+            </Grid>
+            <Grid item xs={8}>
+                <InputField
+                    fullWidth
+                    value={departmentDescription}
+                    label="Description"
+                    disabled
+                    onChange={handleFieldChange}
                 />
             </Grid>
             <Grid item xs={4}>
                 <Typeahead
                     onSelect={newValue => {
-                        handleProductAnalysisCodeChange(newValue);
+                        handleFieldChange('productAnalysisCode', newValue);
                     }}
                     label="Product Analysis Code"
                     modal
@@ -167,10 +195,10 @@ function GeneralTab({
                 <Dropdown
                     label="Stores Controlled?"
                     propertyName="stockControlled"
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     fullWidth
                     allowNoValue={false}
-                    value={convertToYOrNString(stockControlled)}
+                    value={stockControlled}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -180,11 +208,11 @@ function GeneralTab({
                 <Dropdown
                     label="Safety Critical?"
                     propertyName="safetyCriticalPart"
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     fullWidth
                     helperText={safetyCriticalHelperText}
                     allowNoValue={false}
-                    value={convertToYOrNString(safetyCriticalPart)}
+                    value={safetyCriticalPart}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -192,10 +220,10 @@ function GeneralTab({
                 <Dropdown
                     label="Performance Critical?"
                     propertyName="performanceCriticalPart"
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={convertToYOrNString(performanceCriticalPart)}
+                    value={performanceCriticalPart}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -205,10 +233,10 @@ function GeneralTab({
                 <Dropdown
                     label="EMC Critical?"
                     propertyName="emcCriticalPart"
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={convertToYOrNString(emcCriticalPart)}
+                    value={emcCriticalPart}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -216,10 +244,10 @@ function GeneralTab({
                 <Dropdown
                     label="Single Source?"
                     propertyName="singleSourcePart"
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={convertToYOrNString(singleSourcePart)}
+                    value={singleSourcePart}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -229,10 +257,10 @@ function GeneralTab({
                 <Dropdown
                     label="CCC Critical?"
                     propertyName="cccCriticalPart"
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     allowNoValue={false}
                     fullWidth
-                    value={convertToYOrNString(cccCriticalPart)}
+                    value={cccCriticalPart}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -241,9 +269,9 @@ function GeneralTab({
                     label="Approved  PSU?"
                     propertyName="psuPart"
                     allowNoValue={false}
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     fullWidth
-                    value={convertToYOrNString(psuPart)}
+                    value={psuPart}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -275,9 +303,11 @@ const accountingCompanyShape = PropTypes.shape({
     description: PropTypes.string
 });
 
-const departmentShape = PropTypes.shape({
+const nominalShape = PropTypes.shape({
+    nominalCode: PropTypes.string,
+    description: PropTypes.string,
     departmentCode: PropTypes.string,
-    description: PropTypes.string
+    departmentDescription: PropTypes.string
 });
 
 const rootProductShape = PropTypes.shape({
@@ -303,30 +333,29 @@ GeneralTab.propTypes = {
     productAnalysisCodeSearchResults: PropTypes.arrayOf(productAnalysisCodeShape),
     productAnalysisCodesSearchLoading: PropTypes.bool,
     productAnalysisCodeDescription: PropTypes.string,
-    department: PropTypes.string,
-    departmentDescription: PropTypes.string,
-    departmentsSearchResults: PropTypes.arrayOf(departmentShape),
-    departmentsSearchLoading: PropTypes.bool,
-    paretoCode: PropTypes.string,
-    searchDepartments: PropTypes.func.isRequired,
-    clearDepartmentsSearch: PropTypes.func,
-    handleDepartmentChange: PropTypes.func.isRequired,
-    handleProductAnalysisCodeChange: PropTypes.func.isRequired,
-    handleAccountingCompanyChange: PropTypes.func.isRequired,
-    searchProductAnalysisCodes: PropTypes.func.isRequired,
-    clearProductAnalysisCodesSearch: PropTypes.func,
     nominal: PropTypes.string,
     nominalDescription: PropTypes.string,
-    stockControlled: PropTypes.bool,
-    safetyCriticalPart: PropTypes.bool,
-    performanceCriticalPart: PropTypes.bool,
-    emcCriticalPart: PropTypes.bool,
-    singleSourcePart: PropTypes.bool,
-    cccCriticalPart: PropTypes.bool,
-    psuPart: PropTypes.bool,
+    nominalAccountsSearchResults: PropTypes.arrayOf(nominalShape),
+    nominalAccountsSearchLoading: PropTypes.bool,
+    paretoCode: PropTypes.string,
+    searchNominalAccounts: PropTypes.func.isRequired,
+    clearNominalAccountsSearch: PropTypes.func,
+    searchProductAnalysisCodes: PropTypes.func.isRequired,
+    clearProductAnalysisCodesSearch: PropTypes.func,
+    stockControlled: PropTypes.string,
+    safetyCriticalPart: PropTypes.string,
+    performanceCriticalPart: PropTypes.string,
+    emcCriticalPart: PropTypes.string,
+    singleSourcePart: PropTypes.string,
+    cccCriticalPart: PropTypes.string,
+    psuPart: PropTypes.string,
     safetyCertificateExpirationDate: PropTypes.string,
     safetyDataDirectory: PropTypes.string,
-    safetyCriticalHelperText: PropTypes.string
+    safetyCriticalHelperText: PropTypes.string,
+    department: PropTypes.string,
+    departmentDescription: PropTypes.string,
+    rawOrFinished: PropTypes.string,
+    editStatus: PropTypes.string
 };
 
 GeneralTab.defaultProps = {
@@ -340,13 +369,11 @@ GeneralTab.defaultProps = {
     productAnalysisCodeSearchResults: [],
     productAnalysisCodesSearchLoading: false,
     productAnalysisCodeDescription: null,
-    department: null,
-    departmentDescription: null,
-    departmentsSearchResults: [],
-    departmentsSearchLoading: false,
-    paretoCode: null,
     nominal: null,
     nominalDescription: null,
+    nominalAccountsSearchResults: [],
+    nominalAccountsSearchLoading: false,
+    paretoCode: null,
     stockControlled: null,
     safetyCriticalPart: null,
     performanceCriticalPart: null,
@@ -358,7 +385,11 @@ GeneralTab.defaultProps = {
     safetyDataDirectory: null,
     safetyCriticalHelperText: null,
     clearProductAnalysisCodesSearch: () => {},
-    clearDepartmentsSearch: () => {}
+    clearNominalAccountsSearch: () => {},
+    department: null,
+    departmentDescription: null,
+    rawOrFinished: null,
+    editStatus: null
 };
 
 export default GeneralTab;

@@ -1,5 +1,8 @@
 ﻿namespace Linn.Stores.Service.Tests.DepartmentsModuleSpecs
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     using FluentAssertions;
 
     using Linn.Common.Facade;
@@ -18,13 +21,25 @@
         [SetUp]
         public void SetUp()
         {
-            var n = new Nominal { NominalCode = "000123" };
-            this.NominalService.GetNominalForDepartment("000123").Returns(
-                new SuccessResult<Nominal>(n));
+            var n = new List<NominalAccount> 
+                        { 
+                            new NominalAccount 
+                                {
+                                    Department = new Department { DepartmentCode = "CODE", Description = "DESC" },
+                                    Nominal = new Nominal { NominalCode = "CODE", Description = "DESC" }
+                                }
+                        };
+
+            this.NominalAccountsService.GetNominalAccounts("CODE").Returns(
+                new SuccessResult<IEnumerable<NominalAccount>>(n));
 
             this.Response = this.Browser.Get(
-                "/inventory/nominal-for-department/000123",
-                with => { with.Header("Accept", "application/json"); }).Result;
+                "/inventory/nominal-accounts",
+                with =>
+                    {
+                        with.Header("Accept", "application/json");
+                        with.Query("searchTerm", "CODE");
+                    }).Result;
         }
 
         [Test]
@@ -36,14 +51,14 @@
         [Test]
         public void ShouldCallService()
         {
-            this.NominalService.Received().GetNominalForDepartment("000123");
+            this.NominalAccountsService.Received().GetNominalAccounts("CODE");
         }
 
         [Test]
         public void ShouldReturnResource()
         {
-            var resource = this.Response.Body.DeserializeJson<NominalResource>();
-            resource.NominalCode.Should().Be("000123");
+            var resource = this.Response.Body.DeserializeJson<IEnumerable<NominalAccount>>();
+            resource.Count().Should().Be(1);
         }
     }
 }

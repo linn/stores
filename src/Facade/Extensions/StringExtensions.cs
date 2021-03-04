@@ -8,5 +8,10 @@
         {
             return string.IsNullOrEmpty(uri) ? 0 : int.Parse(uri.Split('/').Last());
         }
+
+        public static bool ContainsIgnoringCase(this string str, string substr)
+        {
+            return str.ToUpper().Contains(substr.ToUpper());
+        }
     }
 }

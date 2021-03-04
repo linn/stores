@@ -2,10 +2,12 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
     using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Exceptions;
+    using Linn.Stores.Domain.LinnApps.Parts;
 
     public class StockLocatorService : IStockLocatorService
     {
@@ -17,6 +19,12 @@
 
         private readonly IRepository<StorageLocation, int> storageLocationRepository;
 
+        private readonly IQueryRepository<StockLocatorLocation> stockLocatorLocationsView;
+
+        private readonly IQueryRepository<StockLocatorBatch> stockLocatorBatchesView;
+
+        private readonly IRepository<Part, int> partRepository;
+
         private readonly IAuthorisationService authService;
 
         public StockLocatorService(
@@ -24,12 +32,18 @@
             IStoresPalletRepository palletRepository,
             IQueryRepository<StoragePlace> storagePlaceRepository,
             IRepository<StorageLocation, int> storageLocationRepository,
+            IQueryRepository<StockLocatorLocation> stockLocatorLocationsView,
+            IQueryRepository<StockLocatorBatch> stockLocatorBatchesView,
+            IRepository<Part, int> partRepository,
             IAuthorisationService authService)
         {
             this.stockLocatorRepository = stockLocatorRepository;
             this.palletRepository = palletRepository;
             this.storagePlaceRepository = storagePlaceRepository;
             this.storageLocationRepository = storageLocationRepository;
+            this.stockLocatorLocationsView = stockLocatorLocationsView;
+            this.stockLocatorBatchesView = stockLocatorBatchesView;
+            this.partRepository = partRepository;
             this.authService = authService;
         }
 
@@ -164,6 +178,7 @@
                                   StockRotationDate = stockLocator.StockRotationDate,
                                   PartNumber = stockLocator.PartNumber,
                                   PalletNumber = stockLocator.PalletNumber,
+                                  Id = stockLocator.Id,
                                   Category = stockLocator.Category,
                                   State = stockLocator.State,
                                   StorageLocation = new StorageLocation
@@ -173,6 +188,81 @@
                                                         }
                               }).AsEnumerable().Distinct(new StockLocatorEquals());
            return result;
+        }
+
+        public IEnumerable<StockLocator> SearchStockLocators(
+            string partNumber,
+            int? locationId,
+            int? palletNumber,
+            string stockPool,
+            string stockState,
+            string batchRef,
+            bool queryBatchView)
+        {
+            IEnumerable<StockLocator> result;
+
+            // decide which view we want to query
+            if (!string.IsNullOrEmpty(batchRef) || queryBatchView)
+            {
+                result = this
+                    .stockLocatorBatchesView
+                    .FindAll()
+                    .Where(b => (string.IsNullOrEmpty(batchRef) || b.BatchRef == batchRef))
+                    .Select(x => new StockLocator 
+                                     { 
+                                         PartNumber = x.PartNumber,
+                                         Id = x.LocationId,
+                                         LocationId = x.LocationId,
+                                         BatchRef = x.BatchRef,
+                                         StockRotationDate = x.StockRotationDate,
+                                         Quantity = x.Quantity,
+                                         PalletNumber = x.PalletNumber,
+                                         State = x.State,
+                                         QuantityAllocated = x.QuantityAllocated,
+                                         StockPoolCode = x.StockPoolCode
+                                     });
+            }
+            else
+            {
+                result = this
+                    .stockLocatorLocationsView
+                    .FindAll()
+                    .Select(x => new StockLocator
+                                     {
+                                         PartNumber = x.PartNumber,
+                                         Id = x.StorageLocationId,
+                                         LocationId = x.StorageLocationId,
+                                         Quantity = x.Quantity,
+                                         PalletNumber = x.PalletNumber,
+                                         State = x.State,
+                                         QuantityAllocated = x.QuantityAllocated,
+                                         StockPoolCode = x.StockPoolCode
+                                     });
+            }
+
+            // apply filters common to all use cases
+            result = result.Where(
+                x => (locationId == null || x.LocationId == locationId)
+                     && (palletNumber == null || x.PalletNumber == palletNumber)
+                     && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
+                     && (string.IsNullOrEmpty(stockState) || x.State == stockState));
+
+            // if no partNumber in search then we are done
+            if (string.IsNullOrEmpty(partNumber))
+            {
+                return result;
+            }
+
+            // apply either regex filter if wildcard is used
+            if (partNumber.Contains("*"))
+            {
+                var partNumberPattern = Regex.Escape(partNumber).Replace("\\*", ".*?");
+                var r = new Regex(partNumberPattern, RegexOptions.IgnoreCase);
+                return result.Where(x => r.IsMatch(x.PartNumber.ToUpper()));
+            }
+
+            // else just use simple .Equals() filter
+            return result.Where(x => x.PartNumber.ToUpper().Equals(partNumber.ToUpper()));
         }
     }
 }

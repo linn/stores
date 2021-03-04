@@ -13,6 +13,8 @@
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Requisitions;
+    using Linn.Stores.Domain.LinnApps.Requisitions.Models;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
@@ -129,8 +131,20 @@
             builder.RegisterType<InspectedStateResourceBuilder>().As<IResourceBuilder<InspectedState>>();
             builder.RegisterType<InspectedStatesResourceBuilder>().As<IResourceBuilder<IEnumerable<InspectedState>>>();
             builder.RegisterType<MessageResourceBuilder>().As<IResourceBuilder<MessageResult>>();
+            builder.RegisterType<NominalAccountResourceBuilder>().As<IResourceBuilder<NominalAccount>>();
+            builder.RegisterType<NominalAccountsResourceBuilder>().As<IResourceBuilder<IEnumerable<NominalAccount>>>();
             builder.RegisterType<WandConsignmentsResourceBuilder>().As<IResourceBuilder<IEnumerable<WandConsignment>>>();
             builder.RegisterType<WandItemsResourceBuilder>().As<IResourceBuilder<IEnumerable<WandItem>>>();
+            builder.RegisterType<SalesOutletResourceBuilder>().As<IResourceBuilder<SalesOutlet>>();
+            builder.RegisterType<SalesOutletsResourceBuilder>().As<IResourceBuilder<IEnumerable<SalesOutlet>>>();
+            builder.RegisterType<SalesAccountResourceBuilder>().As<IResourceBuilder<SalesAccount>>();
+            builder.RegisterType<SalesAccountsResourceBuilder>().As<IResourceBuilder<IEnumerable<SalesAccount>>>();
+            builder.RegisterType<ExportRsnResourceBuilder>().As<IResourceBuilder<ExportRsn>>();
+            builder.RegisterType<ExportRsnsResourceBuilder>().As<IResourceBuilder<IEnumerable<ExportRsn>>>();
+            builder.RegisterType<StockQuantitiesResourceBuilder>().As<IResourceBuilder<StockQuantities>>();
+            builder.RegisterType<StockQuantitiesListResourceBuilder>().As<IResourceBuilder<IEnumerable<StockQuantities>>>();
+            builder.RegisterType<WandItemResultResourceBuilder>().As<IResourceBuilder<WandResult>>();
+            builder.RegisterType<RequisitionActionResourceBuilder>().As<IResourceBuilder<RequisitionActionResult>>();
         }
     }
 }

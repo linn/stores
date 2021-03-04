@@ -91,6 +91,4 @@
             return new SuccessResult<IEnumerable<Parcel>>(this.Repository.FilterBy(this.SearchExpression(resource)));
         }
     }
-
-    // public class ImportBookFacadeService : IFacadeService<>
 }

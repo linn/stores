@@ -20,7 +20,7 @@
     {
         protected IDepartmentsService DepartmentsService { get; private set; }
 
-        protected INominalService NominalService { get; set; }
+        protected INominalAccountsService NominalAccountsService { get; set; }
 
         protected IQueryRepository<Department> DepartmentRepository { get; private set; }
 
@@ -31,20 +31,20 @@
             this.DepartmentsService = Substitute
                 .For<IDepartmentsService>();
 
-            this.NominalService = Substitute.For<INominalService>();
+            this.NominalAccountsService = Substitute.For<INominalAccountsService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                 {
                     with.Dependency(this.DepartmentsService);
-                    with.Dependency(this.NominalService);
+                    with.Dependency(this.NominalAccountsService);
                     with.Dependency<IResourceBuilder<Department>>(new DepartmentResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<Department>>>(new DepartmentsResourceBuilder());
-                    with.Dependency<IResourceBuilder<Nominal>>(new NominalResourceBuilder());
-
+                    with.Dependency<IResourceBuilder<NominalAccount>>(new NominalAccountResourceBuilder());
+                    with.Dependency<IResourceBuilder<IEnumerable<NominalAccount>>>(new NominalAccountsResourceBuilder());
                     with.Module<DepartmentsModule>();
                     with.ResponseProcessor<DepartmentsResponseProcessor>();
-                    with.ResponseProcessor<NominalResponseProcessor>();
+                    with.ResponseProcessor<NominalAccountsResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {

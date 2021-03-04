@@ -32,7 +32,8 @@ function SosAllocHeads({
     pickItemsAllocation,
     pickItemsAllocationWorking,
     unpickItemsAllocation,
-    unpickItemsAllocationWorking
+    unpickItemsAllocationWorking,
+    clearAllocationError
 }) {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [selectedDetails, setSelectedDetails] = useState([]);
@@ -88,6 +89,7 @@ function SosAllocHeads({
     });
 
     const doFinishAllocation = () => {
+        clearAllocationError();
         finishAllocation({ jobId });
     };
 
@@ -145,6 +147,9 @@ function SosAllocHeads({
                             Allocate
                         </Button>
                     </Tooltip>
+                </Grid>
+                <Grid item xs={12}>
+                    {allocationError && <ErrorCard errorMessage={`${allocationError}`} />}
                 </Grid>
                 {(loading || finishAllocationWorking) && (
                     <Grid item xs={12}>
@@ -208,9 +213,6 @@ function SosAllocHeads({
                         </Grid>
                         <Grid item xs={10}>
                             <>
-                                {allocationError && (
-                                    <ErrorCard errorMessage={`${allocationError}`} />
-                                )}
                                 {items.length ? (
                                     <SosAllocDetails
                                         header={items[selectedIndex]}
@@ -260,7 +262,8 @@ SosAllocHeads.propTypes = {
     pickItemsAllocation: PropTypes.func.isRequired,
     pickItemsAllocationWorking: PropTypes.func.isRequired,
     unpickItemsAllocation: PropTypes.func.isRequired,
-    unpickItemsAllocationWorking: PropTypes.func.isRequired
+    unpickItemsAllocationWorking: PropTypes.func.isRequired,
+    clearAllocationError: PropTypes.func.isRequired
 };
 
 SosAllocHeads.defaultProps = {

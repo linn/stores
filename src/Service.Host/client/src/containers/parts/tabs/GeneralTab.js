@@ -12,6 +12,8 @@ import sernosSequencesSelectors from '../../../selectors/sernosSequencesSelector
 import suppliersSelectors from '../../../selectors/suppliersSelectors';
 import rootProductsActions from '../../../actions/rootProductsActions';
 import productAnalysisCodesActions from '../../../actions/productAnalysisCodesActions';
+import nominalAccountsActions from '../../../actions/nominalAccountsActions';
+import nominalAccountsSelectors from '../../../selectors/nominalAccountsSelectors';
 
 const mapStateToProps = (state, ownProps) => ({
     accountingComapny: ownProps.accountingComapny,
@@ -31,7 +33,9 @@ const mapStateToProps = (state, ownProps) => ({
     productAnalysisCodeSearchResults: productAnalysisCodesSelectors
         .getSearchItems(state)
         .map(c => ({ name: c.productCode, description: c.description })),
-    productAnalysisCodesSearchLoading: productAnalysisCodesSelectors.getSearchLoading(state)
+    productAnalysisCodesSearchLoading: productAnalysisCodesSelectors.getSearchLoading(state),
+    nominalAccountsSearchResults: nominalAccountsSelectors.getSearchItems(state, 50),
+    nominalAccountsSearchLoading: nominalAccountsSelectors.getSearchLoading(state)
 });
 
 const initialise = () => dispatch => {
@@ -46,7 +50,9 @@ const mapDispatchToProps = {
     searchProductAnalysisCodes: productAnalysisCodesActions.search,
     clearSearchProductAnalysisCodes: productAnalysisCodesActions.clearSearch,
     searchDepartments: departmentsActions.search,
-    clearSearchDepartments: departmentsActions.clearSearch
+    clearSearchDepartments: departmentsActions.clearSearch,
+    searchNominalAccounts: nominalAccountsActions.search,
+    clearNominalAccountsSearch: nominalAccountsActions.clearSearch
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(GeneralTab));

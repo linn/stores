@@ -9,6 +9,7 @@
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.RequestResources;
 
     public class StockLocatorsFacadeService : 
         FacadeService<StockLocator, int, StockLocatorResource, StockLocatorResource>,
@@ -50,6 +51,18 @@
         {
             return new SuccessResult<IEnumerable<StockLocator>>(
                 this.domainService.GetBatches(batchRef));
+        }
+
+        public IResult<IEnumerable<StockLocator>> GetStockLocations(StockLocatorQueryResource searchResource)
+        {
+            return new SuccessResult<IEnumerable<StockLocator>>(this.domainService.SearchStockLocators(
+                searchResource.PartNumber,
+                searchResource.LocationId,
+                searchResource.PalletNumber,
+                searchResource.StockPoolCode,
+                searchResource.State,
+                searchResource.BatchRef,
+                searchResource.QueryBatchView));
         }
 
         public IResult<IEnumerable<StockLocator>> FilterBy(StockLocatorResource searchResource)

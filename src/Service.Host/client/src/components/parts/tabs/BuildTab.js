@@ -9,7 +9,6 @@ function BuildTab({
     linnProduced,
     sernosSequenceName,
     sernosSequenceDescription,
-    handleSernosSequenceChange,
     sernosSequencesSearchResults,
     sernosSequencesSearchLoading,
     searchSernosSequences,
@@ -25,22 +24,16 @@ function BuildTab({
     decrementRules,
     assemblyTechnologies
 }) {
-    const convertToYOrNString = booleanValue => {
-        if (booleanValue === '' || booleanValue === null) {
-            return null;
-        }
-        return booleanValue ? 'Yes' : 'No';
-    };
     return (
         <Grid container spacing={3}>
             <Grid item xs={4}>
                 <Dropdown
                     label="Linn Produced Assembly"
                     propertyName="linnProduced"
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={convertToYOrNString(linnProduced)}
+                    value={linnProduced}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -55,7 +48,7 @@ function BuildTab({
             <Grid item xs={4}>
                 <Typeahead
                     onSelect={newValue => {
-                        handleSernosSequenceChange(newValue);
+                        handleFieldChange('sernosSequenceName', newValue);
                     }}
                     label="Sernos Sequence"
                     modal
@@ -175,10 +168,10 @@ function BuildTab({
                 <Dropdown
                     label="Safety Critical?"
                     propertyName="safetyCriticalPart"
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={convertToYOrNString(safetyCriticalPart)}
+                    value={safetyCriticalPart}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -187,10 +180,10 @@ function BuildTab({
                 <Dropdown
                     label="planned Surplus?"
                     propertyName="plannedSurplus"
-                    items={['Yes', 'No']}
+                    items={['Y', 'N']}
                     fullWidth
                     allowNoValue
-                    value={convertToYOrNString(plannedSurplus)}
+                    value={plannedSurplus}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -202,18 +195,17 @@ function BuildTab({
 BuildTab.propTypes = {
     appRoot: PropTypes.string.isRequired,
     handleFieldChange: PropTypes.func.isRequired,
-    linnProduced: PropTypes.bool,
+    linnProduced: PropTypes.string,
     decrementRuleName: PropTypes.string,
     assemblyTechnologyName: PropTypes.string,
     bomType: PropTypes.string,
     bomId: PropTypes.number,
     optionSet: PropTypes.string,
     drawingReference: PropTypes.string,
-    safetyCriticalPart: PropTypes.bool,
-    plannedSurplus: PropTypes.bool,
+    safetyCriticalPart: PropTypes.string,
+    plannedSurplus: PropTypes.string,
     sernosSequenceName: PropTypes.string,
     sernosSequenceDescription: PropTypes.string,
-    handleSernosSequenceChange: PropTypes.func.isRequired,
     sernosSequencesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     sernosSequencesSearchLoading: PropTypes.bool,
     searchSernosSequences: PropTypes.func.isRequired,

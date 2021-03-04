@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
 
+    using Linn.Stores.Domain.LinnApps.StockLocators;
+
     public class Part
     {
         public int Id { get; set; }
@@ -148,5 +150,7 @@
         public IEnumerable<WwdWork> WwdWorks { get; set; }
         
         public PartParamData ParamData { get; set; }
+
+        public IEnumerable<StockLocatorLocation> Locations { get; set; }
     }
 }

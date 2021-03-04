@@ -16,8 +16,6 @@ import partCategoriesSelectors from '../../selectors/partCategoriesSelectors';
 import sernosSequencesSelectors from '../../selectors/sernosSequencesSelectors';
 import suppliersSelectors from '../../selectors/suppliersSelectors';
 import unitsOfMeasureSelectors from '../../selectors/unitsOfMeasureSelectors';
-import nominalActions from '../../actions/nominalActions';
-import nominalSelectors from '../../selectors/nominalSelectors';
 import partTemplatesActions from '../../actions/partTemplatesActions';
 import partTemplateSelectors from '../../selectors/partTemplatesSelectors';
 import { getPrivileges, getUserName, getUserNumber } from '../../selectors/userSelectors';
@@ -42,11 +40,10 @@ const mapStateToProps = (state, { match, location }) => ({
     sernosSequences: sernosSequencesSelectors.getItems(state),
     suppliers: suppliersSelectors.getItems(state),
     unitsOfMeasure: unitsOfMeasureSelectors.getItems(state),
-    nominal: nominalSelectors.getItem(state),
     privileges: getPrivileges(state),
     userName: getUserName(state),
     userNumber: getUserNumber(state),
-    options: queryString.parse(location?.search),
+    templateName: queryString.parse(location?.search)?.template,
     partTemplates: partTemplateSelectors.getItems(state),
     liveTest: creating(match) ? null : partLiveTestSelectors.getItem(state),
     partsSearchResults: partsSelectors.getSearchItems(state)
@@ -72,7 +69,6 @@ const mapDispatchToProps = dispatch => {
         updateItem: (itemId, item) => dispatch(partActions.update(itemId, item)),
         setEditStatus: status => dispatch(partActions.setEditStatus(status)),
         setSnackbarVisible: () => dispatch(partActions.setSnackbarVisible()),
-        fetchNominal: name => dispatch(nominalActions.fetch(name)),
         fetchLiveTest: itemId => dispatch(partLiveTestActions.fetch(itemId))
     };
 };

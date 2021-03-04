@@ -203,6 +203,17 @@ export const inspectedStates = new ItemType(
     '/inventory/stock-locators/states'
 );
 
+export const stockLocatorLocations = new ItemType(
+    'stockLocatorLocations',
+    'STOCK_LOCATOR_LOCATIONS',
+    '/inventory/stock-locators-by-location'
+);
+
+export const nominalAccounts = new ItemType(
+    'nominalAccounts',
+    'NOMINAL_ACCOUNTS',
+    '/inventory/nominal-accounts'
+);
 export const wandConsignments = new ItemType(
     'wandConsignments',
     'WAND_CONSIGNMENTS',
@@ -210,6 +221,26 @@ export const wandConsignments = new ItemType(
 );
 
 export const wandItems = new ItemType('wandItems', 'WAND_ITEMS', '/logistics/wand/items');
+
+export const salesOutlets = new ItemType(
+    'salesOutlets',
+    'SALES_OUTLETS',
+    '/inventory/sales-outlets'
+);
+
+export const salesAccounts = new ItemType(
+    'salesAccounts',
+    'SALES_ACCOUNTS',
+    '/inventory/sales-accounts'
+);
+
+export const exportRsns = new ItemType('exportRsns', 'EXPORT_RSNS', '/inventory/exports/rsns');
+
+export const stockQuantities = new ItemType(
+    'stockQuantities',
+    'STOCK_QUANTITIES',
+    '/inventory/stock-quantities'
+);
 
 export const parcel = new ItemType('parcel', 'PARCEL', '/logistics/parcels');
 

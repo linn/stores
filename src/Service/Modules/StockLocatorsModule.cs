@@ -21,14 +21,18 @@
         private readonly IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource>
             inspectedStateService;
 
+        private readonly IStockQuantitiesService stockQuantitiesService;
+
         public StockLocatorsModule(
             IStockLocatorFacadeService service,
             IFacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource> storageLocationService,
-            IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource> inspectedStateService)
+            IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource> inspectedStateService,
+            IStockQuantitiesService stockQuantitiesService)
         {
             this.service = service;
             this.storageLocationService = storageLocationService;
             this.inspectedStateService = inspectedStateService;
+            this.stockQuantitiesService = stockQuantitiesService;
             this.Get("/inventory/stock-locators", _ => this.GetStockLocators());
             this.Get("/inventory/stock-locators/batches", _ => this.GetBatches());
             this.Delete("/inventory/stock-locators/{id}", parameters => this.DeleteStockLocator(parameters.id));
@@ -36,12 +40,23 @@
             this.Get("/inventory/storage-locations", _ => this.GetStorageLocations());
             this.Post("/inventory/stock-locators", _ => this.AddStockLocator());
             this.Get("/inventory/stock-locators/states", _ => this.GetStates());
+            this.Get("/inventory/stock-locators-by-location/", _ => this.GetStockLocatorsByLocation());
+            this.Get("/inventory/stock-quantities/", _ => this.GetStockQuantities());
         }
 
         private object GetStockLocators()
         {
             var resource = this.Bind<StockLocatorResource>();
             var result = this.service.GetStockLocatorsForPart(resource.PartNumber);
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
+        }
+
+        private object GetStockLocatorsByLocation()
+        {
+            var resource = this.Bind<StockLocatorQueryResource>();
+            var result = this.service.GetStockLocations(resource);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");
@@ -88,6 +103,12 @@
             var resource = this.Bind<StockLocatorResource>();
             resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
             return this.Negotiate.WithModel(this.service.Update(id, resource));
+        }
+
+        private object GetStockQuantities()
+        {
+            var resource = this.Bind<StockLocatorResource>();
+            return this.stockQuantitiesService.GetStockQuantities(resource.PartNumber);
         }
 
         private object AddStockLocator()

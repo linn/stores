@@ -1,14 +1,12 @@
 ﻿namespace Linn.Stores.Persistence.LinnApps
 {
-    using System.Runtime.InteropServices.ComTypes;
-    using System.Security.Cryptography.X509Certificates;
-
     using Linn.Common.Configuration;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
+    using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
@@ -138,9 +136,23 @@
 
         public DbSet<InspectedState> InspectedStates { get; set; }
 
+        public DbQuery<StockLocatorLocation> StockLocatorLocationsView { get; set; }
+
+        public DbQuery<StockLocatorBatch> StockLocatorBatchesView { get; set; }
+
         public DbQuery<WandConsignment> WandConsignments { get; set; }
 
         public DbQuery<WandItem> WandItems { get; set; }
+
+        public DbQuery<ExportRsn> Rsns { get; set; }
+
+        public DbQuery<SalesAccount> SalesAccounts { get; set; }
+
+        public DbSet<SalesOutlet> SalesOutlets { get; set; }
+
+        public DbQuery<StockQuantities> StockQuantitiesForMrView { get; set; }
+
+        public DbSet<RequisitionHeader> RequisitionHeaders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -204,8 +216,14 @@
             this.QueryDespatchPalletQueueDetails(builder);
             this.BuildStorageLocations(builder);
             this.BuildInspectedStates(builder);
+            this.QueryStockLocatorLocationsView(builder);
+            this.QueryStockLocatorBatches(builder);
             this.QueryWandConsignments(builder);
             this.QueryWandItems(builder);
+            this.QueryRsns(builder);
+            this.QuerySalesAccounts(builder);
+            this.QueryStockQuantitIesForMrView(builder);
+            this.BuildRequisitionHeaders(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1120,6 +1138,7 @@
             e.Property(l => l.LocationCode).HasColumnName("LOCATION_CODE").HasMaxLength(16);
             e.Property(l => l.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
             e.Property(l => l.DateInvalid).HasColumnName("DATE_INVALID");
+            e.Property(l => l.LocationType).HasColumnName("LOCATION_TYPE").HasMaxLength(1);
         }
 
         private void BuildInspectedStates(ModelBuilder builder)
@@ -1130,6 +1149,42 @@
             e.Property(l => l.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
         }
 
+        private void QueryStockLocatorLocationsView(ModelBuilder builder)
+        {
+            var q = builder.Query<StockLocatorLocation>().ToView("STOCK_LOCATOR_LOC_VIEW");
+            q.Property(e => e.Quantity).HasColumnName("QTY");
+            q.Property(e => e.StorageLocationId).HasColumnName("LOCATION_ID");
+            q.HasOne(e => e.StorageLocation).WithMany(s => s.StockLocatorLocations)
+                .HasForeignKey("LOCATION_ID");
+            q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(e => e.LocationType).HasColumnName("LOCATION_TYPE").HasMaxLength(1);
+            q.Property(e => e.State).HasColumnName("STATE").HasMaxLength(6);
+            q.Property(e => e.Category).HasColumnName("CATEGORY").HasMaxLength(6);
+            q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE").HasMaxLength(10);
+            q.Property(e => e.OurUnitOfMeasure).HasColumnName("OUR_UNIT_OF_MEASURE").HasMaxLength(14);
+            q.Property(e => e.QuantityAllocated).HasColumnName("QTY_ALLOCATED");
+            q.HasOne(e => e.Part).WithMany(p => p.Locations).HasForeignKey(l => l.PartNumber);
+        }
+
+        private void QueryStockLocatorBatches(ModelBuilder builder)
+        {
+            var q = builder.Query<StockLocatorBatch>().ToView("STOCK_LOCATOR_BATCH_VIEW");
+            q.Property(e => e.Quantity).HasColumnName("QTY");
+            q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
+            q.Property(e => e.LocationCode).HasColumnName("LOCATION_CODE").HasMaxLength(16);
+            q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(e => e.LocationType).HasColumnName("LOCATION_TYPE").HasMaxLength(1);
+            q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            q.Property(e => e.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
+            q.Property(e => e.BatchRef).HasColumnName("BATCH_REF").HasMaxLength(20);
+            q.Property(e => e.State).HasColumnName("STATE").HasMaxLength(6);
+            q.Property(e => e.Category).HasColumnName("CATEGORY").HasMaxLength(6);
+            q.Property(e => e.StockRotationDate).HasColumnName("STOCK_ROTATION_DATE");
+            q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE").HasMaxLength(10);
+            q.Property(e => e.QuantityAllocated).HasColumnName("QTY_ALLOCATED");
+        }
+    
         private void QueryWandConsignments(ModelBuilder builder)
         {
             var q = builder.Query<WandConsignment>().ToView("WAND_CONSIGNMENTS_VIEW");
@@ -1153,6 +1208,59 @@
             q.Property(v => v.RequisitionNumber).HasColumnName("REQ_NUMBER");
             q.Property(v => v.RequisitionLine).HasColumnName("LINE_NUMBER");
             q.Property(v => v.CountryCode).HasColumnName("COUNTRY");
+            q.Property(v => v.BoxesPerProduct).HasColumnName("BOXES_PER_PRODUCT");
+            q.Property(v => v.AllWanded).HasColumnName("ALL_WANDED");
+        }
+
+        private void QueryRsns(ModelBuilder builder)
+        {
+            var q = builder.Query<ExportRsn>().ToView("EXPORT_RSNS_VIEW");
+            q.Property(e => e.RsnNumber).HasColumnName("RSN_NUMBER");
+            q.Property(e => e.ReasonCodeAlleged).HasColumnName("REASON_CODE_ALLEGED").HasMaxLength(10);
+            q.Property(e => e.DateEntered).HasColumnName("DATE_ENTERED");
+            q.Property(e => e.Quantity).HasColumnName("QUANTITY");
+            q.Property(e => e.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
+            q.Property(e => e.AccountId).HasColumnName("ACCOUNT_ID");
+            q.Property(e => e.OutletNumber).HasColumnName("OUTLET_NUMBER");
+            q.Property(e => e.OutletName).HasColumnName("OUTLET_NAME").HasMaxLength(50);
+            q.Property(e => e.Country).HasColumnName("COUNTRY").HasMaxLength(2);
+            q.Property(e => e.CountryName).HasColumnName("COUNTRY_NAME").HasMaxLength(50);
+            q.Property(e => e.AccountType).HasColumnName("ACCOUNT_TYPE").HasMaxLength(10);
+        }
+
+        private void QuerySalesAccounts(ModelBuilder builder)
+        {
+            var q = builder.Query<SalesAccount>().ToView("SALES_ACCOUNTS");
+            q.Property(e => e.AccountId).HasColumnName("ACCOUNT_ID");
+            q.Property(e => e.AccountName).HasColumnName("ACCOUNT_NAME").HasMaxLength(50);
+            q.Property(e => e.AccountType).HasColumnName("ACCOUNT_TYPE");
+            q.Property(e => e.DateClosed).HasColumnName("DATE_CLOSED");
+        }
+
+        private void QueryStockQuantitIesForMrView(ModelBuilder builder)
+        {
+            var q = builder.Query<StockQuantities>().ToView("V_STOCK_QTIES_FOR_MR");
+            q.Property(s => s.PartNumber).HasColumnName("PART_NUMBER");
+            q.Property(s => s.GoodStock).HasColumnName("GOOD_STOCK");
+            q.Property(s => s.GoodStockAllocated).HasColumnName("GOOD_STOCK_ALLOCATED");
+            q.Property(s => s.UninspectedStock).HasColumnName("UNINSPECTED_STOCK");
+            q.Property(s => s.UninspectedStockAllocated).HasColumnName("UNINSP_STOCK_ALLOCATED");
+            q.Property(s => s.FaultyStock).HasColumnName("FAULTY_STOCK");
+            q.Property(s => s.FaultyStockAllocated).HasColumnName("FAULTY_STOCK_ALLOCATED");
+            q.Property(s => s.DistributorStock).HasColumnName("DISTRIBUTOR_STOCK");
+            q.Property(s => s.DistributorStockAllocated).HasColumnName("DISTRIB_STOCK_ALLOCATED");
+            q.Property(s => s.SupplierStock).HasColumnName("SUPPLIER_STOCK");
+            q.Property(s => s.SupplierStockAllocated).HasColumnName("SUPPLIER_STOCK_ALLOCATED");
+            q.Property(s => s.OtherStock).HasColumnName("OTHER_STOCK");
+            q.Property(s => s.OtherStockAllocated).HasColumnName("OTHER_STOCK_ALLOCATED");
+        }
+
+        private void BuildRequisitionHeaders(ModelBuilder builder)
+        {
+            var r = builder.Entity<RequisitionHeader>().ToTable("REQUISITION_HEADERS");
+            r.HasKey(l => l.ReqNumber);
+            r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
+            r.Property(l => l.Document1).HasColumnName("DOCUMENT_1");
         }
     }
 }

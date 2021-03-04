@@ -17,5 +17,14 @@
             GetStockLocatorsWithStoragePlaceInfoForPart(string partNumber);
 
         IEnumerable<StockLocator> GetBatches(string batches);
+
+        IEnumerable<StockLocator> SearchStockLocators(
+            string partNumber,
+            int? locationId,
+            int? palletNumber,
+            string stockPool,
+            string stockState,
+            string batchRef,
+            bool queryBatchView);
     }
 }

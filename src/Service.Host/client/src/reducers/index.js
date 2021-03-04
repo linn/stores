@@ -54,8 +54,15 @@ import inspectedStates from './stockLocators/inspectedStates';
 import despatchPalletQueueReport from './despatchPalletQueueReport';
 import movePalletToUpper from './movePalletToUpper';
 import movePalletsToUpper from './movePalletsToUpper';
+import stockLocatorLocations from './stockLocators/stockLocatorLocations';
+import stockQuantities from './stockLocators/stockQuantities';
+import nominalAccounts from './nominalAccounts';
 import wandConsignments from './wandConsignments';
 import wandItems from './wandItems';
+import salesOutlets from './salesOutlets';
+import salesAccounts from './salesAccounts';
+import exportRsns from './exportRsns';
+import doWandItem from './doWandItem';
 import parcels from './parcels/parcels';
 import parcel from './parcels/parcel';
 import suppliersApprovedCarrier from './suppliersApprovedCarrier';
@@ -76,7 +83,9 @@ const rootReducer = combineReducers({
     despatchLocations,
     despatchPalletQueueReport,
     despatchPickingSummaryReport,
+    doWandItem,
     employees,
+    exportRsns,
     finishAllocation,
     inspectedStates,
     manufacturers,
@@ -84,6 +93,7 @@ const rootReducer = combineReducers({
     movePalletsToUpper,
     movePalletToUpper,
     nominal,
+    nominalAccounts,
     oidc,
     parcel,
     parcels,
@@ -96,13 +106,17 @@ const rootReducer = combineReducers({
     pickItemsAllocation,
     productAnalysisCodes,
     rootProducts,
+    salesAccounts,
+    salesOutlets,
     sernosSequences,
     sosAllocDetails,
     sosAllocHeads,
     stockLocator,
     stockLocatorBatches,
+    stockLocatorLocations,
     stockLocators,
     stockPools,
+    stockQuantities,
     storageLocations,
     storagePlace,
     storagePlaces,

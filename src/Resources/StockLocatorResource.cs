@@ -12,9 +12,19 @@
 
         public int? LocationId { get; set; }
 
+        public string LocationName { get; set; }
+
+        public string LocationDescription { get; set; }
+
         public int? BudgetId { get; set; }
 
         public string PartNumber { get; set; }
+
+        public string PartDescription { get; set; }
+
+        public string PartUnitOfMeasure { get; set; }
+
+        public string UnitOfMeasure { get; set; }
 
         public int? QuantityAllocated { get; set; }
 
@@ -33,5 +43,7 @@
         public string StoragePlaceDescription { get; set; }
 
         public IEnumerable<string> UserPrivileges { get; set; }
+
+        public string State { get; set; }
     }
 }

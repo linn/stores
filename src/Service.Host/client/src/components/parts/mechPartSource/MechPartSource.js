@@ -166,9 +166,13 @@ function MechPartSource({
     const handleSaveClick = () => {
         const body = mechPartSource;
         const rkmLetters = { KΩ: 'K', MΩ: 'M', Ω: '' };
+        const capacitanceUnits = { uF: 'u', nF: 'n', pF: 'p' };
+
         body.resistanceUnits = rkmLetters[mechPartSource.resistanceUnits];
+        body.capacitanceUnit = capacitanceUnits[mechPartSource.capacitanceUnits];
         body.mechPartAlts = suppliersData;
         body.mechPartManufacturerAlts = manufacturersData;
+        body.capacitance = mechPartSource.capacitance?.toFixed(13);
         body.usages = usagesData;
         body.purchasingQuotes = quotesData;
         if (creating()) {
@@ -517,7 +521,7 @@ function MechPartSource({
                                     capacitanceUnits={
                                         creating()
                                             ? mechPartSource.capacitanceUnits
-                                            : mechPartSource?.capacitanceLetterAndNumeralCodestring?.replace(
+                                            : mechPartSource?.capacitanceLetterAndNumeralCode?.replace(
                                                   /[^a-zA-Z]/g,
                                                   ''
                                               )

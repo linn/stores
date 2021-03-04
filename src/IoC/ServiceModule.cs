@@ -13,7 +13,9 @@
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Reports;
+    using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Facade;
     using Linn.Stores.Facade.Services;
@@ -39,6 +41,8 @@
             builder.RegisterType<WorkstationService>().As<IWorkstationService>();
             builder.RegisterType<StockLocatorService>().As<IStockLocatorService>();
             builder.RegisterType<WarehouseService>().As<IWarehouseService>();
+            builder.RegisterType<WandService>().As<IWandService>();
+            builder.RegisterType<RequisitionService>().As<IRequisitionService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -53,7 +57,7 @@
             builder.RegisterType<SuppliersService>().As<ISuppliersService>();
             builder.RegisterType<ProductAnalysisCodeService>()
                 .As<IProductAnalysisCodeService>();
-            builder.RegisterType<NominalService>().As<INominalService>();
+            builder.RegisterType<NominalAccountsService>().As<INominalAccountsService>();
             builder.RegisterType<DespatchLocationFacadeService>()
                 .As<IFacadeService<DespatchLocation, int, DespatchLocationResource, DespatchLocationResource>>();
             builder.RegisterType<StockPoolFacadeService>()
@@ -95,6 +99,11 @@
                 .As<IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource>>();
             builder.RegisterType<WarehouseFacadeService>().As<IWarehouseFacadeService>();
             builder.RegisterType<WandFacadeService>().As<IWandFacadeService>();
+            builder.RegisterType<SalesOutletService>().As<ISalesOutletService>();
+            builder.RegisterType<SalesAccountService>().As<ISalesAccountService>();
+            builder.RegisterType<ExportRsnService>().As<IExportRsnService>();
+            builder.RegisterType<StockQuantitiesService>().As<IStockQuantitiesService>();
+            builder.RegisterType<RequisitionActionsFacadeService>().As<IRequisitionActionsFacadeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
@@ -105,6 +114,8 @@
             builder.RegisterType<AllocPack>().As<IAllocPack>();
             builder.RegisterType<WorkstationPackProxy>().As<IWorkstationPack>();
             builder.RegisterType<WcsPack>().As<IWcsPack>();
+            builder.RegisterType<WandPack>().As<IWandPack>();
+            builder.RegisterType<StoresPack>().As<IStoresPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();
