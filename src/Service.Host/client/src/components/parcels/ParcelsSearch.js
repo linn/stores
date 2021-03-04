@@ -364,7 +364,7 @@ function ParcelsSearch({
 ParcelsSearch.propTypes = {
     items: PropTypes.arrayOf(
         PropTypes.shape({
-            parcelNumber: PropTypes.number
+            parcelNumber: PropTypes.string
         })
     ).isRequired,
     suppliers: PropTypes.arrayOf(
@@ -402,8 +402,8 @@ ParcelsSearch.propTypes = {
 
 ParcelsSearch.defaultProps = {
     loading: false,
-    carriersSearchResults: [{ id: -1, name: '', description: '' }],
-    suppliersSearchResults: [{ id: -1, name: '', description: '' }],
+    carriersSearchResults: [],
+    suppliersSearchResults: [],
     suppliers: [{ id: -1, name: 'loading..' }],
     privileges: null,
     carriersSearchLoading: false,
