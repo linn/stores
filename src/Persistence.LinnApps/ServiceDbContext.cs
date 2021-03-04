@@ -156,6 +156,8 @@
 
         public DbSet<RequisitionHeader> RequisitionHeaders { get; set; }
 
+        public DbQuery<TransferableStock> TransferableStock { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -227,6 +229,7 @@
             this.QuerySalesAccounts(builder);
             this.QueryStockQuantitIesForMrView(builder);
             this.BuildRequisitionHeaders(builder);
+            this.QueryTpkView(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1273,6 +1276,27 @@
             r.HasKey(l => l.ReqNumber);
             r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
             r.Property(l => l.Document1).HasColumnName("DOCUMENT_1");
+        }
+
+        private void QueryTpkView(ModelBuilder builder)
+        {
+            var q = builder.Query<TransferableStock>().ToView("V_TPK_OO");
+            q.Property(s => s.LocationId).HasColumnName("LOCATION_ID"); 
+            q.Property(s => s.LocationCode).HasColumnName("LOCATION_CODE");
+            q.Property(s => s.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(s => s.FromLocation).HasColumnName("FROM_LOCATION");
+            q.Property(s => s.StoragrPlaceDescription).HasColumnName("STORAGE_PLACE_DESCRIPTION");
+            q.Property(s => s.VaxPallet).HasColumnName("VAX_PALLET");
+            q.Property(s => s.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
+            q.Property(s => s.Quantity).HasColumnName("QTY");
+            q.Property(s => s.InvoiceDescription).HasColumnName("INVOICE_DESCRIPTION");
+            q.Property(s => s.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            q.Property(s => s.Addressee).HasColumnName("ADDRESSEE");
+            q.Property(s => s.ReqNumber).HasColumnName("REQ_NUMBER");
+            q.Property(s => s.ReqLine).HasColumnName("REQ_LINE");
+            q.Property(s => s.DespatchLocationCode).HasColumnName("DESPATCH_LOCATION_CODE");
+            q.Property(s => s.OrderNumber).HasColumnName("ORDER_NUMBER");
+            q.Property(s => s.OrderLine).HasColumnName("ORDER_LINE");
         }
     }
 }
