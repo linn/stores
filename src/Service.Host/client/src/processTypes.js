@@ -49,3 +49,9 @@ export const requisitionUnallocate = new ItemType(
     'REQUISTION_UNALLOCATE',
     '/logistics/requisitions/actions/un-allocate'
 );
+
+export const transferStock = new ItemType(
+    'transferStock',
+    'TRANSFER_STOCK',
+    '/logistics/tpk/transfer'
+);

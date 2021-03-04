@@ -3,6 +3,7 @@ import { initialiseOnMount } from '@linn-it/linn-form-components-library';
 import Tpk from '../components/Tpk';
 import transferableStockSelectors from '../selectors/transferableStockSelectors';
 import transferableStockActions from '../actions/transferableStockActions';
+import tpkActions from '../actions/tpkActions';
 
 const mapStateToProps = state => ({
     transferableStock: transferableStockSelectors.getItems(state),
@@ -14,7 +15,8 @@ const initialise = () => dispatch => {
 };
 
 const mapDispatchToProps = {
-    initialise
+    initialise,
+    transferStock: tpkActions.requestProcessStart
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Tpk));
