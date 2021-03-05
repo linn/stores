@@ -10,24 +10,24 @@
 
     public sealed class TpkModule : NancyModule
     {
-        private readonly ITpkService tpkService;
+        private readonly ITpkFacadeService tpkFacadeService;
 
-        public TpkModule(ITpkService tpkService)
+        public TpkModule(ITpkFacadeService tpkFacadeService)
         {
-            this.tpkService = tpkService;
+            this.tpkFacadeService = tpkFacadeService;
             this.Get("/logistics/tpk/items", _ => this.GetItems());
             this.Post("/logistics/tpk/transfer", _ => this.TransferStock());
         }
 
         private object GetItems()
         {
-            return this.Negotiate.WithModel(this.tpkService.GetTransferableStock());
+            return this.Negotiate.WithModel(this.tpkFacadeService.GetTransferableStock());
         }
 
         private object TransferStock()
         {
             var resource = this.Bind<IEnumerable<TransferableStockResource>>();
-            return this.Negotiate.WithModel(this.tpkService.TransferStock(resource));
+            return this.Negotiate.WithModel(this.tpkFacadeService.TransferStock(resource));
         }
     }
 }

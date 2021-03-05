@@ -19,15 +19,15 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected ITpkService TpkService { get; private set; }
+        protected ITpkFacadeService TpkFacadeService { get; private set; }
 
         protected IQueryRepository<TransferableStock> TransferableStockRepository { get; private set; }
 
         [SetUp]
         public void EstablishContext()
         {
-            this.TpkService = Substitute
-                .For<ITpkService>();
+            this.TpkFacadeService = Substitute
+                .For<ITpkFacadeService>();
 
             this.TransferableStockRepository = Substitute
                 .For<IQueryRepository<TransferableStock>>();
@@ -35,7 +35,7 @@
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                 {
-                    with.Dependency(this.TpkService);
+                    with.Dependency(this.TpkFacadeService);
                     with.Dependency(this.TransferableStockRepository);
                     with.Dependency<IResourceBuilder<TransferableStock>>(new TransferableStockResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<TransferableStock>>>(new TransferableStockListResourceBuilder());

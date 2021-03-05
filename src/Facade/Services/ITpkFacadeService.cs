@@ -7,7 +7,7 @@
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
     using Linn.Stores.Resources;
 
-    public interface ITpkService
+    public interface ITpkFacadeService
     {
         IResult<IEnumerable<TransferableStock>> GetTransferableStock();
 

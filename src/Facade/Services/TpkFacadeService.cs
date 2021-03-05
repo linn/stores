@@ -8,11 +8,11 @@
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
     using Linn.Stores.Resources;
 
-    public class TpkService : ITpkService
+    public class TpkFacadeService : ITpkFacadeService
     {
         private readonly IQueryRepository<TransferableStock> repository;
 
-        public TpkService(IQueryRepository<TransferableStock> repository)
+        public TpkFacadeService(IQueryRepository<TransferableStock> repository)
         {
             this.repository = repository;
         }

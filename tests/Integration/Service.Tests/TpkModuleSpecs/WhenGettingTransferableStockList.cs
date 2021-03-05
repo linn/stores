@@ -31,7 +31,7 @@
                                     ArticleNumber = "B"
                                 };
 
-            this.TpkService.GetTransferableStock()
+            this.TpkFacadeService.GetTransferableStock()
                 .Returns(new SuccessResult<IEnumerable<TransferableStock>>(new List<TransferableStock> { transferableStockA, transferableStockB }));
 
 
@@ -52,7 +52,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.TpkService.Received().GetTransferableStock();
+            this.TpkFacadeService.Received().GetTransferableStock();
         }
 
         [Test]
