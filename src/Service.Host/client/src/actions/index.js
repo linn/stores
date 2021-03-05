@@ -163,4 +163,6 @@ export const requisitionUnallocateActionTypes = makeActionTypes(
 
 export const transferableStockActionTypes = makeActionTypes(itemTypes.transferableStock.actionType);
 
-export const tpkTransferStock = makeActionTypes(processTypes.transferStock.actionType);
+export const tpkTransferStockActionTypes = makeActionTypes(
+    processTypes.tpkTransferStock.actionType
+);

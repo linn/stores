@@ -6,13 +6,40 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Page from '../containers/Page';
 
-export default function Tpk({ transferableStock, transferableStockLoading, transferStock }) {
+export default function Tpk({
+    transferableStock,
+    transferableStockLoading,
+    transferStock,
+    transferredStock
+}) {
     const [selectedRows, setSelectedRows] = useState([]);
     const [dateTimeTpkViewQueried, setDateTimeTpkViewQueried] = useState(new Date());
+    const [rows, setRows] = useState([]);
+
+    const compare = (row, transferred) =>
+        Object.keys(row).every(
+            key => key === 'href' || key === 'id' || row[key] === transferred[key]
+        );
 
     useEffect(() => {
+        setRows(
+            transferableStock.map(s => ({
+                ...s,
+                id: s.articleNumber + s.orderNumber + s.orderLine + s.fromLocation // is this guaranteed unique?
+            }))
+        );
         setDateTimeTpkViewQueried(new Date());
     }, [transferableStock]);
+
+    useEffect(() => {
+        if (transferredStock?.length) {
+            transferredStock.forEach(transferred =>
+                setRows(r =>
+                    r.map(row => (compare(row, transferred) ? { ...transferred, id: row.id } : row))
+                )
+            );
+        }
+    }, [transferredStock]);
 
     const columns = [
         { field: 'fromLocation', headerName: 'From', width: 140 },
@@ -38,10 +65,6 @@ export default function Tpk({ transferableStock, transferableStockLoading, trans
         { field: 'locationId', headerName: 'LocationID', hide: true },
         { field: 'locationCode', headerName: 'Location', width: 140, hide: true }
     ];
-    const rows = transferableStock.map(s => ({
-        ...s,
-        id: s.articleNumber + s.orderNumber + s.orderLine + s.fromLocation // is this guaranteed unique?
-    }));
     const handleSelectRow = selected => {
         setSelectedRows(rows.filter(r => selected.rowIds.includes(r.id)));
     };
@@ -86,11 +109,13 @@ export default function Tpk({ transferableStock, transferableStockLoading, trans
 
 Tpk.propTypes = {
     transferableStock: PropTypes.arrayOf(PropTypes.shape({})),
+    transferredStock: PropTypes.arrayOf(PropTypes.shape({})),
     transferableStockLoading: PropTypes.bool,
     transferStock: PropTypes.func.isRequired
 };
 
 Tpk.defaultProps = {
     transferableStock: [],
+    transferredStock: [],
     transferableStockLoading: true
 };

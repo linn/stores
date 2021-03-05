@@ -64,6 +64,7 @@ import salesAccounts from './salesAccounts';
 import exportRsns from './exportRsns';
 import doWandItem from './doWandItem';
 import transferableStock from './transferableStock';
+import tpkTransferStock from './tpkTransferStock';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -118,6 +119,7 @@ const rootReducer = combineReducers({
     storagePlaces,
     storagePlaceAuditReport,
     suppliers,
+    tpkTransferStock,
     tqmsCategories,
     transferableStock,
     unitsOfMeasure,

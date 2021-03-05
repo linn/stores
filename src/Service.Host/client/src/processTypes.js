@@ -50,8 +50,8 @@ export const requisitionUnallocate = new ItemType(
     '/logistics/requisitions/actions/un-allocate'
 );
 
-export const transferStock = new ItemType(
-    'transferStock',
+export const tpkTransferStock = new ItemType(
+    'tpkTransferStock',
     'TRANSFER_STOCK',
     '/logistics/tpk/transfer'
 );
