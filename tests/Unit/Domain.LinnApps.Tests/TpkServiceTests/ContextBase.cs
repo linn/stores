@@ -13,11 +13,14 @@
 
         protected IQueryRepository<TransferableStock> TpkView { get; set; }
 
+        protected IQueryRepository<AccountingCompany> AccountingCompaniesRepository { get; set; }
+
         [SetUp]
         public void SetUpContext()
         {
             this.TpkView = Substitute.For<IQueryRepository<TransferableStock>>();
-            this.Sut = new TpkService(TpkView);
+            this.AccountingCompaniesRepository = Substitute.For<IQueryRepository<AccountingCompany>>();
+            this.Sut = new TpkService(this.TpkView, this.AccountingCompaniesRepository);
         }
     }
 }

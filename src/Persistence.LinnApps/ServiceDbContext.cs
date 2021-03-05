@@ -257,6 +257,7 @@
             q.Property(c => c.Name).HasColumnName("ACCOUNTING_COMPANY");
             q.Property(c => c.DateInvalid).HasColumnName("DATE_INVALID");
             q.Property(c => c.Description).HasColumnName("DESCRIPTION");
+            q.Property(c => c.LatesSalesAllocationDate).HasColumnName("LATES_SALES_ALLOCATION_DATE");
         }
 
         private void BuildCountries(ModelBuilder builder)
