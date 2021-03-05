@@ -13,10 +13,10 @@
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
-    using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Requisitions.Models;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.Tpk;
+    using Linn.Stores.Domain.LinnApps.Tpk.Models;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Facade;
@@ -153,6 +153,7 @@
             builder.RegisterType<TransferableStockResourceBuilder>().As<IResourceBuilder<TransferableStock>>();
             builder.RegisterType<TransferableStockListResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<TransferableStock>>>();
+            builder.RegisterType<TpkResultResourceBuilder>().As<IResourceBuilder<TpkResult>>();
         }
     }
 }

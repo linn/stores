@@ -55,7 +55,13 @@
                 var temp = this.tpkOoPack.GetTpkNotes((int)t.ConsignmentId, t.FromLocation);
             }
 
-            return new TpkResult();
+            return new TpkResult
+                       {
+                           Success = true,
+                           Message = "Some message",
+                           Transferred = candidates.Select(s => 
+                               new TransferredStock(s, this.tpkOoPack.GetTpkNotes((int)s.ConsignmentId, s.FromLocation)))
+                       };
         }
     }
 }

@@ -24,7 +24,7 @@
                            LocationId = model.LocationId,
                            OrderLine = model.OrderLine,
                            OrderNumber = model.OrderNumber,
-                           StoragrPlaceDescription = model.StoragrPlaceDescription,
+                           StoragePlaceDescription = model.StoragePlaceDescription,
                            PalletNumber = model.PalletNumber,
                            Quantity = model.PalletNumber,
                            ReqLine = model.ReqLine,

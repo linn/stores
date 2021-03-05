@@ -62,7 +62,7 @@ export default function Tpk({ transferableStock, transferableStockLoading, trans
                             })
                         }
                     >
-                        Transfer Selected Stock
+                        Transfer
                     </Button>
                 </Grid>
                 <Grid item xs={12}>

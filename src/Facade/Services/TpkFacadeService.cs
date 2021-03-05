@@ -7,7 +7,6 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
-    using Linn.Stores.Resources;
     using Linn.Stores.Resources.Tpk;
 
     public class TpkFacadeService : ITpkFacadeService
@@ -37,11 +36,24 @@
                                                           {
                                                               FromLocation = s.FromLocation,
                                                               ConsignmentId = s.ConsignmentId,
+                                                              Addressee = s.Addressee,
+                                                              ArticleNumber = s.ArticleNumber,
+                                                              DespatchLocationCode = s.DespatchLocationCode,
+                                                              InvoiceDescription = s.InvoiceDescription,
+                                                              LocationCode = s.LocationCode,
+                                                              LocationId = s.LocationId,
+                                                              OrderLine = s.OrderLine,
+                                                              OrderNumber = s.OrderNumber,
+                                                              PalletNumber = s.PalletNumber,
+                                                              Quantity = s.Quantity,
+                                                              ReqLine = s.ReqLine,
+                                                              ReqNumber = s.ReqNumber,
+                                                              StoragePlaceDescription = s.StoragePlaceDescription,
+                                                              VaxPallet = s.VaxPallet
                                                           })
                                  };
-            return new SuccessResult<TpkResult>(
-                this.domainService
-                    .TransferStock(tpkRequest));
+            var result = this.domainService.TransferStock(tpkRequest);
+            return new SuccessResult<TpkResult>(result);
         }
     }
 }

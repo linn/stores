@@ -10,7 +10,7 @@
 
         public string FromLocation { get; set; }
 
-        public string StoragrPlaceDescription { get; set; }
+        public string StoragePlaceDescription { get; set; }
 
         public int VaxPallet { get; set; }
 

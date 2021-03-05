@@ -1287,7 +1287,7 @@
             q.Property(s => s.LocationCode).HasColumnName("LOCATION_CODE");
             q.Property(s => s.PalletNumber).HasColumnName("PALLET_NUMBER");
             q.Property(s => s.FromLocation).HasColumnName("FROM_LOCATION");
-            q.Property(s => s.StoragrPlaceDescription).HasColumnName("STORAGE_PLACE_DESCRIPTION");
+            q.Property(s => s.StoragePlaceDescription).HasColumnName("STORAGE_PLACE_DESCRIPTION");
             q.Property(s => s.VaxPallet).HasColumnName("VAX_PALLET");
             q.Property(s => s.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
             q.Property(s => s.Quantity).HasColumnName("QTY");
