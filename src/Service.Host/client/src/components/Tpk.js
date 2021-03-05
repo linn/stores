@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import Grid from '@material-ui/core/Grid';
 import { Title } from '@linn-it/linn-form-components-library';
@@ -8,6 +8,11 @@ import Page from '../containers/Page';
 
 export default function Tpk({ transferableStock, transferableStockLoading, transferStock }) {
     const [selectedRows, setSelectedRows] = useState([]);
+    const [dateTimeTpkViewQueried, setDateTimeTpkViewQueried] = useState(new Date());
+
+    useEffect(() => {
+        setDateTimeTpkViewQueried(new Date());
+    }, [transferableStock]);
 
     const columns = [
         { field: 'fromLocation', headerName: 'From', width: 140 },
@@ -50,7 +55,12 @@ export default function Tpk({ transferableStock, transferableStockLoading, trans
                     <Button
                         style={{ marginTop: '22px' }}
                         variant="contained"
-                        onClick={() => transferStock(selectedRows)}
+                        onClick={() =>
+                            transferStock({
+                                stockToTransfer: selectedRows,
+                                dateTimeTpkViewQueried: dateTimeTpkViewQueried?.toISOString()
+                            })
+                        }
                     >
                         Transfer Selected Stock
                     </Button>

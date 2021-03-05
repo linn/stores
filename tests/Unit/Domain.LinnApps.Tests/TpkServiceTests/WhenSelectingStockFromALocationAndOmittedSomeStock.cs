@@ -41,7 +41,7 @@
             var ex = Assert.Throws<TpkException>(() => this.Sut.TransferStock(new TpkRequest
                                                                                   {
                                                                                       StockToTransfer = toTransfer,
-                                                                                      DateTimeTpkViewLastQueried = DateTime.Now
+                                                                                      DateTimeTpkViewQueried = DateTime.Now
                                                                                   }));
             ex.Message.Should()
                 .Be("You haven't looked at everything from location A");

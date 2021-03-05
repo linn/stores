@@ -6,11 +6,12 @@
     using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.Tpk;
 
     public interface ITpkFacadeService
     {
         IResult<IEnumerable<TransferableStock>> GetTransferableStock();
 
-        IResult<TpkResult> TransferStock(IEnumerable<TransferableStockResource> toTransfer);
+        IResult<TpkResult> TransferStock(TpkRequestResource tpkRequestResource);
     }
 }

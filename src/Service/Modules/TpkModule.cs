@@ -4,6 +4,7 @@
 
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.Tpk;
 
     using Nancy;
     using Nancy.ModelBinding;
@@ -26,7 +27,7 @@
 
         private object TransferStock()
         {
-            var resource = this.Bind<IEnumerable<TransferableStockResource>>();
+            var resource = this.Bind<TpkRequestResource>();
             return this.Negotiate.WithModel(this.tpkFacadeService.TransferStock(resource));
         }
     }

@@ -39,7 +39,7 @@
             var latestAllocationDateTime = this.accountingCompaniesRepository.FindBy(c => c.Name == "LINN")
                 .LatesSalesAllocationDate;
 
-            if (tpkRequest.DateTimeTpkViewLastQueried < latestAllocationDateTime)
+            if (tpkRequest.DateTimeTpkViewQueried < latestAllocationDateTime)
             {
                 throw new TpkException("Another allocation was run at " + latestAllocationDateTime +
                 ". You must re-query the TPK screen to get an up to date version.");

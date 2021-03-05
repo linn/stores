@@ -6,6 +6,7 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.Tpk;
 
     public class TransferableStockResourceBuilder : IResourceBuilder<TransferableStock>
     {

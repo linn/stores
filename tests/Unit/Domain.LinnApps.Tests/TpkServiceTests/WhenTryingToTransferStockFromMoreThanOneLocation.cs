@@ -24,7 +24,7 @@
             var ex = Assert.Throws<TpkException>(() => this.Sut.TransferStock(new TpkRequest
                                                                                   {
                                                                                       StockToTransfer = toTransfer,
-                                                                                      DateTimeTpkViewLastQueried = DateTime.Now
+                                                                                      DateTimeTpkViewQueried = DateTime.Now
                                                                                   }));
             ex.Message.Should()
                 .Be("You can only TPK one pallet at a time");

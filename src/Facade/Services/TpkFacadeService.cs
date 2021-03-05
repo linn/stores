@@ -7,6 +7,7 @@
     using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.Tpk;
 
     public class TpkFacadeService : ITpkFacadeService
     {
@@ -22,7 +23,7 @@
             return new SuccessResult<IEnumerable<TransferableStock>>(this.repository.FindAll());
         }
 
-        public IResult<TpkResult> TransferStock(IEnumerable<TransferableStockResource> toTransfer)
+        public IResult<TpkResult> TransferStock(TpkRequestResource tpkRequestResource)
         {
             throw new System.NotImplementedException();
         }

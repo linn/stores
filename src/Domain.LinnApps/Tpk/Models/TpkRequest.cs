@@ -7,6 +7,6 @@
     {
         public IEnumerable<TransferableStock> StockToTransfer { get; set; }
 
-        public DateTime DateTimeTpkViewLastQueried { get; set; }
+        public DateTime DateTimeTpkViewQueried { get; set; }
     }
 }

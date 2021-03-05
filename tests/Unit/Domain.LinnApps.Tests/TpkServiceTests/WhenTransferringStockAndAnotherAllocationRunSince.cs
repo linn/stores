@@ -44,7 +44,7 @@
                 this.Sut.TransferStock(new TpkRequest
                                            {
                                                StockToTransfer = toTransfer,
-                                               DateTimeTpkViewLastQueried = DateTime.UnixEpoch
+                                               DateTimeTpkViewQueried = DateTime.UnixEpoch
                                            }));
             ex.Message.Should()
                 .Be("Another allocation was run at " + DateTime.UnixEpoch.AddDays(1) +
