@@ -3,11 +3,19 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
 
     public class TpkService : ITpkService
     {
+        private readonly IQueryRepository<TransferableStock> tpkView;
+
+        public TpkService(IQueryRepository<TransferableStock> tpkView)
+        {
+            this.tpkView = tpkView;
+        }
+
         public TpkResult TransferStock(IEnumerable<TransferableStock> stockToTransfer)
         {
             var candidates = stockToTransfer.ToList();

@@ -15,6 +15,7 @@
     using Linn.Stores.Domain.LinnApps.Reports;
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Facade;
@@ -43,6 +44,7 @@
             builder.RegisterType<WarehouseService>().As<IWarehouseService>();
             builder.RegisterType<WandService>().As<IWandService>();
             builder.RegisterType<RequisitionService>().As<IRequisitionService>();
+            builder.RegisterType<TpkService>().As<ITpkService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
