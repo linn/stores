@@ -24,7 +24,7 @@
 
         public IQueryable<TransferableStock> FilterBy(Expression<Func<TransferableStock, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.TransferableStock.Where(expression);
         }
 
         public IQueryable<TransferableStock> FindAll()

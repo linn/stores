@@ -23,8 +23,8 @@ export default function Tpk({ transferableStock, transferableStockLoading, trans
 
         { field: 'notes', headerName: 'Notes', width: 200 },
         { field: 'addressee', headerName: 'Addressee', width: 200 },
-        { field: 'orderNumber', headerName: 'Order', width: 80 },
-        { field: 'orderLine', headerName: 'Line', width: 40 },
+        { field: 'orderNumber', headerName: 'Order', width: 100 },
+        { field: 'orderLine', headerName: 'Line', width: 100 },
         { field: 'despatchLocationCode', headerName: 'Despatch Location' },
         { field: 'reqNumber', headerName: 'Req No', width: 100, hide: true },
         { field: 'reqLine', headerName: 'Req Line', width: 110, hide: true },

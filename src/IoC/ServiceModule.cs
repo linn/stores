@@ -120,6 +120,7 @@
             builder.RegisterType<WcsPack>().As<IWcsPack>();
             builder.RegisterType<WandPack>().As<IWandPack>();
             builder.RegisterType<StoresPack>().As<IStoresPack>();
+            builder.RegisterType<TpkOoPack>().As<ITpkOoPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();
