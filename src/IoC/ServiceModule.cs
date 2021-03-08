@@ -121,6 +121,7 @@
             builder.RegisterType<WandPack>().As<IWandPack>();
             builder.RegisterType<StoresPack>().As<IStoresPack>();
             builder.RegisterType<TpkOoPack>().As<ITpkOoPack>();
+            builder.RegisterType<BundleLabelPack>().As<IBundleLabelPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

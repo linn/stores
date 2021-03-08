@@ -14,14 +14,18 @@
         private readonly IQueryRepository<AccountingCompany> accountingCompaniesRepository;
 
         private readonly ITpkOoPack tpkOoPack;
-        
+
+        private readonly IBundleLabelPack bundleLabelPack;
+
         public TpkService(
             IQueryRepository<TransferableStock> tpkView,
             IQueryRepository<AccountingCompany> accountingCompaniesRepository,
-            ITpkOoPack tpkOoPack)
+            ITpkOoPack tpkOoPack,
+            IBundleLabelPack bundleLabelPack)
         {
             this.tpkView = tpkView;
             this.tpkOoPack = tpkOoPack;
+            this.bundleLabelPack = bundleLabelPack;
             this.accountingCompaniesRepository = accountingCompaniesRepository;
         }
 
@@ -50,17 +54,16 @@
                 ". You must re-query the TPK screen to get an up to date version.");
             }
 
-            foreach (var t in tpkRequest.StockToTransfer)
-            {
-                var temp = this.tpkOoPack.GetTpkNotes((int)t.ConsignmentId, t.FromLocation);
-            }
+            var transferredWithNotes = candidates.Select(
+                s => new TransferredStock(s, this.tpkOoPack.GetTpkNotes((int)s.ConsignmentId, s.FromLocation)));
+
+            this.bundleLabelPack.PrintTpkBoxLabels(fromLocation);
 
             return new TpkResult
                        {
                            Success = true,
                            Message = "Some message",
-                           Transferred = candidates.Select(s => 
-                               new TransferredStock(s, this.tpkOoPack.GetTpkNotes((int)s.ConsignmentId, s.FromLocation)))
+                           Transferred = transferredWithNotes
                        };
         }
     }

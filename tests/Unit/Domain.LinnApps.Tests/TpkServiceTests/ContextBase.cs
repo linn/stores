@@ -18,13 +18,20 @@
 
         protected ITpkOoPack TpkOoPack { get; set; }
 
+        protected IBundleLabelPack BundleLabelPack { get; set; }
+
         [SetUp]
         public void SetUpContext()
         {
             this.TpkView = Substitute.For<IQueryRepository<TransferableStock>>();
             this.AccountingCompaniesRepository = Substitute.For<IQueryRepository<AccountingCompany>>();
             this.TpkOoPack = Substitute.For<ITpkOoPack>();
-            this.Sut = new TpkService(this.TpkView, this.AccountingCompaniesRepository, this.TpkOoPack);
+            this.BundleLabelPack = Substitute.For<IBundleLabelPack>();
+            this.Sut = new TpkService(
+                this.TpkView, 
+                this.AccountingCompaniesRepository, 
+                this.TpkOoPack, 
+                this.BundleLabelPack);
         }
     }
 }
