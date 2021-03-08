@@ -20,7 +20,9 @@
 
         protected IBundleLabelPack BundleLabelPack { get; set; }
 
-        protected IWhatToWandService whatToWandService { get; set; }
+        protected IWhatToWandService WhatToWandService { get; set; }
+
+        protected IStoresOoPack StoresOoPack { get; set; }
 
         [SetUp]
         public void SetUpContext()
@@ -29,13 +31,15 @@
             this.AccountingCompaniesRepository = Substitute.For<IQueryRepository<AccountingCompany>>();
             this.TpkOoPack = Substitute.For<ITpkOoPack>();
             this.BundleLabelPack = Substitute.For<IBundleLabelPack>();
-            this.whatToWandService = Substitute.For<IWhatToWandService>();
+            this.WhatToWandService = Substitute.For<IWhatToWandService>();
+            this.StoresOoPack = Substitute.For<IStoresOoPack>();
             this.Sut = new TpkService(
                 this.TpkView, 
                 this.AccountingCompaniesRepository, 
                 this.TpkOoPack, 
                 this.BundleLabelPack,
-                this.whatToWandService);
+                this.WhatToWandService,
+                this.StoresOoPack);
         }
     }
 }

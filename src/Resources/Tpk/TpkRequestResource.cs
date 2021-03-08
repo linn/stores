@@ -5,7 +5,7 @@
 
     public class TpkRequestResource
     {
-        public IEnumerable<TransferableStockResource> StockToTransfer;
+        public IEnumerable<TransferableStockResource> StockToTransfer { get; set; }
 
         public DateTime DateTimeTpkViewQueried { get; set; }
     }

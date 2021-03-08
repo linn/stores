@@ -24,7 +24,7 @@
         [SetUp]
         public void SetUp()
         {
-            var toTransfer = new List<TransferableStock> { new TransferableStock { FromLocation = "A" } };
+            var toTransfer = new List<TransferableStock> { new TransferableStock { FromLocation = "A", LocationId = 1, PalletNumber = 1} };
                                      
             this.AccountingCompaniesRepository
                                          .FindBy(Arg.Any<Expression<Func<AccountingCompany, bool>>>()).Returns(
@@ -33,7 +33,7 @@
             this.TpkView.FilterBy(Arg.Any<Expression<Func<TransferableStock, bool>>>())
                 .Returns(this.repositoryResult.AsQueryable());
 
-            this.whatToWandService.WhatToWand("A")
+            this.WhatToWandService.WhatToWand("A")
                 .Returns(new List<WhatToWandLine> { new WhatToWandLine { ConsignmentId = 1 } });
 
             this.TpkOoPack.When(x => x.UpdateQuantityPrinted(Arg.Any<string>(), out var success))
@@ -42,6 +42,12 @@
                         x[1] = true;
                     });
 
+            this.StoresOoPack.When(x => x.DoTpk(1, 1, Arg.Any<DateTime>(), out var success))
+                .Do(x =>
+                    {
+                        x[3] = true;
+                    });
+            
             this.result = this.Sut.TransferStock(new TpkRequest
                                                      {
                                                          StockToTransfer = toTransfer,
@@ -58,13 +64,19 @@
         [Test]
         public void ShouldGetWhatToWandData()
         {
-            this.whatToWandService.Received().WhatToWand("A");
+            this.WhatToWandService.Received().WhatToWand("A");
         }
 
         [Test]
         public void ShouldCallUpdateQuantity()
         {
             this.TpkOoPack.Received().UpdateQuantityPrinted(Arg.Any<string>(), out Arg.Any<bool>());
+        }
+
+        [Test]
+        public void ShouldDoTpk()
+        {
+            this.StoresOoPack.Received().DoTpk(1, 1, Arg.Any<DateTime>(), out Arg.Any<bool>());
         }
 
         [Test]

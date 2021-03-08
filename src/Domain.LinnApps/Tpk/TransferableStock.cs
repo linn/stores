@@ -2,11 +2,11 @@
 {
     public class TransferableStock
     {
-        public int? LocationId { get; set; }
+        public int LocationId { get; set; }
 
         public string LocationCode { get; set; }
 
-        public int? PalletNumber { get; set; }
+        public int PalletNumber { get; set; }
 
         public string FromLocation { get; set; }
 

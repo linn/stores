@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tpk
 {
+    using System;
     using System.Linq;
 
     using Linn.Common.Persistence;
@@ -19,34 +20,38 @@
 
         private readonly IWhatToWandService whatToWandService;
 
+        private readonly IStoresOoPack storesOoPack;
+
         public TpkService(
             IQueryRepository<TransferableStock> tpkView,
             IQueryRepository<AccountingCompany> accountingCompaniesRepository,
             ITpkOoPack tpkOoPack,
             IBundleLabelPack bundleLabelPack,
-            IWhatToWandService whatToWandService)
+            IWhatToWandService whatToWandService,
+            IStoresOoPack storesOoPack)
         {
             this.tpkView = tpkView;
             this.tpkOoPack = tpkOoPack;
             this.bundleLabelPack = bundleLabelPack;
             this.whatToWandService = whatToWandService;
+            this.storesOoPack = storesOoPack;
             this.accountingCompaniesRepository = accountingCompaniesRepository;
         }
 
         public TpkResult TransferStock(TpkRequest tpkRequest)
         {
             var candidates = tpkRequest.StockToTransfer.ToList();
-            var fromLocation = candidates.First().FromLocation;
-            if (candidates.Any(s => s.FromLocation != fromLocation))
+            var from = candidates.First();
+            if (candidates.Any(s => s.FromLocation != from.FromLocation))
             {
                 throw new TpkException("You can only TPK one pallet at a time");
             }
 
-            var recordsToTpk = this.tpkView.FilterBy(r => r.FromLocation == fromLocation).Count();
+            var recordsToTpk = this.tpkView.FilterBy(r => r.FromLocation == from.FromLocation).Count();
 
             if (recordsToTpk != candidates.Count())
             {
-                throw new TpkException("You haven't looked at everything from location " + fromLocation);
+                throw new TpkException("You haven't looked at everything from location " + from.FromLocation);
             }
 
             var latestAllocationDateTime = this.accountingCompaniesRepository.FindBy(c => c.Name == "LINN")
@@ -61,15 +66,23 @@
             var transferredWithNotes = candidates.Select(
                 s => new TransferredStock(s, this.tpkOoPack.GetTpkNotes((int)s.ConsignmentId, s.FromLocation)));
 
-            this.bundleLabelPack.PrintTpkBoxLabels(fromLocation);
+            this.bundleLabelPack.PrintTpkBoxLabels(from.FromLocation);
 
-            var whatToWand = this.whatToWandService.WhatToWand(fromLocation);
+            var whatToWand = this.whatToWandService.WhatToWand(from.FromLocation);
 
-            this.tpkOoPack.UpdateQuantityPrinted(fromLocation, out var success);
+            this.tpkOoPack.UpdateQuantityPrinted(from.FromLocation, out var updateQuantitySuccessful);
 
-            if (!success)
+            if (!updateQuantitySuccessful)
             {
                 throw new TpkException("Failed in update_qty_printed.");
+            }
+
+            var tpkSuccesful = false;
+            this.storesOoPack.DoTpk((int)from.LocationId, from.PalletNumber, DateTime.Now, out tpkSuccesful);
+
+            if (!tpkSuccesful)
+            {
+                throw new TpkException("TPK failed... can we get an error message?");
             }
 
             return new TpkResult
