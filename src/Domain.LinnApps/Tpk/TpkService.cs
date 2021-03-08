@@ -17,15 +17,19 @@
 
         private readonly IBundleLabelPack bundleLabelPack;
 
+        private readonly IWhatToWandService whatToWandService;
+
         public TpkService(
             IQueryRepository<TransferableStock> tpkView,
             IQueryRepository<AccountingCompany> accountingCompaniesRepository,
             ITpkOoPack tpkOoPack,
-            IBundleLabelPack bundleLabelPack)
+            IBundleLabelPack bundleLabelPack,
+            IWhatToWandService whatToWandService)
         {
             this.tpkView = tpkView;
             this.tpkOoPack = tpkOoPack;
             this.bundleLabelPack = bundleLabelPack;
+            this.whatToWandService = whatToWandService;
             this.accountingCompaniesRepository = accountingCompaniesRepository;
         }
 
@@ -59,11 +63,14 @@
 
             this.bundleLabelPack.PrintTpkBoxLabels(fromLocation);
 
+            var whatToWand = this.whatToWandService.WhatToWand(fromLocation);
+
             return new TpkResult
                        {
                            Success = true,
                            Message = "Some message",
-                           Transferred = transferredWithNotes
+                           Transferred = transferredWithNotes,
+                           WhatToWand = whatToWand
                        };
         }
     }

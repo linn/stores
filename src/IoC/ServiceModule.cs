@@ -122,6 +122,7 @@
             builder.RegisterType<StoresPack>().As<IStoresPack>();
             builder.RegisterType<TpkOoPack>().As<ITpkOoPack>();
             builder.RegisterType<BundleLabelPack>().As<IBundleLabelPack>();
+            builder.RegisterType<WhatToWandDataProxy>().As<IWhatToWandService>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

@@ -30,6 +30,10 @@
                 new AccountingCompany { Name = "LINN", LatesSalesAllocationDate = DateTime.UnixEpoch });
             this.TpkView.FilterBy(Arg.Any<Expression<Func<TransferableStock, bool>>>())
                 .Returns(this.repositoryResult.AsQueryable());
+
+            this.whatToWandService.WhatToWand("A")
+                .Returns(new List<WhatToWandLine> { new WhatToWandLine { ConsignmentId = 1 } });
+
             this.result = this.Sut.TransferStock(new TpkRequest
                                                      {
                                                          StockToTransfer = toTransfer,
@@ -44,9 +48,16 @@
         }
 
         [Test]
+        public void ShouldGetWhatToWandData()
+        {
+            this.whatToWandService.Received().WhatToWand("A");
+        }
+
+        [Test]
         public void ShouldReturnResult()
         {
             this.result.Should().BeOfType<TpkResult>();
+            this.result.WhatToWand.First().ConsignmentId.Should().Be(1);
         }
     }
 }
