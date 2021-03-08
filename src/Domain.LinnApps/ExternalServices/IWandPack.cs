@@ -4,6 +4,6 @@
 
     public interface IWandPack
     {
-        WandResult Wand(string transType, int userNumber, int consignmentId, string wandString);
+        WandPackResult Wand(string transType, int userNumber, int consignmentId, string wandString);
     }
 }
