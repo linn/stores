@@ -1208,6 +1208,7 @@
             q.Property(v => v.Addressee).HasColumnName("ADDRESSEE");
             q.Property(v => v.IsDone).HasColumnName("DONE");
             q.Property(v => v.CountryCode).HasColumnName("COUNTRY");
+            q.Property(v => v.Address).HasColumnName("ADDRESS");
         }
 
         private void QueryWandItems(ModelBuilder builder)
