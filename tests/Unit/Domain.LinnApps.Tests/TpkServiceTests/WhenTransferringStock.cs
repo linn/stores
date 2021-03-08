@@ -62,6 +62,12 @@
         }
 
         [Test]
+        public void ShouldCallUpdateQuantity()
+        {
+            this.TpkOoPack.Received().UpdateQuantityPrinted(Arg.Any<string>(), out Arg.Any<bool>());
+        }
+
+        [Test]
         public void ShouldReturnResult()
         {
             this.result.Should().BeOfType<TpkResult>();

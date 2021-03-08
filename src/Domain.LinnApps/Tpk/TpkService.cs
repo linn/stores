@@ -69,7 +69,7 @@
 
             if (!success)
             {
-                throw new TpkException("Failed Updating Qty");
+                throw new TpkException("Failed in update_qty_printed.");
             }
 
             return new TpkResult
