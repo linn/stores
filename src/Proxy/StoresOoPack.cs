@@ -8,7 +8,12 @@
     {
         public void DoTpk(int locationId, int palletNumber, DateTime dateTimeStarted, out bool success)
         {
-            success = true;
+            success = true; // TODO
+        }
+
+        public string GetErrorMessage()
+        {
+            return "MESSAGE"; // TODO
         }
     }
 }

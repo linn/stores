@@ -77,12 +77,11 @@
                 throw new TpkException("Failed in update_qty_printed.");
             }
 
-            var tpkSuccesful = false;
-            this.storesOoPack.DoTpk((int)from.LocationId, from.PalletNumber, DateTime.Now, out tpkSuccesful);
+            this.storesOoPack.DoTpk((int)from.LocationId, from.PalletNumber, DateTime.Now, out var tpkSuccessful);
 
-            if (!tpkSuccesful)
+            if (!tpkSuccessful)
             {
-                throw new TpkException("TPK failed... can we get an error message?");
+                throw new TpkException(this.storesOoPack.GetErrorMessage());
             }
 
             return new TpkResult
