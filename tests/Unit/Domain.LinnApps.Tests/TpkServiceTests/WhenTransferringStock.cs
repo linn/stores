@@ -25,14 +25,22 @@
         public void SetUp()
         {
             var toTransfer = new List<TransferableStock> { new TransferableStock { FromLocation = "A" } };
-                                     this.AccountingCompaniesRepository
+                                     
+            this.AccountingCompaniesRepository
                                          .FindBy(Arg.Any<Expression<Func<AccountingCompany, bool>>>()).Returns(
                 new AccountingCompany { Name = "LINN", LatesSalesAllocationDate = DateTime.UnixEpoch });
+            
             this.TpkView.FilterBy(Arg.Any<Expression<Func<TransferableStock, bool>>>())
                 .Returns(this.repositoryResult.AsQueryable());
 
             this.whatToWandService.WhatToWand("A")
                 .Returns(new List<WhatToWandLine> { new WhatToWandLine { ConsignmentId = 1 } });
+
+            this.TpkOoPack.When(x => x.UpdateQuantityPrinted(Arg.Any<string>(), out var success))
+                .Do(x =>
+                    {
+                        x[1] = true;
+                    });
 
             this.result = this.Sut.TransferStock(new TpkRequest
                                                      {

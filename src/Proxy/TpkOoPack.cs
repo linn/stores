@@ -5,6 +5,7 @@
     using Linn.Stores.Domain.LinnApps.ExternalServices;
 
     using Oracle.ManagedDataAccess.Client;
+    using Oracle.ManagedDataAccess.Types;
 
     public class TpkOoPack : ITpkOoPack
     {
@@ -48,6 +49,37 @@
                 cmd.ExecuteNonQuery();
                 connection.Close();
                 return result.Value.ToString();
+            }
+        }
+
+        public void UpdateQuantityPrinted(string fromLocation, out bool success)
+        {
+            success = false;
+            using (var connection = this.databaseService.GetConnection())
+            {
+                connection.Open();
+                var cmd = new OracleCommand("tpk_oo.update_qty_printed", connection)
+                              {
+                                  CommandType = CommandType.StoredProcedure
+                              };
+
+                var arg1 = new OracleParameter("p_from_location", OracleDbType.Varchar2)
+                               {
+                                   Direction = ParameterDirection.Input,
+                                   Size = 50,
+                                   Value = fromLocation
+                               };
+                cmd.Parameters.Add(arg1);
+
+                var arg2 = new OracleParameter("p_success", OracleDbType.Boolean)
+                               {
+                                   Direction = ParameterDirection.InputOutput,
+                                   Value = success
+                               };
+                cmd.Parameters.Add(arg2);
+                success = ((OracleBoolean)cmd.Parameters[1].Value).IsTrue;
+                cmd.ExecuteNonQuery();
+                connection.Close();
             }
         }
     }
