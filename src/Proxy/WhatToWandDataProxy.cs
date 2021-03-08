@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.Proxy
 {
     using System.Collections.Generic;
-
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
 
@@ -27,7 +26,7 @@
                 SALES_ORDER_DETAILS SOD,
                 V_STORAGE_PLACES STP
                 WHERE C.CONSIGNMENT_ID=RH.DOCUMENT_1
-                AND STP.STORAGE_PLACE = {fromLocation}
+                AND STP.STORAGE_PLACE = '{fromLocation}'
 				AND NVL(SR.LOCATION_ID,-1)=NVL(STP.LOCATION_ID,-1)
 				AND NVL(SR.PALLET_NUMBER,-1)=NVL(STP.PALLET_NUMBER,-1)
                 AND RH.DOC1_NAME='CONS'
@@ -49,11 +48,26 @@
                 AND RL.LINE_NUMBER=RM.LINE_NUMBER
                 AND RM.STOCK_LOCATOR_ID=SR.STOCK_LOCATOR_ID
                 AND SR.LOCATION_ID=SL.LOCATION_ID (+)
-                AND tpk_oo.wtw_type(C.CONSIGNMENT_ID)<>'*TPKD*'
+                AND tpk_oo.wtw_type(C.CONSIGNMENT_ID)='*TPKD*' --fix me
                 AND C.STATUS='L'";
 
-            var res = this.databaseService.ExecuteQuery(sql).Tables[0];
-            return new List<WhatToWandLine>();
+            var rows = this.databaseService.ExecuteQuery(sql).Tables[0].Rows;
+            var result = new List<WhatToWandLine>();
+
+            for (var i = 0; i < rows.Count; i++)
+            {
+                var data = rows[i].ItemArray;
+                result.Add(new WhatToWandLine
+                              {
+                                  ConsignmentId = (int)data[0],
+                                  ShippingMethod = data[1].ToString(),
+                                  Terms = data[2].ToString(),
+                                  Status = data[3].ToString(),
+                                  Carrier = data[4].ToString(),
+                                  // what other data needs to go on the WTW report?
+                              });
+            }
+            return result;
         }
     }
 }

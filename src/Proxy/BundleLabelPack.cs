@@ -20,7 +20,7 @@
             using (var connection = this.databaseService.GetConnection())
             {
                 connection.Open();
-                var cmd = new OracleCommand("bundle_labbel_pack.print_tpk_box_labels ", connection)
+                var cmd = new OracleCommand("bundle_label_pack.print_tpk_box_labels ", connection)
                               {
                                   CommandType = CommandType.StoredProcedure
                               };

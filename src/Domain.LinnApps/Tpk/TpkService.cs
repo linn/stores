@@ -61,7 +61,7 @@
             var transferredWithNotes = candidates.Select(
                 s => new TransferredStock(s, this.tpkOoPack.GetTpkNotes((int)s.ConsignmentId, s.FromLocation)));
 
-            this.bundleLabelPack.PrintTpkBoxLabels(fromLocation);
+            // this.bundleLabelPack.PrintTpkBoxLabels(fromLocation);
 
             var whatToWand = this.whatToWandService.WhatToWand(fromLocation);
 

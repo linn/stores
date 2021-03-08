@@ -36,7 +36,15 @@
                                             StoragePlaceDescription = s.StoragePlaceDescription,
                                             VaxPallet = s.VaxPallet,
                                             Notes = s.Notes
-                                        })
+                                        }),
+                           WhatToWandReport = tpkResult.WhatToWand.Select(wtw => new WhatToWandLineResource
+                               {
+                                   Carrier = wtw.Carrier,
+                                   ConsignmentId = wtw.ConsignmentId,
+                                   ShippingMethod = wtw.ShippingMethod,
+                                   Status = wtw.Status,
+                                   Terms = wtw.Terms
+                               })
                        };
         }
 

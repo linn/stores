@@ -9,5 +9,7 @@
         public string Message { get; set; }
 
         public IEnumerable<TransferredStockResource> Transferred { get; set; }
+
+        public IEnumerable<WhatToWandLineResource> WhatToWandReport { get; set; }
     }
 }
