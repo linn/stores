@@ -170,6 +170,14 @@ function Wand({
         return details.map((d, i) => ({ id: i, ...d }));
     };
 
+    const getBoxValue = (params, box) => {
+        if (params.row.boxesPerProduct >= box) {
+            return box;
+        }
+
+        return '';
+    };
+
     const columns = [
         { field: 'partNumber', headerName: 'Article No', width: 140 },
         { field: 'quantity', headerName: 'Qty', width: 100 },
@@ -184,6 +192,40 @@ function Wand({
         { field: 'partDescription', headerName: 'Description', width: 230 },
         { field: 'orderNumber', headerName: 'Order', width: 100 },
         { field: 'orderLine', headerName: 'Line', width: 80 },
+        {
+            field: 'boxesPerProduct',
+            description: 'Boxes Per Product',
+            headerName: 'Boxes',
+            width: 100
+        },
+        {
+            field: 'box1',
+            headerName: '1',
+            description: 'Box 1',
+            width: 60,
+            valueGetter: params => getBoxValue(params, 1)
+        },
+        {
+            field: 'box2',
+            headerName: '2',
+            description: 'Box 2',
+            width: 60,
+            valueGetter: params => getBoxValue(params, 2)
+        },
+        {
+            field: 'box3',
+            description: 'Box 3',
+            headerName: '3',
+            width: 60,
+            valueGetter: params => getBoxValue(params, 3)
+        },
+        {
+            field: 'box4',
+            headerName: '4',
+            description: 'Box 4',
+            width: 60,
+            valueGetter: params => getBoxValue(params, 4)
+        },
         { field: 'linnBarCode', headerName: 'Bar Code', width: 120, hide: true },
         { field: 'requisitionNumber', headerName: 'Req No', width: 100, hide: true },
         { field: 'requisitionLine', headerName: 'Req Line', width: 110, hide: true }
