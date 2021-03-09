@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Proxy
 {
+    using System;
     using System.Data;
 
     using Linn.Stores.Domain.LinnApps.ExternalServices;
@@ -64,6 +65,16 @@
                 Message = messageParameter.Value.ToString(),
                 Success = int.Parse(successParameter.Value.ToString()) == 1
             };
+        }
+
+        public void DoTpk(int locationId, int palletNumber, DateTime dateTimeStarted, out bool success)
+        {
+            success = true; // TODO
+        }
+
+        public string GetErrorMessage()
+        {
+            return "MESSAGE"; // TODO
         }
     }
 }

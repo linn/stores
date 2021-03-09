@@ -42,7 +42,7 @@
                         x[1] = true;
                     });
 
-            this.StoresOoPack.When(x => x.DoTpk(1, 1, Arg.Any<DateTime>(), out var success))
+            this.StoresPack.When(x => x.DoTpk(1, 1, Arg.Any<DateTime>(), out var success))
                 .Do(x =>
                     {
                         x[3] = true;
@@ -76,7 +76,7 @@
         [Test]
         public void ShouldDoTpk()
         {
-            this.StoresOoPack.Received().DoTpk(1, 1, Arg.Any<DateTime>(), out Arg.Any<bool>());
+            this.StoresPack.Received().DoTpk(1, 1, Arg.Any<DateTime>(), out Arg.Any<bool>());
         }
 
         [Test]

@@ -20,7 +20,7 @@
 
         private readonly IWhatToWandService whatToWandService;
 
-        private readonly IStoresOoPack storesOoPack;
+        private readonly IStoresPack storesOoPack;
 
         public TpkService(
             IQueryRepository<TransferableStock> tpkView,
@@ -28,7 +28,7 @@
             ITpkOoPack tpkOoPack,
             IBundleLabelPack bundleLabelPack,
             IWhatToWandService whatToWandService,
-            IStoresOoPack storesOoPack)
+            IStoresPack storesOoPack)
         {
             this.tpkView = tpkView;
             this.tpkOoPack = tpkOoPack;

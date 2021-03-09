@@ -47,9 +47,9 @@
                     x[1] = true;
                 });
 
-            this.StoresOoPack.GetErrorMessage().Returns("TPK FAILED");
+            this.StoresPack.GetErrorMessage().Returns("TPK FAILED");
 
-            this.StoresOoPack.When(x => x.DoTpk(1, 1, Arg.Any<DateTime>(), out var success))
+            this.StoresPack.When(x => x.DoTpk(1, 1, Arg.Any<DateTime>(), out var success))
                 .Do(x =>
                     {
                         x[3] = false;
