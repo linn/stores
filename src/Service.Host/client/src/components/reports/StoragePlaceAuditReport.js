@@ -11,7 +11,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
-import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Page from '../../containers/Page';
@@ -30,9 +29,33 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function StoragePlaceAuditReport({ reportData, loading, error }) {
-    const [printLayout, setPrintLayout] = useState(false);
-
     const classes = useStyles();
+
+    const ViewLayout = () => (
+        <Page>
+            <Grid container spacing={3}>
+                {error && (
+                    <Grid item xs={12}>
+                        <ErrorCard errorMessage={error} />
+                    </Grid>
+                )}
+                <Grid item xs={12}>
+                    {loading ? (
+                        <Loading />
+                    ) : (
+                        reportData && (
+                            <ReportTable
+                                reportData={reportData}
+                                showTotals={false}
+                                showTitle
+                                title={reportData ? reportData?.title.displayString : 'Loading'}
+                            />
+                        )
+                    )}
+                </Grid>
+            </Grid>
+        </Page>
+    );
 
     const PrintLayout = () => {
         const headers = reportData.headers.columnHeaders;
@@ -84,67 +107,23 @@ export default function StoragePlaceAuditReport({ reportData, loading, error }) 
     };
 
     return (
-        <div className="print-landscape">
-            {printLayout ? (
-                <>
-                    <div className="hide-when-printing">
-                        <Button
-                            variant="outlined"
-                            className={classes.printButton}
-                            onClick={() => setPrintLayout(!printLayout)}
-                        >
-                            View Layout
-                        </Button>
-                    </div>
-
+        <>
+            {reportData && !loading && (
+                <div className="print-landscape show-only-when-printing">
                     <PrintLayout reportData={reportData} />
-                </>
-            ) : (
-                <Page>
-                    <Grid container spacing={3}>
-                        {error && (
-                            <Grid item xs={12}>
-                                <ErrorCard errorMessage={error} />
-                            </Grid>
-                        )}
-                        <Grid item xs={12}>
-                            {loading ? (
-                                <Loading />
-                            ) : (
-                                reportData && (
-                                    <>
-                                        <Button
-                                            variant="outlined"
-                                            onClick={() => setPrintLayout(!printLayout)}
-                                            className={classes.viewButton}
-                                        >
-                                            Print Layout
-                                        </Button>
-                                        <ReportTable
-                                            reportData={reportData}
-                                            showTotals={false}
-                                            showTitle
-                                            title={
-                                                reportData
-                                                    ? reportData?.title.displayString
-                                                    : 'Loading'
-                                            }
-                                        />
-                                    </>
-                                )
-                            )}
-                        </Grid>
-                    </Grid>
-                </Page>
+                </div>
             )}
-        </div>
+            <div className="hide-when-printing">
+                <ViewLayout />
+            </div>
+        </>
     );
 }
 
 StoragePlaceAuditReport.propTypes = {
     reportData: PropTypes.shape({
         title: PropTypes.shape({ displayString: PropTypes.string }),
-        headers: PropTypes.arrayOf(PropTypes.shape),
+        headers: PropTypes.shape(),
         results: PropTypes.arrayOf(PropTypes.shape)
     }),
     loading: PropTypes.bool,
