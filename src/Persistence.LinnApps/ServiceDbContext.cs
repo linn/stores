@@ -1,15 +1,15 @@
 ﻿namespace Linn.Stores.Persistence.LinnApps
 {
-    using System.Runtime.InteropServices.ComTypes;
-
     using Linn.Common.Configuration;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
+    using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation;
 
@@ -147,7 +147,17 @@
 
         public DbQuery<WandItem> WandItems { get; set; }
 
+        public DbQuery<ExportRsn> Rsns { get; set; }
+
+        public DbQuery<SalesAccount> SalesAccounts { get; set; }
+
+        public DbSet<SalesOutlet> SalesOutlets { get; set; }
+
         public DbQuery<StockQuantities> StockQuantitiesForMrView { get; set; }
+
+        public DbSet<RequisitionHeader> RequisitionHeaders { get; set; }
+
+        public DbSet<WandLog> WandLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -216,7 +226,11 @@
             this.QueryStockLocatorBatches(builder);
             this.QueryWandConsignments(builder);
             this.QueryWandItems(builder);
+            this.QueryRsns(builder);
+            this.QuerySalesAccounts(builder);
             this.QueryStockQuantitIesForMrView(builder);
+            this.BuildRequisitionHeaders(builder);
+            this.BuildWandLogs(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1194,6 +1208,7 @@
             q.Property(v => v.Addressee).HasColumnName("ADDRESSEE");
             q.Property(v => v.IsDone).HasColumnName("DONE");
             q.Property(v => v.CountryCode).HasColumnName("COUNTRY");
+            q.Property(v => v.Address).HasColumnName("ADDRESS");
         }
 
         private void QueryWandItems(ModelBuilder builder)
@@ -1210,6 +1225,33 @@
             q.Property(v => v.RequisitionNumber).HasColumnName("REQ_NUMBER");
             q.Property(v => v.RequisitionLine).HasColumnName("LINE_NUMBER");
             q.Property(v => v.CountryCode).HasColumnName("COUNTRY");
+            q.Property(v => v.BoxesPerProduct).HasColumnName("BOXES_PER_PRODUCT");
+            q.Property(v => v.AllWanded).HasColumnName("ALL_WANDED");
+        }
+
+        private void QueryRsns(ModelBuilder builder)
+        {
+            var q = builder.Query<ExportRsn>().ToView("EXPORT_RSNS_VIEW");
+            q.Property(e => e.RsnNumber).HasColumnName("RSN_NUMBER");
+            q.Property(e => e.ReasonCodeAlleged).HasColumnName("REASON_CODE_ALLEGED").HasMaxLength(10);
+            q.Property(e => e.DateEntered).HasColumnName("DATE_ENTERED");
+            q.Property(e => e.Quantity).HasColumnName("QUANTITY");
+            q.Property(e => e.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
+            q.Property(e => e.AccountId).HasColumnName("ACCOUNT_ID");
+            q.Property(e => e.OutletNumber).HasColumnName("OUTLET_NUMBER");
+            q.Property(e => e.OutletName).HasColumnName("OUTLET_NAME").HasMaxLength(50);
+            q.Property(e => e.Country).HasColumnName("COUNTRY").HasMaxLength(2);
+            q.Property(e => e.CountryName).HasColumnName("COUNTRY_NAME").HasMaxLength(50);
+            q.Property(e => e.AccountType).HasColumnName("ACCOUNT_TYPE").HasMaxLength(10);
+        }
+
+        private void QuerySalesAccounts(ModelBuilder builder)
+        {
+            var q = builder.Query<SalesAccount>().ToView("SALES_ACCOUNTS");
+            q.Property(e => e.AccountId).HasColumnName("ACCOUNT_ID");
+            q.Property(e => e.AccountName).HasColumnName("ACCOUNT_NAME").HasMaxLength(50);
+            q.Property(e => e.AccountType).HasColumnName("ACCOUNT_TYPE");
+            q.Property(e => e.DateClosed).HasColumnName("DATE_CLOSED");
         }
 
         private void QueryStockQuantitIesForMrView(ModelBuilder builder)
@@ -1228,6 +1270,34 @@
             q.Property(s => s.SupplierStockAllocated).HasColumnName("SUPPLIER_STOCK_ALLOCATED");
             q.Property(s => s.OtherStock).HasColumnName("OTHER_STOCK");
             q.Property(s => s.OtherStockAllocated).HasColumnName("OTHER_STOCK_ALLOCATED");
+        }
+
+        private void BuildRequisitionHeaders(ModelBuilder builder)
+        {
+            var r = builder.Entity<RequisitionHeader>().ToTable("REQUISITION_HEADERS");
+            r.HasKey(l => l.ReqNumber);
+            r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
+            r.Property(l => l.Document1).HasColumnName("DOCUMENT_1");
+        }
+
+        private void BuildWandLogs(ModelBuilder builder)
+        {
+            var table = builder.Entity<WandLog>().ToTable("WANDLOG");
+            table.HasKey(w => w.Id);
+            table.Property(w => w.Id).HasColumnName("WANDLOG_ID");
+            table.Property(w => w.TransType).HasColumnName("TRANS_TYPE").HasMaxLength(2);
+            table.Property(w => w.DateWanded).HasColumnName("DATE_WANDED");
+            table.Property(w => w.EmployeeNumber).HasColumnName("EMPLOYEE_NUMBER");
+            table.Property(w => w.WandString).HasColumnName("WAND_STRING").HasMaxLength(20);
+            table.Property(w => w.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
+            table.Property(w => w.QtyWanded).HasColumnName("QTY_WANDED");
+            table.Property(w => w.SeriaNumber1).HasColumnName("SERIAL_NUMBER_1");
+            table.Property(w => w.SeriaNumber2).HasColumnName("SERIAL_NUMBER_2");
+            table.Property(w => w.OrderNumber).HasColumnName("ORDER_NUMBER");
+            table.Property(w => w.OrderLine).HasColumnName("ORDER_LINE");
+            table.Property(w => w.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            table.Property(w => w.ItemNo).HasColumnName("ITEM_NO");
+            table.Property(w => w.ContainerNo).HasColumnName("CONTAINER_NO");
         }
     }
 }

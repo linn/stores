@@ -9,8 +9,10 @@
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
+    using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Persistence.LinnApps;
@@ -90,7 +92,12 @@
                 .As<IQueryRepository<StockLocatorBatch>>();
             builder.RegisterType<WandConsignmentsRepository>().As<IQueryRepository<WandConsignment>>();
             builder.RegisterType<WandItemsRepository>().As<IQueryRepository<WandItem>>();
+            builder.RegisterType<ExportRsnRepository>().As<IQueryRepository<ExportRsn>>();
+            builder.RegisterType<SalesAccountRepository>().As<IQueryRepository<SalesAccount>>();
+            builder.RegisterType<SalesOutletRepository>().As<IQueryRepository<SalesOutlet>>();
             builder.RegisterType<StockQuantitiesRepository>().As<IQueryRepository<StockQuantities>>();
+            builder.RegisterType<RequisitionHeaderRepository>().As<IRepository<RequisitionHeader, int>>();
+            builder.RegisterType<WandLogRepository>().As<IRepository<WandLog, int>>();
         }
     }
 }

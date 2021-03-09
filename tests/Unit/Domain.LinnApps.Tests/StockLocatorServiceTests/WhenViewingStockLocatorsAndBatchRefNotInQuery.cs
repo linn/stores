@@ -22,14 +22,13 @@
             this.StockLocatorLocationsView
                 .FilterBy(Arg.Any<Expression<Func<StockLocatorLocation, bool>>>())
                 .Returns(this.repositoryResult);
-            this.Sut.GetStockLocatorLocationsView("PART", null, null, null, null, null, false);
+            this.Sut.SearchStockLocators("PART", null, null, null, null, null, false);
         }
 
         [Test]
         public void ShouldQueryLocationsView()
         {
-            this.StockLocatorLocationsView.Received()
-                .FilterBy(Arg.Any<Expression<Func<StockLocatorLocation, bool>>>());
+            this.StockLocatorLocationsView.Received().FindAll();
         }
     }
 }

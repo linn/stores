@@ -7,7 +7,6 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.StockLocators;
-    using Linn.Stores.Resources.RequestResources;
 
     using Nancy;
     using Nancy.Testing;
@@ -21,12 +20,9 @@
         [SetUp]
         public void SetUp()
         {
-            this.QuantitiesService
-                .GetStockQuantities(Arg.Any<string>()).Returns(new SuccessResult<StockQuantities>(
-                    new StockQuantities
-                    {
-                        GoodStock = 1000
-                    }));
+            var result = new List<StockQuantities> { new StockQuantities { GoodStock = 1000 } };
+            this.QuantitiesService.GetStockQuantities(Arg.Any<string>())
+                .Returns(new SuccessResult<IEnumerable<StockQuantities>>(result));
 
             this.Response = this.Browser.Get(
                 "/inventory/stock-quantities/",
@@ -52,8 +48,8 @@
         [Test]
         public void ShouldReturnResource()
         {
-            var resultResource = this.Response.Body.DeserializeJson<StockQuantities>();
-            resultResource.GoodStock.Should().Be(1000);
+            var resultResource = this.Response.Body.DeserializeJson<IEnumerable<StockQuantities>>();
+            resultResource.First().GoodStock.Should().Be(1000);
         }
     }
 }

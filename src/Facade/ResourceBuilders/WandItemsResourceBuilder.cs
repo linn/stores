@@ -25,7 +25,9 @@
                              CountryCode = w.CountryCode,
                              LinnBarCode = w.LinnBarCode,
                              RequisitionNumber = w.RequisitionNumber,
-                             RequisitionLine = w.RequisitionLine
+                             RequisitionLine = w.RequisitionLine,
+                             AllWanded = w.AllWanded == "Y",
+                             BoxesPerProduct = w.BoxesPerProduct
                          });
         }
 

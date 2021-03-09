@@ -26,7 +26,9 @@
 
         public IQueryable<StockQuantities> FilterBy(Expression<Func<StockQuantities, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext
+                .StockQuantitiesForMrView
+                .Where(expression);
         }
 
         public IQueryable<StockQuantities> FindAll()

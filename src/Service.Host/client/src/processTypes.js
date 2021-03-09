@@ -43,3 +43,9 @@ export const movePalletsToUpper = new ItemType(
 );
 
 export const doWandItem = new ItemType('doWandItem', 'DO_WAND_ITEM', '/logistics/wand/items');
+
+export const requisitionUnallocate = new ItemType(
+    'requisitionUnallocate',
+    'REQUISTION_UNALLOCATE',
+    '/logistics/requisitions/actions/un-allocate'
+);

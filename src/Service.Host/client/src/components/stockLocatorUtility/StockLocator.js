@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import {
     Title,
     SingleEditTable,
     Loading,
-    BackButton,
+    Dropdown,
     InputField
 } from '@linn-it/linn-form-components-library';
 import Typography from '@material-ui/core/Typography';
@@ -12,17 +12,16 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import Page from '../../containers/Page';
 
-function StockLocator({
-    items,
-    itemsLoading,
-    history,
-    fetchItems,
-    options,
-    quantities,
-    quantitiesLoading
-}) {
+function StockLocator({ items, itemsLoading, fetchItems, options, quantities, quantitiesLoading }) {
     const [batchView, setBatchView] = useState(false);
     const [hasDrilledDown, setHasDrilledDown] = useState(false);
+    const [selectedQuantities, setSelectQuantities] = useState();
+
+    useEffect(() => {
+        if (quantities?.length > 0) {
+            setSelectQuantities(quantities[0]);
+        }
+    }, [quantities]);
 
     const variableColumns =
         options?.batchRef || batchView
@@ -122,56 +121,26 @@ function StockLocator({
                     </Grid>
                 ) : (
                     <>
-                        <Grid item xs={12}>
-                            {items && (
-                                <SingleEditTable
-                                    newRowPosition="top"
-                                    columns={columns}
-                                    rows={items.map(i => ({
-                                        ...i,
-                                        id: i.id + i.batchRef + i.partNumber,
-                                        component: hasDrilledDown ? (
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    setBatchView(false);
-                                                    setHasDrilledDown(false);
-                                                    fetchItems(
-                                                        null,
-                                                        `&${queryString.stringify(options)}`
-                                                    );
-                                                }}
-                                            >
-                                                -
-                                            </button>
-                                        ) : (
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    setBatchView(true);
-                                                    setHasDrilledDown(true);
-                                                    fetchItems(
-                                                        null,
-                                                        `&locationId=${i.id}&partNumber=${
-                                                            i.partNumber
-                                                        }&queryBatchView=${true}&batchRef=${
-                                                            i.batchRef ? i.batchRef : ''
-                                                        }`
-                                                    );
-                                                }}
-                                            >
-                                                +
-                                            </button>
-                                        )
-                                    }))}
-                                    allowNewRowCreation={false}
-                                    editable={false}
-                                    allowNewRowCreations
-                                />
-                            )}
-                        </Grid>
-                        {quantities && !batchView && (
+                        {quantities?.length && selectedQuantities && !batchView && (
                             <>
+                                <Grid item xs={3}>
+                                    <Dropdown
+                                        items={quantities?.map(v => ({
+                                            id: v.partNumber,
+                                            displayText: v.partNumber
+                                        }))}
+                                        value={selectedQuantities.partNumber}
+                                        label="Show Summaries For Part"
+                                        propertyName="part"
+                                        onChange={(_propertyName, newValue) =>
+                                            setSelectQuantities(
+                                                quantities.find(x => x.partNumber === newValue)
+                                            )
+                                        }
+                                        allowNoValue={false}
+                                    />
+                                </Grid>
+                                <Grid item xs={9} />
                                 <Grid item xs={1}>
                                     <Typography variant="subtitle1" align="right">
                                         Main
@@ -181,7 +150,7 @@ function StockLocator({
                                     <InputField
                                         label="Good (Allocated)"
                                         propertyName="goodStock"
-                                        value={`${quantities.goodStock} (${quantities.goodStockAllocated})`}
+                                        value={`${selectedQuantities.goodStock} (${selectedQuantities.goodStockAllocated})`}
                                         disabled
                                     />
                                 </Grid>
@@ -189,7 +158,7 @@ function StockLocator({
                                     <InputField
                                         label="Uninspected (Allocated)"
                                         propertyName="uninspectedStock"
-                                        value={`${quantities.uninspectedStock} (${quantities.uninspectedStockAllocated})`}
+                                        value={`${selectedQuantities.uninspectedStock} (${selectedQuantities.uninspectedStockAllocated})`}
                                         disabled
                                     />
                                 </Grid>
@@ -197,7 +166,7 @@ function StockLocator({
                                     <InputField
                                         label="Faulty (Allocated)"
                                         propertyName="uninspectedStockAllocated"
-                                        value={`${quantities.faultyStock} (${quantities.faultyStockAllocated})`}
+                                        value={`${selectedQuantities.faultyStock} (${selectedQuantities.faultyStockAllocated})`}
                                         disabled
                                     />
                                 </Grid>
@@ -212,7 +181,7 @@ function StockLocator({
                                     <InputField
                                         label="Good (Allocated)"
                                         propertyName="distributorStock"
-                                        value={`${quantities.distributorStock} (${quantities.distributorStockAllocated})`}
+                                        value={`${selectedQuantities.distributorStock} (${selectedQuantities.distributorStockAllocated})`}
                                         disabled
                                     />
                                 </Grid>
@@ -226,18 +195,61 @@ function StockLocator({
                                     <InputField
                                         label="Good (Allocated)"
                                         propertyName="otherStock"
-                                        value={`${quantities.otherStock} (${quantities.otherStockAllocated})`}
+                                        value={`${selectedQuantities.otherStock} (${selectedQuantities.otherStockAllocated})`}
                                         disabled
                                     />
                                 </Grid>
                                 <Grid item xs={8} />
                             </>
                         )}
+                        {items && (
+                            <SingleEditTable
+                                newRowPosition="top"
+                                columns={columns}
+                                rows={items.map(i => ({
+                                    ...i,
+                                    id: i.id + i.batchRef + i.partNumber,
+                                    component: hasDrilledDown ? (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setBatchView(false);
+                                                setHasDrilledDown(false);
+                                                fetchItems(
+                                                    null,
+                                                    `&${queryString.stringify(options)}`
+                                                );
+                                            }}
+                                        >
+                                            -
+                                        </button>
+                                    ) : (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setBatchView(true);
+                                                setHasDrilledDown(true);
+                                                fetchItems(
+                                                    null,
+                                                    `&locationId=${i.id}&partNumber=${
+                                                        i.partNumber
+                                                    }&queryBatchView=${true}&batchRef=${
+                                                        i.batchRef ? i.batchRef : ''
+                                                    }`
+                                                );
+                                            }}
+                                        >
+                                            +
+                                        </button>
+                                    )
+                                }))}
+                                allowNewRowCreation={false}
+                                editable={false}
+                                allowNewRowCreations
+                            />
+                        )}
                     </>
                 )}
-                <Grid item xs={12}>
-                    <BackButton backClick={() => history.push('/inventory/stock-viewer')} />
-                </Grid>
             </Grid>
         </Page>
     );
@@ -253,23 +265,25 @@ StockLocator.propTypes = {
         batchRef: PropTypes.string
     }).isRequired,
     itemsLoading: PropTypes.bool,
-    history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+    history: PropTypes.shape({ goBack: PropTypes.func }).isRequired,
     fetchItems: PropTypes.func.isRequired,
-    quantities: PropTypes.shape({
-        partNumber: PropTypes.string,
-        goodStock: PropTypes.number,
-        goodStockAllocated: PropTypes.number,
-        uninspectedStock: PropTypes.number,
-        uninspectedStockAllocated: PropTypes.number,
-        faultyStock: PropTypes.number,
-        faultyStockAllocated: PropTypes.number,
-        distributorStock: PropTypes.number,
-        distributorStockAllocated: PropTypes.number,
-        supplierStock: PropTypes.number,
-        supplierStockAllocated: PropTypes.number,
-        otherStock: PropTypes.number,
-        otherStockAllocated: PropTypes.number
-    }),
+    quantities: PropTypes.arrayOf(
+        PropTypes.shape({
+            partNumber: PropTypes.string,
+            goodStock: PropTypes.number,
+            goodStockAllocated: PropTypes.number,
+            uninspectedStock: PropTypes.number,
+            uninspectedStockAllocated: PropTypes.number,
+            faultyStock: PropTypes.number,
+            faultyStockAllocated: PropTypes.number,
+            distributorStock: PropTypes.number,
+            distributorStockAllocated: PropTypes.number,
+            supplierStock: PropTypes.number,
+            supplierStockAllocated: PropTypes.number,
+            otherStock: PropTypes.number,
+            otherStockAllocated: PropTypes.number
+        })
+    ),
     quantitiesLoading: PropTypes.bool
 };
 

@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
     using System;
-    using System.Runtime.CompilerServices;
 
     using Linn.Common.Facade;
     using Linn.Common.Resources;

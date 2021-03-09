@@ -18,7 +18,8 @@
                                      ConsignmentId = w.ConsignmentId,
                                      Addressee = w.Addressee,
                                      CountryCode = w.CountryCode,
-                                     IsDone = w.IsDone
+                                     IsDone = w.IsDone,
+                                     Address = w.Address
                                  });
         }
 

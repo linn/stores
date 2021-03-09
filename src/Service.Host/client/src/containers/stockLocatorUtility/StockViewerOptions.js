@@ -1,8 +1,6 @@
 import { connect } from 'react-redux';
 import { initialiseOnMount } from '@linn-it/linn-form-components-library';
 import StockViewerOptions from '../../components/stockLocatorUtility/StockViewerOptions';
-import partsActions from '../../actions/partsActions';
-import partsSelectors from '../../selectors/partsSelectors';
 import storageLocationsActions from '../../actions/storageLocationsActions';
 import storageLocationsSelectors from '../../selectors/storageLocationsSelectors';
 import stockPoolsActions from '../../actions/stockPoolsActions';
@@ -13,11 +11,6 @@ import stockLocatorBatchesActions from '../../actions/stockLocatorBatchesActions
 import stockLocatorBatchesSelectors from '../../selectors/stockLocatorBatchesSelectors';
 
 const mapStateToProps = state => ({
-    parts: partsSelectors.getSearchItems(state, 100).map(i => ({
-        ...i,
-        name: i.partNumber
-    })),
-    partsLoading: partsSelectors.getSearchLoading(state),
     storageLocations: storageLocationsSelectors.getSearchItems(state, 100).map(i => ({
         ...i,
         id: i.id,
@@ -50,8 +43,6 @@ const initialise = () => dispatch => {
 
 const mapDispatchToProps = {
     initialise,
-    searchParts: partsActions.search,
-    clearPartsSearch: partsActions.clearSearch,
     searchStorageLocations: storageLocationsActions.search,
     clearStorageLocationsSearch: storageLocationsActions.clearSearch,
     searchStockPools: stockPoolsActions.search,

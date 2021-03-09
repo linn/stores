@@ -64,6 +64,7 @@
                     with.Dependency(this.StateService);
                     with.Dependency(this.QuantitiesService);
                     with.Dependency<IResourceBuilder<StockQuantities>>(new StockQuantitiesResourceBuilder());
+                    with.Dependency<IResourceBuilder<IEnumerable<StockQuantities>>>(new StockQuantitiesListResourceBuilder());
                     with.Dependency<IResourceBuilder<InspectedState>>(new InspectedStateResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<InspectedState>>>(new InspectedStatesResourceBuilder());
                     with.Dependency<IResourceBuilder<StockLocator>>(new StockLocatorResourceBuilder());
@@ -78,7 +79,7 @@
                     with.ResponseProcessor<StockLocatorsResponseProcessor>();
                     with.ResponseProcessor<StockLocatorResponseProcessor>();
                     with.ResponseProcessor<StockLocatorsWithStoragePlaceInfoResponseProcessor>();
-                    with.ResponseProcessor<StockQuantitiesResponseProcessor>();
+                    with.ResponseProcessor<StockQuantitiesListResponseProcessor>();
                     with.ResponseProcessor<StorageLocationsResponseProcessor>();
                     with.ResponseProcessor<InspectedStatesResponseProcessor>();
                     with.RequestStartup(
