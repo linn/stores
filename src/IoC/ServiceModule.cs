@@ -120,7 +120,7 @@
             builder.RegisterType<WcsPack>().As<IWcsPack>();
             builder.RegisterType<WandPack>().As<IWandPack>();
             builder.RegisterType<StoresPack>().As<IStoresPack>();
-            builder.RegisterType<TpkOoPack>().As<ITpkOoPack>();
+            builder.RegisterType<TpkPack>().As<ITpkPack>();
             builder.RegisterType<BundleLabelPack>().As<IBundleLabelPack>();
             builder.RegisterType<WhatToWandDataProxy>().As<IWhatToWandService>();
 

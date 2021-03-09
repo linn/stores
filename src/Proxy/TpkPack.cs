@@ -7,11 +7,11 @@
     using Oracle.ManagedDataAccess.Client;
     using Oracle.ManagedDataAccess.Types;
 
-    public class TpkOoPack : ITpkOoPack
+    public class TpkPack : ITpkPack
     {
         private readonly IDatabaseService databaseService;
 
-        public TpkOoPack(IDatabaseService databaseService)
+        public TpkPack(IDatabaseService databaseService)
         {
             this.databaseService = databaseService;
         }

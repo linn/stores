@@ -41,7 +41,7 @@
             this.WhatToWandService.WhatToWand("A")
                 .Returns(new List<WhatToWandLine> { new WhatToWandLine { ConsignmentId = 1 } });
 
-            this.TpkOoPack.When(x => x.UpdateQuantityPrinted(Arg.Any<string>(), out var success))
+            this.TpkPack.When(x => x.UpdateQuantityPrinted(Arg.Any<string>(), out var success))
                 .Do(x =>
                 {
                     x[1] = true;

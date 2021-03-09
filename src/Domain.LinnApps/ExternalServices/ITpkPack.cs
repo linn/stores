@@ -1,6 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.ExternalServices
 {
-    public interface ITpkOoPack
+    public interface ITpkPack
     {
         string GetTpkNotes(int consignmentId, string fromLocation);
 

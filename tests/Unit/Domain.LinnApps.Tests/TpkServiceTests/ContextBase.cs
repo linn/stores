@@ -16,7 +16,7 @@
 
         protected IQueryRepository<AccountingCompany> AccountingCompaniesRepository { get; set; }
 
-        protected ITpkOoPack TpkOoPack { get; set; }
+        protected ITpkPack TpkPack { get; set; }
 
         protected IBundleLabelPack BundleLabelPack { get; set; }
 
@@ -29,14 +29,14 @@
         {
             this.TpkView = Substitute.For<IQueryRepository<TransferableStock>>();
             this.AccountingCompaniesRepository = Substitute.For<IQueryRepository<AccountingCompany>>();
-            this.TpkOoPack = Substitute.For<ITpkOoPack>();
+            this.TpkPack = Substitute.For<ITpkPack>();
             this.BundleLabelPack = Substitute.For<IBundleLabelPack>();
             this.WhatToWandService = Substitute.For<IWhatToWandService>();
             this.StoresPack = Substitute.For<IStoresPack>();
             this.Sut = new TpkService(
                 this.TpkView, 
                 this.AccountingCompaniesRepository, 
-                this.TpkOoPack, 
+                this.TpkPack, 
                 this.BundleLabelPack,
                 this.WhatToWandService,
                 this.StoresPack);

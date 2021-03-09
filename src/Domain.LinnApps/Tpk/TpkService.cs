@@ -14,7 +14,7 @@
 
         private readonly IQueryRepository<AccountingCompany> accountingCompaniesRepository;
 
-        private readonly ITpkOoPack tpkOoPack;
+        private readonly ITpkPack tpkPack;
 
         private readonly IBundleLabelPack bundleLabelPack;
 
@@ -25,13 +25,13 @@
         public TpkService(
             IQueryRepository<TransferableStock> tpkView,
             IQueryRepository<AccountingCompany> accountingCompaniesRepository,
-            ITpkOoPack tpkOoPack,
+            ITpkPack tpkPack,
             IBundleLabelPack bundleLabelPack,
             IWhatToWandService whatToWandService,
             IStoresPack storesOoPack)
         {
             this.tpkView = tpkView;
-            this.tpkOoPack = tpkOoPack;
+            this.tpkPack = tpkPack;
             this.bundleLabelPack = bundleLabelPack;
             this.whatToWandService = whatToWandService;
             this.storesOoPack = storesOoPack;
@@ -64,20 +64,20 @@
             }
 
             var transferredWithNotes = candidates.Select(
-                s => new TransferredStock(s, this.tpkOoPack.GetTpkNotes((int)s.ConsignmentId, s.FromLocation)));
+                s => new TransferredStock(s, this.tpkPack.GetTpkNotes(s.ConsignmentId, s.FromLocation)));
 
             this.bundleLabelPack.PrintTpkBoxLabels(from.FromLocation);
 
             var whatToWand = this.whatToWandService.WhatToWand(from.FromLocation);
 
-            this.tpkOoPack.UpdateQuantityPrinted(from.FromLocation, out var updateQuantitySuccessful);
+            this.tpkPack.UpdateQuantityPrinted(from.FromLocation, out var updateQuantitySuccessful);
 
             if (!updateQuantitySuccessful)
             {
                 throw new TpkException("Failed in update_qty_printed.");
             }
 
-            this.storesOoPack.DoTpk((int)from.LocationId, from.PalletNumber, DateTime.Now, out var tpkSuccessful);
+            this.storesOoPack.DoTpk(from.LocationId, from.PalletNumber, DateTime.Now, out var tpkSuccessful);
 
             if (!tpkSuccessful)
             {
@@ -87,7 +87,7 @@
             return new TpkResult
                        {
                            Success = true,
-                           Message = "Some message",
+                           Message = "TPK Successful",
                            Transferred = transferredWithNotes,
                            WhatToWand = whatToWand
                        };

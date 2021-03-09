@@ -20,7 +20,7 @@
 
         public string InvoiceDescription { get; set; }
 
-        public int? ConsignmentId { get; set; }
+        public int ConsignmentId { get; set; }
 
         public string Addressee { get; set; }
 
