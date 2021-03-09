@@ -31,6 +31,7 @@ function Wand({
     const [resultStyle, setResultStyle] = useState('noMessage');
     const [wandMessage, setWandMessage] = useState('');
     const [selectedRow, setSelectedRow] = useState(null);
+    const [lastWandLogId, setLastWandLogId] = useState(null);
 
     const wandStringInput = useRef(null);
 
@@ -58,6 +59,27 @@ function Wand({
         }
     }, [wandResult]);
 
+    useEffect(() => {
+        if (
+            wandResult &&
+            wandResult.wandLog &&
+            wandResult.wandLog.id &&
+            lastWandLogId !== wandResult.wandLog.id
+        ) {
+            const consignmentDetails = wandConsignments.find(
+                a => a.consignmentId === consignmentId
+            );
+            const wandedItem = items.find(
+                a =>
+                    a.orderNumber === wandResult.wandLog.orderNumber &&
+                    a.orderLine === wandResult.wandLog.orderLine
+            );
+
+            // we now have enough information to optionally print a label here
+            setLastWandLogId(wandResult.wandLog.id);
+        }
+    }, [wandResult, consignmentId, wandConsignments, lastWandLogId, items]);
+
     const useStyles = makeStyles({
         ok: {
             color: 'black',
@@ -76,7 +98,7 @@ function Wand({
     const classes = useStyles();
 
     const handleConsignmentChange = (_propertyName, newValue) => {
-        setConsignmentId(newValue);
+        setConsignmentId(newValue ? parseInt(newValue, 10) : null);
         if (newValue) {
             getItems(newValue);
         } else {
@@ -347,7 +369,12 @@ Wand.propTypes = {
     doWandItem: PropTypes.func.isRequired,
     wandResult: PropTypes.shape({
         success: PropTypes.bool,
-        message: PropTypes.string
+        message: PropTypes.string,
+        wandLog: PropTypes.shape({
+            id: PropTypes.number,
+            orderNumber: PropTypes.number,
+            orderLine: PropTypes.number
+        })
     }),
     unallocateRequisition: PropTypes.func.isRequired
 };

@@ -9,6 +9,7 @@
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation;
 
@@ -156,6 +157,8 @@
 
         public DbSet<RequisitionHeader> RequisitionHeaders { get; set; }
 
+        public DbSet<WandLog> WandLogs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -227,6 +230,7 @@
             this.QuerySalesAccounts(builder);
             this.QueryStockQuantitIesForMrView(builder);
             this.BuildRequisitionHeaders(builder);
+            this.BuildWandLogs(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1204,6 +1208,7 @@
             q.Property(v => v.Addressee).HasColumnName("ADDRESSEE");
             q.Property(v => v.IsDone).HasColumnName("DONE");
             q.Property(v => v.CountryCode).HasColumnName("COUNTRY");
+            q.Property(v => v.Address).HasColumnName("ADDRESS");
         }
 
         private void QueryWandItems(ModelBuilder builder)
@@ -1273,6 +1278,26 @@
             r.HasKey(l => l.ReqNumber);
             r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
             r.Property(l => l.Document1).HasColumnName("DOCUMENT_1");
+        }
+
+        private void BuildWandLogs(ModelBuilder builder)
+        {
+            var table = builder.Entity<WandLog>().ToTable("WANDLOG");
+            table.HasKey(w => w.Id);
+            table.Property(w => w.Id).HasColumnName("WANDLOG_ID");
+            table.Property(w => w.TransType).HasColumnName("TRANS_TYPE").HasMaxLength(2);
+            table.Property(w => w.DateWanded).HasColumnName("DATE_WANDED");
+            table.Property(w => w.EmployeeNumber).HasColumnName("EMPLOYEE_NUMBER");
+            table.Property(w => w.WandString).HasColumnName("WAND_STRING").HasMaxLength(20);
+            table.Property(w => w.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
+            table.Property(w => w.QtyWanded).HasColumnName("QTY_WANDED");
+            table.Property(w => w.SeriaNumber1).HasColumnName("SERIAL_NUMBER_1");
+            table.Property(w => w.SeriaNumber2).HasColumnName("SERIAL_NUMBER_2");
+            table.Property(w => w.OrderNumber).HasColumnName("ORDER_NUMBER");
+            table.Property(w => w.OrderLine).HasColumnName("ORDER_LINE");
+            table.Property(w => w.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            table.Property(w => w.ItemNo).HasColumnName("ITEM_NO");
+            table.Property(w => w.ContainerNo).HasColumnName("CONTAINER_NO");
         }
     }
 }
