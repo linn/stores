@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import Grid from '@material-ui/core/Grid';
-import { Title } from '@linn-it/linn-form-components-library';
+import { Title, ErrorCard } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Page from '../containers/Page';
@@ -10,7 +10,9 @@ export default function Tpk({
     transferableStock,
     transferableStockLoading,
     transferStock,
-    transferredStock
+    transferredStock,
+    itemError,
+    clearErrors
 }) {
     const [selectedRows, setSelectedRows] = useState([]);
     const [dateTimeTpkViewQueried, setDateTimeTpkViewQueried] = useState(new Date());
@@ -74,16 +76,24 @@ export default function Tpk({
                 <Grid item xs={10}>
                     <Title text="TPK" />
                 </Grid>
+                {itemError && (
+                    <Grid item xs={12}>
+                        <ErrorCard
+                            errorMessage={itemError?.details?.errors?.[0] || itemError.statusText}
+                        />
+                    </Grid>
+                )}
                 <Grid item xs={2}>
                     <Button
                         style={{ marginTop: '22px' }}
                         variant="contained"
-                        onClick={() =>
+                        onClick={() => {
+                            clearErrors();
                             transferStock({
                                 stockToTransfer: selectedRows,
                                 dateTimeTpkViewQueried: dateTimeTpkViewQueried?.toISOString()
-                            })
-                        }
+                            });
+                        }}
                     >
                         Transfer
                     </Button>
@@ -111,11 +121,17 @@ Tpk.propTypes = {
     transferableStock: PropTypes.arrayOf(PropTypes.shape({})),
     transferredStock: PropTypes.arrayOf(PropTypes.shape({})),
     transferableStockLoading: PropTypes.bool,
-    transferStock: PropTypes.func.isRequired
+    transferStock: PropTypes.func.isRequired,
+    clearErrors: PropTypes.func.isRequired,
+    itemError: PropTypes.shape({
+        statusText: PropTypes.string,
+        details: PropTypes.shape({ errors: PropTypes.arrayOf(PropTypes.string) })
+    })
 };
 
 Tpk.defaultProps = {
     transferableStock: [],
     transferredStock: [],
-    transferableStockLoading: true
+    transferableStockLoading: true,
+    itemError: null
 };

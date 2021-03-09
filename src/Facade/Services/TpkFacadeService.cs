@@ -5,6 +5,7 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
     using Linn.Stores.Resources.Tpk;
@@ -52,8 +53,15 @@
                                                               VaxPallet = s.VaxPallet
                                                           })
                                  };
-            var result = this.domainService.TransferStock(tpkRequest);
-            return new SuccessResult<TpkResult>(result);
+            try
+            {
+                var result = this.domainService.TransferStock(tpkRequest);
+                return new SuccessResult<TpkResult>(result);
+            }
+            catch (TpkException ex)
+            {
+                return new BadRequestResult<TpkResult>(ex.Message);
+            }
         }
     }
 }
