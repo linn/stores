@@ -178,6 +178,14 @@ function Wand({
         return '';
     };
 
+    const getBoxClass = (params, box) => {
+        if (params.row.boxesWanded && params.row.boxesWanded.includes(box)) {
+            return classes.ok;
+        }
+
+        return classes.noMessage;
+    };
+
     const columns = [
         { field: 'partNumber', headerName: 'Article No', width: 140 },
         { field: 'quantity', headerName: 'Qty', width: 100 },
@@ -203,28 +211,32 @@ function Wand({
             headerName: '1',
             description: 'Box 1',
             width: 60,
-            valueGetter: params => getBoxValue(params, 1)
+            valueGetter: params => getBoxValue(params, 1),
+            cellClassName: params => getBoxClass(params, 1)
         },
         {
             field: 'box2',
             headerName: '2',
             description: 'Box 2',
             width: 60,
-            valueGetter: params => getBoxValue(params, 2)
+            valueGetter: params => getBoxValue(params, 2),
+            cellClassName: params => getBoxClass(params, 2)
         },
         {
             field: 'box3',
             description: 'Box 3',
             headerName: '3',
             width: 60,
-            valueGetter: params => getBoxValue(params, 3)
+            valueGetter: params => getBoxValue(params, 3),
+            cellClassName: params => getBoxClass(params, 3)
         },
         {
             field: 'box4',
             headerName: '4',
             description: 'Box 4',
             width: 60,
-            valueGetter: params => getBoxValue(params, 4)
+            valueGetter: params => getBoxValue(params, 4),
+            cellClassName: params => getBoxClass(params, 4)
         },
         { field: 'linnBarCode', headerName: 'Bar Code', width: 120, hide: true },
         { field: 'requisitionNumber', headerName: 'Req No', width: 100, hide: true },

@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Resources.Wand
 {
+    using System.Collections.Generic;
+
     public class WandItemResource
     {
         public int ConsignmentId { get; set; }
@@ -27,5 +29,7 @@
         public bool AllWanded { get; set; }
 
         public int BoxesPerProduct { get; set; }
+
+        public IEnumerable<int> BoxesWanded { get; set; }
     }
 }

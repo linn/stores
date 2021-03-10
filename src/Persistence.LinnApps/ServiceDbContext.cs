@@ -1227,6 +1227,7 @@
             q.Property(v => v.CountryCode).HasColumnName("COUNTRY");
             q.Property(v => v.BoxesPerProduct).HasColumnName("BOXES_PER_PRODUCT");
             q.Property(v => v.AllWanded).HasColumnName("ALL_WANDED");
+            q.Property(v => v.BoxesWanded).HasColumnName("BOXES_WANDED");
         }
 
         private void QueryRsns(ModelBuilder builder)
