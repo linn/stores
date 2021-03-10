@@ -27,7 +27,9 @@
                              RequisitionNumber = w.RequisitionNumber,
                              RequisitionLine = w.RequisitionLine,
                              AllWanded = w.AllWanded == "Y",
-                             BoxesPerProduct = w.BoxesPerProduct
+                             BoxesPerProduct = w.BoxesPerProduct,
+                             BoxesWanded =
+                                 string.IsNullOrWhiteSpace(w.BoxesWanded) ? null : this.GetBoxesWanded(w.BoxesWanded)
                          });
         }
 
@@ -38,5 +40,10 @@
 
         object IResourceBuilder<IEnumerable<WandItem>>.Build(IEnumerable<WandItem> wandItems) =>
             this.Build(wandItems);
+
+        private IEnumerable<int> GetBoxesWanded(string boxesWanded)
+        {
+            return boxesWanded.Select(ch => ch - '0').ToArray();
+        }
     }
 }

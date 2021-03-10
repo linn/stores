@@ -29,7 +29,7 @@
             this.items = new List<WandItem>
                                     {
                                         new WandItem { PartNumber = "pn1" },
-                                        new WandItem { PartNumber = "pn2" }
+                                        new WandItem { PartNumber = "pn2", BoxesWanded = "15" }
                                     };
             this.WandFacadeService.GetWandItems(this.consignmentId)
                 .Returns(new SuccessResult<IEnumerable<WandItem>>(this.items));
@@ -62,6 +62,9 @@
             resultResources.Should().HaveCount(2);
             resultResources.Should().Contain(a => a.PartNumber == "pn1");
             resultResources.Should().Contain(a => a.PartNumber == "pn1");
+            resultResources.First(a => a.PartNumber == "pn2").BoxesWanded.Should().HaveCount(2);
+            resultResources.First(a => a.PartNumber == "pn2").BoxesWanded.Should().Contain(1);
+            resultResources.First(a => a.PartNumber == "pn2").BoxesWanded.Should().Contain(5);
         }
     }
 }
