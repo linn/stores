@@ -22,7 +22,8 @@ function Wand({
     doWandItemWorking,
     doWandItem,
     wandResult,
-    unallocateRequisition
+    unallocateConsignment,
+    unallocateConsignmentLine
 }) {
     const [consignmentId, setConsignmentId] = useState('');
     const [wandAction, setWandAction] = useState('W');
@@ -66,14 +67,15 @@ function Wand({
             wandResult.wandLog.id &&
             lastWandLogId !== wandResult.wandLog.id
         ) {
-            const consignmentDetails = wandConsignments.find(
-                a => a.consignmentId === consignmentId
-            );
-            const wandedItem = items.find(
-                a =>
-                    a.orderNumber === wandResult.wandLog.orderNumber &&
-                    a.orderLine === wandResult.wandLog.orderLine
-            );
+            // data that will be needed to print address label
+            // const consignmentDetails = wandConsignments.find(
+            //     a => a.consignmentId === consignmentId
+            // );
+            // const wandedItem = items.find(
+            //     a =>
+            //         a.orderNumber === wandResult.wandLog.orderNumber &&
+            //         a.orderLine === wandResult.wandLog.orderLine
+            // );
 
             // we now have enough information to optionally print a label here
             setLastWandLogId(wandResult.wandLog.id);
@@ -116,13 +118,13 @@ function Wand({
 
     const handleUnallocateConsignment = () => {
         if (items && items.length > 0) {
-            unallocateRequisition({ requisitionNumber: items[0].requisitionNumber, userNumber });
+            unallocateConsignment({ requisitionNumber: items[0].requisitionNumber, userNumber });
         }
     };
 
     const handleUnallocateLine = () => {
         if (selectedRow) {
-            unallocateRequisition({
+            unallocateConsignmentLine({
                 requisitionNumber: selectedRow.requisitionNumber,
                 requisitionLine: selectedRow.requisitionLine,
                 userNumber
@@ -388,7 +390,8 @@ Wand.propTypes = {
             orderLine: PropTypes.number
         })
     }),
-    unallocateRequisition: PropTypes.func.isRequired
+    unallocateConsignment: PropTypes.func.isRequired,
+    unallocateConsignmentLine: PropTypes.func.isRequired
 };
 
 Wand.defaultProps = {

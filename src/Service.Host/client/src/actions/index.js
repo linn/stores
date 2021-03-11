@@ -157,6 +157,10 @@ export const stockQuantitiesActionTypes = makeReportActionTypes(
 
 export const doWandItemActionTypes = makeActionTypes(processTypes.doWandItem.actionType);
 
-export const requisitionUnallocateActionTypes = makeActionTypes(
-    processTypes.requisitionUnallocate.actionType
+export const unallocateConsignmentActionTypes = makeActionTypes(
+    processTypes.unallocateConsignment.actionType
+);
+
+export const unallocateConsignmentLineActionTypes = makeActionTypes(
+    processTypes.unallocateConsignmentLine.actionType
 );
