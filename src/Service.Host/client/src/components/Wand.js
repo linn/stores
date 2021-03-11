@@ -7,7 +7,13 @@ import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import { DataGrid } from '@material-ui/data-grid';
-import { Title, Dropdown, Loading, InputField } from '@linn-it/linn-form-components-library';
+import {
+    Title,
+    Dropdown,
+    Loading,
+    InputField,
+    SnackbarMessage
+} from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/core/styles';
 import Page from '../containers/Page';
 
@@ -23,7 +29,11 @@ function Wand({
     doWandItem,
     wandResult,
     unallocateConsignment,
-    unallocateConsignmentLine
+    unallocateConsignmentLine,
+    unallocateConsignmentResult,
+    unallocateConsignmentLineResult,
+    clearUnallocateConsignment,
+    clearUnallocateConsignmentLine
 }) {
     const [consignmentId, setConsignmentId] = useState('');
     const [wandAction, setWandAction] = useState('W');
@@ -257,6 +267,24 @@ function Wand({
         }
     };
 
+    const showUnallocateConsignmentError = () =>
+        unallocateConsignmentResult &&
+        !unallocateConsignmentResult.success &&
+        unallocateConsignmentResult.message;
+
+    const closeUnallocateConsignment = () => {
+        clearUnallocateConsignment({});
+    };
+
+    const showUnallocateConsignmentLineError = () =>
+        unallocateConsignmentLineResult &&
+        !unallocateConsignmentLineResult.success &&
+        unallocateConsignmentLineResult.message;
+
+    const closeUnallocateConsignmentLine = () => {
+        clearUnallocateConsignmentLine({});
+    };
+
     return (
         <Page>
             <Dialog open={showAlert} onClose={() => setShowAlert(false)}>
@@ -268,6 +296,23 @@ function Wand({
                 <Grid item xs={12}>
                     <Title text="Wand" />
                 </Grid>
+                <Grid item xs={12}>
+                    <SnackbarMessage
+                        visible={showUnallocateConsignmentError()}
+                        onClose={closeUnallocateConsignment}
+                        message={unallocateConsignmentResult?.message}
+                    />
+                    <SnackbarMessage
+                        visible={showUnallocateConsignmentLineError()}
+                        onClose={closeUnallocateConsignmentLine}
+                        message={unallocateConsignmentLineResult?.message}
+                    />
+                </Grid>
+                {/* {unallocateConsignmentLineResult && !unallocateConsignmentLineResult.success && (
+                    <Grid item xs={12}>
+                        <SnackbarMessage message={unallocateConsignmentLineResult.message} />
+                    </Grid>
+                )} */}
             </Grid>
             {loadingWandConsignments ? (
                 <Loading />
@@ -390,8 +435,18 @@ Wand.propTypes = {
             orderLine: PropTypes.number
         })
     }),
+    unallocateConsignmentResult: PropTypes.shape({
+        success: PropTypes.bool,
+        message: PropTypes.string
+    }),
+    unallocateConsignmentLineResult: PropTypes.shape({
+        success: PropTypes.bool,
+        message: PropTypes.string
+    }),
     unallocateConsignment: PropTypes.func.isRequired,
-    unallocateConsignmentLine: PropTypes.func.isRequired
+    unallocateConsignmentLine: PropTypes.func.isRequired,
+    clearUnallocateConsignment: PropTypes.func.isRequired,
+    clearUnallocateConsignmentLine: PropTypes.func.isRequired
 };
 
 Wand.defaultProps = {
@@ -401,6 +456,14 @@ Wand.defaultProps = {
     itemsLoading: false,
     doWandItemWorking: false,
     wandResult: {
+        message: null,
+        success: true
+    },
+    unallocateConsignmentResult: {
+        message: null,
+        success: true
+    },
+    unallocateConsignmentLineResult: {
         message: null,
         success: true
     }

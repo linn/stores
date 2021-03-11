@@ -10,6 +10,8 @@ import wandItemsSelectors from '../selectors/wandItemsSelectors';
 import { getUserNumber } from '../selectors/userSelectors';
 import doWandItemSelectors from '../selectors/doWandItemSelectors';
 import doWandItemActions from '../actions/doWandItemActions';
+import unallocateConsignmentSelectors from '../selectors/unallocateConsignmentSelectors';
+import unallocateConsignmentLineSelectors from '../selectors/unallocateConsignmentLineSelectors';
 
 const mapStateToProps = state => ({
     loadingWandConsignments: wandConsignmentsSelectors.getLoading(state),
@@ -18,7 +20,9 @@ const mapStateToProps = state => ({
     itemsLoading: wandItemsSelectors.getSearchLoading(state),
     userNumber: getUserNumber(state),
     doWandItemWorking: doWandItemSelectors.getWorking(state),
-    wandResult: doWandItemSelectors.getData(state)
+    wandResult: doWandItemSelectors.getData(state),
+    unallocateConsignmentResult: unallocateConsignmentSelectors.getData(state),
+    unallocateConsignmentLineResult: unallocateConsignmentLineSelectors.getData(state)
 });
 
 const initialise = () => dispatch => {
@@ -31,7 +35,9 @@ const mapDispatchToProps = {
     clearItems: wandItemsActions.clearSearch,
     doWandItem: doWandItemActions.requestProcessStart,
     unallocateConsignment: unallocateConsignmentActions.requestProcessStart,
-    unallocateConsignmentLine: unallocateConsignmentLineActions.requestProcessStart
+    unallocateConsignmentLine: unallocateConsignmentLineActions.requestProcessStart,
+    clearUnallocateConsignment: unallocateConsignmentActions.clearProcessData,
+    clearUnallocateConsignmentLine: unallocateConsignmentLineActions.clearProcessData
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Wand));
