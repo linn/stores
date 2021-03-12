@@ -37,14 +37,17 @@
                                             VaxPallet = s.VaxPallet,
                                             Notes = s.Notes
                                         }),
-                           WhatToWandReport = tpkResult.WhatToWand.Select(wtw => new WhatToWandLineResource
-                               {
-                                   Carrier = wtw.Carrier,
-                                   ConsignmentId = wtw.ConsignmentId,
-                                   ShippingMethod = wtw.ShippingMethod,
-                                   Status = wtw.Status,
-                                   Terms = wtw.Terms
-                               })
+                           WhatToWandReport = tpkResult.Report != null ? new WhatToWandResource
+                                                  {
+                                                      Consignment = new ConsignmentResource
+                                                                        {
+                                                                            AddressId = tpkResult.Report.Consignment.AddressId,
+                                                                            ConsignmentId = tpkResult.Report.Consignment.ConsignmentId,
+                                                                            Country = tpkResult.Report.Consignment.Country?.DisplayName,
+                                                                            SalesAccountId = tpkResult.Report.Consignment.SalesAccountId
+                                                                        }
+                                                  } 
+                                                  : null
                        };
         }
 

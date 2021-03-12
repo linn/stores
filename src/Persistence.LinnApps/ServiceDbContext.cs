@@ -159,6 +159,8 @@
 
         public DbQuery<TransferableStock> TransferableStock { get; set; }
 
+        public DbQuery<Consignment> Consignments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -231,6 +233,7 @@
             this.QueryStockQuantitIesForMrView(builder);
             this.BuildRequisitionHeaders(builder);
             this.QueryTpkView(builder);
+            this.QueryConsignments(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1299,6 +1302,16 @@
             q.Property(s => s.DespatchLocationCode).HasColumnName("DESPATCH_LOCATION_CODE");
             q.Property(s => s.OrderNumber).HasColumnName("ORDER_NUMBER");
             q.Property(s => s.OrderLine).HasColumnName("ORDER_LINE");
+        }
+
+        private void QueryConsignments(ModelBuilder builder)
+        {
+            var q = builder.Query<Consignment>().ToView("CONSIGNMENTS");
+            q.Property(c => c.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            q.Property(c => c.AddressId).HasColumnName("ADDRESS_ID");
+            q.Property(c => c.CountryCode).HasColumnName("COUNTRY");
+            q.Property(c => c.SalesAccountId).HasColumnName("SALES_ACCOUNT_ID");
+            q.HasOne(c => c.Country).WithMany(y => y.Consignments).HasForeignKey(c => c.CountryCode);
         }
     }
 }

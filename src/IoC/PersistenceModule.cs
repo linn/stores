@@ -98,6 +98,7 @@
             builder.RegisterType<StockQuantitiesRepository>().As<IQueryRepository<StockQuantities>>();
             builder.RegisterType<RequisitionHeaderRepository>().As<IRepository<RequisitionHeader, int>>();
             builder.RegisterType<TransferableStockRepository>().As<IQueryRepository<TransferableStock>>();
+            builder.RegisterType<ConsignmentRepository>().As<IQueryRepository<Consignment>>();
         }
     }
 }

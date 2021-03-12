@@ -10,6 +10,6 @@
 
         public IEnumerable<TransferredStock> Transferred { get; set; }
 
-        public IEnumerable<WhatToWandLine> WhatToWand { get; set; }
+        public WhatToWandReport Report { get; set; }
     }
 }

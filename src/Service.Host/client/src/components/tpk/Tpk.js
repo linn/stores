@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
+import { useReactToPrint } from 'react-to-print';
 import Grid from '@material-ui/core/Grid';
 import { Title, ErrorCard } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
-import Page from '../containers/Page';
+import Page from '../../containers/Page';
+import WhatToWandPrintout from './WhatToWandPrintOut';
 
 export default function Tpk({
     transferableStock,
@@ -12,11 +14,13 @@ export default function Tpk({
     transferStock,
     transferredStock,
     itemError,
-    clearErrors
+    clearErrors,
+    whatToWandReport
 }) {
     const [selectedRows, setSelectedRows] = useState([]);
     const [dateTimeTpkViewQueried, setDateTimeTpkViewQueried] = useState(new Date());
     const [rows, setRows] = useState([]);
+    const componentRef = useRef();
 
     const compare = (row, transferred) =>
         Object.keys(row).every(
@@ -32,6 +36,16 @@ export default function Tpk({
         );
         setDateTimeTpkViewQueried(new Date());
     }, [transferableStock]);
+
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current
+    });
+
+    useEffect(() => {
+        if (whatToWandReport?.length) {
+            handlePrint();
+        }
+    }, [whatToWandReport, handlePrint]);
 
     useEffect(() => {
         if (transferredStock?.length) {
@@ -72,6 +86,7 @@ export default function Tpk({
     };
     return (
         <Page>
+            <WhatToWandPrintout ref={componentRef} />
             <Grid container spacing={3}>
                 <Grid item xs={10}>
                     <Title text="TPK" />

@@ -24,6 +24,10 @@
 
         protected IStoresPack StoresPack { get; set; }
 
+        protected IQueryRepository<SalesOutlet> SalesOutletRepository { get; set; }
+
+        protected IQueryRepository<Consignment> ConsignmentRepository { get; set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -33,13 +37,17 @@
             this.BundleLabelPack = Substitute.For<IBundleLabelPack>();
             this.WhatToWandService = Substitute.For<IWhatToWandService>();
             this.StoresPack = Substitute.For<IStoresPack>();
+            this.SalesOutletRepository = Substitute.For<IQueryRepository<SalesOutlet>>();
+            this.ConsignmentRepository = Substitute.For<IQueryRepository<Consignment>>();
             this.Sut = new TpkService(
-                this.TpkView, 
-                this.AccountingCompaniesRepository, 
-                this.TpkPack, 
+                this.TpkView,
+                this.AccountingCompaniesRepository,
+                this.TpkPack,
                 this.BundleLabelPack,
                 this.WhatToWandService,
-                this.StoresPack);
+                this.SalesOutletRepository,
+                this.StoresPack, 
+                this.ConsignmentRepository);
         }
     }
 }

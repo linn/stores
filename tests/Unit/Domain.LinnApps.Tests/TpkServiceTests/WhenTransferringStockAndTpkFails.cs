@@ -39,7 +39,7 @@
                 .Returns(this.repositoryResult.AsQueryable());
 
             this.WhatToWandService.WhatToWand("A")
-                .Returns(new List<WhatToWandLine> { new WhatToWandLine { ConsignmentId = 1 } });
+                .Returns(new List<WhatToWandLine> { new WhatToWandLine { OrderLine = 1 } });
 
             this.TpkPack.When(x => x.UpdateQuantityPrinted(Arg.Any<string>(), out var success))
                 .Do(x =>

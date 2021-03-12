@@ -59,12 +59,7 @@
                 var data = rows[i].ItemArray;
                 result.Add(new WhatToWandLine
                               {
-                                  ConsignmentId = (int)data[0],
-                                  ShippingMethod = data[1].ToString(),
-                                  Terms = data[2].ToString(),
-                                  Status = data[3].ToString(),
-                                  Carrier = data[4].ToString(),
-                                  // what other data needs to go on the WTW report?
+                                  // what data needs to go on the WTW report?
                               });
             }
             return result;

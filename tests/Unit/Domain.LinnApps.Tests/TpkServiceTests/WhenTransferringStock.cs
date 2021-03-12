@@ -34,7 +34,7 @@
                 .Returns(this.repositoryResult.AsQueryable());
 
             this.WhatToWandService.WhatToWand("A")
-                .Returns(new List<WhatToWandLine> { new WhatToWandLine { ConsignmentId = 1 } });
+                .Returns(new List<WhatToWandLine> { new WhatToWandLine { OrderNumber = 1 } });
 
             this.TpkPack.When(x => x.UpdateQuantityPrinted(Arg.Any<string>(), out var success))
                 .Do(x =>
@@ -83,7 +83,7 @@
         public void ShouldReturnResult()
         {
             this.result.Should().BeOfType<TpkResult>();
-            this.result.WhatToWand.First().ConsignmentId.Should().Be(1);
+            this.result.Report.Consignment.ConsignmentId.Should().Be(1);
         }
     }
 }
