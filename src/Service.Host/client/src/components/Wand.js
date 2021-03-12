@@ -7,7 +7,13 @@ import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import { DataGrid } from '@material-ui/data-grid';
-import { Title, Dropdown, Loading, InputField } from '@linn-it/linn-form-components-library';
+import {
+    Title,
+    Dropdown,
+    Loading,
+    InputField,
+    SnackbarMessage
+} from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/core/styles';
 import Page from '../containers/Page';
 
@@ -22,7 +28,14 @@ function Wand({
     doWandItemWorking,
     doWandItem,
     wandResult,
-    unallocateRequisition
+    unallocateConsignment,
+    unallocateConsignmentLine,
+    unallocateConsignmentResult,
+    unallocateConsignmentLineResult,
+    clearUnallocateConsignment,
+    clearUnallocateConsignmentLine,
+    unallocateConsignmentWorking,
+    unallocateConsignmentLineWorking
 }) {
     const [consignmentId, setConsignmentId] = useState('');
     const [wandAction, setWandAction] = useState('W');
@@ -66,14 +79,15 @@ function Wand({
             wandResult.wandLog.id &&
             lastWandLogId !== wandResult.wandLog.id
         ) {
-            const consignmentDetails = wandConsignments.find(
-                a => a.consignmentId === consignmentId
-            );
-            const wandedItem = items.find(
-                a =>
-                    a.orderNumber === wandResult.wandLog.orderNumber &&
-                    a.orderLine === wandResult.wandLog.orderLine
-            );
+            // data that will be needed to print address label
+            // const consignmentDetails = wandConsignments.find(
+            //     a => a.consignmentId === consignmentId
+            // );
+            // const wandedItem = items.find(
+            //     a =>
+            //         a.orderNumber === wandResult.wandLog.orderNumber &&
+            //         a.orderLine === wandResult.wandLog.orderLine
+            // );
 
             // we now have enough information to optionally print a label here
             setLastWandLogId(wandResult.wandLog.id);
@@ -116,13 +130,13 @@ function Wand({
 
     const handleUnallocateConsignment = () => {
         if (items && items.length > 0) {
-            unallocateRequisition({ requisitionNumber: items[0].requisitionNumber, userNumber });
+            unallocateConsignment({ requisitionNumber: items[0].requisitionNumber, userNumber });
         }
     };
 
     const handleUnallocateLine = () => {
         if (selectedRow) {
-            unallocateRequisition({
+            unallocateConsignmentLine({
                 requisitionNumber: selectedRow.requisitionNumber,
                 requisitionLine: selectedRow.requisitionLine,
                 userNumber
@@ -255,6 +269,24 @@ function Wand({
         }
     };
 
+    const showUnallocateConsignmentError = () =>
+        unallocateConsignmentResult &&
+        !unallocateConsignmentResult.success &&
+        unallocateConsignmentResult.message;
+
+    const closeUnallocateConsignment = () => {
+        clearUnallocateConsignment({});
+    };
+
+    const showUnallocateConsignmentLineError = () =>
+        unallocateConsignmentLineResult &&
+        !unallocateConsignmentLineResult.success &&
+        unallocateConsignmentLineResult.message;
+
+    const closeUnallocateConsignmentLine = () => {
+        clearUnallocateConsignmentLine({});
+    };
+
     return (
         <Page>
             <Dialog open={showAlert} onClose={() => setShowAlert(false)}>
@@ -266,8 +298,25 @@ function Wand({
                 <Grid item xs={12}>
                     <Title text="Wand" />
                 </Grid>
+                <Grid item xs={12}>
+                    <SnackbarMessage
+                        visible={showUnallocateConsignmentError()}
+                        onClose={closeUnallocateConsignment}
+                        message={unallocateConsignmentResult?.message}
+                    />
+                    <SnackbarMessage
+                        visible={showUnallocateConsignmentLineError()}
+                        onClose={closeUnallocateConsignmentLine}
+                        message={unallocateConsignmentLineResult?.message}
+                    />
+                </Grid>
+                {/* {unallocateConsignmentLineResult && !unallocateConsignmentLineResult.success && (
+                    <Grid item xs={12}>
+                        <SnackbarMessage message={unallocateConsignmentLineResult.message} />
+                    </Grid>
+                )} */}
             </Grid>
-            {loadingWandConsignments ? (
+            {loadingWandConsignments || unallocateConsignmentWorking ? (
                 <Loading />
             ) : (
                 <Grid container spacing={3}>
@@ -313,7 +362,7 @@ function Wand({
                         </Button>
                     </Grid>
                     <Grid item xs={12}>
-                        {doWandItemWorking ? (
+                        {doWandItemWorking || unallocateConsignmentLineWorking ? (
                             <Loading />
                         ) : (
                             <TextField
@@ -388,7 +437,20 @@ Wand.propTypes = {
             orderLine: PropTypes.number
         })
     }),
-    unallocateRequisition: PropTypes.func.isRequired
+    unallocateConsignmentResult: PropTypes.shape({
+        success: PropTypes.bool,
+        message: PropTypes.string
+    }),
+    unallocateConsignmentLineResult: PropTypes.shape({
+        success: PropTypes.bool,
+        message: PropTypes.string
+    }),
+    unallocateConsignment: PropTypes.func.isRequired,
+    unallocateConsignmentLine: PropTypes.func.isRequired,
+    clearUnallocateConsignment: PropTypes.func.isRequired,
+    clearUnallocateConsignmentLine: PropTypes.func.isRequired,
+    unallocateConsignmentWorking: PropTypes.bool,
+    unallocateConsignmentLineWorking: PropTypes.bool
 };
 
 Wand.defaultProps = {
@@ -400,7 +462,17 @@ Wand.defaultProps = {
     wandResult: {
         message: null,
         success: true
-    }
+    },
+    unallocateConsignmentResult: {
+        message: null,
+        success: true
+    },
+    unallocateConsignmentLineResult: {
+        message: null,
+        success: true
+    },
+    unallocateConsignmentWorking: false,
+    unallocateConsignmentLineWorking: false
 };
 
 export default Wand;

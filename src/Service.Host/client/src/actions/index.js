@@ -84,15 +84,15 @@ export const partDataSheetValuesActionTypes = makeActionTypes(
     itemTypes.partDataSheetValues.actionType
 );
 
-export const finishAllocationActionTypes = makeActionTypes(
+export const finishAllocationActionTypes = makeProcessActionTypes(
     processTypes.finishAllocation.actionType
 );
 
-export const pickItemsAllocationActionTypes = makeActionTypes(
+export const pickItemsAllocationActionTypes = makeProcessActionTypes(
     processTypes.pickItemsAllocation.actionType
 );
 
-export const unpickItemsAllocationActionTypes = makeActionTypes(
+export const unpickItemsAllocationActionTypes = makeProcessActionTypes(
     processTypes.unpickItemsAllocation.actionType
 );
 
@@ -128,11 +128,11 @@ export const storageLocationsActionTypes = makeActionTypes(itemTypes.storageLoca
 
 export const inspectedStatesActionTypes = makeActionTypes(itemTypes.inspectedStates.actionType);
 
-export const movePalletToUpperActionTypes = makeActionTypes(
+export const movePalletToUpperActionTypes = makeProcessActionTypes(
     processTypes.movePalletToUpper.actionType
 );
 
-export const movePalletsToUpperActionTypes = makeActionTypes(
+export const movePalletsToUpperActionTypes = makeProcessActionTypes(
     processTypes.movePalletsToUpper.actionType
 );
 
@@ -155,8 +155,12 @@ export const stockQuantitiesActionTypes = makeReportActionTypes(
     itemTypes.stockQuantities.actionType
 );
 
-export const doWandItemActionTypes = makeActionTypes(processTypes.doWandItem.actionType);
+export const doWandItemActionTypes = makeProcessActionTypes(processTypes.doWandItem.actionType);
 
-export const requisitionUnallocateActionTypes = makeActionTypes(
-    processTypes.requisitionUnallocate.actionType
+export const unallocateConsignmentActionTypes = makeProcessActionTypes(
+    processTypes.unallocateConsignment.actionType
+);
+
+export const unallocateConsignmentLineActionTypes = makeProcessActionTypes(
+    processTypes.unallocateConsignmentLine.actionType
 );
