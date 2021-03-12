@@ -33,7 +33,9 @@ function Wand({
     unallocateConsignmentResult,
     unallocateConsignmentLineResult,
     clearUnallocateConsignment,
-    clearUnallocateConsignmentLine
+    clearUnallocateConsignmentLine,
+    unallocateConsignmentWorking,
+    unallocateConsignmentLineWorking
 }) {
     const [consignmentId, setConsignmentId] = useState('');
     const [wandAction, setWandAction] = useState('W');
@@ -314,7 +316,7 @@ function Wand({
                     </Grid>
                 )} */}
             </Grid>
-            {loadingWandConsignments ? (
+            {loadingWandConsignments || unallocateConsignmentWorking ? (
                 <Loading />
             ) : (
                 <Grid container spacing={3}>
@@ -360,7 +362,7 @@ function Wand({
                         </Button>
                     </Grid>
                     <Grid item xs={12}>
-                        {doWandItemWorking ? (
+                        {doWandItemWorking || unallocateConsignmentLineWorking ? (
                             <Loading />
                         ) : (
                             <TextField
@@ -446,7 +448,9 @@ Wand.propTypes = {
     unallocateConsignment: PropTypes.func.isRequired,
     unallocateConsignmentLine: PropTypes.func.isRequired,
     clearUnallocateConsignment: PropTypes.func.isRequired,
-    clearUnallocateConsignmentLine: PropTypes.func.isRequired
+    clearUnallocateConsignmentLine: PropTypes.func.isRequired,
+    unallocateConsignmentWorking: PropTypes.bool,
+    unallocateConsignmentLineWorking: PropTypes.bool
 };
 
 Wand.defaultProps = {
@@ -466,7 +470,9 @@ Wand.defaultProps = {
     unallocateConsignmentLineResult: {
         message: null,
         success: true
-    }
+    },
+    unallocateConsignmentWorking: false,
+    unallocateConsignmentLineWorking: false
 };
 
 export default Wand;

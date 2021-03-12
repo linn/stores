@@ -40,7 +40,7 @@
                 new OracleParameter("p_commit", OracleDbType.Int32)
                 {
                     Direction = ParameterDirection.Input,
-                    Value = 0
+                    Value = 1
                 });
             var messageParameter = new OracleParameter("p_message", OracleDbType.Varchar2)
                                        {
