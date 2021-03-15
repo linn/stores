@@ -34,8 +34,20 @@
         public int? GrossWeightKg { get; set; }
         
         public int? GrossDimsM3 { get; set; }
+
+        public string MadeIntercompanyInvoices { get; set; }
+
+        public DateTime? DateProcessed { get; set; }
+
+        public string ReturnForCredit { get; set; }
+
+        public string ExportCustomsEntryCode { get; set; }
+
+        public DateTime? ExportCustomsCodeDate { get; set; }
+
+        public Employee RaisedBy { get; set; }
         
-        public int RaisedBy { get; set; }
+        public SalesOutlet SalesOutlet { get; set; }
 
         public IEnumerable<ExportReturnDetail> ExportReturnDetails { get; set; }
     }

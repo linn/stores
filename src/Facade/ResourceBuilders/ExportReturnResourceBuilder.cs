@@ -11,6 +11,10 @@
         private readonly ExportReturnDetailResourceBuilder exportReturnDetailResourceBuilder =
             new ExportReturnDetailResourceBuilder();
 
+        private readonly EmployeeResourceBuilder employeeResourceBuilder = new EmployeeResourceBuilder();
+
+        private readonly SalesOutletResourceBuilder salesOutletResourceBuilder = new SalesOutletResourceBuilder();
+
         public ExportReturnResource Build(ExportReturn exportReturn)
         {
             return new ExportReturnResource
@@ -30,7 +34,13 @@
                            NumCartons = exportReturn.NumCartons,
                            GrossWeightKg = exportReturn.GrossWeightKg,
                            GrossDimsM3 = exportReturn.GrossDimsM3,
-                           RaisedBy = exportReturn.RaisedBy,
+                           MadeIntercompanyInvoices = exportReturn.MadeIntercompanyInvoices,
+                           DateProcessed = exportReturn.DateProcessed?.ToString("o"),
+                           ReturnForCredit = exportReturn.ReturnForCredit,
+                           ExportCustomsEntryCode = exportReturn.ExportCustomsEntryCode,
+                           ExportCustomsCodeDate = exportReturn.ExportCustomsCodeDate?.ToString("o"),
+                           RaisedBy = exportReturn.RaisedBy != null ? this.employeeResourceBuilder.Build(exportReturn.RaisedBy) : null,
+                           SalesOutlet = exportReturn.SalesOutlet != null ? this.salesOutletResourceBuilder.Build(exportReturn.SalesOutlet) : null,
                            ExportReturnDetails = exportReturn.ExportReturnDetails?.Select(
                                e => this.exportReturnDetailResourceBuilder.Build(e))
                        };

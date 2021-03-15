@@ -227,7 +227,7 @@
             this.QueryStockLocatorBatches(builder);
             this.QueryWandConsignments(builder);
             this.QueryWandItems(builder);
-            this.QueryRsns(builder);
+            this.QueryExportRsns(builder);
             this.QuerySalesAccounts(builder);
             this.QueryStockQuantitIesForMrView(builder);
             this.BuildRequisitionHeaders(builder);
@@ -1230,7 +1230,7 @@
             q.Property(v => v.AllWanded).HasColumnName("ALL_WANDED");
         }
 
-        private void QueryRsns(ModelBuilder builder)
+        private void QueryExportRsns(ModelBuilder builder)
         {
             var q = builder.Query<ExportRsn>().ToView("EXPORT_RSNS_VIEW");
             q.Property(e => e.RsnNumber).HasColumnName("RSN_NUMBER");
@@ -1300,8 +1300,15 @@
             q.Property(e => e.NumCartons).HasColumnName("NUM_CARTONS");
             q.Property(e => e.GrossWeightKg).HasColumnName("GROSS_WEIGHT_KG");
             q.Property(e => e.GrossDimsM3).HasColumnName("GROSS_DIMS_M3");
-            q.Property(e => e.RaisedBy).HasColumnName("RAISED_BY");
+            q.Property(e => e.MadeIntercompanyInvoices).HasColumnName("MADE_INTERCO_INVS");
+            q.Property(e => e.DateProcessed).HasColumnName("DATE_PROCESSED");
+            q.Property(e => e.ReturnForCredit).HasColumnName("RETURN_FOR_CREDIT");
+            q.Property(e => e.ExportCustomsEntryCode).HasColumnName("EXPORT_CUSTOMS_ENTRY_CODE");
+            q.Property(e => e.ExportCustomsCodeDate).HasColumnName("EXPORT_CUSTOMS_CODE_DATE");
             q.HasMany(e => e.ExportReturnDetails).WithOne(e => e.ExportReturn).HasForeignKey(e => e.ReturnId);
+            q.HasOne(e => e.RaisedBy).WithMany(l => l.ExportReturnsCreated).HasForeignKey("RAISED_BY");
+            q.HasOne(e => e.SalesOutlet).WithMany(l => l.ExportReturns)
+                .HasForeignKey(e => new { e.AccountId, e.OutletNumber });
         }
 
         private void BuildExportReturnDetails(ModelBuilder builder)

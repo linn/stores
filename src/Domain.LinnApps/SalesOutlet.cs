@@ -29,5 +29,7 @@
         public string CountryName { get; set; }
 
         public IEnumerable<SosAllocHead> SosAllocHeads { get; set; }
+
+        public IEnumerable<ExportReturn> ExportReturns { get; set; } 
     }
 }

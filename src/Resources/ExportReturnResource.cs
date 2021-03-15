@@ -34,8 +34,20 @@
 
         public int? GrossDimsM3 { get; set; }
 
-        public int RaisedBy { get; set; }
+        public string MadeIntercompanyInvoices { get; set; }
+
+        public string DateProcessed { get; set; }
+
+        public string ReturnForCredit { get; set; }
+
+        public string ExportCustomsEntryCode { get; set; }
+
+        public string ExportCustomsCodeDate { get; set; }
 
         public IEnumerable<ExportReturnDetailResource> ExportReturnDetails { get; set; }
+
+        public EmployeeResource RaisedBy { get; set; }
+
+        public SalesOutletResource SalesOutlet { get; set; }
     }
 }
