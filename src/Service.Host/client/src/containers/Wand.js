@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { initialiseOnMount } from '@linn-it/linn-form-components-library';
+import { initialiseOnMount, utilities } from '@linn-it/linn-form-components-library';
 import Wand from '../components/Wand';
 import wandConsignmentsActions from '../actions/wandConsignmentsActions';
 import wandConsignmentsSelectors from '../selectors/wandConsignmentsSelectors';
@@ -15,14 +15,19 @@ import unallocateConsignmentLineSelectors from '../selectors/unallocateConsignme
 
 const mapStateToProps = state => ({
     loadingWandConsignments: wandConsignmentsSelectors.getLoading(state),
-    wandConsignments: wandConsignmentsSelectors.getItems(state),
+    wandConsignments: utilities.sortEntityList(
+        wandConsignmentsSelectors.getItems(state),
+        'consignmentId'
+    ),
     items: wandItemsSelectors.getSearchItems(state),
     itemsLoading: wandItemsSelectors.getSearchLoading(state),
     userNumber: getUserNumber(state),
     doWandItemWorking: doWandItemSelectors.getWorking(state),
     wandResult: doWandItemSelectors.getData(state),
     unallocateConsignmentResult: unallocateConsignmentSelectors.getData(state),
-    unallocateConsignmentLineResult: unallocateConsignmentLineSelectors.getData(state)
+    unallocateConsignmentLineResult: unallocateConsignmentLineSelectors.getData(state),
+    unallocateConsignmentWorking: unallocateConsignmentSelectors.getWorking(state),
+    unallocateConsignmentLineWorking: unallocateConsignmentLineSelectors.getWorking(state)
 });
 
 const initialise = () => dispatch => {

@@ -128,6 +128,11 @@ function Wand({
         setSelectedRow(items[row.rowIds[0]]);
     };
 
+    const handleArticleNumberDoubleClick = wandStringSuggestion => {
+        setWandString(wandStringSuggestion);
+        wandStringInput.current.focus();
+    };
+
     const handleUnallocateConsignment = () => {
         if (items && items.length > 0) {
             unallocateConsignment({ requisitionNumber: items[0].requisitionNumber, userNumber });
@@ -152,9 +157,9 @@ function Wand({
     const consignmentOptions = () => {
         return wandConsignments?.map(c => ({
             id: c.consignmentId,
-            displayText: `Consignment: ${c.consignmentId} Addressee: ${c.addressee} Country: ${
-                c.countryCode
-            } ${c.isDone ? c.isDone : ' '} `
+            displayText: `${c.consignmentId} Addressee: ${c.addressee} Country: ${c.countryCode} ${
+                c.isDone ? c.isDone : ' '
+            } `
         }));
     };
 
@@ -201,7 +206,16 @@ function Wand({
     };
 
     const columns = [
-        { field: 'partNumber', headerName: 'Article No', width: 140 },
+        {
+            field: 'partNumber',
+            headerName: 'Article No',
+            width: 140,
+            renderCell: params => (
+                <div onDoubleClick={() => handleArticleNumberDoubleClick(params.row.wandStringSuggestion)}>
+                    {params.row.partNumber}
+                </div>
+            )
+        },
         { field: 'quantity', headerName: 'Qty', width: 100 },
         {
             field: 'quantityScanned',
@@ -388,6 +402,7 @@ function Wand({
                                 loading={itemsLoading}
                                 hideFooter
                                 pagination={false}
+                                onDoubleClick={handleArticleNumberDoubleClick}
                                 onSelectionChange={handleSelectRow}
                             />
                         </div>

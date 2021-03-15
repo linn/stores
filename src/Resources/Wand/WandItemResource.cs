@@ -31,5 +31,9 @@
         public int BoxesPerProduct { get; set; }
 
         public IEnumerable<int> BoxesWanded { get; set; }
+
+        public string TypeOfSerialNumber { get; set; }
+
+        public string WandStringSuggestion { get; set; }
     }
 }
