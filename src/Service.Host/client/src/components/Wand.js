@@ -7,6 +7,9 @@ import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import { DataGrid } from '@material-ui/data-grid';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 import {
     Title,
     Dropdown,
@@ -69,6 +72,7 @@ function Wand({
         } else {
             setResultStyle('notOk');
             setWandMessage(wandResult.message);
+            setShowAlert(true);
         }
     }, [wandResult]);
 
@@ -211,7 +215,11 @@ function Wand({
             headerName: 'Article No',
             width: 140,
             renderCell: params => (
-                <div onDoubleClick={() => handleArticleNumberDoubleClick(params.row.wandStringSuggestion)}>
+                <div
+                    onDoubleClick={() =>
+                        handleArticleNumberDoubleClick(params.row.wandStringSuggestion)
+                    }
+                >
                     {params.row.partNumber}
                 </div>
             )
@@ -303,10 +311,28 @@ function Wand({
 
     return (
         <Page>
-            <Dialog open={showAlert} onClose={() => setShowAlert(false)}>
+            <Dialog
+                open={showAlert}
+                onClose={() => setShowAlert(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">Wand Error</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>{wandString}</DialogContentText>
+                    <DialogContentText id="alert-dialog-description">
+                        {wandMessage}
+                    </DialogContentText>
                 </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={() => setShowAlert(false)}
+                        variant="contained"
+                        color="secondary"
+                        autoFocus
+                    >
+                        Close
+                    </Button>
+                </DialogActions>
             </Dialog>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
