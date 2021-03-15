@@ -1228,6 +1228,7 @@
             q.Property(v => v.BoxesPerProduct).HasColumnName("BOXES_PER_PRODUCT");
             q.Property(v => v.AllWanded).HasColumnName("ALL_WANDED");
             q.Property(v => v.BoxesWanded).HasColumnName("BOXES_WANDED");
+            q.Property(v => v.TypeOfSerialNumber).HasColumnName("TYPE_OF_SERIAL_NUMBER");
         }
 
         private void QueryRsns(ModelBuilder builder)

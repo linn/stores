@@ -7,6 +7,9 @@ import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import { DataGrid } from '@material-ui/data-grid';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 import {
     Title,
     Dropdown,
@@ -69,6 +72,7 @@ function Wand({
         } else {
             setResultStyle('notOk');
             setWandMessage(wandResult.message);
+            setShowAlert(true);
         }
     }, [wandResult]);
 
@@ -128,6 +132,11 @@ function Wand({
         setSelectedRow(items[row.rowIds[0]]);
     };
 
+    const handleArticleNumberDoubleClick = wandStringSuggestion => {
+        setWandString(wandStringSuggestion);
+        wandStringInput.current.focus();
+    };
+
     const handleUnallocateConsignment = () => {
         if (items && items.length > 0) {
             unallocateConsignment({ requisitionNumber: items[0].requisitionNumber, userNumber });
@@ -152,9 +161,9 @@ function Wand({
     const consignmentOptions = () => {
         return wandConsignments?.map(c => ({
             id: c.consignmentId,
-            displayText: `Consignment: ${c.consignmentId} Addressee: ${c.addressee} Country: ${
-                c.countryCode
-            } ${c.isDone ? c.isDone : ' '} `
+            displayText: `${c.consignmentId} Addressee: ${c.addressee} Country: ${c.countryCode} ${
+                c.isDone ? c.isDone : ' '
+            } `
         }));
     };
 
@@ -201,7 +210,20 @@ function Wand({
     };
 
     const columns = [
-        { field: 'partNumber', headerName: 'Article No', width: 140 },
+        {
+            field: 'partNumber',
+            headerName: 'Article No',
+            width: 140,
+            renderCell: params => (
+                <div
+                    onDoubleClick={() =>
+                        handleArticleNumberDoubleClick(params.row.wandStringSuggestion)
+                    }
+                >
+                    {params.row.partNumber}
+                </div>
+            )
+        },
         { field: 'quantity', headerName: 'Qty', width: 100 },
         {
             field: 'quantityScanned',
@@ -289,10 +311,28 @@ function Wand({
 
     return (
         <Page>
-            <Dialog open={showAlert} onClose={() => setShowAlert(false)}>
+            <Dialog
+                open={showAlert}
+                onClose={() => setShowAlert(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">Wand Error</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>{wandString}</DialogContentText>
+                    <DialogContentText id="alert-dialog-description">
+                        {wandMessage}
+                    </DialogContentText>
                 </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={() => setShowAlert(false)}
+                        variant="contained"
+                        color="secondary"
+                        autoFocus
+                    >
+                        Close
+                    </Button>
+                </DialogActions>
             </Dialog>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
@@ -388,6 +428,7 @@ function Wand({
                                 loading={itemsLoading}
                                 hideFooter
                                 pagination={false}
+                                onDoubleClick={handleArticleNumberDoubleClick}
                                 onSelectionChange={handleSelectRow}
                             />
                         </div>
