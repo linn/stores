@@ -53,6 +53,8 @@ function MechPartSource({
                   createPart: true,
                   mechPartAlts: [],
                   mechPartManufacturerAlts: [],
+                  resistanceUnits: 'KΩ',
+                  capacitanceUnits: 'uF',
                   usages: [],
                   mechanicalOrElectrical: 'E',
                   samplesRequired: 'N'
