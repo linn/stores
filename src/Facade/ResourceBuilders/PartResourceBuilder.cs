@@ -130,7 +130,7 @@
             yield return new LinkResource 
                              {
                                  Rel = "stock-locators",
-                                 Href = $"/inventory/stock-locators?partNumber={part.PartNumber}"
+                                 Href = $"/inventory/stock-locators?partId={part.Id}"
                              };
         }
 

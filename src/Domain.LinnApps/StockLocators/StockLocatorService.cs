@@ -126,10 +126,10 @@
             }
         }
 
-        public IEnumerable<StockLocatorWithStoragePlaceInfo> GetStockLocatorsWithStoragePlaceInfoForPart(string partNumber)
+        public IEnumerable<StockLocatorWithStoragePlaceInfo> GetStockLocatorsWithStoragePlaceInfoForPart(int partId)
         {
             var stockLocators = this.stockLocatorRepository
-                .FilterBy(s => s.PartNumber == partNumber);
+                .FilterBy(s => s.Part.Id == partId);
 
             string auditDept = string.Empty;
 

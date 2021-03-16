@@ -28,7 +28,7 @@
             this.stockLocator1 = new StockLocatorWithStoragePlaceInfo { LocationId = 1, PartNumber = "A" };
             this.stockLocator2 = new StockLocatorWithStoragePlaceInfo { LocationId = 2, PartNumber = "A" };
 
-            this.StockLocatorFacadeService.GetStockLocatorsForPart(Arg.Any<string>())
+            this.StockLocatorFacadeService.GetStockLocatorsForPart(Arg.Any<int>())
                 .Returns(new 
                     SuccessResult<IEnumerable<StockLocatorWithStoragePlaceInfo>>(new List<StockLocatorWithStoragePlaceInfo>
                                                                           {
@@ -40,7 +40,7 @@
                 with =>
                     {
                         with.Header("Accept", "application/json");
-                        with.Query("partNumber", "A");
+                        with.Query("partId", "1");
                     }).Result;
         }
 
@@ -53,7 +53,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.StockLocatorFacadeService.Received().GetStockLocatorsForPart(Arg.Any<string>());
+            this.StockLocatorFacadeService.Received().GetStockLocatorsForPart(Arg.Any<int>());
         }
 
         [Test]
