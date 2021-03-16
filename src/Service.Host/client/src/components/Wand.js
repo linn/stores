@@ -428,7 +428,6 @@ function Wand({
                                 loading={itemsLoading}
                                 hideFooter
                                 pagination={false}
-                                onDoubleClick={handleArticleNumberDoubleClick}
                                 onSelectionChange={handleSelectRow}
                             />
                         </div>

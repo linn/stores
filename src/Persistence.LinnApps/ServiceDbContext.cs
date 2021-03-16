@@ -9,6 +9,7 @@
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.StockMove.Models;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation;
@@ -159,6 +160,8 @@
 
         public DbSet<WandLog> WandLogs { get; set; }
 
+        public DbQuery<StockAvailable> StockAvailable { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -231,6 +234,7 @@
             this.QueryStockQuantitIesForMrView(builder);
             this.BuildRequisitionHeaders(builder);
             this.BuildWandLogs(builder);
+            this.QueryStockAvailable(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1300,6 +1304,19 @@
             table.Property(w => w.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
             table.Property(w => w.ItemNo).HasColumnName("ITEM_NO");
             table.Property(w => w.ContainerNo).HasColumnName("CONTAINER_NO");
+        }
+
+        private void QueryStockAvailable(ModelBuilder builder)
+        {
+            var q = builder.Query<StockAvailable>().ToView("STOCK_MOVE_STOCK_VIEW");
+            q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER");
+            q.Property(e => e.QuantityAvailable).HasColumnName("QTY_FREE");
+            q.Property(e => e.StockRotationDate).HasColumnName("STOCK_ROTATION_DATE");
+            q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
+            q.Property(e => e.LocationCode).HasColumnName("LOCATION_CODE");
+            q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE");
+            q.Property(e => e.State).HasColumnName("STATE");
         }
     }
 }

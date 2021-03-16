@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { Typeahead, InputField } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
+import { DataGrid } from '@material-ui/data-grid';
 import Page from '../containers/Page';
 
 function StockMove({ parts, fetchParts, partsLoading, clearPartsSearch }) {
@@ -16,13 +17,34 @@ function StockMove({ parts, fetchParts, partsLoading, clearPartsSearch }) {
         }));
     };
 
+    const getStock = () => {};
+
+    const handleSelectRow = () => {};
+
     const handleOnSelect = selectedPart => {
         setPartNumber(selectedPart.partNumber);
+        getStock();
     };
 
     const handlePartChange = (_property, value) => {
         setPartNumber(value.toUpperCase());
     };
+
+    const handleOnKeyPress = data => {
+        if (data.keyCode === 13 || data.keyCode === 9) {
+            getStock();
+        }
+    };
+
+    const focusProp = { onKeyDown: handleOnKeyPress };
+    const columns = [
+        {
+            field: 'partNumber',
+            headerName: 'Article No',
+            width: 140
+        },
+        { field: 'quantity', headerName: 'Qty', width: 100 }
+    ];
 
     return (
         <Page>
@@ -34,6 +56,7 @@ function StockMove({ parts, fetchParts, partsLoading, clearPartsSearch }) {
                         onChange={handlePartChange}
                         maxLength={14}
                         propertyName="partNumber"
+                        textFieldProps={focusProp}
                     />
                 </Grid>
                 <Grid item xs={3}>
@@ -51,7 +74,17 @@ function StockMove({ parts, fetchParts, partsLoading, clearPartsSearch }) {
                     />
                 </Grid>
                 <Grid item xs={6}>
-                    <span>elo</span>
+                    <span>Stock</span>
+                    <DataGrid
+                        rows={[{ id: 2, quantity: 5 }]}
+                        columns={columns}
+                        density="compact"
+                        rowHeight={34}
+                        // loading={itemsLoading}
+                        hideFooter
+                        autoHeight
+                        onSelectionChange={handleSelectRow}
+                    />
                 </Grid>
             </Grid>
         </Page>
