@@ -13,7 +13,7 @@
         IResult<StockLocator> Delete(StockLocatorResource resource);
 
         IResult<IEnumerable<StockLocatorWithStoragePlaceInfo>> 
-            GetStockLocatorsForPart(string partNumber);
+            GetStockLocatorsForPart(int partId);
 
         IResult<IEnumerable<StockLocator>> GetBatches(string batchRef);
 

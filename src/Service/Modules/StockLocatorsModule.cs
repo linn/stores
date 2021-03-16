@@ -47,10 +47,16 @@
         private object GetStockLocators()
         {
             var resource = this.Bind<StockLocatorResource>();
-            var result = this.service.GetStockLocatorsForPart(resource.PartNumber);
-            return this.Negotiate.WithModel(result)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
-                .WithView("Index");
+            if (resource.PartId != null)
+            {
+                return this.Negotiate.WithModel(this.service.GetStockLocatorsForPart((int)resource.PartId))
+                    .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                    .WithView("Index");
+            }
+
+            return this.Negotiate.WithModel(this.service.GetAll())
+                    .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                    .WithView("Index");
         }
 
         private object GetStockLocatorsByLocation()

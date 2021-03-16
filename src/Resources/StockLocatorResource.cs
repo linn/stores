@@ -20,6 +20,8 @@
 
         public string PartNumber { get; set; }
 
+        public int? PartId { get; set; }
+
         public string PartDescription { get; set; }
 
         public string PartUnitOfMeasure { get; set; }
