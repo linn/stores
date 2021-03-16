@@ -8,12 +8,12 @@
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
     using Linn.Stores.Resources;
 
-    public class StockAvailableResourceBuilder : IResourceBuilder<IEnumerable<StockAvailable>>
+    public class AvailableStockResourceBuilder : IResourceBuilder<IEnumerable<AvailableStock>>
     {
-        public IEnumerable<StockAvailableResource> Build(IEnumerable<StockAvailable> stockAvailable)
+        public IEnumerable<AvailableStockResource> Build(IEnumerable<AvailableStock> availableStock)
         {
-            return stockAvailable.Select(
-                a => new StockAvailableResource
+            return availableStock.Select(
+                a => new AvailableStockResource
                          {
                              LocationCode = a.LocationCode,
                              PalletNumber = a.PalletNumber,
@@ -22,13 +22,14 @@
                              QuantityAvailable = a.QuantityAvailable,
                              State = a.State,
                              StockPoolCode = a.StockPoolCode,
-                             StockRotationDate = a.StockRotationDate.ToString("o")
+                             StockRotationDate = a.StockRotationDate.ToString("o"),
+                             DisplayLocation = a.DisplayLocation
                          });
         }
 
-        object IResourceBuilder<IEnumerable<StockAvailable>>.Build(IEnumerable<StockAvailable> stockAvailable) => this.Build(stockAvailable);
+        object IResourceBuilder<IEnumerable<AvailableStock>>.Build(IEnumerable<AvailableStock> availableStock) => this.Build(availableStock);
 
-        public string GetLocation(IEnumerable<StockAvailable> stockAvailable)
+        public string GetLocation(IEnumerable<AvailableStock> availableStock)
         {
             throw new NotImplementedException();
         }

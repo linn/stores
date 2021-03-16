@@ -1,6 +1,6 @@
 ﻿namespace Linn.Stores.Resources
 {
-    public class StockAvailableResource
+    public class AvailableStockResource
     {
         public string PartNumber { get; set; }
 
@@ -17,5 +17,7 @@
         public string StockPoolCode { get; set; }
 
         public string State { get; set; }
+
+        public string DisplayLocation { get; set; }
     }
 }

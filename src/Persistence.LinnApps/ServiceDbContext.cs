@@ -160,7 +160,7 @@
 
         public DbSet<WandLog> WandLogs { get; set; }
 
-        public DbQuery<StockAvailable> StockAvailable { get; set; }
+        public DbQuery<AvailableStock> StockAvailable { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -1308,7 +1308,7 @@
 
         private void QueryStockAvailable(ModelBuilder builder)
         {
-            var q = builder.Query<StockAvailable>().ToView("STOCK_MOVE_STOCK_VIEW");
+            var q = builder.Query<AvailableStock>().ToView("STOCK_MOVE_STOCK_VIEW");
             q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER");
             q.Property(e => e.QuantityAvailable).HasColumnName("QTY_FREE");
             q.Property(e => e.StockRotationDate).HasColumnName("STOCK_ROTATION_DATE");
@@ -1317,6 +1317,7 @@
             q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
             q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE");
             q.Property(e => e.State).HasColumnName("STATE");
+            q.Property(e => e.DisplayLocation).HasColumnName("DISPLAY_LOCATION");
         }
     }
 }

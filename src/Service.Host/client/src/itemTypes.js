@@ -236,3 +236,9 @@ export const stockQuantities = new ItemType(
     'STOCK_QUANTITIES',
     '/inventory/stock-quantities'
 );
+
+export const availableStock = new ItemType(
+    'availableStock',
+    'AVAILABLE_STOCK',
+    '/inventory/available-stock'
+);

@@ -20,25 +20,25 @@
     {
         private string partNumber;
 
-        private List<StockAvailable> stock;
+        private List<AvailableStock> stock;
         [SetUp]
         public void SetUp()
         {
             this.partNumber = "pn";
-            this.stock = new List<StockAvailable>
+            this.stock = new List<AvailableStock>
                              {
-                                 new StockAvailable { LocationId = 1, QuantityAvailable = 2 },
-                                 new StockAvailable { LocationId = 3, QuantityAvailable = 5 }
+                                 new AvailableStock { LocationId = 1, QuantityAvailable = 2 },
+                                 new AvailableStock { LocationId = 3, QuantityAvailable = 5 }
                              };
-            this.StockAvailableFacadeService.GetAvailableStock(this.partNumber)
-                .Returns(new SuccessResult<IEnumerable<StockAvailable>>(this.stock.AsQueryable()));
+            this.AvailableStockFacadeService.GetAvailableStock(this.partNumber)
+                .Returns(new SuccessResult<IEnumerable<AvailableStock>>(this.stock.AsQueryable()));
 
             this.Response = this.Browser.Get(
                 "/inventory/available-stock",
                 with =>
                 {
                     with.Header("Accept", "application/json");
-                    with.Query("partNumber", this.partNumber);
+                    with.Query("searchTerm", this.partNumber);
                 }).Result;
         }
 
@@ -51,13 +51,13 @@
         [Test]
         public void ShouldCallService()
         {
-            this.StockAvailableFacadeService.Received().GetAvailableStock(this.partNumber);
+            this.AvailableStockFacadeService.Received().GetAvailableStock(this.partNumber);
         }
 
         [Test]
         public void ShouldReturnResource()
         {
-            var resultResource = this.Response.Body.DeserializeJson<IEnumerable<StockAvailableResource>>().ToList();
+            var resultResource = this.Response.Body.DeserializeJson<IEnumerable<AvailableStockResource>>().ToList();
             resultResource.Should().HaveCount(2);
             resultResource.First(a => a.LocationId == 1).QuantityAvailable.Should().Be(2);
             resultResource.First(a => a.LocationId == 3).QuantityAvailable.Should().Be(5);

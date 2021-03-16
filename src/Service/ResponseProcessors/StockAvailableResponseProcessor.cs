@@ -6,9 +6,9 @@
     using Linn.Common.Nancy.Facade;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
 
-    public class StockAvailableResponseProcessor : JsonResponseProcessor<IEnumerable<StockAvailable>>
+    public class StockAvailableResponseProcessor : JsonResponseProcessor<IEnumerable<AvailableStock>>
     {
-        public StockAvailableResponseProcessor(IResourceBuilder<IEnumerable<StockAvailable>> resourceBuilder)
+        public StockAvailableResponseProcessor(IResourceBuilder<IEnumerable<AvailableStock>> resourceBuilder)
             : base(resourceBuilder, "linnapps-stock-available-for-move", 1)
         {
         }

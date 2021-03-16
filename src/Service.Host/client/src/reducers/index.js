@@ -65,6 +65,7 @@ import exportRsns from './exportRsns';
 import doWandItem from './doWandItem';
 import unallocateConsignment from './unallocateConsignment';
 import unallocateConsignmentLine from './unallocateConsignmentLine';
+import availableStock from './availableStock';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -74,6 +75,7 @@ const rootReducer = combineReducers({
     assemblyTechnologies,
     auditLocation,
     auditLocations,
+    availableStock,
     countries,
     createAuditReqs,
     departments,

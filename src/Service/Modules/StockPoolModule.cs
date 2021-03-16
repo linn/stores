@@ -20,7 +20,7 @@
 
         private object GetStockPools()
         {
-            var resource = this.Bind <SearchRequestResource>();
+            var resource = this.Bind<SearchRequestResource>();
             
             if (resource?.SearchTerm != null)
             {

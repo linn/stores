@@ -10,15 +10,15 @@
 
     public abstract class ContextBase
     {
-        protected StockAvailableFacadeService Sut { get; private set; }
+        protected AvailableStockFacadeService Sut { get; private set; }
 
-        protected IQueryRepository<StockAvailable> StockAvailableRepository { get; private set; }
+        protected IQueryRepository<AvailableStock> StockAvailableRepository { get; private set; }
 
         [SetUp]
         public void SetUpContext()
         {
-            this.StockAvailableRepository = Substitute.For<IQueryRepository<StockAvailable>>();
-            this.Sut = new StockAvailableFacadeService(this.StockAvailableRepository);
+            this.StockAvailableRepository = Substitute.For<IQueryRepository<AvailableStock>>();
+            this.Sut = new AvailableStockFacadeService(this.StockAvailableRepository);
         }
     }
 }

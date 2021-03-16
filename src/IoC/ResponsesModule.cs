@@ -150,7 +150,7 @@
             builder.RegisterType<StockQuantitiesListResourceBuilder>().As<IResourceBuilder<IEnumerable<StockQuantities>>>();
             builder.RegisterType<WandItemResultResourceBuilder>().As<IResourceBuilder<WandResult>>();
             builder.RegisterType<RequisitionActionResourceBuilder>().As<IResourceBuilder<RequisitionActionResult>>();
-            builder.RegisterType<StockAvailableResourceBuilder>().As<IResourceBuilder<IEnumerable<StockAvailable>>>();
+            builder.RegisterType<AvailableStockResourceBuilder>().As<IResourceBuilder<IEnumerable<AvailableStock>>>();
         }
     }
 }

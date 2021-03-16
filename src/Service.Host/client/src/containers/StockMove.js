@@ -3,18 +3,20 @@ import { initialiseOnMount } from '@linn-it/linn-form-components-library';
 import StockMove from '../components/StockMove';
 import partsActions from '../actions/partsActions';
 import partsSelectors from '../selectors/partsSelectors';
+import availableStockActions from '../actions/availableStockActions';
+import availableStockSelectors from '../selectors/availableStockSelectors';
 
 const mapStateToProps = state => ({
     parts: partsSelectors.getSearchItems(state),
-    partsLoading: partsSelectors.getSearchLoading(state)
+    partsLoading: partsSelectors.getSearchLoading(state),
+    availableStock: availableStockSelectors.getSearchItems(state),
+    availableStockLoading: availableStockSelectors.getSearchLoading(state)
 });
 
-const initialise = () => dispatch => {};
-
 const mapDispatchToProps = {
-    initialise,
     fetchParts: partsActions.search,
-    clearPartsSearch: partsActions.clearSearch
+    clearPartsSearch: partsActions.clearSearch,
+    fetchAvailableStock: availableStockActions.search
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(StockMove));

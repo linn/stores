@@ -5,7 +5,15 @@ import PropTypes from 'prop-types';
 import { DataGrid } from '@material-ui/data-grid';
 import Page from '../containers/Page';
 
-function StockMove({ parts, fetchParts, partsLoading, clearPartsSearch }) {
+function StockMove({
+    parts,
+    fetchParts,
+    partsLoading,
+    clearPartsSearch,
+    availableStock,
+    availableStockLoading,
+    fetchAvailableStock
+}) {
     const [partNumber, setPartNumber] = useState(null);
 
     const partResults = () => {
@@ -17,13 +25,11 @@ function StockMove({ parts, fetchParts, partsLoading, clearPartsSearch }) {
         }));
     };
 
-    const getStock = () => {};
-
     const handleSelectRow = () => {};
 
     const handleOnSelect = selectedPart => {
         setPartNumber(selectedPart.partNumber);
-        getStock();
+        fetchAvailableStock(selectedPart.partNumber);
     };
 
     const handlePartChange = (_property, value) => {
@@ -32,18 +38,25 @@ function StockMove({ parts, fetchParts, partsLoading, clearPartsSearch }) {
 
     const handleOnKeyPress = data => {
         if (data.keyCode === 13 || data.keyCode === 9) {
-            getStock();
+            fetchAvailableStock(partNumber);
         }
+    };
+
+    const displayAvailableStock = stock => {
+        if (!stock) {
+            return [];
+        }
+
+        return stock.map((s, i) => ({ id: i, ...s }));
     };
 
     const focusProp = { onKeyDown: handleOnKeyPress };
     const columns = [
-        {
-            field: 'partNumber',
-            headerName: 'Article No',
-            width: 140
-        },
-        { field: 'quantity', headerName: 'Qty', width: 100 }
+        { field: 'quantityAvailable', headerName: 'Qty', width: 100 },
+        { field: 'displayLocation', headerName: 'Location', width: 140 },
+        { field: 'stockRotationDate', type: 'date', headerName: 'Stock Rot Date', width: 140 },
+        { field: 'stockPoolCode', headerName: 'Stock Pool', width: 140 },
+        { field: 'state', headerName: 'State', width: 140 }
     ];
 
     return (
@@ -59,7 +72,7 @@ function StockMove({ parts, fetchParts, partsLoading, clearPartsSearch }) {
                         textFieldProps={focusProp}
                     />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={2}>
                     <Typeahead
                         items={partResults()}
                         fetchItems={fetchParts}
@@ -73,14 +86,14 @@ function StockMove({ parts, fetchParts, partsLoading, clearPartsSearch }) {
                         placeholder="Part Search"
                     />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={7}>
                     <span>Stock</span>
                     <DataGrid
-                        rows={[{ id: 2, quantity: 5 }]}
+                        rows={displayAvailableStock(availableStock)}
                         columns={columns}
                         density="compact"
                         rowHeight={34}
-                        // loading={itemsLoading}
+                        loading={availableStockLoading}
                         hideFooter
                         autoHeight
                         onSelectionChange={handleSelectRow}
@@ -102,11 +115,16 @@ StockMove.propTypes = {
     ).isRequired,
     partsLoading: PropTypes.bool,
     fetchParts: PropTypes.func.isRequired,
-    clearPartsSearch: PropTypes.func.isRequired
+    clearPartsSearch: PropTypes.func.isRequired,
+    availableStock: PropTypes.arrayOf(PropTypes.shape({})),
+    availableStockLoading: PropTypes.bool,
+    fetchAvailableStock: PropTypes.func.isRequired
 };
 
 StockMove.defaultProps = {
-    partsLoading: false
+    partsLoading: false,
+    availableStock: [],
+    availableStockLoading: false
 };
 
 export default StockMove;

@@ -5,8 +5,8 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
 
-    public interface IStockAvailableFacadeService
+    public interface IAvailableStockFacadeService
     {
-        IResult<IEnumerable<StockAvailable>> GetAvailableStock(string partNumber);
+        IResult<IEnumerable<AvailableStock>> GetAvailableStock(string partNumber);
     }
 }

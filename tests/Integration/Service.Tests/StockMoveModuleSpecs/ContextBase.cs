@@ -19,18 +19,18 @@
 
     public abstract class ContextBase : NancyContextBase
     {
-        protected IStockAvailableFacadeService StockAvailableFacadeService { get; private set; }
+        protected IAvailableStockFacadeService AvailableStockFacadeService { get; private set; }
 
         [SetUp]
         public void EstablishContext()
         {
-            this.StockAvailableFacadeService = Substitute.For<IStockAvailableFacadeService>();
+            this.AvailableStockFacadeService = Substitute.For<IAvailableStockFacadeService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                 {
-                    with.Dependency(this.StockAvailableFacadeService);
-                    with.Dependency<IResourceBuilder<IEnumerable<StockAvailable>>>(new StockAvailableResourceBuilder());
+                    with.Dependency(this.AvailableStockFacadeService);
+                    with.Dependency<IResourceBuilder<IEnumerable<AvailableStock>>>(new AvailableStockResourceBuilder());
                     with.Module<StockMoveModule>();
                     with.ResponseProcessor<StockAvailableResponseProcessor>();
                     with.RequestStartup(

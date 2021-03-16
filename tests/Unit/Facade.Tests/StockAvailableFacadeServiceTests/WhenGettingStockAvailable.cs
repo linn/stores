@@ -18,19 +18,19 @@
     {
         private readonly string partNumber = "pn";
 
-        private List<StockAvailable> items;
+        private List<AvailableStock> items;
 
-        private IResult<IEnumerable<StockAvailable>> results;
+        private IResult<IEnumerable<AvailableStock>> results;
 
         [SetUp]
         public void SetUp()
         {
-            this.items = new List<StockAvailable>
+            this.items = new List<AvailableStock>
                                     {
-                                        new StockAvailable { LocationCode = "1" },
-                                        new StockAvailable { LocationCode = "2" }
+                                        new AvailableStock { LocationCode = "1" },
+                                        new AvailableStock { LocationCode = "2" }
                                     };
-            this.StockAvailableRepository.FilterBy(Arg.Any<Expression<Func<StockAvailable, bool>>>())
+            this.StockAvailableRepository.FilterBy(Arg.Any<Expression<Func<AvailableStock, bool>>>())
                 .Returns(this.items.AsQueryable());
 
             this.results = this.Sut.GetAvailableStock(this.partNumber);
@@ -39,14 +39,14 @@
         [Test]
         public void ShouldCallRepository()
         {
-            this.StockAvailableRepository.Received().FilterBy(Arg.Any<Expression<Func<StockAvailable, bool>>>());
+            this.StockAvailableRepository.Received().FilterBy(Arg.Any<Expression<Func<AvailableStock, bool>>>());
         }
 
         [Test]
         public void ShouldReturnSuccess()
         {
-            this.results.Should().BeOfType<SuccessResult<IEnumerable<StockAvailable>>>();
-            var dataResult = ((SuccessResult<IEnumerable<StockAvailable>>)this.results).Data;
+            this.results.Should().BeOfType<SuccessResult<IEnumerable<AvailableStock>>>();
+            var dataResult = ((SuccessResult<IEnumerable<AvailableStock>>)this.results).Data;
             dataResult.Should().HaveCount(2);
         }
     }

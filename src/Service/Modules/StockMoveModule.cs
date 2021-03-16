@@ -8,18 +8,18 @@
 
     public sealed class StockMoveModule : NancyModule
     {
-        private readonly IStockAvailableFacadeService stockAvailableFacadeService;
+        private readonly IAvailableStockFacadeService availableStockFacadeService;
 
-        public StockMoveModule(IStockAvailableFacadeService stockAvailableFacadeService)
+        public StockMoveModule(IAvailableStockFacadeService availableStockFacadeService)
         {
-            this.stockAvailableFacadeService = stockAvailableFacadeService;
+            this.availableStockFacadeService = availableStockFacadeService;
             this.Get("/inventory/available-stock", _ => this.GetAvailableStock());
         }
 
         private object GetAvailableStock()
         {
-            var resource = this.Bind<PartNumberRequestResource>();
-            return this.Negotiate.WithModel(this.stockAvailableFacadeService.GetAvailableStock(resource.PartNumber));
+            var resource = this.Bind<SearchRequestResource>();
+            return this.Negotiate.WithModel(this.availableStockFacadeService.GetAvailableStock(resource.SearchTerm));
         }
     }
 }
