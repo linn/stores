@@ -56,6 +56,9 @@ function Wand({
 
     useEffect(() => {
         setWandString(null);
+        if (wandStringInput.current) {
+            wandStringInput.current.focus();
+        }
     }, [items]);
 
     useEffect(() => {
