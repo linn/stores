@@ -14,7 +14,7 @@
         void DeleteStockLocator(StockLocator toDelete, IEnumerable<string> privileges);
 
         IEnumerable<StockLocatorWithStoragePlaceInfo> 
-            GetStockLocatorsWithStoragePlaceInfoForPart(string partNumber);
+            GetStockLocatorsWithStoragePlaceInfoForPart(int partId);
 
         IEnumerable<StockLocator> GetBatches(string batches);
 

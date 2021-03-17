@@ -41,10 +41,10 @@
         }
 
         public IResult<IEnumerable<StockLocatorWithStoragePlaceInfo>> 
-            GetStockLocatorsForPart(string partNumber)
+            GetStockLocatorsForPart(int partId)
         {
             return new SuccessResult<IEnumerable<StockLocatorWithStoragePlaceInfo>>(
-                this.domainService.GetStockLocatorsWithStoragePlaceInfoForPart(partNumber));
+                this.domainService.GetStockLocatorsWithStoragePlaceInfoForPart(partId));
         }
 
         public IResult<IEnumerable<StockLocator>> GetBatches(string batchRef)

@@ -9,6 +9,9 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import { DataGrid } from '@material-ui/data-grid';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import { makeStyles } from '@material-ui/core/styles';
 
 import {
     Title,
@@ -17,7 +20,7 @@ import {
     InputField,
     SnackbarMessage
 } from '@linn-it/linn-form-components-library';
-import { makeStyles } from '@material-ui/core/styles';
+
 import Page from '../containers/Page';
 
 function Wand({
@@ -53,6 +56,9 @@ function Wand({
 
     useEffect(() => {
         setWandString(null);
+        if (wandStringInput.current) {
+            wandStringInput.current.focus();
+        }
     }, [items]);
 
     useEffect(() => {
@@ -98,7 +104,7 @@ function Wand({
         }
     }, [wandResult, consignmentId, wandConsignments, lastWandLogId, items]);
 
-    const useStyles = makeStyles({
+    const useStyles = makeStyles(theme => ({
         ok: {
             color: 'black',
             backgroundColor: 'lightGreen'
@@ -110,15 +116,25 @@ function Wand({
         noMessage: {
             color: 'black',
             backgroundColor: 'white'
+        },
+        root: {
+            paddingTop: 0,
+            marginTop: theme.spacing(1)
+        },
+        label: {
+            fontSize: theme.typography.fontSize
+        },
+        labelAsterisk: {
+            color: theme.palette.error.main
         }
-    });
+    }));
 
     const classes = useStyles();
 
-    const handleConsignmentChange = (_propertyName, newValue) => {
-        setConsignmentId(newValue ? parseInt(newValue, 10) : null);
-        if (newValue) {
-            getItems(newValue);
+    const handleConsignmentChange = newValue => {
+        setConsignmentId(newValue.target.value ? parseInt(newValue.target.value, 10) : null);
+        if (newValue.target.value) {
+            getItems(newValue.target.value);
         } else {
             clearItems();
         }
@@ -141,6 +157,9 @@ function Wand({
         if (items && items.length > 0) {
             unallocateConsignment({ requisitionNumber: items[0].requisitionNumber, userNumber });
         }
+
+        clearItems();
+        setConsignmentId('');
     };
 
     const handleUnallocateLine = () => {
@@ -156,15 +175,6 @@ function Wand({
     const handlewandActionChange = (_propertyName, newValue) => {
         setWandAction(newValue);
         wandStringInput.current.focus();
-    };
-
-    const consignmentOptions = () => {
-        return wandConsignments?.map(c => ({
-            id: c.consignmentId,
-            displayText: `${c.consignmentId} Addressee: ${c.addressee} Country: ${c.countryCode} ${
-                c.isDone ? c.isDone : ' '
-            } `
-        }));
     };
 
     const handleOnWandChange = (_propertyName, newValue) => {
@@ -361,13 +371,41 @@ function Wand({
             ) : (
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
-                        <Dropdown
-                            label="Consignment"
-                            propertyName="consignment"
-                            items={consignmentOptions()}
+                        <InputLabel
+                            classes={{ root: classes.label, asterisk: classes.labelAsterisk }}
+                        >
+                            Consignment
+                        </InputLabel>
+                        <TextField
+                            select
+                            classes={{
+                                root: classes.root
+                            }}
+                            margin="dense"
+                            style={{ width: '800px' }}
                             value={consignmentId}
                             onChange={handleConsignmentChange}
-                        />
+                            variant="outlined"
+                        >
+                            {wandConsignments.map(option => (
+                                <MenuItem key={option.consignmentId} value={option.consignmentId}>
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={2}>
+                                            {option.consignmentId}
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            {option.addressee}
+                                        </Grid>
+                                        <Grid item xs={2}>
+                                            {option.isDone ? option.isDone : '-'}
+                                        </Grid>
+                                        <Grid item xs={2}>
+                                            {option.countryCode}
+                                        </Grid>
+                                    </Grid>
+                                </MenuItem>
+                            ))}
+                        </TextField>
                     </Grid>
                     <Grid item xs={2}>
                         <Dropdown
@@ -427,7 +465,6 @@ function Wand({
                                 rowHeight={34}
                                 loading={itemsLoading}
                                 hideFooter
-                                pagination={false}
                                 onSelectionChange={handleSelectRow}
                             />
                         </div>
@@ -504,11 +541,11 @@ Wand.defaultProps = {
         success: true
     },
     unallocateConsignmentResult: {
-        message: null,
+        message: 'ok',
         success: true
     },
     unallocateConsignmentLineResult: {
-        message: null,
+        message: 'ok',
         success: true
     },
     unallocateConsignmentWorking: false,
