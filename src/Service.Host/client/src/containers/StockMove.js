@@ -1,22 +1,34 @@
 import { connect } from 'react-redux';
-import { initialiseOnMount } from '@linn-it/linn-form-components-library';
+import {
+    initialiseOnMount,
+    getItemErrorDetailMessage,
+    getRequestErrors
+} from '@linn-it/linn-form-components-library';
 import StockMove from '../components/StockMove';
 import partsActions from '../actions/partsActions';
 import partsSelectors from '../selectors/partsSelectors';
 import availableStockActions from '../actions/availableStockActions';
 import availableStockSelectors from '../selectors/availableStockSelectors';
+import * as processTypes from '../processTypes';
+import doStockMoveSelectors from '../selectors/doStockMoveSelectors';
+import doStockMoveActions from '../actions/doStockMoveActions';
 
 const mapStateToProps = state => ({
     parts: partsSelectors.getSearchItems(state),
     partsLoading: partsSelectors.getSearchLoading(state),
     availableStock: availableStockSelectors.getSearchItems(state),
-    availableStockLoading: availableStockSelectors.getSearchLoading(state)
+    availableStockLoading: availableStockSelectors.getSearchLoading(state),
+    moveError: getItemErrorDetailMessage(state, processTypes.doStockMove.item),
+    requestErrors: getRequestErrors(state)?.filter(error => error.type !== 'FETCH_ERROR'),
+    moveResult: doStockMoveSelectors.getData(state)
 });
 
 const mapDispatchToProps = {
     fetchParts: partsActions.search,
     clearPartsSearch: partsActions.clearSearch,
-    fetchAvailableStock: availableStockActions.search
+    fetchAvailableStock: availableStockActions.search,
+    doMove: doStockMoveActions.requestProcessStart,
+    clearMoveError: doStockMoveActions.clearErrorsForItem
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(StockMove));

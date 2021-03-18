@@ -14,6 +14,12 @@
         {
             this.availableStockFacadeService = availableStockFacadeService;
             this.Get("/inventory/available-stock", _ => this.GetAvailableStock());
+            this.Post("/inventory/move-stock", _ => this.MoveStock());
+        }
+
+        private object MoveStock()
+        {
+            throw new System.NotImplementedException();
         }
 
         private object GetAvailableStock()

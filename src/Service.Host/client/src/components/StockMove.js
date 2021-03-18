@@ -1,6 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
-import { Typeahead, InputField } from '@linn-it/linn-form-components-library';
+import {
+    Typeahead,
+    InputField,
+    SnackbarMessage,
+    ErrorCard
+} from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import { DataGrid } from '@material-ui/data-grid';
 import Button from '@material-ui/core/Button';
@@ -14,12 +19,22 @@ function StockMove({
     clearPartsSearch,
     availableStock,
     availableStockLoading,
-    fetchAvailableStock
+    fetchAvailableStock,
+    moveError,
+    moveResult,
+    doMove,
+    clearMoveError,
+    requestErrors
 }) {
     const [moveDetails, setMoveDetails] = useState({});
     const [selectedRow, setSelectedRow] = useState(null);
+    const [alert, setAlert] = useState({ message: ' ', visible: false });
 
     const toInput = useRef(null);
+
+    useEffect(() => {
+        clearMoveError();
+    }, [moveDetails, clearMoveError]);
 
     const partResults = () => {
         return parts?.map(item => ({
@@ -43,6 +58,39 @@ function StockMove({
         });
 
         toInput.current.focus();
+    };
+
+    const showMessage = text => {
+        setAlert({ message: text, visible: true });
+    };
+
+    const closeMessage = () => {
+        setAlert({ message: ' ', visible: false });
+    };
+
+    const isKardex = loc =>
+        loc.startsWith('E-K1') ||
+        loc.startsWith('K1') ||
+        loc.startsWith('E-K2') ||
+        loc.startsWith('K2') ||
+        loc.startsWith('E-K4') ||
+        loc.startsWith('K4');
+
+    const saveEnabled = () =>
+        moveDetails.from && moveDetails.to && moveDetails.quantity && moveDetails.partNumber;
+
+    const handleMoveClick = () => {
+        clearMoveError();
+        if (!saveEnabled) {
+            showMessage('Please fill out all move fields');
+            return;
+        }
+        if (isKardex(moveDetails.from) && isKardex(moveDetails.to)) {
+            showMessage("You can't move from Kardex to Kardex");
+            return;
+        }
+
+        doMove();
     };
 
     const setToDetailsFromAvailableStock = row => {
@@ -101,8 +149,6 @@ function StockMove({
         return stock.map((s, i) => ({ id: i, ...s }));
     };
 
-    const handleMoveClick = () => {};
-
     const onKeyDownProp = { onKeyDown: handleOnKeyPress };
 
     const columns = [
@@ -120,7 +166,7 @@ function StockMove({
     ];
 
     return (
-        <Page>
+        <Page requestErrors={requestErrors} showRequestErrors>
             <Grid container spacing={3}>
                 <Grid item xs={5} />
                 <Grid item xs={7}>
@@ -222,9 +268,22 @@ function StockMove({
                         className="hide-when-printing"
                         variant="contained"
                         onClick={handleMoveClick}
+                        disabled={!saveEnabled()}
                     >
                         Move
                     </Button>
+                </Grid>
+                {moveError && (
+                    <Grid item xs={12}>
+                        <ErrorCard errorMessage={moveError} />
+                    </Grid>
+                )}
+                <Grid item xs={12}>
+                    <SnackbarMessage
+                        visible={alert.visible}
+                        onClose={closeMessage}
+                        message={alert.message}
+                    />
                 </Grid>
                 <Grid item xs={12}>
                     <div style={{ height: 300, width: '100%' }}>
@@ -258,13 +317,29 @@ StockMove.propTypes = {
     clearPartsSearch: PropTypes.func.isRequired,
     availableStock: PropTypes.arrayOf(PropTypes.shape({})),
     availableStockLoading: PropTypes.bool,
-    fetchAvailableStock: PropTypes.func.isRequired
+    fetchAvailableStock: PropTypes.func.isRequired,
+    moveError: PropTypes.string,
+    moveResult: PropTypes.shape({
+        success: PropTypes.bool,
+        message: PropTypes.string
+    }),
+    doMove: PropTypes.func.isRequired,
+    clearMoveError: PropTypes.func.isRequired,
+    requestErrors: PropTypes.arrayOf(
+        PropTypes.shape({ message: PropTypes.string, name: PropTypes.string })
+    )
 };
 
 StockMove.defaultProps = {
     partsLoading: false,
     availableStock: [],
-    availableStockLoading: false
+    availableStockLoading: false,
+    moveError: null,
+    moveResult: {
+        message: null,
+        success: true
+    },
+    requestErrors: null
 };
 
 export default StockMove;

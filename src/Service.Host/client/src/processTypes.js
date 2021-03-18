@@ -55,3 +55,5 @@ export const unallocateConsignmentLine = new ItemType(
     'UNALLOCATE_CONSIGNMENT_LINE',
     '/logistics/requisitions/actions/un-allocate'
 );
+
+export const doStockMove = new ItemType('doStockMove', 'DO_STOCK_MOVE', '/inventory/move-stock');

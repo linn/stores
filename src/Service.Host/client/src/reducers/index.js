@@ -66,6 +66,7 @@ import doWandItem from './doWandItem';
 import unallocateConsignment from './unallocateConsignment';
 import unallocateConsignmentLine from './unallocateConsignmentLine';
 import availableStock from './availableStock';
+import doStockMove from './doStockMove';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -84,6 +85,7 @@ const rootReducer = combineReducers({
     despatchLocations,
     despatchPalletQueueReport,
     despatchPickingSummaryReport,
+    doStockMove,
     doWandItem,
     employees,
     exportRsns,

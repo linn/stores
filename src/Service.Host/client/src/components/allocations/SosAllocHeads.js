@@ -260,9 +260,9 @@ SosAllocHeads.propTypes = {
     finishAllocationWorking: PropTypes.bool,
     initialise: PropTypes.func.isRequired,
     pickItemsAllocation: PropTypes.func.isRequired,
-    pickItemsAllocationWorking: PropTypes.func.isRequired,
+    pickItemsAllocationWorking: PropTypes.bool,
     unpickItemsAllocation: PropTypes.func.isRequired,
-    unpickItemsAllocationWorking: PropTypes.func.isRequired,
+    unpickItemsAllocationWorking: PropTypes.bool,
     clearAllocationError: PropTypes.func.isRequired
 };
 
@@ -272,7 +272,9 @@ SosAllocHeads.defaultProps = {
     details: [],
     detailsLoading: null,
     allocationError: null,
-    finishAllocationWorking: false
+    finishAllocationWorking: false,
+    pickItemsAllocationWorking: false,
+    unpickItemsAllocationWorking: false
 };
 
 export default SosAllocHeads;
