@@ -25,5 +25,15 @@
         public int? ExpinvDocumentNumber { get; set; }
 
         public string ExpinvDate { get; set; }
+
+        public int? NumCartons { get; set; }
+
+        public int? Weight { get; set; }
+
+        public int? Width { get; set; }
+
+        public int? Height { get; set; }
+
+        public int? Depth { get; set; }
     }
 }

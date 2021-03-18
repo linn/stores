@@ -21,6 +21,8 @@
 
         protected ITransactionManager TransactionManager { get; private set; }
 
+        protected IRepository<ExportReturnDetail, ExportReturnDetailKey> ExportReturnDetailRepository { get; set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -28,11 +30,14 @@
             this.ExportReturnsPack = Substitute.For<IExportReturnsPack>();
             this.ExportReturnRepository = Substitute.For<IRepository<ExportReturn, int>>();
             this.TransactionManager = Substitute.For<ITransactionManager>();
+            this.ExportReturnDetailRepository =
+                Substitute.For<IRepository<ExportReturnDetail, ExportReturnDetailKey>>();
             this.Sut = new ExportReturnService(
                 this.ExportRsnRepository,
                 this.ExportReturnsPack,
                 this.ExportReturnRepository,
-                this.TransactionManager);
+                this.TransactionManager,
+                this.ExportReturnDetailRepository);
         }
     }
 }

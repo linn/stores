@@ -1,6 +1,8 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.Services;
+    using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Service.Models;
 
@@ -16,6 +18,7 @@
             this.exportReturnService = exportReturnService;
             this.Get("/inventory/exports/rsns", parameters => this.GetRsns());
             this.Post("/inventory/exports/returns", parameters => this.CreateExportReturn());
+            this.Put("/inventory/exports/returns", parameters => this.UpdateExportReturn(parameters.id));
             this.Get("/inventory/exports/returns/{id}", parameters => this.GetExportReturn(parameters.id));
         }
 
@@ -36,6 +39,18 @@
             var resource = this.Bind<MakeExportReturnRequestResource>();
 
             var result = this.exportReturnService.MakeExportReturn(resource.Rsns, resource.HubReturn);
+
+            return this.Negotiate
+                .WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get())
+                .WithView("Index");
+        }
+
+        private object UpdateExportReturn(int id)
+        {
+            var resource = this.Bind<ExportReturnResource>();
+
+            var result = this.exportReturnService.Update(id, resource);
 
             return this.Negotiate
                 .WithModel(result)

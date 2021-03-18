@@ -105,6 +105,8 @@
             builder.RegisterType<ExportReturnService>().As<IExportReturnService>();
             builder.RegisterType<StockQuantitiesService>().As<IStockQuantitiesService>();
             builder.RegisterType<RequisitionActionsFacadeService>().As<IRequisitionActionsFacadeService>();
+            builder.RegisterType<ExportReturnDetailFacadeService>()
+                .As<IFacadeService<ExportReturnDetail, ExportReturnDetailKey, ExportReturnDetailResource, ExportReturnDetailResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

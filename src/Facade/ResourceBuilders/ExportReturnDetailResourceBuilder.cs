@@ -21,7 +21,12 @@
                            TariffId = exportReturnDetail.TariffId,
                            ExpinvDocumentType = exportReturnDetail.ExpinvDocumentType,
                            ExpinvDocumentNumber = exportReturnDetail.ExpinvDocumentNumber,
-                           ExpinvDate = exportReturnDetail.ExpinvDate?.ToString("o")
+                           ExpinvDate = exportReturnDetail.ExpinvDate?.ToString("o"),
+                           NumCartons = exportReturnDetail.NumCartons,
+                           Weight = exportReturnDetail.Weight,
+                           Width = exportReturnDetail.Width,
+                           Height = exportReturnDetail.Height,
+                           Depth = exportReturnDetail.Depth
                        };
         }
 

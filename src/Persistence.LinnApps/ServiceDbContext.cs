@@ -156,9 +156,9 @@
 
         public DbSet<RequisitionHeader> RequisitionHeaders { get; set; }
 
-        public DbSet<ExportReturn> ExportReturns { get; set; }
+        public DbQuery<ExportReturn> ExportReturns { get; set; }
 
-        public DbSet<ExportReturnDetail> ExportReturnDetails { get; set; }
+        public DbQuery<ExportReturnDetail> ExportReturnDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -1327,6 +1327,11 @@
             q.Property(e => e.ExpinvDocumentType).HasColumnName("EXPINV_DOCUMENT_TYPE").HasMaxLength(1);
             q.Property(e => e.ExpinvDocumentNumber).HasColumnName("EXPINV_DOCUMENT_NUMBER");
             q.Property(e => e.ExpinvDate).HasColumnName("EXPINV_DATE");
+            q.Property(e => e.NumCartons).HasColumnName("NUM_CARTONS");
+            q.Property(e => e.Weight).HasColumnName("WEIGHT");
+            q.Property(e => e.Width).HasColumnName("WIDTH");
+            q.Property(e => e.Height).HasColumnName("HEIGHT");
+            q.Property(e => e.Depth).HasColumnName("DEPTH");
         }
     }
 }
