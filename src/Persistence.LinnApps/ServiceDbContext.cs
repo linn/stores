@@ -156,9 +156,9 @@
 
         public DbSet<RequisitionHeader> RequisitionHeaders { get; set; }
 
-        public DbQuery<ExportReturn> ExportReturns { get; set; }
+        public DbSet<ExportReturn> ExportReturns { get; set; }
 
-        public DbQuery<ExportReturnDetail> ExportReturnDetails { get; set; }
+        public DbSet<ExportReturnDetail> ExportReturnDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
