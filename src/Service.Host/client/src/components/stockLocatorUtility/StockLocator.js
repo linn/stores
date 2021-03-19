@@ -95,16 +95,16 @@ function StockLocator({ items, itemsLoading, fetchItems, options, quantities, qu
             type: 'text',
             editable: false
         },
+        {
+            title: 'Pallet',
+            id: 'palletNumber',
+            type: 'text',
+            editable: false
+        },
         ...variableColumns,
         {
             title: 'Stock Pool',
             id: 'stockPoolCode',
-            type: 'text',
-            editable: false
-        },
-        {
-            title: 'Pallet',
-            id: 'palletNumber',
             type: 'text',
             editable: false
         }
