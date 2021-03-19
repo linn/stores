@@ -13,7 +13,7 @@
 
     using NUnit.Framework;
 
-    public class WhenViewingStockLocatorsAndBatchRefInQuery : ContextBase
+    public class WhenSearchingBatches : ContextBase
     {
         private readonly IQueryable<StockLocatorBatch> repositoryResult =
             new List<StockLocatorBatch>
@@ -34,24 +34,23 @@
         public void SetUp()
         {
             this.StockLocatorBatchesView
-                .FindAll()
+                .FilterBy(Arg.Any<Expression<Func<StockLocatorBatch, bool>>>())
                 .Returns(this.repositoryResult);
             
-            this.testResult = this.Sut.SearchStockLocators(
+            this.testResult = this.Sut.SearchStockLocatorBatchView(
                 partNumber: "PART", 
                 locationId: 1, 
                 palletNumber: null, 
                 stockPool: "LINN", 
-                stockState: "FREE", 
-                batchRef: "BATCH", 
-                queryBatchView: true);
+                stockState: "FREE",
+                category: null);
         }
 
         [Test]
         public void ShouldQueryBatchesView()
         {
             this.StockLocatorBatchesView.Received()
-                .FindAll();
+                .FilterBy(Arg.Any<Expression<Func<StockLocatorBatch, bool>>>());
         }
 
         [Test]

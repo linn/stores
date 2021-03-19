@@ -25,7 +25,8 @@
                            StockPoolCode = stockLocator.StockPoolCode,
                            LocationDescription = stockLocator.StorageLocation?.Description,
                            State = stockLocator.State,
-                           PartId = stockLocator.Part?.Id
+                           PartId = stockLocator.Part?.Id,
+                           Category = stockLocator.Category
                        };
         }
 

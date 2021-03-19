@@ -24,7 +24,14 @@
             int? palletNumber,
             string stockPool,
             string stockState,
-            string batchRef,
-            bool queryBatchView);
+            string category);
+
+        IEnumerable<StockLocator> SearchStockLocatorBatchView(
+            string partNumber,
+            int? locationId,
+            int? palletNumber,
+            string stockPool,
+            string stockState,
+            string category);
     }
 }

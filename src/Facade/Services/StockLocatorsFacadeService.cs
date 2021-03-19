@@ -55,14 +55,23 @@
 
         public IResult<IEnumerable<StockLocator>> GetStockLocations(StockLocatorQueryResource searchResource)
         {
+            if (searchResource.QueryBatchView)
+            {
+                return new SuccessResult<IEnumerable<StockLocator>>(this.domainService.SearchStockLocatorBatchView(
+                    searchResource.PartNumber,
+                    searchResource.LocationId,
+                    searchResource.PalletNumber,
+                    searchResource.StockPoolCode,
+                    searchResource.State,
+                    searchResource.Category));
+            }
             return new SuccessResult<IEnumerable<StockLocator>>(this.domainService.SearchStockLocators(
                 searchResource.PartNumber,
                 searchResource.LocationId,
                 searchResource.PalletNumber,
                 searchResource.StockPoolCode,
                 searchResource.State,
-                searchResource.BatchRef,
-                searchResource.QueryBatchView));
+                searchResource.Category));
         }
 
         public IResult<IEnumerable<StockLocator>> FilterBy(StockLocatorResource searchResource)

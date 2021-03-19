@@ -36,7 +36,7 @@ function StockViewerOptions({
         locationId: '',
         stockPool: '',
         batchRef: '',
-        inspectedState: ''
+        state: ''
     });
 
     const table = {
@@ -169,12 +169,12 @@ function StockViewerOptions({
                                 id: v.state,
                                 displayText: v.description
                             }))}
-                            value={options.inspectedState}
+                            value={options.state}
                             label="State"
-                            propertyName="inspectedState"
+                            propertyName="state"
                             fullWidth
                             onChange={(_propertyName, newValue) =>
-                                setOptions({ ...options, inspectedState: newValue })
+                                setOptions({ ...options, state: newValue })
                             }
                             allowNoValue
                         />

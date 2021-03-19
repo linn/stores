@@ -47,5 +47,7 @@
         public IEnumerable<string> UserPrivileges { get; set; }
 
         public string State { get; set; }
+
+        public string Category { get; set; }
     }
 }

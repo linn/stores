@@ -46,12 +46,6 @@ function StockLocator({ items, itemsLoading, fetchItems, options, quantities, qu
               ]
             : [
                   {
-                      title: 'Location Code',
-                      id: 'locationName',
-                      type: 'text',
-                      editable: false
-                  },
-                  {
                       title: 'UOM',
                       id: 'partUnitOfMeasure',
                       type: 'text',
@@ -102,6 +96,12 @@ function StockLocator({ items, itemsLoading, fetchItems, options, quantities, qu
             type: 'text',
             editable: false
         },
+        {
+            title: 'Location Code',
+            id: 'locationName',
+            type: 'text',
+            editable: false
+        },
         ...variableColumns,
         {
             title: 'Stock Pool',
@@ -141,11 +141,17 @@ function StockLocator({ items, itemsLoading, fetchItems, options, quantities, qu
                                         <button
                                             type="button"
                                             onClick={() => {
-                                                setBatchView(false);
                                                 setHasDrilledDown(false);
                                                 fetchItems(
                                                     null,
-                                                    `&${queryString.stringify(options)}`
+                                                    `&${queryString.stringify({
+                                                        partNumber: i.partNumber,
+                                                        locationId: i.locationId,
+                                                        palletNumber: i.palletNumber?.toString(),
+                                                        state: i.state,
+                                                        category: i.category?.toString(),
+                                                        queryBatchView: false
+                                                    })}`
                                                 );
                                             }}
                                         >
@@ -159,11 +165,14 @@ function StockLocator({ items, itemsLoading, fetchItems, options, quantities, qu
                                                 setHasDrilledDown(true);
                                                 fetchItems(
                                                     null,
-                                                    `&locationId=${i.id}&partNumber=${
-                                                        i.partNumber
-                                                    }&queryBatchView=${true}&batchRef=${
-                                                        i.batchRef ? i.batchRef : ''
-                                                    }`
+                                                    `&${queryString.stringify({
+                                                        partNumber: i.partNumber,
+                                                        locationId: i.locationId,
+                                                        palletNumber: i.palletNumber?.toString(),
+                                                        state: i.state,
+                                                        category: i.category?.toString(),
+                                                        queryBatchView: true
+                                                    })}`
                                                 );
                                             }}
                                         >
