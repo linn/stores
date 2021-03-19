@@ -145,11 +145,7 @@ function StockLocator({ items, itemsLoading, fetchItems, options, quantities, qu
                                                 fetchItems(
                                                     null,
                                                     `&${queryString.stringify({
-                                                        partNumber: i.partNumber,
-                                                        locationId: i.locationId,
-                                                        palletNumber: i.palletNumber?.toString(),
-                                                        state: i.state,
-                                                        category: i.category?.toString(),
+                                                        ...options,
                                                         queryBatchView: false
                                                     })}`
                                                 );
