@@ -5,7 +5,8 @@ import {
     SingleEditTable,
     Loading,
     Dropdown,
-    InputField
+    InputField,
+    LinkButton
 } from '@linn-it/linn-form-components-library';
 import Typography from '@material-ui/core/Typography';
 import Accordion from '@material-ui/core/Accordion';
@@ -119,6 +120,10 @@ function StockLocator({ items, itemsLoading, fetchItems, options, quantities, qu
                         }
                     />
                 </Grid>
+                <Grid item xs={3}>
+                    <LinkButton to="/inventory/stock-viewer" text="Back to search" />
+                </Grid>
+                <Grid item xs={9} />
                 {itemsLoading || quantitiesLoading ? (
                     <Grid item xs={12}>
                         <Loading />

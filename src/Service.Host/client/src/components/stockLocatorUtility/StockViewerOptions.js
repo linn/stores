@@ -65,6 +65,7 @@ function StockViewerOptions({
                         label="Part Number"
                         propertyName="partNumber"
                         onChange={(_, newValue) => setOptions({ ...options, partNumber: newValue })}
+                        helperText="note: * can be used as a wildcard character"
                         value={options.partNumber}
                     />
                 </Grid>
