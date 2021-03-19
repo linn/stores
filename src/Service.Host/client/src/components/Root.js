@@ -170,7 +170,7 @@ const Root = ({ store }) => (
                                     />
                                     <Route
                                         exact
-                                        path="/logistics/stock-move"
+                                        path="/inventory/move-stock"
                                         component={StockMove}
                                     />
                                     <Route component={NotFoundPage} />

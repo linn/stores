@@ -106,6 +106,7 @@
             builder.RegisterType<StockQuantitiesService>().As<IStockQuantitiesService>();
             builder.RegisterType<RequisitionActionsFacadeService>().As<IRequisitionActionsFacadeService>();
             builder.RegisterType<AvailableStockFacadeService>().As<IAvailableStockFacadeService>();
+            builder.RegisterType<MoveStockRequestResource>().As<IMoveStockFacadeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

@@ -25,7 +25,7 @@ function App() {
                 <ListItem component={Link} to="/inventory/parts/sources" button>
                     <Typography color="primary">Mech Part Sources Utility</Typography>
                 </ListItem>
-                <ListItem component={Link} to="/logistics/stock-move" button>
+                <ListItem component={Link} to="/inventory/move-stock" button>
                     <Typography color="primary">Stock Move</Typography>
                 </ListItem>
             </List>

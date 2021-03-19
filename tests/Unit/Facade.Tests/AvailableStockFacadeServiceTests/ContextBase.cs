@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Facade.Tests.StockAvailableFacadeServiceTests
+﻿namespace Linn.Stores.Facade.Tests.AvailableStockFacadeServiceTests
 {
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
@@ -12,13 +12,13 @@
     {
         protected AvailableStockFacadeService Sut { get; private set; }
 
-        protected IQueryRepository<AvailableStock> StockAvailableRepository { get; private set; }
+        protected IQueryRepository<AvailableStock> AvailableStockRepository { get; private set; }
 
         [SetUp]
         public void SetUpContext()
         {
-            this.StockAvailableRepository = Substitute.For<IQueryRepository<AvailableStock>>();
-            this.Sut = new AvailableStockFacadeService(this.StockAvailableRepository);
+            this.AvailableStockRepository = Substitute.For<IQueryRepository<AvailableStock>>();
+            this.Sut = new AvailableStockFacadeService(this.AvailableStockRepository);
         }
     }
 }

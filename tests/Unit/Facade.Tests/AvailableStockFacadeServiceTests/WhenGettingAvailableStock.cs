@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Facade.Tests.StockAvailableFacadeServiceTests
+﻿namespace Linn.Stores.Facade.Tests.AvailableStockFacadeServiceTests
 {
     using System;
     using System.Collections.Generic;
@@ -14,7 +14,7 @@
 
     using NUnit.Framework;
 
-    public class WhenGettingStockAvailable : ContextBase
+    public class WhenGettingAvailableStock : ContextBase
     {
         private readonly string partNumber = "pn";
 
@@ -30,7 +30,7 @@
                                         new AvailableStock { LocationCode = "1" },
                                         new AvailableStock { LocationCode = "2" }
                                     };
-            this.StockAvailableRepository.FilterBy(Arg.Any<Expression<Func<AvailableStock, bool>>>())
+            this.AvailableStockRepository.FilterBy(Arg.Any<Expression<Func<AvailableStock, bool>>>())
                 .Returns(this.items.AsQueryable());
 
             this.results = this.Sut.GetAvailableStock(this.partNumber);
@@ -39,7 +39,7 @@
         [Test]
         public void ShouldCallRepository()
         {
-            this.StockAvailableRepository.Received().FilterBy(Arg.Any<Expression<Func<AvailableStock, bool>>>());
+            this.AvailableStockRepository.Received().FilterBy(Arg.Any<Expression<Func<AvailableStock, bool>>>());
         }
 
         [Test]

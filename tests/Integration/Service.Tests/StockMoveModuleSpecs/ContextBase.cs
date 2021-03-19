@@ -4,6 +4,7 @@
     using System.Security.Claims;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
@@ -21,18 +22,24 @@
     {
         protected IAvailableStockFacadeService AvailableStockFacadeService { get; private set; }
 
+        protected IMoveStockFacadeService MoveStockFacadeService { get; private set; }
+
         [SetUp]
         public void EstablishContext()
         {
             this.AvailableStockFacadeService = Substitute.For<IAvailableStockFacadeService>();
+            this.MoveStockFacadeService = Substitute.For<IMoveStockFacadeService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                 {
                     with.Dependency(this.AvailableStockFacadeService);
+                    with.Dependency(this.MoveStockFacadeService);
                     with.Dependency<IResourceBuilder<IEnumerable<AvailableStock>>>(new AvailableStockResourceBuilder());
+                    with.Dependency<IResourceBuilder<ProcessResult>>(new ProcessResultResourceBuilder());
                     with.Module<StockMoveModule>();
                     with.ResponseProcessor<StockAvailableResponseProcessor>();
+                    with.ResponseProcessor<ProcessResultResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {
