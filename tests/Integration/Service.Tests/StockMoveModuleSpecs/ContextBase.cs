@@ -4,7 +4,6 @@
     using System.Security.Claims;
 
     using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
@@ -36,10 +35,10 @@
                     with.Dependency(this.AvailableStockFacadeService);
                     with.Dependency(this.MoveStockFacadeService);
                     with.Dependency<IResourceBuilder<IEnumerable<AvailableStock>>>(new AvailableStockResourceBuilder());
-                    with.Dependency<IResourceBuilder<ProcessResult>>(new ProcessResultResourceBuilder());
+                    with.Dependency<IResourceBuilder<RequisitionProcessResult>>(new RequisitionProcessResultResourceBuilder());
                     with.Module<StockMoveModule>();
                     with.ResponseProcessor<StockAvailableResponseProcessor>();
-                    with.ResponseProcessor<ProcessResultResponseProcessor>();
+                    with.ResponseProcessor<RequisitionProcessResultResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {

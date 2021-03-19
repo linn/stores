@@ -12,6 +12,7 @@
         protected MoveStockFacadeService Sut { get; private set; }
 
         protected IMoveStockService MoveStockService { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {

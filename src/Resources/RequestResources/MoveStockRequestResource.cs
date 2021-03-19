@@ -23,5 +23,7 @@
         public string To { get; set; }
 
         public string ToStockRotationDate { get; set; }
+
+        public int UserNumber { get; set; }
     }
 }

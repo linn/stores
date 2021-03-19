@@ -1,9 +1,11 @@
 ﻿namespace Linn.Stores.Service.Tests.StockMoveModuleSpecs
 {
+    using System.Linq;
+
     using FluentAssertions;
 
     using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps.Models;
+    using Linn.Stores.Domain.LinnApps.StockMove.Models;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
 
@@ -16,7 +18,7 @@
 
     public class WhenMovingStock : ContextBase
     {
-        private ProcessResult processResult;
+        private RequisitionProcessResult processResult;
 
         private MoveStockRequestResource resource;
 
@@ -24,10 +26,10 @@
         public void SetUp()
         {
             this.resource = new MoveStockRequestResource { From = "Loc1", To = "Loc2" };
-            this.processResult = new ProcessResult { Success = true, Message = "ok" };
+            this.processResult = new RequisitionProcessResult { Success = true, Message = "ok", ReqNumber = 23 };
             this.MoveStockFacadeService.MoveStock(Arg.Is<MoveStockRequestResource>(
                     a => a.From == this.resource.From && a.To == this.resource.To))
-                .Returns(new SuccessResult<ProcessResult>(this.processResult));
+                .Returns(new SuccessResult<RequisitionProcessResult>(this.processResult));
 
             this.Response = this.Browser.Post(
                 "/inventory/move-stock",
@@ -58,6 +60,9 @@
             var resultResource = this.Response.Body.DeserializeJson<ProcessResultResource>();
             resultResource.Message.Should().Be(this.processResult.Message);
             resultResource.Success.Should().Be(this.processResult.Success);
+            resultResource.Links.Should().HaveCount(2);
+            resultResource.Links.First(l => l.Rel == "requisition").Href.Should().Be("/logistics/requisitions/23");
+            resultResource.Links.First(l => l.Rel == "req-moves").Href.Should().Be("/logistics/requisitions/23/moves");
         }
     }
 }
