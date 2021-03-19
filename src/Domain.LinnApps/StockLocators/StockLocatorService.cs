@@ -232,6 +232,7 @@
                                          PartNumber = x.PartNumber,
                                          Id = x.StorageLocationId,
                                          LocationId = x.StorageLocationId,
+                                         StorageLocation = x.StorageLocation,
                                          Quantity = x.Quantity,
                                          PalletNumber = x.PalletNumber,
                                          State = x.State,
