@@ -13,7 +13,9 @@
 
         private readonly IMoveStockFacadeService moveStockFacadeService;
 
-        public StockMoveModule(IAvailableStockFacadeService availableStockFacadeService, IMoveStockFacadeService moveStockFacadeService)
+        public StockMoveModule(
+            IAvailableStockFacadeService availableStockFacadeService,
+            IMoveStockFacadeService moveStockFacadeService)
         {
             this.availableStockFacadeService = availableStockFacadeService;
             this.moveStockFacadeService = moveStockFacadeService;

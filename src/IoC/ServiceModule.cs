@@ -15,6 +15,7 @@
     using Linn.Stores.Domain.LinnApps.Reports;
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.StockMove;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Facade;
@@ -43,6 +44,7 @@
             builder.RegisterType<WarehouseService>().As<IWarehouseService>();
             builder.RegisterType<WandService>().As<IWandService>();
             builder.RegisterType<RequisitionService>().As<IRequisitionService>();
+            builder.RegisterType<MoveStockService>().As<IMoveStockService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -106,7 +108,7 @@
             builder.RegisterType<StockQuantitiesService>().As<IStockQuantitiesService>();
             builder.RegisterType<RequisitionActionsFacadeService>().As<IRequisitionActionsFacadeService>();
             builder.RegisterType<AvailableStockFacadeService>().As<IAvailableStockFacadeService>();
-            builder.RegisterType<MoveStockRequestResource>().As<IMoveStockFacadeService>();
+            builder.RegisterType<MoveStockFacadeService>().As<IMoveStockFacadeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

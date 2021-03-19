@@ -107,7 +107,8 @@
             return new RequisitionProcessResult
             {
                 Message = messageParameter.Value.ToString(),
-                Success = int.Parse(successParameter.Value.ToString()) == 1
+                Success = int.Parse(successParameter.Value.ToString()) == 1,
+                ReqNumber = int.Parse(reqNumberParameter.Value.ToString())
             };
         }
     }

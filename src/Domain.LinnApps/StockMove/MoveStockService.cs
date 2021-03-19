@@ -41,6 +41,8 @@
                 result.ReqNumber = moveResult.ReqNumber;
             }
 
+            result.Success = true;
+
             return result;
         }
     }

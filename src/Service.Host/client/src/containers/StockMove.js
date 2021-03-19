@@ -12,6 +12,7 @@ import availableStockSelectors from '../selectors/availableStockSelectors';
 import * as processTypes from '../processTypes';
 import doStockMoveSelectors from '../selectors/doStockMoveSelectors';
 import doStockMoveActions from '../actions/doStockMoveActions';
+import { getUserNumber } from '../selectors/userSelectors';
 
 const mapStateToProps = state => ({
     parts: partsSelectors.getSearchItems(state),
@@ -20,7 +21,8 @@ const mapStateToProps = state => ({
     availableStockLoading: availableStockSelectors.getSearchLoading(state),
     moveError: getItemErrorDetailMessage(state, processTypes.doStockMove.item),
     requestErrors: getRequestErrors(state)?.filter(error => error.type !== 'FETCH_ERROR'),
-    moveResult: doStockMoveSelectors.getData(state)
+    moveResult: doStockMoveSelectors.getData(state),
+    userNumber: getUserNumber(state)
 });
 
 const mapDispatchToProps = {

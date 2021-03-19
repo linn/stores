@@ -24,9 +24,10 @@ function StockMove({
     moveResult,
     doMove,
     clearMoveError,
-    requestErrors
+    requestErrors,
+    userNumber
 }) {
-    const [moveDetails, setMoveDetails] = useState({});
+    const [moveDetails, setMoveDetails] = useState({ userNumber });
     const [selectedRow, setSelectedRow] = useState(null);
     const [alert, setAlert] = useState({ message: ' ', visible: false });
 
@@ -49,12 +50,12 @@ function StockMove({
         setMoveDetails({
             ...moveDetails,
             from: row.displayLocation,
-            locationCode: row.locationCode,
-            state: row.state,
-            stockPoolCode: row.stockPoolCode,
-            palletNumber: row.palletNumber,
-            locationId: row.locationId,
-            stockRotationDate: moment(row.stockRotationDate).format('DD MMM YYYY')
+            fromLocationCode: row.locationCode,
+            fromState: row.state,
+            fromStockPoolCode: row.stockPoolCode,
+            fromPalletNumber: row.palletNumber,
+            fromLocationId: row.locationId,
+            fromStockRotationDate: moment(row.stockRotationDate).format('DD MMM YYYY')
         });
 
         toInput.current.focus();
@@ -90,13 +91,18 @@ function StockMove({
             return;
         }
 
-        doMove();
+        doMove(moveDetails);
     };
 
     const setToDetailsFromAvailableStock = row => {
         setMoveDetails({
             ...moveDetails,
-            to: row.displayLocation
+            to: row.displayLocation,
+            toLocationCode: row.locationCode,
+            toState: row.state,
+            toStockPoolCode: row.stockPoolCode,
+            toPalletNumber: row.palletNumber,
+            toLocationId: row.locationId
         });
 
         toInput.current.focus();
@@ -242,12 +248,12 @@ function StockMove({
                 </Grid>
                 <Grid item xs={3}>
                     <InputField
-                        value={moveDetails.stockRotationDate}
+                        value={moveDetails.fromStockRotationDate}
                         label="St Rot Date"
                         onChange={handleFieldChange}
                         maxLength={16}
                         type="date"
-                        propertyName="stockRotationDate"
+                        propertyName="fromStockRotationDate"
                     />
                 </Grid>
                 <Grid item xs={2} />
@@ -327,7 +333,8 @@ StockMove.propTypes = {
     clearMoveError: PropTypes.func.isRequired,
     requestErrors: PropTypes.arrayOf(
         PropTypes.shape({ message: PropTypes.string, name: PropTypes.string })
-    )
+    ),
+    userNumber: PropTypes.number.isRequired
 };
 
 StockMove.defaultProps = {
