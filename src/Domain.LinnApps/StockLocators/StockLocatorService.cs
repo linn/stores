@@ -237,7 +237,8 @@
                                          PalletNumber = x.PalletNumber,
                                          State = x.State,
                                          QuantityAllocated = x.QuantityAllocated,
-                                         StockPoolCode = x.StockPoolCode
+                                         StockPoolCode = x.StockPoolCode,
+                                         Part = x.Part
                                      });
             }
 
