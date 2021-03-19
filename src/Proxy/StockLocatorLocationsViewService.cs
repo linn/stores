@@ -76,7 +76,7 @@
                 }
             }
 
-            var sql = $@"select * from stock_locator_loc_view {whereClause}";
+            var sql = $@"SELECT * FROM STOCK_LOCATOR_LOC_VIEW {whereClause}";
 
             var res = this.databaseService.ExecuteQuery(sql);
 
