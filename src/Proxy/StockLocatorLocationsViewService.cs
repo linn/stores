@@ -85,22 +85,22 @@
                     into values
                     select new StockLocatorLocation
                                {
-                                   Quantity = int.Parse(values[0].ToString()),
-                                   StorageLocationId = int.Parse(values[1].ToString()),
+                                   Quantity = Convert.ToInt32(values[0]),
+                                   StorageLocationId = Convert.ToInt32(values[1]),
                                    StorageLocation = new StorageLocation
                                                          {
-                                                             LocationId = int.Parse(values[1].ToString()),
+                                                             LocationId = Convert.ToInt32(values[1]),
                                                              LocationCode = values[2].ToString(), 
                                                              Description = values[3].ToString()
                                                          },
                                    PartNumber = values[4].ToString(),
-                                   PalletNumber = values[5] == DBNull.Value ? (int?)null : int.Parse(values[5].ToString()),
+                                   PalletNumber = values[5] == DBNull.Value ? (int?)null : Convert.ToInt32(values[5]),
                                    LocationType = values[6].ToString(),
                                    State = values[7].ToString(),
                                    Category = values[8].ToString(),
                                    StockPoolCode = values[9].ToString(),
                                    OurUnitOfMeasure = values[10].ToString(),
-                                   QuantityAllocated = values[11] == DBNull.Value ? (int?)null : int.Parse(values[11].ToString()),
+                                   QuantityAllocated = values[11] == DBNull.Value ? (int?)null : Convert.ToInt32(values[11]),
                                }).ToList();
         }
     }
