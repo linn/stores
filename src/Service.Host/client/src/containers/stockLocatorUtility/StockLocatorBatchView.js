@@ -16,7 +16,9 @@ const mapStateToProps = (state, { location }) => ({
     options: queryString.parse(location?.search),
     loading: stockLocatorLocationsSelectors.getLoading(state),
     itemError: getItemError(state, itemTypes.stockLocator.item),
-    previousPaths: getPreviousPaths(state)
+    drillBackPath: getPreviousPaths(state)
+        ?.filter(x => x.path === '/inventory/stock-locator/locators')
+        .pop()
 });
 
 const initialise = ({ options }) => dispatch => {

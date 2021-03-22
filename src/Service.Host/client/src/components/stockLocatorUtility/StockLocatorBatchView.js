@@ -5,7 +5,8 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import Page from '../../containers/Page';
 
-function StockLocator({ items, itemsLoading, history }) {
+function StockLocatorBatchView({ items, itemsLoading, history, drillBackPath }) {
+    // think: can drillBackPathEndUp undefined? 
     const columns = [
         {
             title: 'Part',
@@ -123,7 +124,7 @@ function StockLocator({ items, itemsLoading, history }) {
     );
 }
 
-StockLocator.propTypes = {
+StockLocatorBatchView.propTypes = {
     items: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
@@ -136,9 +137,9 @@ StockLocator.propTypes = {
     history: PropTypes.shape({ goBack: PropTypes.func, push: PropTypes.func }).isRequired
 };
 
-StockLocator.defaultProps = {
+StockLocatorBatchView.defaultProps = {
     items: [],
     itemsLoading: true
 };
 
-export default StockLocator;
+export default StockLocatorBatchView;
