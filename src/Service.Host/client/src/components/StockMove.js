@@ -189,19 +189,7 @@ function StockMove({
                         />
                     </div>
                 </Grid>
-                <Grid item xs={5}>
-                    <Typeahead
-                        items={partResults()}
-                        fetchItems={fetchParts}
-                        clearSearch={clearPartsSearch}
-                        loading={partsLoading}
-                        debounce={1000}
-                        links={false}
-                        modal
-                        onSelect={p => handleOnSelect(p)}
-                        placeholder="Search For Part Number"
-                    />
-                </Grid>
+                <Grid item xs={5} />
                 <Grid item xs={7}>
                     <Button
                         className="hide-when-printing"
@@ -218,7 +206,7 @@ function StockMove({
                         To
                     </Button>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={4}>
                     <InputField
                         value={moveDetails.partNumber}
                         label="Part Number"
@@ -226,6 +214,18 @@ function StockMove({
                         maxLength={14}
                         propertyName="partNumber"
                         textFieldProps={onKeyDownProp}
+                    />
+                    <Typeahead
+                        items={partResults()}
+                        fetchItems={fetchParts}
+                        clearSearch={clearPartsSearch}
+                        loading={partsLoading}
+                        debounce={1000}
+                        links={false}
+                        modal
+                        searchButtonOnly
+                        onSelect={p => handleOnSelect(p)}
+                        label="Search For Part Number"
                     />
                 </Grid>
                 <Grid item xs={1}>
@@ -256,7 +256,7 @@ function StockMove({
                         propertyName="fromStockRotationDate"
                     />
                 </Grid>
-                <Grid item xs={2} />
+                <Grid item xs={1} />
                 <Grid item xs={4} />
                 <Grid item xs={3}>
                     <InputField
