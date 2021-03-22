@@ -102,7 +102,7 @@ function StockLocator({ items, itemsLoading, history, previousPaths }) {
                                             type="button"
                                             onClick={() => {
                                                 history.push(
-                                                    `/inventory/stock-locator-utility/prices?${queryString.stringify(
+                                                    `/inventory/stock-locator/locators/batches/details?${queryString.stringify(
                                                         {
                                                             partNumber: i.partNumber,
                                                             locationName: i.locationName,

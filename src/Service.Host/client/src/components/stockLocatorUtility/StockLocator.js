@@ -118,7 +118,7 @@ function StockLocator({
                                             type="button"
                                             onClick={() => {
                                                 history.push(
-                                                    `/inventory/stock-locator-utility/batches?${queryString.stringify(
+                                                    `/inventory/stock-locator/locators/batches?${queryString.stringify(
                                                         {
                                                             partNumber: i.partNumber,
                                                             locationId: i.locationId,

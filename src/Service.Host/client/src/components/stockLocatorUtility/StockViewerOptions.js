@@ -78,7 +78,7 @@ function StockViewerOptions({
                             !options.partNumber &&
                             !(options.storageLocation || options.palletNumber)
                         }
-                        to={`/inventory/stock-locator-utility?${queryString.stringify(options)}`}
+                        to={`/inventory/stock-locator/locators?${queryString.stringify(options)}`}
                     />
                 </Grid>
                 <Grid item xs={2} />
