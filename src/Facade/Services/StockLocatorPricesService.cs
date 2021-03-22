@@ -18,6 +18,10 @@
 
         public IResult<IEnumerable<StockLocatorPrices>> GetPrices(StockLocatorResource queryResource)
         {
+            var querydate = queryResource.StockRotationDate == null 
+                                ? (DateTime?)null 
+                                : DateTime.Parse(queryResource.StockRotationDate);
+            
             return new SuccessResult<IEnumerable<StockLocatorPrices>>(
                 this.domainService.GetPrices(
                     queryResource.PalletNumber,
@@ -27,7 +31,7 @@
                     queryResource.Category,
                     queryResource.StockPoolCode,
                     queryResource.BatchRef,
-                    DateTime.Parse(queryResource.StockRotationDate)));
+                    querydate));
         }
     }
 }

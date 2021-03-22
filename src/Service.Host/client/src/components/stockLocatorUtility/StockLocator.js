@@ -22,12 +22,10 @@ function StockLocator({
     items,
     itemsLoading,
     history,
-    options,
     quantities,
     quantitiesLoading,
     previousPaths
 }) {
-    const [batchView, setBatchView] = useState(false);
     const [selectedQuantities, setSelectQuantities] = useState();
 
     useEffect(() => {
@@ -44,6 +42,12 @@ function StockLocator({
             editable: false
         },
         {
+            title: 'UOM',
+            id: 'partUnitOfMeasure',
+            type: 'text',
+            editable: false
+        },
+        {
             title: 'Qty At Location',
             id: 'quantity',
             type: 'number',
@@ -51,8 +55,8 @@ function StockLocator({
         },
         {
             title: '',
-            id: 'button',
-            type: 'text',
+            id: 'component',
+            type: 'component',
             editable: false
         },
         {
@@ -62,14 +66,14 @@ function StockLocator({
             editable: false
         },
         {
-            title: 'Expand',
-            id: 'component',
-            type: 'component',
+            title: 'State',
+            id: 'state',
+            type: 'text',
             editable: false
         },
         {
-            title: 'State',
-            id: 'state',
+            title: 'Stock Pool',
+            id: 'stockPoolCode',
             type: 'text',
             editable: false
         },
@@ -84,29 +88,13 @@ function StockLocator({
             id: 'locationName',
             type: 'text',
             editable: false
-        },
-        {
-            title: 'UOM',
-            id: 'partUnitOfMeasure',
-            type: 'text',
-            editable: false
-        },
-        {
-            title: 'Stock Pool',
-            id: 'stockPoolCode',
-            type: 'text',
-            editable: false
         }
     ];
     return (
         <Page>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <Title
-                        text={
-                            options?.batchRef || batchView ? 'Locator Batches' : 'Stock Locations'
-                        }
-                    />
+                    <Title text="Stock Locations" />
                 </Grid>
                 <Grid item xs={3}>
                     <BackButton backClick={() => smartGoBack(previousPaths, history.goBack)} />
@@ -129,7 +117,6 @@ function StockLocator({
                                         <button
                                             type="button"
                                             onClick={() => {
-                                                setBatchView(true);
                                                 history.push(
                                                     `/inventory/stock-locator-utility/batches?${queryString.stringify(
                                                         {
@@ -153,7 +140,7 @@ function StockLocator({
                                 allowNewRowCreations
                             />
                         )}
-                        {quantities?.length && selectedQuantities && !batchView && (
+                        {quantities?.length && selectedQuantities && (
                             <Accordion>
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}

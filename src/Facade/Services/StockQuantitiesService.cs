@@ -18,7 +18,7 @@
 
         public IResult<IEnumerable<StockQuantities>> GetStockQuantities(string partNumber)
         {
-            var partNumberPattern = Regex.Escape(partNumber).Replace("\\*", ".*?");
+            var partNumberPattern = Regex.Escape(partNumber.Trim(' ')).Replace("\\*", ".*?");
             var r = new Regex(partNumberPattern, RegexOptions.IgnoreCase);
 
             var result = this.repository

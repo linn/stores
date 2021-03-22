@@ -236,3 +236,9 @@ export const stockQuantities = new ItemType(
     'STOCK_QUANTITIES',
     '/inventory/stock-quantities'
 );
+
+export const stockLocatorPrices = new ItemType(
+    'stockLocatorPrices',
+    'STOCK_LOCATOR_PRICES',
+    '/inventory/stock-locators/prices'
+);

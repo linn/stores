@@ -43,6 +43,6 @@
             string category,
             string stockPool,
             string batchRef,
-            DateTime batchDate);
+            DateTime? batchDate);
     }
 }

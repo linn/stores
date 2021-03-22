@@ -8,7 +8,6 @@ import {
     smartGoBack
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
-import queryString from 'query-string';
 import Page from '../../containers/Page';
 
 function StockLocator({ items, itemsLoading, history, previousPaths }) {
@@ -38,13 +37,13 @@ function StockLocator({ items, itemsLoading, history, previousPaths }) {
             editable: false
         },
         {
-            title: 'Batch Ref',
+            title: 'Prices Ref',
             id: 'batchRef',
             type: 'text',
             editable: false
         },
         {
-            title: 'Batch Date',
+            title: 'Prices Date',
             id: 'stockRotationDate',
             type: 'date',
             editable: false
@@ -78,7 +77,7 @@ function StockLocator({ items, itemsLoading, history, previousPaths }) {
         <Page>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <Title text="Locator Batches" />
+                    <Title text="Locator Priceses" />
                 </Grid>
                 <Grid item xs={3}>
                     <BackButton backClick={() => smartGoBack(previousPaths, history.goBack)} />
@@ -101,17 +100,7 @@ function StockLocator({ items, itemsLoading, history, previousPaths }) {
                                         <button
                                             type="button"
                                             onClick={() => {
-                                                history.push(
-                                                    `/inventory/stock-locator-utility/prices?${queryString.stringify(
-                                                        {
-                                                            partNumber: i.partNumber,
-                                                            locationId: i.locationId,
-                                                            palletNumber: i.palletNumber?.toString(),
-                                                            state: i.state,
-                                                            category: i.category?.toString()
-                                                        }
-                                                    )}`
-                                                );
+                                                console.log('ok');
                                             }}
                                         >
                                             +
@@ -140,7 +129,7 @@ StockLocator.propTypes = {
         batchRef: PropTypes.string
     }).isRequired,
     itemsLoading: PropTypes.bool,
-    history: PropTypes.shape({ goBack: PropTypes.func, push: PropTypes.func }).isRequired,
+    history: PropTypes.shape({ goBack: PropTypes.func }).isRequired,
     previousPaths: PropTypes.arrayOf(PropTypes.string)
 };
 

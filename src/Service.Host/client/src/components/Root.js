@@ -33,6 +33,7 @@ import StockLocator from '../containers/stockLocatorUtility/StockLocator';
 import Wand from '../containers/Wand';
 import ExportRsns from '../containers/ExportRsns';
 import StockLocatorBatchView from '../containers/stockLocatorUtility/StockLocatorBatchView';
+import StockLocatorPricesView from '../containers/stockLocatorUtility/StockLocatorPricesView';
 
 const Root = ({ store }) => (
     <div>
@@ -161,6 +162,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/stock-locator-utility/batches"
                                         component={StockLocatorBatchView}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/stock-locator-utility/prices"
+                                        component={StockLocatorPricesView}
                                     />
                                     <Route
                                         exact

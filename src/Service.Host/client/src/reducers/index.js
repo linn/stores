@@ -56,6 +56,7 @@ import despatchPalletQueueReport from './despatchPalletQueueReport';
 import movePalletToUpper from './movePalletToUpper';
 import movePalletsToUpper from './movePalletsToUpper';
 import stockLocatorLocations from './stockLocators/stockLocatorLocations';
+import stockLocatorPrices from './stockLocators/stockLocatorPrices';
 import stockQuantities from './stockLocators/stockQuantities';
 import nominalAccounts from './nominalAccounts';
 import wandConsignments from './wandConsignments';
@@ -116,6 +117,7 @@ const rootReducer = history =>
         stockLocator,
         stockLocatorBatches,
         stockLocatorLocations,
+        stockLocatorPrices,
         stockLocators,
         stockPools,
         stockQuantities,

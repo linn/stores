@@ -262,7 +262,7 @@
             string category,
             string stockPool,
             string batchRef,
-            DateTime batchDate)
+            DateTime? batchDate)
         {
             return this.stockLocatorView.FilterBy(x => false);
         }
