@@ -1323,6 +1323,8 @@
             view.Property(v => v.StockPool).HasColumnName("STOCK_POOL_CODE");
             view.Property(v => v.State).HasColumnName("STATE");
             view.Property(v => v.PartPrice).HasColumnName("PART_PRICE");
+            view.Property(v => v.QuantityAllocated).HasColumnName("QTY_ALLOCATED");
+            view.Property(v => v.Category).HasColumnName("CATEGORY");
         }
     }
 }

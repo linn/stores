@@ -10,6 +10,8 @@
 
         public int? QuantityAtLocation { get; set; }
 
+        public int? QuantityAllocated { get; set; }
+
         public string Remarks { get; set; }
 
         public string State { get; set; }
@@ -33,5 +35,7 @@
         public decimal? LabourPrice { get; set; }
 
         public decimal? OverheadPrice { get; set; }
+
+        public string Category { get; set; }
     }
 }

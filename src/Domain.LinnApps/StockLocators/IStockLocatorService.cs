@@ -38,7 +38,7 @@
         IEnumerable<StockLocatorPrices> GetPrices(
             int? palletNumber,
             string partNumber,
-            int? locationId,
+            string locationCode,
             string state,
             string category,
             string stockPool,

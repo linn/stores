@@ -105,10 +105,13 @@ function StockLocator({ items, itemsLoading, history, previousPaths }) {
                                                     `/inventory/stock-locator-utility/prices?${queryString.stringify(
                                                         {
                                                             partNumber: i.partNumber,
-                                                            locationId: i.locationId,
+                                                            locationName: i.locationName,
                                                             palletNumber: i.palletNumber?.toString(),
                                                             state: i.state,
-                                                            category: i.category?.toString()
+                                                            category: i.category?.toString(),
+                                                            stockPool: i.stockPoolCode,
+                                                            batchRef: i.batchRef,
+                                                            stockRotationDate: i.stockRotationDate
                                                         }
                                                     )}`
                                                 );

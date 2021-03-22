@@ -19,14 +19,8 @@ function StockLocator({ items, itemsLoading, history, previousPaths }) {
             editable: false
         },
         {
-            title: '',
-            id: 'drillDownButton',
-            type: 'component',
-            editable: false
-        },
-        {
             title: 'Qty At Location',
-            id: 'quantity',
+            id: 'quantityAtLocation',
             type: 'number',
             editable: false
         },
@@ -37,15 +31,9 @@ function StockLocator({ items, itemsLoading, history, previousPaths }) {
             editable: false
         },
         {
-            title: 'Prices Ref',
-            id: 'batchRef',
+            title: 'Remarks',
+            id: 'remarks',
             type: 'text',
-            editable: false
-        },
-        {
-            title: 'Prices Date',
-            id: 'stockRotationDate',
-            type: 'date',
             editable: false
         },
         {
@@ -56,7 +44,7 @@ function StockLocator({ items, itemsLoading, history, previousPaths }) {
         },
         {
             title: 'Stock Pool',
-            id: 'stockPoolCode',
+            id: 'stockPool',
             type: 'text',
             editable: false
         },
@@ -68,8 +56,50 @@ function StockLocator({ items, itemsLoading, history, previousPaths }) {
         },
         {
             title: 'Location Code',
-            id: 'locationName',
+            id: 'locationCode',
             type: 'text',
+            editable: false
+        },
+        {
+            title: 'Batch Ref',
+            id: 'batchRef',
+            type: 'text',
+            editable: false
+        },
+        {
+            title: 'Batch Date',
+            id: 'batchDate',
+            type: 'date',
+            editable: false
+        },
+        {
+            title: 'BudgetId',
+            id: 'budgetId',
+            type: 'text',
+            editable: false
+        },
+        {
+            title: 'Part',
+            id: 'partPrice',
+            type: 'number',
+            editable: false
+        },
+        {
+            title: 'Material',
+            id: 'materialPrice',
+            type: 'number',
+            editable: false
+        },
+        {
+            title: 'Labour',
+            id: 'labourPrice',
+            type: 'number',
+            editable: false
+        },
+        {
+            title: 'Overhead',
+            id: 'overheadPrice',
+            type: 'number',
             editable: false
         }
     ];
@@ -77,7 +107,7 @@ function StockLocator({ items, itemsLoading, history, previousPaths }) {
         <Page>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <Title text="Locator Priceses" />
+                    <Title text="Locator Prices" />
                 </Grid>
                 <Grid item xs={3}>
                     <BackButton backClick={() => smartGoBack(previousPaths, history.goBack)} />
@@ -95,17 +125,7 @@ function StockLocator({ items, itemsLoading, history, previousPaths }) {
                                 columns={columns}
                                 rows={items.map(i => ({
                                     ...i,
-                                    id: i.id + i.batchRef + i.partNumber,
-                                    drillDownButton: (
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                console.log('ok');
-                                            }}
-                                        >
-                                            +
-                                        </button>
-                                    )
+                                    id: i.id + i.batchRef + i.partNumber
                                 }))}
                                 allowNewRowCreation={false}
                                 editable={false}

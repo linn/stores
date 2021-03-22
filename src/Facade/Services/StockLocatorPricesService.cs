@@ -26,7 +26,7 @@
                 this.domainService.GetPrices(
                     queryResource.PalletNumber,
                     queryResource.PartNumber,
-                    queryResource.LocationId,
+                    queryResource.LocationName,
                     queryResource.State,
                     queryResource.Category,
                     queryResource.StockPoolCode,
