@@ -42,6 +42,8 @@
 
         protected IStockQuantitiesService QuantitiesService { get; private set; }
 
+        protected IStockLocatorPricesService PricesService { get; private set; }
+
         [SetUp]
         public void EstablishContext()
         {
@@ -57,6 +59,8 @@
             this.StateService = Substitute
                 .For<IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource>>();
 
+            this.PricesService = Substitute.For<IStockLocatorPricesService>();
+
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                 {
@@ -64,6 +68,7 @@
                     with.Dependency(this.StorageLocationService);
                     with.Dependency(this.StateService);
                     with.Dependency(this.QuantitiesService);
+                    with.Dependency(this.PricesService);
                     with.Dependency<IResourceBuilder<StockQuantities>>(new StockQuantitiesResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<StockQuantities>>>(new StockQuantitiesListResourceBuilder());
                     with.Dependency<IResourceBuilder<InspectedState>>(new InspectedStateResourceBuilder());

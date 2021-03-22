@@ -106,6 +106,7 @@
             builder.RegisterType<ExportRsnService>().As<IExportRsnService>();
             builder.RegisterType<StockQuantitiesService>().As<IStockQuantitiesService>();
             builder.RegisterType<RequisitionActionsFacadeService>().As<IRequisitionActionsFacadeService>();
+            builder.RegisterType<StockLocatorPricesService>().As<IStockLocatorPricesService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

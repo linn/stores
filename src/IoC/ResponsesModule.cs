@@ -149,6 +149,9 @@
             builder.RegisterType<StockQuantitiesListResourceBuilder>().As<IResourceBuilder<IEnumerable<StockQuantities>>>();
             builder.RegisterType<WandItemResultResourceBuilder>().As<IResourceBuilder<WandResult>>();
             builder.RegisterType<RequisitionActionResourceBuilder>().As<IResourceBuilder<RequisitionActionResult>>();
+            builder.RegisterType<StockLocatorPricesResourceBuilder>().As<IResourceBuilder<StockLocatorPrices>>();
+            builder.RegisterType<StockLocatorPricesListResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<StockLocatorPrices>>>();
         }
     }
 }

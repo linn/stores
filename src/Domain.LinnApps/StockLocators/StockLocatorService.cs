@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.StockLocators
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -21,6 +22,7 @@
 
         private readonly IQueryRepository<StockLocatorBatch> stockLocatorBatchesView;
 
+        private readonly IQueryRepository<StockLocatorPrices> stockLocatorView;
 
         private readonly IAuthorisationService authService;
 
@@ -33,7 +35,8 @@
             IRepository<StorageLocation, int> storageLocationRepository,
             IQueryRepository<StockLocatorBatch> stockLocatorBatchesView,
             IAuthorisationService authService,
-            IStockLocatorLocationsViewService locationsViewService)
+            IStockLocatorLocationsViewService locationsViewService,
+            IQueryRepository<StockLocatorPrices> stockLocatorView)
         {
             this.stockLocatorRepository = stockLocatorRepository;
             this.palletRepository = palletRepository;
@@ -42,6 +45,7 @@
             this.stockLocatorBatchesView = stockLocatorBatchesView;
             this.authService = authService;
             this.locationsViewService = locationsViewService;
+            this.stockLocatorView = stockLocatorView;
         }
 
         public void UpdateStockLocator(StockLocator @from, StockLocator to, IEnumerable<string> privileges)
@@ -247,6 +251,19 @@
                                      StockPoolCode = x.StockPoolCode,
                                      Category = x.Category
                                  });
+        }
+
+        public IEnumerable<StockLocatorPrices> GetPrices(
+            int? palletNumber,
+            string partNumber,
+            int? locationId,
+            string state,
+            string category,
+            string stockPool,
+            string batchRef,
+            DateTime batchDate)
+        {
+            return this.stockLocatorView.FilterBy(x => false);
         }
     }
 }

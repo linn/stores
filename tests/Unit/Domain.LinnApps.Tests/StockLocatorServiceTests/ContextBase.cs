@@ -33,6 +33,8 @@
 
         protected IStockLocatorLocationsViewService LocationsViewService { get; private set; }
 
+        protected IQueryRepository<StockLocatorPrices> StockLocatorView { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -45,6 +47,7 @@
             this.PartRepository = Substitute.For<IRepository<Part, int>>();
             this.AuthService = Substitute.For<IAuthorisationService>();
             this.LocationsViewService = Substitute.For<IStockLocatorLocationsViewService>();
+            this.StockLocatorView = Substitute.For<IQueryRepository<StockLocatorPrices>>();
             this.Sut = new StockLocatorService(
                 this.StockLocatorRepository, 
                 this.StoresPalletRepository,
@@ -52,7 +55,8 @@
                 this.StorageLocationRepository,
                 this.StockLocatorBatchesView,
                 this.AuthService,
-                this.LocationsViewService);
+                this.LocationsViewService,
+                this.StockLocatorView);
         }
     }
 }

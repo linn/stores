@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.StockLocators
 {
+    using System;
     using System.Collections.Generic;
 
     public interface IStockLocatorService
@@ -33,5 +34,15 @@
             string stockPool,
             string stockState,
             string category);
+
+        IEnumerable<StockLocatorPrices> GetPrices(
+            int? palletNumber,
+            string partNumber,
+            int? locationId,
+            string state,
+            string category,
+            string stockPool,
+            string batchRef,
+            DateTime batchDate);
     }
 }

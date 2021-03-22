@@ -24,16 +24,21 @@
 
         private readonly IStockQuantitiesService stockQuantitiesService;
 
+        private readonly IStockLocatorFacadeService pricesService;
+
         public StockLocatorsModule(
             IStockLocatorFacadeService service,
             IFacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource> storageLocationService,
             IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource> inspectedStateService,
-            IStockQuantitiesService stockQuantitiesService)
+            IStockQuantitiesService stockQuantitiesService,
+            IStockLocatorFacadeService pricesService)
         {
             this.service = service;
             this.storageLocationService = storageLocationService;
             this.inspectedStateService = inspectedStateService;
             this.stockQuantitiesService = stockQuantitiesService;
+            this.pricesService = pricesService;
+
             this.Get("/inventory/stock-locators", _ => this.GetStockLocators());
             this.Get("/inventory/stock-locators/batches", _ => this.GetBatches());
             this.Delete("/inventory/stock-locators/{id}", parameters => this.DeleteStockLocator(parameters.id));
