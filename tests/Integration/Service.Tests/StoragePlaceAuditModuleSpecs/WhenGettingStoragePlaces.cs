@@ -8,6 +8,7 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.StockLocators;
 
     using Nancy;
     using Nancy.Testing;

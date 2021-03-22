@@ -7,6 +7,7 @@
     using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.StockLocators;
 
     public class StorageLocationResourceBuilder : IResourceBuilder<StorageLocation>
     {

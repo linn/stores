@@ -24,6 +24,7 @@
     using Linn.Stores.Resources.Allocation;
     using Linn.Stores.Resources.Parts;
     using Linn.Stores.Resources.RequestResources;
+    using Linn.Stores.Resources.StockLocators;
 
     public class ServiceModule : Module
     {

@@ -11,6 +11,7 @@
     using Linn.Stores.Facade.Extensions;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
+    using Linn.Stores.Resources.StockLocators;
 
     public class StoragePlaceService : IStoragePlaceService
     {

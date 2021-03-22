@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Resources
+﻿namespace Linn.Stores.Resources.StockLocators
 {
     using System.Collections.Generic;
 
@@ -15,8 +15,6 @@
         public string LocationName { get; set; }
 
         public string LocationDescription { get; set; }
-
-        public int? BudgetId { get; set; }
 
         public string PartNumber { get; set; }
 

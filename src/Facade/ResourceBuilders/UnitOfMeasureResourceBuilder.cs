@@ -7,6 +7,7 @@
     using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.Parts;
 
     public class UnitOfMeasureResourceBuilder : IResourceBuilder<UnitOfMeasure>
     {

@@ -7,6 +7,7 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.StockLocators;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
     using Linn.Stores.Service.Tests;
