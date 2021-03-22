@@ -159,6 +159,8 @@
 
         public DbSet<WandLog> WandLogs { get; set; }
 
+        public DbQuery<StockLocatorPrices> StockLocatorView { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -231,6 +233,7 @@
             this.QueryStockQuantitIesForMrView(builder);
             this.BuildRequisitionHeaders(builder);
             this.BuildWandLogs(builder);
+            this.QueryStockLocatorView(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1300,6 +1303,23 @@
             table.Property(w => w.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
             table.Property(w => w.ItemNo).HasColumnName("ITEM_NO");
             table.Property(w => w.ContainerNo).HasColumnName("CONTAINER_NO");
+        }
+
+        private void QueryStockLocatorView(ModelBuilder builder)
+        {
+            var view = builder.Query<StockLocatorPrices>().ToView("STOCK_LOCATOR_VIEW");
+            view.Property(v => v.StockLocatorId).HasColumnName("STOCK_LOCATOR_ID");
+            view.Property(v => v.BatchDate).HasColumnName("STOCK_ROTATION_DATE");
+            view.Property(v => v.QuantityAtLocation).HasColumnName("QTY");
+            view.Property(v => v.BatchRef).HasColumnName("BATCH_REF");
+            view.Property(v => v.BudgetId).HasColumnName("BUDGET_ID");
+            view.Property(v => v.LabourPrice).HasColumnName("LABOUR_PRICE");
+            view.Property(v => v.LocationCode).HasColumnName("LOCATION_CODE");
+            view.Property(v => v.MaterialPrice).HasColumnName("MATERIAL_PRICE");
+            view.Property(v => v.OverheadPrice).HasColumnName("OVERHEAD_PRICE");
+            view.Property(v => v.Pallet).HasColumnName("PALLET_NUMBER");
+            view.Property(v => v.PartNumber).HasColumnName("PART_NUMBER");
+            view.Property(v => v.Remarks).HasColumnName("REMARKS");
         }
     }
 }

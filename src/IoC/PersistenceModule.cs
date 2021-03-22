@@ -98,6 +98,7 @@
             builder.RegisterType<StockQuantitiesRepository>().As<IQueryRepository<StockQuantities>>();
             builder.RegisterType<RequisitionHeaderRepository>().As<IRepository<RequisitionHeader, int>>();
             builder.RegisterType<WandLogRepository>().As<IRepository<WandLog, int>>();
+            builder.RegisterType<StockLocatorPricesRepository>().As<IQueryRepository<StockLocatorPrices>>();
         }
     }
 }
