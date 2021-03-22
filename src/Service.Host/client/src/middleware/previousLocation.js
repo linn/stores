@@ -1,5 +1,6 @@
 // todo -- add to components library
 let prevPathname = '';
+let prevSearch = '';
 
 export default () => next => action => {
     if (action.type === '@@router/LOCATION_CHANGE') {
@@ -7,10 +8,12 @@ export default () => next => action => {
             ...action,
             payload: {
                 ...action.payload,
-                prevPathname
+                prevPathname,
+                prevSearch
             }
         };
         prevPathname = action.payload.location.pathname;
+        prevSearch = action.payload.location?.search;
         return next(newAction);
     }
     return next(action);

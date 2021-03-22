@@ -1,16 +1,10 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import {
-    Title,
-    SingleEditTable,
-    Loading,
-    BackButton,
-    smartGoBack
-} from '@linn-it/linn-form-components-library';
+import { Title, SingleEditTable, Loading } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Page from '../../containers/Page';
 
-function StockLocator({ items, itemsLoading, history, previousPaths }) {
+function StockLocator({ items, itemsLoading }) {
     const columns = [
         {
             title: 'Part',
@@ -109,10 +103,6 @@ function StockLocator({ items, itemsLoading, history, previousPaths }) {
                 <Grid item xs={12}>
                     <Title text="Locator Prices" />
                 </Grid>
-                <Grid item xs={3}>
-                    <BackButton backClick={() => smartGoBack(previousPaths, history.goBack)} />
-                </Grid>
-                <Grid item xs={9} />
                 {itemsLoading ? (
                     <Grid item xs={12}>
                         <Loading />
@@ -149,14 +139,12 @@ StockLocator.propTypes = {
         batchRef: PropTypes.string
     }).isRequired,
     itemsLoading: PropTypes.bool,
-    history: PropTypes.shape({ goBack: PropTypes.func }).isRequired,
-    previousPaths: PropTypes.arrayOf(PropTypes.string)
+    history: PropTypes.shape({ goBack: PropTypes.func }).isRequired
 };
 
 StockLocator.defaultProps = {
     items: [],
-    itemsLoading: true,
-    previousPaths: []
+    itemsLoading: true
 };
 
 export default StockLocator;

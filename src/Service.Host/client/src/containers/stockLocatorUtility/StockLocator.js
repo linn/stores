@@ -20,7 +20,7 @@ const mapStateToProps = (state, { location }) => ({
     quantities: stockQuantitiesSelectors.getItem(state),
     quantitiesLoading: stockQuantitiesSelectors.getLoading(state),
     itemError: getItemError(state, itemTypes.stockLocator.item),
-    previousPaths: getPreviousPaths(state)
+    previousPaths: getPreviousPaths(state).map(p => p.path)
 });
 
 const initialise = ({ options }) => dispatch => {
