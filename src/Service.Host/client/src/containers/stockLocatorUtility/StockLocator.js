@@ -1,5 +1,9 @@
 import { connect } from 'react-redux';
-import { initialiseOnMount, getItemError, getPreviousPaths } from '@linn-it/linn-form-components-library';
+import {
+    initialiseOnMount,
+    getItemError,
+    getPreviousPaths
+} from '@linn-it/linn-form-components-library';
 import queryString from 'query-string';
 import StockLocator from '../../components/stockLocatorUtility/StockLocator';
 import stockLocatorLocationsSelectors from '../../selectors/stockLocatorLocationsSelectors';
@@ -29,8 +33,7 @@ const initialise = ({ options }) => dispatch => {
 };
 
 const mapDispatchToProps = {
-    initialise,
-    fetchItems: stockLocatorLocationsActions.searchWithOptions
+    initialise
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(StockLocator));

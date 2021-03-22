@@ -6,7 +6,6 @@ import {
     Loading,
     Dropdown,
     InputField,
-    LinkButton,
     BackButton,
     smartGoBack
 } from '@linn-it/linn-form-components-library';
@@ -29,7 +28,6 @@ function StockLocator({
     previousPaths
 }) {
     const [batchView, setBatchView] = useState(false);
-    const [hasDrilledDown, setHasDrilledDown] = useState(false);
     const [selectedQuantities, setSelectQuantities] = useState();
 
     useEffect(() => {
@@ -37,31 +35,6 @@ function StockLocator({
             setSelectQuantities(quantities[0]);
         }
     }, [quantities]);
-
-    const variableColumns =
-        options?.batchRef || batchView
-            ? [
-                  {
-                      title: 'Batch Ref',
-                      id: 'batchRef',
-                      type: 'text',
-                      editable: false
-                  },
-                  {
-                      title: 'Batch Date',
-                      id: 'stockRotationDate',
-                      type: 'date',
-                      editable: false
-                  }
-              ]
-            : [
-                  {
-                      title: 'UOM',
-                      id: 'partUnitOfMeasure',
-                      type: 'text',
-                      editable: false
-                  }
-              ];
 
     const columns = [
         {
@@ -157,7 +130,6 @@ function StockLocator({
                                             type="button"
                                             onClick={() => {
                                                 setBatchView(true);
-                                                setHasDrilledDown(true);
                                                 history.push(
                                                     `/inventory/stock-locator-utility/batches?${queryString.stringify(
                                                         {
@@ -292,8 +264,7 @@ StockLocator.propTypes = {
         batchRef: PropTypes.string
     }).isRequired,
     itemsLoading: PropTypes.bool,
-    history: PropTypes.shape({ goBack: PropTypes.func }).isRequired,
-    fetchItems: PropTypes.func.isRequired,
+    history: PropTypes.shape({ goBack: PropTypes.func, push: PropTypes.func }).isRequired,
     quantities: PropTypes.arrayOf(
         PropTypes.shape({
             partNumber: PropTypes.string,
@@ -311,14 +282,16 @@ StockLocator.propTypes = {
             otherStockAllocated: PropTypes.number
         })
     ),
-    quantitiesLoading: PropTypes.bool
+    quantitiesLoading: PropTypes.bool,
+    previousPaths: PropTypes.arrayOf(PropTypes.string)
 };
 
 StockLocator.defaultProps = {
     items: [],
     itemsLoading: true,
     quantities: null,
-    quantitiesLoading: false
+    quantitiesLoading: false,
+    previousPaths: []
 };
 
 export default StockLocator;

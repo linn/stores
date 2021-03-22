@@ -25,20 +25,20 @@ function StockLocator({ items, itemsLoading, history, previousPaths }) {
             editable: false
         },
         {
-            title: '',
-            id: 'button',
-            type: 'text',
-            editable: false
-        },
-        {
             title: 'Qty Allocated',
             id: 'quantityAllocated',
             type: 'number',
             editable: false
         },
         {
-            title: 'Expand',
-            id: 'component',
+            title: '',
+            id: 'drillDownButton',
+            type: 'component',
+            editable: false
+        },
+        {
+            title: '',
+            id: 'drillBackButton',
             type: 'component',
             editable: false
         },
@@ -102,14 +102,14 @@ function StockLocator({ items, itemsLoading, history, previousPaths }) {
                                 rows={items.map(i => ({
                                     ...i,
                                     id: i.id + i.batchRef + i.partNumber,
-                                    component: (
+                                    drillDownButton: (
                                         <button
                                             type="button"
                                             onClick={() => {
-                                                smartGoBack(previousPaths, history.goBack);
+                                                console.log('ok');
                                             }}
                                         >
-                                            -
+                                            +
                                         </button>
                                     )
                                 }))}
@@ -135,12 +135,14 @@ StockLocator.propTypes = {
         batchRef: PropTypes.string
     }).isRequired,
     itemsLoading: PropTypes.bool,
-    history: PropTypes.shape({ goBack: PropTypes.func }).isRequired
+    history: PropTypes.shape({ goBack: PropTypes.func }).isRequired,
+    previousPaths: PropTypes.arrayOf(PropTypes.string)
 };
 
 StockLocator.defaultProps = {
     items: [],
-    itemsLoading: true
+    itemsLoading: true,
+    previousPaths: []
 };
 
 export default StockLocator;
