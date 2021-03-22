@@ -6,7 +6,6 @@
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
-    using Linn.Stores.Resources;
     using Linn.Stores.Resources.StockLocators;
 
     public class StockPoolFacadeService : FacadeService<StockPool, int, StockPoolResource, StockPoolResource>
