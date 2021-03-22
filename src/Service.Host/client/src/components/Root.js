@@ -150,22 +150,22 @@ const Root = ({ store }) => (
                                     />
                                     <Route
                                         exact
-                                        path="/inventory/stock-viewer"
+                                        path="/inventory/stock-locator"
                                         component={StockViewerOptions}
                                     />
                                     <Route
                                         exact
-                                        path="/inventory/stock-locator-utility"
+                                        path="/inventory/stock-locator/locators"
                                         component={StockLocator}
                                     />
                                     <Route
                                         exact
-                                        path="/inventory/stock-locator-utility/batches"
+                                        path="/inventory/stock-locator/locators/batches"
                                         component={StockLocatorBatchView}
                                     />
                                     <Route
                                         exact
-                                        path="/inventory/stock-locator-utility/prices"
+                                        path="/inventory/stock-locator/locators/batches/details"
                                         component={StockLocatorPricesView}
                                     />
                                     <Route
