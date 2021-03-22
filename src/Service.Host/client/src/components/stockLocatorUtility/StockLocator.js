@@ -6,7 +6,9 @@ import {
     Loading,
     Dropdown,
     InputField,
-    LinkButton
+    LinkButton,
+    BackButton,
+    smartGoBack
 } from '@linn-it/linn-form-components-library';
 import Typography from '@material-ui/core/Typography';
 import Accordion from '@material-ui/core/Accordion';
@@ -17,7 +19,15 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import Page from '../../containers/Page';
 
-function StockLocator({ items, itemsLoading, history, options, quantities, quantitiesLoading }) {
+function StockLocator({
+    items,
+    itemsLoading,
+    history,
+    options,
+    quantities,
+    quantitiesLoading,
+    previousPaths
+}) {
     const [batchView, setBatchView] = useState(false);
     const [hasDrilledDown, setHasDrilledDown] = useState(false);
     const [selectedQuantities, setSelectQuantities] = useState();
@@ -126,7 +136,7 @@ function StockLocator({ items, itemsLoading, history, options, quantities, quant
                     />
                 </Grid>
                 <Grid item xs={3}>
-                    <LinkButton to="/inventory/stock-viewer" text="Back to search" />
+                    <BackButton backClick={() => smartGoBack(previousPaths, history.goBack)} />
                 </Grid>
                 <Grid item xs={9} />
                 {itemsLoading || quantitiesLoading ? (

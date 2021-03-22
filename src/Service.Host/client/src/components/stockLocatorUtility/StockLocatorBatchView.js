@@ -4,7 +4,7 @@ import {
     Title,
     SingleEditTable,
     Loading,
-    LinkButton,
+    BackButton,
     smartGoBack
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
@@ -86,7 +86,7 @@ function StockLocator({ items, itemsLoading, history, previousPaths }) {
                     <Title text="Locator Batches" />
                 </Grid>
                 <Grid item xs={3}>
-                    <LinkButton to="/inventory/stock-viewer" text="Back to search" />
+                    <BackButton backClick={() => smartGoBack(previousPaths, history.goBack)} />
                 </Grid>
                 <Grid item xs={9} />
                 {itemsLoading ? (
