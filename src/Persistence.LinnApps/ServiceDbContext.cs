@@ -1320,6 +1320,9 @@
             view.Property(v => v.Pallet).HasColumnName("PALLET_NUMBER");
             view.Property(v => v.PartNumber).HasColumnName("PART_NUMBER");
             view.Property(v => v.Remarks).HasColumnName("REMARKS");
+            view.Property(v => v.StockPool).HasColumnName("STOCK_POOL_CODE");
+            view.Property(v => v.State).HasColumnName("STATE");
+            view.Property(v => v.PartPrice).HasColumnName("PART_PRICE");
         }
     }
 }
