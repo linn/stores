@@ -23,14 +23,14 @@
 
         private readonly IStockQuantitiesService stockQuantitiesService;
 
-        private readonly IStockLocatorFacadeService pricesService;
+        private readonly IStockLocatorPricesService pricesService;
 
         public StockLocatorsModule(
             IStockLocatorFacadeService service,
             IFacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource> storageLocationService,
             IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource> inspectedStateService,
             IStockQuantitiesService stockQuantitiesService,
-            IStockLocatorFacadeService pricesService)
+            IStockLocatorPricesService pricesService)
         {
             this.service = service;
             this.storageLocationService = storageLocationService;
@@ -47,6 +47,7 @@
             this.Get("/inventory/stock-locators/states", _ => this.GetStates());
             this.Get("/inventory/stock-locators-by-location/", _ => this.GetStockLocatorsByLocation());
             this.Get("/inventory/stock-quantities/", _ => this.GetStockQuantities());
+            this.Get("/inventory/stock-locators/prices", _ => this.GetPrices());
         }
 
         private object GetStockLocators()
@@ -127,6 +128,13 @@
             var resource = this.Bind<StockLocatorResource>();
             resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
             return this.Negotiate.WithModel(this.service.Add(resource));
+        }
+
+        private object GetPrices()
+        {
+            var resource = this.Bind<StockLocatorResource>();
+
+            return this.Negotiate.WithModel(this.pricesService.GetPrices(resource));
         }
     }
 }

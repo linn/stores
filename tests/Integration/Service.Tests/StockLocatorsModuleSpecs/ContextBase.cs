@@ -80,6 +80,8 @@
                         new StockLocatorResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<StockLocatorWithStoragePlaceInfo>>>(
                         new StockLocatorsWithStoragePlaceInfoResourceBuilder());
+                    with.Dependency<IResourceBuilder<IEnumerable<StockLocatorPrices>>>(
+                        new StockLocatorPricesListResourceBuilder());
                     with.Module<StockLocatorsModule>();
                     with.ResponseProcessor<StockLocatorsResponseProcessor>();
                     with.ResponseProcessor<StockLocatorResponseProcessor>();
@@ -87,6 +89,7 @@
                     with.ResponseProcessor<StockQuantitiesListResponseProcessor>();
                     with.ResponseProcessor<StorageLocationsResponseProcessor>();
                     with.ResponseProcessor<InspectedStatesResponseProcessor>();
+                    with.ResponseProcessor<StockLocatorPricesResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {
