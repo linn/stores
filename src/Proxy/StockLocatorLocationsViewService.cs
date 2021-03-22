@@ -31,14 +31,10 @@
 
             if (partNumber != null)
             {
-                if (partNumber.Contains("*"))
-                {
-                    whereClauseParts.Add($"PART_NUMBER LIKE '{partNumber.Replace("*", "%").ToUpper()}'");
-                }
-                else
-                {
-                    whereClauseParts.Add($"PART_NUMBER = '{partNumber.ToUpper()}'");
-                }
+                whereClauseParts.Add(
+                    partNumber.Contains("*")
+                        ? $"PART_NUMBER LIKE '{partNumber.Replace("*", "%").ToUpper()}'"
+                        : $"PART_NUMBER = '{partNumber.ToUpper()}'");
             }
 
             if (locationId != null)
