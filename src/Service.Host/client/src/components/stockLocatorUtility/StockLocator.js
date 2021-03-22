@@ -17,7 +17,7 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import Page from '../../containers/Page';
 
-function StockLocator({ items, itemsLoading, fetchItems, options, quantities, quantitiesLoading }) {
+function StockLocator({ items, itemsLoading, history, options, quantities, quantitiesLoading }) {
     const [batchView, setBatchView] = useState(false);
     const [hasDrilledDown, setHasDrilledDown] = useState(false);
     const [selectedQuantities, setSelectQuantities] = useState();
@@ -102,7 +102,12 @@ function StockLocator({ items, itemsLoading, fetchItems, options, quantities, qu
             type: 'text',
             editable: false
         },
-        ...variableColumns,
+        {
+            title: 'UOM',
+            id: 'partUnitOfMeasure',
+            type: 'text',
+            editable: false
+        },
         {
             title: 'Stock Pool',
             id: 'stockPoolCode',
@@ -137,38 +142,23 @@ function StockLocator({ items, itemsLoading, fetchItems, options, quantities, qu
                                 rows={items.map(i => ({
                                     ...i,
                                     id: i.id + i.batchRef + i.partNumber,
-                                    component: hasDrilledDown ? (
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                setHasDrilledDown(false);
-                                                fetchItems(
-                                                    null,
-                                                    `&${queryString.stringify({
-                                                        ...options,
-                                                        queryBatchView: false
-                                                    })}`
-                                                );
-                                            }}
-                                        >
-                                            -
-                                        </button>
-                                    ) : (
+                                    component: (
                                         <button
                                             type="button"
                                             onClick={() => {
                                                 setBatchView(true);
                                                 setHasDrilledDown(true);
-                                                fetchItems(
-                                                    null,
-                                                    `&${queryString.stringify({
-                                                        partNumber: i.partNumber,
-                                                        locationId: i.locationId,
-                                                        palletNumber: i.palletNumber?.toString(),
-                                                        state: i.state,
-                                                        category: i.category?.toString(),
-                                                        queryBatchView: true
-                                                    })}`
+                                                history.push(
+                                                    `/inventory/stock-locator-utility/batches?${queryString.stringify(
+                                                        {
+                                                            partNumber: i.partNumber,
+                                                            locationId: i.locationId,
+                                                            palletNumber: i.palletNumber?.toString(),
+                                                            state: i.state,
+                                                            category: i.category?.toString(),
+                                                            queryBatchView: true
+                                                        }
+                                                    )}`
                                                 );
                                             }}
                                         >
