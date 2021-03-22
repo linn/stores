@@ -7,6 +7,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Requisitions;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class RequisitionHeaderRepository : IRepository<RequisitionHeader, int>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -20,6 +22,8 @@
         {
             return this.serviceDbContext.RequisitionHeaders
                 .Where(p => p.ReqNumber == key)
+                .Include(a => a.Lines)
+                .ThenInclude(b => b.Moves)
                 .ToList().FirstOrDefault();
         }
 

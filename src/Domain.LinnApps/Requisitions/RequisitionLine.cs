@@ -2,12 +2,12 @@
 {
     using System.Collections.Generic;
 
-    public class RequisitionHeader
+    public class RequisitionLine
     {
         public int ReqNumber { get; set; }
 
-        public int? Document1 { get; set; }
+        public int LineNumber { get; set; }
 
-        public IEnumerable<RequisitionLine> Lines { get; set; }
+        public IEnumerable<ReqMove> Moves { get; set; }
     }
 }

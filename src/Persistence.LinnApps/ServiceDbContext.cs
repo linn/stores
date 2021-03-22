@@ -233,6 +233,8 @@
             this.QuerySalesAccounts(builder);
             this.QueryStockQuantitIesForMrView(builder);
             this.BuildRequisitionHeaders(builder);
+            this.BuildRequisitionLines(builder);
+            this.BuildReqMoves(builder);
             this.BuildWandLogs(builder);
             this.QueryStockAvailable(builder);
             base.OnModelCreating(builder);
@@ -1284,6 +1286,25 @@
             r.HasKey(l => l.ReqNumber);
             r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
             r.Property(l => l.Document1).HasColumnName("DOCUMENT_1");
+            r.HasMany(t => t.Lines).WithOne().HasForeignKey(requisitionLine => requisitionLine.ReqNumber);
+        }
+
+        private void BuildRequisitionLines(ModelBuilder builder)
+        {
+            var r = builder.Entity<RequisitionLine>().ToTable("REQUISITION_LINES");
+            r.HasKey(l => new { l.ReqNumber, l.LineNumber });
+            r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
+            r.Property(l => l.LineNumber).HasColumnName("LINE_NUMBER");
+            r.HasMany(t => t.Moves).WithOne().HasForeignKey(reqMove => new { reqMove.ReqNumber, reqMove.LineNumber });
+        }
+
+        private void BuildReqMoves(ModelBuilder builder)
+        {
+            var r = builder.Entity<ReqMove>().ToTable("REQ_MOVES");
+            r.HasKey(l => l.ReqNumber);
+            r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
+            r.Property(l => l.LineNumber).HasColumnName("LINE_NUMBER");
+            r.Property(l => l.Sequence).HasColumnName("SEQ");
         }
 
         private void BuildWandLogs(ModelBuilder builder)
