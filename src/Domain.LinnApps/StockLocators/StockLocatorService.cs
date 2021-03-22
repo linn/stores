@@ -200,7 +200,7 @@
             string category)
         {
             return this.locationsViewService.QueryView(
-                partNumber,
+                partNumber?.Trim(' '),
                 locationId, 
                 palletNumber,
                 stockPool,
@@ -228,11 +228,12 @@
             string stockState,
             string category)
         {
+            var partNumberTrimmed = partNumber?.Trim(' ');
             return this
                 .stockLocatorBatchesView
                 .FilterBy(x => (locationId == null || x.LocationId == locationId)
                         && (palletNumber == null || x.PalletNumber == palletNumber)
-                        && (string.IsNullOrEmpty(partNumber) || x.PartNumber == partNumber)
+                        && (string.IsNullOrEmpty(partNumber) || x.PartNumber == partNumberTrimmed)
                         && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
                         && (string.IsNullOrEmpty(category) || x.Category == category)
                         && (string.IsNullOrEmpty(stockState) || x.State == stockState))
