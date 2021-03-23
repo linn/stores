@@ -1295,16 +1295,19 @@
             r.HasKey(l => new { l.ReqNumber, l.LineNumber });
             r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
             r.Property(l => l.LineNumber).HasColumnName("LINE_NUMBER");
+            r.Property(l => l.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
             r.HasMany(t => t.Moves).WithOne().HasForeignKey(reqMove => new { reqMove.ReqNumber, reqMove.LineNumber });
         }
 
         private void BuildReqMoves(ModelBuilder builder)
         {
             var r = builder.Entity<ReqMove>().ToTable("REQ_MOVES");
-            r.HasKey(l => l.ReqNumber);
+            r.HasKey(l => new { l.ReqNumber, l.LineNumber,  l.Sequence });
             r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
             r.Property(l => l.LineNumber).HasColumnName("LINE_NUMBER");
             r.Property(l => l.Sequence).HasColumnName("SEQ");
+            r.Property(l => l.Quantity).HasColumnName("QTY");
+            r.Property(l => l.PalletNumber).HasColumnName("PALLET_NUMBER");
         }
 
         private void BuildWandLogs(ModelBuilder builder)

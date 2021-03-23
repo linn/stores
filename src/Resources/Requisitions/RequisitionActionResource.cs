@@ -4,7 +4,7 @@
 
     public class RequisitionActionResource : HypermediaResource
     {
-        public RequisitionHeaderResource RequisitionHeader { get; set; }
+        public RequisitionResource Requisition { get; set; }
 
         public bool Success { get; set; }
 

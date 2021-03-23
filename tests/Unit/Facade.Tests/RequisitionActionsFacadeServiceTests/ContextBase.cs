@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Facade.Tests.RequisitionActionsFacadeServiceTests
 {
+    using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Facade.Services;
 
@@ -13,11 +14,14 @@
 
         protected IRequisitionService RequisitionService { get; private set; }
 
+        protected IRepository<RequisitionHeader, int> RequisitionRepository { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
             this.RequisitionService = Substitute.For<IRequisitionService>();
-            this.Sut = new RequisitionActionsFacadeService(this.RequisitionService);
+            this.RequisitionRepository = Substitute.For<IRepository<RequisitionHeader, int>>();
+            this.Sut = new RequisitionActionsFacadeService(this.RequisitionService, this.RequisitionRepository);
         }
     }
 }

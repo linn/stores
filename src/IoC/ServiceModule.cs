@@ -25,6 +25,7 @@
     using Linn.Stores.Resources.Allocation;
     using Linn.Stores.Resources.Parts;
     using Linn.Stores.Resources.RequestResources;
+    using Linn.Stores.Resources.Requisitions;
 
     public class ServiceModule : Module
     {
@@ -109,6 +110,8 @@
             builder.RegisterType<RequisitionActionsFacadeService>().As<IRequisitionActionsFacadeService>();
             builder.RegisterType<AvailableStockFacadeService>().As<IAvailableStockFacadeService>();
             builder.RegisterType<MoveStockFacadeService>().As<IMoveStockFacadeService>();
+            builder.RegisterType<RequisitionFacadeService>()
+                .As<IFacadeService<RequisitionHeader, int, RequisitionResource, RequisitionResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

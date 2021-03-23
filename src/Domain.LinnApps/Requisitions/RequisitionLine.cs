@@ -8,6 +8,8 @@
 
         public int LineNumber { get; set; }
 
+        public string PartNumber { get; set; }
+
         public IEnumerable<ReqMove> Moves { get; set; }
     }
 }

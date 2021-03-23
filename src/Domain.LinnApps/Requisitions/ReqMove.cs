@@ -7,5 +7,9 @@
         public int LineNumber { get; set; }
 
         public int Sequence { get; set; }
+
+        public int Quantity { get; set; }
+
+        public int? PalletNumber { get; set; }
     }
 }

@@ -31,7 +31,6 @@ function StockMove({
     const [moveDetails, setMoveDetails] = useState({ userNumber });
     const [selectedRow, setSelectedRow] = useState(null);
     const [alert, setAlert] = useState({ message: ' ', visible: false });
-    const [reqNumber, setReqNumber] = useState(null);
 
     const toInput = useRef(null);
 
@@ -42,7 +41,6 @@ function StockMove({
     useEffect(() => {
         if (moveResult && moveResult.success && moveResult.links) {
             const reqHref = utilities.getHref(moveResult, 'requisition');
-            setReqNumber(reqHref.split('/').pop());
             setMoveDetails({ reqNumber: reqHref.split('/').pop() });
         }
     }, [moveResult]);
