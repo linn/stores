@@ -15,7 +15,7 @@ function StockLocatorBatchView({
 }) {
     useEffect(() => {
         if (Object.values(queryString.parse(options)).some(x => x !== null && x !== '')) {
-            fetchItems(null, options);
+            fetchItems(null, `&${options}`);
         }
     }, [options, fetchItems]);
 

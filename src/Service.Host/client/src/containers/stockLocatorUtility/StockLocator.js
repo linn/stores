@@ -15,7 +15,7 @@ import * as itemTypes from '../../itemTypes';
 const mapStateToProps = (state, { location }) => ({
     items: stockLocatorLocationsSelectors.getSearchItems(state),
     itemsLoading: stockLocatorLocationsSelectors.getSearchLoading(state),
-    options: location?.search,
+    options: location?.search.replace('?', ''),
     loading: stockLocatorLocationsSelectors.getLoading(state),
     quantities: stockQuantitiesSelectors.getItem(state),
     quantitiesLoading: stockQuantitiesSelectors.getLoading(state),
