@@ -4,7 +4,8 @@ import {
     Typeahead,
     InputField,
     SnackbarMessage,
-    ErrorCard
+    ErrorCard,
+    utilities
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import { DataGrid } from '@material-ui/data-grid';
@@ -30,12 +31,21 @@ function StockMove({
     const [moveDetails, setMoveDetails] = useState({ userNumber });
     const [selectedRow, setSelectedRow] = useState(null);
     const [alert, setAlert] = useState({ message: ' ', visible: false });
+    const [reqNumber, setReqNumber] = useState(null);
 
     const toInput = useRef(null);
 
     useEffect(() => {
         clearMoveError();
     }, [moveDetails, clearMoveError]);
+
+    useEffect(() => {
+        if (moveResult && moveResult.success && moveResult.links) {
+            const reqHref = utilities.getHref(moveResult, 'requisition');
+            setReqNumber(reqHref.split('/').pop());
+            setMoveDetails({ reqNumber: reqHref.split('/').pop() });
+        }
+    }, [moveResult]);
 
     const partResults = () => {
         return parts?.map(item => ({
@@ -345,7 +355,8 @@ StockMove.propTypes = {
     moveError: PropTypes.string,
     moveResult: PropTypes.shape({
         success: PropTypes.bool,
-        message: PropTypes.string
+        message: PropTypes.string,
+        links: PropTypes.arrayOf(PropTypes.shape({}))
     }),
     doMove: PropTypes.func.isRequired,
     clearMoveError: PropTypes.func.isRequired,
@@ -362,7 +373,8 @@ StockMove.defaultProps = {
     moveError: null,
     moveResult: {
         message: null,
-        success: true
+        success: true,
+        links: null
     },
     requestErrors: null
 };
