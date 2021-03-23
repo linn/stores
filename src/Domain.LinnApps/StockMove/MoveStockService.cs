@@ -14,22 +14,24 @@
     {
         private readonly IStoresPack storesPack;
 
-        private readonly IRepository<RequisitionHeader, int> requistionRepository;
+        private readonly IRepository<RequisitionHeader, int> requisitionRepository;
 
-        public MoveStockService(IStoresPack storesPack, IRepository<RequisitionHeader, int> requistionRepository)
+        public MoveStockService(IStoresPack storesPack, IRepository<RequisitionHeader, int> requisitionRepository)
         {
             this.storesPack = storesPack;
-            this.requistionRepository = requistionRepository;
+            this.requisitionRepository = requisitionRepository;
         }
 
         public RequisitionProcessResult MoveStock(
             int? reqNumber,
             string partNumber,
             int quantity,
-            string @from,
+            string from,
             int? fromLocationId,
             int? fromPalletNumber,
             DateTime? fromStockRotationDate,
+            string fromState,
+            string fromStockPool,
             string to,
             int? toLocationId,
             int? toPalletNumber,
@@ -54,25 +56,67 @@
             var result = new RequisitionProcessResult();
             if (!reqNumber.HasValue)
             {
-                var moveResult = this.storesPack.CreateMoveReq(userNumber);
-                if (!moveResult.Success)
+                var createResult = this.storesPack.CreateMoveReq(userNumber);
+                if (!createResult.Success)
                 {
                     throw new CreateReqFailureException("Failed to create move req");
                 }
 
-                result.ReqNumber = moveResult.ReqNumber;
+                result.ReqNumber = createResult.ReqNumber;
+            }
+            else
+            {
+                result.ReqNumber = reqNumber.Value;
             }
 
-            var req = this.requistionRepository.FindById(result.ReqNumber);
-
-            var test = this.requistionRepository.FindById(117004);
+            var req = this.requisitionRepository.FindById(result.ReqNumber);
 
             if (!fromLocationId.HasValue && !fromPalletNumber.HasValue)
             {
                 this.GetLocationDetails(from, out fromLocationId, out fromPalletNumber);
             }
 
-            result.Success = true;
+            if (!toLocationId.HasValue && !toPalletNumber.HasValue)
+            {
+                this.GetLocationDetails(to, out toLocationId, out toPalletNumber);
+            }
+
+            if (this.IsKardexLocation(from) || this.IsKardexLocation(to))
+            {
+                throw new MoveInvalidException("Not yet implemented");
+            }
+
+            var nextLineNumber = req.Lines.Count() + 1;
+
+            var checkFromLocation = this.storesPack.CheckStockAtFromLocation(
+                partNumber,
+                quantity,
+                from,
+                fromLocationId,
+                fromPalletNumber,
+                fromStockRotationDate);
+            
+            if (!checkFromLocation.Success)
+            {
+                throw new MoveInvalidException("The required stock doesn't exist at that from location.");
+            }
+
+            var moveResult = this.storesPack.MoveStock(
+                result.ReqNumber,
+                nextLineNumber,
+                partNumber,
+                quantity,
+                fromLocationId,
+                fromPalletNumber,
+                fromStockRotationDate,
+                toLocationId,
+                toPalletNumber,
+                toStockRotationDate,
+             null, // !string.IsNullOrEmpty(fromState) ? fromState : checkFromLocation.State,
+                fromStockPool);
+
+            result.Success = moveResult.Success;
+            result.Message = moveResult.Message;
             return result;
         }
 
@@ -84,16 +128,15 @@
                 return true;
             }
 
-            if (kardexList.Select(k => $"{k}-").Contains(location.Substring(0, 3)))
+            if (location.Length > 2 && kardexList.Select(k => $"{k}-").Contains(location.Substring(0, 3)))
             {
                 return true;
             }
 
-            if (kardexList.Select(k => $"E-{k}-").Contains(location.Substring(0, 5)))
+            if (location.Length > 4 && kardexList.Select(k => $"E-{k}-").Contains(location.Substring(0, 5)))
             {
                 return true;
             }
-
 
             return false;
         }
@@ -114,8 +157,7 @@
                 return;
             }
 
-            palletNumber = null;
-            locationId = null;
+            throw new TranslateLocationException($"Could not find a valid location id or pallet number for {location}");
         }
     }
 }

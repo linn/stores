@@ -2,8 +2,8 @@
 {
     using System;
 
+    using Linn.Common.Domain.Exceptions;
     using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.StockMove;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
     using Linn.Stores.Resources.RequestResources;
@@ -35,6 +35,8 @@
                     requestResource.FromLocationId,
                     requestResource.FromPalletNumber,
                     fromDate,
+                    requestResource.FromState,
+                    requestResource.FromStockPoolCode,
                     requestResource.To,
                     requestResource.ToLocationId,
                     requestResource.ToPalletNumber,
@@ -47,7 +49,7 @@
 
                 return new BadRequestResult<RequisitionProcessResult>(result.Message);
             }
-            catch (CreateReqFailureException exception)
+            catch (DomainException exception)
             {
                 return new BadRequestResult<RequisitionProcessResult>(exception.Message);
             }

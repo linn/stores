@@ -14,6 +14,8 @@
             int? fromLocationId,
             int? fromPalletNumber,
             DateTime? fromStockRotationDate,
+            string fromState,
+            string fromStockPool,
             string to,
             int? toLocationId,
             int? toPalletNumber,

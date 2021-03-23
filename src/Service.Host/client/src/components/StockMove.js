@@ -134,7 +134,25 @@ function StockMove({
     };
 
     const handleFieldChange = (property, value) => {
-        setMoveDetails({ ...moveDetails, [property]: value.toUpperCase() });
+        if (property === 'from') {
+            setMoveDetails({
+                ...moveDetails,
+                from: value.toUpperCase(),
+                fromPalletNumber: null,
+                fromLocationId: null,
+                fromLocationCode: null
+            });
+        } else if (property === 'to') {
+            setMoveDetails({
+                ...moveDetails,
+                to: value.toUpperCase(),
+                toPalletNumber: null,
+                toLocationId: null,
+                toLocationCode: null
+            });
+        } else {
+            setMoveDetails({ ...moveDetails, [property]: value.toUpperCase() });
+        }
     };
 
     const handleFieldNumberChange = (property, value) => {

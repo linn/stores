@@ -17,5 +17,7 @@
         public string Message { get; set; }
 
         public int ReqNumber { get; set; }
+
+        public string State { get; set; }
     }
 }

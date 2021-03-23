@@ -1,23 +1,28 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.MoveStockServiceTests
 {
+    using System;
+
     using FluentAssertions;
 
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
 
     using NUnit.Framework;
 
-    public class WhenMovingWithInvalidQuantity : ContextBase
+    public class WhenMovingStockFromInvalidLocation: ContextBase
     {
-        private RequisitionProcessResult result;
+        private RequisitionProcessResult storesPackResult;
+
+        private Action action;
 
         [SetUp]
         public void SetUp()
         {
-            this.From = "P2";
-            this.To = "P1";
-            this.Quantity = 0;
+            this.storesPackResult = new RequisitionProcessResult { Success = false };
+            this.From = "XYZ-NO-LOC";
+            this.To = "P2000";
 
-            this.result = this.Sut.MoveStock(
+            this.action = () => this.Sut.MoveStock(
                 this.ReqNumber,
                 this.PartNumber,
                 this.Quantity,
@@ -27,7 +32,7 @@
                 null,
                 null,
                 null,
-                this.To, 
+                this.To,
                 null,
                 null,
                 null,
@@ -35,10 +40,9 @@
         }
 
         [Test]
-        public void ShouldReturnErrorMesage()
+        public void ShouldThrowException()
         {
-            this.result.Success.Should().BeFalse();
-            this.result.Message.Should().Be("You must have a valid quantity.");
+            this.action.Should().Throw<TranslateLocationException>();
         }
     }
 }

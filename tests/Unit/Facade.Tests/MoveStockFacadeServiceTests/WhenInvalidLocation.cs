@@ -11,7 +11,7 @@
 
     using NUnit.Framework;
 
-    public class WhenCreateReqFails : ContextBase
+    public class WhenInvalidLocation : ContextBase
     {
         private MoveStockRequestResource resource;
 
@@ -43,7 +43,7 @@
                     this.resource.ToPalletNumber,
                     null,
                     this.resource.UserNumber)
-                .Throws(new CreateReqFailureException("boom"));
+                .Throws(new TranslateLocationException("boom"));
 
             this.result = this.Sut.MoveStock(this.resource);
         }

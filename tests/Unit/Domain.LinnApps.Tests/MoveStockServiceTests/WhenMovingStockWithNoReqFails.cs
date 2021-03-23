@@ -20,7 +20,6 @@
         [SetUp]
         public void SetUp()
         {
-            this.ReqNumber = null;
             this.storesPackResult = new RequisitionProcessResult { Success = false };
             this.From = "P1000";
             this.To = "P2000";
@@ -29,10 +28,12 @@
                 .Returns(this.storesPackResult);
 
             this.action = () => this.Sut.MoveStock(
-                this.ReqNumber,
+                null,
                 this.PartNumber,
                 this.Quantity,
                 this.From,
+                null,
+                null,
                 null,
                 null,
                 null,

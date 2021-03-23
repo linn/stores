@@ -16,6 +16,10 @@
 
         public string FromStockRotationDate { get; set; }
 
+        public string FromStockPoolCode { get; set; }
+
+        public string FromState { get; set; }
+
         public int? ToPalletNumber { get; set; }
 
         public int? ToLocationId { get; set; }

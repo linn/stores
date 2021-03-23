@@ -13,7 +13,6 @@
         [SetUp]
         public void SetUp()
         {
-            this.ReqNumber = 1;
             this.From = "E-K1-34-34";
             this.To = "K2";
 
@@ -22,6 +21,8 @@
                 this.PartNumber,
                 this.Quantity,
                 this.From,
+                null,
+                null,
                 null,
                 null,
                 null,

@@ -13,7 +13,6 @@
         [SetUp]
         public void SetUp()
         {
-            this.ReqNumber = 1;
             this.From = "P1000";
 
             this.result = this.Sut.MoveStock(
@@ -21,6 +20,8 @@
                 this.PartNumber,
                 this.Quantity,
                 this.From,
+                null,
+                null,
                 null,
                 null,
                 null,
