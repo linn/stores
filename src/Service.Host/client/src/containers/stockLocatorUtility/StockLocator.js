@@ -20,10 +20,22 @@ const mapStateToProps = (state, { location }) => ({
     quantities: stockQuantitiesSelectors.getItem(state),
     quantitiesLoading: stockQuantitiesSelectors.getLoading(state),
     itemError: getItemError(state, itemTypes.stockLocator.item),
-    previousPaths: getPreviousPaths(state).map(p => p.path)
+    previousPaths: getPreviousPaths(state)
 });
 
-const initialise = ({ options }) => dispatch => {
+const initialise = ({ options, history, previousPaths }) => dispatch => {
+    // if options are empty
+    if (!Object.values(options).some(x => x !== null && x !== '')) {
+        // check for previous options
+        const prevPath = previousPaths.filter(p => p.path?.endsWith('/locators')).pop();
+        if (prevPath?.search) {
+            history.push(prevPath.path + prevPath.search);
+            return;
+        }
+        // else just go back to the search to get new options
+        history.push('/inventory/stock-locator');
+        return;
+    }
     dispatch(
         stockLocatorLocationsActions.searchWithOptions(null, `&${queryString.stringify(options)}`)
     );

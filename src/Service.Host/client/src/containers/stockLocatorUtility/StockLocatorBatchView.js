@@ -18,10 +18,22 @@ const mapStateToProps = (state, { location }) => ({
     itemError: getItemError(state, itemTypes.stockLocator.item),
     drillBackPath: getPreviousPaths(state)
         ?.filter(x => x.path === '/inventory/stock-locator/locators')
-        .pop()
+        .pop(),
+    previousPaths: getPreviousPaths(state)
 });
 
-const initialise = ({ options }) => dispatch => {
+const initialise = ({ options, history, previousPaths }) => dispatch => {
+    if (!Object.values(options).some(x => x !== null && x !== '')) {
+        // check for previous options
+        const prevPath = previousPaths.filter(p => p.path?.endsWith('/batches')).pop();
+        if (prevPath?.search) {
+            history.push(prevPath.path + prevPath.search);
+            return;
+        }
+        // else just go back to the search to get new options
+        history.push('/inventory/stock-locator');
+        return;
+    }
     dispatch(
         stockLocatorLocationsActions.searchWithOptions(null, `&${queryString.stringify(options)}`)
     );
