@@ -4,7 +4,6 @@ import {
     getItemError,
     getPreviousPaths
 } from '@linn-it/linn-form-components-library';
-import queryString from 'query-string';
 import StockLocatorBatchView from '../../components/stockLocatorUtility/StockLocatorBatchView';
 import stockLocatorLocationsSelectors from '../../selectors/stockLocatorLocationsSelectors';
 import stockLocatorLocationsActions from '../../actions/stockLocatorLocationsActions';
@@ -13,7 +12,7 @@ import * as itemTypes from '../../itemTypes';
 const mapStateToProps = (state, { location }) => ({
     items: stockLocatorLocationsSelectors.getSearchItems(state),
     itemsLoading: stockLocatorLocationsSelectors.getSearchLoading(state),
-    options: queryString.parse(location?.search),
+    options: location?.search,
     loading: stockLocatorLocationsSelectors.getLoading(state),
     itemError: getItemError(state, itemTypes.stockLocator.item),
     drillBackPath: getPreviousPaths(state)
@@ -22,7 +21,7 @@ const mapStateToProps = (state, { location }) => ({
     previousPaths: getPreviousPaths(state)
 });
 
-const initialise = ({ options, history, previousPaths }) => dispatch => {
+const initialise = ({ options, history, previousPaths }) => () => {
     if (!Object.values(options).some(x => x !== null && x !== '')) {
         // check for previous options
         const prevPath = previousPaths.filter(p => p.path?.endsWith('/batches')).pop();
@@ -32,11 +31,7 @@ const initialise = ({ options, history, previousPaths }) => dispatch => {
         }
         // else just go back to the search to get new options
         history.push('/inventory/stock-locator');
-        return;
     }
-    dispatch(
-        stockLocatorLocationsActions.searchWithOptions(null, `&${queryString.stringify(options)}`)
-    );
 };
 
 const mapDispatchToProps = {

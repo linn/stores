@@ -17,8 +17,22 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import Page from '../../containers/Page';
 
-function StockLocator({ items, itemsLoading, history, quantities, quantitiesLoading }) {
+function StockLocator({
+    items,
+    itemsLoading,
+    history,
+    quantities,
+    quantitiesLoading,
+    options,
+    fetchItems
+}) {
     const [selectedQuantities, setSelectQuantities] = useState();
+
+    useEffect(() => {
+        if (Object.values(queryString.parse(options)).some(x => x !== null && x !== '')) {
+            fetchItems(null, options);
+        }
+    }, [options, fetchItems]);
 
     useEffect(() => {
         if (quantities?.length > 0) {
@@ -105,9 +119,9 @@ function StockLocator({ items, itemsLoading, history, quantities, quantitiesLoad
                             <SingleEditTable
                                 newRowPosition="top"
                                 columns={columns}
-                                rows={items.map(i => ({
+                                rows={items.map((i, index) => ({
                                     ...i,
-                                    id: i.id + i.batchRef + i.partNumber,
+                                    id: index,
                                     component: (
                                         <button
                                             type="button"
@@ -242,9 +256,8 @@ StockLocator.propTypes = {
             id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
         })
     ),
-    options: PropTypes.shape({
-        batchRef: PropTypes.string
-    }).isRequired,
+    fetchItems: PropTypes.func.isRequired,
+    options: PropTypes.string.isRequired,
     itemsLoading: PropTypes.bool,
     history: PropTypes.shape({ goBack: PropTypes.func, push: PropTypes.func }).isRequired,
     quantities: PropTypes.arrayOf(

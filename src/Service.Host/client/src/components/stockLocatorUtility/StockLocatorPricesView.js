@@ -119,9 +119,9 @@ function StockLocator({ items, itemsLoading, drillBackPath, history }) {
                             <SingleEditTable
                                 newRowPosition="top"
                                 columns={columns}
-                                rows={items.map(i => ({
+                                rows={items.map((i, index) => ({
                                     ...i,
-                                    id: i.id + i.batchRef + i.partNumber,
+                                    id: index,
                                     drillBackButton: (
                                         <button
                                             type="button"

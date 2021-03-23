@@ -1,11 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { Title, SingleEditTable, Loading } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import Page from '../../containers/Page';
 
-function StockLocatorBatchView({ items, itemsLoading, history, drillBackPath }) {
+function StockLocatorBatchView({
+    items,
+    itemsLoading,
+    history,
+    drillBackPath,
+    options,
+    fetchItems
+}) {
+    useEffect(() => {
+        if (Object.values(queryString.parse(options)).some(x => x !== null && x !== '')) {
+            fetchItems(null, options);
+        }
+    }, [options, fetchItems]);
+
     const columns = [
         {
             title: 'Part',
@@ -84,9 +97,9 @@ function StockLocatorBatchView({ items, itemsLoading, history, drillBackPath }) 
                             <SingleEditTable
                                 newRowPosition="top"
                                 columns={columns}
-                                rows={items.map(i => ({
+                                rows={items.map((i, index) => ({
                                     ...i,
-                                    id: i.id + i.batchRef + i.partNumber,
+                                    id: index,
                                     drillDownButton: (
                                         <span>
                                             {' '}
@@ -139,14 +152,13 @@ function StockLocatorBatchView({ items, itemsLoading, history, drillBackPath }) 
 }
 
 StockLocatorBatchView.propTypes = {
+    fetchItems: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
         })
     ),
-    options: PropTypes.shape({
-        batchRef: PropTypes.string
-    }).isRequired,
+    options: PropTypes.string.isRequired,
     itemsLoading: PropTypes.bool,
     history: PropTypes.shape({ goBack: PropTypes.func, push: PropTypes.func }).isRequired,
     drillBackPath: PropTypes.shape({ path: PropTypes.string, search: PropTypes.string })

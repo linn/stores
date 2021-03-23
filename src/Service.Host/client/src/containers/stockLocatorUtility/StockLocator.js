@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import {
     initialiseOnMount,
     getItemError,
     getPreviousPaths
 } from '@linn-it/linn-form-components-library';
-import queryString from 'query-string';
 import StockLocator from '../../components/stockLocatorUtility/StockLocator';
 import stockLocatorLocationsSelectors from '../../selectors/stockLocatorLocationsSelectors';
 import stockLocatorLocationsActions from '../../actions/stockLocatorLocationsActions';
@@ -15,7 +15,7 @@ import * as itemTypes from '../../itemTypes';
 const mapStateToProps = (state, { location }) => ({
     items: stockLocatorLocationsSelectors.getSearchItems(state),
     itemsLoading: stockLocatorLocationsSelectors.getSearchLoading(state),
-    options: queryString.parse(location?.search),
+    options: location?.search,
     loading: stockLocatorLocationsSelectors.getLoading(state),
     quantities: stockQuantitiesSelectors.getItem(state),
     quantitiesLoading: stockQuantitiesSelectors.getLoading(state),
@@ -36,16 +36,17 @@ const initialise = ({ options, history, previousPaths }) => dispatch => {
         history.push('/inventory/stock-locator');
         return;
     }
-    dispatch(
-        stockLocatorLocationsActions.searchWithOptions(null, `&${queryString.stringify(options)}`)
-    );
     if (options.partNumber) {
         dispatch(stockQuantitiesActions.fetchByQueryString('partNumber', options.partNumber));
     }
 };
 
 const mapDispatchToProps = {
-    initialise
+    initialise,
+    fetchItems: stockLocatorLocationsActions.searchWithOptions
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(StockLocator));
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withRouter(initialiseOnMount(StockLocator)));
