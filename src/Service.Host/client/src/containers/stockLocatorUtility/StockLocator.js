@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import queryString from 'query-string';
 import {
     initialiseOnMount,
     getItemError,
@@ -36,8 +37,9 @@ const initialise = ({ options, history, previousPaths }) => dispatch => {
         history.push('/inventory/stock-locator');
         return;
     }
-    if (options.partNumber) {
-        dispatch(stockQuantitiesActions.fetchByQueryString('partNumber', options.partNumber));
+    const parsedOptions = queryString.parse(options);
+    if (parsedOptions.partNumber) {
+        dispatch(stockQuantitiesActions.fetchByQueryString('partNumber', parsedOptions.partNumber));
     }
 };
 
