@@ -109,7 +109,7 @@ function StockLocator({
                     />
                 </Grid>
                 <Grid item xs={9} />
-                {itemsLoading || quantitiesLoading ? (
+                {itemsLoading ? (
                     <Grid item xs={12}>
                         <Loading />
                     </Grid>
@@ -149,7 +149,8 @@ function StockLocator({
                                 allowNewRowCreations
                             />
                         )}
-                        {quantities?.length && selectedQuantities && (
+                        {quantitiesLoading && <Loading />}
+                        {quantities?.length && selectedQuantities && !quantitiesLoading && (
                             <Accordion>
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
