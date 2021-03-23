@@ -97,7 +97,10 @@ function StockLocator({
                     <Title text="Stock Locations" />
                 </Grid>
                 <Grid item xs={3}>
-                    <BackButton backClick={() => smartGoBack(previousPaths, history.goBack)} />
+                    <BackButton
+                        backClick={() => history.push('/inventory/stock-locator')}
+                        text="back to search"
+                    />
                 </Grid>
                 <Grid item xs={9} />
                 {itemsLoading || quantitiesLoading ? (
