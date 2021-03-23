@@ -11,33 +11,27 @@
 
     using NUnit.Framework;
 
-    public class WhenSearchingStockLocatorsAndPartNumberWithWildcardInQuery : ContextBase
+    public class WhenSearchingStockLocators : ContextBase
     {
-        private readonly IQueryable<StockLocatorBatch> repositoryResult =
-            new List<StockLocatorBatch>
+        private readonly IQueryable<StockLocatorLocation> repositoryResult =
+            new List<StockLocatorLocation>
                 {
-                    new StockLocatorBatch
+                    new StockLocatorLocation
                         {
                             StockPoolCode = "LINN",
-                            LocationId = 1,
                             State = "FREE",
-                            BatchRef = "BATCH",
-                            PartNumber = "RES 211"
+                            PartNumber = "PART A"
                         },
-                    new StockLocatorBatch
+                    new StockLocatorLocation
                         {
                             StockPoolCode = "LINN",
-                            LocationId = 1,
                             State = "FREE",
-                            BatchRef = "BATCH",
-                            PartNumber = "RES 222"
+                            PartNumber = "PART B"
                         },
-                    new StockLocatorBatch
+                    new StockLocatorLocation
                         {
                             StockPoolCode = "LINN",
-                            LocationId = 1,
                             State = "FREE",
-                            BatchRef = "BATCH",
                             PartNumber = "PART C"
                         },
                 }.AsQueryable();
@@ -47,25 +41,28 @@
         [SetUp]
         public void SetUp()
         {
-            this.StockLocatorBatchesView
-                .FindAll()
+            this.LocationsViewService.QueryView(
+                        Arg.Any<string>(), 
+                        null, 
+                        null, 
+                        Arg.Any<string>(), 
+                        Arg.Any<string>(), 
+                        Arg.Any<string>())
                 .Returns(this.repositoryResult);
 
             this.testResult = this.Sut.SearchStockLocators(
-                partNumber: "RES *",
-                locationId: 1,
+                partNumber: null,
+                locationId: null,
                 palletNumber: null,
                 stockPool: "LINN",
                 stockState: "FREE",
-                batchRef: "BATCH",
-                queryBatchView: true);
+                category: null);
         }
 
         [Test]
-        public void ShouldReturnOnlyMatchingResults()
+        public void ShouldReturnCorrectResult()
         {
-            this.testResult.Count().Should().Be(2);
-            this.testResult.All(x => x.PartNumber.StartsWith("RES")).Should().Be(true);
+            this.testResult.Count().Should().Be(3);
         }
     }
 }

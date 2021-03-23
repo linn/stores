@@ -24,6 +24,7 @@
     using Linn.Stores.Resources.Allocation;
     using Linn.Stores.Resources.Parts;
     using Linn.Stores.Resources.RequestResources;
+    using Linn.Stores.Resources.StockLocators;
 
     public class ServiceModule : Module
     {
@@ -105,6 +106,7 @@
             builder.RegisterType<ExportRsnService>().As<IExportRsnService>();
             builder.RegisterType<StockQuantitiesService>().As<IStockQuantitiesService>();
             builder.RegisterType<RequisitionActionsFacadeService>().As<IRequisitionActionsFacadeService>();
+            builder.RegisterType<StockLocatorPricesService>().As<IStockLocatorPricesService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
@@ -117,6 +119,7 @@
             builder.RegisterType<WcsPack>().As<IWcsPack>();
             builder.RegisterType<WandPack>().As<IWandPack>();
             builder.RegisterType<StoresPack>().As<IStoresPack>();
+            builder.RegisterType<StockLocatorLocationsViewService>().As<IStockLocatorLocationsViewService>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

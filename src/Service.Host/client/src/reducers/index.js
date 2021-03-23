@@ -2,6 +2,7 @@
     reducers as sharedLibraryReducers,
     fetchErrorReducer
 } from '@linn-it/linn-form-components-library';
+import { connectRouter } from 'connected-react-router';
 import { combineReducers } from 'redux';
 import { reducer as oidc } from 'redux-oidc';
 import assemblyTechnologies from './parts/assemblyTechnologies';
@@ -55,6 +56,7 @@ import despatchPalletQueueReport from './despatchPalletQueueReport';
 import movePalletToUpper from './movePalletToUpper';
 import movePalletsToUpper from './movePalletsToUpper';
 import stockLocatorLocations from './stockLocators/stockLocatorLocations';
+import stockLocatorPrices from './stockLocators/stockLocatorPrices';
 import stockQuantities from './stockLocators/stockQuantities';
 import nominalAccounts from './nominalAccounts';
 import wandConsignments from './wandConsignments';
@@ -65,71 +67,76 @@ import exportRsns from './exportRsns';
 import doWandItem from './doWandItem';
 import unallocateConsignment from './unallocateConsignment';
 import unallocateConsignmentLine from './unallocateConsignmentLine';
+import historyStore from './history';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
-const rootReducer = combineReducers({
-    accountingCompanies,
-    allocation,
-    assemblyTechnologies,
-    auditLocation,
-    auditLocations,
-    countries,
-    createAuditReqs,
-    departments,
-    decrementRules,
-    deptStockParts,
-    despatchLocations,
-    despatchPalletQueueReport,
-    despatchPickingSummaryReport,
-    doWandItem,
-    employees,
-    exportRsns,
-    finishAllocation,
-    inspectedStates,
-    manufacturers,
-    mechPartSource,
-    movePalletsToUpper,
-    movePalletToUpper,
-    nominal,
-    nominalAccounts,
-    oidc,
-    part,
-    partCategories,
-    parts,
-    partDataSheetValues,
-    partLiveTest,
-    partTemplates,
-    pickItemsAllocation,
-    productAnalysisCodes,
-    rootProducts,
-    salesAccounts,
-    salesOutlets,
-    sernosSequences,
-    sosAllocDetails,
-    sosAllocHeads,
-    stockLocator,
-    stockLocatorBatches,
-    stockLocatorLocations,
-    stockLocators,
-    stockPools,
-    stockQuantities,
-    storageLocations,
-    storagePlace,
-    storagePlaces,
-    storagePlaceAuditReport,
-    suppliers,
-    tqmsCategories,
-    unallocateConsignment,
-    unallocateConsignmentLine,
-    unitsOfMeasure,
-    unpickItemsAllocation,
-    wandConsignments,
-    wandItems,
-    workstationTopUpStatus,
-    wwdReport,
-    ...sharedLibraryReducers,
-    errors
-});
+const rootReducer = history =>
+    combineReducers({
+        oidc,
+        historyStore,
+        router: connectRouter(history),
+        accountingCompanies,
+        allocation,
+        assemblyTechnologies,
+        auditLocation,
+        auditLocations,
+        countries,
+        createAuditReqs,
+        departments,
+        decrementRules,
+        deptStockParts,
+        despatchLocations,
+        despatchPalletQueueReport,
+        despatchPickingSummaryReport,
+        doWandItem,
+        employees,
+        exportRsns,
+        finishAllocation,
+        inspectedStates,
+        manufacturers,
+        mechPartSource,
+        movePalletsToUpper,
+        movePalletToUpper,
+        nominal,
+        nominalAccounts,
+        part,
+        partCategories,
+        parts,
+        partDataSheetValues,
+        partLiveTest,
+        partTemplates,
+        pickItemsAllocation,
+        productAnalysisCodes,
+        rootProducts,
+        salesAccounts,
+        salesOutlets,
+        sernosSequences,
+        sosAllocDetails,
+        sosAllocHeads,
+        stockLocator,
+        stockLocatorBatches,
+        stockLocatorLocations,
+        stockLocatorPrices,
+        stockLocators,
+        stockPools,
+        stockQuantities,
+        storageLocations,
+        storagePlace,
+        storagePlaces,
+        storagePlaceAuditReport,
+        suppliers,
+        tqmsCategories,
+        unallocateConsignment,
+        unallocateConsignmentLine,
+        unitsOfMeasure,
+        unpickItemsAllocation,
+        wandConsignments,
+        wandItems,
+        workstationTopUpStatus,
+        wwdReport,
+        ...sharedLibraryReducers,
+        errors
+    });
 
 export default rootReducer;

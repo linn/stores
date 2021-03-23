@@ -36,7 +36,7 @@ function StockViewerOptions({
         locationId: '',
         stockPool: '',
         batchRef: '',
-        inspectedState: ''
+        state: ''
     });
 
     const table = {
@@ -65,6 +65,7 @@ function StockViewerOptions({
                         label="Part Number"
                         propertyName="partNumber"
                         onChange={(_, newValue) => setOptions({ ...options, partNumber: newValue })}
+                        helperText="note: * can be used as a wildcard character"
                         value={options.partNumber}
                     />
                 </Grid>
@@ -77,7 +78,7 @@ function StockViewerOptions({
                             !options.partNumber &&
                             !(options.storageLocation || options.palletNumber)
                         }
-                        to={`/inventory/stock-locator-utility?${queryString.stringify(options)}`}
+                        to={`/inventory/stock-locator/locators?${queryString.stringify(options)}`}
                     />
                 </Grid>
                 <Grid item xs={2} />
@@ -168,12 +169,12 @@ function StockViewerOptions({
                                 id: v.state,
                                 displayText: v.description
                             }))}
-                            value={options.inspectedState}
+                            value={options.state}
                             label="State"
-                            propertyName="inspectedState"
+                            propertyName="state"
                             fullWidth
                             onChange={(_propertyName, newValue) =>
-                                setOptions({ ...options, inspectedState: newValue })
+                                setOptions({ ...options, state: newValue })
                             }
                             allowNoValue
                         />
