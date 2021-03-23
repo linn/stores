@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System.Collections.Generic;
+
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Facade.Services;
@@ -60,9 +62,7 @@
                     .WithView("Index");
             }
 
-            return this.Negotiate.WithModel(this.service.GetAll())
-                    .WithMediaRangeModel("text/html", ApplicationSettings.Get)
-                    .WithView("Index");
+            return this.Negotiate.WithModel(new BadRequestResult<IEnumerable<StockLocatorPrices>>("No part number supplied"));
         }
 
         private object GetStockLocatorsByLocation()
