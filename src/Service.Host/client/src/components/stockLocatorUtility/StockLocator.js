@@ -6,8 +6,7 @@ import {
     Loading,
     Dropdown,
     InputField,
-    BackButton,
-    smartGoBack
+    BackButton
 } from '@linn-it/linn-form-components-library';
 import Typography from '@material-ui/core/Typography';
 import Accordion from '@material-ui/core/Accordion';
@@ -18,14 +17,7 @@ import PropTypes from 'prop-types';
 import queryString from 'query-string';
 import Page from '../../containers/Page';
 
-function StockLocator({
-    items,
-    itemsLoading,
-    history,
-    quantities,
-    quantitiesLoading,
-    previousPaths
-}) {
+function StockLocator({ items, itemsLoading, history, quantities, quantitiesLoading }) {
     const [selectedQuantities, setSelectQuantities] = useState();
 
     useEffect(() => {
@@ -272,16 +264,14 @@ StockLocator.propTypes = {
             otherStockAllocated: PropTypes.number
         })
     ),
-    quantitiesLoading: PropTypes.bool,
-    previousPaths: PropTypes.arrayOf(PropTypes.string)
+    quantitiesLoading: PropTypes.bool
 };
 
 StockLocator.defaultProps = {
     items: [],
     itemsLoading: true,
     quantities: null,
-    quantitiesLoading: false,
-    previousPaths: []
+    quantitiesLoading: false
 };
 
 export default StockLocator;
