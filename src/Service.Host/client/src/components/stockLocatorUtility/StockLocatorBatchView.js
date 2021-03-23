@@ -6,7 +6,6 @@ import queryString from 'query-string';
 import Page from '../../containers/Page';
 
 function StockLocatorBatchView({ items, itemsLoading, history, drillBackPath }) {
-    // think: can drillBackPath End Up undefined?
     const columns = [
         {
             title: 'Part',

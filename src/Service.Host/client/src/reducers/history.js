@@ -1,4 +1,3 @@
-//  TODO - ADD THIS TO THE COMPONENTS LIBRARY
 const initialState = [];
 
 function history(state = initialState, action) {

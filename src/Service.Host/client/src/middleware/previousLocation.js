@@ -1,4 +1,3 @@
-// todo -- add to components library
 let prevPathname = '';
 let prevSearch = '';
 
