@@ -6,7 +6,7 @@ import queryString from 'query-string';
 import Page from '../../containers/Page';
 
 function StockLocatorBatchView({ items, itemsLoading, history, drillBackPath }) {
-    // think: can drillBackPath End Up undefined? 
+    // think: can drillBackPath End Up undefined?
     const columns = [
         {
             title: 'Part',
@@ -89,27 +89,42 @@ function StockLocatorBatchView({ items, itemsLoading, history, drillBackPath }) 
                                     ...i,
                                     id: i.id + i.batchRef + i.partNumber,
                                     drillDownButton: (
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                history.push(
-                                                    `/inventory/stock-locator/locators/batches/details?${queryString.stringify(
-                                                        {
-                                                            partNumber: i.partNumber,
-                                                            locationName: i.locationName,
-                                                            palletNumber: i.palletNumber?.toString(),
-                                                            state: i.state,
-                                                            category: i.category?.toString(),
-                                                            stockPool: i.stockPoolCode,
-                                                            batchRef: i.batchRef,
-                                                            stockRotationDate: i.stockRotationDate
-                                                        }
-                                                    )}`
-                                                );
-                                            }}
-                                        >
-                                            +
-                                        </button>
+                                        <span>
+                                            {' '}
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    history.push(
+                                                        `/inventory/stock-locator/locators/batches/details?${queryString.stringify(
+                                                            {
+                                                                partNumber: i.partNumber,
+                                                                locationName: i.locationName,
+                                                                palletNumber: i.palletNumber?.toString(),
+                                                                state: i.state,
+                                                                category: i.category?.toString(),
+                                                                stockPool: i.stockPoolCode,
+                                                                batchRef: i.batchRef,
+                                                                stockRotationDate:
+                                                                    i.stockRotationDate
+                                                            }
+                                                        )}`
+                                                    );
+                                                }}
+                                            >
+                                                +
+                                            </button>
+                                            <button
+                                                type="button"
+                                                disabled={!drillBackPath}
+                                                onClick={() => {
+                                                    history.push(
+                                                        drillBackPath.path + drillBackPath.search
+                                                    );
+                                                }}
+                                            >
+                                                -
+                                            </button>
+                                        </span>
                                     )
                                 }))}
                                 allowNewRowCreation={false}
@@ -134,12 +149,14 @@ StockLocatorBatchView.propTypes = {
         batchRef: PropTypes.string
     }).isRequired,
     itemsLoading: PropTypes.bool,
-    history: PropTypes.shape({ goBack: PropTypes.func, push: PropTypes.func }).isRequired
+    history: PropTypes.shape({ goBack: PropTypes.func, push: PropTypes.func }).isRequired,
+    drillBackPath: PropTypes.shape({ path: PropTypes.string, search: PropTypes.string })
 };
 
 StockLocatorBatchView.defaultProps = {
     items: [],
-    itemsLoading: true
+    itemsLoading: true,
+    drillBackPath: null
 };
 
 export default StockLocatorBatchView;

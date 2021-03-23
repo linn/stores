@@ -4,12 +4,18 @@ import { Title, SingleEditTable, Loading } from '@linn-it/linn-form-components-l
 import PropTypes from 'prop-types';
 import Page from '../../containers/Page';
 
-function StockLocator({ items, itemsLoading }) {
+function StockLocator({ items, itemsLoading, drillBackPath, history }) {
     const columns = [
         {
             title: 'Part',
             id: 'partNumber',
             type: 'text',
+            editable: false
+        },
+        {
+            title: '',
+            id: 'drillBackButton',
+            type: 'component',
             editable: false
         },
         {
@@ -115,7 +121,20 @@ function StockLocator({ items, itemsLoading }) {
                                 columns={columns}
                                 rows={items.map(i => ({
                                     ...i,
-                                    id: i.id + i.batchRef + i.partNumber
+                                    id: i.id + i.batchRef + i.partNumber,
+                                    drillBackButton: (
+                                        <button
+                                            type="button"
+                                            disabled={!drillBackPath}
+                                            onClick={() => {
+                                                history.push(
+                                                    drillBackPath.path + drillBackPath.search
+                                                );
+                                            }}
+                                        >
+                                            -
+                                        </button>
+                                    )
                                 }))}
                                 allowNewRowCreation={false}
                                 editable={false}
@@ -139,12 +158,14 @@ StockLocator.propTypes = {
         batchRef: PropTypes.string
     }).isRequired,
     itemsLoading: PropTypes.bool,
-    history: PropTypes.shape({ goBack: PropTypes.func }).isRequired
+    history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+    drillBackPath: PropTypes.shape({ path: PropTypes.string, search: PropTypes.string })
 };
 
 StockLocator.defaultProps = {
     items: [],
-    itemsLoading: true
+    itemsLoading: true,
+    drillBackPath: null
 };
 
 export default StockLocator;

@@ -9,7 +9,7 @@ function history(state = initialState, action) {
     if (action.type === '@@router/LOCATION_CHANGE') {
         return [
             ...state,
-            { path: action.payload.prevPathname, search: action.payload.location?.search }
+            { path: action.payload.prevPathname, search: action.payload?.prevSearch }
         ];
     }
     return state;
