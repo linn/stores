@@ -242,3 +242,9 @@ export const availableStock = new ItemType(
     'AVAILABLE_STOCK',
     '/inventory/available-stock'
 );
+
+export const stockLocatorPrices = new ItemType(
+    'stockLocatorPrices',
+    'STOCK_LOCATOR_PRICES',
+    '/inventory/stock-locators/prices'
+);

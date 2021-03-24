@@ -8,8 +8,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Proxy;
-    using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
+    using Linn.Stores.Resources.StockLocators;
 
     public class StockLocatorsFacadeService : 
         FacadeService<StockLocator, int, StockLocatorResource, StockLocatorResource>,
@@ -55,14 +55,23 @@
 
         public IResult<IEnumerable<StockLocator>> GetStockLocations(StockLocatorQueryResource searchResource)
         {
+            if (searchResource.QueryBatchView)
+            {
+                return new SuccessResult<IEnumerable<StockLocator>>(this.domainService.SearchStockLocatorBatchView(
+                    searchResource.PartNumber,
+                    searchResource.LocationId,
+                    searchResource.PalletNumber,
+                    searchResource.StockPoolCode,
+                    searchResource.State,
+                    searchResource.Category));
+            }
             return new SuccessResult<IEnumerable<StockLocator>>(this.domainService.SearchStockLocators(
                 searchResource.PartNumber,
                 searchResource.LocationId,
                 searchResource.PalletNumber,
                 searchResource.StockPoolCode,
                 searchResource.State,
-                searchResource.BatchRef,
-                searchResource.QueryBatchView));
+                searchResource.Category));
         }
 
         public IResult<IEnumerable<StockLocator>> FilterBy(StockLocatorResource searchResource)

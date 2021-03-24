@@ -26,6 +26,7 @@
     using Linn.Stores.Resources.Parts;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Resources.Requisitions;
+    using Linn.Stores.Resources.StockLocators;
 
     public class ServiceModule : Module
     {
@@ -112,6 +113,7 @@
             builder.RegisterType<MoveStockFacadeService>().As<IMoveStockFacadeService>();
             builder.RegisterType<RequisitionFacadeService>()
                 .As<IFacadeService<RequisitionHeader, int, RequisitionResource, RequisitionResource>>();
+            builder.RegisterType<StockLocatorPricesService>().As<IStockLocatorPricesService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
@@ -124,6 +126,7 @@
             builder.RegisterType<WcsPack>().As<IWcsPack>();
             builder.RegisterType<WandPack>().As<IWandPack>();
             builder.RegisterType<StoresPack>().As<IStoresPack>();
+            builder.RegisterType<StockLocatorLocationsViewService>().As<IStockLocatorLocationsViewService>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

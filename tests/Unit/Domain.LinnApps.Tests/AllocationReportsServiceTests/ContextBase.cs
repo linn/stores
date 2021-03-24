@@ -3,7 +3,6 @@
     using Linn.Common.Persistence;
     using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps.Allocation;
-    using Linn.Stores.Domain.LinnApps.Allocation.Models;
 
     using NSubstitute;
 
