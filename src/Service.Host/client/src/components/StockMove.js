@@ -203,7 +203,7 @@ function StockMove({
                 <Grid item xs={5} />
                 <Grid item xs={7}>
                     <span>Stock</span>
-                    <div style={{ height: 180, width: '100%' }}>
+                    <div style={{ height: 190, width: '100%' }}>
                         <DataGrid
                             rows={displayAvailableStock(availableStock)}
                             columns={columns}

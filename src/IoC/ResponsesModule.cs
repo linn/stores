@@ -13,6 +13,7 @@
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Requisitions.Models;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
