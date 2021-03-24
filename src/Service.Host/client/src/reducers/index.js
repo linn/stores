@@ -70,6 +70,7 @@ import unallocateConsignmentLine from './unallocateConsignmentLine';
 import availableStock from './availableStock';
 import doStockMove from './doStockMove';
 import historyStore from './history';
+import reqMoves from './reqMoves';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -112,6 +113,7 @@ const rootReducer = history =>
         partTemplates,
         pickItemsAllocation,
         productAnalysisCodes,
+        reqMoves,
         rootProducts,
         salesAccounts,
         salesOutlets,

@@ -24,17 +24,8 @@
             this.requisitionActionsFacadeService = requisitionActionsFacadeService;
             this.requisitionFacadeService = requisitionFacadeService;
             this.Get("/logistics/requisitions/{reqNumber}", p => this.GetReq(p.reqNumber));
-            this.Get("/logistics/requisitions/{reqNumber}/moves", p => this.GetReqMoves(p.reqNumber));
             this.Post("/logistics/requisitions/actions/un-allocate", _ => this.Unallocate());
             this.Post("/logistics/requisitions/{reqNumber}/lines/{lineNumber}/un-allocate", p => this.Unallocate(p.reqNumber, p.lineNumber));
-        }
-
-        private object GetReqMoves(int reqNumber)
-        {
-            return this.Negotiate
-                .WithModel(this.requisitionFacadeService.GetById(reqNumber))
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
-                .WithView("Index");
         }
 
         private object GetReq(int reqNumber)

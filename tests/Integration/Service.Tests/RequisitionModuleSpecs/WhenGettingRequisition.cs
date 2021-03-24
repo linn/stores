@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Service.Tests.RequisitionModuleSpecs
 {
+    using System.Collections.Generic;
+
     using FluentAssertions;
 
     using Linn.Common.Facade;
@@ -20,7 +22,18 @@
         [SetUp]
         public void SetUp()
         {
-            this.requisition = new RequisitionHeader { ReqNumber = 3243, Document1 = 808 };
+            this.requisition = new RequisitionHeader
+                                   {
+                                       ReqNumber = 3243,
+                                       Document1 = 808,
+                                       Lines = new List<RequisitionLine>
+                                                   {
+                                                       new RequisitionLine
+                                                           {
+                                                               LineNumber = 1, Moves = new List<ReqMove>()
+                                                           }
+                                                   }
+                                   };
             this.RequisitionFacadeService.GetById(this.requisition.ReqNumber)
                 .Returns(new SuccessResult<RequisitionHeader>(this.requisition));
             this.Response = this.Browser.Get(

@@ -37,10 +37,12 @@
                         with.Dependency(this.RequisitionActionsFacadeService);
                         with.Dependency(this.RequisitionFacadeService);
                         with.Dependency<IResourceBuilder<RequisitionActionResult>>(new RequisitionActionResourceBuilder());
+                        with.Dependency<IRequisitionMovesResourceBuilder>(new RequisitionMovesResourceBuilder());
                         with.Dependency<IResourceBuilder<RequisitionHeader>>(new RequisitionResourceBuilder());
                         with.Module<RequisitionModule>();
                         with.ResponseProcessor<RequisitionActionResponseProcessor>();
                         with.ResponseProcessor<RequisitionResponseProcessor>();
+                        with.ResponseProcessor<RequisitionMovesResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
                                 {

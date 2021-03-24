@@ -248,3 +248,5 @@ export const stockLocatorPrices = new ItemType(
     'STOCK_LOCATOR_PRICES',
     '/inventory/stock-locators/prices'
 );
+
+export const reqMoves = new ItemType('reqMoves', 'REQ_MOVES', '/logistics/requisitions');

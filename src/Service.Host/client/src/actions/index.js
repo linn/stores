@@ -172,3 +172,5 @@ export const doStockMoveActionTypes = makeProcessActionTypes(processTypes.doStoc
 export const stockLocatorPricesActionTypes = makeActionTypes(
     itemTypes.stockLocatorPrices.actionType
 );
+
+export const reqMovesActionTypes = makeActionTypes(itemTypes.reqMoves.actionType);

@@ -26,13 +26,17 @@ function StockMove({
     doMove,
     clearMoveError,
     requestErrors,
-    userNumber
+    userNumber,
+    reqMoves,
+    fetchReqMoves,
+    reqMovesLoading
 }) {
     const [moveDetails, setMoveDetails] = useState({ userNumber });
     const [selectedRow, setSelectedRow] = useState(null);
     const [alert, setAlert] = useState({ message: ' ', visible: false });
 
     const toInput = useRef(null);
+    const partNumberInput = useRef(null);
 
     useEffect(() => {
         clearMoveError();
@@ -41,9 +45,12 @@ function StockMove({
     useEffect(() => {
         if (moveResult && moveResult.success && moveResult.links) {
             const reqHref = utilities.getHref(moveResult, 'requisition');
-            setMoveDetails({ reqNumber: reqHref.split('/').pop() });
+            const reqNumber = reqHref.split('/').pop();
+            fetchReqMoves(reqNumber);
+            setMoveDetails({ reqNumber });
+            partNumberInput.current.focus();
         }
-    }, [moveResult]);
+    }, [moveResult, fetchReqMoves]);
 
     const partResults = () => {
         return parts?.map(item => ({
@@ -63,7 +70,9 @@ function StockMove({
             fromStockPoolCode: row.stockPoolCode,
             fromPalletNumber: row.palletNumber,
             fromLocationId: row.locationId,
-            fromStockRotationDate: moment(row.stockRotationDate).format('DD MMM YYYY')
+            fromStockRotationDate: row.stockRotationDate
+                ? moment(row.stockRotationDate).format('DD MMM YYYY')
+                : null
         });
 
         toInput.current.focus();
@@ -181,7 +190,13 @@ function StockMove({
         return stock.map((s, i) => ({ id: i, ...s }));
     };
 
-    const onKeyDownProp = { onKeyDown: handleOnKeyPress };
+    const displayMoves = moves => {
+        if (!moves) {
+            return [];
+        }
+
+        return moves.map((m, i) => ({ id: i, ...m }));
+    };
 
     const columns = [
         { field: 'quantityAvailable', headerName: 'Qty', width: 100 },
@@ -196,6 +211,16 @@ function StockMove({
         { field: 'stockPoolCode', headerName: 'Stock Pool', width: 140 },
         { field: 'state', headerName: 'State', width: 140 }
     ];
+
+    const moveColumns = [
+        { field: 'reqNumber', headerName: 'Req', width: 100 },
+        { field: 'lineNumber', headerName: 'Line', width: 100 },
+        { field: 'moveSeq', headerName: 'Seq', width: 100 },
+        { field: 'partNumber', headerName: 'Part', width: 140 },
+        { field: 'moveQuantity', headerName: 'Qty', width: 100 }
+    ];
+
+    const partProp = { inputRef: partNumberInput, onKeyDown: handleOnKeyPress };
 
     return (
         <Page requestErrors={requestErrors} showRequestErrors>
@@ -239,7 +264,7 @@ function StockMove({
                         onChange={handleFieldChange}
                         maxLength={14}
                         propertyName="partNumber"
-                        textFieldProps={onKeyDownProp}
+                        textFieldProps={partProp}
                     />
                     <Typeahead
                         items={partResults()}
@@ -320,13 +345,12 @@ function StockMove({
                 <Grid item xs={12}>
                     <div style={{ height: 300, width: '100%' }}>
                         <DataGrid
-                            rows={displayAvailableStock(availableStock)}
-                            columns={columns}
+                            rows={displayMoves(reqMoves)}
+                            columns={moveColumns}
                             density="compact"
                             rowHeight={34}
-                            loading={availableStockLoading}
+                            loading={reqMovesLoading}
                             hideFooter
-                            onSelectionChange={handleSelectRow}
                         />
                     </div>
                 </Grid>
@@ -361,7 +385,10 @@ StockMove.propTypes = {
     requestErrors: PropTypes.arrayOf(
         PropTypes.shape({ message: PropTypes.string, name: PropTypes.string })
     ),
-    userNumber: PropTypes.number.isRequired
+    userNumber: PropTypes.number.isRequired,
+    reqMoves: PropTypes.arrayOf(PropTypes.shape({})),
+    reqMovesLoading: PropTypes.bool,
+    fetchReqMoves: PropTypes.func.isRequired
 };
 
 StockMove.defaultProps = {
@@ -374,7 +401,9 @@ StockMove.defaultProps = {
         success: true,
         links: null
     },
-    requestErrors: null
+    requestErrors: null,
+    reqMovesLoading: false,
+    reqMoves: null
 };
 
 export default StockMove;

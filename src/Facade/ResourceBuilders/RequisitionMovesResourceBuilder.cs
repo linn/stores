@@ -2,21 +2,33 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+
     using Linn.Common.Facade;
-    using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Resources.Requisitions;
 
     public class RequisitionMovesResourceBuilder : IRequisitionMovesResourceBuilder
     {
-        public RequisitionResource Build(RequisitionHeader requisition)
+        public IEnumerable<RequisitionMoveSummaryResource> Build(RequisitionHeader requisition)
         {
-            return new RequisitionResource
+            var moves = new List<RequisitionMoveSummaryResource>();
+
+            foreach (var line in requisition.Lines.OrderBy(l => l.LineNumber))
             {
-                ReqNumber = requisition.ReqNumber,
-                Document1 = requisition.Document1,
-                Links = this.BuildLinks(requisition).ToArray()
-            };
+                foreach (var move in line.Moves.OrderBy(m => m.Sequence))
+                {
+                    moves.Add(new RequisitionMoveSummaryResource
+                                  {
+                                      ReqNumber = requisition.ReqNumber,
+                                      LineNumber = line.LineNumber,
+                                      MoveSeq = move.Sequence,
+                                      PartNumber = line.PartNumber,
+                                      MoveQuantity = move.Quantity
+                                  });
+                }
+            }
+
+            return moves;
         }
 
         public string GetLocation(RequisitionHeader requisitionHeader)
@@ -25,10 +37,5 @@
         }
 
         object IResourceBuilder<RequisitionHeader>.Build(RequisitionHeader requisition) => this.Build(requisition);
-
-        private IEnumerable<LinkResource> BuildLinks(RequisitionHeader requisition)
-        {
-            yield return new LinkResource { Rel = "self", Href = this.GetLocation(requisition) };
-        }
     }
 }
