@@ -5,7 +5,8 @@ import {
     InputField,
     SnackbarMessage,
     ErrorCard,
-    utilities
+    utilities,
+    Loading
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import { DataGrid } from '@material-ui/data-grid';
@@ -29,7 +30,10 @@ function StockMove({
     userNumber,
     reqMoves,
     fetchReqMoves,
-    reqMovesLoading
+    reqMovesLoading,
+    clearAvailableStock,
+    moveWorking,
+    clearMoveResult
 }) {
     const [moveDetails, setMoveDetails] = useState({ userNumber });
     const [selectedRow, setSelectedRow] = useState(null);
@@ -71,8 +75,6 @@ function StockMove({
             fromPalletNumber: row.palletNumber,
             fromLocationId: row.locationId,
             fromStockRotationDate: row.stockRotationDate
-                ? moment(row.stockRotationDate).format('DD MMM YYYY')
-                : null
         });
 
         toInput.current.focus();
@@ -109,6 +111,7 @@ function StockMove({
         }
 
         doMove(moveDetails);
+        clearAvailableStock();
     };
 
     const setToDetailsFromAvailableStock = row => {
@@ -148,6 +151,8 @@ function StockMove({
     const handleOnSelect = selectedPart => {
         setMoveDetails({ partNumber: selectedPart.partNumber, ...moveDetails });
         fetchAvailableStock(selectedPart.partNumber);
+        clearMoveResult();
+        clearMoveError();
     };
 
     const handleFieldChange = (property, value) => {
@@ -179,6 +184,8 @@ function StockMove({
     const handleOnKeyPress = data => {
         if (data.keyCode === 13 || data.keyCode === 9) {
             fetchAvailableStock(moveDetails.partNumber);
+            clearMoveResult();
+            clearMoveError();
         }
     };
 
@@ -206,7 +213,10 @@ function StockMove({
             type: 'date',
             headerName: 'Stock Rot Date',
             width: 140,
-            valueGetter: params => moment(params.row.stockRotationDate).format('DD MMM YYYY')
+            valueGetter: params =>
+                params.row.stockRotationDate
+                    ? moment(params.row.stockRotationDate).format('DD MMM YYYY')
+                    : null
         },
         { field: 'stockPoolCode', headerName: 'Stock Pool', width: 140 },
         { field: 'state', headerName: 'State', width: 140 }
@@ -214,10 +224,14 @@ function StockMove({
 
     const moveColumns = [
         { field: 'reqNumber', headerName: 'Req', width: 100 },
-        { field: 'lineNumber', headerName: 'Line', width: 100 },
-        { field: 'moveSeq', headerName: 'Seq', width: 100 },
+        { field: 'lineNumber', headerName: 'Line', width: 100, hide: true },
+        { field: 'moveSeq', headerName: 'Seq', width: 100, hide: true },
         { field: 'partNumber', headerName: 'Part', width: 140 },
-        { field: 'moveQuantity', headerName: 'Qty', width: 100 }
+        { field: 'moveQuantity', headerName: 'Qty', width: 100 },
+        { field: 'fromPalletNumber', headerName: 'From Pallet', width: 140 },
+        { field: 'fromLocationCode', headerName: 'From Loc', width: 140 },
+        { field: 'toPalletNumber', headerName: 'To Pallet', width: 140 },
+        { field: 'toLocationCode', headerName: 'To Loc', width: 140 }
     ];
 
     const partProp = { inputRef: partNumberInput, onKeyDown: handleOnKeyPress };
@@ -325,10 +339,11 @@ function StockMove({
                         className="hide-when-printing"
                         variant="contained"
                         onClick={handleMoveClick}
-                        disabled={!saveEnabled()}
+                        disabled={!saveEnabled() || moveWorking}
                     >
                         Move
                     </Button>
+                    {moveWorking && <Loading />}
                 </Grid>
                 {moveError && (
                     <Grid item xs={12}>
@@ -388,7 +403,10 @@ StockMove.propTypes = {
     userNumber: PropTypes.number.isRequired,
     reqMoves: PropTypes.arrayOf(PropTypes.shape({})),
     reqMovesLoading: PropTypes.bool,
-    fetchReqMoves: PropTypes.func.isRequired
+    fetchReqMoves: PropTypes.func.isRequired,
+    clearAvailableStock: PropTypes.func.isRequired,
+    moveWorking: PropTypes.bool,
+    clearMoveResult: PropTypes.func.isRequired
 };
 
 StockMove.defaultProps = {
@@ -403,7 +421,8 @@ StockMove.defaultProps = {
     },
     requestErrors: null,
     reqMovesLoading: false,
-    reqMoves: null
+    reqMoves: null,
+    moveWorking: false
 };
 
 export default StockMove;

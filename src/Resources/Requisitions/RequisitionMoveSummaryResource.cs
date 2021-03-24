@@ -11,5 +11,13 @@
         public string PartNumber { get; set; }
 
         public int MoveQuantity { get; set; }
+
+        public int? FromPalletNumber { get; set; }
+
+        public string FromLocationCode { get; set; }
+
+        public int? ToPalletNumber { get; set; }
+
+        public string ToLocationCode { get; set; }
     }
 }

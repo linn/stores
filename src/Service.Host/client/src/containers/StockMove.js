@@ -24,6 +24,7 @@ const mapStateToProps = state => ({
     moveError: getItemErrorDetailMessage(state, processTypes.doStockMove.item),
     requestErrors: getRequestErrors(state)?.filter(error => error.type !== 'FETCH_ERROR'),
     moveResult: doStockMoveSelectors.getData(state),
+    moveWorking: doStockMoveSelectors.getWorking(state),
     userNumber: getUserNumber(state),
     reqMoves: reqMovesSelectors.getItems(state),
     reqMovesLoading: reqMovesSelectors.getLoading(state)
@@ -33,9 +34,11 @@ const mapDispatchToProps = {
     fetchParts: partsActions.search,
     clearPartsSearch: partsActions.clearSearch,
     fetchAvailableStock: availableStockActions.search,
+    clearAvailableStock: availableStockActions.clearSearch,
     doMove: doStockMoveActions.requestProcessStart,
     clearMoveError: doStockMoveActions.clearErrorsForItem,
-    fetchReqMoves: reqMovesActions.fetchById
+    fetchReqMoves: reqMovesActions.fetchById,
+    clearMoveResult: doStockMoveActions.clearProcessData
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(StockMove));

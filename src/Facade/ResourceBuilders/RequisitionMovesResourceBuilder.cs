@@ -15,17 +15,21 @@
 
             foreach (var line in requisition.Lines.OrderBy(l => l.LineNumber))
             {
-                foreach (var move in line.Moves.OrderBy(m => m.Sequence))
-                {
-                    moves.Add(new RequisitionMoveSummaryResource
-                                  {
-                                      ReqNumber = requisition.ReqNumber,
-                                      LineNumber = line.LineNumber,
-                                      MoveSeq = move.Sequence,
-                                      PartNumber = line.PartNumber,
-                                      MoveQuantity = move.Quantity
-                                  });
-                }
+                moves.AddRange(
+                    line.Moves.Where(b => b.Booked == "Y").OrderBy(m => m.Sequence)
+                    .Select(
+                        move => new RequisitionMoveSummaryResource
+                                    {
+                                        ReqNumber = requisition.ReqNumber,
+                                        LineNumber = line.LineNumber,
+                                        MoveSeq = move.Sequence,
+                                        PartNumber = line.PartNumber,
+                                        MoveQuantity = move.Quantity,
+                                        FromLocationCode = move.StockLocator.StorageLocation?.LocationCode,
+                                        FromPalletNumber = move.StockLocator.PalletNumber,
+                                        ToLocationCode = move.Location?.LocationCode,
+                                        ToPalletNumber = move.PalletNumber
+                                    }));
             }
 
             return moves;

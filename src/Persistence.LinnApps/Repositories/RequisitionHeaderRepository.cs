@@ -24,6 +24,11 @@
                 .Where(p => p.ReqNumber == key)
                 .Include(a => a.Lines)
                 .ThenInclude(b => b.Moves)
+                .ThenInclude(c => c.Location)
+                .Include(a => a.Lines)
+                .ThenInclude(b => b.Moves)
+                .ThenInclude(c => c.StockLocator)
+                .ThenInclude(d => d.StorageLocation)
                 .ToList().FirstOrDefault();
         }
 

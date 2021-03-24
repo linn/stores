@@ -7,6 +7,7 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Requisitions;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Resources.Requisitions;
 
     using Nancy;
@@ -34,7 +35,13 @@
                                                                PartNumber = "part1",
                                                                Moves = new List<ReqMove>
                                                                            {
-                                                                               new ReqMove { Sequence = 1, Quantity = 3 }
+                                                                               new ReqMove
+                                                                                   {
+                                                                                       Sequence = 1,
+                                                                                       Quantity = 3,
+                                                                                       Booked = "Y",
+                                                                                       StockLocator = new StockLocator()
+                                                                                   }
                                                                            }
                                                            },
                                                        new RequisitionLine
@@ -43,19 +50,29 @@
                                                                PartNumber = "part2",
                                                                Moves = new List<ReqMove>
                                                                            {
-                                                                               new ReqMove { Sequence = 1, Quantity = 6 },
-                                                                               new ReqMove { Sequence = 2, Quantity = 1 }
+                                                                               new ReqMove
+                                                                                   {
+                                                                                       Sequence = 1,
+                                                                                       Quantity = 6,
+                                                                                       Booked = "Y",
+                                                                                       StockLocator = new StockLocator()
+                                                                                   },
+                                                                               new ReqMove
+                                                                                   {
+                                                                                       Sequence = 2,
+                                                                                       Quantity = 1,
+                                                                                       Booked = "Y",
+                                                                                       StockLocator = new StockLocator()
+                                                                                   }
                                                                            }
                                                            }
                                                    }
                                    };
-            this.RequisitionFacadeService.GetById(this.requisition.ReqNumber).Returns(new SuccessResult<RequisitionHeader>(this.requisition));
+            this.RequisitionFacadeService.GetById(this.requisition.ReqNumber)
+                .Returns(new SuccessResult<RequisitionHeader>(this.requisition));
             this.Response = this.Browser.Get(
                 $"/logistics/requisitions/{this.requisition.ReqNumber}",
-                with =>
-                {
-                    with.Header("Accept", "application/vnd.linn.req-moves-summary+json;version=1");
-                }).Result;
+                with => { with.Header("Accept", "application/vnd.linn.req-moves-summary+json;version=1"); }).Result;
         }
 
         [Test]

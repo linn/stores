@@ -1310,7 +1310,13 @@
             r.Property(l => l.LineNumber).HasColumnName("LINE_NUMBER");
             r.Property(l => l.Sequence).HasColumnName("SEQ");
             r.Property(l => l.Quantity).HasColumnName("QTY");
+            r.Property(l => l.StockLocatorId).HasColumnName("STOCK_LOCATOR_ID");
+            r.HasOne(l => l.StockLocator).WithMany(s => s.ReqMoves).HasForeignKey(l => l.StockLocatorId);
             r.Property(l => l.PalletNumber).HasColumnName("PALLET_NUMBER");
+            r.Property(l => l.Booked).HasColumnName("BOOKED");
+            r.Property(l => l.StockPoolCode).HasColumnName("STOCK_POOL_CODE").HasMaxLength(10);
+            r.Property(l => l.LocationId).HasColumnName("LOCATION_ID");
+            r.HasOne(l => l.Location).WithMany(s => s.ReqMoves).HasForeignKey(l => l.LocationId);
         }
 
         private void BuildWandLogs(ModelBuilder builder)
