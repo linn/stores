@@ -31,7 +31,10 @@
 
         private object GetReqMoves(int reqNumber)
         {
-            throw new NotImplementedException();
+            return this.Negotiate
+                .WithModel(this.requisitionFacadeService.GetById(reqNumber))
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
 
         private object GetReq(int reqNumber)

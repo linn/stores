@@ -153,6 +153,7 @@
             builder.RegisterType<AvailableStockResourceBuilder>().As<IResourceBuilder<IEnumerable<AvailableStock>>>();
             builder.RegisterType<RequisitionProcessResultResourceBuilder>().As<IResourceBuilder<RequisitionProcessResult>>();
             builder.RegisterType<RequisitionResourceBuilder>().As<IResourceBuilder<RequisitionHeader>>();
+            builder.RegisterType<RequisitionMovesResourceBuilder>().As<IRequisitionMovesResourceBuilder>();
         }
     }
 }
