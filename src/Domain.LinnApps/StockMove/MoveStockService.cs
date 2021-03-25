@@ -112,7 +112,7 @@
                 toLocationId,
                 toPalletNumber,
                 toStockRotationDate,
-             null, // !string.IsNullOrEmpty(fromState) ? fromState : checkFromLocation.State,
+                !string.IsNullOrEmpty(fromState) ? fromState : checkFromLocation.State,
                 fromStockPool);
 
             result.Success = moveResult.Success;
