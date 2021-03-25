@@ -237,8 +237,16 @@ export const stockQuantities = new ItemType(
     '/inventory/stock-quantities'
 );
 
+export const availableStock = new ItemType(
+    'availableStock',
+    'AVAILABLE_STOCK',
+    '/inventory/available-stock'
+);
+
 export const stockLocatorPrices = new ItemType(
     'stockLocatorPrices',
     'STOCK_LOCATOR_PRICES',
     '/inventory/stock-locators/prices'
 );
+
+export const reqMoves = new ItemType('reqMoves', 'REQ_MOVES', '/logistics/requisitions');

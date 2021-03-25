@@ -1,8 +1,10 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.StockLocators
 {
     using System;
+    using System.Collections.Generic;
 
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Requisitions;
 
     public class StockLocator
     {
@@ -35,5 +37,7 @@
         public string State { get; set; }
 
         public string Category { get; set; }
+
+        public IEnumerable<ReqMove> ReqMoves { get; set; }
     }
 }

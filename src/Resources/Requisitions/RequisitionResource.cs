@@ -2,7 +2,7 @@
 {
     using Linn.Common.Resources;
 
-    public class RequisitionHeaderResource : HypermediaResource
+    public class RequisitionResource : HypermediaResource
     {
         public int ReqNumber { get; set; }
 

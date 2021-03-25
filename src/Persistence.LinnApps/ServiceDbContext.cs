@@ -9,6 +9,7 @@
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.StockMove.Models;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation;
@@ -159,6 +160,8 @@
 
         public DbSet<WandLog> WandLogs { get; set; }
 
+        public DbQuery<AvailableStock> StockAvailable { get; set; }
+
         public DbQuery<StockLocatorPrices> StockLocatorView { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -232,8 +235,11 @@
             this.QuerySalesAccounts(builder);
             this.QueryStockQuantitIesForMrView(builder);
             this.BuildRequisitionHeaders(builder);
+            this.BuildRequisitionLines(builder);
+            this.BuildReqMoves(builder);
             this.BuildWandLogs(builder);
             this.QueryStockLocatorView(builder);
+            this.QueryStockAvailable(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1283,6 +1289,34 @@
             r.HasKey(l => l.ReqNumber);
             r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
             r.Property(l => l.Document1).HasColumnName("DOCUMENT_1");
+            r.HasMany(t => t.Lines).WithOne().HasForeignKey(requisitionLine => requisitionLine.ReqNumber);
+        }
+
+        private void BuildRequisitionLines(ModelBuilder builder)
+        {
+            var r = builder.Entity<RequisitionLine>().ToTable("REQUISITION_LINES");
+            r.HasKey(l => new { l.ReqNumber, l.LineNumber });
+            r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
+            r.Property(l => l.LineNumber).HasColumnName("LINE_NUMBER");
+            r.Property(l => l.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            r.HasMany(t => t.Moves).WithOne().HasForeignKey(reqMove => new { reqMove.ReqNumber, reqMove.LineNumber });
+        }
+
+        private void BuildReqMoves(ModelBuilder builder)
+        {
+            var r = builder.Entity<ReqMove>().ToTable("REQ_MOVES");
+            r.HasKey(l => new { l.ReqNumber, l.LineNumber,  l.Sequence });
+            r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
+            r.Property(l => l.LineNumber).HasColumnName("LINE_NUMBER");
+            r.Property(l => l.Sequence).HasColumnName("SEQ");
+            r.Property(l => l.Quantity).HasColumnName("QTY");
+            r.Property(l => l.StockLocatorId).HasColumnName("STOCK_LOCATOR_ID");
+            r.HasOne(l => l.StockLocator).WithMany(s => s.ReqMoves).HasForeignKey(l => l.StockLocatorId);
+            r.Property(l => l.PalletNumber).HasColumnName("PALLET_NUMBER");
+            r.Property(l => l.Booked).HasColumnName("BOOKED");
+            r.Property(l => l.StockPoolCode).HasColumnName("STOCK_POOL_CODE").HasMaxLength(10);
+            r.Property(l => l.LocationId).HasColumnName("LOCATION_ID");
+            r.HasOne(l => l.Location).WithMany(s => s.ReqMoves).HasForeignKey(l => l.LocationId);
         }
 
         private void BuildWandLogs(ModelBuilder builder)
@@ -1325,6 +1359,20 @@
             view.Property(v => v.PartPrice).HasColumnName("PART_PRICE");
             view.Property(v => v.QuantityAllocated).HasColumnName("QTY_ALLOCATED");
             view.Property(v => v.Category).HasColumnName("CATEGORY");
+        }
+
+        private void QueryStockAvailable(ModelBuilder builder)
+        {
+            var q = builder.Query<AvailableStock>().ToView("STOCK_MOVE_STOCK_VIEW");
+            q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER");
+            q.Property(e => e.QuantityAvailable).HasColumnName("QTY_FREE");
+            q.Property(e => e.StockRotationDate).HasColumnName("STOCK_ROTATION_DATE");
+            q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
+            q.Property(e => e.LocationCode).HasColumnName("LOCATION_CODE");
+            q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE");
+            q.Property(e => e.State).HasColumnName("STATE");
+            q.Property(e => e.DisplayLocation).HasColumnName("DISPLAY_LOCATION");
         }
     }
 }

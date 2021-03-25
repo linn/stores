@@ -67,7 +67,10 @@ import exportRsns from './exportRsns';
 import doWandItem from './doWandItem';
 import unallocateConsignment from './unallocateConsignment';
 import unallocateConsignmentLine from './unallocateConsignmentLine';
+import availableStock from './availableStock';
+import doStockMove from './doStockMove';
 import historyStore from './history';
+import reqMoves from './reqMoves';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -81,6 +84,7 @@ const rootReducer = history =>
         assemblyTechnologies,
         auditLocation,
         auditLocations,
+        availableStock,
         countries,
         createAuditReqs,
         departments,
@@ -89,6 +93,7 @@ const rootReducer = history =>
         despatchLocations,
         despatchPalletQueueReport,
         despatchPickingSummaryReport,
+        doStockMove,
         doWandItem,
         employees,
         exportRsns,
@@ -108,6 +113,7 @@ const rootReducer = history =>
         partTemplates,
         pickItemsAllocation,
         productAnalysisCodes,
+        reqMoves,
         rootProducts,
         salesAccounts,
         salesOutlets,

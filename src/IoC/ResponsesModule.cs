@@ -13,8 +13,10 @@
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Requisitions.Models;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.StockMove.Models;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Facade;
@@ -151,6 +153,10 @@
             builder.RegisterType<StockLocatorPricesResourceBuilder>().As<IResourceBuilder<StockLocatorPrices>>();
             builder.RegisterType<StockLocatorPricesListResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<StockLocatorPrices>>>();
+            builder.RegisterType<AvailableStockResourceBuilder>().As<IResourceBuilder<IEnumerable<AvailableStock>>>();
+            builder.RegisterType<RequisitionProcessResultResourceBuilder>().As<IResourceBuilder<RequisitionProcessResult>>();
+            builder.RegisterType<RequisitionResourceBuilder>().As<IResourceBuilder<RequisitionHeader>>();
+            builder.RegisterType<RequisitionMovesResourceBuilder>().As<IRequisitionMovesResourceBuilder>();
         }
     }
 }

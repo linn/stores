@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
 
+    using Linn.Stores.Domain.LinnApps.Requisitions;
+
     public class StorageLocation
     {
         public int LocationId { get; set; }
@@ -18,5 +20,7 @@
         public IEnumerable<StockLocator> StockLocators { get; set; }
 
         public IEnumerable<StockLocatorLocation> StockLocatorLocations { get; set; }
+
+        public IEnumerable<ReqMove> ReqMoves { get; set; }
     }
 }

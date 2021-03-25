@@ -165,6 +165,12 @@ export const unallocateConsignmentLineActionTypes = makeProcessActionTypes(
     processTypes.unallocateConsignmentLine.actionType
 );
 
+export const availableStockActionTypes = makeActionTypes(itemTypes.availableStock.actionType);
+
+export const doStockMoveActionTypes = makeProcessActionTypes(processTypes.doStockMove.actionType);
+
 export const stockLocatorPricesActionTypes = makeActionTypes(
     itemTypes.stockLocatorPrices.actionType
 );
+
+export const reqMovesActionTypes = makeActionTypes(itemTypes.reqMoves.actionType);
