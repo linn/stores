@@ -8,6 +8,7 @@
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Requisitions;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
 
     public class MoveStockService : IMoveStockService
@@ -16,10 +17,16 @@
 
         private readonly IRepository<RequisitionHeader, int> requisitionRepository;
 
-        public MoveStockService(IStoresPack storesPack, IRepository<RequisitionHeader, int> requisitionRepository)
+        private readonly IRepository<StorageLocation, int> storageLocationRepository;
+
+        public MoveStockService(
+            IStoresPack storesPack,
+            IRepository<RequisitionHeader, int> requisitionRepository,
+            IRepository<StorageLocation, int> storageLocationRepository)
         {
             this.storesPack = storesPack;
             this.requisitionRepository = requisitionRepository;
+            this.storageLocationRepository = storageLocationRepository;
         }
 
         public RequisitionProcessResult MoveStock(
@@ -154,6 +161,14 @@
             {
                 palletNumber = int.Parse(location.Substring(1));
                 locationId = null;
+                return;
+            }
+
+            var storageLocation = this.storageLocationRepository.FindBy(l => l.LocationCode == location);
+            if (storageLocation != null)
+            {
+                locationId = storageLocation.LocationId;
+                palletNumber = null;
                 return;
             }
 

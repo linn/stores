@@ -20,7 +20,7 @@
 
         public StorageLocation FindById(int key)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.StorageLocations.Where(a => a.LocationId == key).ToList().FirstOrDefault();
         }
 
         public IQueryable<StorageLocation> FindAll()
@@ -40,7 +40,7 @@
 
         public StorageLocation FindBy(Expression<Func<StorageLocation, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.StorageLocations.Where(expression).ToList().FirstOrDefault();
         }
 
         public IQueryable<StorageLocation> FilterBy(Expression<Func<StorageLocation, bool>> expression)
