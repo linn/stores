@@ -164,6 +164,8 @@
 
         public DbQuery<StockLocatorPrices> StockLocatorView { get; set; }
 
+        public DbSet<PartStorageType> PartStorageTypes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -240,6 +242,7 @@
             this.BuildWandLogs(builder);
             this.QueryStockLocatorView(builder);
             this.QueryStockAvailable(builder);
+            this.BuildPartStorageTypes(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1373,6 +1376,19 @@
             q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE");
             q.Property(e => e.State).HasColumnName("STATE");
             q.Property(e => e.DisplayLocation).HasColumnName("DISPLAY_LOCATION");
+        }
+
+        private void BuildPartStorageTypes(ModelBuilder builder)
+        {
+            var r = builder.Entity<PartStorageType>().ToTable("PARTS_STORAGE_TYPES");
+            r.HasKey(l => l.Id);
+            r.Property(l => l.Id).HasColumnName("BRIDGE_ID");
+            r.Property(l => l.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            r.Property(l => l.StorageType).HasColumnName("STORAGE_TYPE").HasMaxLength(4);
+            r.Property(l => l.Remarks).HasColumnName("REMARKS").HasMaxLength(30);
+            r.Property(l => l.Maximum).HasColumnName("MAXIMUM");
+            r.Property(l => l.Increment).HasColumnName("INCR");
+            r.Property(l => l.Preference).HasColumnName("PREFERENCE").HasMaxLength(1);
         }
     }
 }
