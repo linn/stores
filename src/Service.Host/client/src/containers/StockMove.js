@@ -17,6 +17,8 @@ import reqMovesActions from '../actions/reqMovesActions';
 import reqMovesSelectors from '../selectors/reqMovesSelectors';
 import partStorageTypesActions from '../actions/partStorageTypesActions';
 import partStorageTypesSelectors from '../selectors/partStorageTypesSelectors';
+import storageLocationsActions from '../actions/storageLocationsActions';
+import storageLocationsSelectors from '../selectors/storageLocationsSelectors';
 
 const mapStateToProps = state => ({
     parts: partsSelectors.getSearchItems(state),
@@ -31,7 +33,9 @@ const mapStateToProps = state => ({
     reqMoves: reqMovesSelectors.getItems(state),
     reqMovesLoading: reqMovesSelectors.getLoading(state),
     partStorageTypes: partStorageTypesSelectors.getSearchItems(state),
-    partStorageTypesLoading: partStorageTypesSelectors.getSearchLoading(state)
+    partStorageTypesLoading: partStorageTypesSelectors.getSearchLoading(state),
+    storageLocations: storageLocationsSelectors.getSearchItems(state),
+    storageLocationsLoading: storageLocationsSelectors.getSearchLoading(state)
 });
 
 const mapDispatchToProps = {
@@ -44,7 +48,9 @@ const mapDispatchToProps = {
     fetchReqMoves: reqMovesActions.fetchById,
     clearMoveResult: doStockMoveActions.clearProcessData,
     fetchPartStorageTypes: partStorageTypesActions.search,
-    clearPartStorageTypes: partStorageTypesActions.clearSearch
+    clearPartStorageTypes: partStorageTypesActions.clearSearch,
+    fetchStorageLocations: storageLocationsActions.search,
+    clearStorageLocationsSearch: storageLocationsActions.clearSearch
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(StockMove));

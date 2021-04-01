@@ -37,7 +37,11 @@ function StockMove({
     partStorageTypes,
     partStorageTypesLoading,
     fetchPartStorageTypes,
-    clearPartStorageTypes
+    clearPartStorageTypes,
+    storageLocations,
+    storageLocationsLoading,
+    fetchStorageLocations,
+    clearStorageLocationsSearch
 }) {
     const [moveDetails, setMoveDetails] = useState({ userNumber });
     const [selectedRow, setSelectedRow] = useState(null);
@@ -69,6 +73,14 @@ function StockMove({
             name: item.partNumber.toString(),
             description: item.description,
             href: item.href
+        }));
+    };
+
+    const locationResults = () => {
+        return storageLocations?.map(item => ({
+            ...item,
+            name: item.locationCode,
+            href: null
         }));
     };
 
@@ -182,6 +194,10 @@ function StockMove({
         clearMoveError();
     };
 
+    const handleOnSelectLocation = loc => {
+        setMoveDetails({ ...moveDetails, toLocationId: loc.id, to: loc.locationCode });
+    };
+
     const handleFieldChange = (property, value) => {
         if (property === 'from') {
             setMoveDetails({
@@ -222,7 +238,7 @@ function StockMove({
             return [];
         }
 
-        return stock.map((s, i) => ({ id: i, ...s }));
+        return stock.map((s, i) => ({ ...s, id: i }));
     };
 
     const displayMoves = moves => {
@@ -230,7 +246,7 @@ function StockMove({
             return [];
         }
 
-        return moves.map((m, i) => ({ id: i, ...m }));
+        return moves.map((m, i) => ({ ...m, id: i }));
     };
 
     const columns = [
@@ -390,6 +406,18 @@ function StockMove({
                         propertyName="to"
                         textFieldProps={{ inputRef: toInput }}
                     />
+                    <Typeahead
+                        items={locationResults()}
+                        fetchItems={fetchStorageLocations}
+                        clearSearch={clearStorageLocationsSearch}
+                        loading={storageLocationsLoading}
+                        debounce={1000}
+                        links={false}
+                        modal
+                        searchButtonOnly
+                        onSelect={p => handleOnSelectLocation(p)}
+                        label="Search For Stock Location"
+                    />
                 </Grid>
                 <Grid item xs={3}>
                     <InputField
@@ -477,7 +505,11 @@ StockMove.propTypes = {
     partStorageTypes: PropTypes.arrayOf(PropTypes.shape({})),
     partStorageTypesLoading: PropTypes.bool,
     fetchPartStorageTypes: PropTypes.func.isRequired,
-    clearPartStorageTypes: PropTypes.func.isRequired
+    clearPartStorageTypes: PropTypes.func.isRequired,
+    storageLocations: PropTypes.arrayOf(PropTypes.shape({})),
+    storageLocationsLoading: PropTypes.bool,
+    fetchStorageLocations: PropTypes.func.isRequired,
+    clearStorageLocationsSearch: PropTypes.func.isRequired
 };
 
 StockMove.defaultProps = {
@@ -495,7 +527,9 @@ StockMove.defaultProps = {
     reqMoves: null,
     moveWorking: false,
     partStorageTypes: [],
-    partStorageTypesLoading: false
+    partStorageTypesLoading: false,
+    storageLocations: [],
+    storageLocationsLoading: false
 };
 
 export default StockMove;
