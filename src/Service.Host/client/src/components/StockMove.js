@@ -267,9 +267,10 @@ function StockMove({
     ];
 
     const partStorageColumns = [
-        { field: 'storageType', headerName: 'Type', width: 140 },
-        { field: 'maximum', headerName: 'Max', width: 120 },
-        { field: 'increment', headerName: 'Incr', width: 120 }
+        { field: 'storageType', headerName: 'Type', width: 120 },
+        { field: 'maximum', headerName: 'Max', width: 100 },
+        { field: 'increment', headerName: 'Incr', width: 100 },
+        { field: 'preference', headerName: 'Pref', width: 80 }
     ];
 
     const moveColumns = [
