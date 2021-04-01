@@ -71,6 +71,7 @@ import availableStock from './availableStock';
 import doStockMove from './doStockMove';
 import historyStore from './history';
 import reqMoves from './reqMoves';
+import partStorageTypes from './partStorageTypes';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -107,9 +108,10 @@ const rootReducer = history =>
         nominalAccounts,
         part,
         partCategories,
-        parts,
         partDataSheetValues,
         partLiveTest,
+        parts,
+        partStorageTypes,
         partTemplates,
         pickItemsAllocation,
         productAnalysisCodes,

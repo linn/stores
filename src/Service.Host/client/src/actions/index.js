@@ -174,3 +174,5 @@ export const stockLocatorPricesActionTypes = makeActionTypes(
 );
 
 export const reqMovesActionTypes = makeActionTypes(itemTypes.reqMoves.actionType);
+
+export const partStorageTypesActionTypes = makeActionTypes(itemTypes.partStorageTypes.actionType);
