@@ -104,6 +104,8 @@
                 exportReturnDetails = exportReturnDetails.Append(detail);
             }
 
+            this.UpdateFromResource(exportReturn, resource);
+
             exportReturn.ExportReturnDetails = exportReturnDetails;
 
             this.transactionManager.Commit();
@@ -116,10 +118,14 @@
             throw new NotImplementedException();
         }
 
+        protected override Expression<Func<ExportReturn, bool>> SearchExpression(string searchTerm)
+        {
+            throw new NotImplementedException();
+        }
+
         protected override void UpdateFromResource(ExportReturn entity, ExportReturnResource updateResource)
         {
             entity.CarrierCode = updateResource.CarrierCode;
-            entity.DateCreated = DateTime.Parse(updateResource.DateCreated);
             entity.Currency = updateResource.Currency;
             entity.AccountId = updateResource.AccountId;
             entity.HubId = updateResource.HubId;
@@ -168,11 +174,6 @@
             entity.Width = updateResource.Width;
             entity.Height = updateResource.Height;
             entity.Depth = updateResource.Depth;
-        }
-
-        protected override Expression<Func<ExportReturn, bool>> SearchExpression(string searchTerm)
-        {
-            throw new NotImplementedException();
         }
     }
 }

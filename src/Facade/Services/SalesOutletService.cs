@@ -19,8 +19,8 @@
         {
             return new SuccessResult<IEnumerable<SalesOutlet>>(
                 this.repository.FilterBy(
-                    s => s.Name.ToUpper().Contains(searchTerm.ToUpper())
-                         || s.AccountId.ToString().Contains(searchTerm)));
+                    s => (s.Name.ToUpper().Contains(searchTerm.ToUpper())
+                          || s.AccountId.ToString().Contains(searchTerm)) && s.DateInvalid == null));
         }
     }
 }

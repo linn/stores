@@ -18,7 +18,7 @@
             this.exportReturnService = exportReturnService;
             this.Get("/inventory/exports/rsns", parameters => this.GetRsns());
             this.Post("/inventory/exports/returns", parameters => this.CreateExportReturn());
-            this.Put("/inventory/exports/returns", parameters => this.UpdateExportReturn(parameters.id));
+            this.Put("/inventory/exports/returns/{id}", parameters => this.UpdateExportReturn(parameters.id));
             this.Get("/inventory/exports/returns/{id}", parameters => this.GetExportReturn(parameters.id));
         }
 
@@ -50,7 +50,7 @@
         {
             var resource = this.Bind<ExportReturnResource>();
 
-            var result = this.exportReturnService.Update(id, resource);
+            var result = this.exportReturnService.UpdateExportReturn(id, resource);
 
             return this.Negotiate
                 .WithModel(result)

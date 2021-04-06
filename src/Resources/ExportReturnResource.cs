@@ -2,7 +2,9 @@
 {
     using System.Collections.Generic;
 
-    public class ExportReturnResource
+    using Linn.Common.Resources;
+
+    public class ExportReturnResource : HypermediaResource
     {
         public string CarrierCode { get; set; }
 
@@ -14,7 +16,7 @@
 
         public int AccountId { get; set; }
 
-        public int HubId { get; set; }
+        public int? HubId { get; set; }
 
         public int? OutletNumber { get; set; }
 
@@ -30,9 +32,9 @@
 
         public int? NumCartons { get; set; }
 
-        public int? GrossWeightKg { get; set; }
+        public double? GrossWeightKg { get; set; }
 
-        public int? GrossDimsM3 { get; set; }
+        public double? GrossDimsM3 { get; set; }
 
         public string MadeIntercompanyInvoices { get; set; }
 

@@ -1,8 +1,10 @@
 ﻿namespace Linn.Stores.Facade.ResourceBuilders
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using Linn.Common.Facade;
+    using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
 
@@ -39,18 +41,30 @@
                            ReturnForCredit = exportReturn.ReturnForCredit,
                            ExportCustomsEntryCode = exportReturn.ExportCustomsEntryCode,
                            ExportCustomsCodeDate = exportReturn.ExportCustomsCodeDate?.ToString("o"),
-                           RaisedBy = exportReturn.RaisedBy != null ? this.employeeResourceBuilder.Build(exportReturn.RaisedBy) : null,
-                           SalesOutlet = exportReturn.SalesOutlet != null ? this.salesOutletResourceBuilder.Build(exportReturn.SalesOutlet) : null,
+                           RaisedBy =
+                               exportReturn.RaisedBy != null
+                                   ? this.employeeResourceBuilder.Build(exportReturn.RaisedBy)
+                                   : null,
+                           SalesOutlet =
+                               exportReturn.SalesOutlet != null
+                                   ? this.salesOutletResourceBuilder.Build(exportReturn.SalesOutlet)
+                                   : null,
                            ExportReturnDetails = exportReturn.ExportReturnDetails?.Select(
-                               e => this.exportReturnDetailResourceBuilder.Build(e))
+                               e => this.exportReturnDetailResourceBuilder.Build(e)),
+                           Links = this.BuildLinks(exportReturn).ToArray()
                        };
         }
 
         public string GetLocation(ExportReturn model)
         {
-            throw new System.NotImplementedException();
+            return $"/inventory/exports/returns/{model.ReturnId}";
         }
 
         object IResourceBuilder<ExportReturn>.Build(ExportReturn exportReturn) => this.Build(exportReturn);
+
+        private IEnumerable<LinkResource> BuildLinks(ExportReturn exportReturn)
+        {
+            yield return new LinkResource { Rel = "self", Href = this.GetLocation(exportReturn) };
+        }
     }
 }

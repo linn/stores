@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { initialiseOnMount } from '@linn-it/linn-form-components-library';
 import exportReturnActions from '../actions/exportReturnActions';
 import exportReturnSelectors from '../selectors/exportReturnSelectors';
-import ExportReturn from '../components/ExportReturn';
+import ExportReturn from '../components/exportReturns/ExportReturn';
 
 const mapStateToProps = (state, { match }) => ({
     exportReturnId: match.params.id,
@@ -15,7 +15,8 @@ const initialise = ({ exportReturnId }) => dispatch => {
 };
 
 const mapDispatchToProps = {
-    initialise
+    initialise,
+    updateExportReturn: exportReturnActions.update
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(ExportReturn));

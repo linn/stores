@@ -18,7 +18,8 @@
 
         public ExportReturnDetail FindById(ExportReturnDetailKey key)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.ExportReturnDetails
+                .Where(e => e.ReturnId == key.ReturnId && e.RsnNumber == key.RsnNumber).ToList().FirstOrDefault();
         }
 
         public IQueryable<ExportReturnDetail> FindAll()

@@ -18,8 +18,8 @@ import {
     CheckboxWithLabel
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
-import Page from '../containers/Page';
-import reducer from '../reducers/componentReducers/exportRsnReducer';
+import Page from '../../containers/Page';
+import reducer from '../../reducers/componentReducers/exportRsnReducer';
 
 const useStyles = makeStyles(theme => ({
     label: {

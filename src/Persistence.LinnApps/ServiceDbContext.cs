@@ -836,6 +836,7 @@
             table.Property(s => s.SalesCustomerId).HasColumnName("SALES_CUSTOMER_ID");
             table.Property(s => s.CountryCode).HasColumnName("COUNTRY_CODE").HasMaxLength(2);
             table.Property(s => s.CountryName).HasColumnName("COUNTRY_NAME").HasMaxLength(50);
+            table.Property(s => s.DateInvalid).HasColumnName("DATE_INVALID");
         }
 
         private void BuildParcels(ModelBuilder builder)

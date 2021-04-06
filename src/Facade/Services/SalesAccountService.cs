@@ -18,7 +18,8 @@
         public IResult<IEnumerable<SalesAccount>> SearchSalesAccounts(string searchTerm)
         {
             var result = this.repository.FilterBy(
-                s => s.AccountName.Contains(searchTerm.ToUpper()) || s.AccountId.ToString().Contains(searchTerm));
+                s => (s.AccountName.Contains(searchTerm.ToUpper()) || s.AccountId.ToString().Contains(searchTerm))
+                     && s.DateClosed == null);
 
             return new SuccessResult<IEnumerable<SalesAccount>>(result);
         }

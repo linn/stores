@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import ExportRsns from '../components/ExportRsns';
+import ExportRsns from '../components/exportReturns/ExportRsns';
 import salesOutletsActions from '../actions/salesOutletsActions';
 import salesOutletsSelectors from '../selectors/salesOutletsSelectors';
 import salesAccountsActions from '../actions/salesAccountsActions';
