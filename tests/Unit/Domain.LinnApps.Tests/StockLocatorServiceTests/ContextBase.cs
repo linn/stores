@@ -56,7 +56,8 @@
                 this.StockLocatorBatchesView,
                 this.AuthService,
                 this.LocationsViewService,
-                this.StockLocatorView);
+                this.StockLocatorView,
+                this.PartRepository);
         }
     }
 }

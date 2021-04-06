@@ -11,7 +11,7 @@ export default ({ dispatch }) => next => action => {
             dispatch(
                 stockLocatorsActions.searchWithOptions(
                     null,
-                    `&partNumber=${action.payload.data.partNumber}`
+                    `&partId=${action.payload.data.partId}`
                 )
             );
             break;

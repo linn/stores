@@ -196,7 +196,7 @@ function DeptStockUtility({
                                 saveRow={item => {
                                     const body = item;
                                     if (!body.partNumber) {
-                                        body.partNumber = stockLocators.first(
+                                        body.partNumber = stockLocators.find(
                                             l => l.partNumber
                                         ).partNumber;
                                     }
@@ -208,7 +208,7 @@ function DeptStockUtility({
                                 createRow={item => {
                                     const body = item;
                                     if (!body.partNumber) {
-                                        body.partNumber = stockLocators.first(
+                                        body.partNumber = stockLocators.find(
                                             l => l.partNumber
                                         ).partNumber;
                                     }
