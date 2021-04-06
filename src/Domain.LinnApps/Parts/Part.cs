@@ -153,6 +153,6 @@
 
         public IEnumerable<StockLocatorLocation> Locations { get; set; }
 
-        public SalesArticle SalesPart { get; set; }
+        public SalesArticle SalesArticle { get; set; }
     }
 }

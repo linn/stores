@@ -378,7 +378,7 @@
             e.HasOne(p => p.AssemblyTechnology).WithMany(s => s.Parts).HasForeignKey("ASSEMBLY_TECHNOLOGY");
             e.HasOne(p => p.DecrementRule).WithMany(s => s.Parts).HasForeignKey("DECREMENT_RULE");
             e.HasOne(p => p.MechPartSource).WithOne(m => m.Part);
-            e.HasOne(p => p.SalesPart).WithOne(a => a.Part).HasForeignKey<Part>(x => x.PartNumber);
+            e.HasOne(p => p.SalesArticle).WithOne(a => a.Part).HasForeignKey<Part>(x => x.PartNumber);
         }
 
         private void BuildPartDataSheets(ModelBuilder builder)

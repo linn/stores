@@ -9,7 +9,7 @@
 
     using NUnit.Framework;
 
-    public class WhenUpdatingProductAnalysisCodeAndPartHasASalesPart : ContextBase
+    public class WhenUpdatingProductAnalysisCodeAndPartHasASalesArticle : ContextBase
     {
         private Part from;
 
@@ -27,7 +27,7 @@
                                                           {
                                                               ProductCode = "OLD"
                                                           },
-                                SalesPart = new SalesArticle
+                                SalesArticle = new SalesArticle
                                                 {
                                                     ArticleNumber = "BOX 066 "
                                                 }
@@ -47,7 +47,7 @@
         public void ShouldThrowException()
         {
             var ex = Assert.Throws<UpdatePartException>(() => this.Sut.UpdatePart(this.from, this.to, this.privileges, null));
-            ex.Message.Should().Be("Cannot change product analysis code if part has a sales part");
+            ex.Message.Should().Be("Cannot change product analysis code if part has a sales article.");
         }
     }
 }

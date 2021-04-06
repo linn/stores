@@ -180,6 +180,6 @@
 
         public IEnumerable<MechPartManufacturerAltResource> Manufacturers { get; set; }
 
-        public string SalesPartNumber { get; set; }
+        public string SalesArticleNumber { get; set; }
     }
 }

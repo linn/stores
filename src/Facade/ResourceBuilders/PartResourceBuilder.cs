@@ -105,7 +105,7 @@
                                             Preference = m.Preference
                                         }).OrderBy(m => m.Preference),
                            Links = this.BuildLinks(part).ToArray(),
-                           SalesPartNumber = part.SalesPart?.ArticleNumber
+                           SalesArticleNumber = part.SalesArticle?.ArticleNumber
                        };
         }
 

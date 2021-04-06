@@ -40,7 +40,7 @@
             
             if (result != null)
             {
-                result.SalesPart =
+                result.SalesArticle =
                     this.serviceDbContext.SalesArticles.Where(a => a.ArticleNumber == result.PartNumber)
                         .ToList().FirstOrDefault();
             }
