@@ -52,12 +52,14 @@
             this.partRepository = partRepository;
         }
 
-        public void UpdateStockLocator(StockLocator @from, StockLocator to, IEnumerable<string> privileges)
+        public void UpdateStockLocator(StockLocator from, StockLocator to, IEnumerable<string> privileges)
         {
             if (!this.authService.HasPermissionFor(AuthorisedAction.UpdateStockLocator, privileges))
             {
                 throw new StockLocatorException("You are not authorised to update.");
             }
+
+            from.Part = this.partRepository.FindBy(p => p.PartNumber == from.PartNumber);
 
             from.BatchRef = to.BatchRef;
             from.StockRotationDate = to.StockRotationDate;
@@ -122,6 +124,9 @@
             }
 
             this.stockLocatorRepository.Remove(toDelete);
+
+            toDelete.Part = this.partRepository.FindBy(p => p.PartNumber == toDelete.PartNumber);
+
             if (!this.stockLocatorRepository.FilterBy(l => l.PalletNumber == toDelete.PalletNumber && l.Quantity > 0)
                     .Any())
             {
