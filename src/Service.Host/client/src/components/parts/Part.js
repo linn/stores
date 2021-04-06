@@ -337,6 +337,7 @@ function Part({
                                     }
                                     safetyDataDirectory={state.part.safetyDataDirectory}
                                     rawOrFinished={state.part.rawOrFinished}
+                                    salesPartNumber={state.part.salesPartNumber}
                                     editStatus={editStatus}
                                 />
                             )}
