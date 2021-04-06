@@ -164,6 +164,8 @@
 
         public DbQuery<StockLocatorPrices> StockLocatorView { get; set; }
 
+        public DbSet<SalesArticle> SalesArticles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -240,6 +242,7 @@
             this.BuildWandLogs(builder);
             this.QueryStockLocatorView(builder);
             this.QueryStockAvailable(builder);
+            this.BuildSalesArticles(builder);
             base.OnModelCreating(builder);
         }
 
@@ -375,6 +378,7 @@
             e.HasOne(p => p.AssemblyTechnology).WithMany(s => s.Parts).HasForeignKey("ASSEMBLY_TECHNOLOGY");
             e.HasOne(p => p.DecrementRule).WithMany(s => s.Parts).HasForeignKey("DECREMENT_RULE");
             e.HasOne(p => p.MechPartSource).WithOne(m => m.Part);
+            e.HasOne(p => p.SalesArticle).WithOne(a => a.Part).HasForeignKey<Part>(x => x.PartNumber);
         }
 
         private void BuildPartDataSheets(ModelBuilder builder)
@@ -1373,6 +1377,13 @@
             q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE");
             q.Property(e => e.State).HasColumnName("STATE");
             q.Property(e => e.DisplayLocation).HasColumnName("DISPLAY_LOCATION");
+        }
+
+        private void BuildSalesArticles(ModelBuilder builder)
+        {
+            var e = builder.Entity<SalesArticle>().ToTable("SALES_ARTICLES");
+            e.HasKey(a => a.ArticleNumber);
+            e.Property(a => a.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
         }
     }
 }

@@ -104,7 +104,8 @@
                                             ManufacturerCode = m.ManufacturerCode,
                                             Preference = m.Preference
                                         }).OrderBy(m => m.Preference),
-                           Links = this.BuildLinks(part).ToArray()
+                           Links = this.BuildLinks(part).ToArray(),
+                           SalesArticleNumber = part.SalesArticle?.ArticleNumber
                        };
         }
 
