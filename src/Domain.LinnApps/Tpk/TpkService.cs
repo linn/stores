@@ -104,46 +104,47 @@
             //this.consignmentRepository.FindBy(c => c.ConsignmentId == from.ConsignmentId);
             return new TpkResult 
                        {
-                                         Success = true,
-                                         Message = "TPK Successful",
-                                         Transferred = transferredWithNotes,
-                                         Report = new WhatToWandReport
-                                                      {
-                                                          Outlet = this.salesOutletQueryRepository.FindBy(o => o.AccountId == consignment.SalesAccountId),
-                                                          Consignment = consignment,
-                                                          TotalNettValueOfConsignment = 100.0m,
-                                                          Type = "*START*",
-                                                          Lines = new List<WhatToWandLine>
-                                                                      {
-                                                                          new WhatToWandLine
-                                                                              {
-                                                                                  OrderNumber = 603136,
-                                                                                  OrderLine = 1,
-                                                                                  ArticleNumber = "LINGO 4",
-                                                                                  InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
-                                                                                  Manual = null,
-                                                                                  MainsLead = "CONN 014/1"
-                                                                              },
-                                                                          new WhatToWandLine
-                                                                              {
-                                                                                  OrderNumber = 603136,
-                                                                                  OrderLine = 2,
-                                                                                  ArticleNumber = "LINGO 4",
-                                                                                  InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
-                                                                                  Manual = null,
-                                                                                  MainsLead = "CONN 014/1"
-                                                                              },
-                                                                          new WhatToWandLine
-                                                                              {
-                                                                                  OrderNumber = 603136,
-                                                                                  OrderLine = 3,
-                                                                                  ArticleNumber = "LINGO 4",
-                                                                                  InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
-                                                                                  Manual = null,
-                                                                                  MainsLead = "CONN 014/1"
-                                                                              },
-                                                                      }
-                                                      },
+                           Success = true,
+                           Message = "TPK Successful",
+                           Transferred = transferredWithNotes,
+                           Report = new WhatToWandReport
+                                        {
+                                            Outlet = this.salesOutletQueryRepository
+                                                .FindBy(o => o.AccountId == consignment.SalesAccountId),
+                                            Consignment = consignment,
+                                            TotalNettValueOfConsignment = 100.0m,
+                                            Type = "*START*",
+                                            Lines = new List<WhatToWandLine>
+                                                        {
+                                                            new WhatToWandLine
+                                                                {
+                                                                    OrderNumber = 603136,
+                                                                    OrderLine = 1,
+                                                                    ArticleNumber = "LINGO 4",
+                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
+                                                                    Manual = null,
+                                                                    MainsLead = "CONN 014/1"
+                                                                },
+                                                            new WhatToWandLine
+                                                                {
+                                                                    OrderNumber = 603136,
+                                                                    OrderLine = 2,
+                                                                    ArticleNumber = "LINGO 4",
+                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
+                                                                    Manual = null,
+                                                                    MainsLead = "CONN 014/1"
+                                                                },
+                                                            new WhatToWandLine
+                                                                {
+                                                                    OrderNumber = 603136,
+                                                                    OrderLine = 3,
+                                                                    ArticleNumber = "LINGO 4",
+                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
+                                                                    Manual = null,
+                                                                    MainsLead = "CONN 014/1"
+                                                                },
+                                                        }
+                                            },
                                      };
         }
     }

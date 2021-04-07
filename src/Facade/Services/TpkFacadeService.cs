@@ -33,25 +33,26 @@
                                  {
                                      DateTimeTpkViewQueried = tpkRequestResource.DateTimeTpkViewQueried,
                                      StockToTransfer = tpkRequestResource.StockToTransfer
-                                         .Select(s => new TransferableStock
-                                                          {
-                                                              FromLocation = s.FromLocation,
-                                                              ConsignmentId = s.ConsignmentId,
-                                                              Addressee = s.Addressee,
-                                                              ArticleNumber = s.ArticleNumber,
-                                                              DespatchLocationCode = s.DespatchLocationCode,
-                                                              InvoiceDescription = s.InvoiceDescription,
-                                                              LocationCode = s.LocationCode,
-                                                              LocationId = s.LocationId,
-                                                              OrderLine = s.OrderLine,
-                                                              OrderNumber = s.OrderNumber,
-                                                              PalletNumber = s.PalletNumber,
-                                                              Quantity = s.Quantity,
-                                                              ReqLine = s.ReqLine,
-                                                              ReqNumber = s.ReqNumber,
-                                                              StoragePlaceDescription = s.StoragePlaceDescription,
-                                                              VaxPallet = s.VaxPallet
-                                                          })
+                                         .Select(s => 
+                                             new TransferableStock
+                                                 {
+                                                     FromLocation = s.FromLocation,
+                                                     ConsignmentId = s.ConsignmentId,
+                                                     Addressee = s.Addressee,
+                                                     ArticleNumber = s.ArticleNumber,
+                                                     DespatchLocationCode = s.DespatchLocationCode,
+                                                     InvoiceDescription = s.InvoiceDescription,
+                                                     LocationCode = s.LocationCode,
+                                                     LocationId = s.LocationId,
+                                                     OrderLine = s.OrderLine,
+                                                     OrderNumber = s.OrderNumber,
+                                                     PalletNumber = s.PalletNumber,
+                                                     Quantity = s.Quantity,
+                                                     ReqLine = s.ReqLine,
+                                                     ReqNumber = s.ReqNumber,
+                                                     StoragePlaceDescription = s.StoragePlaceDescription,
+                                                     VaxPallet = s.VaxPallet
+                                                 })
                                  };
             try
             {
