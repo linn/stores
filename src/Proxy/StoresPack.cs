@@ -129,22 +129,26 @@
             using (var connection = this.databaseService.GetConnection())
             {
                 connection.Open();
-                var cmd = new OracleCommand("stores_oo.STORES_ERR_MESSAGE", connection) //  TODO - Move function to stores_pack
-                              {
-                                  CommandType = CommandType.StoredProcedure
-                              };
+                var cmd =
+                    new OracleCommand(
+                        "stores_oo.STORES_ERR_MESSAGE",
+                        connection) //  TODO - Move function to stores_pack
+                        {
+                            CommandType = CommandType.StoredProcedure
+                        };
 
                 var result = new OracleParameter("G_ERR", OracleDbType.Int32)
-                               {
-                                   Direction = ParameterDirection.ReturnValue,
-                                   Size = 50
-                               };
+                                 {
+                                     Direction = ParameterDirection.ReturnValue, Size = 50
+                                 };
                 cmd.Parameters.Add(result);
 
                 cmd.ExecuteNonQuery();
                 connection.Close();
                 return result.Value.ToString();
             }
+        }
+
         public RequisitionProcessResult CreateMoveReq(int userNumber)
         {
             var connection = new OracleConnection(ConnectionStrings.ManagedConnectionString());
