@@ -173,7 +173,7 @@ function DeptStockUtility({
             />
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <Title text={`Departmental Pallets Utility - ${options.partNumber}`} />
+                    <Title text="Departmental Pallets Utility" />
                 </Grid>
                 {itemError && (
                     <Grid item xs={12}>
@@ -196,7 +196,7 @@ function DeptStockUtility({
                                 saveRow={item => {
                                     const body = item;
                                     if (!body.partNumber) {
-                                        body.partNumber = stockLocators.first(
+                                        body.partNumber = stockLocators.find(
                                             l => l.partNumber
                                         ).partNumber;
                                     }
@@ -208,7 +208,7 @@ function DeptStockUtility({
                                 createRow={item => {
                                     const body = item;
                                     if (!body.partNumber) {
-                                        body.partNumber = stockLocators.first(
+                                        body.partNumber = stockLocators.find(
                                             l => l.partNumber
                                         ).partNumber;
                                     }

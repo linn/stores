@@ -6,7 +6,7 @@
     using Linn.Common.Facade;
     using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps;
-    using Linn.Stores.Resources;
+    using Linn.Stores.Resources.StockLocators;
 
     public class StockPoolResourceBuilder : IResourceBuilder<StockPool>
     {

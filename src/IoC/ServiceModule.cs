@@ -16,6 +16,7 @@
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.Tpk;
+    using Linn.Stores.Domain.LinnApps.StockMove;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Facade;
@@ -25,6 +26,8 @@
     using Linn.Stores.Resources.Allocation;
     using Linn.Stores.Resources.Parts;
     using Linn.Stores.Resources.RequestResources;
+    using Linn.Stores.Resources.Requisitions;
+    using Linn.Stores.Resources.StockLocators;
 
     public class ServiceModule : Module
     {
@@ -45,6 +48,7 @@
             builder.RegisterType<WandService>().As<IWandService>();
             builder.RegisterType<RequisitionService>().As<IRequisitionService>();
             builder.RegisterType<TpkService>().As<ITpkService>();
+            builder.RegisterType<MoveStockService>().As<IMoveStockService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -108,6 +112,11 @@
             builder.RegisterType<StockQuantitiesService>().As<IStockQuantitiesService>();
             builder.RegisterType<RequisitionActionsFacadeService>().As<IRequisitionActionsFacadeService>();
             builder.RegisterType<TpkFacadeService>().As<ITpkFacadeService>();
+            builder.RegisterType<AvailableStockFacadeService>().As<IAvailableStockFacadeService>();
+            builder.RegisterType<MoveStockFacadeService>().As<IMoveStockFacadeService>();
+            builder.RegisterType<RequisitionFacadeService>()
+                .As<IFacadeService<RequisitionHeader, int, RequisitionResource, RequisitionResource>>();
+            builder.RegisterType<StockLocatorPricesService>().As<IStockLocatorPricesService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
@@ -123,6 +132,7 @@
             builder.RegisterType<TpkPack>().As<ITpkPack>();
             builder.RegisterType<BundleLabelPack>().As<IBundleLabelPack>();
             builder.RegisterType<WhatToWandDataProxy>().As<IWhatToWandService>();
+            builder.RegisterType<StockLocatorLocationsViewService>().As<IStockLocatorLocationsViewService>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

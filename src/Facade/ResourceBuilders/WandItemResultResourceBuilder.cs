@@ -10,13 +10,16 @@
     {
         public WandItemResultResource Build(WandResult wandResult)
         {
+            var wandLogResultResourceBuilder = new WandLogResultResourceBuilder();
+
             return new WandItemResultResource
                        {
                            Message = wandResult.Message,
                            Success = wandResult.Success,
                            ConsignmentId = wandResult.ConsignmentId,
-                           WandString = wandResult.WandString
-                       };
+                           WandString = wandResult.WandString,
+                           WandLog = wandLogResultResourceBuilder.Build(wandResult.WandLog)
+            };
         }
 
         public string GetLocation(WandResult wandResult)

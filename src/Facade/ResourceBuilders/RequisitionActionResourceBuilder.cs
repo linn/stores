@@ -14,7 +14,7 @@
             {
                 Message = requisitionActionResult.Message,
                 Success = requisitionActionResult.Success,
-                RequisitionHeader = new RequisitionHeaderResource
+                Requisition = new RequisitionResource
                                         {
                                             ReqNumber = requisitionActionResult.RequisitionHeader.ReqNumber,
                                             Document1 = requisitionActionResult.RequisitionHeader.Document1

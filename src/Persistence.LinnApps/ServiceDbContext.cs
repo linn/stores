@@ -10,6 +10,8 @@
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.Tpk;
+    using Linn.Stores.Domain.LinnApps.StockMove.Models;
+    using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation;
 
@@ -160,6 +162,13 @@
         public DbQuery<TransferableStock> TransferableStock { get; set; }
 
         public DbQuery<Consignment> Consignments { get; set; }
+        public DbSet<WandLog> WandLogs { get; set; }
+
+        public DbQuery<AvailableStock> StockAvailable { get; set; }
+
+        public DbQuery<StockLocatorPrices> StockLocatorView { get; set; }
+
+        public DbSet<SalesArticle> SalesArticles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -234,6 +243,12 @@
             this.BuildRequisitionHeaders(builder);
             this.QueryTpkView(builder);
             this.QueryConsignments(builder);
+            this.BuildRequisitionLines(builder);
+            this.BuildReqMoves(builder);
+            this.BuildWandLogs(builder);
+            this.QueryStockLocatorView(builder);
+            this.QueryStockAvailable(builder);
+            this.BuildSalesArticles(builder);
             base.OnModelCreating(builder);
         }
 
@@ -370,6 +385,7 @@
             e.HasOne(p => p.AssemblyTechnology).WithMany(s => s.Parts).HasForeignKey("ASSEMBLY_TECHNOLOGY");
             e.HasOne(p => p.DecrementRule).WithMany(s => s.Parts).HasForeignKey("DECREMENT_RULE");
             e.HasOne(p => p.MechPartSource).WithOne(m => m.Part);
+            e.HasOne(p => p.SalesArticle).WithOne(a => a.Part).HasForeignKey<Part>(x => x.PartNumber);
         }
 
         private void BuildPartDataSheets(ModelBuilder builder)
@@ -1212,6 +1228,7 @@
             q.Property(v => v.Addressee).HasColumnName("ADDRESSEE");
             q.Property(v => v.IsDone).HasColumnName("DONE");
             q.Property(v => v.CountryCode).HasColumnName("COUNTRY");
+            q.Property(v => v.Address).HasColumnName("ADDRESS");
         }
 
         private void QueryWandItems(ModelBuilder builder)
@@ -1230,6 +1247,8 @@
             q.Property(v => v.CountryCode).HasColumnName("COUNTRY");
             q.Property(v => v.BoxesPerProduct).HasColumnName("BOXES_PER_PRODUCT");
             q.Property(v => v.AllWanded).HasColumnName("ALL_WANDED");
+            q.Property(v => v.BoxesWanded).HasColumnName("BOXES_WANDED");
+            q.Property(v => v.TypeOfSerialNumber).HasColumnName("TYPE_OF_SERIAL_NUMBER");
         }
 
         private void QueryRsns(ModelBuilder builder)
@@ -1281,6 +1300,97 @@
             r.HasKey(l => l.ReqNumber);
             r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
             r.Property(l => l.Document1).HasColumnName("DOCUMENT_1");
+            r.HasMany(t => t.Lines).WithOne().HasForeignKey(requisitionLine => requisitionLine.ReqNumber);
+        }
+
+        private void BuildRequisitionLines(ModelBuilder builder)
+        {
+            var r = builder.Entity<RequisitionLine>().ToTable("REQUISITION_LINES");
+            r.HasKey(l => new { l.ReqNumber, l.LineNumber });
+            r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
+            r.Property(l => l.LineNumber).HasColumnName("LINE_NUMBER");
+            r.Property(l => l.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            r.HasMany(t => t.Moves).WithOne().HasForeignKey(reqMove => new { reqMove.ReqNumber, reqMove.LineNumber });
+        }
+
+        private void BuildReqMoves(ModelBuilder builder)
+        {
+            var r = builder.Entity<ReqMove>().ToTable("REQ_MOVES");
+            r.HasKey(l => new { l.ReqNumber, l.LineNumber,  l.Sequence });
+            r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
+            r.Property(l => l.LineNumber).HasColumnName("LINE_NUMBER");
+            r.Property(l => l.Sequence).HasColumnName("SEQ");
+            r.Property(l => l.Quantity).HasColumnName("QTY");
+            r.Property(l => l.StockLocatorId).HasColumnName("STOCK_LOCATOR_ID");
+            r.HasOne(l => l.StockLocator).WithMany(s => s.ReqMoves).HasForeignKey(l => l.StockLocatorId);
+            r.Property(l => l.PalletNumber).HasColumnName("PALLET_NUMBER");
+            r.Property(l => l.Booked).HasColumnName("BOOKED");
+            r.Property(l => l.StockPoolCode).HasColumnName("STOCK_POOL_CODE").HasMaxLength(10);
+            r.Property(l => l.LocationId).HasColumnName("LOCATION_ID");
+            r.HasOne(l => l.Location).WithMany(s => s.ReqMoves).HasForeignKey(l => l.LocationId);
+        }
+
+        private void BuildWandLogs(ModelBuilder builder)
+        {
+            var table = builder.Entity<WandLog>().ToTable("WANDLOG");
+            table.HasKey(w => w.Id);
+            table.Property(w => w.Id).HasColumnName("WANDLOG_ID");
+            table.Property(w => w.TransType).HasColumnName("TRANS_TYPE").HasMaxLength(2);
+            table.Property(w => w.DateWanded).HasColumnName("DATE_WANDED");
+            table.Property(w => w.EmployeeNumber).HasColumnName("EMPLOYEE_NUMBER");
+            table.Property(w => w.WandString).HasColumnName("WAND_STRING").HasMaxLength(20);
+            table.Property(w => w.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
+            table.Property(w => w.QtyWanded).HasColumnName("QTY_WANDED");
+            table.Property(w => w.SeriaNumber1).HasColumnName("SERIAL_NUMBER_1");
+            table.Property(w => w.SeriaNumber2).HasColumnName("SERIAL_NUMBER_2");
+            table.Property(w => w.OrderNumber).HasColumnName("ORDER_NUMBER");
+            table.Property(w => w.OrderLine).HasColumnName("ORDER_LINE");
+            table.Property(w => w.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            table.Property(w => w.ItemNo).HasColumnName("ITEM_NO");
+            table.Property(w => w.ContainerNo).HasColumnName("CONTAINER_NO");
+        }
+
+        private void QueryStockLocatorView(ModelBuilder builder)
+        {
+            var view = builder.Query<StockLocatorPrices>().ToView("STOCK_LOCATOR_VIEW");
+            view.Property(v => v.StockLocatorId).HasColumnName("STOCK_LOCATOR_ID");
+            view.Property(v => v.BatchDate).HasColumnName("STOCK_ROTATION_DATE");
+            view.Property(v => v.QuantityAtLocation).HasColumnName("QTY");
+            view.Property(v => v.BatchRef).HasColumnName("BATCH_REF");
+            view.Property(v => v.BudgetId).HasColumnName("BUDGET_ID");
+            view.Property(v => v.LabourPrice).HasColumnName("LABOUR_PRICE");
+            view.Property(v => v.LocationCode).HasColumnName("LOCATION_CODE");
+            view.Property(v => v.MaterialPrice).HasColumnName("MATERIAL_PRICE");
+            view.Property(v => v.OverheadPrice).HasColumnName("OVERHEAD_PRICE");
+            view.Property(v => v.Pallet).HasColumnName("PALLET_NUMBER");
+            view.Property(v => v.PartNumber).HasColumnName("PART_NUMBER");
+            view.Property(v => v.Remarks).HasColumnName("REMARKS");
+            view.Property(v => v.StockPool).HasColumnName("STOCK_POOL_CODE");
+            view.Property(v => v.State).HasColumnName("STATE");
+            view.Property(v => v.PartPrice).HasColumnName("PART_PRICE");
+            view.Property(v => v.QuantityAllocated).HasColumnName("QTY_ALLOCATED");
+            view.Property(v => v.Category).HasColumnName("CATEGORY");
+        }
+
+        private void QueryStockAvailable(ModelBuilder builder)
+        {
+            var q = builder.Query<AvailableStock>().ToView("STOCK_MOVE_STOCK_VIEW");
+            q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER");
+            q.Property(e => e.QuantityAvailable).HasColumnName("QTY_FREE");
+            q.Property(e => e.StockRotationDate).HasColumnName("STOCK_ROTATION_DATE");
+            q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
+            q.Property(e => e.LocationCode).HasColumnName("LOCATION_CODE");
+            q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE");
+            q.Property(e => e.State).HasColumnName("STATE");
+            q.Property(e => e.DisplayLocation).HasColumnName("DISPLAY_LOCATION");
+        }
+
+        private void BuildSalesArticles(ModelBuilder builder)
+        {
+            var e = builder.Entity<SalesArticle>().ToTable("SALES_ARTICLES");
+            e.HasKey(a => a.ArticleNumber);
+            e.Property(a => a.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
         }
 
         private void QueryTpkView(ModelBuilder builder)

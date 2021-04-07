@@ -44,7 +44,8 @@ function GeneralTab({
     editStatus,
     safetyCertificateExpirationDate,
     safetyDataDirectory,
-    rawOrFinished
+    rawOrFinished,
+    salesArticleNumber
 }) {
     const nominalAccountsTable = {
         totalItemCount: nominalAccountsSearchResults.length,
@@ -177,6 +178,7 @@ function GeneralTab({
                     loading={productAnalysisCodesSearchLoading}
                     fetchItems={searchProductAnalysisCodes}
                     links={false}
+                    disabled={!!salesArticleNumber}
                     clearSearch={clearProductAnalysisCodesSearch}
                     placeholder="Search Codes"
                 />
@@ -355,7 +357,8 @@ GeneralTab.propTypes = {
     department: PropTypes.string,
     departmentDescription: PropTypes.string,
     rawOrFinished: PropTypes.string,
-    editStatus: PropTypes.string
+    editStatus: PropTypes.string,
+    salesArticleNumber: PropTypes.string
 };
 
 GeneralTab.defaultProps = {
@@ -389,7 +392,8 @@ GeneralTab.defaultProps = {
     department: null,
     departmentDescription: null,
     rawOrFinished: null,
-    editStatus: null
+    editStatus: null,
+    salesArticleNumber: null
 };
 
 export default GeneralTab;

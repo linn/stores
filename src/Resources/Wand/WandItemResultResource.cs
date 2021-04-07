@@ -9,5 +9,7 @@
         public int ConsignmentId { get; set; }
 
         public string WandString { get; set; }
+
+        public WandLogResource WandLog { get; set; }
     }
 }

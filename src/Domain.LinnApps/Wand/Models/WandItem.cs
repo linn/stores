@@ -27,5 +27,9 @@
         public string AllWanded { get; set; } 
 
         public int BoxesPerProduct { get; set; }
+
+        public string BoxesWanded { get; set; }
+
+        public string TypeOfSerialNumber { get; set; }
     }
 }

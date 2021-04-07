@@ -242,3 +242,16 @@ export const transferableStock = new ItemType(
     'TRANSFERABLE_STOCK',
     '/logistics/tpk/items'
 );
+export const availableStock = new ItemType(
+    'availableStock',
+    'AVAILABLE_STOCK',
+    '/inventory/available-stock'
+);
+
+export const stockLocatorPrices = new ItemType(
+    'stockLocatorPrices',
+    'STOCK_LOCATOR_PRICES',
+    '/inventory/stock-locators/prices'
+);
+
+export const reqMoves = new ItemType('reqMoves', 'REQ_MOVES', '/logistics/requisitions');

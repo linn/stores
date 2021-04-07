@@ -50,7 +50,9 @@
             }
 
             var stockLocators = this.stockLocatorRepository
-                .FilterBy(s => s.Quantity > 0 && storagePlaces.Any(sp => sp.LocationId == s.LocationId)).Select(
+                .FilterBy(
+                    s => s.Quantity > 0 && storagePlaces.Any(
+                             sp => sp.LocationId == s.LocationId && sp.PalletNumber == s.PalletNumber)).Select(
                     sl => new StockLocator
                               {
                                   Id = sl.Id,
