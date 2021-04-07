@@ -1,5 +1,6 @@
 export default function reducer(state, action) {
     switch (action.type) {
+        // TODO refactor to SetExportReturn and updateExportReturn maybe?
         case 'setExportReturn':
             if (action.payload?.propertyName) {
                 return {
@@ -13,18 +14,20 @@ export default function reducer(state, action) {
             }
             return {
                 ...state,
-                exportReturn: action.payload,
-                exportReturnDetails: action.payload?.exportReturnDetails
-                    ? action.payload.exportReturnDetails.map(detail => ({
-                          ...detail,
-                          id: detail.rsnNumber
-                      }))
-                    : null
+                exportReturn: {
+                    ...action.payload,
+                    exportReturnDetails: action.payload?.exportReturnDetails
+                        ? action.payload.exportReturnDetails.map(detail => ({
+                              ...detail,
+                              id: detail.rsnNumber
+                          }))
+                        : null
+                }
             };
         case 'setEditing':
             return {
                 ...state,
-                setEditing: action.payload
+                editing: action.payload
             };
         case 'setTab':
             return {

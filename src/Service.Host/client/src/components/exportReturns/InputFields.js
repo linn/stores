@@ -55,7 +55,7 @@ export default function InputFields({ exportReturn, handleFieldChange, calculate
                     fullWidth
                     value={exportReturn.grossWeightKg}
                     label="Gross Weight"
-                    propertyName="grossWeight"
+                    propertyName="grossWeightKg"
                     onChange={handleFieldChange}
                     margin="dense"
                     type="number"

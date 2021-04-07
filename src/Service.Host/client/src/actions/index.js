@@ -162,3 +162,7 @@ export const requisitionUnallocateActionTypes = makeActionTypes(
 );
 
 export const exportReturnActionTypes = makeActionTypes(itemTypes.exportReturn.actionType);
+
+export const makeIntercompanyInvoicesActionTypes = makeProcessActionTypes(
+    processTypes.makeIntercompanyInvoices.actionType
+);

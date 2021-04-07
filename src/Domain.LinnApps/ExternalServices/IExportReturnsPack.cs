@@ -3,5 +3,7 @@
     public interface IExportReturnsPack
     {
         int MakeExportReturn(string rsns, string hubReturn);
+
+        string MakeIntercompanyInvoices(int returnId);
     }
 }

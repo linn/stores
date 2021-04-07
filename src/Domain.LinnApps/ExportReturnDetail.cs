@@ -16,9 +16,9 @@
         
         public string Description { get; set; }
         
-        public int? CustomsValue { get; set; }
+        public decimal? CustomsValue { get; set; }
         
-        public int? BaseCustomsValue { get; set; }
+        public decimal? BaseCustomsValue { get; set; }
         
         public int TariffId { get; set; }
         

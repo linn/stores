@@ -1,6 +1,10 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System;
+
+    using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
@@ -20,6 +24,9 @@
             this.Post("/inventory/exports/returns", parameters => this.CreateExportReturn());
             this.Put("/inventory/exports/returns/{id}", parameters => this.UpdateExportReturn(parameters.id));
             this.Get("/inventory/exports/returns/{id}", parameters => this.GetExportReturn(parameters.id));
+            this.Post(
+                "/inventory/exports/returns/make-intercompany-invoices",
+                _ => this.MakeIntercompanyInvoices());
         }
 
         private object GetRsns()
@@ -66,6 +73,22 @@
                 .WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get())
                 .WithView("Index");
+        }
+
+        private object MakeIntercompanyInvoices()
+        {
+            var resource = this.Bind<MakeIntercompanyInvoicesRequestResource>();
+
+            try
+            {
+                this.exportReturnService.MakeIntercompanyInvoices(resource.ReturnId);
+            }
+            catch (Exception e)
+            {
+                return this.Negotiate.WithModel(new BadRequestResult<Error>(e.Message));
+            }
+
+            return HttpStatusCode.OK;
         }
     }
 }

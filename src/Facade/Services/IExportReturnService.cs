@@ -13,5 +13,7 @@
         IResult<ExportReturn> MakeExportReturn(IEnumerable<int> rsns, bool hubReturn);
 
         IResult<ExportReturn> UpdateExportReturn(int id, ExportReturnResource resource);
+
+        void MakeIntercompanyInvoices(int returnId);
     }
 }

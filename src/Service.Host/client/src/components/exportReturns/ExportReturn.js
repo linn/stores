@@ -9,6 +9,8 @@ import {
     InputField,
     Title,
     GroupEditTable,
+    SnackbarMessage,
+    ErrorCard,
     useGroupEditTable
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
@@ -136,7 +138,18 @@ const rsnInvoiceColumns = [
     }
 ];
 
-export default function ExportReturn({ exportReturnLoading, exportReturn, updateExportReturn }) {
+export default function ExportReturn({
+    exportReturnLoading,
+    exportReturn,
+    updateExportReturn,
+    makeIntercompanyInvoicesMessageVisible,
+    makeIntercompanyInvoicesMessageText,
+    makeIntercompanyInvoicesErrorMessage,
+    makeIntercompanyInvoicesWorking,
+    makeIntercompanyInvoices,
+    clearMakeIntercompanyInvoicesErrors,
+    setMakeIntercompanyInvoicesMessageVisible
+}) {
     const [state, dispatch] = useReducer(reducer, {
         exportReturn: null,
         exportReturnDetails: null,
@@ -155,7 +168,7 @@ export default function ExportReturn({ exportReturnLoading, exportReturn, update
         setRowToBeDeleted,
         setRowToBeSaved
     } = useGroupEditTable({
-        rows: state.exportReturnDetails
+        rows: state.exportReturn?.exportReturnDetails
     });
 
     useEffect(() => {
@@ -184,12 +197,20 @@ export default function ExportReturn({ exportReturnLoading, exportReturn, update
         });
     };
 
-    const handleGenerateInvoices = () => {
-        console.log('generate invoices');
-    };
-
     const handleTabChange = (_event, value) => {
         dispatch({ type: 'setTab', payload: value });
+    };
+
+    const handleExportReturnDetailEditClick = (id, editing) => {
+        setTableEditing(id, editing);
+        dispatch({ type: 'setEditing', payload: editing });
+    };
+
+    const handleMakeIntercompanyInvoicesClick = () => {
+        clearMakeIntercompanyInvoicesErrors();
+        makeIntercompanyInvoices({
+            returnId: state.exportReturn.returnId
+        });
     };
 
     const calculateDims = () => {
@@ -225,6 +246,16 @@ export default function ExportReturn({ exportReturnLoading, exportReturn, update
                 <Grid item xs={12}>
                     <Title text="Export Return" />
                 </Grid>
+                <SnackbarMessage
+                    visible={makeIntercompanyInvoicesMessageVisible}
+                    message={makeIntercompanyInvoicesMessageText}
+                    onClose={() => setMakeIntercompanyInvoicesMessageVisible(false)}
+                />
+
+                {makeIntercompanyInvoicesErrorMessage && (
+                    <ErrorCard errorMessage={makeIntercompanyInvoicesErrorMessage} />
+                )}
+                {/* TODO loading for process */}
                 {exportReturnLoading ? (
                     <Loading />
                 ) : (
@@ -249,7 +280,6 @@ export default function ExportReturn({ exportReturnLoading, exportReturn, update
                                     style={{ paddingBottom: '40px' }}
                                 >
                                     <Tab label="RSNs" />
-                                    <Tab label="RSN Invoice Details" />
                                     <Tab label="Inter Company Invoices" />
                                     <Tab label="Export Customs Entry" />
                                 </Tabs>
@@ -262,11 +292,8 @@ export default function ExportReturn({ exportReturnLoading, exportReturn, update
                                         rows={exportReturnDetails}
                                         allowNewRowCreation={false}
                                         updateRow={updateRow}
-                                        addRow={addRow}
-                                        removeRow={removeRow}
                                         resetRow={resetRow}
-                                        handleEditClick={setTableEditing}
-                                        tableValid={setTableValid}
+                                        handleEditClick={handleExportReturnDetailEditClick}
                                         setRowToBeDeleted={setRowToBeDeleted}
                                         setRowToBeSaved={setRowToBeSaved}
                                     />
@@ -278,6 +305,7 @@ export default function ExportReturn({ exportReturnLoading, exportReturn, update
                                     <GroupEditTable
                                         columns={rsnInvoiceColumns}
                                         rows={exportReturnDetails}
+                                        editable={false}
                                         allowNewRowCreation={false}
                                         updateRow={updateRow}
                                         addRow={addRow}
@@ -294,46 +322,9 @@ export default function ExportReturn({ exportReturnLoading, exportReturn, update
                             {state.tab === 2 && (
                                 <>
                                     <Grid item xs={4}>
-                                        <Button
-                                            variant="outlined"
-                                            color="primary"
-                                            onClick={handleGenerateInvoices}
-                                        >
-                                            Generate Invoices
-                                        </Button>
-                                    </Grid>
-                                    <Grid item xs={8} />
-                                    <Grid item xs={4}>
                                         <InputField
                                             fullWidth
-                                            value={exportReturnDetails.interDocNumber}
-                                            label="Inter Doc Number"
-                                            propertyName="interDocNumber"
-                                            onChange={handleFieldChange}
-                                            margin="dense"
-                                            type="number"
-                                        />
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <InputField
-                                            fullWidth
-                                            value={exportReturnDetails.interDocType}
-                                            label="Inter Doc Type"
-                                            propertyName="interDocType"
-                                            onChange={handleFieldChange}
-                                            margin="dense"
-                                        />
-                                    </Grid>
-                                    <Grid item xs={4} />
-                                </>
-                            )}
-
-                            {state.tab === 3 && (
-                                <>
-                                    <Grid item xs={4}>
-                                        <InputField
-                                            fullWidth
-                                            value={exportReturnDetails.exportCustomsCode}
+                                            value={state.exportReturn.exportCustomsEntryCode}
                                             label="Code"
                                             propertyName="exportCustomsCode"
                                             onChange={handleFieldChange}
@@ -343,7 +334,7 @@ export default function ExportReturn({ exportReturnLoading, exportReturn, update
                                     <Grid item xs={4}>
                                         <InputField
                                             fullWidth
-                                            value={exportReturnDetails.exportCustomsCode}
+                                            value={state.exportReturn.exportCustomsEntryDate}
                                             label="Date"
                                             propertyName="exportCustomsCode"
                                             onChange={handleFieldChange}
@@ -355,7 +346,7 @@ export default function ExportReturn({ exportReturnLoading, exportReturn, update
                                 </>
                             )}
 
-                            <Grid item xs={2}>
+                            <Grid item xs={4}>
                                 <Button
                                     variant="outlined"
                                     color="primary"
@@ -365,7 +356,16 @@ export default function ExportReturn({ exportReturnLoading, exportReturn, update
                                     Save
                                 </Button>
                             </Grid>
-                            <Grid item xs={8}>
+                            <Grid item xs={4}>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={handleMakeIntercompanyInvoicesClick}
+                                >
+                                    Make Intercompany Invoices
+                                </Button>
+                            </Grid>
+                            <Grid item xs={4}>
                                 <Button
                                     variant="outlined"
                                     color="secondary"
@@ -387,10 +387,21 @@ ExportReturn.propTypes = {
     exportReturn: PropTypes.shape({
         exportReturnDetails: PropTypes.arrayOf(PropTypes.shape({}))
     }),
-    updateExportReturn: PropTypes.func.isRequired
+    updateExportReturn: PropTypes.func.isRequired,
+    makeIntercompanyInvoicesMessageVisible: PropTypes.bool,
+    makeIntercompanyInvoicesMessageText: PropTypes.string,
+    makeIntercompanyInvoicesErrorMessage: PropTypes.string,
+    makeIntercompanyInvoicesWorking: PropTypes.bool,
+    makeIntercompanyInvoices: PropTypes.func.isRequired,
+    clearMakeIntercompanyInvoicesErrors: PropTypes.func.isRequired,
+    setMakeIntercompanyInvoicesMessageVisible: PropTypes.func.isRequired
 };
 
 ExportReturn.defaultProps = {
     exportReturnLoading: false,
-    exportReturn: {}
+    exportReturn: {},
+    makeIntercompanyInvoicesMessageVisible: false,
+    makeIntercompanyInvoicesMessageText: '',
+    makeIntercompanyInvoicesErrorMessage: '',
+    makeIntercompanyInvoicesWorking: false
 };

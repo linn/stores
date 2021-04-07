@@ -22,7 +22,7 @@ export default function DisplayOnlyFields({ exportReturn }) {
                 <ListItem>
                     <ListItemText
                         primary="Raised By"
-                        secondary={`${exportReturn.raisedBy.id} - ${exportReturn.raisedBy.fullName}`}
+                        secondary={`${exportReturn.raisedBy?.id} - ${exportReturn.raisedBy?.fullName}`}
                     />
                 </ListItem>
                 <ListItem>
@@ -45,7 +45,7 @@ export default function DisplayOnlyFields({ exportReturn }) {
                 <ListItem>
                     <ListItemText
                         primary="Outlet"
-                        secondary={`${exportReturn.outletNumber} - ${exportReturn.salesOutlet.name}`}
+                        secondary={`${exportReturn.outletNumber} - ${exportReturn.salesOutlet?.name}`}
                     />
                 </ListItem>
                 <ListItem>

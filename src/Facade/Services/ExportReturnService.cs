@@ -8,6 +8,7 @@
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Resources;
 
@@ -111,6 +112,16 @@
             this.transactionManager.Commit();
 
             return new SuccessResult<ExportReturn>(exportReturn);
+        }
+
+        public void MakeIntercompanyInvoices(int returnId)
+        {
+            var result = this.exportReturnsPack.MakeIntercompanyInvoices(returnId);
+
+            if (result != "ok")
+            {
+                throw new MakeIntercompanyInvoicesException(result);
+            }
         }
 
         protected override ExportReturn CreateFromResource(ExportReturnResource resource)

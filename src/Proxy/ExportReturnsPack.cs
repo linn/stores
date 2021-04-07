@@ -50,5 +50,34 @@
                 return int.Parse(result.Value.ToString());
             }
         }
+
+        public string MakeIntercompanyInvoices(int returnId)
+        {
+            using (var connection = this.databaseService.GetConnection())
+            {
+                var cmd = new OracleCommand("EXPORT_RETURN_PACK.MAKE_INTERCOMPANY_INVOICES", connection)
+                              {
+                                  CommandType = CommandType.StoredProcedure
+                              };
+
+                var result = new OracleParameter(null, OracleDbType.Varchar2)
+                                 {
+                                     Direction = ParameterDirection.ReturnValue
+                                 };
+                cmd.Parameters.Add(result);
+
+                var idParameter = new OracleParameter("p_return_id", OracleDbType.Int32)
+                                      {
+                                          Direction = ParameterDirection.Input, Value = returnId
+                                      };
+                cmd.Parameters.Add(idParameter);
+
+                connection.Open();
+                cmd.ExecuteNonQuery();
+                connection.Close();
+
+                return result.Value.ToString();
+            }
+        }
     }
 }
