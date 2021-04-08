@@ -129,6 +129,7 @@
             builder.RegisterType<WandPack>().As<IWandPack>();
             builder.RegisterType<StoresPack>().As<IStoresPack>();
             builder.RegisterType<StockLocatorLocationsViewService>().As<IStockLocatorLocationsViewService>();
+            builder.RegisterType<KardexPack>().As<IKardexPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

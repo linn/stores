@@ -13,7 +13,7 @@
 
     using NUnit.Framework;
 
-    public class WhenMovingStockBetweenLocations : ContextBase
+    public class WhenMovingStockFromKardex : ContextBase
     {
         private RequisitionProcessResult result;
 
@@ -21,42 +21,39 @@
 
         private int toLocationId;
 
+        private string storageType;
+
         [SetUp]
         public void SetUp()
         {
-            this.fromLocationId = 23;
-            this.toLocationId = 34;
-            this.From = "E-LOC-1";
+            this.From = "K1";
             this.To = "E-LOC-2";
+            this.toLocationId = 34;
+            this.storageType = "storage type 1";
 
             this.StoresPack.CheckStockAtFromLocation(
                     this.PartNumber,
                     this.Quantity,
                     this.From,
-                    this.fromLocationId,
+                    null,
                     null,
                     this.FromStockDate)
                 .Returns(new RequisitionProcessResult(true, "ok"));
 
             this.StorageLocationRepository.FindBy(Arg.Any<Expression<Func<StorageLocation, bool>>>())
-                .Returns(
-                    new StorageLocation { LocationId = this.fromLocationId },
-                    new StorageLocation { LocationId = this.toLocationId });
+                .Returns(new StorageLocation { LocationId = this.toLocationId });
 
-
-            this.StoresPack.MoveStock(
+            this.KardexPack.MoveStockFromKardex(
                 this.ReqNumber,
                 3,
+                this.From,
                 this.PartNumber,
                 this.Quantity,
-                this.fromLocationId,
-                null,
-                this.FromStockDate,
+                this.storageType,
                 this.toLocationId,
-                null,
-                null,
-                null,
-                null).Returns(new ProcessResult(true, "ok"));
+                null)
+                .Returns(new ProcessResult(true, "ok"));
+
             this.result = this.Sut.MoveStock(
                 this.ReqNumber,
                 this.PartNumber,
@@ -71,7 +68,7 @@
                 null,
                 null,
                 null,
-                null,
+                this.storageType,
                 this.UserNumber);
         }
 
@@ -84,7 +81,7 @@
         [Test]
         public void ShouldCheckLocation()
         {
-            this.StorageLocationRepository.Received(2).FindBy(Arg.Any<Expression<Func<StorageLocation, bool>>>());
+            this.StorageLocationRepository.Received().FindBy(Arg.Any<Expression<Func<StorageLocation, bool>>>());
         }
 
         [Test]
@@ -94,7 +91,7 @@
                 this.PartNumber,
                 this.Quantity,
                 this.From,
-                this.fromLocationId,
+                null,
                 null,
                 this.FromStockDate);
         }
@@ -102,18 +99,14 @@
         [Test]
         public void ShouldDoMove()
         {
-            this.StoresPack.Received().MoveStock(
+            this.KardexPack.Received().MoveStockFromKardex(
                 this.ReqNumber,
                 3,
+                this.From,
                 this.PartNumber,
                 this.Quantity,
-                this.fromLocationId,
-                null,
-                this.FromStockDate,
+                this.storageType,
                 this.toLocationId,
-                null,
-                null,
-                null,
                 null);
         }
 

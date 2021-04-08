@@ -29,5 +29,7 @@
         public string ToStockRotationDate { get; set; }
 
         public int UserNumber { get; set; }
+
+        public string StorageType { get; set; }
     }
 }
