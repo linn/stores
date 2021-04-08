@@ -1325,9 +1325,9 @@
             q.Property(e => e.CustomsValue).HasColumnName("CUSTOMS_VALUE");
             q.Property(e => e.BaseCustomsValue).HasColumnName("BASE_CUSTOMS_VALUE");
             q.Property(e => e.TariffId).HasColumnName("TARIFF_ID");
-            q.Property(e => e.ExpinvDocumentType).HasColumnName("EXPINV_DOCUMENT_TYPE").HasMaxLength(1);
-            q.Property(e => e.ExpinvDocumentNumber).HasColumnName("EXPINV_DOCUMENT_NUMBER");
-            q.Property(e => e.ExpinvDate).HasColumnName("EXPINV_DATE");
+            q.Property(e => e.ExpInvDocumentType).HasColumnName("EXPINV_DOCUMENT_TYPE").HasMaxLength(1);
+            q.Property(e => e.ExpInvDocumentNumber).HasColumnName("EXPINV_DOCUMENT_NUMBER");
+            q.Property(e => e.ExpInvDate).HasColumnName("EXPINV_DATE");
             q.Property(e => e.NumCartons).HasColumnName("NUM_CARTONS");
             q.Property(e => e.Weight).HasColumnName("WEIGHT");
             q.Property(e => e.Width).HasColumnName("WIDTH");

@@ -79,16 +79,10 @@
         {
             var resource = this.Bind<MakeIntercompanyInvoicesRequestResource>();
 
-            try
-            {
-                this.exportReturnService.MakeIntercompanyInvoices(resource.ReturnId);
-            }
-            catch (Exception e)
-            {
-                return this.Negotiate.WithModel(new BadRequestResult<Error>(e.Message));
-            }
+            var result = this.exportReturnService.MakeIntercompanyInvoices(resource.ReturnId);
 
-            return HttpStatusCode.OK;
+            return this.Negotiate.WithModel(result).WithMediaRangeModel("text/html", ApplicationSettings.Get())
+                .WithView("Index");
         }
     }
 }

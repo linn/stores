@@ -20,11 +20,11 @@
 
         public int TariffId { get; set; }
 
-        public string ExpinvDocumentType { get; set; }
+        public string ExpInvDocumentType { get; set; }
 
-        public int? ExpinvDocumentNumber { get; set; }
+        public int? ExpInvDocumentNumber { get; set; }
 
-        public string ExpinvDate { get; set; }
+        public string ExpInvDate { get; set; }
 
         public int? NumCartons { get; set; }
 

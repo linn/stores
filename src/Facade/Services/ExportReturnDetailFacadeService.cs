@@ -30,11 +30,11 @@
             entity.CustomsValue = updateResource.CustomsValue;
             entity.BaseCustomsValue = updateResource.BaseCustomsValue;
             entity.TariffId = updateResource.TariffId;
-            entity.ExpinvDate = updateResource.ExpinvDate != null
-                                    ? DateTime.Parse(updateResource.ExpinvDate)
+            entity.ExpInvDate = updateResource.ExpInvDate != null
+                                    ? DateTime.Parse(updateResource.ExpInvDate)
                                     : (DateTime?)null;
-            entity.ExpinvDocumentType = updateResource.ExpinvDocumentType;
-            entity.ExpinvDocumentNumber = updateResource.ExpinvDocumentNumber;
+            entity.ExpInvDocumentType = updateResource.ExpInvDocumentType;
+            entity.ExpInvDocumentNumber = updateResource.ExpInvDocumentNumber;
             entity.NumCartons = updateResource.NumCartons;
             entity.Weight = updateResource.Weight;
             entity.Width = updateResource.Width;

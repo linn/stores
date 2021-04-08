@@ -14,6 +14,6 @@
 
         IResult<ExportReturn> UpdateExportReturn(int id, ExportReturnResource resource);
 
-        void MakeIntercompanyInvoices(int returnId);
+        IResult<ExportReturn> MakeIntercompanyInvoices(int id);
     }
 }

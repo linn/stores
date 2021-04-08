@@ -62,7 +62,7 @@
 
                 var result = new OracleParameter(null, OracleDbType.Varchar2)
                                  {
-                                     Direction = ParameterDirection.ReturnValue
+                                     Direction = ParameterDirection.ReturnValue, Size = 2000
                                  };
                 cmd.Parameters.Add(result);
 

@@ -114,14 +114,32 @@
             return new SuccessResult<ExportReturn>(exportReturn);
         }
 
-        public void MakeIntercompanyInvoices(int returnId)
+        public IResult<ExportReturn> MakeIntercompanyInvoices(int id)
         {
-            var result = this.exportReturnsPack.MakeIntercompanyInvoices(returnId);
+            string result;
+
+            try
+            {
+                result = this.exportReturnsPack.MakeIntercompanyInvoices(id);
+            }
+            catch (Exception e)
+            {
+                return new BadRequestResult<ExportReturn>(e.Message);
+            }
 
             if (result != "ok")
             {
-                throw new MakeIntercompanyInvoicesException(result);
+                return new BadRequestResult<ExportReturn>(result);
             }
+
+            var exportReturn = this.exportReturnRepository.FindById(id);
+
+            if (exportReturn == null)
+            {
+                return new NotFoundResult<ExportReturn>();
+            }
+
+            return new SuccessResult<ExportReturn>(exportReturn);
         }
 
         protected override ExportReturn CreateFromResource(ExportReturnResource resource)
@@ -175,11 +193,11 @@
             entity.CustomsValue = updateResource.CustomsValue;
             entity.BaseCustomsValue = updateResource.BaseCustomsValue;
             entity.TariffId = updateResource.TariffId;
-            entity.ExpinvDate = updateResource.ExpinvDate != null
-                                    ? DateTime.Parse(updateResource.ExpinvDate)
+            entity.ExpInvDate = updateResource.ExpInvDate != null
+                                    ? DateTime.Parse(updateResource.ExpInvDate)
                                     : (DateTime?)null;
-            entity.ExpinvDocumentType = updateResource.ExpinvDocumentType;
-            entity.ExpinvDocumentNumber = updateResource.ExpinvDocumentNumber;
+            entity.ExpInvDocumentType = updateResource.ExpInvDocumentType;
+            entity.ExpInvDocumentNumber = updateResource.ExpInvDocumentNumber;
             entity.NumCartons = updateResource.NumCartons;
             entity.Weight = updateResource.Weight;
             entity.Width = updateResource.Width;

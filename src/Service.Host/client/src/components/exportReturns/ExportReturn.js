@@ -251,15 +251,19 @@ export default function ExportReturn({
                     message={makeIntercompanyInvoicesMessageText}
                     onClose={() => setMakeIntercompanyInvoicesMessageVisible(false)}
                 />
-
                 {makeIntercompanyInvoicesErrorMessage && (
-                    <ErrorCard errorMessage={makeIntercompanyInvoicesErrorMessage} />
+                    <Grid item xs={12}>
+                        <ErrorCard errorMessage={makeIntercompanyInvoicesErrorMessage} />
+                    </Grid>
                 )}
-                {/* TODO loading for process */}
-                {exportReturnLoading ? (
-                    <Loading />
-                ) : (
-                    state.exportReturn && (
+                {(exportReturnLoading || makeIntercompanyInvoicesWorking) && (
+                    <Grid item xs={12}>
+                        <Loading />
+                    </Grid>
+                )}
+                {state.exportReturn?.returnId &&
+                    !exportReturnLoading &&
+                    !makeIntercompanyInvoicesWorking && (
                         <>
                             <Grid item xs={6}>
                                 <InputFields
@@ -375,8 +379,7 @@ export default function ExportReturn({
                                 </Button>
                             </Grid>
                         </>
-                    )
-                )}
+                    )}
             </Grid>
         </Page>
     );
