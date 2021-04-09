@@ -1,6 +1,5 @@
 export default function reducer(state, action) {
     switch (action.type) {
-        // TODO refactor to SetExportReturn and updateExportReturn maybe?
         case 'setExportReturn':
             if (action.payload?.propertyName) {
                 return {

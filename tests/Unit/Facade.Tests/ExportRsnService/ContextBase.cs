@@ -2,7 +2,6 @@
 {
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
-    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Facade.Services;
 
     using NSubstitute;
@@ -11,33 +10,15 @@
 
     public class ContextBase
     {
-        protected ExportReturnService Sut { get; private set; }
+        protected ExportRsnService Sut { get; private set; }
 
         protected IQueryRepository<ExportRsn> ExportRsnRepository { get; private set; }
-
-        protected IExportReturnsPack ExportReturnsPack { get; private set; }
-
-        protected IRepository<ExportReturn, int> ExportReturnRepository { get; private set; }
-
-        protected ITransactionManager TransactionManager { get; private set; }
-
-        protected IRepository<ExportReturnDetail, ExportReturnDetailKey> ExportReturnDetailRepository { get; set; }
 
         [SetUp]
         public void SetUpContext()
         {
             this.ExportRsnRepository = Substitute.For<IQueryRepository<ExportRsn>>();
-            this.ExportReturnsPack = Substitute.For<IExportReturnsPack>();
-            this.ExportReturnRepository = Substitute.For<IRepository<ExportReturn, int>>();
-            this.TransactionManager = Substitute.For<ITransactionManager>();
-            this.ExportReturnDetailRepository =
-                Substitute.For<IRepository<ExportReturnDetail, ExportReturnDetailKey>>();
-            this.Sut = new ExportReturnService(
-                this.ExportRsnRepository,
-                this.ExportReturnsPack,
-                this.ExportReturnRepository,
-                this.TransactionManager,
-                this.ExportReturnDetailRepository);
+            this.Sut = new ExportRsnService(this.ExportRsnRepository);
         }
     }
 }

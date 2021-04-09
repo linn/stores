@@ -103,6 +103,7 @@
             builder.RegisterType<SalesOutletService>().As<ISalesOutletService>();
             builder.RegisterType<SalesAccountService>().As<ISalesAccountService>();
             builder.RegisterType<ExportReturnService>().As<IExportReturnService>();
+            builder.RegisterType<ExportRsnService>().As<IExportRsnService>();
             builder.RegisterType<StockQuantitiesService>().As<IStockQuantitiesService>();
             builder.RegisterType<RequisitionActionsFacadeService>().As<IRequisitionActionsFacadeService>();
             builder.RegisterType<ExportReturnDetailFacadeService>()

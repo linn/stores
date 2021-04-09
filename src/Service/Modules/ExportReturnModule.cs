@@ -1,10 +1,5 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
-    using System;
-
-    using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps;
-    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
@@ -20,25 +15,12 @@
         public ExportReturnModule(IExportReturnService exportReturnService)
         {
             this.exportReturnService = exportReturnService;
-            this.Get("/inventory/exports/rsns", parameters => this.GetRsns());
             this.Post("/inventory/exports/returns", parameters => this.CreateExportReturn());
             this.Put("/inventory/exports/returns/{id}", parameters => this.UpdateExportReturn(parameters.id));
             this.Get("/inventory/exports/returns/{id}", parameters => this.GetExportReturn(parameters.id));
             this.Post(
                 "/inventory/exports/returns/make-intercompany-invoices",
                 _ => this.MakeIntercompanyInvoices());
-        }
-
-        private object GetRsns()
-        {
-            var resource = this.Bind<ExportRsnSearchRequestResource>();
-
-            var results = this.exportReturnService.SearchRsns(resource.AccountId, resource.OutletNumber);
-
-            return this.Negotiate
-                .WithModel(results)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get())
-                .WithView("Index");
         }
 
         private object CreateExportReturn()

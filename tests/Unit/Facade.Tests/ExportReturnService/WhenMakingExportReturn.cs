@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Facade.Tests.ExportRsnService
+﻿namespace Linn.Stores.Facade.Tests.ExportReturnService
 {
     using System.Collections.Generic;
 

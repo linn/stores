@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Service.Tests.RsnModuleSpecs
+﻿namespace Linn.Stores.Service.Tests.ExportRsnModuleSpecs
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -24,7 +24,7 @@
             var rsn1 = new ExportRsn { RsnNumber = 1, AccountId = 123, OutletNumber = 1 };
             var rsn2 = new ExportRsn { RsnNumber = 2, AccountId = 123, OutletNumber = 1 };
 
-            this.ExportReturnService.SearchRsns(123, 1)
+            this.ExportRsnService.SearchRsns(123, 1)
                 .Returns(new SuccessResult<IEnumerable<ExportRsn>>(new List<ExportRsn> { rsn1, rsn2 }));
 
             this.Response = this.Browser.Get(
@@ -46,7 +46,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ExportReturnService.Received().SearchRsns(123, 1);
+            this.ExportRsnService.Received().SearchRsns(123, 1);
         }
 
         [Test]

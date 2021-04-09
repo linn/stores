@@ -8,15 +8,12 @@
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
-    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Resources;
 
     public class ExportReturnService : FacadeService<ExportReturn, int, ExportReturnResource, ExportReturnResource>,
                                        IExportReturnService
     {
-        private readonly IQueryRepository<ExportRsn> repository;
-
         private readonly IRepository<ExportReturn, int> exportReturnRepository;
 
         private readonly IExportReturnsPack exportReturnsPack;
@@ -26,30 +23,16 @@
         private readonly ITransactionManager transactionManager;
 
         public ExportReturnService(
-            IQueryRepository<ExportRsn> repository,
             IExportReturnsPack exportReturnsPack,
             IRepository<ExportReturn, int> exportReturnRepository,
             ITransactionManager transactionManager,
             IRepository<ExportReturnDetail, ExportReturnDetailKey> exportReturnDetailRepository)
             : base(exportReturnRepository, transactionManager)
         {
-            this.repository = repository;
             this.exportReturnsPack = exportReturnsPack;
             this.exportReturnRepository = exportReturnRepository;
             this.transactionManager = transactionManager;
             this.exportReturnDetailRepository = exportReturnDetailRepository;
-        }
-
-        public IResult<IEnumerable<ExportRsn>> SearchRsns(int accountId, int? outletNumber)
-        {
-            if (outletNumber != null)
-            {
-                return new SuccessResult<IEnumerable<ExportRsn>>(
-                    this.repository.FilterBy(rsn => rsn.AccountId == accountId && rsn.OutletNumber == outletNumber));
-            }
-
-            return new SuccessResult<IEnumerable<ExportRsn>>(
-                this.repository.FilterBy(rsn => rsn.AccountId == accountId));
         }
 
         public IResult<ExportReturn> MakeExportReturn(IEnumerable<int> rsns, bool hubReturn)

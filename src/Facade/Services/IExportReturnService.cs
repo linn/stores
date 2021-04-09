@@ -8,8 +8,6 @@
 
     public interface IExportReturnService : IFacadeService<ExportReturn, int, ExportReturnResource, ExportReturnResource>
     {
-        IResult<IEnumerable<ExportRsn>> SearchRsns(int accountId, int? outletNumber);
-
         IResult<ExportReturn> MakeExportReturn(IEnumerable<int> rsns, bool hubReturn);
 
         IResult<ExportReturn> UpdateExportReturn(int id, ExportReturnResource resource);

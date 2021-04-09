@@ -50,7 +50,6 @@ export const requisitionUnallocate = new ItemType(
     '/logistics/requisitions/actions/un-allocate'
 );
 
-// TODO need to add the full uri to the end of this
 export const makeIntercompanyInvoices = new ItemType(
     'makeIntercompanyInvoices',
     'MAKE_INTERCOMPANY_INVOICES',

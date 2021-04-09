@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Service.Tests.RsnModuleSpecs
+﻿namespace Linn.Stores.Service.Tests.ExportRsnModuleSpecs
 {
     using System.Collections.Generic;
     using System.Security.Claims;
@@ -18,20 +18,20 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IExportReturnService ExportReturnService { get; set; }
+        protected IExportRsnService ExportRsnService { get; set; }
 
         [SetUp]
         public void EstablishContext()
         {
-            this.ExportReturnService = Substitute.For<IExportReturnService>();
+            this.ExportRsnService= Substitute.For<IExportRsnService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
-                        with.Dependency(this.ExportReturnService);
-                        with.Dependency<IResourceBuilder<ExportReturn>>(new ExportReturnResourceBuilder());
-                        with.Module<ExportReturnModule>();
-                        with.ResponseProcessor<ExportReturnResponseProcessor>();
+                        with.Dependency(this.ExportRsnService);
+                        with.Dependency<IResourceBuilder<IEnumerable<ExportRsn>>>(new ExportRsnsResourceBuilder());
+                        with.Module<ExportRsnModule>();
+                        with.ResponseProcessor<ExportRsnsResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
                                 {
