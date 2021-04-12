@@ -59,9 +59,9 @@
 
         private object MakeIntercompanyInvoices()
         {
-            var resource = this.Bind<MakeIntercompanyInvoicesRequestResource>();
+            var resource = this.Bind<ExportReturnResource>();
 
-            var result = this.exportReturnService.MakeIntercompanyInvoices(resource.ReturnId);
+            var result = this.exportReturnService.MakeIntercompanyInvoices(resource);
 
             return this.Negotiate.WithModel(result).WithMediaRangeModel("text/html", ApplicationSettings.Get())
                 .WithView("Index");

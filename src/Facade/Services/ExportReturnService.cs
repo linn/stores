@@ -97,13 +97,15 @@
             return new SuccessResult<ExportReturn>(exportReturn);
         }
 
-        public IResult<ExportReturn> MakeIntercompanyInvoices(int id)
+        public IResult<ExportReturn> MakeIntercompanyInvoices(ExportReturnResource resource)
         {
+            // var wot = this.UpdateExportReturn(resource.ReturnId, resource);
+            
             string result;
 
             try
             {
-                result = this.exportReturnsPack.MakeIntercompanyInvoices(id);
+                result = this.exportReturnsPack.MakeIntercompanyInvoices(resource.ReturnId);
             }
             catch (Exception e)
             {
@@ -115,14 +117,16 @@
                 return new BadRequestResult<ExportReturn>(result);
             }
 
-            var exportReturn = this.exportReturnRepository.FindById(id);
+            var exportReturn = this.exportReturnRepository.FindById(resource.ReturnId);
 
             if (exportReturn == null)
             {
                 return new NotFoundResult<ExportReturn>();
             }
 
-            return new SuccessResult<ExportReturn>(exportReturn);
+            //return new SuccessResult<ExportReturn>(exportReturn);
+
+            return this.UpdateExportReturn(resource.ReturnId, resource);
         }
 
         protected override ExportReturn CreateFromResource(ExportReturnResource resource)
@@ -154,10 +158,6 @@
             entity.NumCartons = updateResource.NumCartons;
             entity.GrossWeightKg = updateResource.GrossWeightKg;
             entity.GrossDimsM3 = updateResource.GrossDimsM3;
-            entity.MadeIntercompanyInvoices = updateResource.MadeIntercompanyInvoices;
-            entity.DateProcessed = updateResource.DateProcessed != null
-                                       ? DateTime.Parse(updateResource.DateProcessed)
-                                       : (DateTime?)null;
             entity.ReturnForCredit = updateResource.ReturnForCredit;
             entity.ExportCustomsEntryCode = updateResource.ExportCustomsEntryCode;
             entity.ExportCustomsCodeDate = updateResource.ExportCustomsCodeDate != null
@@ -176,11 +176,6 @@
             entity.CustomsValue = updateResource.CustomsValue;
             entity.BaseCustomsValue = updateResource.BaseCustomsValue;
             entity.TariffId = updateResource.TariffId;
-            entity.ExpInvDate = updateResource.ExpInvDate != null
-                                    ? DateTime.Parse(updateResource.ExpInvDate)
-                                    : (DateTime?)null;
-            entity.ExpInvDocumentType = updateResource.ExpInvDocumentType;
-            entity.ExpInvDocumentNumber = updateResource.ExpInvDocumentNumber;
             entity.NumCartons = updateResource.NumCartons;
             entity.Weight = updateResource.Weight;
             entity.Width = updateResource.Width;

@@ -66,7 +66,7 @@ export default function InputFields({ exportReturn, handleFieldChange, calculate
                     fullWidth
                     value={exportReturn.grossDimsM3}
                     label="Gross Dims"
-                    propertyName="grossDims"
+                    propertyName="grossDimsM3"
                     onChange={handleFieldChange}
                     margin="dense"
                     type="number"

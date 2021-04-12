@@ -1,11 +1,11 @@
-﻿namespace Linn.Stores.Service.Tests.RsnModuleSpecs
+﻿namespace Linn.Stores.Service.Tests.ExportReturnModuleSpecs
 {
     using FluentAssertions;
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
-    using Linn.Stores.Resources.RequestResources;
+    using Linn.Stores.Service.Tests.RsnModuleSpecs;
 
     using Nancy;
     using Nancy.Testing;
@@ -19,9 +19,9 @@
         [SetUp]
         public void SetUp()
         {
-            var requestResource = new MakeIntercompanyInvoicesRequestResource { ReturnId = 123 };
+            var requestResource = new ExportReturnResource { ReturnId = 123 };
 
-            this.ExportReturnService.MakeIntercompanyInvoices(123)
+            this.ExportReturnService.MakeIntercompanyInvoices(Arg.Any<ExportReturnResource>())
                 .Returns(new SuccessResult<ExportReturn>(new ExportReturn { ReturnId = 123 }));
 
             this.Response = this.Browser.Post(
@@ -43,7 +43,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ExportReturnService.Received().MakeIntercompanyInvoices(123);
+            this.ExportReturnService.Received().MakeIntercompanyInvoices(Arg.Any<ExportReturnResource>());
         }
 
         [Test]

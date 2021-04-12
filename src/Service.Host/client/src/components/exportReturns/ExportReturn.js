@@ -208,9 +208,7 @@ export default function ExportReturn({
 
     const handleMakeIntercompanyInvoicesClick = () => {
         clearMakeIntercompanyInvoicesErrors();
-        makeIntercompanyInvoices({
-            returnId: state.exportReturn.returnId
-        });
+        makeIntercompanyInvoices({ ...state.exportReturn, exportReturnDetails });
     };
 
     const calculateDims = () => {
