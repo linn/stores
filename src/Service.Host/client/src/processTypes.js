@@ -44,9 +44,9 @@ export const movePalletsToUpper = new ItemType(
 
 export const doWandItem = new ItemType('doWandItem', 'DO_WAND_ITEM', '/logistics/wand/items');
 
-export const requisitionUnallocate = new ItemType(
-    'requisitionUnallocate',
-    'REQUISTION_UNALLOCATE',
+export const unallocateConsignment = new ItemType(
+    'unallocateConsignment',
+    'UNALLOCATE_CONSIGNMENT',
     '/logistics/requisitions/actions/un-allocate'
 );
 
@@ -55,3 +55,11 @@ export const makeIntercompanyInvoices = new ItemType(
     'MAKE_INTERCOMPANY_INVOICES',
     '/inventory/exports/returns/make-intercompany-invoices'
 );
+
+export const unallocateConsignmentLine = new ItemType(
+    'unallocateConsignmentLine',
+    'UNALLOCATE_CONSIGNMENT_LINE',
+    '/logistics/requisitions/actions/un-allocate'
+);
+
+export const doStockMove = new ItemType('doStockMove', 'DO_STOCK_MOVE', '/inventory/move-stock');

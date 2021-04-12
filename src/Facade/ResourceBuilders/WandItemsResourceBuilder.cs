@@ -5,6 +5,7 @@
     using System.Linq;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Resources.Wand;
 
@@ -27,7 +28,15 @@
                              RequisitionNumber = w.RequisitionNumber,
                              RequisitionLine = w.RequisitionLine,
                              AllWanded = w.AllWanded == "Y",
-                             BoxesPerProduct = w.BoxesPerProduct
+                             BoxesPerProduct = w.BoxesPerProduct,
+                             BoxesWanded =
+                                 string.IsNullOrWhiteSpace(w.BoxesWanded) ? null : this.GetBoxesWanded(w.BoxesWanded),
+                             TypeOfSerialNumber = w.TypeOfSerialNumber,
+                             WandStringSuggestion = WandService.WandStringSuggestion(
+                                 w.TypeOfSerialNumber,
+                                 w.BoxesPerProduct,
+                                 w.Quantity,
+                                 w.LinnBarCode)
                          });
         }
 
@@ -38,5 +47,10 @@
 
         object IResourceBuilder<IEnumerable<WandItem>>.Build(IEnumerable<WandItem> wandItems) =>
             this.Build(wandItems);
+
+        private IEnumerable<int> GetBoxesWanded(string boxesWanded)
+        {
+            return boxesWanded.Select(ch => ch - '0').ToArray();
+        }
     }
 }

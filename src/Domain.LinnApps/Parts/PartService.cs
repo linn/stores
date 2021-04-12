@@ -67,6 +67,12 @@
                 from.ScrapOrConvert = to.ScrapOrConvert ?? "CONVERT";
             }
 
+            if (from.SalesArticle != null
+                && !from.ProductAnalysisCode.ProductCode.Equals(to.ProductAnalysisCode.ProductCode))
+            {
+                throw new UpdatePartException("Cannot change product analysis code if part has a sales article.");
+            }
+
             if (from.DateLive != to.DateLive)
             {
                 if (!this.authService.HasPermissionFor(AuthorisedAction.PartAdmin, privileges))

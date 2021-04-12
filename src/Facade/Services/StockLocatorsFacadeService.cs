@@ -8,8 +8,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Proxy;
-    using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
+    using Linn.Stores.Resources.StockLocators;
 
     public class StockLocatorsFacadeService : 
         FacadeService<StockLocator, int, StockLocatorResource, StockLocatorResource>,
@@ -41,10 +41,10 @@
         }
 
         public IResult<IEnumerable<StockLocatorWithStoragePlaceInfo>> 
-            GetStockLocatorsForPart(string partNumber)
+            GetStockLocatorsForPart(int partId)
         {
             return new SuccessResult<IEnumerable<StockLocatorWithStoragePlaceInfo>>(
-                this.domainService.GetStockLocatorsWithStoragePlaceInfoForPart(partNumber));
+                this.domainService.GetStockLocatorsWithStoragePlaceInfoForPart(partId));
         }
 
         public IResult<IEnumerable<StockLocator>> GetBatches(string batchRef)
@@ -55,14 +55,23 @@
 
         public IResult<IEnumerable<StockLocator>> GetStockLocations(StockLocatorQueryResource searchResource)
         {
-            return new SuccessResult<IEnumerable<StockLocator>>(this.domainService.GetStockLocatorLocationsView(
+            if (searchResource.QueryBatchView)
+            {
+                return new SuccessResult<IEnumerable<StockLocator>>(this.domainService.SearchStockLocatorBatchView(
+                    searchResource.PartNumber,
+                    searchResource.LocationId,
+                    searchResource.PalletNumber,
+                    searchResource.StockPoolCode,
+                    searchResource.State,
+                    searchResource.Category));
+            }
+            return new SuccessResult<IEnumerable<StockLocator>>(this.domainService.SearchStockLocators(
                 searchResource.PartNumber,
                 searchResource.LocationId,
                 searchResource.PalletNumber,
                 searchResource.StockPoolCode,
                 searchResource.State,
-                searchResource.BatchRef,
-                searchResource.QueryBatchView));
+                searchResource.Category));
         }
 
         public IResult<IEnumerable<StockLocator>> FilterBy(StockLocatorResource searchResource)

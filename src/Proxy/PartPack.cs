@@ -1,9 +1,7 @@
 ﻿namespace Linn.Stores.Proxy
 {
-    using System;
     using System.Data;
 
-    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
 
     using Oracle.ManagedDataAccess.Client;

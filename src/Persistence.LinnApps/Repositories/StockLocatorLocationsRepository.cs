@@ -34,7 +34,8 @@
 
         public IQueryable<StockLocatorLocation> FindAll()
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.StockLocatorLocationsView
+                .Include(l => l.StorageLocation).Include(l => l.Part);
         }
     }
 }

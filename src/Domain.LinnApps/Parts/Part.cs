@@ -152,5 +152,7 @@
         public PartParamData ParamData { get; set; }
 
         public IEnumerable<StockLocatorLocation> Locations { get; set; }
+
+        public SalesArticle SalesArticle { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.StockLocators
 {
+    using System;
     using System.Collections.Generic;
 
     public interface IStockLocatorService
@@ -14,17 +15,34 @@
         void DeleteStockLocator(StockLocator toDelete, IEnumerable<string> privileges);
 
         IEnumerable<StockLocatorWithStoragePlaceInfo> 
-            GetStockLocatorsWithStoragePlaceInfoForPart(string partNumber);
+            GetStockLocatorsWithStoragePlaceInfoForPart(int partId);
 
         IEnumerable<StockLocator> GetBatches(string batches);
 
-        IEnumerable<StockLocator> GetStockLocatorLocationsView(
+        IEnumerable<StockLocator> SearchStockLocators(
             string partNumber,
             int? locationId,
             int? palletNumber,
             string stockPool,
             string stockState,
+            string category);
+
+        IEnumerable<StockLocator> SearchStockLocatorBatchView(
+            string partNumber,
+            int? locationId,
+            int? palletNumber,
+            string stockPool,
+            string stockState,
+            string category);
+
+        IEnumerable<StockLocatorPrices> GetPrices(
+            int? palletNumber,
+            string partNumber,
+            string locationCode,
+            string state,
+            string category,
+            string stockPool,
             string batchRef,
-            bool queryBatchView);
+            DateTime? batchDate);
     }
 }

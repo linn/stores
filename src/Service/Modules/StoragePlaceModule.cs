@@ -6,8 +6,8 @@
     using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Facade.Services;
-    using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
+    using Linn.Stores.Resources.StockLocators;
     using Linn.Stores.Service.Extensions;
     using Linn.Stores.Service.Models;
 

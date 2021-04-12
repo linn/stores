@@ -26,8 +26,6 @@
 
         public string OurUnitOfMeasure { get; set; }
 
-        public string BatchRef { get; set; }
-
         public int? QuantityAllocated { get; set; }
     }
 }

@@ -242,3 +242,17 @@ export const exportReturn = new ItemType(
     'EXPORT_RETURN',
     '/inventory/exports/returns'
 );
+
+export const availableStock = new ItemType(
+    'availableStock',
+    'AVAILABLE_STOCK',
+    '/inventory/available-stock'
+);
+
+export const stockLocatorPrices = new ItemType(
+    'stockLocatorPrices',
+    'STOCK_LOCATOR_PRICES',
+    '/inventory/stock-locators/prices'
+);
+
+export const reqMoves = new ItemType('reqMoves', 'REQ_MOVES', '/logistics/requisitions');

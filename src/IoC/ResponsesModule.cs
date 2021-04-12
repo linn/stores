@@ -16,6 +16,7 @@
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Requisitions.Models;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.StockMove.Models;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Facade;
@@ -146,12 +147,20 @@
             builder.RegisterType<ExportRsnResourceBuilder>().As<IResourceBuilder<ExportRsn>>();
             builder.RegisterType<ExportRsnsResourceBuilder>().As<IResourceBuilder<IEnumerable<ExportRsn>>>();
             builder.RegisterType<StockQuantitiesResourceBuilder>().As<IResourceBuilder<StockQuantities>>();
+            builder.RegisterType<StockQuantitiesListResourceBuilder>().As<IResourceBuilder<IEnumerable<StockQuantities>>>();
             builder.RegisterType<WandItemResultResourceBuilder>().As<IResourceBuilder<WandResult>>();
             builder.RegisterType<RequisitionActionResourceBuilder>().As<IResourceBuilder<RequisitionActionResult>>();
             builder.RegisterType<ExportReturnResourceBuilder>().As<IResourceBuilder<ExportReturn>>();
             builder.RegisterType<ExportReturnDetailResourceBuilder>().As<IResourceBuilder<ExportReturnDetail>>();
             builder.RegisterType<ExportReturnDetailsResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<ExportReturnDetail>>>();
+            builder.RegisterType<StockLocatorPricesResourceBuilder>().As<IResourceBuilder<StockLocatorPrices>>();
+            builder.RegisterType<StockLocatorPricesListResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<StockLocatorPrices>>>();
+            builder.RegisterType<AvailableStockResourceBuilder>().As<IResourceBuilder<IEnumerable<AvailableStock>>>();
+            builder.RegisterType<RequisitionProcessResultResourceBuilder>().As<IResourceBuilder<RequisitionProcessResult>>();
+            builder.RegisterType<RequisitionResourceBuilder>().As<IResourceBuilder<RequisitionHeader>>();
+            builder.RegisterType<RequisitionMovesResourceBuilder>().As<IRequisitionMovesResourceBuilder>();
         }
     }
 }

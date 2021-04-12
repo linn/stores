@@ -9,7 +9,7 @@
 
     public class WandPack : IWandPack
     {
-        public WandResult Wand(string transType, int userNumber, int consignmentId, string wandString)
+        public WandPackResult Wand(string transType, int userNumber, int consignmentId, string wandString)
         {
             var connection = new OracleConnection(ConnectionStrings.ManagedConnectionString());
 
@@ -44,8 +44,15 @@
                 new OracleParameter("p_do_updates", OracleDbType.Int32)
                     {
                         Direction = ParameterDirection.Input,
-                        Value = 0
+                        Value = 1
                     });
+            var wandLogParameter = new OracleParameter("p_wandlog_id", OracleDbType.Int32)
+                                       {
+                                           Direction = ParameterDirection.Output,
+                                           Size = 20
+                                       };
+            cmd.Parameters.Add(wandLogParameter);
+
             var messageParameter = new OracleParameter("p_message", OracleDbType.Varchar2)
                                        {
                                            Direction = ParameterDirection.Output,
@@ -63,10 +70,13 @@
             cmd.ExecuteNonQuery();
             connection.Close();
 
-            return new WandResult
-                       {
+            var success = int.Parse(successParameter.Value.ToString()) == 1;
+            var gotWandLog = int.TryParse(wandLogParameter.Value.ToString(), out var wandLogId);
+            return new WandPackResult
+            {
                            Message = messageParameter.Value.ToString(),
-                           Success = int.Parse(successParameter.Value.ToString()) == 1
+                           Success = success,
+                           WandLogId = gotWandLog ? wandLogId : (int?)null
                        };
         }
     }

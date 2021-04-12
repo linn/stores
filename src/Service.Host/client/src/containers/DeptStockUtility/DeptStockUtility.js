@@ -28,7 +28,7 @@ const mapStateToProps = (state, { location }) => ({
 });
 
 const initialise = ({ options }) => dispatch => {
-    dispatch(stockLocatorsActions.searchWithOptions(null, `&partNumber=${options.partNumber}`));
+    dispatch(stockLocatorsActions.searchWithOptions(null, `&partId=${options.partId}`));
 };
 
 const mapDispatchToProps = {

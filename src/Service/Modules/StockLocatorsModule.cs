@@ -1,10 +1,12 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System.Collections.Generic;
+
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Facade.Services;
-    using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
+    using Linn.Stores.Resources.StockLocators;
     using Linn.Stores.Service.Extensions;
     using Linn.Stores.Service.Models;
 
@@ -23,16 +25,21 @@
 
         private readonly IStockQuantitiesService stockQuantitiesService;
 
+        private readonly IStockLocatorPricesService pricesService;
+
         public StockLocatorsModule(
             IStockLocatorFacadeService service,
             IFacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource> storageLocationService,
             IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource> inspectedStateService,
-            IStockQuantitiesService stockQuantitiesService)
+            IStockQuantitiesService stockQuantitiesService,
+            IStockLocatorPricesService pricesService)
         {
             this.service = service;
             this.storageLocationService = storageLocationService;
             this.inspectedStateService = inspectedStateService;
             this.stockQuantitiesService = stockQuantitiesService;
+            this.pricesService = pricesService;
+
             this.Get("/inventory/stock-locators", _ => this.GetStockLocators());
             this.Get("/inventory/stock-locators/batches", _ => this.GetBatches());
             this.Delete("/inventory/stock-locators/{id}", parameters => this.DeleteStockLocator(parameters.id));
@@ -42,15 +49,20 @@
             this.Get("/inventory/stock-locators/states", _ => this.GetStates());
             this.Get("/inventory/stock-locators-by-location/", _ => this.GetStockLocatorsByLocation());
             this.Get("/inventory/stock-quantities/", _ => this.GetStockQuantities());
+            this.Get("/inventory/stock-locators/prices", _ => this.GetPrices());
         }
 
         private object GetStockLocators()
         {
             var resource = this.Bind<StockLocatorResource>();
-            var result = this.service.GetStockLocatorsForPart(resource.PartNumber);
-            return this.Negotiate.WithModel(result)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
-                .WithView("Index");
+            if (resource.PartId != null)
+            {
+                return this.Negotiate.WithModel(this.service.GetStockLocatorsForPart((int)resource.PartId))
+                    .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                    .WithView("Index");
+            }
+
+            return this.Negotiate.WithModel(new BadRequestResult<IEnumerable<StockLocatorPrices>>("No part number supplied"));
         }
 
         private object GetStockLocatorsByLocation()
@@ -116,6 +128,13 @@
             var resource = this.Bind<StockLocatorResource>();
             resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
             return this.Negotiate.WithModel(this.service.Add(resource));
+        }
+
+        private object GetPrices()
+        {
+            var resource = this.Bind<StockLocatorResource>();
+
+            return this.Negotiate.WithModel(this.pricesService.GetPrices(resource));
         }
     }
 }
