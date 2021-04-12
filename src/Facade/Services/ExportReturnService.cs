@@ -99,8 +99,6 @@
 
         public IResult<ExportReturn> MakeIntercompanyInvoices(ExportReturnResource resource)
         {
-            // var wot = this.UpdateExportReturn(resource.ReturnId, resource);
-            
             string result;
 
             try
@@ -123,8 +121,6 @@
             {
                 return new NotFoundResult<ExportReturn>();
             }
-
-            //return new SuccessResult<ExportReturn>(exportReturn);
 
             return this.UpdateExportReturn(resource.ReturnId, resource);
         }
