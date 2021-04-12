@@ -150,6 +150,10 @@
             builder.RegisterType<StockQuantitiesListResourceBuilder>().As<IResourceBuilder<IEnumerable<StockQuantities>>>();
             builder.RegisterType<WandItemResultResourceBuilder>().As<IResourceBuilder<WandResult>>();
             builder.RegisterType<RequisitionActionResourceBuilder>().As<IResourceBuilder<RequisitionActionResult>>();
+            builder.RegisterType<ExportReturnResourceBuilder>().As<IResourceBuilder<ExportReturn>>();
+            builder.RegisterType<ExportReturnDetailResourceBuilder>().As<IResourceBuilder<ExportReturnDetail>>();
+            builder.RegisterType<ExportReturnDetailsResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<ExportReturnDetail>>>();
             builder.RegisterType<StockLocatorPricesResourceBuilder>().As<IResourceBuilder<StockLocatorPrices>>();
             builder.RegisterType<StockLocatorPricesListResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<StockLocatorPrices>>>();

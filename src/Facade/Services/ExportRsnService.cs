@@ -23,7 +23,9 @@
                     this.repository.FilterBy(rsn => rsn.AccountId == accountId && rsn.OutletNumber == outletNumber));
             }
 
-            return new SuccessResult<IEnumerable<ExportRsn>>(this.repository.FilterBy(rsn => rsn.AccountId == accountId));
+            return new SuccessResult<IEnumerable<ExportRsn>>(
+                this.repository.FilterBy(rsn => rsn.AccountId == accountId));
         }
+
     }
 }

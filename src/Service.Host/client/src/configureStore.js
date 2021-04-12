@@ -11,6 +11,7 @@ import previousLocationMiddleware from './middleware/previousLocation';
 import receiveStockLocator from './middleware/receiveStockLocator';
 import receivePalletMove from './middleware/receivePalletMove';
 import receiveDoWandItem from './middleware/receiveDoWandItem';
+import receiveMakeIntercompnayInvoices from './middleware/receiveMakeIntercompanyInvoices';
 import receiveUnallocateConsignment from './middleware/receiveUnallocateConsignment';
 
 // eslint-disable-next-line no-underscore-dangle
@@ -27,6 +28,7 @@ const middleware = [
     allocationStarted,
     receivePalletMove,
     receiveDoWandItem,
+    receiveMakeIntercompnayInvoices,
     receiveUnallocateConsignment
 ];
 

@@ -1,11 +1,13 @@
 import { connect } from 'react-redux';
-import ExportRsns from '../components/ExportRsns';
+import ExportRsns from '../components/exportReturns/ExportRsns';
 import salesOutletsActions from '../actions/salesOutletsActions';
 import salesOutletsSelectors from '../selectors/salesOutletsSelectors';
 import salesAccountsActions from '../actions/salesAccountsActions';
 import salesAccountsSelectors from '../selectors/salesAccountsSelectors';
 import exportRsnsActions from '../actions/exportRsnsActions';
 import exportRsnsSelectors from '../selectors/exportRsnsSelectors';
+import exportReturnActions from '../actions/exportReturnActions';
+import exportReturnSelectors from '../selectors/exportReturnSelectors';
 
 const mapStateToProps = state => ({
     salesOutletsSearchResults: salesOutletsSelectors.getSearchItems(state),
@@ -13,7 +15,8 @@ const mapStateToProps = state => ({
     salesAccountsSearchResults: salesAccountsSelectors.getSearchItems(state),
     salesAccountsSearchLoading: salesAccountsSelectors.getSearchLoading(state),
     rsnsSearchResults: exportRsnsSelectors.getSearchItems(state),
-    rsnsSearchLoading: exportRsnsSelectors.getSearchLoading(state)
+    rsnsSearchLoading: exportRsnsSelectors.getSearchLoading(state),
+    exportReturnLoading: exportReturnSelectors.getLoading(state)
 });
 
 const mapDispatchToProps = {
@@ -22,7 +25,8 @@ const mapDispatchToProps = {
     searchSalesAccounts: salesAccountsActions.search,
     clearSalesAccountsSearch: salesAccountsActions.clearSearch,
     searchRsns: exportRsnsActions.searchWithOptions,
-    clearRsnsSearch: exportRsnsActions.clearSearch
+    clearRsnsSearch: exportRsnsActions.clearSearch,
+    createExportReturn: exportReturnActions.add
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExportRsns);

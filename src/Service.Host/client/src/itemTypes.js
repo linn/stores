@@ -237,6 +237,12 @@ export const stockQuantities = new ItemType(
     '/inventory/stock-quantities'
 );
 
+export const exportReturn = new ItemType(
+    'exportReturn',
+    'EXPORT_RETURN',
+    '/inventory/exports/returns'
+);
+
 export const availableStock = new ItemType(
     'availableStock',
     'AVAILABLE_STOCK',

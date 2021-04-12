@@ -106,9 +106,12 @@
             builder.RegisterType<WandFacadeService>().As<IWandFacadeService>();
             builder.RegisterType<SalesOutletService>().As<ISalesOutletService>();
             builder.RegisterType<SalesAccountService>().As<ISalesAccountService>();
+            builder.RegisterType<ExportReturnService>().As<IExportReturnService>();
             builder.RegisterType<ExportRsnService>().As<IExportRsnService>();
             builder.RegisterType<StockQuantitiesService>().As<IStockQuantitiesService>();
             builder.RegisterType<RequisitionActionsFacadeService>().As<IRequisitionActionsFacadeService>();
+            builder.RegisterType<ExportReturnDetailFacadeService>()
+                .As<IFacadeService<ExportReturnDetail, ExportReturnDetailKey, ExportReturnDetailResource, ExportReturnDetailResource>>();
             builder.RegisterType<AvailableStockFacadeService>().As<IAvailableStockFacadeService>();
             builder.RegisterType<MoveStockFacadeService>().As<IMoveStockFacadeService>();
             builder.RegisterType<RequisitionFacadeService>()
@@ -126,6 +129,7 @@
             builder.RegisterType<WcsPack>().As<IWcsPack>();
             builder.RegisterType<WandPack>().As<IWandPack>();
             builder.RegisterType<StoresPack>().As<IStoresPack>();
+            builder.RegisterType<ExportReturnsPack>().As<IExportReturnsPack>();
             builder.RegisterType<StockLocatorLocationsViewService>().As<IStockLocatorLocationsViewService>();
 
             // rest client proxies

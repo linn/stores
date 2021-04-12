@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Service.Tests.RsnModuleSpecs
+﻿namespace Linn.Stores.Service.Tests.ExportRsnModuleSpecs
 {
     using System.Collections.Generic;
     using System.Linq;
