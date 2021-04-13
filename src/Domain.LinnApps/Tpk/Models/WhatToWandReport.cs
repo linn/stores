@@ -10,7 +10,7 @@
 
         public string Type { get; set; }
 
-        public SalesOutlet Outlet { get; set; }
+        public SalesAccount Account { get; set; }
 
         public decimal TotalNettValueOfConsignment { get; set; }
     }

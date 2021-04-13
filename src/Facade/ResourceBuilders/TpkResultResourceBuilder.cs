@@ -45,7 +45,20 @@
                                                                             ConsignmentId = tpkResult.Report.Consignment.ConsignmentId,
                                                                             Country = tpkResult.Report.Consignment.Country?.DisplayName,
                                                                             SalesAccountId = tpkResult.Report.Consignment.SalesAccountId
-                                                                        }
+                                                                        },
+                                                      Lines = tpkResult.Report.Lines
+                                                          .Select(l => new WhatToWandLineResource
+                                                                           {
+                                                                               ArticleNumber = l.ArticleNumber,
+                                                                               InvoiceDescription = l.InvoiceDescription,
+                                                                               Kitted = l.Kitted,
+                                                                               MainsLead = l.MainsLead,
+                                                                               Manual = l.Manual,
+                                                                               OrderLine = l.OrderLine,
+                                                                               OrderNumber = l.OrderNumber,
+                                                                               Ordered = l.Ordered,
+                                                                               Sif = l.Sif
+                                                                           })
                                                   } 
                                                   : null
                        };

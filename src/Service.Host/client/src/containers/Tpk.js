@@ -12,7 +12,8 @@ const mapStateToProps = state => ({
     transferableStockLoading: transferableStockSelectors.getLoading(state),
     itemError: getItemError(state, processTypes.tpkTransferStock.item),
     transferredStock: tpkSelectors.getData(state)?.transferred,
-    whatToWandReport: tpkSelectors.getData(state)?.whatToWandReport
+    whatToWandReport: tpkSelectors.getData(state)?.whatToWandReport,
+    tpkLoading: tpkSelectors.getWorking(state)
 });
 
 const initialise = () => dispatch => {

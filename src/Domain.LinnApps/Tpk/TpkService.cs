@@ -23,7 +23,7 @@
 
         private readonly IStoresPack storesOoPack;
 
-        private readonly IQueryRepository<SalesOutlet> salesOutletQueryRepository;
+        private readonly IQueryRepository<SalesAccount> salesAccountQueryRepository;
 
         private readonly IQueryRepository<Consignment> consignmentRepository;
 
@@ -33,7 +33,7 @@
             ITpkPack tpkPack,
             IBundleLabelPack bundleLabelPack,
             IWhatToWandService whatToWandService,
-            IQueryRepository<SalesOutlet> salesOutletQueryRepository,
+            IQueryRepository<SalesAccount> salesAccountQueryRepository,
             IStoresPack storesOoPack,
             IQueryRepository<Consignment> consignmentRepository)
         {
@@ -42,7 +42,7 @@
             this.bundleLabelPack = bundleLabelPack;
             this.whatToWandService = whatToWandService;
             this.storesOoPack = storesOoPack;
-            this.salesOutletQueryRepository = salesOutletQueryRepository;
+            this.salesAccountQueryRepository = salesAccountQueryRepository;
             this.accountingCompaniesRepository = accountingCompaniesRepository;
             this.consignmentRepository = consignmentRepository;
         }
@@ -83,15 +83,15 @@
             
             if (!updateQuantitySuccessful)
             {
-                throw new TpkException("Failed in update_qty_printed.");
+                // throw new TpkException("Failed in update_qty_printed.");
             }
             
-            this.storesOoPack.DoTpk(from.LocationId, from.PalletNumber, DateTime.Now, out var tpkSuccessful);
-            
-            if (!tpkSuccessful)
-            {
-                throw new TpkException(this.storesOoPack.GetErrorMessage());
-            }
+            // this.storesOoPack.DoTpk(from.LocationId, from.PalletNumber, DateTime.Now, out var tpkSuccessful);
+            //
+            // if (!tpkSuccessful)
+            // {
+            //     throw new TpkException(this.storesOoPack.GetErrorMessage());
+            // }
 
             var consignment = new Consignment 
                                   { 
@@ -109,7 +109,7 @@
                            Transferred = transferredWithNotes,
                            Report = new WhatToWandReport
                                         {
-                                            Outlet = this.salesOutletQueryRepository
+                                            Account = this.salesAccountQueryRepository
                                                 .FindBy(o => o.AccountId == consignment.SalesAccountId),
                                             Consignment = consignment,
                                             TotalNettValueOfConsignment = 100.0m,
@@ -123,7 +123,10 @@
                                                                     ArticleNumber = "LINGO 4",
                                                                     InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
                                                                     Manual = null,
-                                                                    MainsLead = "CONN 014/1"
+                                                                    MainsLead = "CONN 014/1",
+                                                                    Sif = "D",
+                                                                    Kitted = 1,
+                                                                    Ordered = 1
                                                                 },
                                                             new WhatToWandLine
                                                                 {
@@ -132,7 +135,10 @@
                                                                     ArticleNumber = "LINGO 4",
                                                                     InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
                                                                     Manual = null,
-                                                                    MainsLead = "CONN 014/1"
+                                                                    MainsLead = "CONN 014/1",
+                                                                    Sif = "D",
+                                                                    Kitted = 1,
+                                                                    Ordered = 1
                                                                 },
                                                             new WhatToWandLine
                                                                 {
@@ -141,7 +147,10 @@
                                                                     ArticleNumber = "LINGO 4",
                                                                     InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
                                                                     Manual = null,
-                                                                    MainsLead = "CONN 014/1"
+                                                                    MainsLead = "CONN 014/1",
+                                                                    Sif = "D",
+                                                                    Kitted = 1,
+                                                                    Ordered = 1
                                                                 },
                                                         }
                                             },

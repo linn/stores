@@ -58,7 +58,7 @@
             using (var connection = this.databaseService.GetConnection())
             {
                 connection.Open();
-                var cmd = new OracleCommand("tpk_oo.update_qty_printed", connection)
+                var cmd = new OracleCommand("tpk_oo.update_qty_printed_wrapper", connection)
                               {
                                   CommandType = CommandType.StoredProcedure
                               };
@@ -71,14 +71,17 @@
                                };
                 cmd.Parameters.Add(arg1);
 
-                var arg2 = new OracleParameter("p_success", OracleDbType.Boolean)
-                               {
-                                   Direction = ParameterDirection.InputOutput,
-                                   Value = success
-                               };
+                 var arg2 = new OracleParameter("p_success", OracleDbType.Int32)
+                                {
+                                    Direction = ParameterDirection.InputOutput,
+                                    Value = success ? 1 : 0
+                                };
                 cmd.Parameters.Add(arg2);
-                success = ((OracleBoolean)cmd.Parameters[1].Value).IsTrue;
+                 
                 cmd.ExecuteNonQuery();
+
+                success = int.Parse(cmd.Parameters[1].Value.ToString()) == 1m;
+
                 connection.Close();
             }
         }

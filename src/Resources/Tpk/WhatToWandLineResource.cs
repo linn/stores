@@ -2,14 +2,22 @@
 {
     public class WhatToWandLineResource
     {
-        public int ConsignmentId { get; set; }
+        public int OrderNumber { get; set; }
 
-        public string ShippingMethod { get; set; }
+        public int OrderLine { get; set; }
 
-        public string Terms { get; set; }
+        public string ArticleNumber { get; set; }
 
-        public string Status { get; set; }
+        public string InvoiceDescription { get; set; }
 
-        public string Carrier { get; set; }
+        public string Manual { get; set; }
+
+        public string MainsLead { get; set; }
+
+        public int Kitted { get; set; }
+
+        public int Ordered { get; set; }
+
+        public string Sif { get; set; }
     }
 }

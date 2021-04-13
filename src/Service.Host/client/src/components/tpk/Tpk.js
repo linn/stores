@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import { useReactToPrint } from 'react-to-print';
 import Grid from '@material-ui/core/Grid';
-import { Title, ErrorCard } from '@linn-it/linn-form-components-library';
+import { Title, ErrorCard, Loading } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Page from '../../containers/Page';
@@ -15,6 +15,7 @@ export default function Tpk({
     transferredStock,
     itemError,
     clearErrors,
+    tpkLoading,
     whatToWandReport
 }) {
     const [selectedRows, setSelectedRows] = useState([]);
@@ -42,7 +43,7 @@ export default function Tpk({
     });
 
     useEffect(() => {
-        if (whatToWandReport?.length) {
+        if (whatToWandReport) {
             handlePrint();
         }
     }, [whatToWandReport, handlePrint]);
@@ -84,49 +85,65 @@ export default function Tpk({
     const handleSelectRow = selected => {
         setSelectedRows(rows.filter(r => selected.rowIds.includes(r.id)));
     };
+    if (whatToWandReport) {
+        return (
+            <Page>
+                <WhatToWandPrintout ref={componentRef} />{' '}
+            </Page>
+        );
+    }
     return (
         <Page>
-            <WhatToWandPrintout ref={componentRef} />
             <Grid container spacing={3}>
                 <Grid item xs={10}>
                     <Title text="TPK" />
                 </Grid>
-                {itemError && (
+                {tpkLoading && !itemError ? (
                     <Grid item xs={12}>
-                        <ErrorCard
-                            errorMessage={itemError?.details?.errors?.[0] || itemError.statusText}
-                        />
+                        <Loading />
                     </Grid>
+                ) : (
+                    <>
+                        {itemError && (
+                            <Grid item xs={12}>
+                                <ErrorCard
+                                    errorMessage={
+                                        itemError?.details?.errors?.[0] || itemError.statusText
+                                    }
+                                />
+                            </Grid>
+                        )}
+                        <Grid item xs={12}>
+                            <div style={{ height: 500, width: '100%' }}>
+                                <DataGrid
+                                    rows={rows}
+                                    columns={columns}
+                                    density="standard"
+                                    rowHeight={34}
+                                    checkboxSelection
+                                    onSelectionChange={handleSelectRow}
+                                    loading={transferableStockLoading}
+                                    hideFooter
+                                />
+                            </div>
+                        </Grid>
+                        <Grid item xs={2}>
+                            <Button
+                                style={{ marginTop: '22px' }}
+                                variant="contained"
+                                onClick={() => {
+                                    clearErrors();
+                                    transferStock({
+                                        stockToTransfer: selectedRows,
+                                        dateTimeTpkViewQueried: dateTimeTpkViewQueried?.toISOString()
+                                    });
+                                }}
+                            >
+                                Transfer
+                            </Button>
+                        </Grid>
+                    </>
                 )}
-                <Grid item xs={2}>
-                    <Button
-                        style={{ marginTop: '22px' }}
-                        variant="contained"
-                        onClick={() => {
-                            clearErrors();
-                            transferStock({
-                                stockToTransfer: selectedRows,
-                                dateTimeTpkViewQueried: dateTimeTpkViewQueried?.toISOString()
-                            });
-                        }}
-                    >
-                        Transfer
-                    </Button>
-                </Grid>
-                <Grid item xs={12}>
-                    <div style={{ height: 500, width: '100%' }}>
-                        <DataGrid
-                            rows={rows}
-                            columns={columns}
-                            density="standard"
-                            rowHeight={34}
-                            checkboxSelection
-                            onSelectionChange={handleSelectRow}
-                            loading={transferableStockLoading}
-                            hideFooter
-                        />
-                    </div>
-                </Grid>
             </Grid>
         </Page>
     );

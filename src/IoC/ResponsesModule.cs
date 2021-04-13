@@ -16,9 +16,9 @@
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Requisitions.Models;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.StockMove.Models;
     using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
-    using Linn.Stores.Domain.LinnApps.StockMove.Models;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Facade;
