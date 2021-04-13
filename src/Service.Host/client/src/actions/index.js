@@ -163,7 +163,7 @@ export const unallocateConsignmentActionTypes = makeProcessActionTypes(
 
 export const transferableStockActionTypes = makeActionTypes(itemTypes.transferableStock.actionType);
 
-export const tpkTransferStockActionTypes = makeActionTypes(
+export const tpkTransferStockActionTypes = makeProcessActionTypes(
     processTypes.tpkTransferStock.actionType
 );
 export const unallocateConsignmentLineActionTypes = makeProcessActionTypes(

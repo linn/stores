@@ -24,7 +24,8 @@ const initialise = () => dispatch => {
 const mapDispatchToProps = {
     initialise,
     transferStock: tpkActions.requestProcessStart,
-    clearErrors: tpkActions.clearErrorsForItem
+    clearErrors: tpkActions.clearErrorsForItem,
+    clearData: tpkActions.clearProcessData
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Tpk));

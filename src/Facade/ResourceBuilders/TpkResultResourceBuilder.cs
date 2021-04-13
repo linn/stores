@@ -1,10 +1,12 @@
 ﻿namespace Linn.Stores.Facade.ResourceBuilders
 {
     using System;
+    using System.Diagnostics;
     using System.Linq;
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
+    using Linn.Stores.Resources;
     using Linn.Stores.Resources.Tpk;
 
     public class TpkResultResourceBuilder : IResourceBuilder<TpkResult>
@@ -39,6 +41,12 @@
                                         }),
                            WhatToWandReport = tpkResult.Report != null ? new WhatToWandResource
                                                   {
+                                                      Account = new SalesAccountResource
+                                                                    {
+                                                                        AccountId = tpkResult.Report.Account.AccountId,
+                                                                        AccountName = tpkResult.Report.Account.AccountName
+                                                                    },
+                                                      Type = tpkResult.Report.Type,
                                                       Consignment = new ConsignmentResource
                                                                         {
                                                                             AddressId = tpkResult.Report.Consignment.AddressId,

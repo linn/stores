@@ -2,11 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import { useReactToPrint } from 'react-to-print';
 import Grid from '@material-ui/core/Grid';
-import { Title, ErrorCard, Loading } from '@linn-it/linn-form-components-library';
+import { Title, ErrorCard, Loading, LinkButton } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Page from '../../containers/Page';
-import WhatToWandPrintout from './WhatToWandPrintOut';
+import WhatToWandPrintOut from './WhatToWandPrintOut';
 
 export default function Tpk({
     transferableStock,
@@ -16,7 +16,8 @@ export default function Tpk({
     itemError,
     clearErrors,
     tpkLoading,
-    whatToWandReport
+    whatToWandReport,
+    clearData
 }) {
     const [selectedRows, setSelectedRows] = useState([]);
     const [dateTimeTpkViewQueried, setDateTimeTpkViewQueried] = useState(new Date());
@@ -39,7 +40,10 @@ export default function Tpk({
     }, [transferableStock]);
 
     const handlePrint = useReactToPrint({
-        content: () => componentRef.current
+        content: () => componentRef.current,
+        onAfterPrint: () => {
+            //clearData();
+        }
     });
 
     useEffect(() => {
@@ -88,7 +92,8 @@ export default function Tpk({
     if (whatToWandReport) {
         return (
             <Page>
-                <WhatToWandPrintout ref={componentRef} />{' '}
+                <WhatToWandPrintOut ref={componentRef} whatToWandReport={whatToWandReport} />
+                <Loading />
             </Page>
         );
     }
@@ -113,20 +118,6 @@ export default function Tpk({
                                 />
                             </Grid>
                         )}
-                        <Grid item xs={12}>
-                            <div style={{ height: 500, width: '100%' }}>
-                                <DataGrid
-                                    rows={rows}
-                                    columns={columns}
-                                    density="standard"
-                                    rowHeight={34}
-                                    checkboxSelection
-                                    onSelectionChange={handleSelectRow}
-                                    loading={transferableStockLoading}
-                                    hideFooter
-                                />
-                            </div>
-                        </Grid>
                         <Grid item xs={2}>
                             <Button
                                 style={{ marginTop: '22px' }}
@@ -142,6 +133,35 @@ export default function Tpk({
                                 Transfer
                             </Button>
                         </Grid>
+                        <Grid item xs={12}>
+                            <div style={{ height: 500, width: '100%' }}>
+                                <DataGrid
+                                    rows={rows}
+                                    columns={columns}
+                                    density="standard"
+                                    rowHeight={34}
+                                    checkboxSelection
+                                    onSelectionChange={handleSelectRow}
+                                    loading={transferableStockLoading}
+                                    hideFooter
+                                />
+                            </div>
+                        </Grid>
+                        {/* <Grid item xs={2}>
+                            <Button
+                                style={{ marginTop: '22px' }}
+                                variant="contained"
+                                onClick={() => {
+                                    clearErrors();
+                                    transferStock({
+                                        stockToTransfer: selectedRows,
+                                        dateTimeTpkViewQueried: dateTimeTpkViewQueried?.toISOString()
+                                    });
+                                }}
+                            >
+                                Transfer
+                            </Button>
+                        </Grid> */}
                     </>
                 )}
             </Grid>

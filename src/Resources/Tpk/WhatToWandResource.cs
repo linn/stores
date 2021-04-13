@@ -10,6 +10,6 @@
 
         public string Type { get; set; }
 
-        public SalesOutletResource Outlet { get; set; }
+        public SalesAccountResource Account { get; set; }
     }
 }
