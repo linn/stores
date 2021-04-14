@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.Facade.ResourceBuilders
 {
     using System;
-    using System.Diagnostics;
     using System.Linq;
 
     using Linn.Common.Facade;
@@ -52,7 +51,9 @@
                                                                             AddressId = tpkResult.Report.Consignment.AddressId,
                                                                             ConsignmentId = tpkResult.Report.Consignment.ConsignmentId,
                                                                             Country = tpkResult.Report.Consignment.Country?.DisplayName,
-                                                                            SalesAccountId = tpkResult.Report.Consignment.SalesAccountId
+                                                                            SalesAccountId = tpkResult.Report.Consignment.SalesAccountId,
+                                                                            TotalNettValue = tpkResult.Report.TotalNettValueOfConsignment,
+                                                                            CurrencyCode = tpkResult.Report.CurrencyCode
                                                                         },
                                                       Lines = tpkResult.Report.Lines
                                                           .Select(l => new WhatToWandLineResource

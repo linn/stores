@@ -1,5 +1,4 @@
 import { Grid, Typography } from '@material-ui/core';
-import { DataGrid } from '@material-ui/data-grid';
 import React from 'react';
 
 export default class WhatToWandPrintout extends React.PureComponent {
@@ -79,14 +78,14 @@ export default class WhatToWandPrintout extends React.PureComponent {
                             <thead style={{ textAlign: 'left' }}>
                                 <tr>
                                     <th style={{ width: '15%' }}>Order</th>
-                                    <th style={{ width: '10%' }}>Line</th>
+                                    <th style={{ width: '5%' }}>Line</th>
                                     <th style={{ width: '15%' }}>Article</th>
                                     <th style={{ width: '20%' }}>Invoice Desc.</th>
-                                    <th>Manual</th>
-                                    <th>Mains Lead</th>
-                                    <th>Kitted</th>
-                                    <th>Ordered</th>
-                                    <th>SIF</th>
+                                    <th style={{ width: '15%' }}>Manual</th>
+                                    <th style={{ width: '15%' }}>Mains Lead</th>
+                                    <th style={{ width: '5%' }}>Kitted</th>
+                                    <th style={{ width: '5%' }}>Ordered</th>
+                                    <th style={{ width: '5%' }}>SIF</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -105,6 +104,13 @@ export default class WhatToWandPrintout extends React.PureComponent {
                                 ))}
                             </tbody>
                         </table>
+                    </Grid>
+                    <Grid item xs={1} />
+                    <Grid item xs={1} />
+                    <Grid item xs={10}>
+                        <Typography align="center" variant="h6">
+                            {`Total Nett Value Of Consignment (${whatToWandReport.consignment.currencyCode}): ${whatToWandReport.consignment.totalNettValue.toFixed(2)}`}
+                        </Typography>
                     </Grid>
                     <Grid item xs={1} />
                 </Grid>

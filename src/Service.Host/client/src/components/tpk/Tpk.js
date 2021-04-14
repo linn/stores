@@ -42,7 +42,7 @@ export default function Tpk({
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
         onAfterPrint: () => {
-            //clearData();
+            clearData();
         }
     });
 

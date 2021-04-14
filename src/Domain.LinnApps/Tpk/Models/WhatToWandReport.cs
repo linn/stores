@@ -13,5 +13,7 @@
         public SalesAccount Account { get; set; }
 
         public decimal TotalNettValueOfConsignment { get; set; }
+
+        public string CurrencyCode { get; set; }
     }
 }

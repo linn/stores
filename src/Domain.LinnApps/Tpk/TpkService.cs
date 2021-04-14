@@ -112,7 +112,8 @@
                                             Account = this.salesAccountQueryRepository
                                                 .FindBy(o => o.AccountId == consignment.SalesAccountId),
                                             Consignment = consignment,
-                                            TotalNettValueOfConsignment = 100.0m,
+                                            TotalNettValueOfConsignment = 100.0m, // sum of all the sales_order_details net totals,
+                                            CurrencyCode = "USD", // this is on the sales order
                                             Type = "*START*",
                                             Lines = new List<WhatToWandLine>
                                                         {
@@ -134,7 +135,7 @@
                                                                     OrderLine = 2,
                                                                     ArticleNumber = "LINGO 4",
                                                                     InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
-                                                                    Manual = null,
+                                                                    Manual = "Manual",
                                                                     MainsLead = "CONN 014/1",
                                                                     Sif = "D",
                                                                     Kitted = 1,
@@ -147,6 +148,138 @@
                                                                     ArticleNumber = "LINGO 4",
                                                                     InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
                                                                     Manual = null,
+                                                                    MainsLead = "CONN 014/1",
+                                                                    Sif = "D",
+                                                                    Kitted = 1,
+                                                                    Ordered = 1
+                                                                },
+                                                            new WhatToWandLine
+                                                                {
+                                                                    OrderNumber = 603136,
+                                                                    OrderLine = 4,
+                                                                    ArticleNumber = "LINGO 4",
+                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
+                                                                    Manual = "Manual",
+                                                                    MainsLead = "CONN 014/1",
+                                                                    Sif = "D",
+                                                                    Kitted = 1,
+                                                                    Ordered = 1
+                                                                },
+                                                            new WhatToWandLine
+                                                                {
+                                                                    OrderNumber = 603136,
+                                                                    OrderLine = 5,
+                                                                    ArticleNumber = "LINGO 4",
+                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
+                                                                    Manual = "Manual",
+                                                                    MainsLead = "CONN 014/1",
+                                                                    Sif = "D",
+                                                                    Kitted = 1,
+                                                                    Ordered = 1
+                                                                },
+                                                            new WhatToWandLine
+                                                                {
+                                                                    OrderNumber = 603136,
+                                                                    OrderLine = 6,
+                                                                    ArticleNumber = "LINGO 4",
+                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
+                                                                    Manual = "Manual",
+                                                                    MainsLead = "CONN 014/1",
+                                                                    Sif = "D",
+                                                                    Kitted = 1,
+                                                                    Ordered = 1
+                                                                },
+                                                            new WhatToWandLine
+                                                                {
+                                                                    OrderNumber = 603136,
+                                                                    OrderLine = 7,
+                                                                    ArticleNumber = "LINGO 4",
+                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
+                                                                    Manual = "Manual",
+                                                                    MainsLead = "CONN 014/1",
+                                                                    Sif = "D",
+                                                                    Kitted = 1,
+                                                                    Ordered = 1
+                                                                },
+                                                            new WhatToWandLine
+                                                                {
+                                                                    OrderNumber = 603136,
+                                                                    OrderLine = 8,
+                                                                    ArticleNumber = "LINGO 4",
+                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
+                                                                    Manual = "Manual",
+                                                                    MainsLead = "CONN 014/1",
+                                                                    Sif = "D",
+                                                                    Kitted = 1,
+                                                                    Ordered = 1
+                                                                },
+                                                            new WhatToWandLine
+                                                                {
+                                                                    OrderNumber = 603136,
+                                                                    OrderLine = 9,
+                                                                    ArticleNumber = "LINGO 4",
+                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
+                                                                    Manual = "Manual",
+                                                                    MainsLead = "CONN 014/1",
+                                                                    Sif = "D",
+                                                                    Kitted = 1,
+                                                                    Ordered = 1
+                                                                },
+                                                            new WhatToWandLine
+                                                                {
+                                                                    OrderNumber = 603136,
+                                                                    OrderLine = 10,
+                                                                    ArticleNumber = "LINGO 4",
+                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
+                                                                    Manual = "Manual",
+                                                                    MainsLead = "CONN 014/1",
+                                                                    Sif = "D",
+                                                                    Kitted = 1,
+                                                                    Ordered = 1
+                                                                },
+                                                            new WhatToWandLine
+                                                                {
+                                                                    OrderNumber = 603136,
+                                                                    OrderLine = 11,
+                                                                    ArticleNumber = "LINGO 4",
+                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
+                                                                    Manual = "Manual",
+                                                                    MainsLead = "CONN 014/1",
+                                                                    Sif = "D",
+                                                                    Kitted = 1,
+                                                                    Ordered = 1
+                                                                },
+                                                            new WhatToWandLine
+                                                                {
+                                                                    OrderNumber = 603136,
+                                                                    OrderLine = 12,
+                                                                    ArticleNumber = "LINGO 4",
+                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
+                                                                    Manual = "Manual",
+                                                                    MainsLead = "CONN 014/1",
+                                                                    Sif = "D",
+                                                                    Kitted = 1,
+                                                                    Ordered = 1
+                                                                },
+                                                            new WhatToWandLine
+                                                                {
+                                                                    OrderNumber = 603136,
+                                                                    OrderLine = 13,
+                                                                    ArticleNumber = "LINGO 4",
+                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
+                                                                    Manual = "Manual",
+                                                                    MainsLead = "CONN 014/1",
+                                                                    Sif = "D",
+                                                                    Kitted = 1,
+                                                                    Ordered = 1
+                                                                },
+                                                            new WhatToWandLine
+                                                                {
+                                                                    OrderNumber = 603136,
+                                                                    OrderLine = 14,
+                                                                    ArticleNumber = "LINGO 4",
+                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
+                                                                    Manual = "Manual",
                                                                     MainsLead = "CONN 014/1",
                                                                     Sif = "D",
                                                                     Kitted = 1,

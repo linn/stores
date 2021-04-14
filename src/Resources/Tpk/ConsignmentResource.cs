@@ -11,5 +11,9 @@
         public string Country { get; set; }
 
         public string CountryCode { get; set; }
+
+        public decimal TotalNettValue { get; set; }
+
+        public string CurrencyCode { get; set; }
     }
 }
