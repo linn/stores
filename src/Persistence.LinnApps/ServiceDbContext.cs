@@ -9,8 +9,8 @@
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
-    using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
+    using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation;
@@ -162,6 +162,7 @@
         public DbQuery<TransferableStock> TransferableStock { get; set; }
 
         public DbQuery<Consignment> Consignments { get; set; }
+
         public DbSet<WandLog> WandLogs { get; set; }
 
         public DbQuery<AvailableStock> StockAvailable { get; set; }
@@ -169,6 +170,10 @@
         public DbQuery<StockLocatorPrices> StockLocatorView { get; set; }
 
         public DbSet<SalesArticle> SalesArticles { get; set; }
+
+        public DbQuery<SalesOrder> SalesOrders { get; set; }
+
+        public DbQuery<SalesOrderDetail> SalesOrderDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -249,6 +254,8 @@
             this.QueryStockLocatorView(builder);
             this.QueryStockAvailable(builder);
             this.BuildSalesArticles(builder);
+            this.QuerySalesOrders(builder);
+            this.QuerySalesOrderDetails(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1422,6 +1429,21 @@
             q.Property(c => c.CountryCode).HasColumnName("COUNTRY");
             q.Property(c => c.SalesAccountId).HasColumnName("SALES_ACCOUNT_ID");
             q.HasOne(c => c.Country).WithMany(y => y.Consignments).HasForeignKey(c => c.CountryCode);
+        }
+
+        private void QuerySalesOrders(ModelBuilder builder)
+        {
+            var q = builder.Query<SalesOrder>().ToView("SALES_ORDERS");
+            q.Property(o => o.OrderNumber).HasColumnName("ORDER_NUMBER");
+            q.Property(o => o.CurrencyCode).HasColumnName("CURRENCY_CODE");
+        }
+
+        private void QuerySalesOrderDetails(ModelBuilder builder)
+        {
+            var q = builder.Query<SalesOrderDetail>().ToView("SALES_ORDER_DETAILS");
+            q.Property(d => d.OrderLine).HasColumnName("ORDER_LINE");
+            q.Property(d => d.OrderNumber).HasColumnName("ORDER_NUMBER");
+            q.Property(d => d.NettTotal).HasColumnName("NET_TOTAL");
         }
     }
 }

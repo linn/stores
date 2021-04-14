@@ -4,6 +4,8 @@
     {
         string GetTpkNotes(int consignmentId, string fromLocation);
 
+        string GetWhatToWandType(int consignmentId);
+
         void UpdateQuantityPrinted(string fromLocation, out bool success);
     }
 }

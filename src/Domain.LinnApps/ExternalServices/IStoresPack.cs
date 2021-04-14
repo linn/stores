@@ -12,6 +12,7 @@
         void DoTpk(int locationId, int palletNumber, DateTime dateTimeStarted, out bool success);
 
         string GetErrorMessage();
+
         RequisitionProcessResult CreateMoveReq(int userNumber);
 
         RequisitionProcessResult CheckStockAtFromLocation(

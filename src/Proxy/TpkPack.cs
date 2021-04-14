@@ -5,7 +5,6 @@
     using Linn.Stores.Domain.LinnApps.ExternalServices;
 
     using Oracle.ManagedDataAccess.Client;
-    using Oracle.ManagedDataAccess.Types;
 
     public class TpkPack : ITpkPack
     {
@@ -45,6 +44,34 @@
                                   Value = consignmentId
                               };
                 cmd.Parameters.Add(arg2);
+
+                cmd.ExecuteNonQuery();
+                connection.Close();
+                return result.Value.ToString();
+            }
+        }
+
+        public string GetWhatToWandType(int consignmentId)
+        {
+            using (var connection = this.databaseService.GetConnection())
+            {
+                connection.Open();
+                var cmd = new OracleCommand("tpk_oo.wtw_type", connection) { CommandType = CommandType.StoredProcedure };
+
+                var result = new OracleParameter(null, OracleDbType.Varchar2)
+                                 {
+                                     Direction = ParameterDirection.ReturnValue,
+                                     Size = 50
+                                 };
+                cmd.Parameters.Add(result);
+
+                var arg1 = new OracleParameter("p_consignment_id", OracleDbType.Varchar2)
+                               {
+                                   Direction = ParameterDirection.Input,
+                                   Size = 50,
+                                   Value = consignmentId
+                               };
+                cmd.Parameters.Add(arg1);
 
                 cmd.ExecuteNonQuery();
                 connection.Close();

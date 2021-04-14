@@ -27,6 +27,10 @@
 
         private readonly IQueryRepository<Consignment> consignmentRepository;
 
+        private readonly IQueryRepository<SalesOrderDetail> salesOrderDetailRepository;
+
+        private readonly IQueryRepository<SalesOrder> salesOrderRepository;
+
         public TpkService(
             IQueryRepository<TransferableStock> tpkView,
             IQueryRepository<AccountingCompany> accountingCompaniesRepository,
@@ -35,7 +39,9 @@
             IWhatToWandService whatToWandService,
             IQueryRepository<SalesAccount> salesAccountQueryRepository,
             IStoresPack storesOoPack,
-            IQueryRepository<Consignment> consignmentRepository)
+            IQueryRepository<Consignment> consignmentRepository,
+            IQueryRepository<SalesOrderDetail> salesOrderDetailRepository,
+            IQueryRepository<SalesOrder> salesOrderRepository)
         {
             this.tpkView = tpkView;
             this.tpkPack = tpkPack;
@@ -45,6 +51,8 @@
             this.salesAccountQueryRepository = salesAccountQueryRepository;
             this.accountingCompaniesRepository = accountingCompaniesRepository;
             this.consignmentRepository = consignmentRepository;
+            this.salesOrderDetailRepository = salesOrderDetailRepository;
+            this.salesOrderRepository = salesOrderRepository;
         }
 
         public TpkResult TransferStock(TpkRequest tpkRequest)
@@ -77,31 +85,23 @@
             
             this.bundleLabelPack.PrintTpkBoxLabels(from.FromLocation);
             
-            var whatToWand = this.whatToWandService.WhatToWand(from.FromLocation);
+            var whatToWand = this.whatToWandService.WhatToWand(from.FromLocation).ToList();
             
             this.tpkPack.UpdateQuantityPrinted(from.FromLocation, out var updateQuantitySuccessful);
             
             if (!updateQuantitySuccessful)
             {
-                // throw new TpkException("Failed in update_qty_printed.");
+                throw new TpkException("Failed in update_qty_printed.");
             }
             
-            // this.storesOoPack.DoTpk(from.LocationId, from.PalletNumber, DateTime.Now, out var tpkSuccessful);
-            //
-            // if (!tpkSuccessful)
-            // {
-            //     throw new TpkException(this.storesOoPack.GetErrorMessage());
-            // }
+            this.storesOoPack.DoTpk(from.LocationId, from.PalletNumber, DateTime.Now, out var tpkSuccessful);
+            
+            if (!tpkSuccessful)
+            {
+                throw new TpkException(this.storesOoPack.GetErrorMessage());
+            }
 
-            var consignment = new Consignment 
-                                  { 
-                                      ConsignmentId = 383093, SalesAccountId = 65861, AddressId = 925132, Country = new Country
-                                                  {
-                                                      DisplayName = "United States Of America"
-                                                  }
-                                  };
-                
-            //this.consignmentRepository.FindBy(c => c.ConsignmentId == from.ConsignmentId);
+            var consignment = this.consignmentRepository.FindBy(c => c.ConsignmentId == from.ConsignmentId);
             return new TpkResult 
                        {
                            Success = true,
@@ -112,181 +112,14 @@
                                             Account = this.salesAccountQueryRepository
                                                 .FindBy(o => o.AccountId == consignment.SalesAccountId),
                                             Consignment = consignment,
-                                            TotalNettValueOfConsignment = 100.0m, // sum of all the sales_order_details net totals,
-                                            CurrencyCode = "USD", // this is on the sales order
-                                            Type = "*START*",
-                                            Lines = new List<WhatToWandLine>
-                                                        {
-                                                            new WhatToWandLine
-                                                                {
-                                                                    OrderNumber = 603136,
-                                                                    OrderLine = 1,
-                                                                    ArticleNumber = "LINGO 4",
-                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
-                                                                    Manual = null,
-                                                                    MainsLead = "CONN 014/1",
-                                                                    Sif = "D",
-                                                                    Kitted = 1,
-                                                                    Ordered = 1
-                                                                },
-                                                            new WhatToWandLine
-                                                                {
-                                                                    OrderNumber = 603136,
-                                                                    OrderLine = 2,
-                                                                    ArticleNumber = "LINGO 4",
-                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
-                                                                    Manual = "Manual",
-                                                                    MainsLead = "CONN 014/1",
-                                                                    Sif = "D",
-                                                                    Kitted = 1,
-                                                                    Ordered = 1
-                                                                },
-                                                            new WhatToWandLine
-                                                                {
-                                                                    OrderNumber = 603136,
-                                                                    OrderLine = 3,
-                                                                    ArticleNumber = "LINGO 4",
-                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
-                                                                    Manual = null,
-                                                                    MainsLead = "CONN 014/1",
-                                                                    Sif = "D",
-                                                                    Kitted = 1,
-                                                                    Ordered = 1
-                                                                },
-                                                            new WhatToWandLine
-                                                                {
-                                                                    OrderNumber = 603136,
-                                                                    OrderLine = 4,
-                                                                    ArticleNumber = "LINGO 4",
-                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
-                                                                    Manual = "Manual",
-                                                                    MainsLead = "CONN 014/1",
-                                                                    Sif = "D",
-                                                                    Kitted = 1,
-                                                                    Ordered = 1
-                                                                },
-                                                            new WhatToWandLine
-                                                                {
-                                                                    OrderNumber = 603136,
-                                                                    OrderLine = 5,
-                                                                    ArticleNumber = "LINGO 4",
-                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
-                                                                    Manual = "Manual",
-                                                                    MainsLead = "CONN 014/1",
-                                                                    Sif = "D",
-                                                                    Kitted = 1,
-                                                                    Ordered = 1
-                                                                },
-                                                            new WhatToWandLine
-                                                                {
-                                                                    OrderNumber = 603136,
-                                                                    OrderLine = 6,
-                                                                    ArticleNumber = "LINGO 4",
-                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
-                                                                    Manual = "Manual",
-                                                                    MainsLead = "CONN 014/1",
-                                                                    Sif = "D",
-                                                                    Kitted = 1,
-                                                                    Ordered = 1
-                                                                },
-                                                            new WhatToWandLine
-                                                                {
-                                                                    OrderNumber = 603136,
-                                                                    OrderLine = 7,
-                                                                    ArticleNumber = "LINGO 4",
-                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
-                                                                    Manual = "Manual",
-                                                                    MainsLead = "CONN 014/1",
-                                                                    Sif = "D",
-                                                                    Kitted = 1,
-                                                                    Ordered = 1
-                                                                },
-                                                            new WhatToWandLine
-                                                                {
-                                                                    OrderNumber = 603136,
-                                                                    OrderLine = 8,
-                                                                    ArticleNumber = "LINGO 4",
-                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
-                                                                    Manual = "Manual",
-                                                                    MainsLead = "CONN 014/1",
-                                                                    Sif = "D",
-                                                                    Kitted = 1,
-                                                                    Ordered = 1
-                                                                },
-                                                            new WhatToWandLine
-                                                                {
-                                                                    OrderNumber = 603136,
-                                                                    OrderLine = 9,
-                                                                    ArticleNumber = "LINGO 4",
-                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
-                                                                    Manual = "Manual",
-                                                                    MainsLead = "CONN 014/1",
-                                                                    Sif = "D",
-                                                                    Kitted = 1,
-                                                                    Ordered = 1
-                                                                },
-                                                            new WhatToWandLine
-                                                                {
-                                                                    OrderNumber = 603136,
-                                                                    OrderLine = 10,
-                                                                    ArticleNumber = "LINGO 4",
-                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
-                                                                    Manual = "Manual",
-                                                                    MainsLead = "CONN 014/1",
-                                                                    Sif = "D",
-                                                                    Kitted = 1,
-                                                                    Ordered = 1
-                                                                },
-                                                            new WhatToWandLine
-                                                                {
-                                                                    OrderNumber = 603136,
-                                                                    OrderLine = 11,
-                                                                    ArticleNumber = "LINGO 4",
-                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
-                                                                    Manual = "Manual",
-                                                                    MainsLead = "CONN 014/1",
-                                                                    Sif = "D",
-                                                                    Kitted = 1,
-                                                                    Ordered = 1
-                                                                },
-                                                            new WhatToWandLine
-                                                                {
-                                                                    OrderNumber = 603136,
-                                                                    OrderLine = 12,
-                                                                    ArticleNumber = "LINGO 4",
-                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
-                                                                    Manual = "Manual",
-                                                                    MainsLead = "CONN 014/1",
-                                                                    Sif = "D",
-                                                                    Kitted = 1,
-                                                                    Ordered = 1
-                                                                },
-                                                            new WhatToWandLine
-                                                                {
-                                                                    OrderNumber = 603136,
-                                                                    OrderLine = 13,
-                                                                    ArticleNumber = "LINGO 4",
-                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
-                                                                    Manual = "Manual",
-                                                                    MainsLead = "CONN 014/1",
-                                                                    Sif = "D",
-                                                                    Kitted = 1,
-                                                                    Ordered = 1
-                                                                },
-                                                            new WhatToWandLine
-                                                                {
-                                                                    OrderNumber = 603136,
-                                                                    OrderLine = 14,
-                                                                    ArticleNumber = "LINGO 4",
-                                                                    InvoiceDescription = "LINGO 4 LP12 POWER SUPPLY IN BLACK",
-                                                                    Manual = "Manual",
-                                                                    MainsLead = "CONN 014/1",
-                                                                    Sif = "D",
-                                                                    Kitted = 1,
-                                                                    Ordered = 1
-                                                                },
-                                                        }
-                                            },
+                                            Type = this.tpkPack.GetWhatToWandType(consignment.ConsignmentId),
+                                            Lines = whatToWand,
+                                            CurrencyCode = this.salesOrderRepository
+                                                .FindBy(o => o.OrderNumber == whatToWand.First().OrderNumber)
+                                                .CurrencyCode, 
+                                            TotalNettValueOfConsignment = whatToWand.Sum(x => this.salesOrderDetailRepository
+                                                .FindBy(d => d.OrderNumber == x.OrderNumber && d.OrderLine == x.OrderLine).NettTotal),
+                                        },
                                      };
         }
     }
