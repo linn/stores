@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import { useReactToPrint } from 'react-to-print';
 import Grid from '@material-ui/core/Grid';
-import { Title, ErrorCard, Loading, LinkButton } from '@linn-it/linn-form-components-library';
+import { Title, ErrorCard, Loading } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Page from '../../containers/Page';
@@ -178,12 +178,17 @@ Tpk.propTypes = {
     itemError: PropTypes.shape({
         statusText: PropTypes.string,
         details: PropTypes.shape({ errors: PropTypes.arrayOf(PropTypes.string) })
-    })
+    }),
+    tpkLoading: PropTypes.bool,
+    whatToWandReport: PropTypes.shape({}),
+    clearData: PropTypes.func.isRequired
 };
 
 Tpk.defaultProps = {
     transferableStock: [],
     transferredStock: [],
     transferableStockLoading: true,
-    itemError: null
+    itemError: null,
+    tpkLoading: false,
+    whatToWandReport: null
 };

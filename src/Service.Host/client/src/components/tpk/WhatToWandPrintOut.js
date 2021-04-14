@@ -1,5 +1,6 @@
 import { Grid, Typography } from '@material-ui/core';
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class WhatToWandPrintout extends React.PureComponent {
     render() {
@@ -74,8 +75,8 @@ export default class WhatToWandPrintout extends React.PureComponent {
                     <Grid item xs={5} />
                     <Grid item xs={1} />
                     <Grid item xs={10}>
-                        <table style={{ width: '100%' }}>
-                            <thead style={{ textAlign: 'left' }}>
+                        <table style={{ width: '100%', borderSpacing: '0 20px' }}>
+                            <thead style={{ textAlign: 'left', marginTop: '20px' }}>
                                 <tr>
                                     <th style={{ width: '15%' }}>Order</th>
                                     <th style={{ width: '5%' }}>Line</th>
@@ -90,7 +91,7 @@ export default class WhatToWandPrintout extends React.PureComponent {
                             </thead>
                             <tbody>
                                 {rows.map(r => (
-                                    <tr>
+                                    <tr style={{ paddingTop: '10px' }}>
                                         <td>{r.orderNumber}</td>
                                         <td>{r.orderLine}</td>
                                         <td>{r.articleNumber}</td>
@@ -109,7 +110,9 @@ export default class WhatToWandPrintout extends React.PureComponent {
                     <Grid item xs={1} />
                     <Grid item xs={10}>
                         <Typography align="center" variant="h6">
-                            {`Total Nett Value Of Consignment (${whatToWandReport.consignment.currencyCode}): ${whatToWandReport.consignment.totalNettValue.toFixed(2)}`}
+                            {`Total Nett Value Of Consignment (${
+                                whatToWandReport.consignment.currencyCode
+                            }): ${whatToWandReport.consignment.totalNettValue.toFixed(2)}`}
                         </Typography>
                     </Grid>
                     <Grid item xs={1} />
@@ -118,3 +121,18 @@ export default class WhatToWandPrintout extends React.PureComponent {
         );
     }
 }
+
+WhatToWandPrintout.propTypes = {
+    whatToWandReport: PropTypes.shape({
+        consignment: PropTypes.shape({
+            currencyCode: PropTypes.string,
+            totalNettValue: PropTypes.number,
+            country: PropTypes.string,
+            consignmentId: PropTypes.number,
+            addressId: PropTypes.number
+        }),
+        lines: PropTypes.arrayOf(PropTypes.shape({})),
+        type: PropTypes.string,
+        account: PropTypes.shape({ accountName: PropTypes.string, accountId: PropTypes.number })
+    }).isRequired
+};
