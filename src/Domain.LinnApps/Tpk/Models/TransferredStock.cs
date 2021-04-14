@@ -2,6 +2,10 @@
 {
     public class TransferredStock : TransferableStock
     {
+        public TransferredStock()
+        {
+        }
+
         public TransferredStock(TransferableStock parent, string notes)
         {
             foreach (var prop in parent.GetType().GetProperties())
