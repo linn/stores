@@ -58,7 +58,15 @@ export default function DisplayOnlyFields({ exportReturn }) {
                     <ListItem>
                         <ListItemText
                             primary="Date Dispatched"
-                            secondary={exportReturn.dateDispatched}
+                            secondary={moment(exportReturn.dateDispatched).format('DD MMM YYYY')}
+                        />
+                    </ListItem>
+                )}
+                {exportReturn.dateProcessed && (
+                    <ListItem>
+                        <ListItemText
+                            primary="Date Processed"
+                            secondary={moment(exportReturn.dateProcessed).format('DD MMM YYYY')}
                         />
                     </ListItem>
                 )}
@@ -88,6 +96,7 @@ DisplayOnlyFields.propTypes = {
         currency: PropTypes.string,
         hubId: PropTypes.number,
         dateDispatched: PropTypes.string,
-        terms: PropTypes.string
+        terms: PropTypes.string,
+        dateProcessed: PropTypes.string
     }).isRequired
 };

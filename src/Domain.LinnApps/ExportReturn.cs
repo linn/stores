@@ -8,7 +8,7 @@
         public string CarrierCode { get; set; }
         
         public int ReturnId { get; set; }
-        
+
         public DateTime DateCreated { get; set; }
         
         public string Currency { get; set; }

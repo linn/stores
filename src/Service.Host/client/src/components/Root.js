@@ -186,6 +186,11 @@ const Root = ({ store }) => (
                                     />
                                     <Route
                                         exact
+                                        path="/inventory/exports/returns"
+                                        component={ExportRsns}
+                                    />
+                                    <Route
+                                        exact
                                         path="/inventory/move-stock"
                                         component={StockMove}
                                     />

@@ -73,6 +73,7 @@ import historyStore from './history';
 import reqMoves from './reqMoves';
 import exportReturn from './exportReturn';
 import makeIntercompanyInvoices from './makeIntercompanyInvoices';
+import interCompanyInvoices from './interCompanyInvoices';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -102,6 +103,7 @@ const rootReducer = history =>
         exportRsns,
         finishAllocation,
         inspectedStates,
+        interCompanyInvoices,
         makeIntercompanyInvoices,
         manufacturers,
         mechPartSource,

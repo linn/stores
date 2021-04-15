@@ -9,6 +9,8 @@ import makeIntercompanyInvoicesActions from '../actions/makeIntercompanyInvoices
 import makeIntercompanyInvoicesSelectors from '../selectors/makeIntercompanyInvoicesSelectors';
 import * as processTypes from '../processTypes';
 import ExportReturn from '../components/exportReturns/ExportReturn';
+import interCompanyInvoicesActions from '../actions/interCompanyInvoicesActions';
+import interCompanyInvoicesSelectors from '../selectors/interCompanyInvoicesSelectors';
 
 const mapStateToProps = (state, { match }) => ({
     exportReturnId: match.params.id,
@@ -22,7 +24,9 @@ const mapStateToProps = (state, { match }) => ({
         state,
         processTypes.makeIntercompanyInvoices.item
     ),
-    makeIntercompanyInvoicesWorking: makeIntercompanyInvoicesSelectors.getWorking(state)
+    makeIntercompanyInvoicesWorking: makeIntercompanyInvoicesSelectors.getWorking(state),
+    interCompanyInvoicesLoading: interCompanyInvoicesSelectors.getSearchLoading(state),
+    interCompanyInvoices: interCompanyInvoicesSelectors.getSearchItems(state)
 });
 
 const initialise = ({ exportReturnId }) => dispatch => {
@@ -34,7 +38,8 @@ const mapDispatchToProps = {
     updateExportReturn: exportReturnActions.update,
     makeIntercompanyInvoices: makeIntercompanyInvoicesActions.requestProcessStart,
     clearMakeIntercompanyInvoicesErrors: makeIntercompanyInvoicesActions.clearErrorsForItem,
-    setMakeIntercompanyInvoicesMessageVisible: makeIntercompanyInvoicesActions.setMessageVisible
+    setMakeIntercompanyInvoicesMessageVisible: makeIntercompanyInvoicesActions.setMessageVisible,
+    searchInterCompanyInvoices: interCompanyInvoicesActions.search
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(ExportReturn));

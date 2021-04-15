@@ -170,6 +170,8 @@
 
         public DbSet<SalesArticle> SalesArticles { get; set; }
 
+        public DbQuery<InterCompanyInvoice> IntercompanyInvoices { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -249,6 +251,7 @@
             this.QueryStockLocatorView(builder);
             this.QueryStockAvailable(builder);
             this.BuildSalesArticles(builder);
+            this.QueryIntercompanyInvoices(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1444,6 +1447,13 @@
             q.Property(e => e.Width).HasColumnName("WIDTH");
             q.Property(e => e.Height).HasColumnName("HEIGHT");
             q.Property(e => e.Depth).HasColumnName("DEPTH");
+        }
+
+        private void QueryIntercompanyInvoices(ModelBuilder builder)
+        {
+            var q = builder.Query<InterCompanyInvoice>().ToView("INTER_COMPANY_INVOICES");
+            q.Property(e => e.DocumentNumber).HasColumnName("DOCUMENT_NUMBER");
+            q.Property(e => e.ExportReturnId).HasColumnName("EXPORT_RETURN_ID");
         }
     }
 }

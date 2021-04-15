@@ -256,3 +256,9 @@ export const stockLocatorPrices = new ItemType(
 );
 
 export const reqMoves = new ItemType('reqMoves', 'REQ_MOVES', '/logistics/requisitions');
+
+export const interCompanyInvoices = new ItemType(
+    'interCompanyInvoices',
+    'INTER_COMPANY_INVOICES',
+    '/inventory/exports/inter-company-invoices'
+);

@@ -180,3 +180,7 @@ export const stockLocatorPricesActionTypes = makeActionTypes(
 );
 
 export const reqMovesActionTypes = makeActionTypes(itemTypes.reqMoves.actionType);
+
+export const interCompanyInvoicesActionTypes = makeActionTypes(
+    itemTypes.interCompanyInvoices.actionType
+);
