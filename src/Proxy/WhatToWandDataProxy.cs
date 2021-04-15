@@ -15,7 +15,7 @@
 
         public IEnumerable<WhatToWandLine> WhatToWand(string fromLocation)
         {
-            // todo - this query isn't right - how do I incorporate fromLocation?
+            // todo - this query isn't right - how do I incorporate fromLocation? (See Data Links in Report Builder)
             var sql = $@"select
             SOD.ORDER_NUMBER ORDER_NUMBER,
             SOD.ORDER_LINE ORDER_LINE,
