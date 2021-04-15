@@ -57,8 +57,6 @@ function MechPartSource({
                   capacitanceUnits: 'uF',
                   usages: [],
                   mechanicalOrElectrical: 'E',
-                  partType: 'RES',
-                  assemblyType: 'SM',
                   samplesRequired: 'N'
               }
             : null
