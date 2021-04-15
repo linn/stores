@@ -1443,7 +1443,7 @@
             var q = builder.Query<SalesOrderDetail>().ToView("SALES_ORDER_DETAILS");
             q.Property(d => d.OrderLine).HasColumnName("ORDER_LINE");
             q.Property(d => d.OrderNumber).HasColumnName("ORDER_NUMBER");
-            q.Property(d => d.NettTotal).HasColumnName("NET_TOTAL");
+            q.Property(d => d.NettTotal).HasColumnName("NETT_TOTAL");
         }
     }
 }
