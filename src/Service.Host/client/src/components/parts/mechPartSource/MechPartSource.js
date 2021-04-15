@@ -53,10 +53,12 @@ function MechPartSource({
                   createPart: true,
                   mechPartAlts: [],
                   mechPartManufacturerAlts: [],
-                  resistanceUnits: 'KΩ',
+                  resistanceUnits: 'Ω',
                   capacitanceUnits: 'uF',
                   usages: [],
                   mechanicalOrElectrical: 'E',
+                  partType: 'RES',
+                  assemblyType: 'SM',
                   samplesRequired: 'N'
               }
             : null
