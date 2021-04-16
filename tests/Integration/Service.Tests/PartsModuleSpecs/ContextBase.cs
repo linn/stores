@@ -89,8 +89,10 @@
 
         protected IAuthorisationService AuthService { get; private set; }
 
-        protected IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>
-            TqmsCategoriesService { get; private set; }
+        protected IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource> TqmsCategoriesService
+        {
+            get; private set;
+        }
 
         [SetUp]
         public void EstablishContext()
@@ -191,7 +193,7 @@
                                 {
                                     var claims = new List<Claim>
                                                      {
-                                                         new Claim(ClaimTypes.Role, "employee"),
+                                                         new Claim("employee", "employees/123"),
                                                          new Claim(ClaimTypes.NameIdentifier, "test-user")
                                                      };
                                     var user = new ClaimsIdentity(claims, "jwt");
