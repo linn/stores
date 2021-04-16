@@ -20,5 +20,3 @@ This services provides forms and reporting for existing data and code in the Lin
 * `npm install` to install npm packages.
 * `npm start` to run client locally on port 3000.
 * `npm test` to run javascript tests.
-
-
