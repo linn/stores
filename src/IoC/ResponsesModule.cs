@@ -161,6 +161,10 @@
             builder.RegisterType<RequisitionProcessResultResourceBuilder>().As<IResourceBuilder<RequisitionProcessResult>>();
             builder.RegisterType<RequisitionResourceBuilder>().As<IResourceBuilder<RequisitionHeader>>();
             builder.RegisterType<RequisitionMovesResourceBuilder>().As<IRequisitionMovesResourceBuilder>();
+            builder.RegisterType<InterCompanyInvoiceResourceBuilder>()
+                .As<IResourceBuilder<InterCompanyInvoice>>();
+            builder.RegisterType<InterCompanyInvoicesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<InterCompanyInvoice>>>();
         }
     }
 }

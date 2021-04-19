@@ -117,6 +117,7 @@
             builder.RegisterType<RequisitionFacadeService>()
                 .As<IFacadeService<RequisitionHeader, int, RequisitionResource, RequisitionResource>>();
             builder.RegisterType<StockLocatorPricesService>().As<IStockLocatorPricesService>();
+            builder.RegisterType<InterCompanyInvoiceService>().As<IInterCompanyInvoiceService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

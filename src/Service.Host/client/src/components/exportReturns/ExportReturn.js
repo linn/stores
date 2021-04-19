@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useRef, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -11,6 +11,7 @@ import {
     GroupEditTable,
     SnackbarMessage,
     ErrorCard,
+    DatePicker,
     useGroupEditTable
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
@@ -90,51 +91,6 @@ const rsnColumns = [
         title: 'Depth',
         type: 'number',
         editable: true
-    },
-    {
-        id: 'tariffId',
-        title: 'Tariff ID',
-        type: 'number',
-        editable: false
-    }
-];
-
-const rsnInvoiceColumns = [
-    {
-        id: 'rsnNumber',
-        title: 'RSN Number',
-        type: 'number',
-        editable: false
-    },
-    {
-        id: 'articleNumber',
-        title: 'Article Number',
-        type: 'text',
-        editable: false
-    },
-    {
-        id: 'description',
-        title: 'Description',
-        type: 'text',
-        editable: false
-    },
-    {
-        id: 'expInvDocumentType',
-        title: 'Inv Doc Type',
-        type: 'text',
-        editable: false
-    },
-    {
-        id: 'expInvDocumentNumber',
-        title: 'Inv Doc Number',
-        type: 'number',
-        editable: false
-    },
-    {
-        id: 'expInvDate',
-        title: 'Invoice Date',
-        type: 'date',
-        editable: false
     }
 ];
 
@@ -148,36 +104,48 @@ export default function ExportReturn({
     makeIntercompanyInvoicesWorking,
     makeIntercompanyInvoices,
     clearMakeIntercompanyInvoicesErrors,
-    setMakeIntercompanyInvoicesMessageVisible
+    setMakeIntercompanyInvoicesMessageVisible,
+    interCompanyInvoicesLoading,
+    interCompanyInvoices,
+    searchInterCompanyInvoices
 }) {
     const [state, dispatch] = useReducer(reducer, {
         exportReturn: null,
         exportReturnDetails: null,
         tab: 0,
-        editing: false
+        editing: false,
+        interCompanyInvoices: null
     });
 
     const {
         data: exportReturnDetails,
-        addRow,
         updateRow,
-        removeRow,
         resetRow,
         setEditing: setTableEditing,
-        setTableValid,
         setRowToBeDeleted,
         setRowToBeSaved
     } = useGroupEditTable({
         rows: state.exportReturn?.exportReturnDetails
     });
 
+    const savedSearchInterCompanyInvoices = useRef();
+
+    useEffect(() => {
+        savedSearchInterCompanyInvoices.current = searchInterCompanyInvoices;
+    }, [searchInterCompanyInvoices]);
+
     useEffect(() => {
         if (exportReturn) {
             dispatch({ type: 'setExportReturn', payload: exportReturn });
+            savedSearchInterCompanyInvoices.current(exportReturn.returnId);
         } else {
             dispatch({ type: 'setExportReturn', payload: null });
         }
     }, [exportReturn]);
+
+    useEffect(() => {
+        dispatch({ type: 'setInterCompanyInvoices', payload: interCompanyInvoices });
+    }, [interCompanyInvoices]);
 
     const handleFieldChange = (propertyName, newValue) => {
         dispatch({ type: 'setExportReturn', payload: { propertyName, newValue } });
@@ -254,11 +222,14 @@ export default function ExportReturn({
                         <ErrorCard errorMessage={makeIntercompanyInvoicesErrorMessage} />
                     </Grid>
                 )}
-                {(exportReturnLoading || makeIntercompanyInvoicesWorking) && (
+                {(exportReturnLoading ||
+                    interCompanyInvoicesLoading ||
+                    makeIntercompanyInvoicesWorking) && (
                     <Grid item xs={12}>
                         <Loading />
                     </Grid>
                 )}
+
                 {state.exportReturn?.returnId &&
                     !exportReturnLoading &&
                     !makeIntercompanyInvoicesWorking && (
@@ -287,39 +258,49 @@ export default function ExportReturn({
                                 </Tabs>
                             </Grid>
 
-                            {state.tab === 0 && exportReturnDetails?.length && (
-                                <Grid item xs={12}>
-                                    <GroupEditTable
-                                        columns={rsnColumns}
-                                        rows={exportReturnDetails}
-                                        allowNewRowCreation={false}
-                                        updateRow={updateRow}
-                                        resetRow={resetRow}
-                                        handleEditClick={handleExportReturnDetailEditClick}
-                                        setRowToBeDeleted={setRowToBeDeleted}
-                                        setRowToBeSaved={setRowToBeSaved}
-                                    />
-                                </Grid>
-                            )}
+                            {state.tab === 0 &&
+                                exportReturnDetails &&
+                                exportReturnDetails?.length > 0 && (
+                                    <Grid item xs={12}>
+                                        <GroupEditTable
+                                            columns={rsnColumns}
+                                            rows={exportReturnDetails}
+                                            allowNewRowCreation={false}
+                                            updateRow={updateRow}
+                                            resetRow={resetRow}
+                                            handleEditClick={handleExportReturnDetailEditClick}
+                                            setRowToBeDeleted={setRowToBeDeleted}
+                                            setRowToBeSaved={setRowToBeSaved}
+                                        />
+                                    </Grid>
+                                )}
 
-                            {state.tab === 1 && (
-                                <Grid item xs={12}>
-                                    <GroupEditTable
-                                        columns={rsnInvoiceColumns}
-                                        rows={exportReturnDetails}
-                                        editable={false}
-                                        allowNewRowCreation={false}
-                                        updateRow={updateRow}
-                                        addRow={addRow}
-                                        removeRow={removeRow}
-                                        resetRow={resetRow}
-                                        handleEditClick={setTableEditing}
-                                        tableValid={setTableValid}
-                                        setRowToBeDeleted={setRowToBeDeleted}
-                                        setRowToBeSaved={setRowToBeSaved}
-                                    />
-                                </Grid>
-                            )}
+                            {state.tab === 1 &&
+                                state.interCompanyInvoices &&
+                                state.interCompanyInvoices?.length > 0 && (
+                                    <Grid item xs={12}>
+                                        {state.interCompanyInvoices.map(invoice => (
+                                            <Fragment key={invoice.documentNumber}>
+                                                <Grid item xs={4}>
+                                                    <InputField
+                                                        disabled
+                                                        label="Document Number"
+                                                        value={invoice.documentNumber}
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={4}>
+                                                    <Button
+                                                        disabled
+                                                        variant="outlined"
+                                                        color="primary"
+                                                    >
+                                                        Print Invoices
+                                                    </Button>
+                                                </Grid>
+                                            </Fragment>
+                                        ))}
+                                    </Grid>
+                                )}
 
                             {state.tab === 2 && (
                                 <>
@@ -328,20 +309,18 @@ export default function ExportReturn({
                                             fullWidth
                                             value={state.exportReturn.exportCustomsEntryCode}
                                             label="Code"
-                                            propertyName="exportCustomsCode"
+                                            propertyName="exportCustomsEntryCode"
                                             onChange={handleFieldChange}
                                             margin="dense"
                                         />
                                     </Grid>
                                     <Grid item xs={4}>
-                                        <InputField
-                                            fullWidth
+                                        <DatePicker
+                                            label="Customs Entry Date"
                                             value={state.exportReturn.exportCustomsEntryDate}
-                                            label="Date"
-                                            propertyName="exportCustomsCode"
-                                            onChange={handleFieldChange}
-                                            margin="dense"
-                                            type="date"
+                                            onChange={value =>
+                                                handleFieldChange('exportCustomsEntryDate', value)
+                                            }
                                         />
                                     </Grid>
                                     <Grid item xs={4} />
@@ -386,7 +365,8 @@ export default function ExportReturn({
 ExportReturn.propTypes = {
     exportReturnLoading: PropTypes.bool,
     exportReturn: PropTypes.shape({
-        exportReturnDetails: PropTypes.arrayOf(PropTypes.shape({}))
+        exportReturnDetails: PropTypes.arrayOf(PropTypes.shape({})),
+        returnId: PropTypes.number
     }),
     updateExportReturn: PropTypes.func.isRequired,
     makeIntercompanyInvoicesMessageVisible: PropTypes.bool,
@@ -395,7 +375,10 @@ ExportReturn.propTypes = {
     makeIntercompanyInvoicesWorking: PropTypes.bool,
     makeIntercompanyInvoices: PropTypes.func.isRequired,
     clearMakeIntercompanyInvoicesErrors: PropTypes.func.isRequired,
-    setMakeIntercompanyInvoicesMessageVisible: PropTypes.func.isRequired
+    setMakeIntercompanyInvoicesMessageVisible: PropTypes.func.isRequired,
+    interCompanyInvoicesLoading: PropTypes.bool,
+    interCompanyInvoices: PropTypes.arrayOf(PropTypes.shape),
+    searchInterCompanyInvoices: PropTypes.func.isRequired
 };
 
 ExportReturn.defaultProps = {
@@ -404,5 +387,7 @@ ExportReturn.defaultProps = {
     makeIntercompanyInvoicesMessageVisible: false,
     makeIntercompanyInvoicesMessageText: '',
     makeIntercompanyInvoicesErrorMessage: '',
-    makeIntercompanyInvoicesWorking: false
+    makeIntercompanyInvoicesWorking: false,
+    interCompanyInvoicesLoading: false,
+    interCompanyInvoices: null
 };

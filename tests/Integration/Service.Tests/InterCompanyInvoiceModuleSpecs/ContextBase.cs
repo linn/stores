@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Service.Tests.ExportRsnModuleSpecs
+﻿namespace Linn.Stores.Service.Tests.InterCompanyInvoiceModuleSpecs
 {
     using System.Collections.Generic;
     using System.Security.Claims;
@@ -18,20 +18,21 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IExportRsnService ExportRsnService { get; private set; }
+        protected IInterCompanyInvoiceService InterCompanyInvoiceService { get; private set; }
 
         [SetUp]
         public void EstablishContext()
         {
-            this.ExportRsnService = Substitute.For<IExportRsnService>();
+            this.InterCompanyInvoiceService = Substitute.For<IInterCompanyInvoiceService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
-                        with.Dependency(this.ExportRsnService);
-                        with.Dependency<IResourceBuilder<IEnumerable<ExportRsn>>>(new ExportRsnsResourceBuilder());
-                        with.Module<ExportRsnModule>();
-                        with.ResponseProcessor<ExportRsnsResponseProcessor>();
+                        with.Dependency(this.InterCompanyInvoiceService);
+                        with.Dependency<IResourceBuilder<IEnumerable<InterCompanyInvoice>>>(
+                            new InterCompanyInvoicesResourceBuilder());
+                        with.Module<InterCompanyInvoiceModule>();
+                        with.ResponseProcessor<InterCompanyInvoicesResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
                                 {

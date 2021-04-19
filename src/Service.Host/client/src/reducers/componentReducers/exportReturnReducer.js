@@ -44,6 +44,11 @@ export default function reducer(state, action) {
                 },
                 editing: true
             };
+        case 'setInterCompanyInvoices':
+            return {
+                ...state,
+                interCompanyInvoices: action.payload
+            };
         default:
             return state;
     }
