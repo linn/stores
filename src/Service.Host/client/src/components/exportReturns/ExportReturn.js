@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useEffect, useReducer, useRef, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -229,6 +229,7 @@ export default function ExportReturn({
                         <Loading />
                     </Grid>
                 )}
+
                 {state.exportReturn?.returnId &&
                     !exportReturnLoading &&
                     !makeIntercompanyInvoicesWorking && (
@@ -279,7 +280,7 @@ export default function ExportReturn({
                                 state.interCompanyInvoices?.length > 0 && (
                                     <Grid item xs={12}>
                                         {state.interCompanyInvoices.map(invoice => (
-                                            <>
+                                            <Fragment key={invoice.documentNumber}>
                                                 <Grid item xs={4}>
                                                     <InputField
                                                         disabled
@@ -296,7 +297,7 @@ export default function ExportReturn({
                                                         Print Invoices
                                                     </Button>
                                                 </Grid>
-                                            </>
+                                            </Fragment>
                                         ))}
                                     </Grid>
                                 )}

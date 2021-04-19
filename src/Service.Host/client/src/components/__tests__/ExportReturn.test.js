@@ -68,17 +68,34 @@ const exportReturn = {
     ]
 };
 
+const interCompanyInvoices = [
+    {
+        documentNumber: 1234567
+    }
+];
+
 const defaultProps = {
     updateExportReturn: jest.fn(),
     makeIntercompanyInvoices: jest.fn(),
     clearMakeIntercompanyInvoicesErrors: jest.fn(),
-    setMakeIntercompanyInvoicesMessageVisible: jest.fn()
+    setMakeIntercompanyInvoicesMessageVisible: jest.fn(),
+    searchInterCompanyInvoices: jest.fn()
 };
 
 describe('<ExportReturn />', () => {
     describe('when export return loading', () => {
         it('should show loading spinner', () => {
             const { getByRole } = render(<ExportReturn {...defaultProps} exportReturnLoading />);
+
+            expect(getByRole('progressbar')).toBeInTheDocument();
+        });
+    });
+
+    describe('when inter company invoices are loading', () => {
+        it('should show loading spinner', () => {
+            const { getByRole } = render(
+                <ExportReturn {...defaultProps} interCompanyInvoicesLoading />
+            );
 
             expect(getByRole('progressbar')).toBeInTheDocument();
         });
@@ -110,7 +127,11 @@ describe('<ExportReturn />', () => {
     describe('when loaded', () => {
         it('should render export return', () => {
             const { getByText } = render(
-                <ExportReturn {...defaultProps} exportReturn={exportReturn} />
+                <ExportReturn
+                    {...defaultProps}
+                    exportReturn={exportReturn}
+                    intercompanyInvoices={interCompanyInvoices}
+                />
             );
 
             expect(getByText('63 - OUTLET NAME')).toBeInTheDocument();
@@ -118,7 +139,11 @@ describe('<ExportReturn />', () => {
 
         it('should render export return details', () => {
             const { getByText } = render(
-                <ExportReturn {...defaultProps} exportReturn={exportReturn} />
+                <ExportReturn
+                    {...defaultProps}
+                    exportReturn={exportReturn}
+                    intercompanyInvoices={interCompanyInvoices}
+                />
             );
 
             // console.log(debug(undefined, 300000));
@@ -128,7 +153,11 @@ describe('<ExportReturn />', () => {
 
         it('should render buttons', () => {
             const { getByText } = render(
-                <ExportReturn {...defaultProps} exportReturn={exportReturn} />
+                <ExportReturn
+                    {...defaultProps}
+                    exportReturn={exportReturn}
+                    intercompanyInvoices={interCompanyInvoices}
+                />
             );
 
             expect(getByText('Save')).toBeInTheDocument();
@@ -138,7 +167,11 @@ describe('<ExportReturn />', () => {
 
         it('should render tabs with first tab selected', () => {
             const { getByRole, getByText } = render(
-                <ExportReturn {...defaultProps} exportReturn={exportReturn} />
+                <ExportReturn
+                    {...defaultProps}
+                    exportReturn={exportReturn}
+                    intercompanyInvoices={interCompanyInvoices}
+                />
             );
 
             expect(getByRole('tablist')).toBeInTheDocument();
@@ -147,21 +180,29 @@ describe('<ExportReturn />', () => {
         });
 
         it('should change tab on click', () => {
-            const { getAllByRole, getByText } = render(
-                <ExportReturn {...defaultProps} exportReturn={exportReturn} />
+            const { getAllByRole, getByDisplayValue } = render(
+                <ExportReturn
+                    {...defaultProps}
+                    exportReturn={exportReturn}
+                    interCompanyInvoices={interCompanyInvoices}
+                />
             );
 
             const tabs = getAllByRole('tab');
 
             fireEvent.click(tabs[1]);
 
-            // expInvDocumentNumber should only be in second tab
-            expect(getByText('483493')).toBeInTheDocument();
+            // inter company invoices should only be in second tab
+            expect(getByDisplayValue('1234567')).toBeInTheDocument();
         });
 
         it('should calculate correct dimensions', () => {
             const { getByDisplayValue, getByRole } = render(
-                <ExportReturn {...defaultProps} exportReturn={exportReturn} />
+                <ExportReturn
+                    {...defaultProps}
+                    exportReturn={exportReturn}
+                    intercompanyInvoices={interCompanyInvoices}
+                />
             );
 
             const button = getByRole('button', { name: 'Calculate Dimensions from RSNs' });
@@ -173,7 +214,11 @@ describe('<ExportReturn />', () => {
 
         it('should disable save button by default', () => {
             const { getByRole } = render(
-                <ExportReturn {...defaultProps} exportReturn={exportReturn} />
+                <ExportReturn
+                    {...defaultProps}
+                    exportReturn={exportReturn}
+                    intercompanyInvoices={interCompanyInvoices}
+                />
             );
 
             const button = getByRole('button', { name: 'Save' });
