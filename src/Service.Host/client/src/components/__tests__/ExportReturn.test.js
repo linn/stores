@@ -101,7 +101,7 @@ describe('<ExportReturn />', () => {
         });
     });
 
-    describe('when make intercompany invoices is processing', () => {
+    describe('when make inter company invoices is processing', () => {
         it('should show loading spinner', () => {
             const { getByRole } = render(
                 <ExportReturn {...defaultProps} makeIntercompanyInvoicesWorking />
@@ -111,7 +111,7 @@ describe('<ExportReturn />', () => {
         });
     });
 
-    describe('when intercompany error message is present', () => {
+    describe('when inter company error message is present', () => {
         it('should show error message', () => {
             const { getByText } = render(
                 <ExportReturn
@@ -130,7 +130,7 @@ describe('<ExportReturn />', () => {
                 <ExportReturn
                     {...defaultProps}
                     exportReturn={exportReturn}
-                    intercompanyInvoices={interCompanyInvoices}
+                    interCompanyInvoices={interCompanyInvoices}
                 />
             );
 
@@ -142,7 +142,7 @@ describe('<ExportReturn />', () => {
                 <ExportReturn
                     {...defaultProps}
                     exportReturn={exportReturn}
-                    intercompanyInvoices={interCompanyInvoices}
+                    interCompanyInvoices={interCompanyInvoices}
                 />
             );
 
@@ -156,7 +156,7 @@ describe('<ExportReturn />', () => {
                 <ExportReturn
                     {...defaultProps}
                     exportReturn={exportReturn}
-                    intercompanyInvoices={interCompanyInvoices}
+                    interCompanyInvoices={interCompanyInvoices}
                 />
             );
 
@@ -170,7 +170,7 @@ describe('<ExportReturn />', () => {
                 <ExportReturn
                     {...defaultProps}
                     exportReturn={exportReturn}
-                    intercompanyInvoices={interCompanyInvoices}
+                    interCompanyInvoices={interCompanyInvoices}
                 />
             );
 
@@ -201,7 +201,7 @@ describe('<ExportReturn />', () => {
                 <ExportReturn
                     {...defaultProps}
                     exportReturn={exportReturn}
-                    intercompanyInvoices={interCompanyInvoices}
+                    interCompanyInvoices={interCompanyInvoices}
                 />
             );
 
@@ -217,7 +217,7 @@ describe('<ExportReturn />', () => {
                 <ExportReturn
                     {...defaultProps}
                     exportReturn={exportReturn}
-                    intercompanyInvoices={interCompanyInvoices}
+                    interCompanyInvoices={interCompanyInvoices}
                 />
             );
 
