@@ -104,6 +104,7 @@
             builder.RegisterType<WandLogRepository>().As<IRepository<WandLog, int>>();
             builder.RegisterType<StockAvailableRepository>().As<IQueryRepository<AvailableStock>>();
             builder.RegisterType<StockLocatorPricesRepository>().As<IQueryRepository<StockLocatorPrices>>();
+            builder.RegisterType<PartStorageTypeRepository>().As<IRepository<PartStorageType, int>>();
             builder.RegisterType<InterCompanyInvoiceRepository>().As<IQueryRepository<InterCompanyInvoice>>();
         }
     }

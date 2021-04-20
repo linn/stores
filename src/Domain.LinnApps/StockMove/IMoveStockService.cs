@@ -20,6 +20,7 @@
             int? toLocationId,
             int? toPalletNumber,
             DateTime? toStockRotationDate,
+            string storageType,
             int userNumber);
 
         bool IsKardexLocation(string location);

@@ -71,6 +71,7 @@ import availableStock from './availableStock';
 import doStockMove from './doStockMove';
 import historyStore from './history';
 import reqMoves from './reqMoves';
+import partStorageTypes from './partStorageTypes';
 import exportReturn from './exportReturn';
 import makeIntercompanyInvoices from './makeIntercompanyInvoices';
 import interCompanyInvoices from './interCompanyInvoices';
@@ -113,9 +114,10 @@ const rootReducer = history =>
         nominalAccounts,
         part,
         partCategories,
-        parts,
         partDataSheetValues,
         partLiveTest,
+        parts,
+        partStorageTypes,
         partTemplates,
         pickItemsAllocation,
         productAnalysisCodes,

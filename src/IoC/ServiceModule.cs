@@ -117,6 +117,8 @@
             builder.RegisterType<RequisitionFacadeService>()
                 .As<IFacadeService<RequisitionHeader, int, RequisitionResource, RequisitionResource>>();
             builder.RegisterType<StockLocatorPricesService>().As<IStockLocatorPricesService>();
+            builder.RegisterType<PartStorageTypeFacadeService>()
+                .As<IFacadeService<PartStorageType, int, PartStorageTypeResource, PartStorageTypeResource>>();
             builder.RegisterType<InterCompanyInvoiceService>().As<IInterCompanyInvoiceService>();
 
             // oracle proxies
@@ -132,6 +134,7 @@
             builder.RegisterType<StoresPack>().As<IStoresPack>();
             builder.RegisterType<ExportReturnsPack>().As<IExportReturnsPack>();
             builder.RegisterType<StockLocatorLocationsViewService>().As<IStockLocatorLocationsViewService>();
+            builder.RegisterType<KardexPack>().As<IKardexPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

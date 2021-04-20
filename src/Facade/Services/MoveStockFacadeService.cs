@@ -41,6 +41,7 @@
                     requestResource.ToLocationId,
                     requestResource.ToPalletNumber,
                     toDate,
+                    requestResource.StorageType,
                     requestResource.UserNumber);
                 if (result.Success)
                 {
