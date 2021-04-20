@@ -7,7 +7,7 @@
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
-    using Linn.Stores.Resources;
+    using Linn.Stores.Resources.StockLocators;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
     using Linn.Stores.Service.Tests;
@@ -41,6 +41,8 @@
 
         protected IStockQuantitiesService QuantitiesService { get; private set; }
 
+        protected IStockLocatorPricesService PricesService { get; private set; }
+
         [SetUp]
         public void EstablishContext()
         {
@@ -56,6 +58,8 @@
             this.StateService = Substitute
                 .For<IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource>>();
 
+            this.PricesService = Substitute.For<IStockLocatorPricesService>();
+
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                 {
@@ -63,6 +67,7 @@
                     with.Dependency(this.StorageLocationService);
                     with.Dependency(this.StateService);
                     with.Dependency(this.QuantitiesService);
+                    with.Dependency(this.PricesService);
                     with.Dependency<IResourceBuilder<StockQuantities>>(new StockQuantitiesResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<StockQuantities>>>(new StockQuantitiesListResourceBuilder());
                     with.Dependency<IResourceBuilder<InspectedState>>(new InspectedStateResourceBuilder());
@@ -75,6 +80,8 @@
                         new StockLocatorResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<StockLocatorWithStoragePlaceInfo>>>(
                         new StockLocatorsWithStoragePlaceInfoResourceBuilder());
+                    with.Dependency<IResourceBuilder<IEnumerable<StockLocatorPrices>>>(
+                        new StockLocatorPricesListResourceBuilder());
                     with.Module<StockLocatorsModule>();
                     with.ResponseProcessor<StockLocatorsResponseProcessor>();
                     with.ResponseProcessor<StockLocatorResponseProcessor>();
@@ -82,6 +89,7 @@
                     with.ResponseProcessor<StockQuantitiesListResponseProcessor>();
                     with.ResponseProcessor<StorageLocationsResponseProcessor>();
                     with.ResponseProcessor<InspectedStatesResponseProcessor>();
+                    with.ResponseProcessor<StockLocatorPricesResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {

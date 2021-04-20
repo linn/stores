@@ -58,8 +58,8 @@
         public void ShouldReturnResource()
         {
             var resource = this.Response.Body.DeserializeJson<RequisitionActionResource>();
-            resource.RequisitionHeader.ReqNumber.Should().Be(this.reqNumber);
-            resource.RequisitionHeader.Document1.Should().Be(this.requisition.RequisitionHeader.Document1);
+            resource.Requisition.ReqNumber.Should().Be(this.reqNumber);
+            resource.Requisition.Document1.Should().Be(this.requisition.RequisitionHeader.Document1);
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿namespace Linn.Stores.Facade.ResourceBuilders
 {
-    using System;
-
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Resources.Parts;

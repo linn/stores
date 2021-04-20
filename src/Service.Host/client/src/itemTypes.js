@@ -242,6 +242,32 @@ export const stockQuantities = new ItemType(
     '/inventory/stock-quantities'
 );
 
+export const exportReturn = new ItemType(
+    'exportReturn',
+    'EXPORT_RETURN',
+    '/inventory/exports/returns'
+);
+
+export const availableStock = new ItemType(
+    'availableStock',
+    'AVAILABLE_STOCK',
+    '/inventory/available-stock'
+);
+
+export const stockLocatorPrices = new ItemType(
+    'stockLocatorPrices',
+    'STOCK_LOCATOR_PRICES',
+    '/inventory/stock-locators/prices'
+);
+
+export const reqMoves = new ItemType('reqMoves', 'REQ_MOVES', '/logistics/requisitions');
+
+export const interCompanyInvoices = new ItemType(
+    'interCompanyInvoices',
+    'INTER_COMPANY_INVOICES',
+    '/inventory/exports/inter-company-invoices'
+);
+
 export const parcel = new ItemType('parcel', 'PARCEL', '/logistics/parcels');
 
 export const parcels = new ItemType('parcels', 'PARCELS', '/logistics/parcels');

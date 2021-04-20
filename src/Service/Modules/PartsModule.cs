@@ -1,5 +1,8 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System;
+    using System.Linq;
+
     using Linn.Common.Authorisation;
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
@@ -152,7 +155,9 @@
             this.RequiresAuthentication();
             var resource = this.Bind<PartResource>();
             resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
-            resource.BomType = "C";
+            resource.DateCreated = DateTime.Today.ToString("o");
+            var userId = this.Context.CurrentUser.GetEmployeeUri().Split("/").Last();
+            resource.CreatedBy = int.Parse(userId);
             var result = this.partsFacadeService.Add(resource);
             if (!string.IsNullOrEmpty(resource.QcOnReceipt))
             {

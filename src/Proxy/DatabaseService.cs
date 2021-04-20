@@ -8,6 +8,8 @@
     {
         public OracleConnection GetConnection()
         {
+            OracleConfiguration.TraceFileLocation = @"C:\Traces";
+            OracleConfiguration.TraceLevel = 7;
             return new OracleConnection(ConnectionStrings.ManagedConnectionString());
         }
 

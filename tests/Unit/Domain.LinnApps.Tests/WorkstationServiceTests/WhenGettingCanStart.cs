@@ -8,7 +8,6 @@
 
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Workstation;
-    using Linn.Stores.Domain.LinnApps.Workstation.Models;
 
     using NSubstitute;
 

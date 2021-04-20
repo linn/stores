@@ -3,13 +3,14 @@ import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { fireEvent, cleanup } from '@testing-library/react';
 import render from '../../test-utils';
-import ExportRsns from '../ExportRsns';
+import ExportRsns from '../exportReturns/ExportRsns';
 
 afterEach(cleanup);
 
 const searchSalesAccounts = jest.fn();
 const searchSalesOutlets = jest.fn();
 const searchRsns = jest.fn();
+const createExportReturn = jest.fn();
 
 const defaultProps = {
     salesOutletsSearchResults: [],
@@ -20,7 +21,8 @@ const defaultProps = {
     rsnsSearchResultsLoading: false,
     searchSalesAccounts,
     searchSalesOutlets,
-    searchRsns
+    searchRsns,
+    createExportReturn
 };
 
 const salesAccountsSearchResults = [{ accountId: 65140, accountName: 'acct1' }];

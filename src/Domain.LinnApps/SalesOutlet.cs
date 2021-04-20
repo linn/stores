@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
+    using System;
     using System.Collections.Generic;
 
     using Linn.Stores.Domain.LinnApps.Allocation;
@@ -28,6 +29,10 @@
 
         public string CountryName { get; set; }
 
+        public DateTime? DateInvalid { get; set; }
+
         public IEnumerable<SosAllocHead> SosAllocHeads { get; set; }
+
+        public IEnumerable<ExportReturn> ExportReturns { get; set; } 
     }
 }

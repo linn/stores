@@ -9,5 +9,9 @@
         public int ConsignmentId { get; set; }
 
         public string WandString { get; set; }
+
+        public int? WandLogId { get; set; }
+
+        public WandLog WandLog { get; set; }
     }
 }

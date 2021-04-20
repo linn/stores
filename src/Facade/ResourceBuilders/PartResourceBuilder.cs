@@ -104,7 +104,8 @@
                                             ManufacturerCode = m.ManufacturerCode,
                                             Preference = m.Preference
                                         }).OrderBy(m => m.Preference),
-                           Links = this.BuildLinks(part).ToArray()
+                           Links = this.BuildLinks(part).ToArray(),
+                           SalesArticleNumber = part.SalesArticle?.ArticleNumber
                        };
         }
 
@@ -130,7 +131,7 @@
             yield return new LinkResource 
                              {
                                  Rel = "stock-locators",
-                                 Href = $"/inventory/stock-locators?partNumber={part.PartNumber}"
+                                 Href = $"/inventory/stock-locators?partId={part.Id}"
                              };
         }
 

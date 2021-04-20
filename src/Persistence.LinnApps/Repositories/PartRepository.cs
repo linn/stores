@@ -20,7 +20,7 @@
 
         public Part FindById(int key)
         {
-            return this.serviceDbContext.Parts.Where(p => p.Id == key)
+            var result = this.serviceDbContext.Parts.Where(p => p.Id == key)
                 .Include(p => p.AccountingCompany)
                 .Include(p => p.ParetoClass)
                 .Include(p => p.ProductAnalysisCode)
@@ -37,6 +37,15 @@
                 .Include(p => p.MechPartSource)
                 .ThenInclude(m => m.MechPartManufacturerAlts)
                 .ToList().FirstOrDefault();
+            
+            if (result != null)
+            {
+                result.SalesArticle =
+                    this.serviceDbContext.SalesArticles.Where(a => a.ArticleNumber == result.PartNumber)
+                        .ToList().FirstOrDefault();
+            }
+            
+            return result;
         }
 
         public IQueryable<Part> FindAll()

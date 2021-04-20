@@ -2,7 +2,7 @@
 {
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.StockLocators;
-    using Linn.Stores.Resources;
+    using Linn.Stores.Resources.StockLocators;
 
     public class StockLocatorResourceBuilder : IResourceBuilder<StockLocator>
     {
@@ -24,7 +24,9 @@
                            LocationName = stockLocator.StorageLocation?.LocationCode,
                            StockPoolCode = stockLocator.StockPoolCode,
                            LocationDescription = stockLocator.StorageLocation?.Description,
-                           State = stockLocator.State
+                           State = stockLocator.State,
+                           PartId = stockLocator.Part?.Id,
+                           Category = stockLocator.Category
                        };
         }
 

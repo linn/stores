@@ -2,7 +2,7 @@
 import { Provider } from 'react-redux';
 import { Route, Redirect, Switch } from 'react-router';
 import { OidcProvider } from 'redux-oidc';
-import { Router } from 'react-router-dom';
+import { ConnectedRouter } from 'connected-react-router';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { Navigation } from '@linn-it/linn-form-components-library';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -34,6 +34,10 @@ import StockViewerOptions from '../containers/stockLocatorUtility/StockViewerOpt
 import StockLocator from '../containers/stockLocatorUtility/StockLocator';
 import Wand from '../containers/Wand';
 import ExportRsns from '../containers/ExportRsns';
+import ExportReturn from '../containers/ExportReturn';
+import StockMove from '../containers/StockMove';
+import StockLocatorBatchView from '../containers/stockLocatorUtility/StockLocatorBatchView';
+import StockLocatorPricesView from '../containers/stockLocatorUtility/StockLocatorPricesView';
 
 const Root = ({ store }) => (
     <div>
@@ -41,7 +45,7 @@ const Root = ({ store }) => (
             <Provider store={store}>
                 <OidcProvider store={store} userManager={userManager}>
                     <MuiPickersUtilsProvider utils={MomentUtils}>
-                        <Router history={history}>
+                        <ConnectedRouter history={history}>
                             <div>
                                 <Navigation />
                                 <CssBaseline />
@@ -63,7 +67,6 @@ const Root = ({ store }) => (
 
                                 <Switch>
                                     <Route exact path="/inventory" component={App} />
-
                                     <Route
                                         exact
                                         path="/inventory/signin-oidc-client"
@@ -97,7 +100,6 @@ const Root = ({ store }) => (
                                         path="/logistics/sos-alloc-heads/:jobId"
                                         component={SosAllocHeads}
                                     />
-
                                     <Route
                                         exact
                                         path="/logistics/sos-alloc-heads/:jobId"
@@ -159,13 +161,23 @@ const Root = ({ store }) => (
                                     />
                                     <Route
                                         exact
-                                        path="/inventory/stock-viewer"
+                                        path="/inventory/stock-locator"
                                         component={StockViewerOptions}
                                     />
                                     <Route
                                         exact
-                                        path="/inventory/stock-locator-utility"
+                                        path="/inventory/stock-locator/locators"
                                         component={StockLocator}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/stock-locator/locators/batches"
+                                        component={StockLocatorBatchView}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/stock-locator/locators/batches/details"
+                                        component={StockLocatorPricesView}
                                     />
                                     <Route
                                         exact
@@ -178,10 +190,25 @@ const Root = ({ store }) => (
                                         path="/inventory/exports/rsns"
                                         component={ExportRsns}
                                     />
+                                    <Route
+                                        exact
+                                        path="/inventory/exports/returns/:id"
+                                        component={ExportReturn}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/exports/returns"
+                                        component={ExportRsns}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/move-stock"
+                                        component={StockMove}
+                                    />
                                     <Route component={NotFoundPage} />
                                 </Switch>
                             </div>
-                        </Router>
+                        </ConnectedRouter>
                     </MuiPickersUtilsProvider>
                 </OidcProvider>
             </Provider>

@@ -6,7 +6,7 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
-    using Linn.Stores.Resources;
+    using Linn.Stores.Resources.Parts;
 
     public class RootProductsResourceBuilder : IResourceBuilder<IEnumerable<RootProduct>>
     {
