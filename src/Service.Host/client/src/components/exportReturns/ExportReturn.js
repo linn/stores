@@ -31,7 +31,11 @@ const rsnColumns = [
         title: 'RSN Number',
         type: 'number',
         editable: false,
-        style
+        style: {
+            body: {
+                minWidth: '80px'
+            }
+        }
     },
     {
         id: 'articleNumber',
@@ -52,14 +56,22 @@ const rsnColumns = [
         title: 'Line Number',
         type: 'number',
         editable: false,
-        style
+        style: {
+            body: {
+                minWidth: '80px'
+            }
+        }
     },
     {
         id: 'qty',
         title: 'Quantity',
         type: 'number',
         editable: false,
-        style
+        style: {
+            body: {
+                minWidth: '80px'
+            }
+        }
     },
     {
         id: 'customsValue',
