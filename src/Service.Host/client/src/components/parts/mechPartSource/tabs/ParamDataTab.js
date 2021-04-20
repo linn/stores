@@ -67,16 +67,25 @@ function ParamDataTab({
                 <Grid container spacing={3}>
                     <Grid item xs={3}>
                         <InputField
-                            value={divide(resistance, ohmUnitMultipliers[resistanceUnits])}
+                            value={
+                                resistance === 0
+                                    ? 0.0
+                                    : divide(resistance, ohmUnitMultipliers[resistanceUnits])
+                            }
                             propertyName="resistance"
                             label="Resistance"
                             onChange={(propertyName, newValue) => {
-                                handleFieldChange(
-                                    propertyName,
-                                    multiply(newValue, ohmUnitMultipliers[resistanceUnits])
-                                );
+                                if (newValue === 0) {
+                                    handleFieldChange(propertyName, 0.0);
+                                } else {
+                                    handleFieldChange(
+                                        propertyName,
+                                        multiply(newValue, ohmUnitMultipliers[resistanceUnits])
+                                    );
+                                }
                             }}
                             type="number"
+                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={3}>

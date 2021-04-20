@@ -28,6 +28,8 @@
 
         private readonly IStockLocatorLocationsViewService locationsViewService;
 
+        private readonly IRepository<Part, int> partRepository;
+
         public StockLocatorService(
             IRepository<StockLocator, int> stockLocatorRepository,
             IStoresPalletRepository palletRepository,
@@ -36,7 +38,8 @@
             IQueryRepository<StockLocatorBatch> stockLocatorBatchesView,
             IAuthorisationService authService,
             IStockLocatorLocationsViewService locationsViewService,
-            IQueryRepository<StockLocatorPrices> stockLocatorView)
+            IQueryRepository<StockLocatorPrices> stockLocatorView,
+            IRepository<Part, int> partRepository)
         {
             this.stockLocatorRepository = stockLocatorRepository;
             this.palletRepository = palletRepository;
@@ -46,14 +49,17 @@
             this.authService = authService;
             this.locationsViewService = locationsViewService;
             this.stockLocatorView = stockLocatorView;
+            this.partRepository = partRepository;
         }
 
-        public void UpdateStockLocator(StockLocator @from, StockLocator to, IEnumerable<string> privileges)
+        public void UpdateStockLocator(StockLocator from, StockLocator to, IEnumerable<string> privileges)
         {
             if (!this.authService.HasPermissionFor(AuthorisedAction.UpdateStockLocator, privileges))
             {
                 throw new StockLocatorException("You are not authorised to update.");
             }
+
+            from.Part = this.partRepository.FindBy(p => p.PartNumber == from.PartNumber);
 
             from.BatchRef = to.BatchRef;
             from.StockRotationDate = to.StockRotationDate;
@@ -105,6 +111,8 @@
                 toCreate.Quantity = 1;
             }
 
+            toCreate.Part = this.partRepository.FindBy(p => p.PartNumber == toCreate.PartNumber);
+
             return toCreate;
         }
 
@@ -116,6 +124,9 @@
             }
 
             this.stockLocatorRepository.Remove(toDelete);
+
+            toDelete.Part = this.partRepository.FindBy(p => p.PartNumber == toDelete.PartNumber);
+
             if (!this.stockLocatorRepository.FilterBy(l => l.PalletNumber == toDelete.PalletNumber && l.Quantity > 0)
                     .Any())
             {

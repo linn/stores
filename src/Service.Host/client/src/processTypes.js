@@ -50,6 +50,12 @@ export const unallocateConsignment = new ItemType(
     '/logistics/requisitions/actions/un-allocate'
 );
 
+export const makeIntercompanyInvoices = new ItemType(
+    'makeIntercompanyInvoices',
+    'MAKE_INTERCOMPANY_INVOICES',
+    '/inventory/exports/returns/make-intercompany-invoices'
+);
+
 export const unallocateConsignmentLine = new ItemType(
     'unallocateConsignmentLine',
     'UNALLOCATE_CONSIGNMENT_LINE',

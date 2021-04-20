@@ -237,6 +237,12 @@ export const stockQuantities = new ItemType(
     '/inventory/stock-quantities'
 );
 
+export const exportReturn = new ItemType(
+    'exportReturn',
+    'EXPORT_RETURN',
+    '/inventory/exports/returns'
+);
+
 export const availableStock = new ItemType(
     'availableStock',
     'AVAILABLE_STOCK',
@@ -255,4 +261,10 @@ export const partStorageTypes = new ItemType(
     'partStorageTypes',
     'PART_STORAGE_TYPES',
     '/inventory/part-storage-types'
+);
+
+export const interCompanyInvoices = new ItemType(
+    'interCompanyInvoices',
+    'INTER_COMPANY_INVOICES',
+    '/inventory/exports/inter-company-invoices'
 );
