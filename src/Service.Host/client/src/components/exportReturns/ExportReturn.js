@@ -19,78 +19,96 @@ import InputFields from './InputFields';
 import DisplayOnlyFields from './DisplayOnlyFields';
 import reducer from '../../reducers/componentReducers/exportReturnReducer';
 
+const style = {
+    body: {
+        minWidth: '160px'
+    }
+};
+
 const rsnColumns = [
     {
         id: 'rsnNumber',
         title: 'RSN Number',
         type: 'number',
-        editable: false
+        editable: false,
+        style
     },
     {
         id: 'articleNumber',
         title: 'Article Number',
         type: 'text',
-        editable: false
+        editable: false,
+        style
     },
     {
         id: 'description',
         title: 'Description',
         type: 'text',
-        editable: false
+        editable: false,
+        style
     },
     {
         id: 'lineNo',
         title: 'Line Number',
         type: 'number',
-        editable: false
+        editable: false,
+        style
     },
     {
         id: 'qty',
         title: 'Quantity',
         type: 'number',
-        editable: false
+        editable: false,
+        style
     },
     {
         id: 'customsValue',
         title: 'Customs Value',
         type: 'number',
-        editable: true
+        editable: true,
+        style
     },
     {
         id: 'baseCustomsValue',
         title: 'Base Customs Value',
         type: 'number',
-        editable: true
+        editable: true,
+        style
     },
     {
         id: 'numCartons',
         title: 'Num Cartons',
         type: 'number',
-        editable: true
+        editable: true,
+        style
     },
     {
         id: 'weight',
         title: 'Weight',
         type: 'number',
-        editable: true
+        editable: true,
+        style
     },
     {
         id: 'width',
         title: 'Width',
         type: 'number',
-        editable: true
+        editable: true,
+        style
     },
     {
         id: 'height',
         title: 'Height',
         type: 'number',
-        editable: true
+        editable: true,
+        style
     },
     {
         id: 'depth',
         title: 'Depth',
         type: 'number',
-        editable: true
+        editable: true,
+        style
     }
 ];
 
