@@ -66,7 +66,7 @@ function ParcelsSearch({
                     ...state.searchTerms,
                     [action.searchTermName]: action.newValue
                 };
-                if (action.carrierDisplayName) {
+                if (action.carrierDisplayName || action.carrierDisplayName === '') {
                     return {
                         ...state,
                         searchTerms: newSearchTerms,
@@ -74,7 +74,7 @@ function ParcelsSearch({
                         carrierDisplayName: action.carrierDisplayName
                     };
                 }
-                if (action.supplierDisplayName) {
+                if (action.supplierDisplayName || action.supplierDisplayName === '') {
                     return {
                         ...state,
                         searchTerms: newSearchTerms,
