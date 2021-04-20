@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useReducer } from 'react';
+import React, { useEffect, useState, useReducer, useCallback } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -28,7 +28,6 @@ function ParcelsSearch({
     carriersSearchLoading,
     searchCarriers,
     clearCarriersSearch,
-    applicationState,
     history,
     privileges
 }) {
@@ -153,6 +152,32 @@ function ParcelsSearch({
 
     const handleRowLinkClick = href => history.push(href);
 
+    const [localSuppliers, setLocalSuppliers] = useState([{}]);
+
+    useEffect(() => {
+        if (suppliers) {
+            setLocalSuppliers([...suppliers]);
+        }
+    }, [suppliers]);
+
+    const supplierNameValue = useCallback(
+        (id, type) => {
+            if (localSuppliers.length && id) {
+                const supplier = localSuppliers.find(x => x.id === id);
+                if (!supplier) {
+                    return `undefined ${type}`;
+                }
+                return supplier.name;
+            }
+            if (!id) {
+                return '';
+            }
+
+            return 'loading..';
+        },
+        [localSuppliers]
+    );
+
     useEffect(() => {
         const compare = (field, orderAscending) => (a, b) => {
             if (!field) {
@@ -172,10 +197,8 @@ function ParcelsSearch({
         const rows = items
             ? items.map(el => ({
                   parcelNumber: el.parcelNumber,
-                  supplier: `${el.supplierId} - ${
-                      suppliers.find(x => x.id === el.supplierId)?.name
-                  }`,
-                  carrier: `${el.carrierId} - ${suppliers.find(x => x.id === el.carrierId)?.name}`,
+                  supplier: `${el.supplierId} - ${supplierNameValue(el.supplierId, 'supplier')}`,
+                  carrier: `${el.carrierId} - ${supplierNameValue(el.carrierId, 'carrier')}`,
                   dateCreated: el.dateCreated,
                   supplierInvoiceNo: el.supplierInvoiceNo,
                   consignmentNo: el.consignmentNo,
@@ -204,7 +227,7 @@ function ParcelsSearch({
         pageOptions.orderAscending,
         items,
         suppliers,
-        applicationState
+        supplierNameValue
     ]);
 
     const columns = {
@@ -364,7 +387,7 @@ function ParcelsSearch({
 ParcelsSearch.propTypes = {
     items: PropTypes.arrayOf(
         PropTypes.shape({
-            parcelNumber: PropTypes.string
+            parcelNumber: PropTypes.number
         })
     ).isRequired,
     suppliers: PropTypes.arrayOf(
@@ -373,7 +396,6 @@ ParcelsSearch.propTypes = {
             name: PropTypes.string
         })
     ),
-    applicationState: PropTypes.shape().isRequired,
     loading: PropTypes.bool,
     fetchItems: PropTypes.func.isRequired,
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,
@@ -404,7 +426,7 @@ ParcelsSearch.defaultProps = {
     loading: false,
     carriersSearchResults: [],
     suppliersSearchResults: [],
-    suppliers: [{ id: -1, name: 'loading..' }],
+    suppliers: [],
     privileges: null,
     carriersSearchLoading: false,
     suppliersSearchLoading: false

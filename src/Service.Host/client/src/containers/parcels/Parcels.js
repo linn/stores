@@ -12,7 +12,6 @@ import { getPrivileges } from '../../selectors/userSelectors';
 const mapStateToProps = state => ({
     items: parcelsSelectors.getItems(state),
     loading: parcelsSelectors.getLoading(state),
-    applicationState: parcelsSelectors.getApplicationState(state),
     suppliers: suppliersSelectors.getItems(state).filter(x => x.countryCode !== 'GB'),
     carriers: suppliersSelectors.getItems(state).filter(x => x.approvedCarrier === 'Y'),
     privileges: getPrivileges(state),
