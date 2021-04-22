@@ -282,7 +282,8 @@ function StockMove({
         { field: 'fromPalletNumber', headerName: 'From Pallet', width: 140 },
         { field: 'fromLocationCode', headerName: 'From Loc', width: 140 },
         { field: 'toPalletNumber', headerName: 'To Pallet', width: 140 },
-        { field: 'toLocationCode', headerName: 'To Loc', width: 140 }
+        { field: 'toLocationCode', headerName: 'To Loc', width: 140 },
+        { field: 'remarks', headerName: 'Remarks', width: 150 }
     ];
 
     const partProp = { inputRef: partNumberInput, onKeyDown: handleOnKeyPress };
@@ -345,7 +346,7 @@ function StockMove({
                         Storage Type
                     </Button>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                     <InputField
                         value={moveDetails.partNumber}
                         label="Part Number"
@@ -368,15 +369,6 @@ function StockMove({
                         label="Search For Part Number"
                     />
                 </Grid>
-                <Grid item xs={1}>
-                    <InputField
-                        value={moveDetails.quantity}
-                        label="Qty"
-                        type="number"
-                        onChange={handleFieldNumberChange}
-                        propertyName="quantity"
-                    />
-                </Grid>
                 <Grid item xs={3}>
                     <InputField
                         value={moveDetails.from}
@@ -386,6 +378,16 @@ function StockMove({
                         propertyName="from"
                     />
                 </Grid>
+                <Grid item xs={1}>
+                    <InputField
+                        value={moveDetails.quantity}
+                        label="Qty"
+                        type="number"
+                        onChange={handleFieldNumberChange}
+                        propertyName="quantity"
+                    />
+                </Grid>
+                <Grid item xs={1} />
                 <Grid item xs={3}>
                     <InputField
                         value={moveDetails.fromStockRotationDate}
@@ -397,7 +399,7 @@ function StockMove({
                     />
                 </Grid>
                 <Grid item xs={1} />
-                <Grid item xs={4} />
+                <Grid item xs={3} />
                 <Grid item xs={3}>
                     <InputField
                         value={moveDetails.to}
@@ -420,7 +422,7 @@ function StockMove({
                         label="Search For Stock Location"
                     />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={2}>
                     <InputField
                         value={moveDetails.storageType}
                         label="Storage Type"
@@ -429,7 +431,17 @@ function StockMove({
                         propertyName="storageType"
                     />
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={3}>
+                    <InputField
+                        value={moveDetails.toStockRotationDate}
+                        label="To Rot Date"
+                        onChange={handleFieldChange}
+                        maxLength={16}
+                        type="date"
+                        propertyName="toStockRotationDate"
+                    />
+                </Grid>
+                <Grid item xs={1}>
                     <Button
                         style={{ marginTop: '22px' }}
                         className="hide-when-printing"

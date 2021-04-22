@@ -94,11 +94,6 @@
                 this.GetLocationDetails(to, out toLocationId, out toPalletNumber);
             }
 
-            if (this.IsKardexLocation(to))
-            {
-                throw new MoveInvalidException("Not yet implemented");
-            }
-
             var nextLineNumber = req.Lines.Count() + 1;
 
             var checkFromLocation = this.storesPack.CheckStockAtFromLocation(
@@ -108,7 +103,7 @@
                 fromLocationId,
                 fromPalletNumber,
                 fromStockRotationDate);
-            
+
             if (!checkFromLocation.Success)
             {
                 throw new MoveInvalidException("The required stock doesn't exist at that from location.");
@@ -127,6 +122,32 @@
                     toLocationId,
                     toPalletNumber);
             }
+            else if (this.IsKardexLocation(to))
+            {
+                if (!fromStockRotationDate.HasValue && !toStockRotationDate.HasValue)
+                {
+                    moveResult = new ProcessResult
+                                     {
+                                         Message = "You must provide either a from or to stock rotation date",
+                                         Success = false
+                                     };
+                }
+                else
+                {
+                    moveResult = this.kardexPack.MoveStockToKardex(
+                        result.ReqNumber,
+                        nextLineNumber,
+                        to,
+                        partNumber,
+                        quantity,
+                        fromStockRotationDate,
+                        storageType,
+                        fromLocationId,
+                        fromPalletNumber,
+                        toStockRotationDate,
+                        null);
+                }
+            }
             else
             {
                 moveResult = this.storesPack.MoveStock(
@@ -143,7 +164,6 @@
                     !string.IsNullOrEmpty(fromState) ? fromState : checkFromLocation.State,
                     fromStockPool);
             }
-
 
             result.Success = moveResult.Success;
             result.Message = moveResult.Message;
