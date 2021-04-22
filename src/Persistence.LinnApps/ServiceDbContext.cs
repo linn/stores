@@ -1333,6 +1333,7 @@
             r.Property(l => l.Booked).HasColumnName("BOOKED");
             r.Property(l => l.StockPoolCode).HasColumnName("STOCK_POOL_CODE").HasMaxLength(10);
             r.Property(l => l.LocationId).HasColumnName("LOCATION_ID");
+            r.Property(l => l.Remarks).HasColumnName("REMARKS").HasMaxLength(2000);
             r.HasOne(l => l.Location).WithMany(s => s.ReqMoves).HasForeignKey(l => l.LocationId);
         }
 

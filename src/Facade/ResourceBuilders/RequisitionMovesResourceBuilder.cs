@@ -28,7 +28,8 @@
                                         FromLocationCode = move.StockLocator.StorageLocation?.LocationCode,
                                         FromPalletNumber = move.StockLocator.PalletNumber,
                                         ToLocationCode = move.Location?.LocationCode,
-                                        ToPalletNumber = move.PalletNumber
+                                        ToPalletNumber = move.PalletNumber,
+                                        Remarks = move.Remarks
                                     }));
             }
 
