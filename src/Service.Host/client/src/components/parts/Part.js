@@ -133,6 +133,9 @@ function Part({
         if (editStatus === 'create') {
             dispatch({ type: 'fieldChange', fieldName: 'bomId', payload: null });
         }
+    }, [editStatus]);
+
+    useEffect(() => {
         if (item && item !== state.prevPart) {
             if (editStatus === 'create') {
                 dispatch({ type: 'initialise', payload: defaultPart });
