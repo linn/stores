@@ -22,7 +22,6 @@ const exportReturn = {
     grossWeightKg: 0,
     grossDimsM3: 0,
     madeIntercompanyInvoices: 'Y',
-    dateProcessed: '2021-04-08T15:32:24.0000000',
     returnForCredit: 'N',
     exportCustomsEntryCode: null,
     exportCustomsCodeDate: null,
