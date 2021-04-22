@@ -301,6 +301,7 @@ export default function ExportReturn({
                                             handleEditClick={handleExportReturnDetailEditClick}
                                             setRowToBeDeleted={setRowToBeDeleted}
                                             setRowToBeSaved={setRowToBeSaved}
+                                            editable={!exportReturn.dateProcessed}
                                         />
                                     </Grid>
                                 )}
@@ -342,6 +343,7 @@ export default function ExportReturn({
                                             propertyName="exportCustomsEntryCode"
                                             onChange={handleFieldChange}
                                             margin="dense"
+                                            disabled={!!exportReturn.dateProcessed}
                                         />
                                     </Grid>
                                     <Grid item xs={4}>
@@ -351,6 +353,7 @@ export default function ExportReturn({
                                             onChange={value =>
                                                 handleFieldChange('exportCustomsEntryDate', value)
                                             }
+                                            disabled={!!exportReturn.dateProcessed}
                                         />
                                     </Grid>
                                     <Grid item xs={4} />
@@ -361,7 +364,7 @@ export default function ExportReturn({
                                 <Button
                                     variant="outlined"
                                     color="primary"
-                                    disabled={!state.editing}
+                                    disabled={!!exportReturn.dateProcessed || !state.editing}
                                     onClick={handleSaveClick}
                                 >
                                     Save
@@ -372,6 +375,7 @@ export default function ExportReturn({
                                     variant="outlined"
                                     color="primary"
                                     onClick={handleMakeIntercompanyInvoicesClick}
+                                    disabled={!!exportReturn.dateProcessed}
                                 >
                                     Make Intercompany Invoices
                                 </Button>
@@ -396,7 +400,8 @@ ExportReturn.propTypes = {
     exportReturnLoading: PropTypes.bool,
     exportReturn: PropTypes.shape({
         exportReturnDetails: PropTypes.arrayOf(PropTypes.shape({})),
-        returnId: PropTypes.number
+        returnId: PropTypes.number,
+        dateProcessed: PropTypes.string
     }),
     updateExportReturn: PropTypes.func.isRequired,
     makeIntercompanyInvoicesMessageVisible: PropTypes.bool,

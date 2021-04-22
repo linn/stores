@@ -15,6 +15,7 @@ export default function InputFields({ exportReturn, handleFieldChange, calculate
                     propertyName="carrierCode"
                     onChange={handleFieldChange}
                     margin="dense"
+                    disabled={!!exportReturn.dateProcessed}
                 />
             </Grid>
             <Grid item xs={6}>
@@ -25,6 +26,7 @@ export default function InputFields({ exportReturn, handleFieldChange, calculate
                     propertyName="carrierRef"
                     onChange={handleFieldChange}
                     margin="dense"
+                    disabled={!!exportReturn.dateProcessed}
                 />
             </Grid>
             <Grid item xs={6}>
@@ -36,6 +38,7 @@ export default function InputFields({ exportReturn, handleFieldChange, calculate
                     onChange={handleFieldChange}
                     margin="dense"
                     type="number"
+                    disabled={!!exportReturn.dateProcessed}
                 />
             </Grid>
             <Grid item xs={6}>
@@ -47,6 +50,7 @@ export default function InputFields({ exportReturn, handleFieldChange, calculate
                     onChange={handleFieldChange}
                     margin="dense"
                     type="number"
+                    disabled={!!exportReturn.dateProcessed}
                 />
             </Grid>
 
@@ -59,6 +63,7 @@ export default function InputFields({ exportReturn, handleFieldChange, calculate
                     onChange={handleFieldChange}
                     margin="dense"
                     type="number"
+                    disabled={!!exportReturn.dateProcessed}
                 />
             </Grid>
             <Grid item xs={6}>
@@ -70,11 +75,17 @@ export default function InputFields({ exportReturn, handleFieldChange, calculate
                     onChange={handleFieldChange}
                     margin="dense"
                     type="number"
+                    disabled={!!exportReturn.dateProcessed}
                 />
             </Grid>
 
             <Grid item xs={12}>
-                <Button variant="outlined" color="primary" onClick={() => calculateDims()}>
+                <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={() => calculateDims()}
+                    disabled={!!exportReturn.dateProcessed}
+                >
                     Calculate Dimensions from RSNs
                 </Button>
             </Grid>
@@ -89,7 +100,8 @@ InputFields.propTypes = {
         numPallets: PropTypes.number,
         numCartons: PropTypes.number,
         grossWeightKg: PropTypes.number,
-        grossDimsM3: PropTypes.number
+        grossDimsM3: PropTypes.number,
+        dateProcessed: PropTypes.string
     }).isRequired,
     calculateDims: PropTypes.func.isRequired,
     handleFieldChange: PropTypes.func.isRequired
