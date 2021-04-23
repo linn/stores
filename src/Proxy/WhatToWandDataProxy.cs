@@ -13,10 +13,9 @@
             this.databaseService = databaseService;
         }
 
-        public IEnumerable<WhatToWandLine> WhatToWand(string fromLocation)
+        public IEnumerable<WhatToWandLine> WhatToWand(int fromLocationId)
         {
-            // todo - this query isn't right - how do I incorporate fromLocation? (See Data Links in Report Builder)
-            var sql = $@"select
+            var q1 = $@"select
             SOD.ORDER_NUMBER ORDER_NUMBER,
             SOD.ORDER_LINE ORDER_LINE,
             SA.ARTICLE_NUMBER ARTICLE_NUMBER, 
@@ -87,6 +86,65 @@
             which_mains_lead(sod.article_number, ad.country) 
             order by c.consignment_id, sod.order_number,SOD.SUPPLY_IN_FULL_CODE,sod.order_line";
 
+            var q2 = $@"select           
+                        distinct C.CONSIGNMENT_ID
+                        FROM CONSIGNMENTS C,
+                        REQUISITION_HEADERS RH,
+                        REQUISITION_LINES RL,
+                        REQ_MOVES RM,
+                        STOCK_LOCATORS SR
+                        WHERE C.CONSIGNMENT_ID=RH.DOCUMENT_1
+                        AND SR.PALLET_NUMBER IS NOT NULL
+                        AND RH.DOC1_NAME='CONS'
+                        AND RL.PART_NUMBER = SR.PART_NUMBER 
+                        AND ((RH.FUNCTION_CODE = 'INVOICE'
+                        AND RL.CANCELLED='N'
+                        AND RH.CANCELLED='N'
+                        AND RH.BOOKED = 'N')
+                              OR
+                              (RH.FUNCTION_CODE = 'ALLOC' 
+                              AND RM.DATE_BOOKED IS NULL
+                              --AND RM.BOOKED='N'
+                        AND RL.CANCELLED='N'
+                        AND RH.CANCELLED='N'
+                        AND RH.BOOKED = 'N'))
+                        AND RH.REQ_NUMBER=RL.REQ_NUMBER
+                        AND RL.REQ_NUMBER=RM.REQ_NUMBER
+                        AND RL.LINE_NUMBER=RM.LINE_NUMBER
+                        AND RM.STOCK_LOCATOR_ID=SR.STOCK_LOCATOR_ID
+                        AND C.DATE_CLOSED IS NULL
+                        AND c.status='L'
+                        union all
+                        select  distinct C.CONSIGNMENT_ID
+                        FROM CONSIGNMENTS C,
+                        REQUISITION_HEADERS RH,
+                        REQUISITION_LINES RL,
+                        REQ_MOVES RM,
+                        STOCK_LOCATORS SR
+                        WHERE C.CONSIGNMENT_ID=RH.DOCUMENT_1
+                        AND SR.LOCATION_ID={fromLocationId}
+                        AND SR.LOCATION_ID is not null
+                        AND RH.DOC1_NAME='CONS'
+                        AND RL.PART_NUMBER = SR.PART_NUMBER 
+                        AND ((RH.FUNCTION_CODE = 'INVOICE'
+                        AND RL.CANCELLED='N'
+                        AND RH.CANCELLED='N'
+                        AND RH.BOOKED = 'N')
+                              OR
+                              (RH.FUNCTION_CODE = 'ALLOC' AND 
+                               RM.DATE_BOOKED IS NULL
+                               --RM.BOOKED='N'
+                        AND RL.CANCELLED='N'
+                        AND RH.CANCELLED='N'
+                        AND RH.BOOKED = 'N'))
+                        AND RH.REQ_NUMBER=RL.REQ_NUMBER
+                        AND RL.REQ_NUMBER=RM.REQ_NUMBER
+                        AND RL.LINE_NUMBER=RM.LINE_NUMBER
+                        AND RM.STOCK_LOCATOR_ID=SR.STOCK_LOCATOR_ID
+                        AND C.DATE_CLOSED IS NULL
+                        AND c.status='L'";
+
+            var sql = $@"select * from ({q1}) t1 inner join ({q2}) t2 on t1.consignment_id = t2.consignment_id";
             var rows = this.databaseService.ExecuteQuery(sql).Tables[0].Rows;
             var result = new List<WhatToWandLine>();
 

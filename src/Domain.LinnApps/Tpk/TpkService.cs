@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tpk
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
 
     using Linn.Common.Persistence;
@@ -85,7 +84,7 @@
             
             this.bundleLabelPack.PrintTpkBoxLabels(from.FromLocation);
             
-            var whatToWand = this.whatToWandService.WhatToWand(from.FromLocation).ToList();
+            var whatToWand = this.whatToWandService.WhatToWand(from.LocationId).ToList();
             
             this.tpkPack.UpdateQuantityPrinted(from.FromLocation, out var updateQuantitySuccessful);
             
