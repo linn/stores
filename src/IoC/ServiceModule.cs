@@ -16,6 +16,7 @@
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.StockMove;
+    using Linn.Stores.Domain.LinnApps.Tqms;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Facade;
@@ -47,6 +48,7 @@
             builder.RegisterType<WandService>().As<IWandService>();
             builder.RegisterType<RequisitionService>().As<IRequisitionService>();
             builder.RegisterType<MoveStockService>().As<IMoveStockService>();
+            builder.RegisterType<TqmsReportsService>().As<ITqmsReportsService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -120,6 +122,7 @@
             builder.RegisterType<PartStorageTypeFacadeService>()
                 .As<IFacadeService<PartStorageType, int, PartStorageTypeResource, PartStorageTypeResource>>();
             builder.RegisterType<InterCompanyInvoiceService>().As<IInterCompanyInvoiceService>();
+            builder.RegisterType<TqmsReportsFacadeService>().As<ITqmsReportsFacadeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
