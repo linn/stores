@@ -33,7 +33,7 @@ export default function Tpk({
         setRows(
             transferableStock.map(s => ({
                 ...s,
-                id: s.articleNumber + s.orderNumber + s.orderLine + s.fromLocation // is this guaranteed unique?
+                id: s.articleNumber + s.orderNumber + s.orderLine + s.fromLocation
             }))
         );
         setDateTimeTpkViewQueried(new Date());
@@ -147,21 +147,6 @@ export default function Tpk({
                                 />
                             </div>
                         </Grid>
-                        {/* <Grid item xs={2}>
-                            <Button
-                                style={{ marginTop: '22px' }}
-                                variant="contained"
-                                onClick={() => {
-                                    clearErrors();
-                                    transferStock({
-                                        stockToTransfer: selectedRows,
-                                        dateTimeTpkViewQueried: dateTimeTpkViewQueried?.toISOString()
-                                    });
-                                }}
-                            >
-                                Transfer
-                            </Button>
-                        </Grid> */}
                     </>
                 )}
             </Grid>
