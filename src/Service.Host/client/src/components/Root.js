@@ -33,6 +33,7 @@ import StockLocator from '../containers/stockLocatorUtility/StockLocator';
 import Wand from '../containers/Wand';
 import ExportRsns from '../containers/ExportRsns';
 import Tpk from '../containers/Tpk';
+import ExportReturn from '../containers/ExportReturn';
 import StockMove from '../containers/StockMove';
 import StockLocatorBatchView from '../containers/stockLocatorUtility/StockLocatorBatchView';
 import StockLocatorPricesView from '../containers/stockLocatorUtility/StockLocatorPricesView';
@@ -65,7 +66,6 @@ const Root = ({ store }) => (
 
                                 <Switch>
                                     <Route exact path="/inventory" component={App} />
-
                                     <Route
                                         exact
                                         path="/inventory/signin-oidc-client"
@@ -99,7 +99,6 @@ const Root = ({ store }) => (
                                         path="/logistics/sos-alloc-heads/:jobId"
                                         component={SosAllocHeads}
                                     />
-
                                     <Route
                                         exact
                                         path="/logistics/sos-alloc-heads/:jobId"
@@ -184,6 +183,16 @@ const Root = ({ store }) => (
 
                                     <Route exact path="/logistics/tpk" component={Tpk} />
 
+                                    <Route
+                                        exact
+                                        path="/inventory/exports/returns/:id"
+                                        component={ExportReturn}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/exports/returns"
+                                        component={ExportRsns}
+                                    />
                                     <Route
                                         exact
                                         path="/inventory/move-stock"

@@ -25,5 +25,7 @@
         public string StockPoolCode { get; set; }
 
         public string Booked { get; set; }
+
+        public string Remarks { get; set; }
     }
 }

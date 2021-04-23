@@ -55,6 +55,13 @@ export const tpkTransferStock = new ItemType(
     'TRANSFER_STOCK',
     '/logistics/tpk/transfer'
 );
+
+export const makeIntercompanyInvoices = new ItemType(
+    'makeIntercompanyInvoices',
+    'MAKE_INTERCOMPANY_INVOICES',
+    '/inventory/exports/returns/make-intercompany-invoices'
+);
+
 export const unallocateConsignmentLine = new ItemType(
     'unallocateConsignmentLine',
     'UNALLOCATE_CONSIGNMENT_LINE',

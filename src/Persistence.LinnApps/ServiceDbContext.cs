@@ -163,17 +163,24 @@
 
         public DbQuery<Consignment> Consignments { get; set; }
 
+        public DbSet<ExportReturn> ExportReturns { get; set; }
+
+        public DbSet<ExportReturnDetail> ExportReturnDetails { get; set; }
+        
         public DbSet<WandLog> WandLogs { get; set; }
 
         public DbQuery<AvailableStock> StockAvailable { get; set; }
 
         public DbQuery<StockLocatorPrices> StockLocatorView { get; set; }
 
+        public DbSet<PartStorageType> PartStorageTypes { get; set; }
+
         public DbSet<SalesArticle> SalesArticles { get; set; }
 
         public DbQuery<SalesOrder> SalesOrders { get; set; }
 
         public DbQuery<SalesOrderDetail> SalesOrderDetails { get; set; }
+        public DbQuery<InterCompanyInvoice> IntercompanyInvoices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -242,20 +249,24 @@
             this.QueryStockLocatorBatches(builder);
             this.QueryWandConsignments(builder);
             this.QueryWandItems(builder);
-            this.QueryRsns(builder);
+            this.QueryExportRsns(builder);
             this.QuerySalesAccounts(builder);
             this.QueryStockQuantitIesForMrView(builder);
             this.BuildRequisitionHeaders(builder);
             this.QueryTpkView(builder);
             this.QueryConsignments(builder);
+            this.BuildExportReturns(builder);
+            this.BuildExportReturnDetails(builder);
             this.BuildRequisitionLines(builder);
             this.BuildReqMoves(builder);
             this.BuildWandLogs(builder);
             this.QueryStockLocatorView(builder);
             this.QueryStockAvailable(builder);
+            this.BuildPartStorageTypes(builder);
             this.BuildSalesArticles(builder);
             this.QuerySalesOrders(builder);
             this.QuerySalesOrderDetails(builder);
+            this.QueryIntercompanyInvoices(builder);
             base.OnModelCreating(builder);
         }
 
@@ -861,6 +872,7 @@
             table.Property(s => s.SalesCustomerId).HasColumnName("SALES_CUSTOMER_ID");
             table.Property(s => s.CountryCode).HasColumnName("COUNTRY_CODE").HasMaxLength(2);
             table.Property(s => s.CountryName).HasColumnName("COUNTRY_NAME").HasMaxLength(50);
+            table.Property(s => s.DateInvalid).HasColumnName("DATE_INVALID");
         }
 
         private void BuildParcels(ModelBuilder builder)
@@ -1258,7 +1270,7 @@
             q.Property(v => v.TypeOfSerialNumber).HasColumnName("TYPE_OF_SERIAL_NUMBER");
         }
 
-        private void QueryRsns(ModelBuilder builder)
+        private void QueryExportRsns(ModelBuilder builder)
         {
             var q = builder.Query<ExportRsn>().ToView("EXPORT_RSNS_VIEW");
             q.Property(e => e.RsnNumber).HasColumnName("RSN_NUMBER");
@@ -1334,6 +1346,7 @@
             r.Property(l => l.Booked).HasColumnName("BOOKED");
             r.Property(l => l.StockPoolCode).HasColumnName("STOCK_POOL_CODE").HasMaxLength(10);
             r.Property(l => l.LocationId).HasColumnName("LOCATION_ID");
+            r.Property(l => l.Remarks).HasColumnName("REMARKS").HasMaxLength(2000);
             r.HasOne(l => l.Location).WithMany(s => s.ReqMoves).HasForeignKey(l => l.LocationId);
         }
 
@@ -1393,6 +1406,19 @@
             q.Property(e => e.DisplayLocation).HasColumnName("DISPLAY_LOCATION");
         }
 
+        private void BuildPartStorageTypes(ModelBuilder builder)
+        {
+            var r = builder.Entity<PartStorageType>().ToTable("PARTS_STORAGE_TYPES");
+            r.HasKey(l => l.Id);
+            r.Property(l => l.Id).HasColumnName("BRIDGE_ID");
+            r.Property(l => l.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            r.Property(l => l.StorageType).HasColumnName("STORAGE_TYPE").HasMaxLength(4);
+            r.Property(l => l.Remarks).HasColumnName("REMARKS").HasMaxLength(30);
+            r.Property(l => l.Maximum).HasColumnName("MAXIMUM");
+            r.Property(l => l.Increment).HasColumnName("INCR");
+            r.Property(l => l.Preference).HasColumnName("PREFERENCE").HasMaxLength(1);
+        }
+
         private void BuildSalesArticles(ModelBuilder builder)
         {
             var e = builder.Entity<SalesArticle>().ToTable("SALES_ARTICLES");
@@ -1444,6 +1470,65 @@
             q.Property(d => d.OrderLine).HasColumnName("ORDER_LINE");
             q.Property(d => d.OrderNumber).HasColumnName("ORDER_NUMBER");
             q.Property(d => d.NettTotal).HasColumnName("NETT_TOTAL");
+        }
+        private void BuildExportReturns(ModelBuilder builder)
+        {
+            var q = builder.Entity<ExportReturn>().ToTable("EXPORT_RETURNS");
+            q.HasKey(e => e.ReturnId);
+            q.Property(e => e.CarrierCode).HasColumnName("CARRIER_CODE").HasMaxLength(10);
+            q.Property(e => e.ReturnId).HasColumnName("RETURN_ID");
+            q.Property(e => e.DateCreated).HasColumnName("DATE_CREATED");
+            q.Property(e => e.Currency).HasColumnName("CURRENCY").HasMaxLength(4);
+            q.Property(e => e.AccountId).HasColumnName("ACCOUNT_ID");
+            q.Property(e => e.HubId).HasColumnName("HUB_ID");
+            q.Property(e => e.OutletNumber).HasColumnName("OUTLET_NUMBER");
+            q.Property(e => e.DateDispatched).HasColumnName("DATE_DISPATCHED");
+            q.Property(e => e.DateCancelled).HasColumnName("DATE_CANCELLED");
+            q.Property(e => e.CarrierRef).HasColumnName("CARRIER_REF").HasMaxLength(32);
+            q.Property(e => e.Terms).HasColumnName("TERMS").HasMaxLength(30);
+            q.Property(e => e.NumPallets).HasColumnName("NUM_PALLETS");
+            q.Property(e => e.NumCartons).HasColumnName("NUM_CARTONS");
+            q.Property(e => e.GrossWeightKg).HasColumnName("GROSS_WEIGHT_KG");
+            q.Property(e => e.GrossDimsM3).HasColumnName("GROSS_DIMS_M3");
+            q.Property(e => e.MadeIntercompanyInvoices).HasColumnName("MADE_INTERCO_INVS");
+            q.Property(e => e.DateProcessed).HasColumnName("DATE_PROCESSED");
+            q.Property(e => e.ReturnForCredit).HasColumnName("RETURN_FOR_CREDIT");
+            q.Property(e => e.ExportCustomsEntryCode).HasColumnName("EXPORT_CUSTOMS_ENTRY_CODE");
+            q.Property(e => e.ExportCustomsCodeDate).HasColumnName("EXPORT_CUSTOMS_CODE_DATE");
+            q.HasMany(e => e.ExportReturnDetails).WithOne(e => e.ExportReturn).HasForeignKey(e => e.ReturnId);
+            q.HasOne(e => e.RaisedBy).WithMany(l => l.ExportReturnsCreated).HasForeignKey("RAISED_BY");
+            q.HasOne(e => e.SalesOutlet).WithMany(l => l.ExportReturns)
+                .HasForeignKey(e => new { e.AccountId, e.OutletNumber });
+        }
+
+        private void BuildExportReturnDetails(ModelBuilder builder)
+        {
+            var q = builder.Entity<ExportReturnDetail>().ToTable("EXP_RETURN_DETAILS");
+            q.HasKey(e => new { e.ReturnId, e.RsnNumber });
+            q.Property(e => e.ReturnId).HasColumnName("RETURN_ID");
+            q.Property(e => e.RsnNumber).HasColumnName("RSN_NUMBER");
+            q.Property(e => e.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
+            q.Property(e => e.LineNo).HasColumnName("LINE_NO");
+            q.Property(e => e.Qty).HasColumnName("QTY");
+            q.Property(e => e.Description).HasColumnName("DESCRIPTION").HasMaxLength(200);
+            q.Property(e => e.CustomsValue).HasColumnName("CUSTOMS_VALUE");
+            q.Property(e => e.BaseCustomsValue).HasColumnName("BASE_CUSTOMS_VALUE");
+            q.Property(e => e.TariffId).HasColumnName("TARIFF_ID");
+            q.Property(e => e.ExpInvDocumentType).HasColumnName("EXPINV_DOCUMENT_TYPE").HasMaxLength(1);
+            q.Property(e => e.ExpInvDocumentNumber).HasColumnName("EXPINV_DOCUMENT_NUMBER");
+            q.Property(e => e.ExpInvDate).HasColumnName("EXPINV_DATE");
+            q.Property(e => e.NumCartons).HasColumnName("NUM_CARTONS");
+            q.Property(e => e.Weight).HasColumnName("WEIGHT");
+            q.Property(e => e.Width).HasColumnName("WIDTH");
+            q.Property(e => e.Height).HasColumnName("HEIGHT");
+            q.Property(e => e.Depth).HasColumnName("DEPTH");
+        }
+
+        private void QueryIntercompanyInvoices(ModelBuilder builder)
+        {
+            var q = builder.Query<InterCompanyInvoice>().ToView("INTER_COMPANY_INVOICES");
+            q.Property(e => e.DocumentNumber).HasColumnName("DOCUMENT_NUMBER");
+            q.Property(e => e.ExportReturnId).HasColumnName("EXPORT_RETURN_ID");
         }
     }
 }

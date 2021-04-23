@@ -37,7 +37,8 @@
                                     ToLocationId = 536,
                                     ToPalletNumber = 8000,
                                     ToStockRotationDate = 2.April(2024).ToString("O"),
-                                    UserNumber = 909
+                                    UserNumber = 909,
+                                    StorageType = "type"
                                 };
             this.MoveStockService.MoveStock(
                     this.resource.ReqNumber,
@@ -53,6 +54,7 @@
                     this.resource.ToLocationId,
                     this.resource.ToPalletNumber,
                     2.April(2024),
+                    this.resource.StorageType,
                     this.resource.UserNumber)
                 .Returns(this.moveResult);
 
@@ -76,6 +78,7 @@
                 this.resource.ToLocationId,
                 this.resource.ToPalletNumber,
                 2.April(2024),
+                this.resource.StorageType,
                 this.resource.UserNumber);
         }
 

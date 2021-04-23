@@ -7,6 +7,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class SernosSequenceRepository : IQueryRepository<SernosSequence>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -18,17 +20,18 @@
 
         public SernosSequence FindBy(Expression<Func<SernosSequence, bool>> expression)
         {
-            return this.serviceDbContext.SernosSequences.Where(expression).ToList().FirstOrDefault();
+            return this.serviceDbContext.SernosSequences
+                .Where(expression).ToList().FirstOrDefault();
         }
 
         public IQueryable<SernosSequence> FilterBy(Expression<Func<SernosSequence, bool>> expression)
         {
-            return this.serviceDbContext.SernosSequences.Where(expression);
+            return this.serviceDbContext.SernosSequences.AsNoTracking().Where(expression);
         }
 
         public IQueryable<SernosSequence> FindAll()
         {
-            return this.serviceDbContext.SernosSequences;
+            return this.serviceDbContext.SernosSequences.AsNoTracking();
         }
     }
 }

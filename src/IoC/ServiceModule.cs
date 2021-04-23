@@ -108,15 +108,21 @@
             builder.RegisterType<WandFacadeService>().As<IWandFacadeService>();
             builder.RegisterType<SalesOutletService>().As<ISalesOutletService>();
             builder.RegisterType<SalesAccountService>().As<ISalesAccountService>();
+            builder.RegisterType<ExportReturnService>().As<IExportReturnService>();
             builder.RegisterType<ExportRsnService>().As<IExportRsnService>();
             builder.RegisterType<StockQuantitiesService>().As<IStockQuantitiesService>();
             builder.RegisterType<RequisitionActionsFacadeService>().As<IRequisitionActionsFacadeService>();
             builder.RegisterType<TpkFacadeService>().As<ITpkFacadeService>();
+            builder.RegisterType<ExportReturnDetailFacadeService>()
+                .As<IFacadeService<ExportReturnDetail, ExportReturnDetailKey, ExportReturnDetailResource, ExportReturnDetailResource>>();
             builder.RegisterType<AvailableStockFacadeService>().As<IAvailableStockFacadeService>();
             builder.RegisterType<MoveStockFacadeService>().As<IMoveStockFacadeService>();
             builder.RegisterType<RequisitionFacadeService>()
                 .As<IFacadeService<RequisitionHeader, int, RequisitionResource, RequisitionResource>>();
             builder.RegisterType<StockLocatorPricesService>().As<IStockLocatorPricesService>();
+            builder.RegisterType<PartStorageTypeFacadeService>()
+                .As<IFacadeService<PartStorageType, int, PartStorageTypeResource, PartStorageTypeResource>>();
+            builder.RegisterType<InterCompanyInvoiceService>().As<IInterCompanyInvoiceService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
@@ -132,7 +138,9 @@
             builder.RegisterType<TpkPack>().As<ITpkPack>();
             builder.RegisterType<BundleLabelPack>().As<IBundleLabelPack>();
             builder.RegisterType<WhatToWandDataProxy>().As<IWhatToWandService>();
+            builder.RegisterType<ExportReturnsPack>().As<IExportReturnsPack>();
             builder.RegisterType<StockLocatorLocationsViewService>().As<IStockLocatorLocationsViewService>();
+            builder.RegisterType<KardexPack>().As<IKardexPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

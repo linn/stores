@@ -106,6 +106,14 @@
             builder.RegisterType<StockLocatorPricesRepository>().As<IQueryRepository<StockLocatorPrices>>();
             builder.RegisterType<SalesOrderRepository>().As<IQueryRepository<SalesOrder>>();
             builder.RegisterType<SalesOrderDetailsRepository>().As<IQueryRepository<SalesOrderDetail>>();
+            builder.RegisterType<ExportReturnRepository>().As<IRepository<ExportReturn, int>>();
+            builder.RegisterType<ExportReturnDetailRepository>()
+                .As<IRepository<ExportReturnDetail, ExportReturnDetailKey>>();
+            builder.RegisterType<WandLogRepository>().As<IRepository<WandLog, int>>();
+            builder.RegisterType<StockAvailableRepository>().As<IQueryRepository<AvailableStock>>();
+            builder.RegisterType<StockLocatorPricesRepository>().As<IQueryRepository<StockLocatorPrices>>();
+            builder.RegisterType<PartStorageTypeRepository>().As<IRepository<PartStorageType, int>>();
+            builder.RegisterType<InterCompanyInvoiceRepository>().As<IQueryRepository<InterCompanyInvoice>>();
         }
     }
 }

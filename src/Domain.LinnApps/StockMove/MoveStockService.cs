@@ -7,6 +7,7 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
+    using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
@@ -15,16 +16,20 @@
     {
         private readonly IStoresPack storesPack;
 
+        private readonly IKardexPack kardexPack;
+
         private readonly IRepository<RequisitionHeader, int> requisitionRepository;
 
         private readonly IRepository<StorageLocation, int> storageLocationRepository;
 
         public MoveStockService(
             IStoresPack storesPack,
+            IKardexPack kardexPack,
             IRepository<RequisitionHeader, int> requisitionRepository,
             IRepository<StorageLocation, int> storageLocationRepository)
         {
             this.storesPack = storesPack;
+            this.kardexPack = kardexPack;
             this.requisitionRepository = requisitionRepository;
             this.storageLocationRepository = storageLocationRepository;
         }
@@ -43,6 +48,7 @@
             int? toLocationId,
             int? toPalletNumber,
             DateTime? toStockRotationDate,
+            string storageType,
             int userNumber)
         {
             if (quantity <= 0)
@@ -78,19 +84,14 @@
 
             var req = this.requisitionRepository.FindById(result.ReqNumber);
 
-            if (!fromLocationId.HasValue && !fromPalletNumber.HasValue)
+            if (!this.IsKardexLocation(from) && !fromLocationId.HasValue && !fromPalletNumber.HasValue)
             {
                 this.GetLocationDetails(from, out fromLocationId, out fromPalletNumber);
             }
 
-            if (!toLocationId.HasValue && !toPalletNumber.HasValue)
+            if (!this.IsKardexLocation(to) && !toLocationId.HasValue && !toPalletNumber.HasValue)
             {
                 this.GetLocationDetails(to, out toLocationId, out toPalletNumber);
-            }
-
-            if (this.IsKardexLocation(from) || this.IsKardexLocation(to))
-            {
-                throw new MoveInvalidException("Not yet implemented");
             }
 
             var nextLineNumber = req.Lines.Count() + 1;
@@ -102,25 +103,67 @@
                 fromLocationId,
                 fromPalletNumber,
                 fromStockRotationDate);
-            
+
             if (!checkFromLocation.Success)
             {
                 throw new MoveInvalidException("The required stock doesn't exist at that from location.");
             }
 
-            var moveResult = this.storesPack.MoveStock(
-                result.ReqNumber,
-                nextLineNumber,
-                partNumber,
-                quantity,
-                fromLocationId,
-                fromPalletNumber,
-                fromStockRotationDate,
-                toLocationId,
-                toPalletNumber,
-                toStockRotationDate,
-                !string.IsNullOrEmpty(fromState) ? fromState : checkFromLocation.State,
-                fromStockPool);
+            ProcessResult moveResult;
+            if (this.IsKardexLocation(from))
+            {
+                moveResult = this.kardexPack.MoveStockFromKardex(
+                    result.ReqNumber,
+                    nextLineNumber,
+                    from,
+                    partNumber,
+                    quantity,
+                    storageType,
+                    toLocationId,
+                    toPalletNumber);
+            }
+            else if (this.IsKardexLocation(to))
+            {
+                if (!fromStockRotationDate.HasValue && !toStockRotationDate.HasValue)
+                {
+                    moveResult = new ProcessResult
+                                     {
+                                         Message = "You must provide either a from or to stock rotation date",
+                                         Success = false
+                                     };
+                }
+                else
+                {
+                    moveResult = this.kardexPack.MoveStockToKardex(
+                        result.ReqNumber,
+                        nextLineNumber,
+                        to,
+                        partNumber,
+                        quantity,
+                        fromStockRotationDate,
+                        storageType,
+                        fromLocationId,
+                        fromPalletNumber,
+                        toStockRotationDate,
+                        null);
+                }
+            }
+            else
+            {
+                moveResult = this.storesPack.MoveStock(
+                    result.ReqNumber,
+                    nextLineNumber,
+                    partNumber,
+                    quantity,
+                    fromLocationId,
+                    fromPalletNumber,
+                    fromStockRotationDate,
+                    toLocationId,
+                    toPalletNumber,
+                    toStockRotationDate,
+                    !string.IsNullOrEmpty(fromState) ? fromState : checkFromLocation.State,
+                    fromStockPool);
+            }
 
             result.Success = moveResult.Success;
             result.Message = moveResult.Message;

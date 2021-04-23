@@ -156,6 +156,10 @@
             builder.RegisterType<TransferableStockListResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<TransferableStock>>>();
             builder.RegisterType<TpkResultResourceBuilder>().As<IResourceBuilder<TpkResult>>();
+            builder.RegisterType<ExportReturnResourceBuilder>().As<IResourceBuilder<ExportReturn>>();
+            builder.RegisterType<ExportReturnDetailResourceBuilder>().As<IResourceBuilder<ExportReturnDetail>>();
+            builder.RegisterType<ExportReturnDetailsResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<ExportReturnDetail>>>();
             builder.RegisterType<StockLocatorPricesResourceBuilder>().As<IResourceBuilder<StockLocatorPrices>>();
             builder.RegisterType<StockLocatorPricesListResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<StockLocatorPrices>>>();
@@ -163,6 +167,11 @@
             builder.RegisterType<RequisitionProcessResultResourceBuilder>().As<IResourceBuilder<RequisitionProcessResult>>();
             builder.RegisterType<RequisitionResourceBuilder>().As<IResourceBuilder<RequisitionHeader>>();
             builder.RegisterType<RequisitionMovesResourceBuilder>().As<IRequisitionMovesResourceBuilder>();
+            builder.RegisterType<PartStorageTypesResourceBuilder>().As<IResourceBuilder<IEnumerable<PartStorageType>>>();
+            builder.RegisterType<InterCompanyInvoiceResourceBuilder>()
+                .As<IResourceBuilder<InterCompanyInvoice>>();
+            builder.RegisterType<InterCompanyInvoicesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<InterCompanyInvoice>>>();
         }
     }
 }

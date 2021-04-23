@@ -166,6 +166,13 @@ export const transferableStockActionTypes = makeActionTypes(itemTypes.transferab
 export const tpkTransferStockActionTypes = makeProcessActionTypes(
     processTypes.tpkTransferStock.actionType
 );
+
+export const exportReturnActionTypes = makeActionTypes(itemTypes.exportReturn.actionType);
+
+export const makeIntercompanyInvoicesActionTypes = makeProcessActionTypes(
+    processTypes.makeIntercompanyInvoices.actionType
+);
+
 export const unallocateConsignmentLineActionTypes = makeProcessActionTypes(
     processTypes.unallocateConsignmentLine.actionType
 );
@@ -179,3 +186,9 @@ export const stockLocatorPricesActionTypes = makeActionTypes(
 );
 
 export const reqMovesActionTypes = makeActionTypes(itemTypes.reqMoves.actionType);
+
+export const partStorageTypesActionTypes = makeActionTypes(itemTypes.partStorageTypes.actionType);
+
+export const interCompanyInvoicesActionTypes = makeActionTypes(
+    itemTypes.interCompanyInvoices.actionType
+);

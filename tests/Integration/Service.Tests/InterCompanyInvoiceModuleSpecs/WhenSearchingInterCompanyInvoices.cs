@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Service.Tests.RsnModuleSpecs
+﻿namespace Linn.Stores.Service.Tests.InterCompanyInvoiceModuleSpecs
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -16,24 +16,23 @@
 
     using NUnit.Framework;
 
-    public class WhenGettingRsns : ContextBase
+    public class WhenSearchingInterCompanyInvoices : ContextBase
     {
         [SetUp]
         public void SetUp()
         {
-            var rsn1 = new ExportRsn { RsnNumber = 1, AccountId = 123, OutletNumber = 1 };
-            var rsn2 = new ExportRsn { RsnNumber = 2, AccountId = 123, OutletNumber = 1 };
+            var inv1 = new InterCompanyInvoice { ExportReturnId = 123, DocumentNumber = 321 };
+            var inv2 = new InterCompanyInvoice { ExportReturnId = 123, DocumentNumber = 111 };
 
-            this.ExportRsnService.SearchRsns(123, 1)
-                .Returns(new SuccessResult<IEnumerable<ExportRsn>>(new List<ExportRsn> { rsn1, rsn2 }));
+            this.InterCompanyInvoiceService.SearchInterCompanyInvoices("123").Returns(
+                new SuccessResult<IEnumerable<InterCompanyInvoice>>(new List<InterCompanyInvoice> { inv1, inv2 }));
 
             this.Response = this.Browser.Get(
-                "/inventory/exports/rsns",
+                "/inventory/exports/inter-company-invoices",
                 with =>
                     {
                         with.Header("Accept", "application/json");
-                        with.Query("accountId", "123");
-                        with.Query("outletNumber", "1");
+                        with.Query("searchTerm", "123");
                     }).Result;
         }
 
@@ -46,16 +45,14 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ExportRsnService.Received().SearchRsns(123, 1);
+            this.InterCompanyInvoiceService.Received().SearchInterCompanyInvoices("123");
         }
 
         [Test]
         public void ShouldReturnResource()
         {
-            var resource = this.Response.Body.DeserializeJson<IEnumerable<ExportRsnResource>>().ToList();
+            var resource = this.Response.Body.DeserializeJson<IEnumerable<IntercompanyInvoiceResource>>().ToList();
             resource.Should().HaveCount(2);
-            resource.Should().Contain(r => r.RsnNumber == 1);
-            resource.Should().Contain(r => r.RsnNumber == 2);
         }
     }
 }

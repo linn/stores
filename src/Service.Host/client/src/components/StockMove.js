@@ -33,10 +33,19 @@ function StockMove({
     reqMovesLoading,
     clearAvailableStock,
     moveWorking,
-    clearMoveResult
+    clearMoveResult,
+    partStorageTypes,
+    partStorageTypesLoading,
+    fetchPartStorageTypes,
+    clearPartStorageTypes,
+    storageLocations,
+    storageLocationsLoading,
+    fetchStorageLocations,
+    clearStorageLocationsSearch
 }) {
     const [moveDetails, setMoveDetails] = useState({ userNumber });
     const [selectedRow, setSelectedRow] = useState(null);
+    const [selectedPartStorageRow, setSelectedPartStorageRow] = useState(null);
     const [alert, setAlert] = useState({ message: ' ', visible: false });
 
     const toInput = useRef(null);
@@ -52,6 +61,8 @@ function StockMove({
             const reqNumber = reqHref.split('/').pop();
             fetchReqMoves(reqNumber);
             setMoveDetails({ reqNumber });
+            setSelectedRow(null);
+            setSelectedPartStorageRow(null);
             partNumberInput.current.focus();
         }
     }, [moveResult, fetchReqMoves]);
@@ -62,6 +73,14 @@ function StockMove({
             name: item.partNumber.toString(),
             description: item.description,
             href: item.href
+        }));
+    };
+
+    const locationResults = () => {
+        return storageLocations?.map(item => ({
+            ...item,
+            name: item.locationCode,
+            href: null
         }));
     };
 
@@ -112,6 +131,7 @@ function StockMove({
 
         doMove(moveDetails);
         clearAvailableStock();
+        clearPartStorageTypes();
     };
 
     const setToDetailsFromAvailableStock = row => {
@@ -140,6 +160,12 @@ function StockMove({
         }
     };
 
+    const handlePartStorageButtonClick = () => {
+        if (selectedPartStorageRow) {
+            setMoveDetails({ ...moveDetails, storageType: selectedPartStorageRow.storageType });
+        }
+    };
+
     const handleSelectRow = row => {
         setSelectedRow(availableStock[row.rowIds[0]]);
 
@@ -148,11 +174,28 @@ function StockMove({
         }
     };
 
+    const handleSelectPartStorageRow = selected => {
+        const row = partStorageTypes.find(p => p.id.toString() === selected.rowIds[0]);
+        setSelectedPartStorageRow(row);
+
+        if (!moveDetails.storageType) {
+            setMoveDetails({
+                ...moveDetails,
+                storageType: row.storageType
+            });
+        }
+    };
+
     const handleOnSelect = selectedPart => {
         setMoveDetails({ partNumber: selectedPart.partNumber, ...moveDetails });
         fetchAvailableStock(selectedPart.partNumber);
+        fetchPartStorageTypes(selectedPart.partNumber);
         clearMoveResult();
         clearMoveError();
+    };
+
+    const handleOnSelectLocation = loc => {
+        setMoveDetails({ ...moveDetails, toLocationId: loc.id, to: loc.locationCode });
     };
 
     const handleFieldChange = (property, value) => {
@@ -184,6 +227,7 @@ function StockMove({
     const handleOnKeyPress = data => {
         if (data.keyCode === 13 || data.keyCode === 9) {
             fetchAvailableStock(moveDetails.partNumber);
+            fetchPartStorageTypes(moveDetails.partNumber);
             clearMoveResult();
             clearMoveError();
         }
@@ -194,7 +238,7 @@ function StockMove({
             return [];
         }
 
-        return stock.map((s, i) => ({ id: i, ...s }));
+        return stock.map((s, i) => ({ ...s, id: i }));
     };
 
     const displayMoves = moves => {
@@ -202,7 +246,7 @@ function StockMove({
             return [];
         }
 
-        return moves.map((m, i) => ({ id: i, ...m }));
+        return moves.map((m, i) => ({ ...m, id: i }));
     };
 
     const columns = [
@@ -222,6 +266,13 @@ function StockMove({
         { field: 'state', headerName: 'State', width: 140 }
     ];
 
+    const partStorageColumns = [
+        { field: 'storageType', headerName: 'Type', width: 120 },
+        { field: 'maximum', headerName: 'Max', width: 100 },
+        { field: 'increment', headerName: 'Incr', width: 100 },
+        { field: 'preference', headerName: 'Pref', width: 80 }
+    ];
+
     const moveColumns = [
         { field: 'reqNumber', headerName: 'Req', width: 100 },
         { field: 'lineNumber', headerName: 'Line', width: 100, hide: true },
@@ -231,7 +282,8 @@ function StockMove({
         { field: 'fromPalletNumber', headerName: 'From Pallet', width: 140 },
         { field: 'fromLocationCode', headerName: 'From Loc', width: 140 },
         { field: 'toPalletNumber', headerName: 'To Pallet', width: 140 },
-        { field: 'toLocationCode', headerName: 'To Loc', width: 140 }
+        { field: 'toLocationCode', headerName: 'To Loc', width: 140 },
+        { field: 'remarks', headerName: 'Remarks', width: 150 }
     ];
 
     const partProp = { inputRef: partNumberInput, onKeyDown: handleOnKeyPress };
@@ -239,8 +291,8 @@ function StockMove({
     return (
         <Page requestErrors={requestErrors} showRequestErrors>
             <Grid container spacing={3}>
-                <Grid item xs={5} />
-                <Grid item xs={7}>
+                <Grid item xs={2} />
+                <Grid item xs={6}>
                     <span>Stock</span>
                     <div style={{ height: 190, width: '100%' }}>
                         <DataGrid
@@ -254,8 +306,22 @@ function StockMove({
                         />
                     </div>
                 </Grid>
-                <Grid item xs={5} />
-                <Grid item xs={7}>
+                <Grid item xs={4}>
+                    <span>Storage Types</span>
+                    <div style={{ height: 190, width: '100%' }}>
+                        <DataGrid
+                            rows={partStorageTypes}
+                            columns={partStorageColumns}
+                            density="compact"
+                            rowHeight={34}
+                            loading={partStorageTypesLoading}
+                            hideFooter
+                            onSelectionChange={handleSelectPartStorageRow}
+                        />
+                    </div>
+                </Grid>
+                <Grid item xs={2} />
+                <Grid item xs={6}>
                     <Button
                         className="hide-when-printing"
                         variant="contained"
@@ -272,11 +338,21 @@ function StockMove({
                     </Button>
                 </Grid>
                 <Grid item xs={4}>
+                    <Button
+                        className="hide-when-printing"
+                        variant="contained"
+                        onClick={handlePartStorageButtonClick}
+                    >
+                        Storage Type
+                    </Button>
+                </Grid>
+                <Grid item xs={3}>
                     <InputField
                         value={moveDetails.partNumber}
                         label="Part Number"
                         onChange={handleFieldChange}
                         maxLength={14}
+                        autoFocus
                         propertyName="partNumber"
                         textFieldProps={partProp}
                     />
@@ -293,15 +369,6 @@ function StockMove({
                         label="Search For Part Number"
                     />
                 </Grid>
-                <Grid item xs={1}>
-                    <InputField
-                        value={moveDetails.quantity}
-                        label="Qty"
-                        type="number"
-                        onChange={handleFieldNumberChange}
-                        propertyName="quantity"
-                    />
-                </Grid>
                 <Grid item xs={3}>
                     <InputField
                         value={moveDetails.from}
@@ -311,6 +378,16 @@ function StockMove({
                         propertyName="from"
                     />
                 </Grid>
+                <Grid item xs={1}>
+                    <InputField
+                        value={moveDetails.quantity}
+                        label="Qty"
+                        type="number"
+                        onChange={handleFieldNumberChange}
+                        propertyName="quantity"
+                    />
+                </Grid>
+                <Grid item xs={1} />
                 <Grid item xs={3}>
                     <InputField
                         value={moveDetails.fromStockRotationDate}
@@ -322,7 +399,7 @@ function StockMove({
                     />
                 </Grid>
                 <Grid item xs={1} />
-                <Grid item xs={4} />
+                <Grid item xs={3} />
                 <Grid item xs={3}>
                     <InputField
                         value={moveDetails.to}
@@ -332,8 +409,39 @@ function StockMove({
                         propertyName="to"
                         textFieldProps={{ inputRef: toInput }}
                     />
+                    <Typeahead
+                        items={locationResults()}
+                        fetchItems={fetchStorageLocations}
+                        clearSearch={clearStorageLocationsSearch}
+                        loading={storageLocationsLoading}
+                        debounce={1000}
+                        links={false}
+                        modal
+                        searchButtonOnly
+                        onSelect={p => handleOnSelectLocation(p)}
+                        label="Search For Stock Location"
+                    />
                 </Grid>
-                <Grid item xs={5}>
+                <Grid item xs={2}>
+                    <InputField
+                        value={moveDetails.storageType}
+                        label="Storage Type"
+                        onChange={handleFieldChange}
+                        maxLength={4}
+                        propertyName="storageType"
+                    />
+                </Grid>
+                <Grid item xs={3}>
+                    <InputField
+                        value={moveDetails.toStockRotationDate}
+                        label="To Rot Date"
+                        onChange={handleFieldChange}
+                        maxLength={16}
+                        type="date"
+                        propertyName="toStockRotationDate"
+                    />
+                </Grid>
+                <Grid item xs={1}>
                     <Button
                         style={{ marginTop: '22px' }}
                         className="hide-when-printing"
@@ -406,7 +514,15 @@ StockMove.propTypes = {
     fetchReqMoves: PropTypes.func.isRequired,
     clearAvailableStock: PropTypes.func.isRequired,
     moveWorking: PropTypes.bool,
-    clearMoveResult: PropTypes.func.isRequired
+    clearMoveResult: PropTypes.func.isRequired,
+    partStorageTypes: PropTypes.arrayOf(PropTypes.shape({})),
+    partStorageTypesLoading: PropTypes.bool,
+    fetchPartStorageTypes: PropTypes.func.isRequired,
+    clearPartStorageTypes: PropTypes.func.isRequired,
+    storageLocations: PropTypes.arrayOf(PropTypes.shape({})),
+    storageLocationsLoading: PropTypes.bool,
+    fetchStorageLocations: PropTypes.func.isRequired,
+    clearStorageLocationsSearch: PropTypes.func.isRequired
 };
 
 StockMove.defaultProps = {
@@ -422,7 +538,11 @@ StockMove.defaultProps = {
     requestErrors: null,
     reqMovesLoading: false,
     reqMoves: null,
-    moveWorking: false
+    moveWorking: false,
+    partStorageTypes: [],
+    partStorageTypesLoading: false,
+    storageLocations: [],
+    storageLocationsLoading: false
 };
 
 export default StockMove;
