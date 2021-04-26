@@ -5,8 +5,10 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Reporting.Models;
+    using Linn.Stores.Domain.LinnApps.Tqms;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
+    using Linn.Stores.Resources.Tqms;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
 
@@ -20,18 +22,24 @@
     {
         protected ITqmsReportsFacadeService TqmsReportsFacadeService { get; private set; }
 
+        protected ISingleRecordFacadeService<TqmsMaster, TqmsMasterResource> TqmsMasterFacadeService { get; private set; }
+
         [SetUp]
         public void EstablishContext()
         {
             this.TqmsReportsFacadeService = Substitute.For<ITqmsReportsFacadeService>();
+            this.TqmsMasterFacadeService = Substitute.For<ISingleRecordFacadeService<TqmsMaster, TqmsMasterResource>>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
                         with.Dependency(this.TqmsReportsFacadeService);
+                        with.Dependency(this.TqmsMasterFacadeService);
                         with.Dependency<IResourceBuilder<IEnumerable<ResultsModel>>>(new ResultsModelsResourceBuilder());
+                        with.Dependency<IResourceBuilder<TqmsMaster>>(new TqmsMasterResourceBuilder());
                         with.Module<TqmsModule>();
                         with.ResponseProcessor<ResultsModelsJsonResponseProcessor>();
+                        with.ResponseProcessor<TqmsMasterResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
                                 {
