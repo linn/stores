@@ -128,6 +128,11 @@
                 throw new StockLocatorException("You are not authorised to delete.");
             }
 
+            if (this.reqMoveRepository.FindBy(m => m.StockLocatorId == toDelete.Id) != null)
+            {
+                throw new StockLocatorException("Cannot Delete Stock Locators When Dependent Req Move exists");
+            }
+
             this.stockLocatorRepository.Remove(toDelete);
 
             toDelete.Part = this.partRepository.FindBy(p => p.PartNumber == toDelete.PartNumber);
