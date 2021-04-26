@@ -77,6 +77,7 @@ import partStorageTypes from './partStorageTypes';
 import exportReturn from './exportReturn';
 import makeIntercompanyInvoices from './makeIntercompanyInvoices';
 import interCompanyInvoices from './interCompanyInvoices';
+import tqmsSummaryByCategoryReport from './tqmsSummaryByCategoryReport';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -144,6 +145,7 @@ const rootReducer = history =>
         suppliers,
         tpkTransferStock,
         tqmsCategories,
+        tqmsSummaryByCategoryReport,
         transferableStock,
         unallocateConsignment,
         unallocateConsignmentLine,

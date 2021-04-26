@@ -37,6 +37,8 @@ import ExportReturn from '../containers/ExportReturn';
 import StockMove from '../containers/StockMove';
 import StockLocatorBatchView from '../containers/stockLocatorUtility/StockLocatorBatchView';
 import StockLocatorPricesView from '../containers/stockLocatorUtility/StockLocatorPricesView';
+import TqmsSummaryByCategoryReportOptions from '../containers/reports/TqmsSummaryByCategoryReportOptions';
+import TqmsSummaryByCategoryReport from '../containers/reports/TqmsSummaryByCategoryReport';
 
 const Root = ({ store }) => (
     <div>
@@ -197,6 +199,16 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/move-stock"
                                         component={StockMove}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/tqms-category-summary/report"
+                                        component={TqmsSummaryByCategoryReport}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/tqms-category-summary"
+                                        component={TqmsSummaryByCategoryReportOptions}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>
