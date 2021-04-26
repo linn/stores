@@ -4,6 +4,7 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
     using NSubstitute;
@@ -35,6 +36,8 @@
 
         protected IQueryRepository<StockLocatorPrices> StockLocatorView { get; private set; }
 
+        protected IQueryRepository<ReqMove> ReqMoveRepository { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -48,6 +51,7 @@
             this.AuthService = Substitute.For<IAuthorisationService>();
             this.LocationsViewService = Substitute.For<IStockLocatorLocationsViewService>();
             this.StockLocatorView = Substitute.For<IQueryRepository<StockLocatorPrices>>();
+            this.ReqMoveRepository = Substitute.For<IQueryRepository<ReqMove>>();
             this.Sut = new StockLocatorService(
                 this.StockLocatorRepository, 
                 this.StoresPalletRepository,
@@ -57,7 +61,8 @@
                 this.AuthService,
                 this.LocationsViewService,
                 this.StockLocatorView,
-                this.PartRepository);
+                this.PartRepository,
+                this.ReqMoveRepository);
         }
     }
 }
