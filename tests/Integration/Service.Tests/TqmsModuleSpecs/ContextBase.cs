@@ -29,9 +29,9 @@
                 with =>
                     {
                         with.Dependency(this.TqmsReportsFacadeService);
-                        with.Dependency<IResourceBuilder<ResultsModel>>(new ResultsModelResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<ResultsModel>>>(new ResultsModelsResourceBuilder());
                         with.Module<TqmsModule>();
-                        with.ResponseProcessor<ResultsModelJsonResponseProcessor>();
+                        with.ResponseProcessor<ResultsModelsJsonResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
                                 {

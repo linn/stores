@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Service.Tests.TqmsModuleSpecs
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using FluentAssertions;
@@ -23,13 +24,10 @@
         public void SetUp()
         {
             this.jobRef = "ABC";
-            var results = new ResultsModel(new[] { "col1" });
+            var results = new List<ResultsModel> { new ResultsModel { ReportTitle = new NameModel("title") } };
 
             this.TqmsReportsFacadeService.GetTqmsSummaryByCategory(this.jobRef)
-                .Returns(new SuccessResult<ResultsModel>(results)
-                             {
-                                 Data = new ResultsModel { ReportTitle = new NameModel("title") }
-                             });
+                .Returns(new SuccessResult<IEnumerable<ResultsModel>>(results));
 
             this.Response = this.Browser.Get(
                 "/inventory/tqms-category-summary/report",

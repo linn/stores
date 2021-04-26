@@ -7,11 +7,11 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
 
-    public class StoresBugetRepository : IQueryRepository<StoresBudget>
+    public class StoresBudgetRepository : IQueryRepository<StoresBudget>
     {
         private readonly ServiceDbContext serviceDbContext;
 
-        public StoresBugetRepository(ServiceDbContext serviceDbContext)
+        public StoresBudgetRepository(ServiceDbContext serviceDbContext)
         {
             this.serviceDbContext = serviceDbContext;
         }
