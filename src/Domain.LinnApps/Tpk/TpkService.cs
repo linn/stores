@@ -20,7 +20,7 @@
 
         private readonly IWhatToWandService whatToWandService;
 
-        private readonly IStoresPack storesOoPack;
+        private readonly IStoresPack storesPack;
 
         private readonly IQueryRepository<SalesAccount> salesAccountQueryRepository;
 
@@ -37,7 +37,7 @@
             IBundleLabelPack bundleLabelPack,
             IWhatToWandService whatToWandService,
             IQueryRepository<SalesAccount> salesAccountQueryRepository,
-            IStoresPack storesOoPack,
+            IStoresPack storesPack,
             IQueryRepository<Consignment> consignmentRepository,
             IQueryRepository<SalesOrderDetail> salesOrderDetailRepository,
             IQueryRepository<SalesOrder> salesOrderRepository)
@@ -46,7 +46,7 @@
             this.tpkPack = tpkPack;
             this.bundleLabelPack = bundleLabelPack;
             this.whatToWandService = whatToWandService;
-            this.storesOoPack = storesOoPack;
+            this.storesPack = storesPack;
             this.salesAccountQueryRepository = salesAccountQueryRepository;
             this.accountingCompaniesRepository = accountingCompaniesRepository;
             this.consignmentRepository = consignmentRepository;
@@ -93,11 +93,11 @@
                 throw new TpkException("Failed in update_qty_printed.");
             }
             
-            this.storesOoPack.DoTpk(from.LocationId, from.PalletNumber, DateTime.Now, out var tpkSuccessful);
+            this.storesPack.DoTpk(from.LocationId, from.PalletNumber, DateTime.Now, out var tpkSuccessful);
             
             if (!tpkSuccessful)
             {
-                throw new TpkException(this.storesOoPack.GetErrorMessage());
+                throw new TpkException(this.storesPack.GetErrorMessage());
             }
 
             var consignment = this.consignmentRepository.FindBy(c => c.ConsignmentId == from.ConsignmentId);

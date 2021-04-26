@@ -82,7 +82,7 @@
             using (var connection = this.databaseService.GetConnection())
             {
                 connection.Open();
-                var cmd = new OracleCommand("stores_oo.do_tpk", connection) //  TODO - Move function to stores_pack
+                var cmd = new OracleCommand("stores_oo.do_tpk", connection)
                               {
                                   CommandType = CommandType.StoredProcedure
                               };
