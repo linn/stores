@@ -180,7 +180,10 @@
         public DbQuery<SalesOrder> SalesOrders { get; set; }
 
         public DbQuery<SalesOrderDetail> SalesOrderDetails { get; set; }
+
         public DbQuery<InterCompanyInvoice> IntercompanyInvoices { get; set; }
+
+        public DbQuery<ReqMove> ReqMoves { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
