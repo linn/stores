@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tqms
 {
     using System.Collections.Generic;
-    using System.Data;
     using System.Linq;
 
     using Linn.Common.Persistence;
@@ -33,7 +32,7 @@
             var summaryResultsModel = new ResultsModel { ReportTitle = new NameModel("Total Stock Summary") };
             summaryResultsModel.AddSortedColumns(new List<AxisDetailsModel>
                                                      {
-                                                         new AxisDetailsModel("Stock", GridDisplayType.TextValue),
+                                                         new AxisDetailsModel("StockType", GridDisplayType.TextValue),
                                                          new AxisDetailsModel("Value", GridDisplayType.Value)
                                                      });
             summaryResultsModel.AddRow("Total Stock");

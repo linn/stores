@@ -12,8 +12,8 @@
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
-    using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
+    using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.Tqms;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
@@ -117,6 +117,7 @@
             builder.RegisterType<InterCompanyInvoiceRepository>().As<IQueryRepository<InterCompanyInvoice>>();
             builder.RegisterType<TqmsSummaryByCategoryRepository>().As<IQueryRepository<TqmsSummaryByCategory>>();
             builder.RegisterType<TqmsOutstandingLoansByCategoryRepository>().As<IQueryRepository<TqmsOutstandingLoansByCategory>>();
+            builder.RegisterType<TqmsMasterRepository>().As<ISingleRecordRepository<TqmsMaster>>();
         }
     }
 }

@@ -15,8 +15,8 @@
     using Linn.Stores.Domain.LinnApps.Reports;
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.StockLocators;
-    using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.StockMove;
+    using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.Tqms;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Workstation;
@@ -29,6 +29,7 @@
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Resources.Requisitions;
     using Linn.Stores.Resources.StockLocators;
+    using Linn.Stores.Resources.Tqms;
 
     public class ServiceModule : Module
     {
@@ -126,6 +127,7 @@
                 .As<IFacadeService<PartStorageType, int, PartStorageTypeResource, PartStorageTypeResource>>();
             builder.RegisterType<InterCompanyInvoiceService>().As<IInterCompanyInvoiceService>();
             builder.RegisterType<TqmsReportsFacadeService>().As<ITqmsReportsFacadeService>();
+            builder.RegisterType<TqmsMasterFacadeService>().As<ISingleRecordFacadeService<TqmsMaster, TqmsMasterResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

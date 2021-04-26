@@ -19,6 +19,7 @@
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
     using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
+    using Linn.Stores.Domain.LinnApps.Tqms;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Facade;
@@ -173,6 +174,7 @@
                 .As<IResourceBuilder<InterCompanyInvoice>>();
             builder.RegisterType<InterCompanyInvoicesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<InterCompanyInvoice>>>();
+            builder.RegisterType<TqmsMasterResourceBuilder>().As<IResourceBuilder<TqmsMaster>>();
         }
     }
 }
