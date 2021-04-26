@@ -24,7 +24,8 @@
             which_mains_lead(sod.article_number, ad.country) lead_to_display,
             SOD.ORDER_LINE KITTED,
             SOD.QTY_ORDERED QTY_ORDERED,
-            SOD.SUPPLY_IN_FULL_CODE SUPPLY_IN_FULL_CODE
+            SOD.SUPPLY_IN_FULL_CODE SUPPLY_IN_FULL_CODE,
+            C.CONSIGNMENT_ID
             FROM SALES_ARTICLES SA,
             SALES_ACCOUNTS A,
             ADDRESSES AD,
