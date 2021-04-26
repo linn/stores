@@ -43,7 +43,10 @@
             this.AuthService
                 .HasPermissionFor(AuthorisedAction.CreateStockLocator, this.privileges)
                 .Returns(true);
-            this.ReqMoveRepository.FindBy(Arg.Any<Expression<Func<ReqMove, bool>>>()).ReturnsNull();
+            this.ReqMoveRepository.FindBy(Arg.Any<Expression<Func<ReqMove, bool>>>()).Returns(new ReqMove
+                {
+                    StockLocatorId = 1
+                });
             this.StoresPalletRepository.FilterBy(Arg.Any<Expression<Func<StoresPallet, bool>>>())
                 .Returns(this.pallets.AsQueryable());
         }
