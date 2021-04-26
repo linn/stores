@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Data;
+    using System.Linq;
 
     using Linn.Common.Persistence;
     using Linn.Common.Reporting.Models;
@@ -12,17 +13,35 @@
 
         private readonly IQueryRepository<TqmsSummaryByCategory> tqmsSummaryByCategoryQueryRepository;
 
+        private readonly IQueryRepository<TqmsOutstandingLoansByCategory> tqmsOutstandingLoansByCategoryRepository;
+
         public TqmsReportsService(
             IReportingHelper reportingHelper,
-            IQueryRepository<TqmsSummaryByCategory> tqmsSummaryByCategoryQueryRepository)
+            IQueryRepository<TqmsSummaryByCategory> tqmsSummaryByCategoryQueryRepository,
+            IQueryRepository<TqmsOutstandingLoansByCategory> tqmsOutstandingLoansByCategoryRepository)
         {
             this.reportingHelper = reportingHelper;
             this.tqmsSummaryByCategoryQueryRepository = tqmsSummaryByCategoryQueryRepository;
+            this.tqmsOutstandingLoansByCategoryRepository = tqmsOutstandingLoansByCategoryRepository;
         }
 
         public IEnumerable<ResultsModel> TqmsSummaryByCategoryReport(string jobRef)
         {
             var stock = this.tqmsSummaryByCategoryQueryRepository.FilterBy(t => t.JobRef == jobRef);
+            var loan = this.tqmsOutstandingLoansByCategoryRepository.FilterBy(t => t.JobRef == jobRef);
+
+            var summaryResultsModel = new ResultsModel { ReportTitle = new NameModel("Total Stock Summary") };
+            summaryResultsModel.AddSortedColumns(new List<AxisDetailsModel>
+                                                     {
+                                                         new AxisDetailsModel("Stock", GridDisplayType.TextValue),
+                                                         new AxisDetailsModel("Value", GridDisplayType.Value)
+                                                     });
+            summaryResultsModel.AddRow("Total Stock");
+            summaryResultsModel.AddRow("Loan Stock Value");
+            summaryResultsModel.SetGridTextValue(0, 0, "Stock Value");
+            summaryResultsModel.SetGridValue(0, 1, stock.Sum(a => a.TotalValue));
+            summaryResultsModel.SetGridTextValue(1, 0, "Loan Stock Value");
+            summaryResultsModel.SetGridValue(1, 1, loan.Sum(a => a.TotalStoresValue));
 
             var resultsModel = new ResultsModel { ReportTitle = new NameModel("TQMS Summary") };
             var columns = new List<AxisDetailsModel>
@@ -65,7 +84,7 @@
             this.reportingHelper.SubtotalRowsByTextColumnValue(resultsModel, 0, new[] { 2 }, false);
             this.reportingHelper.RemovedRepeatedValues(resultsModel, 0, new[] { 0 });
 
-            return new List<ResultsModel> { resultsModel };
+            return new List<ResultsModel> { summaryResultsModel, resultsModel };
         }
     }
 }

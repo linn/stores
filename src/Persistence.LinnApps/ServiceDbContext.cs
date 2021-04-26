@@ -10,8 +10,8 @@
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
-    using Linn.Stores.Domain.LinnApps.Tqms;
     using Linn.Stores.Domain.LinnApps.Tpk;
+    using Linn.Stores.Domain.LinnApps.Tqms;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation;
@@ -181,6 +181,7 @@
         public DbQuery<SalesOrder> SalesOrders { get; set; }
 
         public DbQuery<SalesOrderDetail> SalesOrderDetails { get; set; }
+
         public DbQuery<InterCompanyInvoice> IntercompanyInvoices { get; set; }
 
         public DbQuery<TqmsSummaryByCategory> TqmsSummaryByCategories { get; set; }
@@ -188,6 +189,8 @@
         public DbSet<TqmsMaster> TqmsMaster { get; set; }
 
         public DbSet<TqmsJobRef> TqmsJobRefs { get; set; }
+
+        public DbQuery<TqmsOutstandingLoansByCategory> TqmsOutstandingLoansByCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -277,6 +280,7 @@
             this.QueryTqmsSummaryByCategories(builder);
             this.BuildTqmsMaster(builder);
             this.BuildTqmsJobRefs(builder);
+            this.QueryTqmsOutstandingLoansByCategories(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1567,6 +1571,16 @@
             e.HasKey(a => a.JobRef);
             e.Property(a => a.JobRef).HasColumnName("JOBREF").HasMaxLength(6);
             e.Property(a => a.DateOfRun).HasColumnName("JOBREF_DATE");
+        }
+
+        private void QueryTqmsOutstandingLoansByCategories(ModelBuilder builder)
+        {
+            var q = builder.Query<TqmsOutstandingLoansByCategory>().ToView("TQMS_OUTSTANDING_LOANS");
+            q.Property(t => t.JobRef).HasColumnName("JOBREF");
+            q.Property(t => t.Group).HasColumnName("TQMS_GROUP");
+            q.Property(t => t.Category).HasColumnName("CATEGORY");
+            q.Property(t => t.TotalStoresValue).HasColumnName("TOTAL_STORES_VALUE");
+            q.Property(t => t.TotalSalesValue).HasColumnName("TOTAL_SALES_VALUE");
         }
     }
 }

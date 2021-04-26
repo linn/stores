@@ -116,6 +116,7 @@
             builder.RegisterType<PartStorageTypeRepository>().As<IRepository<PartStorageType, int>>();
             builder.RegisterType<InterCompanyInvoiceRepository>().As<IQueryRepository<InterCompanyInvoice>>();
             builder.RegisterType<TqmsSummaryByCategoryRepository>().As<IQueryRepository<TqmsSummaryByCategory>>();
+            builder.RegisterType<TqmsOutstandingLoansByCategoryRepository>().As<IQueryRepository<TqmsOutstandingLoansByCategory>>();
         }
     }
 }
