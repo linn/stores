@@ -20,7 +20,7 @@
 
         public SalesOutlet FindBy(Expression<Func<SalesOutlet, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.SalesOutlets.Find(expression);
         }
 
         public IQueryable<SalesOutlet> FilterBy(Expression<Func<SalesOutlet, bool>> expression)

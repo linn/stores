@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
     using System;
+    using System.Collections.Generic;
 
     public class Country
     {
@@ -15,5 +16,7 @@
         public string ECMember { get; set; }
 
         public DateTime? DateInvalid { get; set; }
+
+        public IEnumerable<Consignment> Consignments { get; set; }
     }
 }

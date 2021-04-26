@@ -10,6 +10,7 @@
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
+    using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation;
@@ -158,6 +159,10 @@
 
         public DbSet<RequisitionHeader> RequisitionHeaders { get; set; }
 
+        public DbQuery<TransferableStock> TransferableStock { get; set; }
+
+        public DbQuery<Consignment> Consignments { get; set; }
+
         public DbSet<ExportReturn> ExportReturns { get; set; }
 
         public DbSet<ExportReturnDetail> ExportReturnDetails { get; set; }
@@ -172,6 +177,9 @@
 
         public DbSet<SalesArticle> SalesArticles { get; set; }
 
+        public DbQuery<SalesOrder> SalesOrders { get; set; }
+
+        public DbQuery<SalesOrderDetail> SalesOrderDetails { get; set; }
         public DbQuery<InterCompanyInvoice> IntercompanyInvoices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -245,6 +253,8 @@
             this.QuerySalesAccounts(builder);
             this.QueryStockQuantitIesForMrView(builder);
             this.BuildRequisitionHeaders(builder);
+            this.QueryTpkView(builder);
+            this.QueryConsignments(builder);
             this.BuildExportReturns(builder);
             this.BuildExportReturnDetails(builder);
             this.BuildRequisitionLines(builder);
@@ -254,6 +264,8 @@
             this.QueryStockAvailable(builder);
             this.BuildPartStorageTypes(builder);
             this.BuildSalesArticles(builder);
+            this.QuerySalesOrders(builder);
+            this.QuerySalesOrderDetails(builder);
             this.QueryIntercompanyInvoices(builder);
             base.OnModelCreating(builder);
         }
@@ -281,6 +293,7 @@
             q.Property(c => c.Name).HasColumnName("ACCOUNTING_COMPANY");
             q.Property(c => c.DateInvalid).HasColumnName("DATE_INVALID");
             q.Property(c => c.Description).HasColumnName("DESCRIPTION");
+            q.Property(c => c.LatesSalesAllocationDate).HasColumnName("LATEST_SALES_ALLOCATION_DATE");
         }
 
         private void BuildCountries(ModelBuilder builder)
@@ -1413,6 +1426,51 @@
             e.Property(a => a.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
         }
 
+        private void QueryTpkView(ModelBuilder builder)
+        {
+            var q = builder.Query<TransferableStock>().ToView("V_TPK_OO");
+            q.Property(s => s.LocationId).HasColumnName("LOCATION_ID"); 
+            q.Property(s => s.LocationCode).HasColumnName("LOCATION_CODE");
+            q.Property(s => s.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(s => s.FromLocation).HasColumnName("FROM_LOCATION");
+            q.Property(s => s.StoragePlaceDescription).HasColumnName("STORAGE_PLACE_DESCRIPTION");
+            q.Property(s => s.VaxPallet).HasColumnName("VAX_PALLET");
+            q.Property(s => s.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
+            q.Property(s => s.Quantity).HasColumnName("QTY");
+            q.Property(s => s.InvoiceDescription).HasColumnName("INVOICE_DESCRIPTION");
+            q.Property(s => s.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            q.Property(s => s.Addressee).HasColumnName("ADDRESSEE");
+            q.Property(s => s.ReqNumber).HasColumnName("REQ_NUMBER");
+            q.Property(s => s.ReqLine).HasColumnName("REQ_LINE");
+            q.Property(s => s.DespatchLocationCode).HasColumnName("DESPATCH_LOCATION_CODE");
+            q.Property(s => s.OrderNumber).HasColumnName("ORDER_NUMBER");
+            q.Property(s => s.OrderLine).HasColumnName("ORDER_LINE");
+        }
+
+        private void QueryConsignments(ModelBuilder builder)
+        {
+            var q = builder.Query<Consignment>().ToView("CONSIGNMENTS");
+            q.Property(c => c.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            q.Property(c => c.AddressId).HasColumnName("ADDRESS_ID");
+            q.Property(c => c.CountryCode).HasColumnName("COUNTRY");
+            q.Property(c => c.SalesAccountId).HasColumnName("SALES_ACCOUNT_ID");
+            q.HasOne(c => c.Country).WithMany(y => y.Consignments).HasForeignKey(c => c.CountryCode);
+        }
+
+        private void QuerySalesOrders(ModelBuilder builder)
+        {
+            var q = builder.Query<SalesOrder>().ToView("SALES_ORDERS");
+            q.Property(o => o.OrderNumber).HasColumnName("ORDER_NUMBER");
+            q.Property(o => o.CurrencyCode).HasColumnName("CURRENCY_CODE");
+        }
+
+        private void QuerySalesOrderDetails(ModelBuilder builder)
+        {
+            var q = builder.Query<SalesOrderDetail>().ToView("SALES_ORDER_DETAILS");
+            q.Property(d => d.OrderLine).HasColumnName("ORDER_LINE");
+            q.Property(d => d.OrderNumber).HasColumnName("ORDER_NUMBER");
+            q.Property(d => d.NettTotal).HasColumnName("NETT_TOTAL");
+        }
         private void BuildExportReturns(ModelBuilder builder)
         {
             var q = builder.Entity<ExportReturn>().ToTable("EXPORT_RETURNS");

@@ -65,6 +65,8 @@ import salesOutlets from './salesOutlets';
 import salesAccounts from './salesAccounts';
 import exportRsns from './exportRsns';
 import doWandItem from './doWandItem';
+import transferableStock from './transferableStock';
+import tpkTransferStock from './tpkTransferStock';
 import unallocateConsignment from './unallocateConsignment';
 import unallocateConsignmentLine from './unallocateConsignmentLine';
 import availableStock from './availableStock';
@@ -140,7 +142,9 @@ const rootReducer = history =>
         storagePlaces,
         storagePlaceAuditReport,
         suppliers,
+        tpkTransferStock,
         tqmsCategories,
+        transferableStock,
         unallocateConsignment,
         unallocateConsignmentLine,
         unitsOfMeasure,

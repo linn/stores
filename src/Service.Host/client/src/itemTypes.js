@@ -237,6 +237,12 @@ export const stockQuantities = new ItemType(
     '/inventory/stock-quantities'
 );
 
+export const transferableStock = new ItemType(
+    'transferableStock',
+    'TRANSFERABLE_STOCK',
+    '/logistics/tpk/items'
+);
+
 export const exportReturn = new ItemType(
     'exportReturn',
     'EXPORT_RETURN',

@@ -14,5 +14,7 @@
         public DateTime? DateInvalid { get; set; }
 
         public IEnumerable<Part> PartsResponsibleFor { get; set; }
+
+        public DateTime? LatesSalesAllocationDate { get; set; }
     }
 }

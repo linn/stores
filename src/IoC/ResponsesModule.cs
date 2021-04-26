@@ -17,6 +17,8 @@
     using Linn.Stores.Domain.LinnApps.Requisitions.Models;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
+    using Linn.Stores.Domain.LinnApps.Tpk;
+    using Linn.Stores.Domain.LinnApps.Tpk.Models;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Facade;
@@ -150,6 +152,10 @@
             builder.RegisterType<StockQuantitiesListResourceBuilder>().As<IResourceBuilder<IEnumerable<StockQuantities>>>();
             builder.RegisterType<WandItemResultResourceBuilder>().As<IResourceBuilder<WandResult>>();
             builder.RegisterType<RequisitionActionResourceBuilder>().As<IResourceBuilder<RequisitionActionResult>>();
+            builder.RegisterType<TransferableStockResourceBuilder>().As<IResourceBuilder<TransferableStock>>();
+            builder.RegisterType<TransferableStockListResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<TransferableStock>>>();
+            builder.RegisterType<TpkResultResourceBuilder>().As<IResourceBuilder<TpkResult>>();
             builder.RegisterType<ExportReturnResourceBuilder>().As<IResourceBuilder<ExportReturn>>();
             builder.RegisterType<ExportReturnDetailResourceBuilder>().As<IResourceBuilder<ExportReturnDetail>>();
             builder.RegisterType<ExportReturnDetailsResourceBuilder>()

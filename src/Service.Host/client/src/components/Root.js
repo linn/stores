@@ -32,6 +32,7 @@ import StockViewerOptions from '../containers/stockLocatorUtility/StockViewerOpt
 import StockLocator from '../containers/stockLocatorUtility/StockLocator';
 import Wand from '../containers/Wand';
 import ExportRsns from '../containers/ExportRsns';
+import Tpk from '../containers/Tpk';
 import ExportReturn from '../containers/ExportReturn';
 import StockMove from '../containers/StockMove';
 import StockLocatorBatchView from '../containers/stockLocatorUtility/StockLocatorBatchView';
@@ -179,6 +180,9 @@ const Root = ({ store }) => (
                                         path="/inventory/exports/rsns"
                                         component={ExportRsns}
                                     />
+
+                                    <Route exact path="/logistics/tpk" component={Tpk} />
+
                                     <Route
                                         exact
                                         path="/inventory/exports/returns/:id"

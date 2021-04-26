@@ -15,6 +15,7 @@
     using Linn.Stores.Domain.LinnApps.Reports;
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.StockMove;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Workstation;
@@ -46,6 +47,7 @@
             builder.RegisterType<WarehouseService>().As<IWarehouseService>();
             builder.RegisterType<WandService>().As<IWandService>();
             builder.RegisterType<RequisitionService>().As<IRequisitionService>();
+            builder.RegisterType<TpkService>().As<ITpkService>();
             builder.RegisterType<MoveStockService>().As<IMoveStockService>();
 
             // facade services
@@ -110,6 +112,7 @@
             builder.RegisterType<ExportRsnService>().As<IExportRsnService>();
             builder.RegisterType<StockQuantitiesService>().As<IStockQuantitiesService>();
             builder.RegisterType<RequisitionActionsFacadeService>().As<IRequisitionActionsFacadeService>();
+            builder.RegisterType<TpkFacadeService>().As<ITpkFacadeService>();
             builder.RegisterType<ExportReturnDetailFacadeService>()
                 .As<IFacadeService<ExportReturnDetail, ExportReturnDetailKey, ExportReturnDetailResource, ExportReturnDetailResource>>();
             builder.RegisterType<AvailableStockFacadeService>().As<IAvailableStockFacadeService>();
@@ -132,6 +135,9 @@
             builder.RegisterType<WcsPack>().As<IWcsPack>();
             builder.RegisterType<WandPack>().As<IWandPack>();
             builder.RegisterType<StoresPack>().As<IStoresPack>();
+            builder.RegisterType<TpkPack>().As<ITpkPack>();
+            builder.RegisterType<BundleLabelPack>().As<IBundleLabelPack>();
+            builder.RegisterType<WhatToWandDataProxy>().As<IWhatToWandService>();
             builder.RegisterType<ExportReturnsPack>().As<IExportReturnsPack>();
             builder.RegisterType<StockLocatorLocationsViewService>().As<IStockLocatorLocationsViewService>();
             builder.RegisterType<KardexPack>().As<IKardexPack>();
