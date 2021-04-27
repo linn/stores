@@ -27,6 +27,8 @@
 
         protected IRepository<StorageLocation, int> StorageLocationRepository { get; private set; }
 
+        protected IStoresPalletRepository StoresPalletRepository { get; private set; }
+
         protected string PartNumber { get; set; }
 
         protected int ReqNumber { get; set; }
@@ -50,6 +52,9 @@
             this.KardexPack = Substitute.For<IKardexPack>();
             this.RequisitionRepository = Substitute.For<IRepository<RequisitionHeader, int>>();
             this.StorageLocationRepository = Substitute.For<IRepository<StorageLocation, int>>();
+            this.StoresPalletRepository = Substitute.For<IStoresPalletRepository>();
+            this.StoresPalletRepository.FindById(1000).Returns(new StoresPallet { PalletNumber = 1000 });
+            this.StoresPalletRepository.FindById(2000).Returns(new StoresPallet { PalletNumber = 2000 });
 
             this.PartNumber = "part 1";
             this.Quantity = 2;
@@ -108,7 +113,8 @@
                 this.StoresPack,
                 this.KardexPack,
                 this.RequisitionRepository,
-                this.StorageLocationRepository);
+                this.StorageLocationRepository,
+                this.StoresPalletRepository);
         }
     }
 }
