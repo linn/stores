@@ -11,6 +11,7 @@
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
     using Linn.Stores.Domain.LinnApps.Tpk;
+    using Linn.Stores.Domain.LinnApps.Tqms;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation;
@@ -180,7 +181,16 @@
         public DbQuery<SalesOrder> SalesOrders { get; set; }
 
         public DbQuery<SalesOrderDetail> SalesOrderDetails { get; set; }
+
         public DbQuery<InterCompanyInvoice> IntercompanyInvoices { get; set; }
+
+        public DbQuery<TqmsSummaryByCategory> TqmsSummaryByCategories { get; set; }
+
+        public DbSet<TqmsMaster> TqmsMaster { get; set; }
+
+        public DbSet<TqmsJobRef> TqmsJobRefs { get; set; }
+
+        public DbQuery<TqmsOutstandingLoansByCategory> TqmsOutstandingLoansByCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -267,6 +277,10 @@
             this.QuerySalesOrders(builder);
             this.QuerySalesOrderDetails(builder);
             this.QueryIntercompanyInvoices(builder);
+            this.QueryTqmsSummaryByCategories(builder);
+            this.BuildTqmsMaster(builder);
+            this.BuildTqmsJobRefs(builder);
+            this.QueryTqmsOutstandingLoansByCategories(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1529,6 +1543,44 @@
             var q = builder.Query<InterCompanyInvoice>().ToView("INTER_COMPANY_INVOICES");
             q.Property(e => e.DocumentNumber).HasColumnName("DOCUMENT_NUMBER");
             q.Property(e => e.ExportReturnId).HasColumnName("EXPORT_RETURN_ID");
+        }
+
+        private void QueryTqmsSummaryByCategories(ModelBuilder builder)
+        {
+            var q = builder.Query<TqmsSummaryByCategory>().ToView("TQMS_CATEGORY_SUMMARY_VIEW");
+            q.Property(t => t.JobRef).HasColumnName("JOBREF");
+            q.Property(t => t.HeadingCode).HasColumnName("TQMS_HEADING_CODE");
+            q.Property(t => t.HeadingDescription).HasColumnName("HEADING_DESCRIPTION");
+            q.Property(t => t.CategoryCode).HasColumnName("TQMS_CATEGORY");
+            q.Property(t => t.CategoryDescription).HasColumnName("CATEGORY_DESCRIPTION");
+            q.Property(t => t.HeadingOrder).HasColumnName("HEADING_ORDER");
+            q.Property(t => t.CategoryOrder).HasColumnName("CATEGORY_ORDER");
+            q.Property(t => t.TotalValue).HasColumnName("TOTAL_VALUE");
+        }
+
+        private void BuildTqmsMaster(ModelBuilder builder)
+        {
+            var e = builder.Entity<TqmsMaster>().ToTable("TQMS_MASTER");
+            e.HasKey(a => a.JobRef);
+            e.Property(a => a.JobRef).HasColumnName("JOBREF").HasMaxLength(6);
+        }
+
+        private void BuildTqmsJobRefs(ModelBuilder builder)
+        {
+            var e = builder.Entity<TqmsJobRef>().ToTable("TQMS_JOBREFS");
+            e.HasKey(a => a.JobRef);
+            e.Property(a => a.JobRef).HasColumnName("JOBREF").HasMaxLength(6);
+            e.Property(a => a.DateOfRun).HasColumnName("JOBREF_DATE");
+        }
+
+        private void QueryTqmsOutstandingLoansByCategories(ModelBuilder builder)
+        {
+            var q = builder.Query<TqmsOutstandingLoansByCategory>().ToView("TQMS_OUTSTANDING_LOANS");
+            q.Property(t => t.JobRef).HasColumnName("JOBREF");
+            q.Property(t => t.Group).HasColumnName("TQMS_GROUP");
+            q.Property(t => t.Category).HasColumnName("CATEGORY");
+            q.Property(t => t.TotalStoresValue).HasColumnName("TOTAL_STORES_VALUE");
+            q.Property(t => t.TotalSalesValue).HasColumnName("TOTAL_SALES_VALUE");
         }
     }
 }

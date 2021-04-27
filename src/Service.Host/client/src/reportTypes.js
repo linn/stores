@@ -24,3 +24,9 @@ export const despatchPalletQueueReport = new ItemType(
     'DESPATCH_PALLET_QUEUE_REPORT',
     '/logistics/allocations/despatch-pallet-queue'
 );
+
+export const tqmsSummaryByCategoryReport = new ItemType(
+    'tqmsSummaryByCategoryReport',
+    'TQMS_SUMMARY_BY_CATEGORY_REPORT',
+    '/inventory/tqms-category-summary/report'
+);

@@ -192,3 +192,9 @@ export const partStorageTypesActionTypes = makeActionTypes(itemTypes.partStorage
 export const interCompanyInvoicesActionTypes = makeActionTypes(
     itemTypes.interCompanyInvoices.actionType
 );
+
+export const tqmsSummaryByCategoryReportActionTypes = makeReportActionTypes(
+    reportTypes.tqmsSummaryByCategoryReport.actionType
+);
+
+export const tqmsJobRefsActionTypes = makeActionTypes(itemTypes.tqmsJobRefs.actionType);
