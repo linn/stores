@@ -7,6 +7,7 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Reporting.Models;
+    using Linn.Stores.Resources.RequestResources;
 
     using NSubstitute;
 
@@ -20,20 +21,23 @@
 
         private IResult<IEnumerable<ResultsModel>> results;
 
+        private TqmsSummaryRequestResource requestResource;
+
         [SetUp]
         public void SetUp()
         {
             this.jobRef = "DEF";
+            this.requestResource = new TqmsSummaryRequestResource { JobRef = this.jobRef, HeadingsOnly = false };
             this.resultsModel = new ResultsModel { ReportTitle = new NameModel("title") };
-            this.TqmsReportsService.TqmsSummaryByCategoryReport(this.jobRef)
+            this.TqmsReportsService.TqmsSummaryByCategoryReport(this.jobRef, false)
                 .Returns(new List<ResultsModel> { this.resultsModel });
-            this.results = this.Sut.GetTqmsSummaryByCategory(this.jobRef);
+            this.results = this.Sut.GetTqmsSummaryByCategory(this.requestResource);
         }
 
         [Test]
         public void ShouldCallService()
         {
-            this.TqmsReportsService.Received().TqmsSummaryByCategoryReport(this.jobRef);
+            this.TqmsReportsService.Received().TqmsSummaryByCategoryReport(this.jobRef, false);
         }
 
         [Test]

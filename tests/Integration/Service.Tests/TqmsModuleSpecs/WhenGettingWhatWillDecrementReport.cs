@@ -8,6 +8,7 @@
     using Linn.Common.Facade;
     using Linn.Common.Reporting.Models;
     using Linn.Common.Reporting.Resources.ReportResultResources;
+    using Linn.Stores.Resources.RequestResources;
 
     using Nancy;
     using Nancy.Testing;
@@ -26,7 +27,7 @@
             this.jobRef = "ABC";
             var results = new List<ResultsModel> { new ResultsModel { ReportTitle = new NameModel("title") } };
 
-            this.TqmsReportsFacadeService.GetTqmsSummaryByCategory(this.jobRef)
+            this.TqmsReportsFacadeService.GetTqmsSummaryByCategory(Arg.Is<TqmsSummaryRequestResource>(a => a.JobRef == this.jobRef))
                 .Returns(new SuccessResult<IEnumerable<ResultsModel>>(results));
 
             this.Response = this.Browser.Get(
@@ -35,6 +36,7 @@
                     {
                         with.Header("Accept", "application/json");
                         with.Query("JobRef", this.jobRef);
+                        with.Query("HeadingsOnly", "false");
                     }).Result;
         }
 
@@ -47,7 +49,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.TqmsReportsFacadeService.Received().GetTqmsSummaryByCategory(this.jobRef);
+            this.TqmsReportsFacadeService.Received().GetTqmsSummaryByCategory(Arg.Is<TqmsSummaryRequestResource>(a => a.JobRef == this.jobRef));
         }
 
         [Test]

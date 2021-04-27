@@ -6,6 +6,6 @@
 
     public interface ITqmsReportsService
     {
-        IEnumerable<ResultsModel> TqmsSummaryByCategoryReport(string jobRef);
+        IEnumerable<ResultsModel> TqmsSummaryByCategoryReport(string jobRef, bool headingsOnly = true);
     }
 }

@@ -28,7 +28,7 @@
             this.tqmsJobRefsRepository = tqmsJobRefsRepository;
         }
 
-        public IEnumerable<ResultsModel> TqmsSummaryByCategoryReport(string jobRef)
+        public IEnumerable<ResultsModel> TqmsSummaryByCategoryReport(string jobRef, bool headingsOnly = true)
         {
             var stock = this.tqmsSummaryByCategoryQueryRepository.FilterBy(t => t.JobRef == jobRef);
             var loan = this.tqmsOutstandingLoansByCategoryRepository.FilterBy(t => t.JobRef == jobRef);
@@ -52,45 +52,77 @@
             summaryResultsModel.SetGridValue(1, 1, loan.Sum(a => a.TotalStoresValue));
 
             var resultsModel = new ResultsModel { ReportTitle = new NameModel("TQMS Summary") };
-            var columns = new List<AxisDetailsModel>
-                               {
-                                   new AxisDetailsModel("Heading", GridDisplayType.TextValue),
-                                   new AxisDetailsModel("Category", GridDisplayType.TextValue),
-                                   new AxisDetailsModel("Value", GridDisplayType.Value)
-                               };
-            resultsModel.AddSortedColumns(columns);
-            var models = new List<CalculationValueModel>();
-            var rowNumber = 0;
-            foreach (var tqmsSummaryByCategory in stock)
+            if (headingsOnly)
             {
-                rowNumber++;
-                var rowId = $"{rowNumber:000}";
-                models.Add(
-                    new CalculationValueModel
+                var columns = new List<AxisDetailsModel>
+                                  {
+                                      new AxisDetailsModel("Heading", GridDisplayType.TextValue),
+                                      new AxisDetailsModel("Value", GridDisplayType.Value)
+                                  };
+                resultsModel.AddSortedColumns(columns);
+                var models = new List<CalculationValueModel>();
+                foreach (var tqmsSummaryByCategory in stock.OrderBy(a => a.HeadingOrder))
+                {
+                    models.Add(
+                        new CalculationValueModel
                         {
-                            RowId = rowId,
+                            RowId = tqmsSummaryByCategory.HeadingCode,
                             ColumnId = "Heading",
                             TextDisplay = tqmsSummaryByCategory.HeadingDescription
                         });
-                models.Add(
-                    new CalculationValueModel
+                    models.Add(
+                        new CalculationValueModel
                         {
-                            RowId = rowId,
-                            ColumnId = "Category",
-                            TextDisplay = tqmsSummaryByCategory.CategoryDescription
-                        }); 
-                models.Add(
-                    new CalculationValueModel
-                        {
-                            RowId = rowId,
+                            RowId = tqmsSummaryByCategory.HeadingCode,
                             ColumnId = "Value",
                             Value = tqmsSummaryByCategory.TotalValue
                         });
-            }
+                }
 
-            this.reportingHelper.AddResultsToModel(resultsModel, models, CalculationValueModelType.Value, true);
-            this.reportingHelper.SubtotalRowsByTextColumnValue(resultsModel, 0, new[] { 2 }, false);
-            this.reportingHelper.RemovedRepeatedValues(resultsModel, 0, new[] { 0 });
+                this.reportingHelper.AddResultsToModel(resultsModel, models, CalculationValueModelType.Value, true);
+            }
+            else
+            {
+                var columns = new List<AxisDetailsModel>
+                                  {
+                                      new AxisDetailsModel("Heading", GridDisplayType.TextValue),
+                                      new AxisDetailsModel("Category", GridDisplayType.TextValue),
+                                      new AxisDetailsModel("Value", GridDisplayType.Value)
+                                  };
+                resultsModel.AddSortedColumns(columns);
+                var models = new List<CalculationValueModel>();
+                var rowNumber = 0;
+                foreach (var tqmsSummaryByCategory in stock)
+                {
+                    rowNumber++;
+                    var rowId = $"{rowNumber:000}";
+                    models.Add(
+                        new CalculationValueModel
+                            {
+                                RowId = rowId,
+                                ColumnId = "Heading",
+                                TextDisplay = tqmsSummaryByCategory.HeadingDescription
+                            });
+                    models.Add(
+                        new CalculationValueModel
+                            {
+                                RowId = rowId,
+                                ColumnId = "Category",
+                                TextDisplay = tqmsSummaryByCategory.CategoryDescription
+                            });
+                    models.Add(
+                        new CalculationValueModel
+                            {
+                                RowId = rowId,
+                                ColumnId = "Value",
+                                Value = tqmsSummaryByCategory.TotalValue
+                            });
+                }
+
+                this.reportingHelper.AddResultsToModel(resultsModel, models, CalculationValueModelType.Value, true);
+                this.reportingHelper.SubtotalRowsByTextColumnValue(resultsModel, 0, new[] { 2 }, false);
+                this.reportingHelper.RemovedRepeatedValues(resultsModel, 0, new[] { 0 });
+            }
 
             return new List<ResultsModel> { summaryResultsModel, resultsModel };
         }

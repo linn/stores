@@ -8,6 +8,7 @@ import Page from '../../containers/Page';
 
 export default function TqmsSummaryByCategoryReportOptions({ history, jobRefs, jobRefsLoading }) {
     const [jobRef, setJobRef] = useState(null);
+    const [runType, setRunType] = useState('Headings Only');
 
     useEffect(() => {
         if (jobRefs && jobRefs.length > 0) {
@@ -15,8 +16,10 @@ export default function TqmsSummaryByCategoryReportOptions({ history, jobRefs, j
         }
     }, [jobRefs]);
 
+    const typeOfRunOptions = ['Headings Only', 'Show Categories'];
+
     const handleRunClick = () => {
-        const searchString = `?jobref=${jobRef}`;
+        const searchString = `?jobref=${jobRef}&headingsOnly=${runType === 'Headings Only'}`;
 
         history.push({
             pathname: '/inventory/tqms-category-summary/report',
@@ -35,6 +38,10 @@ export default function TqmsSummaryByCategoryReportOptions({ history, jobRefs, j
         setJobRef(newValue);
     };
 
+    const handleRunTypeChange = (_, newValue) => {
+        setRunType(newValue);
+    };
+
     return (
         <Page>
             <Title text="TQMS Summary Report" />
@@ -49,6 +56,17 @@ export default function TqmsSummaryByCategoryReportOptions({ history, jobRefs, j
                             propertyName="jobRef"
                             value={jobRef}
                             items={jobRefOptions()}
+                            required
+                            optionsLoading={jobRefsLoading}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Dropdown
+                            label="Run Type"
+                            onChange={handleRunTypeChange}
+                            propertyName="runType"
+                            value={runType}
+                            items={typeOfRunOptions}
                             required
                         />
                     </Grid>

@@ -44,8 +44,8 @@
 
         private object GetTqmsSummaryByCategory()
         {
-            var resource = this.Bind<JobRefRequestResource>();
-            return this.Negotiate.WithModel(this.tqmsReportsFacadeService.GetTqmsSummaryByCategory(resource.JobRef))
+            var resource = this.Bind<TqmsSummaryRequestResource>();
+            return this.Negotiate.WithModel(this.tqmsReportsFacadeService.GetTqmsSummaryByCategory(resource))
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");
         }

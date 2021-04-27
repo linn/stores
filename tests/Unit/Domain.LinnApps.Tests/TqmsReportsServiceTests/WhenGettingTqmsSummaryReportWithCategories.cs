@@ -14,7 +14,7 @@
 
     using NUnit.Framework;
 
-    public class WhenGettingTqmsSummaryReport : ContextBase
+    public class WhenGettingTqmsSummaryReportWithCategories : ContextBase
     {
         private IEnumerable<ResultsModel> results;
 
@@ -25,15 +25,15 @@
                               {
                                   new TqmsSummaryByCategory
                                       {
-                                          TotalValue = 12, CategoryDescription = "c1", HeadingDescription = "c", HeadingCode = "c", HeadingOrder = 1
+                                          TotalValue = 12, CategoryDescription = "c1", HeadingDescription = "c"
                                       },
                                   new TqmsSummaryByCategory
                                       {
-                                          TotalValue = 10, CategoryDescription = "c2", HeadingDescription = "c", HeadingCode = "c", HeadingOrder = 1
+                                          TotalValue = 10, CategoryDescription = "c2", HeadingDescription = "c"
                                       },
                                   new TqmsSummaryByCategory
                                       {
-                                          TotalValue = 20, CategoryDescription = "d", HeadingDescription = "d", HeadingCode = "d", HeadingOrder = 2
+                                          TotalValue = 20, CategoryDescription = "d", HeadingDescription = "d"
                                       }
                               };
             var loans = new List<TqmsOutstandingLoansByCategory>
@@ -53,7 +53,7 @@
             this.TqmsOutstandingLoansByCategoryRepository
                 .FilterBy(Arg.Any<Expression<Func<TqmsOutstandingLoansByCategory, bool>>>())
                 .Returns(loans.AsQueryable());
-            this.results = this.Sut.TqmsSummaryByCategoryReport(this.JobRef, true);
+            this.results = this.Sut.TqmsSummaryByCategoryReport(this.JobRef, false);
         }
 
         [Test]
@@ -81,14 +81,28 @@
                 .Should().Be(27);
             totalStockSummary.GetTotalValue(totalStockSummary.ColumnIndex("Value")).Should().Be(69);
 
-            tqmsSummary.RowCount().Should().Be(2);
-            tqmsSummary.GetGridTextValue(tqmsSummary.RowIndex("c"), tqmsSummary.ColumnIndex("Heading"))
+            tqmsSummary.RowCount().Should().Be(5);
+            tqmsSummary.GetGridTextValue(tqmsSummary.RowIndex("001"), tqmsSummary.ColumnIndex("Heading"))
                 .Should().Be("c");
-            tqmsSummary.GetGridValue(tqmsSummary.RowIndex("c"), tqmsSummary.ColumnIndex("Value"))
+            tqmsSummary.GetGridTextValue(tqmsSummary.RowIndex("001"), tqmsSummary.ColumnIndex("Category"))
+                .Should().Be("c1");
+            tqmsSummary.GetGridValue(tqmsSummary.RowIndex("001"), tqmsSummary.ColumnIndex("Value"))
+                .Should().Be(12);
+            tqmsSummary.GetGridTextValue(tqmsSummary.RowIndex("002"), tqmsSummary.ColumnIndex("Heading"))
+                .Should().Be(string.Empty);
+            tqmsSummary.GetGridTextValue(tqmsSummary.RowIndex("002"), tqmsSummary.ColumnIndex("Category"))
+                .Should().Be("c2");
+            tqmsSummary.GetGridValue(tqmsSummary.RowIndex("002"), tqmsSummary.ColumnIndex("Value"))
+                .Should().Be(10);
+            tqmsSummary.GetGridValue(tqmsSummary.RowIndex("subtotalc"), tqmsSummary.ColumnIndex("Value"))
                 .Should().Be(22);
-            tqmsSummary.GetGridTextValue(tqmsSummary.RowIndex("d"), tqmsSummary.ColumnIndex("Heading"))
+            tqmsSummary.GetGridTextValue(tqmsSummary.RowIndex("003"), tqmsSummary.ColumnIndex("Heading"))
                 .Should().Be("d");
-            tqmsSummary.GetGridValue(tqmsSummary.RowIndex("d"), tqmsSummary.ColumnIndex("Value"))
+            tqmsSummary.GetGridTextValue(tqmsSummary.RowIndex("003"), tqmsSummary.ColumnIndex("Category"))
+                .Should().Be("d");
+            tqmsSummary.GetGridValue(tqmsSummary.RowIndex("003"), tqmsSummary.ColumnIndex("Value"))
+                .Should().Be(20);
+            tqmsSummary.GetGridValue(tqmsSummary.RowIndex("subtotald"), tqmsSummary.ColumnIndex("Value"))
                 .Should().Be(20);
             tqmsSummary.GetTotalValue(tqmsSummary.ColumnIndex("Value")).Should().Be(42);
         }
