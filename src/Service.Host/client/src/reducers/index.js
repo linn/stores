@@ -78,6 +78,7 @@ import exportReturn from './exportReturn';
 import makeIntercompanyInvoices from './makeIntercompanyInvoices';
 import interCompanyInvoices from './interCompanyInvoices';
 import tqmsSummaryByCategoryReport from './tqmsSummaryByCategoryReport';
+import tqmsJobRefs from './tqmsJobRefs';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -145,6 +146,7 @@ const rootReducer = history =>
         suppliers,
         tpkTransferStock,
         tqmsCategories,
+        tqmsJobRefs,
         tqmsSummaryByCategoryReport,
         transferableStock,
         unallocateConsignment,

@@ -18,7 +18,7 @@
 
         public TqmsJobRef FindById(string key)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.TqmsJobRefs.Where(a => a.JobRef == key).ToList().FirstOrDefault();
         }
 
         public IQueryable<TqmsJobRef> FindAll()

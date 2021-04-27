@@ -14,14 +14,18 @@
 
         private readonly IQueryRepository<TqmsOutstandingLoansByCategory> tqmsOutstandingLoansByCategoryRepository;
 
+        private readonly IRepository<TqmsJobRef, string> tqmsJobRefsRepository;
+
         public TqmsReportsService(
             IReportingHelper reportingHelper,
             IQueryRepository<TqmsSummaryByCategory> tqmsSummaryByCategoryQueryRepository,
-            IQueryRepository<TqmsOutstandingLoansByCategory> tqmsOutstandingLoansByCategoryRepository)
+            IQueryRepository<TqmsOutstandingLoansByCategory> tqmsOutstandingLoansByCategoryRepository,
+            IRepository<TqmsJobRef, string> tqmsJobRefsRepository)
         {
             this.reportingHelper = reportingHelper;
             this.tqmsSummaryByCategoryQueryRepository = tqmsSummaryByCategoryQueryRepository;
             this.tqmsOutstandingLoansByCategoryRepository = tqmsOutstandingLoansByCategoryRepository;
+            this.tqmsJobRefsRepository = tqmsJobRefsRepository;
         }
 
         public IEnumerable<ResultsModel> TqmsSummaryByCategoryReport(string jobRef)
@@ -29,7 +33,12 @@
             var stock = this.tqmsSummaryByCategoryQueryRepository.FilterBy(t => t.JobRef == jobRef);
             var loan = this.tqmsOutstandingLoansByCategoryRepository.FilterBy(t => t.JobRef == jobRef);
 
-            var summaryResultsModel = new ResultsModel { ReportTitle = new NameModel("Total Stock Summary") };
+            var jobRefDetails = this.tqmsJobRefsRepository.FindById(jobRef);
+
+            var summaryResultsModel = new ResultsModel
+                                          {
+                                              ReportTitle = new NameModel($"Total Stock Summary {jobRefDetails.DateOfRun:dd-MMM-yyyy} ({jobRefDetails.JobRef})")
+                                          };
             summaryResultsModel.AddSortedColumns(new List<AxisDetailsModel>
                                                      {
                                                          new AxisDetailsModel("StockType", GridDisplayType.TextValue),

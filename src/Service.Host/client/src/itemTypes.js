@@ -274,3 +274,5 @@ export const interCompanyInvoices = new ItemType(
     'INTER_COMPANY_INVOICES',
     '/inventory/exports/inter-company-invoices'
 );
+
+export const tqmsJobRefs = new ItemType('tqmsJobRefs', 'TQMS_JOBREFS', '/inventory/tqms-jobrefs');

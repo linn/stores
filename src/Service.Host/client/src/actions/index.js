@@ -196,3 +196,5 @@ export const interCompanyInvoicesActionTypes = makeActionTypes(
 export const tqmsSummaryByCategoryReportActionTypes = makeReportActionTypes(
     reportTypes.tqmsSummaryByCategoryReport.actionType
 );
+
+export const tqmsJobRefsActionTypes = makeActionTypes(itemTypes.tqmsJobRefs.actionType);

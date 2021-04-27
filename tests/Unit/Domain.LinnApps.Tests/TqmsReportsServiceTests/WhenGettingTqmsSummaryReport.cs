@@ -16,14 +16,11 @@
 
     public class WhenGettingTqmsSummaryReport : ContextBase
     {
-        private string jobRef;
-
         private IEnumerable<ResultsModel> results;
 
         [SetUp]
         public void SetUp()
         {
-            this.jobRef = "abc";
             var stock = new List<TqmsSummaryByCategory>
                               {
                                   new TqmsSummaryByCategory
@@ -56,7 +53,7 @@
             this.TqmsOutstandingLoansByCategoryRepository
                 .FilterBy(Arg.Any<Expression<Func<TqmsOutstandingLoansByCategory, bool>>>())
                 .Returns(loans.AsQueryable());
-            this.results = this.Sut.TqmsSummaryByCategoryReport(this.jobRef);
+            this.results = this.Sut.TqmsSummaryByCategoryReport(this.JobRef);
         }
 
         [Test]
