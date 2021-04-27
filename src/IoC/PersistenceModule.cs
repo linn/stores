@@ -118,6 +118,7 @@
             builder.RegisterType<TqmsSummaryByCategoryRepository>().As<IQueryRepository<TqmsSummaryByCategory>>();
             builder.RegisterType<TqmsOutstandingLoansByCategoryRepository>().As<IQueryRepository<TqmsOutstandingLoansByCategory>>();
             builder.RegisterType<TqmsMasterRepository>().As<ISingleRecordRepository<TqmsMaster>>();
+            builder.RegisterType<TqmsJobRefRepository>().As<IRepository<TqmsJobRef, string>>();
         }
     }
 }

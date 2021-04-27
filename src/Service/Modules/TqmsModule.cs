@@ -16,15 +16,25 @@
 
         private readonly ISingleRecordFacadeService<TqmsMaster, TqmsMasterResource> tqmsMasterFacadeService;
 
+        private readonly IFacadeService<TqmsJobRef, string, TqmsJobRefResource, TqmsJobRefResource> tqmsJobRefsFacadeService;
+
         public TqmsModule(
             ITqmsReportsFacadeService tqmsReportsFacadeService,
-            ISingleRecordFacadeService<TqmsMaster, TqmsMasterResource> tqmsMasterFacadeService)
+            ISingleRecordFacadeService<TqmsMaster, TqmsMasterResource> tqmsMasterFacadeService,
+            IFacadeService<TqmsJobRef, string, TqmsJobRefResource, TqmsJobRefResource> tqmsJobRefsFacadeService)
         {
             this.tqmsReportsFacadeService = tqmsReportsFacadeService;
             this.tqmsMasterFacadeService = tqmsMasterFacadeService;
+            this.tqmsJobRefsFacadeService = tqmsJobRefsFacadeService;
             this.Get("/inventory/tqms-category-summary", _ => this.GetApp());
             this.Get("/inventory/tqms-category-summary/report", _ => this.GetTqmsSummaryByCategory());
             this.Get("/inventory/tqms-master", _ => this.GetTqmsMaster());
+            this.Get("/inventory/tqms-jobrefs", _ => this.GetTqmsJobrefs());
+        }
+
+        private object GetTqmsJobrefs()
+        {
+            return this.Negotiate.WithModel(this.tqmsJobRefsFacadeService.GetAll());
         }
 
         private object GetTqmsMaster()

@@ -128,6 +128,7 @@
             builder.RegisterType<InterCompanyInvoiceService>().As<IInterCompanyInvoiceService>();
             builder.RegisterType<TqmsReportsFacadeService>().As<ITqmsReportsFacadeService>();
             builder.RegisterType<TqmsMasterFacadeService>().As<ISingleRecordFacadeService<TqmsMaster, TqmsMasterResource>>();
+            builder.RegisterType<TqmsJobrefsFacadeService>().As<IFacadeService<TqmsJobRef, string, TqmsJobRefResource, TqmsJobRefResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

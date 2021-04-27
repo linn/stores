@@ -175,6 +175,7 @@
             builder.RegisterType<InterCompanyInvoicesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<InterCompanyInvoice>>>();
             builder.RegisterType<TqmsMasterResourceBuilder>().As<IResourceBuilder<TqmsMaster>>();
+            builder.RegisterType<TqmsJobRefsResourceBuilder>().As<IResourceBuilder<IEnumerable<TqmsJobRef>>>();
         }
     }
 }
