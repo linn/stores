@@ -32,6 +32,8 @@
 
         protected IRepository<StockLocator, int> StockLocatorRepository { get; private set; }
 
+        protected IRepository<PartDataSheet, PartDataSheetKey> DataSheetRepository { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -52,6 +54,7 @@
                 this.TemplateRepository,
                 this.SourceRepository,
                 this.StockLocatorRepository,
+                this.DataSheetRepository,
                 this.PartPack);
         }
     }

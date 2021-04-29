@@ -57,7 +57,8 @@ function MechPartSource({
                   capacitanceUnits: 'uF',
                   usages: [],
                   mechanicalOrElectrical: 'E',
-                  samplesRequired: 'N'
+                  samplesRequired: 'N',
+                  part: { dataSheets: [] }
               }
             : null
     );
@@ -394,7 +395,10 @@ function MechPartSource({
                                 style={{ paddingBottom: '40px' }}
                             >
                                 <Tab label="Proposal" />
-                                <Tab label="DataSheets" disabled={!mechPartSource.part} />
+                                <Tab
+                                    label="DataSheets"
+                                    disabled={!mechPartSource.partType === 'E'}
+                                />
                                 <Tab label="Quality Requirements" />
                                 <Tab label="Suppliers" />
                                 <Tab label="Manufacturers" />
