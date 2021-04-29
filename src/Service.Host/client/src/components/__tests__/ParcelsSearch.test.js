@@ -1,6 +1,6 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { fireEvent, cleanup } from '@testing-library/react';
+import { cleanup } from '@testing-library/react';
 import render from '../../test-utils';
 import ParcelsSearch from '../parcels/ParcelsSearch';
 
@@ -117,7 +117,6 @@ test('Before suppliers have loaded, search page can still render search results 
     //carriers
     expect(getByText(`${suppliers[2].id} - loading..`)).toBeInTheDocument();
     expect(getByText(`${suppliers[3].id} - loading..`)).toBeInTheDocument();
-
 });
 
 //this might change to check disabled if permissions change

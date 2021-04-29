@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -49,15 +49,15 @@ function Parcel({
         creating()
             ? {
                   parcelNumber: '',
-                  supplierId: null,
-                  dateCreated: new Date(),
+                  supplierId: '',
+                  dateCreated: new Date().toISOString(),
                   carrierId: '',
                   supplierInvoiceNo: null,
                   consignmentNo: '',
                   cartonCount: null,
                   palletCount: null,
                   weight: null,
-                  dateReceived: new Date(),
+                  dateReceived: new Date().toISOString(),
                   checkedById: userNumber,
                   comments: ''
               }
@@ -67,15 +67,15 @@ function Parcel({
         creating()
             ? {
                   parcelNumber: '',
-                  supplierId: null,
-                  dateCreated: new Date(),
+                  supplierId: '',
+                  dateCreated: new Date().toISOString(),
                   carrierId: '',
                   supplierInvoiceNo: null,
                   consignmentNo: '',
                   cartonCount: null,
                   palletCount: null,
                   weight: null,
-                  dateReceived: new Date(),
+                  dateReceived: new Date().toISOString(),
                   checkedById: userNumber,
                   comments: ''
               }
@@ -469,7 +469,7 @@ Parcel.propTypes = {
     itemError: PropTypes.shape({
         status: PropTypes.number,
         statusText: PropTypes.string,
-        details: PropTypes.shape({}),
+        details: PropTypes.shape({ errors: PropTypes.shape({}) }),
         item: PropTypes.string
     }),
     itemId: PropTypes.string,
@@ -512,12 +512,27 @@ Parcel.propTypes = {
 };
 
 Parcel.defaultProps = {
-    item: {},
+    item: {
+        parcelNumber: -1,
+        supplierId: '',
+        countryCode: '',
+        carrierId: '',
+        dateCreated: '',
+        dateReceived: '',
+        supplierInvoiceNo: '',
+        consignmentNo: '',
+        cartonCount: '',
+        palletCount: '',
+        weight: '',
+        checkedById: '-1',
+        comments: '',
+        links: {}
+    },
     snackbarVisible: false,
     loading: false,
     itemError: null,
     itemId: null,
-    employees: [{ id: -1, name: 'loading..' }],
+    employees: [{ id: -1, fullName: 'loading..' }],
     carriersSearchResults: [{ id: -1, name: '', description: '' }],
     suppliersSearchResults: [{ id: -1, name: '', description: '' }],
     suppliers: [{}],

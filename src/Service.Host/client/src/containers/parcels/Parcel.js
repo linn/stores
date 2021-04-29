@@ -39,8 +39,7 @@ const mapStateToProps = (state, { match }) => ({
 });
 
 const initialise = item => dispatch => {
-    if (!item.editStatus === 'create') {
-        console.info(item.editStatus);
+    if (item.itemId) {
         dispatch(parcelActions.fetch(item.itemId));
     }
     dispatch(suppliersActions.fetch());
