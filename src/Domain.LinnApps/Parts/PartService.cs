@@ -56,6 +56,7 @@
 
         public void UpdatePart(Part from, Part to, List<string> privileges, IEnumerable<MechPartManufacturerAlt> manufacturers)
         {
+            to.PartNumber = to.PartNumber?.ToUpper();
             if (from.DatePhasedOut == null && to.DatePhasedOut != null)
             {
                 if (!this.authService.HasPermissionFor(AuthorisedAction.PartAdmin, privileges))
@@ -169,6 +170,8 @@
 
         public Part CreatePart(Part partToCreate, List<string> privileges)
         {
+            partToCreate.PartNumber = partToCreate.PartNumber?.ToUpper();
+
             if (!this.authService.HasPermissionFor(AuthorisedAction.PartAdmin, privileges))
             {
                 throw new CreatePartException("You are not authorised to create parts.");
