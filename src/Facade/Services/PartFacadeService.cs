@@ -69,12 +69,25 @@
             return new SuccessResult<IEnumerable<Part>>(this.partService.GetDeptStockPalletParts());
         }
 
+        public void CreatePartFromSource(int sourceId, int proposedById, IEnumerable<PartDataSheetResource> dataSheets)
+        {
+            this.partService.CreateFromSource(
+                sourceId, 
+                proposedById, 
+                dataSheets.Select(s => 
+                new PartDataSheet
+                    {
+                        PdfFilePath = s.PdfFilePath,
+                        Sequence = s.Sequence
+                    }));
+        }
+
         protected override Part CreateFromResource(PartResource resource)
         {
-            if (resource.CreateFromSourceSheet)
-            {
-                return this.partService.CreateFromSource(resource.SourceId, resource.SourceCreatedBy);
-            }
+            // if (resource.CreateFromSourceSheet)
+            // {
+            //     return this.partService.CreateFromSource(resource.SourceId, resource.SourceCreatedBy);
+            // }
 
             var partToAdd = new Part
                                     {

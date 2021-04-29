@@ -226,7 +226,7 @@
                                              });
         }
 
-        public Part CreateFromSource(int sourceId, int createdBy)
+        public Part CreateFromSource(int sourceId, int createdBy, IEnumerable<PartDataSheet> dataSheets)
         {
             var source = this.sourceRepository.FindById(sourceId);
             source.PartNumber = 

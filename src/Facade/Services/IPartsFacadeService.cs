@@ -9,5 +9,7 @@
     public interface IPartsFacadeService : IFacadeService<Part, int, PartResource, PartResource>
     {
         IResult<IEnumerable<Part>> GetDeptStockPalletParts();
+
+        void CreatePartFromSource(int sourceId, int proposedById, IEnumerable<PartDataSheetResource> dataSheets);
     }
 }
