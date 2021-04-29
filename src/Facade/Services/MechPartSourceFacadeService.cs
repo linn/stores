@@ -53,17 +53,10 @@
                 ? null
                 : this.partRepository.FindBy(p => p.PartNumber == resource.PartNumber);
 
-            if (part != null)
-            {
-                part.DataSheets = resource.Part.DataSheets.Select(s => new PartDataSheet
-                {
-                    Part = part,
-                    Sequence = s.Sequence,
-                    PdfFilePath = s.PdfFilePath
-                });
-            }
+            var dataSheets = resource.Part?.DataSheets?.Select(
+                s => new PartDataSheet { PartNumber = null, PdfFilePath = s.PdfFilePath, Sequence = s.Sequence });
 
-            return new MechPartSource
+            var candidate = new MechPartSource
             {
                 Id = this.databaseService.GetIdSequence("MECH_SOURCE_SEQ"),
                 PartNumber = resource.PartNumber,
@@ -244,6 +237,8 @@
                 LifeExpectancyPart = resource.LifeExpectancyPart,
                 Configuration = resource.Configuration
             };
+
+            return this.domainService.Create(candidate, dataSheets);
         }
 
         protected override void UpdateFromResource(MechPartSource entity, MechPartSourceResource resource)

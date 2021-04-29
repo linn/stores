@@ -30,6 +30,8 @@
 
         private readonly IRepository<StockLocator, int> stockLocatorRepository;
 
+        private IRepository<PartDataSheet, PartDataSheetKey> dataSheetRepository;
+
         public PartService(
             IAuthorisationService authService,
             IRepository<QcControl, int> qcControlRepository,
@@ -38,6 +40,7 @@
             IRepository<PartTemplate, string> templateRepository,
             IRepository<MechPartSource, int> sourceRepository,
             IRepository<StockLocator, int> stockLocatorRepository,
+            IRepository<PartDataSheet, PartDataSheetKey> dataSheetRepository,
             IPartPack partPack)
         {
             this.authService = authService;
@@ -48,10 +51,12 @@
             this.sourceRepository = sourceRepository;
             this.templateRepository = templateRepository;
             this.stockLocatorRepository = stockLocatorRepository;
+            this.dataSheetRepository = dataSheetRepository;
         }
 
         public void UpdatePart(Part from, Part to, List<string> privileges, IEnumerable<MechPartManufacturerAlt> manufacturers)
         {
+            to.PartNumber = to.PartNumber?.ToUpper();
             if (from.DatePhasedOut == null && to.DatePhasedOut != null)
             {
                 if (!this.authService.HasPermissionFor(AuthorisedAction.PartAdmin, privileges))
@@ -165,6 +170,8 @@
 
         public Part CreatePart(Part partToCreate, List<string> privileges)
         {
+            partToCreate.PartNumber = partToCreate.PartNumber?.ToUpper();
+
             if (!this.authService.HasPermissionFor(AuthorisedAction.PartAdmin, privileges))
             {
                 throw new CreatePartException("You are not authorised to create parts.");
@@ -226,7 +233,7 @@
                                              });
         }
 
-        public Part CreateFromSource(int sourceId, int createdBy)
+        public Part CreateFromSource(int sourceId, int createdBy, IEnumerable<PartDataSheet> dataSheets)
         {
             var source = this.sourceRepository.FindById(sourceId);
             source.PartNumber = 
@@ -237,7 +244,22 @@
                 throw new CreatePartException(message);
             }
 
-            return this.partRepository.FindBy(p => p.PartNumber == source.PartNumber);
+            var part = this.partRepository.FindBy(p => p.PartNumber == source.PartNumber);
+
+            var seq = 1;
+            foreach (var partDataSheet in dataSheets)
+            {
+                this.dataSheetRepository.Add(new PartDataSheet
+                                                 {
+                                                     PartNumber = source.PartNumber,
+                                                     Sequence = seq,
+                                                     Part = part,
+                                                     PdfFilePath = partDataSheet.PdfFilePath
+                                                 });
+                seq++;
+            }
+
+            return part; 
         }
 
         public IEnumerable<Part> GetDeptStockPalletParts()
