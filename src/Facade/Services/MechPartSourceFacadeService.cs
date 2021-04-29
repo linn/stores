@@ -54,7 +54,7 @@
                 : this.partRepository.FindBy(p => p.PartNumber == resource.PartNumber);
 
             var dataSheets = resource.Part?.DataSheets?.Select(
-                s => new PartDataSheet { PartNumber = null, PdfFilePath = s.PdfFilePath, Sequence = s.Sequence }); // todo - set sequence here
+                s => new PartDataSheet { PartNumber = null, PdfFilePath = s.PdfFilePath, Sequence = s.Sequence });
 
             var candidate = new MechPartSource
             {
