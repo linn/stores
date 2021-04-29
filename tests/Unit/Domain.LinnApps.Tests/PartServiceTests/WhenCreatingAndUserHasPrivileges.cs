@@ -24,7 +24,10 @@
         [SetUp]
         public void SetUp()
         {
-            this.part = new Part();
+            this.part = new Part
+                            {
+                                PartNumber = "CAp 431"
+                            };
             this.privileges = new List<string> { "part.admin" };
 
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
@@ -45,6 +48,12 @@
         public void ShouldReturnNewPart()
         {
             this.result.Should().BeOfType<Part>();
+        }
+
+        [Test]
+        public void ShouldConvertPartNumberToUpper()
+        {
+            this.result.PartNumber.Should().Be("CAP 431");
         }
 
         [Test]
