@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
     using System.IO;
-    using System.Linq;
 
     using Linn.Common.Configuration;
 
@@ -36,8 +35,10 @@
                                    Text = body
                                };
 
+            // placeholder
+            // simple pdf generation as proof of concept, but this code won't go here. Pdf is passed in
             PdfDocument document = new PdfDocument();
-            document.Info.Title = "Created with PDFsharp";
+            document.Info.Title = "Some title";
             PdfPage page = document.AddPage();
             XGraphics gfx = XGraphics.FromPdfPage(page);
             XFont font = new XFont("Verdana", 20, XFontStyle.BoldItalic);
@@ -48,6 +49,7 @@
                 XBrushes.Black,
                 new XRect(0, 0, page.Width, page.Height),
                 XStringFormats.Center);
+            // end placeholder
 
            MimeContent content;
            using (MemoryStream ms = new MemoryStream())
