@@ -856,6 +856,7 @@
             e.Property(c => c.DateReceived).HasColumnName("DATE_RECEIVED");
             e.Property(c => c.SupplierInvoiceNo).HasColumnName("SUPPLIER_INV_NUMBERS").HasMaxLength(500);
             e.Property(c => c.ConsignmentNo).HasColumnName("CONSIGNMENT_NUMBER").HasMaxLength(20);
+            e.Property(c => c.ImportBookNo).HasColumnName("IMPORT_BOOK_NUM").HasMaxLength(8);
             e.Property(c => c.Weight).HasColumnName("WEIGHT");
             e.Property(c => c.CheckedById).HasColumnName("CHECKED_BY");
             e.Property(c => c.SupplierId).HasColumnName("SUPPLIER_ID");

@@ -33,5 +33,7 @@
         public int? CancelledBy { get; set; }
 
         public string CancellationReason { get; set; }
+
+        public int? ImportBookNo { get; set; }
     }
 }

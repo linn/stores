@@ -34,6 +34,7 @@ const item = {
     weight: 15,
     checkedById: '33067',
     comments: 'TVS + PACKING MATERIAL',
+    importBookNumber: 136890,
     links: { href: '/logistics/parcels/52828', rel: 'self' }
 };
 
@@ -148,4 +149,7 @@ test('On View -  page renders populated fields', () => {
 
     expect(getByText('Comments')).toBeInTheDocument();
     expect(getByDisplayValue(item.comments)).toBeInTheDocument();
+
+    expect(getByText('Import Book Number')).toBeInTheDocument();
+    expect(getByDisplayValue(item.importBookNumber)).toBeInTheDocument();
 });

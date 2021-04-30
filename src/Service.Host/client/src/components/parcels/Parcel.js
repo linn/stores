@@ -48,36 +48,36 @@ function Parcel({
     const [parcel, setParcel] = useState(
         creating()
             ? {
-                  parcelNumber: '',
                   supplierId: '',
                   dateCreated: new Date().toISOString(),
                   carrierId: '',
-                  supplierInvoiceNo: null,
+                  supplierInvoiceNo: '',
                   consignmentNo: '',
                   cartonCount: null,
                   palletCount: null,
-                  weight: null,
+                  weight: 0.0,
                   dateReceived: new Date().toISOString(),
                   checkedById: userNumber,
-                  comments: ''
+                  comments: '',
+                  importBookNo: null
               }
             : null
     );
     const [prevParcel, setPrevParcel] = useState(
         creating()
             ? {
-                  parcelNumber: '',
                   supplierId: '',
                   dateCreated: new Date().toISOString(),
                   carrierId: '',
-                  supplierInvoiceNo: null,
+                  supplierInvoiceNo: '',
                   consignmentNo: '',
                   cartonCount: null,
                   palletCount: null,
-                  weight: null,
+                  weight: 0.0,
                   dateReceived: new Date().toISOString(),
                   checkedById: userNumber,
-                  comments: ''
+                  comments: '',
+                  importBookNo: null
               }
             : null
     );
@@ -85,6 +85,7 @@ function Parcel({
 
     useEffect(() => {
         if (item && item !== prevParcel) {
+            console.info(item);
             setParcel(item);
             setPrevParcel(item);
         }
@@ -167,22 +168,24 @@ function Parcel({
     };
 
     const saveEnabled = () => {
+        console.info(parcel.weight);
+        console.log(parcel.weight === 0);
+        console.log(parcel.weight == 0);
         if (creating()) {
             return (
                 !parcel.dateCreated ||
                 !parcel.dateReceived ||
                 !parcel.consignmentNo ||
                 !parcel.checkedById ||
-                !parcel.comments
+                (!parcel.weight && parcel.weight !== 0)
             );
         }
         return (
-            !parcel.parcelNumber ||
             !parcel.dateCreated ||
             !parcel.dateReceived ||
             !parcel.consignmentNo ||
             !parcel.checkedById ||
-            !parcel.comments
+            (!parcel.weight && parcel.weight !== 0)
         );
     };
 
@@ -259,18 +262,15 @@ function Parcel({
                                             value={parcel.parcelNumber}
                                             label="Parcel Number"
                                             maxLength={10}
-                                            helperText={
-                                                !creating() ? 'This field cannot be changed' : ''
-                                            }
+                                            helperText="This field cannot be changed"
                                             required
-                                            onChange={handleFieldChange}
                                             propertyName="parcelNumber"
                                         />
                                     )}
                                 </Grid>
-                                <Grid item xs={1} />
+                                <Grid item xs={7} />
 
-                                <Grid item xs={3}>
+                                <Grid item xs={5}>
                                     <SearchInputField
                                         label="Date Created"
                                         fullWidth
@@ -281,7 +281,9 @@ function Parcel({
                                         required
                                     />
                                 </Grid>
-                                <Grid item xs={3}>
+                                <Grid item xs={1} />
+
+                                <Grid item xs={5}>
                                     <SearchInputField
                                         label="Date Received"
                                         fullWidth
@@ -292,6 +294,7 @@ function Parcel({
                                         required
                                     />
                                 </Grid>
+                                <Grid item xs={1} />
 
                                 <Grid item xs={6}>
                                     <div className={classes.displayInline}>
@@ -410,6 +413,7 @@ function Parcel({
                                         propertyName="weight"
                                         type="number"
                                         decimalPlaces={2}
+                                        required
                                     />
                                 </Grid>
 
@@ -436,10 +440,20 @@ function Parcel({
                                         value={parcel.comments}
                                         label="Comments"
                                         maxLength={2000}
-                                        required
                                         onChange={handleFieldChange}
                                         propertyName="comments"
                                         rows={3}
+                                    />
+                                </Grid>
+
+                                <Grid item xs={4}>
+                                    <InputField
+                                        fullWidth
+                                        value={parcel.importBookNo}
+                                        label="Import Book Number"
+                                        maxLength={8}
+                                        onChange={handleFieldChange}
+                                        propertyName="importBookNo"
                                     />
                                 </Grid>
 
@@ -526,6 +540,7 @@ Parcel.defaultProps = {
         weight: '',
         checkedById: '-1',
         comments: '',
+        importBookNo: '',
         links: {}
     },
     snackbarVisible: false,

@@ -28,7 +28,8 @@
                 DateCancelled = parcel.DateCancelled?.ToString("o"),
                 CancellationReason = parcel.CancellationReason,
                 CancelledBy = parcel.CancelledBy,
-                Links = this.BuildLinks(parcel).ToArray()
+                Links = this.BuildLinks(parcel).ToArray(),
+                ImportBookNo = parcel.ImportBookNo
             };
         }
 

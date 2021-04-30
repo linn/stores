@@ -6,45 +6,47 @@
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
 
     public class ParcelService : FacadeService<Parcel, int, ParcelResource, ParcelResource>, IParcelService
     {
         private readonly IRepository<Parcel, int> Repository;
+        private readonly IDatabaseService databaseService;
 
-        public ParcelService(IRepository<Parcel, int> repository, ITransactionManager transactionManager)
+
+        public ParcelService(IRepository<Parcel, int> repository, ITransactionManager transactionManager, IDatabaseService databaseService)
             : base(repository, transactionManager)
         {
             this.Repository = repository;
+            this.databaseService = databaseService;
         }
 
         protected override Parcel CreateFromResource(ParcelResource resource)
         {
             var parcel = new Parcel
-                             {
-                                 ParcelNumber = resource.ParcelNumber,
-                                 CarrierId = resource.CarrierId,
-                                 CartonCount = resource.CartonCount,
-                                 CheckedById = resource.CheckedById,
-                                 Comments = resource.Comments,
-                                 ConsignmentNo = resource.ConsignmentNo,
-                                 DateCreated = DateTime.Parse(resource.DateCreated),
-                                 DateReceived = DateTime.Parse(resource.DateReceived),
-                                 PalletCount = resource.PalletCount,
-                                 SupplierId = resource.SupplierId,
-                                 SupplierInvoiceNo = resource.SupplierInvoiceNo,
-                                 Weight = resource.Weight,
-                                 CancelledBy = resource.CancelledBy,
-                                 CancellationReason = resource.CancellationReason,
-                                 DateCancelled = DateTime.Parse(resource.DateCancelled)
+            {
+                ParcelNumber = this.databaseService.GetNextVal("PARCEL_SEQ"),
+                CarrierId = resource.CarrierId,
+                CartonCount = resource.CartonCount,
+                CheckedById = resource.CheckedById,
+                Comments = resource.Comments,
+                ConsignmentNo = resource.ConsignmentNo,
+                DateCreated = DateTime.Parse(resource.DateCreated),
+                DateReceived = DateTime.Parse(resource.DateReceived),
+                PalletCount = resource.PalletCount,
+                SupplierId = resource.SupplierId,
+                SupplierInvoiceNo = resource.SupplierInvoiceNo,
+                Weight = resource.Weight,
+                ImportBookNo = resource.ImportBookNo
             };
+
             return parcel;
         }
 
         protected override void UpdateFromResource(Parcel entity, ParcelResource updateResource)
         {
-            entity.ParcelNumber = updateResource.ParcelNumber;
             entity.CarrierId = updateResource.CarrierId;
             entity.CartonCount = updateResource.CartonCount;
             entity.CheckedById = updateResource.CheckedById;
@@ -59,6 +61,7 @@
             entity.CancelledBy = updateResource.CancelledBy;
             entity.CancellationReason = updateResource.CancellationReason;
             entity.DateCancelled = string.IsNullOrWhiteSpace(updateResource.DateCancelled) ? (DateTime?)null : DateTime.Parse(updateResource.DateCancelled);
+            entity.ImportBookNo = updateResource.ImportBookNo;
         }
 
         protected override Expression<Func<Parcel, bool>> SearchExpression(string searchTerms)
