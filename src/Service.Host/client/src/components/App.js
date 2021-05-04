@@ -31,6 +31,9 @@ function App() {
                 <ListItem component={Link} to="/inventory/stock-locator" button>
                     <Typography color="primary">Stock Locator Utility</Typography>
                 </ListItem>
+                <ListItem component={Link} to="/logistics/parcels" button>
+                    <Typography color="primary">Parcel Utility</Typography>
+                </ListItem>
             </List>
             <Typography variant="h6">Reports</Typography>
             <List>
