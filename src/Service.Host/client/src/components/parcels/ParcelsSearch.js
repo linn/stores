@@ -251,7 +251,7 @@ function ParcelsSearch({
                 </Grid>
                 <Grid item xs={3}>
                     <SearchInputField
-                        label="Parcels"
+                        label="Parcel number"
                         fullWidth
                         placeholder="search.."
                         onChange={handleSearchTermChange}

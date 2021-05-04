@@ -59,7 +59,7 @@ test('Search page renders all search fields without crashing...', () => {
             history={history}
         />
     );
-    expect(getByText('Parcels')).toBeInTheDocument();
+    expect(getByText('Parcel number')).toBeInTheDocument();
     expect(getByText('Supplier')).toBeInTheDocument();
     expect(getByText('Carrier')).toBeInTheDocument();
     expect(getByText('Date Created')).toBeInTheDocument();

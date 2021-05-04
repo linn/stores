@@ -85,7 +85,6 @@ function Parcel({
 
     useEffect(() => {
         if (item && item !== prevParcel) {
-            console.info(item);
             setParcel(item);
             setPrevParcel(item);
         }
@@ -168,9 +167,6 @@ function Parcel({
     };
 
     const saveEnabled = () => {
-        console.info(parcel.weight);
-        console.log(parcel.weight === 0);
-        console.log(parcel.weight == 0);
         if (creating()) {
             return (
                 !parcel.dateCreated ||
@@ -190,12 +186,16 @@ function Parcel({
     };
 
     const handleCancelClick = () => {
-        setParcel(item);
-        setEditStatus('view');
+        if (creating()) {
+            setParcel(prevParcel);
+        } else {
+            setParcel(item);
+            setEditStatus('view');
+        }
     };
 
     const handleBackClick = () => {
-        history.push('/inventory/parcels');
+        history.push('/logistics/parcels');
     };
 
     const handleFieldChange = (propertyName, newValue) => {
@@ -429,7 +429,6 @@ function Parcel({
                                         label="Checked by"
                                         required
                                         onChange={handleFieldChange}
-                                        // disabled={!allowedToEdit}
                                         type="number"
                                     />
                                 </Grid>
