@@ -19,7 +19,10 @@
                            Status = shipfile.Message,
                            CustomerName = shipfile.Consignment.CustomerName,
                            DateClosed = shipfile.Consignment.DateClosed?.ToString("o"),
-                           InvoiceNumbers = shipfile.Consignment.Invoices.Select(i => i.DocumentNumber)
+                           InvoiceNumbers = !shipfile.Consignment.Invoices.Any() ? null 
+                                                : shipfile
+                                                    .Consignment.Invoices.Select(i => i.DocumentNumber.ToString())
+                                                    .Aggregate((acc, c) => acc + " " + c)
                        };
         }
 

@@ -79,6 +79,7 @@ import makeIntercompanyInvoices from './makeIntercompanyInvoices';
 import interCompanyInvoices from './interCompanyInvoices';
 import tqmsSummaryByCategoryReport from './tqmsSummaryByCategoryReport';
 import tqmsJobRefs from './tqmsJobRefs';
+import consignmentShipfiles from './consignmentShipfiles';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -93,6 +94,7 @@ const rootReducer = history =>
         auditLocation,
         auditLocations,
         availableStock,
+        consignmentShipfiles,
         countries,
         createAuditReqs,
         departments,

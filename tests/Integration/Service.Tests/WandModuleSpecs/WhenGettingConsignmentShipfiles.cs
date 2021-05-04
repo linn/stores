@@ -27,14 +27,20 @@
                                  {
                                      new ConsignmentShipfile
                                          {
-                                             ConsignmentId = 1, Consignment = new Consignment
+                                             ConsignmentId = 1, Consignment = new Consignment 
                                                                                   {
                                                                                       ConsignmentId = 1,
                                                                                       Invoices = new List<Invoice>
                                                                                           {
                                                                                               new Invoice
                                                                                                   {
-                                                                                                      ConsignmentId = 1
+                                                                                                      ConsignmentId = 1,
+                                                                                                      DocumentNumber = 491689
+                                                                                                  },
+                                                                                              new Invoice
+                                                                                                  {
+                                                                                                      ConsignmentId = 1,
+                                                                                                      DocumentNumber = 491690
                                                                                                   }
                                                                                           }
                                                                                   }
@@ -70,6 +76,7 @@
                 .Body.DeserializeJson<IEnumerable<ConsignmentShipfileResource>>().ToList();
             resultResources.Should().HaveCount(1);
             resultResources.Should().Contain(a => a.ConsignmentId == 1);
+            resultResources.First().InvoiceNumbers.Should().Be("491689 491690");
         }
     }
 }
