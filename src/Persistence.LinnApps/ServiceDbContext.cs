@@ -162,7 +162,7 @@
 
         public DbQuery<TransferableStock> TransferableStock { get; set; }
 
-        public DbQuery<Consignment> Consignments { get; set; }
+        public DbSet<Consignment> Consignments { get; set; }
 
         public DbSet<ExportReturn> ExportReturns { get; set; }
 
@@ -192,9 +192,9 @@
 
         public DbQuery<TqmsOutstandingLoansByCategory> TqmsOutstandingLoansByCategories { get; set; }
 
-        public DbQuery<ConsignmentShipfile> ConsignmentShipfiles { get; set; }
+        public DbSet<ConsignmentShipfile> ConsignmentShipfiles { get; set; }
 
-        public DbQuery<Invoice> Invoices { get; set; }
+        public DbSet<Invoice> Invoices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -1469,7 +1469,8 @@
 
         private void QueryConsignments(ModelBuilder builder)
         {
-            var q = builder.Query<Consignment>().ToView("CONSIGNMENTS");
+            var q = builder.Entity<Consignment>().ToTable("CONSIGNMENTS");
+            q.HasKey(c => c.ConsignmentId);
             q.Property(c => c.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
             q.Property(c => c.AddressId).HasColumnName("ADDRESS_ID");
             q.Property(c => c.CountryCode).HasColumnName("COUNTRY");
@@ -1593,18 +1594,21 @@
 
         private void QueryConsignmentShipFiles(ModelBuilder builder)
         {
-            var q = builder.Query<ConsignmentShipfile>().ToView("CONSGINMENT_SHIPFILES");
+            var q = builder.Entity<ConsignmentShipfile>().ToTable("CONSIGNMENT_SHIPFILES");
+            q.HasKey(f => f.ConsignmentId);
             q.Property(f => f.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
             q.Property(f => f.Message).HasColumnName("MESSAGE");
-            q.HasOne(f => f.Consignment).WithOne(c => c.Shipfile).HasForeignKey("CONSIGNMENT_ID");
+            q.HasOne(f => f.Consignment).WithOne(c => c.Shipfile).HasForeignKey<ConsignmentShipfile>(s => s.ConsignmentId);
         }
 
         private void QueryInvoices(ModelBuilder builder)
         {
-            var q = builder.Query<Invoice>().ToView("INVOICES");
+            var q = builder.Entity<Invoice>().ToTable("INVOICES");
+            q.HasKey(i => i.DocumentNumber);
             q.Property(i => i.DocumentType).HasColumnName("DOCUMENT_TYPE");
             q.Property(i => i.DocumentNumber).HasColumnName("DOCUMENT_NUMBER");
-            q.HasOne(i => i.Consignment).WithMany(c => c.Invoices).HasForeignKey("CONSIGNMENT_ID");
+            q.Property(i => i.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            q.HasOne(i => i.Consignment).WithMany(c => c.Invoices).HasForeignKey(i => i.ConsignmentId);
         }
     }
 }
