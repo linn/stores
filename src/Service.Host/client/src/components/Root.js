@@ -129,13 +129,13 @@ const Root = ({ store }) => (
                                         component={DeptStockParts}
                                     />
 
-                                    <Route exact path="/logistics/parcels" component={Parcels} />
+                                    <Route exact path="/inventory/parcels" component={Parcels} />
                                     <Route
                                         exact
-                                        path="/logistics/parcels/create"
+                                        path="/inventory/parcels/create"
                                         component={Parcel}
                                     />
-                                    <Route exact path="/logistics/parcels/:id" component={Parcel} />
+                                    <Route exact path="/inventory/parcels/:id" component={Parcel} />
 
                                     <Route
                                         exact

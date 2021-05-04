@@ -246,7 +246,7 @@ function ParcelsSearch({
                 <Grid item xs={11} />
                 <Grid item xs={1}>
                     {(allowedToCreate || true) && (
-                        <LinkButton text="Create" to="/logistics/parcels/create" />
+                        <LinkButton text="Create" to="/inventory/parcels/create" />
                     )}
                 </Grid>
                 <Grid item xs={3}>

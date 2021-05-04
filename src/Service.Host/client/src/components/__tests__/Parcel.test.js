@@ -35,7 +35,7 @@ const item = {
     checkedById: '33067',
     comments: 'TVS + PACKING MATERIAL',
     importBookNo: 136890,
-    links: { href: '/logistics/parcels/52828', rel: 'self' }
+    links: { href: '/inventory/parcels/52828', rel: 'self' }
 };
 
 const suppliers = [

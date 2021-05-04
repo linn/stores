@@ -35,7 +35,7 @@
 
         public string GetLocation(Parcel p)
         {
-            return $"/logistics/parcels/{p.ParcelNumber}";
+            return $"/inventory/parcels/{p.ParcelNumber}";
         }
 
         object IResourceBuilder<Parcel>.Build(Parcel parcel) => this.Build(parcel);

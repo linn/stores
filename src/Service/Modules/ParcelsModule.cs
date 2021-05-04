@@ -1,5 +1,9 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System;
+
+    using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
@@ -14,12 +18,12 @@
         public ParcelsModule(IParcelService parcelsFacadeService)
         {
             this.parcelsFacadeService = parcelsFacadeService;
-            this.Get("/logistics/parcels/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
-            this.Get("/logistics/parcels", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
-            this.Get("/logistics/parcels/{id}", parameters => this.GetParcel(parameters.id));
-            this.Put("/logistics/parcels/{id}", parameters => this.UpdateParcel(parameters.id));
-            this.Get("/logistics/parcels", _ => this.GetParcels());
-            this.Post("/logistics/parcels", _ => this.AddParcel());
+            this.Get("/inventory/parcels/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
+            this.Get("/inventory/parcels", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
+            this.Get("/inventory/parcels/{id}", parameters => this.GetParcel(parameters.id));
+            this.Put("/inventory/parcels/{id}", parameters => this.UpdateParcel(parameters.id));
+            this.Get("/inventory/parcels", _ => this.GetParcels());
+            this.Post("/inventory/parcels", _ => this.AddParcel());
         }
 
         private object GetParcel(int id)
@@ -47,19 +51,33 @@
         {
             var resource = this.Bind<ParcelResource>();
 
-            var result = this.parcelsFacadeService.Add(resource);
-
-            return this.Negotiate.WithModel(result).WithMediaRangeModel("text/html", ApplicationSettings.Get);
+            try
+            {
+                var result = this.parcelsFacadeService.Add(resource);
+                return this.Negotiate.WithModel(result).WithMediaRangeModel("text/html", ApplicationSettings.Get);
+            }
+            catch (Exception e)
+            {
+                return new ServerFailureResult<Parcel>($"Error when creating - ${(e.InnerException != null ? e.InnerException.Message : e.Message)}");
+            }
         }
 
         private object UpdateParcel(int id)
         {
             var resource = this.Bind<ParcelResource>();
 
-            var result = this.parcelsFacadeService.Update(id, resource);
+            try
+            {
+                var result = this.parcelsFacadeService.Update(id, resource);
 
-            return this.Negotiate.WithModel(result)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+                return this.Negotiate.WithModel(result)
+                    .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+
+            }
+            catch (Exception e)
+            {
+                return new ServerFailureResult<Parcel>($"Error when updating - ${(e.InnerException != null ? e.InnerException.Message : e.Message)}");
+            }
         }
     }
 }

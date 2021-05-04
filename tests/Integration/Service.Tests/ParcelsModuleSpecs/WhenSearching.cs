@@ -57,7 +57,7 @@
              .Returns(new SuccessResult<IEnumerable<Parcel>>(parcels));
 
             this.Response = this.Browser.Get(
-                "/logistics/parcels",
+                "/inventory/parcels",
                 with =>
                 {
                     with.Header("Accept", "application/json");

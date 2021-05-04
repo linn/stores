@@ -36,7 +36,7 @@
 
 
             this.Response = this.Browser.Get(
-                "/logistics/parcels/1",
+                "/inventory/parcels/1",
                 with =>
                 {
                     with.Header("Accept", "application/json");

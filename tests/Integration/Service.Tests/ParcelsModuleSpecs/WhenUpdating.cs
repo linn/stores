@@ -52,7 +52,7 @@
 
 
             this.Response = this.Browser.Put(
-                "/logistics/parcels/4",
+                "/inventory/parcels/4",
                 with =>
                 {
                     with.Header("Accept", "application/json");

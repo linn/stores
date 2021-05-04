@@ -195,7 +195,7 @@ function Parcel({
     };
 
     const handleBackClick = () => {
-        history.push('/logistics/parcels');
+        history.push('/inventory/parcels');
     };
 
     const handleFieldChange = (propertyName, newValue) => {
@@ -236,9 +236,7 @@ function Parcel({
                     {itemError && (
                         <Grid item xs={12}>
                             <ErrorCard
-                                errorMessage={
-                                    itemError?.details?.errors?.[0] || itemError.statusText
-                                }
+                                errorMessage={itemError?.details?.message || itemError.statusText}
                             />
                         </Grid>
                     )}
