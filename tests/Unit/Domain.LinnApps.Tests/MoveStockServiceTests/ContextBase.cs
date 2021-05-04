@@ -21,9 +21,13 @@
 
         protected IStoresPack StoresPack { get; private set; }
 
+        protected IKardexPack KardexPack { get; private set; }
+
         protected IRepository<RequisitionHeader, int> RequisitionRepository { get; private set; }
 
         protected IRepository<StorageLocation, int> StorageLocationRepository { get; private set; }
+
+        protected IStoresPalletRepository StoresPalletRepository { get; private set; }
 
         protected string PartNumber { get; set; }
 
@@ -45,8 +49,12 @@
         public void SetUpContext()
         {
             this.StoresPack = Substitute.For<IStoresPack>();
+            this.KardexPack = Substitute.For<IKardexPack>();
             this.RequisitionRepository = Substitute.For<IRepository<RequisitionHeader, int>>();
             this.StorageLocationRepository = Substitute.For<IRepository<StorageLocation, int>>();
+            this.StoresPalletRepository = Substitute.For<IStoresPalletRepository>();
+            this.StoresPalletRepository.FindById(1000).Returns(new StoresPallet { PalletNumber = 1000 });
+            this.StoresPalletRepository.FindById(2000).Returns(new StoresPallet { PalletNumber = 2000 });
 
             this.PartNumber = "part 1";
             this.Quantity = 2;
@@ -103,8 +111,10 @@
             this.RequisitionRepository.FindById(this.ReqNumber).Returns(this.Req);
             this.Sut = new MoveStockService(
                 this.StoresPack,
+                this.KardexPack,
                 this.RequisitionRepository,
-                this.StorageLocationRepository);
+                this.StorageLocationRepository,
+                this.StoresPalletRepository);
         }
     }
 }

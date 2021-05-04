@@ -50,6 +50,9 @@ function App() {
                 <ListItem component={Link} to="/logistics/allocations/despatch-pallet-queue" button>
                     <Typography color="primary">Despatch Pallet Queue Upper Report</Typography>
                 </ListItem>
+                <ListItem component={Link} to="/inventory/tqms-category-summary" button>
+                    <Typography color="primary">TQMS Summary Report</Typography>
+                </ListItem>
             </List>
         </Page>
     );

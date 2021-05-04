@@ -34,10 +34,13 @@ import StockViewerOptions from '../containers/stockLocatorUtility/StockViewerOpt
 import StockLocator from '../containers/stockLocatorUtility/StockLocator';
 import Wand from '../containers/Wand';
 import ExportRsns from '../containers/ExportRsns';
+import Tpk from '../containers/Tpk';
 import ExportReturn from '../containers/ExportReturn';
 import StockMove from '../containers/StockMove';
 import StockLocatorBatchView from '../containers/stockLocatorUtility/StockLocatorBatchView';
 import StockLocatorPricesView from '../containers/stockLocatorUtility/StockLocatorPricesView';
+import TqmsSummaryByCategoryReportOptions from '../containers/reports/TqmsSummaryByCategoryReportOptions';
+import TqmsSummaryByCategoryReport from '../containers/reports/TqmsSummaryByCategoryReport';
 
 const Root = ({ store }) => (
     <div>
@@ -190,6 +193,9 @@ const Root = ({ store }) => (
                                         path="/inventory/exports/rsns"
                                         component={ExportRsns}
                                     />
+
+                                    <Route exact path="/logistics/tpk" component={Tpk} />
+
                                     <Route
                                         exact
                                         path="/inventory/exports/returns/:id"
@@ -204,6 +210,16 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/move-stock"
                                         component={StockMove}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/tqms-category-summary/report"
+                                        component={TqmsSummaryByCategoryReport}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/tqms-category-summary"
+                                        component={TqmsSummaryByCategoryReportOptions}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>

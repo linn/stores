@@ -8,6 +8,8 @@
 
     using Linn.Common.Persistence;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class DepartmentRepository : IQueryRepository<Department>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -24,7 +26,8 @@
 
         public IQueryable<Department> FilterBy(Expression<Func<Department, bool>> expression)
         {
-            return this.serviceDbContext.Departments.Where(expression);
+            return this.serviceDbContext.Departments
+                .AsNoTracking().Where(expression);
         }
 
         public IQueryable<Department> FindAll()

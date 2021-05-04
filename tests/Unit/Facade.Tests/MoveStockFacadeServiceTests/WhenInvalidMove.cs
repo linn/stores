@@ -42,6 +42,7 @@
                     this.resource.ToLocationId,
                     this.resource.ToPalletNumber,
                     null,
+                    null,
                     this.resource.UserNumber)
                 .Throws(new MoveInvalidException("boom"));
 

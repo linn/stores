@@ -242,6 +242,12 @@ export const stockQuantities = new ItemType(
     '/inventory/stock-quantities'
 );
 
+export const transferableStock = new ItemType(
+    'transferableStock',
+    'TRANSFERABLE_STOCK',
+    '/logistics/tpk/items'
+);
+
 export const exportReturn = new ItemType(
     'exportReturn',
     'EXPORT_RETURN',
@@ -262,11 +268,19 @@ export const stockLocatorPrices = new ItemType(
 
 export const reqMoves = new ItemType('reqMoves', 'REQ_MOVES', '/logistics/requisitions');
 
+export const partStorageTypes = new ItemType(
+    'partStorageTypes',
+    'PART_STORAGE_TYPES',
+    '/inventory/part-storage-types'
+);
+
 export const interCompanyInvoices = new ItemType(
     'interCompanyInvoices',
     'INTER_COMPANY_INVOICES',
     '/inventory/exports/inter-company-invoices'
 );
+
+export const tqmsJobRefs = new ItemType('tqmsJobRefs', 'TQMS_JOBREFS', '/inventory/tqms-jobrefs');
 
 export const parcel = new ItemType('parcel', 'PARCEL', '/logistics/parcels');
 

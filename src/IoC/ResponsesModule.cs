@@ -17,6 +17,9 @@
     using Linn.Stores.Domain.LinnApps.Requisitions.Models;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
+    using Linn.Stores.Domain.LinnApps.Tpk;
+    using Linn.Stores.Domain.LinnApps.Tpk.Models;
+    using Linn.Stores.Domain.LinnApps.Tqms;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Facade;
@@ -76,6 +79,7 @@
             builder.RegisterType<DecrementRulesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<DecrementRule>>>();
             builder.RegisterType<ResultsModelResourceBuilder>().As<IResourceBuilder<ResultsModel>>();
+            builder.RegisterType<ResultsModelsResourceBuilder>().As<IResourceBuilder<IEnumerable<ResultsModel>>>();
             builder.RegisterType<CountryResourceBuilder>().As<IResourceBuilder<Country>>();
             builder.RegisterType<CountriesResourceBuilder>().As<IResourceBuilder<IEnumerable<Country>>>();
             builder.RegisterType<PartTemplateResourceBuilder>().As<IResourceBuilder<PartTemplate>>();
@@ -146,6 +150,10 @@
             builder.RegisterType<StockQuantitiesListResourceBuilder>().As<IResourceBuilder<IEnumerable<StockQuantities>>>();
             builder.RegisterType<WandItemResultResourceBuilder>().As<IResourceBuilder<WandResult>>();
             builder.RegisterType<RequisitionActionResourceBuilder>().As<IResourceBuilder<RequisitionActionResult>>();
+            builder.RegisterType<TransferableStockResourceBuilder>().As<IResourceBuilder<TransferableStock>>();
+            builder.RegisterType<TransferableStockListResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<TransferableStock>>>();
+            builder.RegisterType<TpkResultResourceBuilder>().As<IResourceBuilder<TpkResult>>();
             builder.RegisterType<ExportReturnResourceBuilder>().As<IResourceBuilder<ExportReturn>>();
             builder.RegisterType<ExportReturnDetailResourceBuilder>().As<IResourceBuilder<ExportReturnDetail>>();
             builder.RegisterType<ExportReturnDetailsResourceBuilder>()
@@ -157,10 +165,13 @@
             builder.RegisterType<RequisitionProcessResultResourceBuilder>().As<IResourceBuilder<RequisitionProcessResult>>();
             builder.RegisterType<RequisitionResourceBuilder>().As<IResourceBuilder<RequisitionHeader>>();
             builder.RegisterType<RequisitionMovesResourceBuilder>().As<IRequisitionMovesResourceBuilder>();
+            builder.RegisterType<PartStorageTypesResourceBuilder>().As<IResourceBuilder<IEnumerable<PartStorageType>>>();
             builder.RegisterType<InterCompanyInvoiceResourceBuilder>()
                 .As<IResourceBuilder<InterCompanyInvoice>>();
             builder.RegisterType<InterCompanyInvoicesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<InterCompanyInvoice>>>();
+            builder.RegisterType<TqmsMasterResourceBuilder>().As<IResourceBuilder<TqmsMaster>>();
+            builder.RegisterType<TqmsJobRefsResourceBuilder>().As<IResourceBuilder<IEnumerable<TqmsJobRef>>>();
         }
     }
 }

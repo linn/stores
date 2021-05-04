@@ -1,6 +1,9 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.Services;
+    using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Service.Models;
 
@@ -13,17 +16,27 @@
 
         private readonly IMoveStockFacadeService moveStockFacadeService;
 
+        private readonly IFacadeService<PartStorageType, int, PartStorageTypeResource, PartStorageTypeResource> partStorageTypeFacadeService;
+
         public StockMoveModule(
             IAvailableStockFacadeService availableStockFacadeService,
-            IMoveStockFacadeService moveStockFacadeService)
+            IMoveStockFacadeService moveStockFacadeService,
+            IFacadeService<PartStorageType, int, PartStorageTypeResource, PartStorageTypeResource> partStorageTypeFacadeService)
         {
             this.availableStockFacadeService = availableStockFacadeService;
             this.moveStockFacadeService = moveStockFacadeService;
+            this.partStorageTypeFacadeService = partStorageTypeFacadeService;
             this.Get("/inventory/available-stock", _ => this.GetAvailableStock());
             this.Get("/inventory/move-stock", _ => this.GetApp());
             this.Post("/inventory/move-stock", _ => this.MoveStock());
+            this.Get("/inventory/part-storage-types", _ => this.GetPartStorageTypes());
         }
 
+        private object GetPartStorageTypes()
+        {
+            var resource = this.Bind<SearchRequestResource>();
+            return this.Negotiate.WithModel(this.partStorageTypeFacadeService.Search(resource.SearchTerm));
+        }
 
         private object MoveStock()
         {

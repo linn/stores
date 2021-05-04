@@ -3,6 +3,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Linn.Stores.Domain.LinnApps.Exceptions;
+
     public class MechPartSourceService : IMechPartSourceService
     {
         public IEnumerable<PartDataSheet> GetUpdatedDataSheets(IEnumerable<PartDataSheet> from, IEnumerable<PartDataSheet> to)
@@ -59,6 +61,21 @@
             }
 
             return result + unit + "F";
+        }
+
+        public MechPartSource Create(MechPartSource candidate, IEnumerable<PartDataSheet> dataSheets)
+        {
+            if (candidate.SafetyCritical == "Y" && string.IsNullOrEmpty(candidate.SafetyDataDirectory))
+            {
+                throw new CreatePartException("You must enter a EMC/safety data directory for EMC or safety critical parts");
+            }
+
+            if (candidate.MechanicalOrElectrical == "E" && !dataSheets.Any())
+            {
+                throw new CreatePartException("You must enter at least one datasheet for this part");
+            }
+
+            return candidate;
         }
     }
 }

@@ -65,15 +65,20 @@ import salesOutlets from './salesOutlets';
 import salesAccounts from './salesAccounts';
 import exportRsns from './exportRsns';
 import doWandItem from './doWandItem';
+import transferableStock from './transferableStock';
+import tpkTransferStock from './tpkTransferStock';
 import unallocateConsignment from './unallocateConsignment';
 import unallocateConsignmentLine from './unallocateConsignmentLine';
 import availableStock from './availableStock';
 import doStockMove from './doStockMove';
 import historyStore from './history';
 import reqMoves from './reqMoves';
+import partStorageTypes from './partStorageTypes';
 import exportReturn from './exportReturn';
 import makeIntercompanyInvoices from './makeIntercompanyInvoices';
 import interCompanyInvoices from './interCompanyInvoices';
+import tqmsSummaryByCategoryReport from './tqmsSummaryByCategoryReport';
+import tqmsJobRefs from './tqmsJobRefs';
 import parcels from './parcels/parcels';
 import parcel from './parcels/parcel';
 import suppliersApprovedCarrier from './suppliersApprovedCarrier';
@@ -118,9 +123,10 @@ const rootReducer = history =>
         parcels,
         part,
         partCategories,
-        parts,
         partDataSheetValues,
         partLiveTest,
+        parts,
+        partStorageTypes,
         partTemplates,
         pickItemsAllocation,
         productAnalysisCodes,
@@ -144,7 +150,11 @@ const rootReducer = history =>
         storagePlaceAuditReport,
         suppliers,
         suppliersApprovedCarrier,
+        tpkTransferStock,
         tqmsCategories,
+        tqmsJobRefs,
+        tqmsSummaryByCategoryReport,
+        transferableStock,
         unallocateConsignment,
         unallocateConsignmentLine,
         unitsOfMeasure,

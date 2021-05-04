@@ -44,6 +44,7 @@
                     this.resource.ToLocationId,
                     this.resource.ToPalletNumber,
                     null,
+                    null,
                     this.resource.UserNumber)
                 .Returns(this.moveResult);
 
@@ -66,6 +67,7 @@
                 this.resource.To,
                 this.resource.ToLocationId,
                 this.resource.ToPalletNumber,
+                null,
                 null,
                 this.resource.UserNumber);
         }
