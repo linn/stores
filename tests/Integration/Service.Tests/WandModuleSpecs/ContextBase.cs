@@ -4,6 +4,7 @@
     using System.Security.Claims;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
@@ -36,10 +37,14 @@
                     with.Dependency<IResourceBuilder<IEnumerable<WandConsignment>>>(new WandConsignmentsResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<WandItem>>>(new WandItemsResourceBuilder());
                     with.Dependency<IResourceBuilder<WandResult>>(new WandItemResultResourceBuilder());
+                    with.Dependency<IResourceBuilder<ConsignmentShipfile>>(new ConsignmentShipfileResourceBuilder());
+                    with.Dependency<IResourceBuilder<IEnumerable<ConsignmentShipfile>>>(
+                        new ConsignmentShipfilesResourceBuilder());
                     with.Module<WandModule>();
                     with.ResponseProcessor<WandConsignmentsResponseProcessor>();
                     with.ResponseProcessor<WandItemsResponseProcessor>();
                     with.ResponseProcessor<WandResultResponseProcessor>();
+                    with.ResponseProcessor<ConsignmentShipfilesResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {
