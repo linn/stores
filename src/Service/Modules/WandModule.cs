@@ -12,13 +12,18 @@
     {
         private readonly IWandFacadeService wandFacadeService;
 
-        public WandModule(IWandFacadeService wandFacadeService)
+        private readonly IConsignmentShipfileFacadeService shipfileService;
+
+        public WandModule(IWandFacadeService wandFacadeService, IConsignmentShipfileFacadeService shipfileService)
         {
             this.wandFacadeService = wandFacadeService;
             this.Get("/logistics/wand", _ => this.GetApp());
             this.Get("/logistics/wand/consignments", _ => this.GetConsignments());
             this.Get("/logistics/wand/items", _ => this.GetItems());
             this.Post("/logistics/wand/items", _ => this.WandItem());
+
+            this.shipfileService = shipfileService;
+            this.Get("/logistics/shipfiles", _ => this.GetShipfiles());
         }
 
         private object WandItem()
@@ -41,6 +46,11 @@
         private object GetApp()
         {
             return this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index");
+        }
+
+        private object GetShipfiles()
+        {
+            return this.Negotiate.WithModel(this.shipfileService.GetShipfiles());
         }
     }
 }

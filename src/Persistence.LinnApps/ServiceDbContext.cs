@@ -192,6 +192,10 @@
 
         public DbQuery<TqmsOutstandingLoansByCategory> TqmsOutstandingLoansByCategories { get; set; }
 
+        public DbQuery<ConsignmentShipfile> ConsignmentShipfiles { get; set; }
+
+        public DbQuery<Invoice> Invoices { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -281,6 +285,8 @@
             this.BuildTqmsMaster(builder);
             this.BuildTqmsJobRefs(builder);
             this.QueryTqmsOutstandingLoansByCategories(builder);
+            this.QueryConsignmentShipFiles(builder);
+            this.QueryInvoices(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1468,6 +1474,8 @@
             q.Property(c => c.AddressId).HasColumnName("ADDRESS_ID");
             q.Property(c => c.CountryCode).HasColumnName("COUNTRY");
             q.Property(c => c.SalesAccountId).HasColumnName("SALES_ACCOUNT_ID");
+            q.Property(c => c.DateClosed).HasColumnName("DATE_CLOSED");
+            q.Property(c => c.CustomerName).HasColumnName("CUSTOMER_NAME");
             q.HasOne(c => c.Country).WithMany(y => y.Consignments).HasForeignKey(c => c.CountryCode);
         }
 
@@ -1581,6 +1589,22 @@
             q.Property(t => t.Category).HasColumnName("CATEGORY");
             q.Property(t => t.TotalStoresValue).HasColumnName("TOTAL_STORES_VALUE");
             q.Property(t => t.TotalSalesValue).HasColumnName("TOTAL_SALES_VALUE");
+        }
+
+        private void QueryConsignmentShipFiles(ModelBuilder builder)
+        {
+            var q = builder.Query<ConsignmentShipfile>().ToView("CONSGINMENT_SHIPFILES");
+            q.Property(f => f.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            q.Property(f => f.Message).HasColumnName("MESSAGE");
+            q.HasOne(f => f.Consignment).WithOne(c => c.Shipfile).HasForeignKey("CONSIGNMENT_ID");
+        }
+
+        private void QueryInvoices(ModelBuilder builder)
+        {
+            var q = builder.Query<Invoice>().ToView("INVOICES");
+            q.Property(i => i.DocumentType).HasColumnName("DOCUMENT_TYPE");
+            q.Property(i => i.DocumentNumber).HasColumnName("DOCUMENT_NUMBER");
+            q.HasOne(i => i.Consignment).WithMany(c => c.Invoices).HasForeignKey("CONSIGNMENT_ID");
         }
     }
 }
