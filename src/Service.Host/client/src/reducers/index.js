@@ -79,6 +79,9 @@ import makeIntercompanyInvoices from './makeIntercompanyInvoices';
 import interCompanyInvoices from './interCompanyInvoices';
 import tqmsSummaryByCategoryReport from './tqmsSummaryByCategoryReport';
 import tqmsJobRefs from './tqmsJobRefs';
+import parcels from './parcels/parcels';
+import parcel from './parcels/parcel';
+import suppliersApprovedCarrier from './suppliersApprovedCarrier';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -116,6 +119,8 @@ const rootReducer = history =>
         movePalletToUpper,
         nominal,
         nominalAccounts,
+        parcel,
+        parcels,
         part,
         partCategories,
         partDataSheetValues,
@@ -144,6 +149,7 @@ const rootReducer = history =>
         storagePlaces,
         storagePlaceAuditReport,
         suppliers,
+        suppliersApprovedCarrier,
         tpkTransferStock,
         tqmsCategories,
         tqmsJobRefs,

@@ -2,37 +2,33 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-
     using FluentAssertions;
-
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
-
     using Nancy;
     using Nancy.Testing;
-
     using NSubstitute;
-
     using NUnit.Framework;
 
-    public class WhenSearching : ContextBase
+
+    public class WhenGettingAll : ContextBase
     {
         [SetUp]
         public void SetUp()
         {
             var employeeA = new Employee
-                               {
-                                   Id = 22,
-                                   FullName = "Mr  Employee"
-                               };
+            {
+                Id = 118,
+                FullName = "First Employee"
+            };
             var employeeB = new Employee
-                               {
-                                   Id = 2,
-                                   FullName = "Mrs Employee"
-                               };
+            {
+                Id = 13224,
+                FullName = "Employee numba 2"
+            };
 
-            this.EmployeesService.SearchEmployees(Arg.Any<string>())
+            this.EmployeesService.GetAllEmployees()
                 .Returns(new SuccessResult<IEnumerable<Employee>>(new List<Employee> { employeeA, employeeB }));
 
             this.Response = this.Browser.Get(
@@ -40,7 +36,6 @@
                 with =>
                     {
                         with.Header("Accept", "application/json");
-                        with.Query("searchTerm", "2");
                     }).Result;
         }
 
@@ -53,7 +48,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.EmployeesService.Received().SearchEmployees(Arg.Any<string>());
+            this.EmployeesService.Received().GetAllEmployees();
         }
 
         [Test]
@@ -61,8 +56,8 @@
         {
             var resource = this.Response.Body.DeserializeJson<IEnumerable<EmployeeResource>>().ToList();
             resource.Should().HaveCount(2);
-            resource.Should().Contain(a => a.Id == 22);
-            resource.Should().Contain(a => a.Id == 2);
+            resource.Should().Contain(a => a.Id == 118);
+            resource.Should().Contain(a => a.Id == 13224);
         }
     }
 }

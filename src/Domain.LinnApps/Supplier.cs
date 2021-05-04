@@ -20,5 +20,7 @@
         public IEnumerable<MechPartAlt> MechPartAlts { get; set; }
 
         public IEnumerable<MechPartPurchasingQuote> PurchasingQuotesSupplierOn { get; set; }
+
+        public string ApprovedCarrier { get; set; }
     }
 }

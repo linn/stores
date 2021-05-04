@@ -22,6 +22,8 @@ import WwdReport from '../containers/reports/WwdReport';
 import StoragePlaceAuditReportOptions from '../containers/reports/StoragePlaceAuditReportOptions';
 import StoragePlaceAuditReport from '../containers/reports/StoragePlaceAuditReport';
 import NotFoundPage from './NotFoundPage';
+import Parcel from '../containers/parcels/Parcel';
+import Parcels from '../containers/parcels/Parcels';
 import MechPartSource from '../containers/parts/mechPartSource/MechPartSource';
 import WorkstationTopUpStatus from '../containers/workstations/WorkstationTopUpStatus';
 import DeptStockUtility from '../containers/DeptStockUtility/DeptStockUtility';
@@ -126,6 +128,15 @@ const Root = ({ store }) => (
                                         path="/inventory/dept-stock-parts"
                                         component={DeptStockParts}
                                     />
+
+                                    <Route exact path="/logistics/parcels" component={Parcels} />
+                                    <Route
+                                        exact
+                                        path="/logistics/parcels/create"
+                                        component={Parcel}
+                                    />
+                                    <Route exact path="/logistics/parcels/:id" component={Parcel} />
+
                                     <Route
                                         exact
                                         path="/inventory/reports/storage-place-audit/report"
