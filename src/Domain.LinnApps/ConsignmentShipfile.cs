@@ -2,6 +2,8 @@
 {
     public class ConsignmentShipfile
     {
+        public int Id { get; set; }
+
         public int ConsignmentId { get; set; }
 
         public Consignment Consignment { get; set; }

@@ -1595,7 +1595,8 @@
         private void QueryConsignmentShipFiles(ModelBuilder builder)
         {
             var q = builder.Entity<ConsignmentShipfile>().ToTable("CONSIGNMENT_SHIPFILES");
-            q.HasKey(f => f.ConsignmentId);
+            q.Property(f => f.Id).HasColumnName("CONSH_ID");
+            q.HasKey(f => f.Id);
             q.Property(f => f.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
             q.Property(f => f.Message).HasColumnName("MESSAGE");
             q.HasOne(f => f.Consignment).WithOne(c => c.Shipfile).HasForeignKey<ConsignmentShipfile>(s => s.ConsignmentId);

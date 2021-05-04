@@ -8,13 +8,13 @@ import * as processTypes from '../processTypes';
 const mapStateToProps = state => ({
     consignmentShipfiles: consignmentShipfilesSelectors.getItems(state),
     consignmentShipfilesLoading: consignmentShipfilesSelectors.getLoading(state),
-    itemError: getItemError(state, processTypes.consignmentShipfiles.item),
-    shipfilesSent: consignmentShipfilesSelectors.getData(state)?.transferred
+    //itemError: getItemError(state, processTypes.consignmentShipfiles.item),
+    //shipfilesSent: consignmentShipfilesSelectors.getData(state)?.transferred
 });
 
 const initialise = () => dispatch => {
     dispatch(consignmentShipfilesActions.fetch());
-    consignmentShipfilesActions.clearErrorsForItem();
+    //consignmentShipfilesActions.clearErrorsForItem();
 };
 
 const mapDispatchToProps = {
