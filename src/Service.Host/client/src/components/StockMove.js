@@ -41,12 +41,14 @@ function StockMove({
     storageLocations,
     storageLocationsLoading,
     fetchStorageLocations,
-    clearStorageLocationsSearch
+    clearStorageLocationsSearch,
+    fetchPartsLookup
 }) {
     const [moveDetails, setMoveDetails] = useState({ userNumber });
     const [selectedRow, setSelectedRow] = useState(null);
     const [selectedPartStorageRow, setSelectedPartStorageRow] = useState(null);
     const [alert, setAlert] = useState({ message: ' ', visible: false });
+    const [partDescription, setPartDescription] = useState(null);
 
     const toInput = useRef(null);
     const partNumberInput = useRef(null);
@@ -61,11 +63,18 @@ function StockMove({
             const reqNumber = reqHref.split('/').pop();
             fetchReqMoves(reqNumber);
             setMoveDetails({ reqNumber });
+            setPartDescription(null);
             setSelectedRow(null);
             setSelectedPartStorageRow(null);
             partNumberInput.current.focus();
         }
     }, [moveResult, fetchReqMoves]);
+
+    useEffect(() => {
+        if (parts && parts.length === 1) {
+            setPartDescription(parts[0].description);
+        }
+    }, [parts, setPartDescription]);
 
     const partResults = () => {
         return parts?.map(item => ({
@@ -187,7 +196,9 @@ function StockMove({
     };
 
     const handleOnSelect = selectedPart => {
-        setMoveDetails({ partNumber: selectedPart.partNumber, ...moveDetails });
+        setMoveDetails({ ...moveDetails, partNumber: selectedPart.partNumber });
+
+        setPartDescription(selectedPart.description);
         fetchAvailableStock(selectedPart.partNumber);
         fetchPartStorageTypes(selectedPart.partNumber);
         clearMoveResult();
@@ -230,6 +241,7 @@ function StockMove({
             fetchPartStorageTypes(moveDetails.partNumber);
             clearMoveResult();
             clearMoveError();
+            fetchPartsLookup(moveDetails.partNumber, '&exactOnly=true');
         }
     };
 
@@ -399,7 +411,14 @@ function StockMove({
                     />
                 </Grid>
                 <Grid item xs={1} />
-                <Grid item xs={3} />
+                <Grid item xs={3}>
+                    <InputField
+                        value={partDescription}
+                        label="Part Description"
+                        disabled
+                        propertyName="partDescription"
+                    />
+                </Grid>
                 <Grid item xs={3}>
                     <InputField
                         value={moveDetails.to}
@@ -493,6 +512,7 @@ StockMove.propTypes = {
     ).isRequired,
     partsLoading: PropTypes.bool,
     fetchParts: PropTypes.func.isRequired,
+    fetchPartsLookup: PropTypes.func.isRequired,
     clearPartsSearch: PropTypes.func.isRequired,
     availableStock: PropTypes.arrayOf(PropTypes.shape({})),
     availableStockLoading: PropTypes.bool,

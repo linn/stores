@@ -40,6 +40,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     fetchParts: partsActions.search,
+    fetchPartsLookup: partsActions.searchWithOptions,
     clearPartsSearch: partsActions.clearSearch,
     fetchAvailableStock: availableStockActions.search,
     clearAvailableStock: availableStockActions.clearSearch,
