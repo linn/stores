@@ -1,8 +1,5 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
-    using System;
-    using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
@@ -50,33 +47,19 @@
         {
             var resource = this.Bind<ParcelResource>();
 
-            try
-            {
-                var result = this.parcelsFacadeService.Add(resource);
-                return this.Negotiate.WithModel(result).WithMediaRangeModel("text/html", ApplicationSettings.Get);
-            }
-            catch (Exception e)
-            {
-                return new ServerFailureResult<Parcel>($"Error when creating - ${(e.InnerException != null ? e.InnerException.Message : e.Message)}");
-            }
+            var result = this.parcelsFacadeService.Add(resource);
+
+            return this.Negotiate.WithModel(result).WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
 
         private object UpdateParcel(int id)
         {
             var resource = this.Bind<ParcelResource>();
+            
+            var result = this.parcelsFacadeService.Update(id, resource);
 
-            try
-            {
-                var result = this.parcelsFacadeService.Update(id, resource);
-
-                return this.Negotiate.WithModel(result)
+            return this.Negotiate.WithModel(result)
                     .WithMediaRangeModel("text/html", ApplicationSettings.Get);
-
-            }
-            catch (Exception e)
-            {
-                return new ServerFailureResult<Parcel>($"Error when updating - ${(e.InnerException != null ? e.InnerException.Message : e.Message)}");
-            }
         }
     }
 }
