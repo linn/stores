@@ -11,6 +11,7 @@ import {
 import PropTypes from 'prop-types';
 import { DataGrid } from '@material-ui/data-grid';
 import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
 import moment from 'moment';
 import Page from '../containers/Page';
 
@@ -412,12 +413,16 @@ function StockMove({
                 </Grid>
                 <Grid item xs={1} />
                 <Grid item xs={3}>
-                    <InputField
-                        value={partDescription}
-                        label="Part Description"
-                        disabled
-                        propertyName="partDescription"
-                    />
+                    <Tooltip title={partDescription}>
+                        <span>
+                            <InputField
+                                value={partDescription}
+                                label="Part Description"
+                                disabled
+                                propertyName="partDescription"
+                            />
+                        </span>
+                    </Tooltip>
                 </Grid>
                 <Grid item xs={3}>
                     <InputField
