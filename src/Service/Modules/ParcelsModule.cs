@@ -17,8 +17,8 @@
         public ParcelsModule(IParcelService parcelsFacadeService)
         {
             this.parcelsFacadeService = parcelsFacadeService;
-            this.Get("/inventory/parcels/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
-            this.Get("/inventory/parcels", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
+            this.Get("/inventory/parcels/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithMediaRangeModel("text/html", ApplicationSettings.Get).WithView("Index"));
+            //this.Get("/inventory/parcels", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/inventory/parcels/{id}", parameters => this.GetParcel(parameters.id));
             this.Put("/inventory/parcels/{id}", parameters => this.UpdateParcel(parameters.id));
             this.Get("/inventory/parcels", _ => this.GetParcels());
@@ -43,7 +43,8 @@
 
             return this.Negotiate
                 .WithModel(results)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
 
         private object AddParcel()
