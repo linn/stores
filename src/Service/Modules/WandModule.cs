@@ -1,6 +1,9 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System.Collections.Generic;
+
     using Linn.Stores.Facade.Services;
+    using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Resources.Wand;
     using Linn.Stores.Service.Models;
@@ -50,6 +53,7 @@
 
         private object GetShipfiles()
         {
+            this.shipfileService.SendEmails(new List<ConsignmentShipfileResource>());
             return this.Negotiate.WithModel(this.shipfileService.GetShipfiles());
         }
     }

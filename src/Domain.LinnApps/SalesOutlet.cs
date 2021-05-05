@@ -34,5 +34,13 @@
         public IEnumerable<SosAllocHead> SosAllocHeads { get; set; }
 
         public IEnumerable<ExportReturn> ExportReturns { get; set; } 
+
+        public string SendShipfile { get; set; }
+
+        public int? OutletAddressId { get; set; }
+        
+        public int? OrderContactId { get; set; }
+         
+        public IEnumerable<SalesOrder> SalesOrders { get; set; }
     }
 }

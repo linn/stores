@@ -7,6 +7,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class SalesOrderRepository : IQueryRepository<SalesOrder>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -23,7 +25,10 @@
 
         public IQueryable<SalesOrder> FilterBy(Expression<Func<SalesOrder, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.SalesOrders.AsNoTracking()
+                .Where(expression)
+                .Include(o => o.ConsignmentItems).AsNoTracking()
+                .Include(o => o.SalesOutlet).AsNoTracking();
         }
 
         public IQueryable<SalesOrder> FindAll()

@@ -178,7 +178,7 @@
 
         public DbSet<SalesArticle> SalesArticles { get; set; }
 
-        public DbQuery<SalesOrder> SalesOrders { get; set; }
+        public DbSet<SalesOrder> SalesOrders { get; set; }
 
         public DbQuery<SalesOrderDetail> SalesOrderDetails { get; set; }
 
@@ -195,6 +195,8 @@
         public DbSet<ConsignmentShipfile> ConsignmentShipfiles { get; set; }
 
         public DbSet<Invoice> Invoices { get; set; }
+
+        public DbSet<ConsignmentItem> ConsignmentItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -287,6 +289,7 @@
             this.QueryTqmsOutstandingLoansByCategories(builder);
             this.QueryConsignmentShipFiles(builder);
             this.QueryInvoices(builder);
+            this.BuildConsignmentItems(builder);
             base.OnModelCreating(builder);
         }
 
@@ -893,6 +896,10 @@
             table.Property(s => s.CountryCode).HasColumnName("COUNTRY_CODE").HasMaxLength(2);
             table.Property(s => s.CountryName).HasColumnName("COUNTRY_NAME").HasMaxLength(50);
             table.Property(s => s.DateInvalid).HasColumnName("DATE_INVALID");
+            table.Property(s => s.SendShipfile).HasColumnName("SEND_SHIPFILE").HasMaxLength(1);
+            table.Property(s => s.OutletAddressId).HasColumnName("OUTLET_ADDRESS");
+            table.Property(s => s.OrderContactId).HasColumnName("ORDER_CONTACT_ID");
+            table.HasMany(o => o.SalesOrders).WithOne(r => r.SalesOutlet).HasForeignKey(o => new { o.AccountId, o.OutletNumber });
         }
 
         private void BuildParcels(ModelBuilder builder)
@@ -1482,9 +1489,12 @@
 
         private void QuerySalesOrders(ModelBuilder builder)
         {
-            var q = builder.Query<SalesOrder>().ToView("SALES_ORDERS");
+            var q = builder.Entity<SalesOrder>().ToTable("SALES_ORDERS");
+            q.HasKey(o => o.OrderNumber);
             q.Property(o => o.OrderNumber).HasColumnName("ORDER_NUMBER");
             q.Property(o => o.CurrencyCode).HasColumnName("CURRENCY_CODE");
+            q.Property(o => o.OutletNumber).HasColumnName("OUTLET_NUMBER");
+            q.Property(o => o.AccountId).HasColumnName("ACCOUNT_ID");
         }
 
         private void QuerySalesOrderDetails(ModelBuilder builder)
@@ -1494,6 +1504,7 @@
             q.Property(d => d.OrderNumber).HasColumnName("ORDER_NUMBER");
             q.Property(d => d.NettTotal).HasColumnName("NETT_TOTAL");
         }
+
         private void BuildExportReturns(ModelBuilder builder)
         {
             var q = builder.Entity<ExportReturn>().ToTable("EXPORT_RETURNS");
@@ -1610,6 +1621,17 @@
             q.Property(i => i.DocumentNumber).HasColumnName("DOCUMENT_NUMBER");
             q.Property(i => i.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
             q.HasOne(i => i.Consignment).WithMany(c => c.Invoices).HasForeignKey(i => i.ConsignmentId);
+        }
+
+        private void BuildConsignmentItems(ModelBuilder builder)
+        {   
+            var entity = builder.Entity<ConsignmentItem>().ToTable("CONSIGNMENT_ITEMS");
+            entity.ToTable("CONSIGNMENT_ITEMS");
+            entity.HasKey(i => new { i.ItemNumber, i.ConsignmentId });
+            entity.Property(i => i.ItemNumber).HasColumnName("ITEM_NO");
+            entity.Property(i => i.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            entity.Property(i => i.OrderNumber).HasColumnName("ORDER_NUMBER");
+            entity.HasOne(i => i.SalesOrder).WithMany(o => o.ConsignmentItems).HasForeignKey(i => i.OrderNumber);
         }
     }
 }
