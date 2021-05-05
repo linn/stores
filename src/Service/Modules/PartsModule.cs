@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using Linn.Common.Authorisation;
@@ -132,9 +133,19 @@
         private object GetParts()
         {
             var resource = this.Bind<SearchRequestResource>();
-            var results = string.IsNullOrEmpty(resource.SearchTerm)
-                              ? this.partsFacadeService.GetAll()
+            
+            IResult<IEnumerable<Part>> results;
+            if (!string.IsNullOrEmpty(resource.SearchTerm))
+            {
+                results = resource.ExactOnly
+                              ? this.partsFacadeService.GetPartByPartNumber(resource.SearchTerm)
                               : this.partsFacadeService.Search(resource.SearchTerm);
+            }
+            else
+            {
+                results = this.partsFacadeService.GetAll();
+            }
+
             return this.Negotiate
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
