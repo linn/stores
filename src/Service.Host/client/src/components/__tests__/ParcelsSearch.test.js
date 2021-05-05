@@ -25,7 +25,7 @@ const items = [
         supplierInvoiceNo: '9792',
         consignmentNo: '3879 8707 205',
         comments: 'TVS + PACKING MATERIAL',
-        links: { href: '/inventory/parcels/52828', rel: 'self' }
+        links: { href: '/logistics/parcels/52828', rel: 'self' }
     },
     {
         parcelNumber: 11111,
@@ -35,7 +35,7 @@ const items = [
         supplierInvoiceNo: '4444',
         consignmentNo: '5555 5555 555',
         comments: 'PO738401',
-        links: { href: '/inventory/parcels/11111', rel: 'self' }
+        links: { href: '/logistics/parcels/11111', rel: 'self' }
     }
 ];
 

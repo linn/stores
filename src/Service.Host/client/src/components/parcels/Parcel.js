@@ -195,7 +195,7 @@ function Parcel({
     };
 
     const handleBackClick = () => {
-        history.push('/inventory/parcels');
+        history.push('/logistics/parcels');
     };
 
     const handleFieldChange = (propertyName, newValue) => {

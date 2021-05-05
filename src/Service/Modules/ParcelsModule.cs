@@ -17,11 +17,11 @@
         public ParcelsModule(IParcelService parcelsFacadeService)
         {
             this.parcelsFacadeService = parcelsFacadeService;
-            this.Get("/inventory/parcels/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
-            this.Get("/inventory/parcels/{id}", parameters => this.GetParcel(parameters.id));
-            this.Put("/inventory/parcels/{id}", parameters => this.UpdateParcel(parameters.id));
-            this.Get("/inventory/parcels", _ => this.GetParcels());
-            this.Post("/inventory/parcels", _ => this.AddParcel());
+            this.Get("/logistics/parcels/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
+            this.Get("/logistics/parcels/{id}", parameters => this.GetParcel(parameters.id));
+            this.Put("/logistics/parcels/{id}", parameters => this.UpdateParcel(parameters.id));
+            this.Get("/logistics/parcels", _ => this.GetParcels());
+            this.Post("/logistics/parcels", _ => this.AddParcel());
         }
 
         private object GetParcel(int id)

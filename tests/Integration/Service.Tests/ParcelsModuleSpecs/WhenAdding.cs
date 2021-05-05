@@ -51,7 +51,7 @@
 
 
             this.Response = this.Browser.Post(
-                "/inventory/parcels",
+                "/logistics/parcels",
                 with =>
                 {
                     with.Header("Accept", "application/json");
