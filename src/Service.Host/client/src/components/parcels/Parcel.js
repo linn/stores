@@ -236,9 +236,7 @@ function Parcel({
                     {itemError && (
                         <Grid item xs={12}>
                             <ErrorCard
-                                errorMessage={
-                                    itemError?.details?.errors?.[0] || itemError.statusText
-                                }
+                                errorMessage={itemError?.details?.message || itemError.statusText}
                             />
                         </Grid>
                     )}

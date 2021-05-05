@@ -15,7 +15,6 @@
         {
             this.parcelsFacadeService = parcelsFacadeService;
             this.Get("/logistics/parcels/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
-            this.Get("/logistics/parcels", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/logistics/parcels/{id}", parameters => this.GetParcel(parameters.id));
             this.Put("/logistics/parcels/{id}", parameters => this.UpdateParcel(parameters.id));
             this.Get("/logistics/parcels", _ => this.GetParcels());
@@ -40,7 +39,8 @@
 
             return this.Negotiate
                 .WithModel(results)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
 
         private object AddParcel()
@@ -55,11 +55,11 @@
         private object UpdateParcel(int id)
         {
             var resource = this.Bind<ParcelResource>();
-
+            
             var result = this.parcelsFacadeService.Update(id, resource);
 
             return this.Negotiate.WithModel(result)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+                    .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
     }
 }
