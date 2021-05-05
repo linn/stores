@@ -13,6 +13,8 @@
 
     public class PartFacadeService : FacadeService<Part, int, PartResource, PartResource>, IPartsFacadeService
     {
+        private readonly IRepository<Part, int> partRepository;
+
         private readonly IRepository<ParetoClass, string> paretoClassRepository;
 
         private readonly IRepository<AssemblyTechnology, string> assemblyTechnologyRepository;
@@ -36,7 +38,7 @@
         private readonly IPartService partService;
 
         public PartFacadeService(
-            IRepository<Part, int> repository,
+            IRepository<Part, int> partRepository,
             IRepository<ParetoClass, string> paretoClassRepository,
             IQueryRepository<ProductAnalysisCode> productAnalysisCodeRepository,
             IQueryRepository<AccountingCompany> accountingCompanyRepository,
@@ -49,8 +51,9 @@
             IPartService partService,
             IDatabaseService databaseService,
             ITransactionManager transactionManager)
-            : base(repository, transactionManager)
+            : base(partRepository, transactionManager)
         {
+            this.partRepository = partRepository;
             this.paretoClassRepository = paretoClassRepository;
             this.productAnalysisCodeRepository = productAnalysisCodeRepository;
             this.accountingCompanyRepository = accountingCompanyRepository;
@@ -80,6 +83,11 @@
                         PdfFilePath = s.PdfFilePath,
                         Sequence = s.Sequence
                     }));
+        }
+
+        public IResult<IEnumerable<Part>> GetPartByPartNumber(string partNumber)
+        {
+            return new SuccessResult<IEnumerable<Part>>(new List<Part> { this.partRepository.FindBy(a => a.PartNumber == partNumber.ToUpper()) });
         }
 
         protected override Part CreateFromResource(PartResource resource)
