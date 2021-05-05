@@ -31,7 +31,6 @@ function Parcel({
     setEditStatus,
     setSnackbarVisible,
     employees,
-    privileges,
     suppliers,
     suppliersSearchResults,
     suppliersSearchLoading,
@@ -480,7 +479,7 @@ Parcel.propTypes = {
     itemError: PropTypes.shape({
         status: PropTypes.number,
         statusText: PropTypes.string,
-        details: PropTypes.shape({ errors: PropTypes.shape({}) }),
+        details: PropTypes.shape({ errors: PropTypes.shape({}), message: PropTypes.string }),
         item: PropTypes.string
     }),
     itemId: PropTypes.string,
@@ -511,7 +510,6 @@ Parcel.propTypes = {
     carriersSearchLoading: PropTypes.bool,
     searchCarriers: PropTypes.func.isRequired,
     clearCarriersSearch: PropTypes.func.isRequired,
-    privileges: PropTypes.arrayOf(PropTypes.string),
     userNumber: PropTypes.number.isRequired,
     suppliers: PropTypes.arrayOf(
         PropTypes.shape({
@@ -548,7 +546,6 @@ Parcel.defaultProps = {
     carriersSearchResults: [{ id: -1, name: '', description: '' }],
     suppliersSearchResults: [{ id: -1, name: '', description: '' }],
     suppliers: [{}],
-    privileges: null,
     carriersSearchLoading: false,
     suppliersSearchLoading: false
 };

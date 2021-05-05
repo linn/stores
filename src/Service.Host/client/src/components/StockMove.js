@@ -419,6 +419,7 @@ function StockMove({
                                 value={partDescription}
                                 label="Part Description"
                                 disabled
+                                fullWidth
                                 propertyName="partDescription"
                             />
                         </span>
