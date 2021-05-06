@@ -1,15 +1,20 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.Linq;
 
     using Linn.Common.Persistence;
 
-    using MigraDoc.DocumentObjectModel;
-    using MigraDoc.Rendering;
+    using MigraDocCore;
+    using MigraDocCore.DocumentObjectModel;
+    using MigraDocCore.Rendering;
 
-    using PdfSharp.Drawing;
-    using PdfSharp.Pdf;
+    using PdfSharpCore.Drawing;
+    using PdfSharpCore.Pdf;
+
+    using Document = System.Reflection.Metadata.Document;
+    using TextFormat = MimeKit.Text.TextFormat;
 
     public class ConsignmentShipfileService : IConsignmentShipfileService
     {
@@ -90,18 +95,18 @@
             gfx.MUH = PdfFontEncoding.Unicode;
 
             // You always need a MigraDoc document for rendering.
-            Document doc = new Document();
-            Section sec = doc.AddSection();
+            var doc = new MigraDocCore.DocumentObjectModel.Document();
+            var sec = doc.AddSection();
             // Add a single paragraph with some text and format information.
             Paragraph para = sec.AddParagraph();
             para.Format.Alignment = ParagraphAlignment.Justify;
             para.Format.Font.Name = "Times New Roman";
             para.Format.Font.Size = 12;
-            para.Format.Font.Color = MigraDoc.DocumentObjectModel.Colors.DarkGray;
-            para.Format.Font.Color = MigraDoc.DocumentObjectModel.Colors.DarkGray;
+            para.Format.Font.Color = MigraDocCore.DocumentObjectModel.Colors.DarkGray;
+            para.Format.Font.Color = MigraDocCore.DocumentObjectModel.Colors.DarkGray;
             para.AddText("Duisism odigna acipsum delesenisl ");
-            para.AddFormattedText("ullum in velenit", TextFormat.Bold);
-            para.AddText(" ipit iurero dolum zzriliquisis nit wis dolore vel et nonsequipit, velendigna " +
+            para.AddFormattedText("ullum in velenit");
+            para.AddText("ipit iurero dolum zzriliquisis nit wis dolore vel et nonsequipit, velendigna " +
               "auguercilit lor se dipisl duismod tatem zzrit at laore magna feummod oloborting ea con vel " +
               "essit augiati onsequat luptat nos diatum vel ullum illummy nonsent nit ipis et nonsequis " +
               "niation utpat. Odolobor augait et non etueril landre min ut ulla feugiam commodo lortie ex " +
@@ -110,7 +115,7 @@
             para.Format.Borders.Color = Colors.Gold;
 
             // Create a renderer and prepare (=layout) the document
-            MigraDoc.Rendering.DocumentRenderer docRenderer = new DocumentRenderer(doc);
+            MigraDocCore.Rendering.DocumentRenderer docRenderer = new DocumentRenderer(doc);
             docRenderer.PrepareDocument();
 
             // Render the paragraph. You can render tables or shapes the same way.

@@ -8,8 +8,7 @@
 
     using MimeKit;
 
-    using PdfSharp.Drawing;
-    using PdfSharp.Pdf;
+    using PdfSharpCore.Pdf;
 
     public class EmailService : IEmailService
     {

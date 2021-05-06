@@ -1,6 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
-    using PdfSharp.Pdf;
+    using PdfSharpCore.Pdf;
 
     public interface IEmailService
     {
