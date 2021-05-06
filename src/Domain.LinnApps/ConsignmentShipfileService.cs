@@ -1,20 +1,15 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
     using System.Collections.Generic;
-    using System.Collections.Specialized;
     using System.Linq;
 
     using Linn.Common.Persistence;
 
-    using MigraDocCore;
     using MigraDocCore.DocumentObjectModel;
     using MigraDocCore.Rendering;
 
     using PdfSharpCore.Drawing;
     using PdfSharpCore.Pdf;
-
-    using Document = System.Reflection.Metadata.Document;
-    using TextFormat = MimeKit.Text.TextFormat;
 
     public class ConsignmentShipfileService : IConsignmentShipfileService
     {
@@ -91,19 +86,19 @@
 
             PdfPage page = document.AddPage();
             XGraphics gfx = XGraphics.FromPdfPage(page);
-            // HACK²
             gfx.MUH = PdfFontEncoding.Unicode;
 
             // You always need a MigraDoc document for rendering.
             var doc = new MigraDocCore.DocumentObjectModel.Document();
             var sec = doc.AddSection();
+
             // Add a single paragraph with some text and format information.
             Paragraph para = sec.AddParagraph();
             para.Format.Alignment = ParagraphAlignment.Justify;
             para.Format.Font.Name = "Times New Roman";
             para.Format.Font.Size = 12;
-            para.Format.Font.Color = MigraDocCore.DocumentObjectModel.Colors.DarkGray;
-            para.Format.Font.Color = MigraDocCore.DocumentObjectModel.Colors.DarkGray;
+            para.Format.Font.Color = Colors.DarkGray;
+            para.Format.Font.Color = Colors.DarkGray;
             para.AddText("Duisism odigna acipsum delesenisl ");
             para.AddFormattedText("ullum in velenit");
             para.AddText("ipit iurero dolum zzriliquisis nit wis dolore vel et nonsequipit, velendigna " +
@@ -115,7 +110,7 @@
             para.Format.Borders.Color = Colors.Gold;
 
             // Create a renderer and prepare (=layout) the document
-            MigraDocCore.Rendering.DocumentRenderer docRenderer = new DocumentRenderer(doc);
+            DocumentRenderer docRenderer = new DocumentRenderer(doc);
             docRenderer.PrepareDocument();
 
             // Render the paragraph. You can render tables or shapes the same way.
