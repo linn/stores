@@ -14,7 +14,7 @@
     <PackageReference Include="Linn.Common.Reporting" Version="1.4.0" />
     <PackageReference Include="MailKit" Version="2.11.1" />
     <PackageReference Include="PDFsharp-MigraDoc" Version="1.50.5147" />
-    <PackageReference Include="PdfSharpCore" Version="1.2.16" />
+    <PackageReference Include="PdfSharpCore.PdfSharp" Version="1.50.0-beta5-5" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
   </ItemGroup>
