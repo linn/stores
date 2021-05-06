@@ -26,6 +26,10 @@ export const partLiveTestActionTypes = makeActionTypes(itemTypes.partLiveTest.ac
 
 export const suppliersActionTypes = makeActionTypes(itemTypes.suppliers.actionType);
 
+export const suppliersApprovedCarrierActionTypes = makeActionTypes(
+    itemTypes.suppliersApprovedCarrier.actionType
+);
+
 export const sernosSequencesActionTypes = makeActionTypes(itemTypes.sernosSequences.actionType);
 
 export const unitsOfMeasureActionTypes = makeActionTypes(itemTypes.unitsOfMeasure.actionType);
@@ -202,3 +206,7 @@ export const tqmsJobRefsActionTypes = makeActionTypes(itemTypes.tqmsJobRefs.acti
 export const consignmentShipfilesActionTypes = makeActionTypes(
     itemTypes.consignmentShipfiles.actionType
 );
+
+export const parcelActionTypes = makeActionTypes(itemTypes.parcel.actionType);
+
+export const parcelsActionTypes = makeActionTypes(itemTypes.parcels.actionType, false);

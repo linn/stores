@@ -6,6 +6,7 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.ResourceBuilders;
+    using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
@@ -15,15 +16,15 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IFacadeService<Parcel, int, ParcelResource, ParcelResource> ParcelsService { get; private set; }
+        protected IParcelService ParcelsFacadeService { get; private set; }
 
         protected IRepository<Parcel, int> ParcelRepository { get; private set; }
 
         [SetUp]
         public void EstablishContext()
         {
-            this.ParcelsService = Substitute
-                .For<IFacadeService<Parcel, int, ParcelResource, ParcelResource>>();
+            this.ParcelsFacadeService = Substitute
+                .For<IParcelService>();
 
             this.ParcelRepository = Substitute
                 .For<IRepository<Parcel, int>>();
@@ -31,7 +32,7 @@
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                 {
-                    with.Dependency(this.ParcelsService);
+                    with.Dependency(this.ParcelsFacadeService);
                     with.Dependency(this.ParcelRepository);
                     with.Dependency<IResourceBuilder<Parcel>>(new ParcelResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<Parcel>>>(new ParcelsResourceBuilder());

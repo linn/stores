@@ -85,9 +85,7 @@
         public DbQuery<AuditLocation> AuditLocations { get; set; }
 
         public DbSet<SosAllocHead> SosAllocHeads { get; set; }
-
-        public DbSet<Carrier> Carriers { get; set; }
-
+        
         public DbSet<Parcel> Parcels { get; set; }
 
         public DbSet<SosAllocDetail> SosAllocDetails { get; set; }
@@ -233,7 +231,6 @@
             this.QueryStoresBudgets(builder);
             this.QueryAuditLocations(builder);
             this.BuildSosAllocHeads(builder);
-            this.BuildCarriers(builder);
             this.BuildParcels(builder);
             this.BuildMechPartAlts(builder);
             this.BuildManufacturers(builder);
@@ -353,6 +350,7 @@
             q.Property(e => e.Name).HasColumnName("SUPPLIER_NAME").HasMaxLength(50);
             q.Property(e => e.CountryCode).HasColumnName("COUNTRY");
             q.Property(e => e.DateClosed).HasColumnName("DATE_CLOSED");
+            q.Property(s => s.ApprovedCarrier).HasColumnName("APPROVED_CARRIER");
         }
 
         private void BuildParts(ModelBuilder builder)
@@ -854,16 +852,6 @@
             table.Property(s => s.OutletHoldStatus).HasColumnName("OUTLET_HOLD_STATUS").HasMaxLength(200);
         }
 
-        private void BuildCarriers(ModelBuilder builder)
-        {
-            var e = builder.Entity<Carrier>().ToTable("CARRIERS");
-            e.HasKey(c => c.CarrierCode);
-            e.Property(c => c.CarrierCode).HasColumnName("CARRIER_CODE").HasMaxLength(10);
-            e.Property(c => c.Name).HasColumnName("NAME");
-            e.Property(c => c.OrganisationId).HasColumnName("ORG_ID");
-            e.Property(c => c.DateInvalid).HasColumnName("DATE_INVALID");
-        }
-
         private void BuildSosAllocDetails(ModelBuilder builder)
         {
             var table = builder.Entity<SosAllocDetail>().ToTable("SOS_ALLOC_DETAILS");
@@ -912,16 +900,17 @@
             e.Property(c => c.ParcelNumber).HasColumnName("PARCEL_NUMBER");
             e.Property(c => c.DateCreated).HasColumnName("DATE_CREATED");
             e.Property(c => c.DateReceived).HasColumnName("DATE_RECEIVED");
-            e.Property(c => c.SupplierInvoiceNo).HasColumnName("SUPPLIER_INV_NUMBERS");
-            e.Property(c => c.ConsignmentNo).HasColumnName("CONSIGNMENT_NUMBER");
+            e.Property(c => c.SupplierInvoiceNo).HasColumnName("SUPPLIER_INV_NUMBERS").HasMaxLength(500);
+            e.Property(c => c.ConsignmentNo).HasColumnName("CONSIGNMENT_NUMBER").HasMaxLength(20);
+            e.Property(c => c.ImportBookNo).HasColumnName("IMPORT_BOOK_NUM").HasMaxLength(8);
             e.Property(c => c.Weight).HasColumnName("WEIGHT");
             e.Property(c => c.CheckedById).HasColumnName("CHECKED_BY");
             e.Property(c => c.SupplierId).HasColumnName("SUPPLIER_ID");
-            e.Property(c => c.Comments).HasColumnName("COMMENTS");
+            e.Property(c => c.Comments).HasColumnName("COMMENTS").HasMaxLength(2000);
             e.Property(c => c.CarrierId).HasColumnName("CARRIER");
             e.Property(c => c.PalletCount).HasColumnName("NUMBER_OF_PALLETS");
             e.Property(c => c.CartonCount).HasColumnName("NUMBER_OF_CARTONS");
-            e.Property(c => c.DateCancelled).HasColumnName("DATE_CANCELLED");
+            e.Property(c => c.DateCancelled).HasColumnName("DATE_CANCELLED").HasMaxLength(2000);
             e.Property(c => c.CancellationReason).HasColumnName("REASON_CANCELLED");
             e.Property(c => c.CancelledBy).HasColumnName("CANCELLED_BY");
         }

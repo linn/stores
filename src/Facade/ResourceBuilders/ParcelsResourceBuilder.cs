@@ -18,9 +18,9 @@
                 .Select(a => this.parcelResourceBuilder.Build(a));
         }
 
-        object IResourceBuilder<IEnumerable<Parcel>>.Build(IEnumerable<Parcel> parts) => this.Build(parts);
+        object IResourceBuilder<IEnumerable<Parcel>>.Build(IEnumerable<Parcel> parcels) => this.Build(parcels);
 
-        public string GetLocation(IEnumerable<Parcel> parts)
+        public string GetLocation(IEnumerable<Parcel> parcels)
         {
             throw new NotImplementedException();
         }

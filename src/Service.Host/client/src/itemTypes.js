@@ -11,6 +11,11 @@ export const sernosSequences = new ItemType(
 );
 
 export const suppliers = new ItemType('suppliers', 'SUPPLIERS', '/inventory/suppliers');
+export const suppliersApprovedCarrier = new ItemType(
+    'suppliersApprovedCarrier',
+    'SUPPLIERS_APPROVED_CARRER',
+    '/inventory/suppliers-approved-carrier'
+);
 
 export const partCategories = new ItemType(
     'partCategories',
@@ -282,3 +287,7 @@ export const consignmentShipfiles = new ItemType(
     'CONSIGNMENT_SHIPFILES',
     '/logistics/shipfiles'
 );
+
+export const parcel = new ItemType('parcel', 'PARCEL', '/logistics/parcels');
+
+export const parcels = new ItemType('parcels', 'PARCELS', '/logistics/parcels');

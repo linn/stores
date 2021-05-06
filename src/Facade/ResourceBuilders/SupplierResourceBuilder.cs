@@ -15,7 +15,8 @@
                        {
                            Id = supplier.Id,
                            Name = supplier.Name,
-                           CountryCode = supplier.CountryCode
+                           CountryCode = supplier.CountryCode,
+                           ApprovedCarrier = supplier.ApprovedCarrier
                        };
         }
 
