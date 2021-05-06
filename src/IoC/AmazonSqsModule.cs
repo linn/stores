@@ -10,10 +10,10 @@
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<AmazonSQSClient>()
-                .As<IAmazonSQS>()
-                .UsingConstructor(typeof(AWSCredentials), typeof(RegionEndpoint))
-                .SingleInstance();
+            // builder.RegisterType<AmazonSQSClient>()
+            //     .As<IAmazonSQS>()
+            //     .UsingConstructor(typeof(AWSCredentials), typeof(RegionEndpoint))
+            //     .SingleInstance();
         }
     }
 }
