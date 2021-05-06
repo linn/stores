@@ -5,5 +5,7 @@
     public interface IConsignmentShipfileService
     {
         IEnumerable<ConsignmentShipfile> GetEmailDetails(IEnumerable<ConsignmentShipfile> shipfiles);
+
+        IEnumerator<ConsignmentShipfile> SendEmails(IEnumerable<ConsignmentShipfile> toSend);
     }
 }

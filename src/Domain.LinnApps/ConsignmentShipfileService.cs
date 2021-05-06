@@ -17,9 +17,8 @@
 
         public IEnumerable<ConsignmentShipfile> GetEmailDetails(IEnumerable<ConsignmentShipfile> shipfiles)
         {
-            var result = new List<ConsignmentShipfile>();
-
-            foreach (var shipfile in shipfiles)
+            var consignmentShipfiles = shipfiles as ConsignmentShipfile[] ?? shipfiles.ToArray();
+            foreach (var shipfile in consignmentShipfiles)
             {
                 var orders = this.salesOrderRepository.FilterBy(
                         o => o.ConsignmentItems.Any() 
@@ -28,21 +27,31 @@
 
                 foreach (var salesOrder in orders)
                 {
+                    // not an org
                     if (salesOrder.Account.OrgId == null)
                     {
                         if (salesOrder.Account.ContactId != null)
                         {
-                            // we found a contact
+                            shipfile.Message = null;
                         }
                         else
                         {
-                            // we didn't find a contact
+                            shipfile.Message = ShipfileStatusMessages.NoContactDetails;
                         }
+                    }
+                    else // an org
+                    {
+
                     }
                 }
             }
 
-            return result;
+            return consignmentShipfiles;
+        }
+
+        public IEnumerator<ConsignmentShipfile> SendEmails(IEnumerable<ConsignmentShipfile> toSend)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
