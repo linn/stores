@@ -53,6 +53,7 @@
             builder.RegisterType<MoveStockService>().As<IMoveStockService>();
             builder.RegisterType<TqmsReportsService>().As<ITqmsReportsService>();
             builder.RegisterType<ConsignmentShipfileService>().As<IConsignmentShipfileService>();
+            builder.RegisterType<EmailService>().As<IEmailService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
