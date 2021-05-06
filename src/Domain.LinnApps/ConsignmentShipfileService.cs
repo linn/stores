@@ -89,7 +89,7 @@
             gfx.MUH = PdfFontEncoding.Unicode;
 
             // You always need a MigraDoc document for rendering.
-            var doc = new MigraDocCore.DocumentObjectModel.Document();
+            var doc = new Document();
             var sec = doc.AddSection();
 
             // Add a single paragraph with some text and format information.
