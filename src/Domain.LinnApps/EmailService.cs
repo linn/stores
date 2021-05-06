@@ -20,7 +20,7 @@
             string fromName,
             string subject,
             string body,
-            PdfDocument pdfAttachment)
+            PdfDocument document)
         {
             var smtpHost = ConfigurationManager.Configuration["SMTP_HOSTNAME"];
 
@@ -37,18 +37,18 @@
 
             // placeholder
             // simple pdf generation as proof of concept, but this code won't go here. Pdf is passed in
-            PdfDocument document = new PdfDocument();
-            document.Info.Title = "Some title";
-            PdfPage page = document.AddPage();
-            XGraphics gfx = XGraphics.FromPdfPage(page);
-            XFont font = new XFont("Verdana", 20, XFontStyle.BoldItalic);
-
-            gfx.DrawString(
-                "Hello, World!", 
-                font, 
-                XBrushes.Black,
-                new XRect(0, 0, page.Width, page.Height),
-                XStringFormats.Center);
+            // PdfDocument document = new PdfDocument();
+            // document.Info.Title = "Some title";
+            // PdfPage page = document.AddPage();
+            // XGraphics gfx = XGraphics.FromPdfPage(page);
+            // XFont font = new XFont("Verdana", 20, XFontStyle.BoldItalic);
+            //
+            // gfx.DrawString(
+            //     "Hello, World!", 
+            //     font, 
+            //     XBrushes.Black,
+            //     new XRect(0, 0, page.Width, page.Height),
+            //     XStringFormats.Center);
             // end placeholder
 
            MimeContent content;

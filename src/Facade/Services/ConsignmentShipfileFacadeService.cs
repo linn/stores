@@ -30,15 +30,17 @@
         public IResult<IEnumerable<ConsignmentShipfile>> SendEmails(
             IEnumerable<ConsignmentShipfileResource> toSend)
         {
-            var canSend = this.domainService.GetEmailDetails(new List<ConsignmentShipfile> 
-                                                   { 
-                                                       new ConsignmentShipfile
-                                                           {
-                                                               Id = 1, 
-                                                               ConsignmentId = 1
-                                                           }
-                                                   })
-                .Where(x => x.Message == null);
+            // var canSend = this.domainService.GetEmailDetails(new List<ConsignmentShipfile> 
+            //                                        { 
+            //                                            new ConsignmentShipfile
+            //                                                {
+            //                                                    Id = 1, 
+            //                                                    ConsignmentId = 1
+            //                                                }
+            //                                        })
+            //     .Where(x => x.Message == null);
+
+            this.domainService.SendEmails(new List<ConsignmentShipfile>());
 
 
             throw new System.NotImplementedException();

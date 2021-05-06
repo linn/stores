@@ -5,14 +5,24 @@
 
     using Linn.Common.Persistence;
 
+    using MigraDoc.DocumentObjectModel;
+    using MigraDoc.Rendering;
+
+    using PdfSharp.Drawing;
+    using PdfSharp.Pdf;
+
     public class ConsignmentShipfileService : IConsignmentShipfileService
     {
         private readonly IQueryRepository<SalesOrder> salesOrderRepository;
 
+        private readonly IEmailService emailService;
+
         public ConsignmentShipfileService(
-            IQueryRepository<SalesOrder> salesOrderRepository)
+            IQueryRepository<SalesOrder> salesOrderRepository,
+            IEmailService emailService)
         {
             this.salesOrderRepository = salesOrderRepository;
+            this.emailService = emailService;
         }
 
         public IEnumerable<ConsignmentShipfile> GetEmailDetails(IEnumerable<ConsignmentShipfile> shipfiles)
@@ -51,7 +61,60 @@
 
         public IEnumerator<ConsignmentShipfile> SendEmails(IEnumerable<ConsignmentShipfile> toSend)
         {
+            PdfDocument document = new PdfDocument();
+            document.Info.Title = "PDFsharp XGraphic Sample";
+            document.Info.Author = "Stefan Lange";
+            document.Info.Subject = "Created with code snippets that show the use of graphical functions";
+            document.Info.Keywords = "PDFsharp, XGraphics";
+
+            this.SamplePage1(document);
+
+            this.emailService.SendEmail(
+                "lewis.renfrew@linn.co.uk", 
+                "Me", 
+                "lewis.renfrew@linn.co.uk", 
+                "Me", 
+                "hello", 
+                "hello", 
+                document);
             throw new System.NotImplementedException();
+        }
+
+        private void SamplePage1(PdfDocument document)
+        {
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
+            PdfPage page = document.AddPage();
+            XGraphics gfx = XGraphics.FromPdfPage(page);
+            // HACK²
+            gfx.MUH = PdfFontEncoding.Unicode;
+
+            // You always need a MigraDoc document for rendering.
+            Document doc = new Document();
+            Section sec = doc.AddSection();
+            // Add a single paragraph with some text and format information.
+            Paragraph para = sec.AddParagraph();
+            para.Format.Alignment = ParagraphAlignment.Justify;
+            para.Format.Font.Name = "Times New Roman";
+            para.Format.Font.Size = 12;
+            para.Format.Font.Color = MigraDoc.DocumentObjectModel.Colors.DarkGray;
+            para.Format.Font.Color = MigraDoc.DocumentObjectModel.Colors.DarkGray;
+            para.AddText("Duisism odigna acipsum delesenisl ");
+            para.AddFormattedText("ullum in velenit", TextFormat.Bold);
+            para.AddText(" ipit iurero dolum zzriliquisis nit wis dolore vel et nonsequipit, velendigna " +
+              "auguercilit lor se dipisl duismod tatem zzrit at laore magna feummod oloborting ea con vel " +
+              "essit augiati onsequat luptat nos diatum vel ullum illummy nonsent nit ipis et nonsequis " +
+              "niation utpat. Odolobor augait et non etueril landre min ut ulla feugiam commodo lortie ex " +
+              "essent augait el ing eumsan hendre feugait prat augiatem amconul laoreet. ≤≥≈≠");
+            para.Format.Borders.Distance = "5pt";
+            para.Format.Borders.Color = Colors.Gold;
+
+            // Create a renderer and prepare (=layout) the document
+            MigraDoc.Rendering.DocumentRenderer docRenderer = new DocumentRenderer(doc);
+            docRenderer.PrepareDocument();
+
+            // Render the paragraph. You can render tables or shapes the same way.
+            docRenderer.RenderObject(gfx, XUnit.FromCentimeter(5), XUnit.FromCentimeter(10), "12cm", para);
         }
     }
 }
