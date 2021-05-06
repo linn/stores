@@ -8,6 +8,8 @@
 
         public int AccountId { get; set; }
 
+        public SalesAccount Account { get; set; }
+
         public string CurrencyCode { get; set; }
 
         public int OutletNumber { get; set; }

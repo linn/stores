@@ -4,6 +4,6 @@
 
     public interface IConsignmentShipfileService
     {
-        IEnumerable<ConsignmentShipfile> GetEmailDetails(int consignmentId);
+        IEnumerable<ConsignmentShipfile> GetEmailDetails(IEnumerable<ConsignmentShipfile> shipfiles);
     }
 }

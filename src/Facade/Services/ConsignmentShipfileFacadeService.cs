@@ -29,7 +29,15 @@
         public IResult<IEnumerable<ConsignmentShipfile>> SendEmails(
             IEnumerable<ConsignmentShipfileResource> toSend)
         {
-            this.domainService.GetEmailDetails(227165);
+            this.domainService.GetEmailDetails(new List<ConsignmentShipfile> 
+                                                   { 
+                                                       new ConsignmentShipfile
+                                                           {
+                                                               Id = 1, 
+                                                               ConsignmentId = 1
+                                                           }
+                                                   });
+
             throw new System.NotImplementedException();
         }
     }

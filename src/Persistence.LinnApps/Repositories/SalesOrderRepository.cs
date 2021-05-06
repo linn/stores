@@ -28,6 +28,7 @@
             return this.serviceDbContext.SalesOrders.AsNoTracking()
                 .Where(expression)
                 .Include(o => o.ConsignmentItems).AsNoTracking()
+                .Include(o => o.Account).ThenInclude(a => a.ContactDetails)
                 .Include(o => o.SalesOutlet).AsNoTracking();
         }
 

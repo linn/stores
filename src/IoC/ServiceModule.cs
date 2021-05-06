@@ -52,7 +52,7 @@
             builder.RegisterType<TpkService>().As<ITpkService>();
             builder.RegisterType<MoveStockService>().As<IMoveStockService>();
             builder.RegisterType<TqmsReportsService>().As<ITqmsReportsService>();
-            builder.RegisterType<ConsignmentConsignmentShipfileService>().As<IConsignmentShipfileService>();
+            builder.RegisterType<ConsignmentShipfileService>().As<IConsignmentShipfileService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()

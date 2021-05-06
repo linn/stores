@@ -152,7 +152,7 @@
 
         public DbQuery<ExportRsn> Rsns { get; set; }
 
-        public DbQuery<SalesAccount> SalesAccounts { get; set; }
+        public DbSet<SalesAccount> SalesAccounts { get; set; }
 
         public DbSet<SalesOutlet> SalesOutlets { get; set; }
 
@@ -197,6 +197,8 @@
         public DbSet<Invoice> Invoices { get; set; }
 
         public DbSet<ConsignmentItem> ConsignmentItems { get; set; }
+
+        public DbSet<Contact> Contacts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -290,6 +292,7 @@
             this.QueryConsignmentShipFiles(builder);
             this.QueryInvoices(builder);
             this.BuildConsignmentItems(builder);
+            this.BuildContacts(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1315,11 +1318,15 @@
 
         private void QuerySalesAccounts(ModelBuilder builder)
         {
-            var q = builder.Query<SalesAccount>().ToView("SALES_ACCOUNTS");
+            var q = builder.Entity<SalesAccount>().ToTable("SALES_ACCOUNTS");
+            q.HasKey(e => e.AccountId);
             q.Property(e => e.AccountId).HasColumnName("ACCOUNT_ID");
             q.Property(e => e.AccountName).HasColumnName("ACCOUNT_NAME").HasMaxLength(50);
             q.Property(e => e.AccountType).HasColumnName("ACCOUNT_TYPE");
             q.Property(e => e.DateClosed).HasColumnName("DATE_CLOSED");
+            q.Property(e => e.OrgId).HasColumnName("ORG_ID");
+            q.Property(e => e.ContactId).HasColumnName("CONTACT_ID");
+            q.HasOne(a => a.ContactDetails).WithMany(c => c.SalesAccounts).HasForeignKey(a => a.ContactId);
         }
 
         private void QueryStockQuantitIesForMrView(ModelBuilder builder)
@@ -1495,6 +1502,7 @@
             q.Property(o => o.CurrencyCode).HasColumnName("CURRENCY_CODE");
             q.Property(o => o.OutletNumber).HasColumnName("OUTLET_NUMBER");
             q.Property(o => o.AccountId).HasColumnName("ACCOUNT_ID");
+            q.HasOne(o => o.Account).WithMany(a => a.SalesOrders).HasForeignKey(o => o.AccountId);
         }
 
         private void QuerySalesOrderDetails(ModelBuilder builder)
@@ -1632,6 +1640,15 @@
             entity.Property(i => i.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
             entity.Property(i => i.OrderNumber).HasColumnName("ORDER_NUMBER");
             entity.HasOne(i => i.SalesOrder).WithMany(o => o.ConsignmentItems).HasForeignKey(i => i.OrderNumber);
+        }
+
+        private void BuildContacts(ModelBuilder builder)
+        {
+            var entity = builder.Entity<Contact>().ToTable("CONTACTS");
+            entity.HasKey(c => c.Id);
+            entity.Property(c => c.Id).HasColumnName("CONTACT_ID");
+            entity.Property(c => c.OrgId).HasColumnName("ORG_ID");
+            entity.Property(c => c.EmailAddress).HasColumnName("EMAIL_ADDRESS");
         }
     }
 }
