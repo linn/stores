@@ -88,11 +88,9 @@
             XGraphics gfx = XGraphics.FromPdfPage(page);
             gfx.MUH = PdfFontEncoding.Unicode;
 
-            // You always need a MigraDoc document for rendering.
             var doc = new Document();
             var sec = doc.AddSection();
 
-            // Add a single paragraph with some text and format information.
             Paragraph para = sec.AddParagraph();
             para.Format.Alignment = ParagraphAlignment.Justify;
             para.Format.Font.Name = "Times New Roman";
@@ -107,7 +105,7 @@
               "niation utpat. Odolobor augait et non etueril landre min ut ulla feugiam commodo lortie ex " +
               "essent augait el ing eumsan hendre feugait prat augiatem amconul laoreet. ≤≥≈≠");
             para.Format.Borders.Distance = "5pt";
-            para.Format.Borders.Color = Colors.Gold;
+            para.Format.Borders.Color = Colors.Black;
 
             // Create a renderer and prepare (=layout) the document
             DocumentRenderer docRenderer = new DocumentRenderer(doc);
