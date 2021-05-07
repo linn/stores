@@ -2,13 +2,10 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection.Metadata;
 
     using Linn.Common.Persistence;
 
-    using MimeKit.Text;
-
-    using SelectPdf;
+    using PuppeteerSharp;
 
     public class ConsignmentShipfileService : IConsignmentShipfileService
     {
@@ -58,30 +55,26 @@
             return consignmentShipfiles;
         }
 
-        public IEnumerator<ConsignmentShipfile> SendEmails(IEnumerable<ConsignmentShipfile> toSend)
+        public async void SendEmails(IEnumerable<ConsignmentShipfile> toSend)
         {
-            HtmlToPdf converter = new HtmlToPdf();
+            await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
 
-            converter.Options.PdfPageSize = PdfPageSize.A4;
-            converter.Options.PdfPageOrientation = PdfPageOrientation.Portrait;
-            converter.Options.MarginLeft = 10;
-            converter.Options.MarginRight = 10;
-            converter.Options.MarginTop = 20;
-            converter.Options.MarginBottom = 20;
-            var htmlString = "<style>h1 {font-size:12px;}</style><h1>Test</h1><p style='font-weight:bold'>Test Bold</p>";
-
-            PdfDocument doc = converter.ConvertHtmlString(htmlString);
-
+            Browser browser = await Puppeteer.LaunchAsync(new LaunchOptions
+                                                              {
+                                                                  Headless = true
+                                                              });
+            Page page = await browser.NewPageAsync();
+            await page.SetContentAsync("<html><head></head><body><h1>Hello World<h1></body></html>");
+            var pdfStream = page.PdfStreamAsync().Result;
+            await browser.CloseAsync();
             this.emailService.SendEmail(
-                "lewis.renfrew@linn.co.uk", 
-                "Me", 
-                "lewis.renfrew@linn.co.uk", 
-                "Me", 
-                "hello", 
-                "hello", 
-                doc);
-            doc.Close();
-            throw new System.NotImplementedException();
+                "lewis.renfrew@linn.co.uk",
+                "Me",
+                "lewis.renfrew@linn.co.uk",
+                "Me",
+                "hello",
+                "hello",
+                pdfStream);
         }
     }
 }

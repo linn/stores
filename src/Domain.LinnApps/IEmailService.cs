@@ -1,6 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
-    using SelectPdf;
+    using System.IO;
 
     public interface IEmailService
     {
@@ -11,6 +11,6 @@
             string fromName,
             string subject, 
             string body, 
-            PdfDocument pdfAttachment);
+            Stream attachment);
     }
 }

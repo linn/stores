@@ -43,7 +43,8 @@
             this.domainService.SendEmails(new List<ConsignmentShipfile>());
 
 
-            throw new System.NotImplementedException();
+            return new SuccessResult<IEnumerable<ConsignmentShipfile>>(
+                new List<ConsignmentShipfile>());
         }
     }
 }

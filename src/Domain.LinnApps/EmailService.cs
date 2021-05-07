@@ -8,7 +8,6 @@
 
     using MimeKit;
 
-    using SelectPdf;
 
     public class EmailService : IEmailService
     {
@@ -19,7 +18,7 @@
             string fromName,
             string subject,
             string body,
-            PdfDocument document)
+            Stream attachment)
         {
             var smtpHost = ConfigurationManager.Configuration["SMTP_HOSTNAME"];
 
@@ -35,20 +34,19 @@
                                };
 
             MimeContent content;
-           using (MemoryStream ms = new MemoryStream())
+           using (Stream ms = attachment)
            {
-               document.Save(ms);
                byte[] buffer = new byte[ms.Length];
                ms.Seek(0, SeekOrigin.Begin);
                ms.Flush();
                ms.Read(buffer, 0, (int)ms.Length);
                content = new MimeContent(ms);
-               var attachment = new MimePart("application", "pdf")
+               var a = new MimePart("application", "pdf")
                                     {
                                         Content = content,
                                     };
 
-               var multipart = new Multipart("mixed") { emailBody, attachment };
+               var multipart = new Multipart("mixed") { emailBody, a };
 
                message.Body = multipart;
 

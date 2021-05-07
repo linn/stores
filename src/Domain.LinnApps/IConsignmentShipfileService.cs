@@ -6,6 +6,6 @@
     {
         IEnumerable<ConsignmentShipfile> GetEmailDetails(IEnumerable<ConsignmentShipfile> shipfiles);
 
-        IEnumerator<ConsignmentShipfile> SendEmails(IEnumerable<ConsignmentShipfile> toSend);
+        void SendEmails(IEnumerable<ConsignmentShipfile> toSend);
     }
 }
