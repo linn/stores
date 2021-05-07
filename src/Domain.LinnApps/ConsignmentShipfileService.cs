@@ -61,6 +61,7 @@
 
             Browser browser = await Puppeteer.LaunchAsync(new LaunchOptions
                                                               {
+                                                                  Args = new[] { "--no-sandbox" },
                                                                   Headless = true
                                                               });
             Page page = await browser.NewPageAsync();
