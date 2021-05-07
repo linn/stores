@@ -33,29 +33,28 @@
                                    Text = body
                                };
 
-            MimeContent content;
-           using (Stream ms = attachment)
-           {
-               byte[] buffer = new byte[ms.Length];
-               ms.Seek(0, SeekOrigin.Begin);
-               ms.Flush();
-               ms.Read(buffer, 0, (int)ms.Length);
-               content = new MimeContent(ms);
-               var a = new MimePart("application", "pdf")
-                                    {
-                                        Content = content,
-                                    };
+            using (Stream ms = attachment)
+            {
+                byte[] buffer = new byte[ms.Length];
+                ms.Seek(0, SeekOrigin.Begin);
+                ms.Flush();
+                ms.Read(buffer, 0, (int)ms.Length);
+                var content = new MimeContent(ms);
+                var a = new MimePart("application", "pdf")
+                                        {
+                                            Content = content,
+                                        };
 
-               var multipart = new Multipart("mixed") { emailBody, a };
+                var multipart = new Multipart("mixed") { emailBody, a };
 
-               message.Body = multipart;
+                message.Body = multipart;
 
-               using (var client = new SmtpClient())
-               {
-                   client.Connect(smtpHost, 25, false);
-                   client.Send(message);
-                   client.Disconnect(true);
-               }
+                using (var client = new SmtpClient())
+                {
+                    client.Connect(smtpHost, 25, false);
+                    client.Send(message);
+                    client.Disconnect(true);
+                }
             }
         }
     }
