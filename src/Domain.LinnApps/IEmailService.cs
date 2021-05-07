@@ -1,6 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
-    using PdfSharpCore.Pdf;
+    using SelectPdf;
 
     public interface IEmailService
     {
