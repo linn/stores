@@ -92,13 +92,12 @@
             var sec = doc.AddSection();
 
             Paragraph para = sec.AddParagraph();
-            para.Format.Alignment = ParagraphAlignment.Justify;
+            para.Format.Alignment = ParagraphAlignment.Left;
             para.Format.Font.Name = "Times New Roman";
             para.Format.Font.Size = 12;
-            para.Format.Font.Color = Colors.DarkGray;
-            para.Format.Font.Color = Colors.DarkGray;
+            para.Format.Font.Color = Colors.Black;
             para.AddText("Duisism odigna acipsum delesenisl ");
-            para.AddFormattedText("ullum in velenit");
+            para.AddFormattedText("ullum in velenit", TextFormat.Bold);
             para.AddText("ipit iurero dolum zzriliquisis nit wis dolore vel et nonsequipit, velendigna " +
               "auguercilit lor se dipisl duismod tatem zzrit at laore magna feummod oloborting ea con vel " +
               "essit augiati onsequat luptat nos diatum vel ullum illummy nonsent nit ipis et nonsequis " +
