@@ -196,7 +196,7 @@
 
         public RequisitionProcessResult CheckStockAtFromLocation(
             string partNumber,
-            int quantity,
+            decimal quantity,
             string from,
             int? fromLocationId,
             int? fromPalletNumber,
@@ -213,7 +213,7 @@
                                        Direction = ParameterDirection.Input,
                                        Value = partNumber
                                    });
-            cmd.Parameters.Add(new OracleParameter("p_qty", OracleDbType.Int32)
+            cmd.Parameters.Add(new OracleParameter("p_qty", OracleDbType.Decimal)
                                    {
                                        Direction = ParameterDirection.Input,
                                        Value = quantity
@@ -274,7 +274,7 @@
             int reqNumber,
             int reqLine,
             string partNumber,
-            int quantity,
+            decimal quantity,
             int? fromLocationId,
             int? fromPalletNumber,
             DateTime? fromStockDate,
@@ -306,7 +306,7 @@
                                        Direction = ParameterDirection.Input,
                                        Value = partNumber
                                    });
-            cmd.Parameters.Add(new OracleParameter("p_qty", OracleDbType.Int32)
+            cmd.Parameters.Add(new OracleParameter("p_qty", OracleDbType.Decimal)
                                    {
                                        Direction = ParameterDirection.Input,
                                        Value = quantity

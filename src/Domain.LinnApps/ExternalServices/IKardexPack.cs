@@ -11,7 +11,7 @@
             int reqLine,
             string kardexLocation,
             string partNumber,
-            int quantity,
+            decimal quantity,
             string storageType,
             int? toLocationId,
             int? toPalletNumber);
@@ -21,7 +21,7 @@
             int reqLine,
             string kardexLocation,
             string partNumber,
-            int quantity,
+            decimal quantity,
             DateTime? fromStockDate,
             string storageType,
             int? fromLocationId,
