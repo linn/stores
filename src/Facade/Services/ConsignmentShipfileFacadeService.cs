@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
@@ -29,17 +30,17 @@
         public IResult<IEnumerable<ConsignmentShipfile>> SendEmails(
             IEnumerable<ConsignmentShipfileResource> toSend)
         {
-            // var canSend = this.domainService.GetEmailDetails(new List<ConsignmentShipfile> 
-            //                                        { 
-            //                                            new ConsignmentShipfile
-            //                                                {
-            //                                                    Id = 1, 
-            //                                                    ConsignmentId = 1
-            //                                                }
-            //                                        })
-            //     .Where(x => x.Message == null);
+            //var canSend = this.domainService.GetEmailDetails(new List<ConsignmentShipfile> 
+            //                                       { 
+            //                                           new ConsignmentShipfile
+            //                                               {
+            //                                                   Id = 1, 
+            //                                                   ConsignmentId = 1
+            //                                               }
+            //                                       })
+            //    .Where(x => x.Message == null);
 
-            this.domainService.SendEmails(new List<ConsignmentShipfile>());
+            this.domainService.SendEmails(new List<ConsignmentShipfile> { new ConsignmentShipfile()});
 
 
             return new SuccessResult<IEnumerable<ConsignmentShipfile>>(

@@ -156,7 +156,7 @@
                 "rootUri",
                 ConfigurationManager.Configuration["PROXY_ROOT"]);
 
-            builder.RegisterType<IShipfilePdfBuilder>().As<ShipfilePdfBuilder>();
+            builder.RegisterType<ShipfilePdfBuilder>().As<IShipfilePdfBuilder>();
         }
     }
 }

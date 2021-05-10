@@ -11,8 +11,6 @@
     {
         public async Task<Stream> BuildPdf(ConsignmentShipfile shipfile)
         {
-            await new BrowserFetcher().DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
-
             Browser browser = await Puppeteer.LaunchAsync(new LaunchOptions
                                                               {
                                                                   Args = new[] { "--no-sandbox" },
