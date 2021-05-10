@@ -1,13 +1,13 @@
-﻿namespace Linn.Stores.Domain.LinnApps
+﻿namespace Linn.Stores.Proxy
 {
     using System.IO;
 
     using Linn.Common.Configuration;
+    using Linn.Stores.Domain.LinnApps;
 
     using MailKit.Net.Smtp;
 
     using MimeKit;
-
 
     public class EmailService : IEmailService
     {
