@@ -97,7 +97,7 @@ function StockMove({
     const setFromDetailsFromAvailableStock = row => {
         setMoveDetails({
             ...moveDetails,
-            from: row.displayLocation,
+            from: row.displayMoveLocation,
             fromLocationCode: row.locationCode,
             fromState: row.state,
             fromStockPoolCode: row.stockPoolCode,
@@ -147,7 +147,7 @@ function StockMove({
     const setToDetailsFromAvailableStock = row => {
         setMoveDetails({
             ...moveDetails,
-            to: row.displayLocation,
+            to: row.displayMoveLocation,
             toLocationCode: row.locationCode,
             toState: row.state,
             toStockPoolCode: row.stockPoolCode,

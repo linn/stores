@@ -19,5 +19,7 @@
         public string State { get; set; }
 
         public string DisplayLocation { get; set; }
+
+        public string DisplayMoveLocation { get; set; }
     }
 }
