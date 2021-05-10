@@ -1,9 +1,12 @@
 ﻿namespace Linn.Stores.Proxy
 {
     using System.IO;
+    using System.Text.Encodings.Web;
     using System.Threading.Tasks;
 
     using Linn.Stores.Domain.LinnApps;
+
+    using Microsoft.AspNetCore.Html;
 
     using PuppeteerSharp;
 
@@ -17,9 +20,21 @@
                                                                   Headless = true
                                                               });
             Page page = await browser.NewPageAsync();
-            await page.SetContentAsync("<html><head></head><body><h1>Hello World<h1></body></html>");
+
+            var builder = new HtmlContentBuilder();
+
+            builder.AppendFormat("<html> <body> <h1>{0}</h1> </body> </html>", "Hello, World!");
+            
+            var s = new StringWriter();
+           
+            builder.WriteTo(s, HtmlEncoder.Default);
+            
+            await page.SetContentAsync(s.ToString());
+            
             var pdfStream = page.PdfStreamAsync().Result;
+            
             await browser.CloseAsync();
+            
             return pdfStream;
         }
     }
