@@ -155,6 +155,8 @@
             builder.RegisterType<ProductionTriggerLevelsProxy>().As<IProductionTriggerLevelsService>().WithParameter(
                 "rootUri",
                 ConfigurationManager.Configuration["PROXY_ROOT"]);
+
+            builder.RegisterType<IShipfilePdfBuilder>().As<ShipfilePdfBuilder>();
         }
     }
 }
