@@ -23,7 +23,8 @@
                              State = a.State,
                              StockPoolCode = a.StockPoolCode,
                              StockRotationDate = a.StockRotationDate.ToString("o"),
-                             DisplayLocation = a.DisplayLocation
+                             DisplayLocation = a.DisplayLocation,
+                             DisplayMoveLocation = a.DisplayMoveLocation
                          });
         }
 

@@ -1407,6 +1407,7 @@
             q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE");
             q.Property(e => e.State).HasColumnName("STATE");
             q.Property(e => e.DisplayLocation).HasColumnName("DISPLAY_LOCATION");
+            q.Property(e => e.DisplayMoveLocation).HasColumnName("DISPLAY_MOVE_LOCATION");
         }
 
         private void BuildPartStorageTypes(ModelBuilder builder)
