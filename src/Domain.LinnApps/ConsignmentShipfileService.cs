@@ -1,8 +1,9 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
-    using Linn.Common.Persistence;
     using System.Collections.Generic;
     using System.Linq;
+
+    using Linn.Common.Persistence;
 
     public class ConsignmentShipfileService : IConsignmentShipfileService
     {
@@ -51,7 +52,6 @@
 
         public async void SendEmails(IEnumerable<ConsignmentShipfile> toSend)
         {
-            // should I parallelize this loop? Does it take long enough to hurt
             foreach (var shipfile in toSend)
             {
                 var pdf = await this.pdfBuilder.BuildPdf(shipfile);
