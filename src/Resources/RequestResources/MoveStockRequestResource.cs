@@ -6,7 +6,7 @@
 
         public string PartNumber { get; set; }
 
-        public int Quantity { get; set; }
+        public decimal Quantity { get; set; }
 
         public int? FromPalletNumber { get; set; }
 
