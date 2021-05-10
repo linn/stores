@@ -23,6 +23,9 @@
     <None Remove="node_modules\**" />
   </ItemGroup>
   <ItemGroup>
+    <Content Remove="views\TestTemplate.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Linn.Common.Authentication.Host" Version="1.0.2" />
     <PackageReference Include="Linn.Common.Configuration" Version="2.0.0" />
     <PackageReference Include="Linn.Common.Logging" Version="2.0.0" />
@@ -41,5 +44,8 @@
     <Folder Include="client\src\reducers\__tests__\" />
     <Folder Include="client\src\selectors\__tests__\" />
     <Folder Include="coverage\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="views\TestTemplate.cshtml" />
   </ItemGroup>
 </Project>

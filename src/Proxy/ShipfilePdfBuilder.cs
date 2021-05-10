@@ -1,14 +1,14 @@
 ﻿namespace Linn.Stores.Proxy
 {
     using System.IO;
-    using System.Text.Encodings.Web;
     using System.Threading.Tasks;
 
     using Linn.Stores.Domain.LinnApps;
 
-    using Microsoft.AspNetCore.Html;
-
     using PuppeteerSharp;
+
+    using RazorEngine;
+    using RazorEngine.Templating;
 
     public class ShipfilePdfBuilder : IShipfilePdfBuilder
     {
@@ -21,15 +21,10 @@
                                                               });
             Page page = await browser.NewPageAsync();
 
-            var builder = new HtmlContentBuilder();
-            builder.AppendHtmlLine(
-                "<html><body><head><style>body{padding:20px;font-family:Helvetica;}.wrapper{display:grid;grid-template-columns:repeat(auto-fit,minmax(400px,1fr));grid-gap:10px;}.box{color:#000;border-radius:3px;padding:20px;font-size:18px;}</style></head><div class=\"wrapper\"><div class=\"boxa\">CONSIGNMENTNUMBER:{0}</div><div class=\"boxb\">B</div><div class=\"boxc\">C</div><div class=\"boxd\">D</div><div class=\"boxe\">E</div><div class=\"boxf\">F</div><div class=\"boxf\">F</div><div class=\"boxf\">F</div><div class=\"boxf\">F</div></div></body></html>");
-            
-            var s = new StringWriter();
-           
-            builder.WriteTo(s, HtmlEncoder.Default);
+            string template = File.ReadAllText("views/TestTemplate.cshtml");
+            var result = Engine.Razor.RunCompile(template, "templateKey", null, new { Data = "World" });
 
-            await page.SetContentAsync(s.ToString());
+            await page.SetContentAsync(result);
 
             var pdfOptions = new PdfOptions { Landscape = true };
 
