@@ -10,23 +10,38 @@
     {
         public async Task<Stream> BuildPdf(ConsignmentShipfile shipfile)
         {
-            Browser browser = await Puppeteer.LaunchAsync(new LaunchOptions
-                                                              {
-                                                                  Args = new[] { "--no-sandbox" },
-                                                                  Headless = true
-                                                              });
+            // launch a headless chrome instance and initialise a page
+            Browser browser =
+                await Puppeteer.LaunchAsync(new LaunchOptions
+                                                {
+                                                    Args = new[]
+                                                               {
+                                                                   "--no-sandbox"
+                                                               }, 
+                                                    Headless = true
+                                                });
             Page page = await browser.NewPageAsync();
-            var template = Template.Parse("Hello {{name}}!");
-            var result = await template.RenderAsync(new { Name = "World" });
 
+            // get the template from file and parse it
+            string templateString = await File.ReadAllTextAsync("./views/TestTemplate.html");
+            var template = Template.ParseLiquid(templateString);
+
+            // render the template with this anonymous model
+            var result = await template.RenderAsync(
+                             new
+                                 {
+                                     Name = "Lewis"
+                                 });
+
+            // pass chromium the rendered html to convert to a pdf
             await page.SetContentAsync(result);
 
             var pdfOptions = new PdfOptions { Landscape = true };
 
             var pdfStream = page.PdfStreamAsync(pdfOptions).Result;
-            
+
             await browser.CloseAsync();
-            
+
             return pdfStream;
         }
     }

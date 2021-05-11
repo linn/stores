@@ -1,6 +1,5 @@
 ﻿FROM microsoft/dotnet:2.2-runtime
 
-# 
 ARG CHROME_VERSION="81.0.4044.138-1"
 RUN apt-get update && apt-get -f install && apt-get -y install wget gnupg2 apt-utils
 RUN wget --no-verbose -O /tmp/chrome.deb http://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}_amd64.deb \
