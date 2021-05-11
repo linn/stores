@@ -4,6 +4,8 @@
 
     public class ConsignmentShipfileResource
     {
+        public int Id { get; set; }
+
         public int ConsignmentId { get; set; }
 
         public string DateClosed { get; set; }

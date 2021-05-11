@@ -30,7 +30,8 @@
         public IResult<IEnumerable<ConsignmentShipfile>> SendEmails(
             IEnumerable<ConsignmentShipfileResource> toSend)
         {
-            this.domainService.SendEmails(new List<ConsignmentShipfile> { new ConsignmentShipfile()});
+            this.domainService.SendEmails(toSend.Select(
+                s => new ConsignmentShipfile { Id = s.Id, ConsignmentId = s.ConsignmentId }));
 
             return new SuccessResult<IEnumerable<ConsignmentShipfile>>(
                 new List<ConsignmentShipfile>());

@@ -23,7 +23,32 @@
             this.pdfBuilder = pdfBuilder;
         }
 
-        public IEnumerable<ConsignmentShipfile> GetEmailDetails(IEnumerable<ConsignmentShipfile> shipfiles)
+        public IEnumerable<ConsignmentShipfile> SendEmails(IEnumerable<ConsignmentShipfile> toSend)
+        {
+            var withDetails = this.GetEmailDetails(toSend);
+
+            var consignmentShipfiles = withDetails as ConsignmentShipfile[] ?? withDetails.ToArray();
+            foreach (var shipfile in consignmentShipfiles)
+            {
+                if (shipfile.Message == null)
+                {
+                    var pdf = this.pdfBuilder.BuildPdf(shipfile); // todo - implement pdf builder properly
+                    this.emailService.SendEmail( // todo - get proper email data from shipfile
+                        "lewis.renfrew@linn.co.uk",
+                        "Me",
+                        "lewis.renfrew@linn.co.uk",
+                        "Me",
+                        "hello",
+                        "hello",
+                        pdf.Result);
+                    shipfile.Message = ShipfileStatusMessages.EmailSent;
+                }
+            }
+
+            return consignmentShipfiles;
+        }
+
+        private IEnumerable<ConsignmentShipfile> GetEmailDetails(IEnumerable<ConsignmentShipfile> shipfiles)
         {
             var consignmentShipfiles = shipfiles as ConsignmentShipfile[] ?? shipfiles.ToArray();
             foreach (var shipfile in consignmentShipfiles)
@@ -48,22 +73,6 @@
             }
 
             return consignmentShipfiles;
-        }
-
-        public async void SendEmails(IEnumerable<ConsignmentShipfile> toSend)
-        {
-            foreach (var shipfile in toSend)
-            {
-                var pdf = await this.pdfBuilder.BuildPdf(shipfile);
-                this.emailService.SendEmail(
-                    "lewis.renfrew@linn.co.uk",
-                    "Me",
-                    "lewis.renfrew@linn.co.uk",
-                    "Me",
-                    "hello",
-                    "hello",
-                    pdf);
-            }
         }
     }
 }
