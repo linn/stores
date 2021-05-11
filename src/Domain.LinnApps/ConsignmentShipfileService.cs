@@ -29,29 +29,33 @@
 
         public IEnumerable<ConsignmentShipfile> SendEmails(IEnumerable<ConsignmentShipfile> toSend)
         {
-            var withDetails = this.GetEmailDetails(toSend);
+            var withDetails = this.GetEmailDetails(toSend).ToList();
 
-            var consignmentShipfiles = withDetails as ConsignmentShipfile[] ?? withDetails.ToArray();
-            foreach (var shipfile in consignmentShipfiles)
+            foreach (var shipfile in withDetails)
             {
                 shipfile.Consignment =
                     this.consignmentRepository.FindBy(c => c.ConsignmentId == shipfile.ConsignmentId);
-                if (shipfile.Message == null)
+
+                // a message implies there was some issue with finding contact details etc.
+                if (shipfile.Message != null) 
                 {
-                    var pdf = this.pdfBuilder.BuildPdf(shipfile); // todo - implement pdf builder properly
-                    this.emailService.SendEmail( // todo - get proper email data from shipfile
-                        "lewis.renfrew@linn.co.uk",
-                        "Me",
-                        "lewis.renfrew@linn.co.uk",
-                        "Me",
-                        "hello",
-                        "hello",
-                        pdf.Result);
-                    shipfile.Message = ShipfileStatusMessages.EmailSent;
+                    continue;
                 }
+
+                var pdf = this.pdfBuilder.BuildPdf(shipfile); 
+                this.emailService.SendEmail(
+                    "lewis.renfrew@linn.co.uk",
+                    "Me",
+                    "lewis.renfrew@linn.co.uk",
+                    "Me",
+                    "Consignment Shipfile",
+                    $"Here is your pdf shipfile {shipfile.Consignment.CustomerName}",
+                    pdf.Result);
+                
+                shipfile.Message = ShipfileStatusMessages.EmailSent;
             }
 
-            return consignmentShipfiles;
+            return withDetails;
         }
 
         private IEnumerable<ConsignmentShipfile> GetEmailDetails(IEnumerable<ConsignmentShipfile> shipfiles)
@@ -59,7 +63,6 @@
             var consignmentShipfiles = shipfiles as ConsignmentShipfile[] ?? shipfiles.ToArray();
             foreach (var shipfile in consignmentShipfiles)
             {
-
                 var orders = this.salesOrderRepository.FilterBy(
                         o => o.ConsignmentItems.Any() 
                              && o.ConsignmentItems.All(i => i.ConsignmentId == shipfile.Id))
@@ -67,12 +70,11 @@
 
                 foreach (var salesOrder in orders)
                 {
-                    // not an org
                     if (salesOrder.Account.OrgId == null)
                     {
                         shipfile.Message = salesOrder.Account.ContactId != null ? null : ShipfileStatusMessages.NoContactDetails;
                     }
-                    else // an org
+                    else
                     {
                         shipfile.Message = null;
                     }
