@@ -9,12 +9,11 @@ import Page from '../containers/Page';
 export default function ConsignmentShipfiles({
     consignmentShipfiles,
     consignmentShipfilesLoading,
-    sendShipfiles,
+    sendEmails,
+    processedShipfiles,
     itemError,
     clearErrors,
-    sendShipfilesLoading,
-    shipfilesSent,
-    clearData
+    sendEmailsLoading
 }) {
     const [selectedRows, setSelectedRows] = useState([]);
     const [rows, setRows] = useState([]);
@@ -34,14 +33,14 @@ export default function ConsignmentShipfiles({
     }, [consignmentShipfiles]);
 
     useEffect(() => {
-        if (shipfilesSent?.length) {
-            shipfilesSent.forEach(transferred =>
+        if (processedShipfiles?.length) {
+            processedShipfiles.forEach(transferred =>
                 setRows(r =>
                     r.map(row => (compare(row, transferred) ? { ...transferred, id: row.id } : row))
                 )
             );
         }
-    }, [shipfilesSent]);
+    }, [processedShipfiles]);
 
     const columns = [
         { field: 'consignmentId', headerName: 'From', width: 140 },
@@ -59,7 +58,7 @@ export default function ConsignmentShipfiles({
                 <Grid item xs={10}>
                     <Title text="Send Shipfile Emails" />
                 </Grid>
-                {sendShipfilesLoading && !itemError ? (
+                {sendEmailsLoading && !itemError ? (
                     <Grid item xs={12}>
                         <Loading />
                     </Grid>
@@ -80,7 +79,7 @@ export default function ConsignmentShipfiles({
                                 variant="contained"
                                 onClick={() => {
                                     clearErrors();
-                                    sendShipfiles({
+                                    sendEmails({
                                         shipfiles: selectedRows
                                     });
                                 }}
@@ -111,24 +110,23 @@ export default function ConsignmentShipfiles({
 
 ConsignmentShipfiles.propTypes = {
     consignmentShipfiles: PropTypes.arrayOf(PropTypes.shape({})),
-    shipfilesSent: PropTypes.arrayOf(PropTypes.shape({})),
+    processedShipfiles: PropTypes.arrayOf(PropTypes.shape({})),
     consignmentShipfilesLoading: PropTypes.bool,
-    sendShipfiles: PropTypes.func.isRequired,
+    sendEmails: PropTypes.func.isRequired,
     clearErrors: PropTypes.func.isRequired,
     itemError: PropTypes.shape({
         statusText: PropTypes.string,
         details: PropTypes.shape({ errors: PropTypes.arrayOf(PropTypes.string) })
     }),
-    sendShipfilesLoading: PropTypes.bool,
-    whatToWandReport: PropTypes.shape({}),
-    clearData: PropTypes.func.isRequired
+    sendEmailsLoading: PropTypes.bool,
+    whatToWandReport: PropTypes.shape({})
 };
 
 ConsignmentShipfiles.defaultProps = {
     consignmentShipfiles: [],
-    shipfilesSent: [],
+    processedShipfiles: [],
     consignmentShipfilesLoading: true,
     itemError: null,
-    sendShipfilesLoading: false,
+    sendEmailsLoading: false,
     whatToWandReport: null
 };
