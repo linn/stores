@@ -10,9 +10,9 @@ import shipfilesSendEmailsActions from '../actions/shipfilesSendEmailsActions';
 const mapStateToProps = state => ({
     consignmentShipfiles: consignmentShipfilesSelectors.getItems(state),
     consignmentShipfilesLoading: consignmentShipfilesSelectors.getLoading(state),
-    processedShipfiles: shipfilesSendEmailsSelectors.getData(state)?.processed,
+    processedShipfiles: shipfilesSendEmailsSelectors.getData(state),
     sendEmailsLoading: shipfilesSendEmailsSelectors.getWorking(state),
-    itemError: getItemError(state, processTypes.shipfileSendEmails.item)
+    itemError: getItemError(state, processTypes.shipfilesSendEmails.item)
 });
 
 const initialise = () => dispatch => {

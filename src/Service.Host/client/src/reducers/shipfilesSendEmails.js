@@ -5,7 +5,7 @@ import * as processTypes from '../processTypes';
 const defaultState = { working: false, messageText: '', messageVisible: false };
 
 export default processStoreFactory(
-    processTypes.shipfileSendEmails.actionType,
+    processTypes.shipfilesSendEmails.actionType,
     actionTypes,
     defaultState,
     'SHIPFILES PROCESSED'

@@ -15,7 +15,7 @@ export default function ConsignmentShipfiles({
     clearErrors,
     sendEmailsLoading
 }) {
-    const [selectedRows, setSelectedRows] = useState([]);
+    const [selectedRows, setSelectedRows] = useState([227165]);
     const [rows, setRows] = useState([]);
 
     const compare = (row, sentShipfile) =>
@@ -34,9 +34,11 @@ export default function ConsignmentShipfiles({
 
     useEffect(() => {
         if (processedShipfiles?.length) {
-            processedShipfiles.forEach(transferred =>
+            processedShipfiles.forEach(processed =>
                 setRows(r =>
-                    r.map(row => (compare(row, transferred) ? { ...transferred, id: row.id } : row))
+                    r.map(row =>
+                        row.id === processed.consignmentId ? { ...processed, id: row.id } : row
+                    )
                 )
             );
         }
@@ -50,7 +52,8 @@ export default function ConsignmentShipfiles({
         { field: 'status', headerName: 'Status', width: 200 }
     ];
     const handleSelectRow = selected => {
-        setSelectedRows(rows.filter(r => selected.rowIds.includes(r.id)));
+        console.log(selected);
+        setSelectedRows(rows.filter(r => selected.rowIds.includes(r.consignmentId.toString())));
     };
     return (
         <Page>
@@ -84,7 +87,7 @@ export default function ConsignmentShipfiles({
                                     });
                                 }}
                             >
-                                Transfer
+                                Send Selected
                             </Button>
                         </Grid>
                         <Grid item xs={12}>

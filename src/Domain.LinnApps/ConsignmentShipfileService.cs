@@ -13,14 +13,18 @@
 
         private readonly IShipfilePdfBuilder pdfBuilder;
 
+        private readonly IQueryRepository<Consignment> consignmentRepository;
+
         public ConsignmentShipfileService(
             IQueryRepository<SalesOrder> salesOrderRepository,
             IEmailService emailService,
-            IShipfilePdfBuilder pdfBuilder)
+            IShipfilePdfBuilder pdfBuilder,
+            IQueryRepository<Consignment> consignmentRepository)
         {
             this.salesOrderRepository = salesOrderRepository;
             this.emailService = emailService;
             this.pdfBuilder = pdfBuilder;
+            this.consignmentRepository = consignmentRepository;
         }
 
         public IEnumerable<ConsignmentShipfile> SendEmails(IEnumerable<ConsignmentShipfile> toSend)
@@ -30,6 +34,8 @@
             var consignmentShipfiles = withDetails as ConsignmentShipfile[] ?? withDetails.ToArray();
             foreach (var shipfile in consignmentShipfiles)
             {
+                shipfile.Consignment =
+                    this.consignmentRepository.FindBy(c => c.ConsignmentId == shipfile.ConsignmentId);
                 if (shipfile.Message == null)
                 {
                     var pdf = this.pdfBuilder.BuildPdf(shipfile); // todo - implement pdf builder properly
@@ -53,6 +59,7 @@
             var consignmentShipfiles = shipfiles as ConsignmentShipfile[] ?? shipfiles.ToArray();
             foreach (var shipfile in consignmentShipfiles)
             {
+
                 var orders = this.salesOrderRepository.FilterBy(
                         o => o.ConsignmentItems.Any() 
                              && o.ConsignmentItems.All(i => i.ConsignmentId == shipfile.Id))
@@ -67,7 +74,7 @@
                     }
                     else // an org
                     {
-
+                        shipfile.Message = null;
                     }
                 }
             }

@@ -28,13 +28,12 @@
         }
 
         public IResult<IEnumerable<ConsignmentShipfile>> SendEmails(
-            IEnumerable<ConsignmentShipfileResource> toSend)
+           ConsignmentShipfilesSendEmailsRequestResource toSend)
         {
-            this.domainService.SendEmails(toSend.Select(
+            var result = this.domainService.SendEmails(toSend.Shipfiles.Select(
                 s => new ConsignmentShipfile { Id = s.Id, ConsignmentId = s.ConsignmentId }));
 
-            return new SuccessResult<IEnumerable<ConsignmentShipfile>>(
-                new List<ConsignmentShipfile>());
+            return new SuccessResult<IEnumerable<ConsignmentShipfile>>(result);
         }
     }
 }

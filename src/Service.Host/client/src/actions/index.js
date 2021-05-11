@@ -212,5 +212,5 @@ export const parcelActionTypes = makeActionTypes(itemTypes.parcel.actionType);
 export const parcelsActionTypes = makeActionTypes(itemTypes.parcels.actionType, false);
 
 export const shipfilesSendEmailsActionTypes = makeProcessActionTypes(
-    processTypes.shipfileSendEmails.actionType
+    processTypes.shipfilesSendEmails.actionType
 );

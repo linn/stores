@@ -59,7 +59,7 @@
 
         private object SendEmails()
         {
-            var resource = this.Bind<IEnumerable<ConsignmentShipfileResource>>();
+            var resource = this.Bind<ConsignmentShipfilesSendEmailsRequestResource>();
             return this.Negotiate.WithModel(this.shipfileService.SendEmails(resource));
         }
     }

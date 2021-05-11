@@ -4,9 +4,9 @@ import * as processTypes from '../processTypes';
 import config from '../config';
 
 export default new ProcessActions(
-    processTypes.shipfileSendEmails.item,
-    processTypes.shipfileSendEmails.actionType,
-    processTypes.shipfileSendEmails.uri,
+    processTypes.shipfilesSendEmails.item,
+    processTypes.shipfilesSendEmails.actionType,
+    processTypes.shipfilesSendEmails.uri,
     actionTypes,
     config.appRoot
 );
