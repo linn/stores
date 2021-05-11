@@ -1546,6 +1546,7 @@
             q.Property(t => t.HeadingOrder).HasColumnName("HEADING_ORDER");
             q.Property(t => t.CategoryOrder).HasColumnName("CATEGORY_ORDER");
             q.Property(t => t.TotalValue).HasColumnName("TOTAL_VALUE");
+            q.Property(t => t.ActiveCategory).HasColumnName("ACTIVE");
         }
 
         private void BuildTqmsMaster(ModelBuilder builder)

@@ -57,6 +57,8 @@
                 var columns = new List<AxisDetailsModel>
                                   {
                                       new AxisDetailsModel("Heading", GridDisplayType.TextValue),
+                                      new AxisDetailsModel("Active", GridDisplayType.Value),
+                                      new AxisDetailsModel("Inactive", GridDisplayType.Value),
                                       new AxisDetailsModel("Value", GridDisplayType.Value)
                                   };
                 resultsModel.AddSortedColumns(columns);
@@ -70,6 +72,27 @@
                             ColumnId = "Heading",
                             TextDisplay = tqmsSummaryByCategory.HeadingDescription
                         });
+                    if (tqmsSummaryByCategory.ActiveCategory == "Y")
+                    {
+                        models.Add(
+                            new CalculationValueModel
+                                {
+                                    RowId = tqmsSummaryByCategory.HeadingCode,
+                                    ColumnId = "Active",
+                                    Value = tqmsSummaryByCategory.TotalValue
+                                });
+                    }
+                    else
+                    {
+                        models.Add(
+                            new CalculationValueModel
+                                {
+                                    RowId = tqmsSummaryByCategory.HeadingCode,
+                                    ColumnId = "Inactive",
+                                    Value = tqmsSummaryByCategory.TotalValue
+                                });
+                    }
+
                     models.Add(
                         new CalculationValueModel
                         {
