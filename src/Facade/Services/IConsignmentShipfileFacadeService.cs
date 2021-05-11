@@ -11,5 +11,7 @@
         IResult<IEnumerable<ConsignmentShipfile>> GetShipfiles();
 
         IResult<IEnumerable<ConsignmentShipfile>> SendEmails(IEnumerable<ConsignmentShipfileResource> toSend);
+
+        IResult<IEnumerable<ConsignmentShipfile>> GetEmailDetails(IEnumerable<ConsignmentShipfileResource> shipfiles);
     }
 }
