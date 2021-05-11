@@ -4,21 +4,27 @@ import ConsignmentShipfiles from '../components/ConsignmentShipfiles';
 import consignmentShipfilesActions from '../actions/consignmentShipfilesActions';
 import consignmentShipfilesSelectors from '../selectors/consignmentShipfilesSelectors';
 import * as processTypes from '../processTypes';
+import shipfilesSendEmailsSelectors from '../selectors/shipfilesSendEmailsSelectors';
+import shipfilesSendEmailsActions from '../actions/shipfilesSendEmailsActions';
 
 const mapStateToProps = state => ({
     consignmentShipfiles: consignmentShipfilesSelectors.getItems(state),
     consignmentShipfilesLoading: consignmentShipfilesSelectors.getLoading(state),
-    //itemError: getItemError(state, processTypes.consignmentShipfiles.item),
-    //shipfilesSent: consignmentShipfilesSelectors.getData(state)?.transferred
+    processedShipfiles: shipfilesSendEmailsSelectors.getData(state)?.processed,
+    sendEmailsLoading: shipfilesSendEmailsSelectors.getWorking(state),
+    itemError: getItemError(state, processTypes.shipfileSendEmails.item)
 });
 
 const initialise = () => dispatch => {
     dispatch(consignmentShipfilesActions.fetch());
-    //consignmentShipfilesActions.clearErrorsForItem();
+    shipfilesSendEmailsActions.clearErrorsForItem();
 };
 
 const mapDispatchToProps = {
-    initialise
+    initialise,
+    sendEmails: shipfilesSendEmailsActions.requestProcessStart,
+    clearErrors: shipfilesSendEmailsActions.clearErrorsForItem,
+    clearData: shipfilesSendEmailsActions.clearProcessData
 };
 
 export default connect(
