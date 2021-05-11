@@ -69,3 +69,9 @@ export const unallocateConsignmentLine = new ItemType(
 );
 
 export const doStockMove = new ItemType('doStockMove', 'DO_STOCK_MOVE', '/inventory/move-stock');
+
+export const shipfileSendEmails = new ItemType(
+    'shipfileSendEmails',
+    'SHIPFILE_SEND_EMAILS',
+    'inventory/shipfiles/send-emails'
+);

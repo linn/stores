@@ -83,6 +83,7 @@ import consignmentShipfiles from './consignmentShipfiles';
 import parcels from './parcels/parcels';
 import parcel from './parcels/parcel';
 import suppliersApprovedCarrier from './suppliersApprovedCarrier';
+import shipfilesSendEmails from './shipfilesSendEmails';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -137,6 +138,7 @@ const rootReducer = history =>
         salesAccounts,
         salesOutlets,
         sernosSequences,
+        shipfilesSendEmails,
         sosAllocDetails,
         sosAllocHeads,
         stockLocator,
