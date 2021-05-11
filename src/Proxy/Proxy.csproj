@@ -13,6 +13,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.60" />
     <PackageReference Include="PuppeteerSharp" Version="4.0.0" />
+    <PackageReference Include="Scriban" Version="3.7.0" />
   </ItemGroup>
 
   <ItemGroup>
