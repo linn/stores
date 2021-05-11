@@ -17,5 +17,7 @@
         public int? HeadingOrder { get; set; }
 
         public int? CategoryOrder { get; set; }
+
+        public string ActiveCategory { get; set; }
     }
 }
