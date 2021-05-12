@@ -11,6 +11,7 @@
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
     using Linn.Stores.Domain.LinnApps.Tpk;
+    using Linn.Stores.Domain.LinnApps.Tqms;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation;
@@ -84,9 +85,7 @@
         public DbQuery<AuditLocation> AuditLocations { get; set; }
 
         public DbSet<SosAllocHead> SosAllocHeads { get; set; }
-
-        public DbSet<Carrier> Carriers { get; set; }
-
+        
         public DbSet<Parcel> Parcels { get; set; }
 
         public DbSet<SosAllocDetail> SosAllocDetails { get; set; }
@@ -184,6 +183,14 @@
         public DbQuery<InterCompanyInvoice> IntercompanyInvoices { get; set; }
 
         public DbQuery<ReqMove> ReqMoves { get; set; }
+        
+        public DbQuery<TqmsSummaryByCategory> TqmsSummaryByCategories { get; set; }
+
+        public DbSet<TqmsMaster> TqmsMaster { get; set; }
+
+        public DbSet<TqmsJobRef> TqmsJobRefs { get; set; }
+
+        public DbQuery<TqmsOutstandingLoansByCategory> TqmsOutstandingLoansByCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -218,7 +225,6 @@
             this.QueryStoresBudgets(builder);
             this.QueryAuditLocations(builder);
             this.BuildSosAllocHeads(builder);
-            this.BuildCarriers(builder);
             this.BuildParcels(builder);
             this.BuildMechPartAlts(builder);
             this.BuildManufacturers(builder);
@@ -270,6 +276,10 @@
             this.QuerySalesOrders(builder);
             this.QuerySalesOrderDetails(builder);
             this.QueryIntercompanyInvoices(builder);
+            this.QueryTqmsSummaryByCategories(builder);
+            this.BuildTqmsMaster(builder);
+            this.BuildTqmsJobRefs(builder);
+            this.QueryTqmsOutstandingLoansByCategories(builder);
             base.OnModelCreating(builder);
         }
 
@@ -330,6 +340,7 @@
             q.Property(e => e.Name).HasColumnName("SUPPLIER_NAME").HasMaxLength(50);
             q.Property(e => e.CountryCode).HasColumnName("COUNTRY");
             q.Property(e => e.DateClosed).HasColumnName("DATE_CLOSED");
+            q.Property(s => s.ApprovedCarrier).HasColumnName("APPROVED_CARRIER");
         }
 
         private void BuildParts(ModelBuilder builder)
@@ -831,16 +842,6 @@
             table.Property(s => s.OutletHoldStatus).HasColumnName("OUTLET_HOLD_STATUS").HasMaxLength(200);
         }
 
-        private void BuildCarriers(ModelBuilder builder)
-        {
-            var e = builder.Entity<Carrier>().ToTable("CARRIERS");
-            e.HasKey(c => c.CarrierCode);
-            e.Property(c => c.CarrierCode).HasColumnName("CARRIER_CODE").HasMaxLength(10);
-            e.Property(c => c.Name).HasColumnName("NAME");
-            e.Property(c => c.OrganisationId).HasColumnName("ORG_ID");
-            e.Property(c => c.DateInvalid).HasColumnName("DATE_INVALID");
-        }
-
         private void BuildSosAllocDetails(ModelBuilder builder)
         {
             var table = builder.Entity<SosAllocDetail>().ToTable("SOS_ALLOC_DETAILS");
@@ -885,16 +886,17 @@
             e.Property(c => c.ParcelNumber).HasColumnName("PARCEL_NUMBER");
             e.Property(c => c.DateCreated).HasColumnName("DATE_CREATED");
             e.Property(c => c.DateReceived).HasColumnName("DATE_RECEIVED");
-            e.Property(c => c.SupplierInvoiceNo).HasColumnName("SUPPLIER_INV_NUMBERS");
-            e.Property(c => c.ConsignmentNo).HasColumnName("CONSIGNMENT_NUMBER");
+            e.Property(c => c.SupplierInvoiceNo).HasColumnName("SUPPLIER_INV_NUMBERS").HasMaxLength(500);
+            e.Property(c => c.ConsignmentNo).HasColumnName("CONSIGNMENT_NUMBER").HasMaxLength(20);
+            e.Property(c => c.ImportBookNo).HasColumnName("IMPORT_BOOK_NUM").HasMaxLength(8);
             e.Property(c => c.Weight).HasColumnName("WEIGHT");
             e.Property(c => c.CheckedById).HasColumnName("CHECKED_BY");
             e.Property(c => c.SupplierId).HasColumnName("SUPPLIER_ID");
-            e.Property(c => c.Comments).HasColumnName("COMMENTS");
+            e.Property(c => c.Comments).HasColumnName("COMMENTS").HasMaxLength(2000);
             e.Property(c => c.CarrierId).HasColumnName("CARRIER");
             e.Property(c => c.PalletCount).HasColumnName("NUMBER_OF_PALLETS");
             e.Property(c => c.CartonCount).HasColumnName("NUMBER_OF_CARTONS");
-            e.Property(c => c.DateCancelled).HasColumnName("DATE_CANCELLED");
+            e.Property(c => c.DateCancelled).HasColumnName("DATE_CANCELLED").HasMaxLength(2000);
             e.Property(c => c.CancellationReason).HasColumnName("REASON_CANCELLED");
             e.Property(c => c.CancelledBy).HasColumnName("CANCELLED_BY");
         }
@@ -1407,6 +1409,7 @@
             q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE");
             q.Property(e => e.State).HasColumnName("STATE");
             q.Property(e => e.DisplayLocation).HasColumnName("DISPLAY_LOCATION");
+            q.Property(e => e.DisplayMoveLocation).HasColumnName("DISPLAY_MOVE_LOCATION");
         }
 
         private void BuildPartStorageTypes(ModelBuilder builder)
@@ -1532,6 +1535,45 @@
             var q = builder.Query<InterCompanyInvoice>().ToView("INTER_COMPANY_INVOICES");
             q.Property(e => e.DocumentNumber).HasColumnName("DOCUMENT_NUMBER");
             q.Property(e => e.ExportReturnId).HasColumnName("EXPORT_RETURN_ID");
+        }
+
+        private void QueryTqmsSummaryByCategories(ModelBuilder builder)
+        {
+            var q = builder.Query<TqmsSummaryByCategory>().ToView("TQMS_CATEGORY_SUMMARY_VIEW");
+            q.Property(t => t.JobRef).HasColumnName("JOBREF");
+            q.Property(t => t.HeadingCode).HasColumnName("TQMS_HEADING_CODE");
+            q.Property(t => t.HeadingDescription).HasColumnName("HEADING_DESCRIPTION");
+            q.Property(t => t.CategoryCode).HasColumnName("TQMS_CATEGORY");
+            q.Property(t => t.CategoryDescription).HasColumnName("CATEGORY_DESCRIPTION");
+            q.Property(t => t.HeadingOrder).HasColumnName("HEADING_ORDER");
+            q.Property(t => t.CategoryOrder).HasColumnName("CATEGORY_ORDER");
+            q.Property(t => t.TotalValue).HasColumnName("TOTAL_VALUE");
+            q.Property(t => t.ActiveCategory).HasColumnName("ACTIVE");
+        }
+
+        private void BuildTqmsMaster(ModelBuilder builder)
+        {
+            var e = builder.Entity<TqmsMaster>().ToTable("TQMS_MASTER");
+            e.HasKey(a => a.JobRef);
+            e.Property(a => a.JobRef).HasColumnName("JOBREF").HasMaxLength(6);
+        }
+
+        private void BuildTqmsJobRefs(ModelBuilder builder)
+        {
+            var e = builder.Entity<TqmsJobRef>().ToTable("TQMS_JOBREFS");
+            e.HasKey(a => a.JobRef);
+            e.Property(a => a.JobRef).HasColumnName("JOBREF").HasMaxLength(6);
+            e.Property(a => a.DateOfRun).HasColumnName("JOBREF_DATE");
+        }
+
+        private void QueryTqmsOutstandingLoansByCategories(ModelBuilder builder)
+        {
+            var q = builder.Query<TqmsOutstandingLoansByCategory>().ToView("TQMS_OUTSTANDING_LOANS");
+            q.Property(t => t.JobRef).HasColumnName("JOBREF");
+            q.Property(t => t.Group).HasColumnName("TQMS_GROUP");
+            q.Property(t => t.Category).HasColumnName("CATEGORY");
+            q.Property(t => t.TotalStoresValue).HasColumnName("TOTAL_STORES_VALUE");
+            q.Property(t => t.TotalSalesValue).HasColumnName("TOTAL_SALES_VALUE");
         }
     }
 }

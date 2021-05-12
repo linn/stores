@@ -15,11 +15,8 @@
             {
                 ParcelNumber = parcel.ParcelNumber,
                 SupplierId = parcel.SupplierId,
-                SupplierName = parcel.SupplierName,
-                SupplierCountry = parcel.SupplierCountry,
                 DateCreated = parcel.DateCreated.ToString("o"),
                 CarrierId = parcel.CarrierId,
-                CarrierName = parcel.CarrierName,
                 SupplierInvoiceNo = parcel.SupplierInvoiceNo,
                 ConsignmentNo = parcel.ConsignmentNo,
                 CartonCount = parcel.CartonCount,
@@ -27,12 +24,12 @@
                 Weight = parcel.Weight,
                 DateReceived = parcel.DateReceived.ToString("o"),
                 CheckedById = parcel.CheckedById,
-                CheckedByName = parcel.CheckedByName,
                 Comments = parcel.Comments,
-                DateCancelled = parcel.DateCancelled.ToString("o"),
+                DateCancelled = parcel.DateCancelled?.ToString("o"),
                 CancellationReason = parcel.CancellationReason,
                 CancelledBy = parcel.CancelledBy,
-                Links = this.BuildLinks(parcel).ToArray()
+                Links = this.BuildLinks(parcel).ToArray(),
+                ImportBookNo = parcel.ImportBookNo
             };
         }
 

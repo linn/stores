@@ -10,7 +10,7 @@
 
         void AddQcControl(string partNumber, int? createdBy, string qcInfo);
 
-        Part CreateFromSource(int sourceId, int createdBy);
+        Part CreateFromSource(int sourceId, int createdBy, IEnumerable<PartDataSheet> dataSheets);
 
         IEnumerable<Part> GetDeptStockPalletParts();
     }

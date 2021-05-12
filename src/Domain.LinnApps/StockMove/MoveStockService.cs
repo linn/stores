@@ -22,22 +22,26 @@
 
         private readonly IRepository<StorageLocation, int> storageLocationRepository;
 
+        private readonly IStoresPalletRepository storesPalletRepository;
+
         public MoveStockService(
             IStoresPack storesPack,
             IKardexPack kardexPack,
             IRepository<RequisitionHeader, int> requisitionRepository,
-            IRepository<StorageLocation, int> storageLocationRepository)
+            IRepository<StorageLocation, int> storageLocationRepository,
+            IStoresPalletRepository storesPalletRepository)
         {
             this.storesPack = storesPack;
             this.kardexPack = kardexPack;
             this.requisitionRepository = requisitionRepository;
             this.storageLocationRepository = storageLocationRepository;
+            this.storesPalletRepository = storesPalletRepository;
         }
 
         public RequisitionProcessResult MoveStock(
             int? reqNumber,
             string partNumber,
-            int quantity,
+            decimal quantity,
             string from,
             int? fromLocationId,
             int? fromPalletNumber,
@@ -93,6 +97,9 @@
             {
                 this.GetLocationDetails(to, out toLocationId, out toPalletNumber);
             }
+
+            this.CheckPallet(fromPalletNumber);
+            this.CheckPallet(toPalletNumber);
 
             var nextLineNumber = req.Lines.Count() + 1;
 
@@ -216,6 +223,18 @@
             }
 
             throw new TranslateLocationException($"Could not find a valid location id or pallet number for {location}");
+        }
+
+        private void CheckPallet(int? palletNumber)
+        {
+            if (palletNumber.HasValue)
+            {
+                var pallet = this.storesPalletRepository.FindById(palletNumber.Value);
+                if (pallet == null)
+                {
+                    throw new MoveInvalidException($"Pallet number {palletNumber} does not exist");
+                }
+            }
         }
     }
 }

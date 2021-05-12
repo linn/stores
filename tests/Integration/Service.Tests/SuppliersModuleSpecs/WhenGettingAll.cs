@@ -55,7 +55,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.SuppliersService.Received().GetSuppliers();
+            this.SuppliersService.Received().GetSuppliers(Arg.Any<string>(), false, false);
         }
 
         [Test]

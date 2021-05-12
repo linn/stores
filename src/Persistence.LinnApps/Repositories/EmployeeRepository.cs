@@ -23,7 +23,7 @@
 
         public IQueryable<Employee> FindAll()
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.Employees.Where(e => e.DateInvalid == null).OrderBy(e => e.FullName);
         }
 
         public void Add(Employee entity)

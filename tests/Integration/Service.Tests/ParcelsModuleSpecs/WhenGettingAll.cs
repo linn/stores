@@ -7,13 +7,16 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.RequestResources;
     using Nancy;
     using Nancy.Testing;
     using NSubstitute;
     using NUnit.Framework;
+ 
 
     public class WhenGettingAll : ContextBase
     {
+        ParcelSearchRequestResource requestResource;
         [SetUp]
         public void SetUp()
         {
@@ -23,43 +26,37 @@
                                       {
                                           ParcelNumber = 1,
                                         SupplierId = 2,
-                                        SupplierName = "bathroom cabinet company",
-                                        SupplierCountry = "UK",
                                         DateCreated = new DateTime(),
                                         CarrierId = 4,
-                                        CarrierName = "DHL",
                                         SupplierInvoiceNo = "Bond, James Bond",
-                                        ConsignmentNo = 007,
+                                        ConsignmentNo = "007",
                                         CartonCount = 0,
                                         PalletCount = 0,
                                         Weight = (decimal)00.70,
                                         DateReceived = new DateTime(),
                                         CheckedById = 123456,
-                                        CheckedByName = "DJ badboy",
                                         Comments = "RSN 212, RSN 118"
                                       },
                                   new Parcel
                                       {
-                                          ParcelNumber = 22,
+                                          ParcelNumber = 21,
                                           SupplierId = 3,
-                                          SupplierName = "electric things company",
-                                          SupplierCountry = "UK",
                                           DateCreated = new DateTime(),
                                           CarrierId = 4,
-                                          CarrierName = "DHL",
                                           SupplierInvoiceNo = "swift, t swift",
-                                          ConsignmentNo = 222,
+                                          ConsignmentNo = "222",
                                           CartonCount = 15,
                                           PalletCount = 1,
                                           Weight = (decimal)02.20,
                                           DateReceived = new DateTime(),
                                           CheckedById = 123456,
-                                          CheckedByName = "partridge alan",
                                           Comments = "sent"
                                       }
                                     };
 
-            this.ParcelsService.GetAll() 
+            this.requestResource = new ParcelSearchRequestResource();
+
+            this.ParcelsFacadeService.Search(Arg.Any<ParcelSearchRequestResource>())
                 .Returns(new SuccessResult<IEnumerable<Parcel>>(parcels));
 
             this.Response = this.Browser.Get(
@@ -67,6 +64,7 @@
                 with =>
                 {
                     with.Header("Accept", "application/json");
+                    with.Query("searchTerm", String.Empty);
                 }).Result;
         }
 
@@ -79,14 +77,14 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ParcelsService.Received().GetAll();
+            this.ParcelsFacadeService.Received().Search(Arg.Any<ParcelSearchRequestResource>());
         }
 
         [Test]
         public void ShouldReturnResources()
         {
             var resources = this.Response.Body.DeserializeJson<IEnumerable<ParcelResource>>();
-            resources.Count(x => x.ParcelNumber == 22).Should().Be(1);
+            resources.Count(x => x.ParcelNumber == 21).Should().Be(1);
             resources.Count(x => x.ParcelNumber == 1).Should().Be(1);
             resources.Count().Should().Be(2);
         }

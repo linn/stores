@@ -17,8 +17,8 @@
 
         public Parcel FindById(int key)
         {
-            return this.serviceDbContext
-                .Parcels.FirstOrDefault(p => p.ParcelNumber == key);
+            return this.serviceDbContext.Parcels.Where(p => p.ParcelNumber == key)
+                .ToList().FirstOrDefault();
         }
 
         public IQueryable<Parcel> FindAll()

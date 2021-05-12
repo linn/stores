@@ -22,6 +22,8 @@ import WwdReport from '../containers/reports/WwdReport';
 import StoragePlaceAuditReportOptions from '../containers/reports/StoragePlaceAuditReportOptions';
 import StoragePlaceAuditReport from '../containers/reports/StoragePlaceAuditReport';
 import NotFoundPage from './NotFoundPage';
+import Parcel from '../containers/parcels/Parcel';
+import Parcels from '../containers/parcels/Parcels';
 import MechPartSource from '../containers/parts/mechPartSource/MechPartSource';
 import WorkstationTopUpStatus from '../containers/workstations/WorkstationTopUpStatus';
 import DeptStockUtility from '../containers/DeptStockUtility/DeptStockUtility';
@@ -37,6 +39,8 @@ import ExportReturn from '../containers/ExportReturn';
 import StockMove from '../containers/StockMove';
 import StockLocatorBatchView from '../containers/stockLocatorUtility/StockLocatorBatchView';
 import StockLocatorPricesView from '../containers/stockLocatorUtility/StockLocatorPricesView';
+import TqmsSummaryByCategoryReportOptions from '../containers/reports/TqmsSummaryByCategoryReportOptions';
+import TqmsSummaryByCategoryReport from '../containers/reports/TqmsSummaryByCategoryReport';
 
 const Root = ({ store }) => (
     <div>
@@ -124,6 +128,15 @@ const Root = ({ store }) => (
                                         path="/inventory/dept-stock-parts"
                                         component={DeptStockParts}
                                     />
+
+                                    <Route exact path="/logistics/parcels" component={Parcels} />
+                                    <Route
+                                        exact
+                                        path="/logistics/parcels/create"
+                                        component={Parcel}
+                                    />
+                                    <Route exact path="/logistics/parcels/:id" component={Parcel} />
+
                                     <Route
                                         exact
                                         path="/inventory/reports/storage-place-audit/report"
@@ -197,6 +210,16 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/move-stock"
                                         component={StockMove}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/tqms-category-summary/report"
+                                        component={TqmsSummaryByCategoryReport}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/tqms-category-summary"
+                                        component={TqmsSummaryByCategoryReportOptions}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>

@@ -9,5 +9,7 @@
         string GetRkmCode(string unit, decimal value);
 
         string GetCapacitanceLetterAndNumeralCode(string unit, decimal value);
+
+        MechPartSource Create(MechPartSource candidate, IEnumerable<PartDataSheet> dataSheets);
     }
 }

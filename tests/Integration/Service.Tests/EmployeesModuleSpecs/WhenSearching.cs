@@ -23,7 +23,7 @@
         {
             var employeeA = new Employee
                                {
-                                   Id = 1,
+                                   Id = 22,
                                    FullName = "Mr  Employee"
                                };
             var employeeB = new Employee
@@ -40,6 +40,7 @@
                 with =>
                     {
                         with.Header("Accept", "application/json");
+                        with.Query("searchTerm", "2");
                     }).Result;
         }
 
@@ -60,7 +61,7 @@
         {
             var resource = this.Response.Body.DeserializeJson<IEnumerable<EmployeeResource>>().ToList();
             resource.Should().HaveCount(2);
-            resource.Should().Contain(a => a.Id == 1);
+            resource.Should().Contain(a => a.Id == 22);
             resource.Should().Contain(a => a.Id == 2);
         }
     }

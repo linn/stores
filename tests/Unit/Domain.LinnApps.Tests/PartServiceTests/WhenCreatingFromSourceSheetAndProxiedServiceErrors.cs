@@ -34,7 +34,7 @@
         [Test]
         public void ShouldThrowException()
         {
-            var ex = Assert.Throws<CreatePartException>(() => this.Sut.CreateFromSource(1, 1));
+            var ex = Assert.Throws<CreatePartException>(() => this.Sut.CreateFromSource(1, 1, new List<PartDataSheet>()));
             ex.Message.Should().Be("A Message other than the Success Message");
         }
     }

@@ -9,7 +9,7 @@
         RequisitionProcessResult MoveStock(
             int? reqNumber,
             string partNumber,
-            int quantity,
+            decimal quantity,
             string from,
             int? fromLocationId,
             int? fromPalletNumber,

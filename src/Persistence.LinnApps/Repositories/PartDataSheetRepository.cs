@@ -27,7 +27,8 @@
 
         public void Add(PartDataSheet entity)
         {
-            throw new NotImplementedException();
+            this.serviceDbContext.PartDataSheets.Add(entity);
+            this.serviceDbContext.SaveChanges();
         }
 
         public void Remove(PartDataSheet entity)

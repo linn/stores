@@ -6,7 +6,7 @@
     {
         public string PartNumber { get; set; }
 
-        public int QuantityAvailable { get; set; }
+        public decimal QuantityAvailable { get; set; }
 
         public DateTime StockRotationDate { get; set; }
 
@@ -21,5 +21,7 @@
         public string State { get; set; }
 
         public string DisplayLocation { get; set; }
+
+        public string DisplayMoveLocation { get; set; }
     }
 }

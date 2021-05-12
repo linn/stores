@@ -49,7 +49,7 @@
 
             this.MechPartSourceService.Add(Arg.Any<MechPartSourceResource>())
                 .Returns(new CreatedResult<MechPartSource>(source));
-            this.PartsDomainService.CreateFromSource(1, 33087).Returns(part);
+            this.PartsDomainService.CreateFromSource(1, 33087, new List<PartDataSheet>()).Returns(part);
             this.MechPartSourceService.GetById(1).Returns(new SuccessResult<MechPartSource>(source));
             this.AuthService.HasPermissionFor(
                 Arg.Any<string>(),
@@ -82,7 +82,7 @@
         [Test]
         public void ShouldCreatePart()
         {
-            this.PartsDomainService.Received().CreateFromSource(1, 33087);
+            this.PartsFacadeService.Received().CreatePartFromSource(1, 33087, null);
         }
 
         [Test]

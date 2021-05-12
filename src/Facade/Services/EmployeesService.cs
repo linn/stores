@@ -27,5 +27,10 @@
 
             return new SuccessResult<IEnumerable<Employee>>(result);
         }
+
+        public IResult<IEnumerable<Employee>> GetAllEmployees()
+        {
+            return new SuccessResult<IEnumerable<Employee>>(this.repository.FindAll());
+        }
     }
 }

@@ -14,6 +14,7 @@
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
     using Linn.Stores.Domain.LinnApps.Tpk;
+    using Linn.Stores.Domain.LinnApps.Tqms;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation;
@@ -58,11 +59,10 @@
             builder.RegisterType<PartDataSheetRepository>().As<IRepository<PartDataSheet, PartDataSheetKey>>();
             builder.RegisterType<MechPartSourceRepository>().As<IRepository<MechPartSource, int>>();
             builder.RegisterType<ParcelRepository>().As<IRepository<Parcel, int>>();
-            builder.RegisterType<CarrierRepository>().As<IRepository<Carrier, string>>();
             builder.RegisterType<PartDataSheetValuesRepository>().As<IQueryRepository<PartDataSheetValues>>();
             builder.RegisterType<StockLocatorRepository>().As<IRepository<StockLocator, int>>();
             builder.RegisterType<StoragePlaceRepository>().As<IQueryRepository<StoragePlace>>();
-            builder.RegisterType<StoresBugetRepository>().As<IQueryRepository<StoresBudget>>();
+            builder.RegisterType<StoresBudgetRepository>().As<IQueryRepository<StoresBudget>>();
             builder.RegisterType<AuditLocationRepository>().As<IQueryRepository<AuditLocation>>();
             builder.RegisterType<ManufacturerRepository>().As<IRepository<Manufacturer, string>>();
             builder.RegisterType<ImportBookCpcNumberRepository>().As<IRepository<ImportBookCpcNumber, int>>();
@@ -115,6 +115,10 @@
             builder.RegisterType<PartStorageTypeRepository>().As<IRepository<PartStorageType, int>>();
             builder.RegisterType<InterCompanyInvoiceRepository>().As<IQueryRepository<InterCompanyInvoice>>();
             builder.RegisterType<ReqMovesRepository>().As<IQueryRepository<ReqMove>>();
+            builder.RegisterType<TqmsSummaryByCategoryRepository>().As<IQueryRepository<TqmsSummaryByCategory>>();
+            builder.RegisterType<TqmsOutstandingLoansByCategoryRepository>().As<IQueryRepository<TqmsOutstandingLoansByCategory>>();
+            builder.RegisterType<TqmsMasterRepository>().As<ISingleRecordRepository<TqmsMaster>>();
+            builder.RegisterType<TqmsJobRefRepository>().As<IRepository<TqmsJobRef, string>>();
         }
     }
 }

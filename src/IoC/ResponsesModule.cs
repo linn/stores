@@ -19,6 +19,7 @@
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
     using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
+    using Linn.Stores.Domain.LinnApps.Tqms;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Facade;
@@ -78,6 +79,7 @@
             builder.RegisterType<DecrementRulesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<DecrementRule>>>();
             builder.RegisterType<ResultsModelResourceBuilder>().As<IResourceBuilder<ResultsModel>>();
+            builder.RegisterType<ResultsModelsResourceBuilder>().As<IResourceBuilder<IEnumerable<ResultsModel>>>();
             builder.RegisterType<CountryResourceBuilder>().As<IResourceBuilder<Country>>();
             builder.RegisterType<CountriesResourceBuilder>().As<IResourceBuilder<IEnumerable<Country>>>();
             builder.RegisterType<PartTemplateResourceBuilder>().As<IResourceBuilder<PartTemplate>>();
@@ -89,10 +91,6 @@
             builder.RegisterType<SosAllocDetailsResourceBuilder>().As<IResourceBuilder<IEnumerable<SosAllocDetail>>>();
             builder.RegisterType<MechPartSourceResourceBuilder>().As<IResourceBuilder<MechPartSource>>();
             builder.RegisterType<PartDataSheetResourceBuilder>().As<IResourceBuilder<PartDataSheet>>();
-            builder.RegisterType<CarrierResourceBuilder>()
-                .As<IResourceBuilder<Carrier>>();
-            builder.RegisterType<CarriersResourceBuilder>()
-                .As<IResourceBuilder<IEnumerable<Carrier>>>();
             builder.RegisterType<ParcelResourceBuilder>()
                 .As<IResourceBuilder<Parcel>>();
             builder.RegisterType<ParcelsResourceBuilder>()
@@ -172,6 +170,8 @@
                 .As<IResourceBuilder<InterCompanyInvoice>>();
             builder.RegisterType<InterCompanyInvoicesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<InterCompanyInvoice>>>();
+            builder.RegisterType<TqmsMasterResourceBuilder>().As<IResourceBuilder<TqmsMaster>>();
+            builder.RegisterType<TqmsJobRefsResourceBuilder>().As<IResourceBuilder<IEnumerable<TqmsJobRef>>>();
         }
     }
 }
