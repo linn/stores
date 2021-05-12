@@ -1481,6 +1481,7 @@
             q.Property(c => c.DateClosed).HasColumnName("DATE_CLOSED");
             q.Property(c => c.CustomerName).HasColumnName("CUSTOMER_NAME");
             q.HasOne(c => c.Country).WithMany(y => y.Consignments).HasForeignKey(c => c.CountryCode);
+            q.HasOne(c => c.SalesAccount).WithMany(a => a.Consignments).HasForeignKey(c => c.SalesAccountId);
         }
 
         private void QuerySalesOrders(ModelBuilder builder)
@@ -1639,6 +1640,7 @@
             entity.Property(c => c.Id).HasColumnName("CONTACT_ID");
             entity.Property(c => c.OrgId).HasColumnName("ORG_ID");
             entity.Property(c => c.EmailAddress).HasColumnName("EMAIL_ADDRESS");
+            entity.HasMany(c => c.SalesOutlets).WithOne(o => o.OrderContact).HasForeignKey(o => o.OrderContactId);
         }
     }
 }

@@ -19,6 +19,8 @@
 
         public IEnumerable<SalesOrder> SalesOrders { get; set; }
 
+        public IEnumerable<Consignment> Consignments { get; set; }
+
         public Contact ContactDetails { get; set; }
     }
 }

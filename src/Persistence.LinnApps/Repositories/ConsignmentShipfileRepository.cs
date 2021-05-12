@@ -31,10 +31,13 @@
                 .Include(s => s.Consignment)
                 .ThenInclude(c => c.Invoices)
                 .Include(s => s.Consignment)
-                .ThenInclude(c => c.Items)
-                .ThenInclude(items => items.SalesOrder)
-                .ThenInclude(o => o.Account)
+                .ThenInclude(c => c.SalesAccount)
                 .ThenInclude(a => a.ContactDetails)
+                .Include(s => s.Consignment)
+                .ThenInclude(c => c.Items)
+                // .ThenInclude(items => items.SalesOrder)
+                // .ThenInclude(o => o.Account)
+                // .ThenInclude(a => a.ContactDetails)
                 .AsNoTracking()
                 .ToList().FirstOrDefault();
         }

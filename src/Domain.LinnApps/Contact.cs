@@ -11,5 +11,7 @@
         public string EmailAddress { get; set; }
 
         public IEnumerable<SalesAccount> SalesAccounts { get; set; }
+
+        public IEnumerable<SalesOutlet> SalesOutlets { get; set; }
     }
 }

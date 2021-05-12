@@ -40,6 +40,8 @@
         public int? OutletAddressId { get; set; }
         
         public int? OrderContactId { get; set; }
+
+        public Contact OrderContact { get; set; }
          
         public IEnumerable<SalesOrder> SalesOrders { get; set; }
     }

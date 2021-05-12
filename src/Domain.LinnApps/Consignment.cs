@@ -9,6 +9,8 @@
 
         public int? SalesAccountId { get; set; }
 
+        public SalesAccount SalesAccount { get; set; }
+
         public int? AddressId { get; set; }
 
         public Country Country { get; set; } 

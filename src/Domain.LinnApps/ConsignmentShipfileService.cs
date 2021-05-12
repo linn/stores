@@ -13,14 +13,18 @@
 
         private readonly IRepository<ConsignmentShipfile, int> shipfileRepository;
 
+        private readonly IQueryRepository<SalesOrder> salesOrderRepository;
+
         public ConsignmentShipfileService(
             IEmailService emailService,
             IShipfilePdfBuilder pdfBuilder,
-            IRepository<ConsignmentShipfile, int> shipfileRepository)
+            IRepository<ConsignmentShipfile, int> shipfileRepository,
+            IQueryRepository<SalesOrder> salesOrderRepository)
         {
             this.emailService = emailService;
             this.pdfBuilder = pdfBuilder;
             this.shipfileRepository = shipfileRepository;
+            this.salesOrderRepository = salesOrderRepository;
         }
 
         public IEnumerable<ConsignmentShipfile> SendEmails(IEnumerable<ConsignmentShipfile> toSend)
@@ -35,15 +39,16 @@
                     continue;
                 }
 
+                var emailAddress = shipfile.Consignment.SalesAccount.ContactDetails?.EmailAddress;
                 var pdf = this.pdfBuilder.BuildPdf(shipfile); 
-                this.emailService.SendEmail(
-                    "lewis.renfrew@linn.co.uk",
-                    "Me",
-                    "lewis.renfrew@linn.co.uk",
-                    "Me",
-                    "Consignment Shipfile",
-                    $"Here is your pdf shipfile {shipfile.Consignment.CustomerName}",
-                    pdf.Result);
+                // this.emailService.SendEmail(
+                //     "lewis.renfrew@linn.co.uk",
+                //     "Me",
+                //     "lewis.renfrew@linn.co.uk",
+                //     "Me",
+                //     "Consignment Shipfile",
+                //     $"Here is your pdf shipfile {emailAddress}",
+                //     pdf.Result);
                 
                 shipfile.Message = ShipfileStatusMessages.EmailSent;
             }
@@ -58,14 +63,24 @@
             foreach (var shipfile in shipfiles)
             {
                 var data = this.shipfileRepository.FindBy(s => s.Id == shipfile.Id);
-                var account = data.Consignment.Items.First().SalesOrder.Account;
+                var account = data.Consignment.SalesAccount;
                 if (account.OrgId == null)
                 {
                     data.Message = account.ContactId != null ? null : ShipfileStatusMessages.NoContactDetails;
                 }
+                // an org
                 else
                 {
-                    data.Message = null;
+                    // ugly, copied from form. ask if this is still relevant?
+                    if (!new List<int> { 7049, 29354, 6480 }.Contains(account.AccountId))
+                    {
+                        var consignmentOrderNumbers = data.Consignment.Items.Select(i => i.OrderNumber);
+                        var orders = this.salesOrderRepository.FilterBy(
+                            o => consignmentOrderNumbers.Contains(o.OrderNumber));
+
+                        var outlets = orders.ToList()
+                            .Select(o => o.SalesOutlet).ToList();
+                    }
                 }
 
                 withDetails.Add(data);

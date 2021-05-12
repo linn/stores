@@ -25,11 +25,13 @@
 
         public IQueryable<SalesOrder> FilterBy(Expression<Func<SalesOrder, bool>> expression)
         {
-            return this.serviceDbContext.SalesOrders.AsNoTracking()
+            var result = this.serviceDbContext.SalesOrders
                 .Where(expression)
-                .Include(o => o.ConsignmentItems).AsNoTracking()
+                .Include(o => o.ConsignmentItems)
                 .Include(o => o.Account).ThenInclude(a => a.ContactDetails)
-                .Include(o => o.SalesOutlet).AsNoTracking();
+                .Include(o => o.SalesOutlet).ThenInclude(o => o.OrderContact)
+                .AsNoTracking();
+            return result;
         }
 
         public IQueryable<SalesOrder> FindAll()
