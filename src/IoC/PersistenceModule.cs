@@ -118,7 +118,7 @@
             builder.RegisterType<TqmsOutstandingLoansByCategoryRepository>().As<IQueryRepository<TqmsOutstandingLoansByCategory>>();
             builder.RegisterType<TqmsMasterRepository>().As<ISingleRecordRepository<TqmsMaster>>();
             builder.RegisterType<TqmsJobRefRepository>().As<IRepository<TqmsJobRef, string>>();
-            builder.RegisterType<ConsignmentShipfileRepository>().As<IQueryRepository<ConsignmentShipfile>>();
+            builder.RegisterType<ConsignmentShipfileRepository>().As<IRepository<ConsignmentShipfile, int>>();
             builder.RegisterType<ConsignmentItemRepository>().As<IRepository<ConsignmentItem, int>>();
         }
     }

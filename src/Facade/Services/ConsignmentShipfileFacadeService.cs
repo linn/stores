@@ -10,12 +10,12 @@
 
     public class ConsignmentShipfileFacadeService : IConsignmentShipfileFacadeService
     {
-        private readonly IQueryRepository<ConsignmentShipfile> repository;
+        private readonly IRepository<ConsignmentShipfile, int> repository;
 
         private readonly IConsignmentShipfileService domainService;
 
         public ConsignmentShipfileFacadeService(
-            IQueryRepository<ConsignmentShipfile> repository,
+            IRepository<ConsignmentShipfile, int> repository,
             IConsignmentShipfileService domainService)
         {
             this.repository = repository;

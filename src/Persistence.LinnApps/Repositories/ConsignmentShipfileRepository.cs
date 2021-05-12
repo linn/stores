@@ -9,13 +9,18 @@
 
     using Microsoft.EntityFrameworkCore;
 
-    public class ConsignmentShipfileRepository : IQueryRepository<ConsignmentShipfile>
+    public class ConsignmentShipfileRepository : IRepository<ConsignmentShipfile, int>
     {
         private readonly ServiceDbContext serviceDbContext;
 
         public ConsignmentShipfileRepository(ServiceDbContext serviceDbContext)
         {
             this.serviceDbContext = serviceDbContext;
+        }
+
+        public void Remove(ConsignmentShipfile entity)
+        {
+            throw new NotImplementedException();
         }
 
         public ConsignmentShipfile FindBy(Expression<Func<ConsignmentShipfile, bool>> expression)
@@ -39,12 +44,22 @@
             throw new NotImplementedException();
         }
 
+        public ConsignmentShipfile FindById(int key)
+        {
+            throw new NotImplementedException();
+        }
+
         public IQueryable<ConsignmentShipfile> FindAll()
         {
             return this.serviceDbContext
                 .ConsignmentShipfiles
                 .Include(s => s.Consignment)
                 .ThenInclude(c => c.Invoices);
+        }
+
+        public void Add(ConsignmentShipfile entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

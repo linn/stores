@@ -7,27 +7,19 @@
 
     public class ConsignmentShipfileService : IConsignmentShipfileService
     {
-        private readonly IQueryRepository<SalesOrder> salesOrderRepository;
-
         private readonly IEmailService emailService;
 
         private readonly IShipfilePdfBuilder pdfBuilder;
 
-        private readonly IQueryRepository<Consignment> consignmentRepository;
-
-        private readonly IQueryRepository<ConsignmentShipfile> shipfileRepository;
+        private readonly IRepository<ConsignmentShipfile, int> shipfileRepository;
 
         public ConsignmentShipfileService(
-            IQueryRepository<SalesOrder> salesOrderRepository,
             IEmailService emailService,
             IShipfilePdfBuilder pdfBuilder,
-            IQueryRepository<Consignment> consignmentRepository,
-            IQueryRepository<ConsignmentShipfile> shipfileRepository)
+            IRepository<ConsignmentShipfile, int> shipfileRepository)
         {
-            this.salesOrderRepository = salesOrderRepository;
             this.emailService = emailService;
             this.pdfBuilder = pdfBuilder;
-            this.consignmentRepository = consignmentRepository;
             this.shipfileRepository = shipfileRepository;
         }
 
