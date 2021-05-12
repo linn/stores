@@ -15,6 +15,7 @@
         {
             return new ConsignmentShipfileResource
                        {
+                           Id = shipfile.Id,
                            ConsignmentId = shipfile.ConsignmentId,
                            Status = shipfile.Message,
                            CustomerName = shipfile.Consignment.CustomerName,

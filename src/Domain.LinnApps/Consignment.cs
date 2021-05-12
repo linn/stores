@@ -22,5 +22,7 @@
         public string CustomerName { get; set; }
 
         public IEnumerable<Invoice> Invoices { get; set; }
+
+        public IEnumerable<ConsignmentItem> Items { get; set; }
     }
 }

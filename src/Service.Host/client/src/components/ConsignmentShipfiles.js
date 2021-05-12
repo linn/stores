@@ -18,16 +18,11 @@ export default function ConsignmentShipfiles({
     const [selectedRows, setSelectedRows] = useState([227165]);
     const [rows, setRows] = useState([]);
 
-    const compare = (row, sentShipfile) =>
-        Object.keys(row).every(
-            key => key === 'href' || key === 'id' || row[key] === sentShipfile[key]
-        );
-
     useEffect(() => {
         setRows(
             consignmentShipfiles.map(s => ({
                 ...s,
-                id: s.consignmentId
+                id: s.id
             }))
         );
     }, [consignmentShipfiles]);
@@ -36,15 +31,14 @@ export default function ConsignmentShipfiles({
         if (processedShipfiles?.length) {
             processedShipfiles.forEach(processed =>
                 setRows(r =>
-                    r.map(row =>
-                        row.id === processed.consignmentId ? { ...processed, id: row.id } : row
-                    )
+                    r.map(row => (row.id === processed.id ? { ...processed, id: row.id } : row))
                 )
             );
         }
     }, [processedShipfiles]);
 
     const columns = [
+        { field: 'id', headerName: 'Id', width: 0, hide: true },
         { field: 'consignmentId', headerName: 'From', width: 140 },
         { field: 'dateClosed', headerName: 'DispatchedOn', width: 100 },
         { field: 'customerName', headerName: 'Customer', width: 150 },
@@ -53,7 +47,7 @@ export default function ConsignmentShipfiles({
     ];
     const handleSelectRow = selected => {
         console.log(selected);
-        setSelectedRows(rows.filter(r => selected.rowIds.includes(r.consignmentId.toString())));
+        setSelectedRows(rows.filter(r => selected.rowIds.includes(r.id.toString())));
     };
     return (
         <Page>

@@ -20,7 +20,18 @@
 
         public ConsignmentShipfile FindBy(Expression<Func<ConsignmentShipfile, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext
+                .ConsignmentShipfiles
+                .Where(expression)
+                .Include(s => s.Consignment)
+                .ThenInclude(c => c.Invoices)
+                .Include(s => s.Consignment)
+                .ThenInclude(c => c.Items)
+                .ThenInclude(items => items.SalesOrder)
+                .ThenInclude(o => o.Account)
+                .ThenInclude(a => a.ContactDetails)
+                .AsNoTracking()
+                .ToList().FirstOrDefault();
         }
 
         public IQueryable<ConsignmentShipfile> FilterBy(Expression<Func<ConsignmentShipfile, bool>> expression)

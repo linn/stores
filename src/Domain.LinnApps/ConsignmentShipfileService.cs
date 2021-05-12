@@ -15,16 +15,20 @@
 
         private readonly IQueryRepository<Consignment> consignmentRepository;
 
+        private readonly IQueryRepository<ConsignmentShipfile> shipfileRepository;
+
         public ConsignmentShipfileService(
             IQueryRepository<SalesOrder> salesOrderRepository,
             IEmailService emailService,
             IShipfilePdfBuilder pdfBuilder,
-            IQueryRepository<Consignment> consignmentRepository)
+            IQueryRepository<Consignment> consignmentRepository,
+            IQueryRepository<ConsignmentShipfile> shipfileRepository)
         {
             this.salesOrderRepository = salesOrderRepository;
             this.emailService = emailService;
             this.pdfBuilder = pdfBuilder;
             this.consignmentRepository = consignmentRepository;
+            this.shipfileRepository = shipfileRepository;
         }
 
         public IEnumerable<ConsignmentShipfile> SendEmails(IEnumerable<ConsignmentShipfile> toSend)
@@ -33,9 +37,6 @@
 
             foreach (var shipfile in withDetails)
             {
-                shipfile.Consignment =
-                    this.consignmentRepository.FindBy(c => c.ConsignmentId == shipfile.ConsignmentId);
-
                 // a message implies there was some issue with finding contact details etc.
                 if (shipfile.Message != null) 
                 {
@@ -60,28 +61,25 @@
 
         private IEnumerable<ConsignmentShipfile> GetEmailDetails(IEnumerable<ConsignmentShipfile> shipfiles)
         {
-            var consignmentShipfiles = shipfiles as ConsignmentShipfile[] ?? shipfiles.ToArray();
-            foreach (var shipfile in consignmentShipfiles)
+            var withDetails = new List<ConsignmentShipfile>();
+            
+            foreach (var shipfile in shipfiles)
             {
-                var orders = this.salesOrderRepository.FilterBy(
-                        o => o.ConsignmentItems.Any() 
-                             && o.ConsignmentItems.All(i => i.ConsignmentId == shipfile.Id))
-                    .ToList();
-
-                foreach (var salesOrder in orders)
+                var data = this.shipfileRepository.FindBy(s => s.Id == shipfile.Id);
+                var account = data.Consignment.Items.First().SalesOrder.Account;
+                if (account.OrgId == null)
                 {
-                    if (salesOrder.Account.OrgId == null)
-                    {
-                        shipfile.Message = salesOrder.Account.ContactId != null ? null : ShipfileStatusMessages.NoContactDetails;
-                    }
-                    else
-                    {
-                        shipfile.Message = null;
-                    }
+                    data.Message = account.ContactId != null ? null : ShipfileStatusMessages.NoContactDetails;
                 }
+                else
+                {
+                    data.Message = null;
+                }
+
+                withDetails.Add(data);
             }
 
-            return consignmentShipfiles;
+            return withDetails;
         }
     }
 }
