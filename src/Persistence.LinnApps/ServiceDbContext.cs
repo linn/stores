@@ -182,7 +182,7 @@
 
         public DbQuery<InterCompanyInvoice> IntercompanyInvoices { get; set; }
 
-        public DbQuery<ReqMove> ReqMoves { get; set; }
+        public DbSet<ReqMove> ReqMoves { get; set; }
         
         public DbQuery<TqmsSummaryByCategory> TqmsSummaryByCategories { get; set; }
 
