@@ -2,6 +2,16 @@
 <head>
 </head>
 <body>
-<h1 style="color:red;"> Hello, {{ name }} </h1>
+    <h1 style="color:red;"> Hello, {{ to_customer_name }} </h1>
+    {{ for line in address_lines }}
+    <li>
+        <h2>{{ line }}</h2>
+    </li>
+{{ end }}
+{{ for item in packing_list }}
+<li>
+    <h2>{{ item.contents_description }}</h2>
+</li>
+{{ end }}
 </body>
 </html>

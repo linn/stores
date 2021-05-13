@@ -4,6 +4,7 @@
     using System.Linq;
 
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.Models.Emails;
 
     public class ConsignmentShipfileService : IConsignmentShipfileService
     {
@@ -29,64 +30,83 @@
 
         public IEnumerable<ConsignmentShipfile> SendEmails(IEnumerable<ConsignmentShipfile> toSend)
         {
-            var withDetails = this.GetEmailDetails(toSend).ToList();
-
-            foreach (var shipfile in withDetails)
+            var withDetails = new List<ConsignmentShipfile>();
+            foreach (var shipfile in toSend)
             {
-                // a message implies there was some issue with finding contact details etc.
-                if (shipfile.Message != null) 
+                var data = this.shipfileRepository.FindBy(s => s.Id == shipfile.Id);
+                
+                // what is this for
+                if (shipfile.Message != null)
                 {
                     continue;
                 }
 
-                var emailAddress = shipfile.Consignment.SalesAccount.ContactDetails?.EmailAddress;
-                var pdf = this.pdfBuilder.BuildPdf(shipfile); 
-                // this.emailService.SendEmail(
-                //     "lewis.renfrew@linn.co.uk",
-                //     "Me",
-                //     "lewis.renfrew@linn.co.uk",
-                //     "Me",
-                //     "Consignment Shipfile",
-                //     $"Here is your pdf shipfile {emailAddress}",
-                //     pdf.Result);
-                
-                shipfile.Message = ShipfileStatusMessages.EmailSent;
+                var models = this.BuildPdfModels(data);
+
+                // potentially an email to send to each outlet in this consignment
+                foreach (var model in models)
+                {
+                    // var emailAddress = shipfile.Consignment.SalesAccount.ContactDetails?.EmailAddress;
+                    var pdf = this.pdfBuilder.BuildPdf(model);
+                    this.emailService.SendEmail(
+                        "lewis.renfrew@linn.co.uk",
+                        "Me",
+                        "lewis.renfrew@linn.co.uk",
+                        "Me",
+                        "Consignment Shipfile",
+                        $"Here is your pdf shipfile {model.ToEmailAddress}",
+                        pdf.Result);
+                }
+
+
+                data.Message = ShipfileStatusMessages.EmailSent;
+                withDetails.Add(data);
             }
 
             return withDetails;
         }
 
-        private IEnumerable<ConsignmentShipfile> GetEmailDetails(IEnumerable<ConsignmentShipfile> shipfiles)
+        private IEnumerable<ConsignmentShipfilePdfModel> BuildPdfModels(ConsignmentShipfile shipfile)
         {
-            var withDetails = new List<ConsignmentShipfile>();
+            var toSend = new List<ConsignmentShipfilePdfModel>();
             
-            foreach (var shipfile in shipfiles)
+            var account = shipfile.Consignment.SalesAccount;
+
+            // an individual, one email to be sent I imagine
+            if (account.OrgId == null)
             {
-                var data = this.shipfileRepository.FindBy(s => s.Id == shipfile.Id);
-                var account = data.Consignment.SalesAccount;
-                if (account.OrgId == null)
-                {
-                    data.Message = account.ContactId != null ? null : ShipfileStatusMessages.NoContactDetails;
-                }
-                // an org
-                else
-                {
-                    // ugly, copied from form. ask if this is still relevant?
-                    if (!new List<int> { 7049, 29354, 6480 }.Contains(account.AccountId))
-                    {
-                        var consignmentOrderNumbers = data.Consignment.Items.Select(i => i.OrderNumber);
-                        var orders = this.salesOrderRepository.FilterBy(
-                            o => consignmentOrderNumbers.Contains(o.OrderNumber));
+                shipfile.Message = account.ContactId != null ? null : ShipfileStatusMessages.NoContactDetails;
+                toSend.Add(new ConsignmentShipfilePdfModel()); // todo
+            }
+            // an org, could have multiple emails to send for each outlet on consignment 
+            else
+            {
+                var consignmentOrderNumbers = shipfile.Consignment.Items.Select(i => i.OrderNumber);
+                var orders = this.salesOrderRepository.FilterBy(
+                    o => consignmentOrderNumbers.Contains(o.OrderNumber));
 
-                        var outlets = orders.ToList()
-                            .Select(o => o.SalesOutlet).ToList();
-                    }
+                var outlets = orders.ToList()
+                    .Select(o => o.SalesOutlet).ToList();
+                foreach (var salesOutlet in outlets)
+                {
+                    toSend.Add(new ConsignmentShipfilePdfModel
+                                   {
+                                       ToEmailAddress = salesOutlet.OrderContact?.EmailAddress,
+                                       ConsignmentNumber = shipfile.ConsignmentId,
+                                       ToCustomerName = salesOutlet.Name,
+                                       AddressLines = new[] { "Line 1", "Line 2" },
+                                       PackingList = new PackingListItem[] 
+                                                         { 
+                                                             new PackingListItem 
+                                                                 {
+                                                                    ContentsDescription = "Something"
+                                                                 }
+                                                         }
+                                   });
                 }
-
-                withDetails.Add(data);
             }
 
-            return withDetails;
+            return toSend;
         }
     }
 }

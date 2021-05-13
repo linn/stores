@@ -3,8 +3,10 @@
     using System.IO;
     using System.Threading.Tasks;
 
+    using Linn.Stores.Domain.LinnApps.Models.Emails;
+
     public interface IShipfilePdfBuilder
     {
-        Task<Stream> BuildPdf(ConsignmentShipfile shipfile);
+        Task<Stream> BuildPdf(ConsignmentShipfilePdfModel pdfModel);
     }
 }
