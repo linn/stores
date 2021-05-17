@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Proxy
 {
+    using System.Collections.Generic;
     using System.IO;
 
     using Linn.Common.Configuration;
@@ -14,6 +15,8 @@
         public void SendEmail(
             string toAddress,
             string toName,
+            IEnumerable<Dictionary<string, string>> cc,
+            IEnumerable<Dictionary<string, string>> bcc,
             string fromAddress,
             string fromName,
             string subject,
@@ -21,10 +24,19 @@
             Stream attachment)
         {
             var smtpHost = ConfigurationManager.Configuration["SMTP_HOSTNAME"];
-
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(toName, toAddress));
             message.To.Add(new MailboxAddress(toName, toAddress));
+
+            foreach (var entry in cc)
+            {
+                message.Cc.Add(new MailboxAddress(entry["name"], entry["address"]));
+            }
+
+            foreach (var entry in bcc)
+            {
+                message.Bcc.Add(new MailboxAddress(entry["name"], entry["address"]));
+            }
 
             message.Subject = subject;
 

@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Linn.Common.Configuration;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Models.Emails;
 
@@ -43,15 +44,22 @@
 
                 var models = this.BuildPdfModels(data);
 
+                var bccList = new Dictionary<string, string>();
+                bccList.Add("name", "financeoutgoing");
+                bccList.Add("address", ConfigurationManager.Configuration["SHIPFILES_OUTGOING_ADDRESS"]);
+
+
                 // potentially an email to send to each outlet in this consignment
                 foreach (var model in models)
                 {
-                    // var emailAddress = shipfile.Consignment.SalesAccount.ContactDetails?.EmailAddress;
+                    var emailAddress = shipfile.Consignment.SalesAccount.ContactDetails?.EmailAddress;
                     var pdf = this.pdfBuilder.BuildPdf(model);
                     this.emailService.SendEmail(
-                        "lewis.renfrew@linn.co.uk",
-                        "Me",
-                        "lewis.renfrew@linn.co.uk",
+                        emailAddress,
+                        model.ToCustomerName,
+                        null,
+                        new List<Dictionary<string, string>> { bccList },
+                        ConfigurationManager.Configuration["SHIPFILES_FROM_ADDRESS"],
                         "Me",
                         "Consignment Shipfile",
                         $"Here is your pdf shipfile {model.ToEmailAddress}",
