@@ -19,8 +19,9 @@
         }
 
         public void Remove(ConsignmentShipfile entity)
-        {
-            throw new NotImplementedException();
+        { 
+            this.serviceDbContext.ConsignmentShipfiles.Remove(entity);
+            this.serviceDbContext.SaveChanges();
         }
 
         public ConsignmentShipfile FindBy(Expression<Func<ConsignmentShipfile, bool>> expression)

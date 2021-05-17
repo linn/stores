@@ -52,6 +52,7 @@
                 // potentially an email to send to each outlet in this consignment
                 foreach (var model in models)
                 {
+                    var emailAddress = shipfile.Consignment.SalesAccount.ContactDetails?.EmailAddress;
                     var pdf = this.pdfBuilder.BuildPdf(model);
                     // this.emailService.SendEmail(
                     //     emailAddress,
@@ -93,6 +94,7 @@
 
                 var outlets = orders.ToList()
                     .Select(o => o.SalesOutlet).ToList();
+                
                 foreach (var salesOutlet in outlets)
                 {
                     toSend.Add(new ConsignmentShipfilePdfModel

@@ -1,7 +1,9 @@
 import { connect } from 'react-redux';
 import { initialiseOnMount, getItemError } from '@linn-it/linn-form-components-library';
 import ConsignmentShipfiles from '../components/ConsignmentShipfiles';
+import consignmentShipfileActions from '../actions/consignmentShipfileActions';
 import consignmentShipfilesActions from '../actions/consignmentShipfilesActions';
+import consignmentShipfileSelectors from '../selectors/consignmentShipfileSelectors';
 import consignmentShipfilesSelectors from '../selectors/consignmentShipfilesSelectors';
 import * as processTypes from '../processTypes';
 import shipfilesSendEmailsSelectors from '../selectors/shipfilesSendEmailsSelectors';
@@ -12,7 +14,8 @@ const mapStateToProps = state => ({
     consignmentShipfilesLoading: consignmentShipfilesSelectors.getLoading(state),
     processedShipfiles: shipfilesSendEmailsSelectors.getData(state),
     sendEmailsLoading: shipfilesSendEmailsSelectors.getWorking(state),
-    itemError: getItemError(state, processTypes.shipfilesSendEmails.item)
+    itemError: getItemError(state, processTypes.shipfilesSendEmails.item),
+    deleteLoading: consignmentShipfileSelectors.getLoading(state)
 });
 
 const initialise = () => dispatch => {
@@ -24,7 +27,8 @@ const mapDispatchToProps = {
     initialise,
     sendEmails: shipfilesSendEmailsActions.requestProcessStart,
     clearErrors: shipfilesSendEmailsActions.clearErrorsForItem,
-    clearData: shipfilesSendEmailsActions.clearProcessData
+    clearData: shipfilesSendEmailsActions.clearProcessData,
+    deleteShipfile: consignmentShipfileActions.delete
 };
 
 export default connect(

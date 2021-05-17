@@ -13,7 +13,9 @@ export default function ConsignmentShipfiles({
     processedShipfiles,
     itemError,
     clearErrors,
-    sendEmailsLoading
+    sendEmailsLoading,
+    deleteShipfile,
+    deleteLoading
 }) {
     const [selectedRows, setSelectedRows] = useState([227165]);
     const [rows, setRows] = useState([]);
@@ -46,16 +48,15 @@ export default function ConsignmentShipfiles({
         { field: 'status', headerName: 'Status', width: 200 }
     ];
     const handleSelectRow = selected => {
-        console.log(selected);
         setSelectedRows(rows.filter(r => selected.rowIds.includes(r.id.toString())));
     };
     return (
         <Page>
             <Grid container spacing={3}>
-                <Grid item xs={10}>
+                <Grid item xs={8}>
                     <Title text="Send Shipfile Emails" />
                 </Grid>
-                {sendEmailsLoading && !itemError ? (
+                {(sendEmailsLoading || deleteLoading) && !itemError ? (
                     <Grid item xs={12}>
                         <Loading />
                     </Grid>
@@ -84,6 +85,19 @@ export default function ConsignmentShipfiles({
                                 Send Selected
                             </Button>
                         </Grid>
+                        <Grid item xs={2}>
+                            <Button
+                                style={{ marginTop: '22px' }}
+                                variant="contained"
+                                color="secondary"
+                                onClick={() => {
+                                    clearErrors();
+                                    selectedRows.forEach(r => deleteShipfile(r.id, null));
+                                }}
+                            >
+                                Delete Selected
+                            </Button>
+                        </Grid>
                         <Grid item xs={12}>
                             <div style={{ height: 500, width: '100%' }}>
                                 <DataGrid
@@ -110,6 +124,8 @@ ConsignmentShipfiles.propTypes = {
     processedShipfiles: PropTypes.arrayOf(PropTypes.shape({})),
     consignmentShipfilesLoading: PropTypes.bool,
     sendEmails: PropTypes.func.isRequired,
+    deleteShipfile: PropTypes.func.isRequired,
+    deleteLoading: PropTypes.bool,
     clearErrors: PropTypes.func.isRequired,
     itemError: PropTypes.shape({
         statusText: PropTypes.string,
@@ -125,5 +141,6 @@ ConsignmentShipfiles.defaultProps = {
     consignmentShipfilesLoading: true,
     itemError: null,
     sendEmailsLoading: false,
-    whatToWandReport: null
+    whatToWandReport: null,
+    deleteLoading: false
 };

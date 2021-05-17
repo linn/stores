@@ -79,6 +79,7 @@ import makeIntercompanyInvoices from './makeIntercompanyInvoices';
 import interCompanyInvoices from './interCompanyInvoices';
 import tqmsSummaryByCategoryReport from './tqmsSummaryByCategoryReport';
 import tqmsJobRefs from './tqmsJobRefs';
+import consignmentShipfile from './consignmentShipfile';
 import consignmentShipfiles from './consignmentShipfiles';
 import parcels from './parcels/parcels';
 import parcel from './parcels/parcel';
@@ -98,6 +99,7 @@ const rootReducer = history =>
         auditLocation,
         auditLocations,
         availableStock,
+        consignmentShipfile,
         consignmentShipfiles,
         countries,
         createAuditReqs,
