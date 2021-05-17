@@ -35,5 +35,12 @@
 
             return new SuccessResult<IEnumerable<ConsignmentShipfile>>(result);
         }
+
+        public IResult<ConsignmentShipfile> DeleteShipfile(int id)
+        {
+            var toDelete = this.repository.FindBy(s => s.Id == id);
+            this.repository.Remove(toDelete);
+            return new SuccessResult<ConsignmentShipfile>(toDelete);
+        }
     }
 }

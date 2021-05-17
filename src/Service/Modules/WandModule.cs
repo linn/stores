@@ -28,6 +28,7 @@
             this.shipfileService = shipfileService;
             this.Get("/logistics/shipfiles", _ => this.GetShipfiles());
             this.Post("/logistics/shipfiles/send-emails", _ => this.SendEmails());
+            this.Delete("/logistics/shipfiles/{id}" , parameters => this.DeleteShipfile(parameters.id));
         }
 
         private object WandItem()
@@ -61,6 +62,11 @@
         {
             var resource = this.Bind<ConsignmentShipfilesSendEmailsRequestResource>();
             return this.Negotiate.WithModel(this.shipfileService.SendEmails(resource));
+        }
+
+        private object DeleteShipfile(int id)
+        {
+            return this.Negotiate.WithModel(this.shipfileService.DeleteShipfile(id));
         }
     }
 }

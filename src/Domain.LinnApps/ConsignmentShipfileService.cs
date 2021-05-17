@@ -52,20 +52,18 @@
                 // potentially an email to send to each outlet in this consignment
                 foreach (var model in models)
                 {
-                    var emailAddress = shipfile.Consignment.SalesAccount.ContactDetails?.EmailAddress;
                     var pdf = this.pdfBuilder.BuildPdf(model);
-                    this.emailService.SendEmail(
-                        emailAddress,
-                        model.ToCustomerName,
-                        null,
-                        new List<Dictionary<string, string>> { bccList },
-                        ConfigurationManager.Configuration["SHIPFILES_FROM_ADDRESS"],
-                        "Me",
-                        "Consignment Shipfile",
-                        $"Here is your pdf shipfile {model.ToEmailAddress}",
-                        pdf.Result);
+                    // this.emailService.SendEmail(
+                    //     emailAddress,
+                    //     model.ToCustomerName,
+                    //     null,
+                    //     new List<Dictionary<string, string>> { bccList },
+                    //     ConfigurationManager.Configuration["SHIPFILES_FROM_ADDRESS"],
+                    //     "Linn Shipping",
+                    //     "Consignment Shipfile",
+                    //     $"Here is your pdf shipfile {model.ToEmailAddress}",
+                    //     pdf.Result);
                 }
-
 
                 data.Message = ShipfileStatusMessages.EmailSent;
                 withDetails.Add(data);
@@ -86,9 +84,9 @@
                 shipfile.Message = account.ContactId != null ? null : ShipfileStatusMessages.NoContactDetails;
                 toSend.Add(new ConsignmentShipfilePdfModel()); // todo
             }
-            // an org, could have multiple emails to send for each outlet on consignment 
             else
             {
+                // an org, could have multiple emails to send for each outlet on consignment 
                 var consignmentOrderNumbers = shipfile.Consignment.Items.Select(i => i.OrderNumber);
                 var orders = this.salesOrderRepository.FilterBy(
                     o => consignmentOrderNumbers.Contains(o.OrderNumber));
