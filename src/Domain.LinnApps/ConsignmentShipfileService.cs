@@ -52,7 +52,6 @@
                 // potentially an email to send to each outlet in this consignment
                 foreach (var model in models)
                 {
-                    var emailAddress = shipfile.Consignment.SalesAccount.ContactDetails?.EmailAddress;
                     var pdf = this.pdfBuilder.BuildPdf(model);
                     // this.emailService.SendEmail(
                     //     emailAddress,
@@ -73,9 +72,9 @@
             return withDetails;
         }
 
-        private IEnumerable<ConsignmentShipfilePdfModel> BuildPdfModels(ConsignmentShipfile shipfile)
+        private IEnumerable<ConsignmentShipfileEmailModel> BuildPdfModels(ConsignmentShipfile shipfile)
         {
-            var toSend = new List<ConsignmentShipfilePdfModel>();
+            var toSend = new List<ConsignmentShipfileEmailModel>();
             
             var account = shipfile.Consignment.SalesAccount;
 
@@ -83,7 +82,7 @@
             if (account.OrgId == null)
             {
                 shipfile.Message = account.ContactId != null ? null : ShipfileStatusMessages.NoContactDetails;
-                toSend.Add(new ConsignmentShipfilePdfModel()); // todo
+                toSend.Add(new ConsignmentShipfileEmailModel()); // todo
             }
             else
             {
@@ -97,7 +96,7 @@
                 
                 foreach (var salesOutlet in outlets)
                 {
-                    toSend.Add(new ConsignmentShipfilePdfModel
+                    toSend.Add(new ConsignmentShipfileEmailModel
                                    {
                                        ToEmailAddress = salesOutlet.OrderContact?.EmailAddress,
                                        ConsignmentNumber = shipfile.ConsignmentId,

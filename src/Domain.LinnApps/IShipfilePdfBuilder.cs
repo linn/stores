@@ -7,6 +7,6 @@
 
     public interface IShipfilePdfBuilder
     {
-        Task<Stream> BuildPdf(ConsignmentShipfilePdfModel pdfModel);
+        Task<Stream> BuildPdf(ConsignmentShipfileEmailModel emailModel);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Models.Emails
 {
-    public class ConsignmentShipfilePdfModel
+    public class ConsignmentShipfileEmailModel
     {
         public string ToCustomerName { get; set; }
 

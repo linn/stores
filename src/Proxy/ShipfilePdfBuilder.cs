@@ -10,7 +10,7 @@
 
     public class ShipfilePdfBuilder : IShipfilePdfBuilder
     {
-        public async Task<Stream> BuildPdf(ConsignmentShipfilePdfModel pdfModel)
+        public async Task<Stream> BuildPdf(ConsignmentShipfileEmailModel emailModel)
         {
             var browser =
                 await Puppeteer.LaunchAsync(new LaunchOptions
@@ -26,7 +26,7 @@
             var templateString = await File.ReadAllTextAsync("./views/ShipfileEmailTemplate.html");
             var template = Template.Parse(templateString);
 
-            var result = await template.RenderAsync(pdfModel);
+            var result = await template.RenderAsync(emailModel);
 
             await page.SetContentAsync(result);
 

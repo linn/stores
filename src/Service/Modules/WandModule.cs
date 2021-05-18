@@ -1,7 +1,5 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
-    using System.Collections.Generic;
-
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
