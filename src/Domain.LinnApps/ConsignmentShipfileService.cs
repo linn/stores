@@ -5,6 +5,7 @@
 
     using Linn.Common.Configuration;
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models.Emails;
 
     public class ConsignmentShipfileService : IConsignmentShipfileService
@@ -17,16 +18,20 @@
 
         private readonly IQueryRepository<SalesOrder> salesOrderRepository;
 
+        private readonly IConsignmentShipfilePackingListService packingListService;
+
         public ConsignmentShipfileService(
             IEmailService emailService,
             IShipfilePdfBuilder pdfBuilder,
             IRepository<ConsignmentShipfile, int> shipfileRepository,
-            IQueryRepository<SalesOrder> salesOrderRepository)
+            IQueryRepository<SalesOrder> salesOrderRepository,
+            IConsignmentShipfilePackingListService packingListService)
         {
             this.emailService = emailService;
             this.pdfBuilder = pdfBuilder;
             this.shipfileRepository = shipfileRepository;
             this.salesOrderRepository = salesOrderRepository;
+            this.packingListService = packingListService;
         }
 
         public IEnumerable<ConsignmentShipfile> SendEmails(IEnumerable<ConsignmentShipfile> toSend)
@@ -112,13 +117,7 @@
                                            ConsignmentNumber = shipfile.ConsignmentId,
                                            ToCustomerName = salesOutlet.Name,
                                            AddressLines = new[] { "Line 1", "Line 2" },
-                                           PackingList = new PackingListItem[]
-                                                             {
-                                                                 new PackingListItem
-                                                                     {
-                                                                         ContentsDescription = "Something"
-                                                                     }
-                                                             }
+                                           PackingList = this.packingListService.GetPackingList(shipfile.ConsignmentId).ToArray()
                                        });
                     }
                 }

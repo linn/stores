@@ -54,6 +54,7 @@
             builder.RegisterType<TqmsReportsService>().As<ITqmsReportsService>();
             builder.RegisterType<ConsignmentShipfileService>().As<IConsignmentShipfileService>();
             builder.RegisterType<EmailService>().As<IEmailService>();
+            builder.RegisterType<ShipfilePdfBuilder>().As<IShipfilePdfBuilder>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -149,14 +150,14 @@
             builder.RegisterType<ExportReturnsPack>().As<IExportReturnsPack>();
             builder.RegisterType<StockLocatorLocationsViewService>().As<IStockLocatorLocationsViewService>();
             builder.RegisterType<KardexPack>().As<IKardexPack>();
+            builder.RegisterType<ConsignmentShipfilePackingListDataProxy>()
+                .As<IConsignmentShipfilePackingListService>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();
             builder.RegisterType<ProductionTriggerLevelsProxy>().As<IProductionTriggerLevelsService>().WithParameter(
                 "rootUri",
                 ConfigurationManager.Configuration["PROXY_ROOT"]);
-
-            builder.RegisterType<ShipfilePdfBuilder>().As<IShipfilePdfBuilder>();
         }
     }
 }
