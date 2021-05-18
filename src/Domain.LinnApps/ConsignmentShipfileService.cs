@@ -66,6 +66,7 @@
                 }
 
                 data.Message = ShipfileStatusMessages.EmailSent;
+                data.ShipfileSent = "Y";
                 withDetails.Add(data);
             }
 
@@ -91,25 +92,35 @@
                 var orders = this.salesOrderRepository.FilterBy(
                     o => consignmentOrderNumbers.Contains(o.OrderNumber));
 
+                // find distinct outlets to contact
                 var outlets = orders.ToList()
-                    .Select(o => o.SalesOutlet).ToList();
-                
-                foreach (var salesOutlet in outlets)
+                    .Select(o => o.SalesOutlet)
+                    .GroupBy(elem => $"{elem.OutletNumber}-{elem.OrderContact.Id}")
+                    .Select(group => group.First()).ToList();
+
+                if (outlets.Any(o => o.OrderContact == null))
                 {
-                    toSend.Add(new ConsignmentShipfileEmailModel
-                                   {
-                                       ToEmailAddress = salesOutlet.OrderContact?.EmailAddress,
-                                       ConsignmentNumber = shipfile.ConsignmentId,
-                                       ToCustomerName = salesOutlet.Name,
-                                       AddressLines = new[] { "Line 1", "Line 2" },
-                                       PackingList = new PackingListItem[] 
-                                                         { 
-                                                             new PackingListItem 
-                                                                 {
-                                                                    ContentsDescription = "Something"
-                                                                 }
-                                                         }
-                                   });
+                    shipfile.Message = account.ContactId != null ? null : ShipfileStatusMessages.NoContactDetails;
+                }
+                else
+                {
+                    foreach (var salesOutlet in outlets)
+                    {
+                        toSend.Add(new ConsignmentShipfileEmailModel
+                                       {
+                                           ToEmailAddress = salesOutlet.OrderContact?.EmailAddress,
+                                           ConsignmentNumber = shipfile.ConsignmentId,
+                                           ToCustomerName = salesOutlet.Name,
+                                           AddressLines = new[] { "Line 1", "Line 2" },
+                                           PackingList = new PackingListItem[]
+                                                             {
+                                                                 new PackingListItem
+                                                                     {
+                                                                         ContentsDescription = "Something"
+                                                                     }
+                                                             }
+                                       });
+                    }
                 }
             }
 

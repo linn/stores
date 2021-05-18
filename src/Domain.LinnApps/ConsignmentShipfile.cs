@@ -9,5 +9,7 @@
         public Consignment Consignment { get; set; }
 
         public string Message { get; set; }
+
+        public string ShipfileSent { get; set; }
     }
 }

@@ -1608,6 +1608,7 @@
             q.HasKey(f => f.Id);
             q.Property(f => f.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
             q.Property(f => f.Message).HasColumnName("MESSAGE");
+            q.Property(f => f.ShipfileSent).HasColumnName("SHIPFILE_SENT").HasMaxLength(1);
             q.HasOne(f => f.Consignment).WithOne(c => c.Shipfile).HasForeignKey<ConsignmentShipfile>(s => s.ConsignmentId);
         }
 

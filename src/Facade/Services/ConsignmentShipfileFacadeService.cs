@@ -12,14 +12,18 @@
     {
         private readonly IRepository<ConsignmentShipfile, int> repository;
 
+        private readonly ITransactionManager transactionManager;
+
         private readonly IConsignmentShipfileService domainService;
 
         public ConsignmentShipfileFacadeService(
             IRepository<ConsignmentShipfile, int> repository,
-            IConsignmentShipfileService domainService)
+            IConsignmentShipfileService domainService,
+            ITransactionManager transactionManager)
         {
             this.repository = repository;
             this.domainService = domainService;
+            this.transactionManager = transactionManager;
         }
 
         public IResult<IEnumerable<ConsignmentShipfile>> GetShipfiles()
@@ -33,6 +37,7 @@
             var result = this.domainService.SendEmails(toSend.Shipfiles.Select(
                 s => new ConsignmentShipfile { Id = s.Id, ConsignmentId = s.ConsignmentId }));
 
+            this.transactionManager.Commit();
             return new SuccessResult<IEnumerable<ConsignmentShipfile>>(result);
         }
 

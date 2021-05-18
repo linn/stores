@@ -36,7 +36,6 @@
                 .ThenInclude(a => a.ContactDetails)
                 .Include(s => s.Consignment)
                 .ThenInclude(c => c.Items)
-                .AsNoTracking()
                 .ToList().FirstOrDefault();
         }
 
