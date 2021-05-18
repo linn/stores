@@ -13,6 +13,7 @@ import receivePalletMove from './middleware/receivePalletMove';
 import receiveDoWandItem from './middleware/receiveDoWandItem';
 import receiveMakeIntercompnayInvoices from './middleware/receiveMakeIntercompanyInvoices';
 import receiveUnallocateConsignment from './middleware/receiveUnallocateConsignment';
+import receiveDeletedConsignmentShipfile from './middleware/receiveDeletedConsignmentShipfile';
 
 // eslint-disable-next-line no-underscore-dangle
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -29,7 +30,8 @@ const middleware = [
     receivePalletMove,
     receiveDoWandItem,
     receiveMakeIntercompnayInvoices,
-    receiveUnallocateConsignment
+    receiveUnallocateConsignment,
+    receiveDeletedConsignmentShipfile
 ];
 
 export const history = createBrowserHistory();
