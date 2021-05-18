@@ -2,14 +2,15 @@
 {
     using System.IO;
     using System.Threading.Tasks;
+
     using Linn.Stores.Domain.LinnApps;
 
     using PuppeteerSharp;
     using Scriban;
 
-    public class PdfBuilder<T> : IPdfBuilder<T>
+    public class PdfBuilder : IPdfBuilder
     {
-        public async Task<Stream> BuildPdf(T model, string pathToTemplate)
+        public async Task<Stream> BuildPdf(object model, string pathToTemplate)
         {
             var browser =
                 await Puppeteer.LaunchAsync(new LaunchOptions

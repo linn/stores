@@ -12,7 +12,7 @@
     {
         private readonly IEmailService emailService;
 
-        private readonly IPdfBuilder<ConsignmentShipfileEmailModel> pdfBuilder;
+        private readonly IPdfBuilder pdfBuilder;
 
         private readonly IRepository<ConsignmentShipfile, int> shipfileRepository;
 
@@ -22,7 +22,7 @@
 
         public ConsignmentShipfileService(
             IEmailService emailService,
-            IPdfBuilder<ConsignmentShipfileEmailModel> pdfBuilder,
+            IPdfBuilder pdfBuilder,
             IRepository<ConsignmentShipfile, int> shipfileRepository,
             IQueryRepository<SalesOrder> salesOrderRepository,
             IConsignmentShipfilePackingListService packingListService)

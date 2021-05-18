@@ -3,8 +3,8 @@
     using System.IO;
     using System.Threading.Tasks;
 
-    public interface IPdfBuilder<T>
+    public interface IPdfBuilder
     {
-        Task<Stream> BuildPdf(T model, string pathToTemplate);
+        Task<Stream> BuildPdf(object model, string pathToTemplate);
     }
 }
