@@ -10,7 +10,7 @@
     using NSubstitute;
     using NUnit.Framework;
 
-    public class WhenAdding: ContextBase
+    public class WhenAdding : ContextBase
     {
         [SetUp]
         public void SetUp()

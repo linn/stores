@@ -13,7 +13,6 @@
     using NSubstitute;
     using NUnit.Framework;
    
-
     public class WhenSearching : ContextBase
     {
         [SetUp]
@@ -53,7 +52,7 @@
                                       }
                                     };
 
-            this.ParcelsFacadeService.Search(Arg.Any<ParcelSearchRequestResource>())
+            this.ParcelsFacadeService.FilterBy(Arg.Any<ParcelSearchRequestResource>())
              .Returns(new SuccessResult<IEnumerable<Parcel>>(parcels));
 
             this.Response = this.Browser.Get(
@@ -64,7 +63,6 @@
                     with.Query("searchTerm", "22");
                     with.Query("supplierIdSearchTerm", "22");
                     with.Query("carrierIdSearchTerm", "22");
-
                 }).Result;
         }
 
@@ -77,7 +75,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ParcelsFacadeService.Received().Search(Arg.Any<ParcelSearchRequestResource>());
+            this.ParcelsFacadeService.Received().FilterBy(Arg.Any<ParcelSearchRequestResource>());
         }
 
         [Test]

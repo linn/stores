@@ -91,8 +91,8 @@
                 .As<IFacadeFilterService<SosAllocDetail, int, SosAllocDetailResource, SosAllocDetailResource, JobIdRequestResource>>();
             builder.RegisterType<MechPartSourceFacadeService>()
                 .As<IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>>();
-            builder.RegisterType<ParcelService>()
-                .As<IParcelService>();
+            builder.RegisterType<ParcelFacadeService>()
+                .As<IFacadeFilterService<Parcel, int, ParcelResource, ParcelResource, ParcelSearchRequestResource>>();
             builder.RegisterType<ManufacturerService>()
                 .As<IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>>();
             builder.RegisterType<EmployeesService>().As<IEmployeeService>();
