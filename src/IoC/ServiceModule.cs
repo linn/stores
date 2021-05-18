@@ -54,7 +54,7 @@
             builder.RegisterType<TqmsReportsService>().As<ITqmsReportsService>();
             builder.RegisterType<ConsignmentShipfileService>().As<IConsignmentShipfileService>();
             builder.RegisterType<EmailService>().As<IEmailService>();
-            builder.RegisterType<ShipfilePdfBuilder>().As<IShipfilePdfBuilder>();
+            builder.RegisterType<PdfBuilder>().As<IPdfBuilder>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()

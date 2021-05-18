@@ -12,7 +12,7 @@
     {
         private readonly IEmailService emailService;
 
-        private readonly IShipfilePdfBuilder pdfBuilder;
+        private readonly IPdfBuilder<ConsignmentShipfileEmailModel> pdfBuilder;
 
         private readonly IRepository<ConsignmentShipfile, int> shipfileRepository;
 
@@ -22,7 +22,7 @@
 
         public ConsignmentShipfileService(
             IEmailService emailService,
-            IShipfilePdfBuilder pdfBuilder,
+            IPdfBuilder<ConsignmentShipfileEmailModel> pdfBuilder,
             IRepository<ConsignmentShipfile, int> shipfileRepository,
             IQueryRepository<SalesOrder> salesOrderRepository,
             IConsignmentShipfilePackingListService packingListService)
@@ -57,7 +57,7 @@
                 // potentially an email to send to each outlet in this consignment
                 foreach (var model in models)
                 {
-                    var pdf = this.pdfBuilder.BuildPdf(model);
+                    var pdf = this.pdfBuilder.BuildPdf(model, "./views/ShipfilePdfTemplate.html");
                     // this.emailService.SendEmail(
                     //     emailAddress,
                     //     model.ToCustomerName,

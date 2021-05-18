@@ -3,14 +3,13 @@
     using System.IO;
     using System.Threading.Tasks;
     using Linn.Stores.Domain.LinnApps;
-    using Linn.Stores.Domain.LinnApps.Models.Emails;
 
     using PuppeteerSharp;
     using Scriban;
 
-    public class ShipfilePdfBuilder : IShipfilePdfBuilder
+    public class PdfBuilder<T> : IPdfBuilder<T>
     {
-        public async Task<Stream> BuildPdf(ConsignmentShipfileEmailModel emailModel)
+        public async Task<Stream> BuildPdf(T model, string pathToTemplate)
         {
             var browser =
                 await Puppeteer.LaunchAsync(new LaunchOptions
@@ -23,10 +22,10 @@
                                                 });
             var page = await browser.NewPageAsync();
 
-            var templateString = await File.ReadAllTextAsync("./views/ShipfilePdfTemplate.html");
+            var templateString = await File.ReadAllTextAsync(pathToTemplate);
             var template = Template.Parse(templateString);
 
-            var result = await template.RenderAsync(emailModel);
+            var result = await template.RenderAsync(model);
 
             await page.SetContentAsync(result);
 
