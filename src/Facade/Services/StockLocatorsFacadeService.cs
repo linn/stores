@@ -6,8 +6,8 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
+    using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps.StockLocators;
-    using Linn.Stores.Proxy;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Resources.StockLocators;
 

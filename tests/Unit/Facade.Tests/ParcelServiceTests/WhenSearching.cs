@@ -7,7 +7,6 @@
     using FluentAssertions;
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
-    using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
     using NSubstitute;
     using NUnit.Framework;
@@ -15,8 +14,6 @@
 
     public class WhenSearching : ContextBase
     {
-        private ParcelResource resource;
-
         private IResult<IEnumerable<Parcel>> results;
 
         [SetUp]

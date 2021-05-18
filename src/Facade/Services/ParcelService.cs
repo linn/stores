@@ -5,22 +5,30 @@
     using System.Linq.Expressions;
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
+    using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps;
-    using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
 
     public class ParcelService : FacadeService<Parcel, int, ParcelResource, ParcelResource>, IParcelService
     {
-        private readonly IRepository<Parcel, int> Repository;
+        private readonly IRepository<Parcel, int> parcelRepository;
+
         private readonly IDatabaseService databaseService;
 
-
-        public ParcelService(IRepository<Parcel, int> repository, ITransactionManager transactionManager, IDatabaseService databaseService)
-            : base(repository, transactionManager)
+        public ParcelService(
+            IRepository<Parcel, int> parcelRepository,
+            ITransactionManager transactionManager,
+            IDatabaseService databaseService)
+            : base(parcelRepository, transactionManager)
         {
-            this.Repository = repository;
+            this.parcelRepository = parcelRepository;
             this.databaseService = databaseService;
+        }
+
+        public IResult<IEnumerable<Parcel>> Search(ParcelSearchRequestResource resource)
+        {
+            return new SuccessResult<IEnumerable<Parcel>>(this.parcelRepository.FilterBy(this.SearchExpression(resource)));
         }
 
         protected override Parcel CreateFromResource(ParcelResource resource)
@@ -60,7 +68,9 @@
             entity.Weight = updateResource.Weight;
             entity.CancelledBy = updateResource.CancelledBy;
             entity.CancellationReason = updateResource.CancellationReason;
-            entity.DateCancelled = string.IsNullOrWhiteSpace(updateResource.DateCancelled) ? (DateTime?)null : DateTime.Parse(updateResource.DateCancelled);
+            entity.DateCancelled = string.IsNullOrWhiteSpace(updateResource.DateCancelled)
+                                       ? (DateTime?)null
+                                       : DateTime.Parse(updateResource.DateCancelled);
             entity.ImportBookNo = updateResource.ImportBookNo;
         }
 
@@ -87,11 +97,6 @@
                 && (string.IsNullOrWhiteSpace(searchTerms.DateCreatedSearchTerm)
                     || (DateTime.Parse(searchTerms.DateCreatedSearchTerm).AddDays(-1) < x.DateCreated
                         && x.DateCreated < DateTime.Parse(searchTerms.DateCreatedSearchTerm).AddDays(1)));
-        }
-
-        public IResult<IEnumerable<Parcel>> Search(ParcelSearchRequestResource resource)
-        {
-            return new SuccessResult<IEnumerable<Parcel>>(this.Repository.FilterBy(this.SearchExpression(resource)));
         }
     }
 }
