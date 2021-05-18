@@ -4,8 +4,10 @@
 
     using Linn.Stores.Domain.LinnApps.Models.Emails;
 
-    public interface IConsignmentShipfilePackingListService
+    public interface IConsignmentShipfileDataService
     {
         IEnumerable<PackingListItem> GetPackingList(int consignmentId);
+
+        IEnumerable<DespatchNote> GetDespatchNotes(int consignmentId);
     }
 }

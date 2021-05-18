@@ -5,11 +5,11 @@
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models.Emails;
 
-    public class ConsignmentShipfilePackingListDataProxy : IConsignmentShipfilePackingListService
+    public class ConsignmentShipfileDataDataProxy : IConsignmentShipfileDataService
     {
         private readonly IDatabaseService databaseService;
 
-        public ConsignmentShipfilePackingListDataProxy(IDatabaseService databaseService)
+        public ConsignmentShipfileDataDataProxy(IDatabaseService databaseService)
         {
             this.databaseService = databaseService;
         }
@@ -70,6 +70,46 @@
                                    Box = data[2].ToString(),
                                    ContentsDescription = data[3].ToString(),
                                    // what is count? Seems to come from a Program Unit on the report Count = 
+                               });
+            }
+
+            return result;
+        }
+
+        public IEnumerable<DespatchNote> GetDespatchNotes(int consignmentId)
+        {
+            var sql = $@"
+            SELECT INV.CONSIGNMENT_ID, INV.DOCUMENT_NUMBER DOC_NUMBER, 
+            INV.DOCUMENT_DATE, INVI.INVOICE_LINE, INVD.DESCRIPTION,
+            INVI.QTY, INVD.CUSTOMERS_ORDER_NOS,
+            INVI.SALES_ORDER_NUMBER, INVI.ORDER_LINE
+            FROM INVOICES INV, INVOICED_ITEMS INVI, 
+            INVOICE_DETAILS INVD, SALES_OUTLETS SAOU
+            WHERE  INV.DOCUMENT_TYPE='I'
+            AND INV.CONSIGNMENT_ID = {consignmentId}
+            AND (INVI.INVOICE_LINE=INVD.LINE_NO)
+            AND (INVI.INVOICE_NUMBER=INVD.DOCUMENT_NUMBER)
+            AND (INVD.OUTLET_NUMBER=SAOU.OUTLET_NUMBER)
+            AND (INVD.ACCOUNT_ID=SAOU.ACCOUNT_ID)
+            AND (INVD.DOCUMENT_TYPE=INV.DOCUMENT_TYPE)
+            AND (INVD.DOCUMENT_NUMBER=INV.DOCUMENT_NUMBER)
+            ORDER BY SAOU.NAME ASC, INV.DOCUMENT_NUMBER, INVI.INVOICE_LINE";
+            var rows = this.databaseService.ExecuteQuery(sql).Tables[0].Rows;
+            var result = new List<DespatchNote>();
+            for (var i = 0; i < rows.Count; i++)
+            {
+                var data = rows[i].ItemArray;
+                result.Add(new DespatchNote 
+                               {
+                                    ConsignmentId = data[0].ToString(),
+                                    DocNumber = data[1].ToString(),
+                                    DocumentDate = data[2].ToString(),
+                                    InvoiceLine = data[3].ToString(),
+                                    Description = data[4].ToString(),
+                                    Quantity = data[5].ToString(),
+                                    CustomersOrderNumbers = data[6].ToString(),
+                                    SalesOrderNumber = data[7].ToString(),
+                                    OrderLine = data[8].ToString()
                                });
             }
 

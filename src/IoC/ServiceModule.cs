@@ -150,8 +150,8 @@
             builder.RegisterType<ExportReturnsPack>().As<IExportReturnsPack>();
             builder.RegisterType<StockLocatorLocationsViewService>().As<IStockLocatorLocationsViewService>();
             builder.RegisterType<KardexPack>().As<IKardexPack>();
-            builder.RegisterType<ConsignmentShipfilePackingListDataProxy>()
-                .As<IConsignmentShipfilePackingListService>();
+            builder.RegisterType<ConsignmentShipfileDataDataProxy>()
+                .As<IConsignmentShipfileDataService>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

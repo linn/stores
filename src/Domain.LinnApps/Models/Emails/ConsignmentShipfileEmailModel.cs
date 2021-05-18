@@ -17,5 +17,7 @@
         public string Country { get; set; }
 
         public PackingListItem[] PackingList { get; set; }
+
+        public DespatchNote[] DespatchNotes { get; set; }
     }
 }

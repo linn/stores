@@ -18,20 +18,20 @@
 
         private readonly IQueryRepository<SalesOrder> salesOrderRepository;
 
-        private readonly IConsignmentShipfilePackingListService packingListService;
+        private readonly IConsignmentShipfileDataService dataService;
 
         public ConsignmentShipfileService(
             IEmailService emailService,
             IPdfBuilder pdfBuilder,
             IRepository<ConsignmentShipfile, int> shipfileRepository,
             IQueryRepository<SalesOrder> salesOrderRepository,
-            IConsignmentShipfilePackingListService packingListService)
+            IConsignmentShipfileDataService dataService)
         {
             this.emailService = emailService;
             this.pdfBuilder = pdfBuilder;
             this.shipfileRepository = shipfileRepository;
             this.salesOrderRepository = salesOrderRepository;
-            this.packingListService = packingListService;
+            this.dataService = dataService;
         }
 
         public IEnumerable<ConsignmentShipfile> SendEmails(IEnumerable<ConsignmentShipfile> toSend)
@@ -117,8 +117,9 @@
                                            ConsignmentNumber = shipfile.ConsignmentId,
                                            ToCustomerName = salesOutlet.Name,
                                            AddressLines = new[] { "Line 1", "Line 2" },
-                                           PackingList = this.packingListService.GetPackingList(shipfile.ConsignmentId).ToArray()
-                                       });
+                                           PackingList = this.dataService.GetPackingList(shipfile.ConsignmentId).ToArray(),
+                                           DespatchNotes = this.dataService.GetDespatchNotes(shipfile.ConsignmentId).ToArray()
+                        });
                     }
                 }
             }
