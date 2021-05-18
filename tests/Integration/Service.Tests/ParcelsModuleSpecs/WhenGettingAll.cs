@@ -12,11 +12,9 @@
     using Nancy.Testing;
     using NSubstitute;
     using NUnit.Framework;
- 
 
     public class WhenGettingAll : ContextBase
     {
-        ParcelSearchRequestResource requestResource;
         [SetUp]
         public void SetUp()
         {
@@ -54,9 +52,7 @@
                                       }
                                     };
 
-            this.requestResource = new ParcelSearchRequestResource();
-
-            this.ParcelsFacadeService.Search(Arg.Any<ParcelSearchRequestResource>())
+            this.ParcelsFacadeService.FilterBy(Arg.Any<ParcelSearchRequestResource>())
                 .Returns(new SuccessResult<IEnumerable<Parcel>>(parcels));
 
             this.Response = this.Browser.Get(
@@ -64,7 +60,7 @@
                 with =>
                 {
                     with.Header("Accept", "application/json");
-                    with.Query("searchTerm", String.Empty);
+                    with.Query("searchTerm", string.Empty);
                 }).Result;
         }
 
@@ -77,13 +73,13 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ParcelsFacadeService.Received().Search(Arg.Any<ParcelSearchRequestResource>());
+            this.ParcelsFacadeService.Received().FilterBy(Arg.Any<ParcelSearchRequestResource>());
         }
 
         [Test]
         public void ShouldReturnResources()
         {
-            var resources = this.Response.Body.DeserializeJson<IEnumerable<ParcelResource>>();
+            var resources = this.Response.Body.DeserializeJson<IEnumerable<ParcelResource>>().ToList();
             resources.Count(x => x.ParcelNumber == 21).Should().Be(1);
             resources.Count(x => x.ParcelNumber == 1).Should().Be(1);
             resources.Count().Should().Be(2);

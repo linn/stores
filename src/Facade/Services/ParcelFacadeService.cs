@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq.Expressions;
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
@@ -10,13 +9,13 @@
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
 
-    public class ParcelService : FacadeService<Parcel, int, ParcelResource, ParcelResource>, IParcelService
+    public class ParcelFacadeService : FacadeFilterService<Parcel, int, ParcelResource, ParcelResource, ParcelSearchRequestResource>
     {
         private readonly IRepository<Parcel, int> parcelRepository;
 
         private readonly IDatabaseService databaseService;
 
-        public ParcelService(
+        public ParcelFacadeService(
             IRepository<Parcel, int> parcelRepository,
             ITransactionManager transactionManager,
             IDatabaseService databaseService)
@@ -24,11 +23,6 @@
         {
             this.parcelRepository = parcelRepository;
             this.databaseService = databaseService;
-        }
-
-        public IResult<IEnumerable<Parcel>> Search(ParcelSearchRequestResource resource)
-        {
-            return new SuccessResult<IEnumerable<Parcel>>(this.parcelRepository.FilterBy(this.SearchExpression(resource)));
         }
 
         protected override Parcel CreateFromResource(ParcelResource resource)
@@ -79,7 +73,7 @@
             throw new NotImplementedException();
         }
 
-        protected Expression<Func<Parcel, bool>> SearchExpression(ParcelSearchRequestResource searchTerms)
+        protected override Expression<Func<Parcel, bool>> FilterExpression(ParcelSearchRequestResource searchTerms)
         {
             return x =>
                 (string.IsNullOrWhiteSpace(searchTerms.ParcelNumberSearchTerm)

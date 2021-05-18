@@ -9,7 +9,7 @@
 
     public class ContextBase
     {
-        protected ParcelService Sut { get; private set; }
+        protected ParcelFacadeService Sut { get; private set; }
 
         protected IDatabaseService DatabaseService { get; private set; }
 
@@ -23,7 +23,7 @@
             this.ParcelRepository = Substitute.For<IRepository<Parcel, int>>();
             this.DatabaseService = Substitute.For<IDatabaseService>();
             this.TransactionManager = Substitute.For<ITransactionManager>();
-            this.Sut = new ParcelService(
+            this.Sut = new ParcelFacadeService(
                 this.ParcelRepository,
                 this.TransactionManager,
                 this.DatabaseService);
