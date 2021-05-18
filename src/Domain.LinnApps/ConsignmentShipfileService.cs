@@ -47,7 +47,7 @@
                     continue;
                 }
 
-                var models = this.BuildPdfModels(data);
+                var models = this.BuildEmailModels(data);
 
                 var bccList = new Dictionary<string, string>();
                 bccList.Add("name", "financeoutgoing");
@@ -78,7 +78,7 @@
             return withDetails;
         }
 
-        private IEnumerable<ConsignmentShipfileEmailModel> BuildPdfModels(ConsignmentShipfile shipfile)
+        private IEnumerable<ConsignmentShipfileEmailModel> BuildEmailModels(ConsignmentShipfile shipfile)
         {
             var toSend = new List<ConsignmentShipfileEmailModel>();
             
