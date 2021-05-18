@@ -10,10 +10,20 @@
 
         private readonly IRepository<WandLog, int> wandLogRepository;
 
-        public WandService(IWandPack wandPack, IRepository<WandLog, int> wandLogRepository)
+        private readonly IQueryRepository<Consignment> consignmentRepository;
+
+        private readonly IBundleLabelPack bundleLabelPack;
+
+        public WandService(
+            IWandPack wandPack,
+            IRepository<WandLog, int> wandLogRepository,
+            IQueryRepository<Consignment> consignmentRepository,
+            IBundleLabelPack bundleLabelPack)
         {
             this.wandPack = wandPack;
             this.wandLogRepository = wandLogRepository;
+            this.consignmentRepository = consignmentRepository;
+            this.bundleLabelPack = bundleLabelPack;
         }
 
         public static string WandStringSuggestion(
@@ -51,7 +61,24 @@
                 result.WandLog = this.wandLogRepository.FindById(wandPackResult.WandLogId.Value);
             }
 
+            this.MaybePrintLabel(consignmentId, result.WandLog);
+
             return result;
+        }
+
+        private void MaybePrintLabel(int consignmentId, WandLog wandLog)
+        {
+            if (!wandLog.ContainerNo.HasValue || wandLog.TransType != "W")
+            {
+                return;
+            }
+
+            var consignment = this.consignmentRepository.FindBy(c => c.ConsignmentId == consignmentId);
+
+            if (consignment.CountryCode != "GB")
+            {
+                // print
+            }
         }
     }
 }

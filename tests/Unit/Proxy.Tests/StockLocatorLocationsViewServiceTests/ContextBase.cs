@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Proxy.Tests.StockLocatorLocationsViewServiceTests
 {
+    using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
 
     using NSubstitute;

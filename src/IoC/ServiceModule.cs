@@ -4,8 +4,10 @@
 
     using Linn.Common.Authorisation;
     using Linn.Common.Configuration;
+    using Linn.Common.Domain.LinnApps.RemoteServices;
     using Linn.Common.Facade;
     using Linn.Common.Proxy;
+    using Linn.Common.Proxy.LinnApps;
     using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
@@ -146,6 +148,7 @@
             builder.RegisterType<ExportReturnsPack>().As<IExportReturnsPack>();
             builder.RegisterType<StockLocatorLocationsViewService>().As<IStockLocatorLocationsViewService>();
             builder.RegisterType<KardexPack>().As<IKardexPack>();
+            builder.RegisterType<BartenderLabelPack>().As<IBartenderLabelPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

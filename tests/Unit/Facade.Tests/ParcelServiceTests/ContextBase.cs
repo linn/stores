@@ -1,9 +1,9 @@
 ﻿namespace Linn.Stores.Facade.Tests.ParcelFacadeServiceTests
 {
     using Linn.Common.Persistence;
+    using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.Services;
-    using Linn.Stores.Proxy;
     using NSubstitute;
     using NUnit.Framework;
 

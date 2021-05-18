@@ -1,10 +1,10 @@
 ﻿namespace Linn.Stores.Facade.Tests.MechPartSourceFacadeServiceTests
 {
     using Linn.Common.Persistence;
+    using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;
-    using Linn.Stores.Proxy;
 
     using NSubstitute;
 

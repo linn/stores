@@ -5,6 +5,7 @@
     using System.Data;
     using System.Linq;
 
+    using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 

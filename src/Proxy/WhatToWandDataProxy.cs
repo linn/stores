@@ -1,6 +1,8 @@
 ﻿namespace Linn.Stores.Proxy
 {
     using System.Collections.Generic;
+
+    using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
 
