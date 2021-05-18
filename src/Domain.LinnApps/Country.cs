@@ -18,5 +18,7 @@
         public DateTime? DateInvalid { get; set; }
 
         public IEnumerable<Consignment> Consignments { get; set; }
+
+        public IEnumerable<Address> Addresses { get; set; }
     }
 }
