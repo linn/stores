@@ -5,11 +5,11 @@
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models.Emails;
 
-    public class ConsignmentShipfileDataDataProxy : IConsignmentShipfileDataService
+    public class ConsignmentShipfileDataProxy : IConsignmentShipfileDataService
     {
         private readonly IDatabaseService databaseService;
 
-        public ConsignmentShipfileDataDataProxy(IDatabaseService databaseService)
+        public ConsignmentShipfileDataProxy(IDatabaseService databaseService)
         {
             this.databaseService = databaseService;
         }
