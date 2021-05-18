@@ -23,7 +23,7 @@
                                                 });
             var page = await browser.NewPageAsync();
 
-            var templateString = await File.ReadAllTextAsync("./views/ShipfileEmailTemplate.html");
+            var templateString = await File.ReadAllTextAsync("./views/ShipfilePdfTemplate.html");
             var template = Template.Parse(templateString);
 
             var result = await template.RenderAsync(emailModel);
