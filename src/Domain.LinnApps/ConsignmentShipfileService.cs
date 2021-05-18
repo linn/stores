@@ -111,15 +111,7 @@
                 {
                     foreach (var salesOutlet in outlets)
                     {
-                        toSend.Add(new ConsignmentShipfileEmailModel
-                                       {
-                                           ToEmailAddress = salesOutlet.OrderContact?.EmailAddress,
-                                           ConsignmentNumber = shipfile.ConsignmentId,
-                                           ToCustomerName = salesOutlet.Name,
-                                           AddressLines = new[] { "Line 1", "Line 2" },
-                                           PackingList = this.dataService.GetPackingList(shipfile.ConsignmentId).ToArray(),
-                                           DespatchNotes = this.dataService.GetDespatchNotes(shipfile.ConsignmentId).ToArray()
-                        });
+                        toSend.Add(this.dataService.BuildEmailModel(shipfile.ConsignmentId, salesOutlet.OutletAddressId));
                     }
                 }
             }

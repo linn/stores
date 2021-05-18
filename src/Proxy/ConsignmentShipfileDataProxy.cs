@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Proxy
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models.Emails;
@@ -14,7 +15,40 @@
             this.databaseService = databaseService;
         }
 
-        public IEnumerable<PackingListItem> GetPackingList(int consignmentId)
+        public ConsignmentShipfileEmailModel BuildEmailModel(int consignmentId, int outletAddressId)
+        {
+            var sql = $@"
+            select CONS.CONSIGNMENT_ID CONSIGNMENT_ID,
+            DATE_CLOSED DESPATCH_DATE,
+            CONS.ADDRESS ADDRESS,
+            CARR.NAME CARRIER, CONSIGNMENT.CUSTOMER_REFS(CONSIGNMENT_ID) Ref,
+            ADDV.ADDRESS OUTLET_ADDRESS,
+            CARRIER_REF 
+            from V_CONSIGNMENT_ADDRESS CONS,
+            CARRIERS CARR,
+            ADDRESSES_VIEW ADDV
+            WHERE cons.CONSIGNMENT_ID = {consignmentId}
+            AND CONS.CARRIER = CARR.CARRIER_CODE
+            AND ADDV.ADDRESS_ID = {outletAddressId}";
+            var rows = this.databaseService.ExecuteQuery(sql).Tables[0].Rows;
+            
+            var data = rows[0].ItemArray;
+            var result = new ConsignmentShipfileEmailModel
+                             {
+                                 ConsignmentNumber = data[0].ToString(),
+                                 DateDispatched = data[1].ToString(),
+                                 Address = data[2].ToString(),
+                                 Carrier = data[3].ToString(),
+                                 Reference = data[4].ToString(),
+                                 OutletAddress = data[5].ToString(),
+                                 CarriersReference = data[6].ToString()
+                             };
+            result.PackingList = this.GetPackingList(consignmentId).ToArray();
+            result.DespatchNotes = this.GetDespatchNotes(consignmentId).ToArray();
+            return result;
+        }
+
+        private IEnumerable<PackingListItem> GetPackingList(int consignmentId)
         {
             var sql = $@"
             (SELECT CI.CONSIGNMENT_ID,
@@ -76,7 +110,7 @@
             return result;
         }
 
-        public IEnumerable<DespatchNote> GetDespatchNotes(int consignmentId)
+        private IEnumerable<DespatchNote> GetDespatchNotes(int consignmentId)
         {
             var sql = $@"
             SELECT INV.CONSIGNMENT_ID, INV.DOCUMENT_NUMBER DOC_NUMBER, 

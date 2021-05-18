@@ -37,7 +37,7 @@
 
         public string SendShipfile { get; set; }
 
-        public int? OutletAddressId { get; set; }
+        public int OutletAddressId { get; set; }
         
         public int? OrderContactId { get; set; }
 
