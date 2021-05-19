@@ -75,6 +75,7 @@ export default function ConsignmentShipfiles({
                             <Button
                                 style={{ marginTop: '22px' }}
                                 variant="contained"
+                                disabled
                                 onClick={() => {
                                     clearErrors();
                                     sendEmails({

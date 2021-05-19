@@ -97,7 +97,12 @@
                     }
                     else
                     {
-                        toSend.Add(this.dataService.BuildEmailModel(shipfile.ConsignmentId, (int)contact.AddressId));
+                        toSend.Add(new ConsignmentShipfileEmailModel
+                                       {
+                                           PdfAttachment = this.dataService.BuildPdfModel(shipfile.ConsignmentId, (int)contact.AddressId),
+                                           ToCustomerName = contact.EmailAddress,
+                                           ToEmailAddress = contact.EmailAddress
+                        });
                     }
                 }
             }
@@ -120,7 +125,12 @@
                 {
                     foreach (var salesOutlet in outlets)
                     {
-                        toSend.Add(this.dataService.BuildEmailModel(shipfile.ConsignmentId, salesOutlet.OutletAddressId));
+                        toSend.Add(new ConsignmentShipfileEmailModel
+                                       {
+                                           PdfAttachment = this.dataService.BuildPdfModel(shipfile.ConsignmentId, salesOutlet.OutletAddressId),
+                                           ToEmailAddress = salesOutlet.OrderContact.EmailAddress,
+                                           ToCustomerName = salesOutlet.Name
+                                        });
                     }
                 }
             }

@@ -15,7 +15,7 @@
             this.databaseService = databaseService;
         }
 
-        public ConsignmentShipfileEmailModel BuildEmailModel(int consignmentId, int addressId)
+        public ConsignmentShipfilePdfModel BuildPdfModel(int consignmentId, int addressId)
         {
             var sql = $@"
             select CONS.CONSIGNMENT_ID CONSIGNMENT_ID,
@@ -33,7 +33,7 @@
             var rows = this.databaseService.ExecuteQuery(sql).Tables[0].Rows;
             
             var data = rows[0].ItemArray;
-            var result = new ConsignmentShipfileEmailModel
+            var result = new ConsignmentShipfilePdfModel
                              {
                                  ConsignmentNumber = data[0].ToString(),
                                  DateDispatched = data[1].ToString(),
