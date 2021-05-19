@@ -5,5 +5,7 @@
     public class ConsignmentShipfilesSendEmailsRequestResource
     {
         public IEnumerable<ConsignmentShipfileResource> Shipfiles { get; set; }
+
+        public bool Test { get; set; }
     }
 }

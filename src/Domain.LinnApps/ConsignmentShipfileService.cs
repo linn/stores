@@ -34,7 +34,7 @@
             this.dataService = dataService;
         }
 
-        public IEnumerable<ConsignmentShipfile> SendEmails(IEnumerable<ConsignmentShipfile> toSend)
+        public IEnumerable<ConsignmentShipfile> SendEmails(IEnumerable<ConsignmentShipfile> toSend, bool test = false)
         {
             var withDetails = new List<ConsignmentShipfile>();
             foreach (var shipfile in toSend)
@@ -53,7 +53,7 @@
                 {
                     var pdf = this.pdfBuilder.BuildPdf(model, "./views/ShipfilePdfTemplate.html");
                     this.emailService.SendEmail(
-                        model.ToEmailAddress,
+                        test ? ConfigurationManager.Configuration["SHIPFILES_TEST_ADDRESS"] : model.ToEmailAddress,
                         model.ToCustomerName,
                         null,
                         null,
@@ -64,8 +64,12 @@
                         pdf.Result);
                 }
 
-                data.Message = ShipfileStatusMessages.EmailSent;
-                data.ShipfileSent = "Y";
+                if (!test)
+                {
+                    data.Message = ShipfileStatusMessages.EmailSent;
+                    data.ShipfileSent = "Y";
+                }
+
                 withDetails.Add(data);
             }
 

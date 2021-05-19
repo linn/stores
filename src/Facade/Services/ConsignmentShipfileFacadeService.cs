@@ -34,8 +34,13 @@
         public IResult<IEnumerable<ConsignmentShipfile>> SendEmails(
            ConsignmentShipfilesSendEmailsRequestResource toSend)
         {
-            var result = this.domainService.SendEmails(toSend.Shipfiles.Select(
-                s => new ConsignmentShipfile { Id = s.Id, ConsignmentId = s.ConsignmentId }));
+            var result = this.domainService.SendEmails(
+                toSend.Shipfiles.Select(
+                    s => new ConsignmentShipfile
+                             {
+                                 Id = s.Id, ConsignmentId = s.ConsignmentId
+                             }), 
+                toSend.Test);
 
             this.transactionManager.Commit();
             return new SuccessResult<IEnumerable<ConsignmentShipfile>>(result);

@@ -53,7 +53,7 @@ export default function ConsignmentShipfiles({
     return (
         <Page>
             <Grid container spacing={3}>
-                <Grid item xs={8}>
+                <Grid item xs={12}>
                     <Title text="Send Shipfile Emails" />
                 </Grid>
                 {(sendEmailsLoading || deleteLoading) && !itemError ? (
@@ -83,6 +83,21 @@ export default function ConsignmentShipfiles({
                                 }}
                             >
                                 Send Selected
+                            </Button>
+                        </Grid>
+                        <Grid item xs={2}>
+                            <Button
+                                style={{ marginTop: '22px' }}
+                                variant="contained"
+                                onClick={() => {
+                                    clearErrors();
+                                    sendEmails({
+                                        shipfiles: selectedRows,
+                                        test: true
+                                    });
+                                }}
+                            >
+                                Test Selected
                             </Button>
                         </Grid>
                         <Grid item xs={2}>
