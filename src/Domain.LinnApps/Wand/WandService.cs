@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Wand
 {
+    using System;
+
     using Linn.Common.Domain.LinnApps.RemoteServices;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
@@ -92,18 +94,18 @@
         private string GetLabelInformation(WandLog wandLog)
         {
             return
-                $"Carton: {wandLog.ContainerNo}/nArticle:{wandLog.ArticleNumber}/nSerial No: {wandLog.SeriaNumber1} {wandLog.SeriaNumber2}/nOrder: {wandLog.OrderNumber}/nConsignment: {wandLog.ConsignmentId}";
+                $"Carton: {wandLog.ContainerNo}{Environment.NewLine}Article:{wandLog.ArticleNumber}{Environment.NewLine}Serial No: {wandLog.SeriaNumber1} {wandLog.SeriaNumber2}{Environment.NewLine}Order: {wandLog.OrderNumber}{Environment.NewLine}Consignment: {wandLog.ConsignmentId}";
         }
 
         private string GetPrintAddress(Address address)
         {
-            var printAddress = $"{address.Addressee}/n";
-            printAddress += string.IsNullOrEmpty(address.Addressee2) ? null : $"{address.Addressee2}/n";
-            printAddress += string.IsNullOrEmpty(address.Line1) ? null : $"{address.Line1}/n";
-            printAddress += string.IsNullOrEmpty(address.Line2) ? null : $"{address.Line2}/n";
-            printAddress += string.IsNullOrEmpty(address.Line3) ? null : $"{address.Line3}/n";
-            printAddress += string.IsNullOrEmpty(address.Line4) ? null : $"{address.Line4}/n";
-            printAddress += string.IsNullOrEmpty(address.PostCode) ? null : $"{address.PostCode}/n";
+            var printAddress = $"{address.Addressee}{Environment.NewLine}";
+            printAddress += string.IsNullOrEmpty(address.Addressee2) ? null : $"{address.Addressee2}{Environment.NewLine}";
+            printAddress += string.IsNullOrEmpty(address.Line1) ? null : $"{address.Line1}{Environment.NewLine}";
+            printAddress += string.IsNullOrEmpty(address.Line2) ? null : $"{address.Line2}{Environment.NewLine}";
+            printAddress += string.IsNullOrEmpty(address.Line3) ? null : $"{address.Line3}{Environment.NewLine}";
+            printAddress += string.IsNullOrEmpty(address.Line4) ? null : $"{address.Line4}{Environment.NewLine}";
+            printAddress += string.IsNullOrEmpty(address.PostCode) ? null : $"{address.PostCode}{Environment.NewLine}";
             printAddress += string.IsNullOrEmpty(address.Country.DisplayName) ? null : $"{address.Country.DisplayName}";
 
             return printAddress;
