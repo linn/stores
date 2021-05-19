@@ -1,8 +1,5 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.WandServiceTests
 {
-    using System;
-    using System.Linq.Expressions;
-
     using FluentAssertions;
 
     using Linn.Stores.Domain.LinnApps.Wand;
@@ -40,10 +37,17 @@
             this.wandString = "flajdlfjd1312";
             this.userNumber = 35345;
             this.wandLogId = 123;
-            this.wandLog = new WandLog { Id = this.wandLogId, ArticleNumber = "a", ConsignmentId = 123, ContainerNo = 1, TransType = "W" };
+            this.wandLog = new WandLog
+                               {
+                                   Id = this.wandLogId,
+                                   ArticleNumber = "a",
+                                   ConsignmentId = this.consignmentId,
+                                   ContainerNo = 1,
+                                   TransType = "W"
+                               };
             this.consignment = new Consignment
                                    {
-                                       ConsignmentId = 123,
+                                       ConsignmentId = this.consignmentId,
                                        Address = new Address
                                                      {
                                                          Line1 = "this",
@@ -54,7 +58,7 @@
                                                      }
                                    };
             this.WandLogRepository.FindById(this.wandLogId).Returns(this.wandLog);
-            this.ConsignmentRepository.FindBy(Arg.Any<Expression<Func<Consignment, bool>>>()).Returns(this.consignment);
+            this.ConsignmentRepository.FindById(this.consignmentId).Returns(this.consignment);
             this.wandPackResult = new WandPackResult { Message = "ok", Success = true, WandLogId = this.wandLogId };
             this.WandPack.Wand(this.wandAction, this.userNumber, this.consignmentId, this.wandString)
                 .Returns(this.wandPackResult);
@@ -65,7 +69,7 @@
         [Test]
         public void ShouldGetWandLog()
         {
-            this.WandLogRepository.FindById(this.wandLogId).Returns(this.wandLog);
+            this.WandLogRepository.Received().FindById(this.wandLogId);
         }
 
         [Test]
@@ -77,7 +81,7 @@
         [Test]
         public void ShouldGetConsignment()
         {
-            this.ConsignmentRepository.Received().FindBy(Arg.Any<Expression<Func<Consignment, bool>>>());
+            this.ConsignmentRepository.Received().FindById(this.consignmentId);
         }
 
         [Test]

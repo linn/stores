@@ -17,7 +17,7 @@
 
         protected IRepository<WandLog, int> WandLogRepository { get; private set; }
 
-        protected IQueryRepository<Consignment> ConsignmentRepository { get; private set; }
+        protected IRepository<Consignment, int> ConsignmentRepository { get; private set; }
 
         protected IBartenderLabelPack BartenderLabelPack{ get; private set; }
 
@@ -26,7 +26,7 @@
         {
             this.WandPack = Substitute.For<IWandPack>();
             this.WandLogRepository = Substitute.For<IRepository<WandLog, int>>();
-            this.ConsignmentRepository = Substitute.For<IQueryRepository<Consignment>>();
+            this.ConsignmentRepository = Substitute.For<IRepository<Consignment, int>>();
             this.BartenderLabelPack = Substitute.For<IBartenderLabelPack>();
 
             this.Sut = new WandService(

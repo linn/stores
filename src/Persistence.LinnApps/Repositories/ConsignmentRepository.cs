@@ -9,7 +9,7 @@
 
     using Microsoft.EntityFrameworkCore;
 
-    public class ConsignmentRepository : IQueryRepository<Consignment>
+    public class ConsignmentRepository : IRepository<Consignment, int>
     {
         private readonly ServiceDbContext serviceDbContext;
 
@@ -21,7 +21,6 @@
         public Consignment FindBy(Expression<Func<Consignment, bool>> expression)
         {
             return this.serviceDbContext.Consignments.Where(expression)
-                .Include(c => c.Country)
                 .Include(a => a.Address)
                 .ThenInclude(c => c.Country)
                 .ToList().FirstOrDefault();
@@ -32,7 +31,26 @@
             throw new NotImplementedException();
         }
 
+        public Consignment FindById(int key)
+        {
+            return this.serviceDbContext.Consignments
+                .Where(c => c.ConsignmentId == key)
+                .Include(a => a.Address)
+                .ThenInclude(c => c.Country)
+                .ToList().FirstOrDefault();
+        }
+
         public IQueryable<Consignment> FindAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Add(Consignment entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(Consignment entity)
         {
             throw new NotImplementedException();
         }

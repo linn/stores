@@ -100,7 +100,7 @@
             builder.RegisterType<StockQuantitiesRepository>().As<IQueryRepository<StockQuantities>>();
             builder.RegisterType<RequisitionHeaderRepository>().As<IRepository<RequisitionHeader, int>>();
             builder.RegisterType<TransferableStockRepository>().As<IQueryRepository<TransferableStock>>();
-            builder.RegisterType<ConsignmentRepository>().As<IQueryRepository<Consignment>>();
+            builder.RegisterType<ConsignmentRepository>().As<IRepository<Consignment, int>>();
             builder.RegisterType<WandLogRepository>().As<IRepository<WandLog, int>>();
             builder.RegisterType<StockAvailableRepository>().As<IQueryRepository<AvailableStock>>();
             builder.RegisterType<StockLocatorPricesRepository>().As<IQueryRepository<StockLocatorPrices>>();

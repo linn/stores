@@ -11,14 +11,14 @@
 
         private readonly IRepository<WandLog, int> wandLogRepository;
 
-        private readonly IQueryRepository<Consignment> consignmentRepository;
+        private readonly IRepository<Consignment, int> consignmentRepository;
 
         private readonly IBartenderLabelPack bartenderLabelPack;
 
         public WandService(
             IWandPack wandPack,
             IRepository<WandLog, int> wandLogRepository,
-            IQueryRepository<Consignment> consignmentRepository,
+            IRepository<Consignment, int> consignmentRepository,
             IBartenderLabelPack bartenderLabelPack)
         {
             this.wandPack = wandPack;
@@ -73,7 +73,7 @@
                 return;
             }
 
-            var consignment = this.consignmentRepository.FindBy(c => c.ConsignmentId == consignmentId);
+            var consignment = this.consignmentRepository.FindById(consignmentId);
 
             var labelMessage = string.Empty;
             var labelData = $"\"{this.GetPrintAddress(consignment.Address)}\", \"{this.GetLabelInformation(wandLog)}\"";
