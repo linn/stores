@@ -47,7 +47,7 @@
         [Test]
         public void ShouldGetWandLog()
         {
-            this.WandLogRepository.FindById(this.wandLogId).Returns(this.wandLog);
+            this.WandLogRepository.Received().FindById(this.wandLogId);
         }
 
         [Test]

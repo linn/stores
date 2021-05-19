@@ -29,7 +29,7 @@
 
         protected IQueryRepository<SalesAccount> SalesAccountRepository { get; set; }
 
-        protected IQueryRepository<Consignment> ConsignmentRepository { get; set; }
+        protected IRepository<Consignment, int> ConsignmentRepository { get; set; }
 
         protected IQueryRepository<SalesOrderDetail> SalesOrderDetailRepository { get; set; }
 
@@ -45,14 +45,14 @@
             this.WhatToWandService = Substitute.For<IWhatToWandService>();
             this.StoresPack = Substitute.For<IStoresPack>();
             this.SalesAccountRepository = Substitute.For<IQueryRepository<SalesAccount>>();
-            this.ConsignmentRepository = Substitute.For<IQueryRepository<Consignment>>();
+            this.ConsignmentRepository = Substitute.For<IRepository<Consignment, int>>();
             this.SalesOrderRepository = Substitute.For<IQueryRepository<SalesOrder>>();
             this.SalesOrderDetailRepository = Substitute.For<IQueryRepository<SalesOrderDetail>>();
             this.SalesOrderRepository.FindBy(Arg.Any<Expression<Func<SalesOrder, bool>>>())
                 .Returns(new SalesOrder { OrderNumber = 1, CurrencyCode = "USD" });
             this.SalesOrderDetailRepository.FindBy(Arg.Any<Expression<Func<SalesOrderDetail, bool>>>())
                 .Returns(new SalesOrderDetail() { OrderNumber = 1, OrderLine = 1, NettTotal = 100m });
-            this.ConsignmentRepository.FindBy(Arg.Any<Expression<Func<Consignment, bool>>>())
+            this.ConsignmentRepository.FindById(1)
                 .Returns(new Consignment
                              {
                                  ConsignmentId = 1

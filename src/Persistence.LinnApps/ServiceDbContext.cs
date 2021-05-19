@@ -1461,9 +1461,7 @@
             var q = builder.Query<Consignment>().ToView("CONSIGNMENTS");
             q.Property(c => c.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
             q.Property(c => c.AddressId).HasColumnName("ADDRESS_ID");
-            q.Property(c => c.CountryCode).HasColumnName("COUNTRY");
             q.Property(c => c.SalesAccountId).HasColumnName("SALES_ACCOUNT_ID");
-            q.HasOne(c => c.Country).WithMany(y => y.Consignments).HasForeignKey(c => c.CountryCode);
             q.HasOne(c => c.Address).WithMany(a => a.Consignments).HasForeignKey(o => o.AddressId);
         }
 
