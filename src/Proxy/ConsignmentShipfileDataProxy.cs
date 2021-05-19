@@ -15,7 +15,7 @@
             this.databaseService = databaseService;
         }
 
-        public ConsignmentShipfileEmailModel BuildEmailModel(int consignmentId, int outletAddressId)
+        public ConsignmentShipfileEmailModel BuildEmailModel(int consignmentId, int addressId)
         {
             var sql = $@"
             select CONS.CONSIGNMENT_ID CONSIGNMENT_ID,
@@ -29,7 +29,7 @@
             ADDRESSES_VIEW ADDV
             WHERE cons.CONSIGNMENT_ID = {consignmentId}
             AND CONS.CARRIER = CARR.CARRIER_CODE
-            AND ADDV.ADDRESS_ID = {outletAddressId}";
+            AND ADDV.ADDRESS_ID = {addressId}";
             var rows = this.databaseService.ExecuteQuery(sql).Tables[0].Rows;
             
             var data = rows[0].ItemArray;

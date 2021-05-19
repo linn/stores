@@ -10,6 +10,12 @@
 
         public string EmailAddress { get; set; }
 
+        public int PersonId { get; set; }
+
+        public Person Person { get; set; }
+
+        public int? AddressId { get; set; }
+
         public IEnumerable<SalesAccount> SalesAccounts { get; set; }
 
         public IEnumerable<SalesOutlet> SalesOutlets { get; set; }

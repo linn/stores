@@ -198,6 +198,8 @@
 
         public DbSet<Contact> Contacts { get; set; }
 
+        public DbSet<Person> Persons { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -290,6 +292,7 @@
             this.QueryInvoices(builder);
             this.BuildConsignmentItems(builder);
             this.BuildContacts(builder);
+            this.BuildPersons(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1641,7 +1644,19 @@
             entity.Property(c => c.Id).HasColumnName("CONTACT_ID");
             entity.Property(c => c.OrgId).HasColumnName("ORG_ID");
             entity.Property(c => c.EmailAddress).HasColumnName("EMAIL_ADDRESS");
+            entity.Property(c => c.AddressId).HasColumnName("ADDRESS_ID");
+            entity.Property(c => c.PersonId).HasColumnName("PERSON_ID");
             entity.HasMany(c => c.SalesOutlets).WithOne(o => o.OrderContact).HasForeignKey(o => o.OrderContactId);
+            entity.HasOne(c => c.Person).WithMany(p => p.ContactDetails).HasForeignKey(c => c.PersonId);
+        }
+
+        private void BuildPersons(ModelBuilder builder)
+        {
+            var entity = builder.Entity<Person>().ToTable("PERSONS");
+            entity.HasKey(p => p.PersonId);
+            entity.Property(p => p.PersonId).HasColumnName("PERSON_ID");
+            entity.Property(p => p.FirstName).HasColumnName("FIRST_NAME");
+            entity.Property(p => p.LastName).HasColumnName("LAST_NAME");
         }
     }
 }

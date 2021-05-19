@@ -28,14 +28,20 @@
             message.From.Add(new MailboxAddress(toName, toAddress));
             message.To.Add(new MailboxAddress(toName, toAddress));
 
-            foreach (var entry in cc)
+            if (cc != null)
             {
-                message.Cc.Add(new MailboxAddress(entry["name"], entry["address"]));
+                foreach (var entry in cc)
+                {
+                    message.Cc.Add(new MailboxAddress(entry["name"], entry["address"]));
+                }
             }
 
-            foreach (var entry in bcc)
+            if (bcc != null)
             {
-                message.Bcc.Add(new MailboxAddress(entry["name"], entry["address"]));
+                foreach (var entry in bcc)
+                {
+                    message.Bcc.Add(new MailboxAddress(entry["name"], entry["address"]));
+                }
             }
 
             message.Subject = subject;
@@ -45,13 +51,13 @@
                                    Text = body
                                };
 
-            using (Stream ms = attachment)
+            using (var stream = attachment)
             {
-                byte[] buffer = new byte[ms.Length];
-                ms.Seek(0, SeekOrigin.Begin);
-                ms.Flush();
-                ms.Read(buffer, 0, (int)ms.Length);
-                var content = new MimeContent(ms);
+                byte[] buffer = new byte[stream.Length];
+                stream.Seek(0, SeekOrigin.Begin);
+                stream.Flush();
+                stream.Read(buffer, 0, (int)stream.Length);
+                var content = new MimeContent(stream);
                 var a = new MimePart("application", "pdf")
                                         {
                                             Content = content,

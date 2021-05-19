@@ -34,6 +34,7 @@
                 .Include(s => s.Consignment)
                 .ThenInclude(c => c.SalesAccount)
                 .ThenInclude(a => a.ContactDetails)
+                .ThenInclude(c => c.Person)
                 .Include(s => s.Consignment)
                 .ThenInclude(c => c.Items)
                 .ToList().FirstOrDefault();

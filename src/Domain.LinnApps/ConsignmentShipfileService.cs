@@ -41,33 +41,27 @@
             {
                 var data = this.shipfileRepository.FindBy(s => s.Id == shipfile.Id);
                 
-                // what is this for
-                if (shipfile.Message != null)
+                if (shipfile.Message != null || shipfile.ShipfileSent == "Y")
                 {
                     continue;
                 }
 
                 var models = this.BuildEmailModels(data);
 
-                var bccList = new Dictionary<string, string>();
-                bccList.Add("name", "financeoutgoing");
-                bccList.Add("address", ConfigurationManager.Configuration["SHIPFILES_OUTGOING_ADDRESS"]);
-
-
-                // potentially an email to send to each outlet in this consignment
+                // potentially an email to send to each outlet in this consignment?
                 foreach (var model in models)
                 {
                     var pdf = this.pdfBuilder.BuildPdf(model, "./views/ShipfilePdfTemplate.html");
-                    // this.emailService.SendEmail(
-                    //     emailAddress,
-                    //     model.ToCustomerName,
-                    //     null,
-                    //     new List<Dictionary<string, string>> { bccList },
-                    //     ConfigurationManager.Configuration["SHIPFILES_FROM_ADDRESS"],
-                    //     "Linn Shipping",
-                    //     "Consignment Shipfile",
-                    //     $"Here is your pdf shipfile {model.ToEmailAddress}",
-                    //     pdf.Result);
+                    this.emailService.SendEmail(
+                        model.ToEmailAddress,
+                        model.ToCustomerName,
+                        null,
+                        null,
+                        ConfigurationManager.Configuration["SHIPFILES_FROM_ADDRESS"],
+                        "Linn Shipping",
+                        "Consignment Shipfile",
+                        $"Here is your pdf shipfile {model.ToEmailAddress}",
+                        pdf.Result);
                 }
 
                 data.Message = ShipfileStatusMessages.EmailSent;
@@ -84,20 +78,31 @@
             
             var account = shipfile.Consignment.SalesAccount;
 
-            // an individual, one email to be sent I imagine
             if (account.OrgId == null)
             {
-                shipfile.Message = account.ContactId != null ? null : ShipfileStatusMessages.NoContactDetails;
-                toSend.Add(new ConsignmentShipfileEmailModel()); // todo
+                if (account.ContactId == null || string.IsNullOrEmpty(account.ContactDetails.EmailAddress))
+                {
+                    shipfile.Message = ShipfileStatusMessages.NoContactDetails;
+                }
+                else
+                {
+                    var contact = account.ContactDetails;
+                    if (contact.AddressId == null)
+                    {
+                        shipfile.Message = ShipfileStatusMessages.NoShippingAddress;
+                    }
+                    else
+                    {
+                        toSend.Add(this.dataService.BuildEmailModel(shipfile.ConsignmentId, (int)contact.AddressId));
+                    }
+                }
             }
             else
             {
-                // an org, could have multiple emails to send for each outlet on consignment 
                 var consignmentOrderNumbers = shipfile.Consignment.Items.Select(i => i.OrderNumber);
                 var orders = this.salesOrderRepository.FilterBy(
                     o => consignmentOrderNumbers.Contains(o.OrderNumber));
 
-                // find distinct outlets to contact
                 var outlets = orders.ToList()
                     .Select(o => o.SalesOutlet)
                     .GroupBy(elem => $"{elem.OutletNumber}-{elem.OrderContact.Id}")
