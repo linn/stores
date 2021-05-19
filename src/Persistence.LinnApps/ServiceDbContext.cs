@@ -192,6 +192,8 @@
 
         public DbQuery<TqmsOutstandingLoansByCategory> TqmsOutstandingLoansByCategories { get; set; }
 
+        public DbSet<Address> Addresses { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -280,6 +282,7 @@
             this.BuildTqmsMaster(builder);
             this.BuildTqmsJobRefs(builder);
             this.QueryTqmsOutstandingLoansByCategories(builder);
+            this.BuildAddresses(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1461,6 +1464,7 @@
             q.Property(c => c.CountryCode).HasColumnName("COUNTRY");
             q.Property(c => c.SalesAccountId).HasColumnName("SALES_ACCOUNT_ID");
             q.HasOne(c => c.Country).WithMany(y => y.Consignments).HasForeignKey(c => c.CountryCode);
+            q.HasOne(c => c.Address).WithMany(a => a.Consignments).HasForeignKey(o => o.AddressId);
         }
 
         private void QuerySalesOrders(ModelBuilder builder)
@@ -1477,6 +1481,7 @@
             q.Property(d => d.OrderNumber).HasColumnName("ORDER_NUMBER");
             q.Property(d => d.NettTotal).HasColumnName("NETT_TOTAL");
         }
+
         private void BuildExportReturns(ModelBuilder builder)
         {
             var q = builder.Entity<ExportReturn>().ToTable("EXPORT_RETURNS");
@@ -1574,6 +1579,23 @@
             q.Property(t => t.Category).HasColumnName("CATEGORY");
             q.Property(t => t.TotalStoresValue).HasColumnName("TOTAL_STORES_VALUE");
             q.Property(t => t.TotalSalesValue).HasColumnName("TOTAL_SALES_VALUE");
+        }
+
+        private void BuildAddresses(ModelBuilder builder)
+        {
+            var q = builder.Entity<Address>();
+            q.ToTable("ADDRESSES");
+            q.Property(b => b.Id).HasColumnName("ADDRESS_ID").HasMaxLength(38);
+            q.Property(b => b.Addressee).HasColumnName("ADDRESSEE").HasMaxLength(40);
+            q.Property(b => b.Addressee2).HasColumnName("ADDRESSEE_2").HasMaxLength(40);
+            q.Property(b => b.Line1).HasColumnName("ADDRESS_1").HasMaxLength(40);
+            q.Property(b => b.Line2).HasColumnName("ADDRESS_2").HasMaxLength(40);
+            q.Property(b => b.Line3).HasColumnName("ADDRESS_3").HasMaxLength(40);
+            q.Property(b => b.Line4).HasColumnName("ADDRESS_4").HasMaxLength(40);
+            q.Property(b => b.PostCode).HasColumnName("POSTAL_CODE").HasMaxLength(20);
+            q.Property(b => b.DateInvalid).HasColumnName("DATE_INVALID");
+            q.Property(b => b.CountryCode).HasColumnName("COUNTRY").HasMaxLength(2);
+            q.HasOne(b => b.Country).WithMany(c => c.Addresses).HasForeignKey(f => f.CountryCode);
         }
     }
 }

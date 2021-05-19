@@ -21,7 +21,10 @@
         public Consignment FindBy(Expression<Func<Consignment, bool>> expression)
         {
             return this.serviceDbContext.Consignments.Where(expression)
-                .Include(c => c.Country).ToList().FirstOrDefault();
+                .Include(c => c.Country)
+                .Include(a => a.Address)
+                .ThenInclude(c => c.Country)
+                .ToList().FirstOrDefault();
         }
 
         public IQueryable<Consignment> FilterBy(Expression<Func<Consignment, bool>> expression)
