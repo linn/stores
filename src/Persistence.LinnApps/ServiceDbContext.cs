@@ -1481,6 +1481,7 @@
             q.Property(d => d.OrderNumber).HasColumnName("ORDER_NUMBER");
             q.Property(d => d.NettTotal).HasColumnName("NETT_TOTAL");
         }
+
         private void BuildExportReturns(ModelBuilder builder)
         {
             var q = builder.Entity<ExportReturn>().ToTable("EXPORT_RETURNS");
@@ -1591,9 +1592,10 @@
             q.Property(b => b.Line2).HasColumnName("ADDRESS_2").HasMaxLength(40);
             q.Property(b => b.Line3).HasColumnName("ADDRESS_3").HasMaxLength(40);
             q.Property(b => b.Line4).HasColumnName("ADDRESS_4").HasMaxLength(40);
-            q.Property(b => b.PostCode).HasColumnName("POSTAL_CODE");
+            q.Property(b => b.PostCode).HasColumnName("POSTAL_CODE").HasMaxLength(20);
             q.Property(b => b.DateInvalid).HasColumnName("DATE_INVALID");
-            q.HasOne(b => b.Country).WithMany(c => c.Addresses).HasForeignKey("COUNTRY");
+            q.Property(b => b.CountryCode).HasColumnName("COUNTRY").HasMaxLength(2);
+            q.HasOne(b => b.Country).WithMany(c => c.Addresses).HasForeignKey(f => f.CountryCode);
         }
     }
 }
