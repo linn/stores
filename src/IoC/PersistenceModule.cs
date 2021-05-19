@@ -70,11 +70,11 @@
             builder.RegisterType<ImportBookExhangeRateRepository>()
                 .As<IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey>>();
             builder.RegisterType<ImportBookInvoiceDetailsRepository>()
-                .As<IRepository<ImpBookInvoiceDetail, ImportBookInvoiceDetailKey>>();
+                .As<IRepository<ImportBookInvoiceDetail, ImportBookInvoiceDetailKey>>();
             builder.RegisterType<ImportBookOrderDetailsRepository>()
-                .As<IRepository<ImpBookOrderDetail, ImportBookOrderDetailKey>>();
+                .As<IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey>>();
             builder.RegisterType<ImportBookPostEntryRepository>()
-                .As<IRepository<ImpBookPostEntry, ImportBookPostEntryKey>>();
+                .As<IRepository<ImportBookPostEntry, ImportBookPostEntryKey>>();
             builder.RegisterType<ImportBookRepository>().As<IRepository<ImportBook, int>>();
             builder.RegisterType<ImportBookTransactionCodeRepository>()
                 .As<IRepository<ImportBookTransactionCode, int>>();

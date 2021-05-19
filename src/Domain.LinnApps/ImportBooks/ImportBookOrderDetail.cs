@@ -1,8 +1,8 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.ImportBooks
 {
-    public class ImpBookOrderDetail
+    public class ImportBookOrderDetail
     {
-        public int ImpBookId { get; set; }
+        public int ImportBookId { get; set; }
         
         public int LineNumber { get; set; }
         

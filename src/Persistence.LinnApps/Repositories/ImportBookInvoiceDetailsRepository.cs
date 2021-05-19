@@ -8,7 +8,7 @@
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
 
-    public class ImportBookInvoiceDetailsRepository : IRepository<ImpBookInvoiceDetail, ImportBookInvoiceDetailKey>
+    public class ImportBookInvoiceDetailsRepository : IRepository<ImportBookInvoiceDetail, ImportBookInvoiceDetailKey>
     {
         private readonly ServiceDbContext serviceDbContext;
 
@@ -17,32 +17,32 @@
             this.serviceDbContext = serviceDbContext;
         }
 
-        public ImpBookInvoiceDetail FindById(ImportBookInvoiceDetailKey key)
+        public ImportBookInvoiceDetail FindById(ImportBookInvoiceDetailKey key)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<ImpBookInvoiceDetail> FindAll()
+        public IQueryable<ImportBookInvoiceDetail> FindAll()
         {
             throw new NotImplementedException();
         }
 
-        public void Add(ImpBookInvoiceDetail entity)
+        public void Add(ImportBookInvoiceDetail entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(ImpBookInvoiceDetail entity)
+        public void Remove(ImportBookInvoiceDetail entity)
         {
             throw new NotImplementedException();
         }
 
-        public ImpBookInvoiceDetail FindBy(Expression<Func<ImpBookInvoiceDetail, bool>> expression)
+        public ImportBookInvoiceDetail FindBy(Expression<Func<ImportBookInvoiceDetail, bool>> expression)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<ImpBookInvoiceDetail> FilterBy(Expression<Func<ImpBookInvoiceDetail, bool>> expression)
+        public IQueryable<ImportBookInvoiceDetail> FilterBy(Expression<Func<ImportBookInvoiceDetail, bool>> expression)
         {
             throw new NotImplementedException();
         }

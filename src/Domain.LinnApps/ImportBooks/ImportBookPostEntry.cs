@@ -2,9 +2,9 @@
 {
     using System;
 
-    public class ImpBookPostEntry
+    public class ImportBookPostEntry
     {
-        public int ImpBookId { get; set; }
+        public int ImportBookId { get; set; }
         
         public int LineNumber { get; set; }
         

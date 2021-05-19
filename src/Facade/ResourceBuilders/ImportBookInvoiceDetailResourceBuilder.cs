@@ -4,9 +4,9 @@
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Resources.Parts;
 
-    public class ImportBookInvoiceDetailResourceBuilder : IResourceBuilder<ImpBookInvoiceDetail>
+    public class ImportBookInvoiceDetailResourceBuilder : IResourceBuilder<ImportBookInvoiceDetail>
     {
-        public ImportBookInvoiceDetailResource Build(ImpBookInvoiceDetail model)
+        public ImportBookInvoiceDetailResource Build(ImportBookInvoiceDetail model)
         {
             return new ImportBookInvoiceDetailResource
                        {
@@ -17,9 +17,9 @@
                        };
         }
 
-        object IResourceBuilder<ImpBookInvoiceDetail>.Build(ImpBookInvoiceDetail model) => this.Build(model);
+        object IResourceBuilder<ImportBookInvoiceDetail>.Build(ImportBookInvoiceDetail model) => this.Build(model);
 
-        public string GetLocation(ImpBookInvoiceDetail model)
+        public string GetLocation(ImportBookInvoiceDetail model)
         {
             throw new System.NotImplementedException();
         }
