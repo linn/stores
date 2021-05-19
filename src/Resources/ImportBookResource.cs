@@ -42,37 +42,37 @@
 
         public string ArrivalDate { get; set; }
 
-        public int? FreightCharges { get; set; }
+        public decimal? FreightCharges { get; set; }
 
-        public int? HandlingCharge { get; set; }
+        public decimal? HandlingCharge { get; set; }
 
-        public int? ClearanceCharge { get; set; }
+        public decimal? ClearanceCharge { get; set; }
 
-        public int? Cartage { get; set; }
+        public decimal? Cartage { get; set; }
 
-        public int? Duty { get; set; }
+        public decimal? Duty { get; set; }
 
-        public int? Vat { get; set; }
+        public decimal? Vat { get; set; }
 
-        public int? Misc { get; set; }
+        public decimal? Misc { get; set; }
 
-        public int? CarriersInvTotal { get; set; }
+        public decimal? CarriersInvTotal { get; set; }
 
-        public int? CarriersVatTotal { get; set; }
+        public decimal? CarriersVatTotal { get; set; }
 
-        public int TotalImportValue { get; set; }
+        public decimal TotalImportValue { get; set; }
 
         public int? Pieces { get; set; }
 
-        public int? Weight { get; set; }
+        public decimal? Weight { get; set; }
 
         public string CustomsEntryCode { get; set; }
 
         public string CustomsEntryCodeDate { get; set; }
 
-        public int? LinnDuty { get; set; }
+        public decimal? LinnDuty { get; set; }
 
-        public int? LinnVat { get; set; }
+        public decimal? LinnVat { get; set; }
 
         public int? IprCpcNumber { get; set; }
 
@@ -94,7 +94,7 @@
 
         public string VaxRef { get; set; }
 
-        public int? Storage { get; set; }
+        public decimal? Storage { get; set; }
 
         public int? NumCartons { get; set; }
 
@@ -102,7 +102,7 @@
 
         public string Comments { get; set; }
 
-        public int? ExchangeRate { get; set; }
+        public decimal? ExchangeRate { get; set; }
 
         public string ExchangeCurrency { get; set; }
 

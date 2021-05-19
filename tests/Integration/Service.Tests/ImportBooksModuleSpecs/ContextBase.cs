@@ -34,8 +34,11 @@
                     {
                         with.Dependency(this.importBooksFacadeService);
                         with.Dependency<IResourceBuilder<ImportBook>>(new ImportBookResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<ImportBook>>>(new ImportBooksResourceBuilder());
                         with.Module<ImportBooksModule>();
                         with.ResponseProcessor<ImportBookResponseProcessor>();
+                        with.ResponseProcessor<ImportBooksResponseProcessor>();
+
                         with.RequestStartup(
                             (container, pipelines, context) =>
                                 {

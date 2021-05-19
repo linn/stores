@@ -8,6 +8,6 @@
 
         public string InvoiceNumber { get; set; }
 
-        public int InvoiceValue { get; set; }
+        public decimal InvoiceValue { get; set; }
     }
 }

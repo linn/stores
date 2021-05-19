@@ -27,7 +27,7 @@
 
         protected override Expression<Func<ImportBook, bool>> SearchExpression(string searchTerm)
         {
-            throw new NotImplementedException();
+            return imps => imps.Id.ToString().Contains(searchTerm);
         }
     }
 }
