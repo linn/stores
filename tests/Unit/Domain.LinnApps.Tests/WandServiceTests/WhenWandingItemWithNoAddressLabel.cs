@@ -9,7 +9,7 @@
 
     using NUnit.Framework;
 
-    public class WhenWandingItemWithAddressLabel : ContextBase
+    public class WhenWandingItemWithNoAddressLabel : ContextBase
     {
         private int consignmentId;
 
@@ -35,7 +35,7 @@
         public void SetUp()
         {
             this.wandAction = "W";
-            this.printLabels = true;
+            this.printLabels = false;
             this.consignmentId = 134;
             this.wandString = "flajdlfjd1312";
             this.userNumber = 35345;
@@ -87,19 +87,19 @@
         }
 
         [Test]
-        public void ShouldGetConsignment()
+        public void ShouldNotGetConsignment()
         {
-            this.ConsignmentRepository.Received().FindById(this.consignmentId);
+            this.ConsignmentRepository.DidNotReceive().FindById(Arg.Any<int>());
         }
 
         [Test]
         public void ShouldPrintLabel()
         {
-            this.BartenderLabelPack.Received().PrintLabels(
-                $"Address{this.wandLogId}",
-                "DispatchLabels1",
-                1,
-                "dispatchaddress.btw",
+            this.BartenderLabelPack.DidNotReceive().PrintLabels(
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<int>(),
+                Arg.Any<string>(),
                 Arg.Any<string>(),
                 ref Arg.Any<string>());
         }

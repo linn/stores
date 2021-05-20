@@ -19,7 +19,7 @@
 
         protected IRepository<Consignment, int> ConsignmentRepository { get; private set; }
 
-        protected IBartenderLabelPack BartenderLabelPack{ get; private set; }
+        protected IBartenderLabelPack BartenderLabelPack { get; private set; }
 
         [SetUp]
         public void SetUpContext()

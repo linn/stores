@@ -48,7 +48,12 @@
             return $"02{linnBarCode}?";
         }
 
-        public WandResult Wand(string wandAction, string wandString, int consignmentId, int userNumber)
+        public WandResult Wand(
+            string wandAction,
+            string wandString,
+            int consignmentId,
+            int userNumber,
+            bool printLabels)
         {
             var wandPackResult = this.wandPack.Wand(wandAction, userNumber, consignmentId, wandString);
             var result = new WandResult
@@ -62,15 +67,15 @@
             if (wandPackResult.WandLogId.HasValue)
             {
                 result.WandLog = this.wandLogRepository.FindById(wandPackResult.WandLogId.Value);
-                this.MaybePrintLabel(consignmentId, result.WandLog);
+                this.MaybePrintLabel(printLabels, consignmentId, result.WandLog);
             }
 
             return result;
         }
 
-        private void MaybePrintLabel(int consignmentId, WandLog wandLog)
+        private void MaybePrintLabel(bool printLabels, int consignmentId, WandLog wandLog)
         {
-            if (!wandLog.ContainerNo.HasValue || wandLog.TransType != "W")
+            if (!printLabels || !wandLog.ContainerNo.HasValue || wandLog.TransType != "W")
             {
                 return;
             }

@@ -10,7 +10,7 @@
 
     using NUnit.Framework;
 
-    public class WhenWandingItem : ContextBase
+    public class WhenWandingItemNoLabels : ContextBase
     {
         private WandItemRequestResource resource;
 
@@ -23,7 +23,7 @@
         {
             this.resource = new WandItemRequestResource
                                 {
-                                    ConsignmentId = 1, WandString = "wa", WandAction = "W", UserNumber = 234, PrintLabels = "Y"
+                                    ConsignmentId = 1, WandString = "wa", WandAction = "W", UserNumber = 234, PrintLabels = "N"
                                 };
             this.wandServiceResult = new WandResult { Message = "ok", Success = true };
             this.WandService.Wand(
@@ -31,7 +31,7 @@
                     this.resource.WandString,
                     this.resource.ConsignmentId,
                     this.resource.UserNumber,
-                    true)
+                    false)
                 .Returns(this.wandServiceResult);
 
             this.result = this.Sut.WandItem(this.resource);
@@ -45,7 +45,7 @@
                 this.resource.WandString,
                 this.resource.ConsignmentId,
                 this.resource.UserNumber,
-                true);
+                false);
         }
 
         [Test]

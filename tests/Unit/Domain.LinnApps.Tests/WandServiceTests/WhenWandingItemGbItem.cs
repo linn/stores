@@ -29,10 +29,13 @@
 
         private Consignment consignment;
 
+        private bool printLabels;
+
         [SetUp]
         public void SetUp()
         {
             this.wandAction = "W";
+            this.printLabels = true;
             this.consignmentId = 134;
             this.wandString = "flajdlfjd1312";
             this.userNumber = 35345;
@@ -63,7 +66,12 @@
             this.WandPack.Wand(this.wandAction, this.userNumber, this.consignmentId, this.wandString)
                 .Returns(this.wandPackResult);
 
-            this.result = this.Sut.Wand(this.wandAction, this.wandString, this.consignmentId, this.userNumber);
+            this.result = this.Sut.Wand(
+                this.wandAction,
+                this.wandString,
+                this.consignmentId,
+                this.userNumber,
+                this.printLabels);
         }
 
         [Test]
