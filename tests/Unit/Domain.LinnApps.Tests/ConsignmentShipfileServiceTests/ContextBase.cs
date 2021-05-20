@@ -21,6 +21,8 @@
 
         protected IEmailService EmailService { get; private set; }
 
+        protected IQueryRepository<SalesOutlet> OutletRepository { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -29,13 +31,15 @@
             this.SalesOrderRepository = Substitute.For<IQueryRepository<SalesOrder>>();
             this.DataService = Substitute.For<IConsignmentShipfileDataService>();
             this.EmailService = Substitute.For<IEmailService>();
+            this.OutletRepository = Substitute.For<IQueryRepository<SalesOutlet>>();
 
             this.Sut = new ConsignmentShipfileService(
                 this.EmailService,
                 this.PdfBuilder,
                 this.ShipfileRepository,
                 this.SalesOrderRepository,
-                this.DataService);
+                this.DataService,
+                this.OutletRepository);
         }
     }
 }

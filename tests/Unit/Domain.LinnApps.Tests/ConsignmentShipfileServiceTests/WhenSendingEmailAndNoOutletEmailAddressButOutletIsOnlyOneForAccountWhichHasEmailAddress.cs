@@ -14,7 +14,7 @@
 
     using NUnit.Framework;
 
-    public class WhenSendingEmailsToAnOrgAndContactDetailsMissingForAnOutlet : ContextBase
+    public class WhenSendingEmailAndNoOutletEmailAddressButOutletIsOnlyOneForAccountWhichHasEmailAddress : ContextBase
     {
         private IEnumerable<ConsignmentShipfile> toSend;
 
@@ -29,7 +29,7 @@
             {
                 OrgId = 1,
                 ContactId = 1,
-                ContactDetails = new Contact { EmailAddress = "customer@linn.co.uk", AddressId = 1 }
+                ContactDetails = new Contact { EmailAddress = "account@linn.co.uk", AddressId = 1 }
             };
 
             var orders = new List<SalesOrder>
@@ -42,23 +42,14 @@
                                                                 OutletNumber = 1,
                                                                 OrderContact = new Contact
                                                                                    {
-                                                                                       EmailAddress = null
+                                                                                       EmailAddress = null,
+                                                                                       AddressId = 1
                                                                                    }
                                                             }
                                       },
-                                  new SalesOrder
-                                      {
-                                          SalesOutlet = new SalesOutlet
-                                                            {
-                                                                AccountId = 1,
-                                                                OutletNumber = 2,
-                                                                OrderContact = new Contact
-                                                                                   {
-                                                                                       EmailAddress = null
-                                                                                   }
-                                                            }
-                                      }
                               };
+            var outlet = new SalesOutlet { OutletAddressId =  1 };
+            var outlets = new List<SalesOutlet> { outlet };
 
             var consignment = new Consignment
             {
@@ -79,6 +70,11 @@
 
             this.ShipfileRepository.FindById(1).Returns(this.shipfileData);
 
+            this.OutletRepository.FilterBy(Arg.Any<Expression<Func<SalesOutlet, bool>>>())
+                .Returns(outlets.AsQueryable());
+
+            this.OutletRepository.FindBy(Arg.Any<Expression<Func<SalesOutlet, bool>>>()).Returns(outlet);
+
             this.SalesOrderRepository.FilterBy(Arg.Any<Expression<Func<SalesOrder, bool>>>()).Returns(orders.AsQueryable());
 
             this.DataService.BuildPdfModel(Arg.Any<int>(), Arg.Any<int>()).Returns(
@@ -93,10 +89,10 @@
         }
 
         [Test]
-        public void ShouldNotSendEmail()
+        public void ShouldSendEmailToAccount()
         {
-            this.EmailService.DidNotReceive().SendEmail(
-                Arg.Any<string>(),
+            this.EmailService.Received().SendEmail(
+                "account@linn.co.uk",
                 Arg.Any<string>(),
                 null,
                 null,
@@ -110,7 +106,7 @@
         [Test]
         public void ShouldUpdateStatusMessage()
         {
-            this.result.First().Message.Should().Be(ShipfileStatusMessages.NoContactDetailsForAnOutlet);
+            this.result.First().Message.Should().Be(ShipfileStatusMessages.EmailSent);
         }
     }
 }

@@ -23,7 +23,6 @@
                               {
                                   ConsignmentId = 1,
                                   Consignment = new Consignment(),
-
                               };
 
             this.ShipfileService.DeleteShipfile(1)

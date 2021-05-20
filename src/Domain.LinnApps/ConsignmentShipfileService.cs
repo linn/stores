@@ -20,17 +20,21 @@
 
         private readonly IConsignmentShipfileDataService dataService;
 
+        private readonly IQueryRepository<SalesOutlet> outletRepository;
+
         public ConsignmentShipfileService(
             IEmailService emailService,
             IPdfBuilder pdfBuilder,
             IRepository<ConsignmentShipfile, int> shipfileRepository,
             IQueryRepository<SalesOrder> salesOrderRepository,
-            IConsignmentShipfileDataService dataService)
+            IConsignmentShipfileDataService dataService,
+            IQueryRepository<SalesOutlet> outletRepository)
         {
             this.emailService = emailService;
             this.pdfBuilder = pdfBuilder;
             this.shipfileRepository = shipfileRepository;
             this.salesOrderRepository = salesOrderRepository;
+            this.outletRepository = outletRepository;
             this.dataService = dataService;
         }
 
@@ -91,6 +95,7 @@
 
             if (account.OrgId == null)
             {
+                // for an individual
                 if (account.ContactId == null || string.IsNullOrEmpty(account.ContactDetails.EmailAddress))
                 {
                     shipfile.Message = ShipfileStatusMessages.NoContactDetails;
@@ -113,21 +118,62 @@
             }
             else
             {
+                // for an org
+
+                // get all the outlets involved in the consignment
                 var consignmentOrderNumbers = shipfile.Consignment.Items.Select(i => i.OrderNumber);
                 var orders = this.salesOrderRepository.FilterBy(
                     o => consignmentOrderNumbers.Contains(o.OrderNumber));
 
                 var outlets = orders.ToList()
                     .Select(o => o.SalesOutlet)
-                    .GroupBy(elem => $"{elem.OutletNumber}-{elem.OrderContact.Id}")
+                    .GroupBy(elem => $"{elem.OutletNumber}-{elem.OrderContact.EmailAddress}")
                     .Select(group => group.First()).ToList();
 
+                // if email address missing for one of the outlets
                 if (outlets.Any(o => o.OrderContact?.EmailAddress == null))
                 {
-                    shipfile.Message = ShipfileStatusMessages.NoContactDetailsForAnOutlet;
+                    // if it's the only outlet for that account
+                    if (this.outletRepository.FilterBy(
+                            x => x.AccountId == shipfile.Consignment.SalesAccountId).Count() == 1)
+                    {
+                        var outlet =
+                            this.outletRepository.FindBy(x => x.AccountId == shipfile.Consignment.SalesAccountId);
+                        
+                        // and it is the same address as the account
+                        if (outlet.OutletAddressId == shipfile.Consignment.SalesAccount.ContactDetails.AddressId)
+                        {
+                            // check account has contact details
+                            if (string.IsNullOrEmpty(shipfile.Consignment.SalesAccount?.ContactDetails?.EmailAddress))
+                            {
+                                shipfile.Message = ShipfileStatusMessages.NoContactDetails;
+                                return toSend;
+                            }
+
+                            // and send to account if possible
+                            var contact = account.ContactDetails;
+
+                            var pdf = this.dataService.BuildPdfModel(shipfile.ConsignmentId, (int)contact.AddressId);
+                            var body = this.BuildEmailBody(pdf);
+
+                            toSend.Add(new ConsignmentShipfileEmailModel
+                                           {
+                                               PdfAttachment = pdf,
+                                               ToCustomerName = contact.EmailAddress,
+                                               ToEmailAddress = contact.EmailAddress,
+                                               Body = body
+                                           });
+                        }
+                    }
+                    else
+                    {
+                        // don't send, details missing for an outlet
+                        shipfile.Message = ShipfileStatusMessages.NoContactDetailsForAnOutlet;
+                    }
                 }
                 else
                 {
+                    // multiple outlets to email, email addresses present and correct
                     toSend.AddRange(
                         from salesOutlet in outlets 
                         let pdf = this.dataService.BuildPdfModel(shipfile.ConsignmentId, salesOutlet.OutletAddressId) 
