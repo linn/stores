@@ -10,6 +10,8 @@
 
         public string ToEmailAddress { get; set; }
 
+        public string Country { get; set; }
+
         public ConsignmentShipfilePdfModel PdfAttachment { get; set; }
     }
 }

@@ -14,11 +14,7 @@
 
         public string CarriersReference { get; set; }
 
-        public string[] AddressLines { get; set; }
-
         public string OutletAddress { get; set; }
-
-        public string Country { get; set; }
 
         public PackingListItem[] PackingList { get; set; }
 

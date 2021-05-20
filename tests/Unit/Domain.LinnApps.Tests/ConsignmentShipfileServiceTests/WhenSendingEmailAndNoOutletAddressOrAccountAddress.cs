@@ -75,7 +75,8 @@
 
             this.OutletRepository.FindBy(Arg.Any<Expression<Func<SalesOutlet, bool>>>()).Returns(outlet);
 
-            this.SalesOrderRepository.FilterBy(Arg.Any<Expression<Func<SalesOrder, bool>>>()).Returns(orders.AsQueryable());
+            this.SalesOrderRepository.FilterBy(Arg.Any<Expression<Func<SalesOrder, bool>>>())
+                .Returns(orders.AsQueryable());
 
             this.DataService.BuildPdfModel(Arg.Any<int>(), Arg.Any<int>()).Returns(
                 new ConsignmentShipfilePdfModel

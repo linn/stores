@@ -95,7 +95,7 @@
 
             if (account.OrgId == null)
             {
-                // for an individual
+                // for an individual, send to account
                 if (account.ContactId == null || string.IsNullOrEmpty(account.ContactDetails.EmailAddress))
                 {
                     shipfile.Message = ShipfileStatusMessages.NoContactDetails;
@@ -118,7 +118,7 @@
             }
             else
             {
-                // for an org
+                // for an org, have to decide whether to send to outlets or account
 
                 // get all the outlets involved in the consignment
                 var consignmentOrderNumbers = shipfile.Consignment.Items.Select(i => i.OrderNumber);
@@ -133,15 +133,16 @@
                 // if email address missing for one of the outlets
                 if (outlets.Any(o => o.OrderContact?.EmailAddress == null))
                 {
-                    // if it's the only outlet for that account
-                    if (this.outletRepository.FilterBy(
-                            x => x.AccountId == shipfile.Consignment.SalesAccountId).Count() == 1)
+                    // if it is the only outlet for that account
+                    var accountOutlets = this.outletRepository.FilterBy(
+                        x => x.AccountId == shipfile.Consignment.SalesAccountId);
+                    if (accountOutlets.Count() == 1)
                     {
                         var outlet =
-                            this.outletRepository.FindBy(x => x.AccountId == shipfile.Consignment.SalesAccountId);
+                           accountOutlets.First();
                         
                         // and it is the same address as the account
-                        if (outlet.OutletAddressId == shipfile.Consignment.SalesAccount.ContactDetails.AddressId)
+                        if (outlet.OutletAddressId == account.ContactDetails.AddressId && account.ContactDetails.AddressId != null)
                         {
                             // check account has contact details
                             if (string.IsNullOrEmpty(shipfile.Consignment.SalesAccount?.ContactDetails?.EmailAddress))
@@ -151,16 +152,14 @@
                             }
 
                             // and send to account if possible
-                            var contact = account.ContactDetails;
-
-                            var pdf = this.dataService.BuildPdfModel(shipfile.ConsignmentId, (int)contact.AddressId);
+                            var pdf = this.dataService.BuildPdfModel(shipfile.ConsignmentId, (int)account.ContactDetails.AddressId);
                             var body = this.BuildEmailBody(pdf);
 
                             toSend.Add(new ConsignmentShipfileEmailModel
                                            {
                                                PdfAttachment = pdf,
-                                               ToCustomerName = contact.EmailAddress,
-                                               ToEmailAddress = contact.EmailAddress,
+                                               ToCustomerName = account.ContactDetails.EmailAddress,
+                                               ToEmailAddress = account.ContactDetails.EmailAddress,
                                                Body = body
                                            });
                         }
@@ -183,7 +182,7 @@
                                        PdfAttachment = pdf, 
                                        ToEmailAddress = salesOutlet.OrderContact.EmailAddress, 
                                        ToCustomerName = salesOutlet.OrderContact.EmailAddress,
-                            Body = body
+                                Body = body
                                    });
                 }
             }
