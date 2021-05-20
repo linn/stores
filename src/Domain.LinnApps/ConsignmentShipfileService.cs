@@ -69,7 +69,7 @@
                             null,
                             ConfigurationManager.Configuration["SHIPFILES_FROM_ADDRESS"],
                             "Linn Shipping",
-                            model.Subject,
+                            test ? model.ToEmailAddress : model.Subject,
                             model.Body,
                             pdf.Result);
                     }
