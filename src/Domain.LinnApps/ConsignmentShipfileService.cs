@@ -124,7 +124,7 @@
 
                 if (outlets.Any(o => o.OrderContact?.EmailAddress == null))
                 {
-                    shipfile.Message = ShipfileStatusMessages.NoContactDetails;
+                    shipfile.Message = ShipfileStatusMessages.NoContactDetailsForAnOutlet;
                 }
                 else
                 {

@@ -14,7 +14,7 @@
 
     using NUnit.Framework;
 
-    public class WhenSendingEmailToAnOrg : ContextBase
+    public class WhenSendingEmailsToAnOrgAndContactDetailsMissingForAnOutlet : ContextBase
     {
         private IEnumerable<ConsignmentShipfile> toSend;
 
@@ -40,7 +40,7 @@
                                                             {
                                                                 OrderContact = new Contact
                                                                                    {
-                                                                                       EmailAddress = "outlet@linn.co.uk"
+                                                                                       EmailAddress = null
                                                                                    }
                                                             }
                                       }
@@ -79,34 +79,24 @@
         }
 
         [Test]
-        public void ShouldSendEmail()
+        public void ShouldNotSendEmail()
         {
-            var correctBody =
-                $"Please find attached the following documents for your information {System.Environment.NewLine}{System.Environment.NewLine}";
-            correctBody += 
-                $"Packing List {System.Environment.NewLine}";
-            correctBody += 
-                $"Despatch Note/Serial Number List {System.Environment.NewLine}";
-            correctBody += 
-                $"These refer to goods that left the factory on 12/05/2008 09:34:58 {System.Environment.NewLine}";
-
-            this.EmailService.Received().SendEmail(
-                "outlet@linn.co.uk",
-                "outlet@linn.co.uk",
+            this.EmailService.DidNotReceive().SendEmail(
+                Arg.Any<string>(),
+                Arg.Any<string>(),
                 null,
                 null,
                 Arg.Any<string>(),
                 Arg.Any<string>(),
-                "Shipping Details",
-                correctBody,
+                Arg.Any<string>(),
+                Arg.Any<string>(),
                 Arg.Any<Stream>());
         }
 
         [Test]
         public void ShouldUpdateStatusMessage()
         {
-            this.result.First().Message.Should().Be(ShipfileStatusMessages.EmailSent);
-            this.result.First().ShipfileSent.Should().Be("Y");
+            this.result.First().Message.Should().Be(ShipfileStatusMessages.NoContactDetailsForAnOutlet);
         }
     }
 }
