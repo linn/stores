@@ -19,7 +19,7 @@
 
         public ImportBookOrderDetail FindById(ImportBookOrderDetailKey key)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.ImportBookOrderDetails.Find(key.ImportBookId, key.LineNumber);
         }
 
         public IQueryable<ImportBookOrderDetail> FindAll()

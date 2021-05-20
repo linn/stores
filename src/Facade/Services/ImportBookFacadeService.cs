@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq.Expressions;
 
     using Linn.Common.Facade;
@@ -88,49 +89,62 @@
             entity.PortCode = updateResource.PortCode;
             entity.CustomsEntryCodePrefix = updateResource.CustomsEntryCodePrefix;
 
+            var invoiceDetails = new List<ImportBookInvoiceDetail>();
+            foreach (var detail in updateResource.ImportBookInvoiceDetails)
+            {
+                invoiceDetails.Add(new ImportBookInvoiceDetail
+                                       {
+                                           ImportBookId = updateResource.Id,
+                                           LineNumber = detail.LineNumber,
+                                           InvoiceNumber = detail.InvoiceNumber,
+                                           InvoiceValue = detail.InvoiceValue
+                                       });
+            }
 
-            var invoiceDetail = new ImportBookInvoiceDetail
-                                    {
-                                        ImportBookId = updateResource.Id,
-                                        LineNumber = updateResource.ImportBookInvoiceDetail.LineNumber,
-                                        InvoiceNumber = updateResource.ImportBookInvoiceDetail.InvoiceNumber,
-                                        InvoiceValue = updateResource.ImportBookInvoiceDetail.InvoiceValue
-                                    };
+            var orderDetails = new List<ImportBookOrderDetail>();
+            foreach (var detail in updateResource.ImportBookOrderDetails)
+            {
+                orderDetails.Add(
+                    new ImportBookOrderDetail
+                        {
+                            ImportBookId = updateResource.Id,
+                            LineNumber = detail.LineNumber,
+                            OrderNumber = detail.OrderNumber,
+                            RsnNumber = detail.RsnNumber,
+                            OrderDescription = detail.OrderDescription,
+                            Qty = detail.Qty,
+                            DutyValue = detail.DutyValue,
+                            FreightValue = detail.FreightValue,
+                            VatValue = detail.VatValue,
+                            OrderValue = detail.OrderValue,
+                            Weight = detail.Weight,
+                            LoanNumber = detail.LoanNumber,
+                            LineType = detail.LineType,
+                            CpcNumber = detail.CpcNumber,
+                            TariffCode = detail.TariffCode,
+                            InsNumber = detail.InsNumber,
+                            VatRate = detail.VatRate
+                        });
+            }
 
-            var orderDetail = new ImportBookOrderDetail
-                                  {
-                                      ImportBookId = updateResource.Id,
-                                      LineNumber = updateResource.ImportBookOrderDetail.LineNumber,
-                                      OrderNumber = updateResource.ImportBookOrderDetail.OrderNumber,
-                                      RsnNumber = updateResource.ImportBookOrderDetail.RsnNumber,
-                                      OrderDescription = updateResource.ImportBookOrderDetail.OrderDescription,
-                                      Qty = updateResource.ImportBookOrderDetail.Qty,
-                                      DutyValue = updateResource.ImportBookOrderDetail.DutyValue,
-                                      FreightValue = updateResource.ImportBookOrderDetail.FreightValue,
-                                      VatValue = updateResource.ImportBookOrderDetail.VatValue,
-                                      OrderValue = updateResource.ImportBookOrderDetail.OrderValue,
-                                      Weight = updateResource.ImportBookOrderDetail.Weight,
-                                      LoanNumber = updateResource.ImportBookOrderDetail.LoanNumber,
-                                      LineType = updateResource.ImportBookOrderDetail.LineType,
-                                      CpcNumber = updateResource.ImportBookOrderDetail.CpcNumber,
-                                      TariffCode = updateResource.ImportBookOrderDetail.TariffCode,
-                                      InsNumber = updateResource.ImportBookOrderDetail.InsNumber,
-                                      VatRate = updateResource.ImportBookOrderDetail.VatRate
-                                  };
-
-            var postEntry = new ImportBookPostEntry
-                                {
-                                    ImportBookId = updateResource.Id,
-                                    LineNumber = updateResource.ImportBookPostEntry.LineNumber,
-                                    EntryCodePrefix = updateResource.ImportBookPostEntry.EntryCodePrefix,
-                                    EntryCode = updateResource.ImportBookPostEntry.EntryCode,
-                                    EntryDate = string.IsNullOrWhiteSpace(updateResource.ImportBookPostEntry.EntryDate)
-                                                    ? (DateTime?)null
-                                                    : DateTime.Parse(updateResource.ImportBookPostEntry.EntryDate),
-                                    Reference = updateResource.ImportBookPostEntry.Reference,
-                                    Duty = updateResource.ImportBookPostEntry.Duty,
-                                    Vat = updateResource.ImportBookPostEntry.Vat
-                                };
+            var postEntries = new List<ImportBookPostEntry>();
+            foreach (var entry in updateResource.ImportBookPostEntries)
+            {
+                postEntries.Add(
+                    new ImportBookPostEntry
+                        {
+                            ImportBookId = updateResource.Id,
+                            LineNumber = entry.LineNumber,
+                            EntryCodePrefix = entry.EntryCodePrefix,
+                            EntryCode = entry.EntryCode,
+                            EntryDate = string.IsNullOrWhiteSpace(entry.EntryDate)
+                                            ? (DateTime?)null
+                                            : DateTime.Parse(entry.EntryDate),
+                            Reference = entry.Reference,
+                            Duty = entry.Duty,
+                            Vat = entry.Vat
+                        });
+            }
 
 
             this.importBookService.Update(entity, invoiceDetail, orderDetail, postEntry);

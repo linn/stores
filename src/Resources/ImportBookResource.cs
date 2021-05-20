@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Resources.Parts
 {
+    using System.Collections.Generic;
+
     using Linn.Common.Resources;
 
     public class ImportBookResource : HypermediaResource
@@ -116,10 +118,10 @@
 
         public string CustomsEntryCodePrefix { get; set; }
 
-        public ImportBookOrderDetailResource ImportBookOrderDetail { get; set; }
+        public IEnumerable<ImportBookOrderDetailResource> ImportBookOrderDetails { get; set; }
 
-        public ImportBookPostEntryResource ImportBookPostEntry { get; set; }
+        public IEnumerable<ImportBookPostEntryResource> ImportBookPostEntries { get; set; }
 
-        public ImportBookInvoiceDetailResource ImportBookInvoiceDetail { get; set; }
+        public IEnumerable<ImportBookInvoiceDetailResource> ImportBookInvoiceDetails { get; set; }
     }
 }

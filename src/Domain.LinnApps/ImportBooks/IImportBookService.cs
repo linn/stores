@@ -6,6 +6,9 @@ namespace Linn.Stores.Domain.LinnApps.ImportBooks
 {
     public interface IImportBookService
     {
-        void Update(ImportBook from, ImportBookInvoiceDetail invoiceDetail, ImportBookOrderDetail orderDetail, ImportBookPostEntry postEntry);
+        void Update(ImportBook from, 
+                    IEnumerable<ImportBookInvoiceDetail> invoiceDetails, 
+                    IEnumerable<ImportBookOrderDetail> orderDetails,
+                    IEnumerable<ImportBookPostEntry> postEntries);
     }
 }
