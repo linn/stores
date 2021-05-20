@@ -39,36 +39,42 @@
             var withDetails = new List<ConsignmentShipfile>();
             foreach (var shipfile in toSend)
             {
-                var data = this.shipfileRepository.FindBy(s => s.Id == shipfile.Id);
+                var data = this.shipfileRepository.FindById(shipfile.Id);
                 
-                if (shipfile.Message != null || shipfile.ShipfileSent == "Y")
+                if (data.ShipfileSent == "Y")
                 {
+                    data.Message = ShipfileStatusMessages.EmailAlreadySent;
+                    withDetails.Add(data);
                     continue;
                 }
 
                 var models = this.BuildEmailModels(data);
 
-                // potentially an email to send to each outlet in this consignment?
-                foreach (var model in models)
+                // A message implies there is some problem with generating the email
+                if (data.Message == null)
                 {
-                    model.Subject = "Shipping Details";
-                    var pdf = this.pdfBuilder.BuildPdf(model.PdfAttachment, "./views/ShipfilePdfTemplate.html");
-                    this.emailService.SendEmail(
-                        test ? ConfigurationManager.Configuration["SHIPFILES_TEST_ADDRESS"] : model.ToEmailAddress,
-                        model.ToCustomerName,
-                        null,
-                        null,
-                        ConfigurationManager.Configuration["SHIPFILES_FROM_ADDRESS"],
-                        "Linn Shipping",
-                        model.Subject,
-                        model.Body,
-                        pdf.Result);
-                }
+                    // potentially an email to send to each outlet in this consignment?
+                    foreach (var model in models)
+                    {
+                        model.Subject = "Shipping Details";
+                        var pdf = this.pdfBuilder.BuildPdf(model.PdfAttachment, "./views/ShipfilePdfTemplate.html");
+                        this.emailService.SendEmail(
+                            test ? ConfigurationManager.Configuration["SHIPFILES_TEST_ADDRESS"] : model.ToEmailAddress,
+                            model.ToCustomerName,
+                            null,
+                            null,
+                            ConfigurationManager.Configuration["SHIPFILES_FROM_ADDRESS"],
+                            "Linn Shipping",
+                            model.Subject,
+                            model.Body,
+                            pdf.Result);
+                    }
 
-                if (!test)
-                {
-                    data.Message = ShipfileStatusMessages.EmailSent;
-                    data.ShipfileSent = "Y";
+                    if (!test)
+                    {
+                        data.Message = ShipfileStatusMessages.EmailSent;
+                        data.ShipfileSent = "Y";
+                    }
                 }
 
                 withDetails.Add(data);

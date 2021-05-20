@@ -7,5 +7,7 @@
         public const string NoShippingAddress = "No shipping address found for account!";
 
         public const string EmailSent = "Email Sent!";
+
+        public const string EmailAlreadySent = "Email Already Sent!";
     }
 }
