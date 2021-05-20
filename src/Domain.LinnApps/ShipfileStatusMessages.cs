@@ -8,6 +8,8 @@
 
         public const string EmailSent = "Email Sent!";
 
+        public const string TestEmailSent = "Test Email Sent!";
+
         public const string EmailAlreadySent = "Email Already Sent!";
     }
 }

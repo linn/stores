@@ -42,7 +42,11 @@
                              }), 
                 toSend.Test);
 
-            this.transactionManager.Commit();
+            if (!toSend.Test)
+            {
+                this.transactionManager.Commit();
+            }
+
             return new SuccessResult<IEnumerable<ConsignmentShipfile>>(result);
         }
 

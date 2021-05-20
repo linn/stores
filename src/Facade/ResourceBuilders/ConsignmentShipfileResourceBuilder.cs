@@ -13,6 +13,7 @@
     {
         public ConsignmentShipfileResource Build(ConsignmentShipfile shipfile)
         {
+            var invoices = shipfile.Consignment.Invoices;
             return new ConsignmentShipfileResource
                        {
                            Id = shipfile.Id,
@@ -20,8 +21,8 @@
                            Status = shipfile.Message,
                            CustomerName = shipfile.Consignment.CustomerName,
                            DateClosed = shipfile.Consignment.DateClosed?.ToString("o"),
-                           InvoiceNumbers = shipfile.Consignment.Invoices?.Select(i => i.DocumentNumber.ToString())
-                               .Aggregate((acc, c) => acc + " " + c)
+                           InvoiceNumbers = invoices != null && invoices.Any() ? shipfile.Consignment.Invoices.Select(i => i.DocumentNumber.ToString())
+                               .Aggregate((acc, c) => acc + " " + c) : null
                        };
         }
 

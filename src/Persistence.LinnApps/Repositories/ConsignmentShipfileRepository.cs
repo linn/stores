@@ -47,7 +47,16 @@
 
         public ConsignmentShipfile FindById(int key)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.ConsignmentShipfiles
+                .Include(s => s.Consignment)
+                .ThenInclude(c => c.Invoices)
+                .Include(s => s.Consignment)
+                .ThenInclude(c => c.SalesAccount)
+                .ThenInclude(a => a.ContactDetails)
+                .ThenInclude(c => c.Person)
+                .Include(s => s.Consignment)
+                .ThenInclude(c => c.Items)
+                .Where(x => x.Id == key).ToList().FirstOrDefault();
         }
 
         public IQueryable<ConsignmentShipfile> FindAll()

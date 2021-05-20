@@ -74,7 +74,11 @@
                             pdf.Result);
                     }
 
-                    if (!test)
+                    if (test)
+                    {
+                        data.Message = ShipfileStatusMessages.EmailSent;
+                    }
+                    else
                     {
                         data.Message = ShipfileStatusMessages.EmailSent;
                         data.ShipfileSent = "Y";
@@ -182,7 +186,7 @@
                                        PdfAttachment = pdf, 
                                        ToEmailAddress = salesOutlet.OrderContact.EmailAddress, 
                                        ToCustomerName = salesOutlet.OrderContact.EmailAddress,
-                                Body = body
+                                       Body = body
                                    });
                 }
             }
