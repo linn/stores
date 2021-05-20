@@ -51,6 +51,7 @@
                 // potentially an email to send to each outlet in this consignment?
                 foreach (var model in models)
                 {
+                    model.Subject = "Shipping Details";
                     var pdf = this.pdfBuilder.BuildPdf(model, "./views/ShipfilePdfTemplate.html");
                     this.emailService.SendEmail(
                         test ? ConfigurationManager.Configuration["SHIPFILES_TEST_ADDRESS"] : model.ToEmailAddress,
@@ -59,7 +60,7 @@
                         null,
                         ConfigurationManager.Configuration["SHIPFILES_FROM_ADDRESS"],
                         "Linn Shipping",
-                        "Consignment Shipfile",
+                        model.Subject,
                         $"Here is your pdf shipfile {model.ToEmailAddress}",
                         pdf.Result);
                 }
@@ -129,11 +130,14 @@
                 {
                     foreach (var salesOutlet in outlets)
                     {
+                        var pdf = this.dataService.BuildPdfModel(shipfile.ConsignmentId, salesOutlet.OutletAddressId);
+                        var body = this.BuildEmailBody(pdf);
                         toSend.Add(new ConsignmentShipfileEmailModel
                                        {
-                                           PdfAttachment = this.dataService.BuildPdfModel(shipfile.ConsignmentId, salesOutlet.OutletAddressId),
+                                           PdfAttachment = pdf,
                                            ToEmailAddress = salesOutlet.OrderContact.EmailAddress,
-                                           ToCustomerName = salesOutlet.Name
+                                           ToCustomerName = salesOutlet.Name,
+                                           Body = body
                                         });
                     }
                 }

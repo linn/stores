@@ -2,7 +2,7 @@
 {
     public class ConsignmentShipfileEmailModel
     {
-        public const string Subject = "Shipment Details";
+        public string Subject { get; set; }
 
         public string Body { get; set; }
 
