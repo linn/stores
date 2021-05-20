@@ -98,23 +98,17 @@
                 else
                 {
                     var contact = account.ContactDetails;
-                    if (contact.AddressId == null)
-                    {
-                        shipfile.Message = ShipfileStatusMessages.NoShippingAddress;
-                    }
-                    else
-                    {
-                        var pdf = this.dataService.BuildPdfModel(shipfile.ConsignmentId, (int)contact.AddressId);
-                        var body = this.BuildEmailBody(pdf);
+                
+                    var pdf = this.dataService.BuildPdfModel(shipfile.ConsignmentId, (int)contact.AddressId);
+                    var body = this.BuildEmailBody(pdf);
 
-                            toSend.Add(new ConsignmentShipfileEmailModel
-                                           {
-                                               PdfAttachment = pdf,
-                                               ToCustomerName = contact.EmailAddress,
-                                               ToEmailAddress = contact.EmailAddress,
-                                               Body = body
-                                           });
-                    }
+                        toSend.Add(new ConsignmentShipfileEmailModel
+                                       {
+                                           PdfAttachment = pdf,
+                                           ToCustomerName = contact.EmailAddress,
+                                           ToEmailAddress = contact.EmailAddress,
+                                           Body = body
+                                       });
                 }
             }
             else
@@ -128,24 +122,23 @@
                     .GroupBy(elem => $"{elem.OutletNumber}-{elem.OrderContact.Id}")
                     .Select(group => group.First()).ToList();
 
-                if (outlets.Any(o => o.OrderContact == null))
+                if (outlets.Any(o => o.OrderContact?.EmailAddress == null))
                 {
-                    shipfile.Message = account.ContactId != null ? null : ShipfileStatusMessages.NoContactDetails;
+                    shipfile.Message = ShipfileStatusMessages.NoContactDetails;
                 }
                 else
                 {
-                    foreach (var salesOutlet in outlets)
-                    {
-                        var pdf = this.dataService.BuildPdfModel(shipfile.ConsignmentId, salesOutlet.OutletAddressId);
-                        var body = this.BuildEmailBody(pdf);
-                        toSend.Add(new ConsignmentShipfileEmailModel
-                                       {
-                                           PdfAttachment = pdf,
-                                           ToEmailAddress = salesOutlet.OrderContact.EmailAddress,
-                                           ToCustomerName = salesOutlet.Name,
-                                           Body = body
-                                        });
-                    }
+                    toSend.AddRange(
+                        from salesOutlet in outlets 
+                        let pdf = this.dataService.BuildPdfModel(shipfile.ConsignmentId, salesOutlet.OutletAddressId) 
+                        let body = this.BuildEmailBody(pdf) 
+                        select new ConsignmentShipfileEmailModel
+                                   {
+                                       PdfAttachment = pdf, 
+                                       ToEmailAddress = salesOutlet.OrderContact.EmailAddress, 
+                                       ToCustomerName = salesOutlet.OrderContact.EmailAddress,
+                            Body = body
+                                   });
                 }
             }
 
