@@ -97,12 +97,16 @@
                     }
                     else
                     {
-                        toSend.Add(new ConsignmentShipfileEmailModel
-                                       {
-                                           PdfAttachment = this.dataService.BuildPdfModel(shipfile.ConsignmentId, (int)contact.AddressId),
-                                           ToCustomerName = contact.EmailAddress,
-                                           ToEmailAddress = contact.EmailAddress
-                        });
+                        var pdf = this.dataService.BuildPdfModel(shipfile.ConsignmentId, (int)contact.AddressId);
+                        var body = this.BuildEmailBody(pdf);
+
+                            toSend.Add(new ConsignmentShipfileEmailModel
+                                           {
+                                               PdfAttachment = pdf,
+                                               ToCustomerName = contact.EmailAddress,
+                                               ToEmailAddress = contact.EmailAddress,
+                                               Body = body
+                                           });
                     }
                 }
             }
@@ -136,6 +140,27 @@
             }
 
             return toSend;
+        }
+
+        private string BuildEmailBody(ConsignmentShipfilePdfModel model)
+        {
+            var body =
+                $"Please find attached the following documents for your information {System.Environment.NewLine}{System.Environment.NewLine}";
+
+            if (model.PackingList.Any())
+            {
+                body += $"Packing List {System.Environment.NewLine}";
+            }
+
+            if (model.DespatchNotes.Any())
+            {
+                body += $"Despatch Note/Serial Number List {System.Environment.NewLine}";
+            }
+
+            body += $"These refer to goods that left the factory on {model.DateDispatched} {System.Environment.NewLine}";
+
+            // todo - something about when shipment should arrive?
+            return body;
         }
     }
 }

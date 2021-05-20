@@ -44,7 +44,7 @@
                                  CarriersReference = data[6].ToString()
                              };
             result.PackingList = this.GetPackingList(consignmentId).ToArray();
-            result.DespatchNotes = this.GetDespatchNotes(consignmentId).ToArray();
+            result.DespatchNotes = this.GetDespatchNote(consignmentId).ToArray();
             return result;
         }
 
@@ -110,7 +110,7 @@
             return result;
         }
 
-        private IEnumerable<DespatchNote> GetDespatchNotes(int consignmentId)
+        private IEnumerable<DespatchNote> GetDespatchNote(int consignmentId)
         {
             var sql = $@"
             SELECT INV.CONSIGNMENT_ID, INV.DOCUMENT_NUMBER DOC_NUMBER, 
