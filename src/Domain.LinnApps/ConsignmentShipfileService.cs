@@ -52,7 +52,7 @@
                 foreach (var model in models)
                 {
                     model.Subject = "Shipping Details";
-                    var pdf = this.pdfBuilder.BuildPdf(model, "./views/ShipfilePdfTemplate.html");
+                    var pdf = this.pdfBuilder.BuildPdf(model.PdfAttachment, "./views/ShipfilePdfTemplate.html");
                     this.emailService.SendEmail(
                         test ? ConfigurationManager.Configuration["SHIPFILES_TEST_ADDRESS"] : model.ToEmailAddress,
                         model.ToCustomerName,
@@ -61,7 +61,7 @@
                         ConfigurationManager.Configuration["SHIPFILES_FROM_ADDRESS"],
                         "Linn Shipping",
                         model.Subject,
-                        $"Here is your pdf shipfile {model.ToEmailAddress}",
+                        model.Body,
                         pdf.Result);
                 }
 
