@@ -44,6 +44,7 @@
                     with.ResponseProcessor<WandConsignmentsResponseProcessor>();
                     with.ResponseProcessor<WandItemsResponseProcessor>();
                     with.ResponseProcessor<WandResultResponseProcessor>();
+                    with.ResponseProcessor<ConsignmentShipfileResponseProcessor>();
                     with.ResponseProcessor<ConsignmentShipfilesResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
