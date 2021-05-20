@@ -76,7 +76,7 @@
 
                     if (test)
                     {
-                        data.Message = ShipfileStatusMessages.EmailSent;
+                        data.Message = ShipfileStatusMessages.TestEmailSent;
                     }
                     else
                     {
