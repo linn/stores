@@ -6,7 +6,6 @@ export default ({ dispatch }) => next => action => {
 
     switch (action.type) {
         case actionTypes.consignmentShipfileActionTypes.RECEIVE_DELETED_CONSIGNMENT_SHIPFILE:
-            console.log('we caught you');
             dispatch(consignmentShipfilesActions.fetch(action.payload.data, dispatch));
             break;
         default:
