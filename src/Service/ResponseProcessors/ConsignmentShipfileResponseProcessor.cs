@@ -7,7 +7,7 @@
     public class ConsignmentShipfileResponseProcessor : JsonResponseProcessor<ConsignmentShipfile>
     {
         public ConsignmentShipfileResponseProcessor(IResourceBuilder<ConsignmentShipfile> resourceBuilder)
-            : base(resourceBuilder, "consignmnet-shipfile-1")
+            : base(resourceBuilder, "consignment-shipfile", 1)
         {
         }
     }
