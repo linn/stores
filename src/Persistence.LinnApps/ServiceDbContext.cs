@@ -1663,6 +1663,8 @@
             entity.Property(p => p.PersonId).HasColumnName("PERSON_ID");
             entity.Property(p => p.FirstName).HasColumnName("FIRST_NAME");
             entity.Property(p => p.LastName).HasColumnName("LAST_NAME");
+        }
+
         private void BuildAddresses(ModelBuilder builder)
         {
             var q = builder.Entity<Address>();
