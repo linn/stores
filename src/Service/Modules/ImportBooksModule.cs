@@ -19,10 +19,10 @@
         public ImportBooksModule(IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource> importBookFacadeService)
         {
             this.importBookFacadeService = importBookFacadeService;
-            this.Get("/inventory/import-books/{id}", parameters => this.GetImportBook(parameters.id));
-            this.Put("/inventory/import-books/{id}", parameters => this.UpdateImportBook(parameters.id));
-            this.Post("/inventory/import-book/", _ => this.CreateImportBook());
-            this.Get("/inventory/import-books", parameters => this.GetImportBooks());
+            this.Get("/logistics/import-books/{id}", parameters => this.GetImportBook(parameters.id));
+            this.Put("/logistics/import-books/{id}", parameters => this.UpdateImportBook(parameters.id));
+            this.Post("/logistics/import-books/", _ => this.CreateImportBook());
+            this.Get("/logistics/import-books", parameters => this.GetImportBooks());
 
 
         }

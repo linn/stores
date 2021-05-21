@@ -2,19 +2,16 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-
     using FluentAssertions;
-
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Resources.Parts;
-
     using Nancy;
     using Nancy.Testing;
-
     using NSubstitute;
-
     using NUnit.Framework;
+
+
 
     public class WhenSearching : ContextBase
     {
@@ -26,7 +23,7 @@
             this.importBooksFacadeService.Search(Arg.Any<string>())
                 .Returns(new SuccessResult<IEnumerable<ImportBook>>(importBooks));
             this.Response = this.Browser.Get(
-                "/inventory/import-books",
+                "/logistics/import-books",
                 with =>
                     {
                         with.Header("Accept", "application/json");

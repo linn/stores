@@ -33,7 +33,7 @@
                 .Returns(new SuccessResult<ImportBook>(importBook));
             
             this.Response = this.Browser.Put(
-                "/inventory/import-books/123",
+                "/logistics/import-books/123",
                 with =>
                     {
                         with.Header("Accept", "application/json");

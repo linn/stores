@@ -76,7 +76,7 @@
 
         public string GetLocation(ImportBook model)
         {
-            return $"/inventory/import-books/{model.Id}";
+            return $"/logistics/import-books/{model.Id}";
         }
 
         object IResourceBuilder<ImportBook>.Build(ImportBook importBook) => this.Build(importBook);

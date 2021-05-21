@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.ImportBooks
 {
     using System;
+    using System.Collections.Generic;
 
     public class ImportBook
     {
@@ -115,5 +116,12 @@
         public string PortCode { get; set; }
 
         public string CustomsEntryCodePrefix { get; set; }
+
+        public IEnumerable<ImportBookInvoiceDetail> InvoiceDetails { get; set; }
+
+        public IEnumerable<ImportBookOrderDetail> OrderDetails { get; set; }
+
+        public IEnumerable<ImportBookPostEntry> PostEntries { get; set; }
+
     }
 }

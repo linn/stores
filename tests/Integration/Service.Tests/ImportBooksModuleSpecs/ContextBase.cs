@@ -2,19 +2,16 @@
 {
     using System.Collections.Generic;
     using System.Security.Claims;
-
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Resources.Parts;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
-
     using Nancy.Testing;
-
     using NSubstitute;
-
     using NUnit.Framework;
+
 
     public class ContextBase : NancyContextBase
     {
