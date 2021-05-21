@@ -1,8 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.ImportBooks
 {
     using System.Collections.Generic;
-    using System.ComponentModel;
-
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Parts;
 
@@ -40,13 +38,16 @@
         {
             foreach (var detail in details)
             {
-                if (this.InvoiceDetailRepository.FindById(new ImportBookInvoiceDetailKey(detail.ImportBookId, detail.LineNumber)) == null)
+                var currentDetail = this.InvoiceDetailRepository.FindById(new ImportBookInvoiceDetailKey(detail.ImportBookId, detail.LineNumber));
+
+                if (currentDetail == null)
                 {
                     this.CreateInvoiceDetail(detail);
                 }
                 else
                 {
-                    this.UpdateInvoiceDetail(detail);
+                    currentDetail.InvoiceNumber = detail.InvoiceNumber;
+                    currentDetail.InvoiceValue = detail.InvoiceValue;
                 }
             }
         }
@@ -55,13 +56,29 @@
         {
             foreach (var detail in details)
             {
-                if (this.OrderDetailRepository.FindById(new ImportBookOrderDetailKey(detail.ImportBookId, detail.LineNumber)) == null)
+                var currentDetail = this.OrderDetailRepository.FindById(new ImportBookOrderDetailKey(detail.ImportBookId, detail.LineNumber));
+
+                if (currentDetail == null)
                 {
                     this.CreateOrderDetail(detail);
                 }
                 else
                 {
-                    this.UpdateOrderDetail(detail);
+                    currentDetail.OrderNumber = detail.OrderNumber;
+                    currentDetail.RsnNumber = detail.RsnNumber;
+                    currentDetail.OrderDescription = detail.OrderDescription;
+                    currentDetail.Qty = detail.Qty;
+                    currentDetail.DutyValue = detail.DutyValue;
+                    currentDetail.FreightValue = detail.FreightValue;
+                    currentDetail.VatValue = detail.VatValue;
+                    currentDetail.OrderValue = detail.OrderValue;
+                    currentDetail.Weight = detail.Weight;
+                    currentDetail.LoanNumber = detail.LoanNumber;
+                    currentDetail.LineType = detail.LineType;
+                    currentDetail.CpcNumber = detail.CpcNumber;
+                    currentDetail.TariffCode = detail.TariffCode;
+                    currentDetail.InsNumber = detail.InsNumber;
+                    currentDetail.VatRate = detail.VatRate;
                 }
             }
         }
@@ -70,47 +87,37 @@
         {
             foreach (var entry in entries)
             {
-                if (this.PostEntryRepository.FindById(new ImportBookPostEntryKey(entry.ImportBookId, entry.LineNumber)) == null)
+                var currentEntry = this.PostEntryRepository.FindById(new ImportBookPostEntryKey(entry.ImportBookId, entry.LineNumber));
+
+                if (currentEntry == null)
                 {
                     this.CreatePostEntry(entry);
                 }
                 else
                 {
-                    this.UpdatePostEntry(entry);
+                  currentEntry.EntryCodePrefix = entry.EntryCodePrefix;
+                  currentEntry.EntryCode = entry.EntryCode;
+                  currentEntry.EntryDate = entry.EntryDate;
+                  currentEntry.Reference = entry.Reference;
+                  currentEntry.Duty = entry.Duty;
+                  currentEntry.Vat = entry.Vat;
                 }
             }
         }
 
         public void CreateInvoiceDetail(ImportBookInvoiceDetail detail)
         {
-            //create
-        }
-
-        public void UpdateInvoiceDetail(ImportBookInvoiceDetail detail)
-        {
-            //update
+           this.InvoiceDetailRepository.Add(detail);
         }
 
         public void CreateOrderDetail(ImportBookOrderDetail detail)
         {
-            //create
+            this.OrderDetailRepository.Add(detail);
         }
-
-        public void UpdateOrderDetail(ImportBookOrderDetail detail)
+        
+        public void CreatePostEntry(ImportBookPostEntry entry)
         {
-            //update
-
-        }
-
-        public void CreatePostEntry(ImportBookPostEntry detail)
-        {
-            //create
-        }
-
-        public void UpdatePostEntry(ImportBookPostEntry detail)
-        {
-            //update
-
+            this.PostEntryRepository.Add(entry);
         }
     }
 }

@@ -10,7 +10,7 @@
         {
             return new ImportBookOrderDetailResource
                        {
-                           ImportBookId = model.ImpBookId,
+                           ImportBookId = model.ImportBookId,
                            LineNumber = model.LineNumber,
                            OrderNumber = model.OrderNumber,
                            RsnNumber = model.RsnNumber,

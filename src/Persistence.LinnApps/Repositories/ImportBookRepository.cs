@@ -43,7 +43,9 @@
 
         public IQueryable<ImportBook> FilterBy(Expression<Func<ImportBook, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext
+                .ImportBooks
+                .Where(expression);
         }
     }
 }

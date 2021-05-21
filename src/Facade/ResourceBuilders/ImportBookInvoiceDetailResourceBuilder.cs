@@ -10,7 +10,7 @@
         {
             return new ImportBookInvoiceDetailResource
                        {
-                           ImportBookId = model.ImpBookId,
+                           ImportBookId = model.ImportBookId,
                            LineNumber = model.LineNumber,
                            InvoiceNumber = model.InvoiceNumber,
                            InvoiceValue = model.InvoiceValue

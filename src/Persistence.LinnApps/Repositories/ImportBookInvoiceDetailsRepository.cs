@@ -29,7 +29,7 @@
 
         public void Add(ImportBookInvoiceDetail entity)
         {
-            throw new NotImplementedException();
+            this.serviceDbContext.ImportBookInvoiceDetails.Add(entity);
         }
 
         public void Remove(ImportBookInvoiceDetail entity)

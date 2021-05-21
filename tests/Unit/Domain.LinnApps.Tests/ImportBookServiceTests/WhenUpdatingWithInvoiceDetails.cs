@@ -36,23 +36,25 @@ namespace Linn.Stores.Domain.LinnApps.Tests.ImportBookServiceTests
             var postEntries = new List<ImportBookPostEntry>();
 
 
+            //below doesn't actually work
             this.InvoiceDetailRepository.FindById(new ImportBookInvoiceDetailKey(impbookId, 1)).Returns(new ImportBookInvoiceDetail{ImportBookId = 12007});
+
+
             this.InvoiceDetailRepository.FindById(new ImportBookInvoiceDetailKey(impbookId, 2)).Returns(new ImportBookInvoiceDetail());
 
-            
             this.Sut.Update(this.impbook, invoiceDetails, orderDetails, postEntries);
         }
 
         [Test]
         public void ShouldHaveAddedInvoiceDetail()
         {
+            this.InvoiceDetailRepository.Received().Add(Arg.Any<ImportBookInvoiceDetail>());
         }
 
         [Test]
         public void ShouldHaveUpdatedInvoiceDetail()
         {
-            //check updated
-            //this.InvoiceDetailRepository.Received(). Update(Arg.Any<ImportBookInvoiceDetail
+            //check updated somehow
         }
     }
 }

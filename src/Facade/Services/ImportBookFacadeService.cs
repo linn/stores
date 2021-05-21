@@ -147,7 +147,7 @@
             }
 
 
-            this.importBookService.Update(entity, invoiceDetail, orderDetail, postEntry);
+            this.importBookService.Update(entity, invoiceDetails, orderDetails, postEntries);
 
         }
 

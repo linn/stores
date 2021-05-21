@@ -10,7 +10,7 @@
         {
             return new ImportBookPostEntryResource
                        {
-                           ImportBookId = model.ImpBookId,
+                           ImportBookId = model.ImportBookId,
                            LineNumber = model.LineNumber,
                            EntryCodePrefix = model.EntryCodePrefix,
                            EntryCode = model.EntryCode,
