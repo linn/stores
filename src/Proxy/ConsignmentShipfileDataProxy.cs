@@ -38,14 +38,14 @@
                              {
                                  ConsignmentNumber = data[0].ToString(),
                                  DateDispatched = data[1].ToString(),
-                                 Address = data[2].ToString(),
+                                 Address = data[2].ToString().Split("\n"),
                                  Carrier = data[3].ToString(),
                                  Reference = data[4].ToString(),
-                                 OutletAddress = data[5].ToString(),
-                                 CarriersReference = data[6].ToString()
+                                 OutletAddress = data[5].ToString().Split("\n"),
+                                 CarriersReference = data[6].ToString(),
+                                 PackingList = this.GetPackingList(consignmentId).ToArray(),
+                                 DespatchNotes = this.GetDespatchNote(consignmentId).ToArray()
                              };
-            result.PackingList = this.GetPackingList(consignmentId).ToArray();
-            result.DespatchNotes = this.GetDespatchNote(consignmentId).ToArray();
             return result;
         }
 

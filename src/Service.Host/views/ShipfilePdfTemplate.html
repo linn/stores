@@ -1,19 +1,45 @@
-﻿<!-- todo - replace this placeholder file with the real one -->
-
-<html>
+﻿<html>
 <head>
+    <style>
+        body {
+            margin: 40px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .wrapper {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(40%, 1fr));
+            grid-gap: 10px;
+        }
+
+        .box {
+            border-radius: 3px;
+            padding: 20px;
+            font-size: 14px;
+        }
+    </style>
 </head>
+
 <body>
-    <h1 style="color: red;"> Hello, {{ to_customer_name }} </h1>
-    {{ for line in address_lines }}
-    <li>
-        <h2>{{ line }}</h2>
-    </li>
-    {{ end }}
-    {{ for item in packing_list }}
-    <li>
-        <h2>{{ item.contents_description }}</h2>
-    </li>
-    {{ end }}
+    <div class="wrapper">
+        <div class="box a">Consignment Number: {{ consignment_number }}</div>
+        <div class="box b"></div> 
+        <div class="box c">Date dispatched: {{ date_dispatched }}</div>
+        <div class="box d">Carrier: {{ carrier }}</div>
+        <div class="box e">
+            <div >Outlet Address:</div>
+            {{ for item in outlet_address }}
+            <div> {{ item }} </div>
+            {{ end }}
+        </div>
+        <div class="box f">
+            <div>Delivery Address:</div>
+            {{ for item in address }}
+            <div> {{ item }} </div>
+            {{ end }}
+        </div>
+    </div>
 </body>
 </html>
