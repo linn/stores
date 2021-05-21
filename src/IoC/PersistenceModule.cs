@@ -120,6 +120,7 @@
             builder.RegisterType<TqmsMasterRepository>().As<ISingleRecordRepository<TqmsMaster>>();
             builder.RegisterType<TqmsJobRefRepository>().As<IRepository<TqmsJobRef, string>>();
             builder.RegisterType<ConsignmentShipfileRepository>().As<IRepository<ConsignmentShipfile, int>>();
+            builder.RegisterType<PrinterMappingRepository>().As<IRepository<PrinterMapping, int>>();
         }
     }
 }

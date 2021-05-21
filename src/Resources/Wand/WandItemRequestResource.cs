@@ -9,5 +9,7 @@
         public int ConsignmentId { get; set; }
 
         public int UserNumber { get; set; }
+
+        public string PrintLabels { get; set; }
     }
 }
