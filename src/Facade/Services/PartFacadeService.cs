@@ -6,9 +6,9 @@
     using System.Linq.Expressions;
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
+    using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Parts;
-    using Linn.Stores.Proxy;
     using Linn.Stores.Resources.Parts;
 
     public class PartFacadeService : FacadeService<Part, int, PartResource, PartResource>, IPartsFacadeService

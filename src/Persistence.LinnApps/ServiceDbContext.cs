@@ -182,6 +182,8 @@
 
         public DbQuery<InterCompanyInvoice> IntercompanyInvoices { get; set; }
 
+        public DbSet<ReqMove> ReqMoves { get; set; }
+        
         public DbQuery<TqmsSummaryByCategory> TqmsSummaryByCategories { get; set; }
 
         public DbSet<TqmsMaster> TqmsMaster { get; set; }
@@ -199,6 +201,8 @@
         public DbSet<Contact> Contacts { get; set; }
 
         public DbSet<Person> Persons { get; set; }
+        
+        public DbSet<Address> Addresses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -293,6 +297,7 @@
             this.BuildConsignmentItems(builder);
             this.BuildContacts(builder);
             this.BuildPersons(builder);
+            this.BuildAddresses(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1430,6 +1435,7 @@
             q.Property(e => e.StockPoolCode).HasColumnName("STOCK_POOL_CODE");
             q.Property(e => e.State).HasColumnName("STATE");
             q.Property(e => e.DisplayLocation).HasColumnName("DISPLAY_LOCATION");
+            q.Property(e => e.DisplayMoveLocation).HasColumnName("DISPLAY_MOVE_LOCATION");
         }
 
         private void BuildPartStorageTypes(ModelBuilder builder)
@@ -1479,12 +1485,11 @@
             q.HasKey(c => c.ConsignmentId);
             q.Property(c => c.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
             q.Property(c => c.AddressId).HasColumnName("ADDRESS_ID");
-            q.Property(c => c.CountryCode).HasColumnName("COUNTRY");
             q.Property(c => c.SalesAccountId).HasColumnName("SALES_ACCOUNT_ID");
             q.Property(c => c.DateClosed).HasColumnName("DATE_CLOSED");
             q.Property(c => c.CustomerName).HasColumnName("CUSTOMER_NAME");
-            q.HasOne(c => c.Country).WithMany(y => y.Consignments).HasForeignKey(c => c.CountryCode);
             q.HasOne(c => c.SalesAccount).WithMany(a => a.Consignments).HasForeignKey(c => c.SalesAccountId);
+            q.HasOne(c => c.Address).WithMany(a => a.Consignments).HasForeignKey(o => o.AddressId);
         }
 
         private void QuerySalesOrders(ModelBuilder builder)
@@ -1577,6 +1582,7 @@
             q.Property(t => t.HeadingOrder).HasColumnName("HEADING_ORDER");
             q.Property(t => t.CategoryOrder).HasColumnName("CATEGORY_ORDER");
             q.Property(t => t.TotalValue).HasColumnName("TOTAL_VALUE");
+            q.Property(t => t.ActiveCategory).HasColumnName("ACTIVE");
         }
 
         private void BuildTqmsMaster(ModelBuilder builder)
@@ -1657,6 +1663,21 @@
             entity.Property(p => p.PersonId).HasColumnName("PERSON_ID");
             entity.Property(p => p.FirstName).HasColumnName("FIRST_NAME");
             entity.Property(p => p.LastName).HasColumnName("LAST_NAME");
+        private void BuildAddresses(ModelBuilder builder)
+        {
+            var q = builder.Entity<Address>();
+            q.ToTable("ADDRESSES");
+            q.Property(b => b.Id).HasColumnName("ADDRESS_ID").HasMaxLength(38);
+            q.Property(b => b.Addressee).HasColumnName("ADDRESSEE").HasMaxLength(40);
+            q.Property(b => b.Addressee2).HasColumnName("ADDRESSEE_2").HasMaxLength(40);
+            q.Property(b => b.Line1).HasColumnName("ADDRESS_1").HasMaxLength(40);
+            q.Property(b => b.Line2).HasColumnName("ADDRESS_2").HasMaxLength(40);
+            q.Property(b => b.Line3).HasColumnName("ADDRESS_3").HasMaxLength(40);
+            q.Property(b => b.Line4).HasColumnName("ADDRESS_4").HasMaxLength(40);
+            q.Property(b => b.PostCode).HasColumnName("POSTAL_CODE").HasMaxLength(20);
+            q.Property(b => b.DateInvalid).HasColumnName("DATE_INVALID");
+            q.Property(b => b.CountryCode).HasColumnName("COUNTRY").HasMaxLength(2);
+            q.HasOne(b => b.Country).WithMany(c => c.Addresses).HasForeignKey(f => f.CountryCode);
         }
     }
 }

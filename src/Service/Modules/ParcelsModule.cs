@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
-    using Linn.Stores.Facade.Services;
+    using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Service.Models;
@@ -9,9 +10,9 @@
 
     public sealed class ParcelsModule : NancyModule
     {
-        private readonly IParcelService parcelsFacadeService;
+        private readonly IFacadeFilterService<Parcel, int, ParcelResource, ParcelResource, ParcelSearchRequestResource> parcelsFacadeService;
 
-        public ParcelsModule(IParcelService parcelsFacadeService)
+        public ParcelsModule(IFacadeFilterService<Parcel, int, ParcelResource, ParcelResource, ParcelSearchRequestResource> parcelsFacadeService)
         {
             this.parcelsFacadeService = parcelsFacadeService;
             this.Get("/logistics/parcels/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
@@ -35,7 +36,7 @@
         {
             var resource = this.Bind<ParcelSearchRequestResource>();
 
-            var results = this.parcelsFacadeService.Search(resource);
+            var results = this.parcelsFacadeService.FilterBy(resource);
 
             return this.Negotiate
                 .WithModel(results)

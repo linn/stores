@@ -10,7 +10,7 @@
 
         public string PartNumber { get; set; }
 
-        public int MoveQuantity { get; set; }
+        public decimal MoveQuantity { get; set; }
 
         public int? FromPalletNumber { get; set; }
 

@@ -52,6 +52,7 @@ function StockMove({
     const [partDescription, setPartDescription] = useState(null);
 
     const toInput = useRef(null);
+    const qtyInput = useRef(null);
     const partNumberInput = useRef(null);
 
     useEffect(() => {
@@ -97,7 +98,7 @@ function StockMove({
     const setFromDetailsFromAvailableStock = row => {
         setMoveDetails({
             ...moveDetails,
-            from: row.displayLocation,
+            from: row.displayMoveLocation,
             fromLocationCode: row.locationCode,
             fromState: row.state,
             fromStockPoolCode: row.stockPoolCode,
@@ -106,7 +107,7 @@ function StockMove({
             fromStockRotationDate: row.stockRotationDate
         });
 
-        toInput.current.focus();
+        qtyInput.current.focus();
     };
 
     const showMessage = text => {
@@ -147,7 +148,7 @@ function StockMove({
     const setToDetailsFromAvailableStock = row => {
         setMoveDetails({
             ...moveDetails,
-            to: row.displayLocation,
+            to: row.displayMoveLocation,
             toLocationCode: row.locationCode,
             toState: row.state,
             toStockPoolCode: row.stockPoolCode,
@@ -398,6 +399,7 @@ function StockMove({
                         type="number"
                         onChange={handleFieldNumberChange}
                         propertyName="quantity"
+                        textFieldProps={{ inputRef: qtyInput }}
                     />
                 </Grid>
                 <Grid item xs={1} />

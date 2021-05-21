@@ -17,7 +17,7 @@
 
         RequisitionProcessResult CheckStockAtFromLocation(
             string partNumber,
-            int quantity,
+            decimal quantity,
             string from,
             int? fromLocationId,
             int? fromPalletNumber,
@@ -27,7 +27,7 @@
             int reqNumber,
             int reqLine,
             string partNumber,
-            int quantity,
+            decimal quantity,
             int? fromLocationId,
             int? fromPalletNumber,
             DateTime? fromStockDate,

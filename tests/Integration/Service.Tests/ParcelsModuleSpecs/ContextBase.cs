@@ -6,8 +6,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.ResourceBuilders;
-    using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
     using Nancy.Testing;
@@ -16,18 +16,16 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IParcelService ParcelsFacadeService { get; private set; }
+        protected IFacadeFilterService<Parcel, int, ParcelResource, ParcelResource, ParcelSearchRequestResource> ParcelsFacadeService { get; private set; }
 
         protected IRepository<Parcel, int> ParcelRepository { get; private set; }
 
         [SetUp]
         public void EstablishContext()
         {
-            this.ParcelsFacadeService = Substitute
-                .For<IParcelService>();
+            this.ParcelsFacadeService = Substitute.For<IFacadeFilterService<Parcel, int, ParcelResource, ParcelResource, ParcelSearchRequestResource>>();
 
-            this.ParcelRepository = Substitute
-                .For<IRepository<Parcel, int>>();
+            this.ParcelRepository = Substitute.For<IRepository<Parcel, int>>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>

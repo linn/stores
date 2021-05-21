@@ -9,6 +9,7 @@
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Requisitions;
 
     public class StockLocatorService : IStockLocatorService
     {
@@ -30,6 +31,8 @@
 
         private readonly IRepository<Part, int> partRepository;
 
+        private readonly IQueryRepository<ReqMove> reqMoveRepository;
+
         public StockLocatorService(
             IRepository<StockLocator, int> stockLocatorRepository,
             IStoresPalletRepository palletRepository,
@@ -39,7 +42,8 @@
             IAuthorisationService authService,
             IStockLocatorLocationsViewService locationsViewService,
             IQueryRepository<StockLocatorPrices> stockLocatorView,
-            IRepository<Part, int> partRepository)
+            IRepository<Part, int> partRepository,
+            IQueryRepository<ReqMove> reqMoveRepository)
         {
             this.stockLocatorRepository = stockLocatorRepository;
             this.palletRepository = palletRepository;
@@ -50,6 +54,7 @@
             this.locationsViewService = locationsViewService;
             this.stockLocatorView = stockLocatorView;
             this.partRepository = partRepository;
+            this.reqMoveRepository = reqMoveRepository;
         }
 
         public void UpdateStockLocator(StockLocator from, StockLocator to, IEnumerable<string> privileges)
@@ -121,6 +126,11 @@
             if (!this.authService.HasPermissionFor(AuthorisedAction.CreateStockLocator, privileges))
             {
                 throw new StockLocatorException("You are not authorised to delete.");
+            }
+
+            if (this.reqMoveRepository.FindBy(m => m.StockLocatorId == toDelete.Id) != null)
+            {
+                throw new StockLocatorException("Cannot Delete Stock Locators When Dependent Req Move exists");
             }
 
             this.stockLocatorRepository.Remove(toDelete);

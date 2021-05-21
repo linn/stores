@@ -12,7 +12,7 @@
     {
         public IEnumerable<AvailableStockResource> Build(IEnumerable<AvailableStock> availableStock)
         {
-            return availableStock.Select(
+            return availableStock.OrderBy(a => a.StockRotationDate).ThenBy(b => b.DisplayLocation).Select(
                 a => new AvailableStockResource
                          {
                              LocationCode = a.LocationCode,
@@ -23,7 +23,8 @@
                              State = a.State,
                              StockPoolCode = a.StockPoolCode,
                              StockRotationDate = a.StockRotationDate.ToString("o"),
-                             DisplayLocation = a.DisplayLocation
+                             DisplayLocation = a.DisplayLocation,
+                             DisplayMoveLocation = a.DisplayMoveLocation
                          });
         }
 

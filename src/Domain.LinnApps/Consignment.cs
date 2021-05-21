@@ -13,10 +13,6 @@
 
         public int? AddressId { get; set; }
 
-        public Country Country { get; set; } 
-
-        public string CountryCode { get; set; }
-
         public ConsignmentShipfile Shipfile { get; set; }
 
         public DateTime? DateClosed { get; set; }
@@ -26,5 +22,7 @@
         public IEnumerable<Invoice> Invoices { get; set; }
 
         public IEnumerable<ConsignmentItem> Items { get; set; }
+        
+        public Address Address { get; set; }
     }
 }

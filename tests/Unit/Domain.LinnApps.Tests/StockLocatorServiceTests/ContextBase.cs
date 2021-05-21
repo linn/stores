@@ -1,12 +1,17 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.StockLocatorServiceTests
 {
+    using System;
+    using System.Linq.Expressions;
+
     using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
     using NSubstitute;
+    using NSubstitute.ReturnsExtensions;
 
     using NUnit.Framework;
 
@@ -35,6 +40,8 @@
 
         protected IQueryRepository<StockLocatorPrices> StockLocatorView { get; private set; }
 
+        protected IQueryRepository<ReqMove> ReqMoveRepository { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -48,6 +55,8 @@
             this.AuthService = Substitute.For<IAuthorisationService>();
             this.LocationsViewService = Substitute.For<IStockLocatorLocationsViewService>();
             this.StockLocatorView = Substitute.For<IQueryRepository<StockLocatorPrices>>();
+            this.ReqMoveRepository = Substitute.For<IQueryRepository<ReqMove>>();
+            this.ReqMoveRepository.FindBy(Arg.Any<Expression<Func<ReqMove, bool>>>()).ReturnsNull();
             this.Sut = new StockLocatorService(
                 this.StockLocatorRepository, 
                 this.StoresPalletRepository,
@@ -57,7 +66,8 @@
                 this.AuthService,
                 this.LocationsViewService,
                 this.StockLocatorView,
-                this.PartRepository);
+                this.PartRepository,
+                this.ReqMoveRepository);
         }
     }
 }

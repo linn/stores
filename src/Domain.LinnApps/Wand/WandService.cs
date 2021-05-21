@@ -1,5 +1,8 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Wand
 {
+    using System;
+
+    using Linn.Common.Domain.LinnApps.RemoteServices;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
@@ -10,10 +13,20 @@
 
         private readonly IRepository<WandLog, int> wandLogRepository;
 
-        public WandService(IWandPack wandPack, IRepository<WandLog, int> wandLogRepository)
+        private readonly IRepository<Consignment, int> consignmentRepository;
+
+        private readonly IBartenderLabelPack bartenderLabelPack;
+
+        public WandService(
+            IWandPack wandPack,
+            IRepository<WandLog, int> wandLogRepository,
+            IRepository<Consignment, int> consignmentRepository,
+            IBartenderLabelPack bartenderLabelPack)
         {
             this.wandPack = wandPack;
             this.wandLogRepository = wandLogRepository;
+            this.consignmentRepository = consignmentRepository;
+            this.bartenderLabelPack = bartenderLabelPack;
         }
 
         public static string WandStringSuggestion(
@@ -49,9 +62,53 @@
             if (wandPackResult.WandLogId.HasValue)
             {
                 result.WandLog = this.wandLogRepository.FindById(wandPackResult.WandLogId.Value);
+                this.MaybePrintLabel(consignmentId, result.WandLog);
             }
 
             return result;
+        }
+
+        private void MaybePrintLabel(int consignmentId, WandLog wandLog)
+        {
+            if (!wandLog.ContainerNo.HasValue || wandLog.TransType != "W")
+            {
+                return;
+            }
+
+            var consignment = this.consignmentRepository.FindById(consignmentId);
+
+            var labelMessage = string.Empty;
+            var labelData = $"\"{this.GetPrintAddress(consignment.Address)}\", \"{this.GetLabelInformation(wandLog)}\"";
+            if (consignment.Address.CountryCode != "GB")
+            {
+                this.bartenderLabelPack.PrintLabels(
+                    $"Address{wandLog.Id}",
+                    "DispatchLabels1",
+                    1,
+                    "dispatchaddress.btw",
+                    labelData,
+                    ref labelMessage);
+            }
+        }
+
+        private string GetLabelInformation(WandLog wandLog)
+        {
+            return
+                $"Carton: {wandLog.ContainerNo}{Environment.NewLine}Article:{wandLog.ArticleNumber}{Environment.NewLine}Serial No: {wandLog.SeriaNumber1} {wandLog.SeriaNumber2}{Environment.NewLine}Order: {wandLog.OrderNumber}{Environment.NewLine}Consignment: {wandLog.ConsignmentId}";
+        }
+
+        private string GetPrintAddress(Address address)
+        {
+            var printAddress = $"{address.Addressee}{Environment.NewLine}";
+            printAddress += string.IsNullOrEmpty(address.Addressee2) ? null : $"{address.Addressee2}{Environment.NewLine}";
+            printAddress += string.IsNullOrEmpty(address.Line1) ? null : $"{address.Line1}{Environment.NewLine}";
+            printAddress += string.IsNullOrEmpty(address.Line2) ? null : $"{address.Line2}{Environment.NewLine}";
+            printAddress += string.IsNullOrEmpty(address.Line3) ? null : $"{address.Line3}{Environment.NewLine}";
+            printAddress += string.IsNullOrEmpty(address.Line4) ? null : $"{address.Line4}{Environment.NewLine}";
+            printAddress += string.IsNullOrEmpty(address.PostCode) ? null : $"{address.PostCode}{Environment.NewLine}";
+            printAddress += string.IsNullOrEmpty(address.Country.DisplayName) ? null : $"{address.Country.DisplayName}";
+
+            return printAddress;
         }
     }
 }

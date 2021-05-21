@@ -3,6 +3,7 @@
     using System;
     using System.Data;
 
+    using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models;
 
@@ -15,7 +16,7 @@
             int reqLine,
             string kardexLocation,
             string partNumber,
-            int quantity,
+            decimal quantity,
             string storageType,
             int? toLocationId,
             int? toPalletNumber)
@@ -44,7 +45,7 @@
                                        Direction = ParameterDirection.Input,
                                        Value = partNumber
                                    });
-            cmd.Parameters.Add(new OracleParameter("p_qty", OracleDbType.Int32)
+            cmd.Parameters.Add(new OracleParameter("p_qty", OracleDbType.Decimal)
                                    {
                                        Direction = ParameterDirection.Input, Value = quantity
                                    });
@@ -90,7 +91,7 @@
             int reqLine,
             string kardexLocation,
             string partNumber,
-            int quantity,
+            decimal quantity,
             DateTime? fromStockDate,
             string storageType,
             int? fromLocationId,
@@ -117,7 +118,7 @@
                                    {
                                        Direction = ParameterDirection.Input, Value = kardexLocation
                                    });
-            cmd.Parameters.Add(new OracleParameter("p_qty", OracleDbType.Int32)
+            cmd.Parameters.Add(new OracleParameter("p_qty", OracleDbType.Decimal)
                                    {
                                        Direction = ParameterDirection.Input,
                                        Value = quantity

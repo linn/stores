@@ -6,9 +6,9 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
+    using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Parts;
-    using Linn.Stores.Proxy;
     using Linn.Stores.Resources.Parts;
 
     public class MechPartSourceFacadeService : FacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>

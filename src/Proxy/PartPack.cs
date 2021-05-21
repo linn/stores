@@ -2,6 +2,7 @@
 {
     using System.Data;
 
+    using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
 
     using Oracle.ManagedDataAccess.Client;

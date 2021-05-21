@@ -4,8 +4,10 @@
 
     using Linn.Common.Authorisation;
     using Linn.Common.Configuration;
+    using Linn.Common.Domain.LinnApps.RemoteServices;
     using Linn.Common.Facade;
     using Linn.Common.Proxy;
+    using Linn.Common.Proxy.LinnApps;
     using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
@@ -92,8 +94,8 @@
                 .As<IFacadeFilterService<SosAllocDetail, int, SosAllocDetailResource, SosAllocDetailResource, JobIdRequestResource>>();
             builder.RegisterType<MechPartSourceFacadeService>()
                 .As<IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>>();
-            builder.RegisterType<ParcelService>()
-                .As<IParcelService>();
+            builder.RegisterType<ParcelFacadeService>()
+                .As<IFacadeFilterService<Parcel, int, ParcelResource, ParcelResource, ParcelSearchRequestResource>>();
             builder.RegisterType<ManufacturerService>()
                 .As<IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>>();
             builder.RegisterType<EmployeesService>().As<IEmployeeService>();
@@ -150,8 +152,12 @@
             builder.RegisterType<ExportReturnsPack>().As<IExportReturnsPack>();
             builder.RegisterType<StockLocatorLocationsViewService>().As<IStockLocatorLocationsViewService>();
             builder.RegisterType<KardexPack>().As<IKardexPack>();
+<<<<<<< HEAD
             builder.RegisterType<ConsignmentShipfileDataProxy>()
                 .As<IConsignmentShipfileDataService>();
+=======
+            builder.RegisterType<BartenderLabelPack>().As<IBartenderLabelPack>();
+>>>>>>> master
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();
