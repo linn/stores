@@ -119,6 +119,7 @@
             builder.RegisterType<TqmsOutstandingLoansByCategoryRepository>().As<IQueryRepository<TqmsOutstandingLoansByCategory>>();
             builder.RegisterType<TqmsMasterRepository>().As<ISingleRecordRepository<TqmsMaster>>();
             builder.RegisterType<TqmsJobRefRepository>().As<IRepository<TqmsJobRef, string>>();
+            builder.RegisterType<PrinterMappingRepository>().As<IRepository<PrinterMapping, int>>();
         }
     }
 }

@@ -17,16 +17,20 @@
 
         private readonly IBartenderLabelPack bartenderLabelPack;
 
+        private readonly IRepository<PrinterMapping, int> printerMappingRepository;
+
         public WandService(
             IWandPack wandPack,
             IRepository<WandLog, int> wandLogRepository,
             IRepository<Consignment, int> consignmentRepository,
-            IBartenderLabelPack bartenderLabelPack)
+            IBartenderLabelPack bartenderLabelPack,
+            IRepository<PrinterMapping, int> printerMappingRepository)
         {
             this.wandPack = wandPack;
             this.wandLogRepository = wandLogRepository;
             this.consignmentRepository = consignmentRepository;
             this.bartenderLabelPack = bartenderLabelPack;
+            this.printerMappingRepository = printerMappingRepository;
         }
 
         public static string WandStringSuggestion(
