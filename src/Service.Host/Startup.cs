@@ -27,7 +27,7 @@ namespace Linn.Stores.Service.Host
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-            //services.AddLogging(a => a.AddConsole());
+            services.AddLogging(a => a.AddConsole());
 
             services.AddLinnAuthentication(
                 options =>
