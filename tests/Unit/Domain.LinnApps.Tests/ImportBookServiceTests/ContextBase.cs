@@ -23,10 +23,7 @@
             this.OrderDetailRepository = Substitute.For<IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey>>();
             this.PostEntryRepository = Substitute.For<IRepository<ImportBookPostEntry, ImportBookPostEntryKey>>();
 
-            this.Sut = new ImportBookService(
-                this.InvoiceDetailRepository,
-                this.OrderDetailRepository,
-                this.PostEntryRepository);
+            this.Sut = new ImportBookService();
         }
     }
 }

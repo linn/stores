@@ -9,22 +9,6 @@
 
     public class ImportBookService : IImportBookService
     {
-        private readonly IRepository<ImportBookInvoiceDetail, ImportBookInvoiceDetailKey> InvoiceDetailRepository;
-
-        private readonly IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey> OrderDetailRepository;
-
-        private readonly IRepository<ImportBookPostEntry, ImportBookPostEntryKey> PostEntryRepository;
-
-        public ImportBookService(
-            IRepository<ImportBookInvoiceDetail, ImportBookInvoiceDetailKey> invoiceDetailRepository,
-            IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey> orderDetailRepository,
-            IRepository<ImportBookPostEntry, ImportBookPostEntryKey> postEntryRepository)
-        {
-            this.InvoiceDetailRepository = invoiceDetailRepository;
-            this.OrderDetailRepository = orderDetailRepository;
-            this.PostEntryRepository = postEntryRepository;
-        }
-
         public void Update(
             ImportBook from,
             ImportBook to)
@@ -97,101 +81,124 @@
             entity.CustomsEntryCodePrefix = to.CustomsEntryCodePrefix;
         }
 
-        private void UpdateInvoiceDetails(IEnumerable<ImportBookInvoiceDetail> from, IEnumerable<ImportBookInvoiceDetail> to)
+        private void UpdateInvoiceDetails(IList<ImportBookInvoiceDetail> from, IList<ImportBookInvoiceDetail> to)
         {
-            foreach (var detail in to)
+            if (!from.Any() && !to.Any())
             {
+                return;
+            }
 
-                var currentDetail = from.Any()
-                                        ? from.FirstOrDefault(
-                                            x => x.ImportBookId == detail.ImportBookId
-                                                 && x.LineNumber == detail.LineNumber)
-                                        : null;
-
-                if (currentDetail ==  null)
+            //need to do something else for these, can't modify the list while I'm enumerating on it
+            foreach (var oldDetail in from)
+            {
+                if (!to.Any(x => oldDetail.LineNumber == x.LineNumber))
                 {
-                    this.CreateInvoiceDetail(detail);
-                }
-                else
-                {
-                    currentDetail.InvoiceNumber = detail.InvoiceNumber;
-                    currentDetail.InvoiceValue = detail.InvoiceValue;
+                    from.Remove(oldDetail);
                 }
             }
-        }
 
-        private void UpdateOrderDetails(IEnumerable<ImportBookOrderDetail> from, IEnumerable<ImportBookOrderDetail> to)
-        {
-            foreach (var detail in to)
+            foreach (var newdetail in to)
             {
+                
                 var currentDetail = from.Any()
-                                        ? from.FirstOrDefault(
-                                            x => x.ImportBookId == detail.ImportBookId
-                                                 && x.LineNumber == detail.LineNumber)
+                                        ? from.FirstOrDefault(x => x.LineNumber == newdetail.LineNumber)
                                         : null;
+
                 if (currentDetail == null)
                 {
-                    this.CreateOrderDetail(detail);
+                    from.Add(newdetail);
                 }
                 else
                 {
-                    currentDetail.OrderNumber = detail.OrderNumber;
-                    currentDetail.RsnNumber = detail.RsnNumber;
-                    currentDetail.OrderDescription = detail.OrderDescription;
-                    currentDetail.Qty = detail.Qty;
-                    currentDetail.DutyValue = detail.DutyValue;
-                    currentDetail.FreightValue = detail.FreightValue;
-                    currentDetail.VatValue = detail.VatValue;
-                    currentDetail.OrderValue = detail.OrderValue;
-                    currentDetail.Weight = detail.Weight;
-                    currentDetail.LoanNumber = detail.LoanNumber;
-                    currentDetail.LineType = detail.LineType;
-                    currentDetail.CpcNumber = detail.CpcNumber;
-                    currentDetail.TariffCode = detail.TariffCode;
-                    currentDetail.InsNumber = detail.InsNumber;
-                    currentDetail.VatRate = detail.VatRate;
+                    currentDetail.InvoiceNumber = newdetail.InvoiceNumber;
+                    currentDetail.InvoiceValue = newdetail.InvoiceValue;
                 }
             }
         }
 
-        private void UpdatePostEntries(IEnumerable<ImportBookPostEntry> from, IEnumerable<ImportBookPostEntry> to)
+        private void UpdateOrderDetails(IList<ImportBookOrderDetail> from, IList<ImportBookOrderDetail> to)
         {
-            foreach (var entry in to)
+            if (!from.Any() && !to.Any())
             {
+                return;
+            }
+
+            foreach (var oldDetail in from)
+            {
+                if (!to.Any(x => oldDetail.LineNumber == x.LineNumber))
+                {
+                    from.Remove(oldDetail);
+                }
+            }
+
+            foreach (var newdetail in to)
+            {
+
+                var currentDetail = from.Any()
+                                        ? from.FirstOrDefault(x => x.LineNumber == newdetail.LineNumber)
+                                        : null;
+
+                if (currentDetail == null)
+                {
+                    from.Add(newdetail);
+                }
+                else
+                {
+                    currentDetail.OrderNumber = newdetail.OrderNumber;
+                    currentDetail.RsnNumber = newdetail.RsnNumber;
+                    currentDetail.OrderDescription = newdetail.OrderDescription;
+                    currentDetail.Qty = newdetail.Qty;
+                    currentDetail.DutyValue = newdetail.DutyValue;
+                    currentDetail.FreightValue = newdetail.FreightValue;
+                    currentDetail.VatValue = newdetail.VatValue;
+                    currentDetail.OrderValue = newdetail.OrderValue;
+                    currentDetail.Weight = newdetail.Weight;
+                    currentDetail.LoanNumber = newdetail.LoanNumber;
+                    currentDetail.LineType = newdetail.LineType;
+                    currentDetail.CpcNumber = newdetail.CpcNumber;
+                    currentDetail.TariffCode = newdetail.TariffCode;
+                    currentDetail.InsNumber = newdetail.InsNumber;
+                    currentDetail.VatRate = newdetail.VatRate;
+                }
+            }
+        }
+
+        private void UpdatePostEntries(IList<ImportBookPostEntry> from, IList<ImportBookPostEntry> to)
+        {
+            if (!from.Any() && !to.Any())
+            {
+                return;
+            }
+
+            foreach (var oldEntry in from)
+            {
+                if (!to.Any(x => oldEntry.LineNumber == x.LineNumber))
+                {
+                    from.Remove(oldEntry);
+                }
+            }
+
+            foreach (var newEntry in to)
+            {
+
                 var currentEntry = from.Any()
-                                       ? from.FirstOrDefault(
-                                           x => x.ImportBookId == entry.ImportBookId
-                                                && x.LineNumber == entry.LineNumber)
+                                       ? from.FirstOrDefault(x => x.LineNumber == newEntry.LineNumber)
                                        : null;
+
                 if (currentEntry == null)
                 {
-                    this.CreatePostEntry(entry);
+                    from.Add(newEntry);
                 }
                 else
                 {
-                    currentEntry.EntryCodePrefix = entry.EntryCodePrefix;
-                    currentEntry.EntryCode = entry.EntryCode;
-                    currentEntry.EntryDate = entry.EntryDate;
-                    currentEntry.Reference = entry.Reference;
-                    currentEntry.Duty = entry.Duty;
-                    currentEntry.Vat = entry.Vat;
+                    currentEntry.EntryCodePrefix = newEntry.EntryCodePrefix;
+                    currentEntry.EntryCode = newEntry.EntryCode;
+                    currentEntry.EntryDate = newEntry.EntryDate;
+                    currentEntry.Reference = newEntry.Reference;
+                    currentEntry.Duty = newEntry.Duty;
+                    currentEntry.Vat = newEntry.Vat;
                 }
             }
-        }
-
-        private void CreateInvoiceDetail(ImportBookInvoiceDetail detail)
-        {
-            this.InvoiceDetailRepository.Add(detail);
-        }
-
-        private void CreateOrderDetail(ImportBookOrderDetail detail)
-        {
-            this.OrderDetailRepository.Add(detail);
-        }
-
-        private void CreatePostEntry(ImportBookPostEntry entry)
-        {
-            this.PostEntryRepository.Add(entry);
         }
     }
 }

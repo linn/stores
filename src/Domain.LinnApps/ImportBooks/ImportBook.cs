@@ -117,11 +117,11 @@
 
         public string CustomsEntryCodePrefix { get; set; }
 
-        public IEnumerable<ImportBookInvoiceDetail> InvoiceDetails { get; set; }
+        public IList<ImportBookInvoiceDetail> InvoiceDetails { get; set; }
 
-        public IEnumerable<ImportBookOrderDetail> OrderDetails { get; set; }
+        public IList<ImportBookOrderDetail> OrderDetails { get; set; }
 
-        public IEnumerable<ImportBookPostEntry> PostEntries { get; set; }
+        public IList<ImportBookPostEntry> PostEntries { get; set; }
 
     }
 }

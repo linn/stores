@@ -7,8 +7,7 @@
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using NUnit.Framework;
 
-
-    public class WhenUpdatingWithInvoiceDetails : ContextBase
+    public class WhenRemovingInvoiceDetail : ContextBase
     {
         private readonly int impbookId = 12007;
         private ImportBook impbook;
@@ -20,10 +19,7 @@
             var firstInvoiceDetail = new ImportBookInvoiceDetail() { ImportBookId = impbookId, InvoiceNumber = "123", LineNumber = 1, InvoiceValue = (decimal)12.5 };
 
             var secondInvoiceDetail = new ImportBookInvoiceDetail() { ImportBookId = impbookId, InvoiceNumber = "1234", LineNumber = 2, InvoiceValue = (decimal)155.2 };
-
-            var updatedFirstInvoiceDetail = new ImportBookInvoiceDetail() { ImportBookId = impbookId, InvoiceNumber = "133", LineNumber = 1, InvoiceValue = (decimal)125.5 };
-
-
+            
             this.impbook = new ImportBook
             {
                 Id = this.impbookId,
@@ -33,7 +29,7 @@
                 TransportId = 1,
                 TransactionId = 44,
                 TotalImportValue = (decimal)123.4,
-                InvoiceDetails = new List<ImportBookInvoiceDetail> { firstInvoiceDetail },
+                InvoiceDetails = new List<ImportBookInvoiceDetail> { firstInvoiceDetail, secondInvoiceDetail },
                 OrderDetails = new List<ImportBookOrderDetail>(),
                 PostEntries = new List<ImportBookPostEntry>()
             };
@@ -46,7 +42,7 @@
                 CarrierId = 678,
                 TransactionId = 44,
                 TotalImportValue = (decimal)123.4,
-                InvoiceDetails = new List<ImportBookInvoiceDetail> { updatedFirstInvoiceDetail, secondInvoiceDetail },
+                InvoiceDetails = new List<ImportBookInvoiceDetail> { firstInvoiceDetail },
                 OrderDetails = new List<ImportBookOrderDetail>(),
                 PostEntries = new List<ImportBookPostEntry>()
             };
@@ -56,19 +52,13 @@
         }
 
         [Test]
-        public void ShouldHaveUpdatedInvoiceDetail()
+        public void ShouldHaveRemovedInvoiceDetail()
         {
-            this.impbook.InvoiceDetails.FirstOrDefault(
-                    x => x.LineNumber == 1 && x.InvoiceNumber == "133" && x.InvoiceValue == (decimal)125.5)
-                .Should().NotBeNull();
-        }
+            //need to fix service, this fails
 
-        [Test]
-        public void ShouldHaveAddedInvoiceDetail()
-        {
-            this.impbook.InvoiceDetails.Count().Should().Be(2);
+            this.impbook.InvoiceDetails.Count().Should().Be(1);
             this.impbook.InvoiceDetails.FirstOrDefault(
-                    x => x.LineNumber == 2 && x.InvoiceNumber == "1234" && x.InvoiceValue == (decimal)155.2)
+                    x => x.LineNumber == 1 && x.InvoiceNumber == "123" && x.InvoiceValue == (decimal)12.5)
                 .Should().NotBeNull();
         }
     }
