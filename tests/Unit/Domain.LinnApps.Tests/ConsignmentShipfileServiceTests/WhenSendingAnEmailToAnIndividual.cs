@@ -31,9 +31,12 @@
                               };
             var consignment = new Consignment
                                   {
+                                      ConsignmentId = 1,
                                       SalesAccount = account,
-                                      Items = new List<ConsignmentItem> { new ConsignmentItem { OrderNumber = 1 } }
-                                  };
+                                      Items = new List<ConsignmentItem> { new ConsignmentItem { OrderNumber = 1 } },
+                                      Address = new Address { Country = new Country { CountryCode = "US" } },
+                                      Carrier = "TNT"
+            };
             this.shipfileData = new ConsignmentShipfile
                                     {
                                         Id = 1,
@@ -41,14 +44,17 @@
                                     };
             this.toSend = new List<ConsignmentShipfile>
                               {
-                                  new ConsignmentShipfile { Id = 1 }
+                                  new ConsignmentShipfile { Id = 1, ConsignmentId = 1}
                               };
 
             this.ShipfileRepository.FindById(1).Returns(this.shipfileData);
 
+            this.ConsignmentRepository.FindById(Arg.Any<int>()).Returns(consignment);
+
             this.DataService.BuildPdfModel(Arg.Any<int>(), Arg.Any<int>()).Returns(
                 new ConsignmentShipfilePdfModel
                     {
+                        ConsignmentNumber = "1",
                         PackingList = new PackingListItem[] { new PackingListItem() }, 
                         DespatchNotes = new DespatchNote[] { new DespatchNote() },
                         DateDispatched = "12/05/2008 09:34:58"
@@ -65,7 +71,9 @@
             correctBody += $"Packing List {System.Environment.NewLine}";
             correctBody += $"Despatch Note/Serial Number List {System.Environment.NewLine}";
             correctBody += $"These refer to goods that left the factory on 12/05/2008 09:34:58 {System.Environment.NewLine}";
-            
+            correctBody += "The shipment should arrive within four working days.";
+
+
             this.EmailService.Received().SendEmail(
                 "customer@linn.co.uk",
                 "customer@linn.co.uk",

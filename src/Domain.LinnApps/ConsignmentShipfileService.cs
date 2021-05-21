@@ -22,13 +22,16 @@
 
         private readonly IQueryRepository<SalesOutlet> outletRepository;
 
+        private readonly IRepository<Consignment, int> consignmentRepository;
+
         public ConsignmentShipfileService(
             IEmailService emailService,
             IPdfBuilder pdfBuilder,
             IRepository<ConsignmentShipfile, int> shipfileRepository,
             IQueryRepository<SalesOrder> salesOrderRepository,
             IConsignmentShipfileDataService dataService,
-            IQueryRepository<SalesOutlet> outletRepository)
+            IQueryRepository<SalesOutlet> outletRepository,
+            IRepository<Consignment, int> consignmentRepository)
         {
             this.emailService = emailService;
             this.pdfBuilder = pdfBuilder;
@@ -36,6 +39,7 @@
             this.salesOrderRepository = salesOrderRepository;
             this.outletRepository = outletRepository;
             this.dataService = dataService;
+            this.consignmentRepository = consignmentRepository;
         }
 
         public IEnumerable<ConsignmentShipfile> SendEmails(IEnumerable<ConsignmentShipfile> toSend, bool test = false)
@@ -60,8 +64,9 @@
                     // potentially an email to send to each outlet in this consignment?
                     foreach (var model in models)
                     {
-                        model.Subject = "Shipping Details";
-                        var pdf = this.pdfBuilder.BuildPdf(model.PdfAttachment, "./views/ShipfilePdfTemplate.html");
+                        model.Subject = test ? model.ToEmailAddress : "Shipping Details";
+
+                        var pdf = this.pdfBuilder.BuildPdf(model.PdfAttachment, ConfigurationManager.Configuration["SHIPFILE_TEMPLATE_PATH"]);
                         this.emailService.SendEmail(
                             test ? ConfigurationManager.Configuration["SHIPFILES_TEST_ADDRESS"] : model.ToEmailAddress,
                             model.ToCustomerName,
@@ -69,7 +74,7 @@
                             null,
                             ConfigurationManager.Configuration["SHIPFILES_FROM_ADDRESS"],
                             "Linn Shipping",
-                            test ? model.ToEmailAddress : model.Subject,
+                            model.Subject,
                             model.Body,
                             pdf.Result);
                     }
@@ -176,7 +181,7 @@
                 }
                 else
                 {
-                    // multiple outlets to email, email addresses present and correct
+                    // multiple outlets to email, email addresses all present and correct
                     toSend.AddRange(
                         from salesOutlet in outlets 
                         let pdf = this.dataService.BuildPdfModel(shipfile.ConsignmentId, salesOutlet.OutletAddressId) 
@@ -211,8 +216,31 @@
 
             body += $"These refer to goods that left the factory on {model.DateDispatched} {System.Environment.NewLine}";
 
-            // todo - something about when shipment should arrive?
+            var code = this.GetCountryCode(int.Parse(model.ConsignmentNumber));
+
+            if (code == "E")
+            {
+                 body += "The shipment should arrive within four working days.";
+            }
+
+            if (code == "U")
+            {
+                body += "The shipment should arrive tomorrow.";
+            }
+
             return body;
+        }
+
+        private string GetCountryCode(int consignmentId)
+        {
+            var consignment = this.consignmentRepository.FindById(consignmentId);
+
+            if (consignment.Address.Country.CountryCode == "GB")
+            {
+                return "U";
+            }
+
+            return consignment.Carrier != "TNT" ? "R" : "E";
         }
     }
 }

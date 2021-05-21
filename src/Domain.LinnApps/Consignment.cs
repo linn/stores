@@ -24,5 +24,7 @@
         public IEnumerable<ConsignmentItem> Items { get; set; }
         
         public Address Address { get; set; }
+
+        public string Carrier { get; set; }
     }
 }

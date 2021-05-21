@@ -49,7 +49,8 @@
             var consignment = new Consignment
             {
                 SalesAccount = account,
-                Items = new List<ConsignmentItem> { new ConsignmentItem { OrderNumber = 1 } }
+                Items = new List<ConsignmentItem> { new ConsignmentItem { OrderNumber = 1 } },
+                Address = new Address { Country = new Country { CountryCode = "GB" } }
             };
 
             this.shipfileData = new ConsignmentShipfile
@@ -67,12 +68,15 @@
 
             this.SalesOrderRepository.FilterBy(Arg.Any<Expression<Func<SalesOrder, bool>>>()).Returns(orders.AsQueryable());
 
+            this.ConsignmentRepository.FindById(1).Returns(consignment);
+
             this.DataService.BuildPdfModel(Arg.Any<int>(), Arg.Any<int>()).Returns(
                 new ConsignmentShipfilePdfModel
                 {
                     PackingList = new PackingListItem[] { new PackingListItem() },
                     DespatchNotes = new DespatchNote[] { new DespatchNote() },
-                    DateDispatched = "12/05/2008 09:34:58"
+                    DateDispatched = "12/05/2008 09:34:58",
+                    ConsignmentNumber = "1"
                 });
 
             this.result = this.Sut.SendEmails(this.toSend);
@@ -89,6 +93,8 @@
                 $"Despatch Note/Serial Number List {System.Environment.NewLine}";
             correctBody += 
                 $"These refer to goods that left the factory on 12/05/2008 09:34:58 {System.Environment.NewLine}";
+            correctBody +=
+                $"The shipment should arrive tomorrow.";
 
             this.EmailService.Received().SendEmail(
                 "outlet@linn.co.uk",

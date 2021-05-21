@@ -1490,6 +1490,7 @@
             q.Property(c => c.CustomerName).HasColumnName("CUSTOMER_NAME");
             q.HasOne(c => c.SalesAccount).WithMany(a => a.Consignments).HasForeignKey(c => c.SalesAccountId);
             q.HasOne(c => c.Address).WithMany(a => a.Consignments).HasForeignKey(o => o.AddressId);
+            q.Property(c => c.Carrier).HasColumnName("CARRIER");
         }
 
         private void QuerySalesOrders(ModelBuilder builder)
