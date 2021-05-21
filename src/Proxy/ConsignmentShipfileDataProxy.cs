@@ -134,18 +134,43 @@
             for (var i = 0; i < rows.Count; i++)
             {
                 var data = rows[i].ItemArray;
+                var orderNumber = data[7].ToString();
+                var orderLine = data[8].ToString();
                 result.Add(new DespatchNote 
                                {
-                                    ConsignmentId = data[0].ToString(),
+                                    ConsignmentId = consignmentId.ToString(),
                                     DocNumber = data[1].ToString(),
                                     DocumentDate = data[2].ToString(),
                                     InvoiceLine = data[3].ToString(),
                                     Description = data[4].ToString(),
                                     Quantity = data[5].ToString(),
                                     CustomersOrderNumbers = data[6].ToString(),
-                                    SalesOrderNumber = data[7].ToString(),
-                                    OrderLine = data[8].ToString()
+                                    SalesOrderNumber = orderNumber,
+                                    OrderLine = orderLine,
+                                    SerialNumbers = this.GetSerialNumbers(
+                                        consignmentId, 
+                                        int.Parse(orderNumber), 
+                                        int.Parse(orderLine))
+                                        .ToArray()
                                });
+            }
+
+            return result;
+        }
+
+        private IEnumerable<string> GetSerialNumbers(int consignmentId, int orderNumber, int orderLine)
+        {
+            var sql = $@"
+            SELECT CI.SERIAL_NUMBER
+            FROM CONSIGNMENT_ITEMS CI WHERE CI.ORDER_NUMBER = {orderNumber}
+            AND CI.ORDER_LINE = {orderLine}
+            AND CI.CONSIGNMENT_ID = {consignmentId}";
+            var rows = this.databaseService.ExecuteQuery(sql).Tables[0].Rows;
+            var result = new List<string>();
+            for (var i = 0; i < rows.Count; i++)
+            {
+                var data = rows[i].ItemArray;
+                result.Add(data[0].ToString());
             }
 
             return result;

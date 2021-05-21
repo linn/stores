@@ -19,5 +19,7 @@
         public string SalesOrderNumber { get; set; }
 
         public string OrderLine { get; set; }
+
+        public string[] SerialNumbers { get; set; }
     }
 }
