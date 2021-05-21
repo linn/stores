@@ -9,7 +9,7 @@
 
     using NUnit.Framework;
 
-    public class WhenWandingItemGbItem : ContextBase
+    public class WhenWandingItemWithNoAddressLabel : ContextBase
     {
         private int consignmentId;
 
@@ -35,7 +35,7 @@
         public void SetUp()
         {
             this.wandAction = "W";
-            this.printLabels = true;
+            this.printLabels = false;
             this.consignmentId = 134;
             this.wandString = "flajdlfjd1312";
             this.userNumber = 35345;
@@ -56,8 +56,8 @@
                                                          Line1 = "this",
                                                          Line2 = "address",
                                                          PostCode = "d",
-                                                         CountryCode = "GB",
-                                                         Country = new Country { CountryCode = "GB", DisplayName = "GB" }
+                                                         CountryCode = "FR",
+                                                         Country = new Country { CountryCode = "FR", DisplayName = "France" }
                                                      }
                                    };
             this.WandLogRepository.FindById(this.wandLogId).Returns(this.wandLog);
@@ -75,13 +75,25 @@
         }
 
         [Test]
-        public void ShouldGetConsignment()
+        public void ShouldGetWandLog()
         {
-            this.ConsignmentRepository.Received().FindById(this.consignmentId);
+            this.WandLogRepository.Received().FindById(this.wandLogId);
         }
 
         [Test]
-        public void ShouldNotPrintLabel()
+        public void ShouldCallProxy()
+        {
+            this.WandPack.Received().Wand(this.wandAction, this.userNumber, this.consignmentId, this.wandString);
+        }
+
+        [Test]
+        public void ShouldNotGetConsignment()
+        {
+            this.ConsignmentRepository.DidNotReceive().FindById(Arg.Any<int>());
+        }
+
+        [Test]
+        public void ShouldPrintLabel()
         {
             this.BartenderLabelPack.DidNotReceive().PrintLabels(
                 Arg.Any<string>(),

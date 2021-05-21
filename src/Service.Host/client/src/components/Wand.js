@@ -51,6 +51,7 @@ function Wand({
     const [wandMessage, setWandMessage] = useState('');
     const [selectedRow, setSelectedRow] = useState(null);
     const [lastWandLogId, setLastWandLogId] = useState(null);
+    const [printLabels, setPrintLabels] = useState('Y');
 
     const wandStringInput = useRef(null);
 
@@ -172,8 +173,13 @@ function Wand({
         }
     };
 
-    const handlewandActionChange = (_propertyName, newValue) => {
+    const handleWandActionChange = (_propertyName, newValue) => {
         setWandAction(newValue);
+        wandStringInput.current.focus();
+    };
+
+    const handlePrintLabelsChange = (_propertyName, newValue) => {
+        setPrintLabels(newValue);
         wandStringInput.current.focus();
     };
 
@@ -183,7 +189,7 @@ function Wand({
 
     const handleWand = () => {
         if (wandString && consignmentId) {
-            doWandItem({ consignmentId, userNumber, wandAction, wandString });
+            doWandItem({ consignmentId, userNumber, wandAction, wandString, printLabels });
             setWandString(null);
             wandStringInput.current.focus();
         }
@@ -370,7 +376,7 @@ function Wand({
                 <Loading />
             ) : (
                 <Grid container spacing={3}>
-                    <Grid item xs={12}>
+                    <Grid item xs={10}>
                         <InputLabel
                             classes={{ root: classes.label, asterisk: classes.labelAsterisk }}
                         >
@@ -409,6 +415,19 @@ function Wand({
                     </Grid>
                     <Grid item xs={2}>
                         <Dropdown
+                            label="Labels"
+                            propertyName="printLabels"
+                            items={[
+                                { id: 'Y', displayText: 'Yes' },
+                                { id: 'N', displayText: 'No' }
+                            ]}
+                            value={printLabels}
+                            onChange={handlePrintLabelsChange}
+                            allowNoValue={false}
+                        />
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Dropdown
                             label="Action"
                             propertyName="wandAction"
                             items={[
@@ -416,7 +435,7 @@ function Wand({
                                 { id: 'U', displayText: 'Unwand' }
                             ]}
                             value={wandAction}
-                            onChange={handlewandActionChange}
+                            onChange={handleWandActionChange}
                         />
                     </Grid>
                     <Grid item xs={8}>

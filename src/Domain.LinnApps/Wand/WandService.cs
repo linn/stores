@@ -17,16 +17,20 @@
 
         private readonly IBartenderLabelPack bartenderLabelPack;
 
+        private readonly IRepository<PrinterMapping, int> printerMappingRepository;
+
         public WandService(
             IWandPack wandPack,
             IRepository<WandLog, int> wandLogRepository,
             IRepository<Consignment, int> consignmentRepository,
-            IBartenderLabelPack bartenderLabelPack)
+            IBartenderLabelPack bartenderLabelPack,
+            IRepository<PrinterMapping, int> printerMappingRepository)
         {
             this.wandPack = wandPack;
             this.wandLogRepository = wandLogRepository;
             this.consignmentRepository = consignmentRepository;
             this.bartenderLabelPack = bartenderLabelPack;
+            this.printerMappingRepository = printerMappingRepository;
         }
 
         public static string WandStringSuggestion(
@@ -48,7 +52,12 @@
             return $"02{linnBarCode}?";
         }
 
-        public WandResult Wand(string wandAction, string wandString, int consignmentId, int userNumber)
+        public WandResult Wand(
+            string wandAction,
+            string wandString,
+            int consignmentId,
+            int userNumber,
+            bool printLabels)
         {
             var wandPackResult = this.wandPack.Wand(wandAction, userNumber, consignmentId, wandString);
             var result = new WandResult
@@ -62,15 +71,15 @@
             if (wandPackResult.WandLogId.HasValue)
             {
                 result.WandLog = this.wandLogRepository.FindById(wandPackResult.WandLogId.Value);
-                this.MaybePrintLabel(consignmentId, result.WandLog);
+                this.MaybePrintLabel(printLabels, consignmentId, result.WandLog, userNumber);
             }
 
             return result;
         }
 
-        private void MaybePrintLabel(int consignmentId, WandLog wandLog)
+        private void MaybePrintLabel(bool printLabels, int consignmentId, WandLog wandLog, int userNumber)
         {
-            if (!wandLog.ContainerNo.HasValue || wandLog.TransType != "W")
+            if (!printLabels || !wandLog.ContainerNo.HasValue || wandLog.TransType != "W")
             {
                 return;
             }
@@ -79,16 +88,33 @@
 
             var labelMessage = string.Empty;
             var labelData = $"\"{this.GetPrintAddress(consignment.Address)}\", \"{this.GetLabelInformation(wandLog)}\"";
+            var printerName = this.GetPrinter(userNumber);
             if (consignment.Address.CountryCode != "GB")
             {
                 this.bartenderLabelPack.PrintLabels(
                     $"Address{wandLog.Id}",
-                    "DispatchLabels1",
+                    printerName,
                     1,
                     "dispatchaddress.btw",
                     labelData,
                     ref labelMessage);
             }
+        }
+
+        private string GetPrinter(int userNumber)
+        {
+            var printer = this.printerMappingRepository.FindBy(
+                a => a.UserNumber == userNumber && a.PrinterGroup == "DISPATCH-LABEL");
+
+            if (!string.IsNullOrEmpty(printer?.PrinterName))
+            {
+                return printer.PrinterName;
+            }
+
+            printer = this.printerMappingRepository.FindBy(
+                a => a.DefaultForGroup == "Y" && a.PrinterGroup == "DISPATCH-LABEL");
+
+            return printer?.PrinterName;
         }
 
         private string GetLabelInformation(WandLog wandLog)

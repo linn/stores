@@ -19,7 +19,9 @@
 
         protected IRepository<Consignment, int> ConsignmentRepository { get; private set; }
 
-        protected IBartenderLabelPack BartenderLabelPack{ get; private set; }
+        protected IBartenderLabelPack BartenderLabelPack { get; private set; }
+
+        protected IRepository<PrinterMapping, int> PrinterMappingRepository { get; private set; }
 
         [SetUp]
         public void SetUpContext()
@@ -28,12 +30,14 @@
             this.WandLogRepository = Substitute.For<IRepository<WandLog, int>>();
             this.ConsignmentRepository = Substitute.For<IRepository<Consignment, int>>();
             this.BartenderLabelPack = Substitute.For<IBartenderLabelPack>();
+            this.PrinterMappingRepository = Substitute.For<IRepository<PrinterMapping, int>>();
 
             this.Sut = new WandService(
                 this.WandPack,
                 this.WandLogRepository,
                 this.ConsignmentRepository,
-                this.BartenderLabelPack);
+                this.BartenderLabelPack,
+                this.PrinterMappingRepository);
         }
     }
 }
