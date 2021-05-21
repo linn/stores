@@ -71,13 +71,13 @@
             if (wandPackResult.WandLogId.HasValue)
             {
                 result.WandLog = this.wandLogRepository.FindById(wandPackResult.WandLogId.Value);
-                this.MaybePrintLabel(printLabels, consignmentId, result.WandLog);
+                this.MaybePrintLabel(printLabels, consignmentId, result.WandLog, userNumber);
             }
 
             return result;
         }
 
-        private void MaybePrintLabel(bool printLabels, int consignmentId, WandLog wandLog)
+        private void MaybePrintLabel(bool printLabels, int consignmentId, WandLog wandLog, int userNumber)
         {
             if (!printLabels || !wandLog.ContainerNo.HasValue || wandLog.TransType != "W")
             {
@@ -88,16 +88,33 @@
 
             var labelMessage = string.Empty;
             var labelData = $"\"{this.GetPrintAddress(consignment.Address)}\", \"{this.GetLabelInformation(wandLog)}\"";
+            var printerName = this.GetPrinter(userNumber);
             if (consignment.Address.CountryCode != "GB")
             {
                 this.bartenderLabelPack.PrintLabels(
                     $"Address{wandLog.Id}",
-                    "DispatchLabels1",
+                    printerName,
                     1,
                     "dispatchaddress.btw",
                     labelData,
                     ref labelMessage);
             }
+        }
+
+        private string GetPrinter(int userNumber)
+        {
+            var printer = this.printerMappingRepository.FindBy(
+                a => a.UserNumber == userNumber && a.PrinterGroup == "DISPATCH-LABEL");
+
+            if (!string.IsNullOrEmpty(printer?.PrinterName))
+            {
+                return printer.PrinterName;
+            }
+
+            printer = this.printerMappingRepository.FindBy(
+                a => a.DefaultForGroup == "Y" && a.PrinterGroup == "DISPATCH-LABEL");
+
+            return printer?.PrinterName;
         }
 
         private string GetLabelInformation(WandLog wandLog)

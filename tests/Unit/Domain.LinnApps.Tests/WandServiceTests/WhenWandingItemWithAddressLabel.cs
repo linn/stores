@@ -1,5 +1,8 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.WandServiceTests
 {
+    using System;
+    using System.Linq.Expressions;
+
     using FluentAssertions;
 
     using Linn.Stores.Domain.LinnApps.Wand;
@@ -65,7 +68,11 @@
             this.wandPackResult = new WandPackResult { Message = "ok", Success = true, WandLogId = this.wandLogId };
             this.WandPack.Wand(this.wandAction, this.userNumber, this.consignmentId, this.wandString)
                 .Returns(this.wandPackResult);
-
+            this.PrinterMappingRepository.FindBy(Arg.Any<Expression<Func<PrinterMapping, bool>>>()).Returns(
+                new PrinterMapping
+                    {
+                        UserNumber = this.userNumber, PrinterGroup = "DISPATCH-LABEL", PrinterName = "DispatchLabels1"
+                    });
             this.result = this.Sut.Wand(
                 this.wandAction,
                 this.wandString,
