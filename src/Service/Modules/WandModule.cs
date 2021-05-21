@@ -53,7 +53,7 @@
 
         private object GetShipfiles()
         {
-            return this.Negotiate.WithModel(this.shipfileService.GetShipfiles());
+            return this.Negotiate.WithModel(this.shipfileService.GetShipfiles()).WithView("Index");
         }
 
         private object SendEmails()
