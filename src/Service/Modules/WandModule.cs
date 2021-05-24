@@ -53,7 +53,9 @@
 
         private object GetShipfiles()
         {
-            return this.Negotiate.WithModel(this.shipfileService.GetShipfiles()).WithView("Index");
+            return this.Negotiate.WithModel(this.shipfileService.GetShipfiles())
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
 
         private object SendEmails()
