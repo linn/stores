@@ -54,7 +54,7 @@ export default function ConsignmentShipfiles({
         <Page>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
-                    <Title text="Send Shipfile Emails" />
+                    <Title text="Send Shipfile Emails*" />
                 </Grid>
                 {(sendEmailsLoading || deleteLoading) && !itemError ? (
                     <Grid item xs={12}>
