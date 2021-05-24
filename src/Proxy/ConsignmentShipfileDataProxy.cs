@@ -155,8 +155,8 @@
                                         consignmentId, 
                                         int.Parse(orderNumber), 
                                         int.Parse(orderLine))
-                                        .ToArray()
-                               });
+                                        .Aggregate((acc, c) => acc + " " + c)
+                });
             }
 
             return result;

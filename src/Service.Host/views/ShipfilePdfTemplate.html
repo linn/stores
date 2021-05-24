@@ -1,23 +1,41 @@
 ﻿<html>
+
 <head>
     <style>
         body {
             margin: 40px;
             font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
-            font-size: 24px;
+            font-size: 12px;
         }
 
         .wrapper {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(40%, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(48%, 1fr));
             grid-gap: 10px;
         }
 
         .box {
-            border-radius: 3px;
-            padding: 20px;
-            font-size: 14px;
+            border-radius: 1px;
+            padding-bottom: 20px;
+        }
+
+        .table-title {
+            padding-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            padding-bottom: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        td,
+        th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 5px;
         }
     </style>
 </head>
@@ -25,11 +43,11 @@
 <body>
     <div class="wrapper">
         <div class="box a">Consignment Number: {{ consignment_number }}</div>
-        <div class="box b"></div> 
+        <div class="box b"></div>
         <div class="box c">Date dispatched: {{ date_dispatched }}</div>
         <div class="box d">Carrier: {{ carrier }}</div>
         <div class="box e">
-            <div >Outlet Address:</div>
+            <div>Outlet Address:</div>
             {{ for item in outlet_address }}
             <div> {{ item }} </div>
             {{ end }}
@@ -41,5 +59,55 @@
             {{ end }}
         </div>
     </div>
+    <div>
+        <div class="table-title">Packing List</div>
+        <table>
+            <tr>
+                <th>Pallet</th>
+                <th>Box</th>
+                <th>To</th>
+                <th>Count</th>
+                <th>Contents Description</th>
+            </tr>
+            {{ for item in packing_list }}
+            <tr>
+                <td>{{ item.pallet }}</td>
+                <td>{{ item.box }}</td>
+                <td>{{ item.to }}</td>
+                <td>{{ item.count }}</td>
+                <td>{{ item.contents_description }}</td>
+            </tr>
+            {{ end }}
+        </table>
+    </div>
+    <div>
+        <div class="table-title">Despatch Note/Serial No details</div>
+        <table>
+            <tr>
+                <th>Invoice</th>
+                <th>Line</th>
+                <th>Qty</th>
+                <th>Article</th>
+                <th>Serial Numbers</th>
+                <th>Your Order Ref</th>
+                <th>Order No</th>
+                <th>Line</th>
+            </tr>
+            {{ for item in despatch_notes }}
+            <tr>
+                <td>{{ item.doc_number }}</td>
+                <td>{{ item.invoice_line }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.article }}</td>
+                <td>{{ item.serial_numbers }}</td>
+                <td>{{ item.customers_order_numbers }}</td>
+                <td>{{ item.sales_order_number }}</td>
+                <td>{{ item.order_line }}</td>
+            </tr>
+            {{ end }}
+        </table>
+    </div>
+
 </body>
+
 </html>

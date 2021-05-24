@@ -20,6 +20,6 @@
 
         public string OrderLine { get; set; }
 
-        public string[] SerialNumbers { get; set; }
+        public string SerialNumbers { get; set; }
     }
 }

@@ -30,7 +30,7 @@
 
             await page.SetContentAsync(result);
 
-            var pdfOptions = new PdfOptions { Landscape = false };
+            var pdfOptions = new PdfOptions { Landscape = true };
 
             var pdfStream = page.PdfStreamAsync(pdfOptions).Result;
 
