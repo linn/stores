@@ -167,7 +167,7 @@ Resources:
           Value: !Ref shipfilesTestAddress
         - Name: SHIPFILES_FROM_ADDRESS
           Value: !Ref shipfilesFromAddress
-        - Name: SHIPFILES_TEMPLATE_PATH
+        - Name: SHIPFILE_TEMPLATE_PATH
           Value: !Ref shipfileTemplatePath
         - Name: awsRegion
           Value: !Ref AWS::Region
