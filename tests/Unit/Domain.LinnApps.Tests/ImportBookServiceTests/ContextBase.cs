@@ -2,7 +2,6 @@
 {
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
-    using Linn.Stores.Domain.LinnApps.Parts;
     using NSubstitute;
     using NUnit.Framework;
 

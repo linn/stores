@@ -11,6 +11,7 @@
     public class WhenUpdatingWithInvoiceDetails : ContextBase
     {
         private readonly int impbookId = 12007;
+
         private ImportBook impbook;
 
         [SetUp]

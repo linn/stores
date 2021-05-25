@@ -11,46 +11,48 @@
     public class WhenUpdatingWithPostEntries : ContextBase
     {
         private readonly int impbookId = 12007;
+
         private ImportBook impbook;
+
         private readonly DateTime now = DateTime.Now;
 
         [SetUp]
         public void SetUp()
         {
             var firstPostEntry = new ImportBookPostEntry()
-                                     {
-                                         ImportBookId = this.impbookId,
-                                         LineNumber = 1,
-                                         EntryCodePrefix = "PR",
-                                         EntryCode = "code blu",
-                                         EntryDate = (DateTime?)null,
-                                         Reference = "refer fence",
-                                         Duty = null,
-                                         Vat = null
+            {
+                ImportBookId = this.impbookId,
+                LineNumber = 1,
+                EntryCodePrefix = "PR",
+                EntryCode = "code blu",
+                EntryDate = null,
+                Reference = "refer fence",
+                Duty = null,
+                Vat = null
             };
 
             var secondPostEntry = new ImportBookPostEntry()
-                                      {
-                                          ImportBookId = this.impbookId,
-                                          LineNumber = 2,
-                                          EntryCodePrefix = "DL",
-                                          EntryCode = "code blanc",
-                                          EntryDate = this.now.AddDays(-6),
-                                          Reference = "hocus pocus",
-                                          Duty = 33,
-                                          Vat = 44
+            {
+                ImportBookId = this.impbookId,
+                LineNumber = 2,
+                EntryCodePrefix = "DL",
+                EntryCode = "code blanc",
+                EntryDate = this.now.AddDays(-6),
+                Reference = "hocus pocus",
+                Duty = 33,
+                Vat = 44
             };
 
             var updatedFirstPostEntry = new ImportBookPostEntry()
-                                            {
-                                                ImportBookId = this.impbookId,
-                                                LineNumber = 1,
-                                                EntryCodePrefix = "PRE",
-                                                EntryCode = "code vert",
-                                                EntryDate = this.now.AddDays(-5),
-                                                Reference = "refer fence",
-                                                Duty = 111,
-                                                Vat = 222
+            {
+                ImportBookId = this.impbookId,
+                LineNumber = 1,
+                EntryCodePrefix = "PRE",
+                EntryCode = "code vert",
+                EntryDate = this.now.AddDays(-5),
+                Reference = "refer fence",
+                Duty = 111,
+                Vat = 222
             };
 
 

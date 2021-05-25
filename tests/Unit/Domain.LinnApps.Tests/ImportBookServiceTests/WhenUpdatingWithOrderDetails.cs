@@ -1,17 +1,18 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.ImportBookServiceTests
 {
-    using FluentAssertions;
-    using Linn.Stores.Domain.LinnApps.ImportBooks;
-    using NUnit.Framework;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using FluentAssertions;
+    using Linn.Stores.Domain.LinnApps.ImportBooks;
+    using NUnit.Framework;
+
 
     public class WhenUpdatingWithOrderDetails : ContextBase
     {
         private readonly int impbookId = 12007;
-        private ImportBook impbook;
 
+        private ImportBook impbook;
 
         [SetUp]
         public void SetUp()
@@ -59,25 +60,25 @@
             };
 
             var updatedFirstOrderDetail = new ImportBookOrderDetail()
-                                              {
-                                                  ImportBookId = impbookId,
-                                                  LineNumber = 1,
-                                                  OrderNumber = 111,
-                                                  RsnNumber = 222,
-                                                  OrderDescription = "kylo ren first order",
-                                                  Qty = 3,
-                                                  DutyValue = (decimal)91.12,
-                                                  FreightValue = (decimal)92.12,
-                                                  VatValue = (decimal)93.12,
-                                                  OrderValue = (decimal)944.1,
-                                                  Weight = (decimal)955.2,
-                                                  LoanNumber = 999,
-                                                  LineType = "Type C",
-                                                  CpcNumber = 91,
-                                                  TariffCode = "121213",
-                                                  InsNumber = 92,
-                                                  VatRate = 93
-                                              };
+            {
+                ImportBookId = impbookId,
+                LineNumber = 1,
+                OrderNumber = 111,
+                RsnNumber = 222,
+                OrderDescription = "kylo ren first order",
+                Qty = 3,
+                DutyValue = (decimal)91.12,
+                FreightValue = (decimal)92.12,
+                VatValue = (decimal)93.12,
+                OrderValue = (decimal)944.1,
+                Weight = (decimal)955.2,
+                LoanNumber = 999,
+                LineType = "Type C",
+                CpcNumber = 91,
+                TariffCode = "121213",
+                InsNumber = 92,
+                VatRate = 93
+            };
 
 
             this.impbook = new ImportBook

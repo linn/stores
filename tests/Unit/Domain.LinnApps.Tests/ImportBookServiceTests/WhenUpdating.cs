@@ -2,19 +2,20 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using FluentAssertions;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
-    using NSubstitute;
     using NUnit.Framework;
+
 
     public class WhenUpdating : ContextBase
     {
         private readonly int impbookId = 12007;
-        private ImportBook impbook;
-        private ImportBook newImpBook;
-        private readonly DateTime now = DateTime.Now;
 
+        private ImportBook impbook;
+
+        private ImportBook newImpBook;
+
+        private readonly DateTime now = DateTime.Now;
 
         [SetUp]
         public void SetUp()
@@ -103,7 +104,7 @@
                 SupplierCostCurrency = "egg",
                 TransNature = "sea",
                 ArrivalDate = this.now.AddDays(3),
-                FreightCharges = (decimal) 11.1,
+                FreightCharges = (decimal)11.1,
                 HandlingCharge = (decimal)11.1,
                 ClearanceCharge = (decimal)11.1,
                 Cartage = (decimal)11.1,
@@ -117,7 +118,7 @@
                 Weight = (decimal)11.1,
                 CustomsEntryCode = "code green",
                 CustomsEntryCodeDate = this.now.AddDays(2),
-                LinnDuty = (decimal) 12,
+                LinnDuty = 12,
                 LinnVat = (decimal)11.1,
                 IprCpcNumber = 1,
                 EecgNumber = 1,
