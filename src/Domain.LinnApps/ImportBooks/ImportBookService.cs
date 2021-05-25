@@ -1,11 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.ImportBooks
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using Linn.Common.Persistence;
-    using Linn.Stores.Domain.LinnApps.Parts;
 
     public class ImportBookService : IImportBookService
     {
@@ -88,18 +84,9 @@
                 return;
             }
 
-            //need to do something else for these, can't modify the list while I'm enumerating on it
-            foreach (var oldDetail in from)
-            {
-                if (!to.Any(x => oldDetail.LineNumber == x.LineNumber))
-                {
-                    from.Remove(oldDetail);
-                }
-            }
-
             foreach (var newdetail in to)
             {
-                
+
                 var currentDetail = from.Any()
                                         ? from.FirstOrDefault(x => x.LineNumber == newdetail.LineNumber)
                                         : null;
@@ -121,14 +108,6 @@
             if (!from.Any() && !to.Any())
             {
                 return;
-            }
-
-            foreach (var oldDetail in from)
-            {
-                if (!to.Any(x => oldDetail.LineNumber == x.LineNumber))
-                {
-                    from.Remove(oldDetail);
-                }
             }
 
             foreach (var newdetail in to)
@@ -168,14 +147,6 @@
             if (!from.Any() && !to.Any())
             {
                 return;
-            }
-
-            foreach (var oldEntry in from)
-            {
-                if (!to.Any(x => oldEntry.LineNumber == x.LineNumber))
-                {
-                    from.Remove(oldEntry);
-                }
             }
 
             foreach (var newEntry in to)

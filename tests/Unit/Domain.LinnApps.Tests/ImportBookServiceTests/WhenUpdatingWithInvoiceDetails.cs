@@ -13,15 +13,14 @@
         private readonly int impbookId = 12007;
         private ImportBook impbook;
 
-
         [SetUp]
         public void SetUp()
         {
-            var firstInvoiceDetail = new ImportBookInvoiceDetail() { ImportBookId = impbookId, InvoiceNumber = "123", LineNumber = 1, InvoiceValue = (decimal)12.5 };
+            var firstInvoiceDetail = new ImportBookInvoiceDetail() { ImportBookId = this.impbookId, InvoiceNumber = "123", LineNumber = 1, InvoiceValue = (decimal)12.5 };
 
-            var secondInvoiceDetail = new ImportBookInvoiceDetail() { ImportBookId = impbookId, InvoiceNumber = "1234", LineNumber = 2, InvoiceValue = (decimal)155.2 };
+            var secondInvoiceDetail = new ImportBookInvoiceDetail() { ImportBookId = this.impbookId, InvoiceNumber = "1234", LineNumber = 2, InvoiceValue = (decimal)155.2 };
 
-            var updatedFirstInvoiceDetail = new ImportBookInvoiceDetail() { ImportBookId = impbookId, InvoiceNumber = "133", LineNumber = 1, InvoiceValue = (decimal)125.5 };
+            var updatedFirstInvoiceDetail = new ImportBookInvoiceDetail() { ImportBookId = this.impbookId, InvoiceNumber = "133", LineNumber = 1, InvoiceValue = (decimal)125.5 };
 
 
             this.impbook = new ImportBook

@@ -52,14 +52,9 @@
         }
 
         [Test]
-        public void ShouldHaveRemovedInvoiceDetail()
+        public void ShouldNotHaveRemovedInvoiceDetailAsFinancialRecord()
         {
-            //need to fix service, this fails
-
-            this.impbook.InvoiceDetails.Count().Should().Be(1);
-            this.impbook.InvoiceDetails.FirstOrDefault(
-                    x => x.LineNumber == 1 && x.InvoiceNumber == "123" && x.InvoiceValue == (decimal)12.5)
-                .Should().NotBeNull();
+            this.impbook.InvoiceDetails.Count().Should().Be(2);
         }
     }
 }
