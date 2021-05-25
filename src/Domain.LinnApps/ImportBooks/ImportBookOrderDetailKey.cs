@@ -1,12 +1,12 @@
-﻿namespace Linn.Stores.Domain.LinnApps.Parts
+﻿namespace Linn.Stores.Domain.LinnApps.ImportBooks
 {
-    public class ImportBookPostEntryKey
+    public class ImportBookOrderDetailKey
     {
         public int ImportBookId { get; set; }
 
         public int LineNumber { get; set; }
 
-        public ImportBookPostEntryKey(int importBookId, int lineNumber)
+        public ImportBookOrderDetailKey(int importBookId, int lineNumber)
         {
             this.ImportBookId = importBookId;
             this.LineNumber = lineNumber;
