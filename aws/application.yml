@@ -44,16 +44,16 @@ Parameters:
     Type: Number
     Description: Logging Max Inner Exception Depth
   smtpHostname:
-    Type: string
+    Type: String
     Description: SMTP Hostname
   shipfileTemplatePath:
-    Type: string
+    Type: String
     Description: Shipfile PDF Template Path
   shipfilesTestAddress:
-    Type: string
+    Type: String
     Description: Email address test shipfiles are sent to
   shipfilesFromAddress:
-    Type: string
+    Type: String
     Description: Email address shipfiles are sent from  
   environmentSuffix:
     Type: String
