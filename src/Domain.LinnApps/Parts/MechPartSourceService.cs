@@ -70,11 +70,6 @@
                 throw new CreatePartException("You must enter a EMC/safety data directory for EMC or safety critical parts");
             }
 
-            if (candidate.MechanicalOrElectrical == "E" && !dataSheets.Any())
-            {
-                throw new CreatePartException("You must enter at least one datasheet for this part");
-            }
-
             return candidate;
         }
     }
