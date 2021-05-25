@@ -8,7 +8,6 @@
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Resources.Parts;
 
-
     public class ImportBookFacadeService : FacadeService<ImportBook, int, ImportBookResource, ImportBookResource>
     {
         private readonly IImportBookService importBookService;
@@ -158,11 +157,10 @@
                         Vat = entry.Vat
                     });
             }
+
             newImportBook.PostEntries = postEntries;
 
-
             this.importBookService.Update(from: entity, to: newImportBook);
-
         }
 
         protected override Expression<Func<ImportBook, bool>> SearchExpression(string searchTerm)

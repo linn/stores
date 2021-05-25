@@ -3,10 +3,9 @@
     using System;
     using System.Linq;
     using System.Linq.Expressions;
-
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
-    using Linn.Stores.Domain.LinnApps.Parts;
+
 
     public class ImportBookOrderDetailsRepository : IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey>
     {

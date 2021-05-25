@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.Resources.Parts
 {
     using System.Collections.Generic;
-
     using Linn.Common.Resources;
 
     public class ImportBookResource : HypermediaResource

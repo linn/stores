@@ -9,12 +9,12 @@
         public ImportBookInvoiceDetailResource Build(ImportBookInvoiceDetail model)
         {
             return new ImportBookInvoiceDetailResource
-                       {
-                           ImportBookId = model.ImportBookId,
-                           LineNumber = model.LineNumber,
-                           InvoiceNumber = model.InvoiceNumber,
-                           InvoiceValue = model.InvoiceValue
-                       };
+            {
+                ImportBookId = model.ImportBookId,
+                LineNumber = model.LineNumber,
+                InvoiceNumber = model.InvoiceNumber,
+                InvoiceValue = model.InvoiceValue
+            };
         }
 
         object IResourceBuilder<ImportBookInvoiceDetail>.Build(ImportBookInvoiceDetail model) => this.Build(model);
