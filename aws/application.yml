@@ -43,6 +43,18 @@ Parameters:
   loggingMaxInnerExceptionDepth:
     Type: Number
     Description: Logging Max Inner Exception Depth
+  smtpHostname:
+    Type: string
+    Description: SMTP Hostname
+  shipfileTemplatePath:
+    Type: string
+    Description: Shipfile PDF Template Path
+  shipfilesTestAddress:
+    Type: string
+    Description: Email address test shipfiles are sent to
+  shipfilesFromAddress:
+    Type: string
+    Description: Email address shipfiles are sent from  
   environmentSuffix:
     Type: String
     AllowedValues:
