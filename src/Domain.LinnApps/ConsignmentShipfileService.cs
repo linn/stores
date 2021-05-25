@@ -12,7 +12,9 @@
     {
         private readonly IEmailService emailService;
 
-        private readonly IPdfBuilder pdfBuilder;
+        private readonly ITemplateEngine templateEngine;
+
+        private readonly IPdfService pdfService;
 
         private readonly IRepository<ConsignmentShipfile, int> shipfileRepository;
 
@@ -26,7 +28,8 @@
 
         public ConsignmentShipfileService(
             IEmailService emailService,
-            IPdfBuilder pdfBuilder,
+            ITemplateEngine templateEngine,
+            IPdfService pdfService,
             IRepository<ConsignmentShipfile, int> shipfileRepository,
             IQueryRepository<SalesOrder> salesOrderRepository,
             IConsignmentShipfileDataService dataService,
@@ -34,7 +37,8 @@
             IRepository<Consignment, int> consignmentRepository)
         {
             this.emailService = emailService;
-            this.pdfBuilder = pdfBuilder;
+            this.pdfService = pdfService;
+            this.templateEngine = templateEngine;
             this.shipfileRepository = shipfileRepository;
             this.salesOrderRepository = salesOrderRepository;
             this.outletRepository = outletRepository;
@@ -66,7 +70,11 @@
                     {
                         model.Subject = test ? model.ToEmailAddress : "Shipping Details";
 
-                        var pdf = this.pdfBuilder.BuildPdf(model.PdfAttachment, ConfigurationManager.Configuration["SHIPFILE_TEMPLATE_PATH"]);
+                        var render = this.templateEngine.Render(
+                            model.PdfAttachment,
+                            ConfigurationManager.Configuration["SHIPFILE_TEMPLATE_PATH"]);
+
+                        var pdf = this.pdfService.ConvertHtmlToPdf(render.Result, landscape: true);
                         this.emailService.SendEmail(
                             test ? ConfigurationManager.Configuration["SHIPFILES_TEST_ADDRESS"] : model.ToEmailAddress,
                             model.ToCustomerName,
@@ -105,7 +113,7 @@
             if (account.OrgId == null)
             {
                 // for an individual, send to account
-                if (account.ContactId == null || string.IsNullOrEmpty(account.ContactDetails.EmailAddress))
+                if (account.ContactDetails == null || string.IsNullOrEmpty(account.ContactDetails.EmailAddress))
                 {
                     shipfile.Message = ShipfileStatusMessages.NoContactDetails;
                 }
@@ -113,12 +121,12 @@
                 {
                     var contact = account.ContactDetails;
                 
-                    var pdf = this.dataService.BuildPdfModel(shipfile.ConsignmentId, (int)contact.AddressId);
-                    var body = this.BuildEmailBody(pdf);
+                    var pdfModel = this.dataService.BuildPdfModel(shipfile.ConsignmentId, contact.AddressId);
+                    var body = this.BuildEmailBody(pdfModel);
 
                         toSend.Add(new ConsignmentShipfileEmailModel
                                        {
-                                           PdfAttachment = pdf,
+                                           PdfAttachment = pdfModel,
                                            ToCustomerName = contact.EmailAddress,
                                            ToEmailAddress = contact.EmailAddress,
                                            Body = body

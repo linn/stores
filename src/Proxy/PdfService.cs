@@ -6,11 +6,10 @@
     using Linn.Stores.Domain.LinnApps;
 
     using PuppeteerSharp;
-    using Scriban;
 
-    public class PdfBuilder : IPdfBuilder
+    public class PdfService : IPdfService
     {
-        public async Task<Stream> BuildPdf(object model, string pathToTemplate)
+        public async Task<Stream> ConvertHtmlToPdf(string html, bool landscape)
         {
             var browser =
                 await Puppeteer.LaunchAsync(new LaunchOptions
@@ -23,14 +22,9 @@
                                                 });
             var page = await browser.NewPageAsync();
 
-            var templateString = await File.ReadAllTextAsync(pathToTemplate);
-            var template = Template.Parse(templateString);
+            await page.SetContentAsync(html);
 
-            var result = await template.RenderAsync(model);
-
-            await page.SetContentAsync(result);
-
-            var pdfOptions = new PdfOptions { Landscape = true };
+            var pdfOptions = new PdfOptions { Landscape = landscape };
 
             var pdfStream = page.PdfStreamAsync(pdfOptions).Result;
 

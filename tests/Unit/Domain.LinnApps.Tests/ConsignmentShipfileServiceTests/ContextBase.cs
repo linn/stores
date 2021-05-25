@@ -11,7 +11,7 @@
     {
         protected IConsignmentShipfileService Sut { get; private set; }
 
-        protected IPdfBuilder PdfBuilder { get; private set; }
+        protected IPdfService PdfService { get; private set; }
 
         protected IRepository<ConsignmentShipfile, int> ShipfileRepository { get; private set; }
 
@@ -21,6 +21,8 @@
 
         protected IEmailService EmailService { get; private set; }
 
+        protected ITemplateEngine TemplateEngine { get; private set; }
+
         protected IQueryRepository<SalesOutlet> OutletRepository { get; private set; }
 
         protected IRepository<Consignment, int> ConsignmentRepository { get; private set; }
@@ -28,17 +30,19 @@
         [SetUp]
         public void SetUpContext()
         {
-            this.PdfBuilder = Substitute.For<IPdfBuilder>();
+            this.PdfService = Substitute.For<IPdfService>();
             this.ShipfileRepository = Substitute.For<IRepository<ConsignmentShipfile, int>>();
             this.SalesOrderRepository = Substitute.For<IQueryRepository<SalesOrder>>();
             this.DataService = Substitute.For<IConsignmentShipfileDataService>();
             this.EmailService = Substitute.For<IEmailService>();
             this.OutletRepository = Substitute.For<IQueryRepository<SalesOutlet>>();
             this.ConsignmentRepository = Substitute.For<IRepository<Consignment, int>>();
+            this.TemplateEngine = Substitute.For<ITemplateEngine>();
 
             this.Sut = new ConsignmentShipfileService(
                 this.EmailService,
-                this.PdfBuilder,
+                this.TemplateEngine,
+                this.PdfService,
                 this.ShipfileRepository,
                 this.SalesOrderRepository,
                 this.DataService,
