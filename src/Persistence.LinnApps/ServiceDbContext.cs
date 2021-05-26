@@ -149,7 +149,7 @@
 
         public DbQuery<ExportRsn> Rsns { get; set; }
 
-        public DbQuery<SalesAccount> SalesAccounts { get; set; }
+        public DbSet<SalesAccount> SalesAccounts { get; set; }
 
         public DbSet<SalesOutlet> SalesOutlets { get; set; }
 
@@ -159,7 +159,7 @@
 
         public DbQuery<TransferableStock> TransferableStock { get; set; }
 
-        public DbQuery<Consignment> Consignments { get; set; }
+        public DbSet<Consignment> Consignments { get; set; }
 
         public DbSet<ExportReturn> ExportReturns { get; set; }
 
@@ -175,7 +175,7 @@
 
         public DbSet<SalesArticle> SalesArticles { get; set; }
 
-        public DbQuery<SalesOrder> SalesOrders { get; set; }
+        public DbSet<SalesOrder> SalesOrders { get; set; }
 
         public DbQuery<SalesOrderDetail> SalesOrderDetails { get; set; }
 
@@ -191,6 +191,16 @@
 
         public DbQuery<TqmsOutstandingLoansByCategory> TqmsOutstandingLoansByCategories { get; set; }
 
+        public DbSet<ConsignmentShipfile> ConsignmentShipfiles { get; set; }
+
+        public DbSet<Invoice> Invoices { get; set; }
+
+        public DbSet<ConsignmentItem> ConsignmentItems { get; set; }
+
+        public DbSet<Contact> Contacts { get; set; }
+
+        public DbSet<Person> Persons { get; set; }
+        
         public DbSet<Address> Addresses { get; set; }
 
         public DbSet<PrinterMapping> PrinterMappings { get; set; }
@@ -283,6 +293,11 @@
             this.BuildTqmsMaster(builder);
             this.BuildTqmsJobRefs(builder);
             this.QueryTqmsOutstandingLoansByCategories(builder);
+            this.QueryConsignmentShipFiles(builder);
+            this.QueryInvoices(builder);
+            this.BuildConsignmentItems(builder);
+            this.BuildContacts(builder);
+            this.BuildPersons(builder);
             this.BuildAddresses(builder);
             this.BuildPrinterMappings(builder);
             base.OnModelCreating(builder);
@@ -883,6 +898,10 @@
             table.Property(s => s.CountryCode).HasColumnName("COUNTRY_CODE").HasMaxLength(2);
             table.Property(s => s.CountryName).HasColumnName("COUNTRY_NAME").HasMaxLength(50);
             table.Property(s => s.DateInvalid).HasColumnName("DATE_INVALID");
+            table.Property(s => s.SendShipfile).HasColumnName("SEND_SHIPFILE").HasMaxLength(1);
+            table.Property(s => s.OutletAddressId).HasColumnName("OUTLET_ADDRESS");
+            table.Property(s => s.OrderContactId).HasColumnName("ORDER_CONTACT_ID");
+            table.HasMany(o => o.SalesOrders).WithOne(r => r.SalesOutlet).HasForeignKey(o => new { o.AccountId, o.OutletNumber });
         }
 
         private void BuildParcels(ModelBuilder builder)
@@ -1301,11 +1320,15 @@
 
         private void QuerySalesAccounts(ModelBuilder builder)
         {
-            var q = builder.Query<SalesAccount>().ToView("SALES_ACCOUNTS");
+            var q = builder.Entity<SalesAccount>().ToTable("SALES_ACCOUNTS");
+            q.HasKey(e => e.AccountId);
             q.Property(e => e.AccountId).HasColumnName("ACCOUNT_ID");
             q.Property(e => e.AccountName).HasColumnName("ACCOUNT_NAME").HasMaxLength(50);
             q.Property(e => e.AccountType).HasColumnName("ACCOUNT_TYPE");
             q.Property(e => e.DateClosed).HasColumnName("DATE_CLOSED");
+            q.Property(e => e.OrgId).HasColumnName("ORG_ID");
+            q.Property(e => e.ContactId).HasColumnName("CONTACT_ID");
+            q.HasOne(a => a.ContactDetails).WithMany(c => c.SalesAccounts).HasForeignKey(a => a.ContactId);
         }
 
         private void QueryStockQuantitIesForMrView(ModelBuilder builder)
@@ -1463,18 +1486,27 @@
 
         private void QueryConsignments(ModelBuilder builder)
         {
-            var q = builder.Query<Consignment>().ToView("CONSIGNMENTS");
+            var q = builder.Entity<Consignment>().ToTable("CONSIGNMENTS");
+            q.HasKey(c => c.ConsignmentId);
             q.Property(c => c.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
             q.Property(c => c.AddressId).HasColumnName("ADDRESS_ID");
             q.Property(c => c.SalesAccountId).HasColumnName("SALES_ACCOUNT_ID");
+            q.Property(c => c.DateClosed).HasColumnName("DATE_CLOSED");
+            q.Property(c => c.CustomerName).HasColumnName("CUSTOMER_NAME");
+            q.HasOne(c => c.SalesAccount).WithMany(a => a.Consignments).HasForeignKey(c => c.SalesAccountId);
             q.HasOne(c => c.Address).WithMany(a => a.Consignments).HasForeignKey(o => o.AddressId);
+            q.Property(c => c.Carrier).HasColumnName("CARRIER");
         }
 
         private void QuerySalesOrders(ModelBuilder builder)
         {
-            var q = builder.Query<SalesOrder>().ToView("SALES_ORDERS");
+            var q = builder.Entity<SalesOrder>().ToTable("SALES_ORDERS");
+            q.HasKey(o => o.OrderNumber);
             q.Property(o => o.OrderNumber).HasColumnName("ORDER_NUMBER");
             q.Property(o => o.CurrencyCode).HasColumnName("CURRENCY_CODE");
+            q.Property(o => o.OutletNumber).HasColumnName("OUTLET_NUMBER");
+            q.Property(o => o.AccountId).HasColumnName("ACCOUNT_ID");
+            q.HasOne(o => o.Account).WithMany(a => a.SalesOrders).HasForeignKey(o => o.AccountId);
         }
 
         private void QuerySalesOrderDetails(ModelBuilder builder)
@@ -1582,6 +1614,61 @@
             q.Property(t => t.Category).HasColumnName("CATEGORY");
             q.Property(t => t.TotalStoresValue).HasColumnName("TOTAL_STORES_VALUE");
             q.Property(t => t.TotalSalesValue).HasColumnName("TOTAL_SALES_VALUE");
+        }
+
+        private void QueryConsignmentShipFiles(ModelBuilder builder)
+        {
+            var q = builder.Entity<ConsignmentShipfile>().ToTable("CONSIGNMENT_SHIPFILES");
+            q.Property(f => f.Id).HasColumnName("CONSH_ID");
+            q.HasKey(f => f.Id);
+            q.Property(f => f.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            q.Property(f => f.Message).HasColumnName("MESSAGE");
+            q.Property(f => f.ShipfileSent).HasColumnName("SHIPFILE_SENT").HasMaxLength(1);
+            q.HasOne(f => f.Consignment).WithOne(c => c.Shipfile).HasForeignKey<ConsignmentShipfile>(s => s.ConsignmentId);
+        }
+
+        private void QueryInvoices(ModelBuilder builder)
+        {
+            var q = builder.Entity<Invoice>().ToTable("INVOICES");
+            q.HasKey(i => i.DocumentNumber);
+            q.Property(i => i.DocumentType).HasColumnName("DOCUMENT_TYPE");
+            q.Property(i => i.DocumentNumber).HasColumnName("DOCUMENT_NUMBER");
+            q.Property(i => i.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            q.HasOne(i => i.Consignment).WithMany(c => c.Invoices).HasForeignKey(i => i.ConsignmentId);
+        }
+
+        private void BuildConsignmentItems(ModelBuilder builder)
+        {   
+            var entity = builder.Entity<ConsignmentItem>().ToTable("CONSIGNMENT_ITEMS");
+            entity.ToTable("CONSIGNMENT_ITEMS");
+            entity.HasKey(i => new { i.ItemNumber, i.ConsignmentId });
+            entity.Property(i => i.ItemNumber).HasColumnName("ITEM_NO");
+            entity.Property(i => i.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            entity.Property(i => i.OrderNumber).HasColumnName("ORDER_NUMBER");
+            entity.HasOne(i => i.SalesOrder).WithMany(o => o.ConsignmentItems).HasForeignKey(i => i.OrderNumber);
+            entity.HasOne(i => i.Consignment).WithMany(c => c.Items).HasForeignKey(i => i.ConsignmentId);
+        }
+
+        private void BuildContacts(ModelBuilder builder)
+        {
+            var entity = builder.Entity<Contact>().ToTable("CONTACTS");
+            entity.HasKey(c => c.Id);
+            entity.Property(c => c.Id).HasColumnName("CONTACT_ID");
+            entity.Property(c => c.OrgId).HasColumnName("ORG_ID");
+            entity.Property(c => c.EmailAddress).HasColumnName("EMAIL_ADDRESS");
+            entity.Property(c => c.AddressId).HasColumnName("ADDRESS_ID");
+            entity.Property(c => c.PersonId).HasColumnName("PERSON_ID");
+            entity.HasMany(c => c.SalesOutlets).WithOne(o => o.OrderContact).HasForeignKey(o => o.OrderContactId);
+            entity.HasOne(c => c.Person).WithMany(p => p.ContactDetails).HasForeignKey(c => c.PersonId);
+        }
+
+        private void BuildPersons(ModelBuilder builder)
+        {
+            var entity = builder.Entity<Person>().ToTable("PERSONS");
+            entity.HasKey(p => p.PersonId);
+            entity.Property(p => p.PersonId).HasColumnName("PERSON_ID");
+            entity.Property(p => p.FirstName).HasColumnName("FIRST_NAME");
+            entity.Property(p => p.LastName).HasColumnName("LAST_NAME");
         }
 
         private void BuildAddresses(ModelBuilder builder)

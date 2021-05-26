@@ -132,7 +132,7 @@
                 var cmd =
                     new OracleCommand(
                         "stores_oo.STORES_ERR_MESSAGE",
-                        connection) // TODO - Move function to stores_pack
+                        connection)
                         {
                             CommandType = CommandType.StoredProcedure
                         };

@@ -67,6 +67,8 @@ prod-update.sh
 
 src/Service.Host/client/build/
 
+src/Service.Host/.local-chromium*
+
 config.env
 local-update.sh
 

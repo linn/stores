@@ -173,6 +173,9 @@
                 .As<IResourceBuilder<IEnumerable<InterCompanyInvoice>>>();
             builder.RegisterType<TqmsMasterResourceBuilder>().As<IResourceBuilder<TqmsMaster>>();
             builder.RegisterType<TqmsJobRefsResourceBuilder>().As<IResourceBuilder<IEnumerable<TqmsJobRef>>>();
+            builder.RegisterType<ConsignmentShipfileResourceBuilder>().As<IResourceBuilder<ConsignmentShipfile>>();
+            builder.RegisterType<ConsignmentShipfilesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<ConsignmentShipfile>>>();
         }
     }
 }

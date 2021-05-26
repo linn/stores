@@ -3,6 +3,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AssemblyName>Linn.Stores.Service.Host</AssemblyName>
     <RootNamespace>Linn.Stores.Service.Host</RootNamespace>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="client\assets\" />

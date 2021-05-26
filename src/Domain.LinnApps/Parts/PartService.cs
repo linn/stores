@@ -30,7 +30,7 @@
 
         private readonly IRepository<StockLocator, int> stockLocatorRepository;
 
-        private IRepository<PartDataSheet, PartDataSheetKey> dataSheetRepository;
+        private readonly IRepository<PartDataSheet, PartDataSheetKey> dataSheetRepository;
 
         public PartService(
             IAuthorisationService authService,

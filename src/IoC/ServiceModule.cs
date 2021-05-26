@@ -54,6 +54,10 @@
             builder.RegisterType<TpkService>().As<ITpkService>();
             builder.RegisterType<MoveStockService>().As<IMoveStockService>();
             builder.RegisterType<TqmsReportsService>().As<ITqmsReportsService>();
+            builder.RegisterType<ConsignmentShipfileService>().As<IConsignmentShipfileService>();
+            builder.RegisterType<EmailService>().As<IEmailService>();
+            builder.RegisterType<PdfService>().As<IPdfService>();
+            builder.RegisterType<TemplateEngine>().As<ITemplateEngine>();
             builder.RegisterType<ImportBookService>().As<IImportBookService>();
 
 
@@ -132,6 +136,7 @@
             builder.RegisterType<TqmsReportsFacadeService>().As<ITqmsReportsFacadeService>();
             builder.RegisterType<TqmsMasterFacadeService>().As<ISingleRecordFacadeService<TqmsMaster, TqmsMasterResource>>();
             builder.RegisterType<TqmsJobrefsFacadeService>().As<IFacadeService<TqmsJobRef, string, TqmsJobRefResource, TqmsJobRefResource>>();
+            builder.RegisterType<ConsignmentShipfileFacadeService>().As<IConsignmentShipfileFacadeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
@@ -150,6 +155,8 @@
             builder.RegisterType<ExportReturnsPack>().As<IExportReturnsPack>();
             builder.RegisterType<StockLocatorLocationsViewService>().As<IStockLocatorLocationsViewService>();
             builder.RegisterType<KardexPack>().As<IKardexPack>();
+            builder.RegisterType<ConsignmentShipfileDataProxy>()
+                .As<IConsignmentShipfileDataService>();
             builder.RegisterType<BartenderLabelPack>().As<IBartenderLabelPack>();
 
             // rest client proxies

@@ -41,6 +41,7 @@ import StockLocatorBatchView from '../containers/stockLocatorUtility/StockLocato
 import StockLocatorPricesView from '../containers/stockLocatorUtility/StockLocatorPricesView';
 import TqmsSummaryByCategoryReportOptions from '../containers/reports/TqmsSummaryByCategoryReportOptions';
 import TqmsSummaryByCategoryReport from '../containers/reports/TqmsSummaryByCategoryReport';
+import ConsignmentShipfiles from '../containers/ConsignmentShipfiles';
 
 const Root = ({ store }) => (
     <div>
@@ -220,6 +221,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/tqms-category-summary"
                                         component={TqmsSummaryByCategoryReportOptions}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/shipfiles"
+                                        component={ConsignmentShipfiles}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>

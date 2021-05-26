@@ -5,20 +5,16 @@
     using FluentAssertions;
 
     using Linn.Stores.Domain.LinnApps.Exceptions;
-    using Linn.Stores.Domain.LinnApps.StockMove.Models;
 
     using NUnit.Framework;
 
     public class WhenMovingStockFromInvalidLocation : ContextBase
     {
-        private RequisitionProcessResult storesPackResult;
-
         private Action action;
 
         [SetUp]
         public void SetUp()
         {
-            this.storesPackResult = new RequisitionProcessResult { Success = false };
             this.From = "XYZ-NO-LOC";
             this.To = "P2000";
 
