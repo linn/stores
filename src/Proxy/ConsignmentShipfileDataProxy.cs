@@ -100,7 +100,7 @@
             for (var i = 0; i < rows.Count; i++)
             {
                 var data = rows[i].ItemArray;
-                int.TryParse(data[4].ToString(), out var box);
+                int.TryParse(data[2].ToString(), out var box);
                 result.Add(new PackingListItem
                                {
                                    Pallet = data[1].ToString(),
