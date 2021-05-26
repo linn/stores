@@ -3,7 +3,6 @@
     using System;
     using System.Linq;
     using System.Linq.Expressions;
-
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Parts;
 
@@ -39,7 +38,6 @@
         public AssemblyTechnology FindBy(Expression<Func<AssemblyTechnology, bool>> expression)
         {
             return this.serviceDbContext.AssemblyTechnologies.Where(expression).ToList().FirstOrDefault();
-
         }
 
         public IQueryable<AssemblyTechnology> FilterBy(Expression<Func<AssemblyTechnology, bool>> expression)

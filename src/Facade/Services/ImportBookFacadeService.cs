@@ -138,7 +138,6 @@
 
             newImportBook.OrderDetails = orderDetails;
 
-
             var postEntries = new List<ImportBookPostEntry>();
             foreach (var entry in updateResource.ImportBookPostEntries)
             {

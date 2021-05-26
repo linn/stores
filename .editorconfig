@@ -1,0 +1,5 @@
+
+[*]
+
+# ReSharper properties
+resharper_csharp_insert_final_newline=true

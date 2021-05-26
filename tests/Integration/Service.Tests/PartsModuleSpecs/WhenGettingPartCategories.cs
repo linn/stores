@@ -33,7 +33,6 @@
             this.PartCategoriesService.GetCategories()
                 .Returns(new SuccessResult<IEnumerable<PartCategory>>(new List<PartCategory> { catA, catB }));
 
-
             this.Response = this.Browser.Get(
                 "/inventory/part-categories",
                 with =>

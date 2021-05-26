@@ -9,7 +9,7 @@
 
     using NUnit.Framework;
 
-    public class WhenMovingStockFromInvalidLocation: ContextBase
+    public class WhenMovingStockFromInvalidLocation : ContextBase
     {
         private RequisitionProcessResult storesPackResult;
 

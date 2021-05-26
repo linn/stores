@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
     using System.Collections.Generic;
-
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
@@ -26,6 +25,5 @@
             return new SuccessResult<IEnumerable<ExportRsn>>(
                 this.repository.FilterBy(rsn => rsn.AccountId == accountId));
         }
-
     }
 }

@@ -41,7 +41,7 @@
         public void SetUp()
         {
             this.AuthService
-                .HasPermissionFor(AuthorisedAction.CreateStockLocator , Arg.Any<IEnumerable<string>>())
+                .HasPermissionFor(AuthorisedAction.CreateStockLocator, Arg.Any<IEnumerable<string>>())
                 .Returns(true);
             this.StoresPalletRepository.FilterBy(Arg.Any<Expression<Func<StoresPallet, bool>>>())
                 .Returns(this.pallets.AsQueryable());

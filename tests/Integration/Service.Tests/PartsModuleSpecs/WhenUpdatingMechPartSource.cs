@@ -17,7 +17,7 @@
 
     using NUnit.Framework;
 
-    public class WhenUpdatingMechMechPartSource: ContextBase
+    public class WhenUpdatingMechMechPartSource : ContextBase
     {
         private MechPartSourceResource requestResource;
 

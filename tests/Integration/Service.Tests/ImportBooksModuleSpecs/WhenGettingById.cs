@@ -1,12 +1,16 @@
 ﻿namespace Linn.Stores.Service.Tests.ImportBooksModuleSpecs
 {
     using FluentAssertions;
+
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Resources.Parts;
+
     using Nancy;
     using Nancy.Testing;
+
     using NSubstitute;
+
     using NUnit.Framework;
 
     public class WhenGettingById : ContextBase
@@ -15,7 +19,7 @@
         public void SetUp()
         {
             var importBook = new ImportBook { Id = 123 };
-            this.importBooksFacadeService.GetById(123).Returns(new SuccessResult<ImportBook>(importBook));
+            this.ImportBooksFacadeService.GetById(123).Returns(new SuccessResult<ImportBook>(importBook));
 
             this.Response = this.Browser.Get(
                 "/logistics/import-books/123",
@@ -31,7 +35,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.importBooksFacadeService.Received().GetById(123);
+            this.ImportBooksFacadeService.Received().GetById(123);
         }
 
         [Test]

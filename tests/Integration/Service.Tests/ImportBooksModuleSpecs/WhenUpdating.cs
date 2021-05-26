@@ -3,12 +3,16 @@
     using System;
 
     using FluentAssertions;
+
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Resources.Parts;
+
     using Nancy;
     using Nancy.Testing;
+
     using NSubstitute;
+
     using NUnit.Framework;
 
     public class WhenUpdating : ContextBase
@@ -25,26 +29,26 @@
                                          SupplierId = 2,
                                          DateCreated = new DateTime().ToString("o"),
                                          CarrierId = 4,
-                                         Weight = (decimal)00.70,
+                                         Weight = 00.70m,
                                          Comments = "Rsn 1234 raised as BRG, but Customs charged duty incorrectly."
                                      };
 
-            this.importBooksFacadeService.Update(Arg.Any<int>(), Arg.Any<ImportBookResource>())
+            this.ImportBooksFacadeService.Update(Arg.Any<int>(), Arg.Any<ImportBookResource>())
                 .Returns(new SuccessResult<ImportBook>(importBook));
-            
+
             this.Response = this.Browser.Put(
                 "/logistics/import-books/123",
                 with =>
-                    {
-                        with.Header("Accept", "application/json");
-                        with.JsonBody(importBookResource);
-                    }).Result;
+                {
+                    with.Header("Accept", "application/json");
+                    with.JsonBody(importBookResource);
+                }).Result;
         }
 
         [Test]
         public void ShouldCallService()
         {
-            this.importBooksFacadeService.Received().Update(Arg.Any<int>(), Arg.Any<ImportBookResource>());
+            this.ImportBooksFacadeService.Received().Update(Arg.Any<int>(), Arg.Any<ImportBookResource>());
         }
 
         [Test]

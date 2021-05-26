@@ -22,7 +22,6 @@
 
         protected IQueryRepository<RootProduct> RootProductRepository { get; private set; }
 
-
         [SetUp]
         public void EstablishContext()
         {

@@ -38,7 +38,7 @@
                 .Returns(true);
             this.StoresPalletRepository.FilterBy(Arg.Any<Expression<Func<StoresPallet, bool>>>())
                 .Returns(Enumerable.Empty<StoresPallet>().AsQueryable());
-            this.Sut.UpdateStockLocator(this.from, this.to,this.privileges);
+            this.Sut.UpdateStockLocator(this.from, this.to, this.privileges);
         }
 
         [Test]

@@ -6,7 +6,6 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
 
-
     public class ImportBookPostEntryRepository : IRepository<ImportBookPostEntry, ImportBookPostEntryKey>
     {
         private readonly ServiceDbContext serviceDbContext;

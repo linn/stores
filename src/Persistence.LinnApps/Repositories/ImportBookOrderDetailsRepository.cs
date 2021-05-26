@@ -6,7 +6,6 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
 
-
     public class ImportBookOrderDetailsRepository : IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey>
     {
         private readonly ServiceDbContext serviceDbContext;

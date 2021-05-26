@@ -5,9 +5,7 @@
 
     public class ImportBookService : IImportBookService
     {
-        public void Update(
-            ImportBook from,
-            ImportBook to)
+        public void Update(ImportBook from, ImportBook to)
         {
             this.UpdateTopLevelProperties(from, to);
 
@@ -86,10 +84,7 @@
 
             foreach (var newdetail in to)
             {
-
-                var currentDetail = from.Any()
-                                        ? from.FirstOrDefault(x => x.LineNumber == newdetail.LineNumber)
-                                        : null;
+                var currentDetail = from.Any() ? from.FirstOrDefault(x => x.LineNumber == newdetail.LineNumber) : null;
 
                 if (currentDetail == null)
                 {
@@ -112,10 +107,7 @@
 
             foreach (var newdetail in to)
             {
-
-                var currentDetail = from.Any()
-                                        ? from.FirstOrDefault(x => x.LineNumber == newdetail.LineNumber)
-                                        : null;
+                var currentDetail = from.Any() ? from.FirstOrDefault(x => x.LineNumber == newdetail.LineNumber) : null;
 
                 if (currentDetail == null)
                 {
@@ -151,10 +143,7 @@
 
             foreach (var newEntry in to)
             {
-
-                var currentEntry = from.Any()
-                                       ? from.FirstOrDefault(x => x.LineNumber == newEntry.LineNumber)
-                                       : null;
+                var currentEntry = from.Any() ? from.FirstOrDefault(x => x.LineNumber == newEntry.LineNumber) : null;
 
                 if (currentEntry == null)
                 {

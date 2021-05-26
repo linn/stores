@@ -34,7 +34,6 @@
                 .Returns(new SuccessResult<IEnumerable<DecrementRule>>(
                     new List<DecrementRule> { a, b }));
 
-
             this.Response = this.Browser.Get(
                 "/inventory/decrement-rules",
                 with =>

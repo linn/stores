@@ -35,7 +35,6 @@
             this.ManufacturerService.Search("MAN")
                 .Returns(new SuccessResult<IEnumerable<Manufacturer>>(new List<Manufacturer> { manB, manA }));
 
-
             this.Response = this.Browser.Get(
                 "/inventory/manufacturers",
                 with =>

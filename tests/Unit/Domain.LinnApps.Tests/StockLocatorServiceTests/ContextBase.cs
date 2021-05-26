@@ -29,7 +29,6 @@
 
         protected IQueryRepository<StockLocatorBatch> StockLocatorBatchesView { get; private set; }
 
-
         protected IRepository<Part, int> PartRepository { get; private set; }
 
         protected IStockLocatorService Sut { get; private set; }
@@ -58,7 +57,7 @@
             this.ReqMoveRepository = Substitute.For<IQueryRepository<ReqMove>>();
             this.ReqMoveRepository.FindBy(Arg.Any<Expression<Func<ReqMove, bool>>>()).ReturnsNull();
             this.Sut = new StockLocatorService(
-                this.StockLocatorRepository, 
+                this.StockLocatorRepository,
                 this.StoresPalletRepository,
                 this.StoragePlaceRepository,
                 this.StorageLocationRepository,

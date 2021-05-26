@@ -6,7 +6,6 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
 
-
     public class ImportBookTransactionCodeRepository : IRepository<ImportBookTransactionCode, int>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -41,7 +40,8 @@
             throw new NotImplementedException();
         }
 
-        public IQueryable<ImportBookTransactionCode> FilterBy(Expression<Func<ImportBookTransactionCode, bool>> expression)
+        public IQueryable<ImportBookTransactionCode> FilterBy(
+            Expression<Func<ImportBookTransactionCode, bool>> expression)
         {
             throw new NotImplementedException();
         }

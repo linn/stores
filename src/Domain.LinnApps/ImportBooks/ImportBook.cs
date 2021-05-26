@@ -122,6 +122,5 @@
         public IList<ImportBookOrderDetail> OrderDetails { get; set; }
 
         public IList<ImportBookPostEntry> PostEntries { get; set; }
-
     }
 }

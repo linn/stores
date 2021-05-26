@@ -6,7 +6,6 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
 
-
     public class ImportBookRepository : IRepository<ImportBook, int>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -43,9 +42,7 @@
 
         public IQueryable<ImportBook> FilterBy(Expression<Func<ImportBook, bool>> expression)
         {
-            return this.serviceDbContext
-                .ImportBooks
-                .Where(expression);
+            return this.serviceDbContext.ImportBooks.Where(expression);
         }
     }
 }

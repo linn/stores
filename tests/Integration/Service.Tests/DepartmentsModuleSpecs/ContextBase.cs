@@ -24,7 +24,6 @@
 
         protected IQueryRepository<Department> DepartmentRepository { get; private set; }
 
-
         [SetUp]
         public void EstablishContext()
         {

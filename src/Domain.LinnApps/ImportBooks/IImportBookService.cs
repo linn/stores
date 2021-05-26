@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Linn.Stores.Domain.LinnApps.ImportBooks
+﻿namespace Linn.Stores.Domain.LinnApps.ImportBooks
 {
     public interface IImportBookService
     {
