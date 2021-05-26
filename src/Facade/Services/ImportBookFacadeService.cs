@@ -31,7 +31,6 @@
         {
             var newImportBook = new ImportBook
                                     {
-                                        DateCreated = DateTime.Parse(updateResource.DateCreated),
                                         ParcelNumber = updateResource.ParcelNumber,
                                         SupplierId = updateResource.SupplierId,
                                         ForeignCurrency = updateResource.ForeignCurrency,

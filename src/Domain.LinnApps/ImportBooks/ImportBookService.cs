@@ -18,7 +18,6 @@
 
         private void UpdateTopLevelProperties(ImportBook entity, ImportBook to)
         {
-            entity.DateCreated = to.DateCreated;
             entity.ParcelNumber = to.ParcelNumber;
             entity.SupplierId = to.SupplierId;
             entity.ForeignCurrency = to.ForeignCurrency;

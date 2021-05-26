@@ -156,7 +156,8 @@
         {
             this.impbook.Id.Equals(this.impbookId).Should().Be(true);
             this.impbook.ParcelNumber.Equals(this.newImpBook.ParcelNumber).Should().Be(true);
-            this.impbook.DateCreated.Equals(this.newImpBook.DateCreated).Should().Be(true);
+            this.impbook.DateCreated.Equals(this.newImpBook.DateCreated).Should().Be(false);
+            this.impbook.DateCreated.Equals(this.impbook.DateCreated).Should().Be(true);
             this.impbook.SupplierId.Equals(this.newImpBook.SupplierId).Should().Be(true);
             this.impbook.ForeignCurrency.Equals(this.newImpBook.ForeignCurrency).Should().Be(true);
             this.impbook.Currency.Equals(this.newImpBook.Currency).Should().Be(true);
