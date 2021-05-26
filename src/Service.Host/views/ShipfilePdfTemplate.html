@@ -29,6 +29,20 @@
             padding-bottom: 20px;
             font-size: 12px;
             font-weight: bold;
+            page-break-inside: auto;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto
+        }
+
+        thead {
+            display: table-header-group
+        }
+
+        tfoot {
+            display: table-footer-group
         }
 
         td,
