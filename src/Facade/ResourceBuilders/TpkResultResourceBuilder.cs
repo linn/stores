@@ -50,7 +50,8 @@
                                                                         {
                                                                             AddressId = tpkResult.Report.Consignment.AddressId,
                                                                             ConsignmentId = tpkResult.Report.Consignment.ConsignmentId,
-                                                                            Country = tpkResult.Report.Consignment.Country?.DisplayName,
+                                                                            CountryCode = tpkResult.Report.Consignment.Address?.Country?.CountryCode,
+                                                                            Country = tpkResult.Report.Consignment.Address?.Country?.DisplayName,
                                                                             SalesAccountId = tpkResult.Report.Consignment.SalesAccountId,
                                                                             TotalNettValue = tpkResult.Report.TotalNettValueOfConsignment,
                                                                             CurrencyCode = tpkResult.Report.CurrencyCode

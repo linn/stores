@@ -24,7 +24,7 @@
 
         private readonly IQueryRepository<SalesAccount> salesAccountQueryRepository;
 
-        private readonly IQueryRepository<Consignment> consignmentRepository;
+        private readonly IRepository<Consignment, int> consignmentRepository;
 
         private readonly IQueryRepository<SalesOrderDetail> salesOrderDetailRepository;
 
@@ -38,7 +38,7 @@
             IWhatToWandService whatToWandService,
             IQueryRepository<SalesAccount> salesAccountQueryRepository,
             IStoresPack storesPack,
-            IQueryRepository<Consignment> consignmentRepository,
+            IRepository<Consignment, int> consignmentRepository,
             IQueryRepository<SalesOrderDetail> salesOrderDetailRepository,
             IQueryRepository<SalesOrder> salesOrderRepository)
         {
@@ -65,7 +65,7 @@
             
             var recordsToTpk = this.tpkView.FilterBy(r => r.FromLocation == from.FromLocation).Count();
             
-            if (recordsToTpk != candidates.Count())
+            if (recordsToTpk != candidates.Count)
             {
                 throw new TpkException("You haven't looked at everything from location " + from.FromLocation);
             }
@@ -100,7 +100,7 @@
                 throw new TpkException(this.storesPack.GetErrorMessage());
             }
 
-            var consignment = this.consignmentRepository.FindBy(c => c.ConsignmentId == from.ConsignmentId);
+            var consignment = this.consignmentRepository.FindById(from.ConsignmentId);
             return new TpkResult 
                        {
                            Success = true,

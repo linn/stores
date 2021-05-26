@@ -9,7 +9,7 @@
 
     using NUnit.Framework;
 
-    public class WhenWandingItem : ContextBase
+    public class WhenUnWandingItem : ContextBase
     {
         private int consignmentId;
 
@@ -27,18 +27,39 @@
 
         private WandLog wandLog;
 
+        private Consignment consignment;
+
         private bool printLabels;
 
         [SetUp]
         public void SetUp()
         {
-            this.wandAction = "W";
+            this.wandAction = "U";
             this.printLabels = true;
             this.consignmentId = 134;
             this.wandString = "flajdlfjd1312";
             this.userNumber = 35345;
             this.wandLogId = 123;
-            this.wandLog = new WandLog { Id = this.wandLogId, ArticleNumber = "a" };
+            this.wandLog = new WandLog
+                               {
+                                   Id = this.wandLogId,
+                                   ArticleNumber = "a",
+                                   ConsignmentId = this.consignmentId,
+                                   ContainerNo = 1,
+                                   TransType = "U"
+                               };
+            this.consignment = new Consignment
+                                   {
+                                       ConsignmentId = this.consignmentId,
+                                       Address = new Address
+                                                     {
+                                                         Line1 = "this",
+                                                         Line2 = "address",
+                                                         PostCode = "d",
+                                                         CountryCode = "FR",
+                                                         Country = new Country { CountryCode = "FR", DisplayName = "France" }
+                                                     }
+                                   };
             this.WandLogRepository.FindById(this.wandLogId).Returns(this.wandLog);
             this.wandPackResult = new WandPackResult { Message = "ok", Success = true, WandLogId = this.wandLogId };
             this.WandPack.Wand(this.wandAction, this.userNumber, this.consignmentId, this.wandString)
@@ -65,13 +86,28 @@
         }
 
         [Test]
+        public void ShouldNotGetConsignment()
+        {
+            this.ConsignmentRepository.DidNotReceive().FindById(Arg.Any<int>());
+        }
+
+        [Test]
+        public void ShouldNotPrintLabel()
+        {
+            this.BartenderLabelPack.DidNotReceive().PrintLabels(
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<int>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                ref Arg.Any<string>());
+        }
+
+        [Test]
         public void ShouldReturnResult()
         {
             this.result.Message.Should().Be(this.wandPackResult.Message);
             this.result.Success.Should().BeTrue();
-            this.result.ConsignmentId.Should().Be(this.consignmentId);
-            this.result.WandString.Should().Be(this.wandString);
-            this.result.WandLog.Id.Should().Be(this.wandLogId);
         }
     }
 }

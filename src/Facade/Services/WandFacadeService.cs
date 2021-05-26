@@ -52,7 +52,8 @@
                     resource.WandAction,
                     resource.WandString,
                     resource.ConsignmentId,
-                    resource.UserNumber);
+                    resource.UserNumber,
+                    resource.PrintLabels != "N");
                 return new SuccessResult<WandResult>(result);
             }
             catch (Exception ex)

@@ -25,6 +25,7 @@
                 CheckedById = 33067,
                 ConsignmentNo = "numma 1"
             };
+
             this.DatabaseService.GetNextVal("PARCEL_SEQ").Returns(12798);
             this.result = this.Sut.Add(this.resource);
         }

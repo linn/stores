@@ -56,8 +56,8 @@
                                   Comments = "sent"
                               }
                           };
-            
-            this.ParcelsFacadeService.Search(Arg.Any<ParcelSearchRequestResource>())
+
+            this.ParcelsFacadeService.FilterBy(Arg.Any<ParcelSearchRequestResource>())
                 .Returns(new SuccessResult<IEnumerable<Parcel>>(parcels));
 
             this.Response = this.Browser.Get(
@@ -78,13 +78,13 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ParcelsFacadeService.Received().Search(Arg.Any<ParcelSearchRequestResource>());
+            this.ParcelsFacadeService.Received().FilterBy(Arg.Any<ParcelSearchRequestResource>());
         }
 
         [Test]
         public void ShouldReturnResources()
         {
-            var resources = this.Response.Body.DeserializeJson<IEnumerable<ParcelResource>>();
+            var resources = this.Response.Body.DeserializeJson<IEnumerable<ParcelResource>>().ToList();
             resources.Count(x => x.ParcelNumber == 21).Should().Be(1);
             resources.Count(x => x.ParcelNumber == 1).Should().Be(1);
             resources.Count().Should().Be(2);

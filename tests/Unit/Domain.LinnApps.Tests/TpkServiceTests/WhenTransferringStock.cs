@@ -24,7 +24,13 @@
         [SetUp]
         public void SetUp()
         {
-            var toTransfer = new List<TransferableStock> { new TransferableStock { FromLocation = "A", LocationId = 1, PalletNumber = 1 } };
+            var toTransfer = new List<TransferableStock>
+                                 {
+                                     new TransferableStock
+                                         {
+                                             FromLocation = "A", LocationId = 1, PalletNumber = 1, ConsignmentId = 1
+                                         }
+                                 };
                                      
             this.AccountingCompaniesRepository
                                          .FindBy(Arg.Any<Expression<Func<AccountingCompany, bool>>>()).Returns(

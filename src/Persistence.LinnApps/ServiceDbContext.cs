@@ -191,6 +191,10 @@
 
         public DbQuery<TqmsOutstandingLoansByCategory> TqmsOutstandingLoansByCategories { get; set; }
 
+        public DbSet<Address> Addresses { get; set; }
+
+        public DbSet<PrinterMapping> PrinterMappings { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -279,6 +283,8 @@
             this.BuildTqmsMaster(builder);
             this.BuildTqmsJobRefs(builder);
             this.QueryTqmsOutstandingLoansByCategories(builder);
+            this.BuildAddresses(builder);
+            this.BuildPrinterMappings(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1460,9 +1466,8 @@
             var q = builder.Query<Consignment>().ToView("CONSIGNMENTS");
             q.Property(c => c.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
             q.Property(c => c.AddressId).HasColumnName("ADDRESS_ID");
-            q.Property(c => c.CountryCode).HasColumnName("COUNTRY");
             q.Property(c => c.SalesAccountId).HasColumnName("SALES_ACCOUNT_ID");
-            q.HasOne(c => c.Country).WithMany(y => y.Consignments).HasForeignKey(c => c.CountryCode);
+            q.HasOne(c => c.Address).WithMany(a => a.Consignments).HasForeignKey(o => o.AddressId);
         }
 
         private void QuerySalesOrders(ModelBuilder builder)
@@ -1577,6 +1582,35 @@
             q.Property(t => t.Category).HasColumnName("CATEGORY");
             q.Property(t => t.TotalStoresValue).HasColumnName("TOTAL_STORES_VALUE");
             q.Property(t => t.TotalSalesValue).HasColumnName("TOTAL_SALES_VALUE");
+        }
+
+        private void BuildAddresses(ModelBuilder builder)
+        {
+            var q = builder.Entity<Address>();
+            q.ToTable("ADDRESSES");
+            q.Property(b => b.Id).HasColumnName("ADDRESS_ID").HasMaxLength(38);
+            q.Property(b => b.Addressee).HasColumnName("ADDRESSEE").HasMaxLength(40);
+            q.Property(b => b.Addressee2).HasColumnName("ADDRESSEE_2").HasMaxLength(40);
+            q.Property(b => b.Line1).HasColumnName("ADDRESS_1").HasMaxLength(40);
+            q.Property(b => b.Line2).HasColumnName("ADDRESS_2").HasMaxLength(40);
+            q.Property(b => b.Line3).HasColumnName("ADDRESS_3").HasMaxLength(40);
+            q.Property(b => b.Line4).HasColumnName("ADDRESS_4").HasMaxLength(40);
+            q.Property(b => b.PostCode).HasColumnName("POSTAL_CODE").HasMaxLength(20);
+            q.Property(b => b.DateInvalid).HasColumnName("DATE_INVALID");
+            q.Property(b => b.CountryCode).HasColumnName("COUNTRY").HasMaxLength(2);
+            q.HasOne(b => b.Country).WithMany(c => c.Addresses).HasForeignKey(f => f.CountryCode);
+        }
+
+        private void BuildPrinterMappings(ModelBuilder builder)
+        {
+            var e = builder.Entity<PrinterMapping>().ToTable("PRINTER_MAPPINGS");
+            e.HasKey(a => a.Id);
+            e.Property(a => a.Id).HasColumnName("ID");
+            e.Property(a => a.PrinterName).HasColumnName("PRINTER_NAME").HasMaxLength(100);
+            e.Property(a => a.UserNumber).HasColumnName("USER_NUMBER");
+            e.Property(a => a.PrinterType).HasColumnName("PRINTER_TYPE").HasMaxLength(50);
+            e.Property(a => a.PrinterGroup).HasColumnName("PRINTER_GROUP").HasMaxLength(50);
+            e.Property(a => a.DefaultForGroup).HasColumnName("DEFAULT_FOR_GROUP").HasMaxLength(50);
         }
     }
 }

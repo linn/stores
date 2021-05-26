@@ -8,8 +8,6 @@
 
         public int? AddressId { get; set; }
 
-        public Country Country { get; set; } 
-
-        public string CountryCode { get; set; }
+        public Address Address { get; set; }
     }
 }

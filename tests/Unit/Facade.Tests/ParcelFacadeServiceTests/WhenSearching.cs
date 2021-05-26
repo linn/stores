@@ -58,7 +58,7 @@
 
             this.ParcelRepository.FilterBy(Arg.Any<Expression<Func<Parcel, bool>>>()).Returns(parcels);
 
-            this.results = this.Sut.Search(new ParcelSearchRequestResource { SupplierInvNoSearchTerm = "potato" });
+            this.results = this.Sut.FilterBy(new ParcelSearchRequestResource { SupplierInvNoSearchTerm = "potato" });
         }
 
         [Test]
@@ -71,10 +71,10 @@
         public void ShouldReturnSuccess()
         {
             this.results.Should().BeOfType<SuccessResult<IEnumerable<Parcel>>>();
-            var dataResult = ((SuccessResult<IEnumerable<Parcel>>)this.results).Data;
+            var dataResult = ((SuccessResult<IEnumerable<Parcel>>)this.results).Data.ToList();
             dataResult.FirstOrDefault(x => x.ParcelNumber == 46287).Should().NotBeNull();
             dataResult.FirstOrDefault(x => x.ParcelNumber == 2).Should().NotBeNull();
-            dataResult.Count().Should().Be(2);
+            dataResult.Count.Should().Be(2);
         }
     }
 }

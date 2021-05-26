@@ -57,8 +57,8 @@
                               }
                           };
 
-            this.ParcelsFacadeService.Search(Arg.Any<ParcelSearchRequestResource>())
-                .Returns(new SuccessResult<IEnumerable<Parcel>>(parcels));
+            this.ParcelsFacadeService.FilterBy(Arg.Any<ParcelSearchRequestResource>())
+             .Returns(new SuccessResult<IEnumerable<Parcel>>(parcels));
 
             this.Response = this.Browser.Get(
                 "/logistics/parcels",
@@ -80,7 +80,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ParcelsFacadeService.Received().Search(Arg.Any<ParcelSearchRequestResource>());
+            this.ParcelsFacadeService.Received().FilterBy(Arg.Any<ParcelSearchRequestResource>());
         }
 
         [Test]
