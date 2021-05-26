@@ -51,11 +51,11 @@
 
             this.ConsignmentRepository.FindById(Arg.Any<int>()).Returns(consignment);
 
-            this.DataService.BuildPdfModel(Arg.Any<int>(), Arg.Any<int>()).Returns(
+            this.DataService.GetPdfModelData(Arg.Any<int>(), Arg.Any<int>()).Returns(
                 new ConsignmentShipfilePdfModel
                     {
                         ConsignmentNumber = "1",
-                        PackingList = new PackingListItem[] { new PackingListItem() }, 
+                        PackingList = new PackingListItem[] { new PackingListItem { Box = "1" } }, 
                         DespatchNotes = new DespatchNote[] { new DespatchNote() },
                         DateDispatched = "12/05/2008 09:34:58"
                 });

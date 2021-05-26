@@ -16,7 +16,7 @@
             this.databaseService = databaseService;
         }
 
-        public ConsignmentShipfilePdfModel BuildPdfModel(int consignmentId, int addressId)
+        public ConsignmentShipfilePdfModel GetPdfModelData(int consignmentId, int addressId)
         {
             var sql = $@"
             select CONS.CONSIGNMENT_ID CONSIGNMENT_ID,
@@ -96,20 +96,17 @@
 
             var rows = this.databaseService.ExecuteQuery(sql).Tables[0].Rows;
             var result = new List<PackingListItem>();
-            var to = 0;
+           
             for (var i = 0; i < rows.Count; i++)
             {
                 var data = rows[i].ItemArray;
 
-                to += int.Parse(data[4].ToString());
                 result.Add(new PackingListItem
                                {
                                    Pallet = data[1].ToString(),
                                    Box = data[2].ToString(),
-                                   ContentsDescription = data[3].ToString(),
-                                   Count = data[4].ToString(),
-                                   To = to.ToString()
-                });
+                                   ContentsDescription = data[3].ToString()
+                               });
             }
 
             return result;

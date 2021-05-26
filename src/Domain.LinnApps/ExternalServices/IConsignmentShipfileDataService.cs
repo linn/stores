@@ -4,6 +4,6 @@
 
     public interface IConsignmentShipfileDataService
     {
-        ConsignmentShipfilePdfModel BuildPdfModel(int consignmentId, int addressId);
+        ConsignmentShipfilePdfModel GetPdfModelData(int consignmentId, int addressId);
     }
 }

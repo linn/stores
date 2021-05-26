@@ -81,7 +81,7 @@
 
             this.SalesOrderRepository.FilterBy(Arg.Any<Expression<Func<SalesOrder, bool>>>()).Returns(orders.AsQueryable());
 
-            this.DataService.BuildPdfModel(Arg.Any<int>(), Arg.Any<int>()).Returns(
+            this.DataService.GetPdfModelData(Arg.Any<int>(), Arg.Any<int>()).Returns(
                 new ConsignmentShipfilePdfModel
                 {
                     PackingList = new PackingListItem[] { new PackingListItem() },

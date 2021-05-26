@@ -122,7 +122,10 @@
                 {
                     var contact = account.ContactDetails;
                 
-                    var pdfModel = this.dataService.BuildPdfModel(shipfile.ConsignmentId, (int)contact.AddressId);
+                    var pdfData = this.dataService.GetPdfModelData(shipfile.ConsignmentId, (int)contact.AddressId);
+
+                    var pdfModel = this.FormatPdfData(pdfData);
+
                     var body = this.BuildEmailBody(pdfModel);
 
                         toSend.Add(new ConsignmentShipfileEmailModel
@@ -170,12 +173,13 @@
                             }
 
                             // and send to account if possible
-                            var pdf = this.dataService.BuildPdfModel(shipfile.ConsignmentId, (int)account.ContactDetails.AddressId);
-                            var body = this.BuildEmailBody(pdf);
+                            var pdfData = this.dataService.GetPdfModelData(shipfile.ConsignmentId, (int)account.ContactDetails.AddressId);
+                            var pdfModel = this.FormatPdfData(pdfData);
+                            var body = this.BuildEmailBody(pdfModel);
 
                             toSend.Add(new ConsignmentShipfileEmailModel
                                            {
-                                               PdfAttachment = pdf,
+                                               PdfAttachment = pdfModel,
                                                ToCustomerName = account.ContactDetails.EmailAddress,
                                                ToEmailAddress = account.ContactDetails.EmailAddress,
                                                Body = body
@@ -193,11 +197,12 @@
                     // multiple outlets to email, email addresses all present and correct
                     toSend.AddRange(
                         (from salesOutlet in outlets
-                         let pdf = this.dataService.BuildPdfModel(shipfile.ConsignmentId, salesOutlet.OutletAddressId)
-                         let body = this.BuildEmailBody(pdf)
+                         let pdfData = this.dataService.GetPdfModelData(shipfile.ConsignmentId, salesOutlet.OutletAddressId)
+                         let pdfModel = this.FormatPdfData(pdfData)
+                         let body = this.BuildEmailBody(pdfModel)
                          select new ConsignmentShipfileEmailModel
                                     {
-                                        PdfAttachment = pdf,
+                                        PdfAttachment = pdfModel,
                                         ToEmailAddress = salesOutlet.OrderContact.EmailAddress,
                                         ToCustomerName = salesOutlet.OrderContact.EmailAddress,
                                         Body = body
@@ -251,6 +256,24 @@
             }
 
             return consignment.Carrier != "TNT" ? "R" : "E";
+        }
+
+        private ConsignmentShipfilePdfModel FormatPdfData(ConsignmentShipfilePdfModel toFormat)
+        {
+            var formattedPackingList = new List<PackingListItem>();
+            var groups = toFormat.PackingList.GroupBy(x => x.ContentsDescription);
+
+            foreach (var packingListItems in groups)
+            {
+                var formattedItem = packingListItems.First();
+                var range = packingListItems.Max(x => int.Parse(x.Box)) - packingListItems.Min(x => int.Parse(x.Box));
+                formattedItem.To = (int.Parse(formattedItem.Box) + range).ToString();
+                formattedItem.Count = (range + 1).ToString();
+                formattedPackingList.Add(formattedItem);
+            }
+
+            toFormat.PackingList = formattedPackingList.ToArray();
+            return toFormat;
         }
     }
 }
