@@ -266,9 +266,10 @@
             foreach (var packingListItems in groups)
             {
                 var formattedItem = packingListItems.First();
-                var range = packingListItems.Max(x => int.Parse(x.Box)) - packingListItems.Min(x => int.Parse(x.Box));
-                formattedItem.To = (int.Parse(formattedItem.Box) + range).ToString();
-                formattedItem.Count = (range + 1).ToString();
+                
+                var range = packingListItems.Max(x => x.Box) - packingListItems.Min(x => x.Box);
+                formattedItem.To = formattedItem.Box + range;
+                formattedItem.Count = range + 1;
                 formattedPackingList.Add(formattedItem);
             }
 

@@ -55,7 +55,7 @@
                 new ConsignmentShipfilePdfModel
                     {
                         ConsignmentNumber = "1",
-                        PackingList = new PackingListItem[] { new PackingListItem { Box = "1" } }, 
+                        PackingList = new PackingListItem[] { new PackingListItem { Box = 1 } }, 
                         DespatchNotes = new DespatchNote[] { new DespatchNote() },
                         DateDispatched = "12/05/2008 09:34:58"
                 });

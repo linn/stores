@@ -4,11 +4,11 @@
     {
         public string Pallet { get; set; }
 
-        public string Box { get; set; }
+        public int? Box { get; set; }
 
-        public string To { get; set; }
+        public int? To { get; set; }
 
-        public string Count { get; set; }
+        public int? Count { get; set; }
 
         public string ContentsDescription { get; set; }
     }

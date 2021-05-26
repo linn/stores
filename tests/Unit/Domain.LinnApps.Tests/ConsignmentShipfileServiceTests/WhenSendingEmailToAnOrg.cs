@@ -83,7 +83,7 @@
             this.DataService.GetPdfModelData(Arg.Any<int>(), Arg.Any<int>()).Returns(
                 new ConsignmentShipfilePdfModel
                 {
-                    PackingList = new PackingListItem[] { new PackingListItem { Box = "1" } },
+                    PackingList = new PackingListItem[] { new PackingListItem { Box = 1 } },
                     DespatchNotes = new DespatchNote[] { new DespatchNote() },
                     DateDispatched = "12/05/2008 09:34:58",
                     ConsignmentNumber = "1"

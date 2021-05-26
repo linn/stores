@@ -96,15 +96,15 @@
 
             var rows = this.databaseService.ExecuteQuery(sql).Tables[0].Rows;
             var result = new List<PackingListItem>();
-           
+
             for (var i = 0; i < rows.Count; i++)
             {
                 var data = rows[i].ItemArray;
-
+                int.TryParse(data[4].ToString(), out var box);
                 result.Add(new PackingListItem
                                {
                                    Pallet = data[1].ToString(),
-                                   Box = data[2].ToString(),
+                                   Box = box,
                                    ContentsDescription = data[3].ToString()
                                });
             }
