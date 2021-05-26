@@ -54,6 +54,8 @@
             builder.RegisterType<TpkService>().As<ITpkService>();
             builder.RegisterType<MoveStockService>().As<IMoveStockService>();
             builder.RegisterType<TqmsReportsService>().As<ITqmsReportsService>();
+            builder.RegisterType<ImportBookService>().As<IImportBookService>();
+
 
             // facade services
             builder.RegisterType<PartFacadeService>()
