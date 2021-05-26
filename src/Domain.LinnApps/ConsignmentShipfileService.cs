@@ -192,16 +192,17 @@
                 {
                     // multiple outlets to email, email addresses all present and correct
                     toSend.AddRange(
-                        from salesOutlet in outlets 
-                        let pdf = this.dataService.BuildPdfModel(shipfile.ConsignmentId, salesOutlet.OutletAddressId) 
-                        let body = this.BuildEmailBody(pdf) 
-                        select new ConsignmentShipfileEmailModel
-                                   {
-                                       PdfAttachment = pdf, 
-                                       ToEmailAddress = salesOutlet.OrderContact.EmailAddress, 
-                                       ToCustomerName = salesOutlet.OrderContact.EmailAddress,
-                                       Body = body
-                                   });
+                        (from salesOutlet in outlets
+                         let pdf = this.dataService.BuildPdfModel(shipfile.ConsignmentId, salesOutlet.OutletAddressId)
+                         let body = this.BuildEmailBody(pdf)
+                         select new ConsignmentShipfileEmailModel
+                                    {
+                                        PdfAttachment = pdf,
+                                        ToEmailAddress = salesOutlet.OrderContact.EmailAddress,
+                                        ToCustomerName = salesOutlet.OrderContact.EmailAddress,
+                                        Body = body
+                                    }).GroupBy(x => x.ToEmailAddress)
+                        .Select(x => x.FirstOrDefault()));
                 }
             }
 

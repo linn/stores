@@ -14,7 +14,7 @@
 
     using NUnit.Framework;
 
-    public class WhenSendingEmailToAnOrg : ContextBase
+    public class WhenSendingEmailToAnOrgWithMultipleOutletsWithTheSameEmailAddress : ContextBase
     {
         private IEnumerable<ConsignmentShipfile> toSend;
 
@@ -40,7 +40,7 @@
                                                             {
                                                                 OrderContact = new Contact
                                                                                    {
-                                                                                       EmailAddress = "outlet1@linn.co.uk"
+                                                                                       EmailAddress = "outlet@linn.co.uk"
                                                                                    }
                                                             }
                                       },
@@ -50,7 +50,7 @@
                                                             {
                                                                 OrderContact = new Contact
                                                                                    {
-                                                                                       EmailAddress = "outlet2@linn.co.uk"
+                                                                                       EmailAddress = "outlet@linn.co.uk"
                                                                                    }
                                                             }
                                       }
@@ -93,22 +93,22 @@
         }
 
         [Test]
-        public void ShouldSendEmailToEachOutlet()
+        public void ShouldSendOneEmail()
         {
             var correctBody =
                 $"Please find attached the following documents for your information {System.Environment.NewLine}{System.Environment.NewLine}";
-            correctBody += 
+            correctBody +=
                 $"Packing List {System.Environment.NewLine}";
-            correctBody += 
+            correctBody +=
                 $"Despatch Note/Serial Number List {System.Environment.NewLine}";
-            correctBody += 
+            correctBody +=
                 $"These refer to goods that left the factory on 12/05/2008 09:34:58 {System.Environment.NewLine}";
             correctBody +=
                 $"The shipment should arrive tomorrow.";
 
-            this.EmailService.Received(2).SendEmail(
-                Arg.Any<string>(),
-                Arg.Any<string>(),
+            this.EmailService.Received(1).SendEmail(
+                "outlet@linn.co.uk",
+                "outlet@linn.co.uk",
                 null,
                 null,
                 Arg.Any<string>(),
