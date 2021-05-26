@@ -26,6 +26,5 @@
             return new SuccessResult<IEnumerable<ExportRsn>>(
                 this.repository.FilterBy(rsn => rsn.AccountId == accountId));
         }
-
     }
 }

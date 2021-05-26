@@ -33,7 +33,6 @@
             this.AccountingCompaniesService.GetValid()
                 .Returns(new SuccessResult<IEnumerable<AccountingCompany>>(new List<AccountingCompany> { companyA, companyB }));
 
-
             this.Response = this.Browser.Get(
                 "/inventory/accounting-companies",
                 with =>

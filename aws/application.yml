@@ -43,6 +43,18 @@ Parameters:
   loggingMaxInnerExceptionDepth:
     Type: Number
     Description: Logging Max Inner Exception Depth
+  smtpHostname:
+    Type: String
+    Description: SMTP Hostname
+  shipfileTemplatePath:
+    Type: String
+    Description: Shipfile PDF Template Path
+  shipfilesTestAddress:
+    Type: String
+    Description: Email address test shipfiles are sent to
+  shipfilesFromAddress:
+    Type: String
+    Description: Email address shipfiles are sent from  
   environmentSuffix:
     Type: String
     AllowedValues:
@@ -149,6 +161,14 @@ Resources:
           Value: !Ref loggingEnvironment
         - Name: LOG_MAX_INNER_EXCEPTION_DEPTH
           Value: !Ref loggingMaxInnerExceptionDepth
+        - Name: SMTP_HOSTNAME
+          Value: !Ref smtpHostname
+        - Name: SHIPFILES_TEST_ADDRESS
+          Value: !Ref shipfilesTestAddress
+        - Name: SHIPFILES_FROM_ADDRESS
+          Value: !Ref shipfilesFromAddress
+        - Name: SHIPFILE_TEMPLATE_PATH
+          Value: !Ref shipfileTemplatePath
         - Name: awsRegion
           Value: !Ref AWS::Region
         - Name: KEYS_BUCKET_NAME
@@ -159,6 +179,7 @@ Resources:
           Value:
             Fn::ImportValue:
               !Sub "kms-key-alias${environmentSuffix}"
+  
   storesService:
     Type: AWS::ECS::Service
     Properties:

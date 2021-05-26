@@ -22,7 +22,6 @@
 
         protected IQueryRepository<AccountingCompany> AccountingCompanyRepository { get; private set; }
 
-
         [SetUp]
         public void EstablishContext()
         {

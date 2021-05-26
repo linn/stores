@@ -18,7 +18,7 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource> importBooksFacadeService
+        protected IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource> ImportBooksFacadeService
         {
             get; private set;
         }
@@ -26,13 +26,13 @@
         [SetUp]
         public void EstablishContext()
         {
-            this.importBooksFacadeService =
+            this.ImportBooksFacadeService =
                 Substitute.For<IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource>>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
-                        with.Dependency(this.importBooksFacadeService);
+                        with.Dependency(this.ImportBooksFacadeService);
                         with.Dependency<IResourceBuilder<ImportBook>>(new ImportBookResourceBuilder());
                         with.Module<ImportBooksModule>();
                         with.ResponseProcessor<ImportBookResponseProcessor>();

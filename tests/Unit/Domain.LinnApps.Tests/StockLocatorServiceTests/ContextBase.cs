@@ -29,7 +29,6 @@
 
         protected IQueryRepository<StockLocatorBatch> StockLocatorBatchesView { get; private set; }
 
-
         protected IRepository<Part, int> PartRepository { get; private set; }
 
         protected IStockLocatorService Sut { get; private set; }

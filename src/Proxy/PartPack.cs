@@ -72,7 +72,6 @@
                               };
                 cmd.Parameters.Add(msg);
 
-
                 cmd.ExecuteNonQuery();
                 message = cmd.Parameters[2].Value.ToString();
                 connection.Close();
@@ -119,7 +118,6 @@
                                   Direction = ParameterDirection.InputOutput, Size = 100
                               };
                 cmd.Parameters.Add(arg3);
-
 
                 cmd.ExecuteNonQuery();
                 message = cmd.Parameters[3].Value.ToString();

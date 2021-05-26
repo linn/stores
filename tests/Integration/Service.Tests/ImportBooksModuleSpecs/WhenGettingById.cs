@@ -19,7 +19,7 @@
         public void SetUp()
         {
             var importBook = new ImportBook { Id = 123 };
-            this.importBooksFacadeService.GetById(123).Returns(new SuccessResult<ImportBook>(importBook));
+            this.ImportBooksFacadeService.GetById(123).Returns(new SuccessResult<ImportBook>(importBook));
 
             this.Response = this.Browser.Get(
                 "/inventory/import-books/123",
@@ -35,7 +35,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.importBooksFacadeService.Received().GetById(123);
+            this.ImportBooksFacadeService.Received().GetById(123);
         }
 
         [Test]

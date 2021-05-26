@@ -43,7 +43,6 @@
                     new StorageLocation { LocationId = this.fromLocationId },
                     new StorageLocation { LocationId = this.toLocationId });
 
-
             this.StoresPack.MoveStock(
                 this.ReqNumber,
                 3,

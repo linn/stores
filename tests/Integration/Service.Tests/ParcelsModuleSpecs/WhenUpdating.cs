@@ -50,7 +50,6 @@
             this.ParcelsFacadeService.Update(Arg.Any<int>(), Arg.Any<ParcelResource>()) 
                 .Returns(new SuccessResult<Parcel>(parcel));
 
-
             this.Response = this.Browser.Put(
                 "/logistics/parcels/4",
                 with =>

@@ -11,7 +11,6 @@
     using NSubstitute;
     using NUnit.Framework;
 
-
     public class WhenGettingAll : ContextBase
     {
         [SetUp]

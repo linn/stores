@@ -34,7 +34,6 @@
                 .Returns(new SuccessResult<IEnumerable<AssemblyTechnology>>(
                     new List<AssemblyTechnology> { a, b }));
 
-
             this.Response = this.Browser.Get(
                 "/inventory/assembly-technologies",
                 with =>

@@ -34,7 +34,6 @@
                 .Returns(new SuccessResult<IEnumerable<ProductAnalysisCode>>(
                     new List<ProductAnalysisCode> { codeA, codeB }));
 
-
             this.Response = this.Browser.Get(
                 "/inventory/product-analysis-codes",
                 with =>

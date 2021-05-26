@@ -41,7 +41,6 @@
                 .Returns(Enumerable.Empty<StoresPallet>().AsQueryable());
         }
 
-
         [Test]
         public void ShouldThrowException()
         {

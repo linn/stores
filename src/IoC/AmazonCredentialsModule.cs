@@ -14,7 +14,7 @@
             builder.RegisterInstance(FallbackCredentialsFactory.GetCredentials())
                 .As<AWSCredentials>()
                 .SingleInstance();
-
+            
             builder.Register(c => RegionEndpoint.GetBySystemName(AwsCredentialsConfiguration.Region))
                 .As<RegionEndpoint>()
                 .SingleInstance();

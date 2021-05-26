@@ -203,6 +203,20 @@ export const tqmsSummaryByCategoryReportActionTypes = makeReportActionTypes(
 
 export const tqmsJobRefsActionTypes = makeActionTypes(itemTypes.tqmsJobRefs.actionType);
 
+export const consignmentShipfileActionTypes = makeActionTypes(
+    itemTypes.consignmentShipfile.actionType,
+    true,
+    true
+);
+
+export const consignmentShipfilesActionTypes = makeActionTypes(
+    itemTypes.consignmentShipfiles.actionType
+);
+
 export const parcelActionTypes = makeActionTypes(itemTypes.parcel.actionType);
 
 export const parcelsActionTypes = makeActionTypes(itemTypes.parcels.actionType, false);
+
+export const shipfilesSendEmailsActionTypes = makeProcessActionTypes(
+    processTypes.shipfilesSendEmails.actionType
+);

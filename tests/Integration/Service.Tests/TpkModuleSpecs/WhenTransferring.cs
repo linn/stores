@@ -38,8 +38,7 @@
                                                                    }
                                                            }
                                  };
-           
-
+            
             this.TpkFacadeService.TransferStock(Arg.Any<TpkRequestResource>())
                 .Returns(new SuccessResult<TpkResult>(new TpkResult
                                                           {
@@ -57,7 +56,6 @@
                                                               Message = "Msg",
                                                               Success = true
                                                           }));
-
 
             this.Response = this.Browser.Post(
                 "/logistics/tpk/transfer",

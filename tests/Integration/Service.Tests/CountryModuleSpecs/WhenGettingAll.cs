@@ -25,8 +25,8 @@
         [SetUp]
         public void SetUp()
         {
-            this.country1 = new Country { CountryCode = "a", Name= "one" };
-            this.country2 = new Country { CountryCode = "b", Name= "two" };
+            this.country1 = new Country { CountryCode = "a", Name = "one" };
+            this.country2 = new Country { CountryCode = "b", Name = "two" };
 
             this.CountryFacadeService.GetAll()
                 .Returns(new SuccessResult<IEnumerable<Country>>(new List<Country>

@@ -34,7 +34,6 @@
             this.PartTemplateService.GetAll()
                 .Returns(new SuccessResult<IEnumerable<PartTemplate>>(new List<PartTemplate> { a, b }));
 
-
             this.Response = this.Browser.Get(
                 "/inventory/part-templates",
                 with =>

@@ -79,9 +79,12 @@ import makeIntercompanyInvoices from './makeIntercompanyInvoices';
 import interCompanyInvoices from './interCompanyInvoices';
 import tqmsSummaryByCategoryReport from './tqmsSummaryByCategoryReport';
 import tqmsJobRefs from './tqmsJobRefs';
+import consignmentShipfile from './consignmentShipfile';
+import consignmentShipfiles from './consignmentShipfiles';
 import parcels from './parcels/parcels';
 import parcel from './parcels/parcel';
 import suppliersApprovedCarrier from './suppliersApprovedCarrier';
+import shipfilesSendEmails from './shipfilesSendEmails';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -96,6 +99,8 @@ const rootReducer = history =>
         auditLocation,
         auditLocations,
         availableStock,
+        consignmentShipfile,
+        consignmentShipfiles,
         countries,
         createAuditReqs,
         departments,
@@ -135,6 +140,7 @@ const rootReducer = history =>
         salesAccounts,
         salesOutlets,
         sernosSequences,
+        shipfilesSendEmails,
         sosAllocDetails,
         sosAllocHeads,
         stockLocator,

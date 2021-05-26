@@ -34,7 +34,6 @@
                 .Returns(new SuccessResult<IEnumerable<TqmsCategory>>(
                     new List<TqmsCategory> { a, b }));
 
-
             this.Response = this.Browser.Get(
                 "/inventory/parts/tqms-categories",
                 with =>

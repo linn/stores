@@ -282,6 +282,18 @@ export const interCompanyInvoices = new ItemType(
 
 export const tqmsJobRefs = new ItemType('tqmsJobRefs', 'TQMS_JOBREFS', '/inventory/tqms-jobrefs');
 
+export const consignmentShipfile = new ItemType(
+    'consignmentShipfile',
+    'CONSIGNMENT_SHIPFILE',
+    '/logistics/shipfiles'
+);
+
+export const consignmentShipfiles = new ItemType(
+    'consignmentShipfiles',
+    'CONSIGNMENT_SHIPFILES',
+    '/logistics/shipfiles'
+);
+
 export const parcel = new ItemType('parcel', 'PARCEL', '/logistics/parcels');
 
 export const parcels = new ItemType('parcels', 'PARCELS', '/logistics/parcels');

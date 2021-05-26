@@ -51,7 +51,6 @@ namespace Linn.Stores.Service.Host
                                         {
                                             ForwardedHeaders = ForwardedHeaders.XForwardedProto
                                         });
-
             app.UseAuthentication();
 
             app.UseBearerTokenAuthentication();
@@ -63,6 +62,7 @@ namespace Linn.Stores.Service.Host
                     }));
 
             app.Use((context, next) => context.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme));
+            app.PreparePuppeteerAsync(env).GetAwaiter().GetResult();
         }
     }
 }

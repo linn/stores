@@ -12,7 +12,7 @@
     {
         protected IAllocationReportsService Sut { get; private set; }
 
-        protected IQueryRepository<DespatchPickingSummary> DespatchPickingSummaryRepository{ get; private set; }
+        protected IQueryRepository<DespatchPickingSummary> DespatchPickingSummaryRepository { get; private set; }
 
         protected IQueryRepository<DespatchPalletQueueDetail> DespatchPalletQueueDetailRepository { get; private set; }
 

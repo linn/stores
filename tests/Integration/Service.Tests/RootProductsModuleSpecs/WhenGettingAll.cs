@@ -35,7 +35,6 @@
             this.RootProductsService.GetValid()
                 .Returns(new SuccessResult<IEnumerable<RootProduct>>(new List<RootProduct> { rootProductA, rootProductB }));
 
-
             this.Response = this.Browser.Get(
                 "/inventory/root-products",
                 with =>
