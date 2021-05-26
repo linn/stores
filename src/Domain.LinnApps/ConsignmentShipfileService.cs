@@ -75,6 +75,7 @@
                             ConfigurationManager.Configuration["SHIPFILE_TEMPLATE_PATH"]);
 
                         var pdf = this.pdfService.ConvertHtmlToPdf(render.Result, landscape: true);
+                        
                         this.emailService.SendEmail(
                             test ? ConfigurationManager.Configuration["SHIPFILES_TEST_ADDRESS"] : model.ToEmailAddress,
                             model.ToCustomerName,
@@ -121,7 +122,7 @@
                 {
                     var contact = account.ContactDetails;
                 
-                    var pdfModel = this.dataService.BuildPdfModel(shipfile.ConsignmentId, contact.AddressId);
+                    var pdfModel = this.dataService.BuildPdfModel(shipfile.ConsignmentId, (int)contact.AddressId);
                     var body = this.BuildEmailBody(pdfModel);
 
                         toSend.Add(new ConsignmentShipfileEmailModel

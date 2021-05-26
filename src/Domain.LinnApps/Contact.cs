@@ -14,7 +14,7 @@
 
         public Person Person { get; set; }
 
-        public int AddressId { get; set; }
+        public int? AddressId { get; set; }
 
         public IEnumerable<SalesAccount> SalesAccounts { get; set; }
 

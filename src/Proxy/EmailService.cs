@@ -21,7 +21,7 @@
             string fromName,
             string subject,
             string body,
-            Stream attachment)
+            Stream pdfAttachment)
         {
             var smtpHost = ConfigurationManager.Configuration["SMTP_HOSTNAME"];
             var message = new MimeMessage();
@@ -51,7 +51,7 @@
                                    Text = body
                                };
 
-            using (var stream = attachment)
+            using (var stream = pdfAttachment)
             {
                 byte[] buffer = new byte[stream.Length];
                 stream.Seek(0, SeekOrigin.Begin);
