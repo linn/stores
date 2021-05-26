@@ -23,7 +23,6 @@
 
         protected IRepository<Employee, int> EmployeeRepository { get; private set; }
 
-
         [SetUp]
         public void EstablishContext()
         {

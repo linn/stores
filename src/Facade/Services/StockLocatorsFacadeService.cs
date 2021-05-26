@@ -65,6 +65,7 @@
                     searchResource.State,
                     searchResource.Category));
             }
+
             return new SuccessResult<IEnumerable<StockLocator>>(this.domainService.SearchStockLocators(
                 searchResource.PartNumber,
                 searchResource.LocationId,

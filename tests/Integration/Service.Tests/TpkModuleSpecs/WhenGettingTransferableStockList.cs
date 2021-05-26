@@ -33,7 +33,6 @@
             this.TpkFacadeService.GetTransferableStock()
                 .Returns(new SuccessResult<IEnumerable<TransferableStock>>(new List<TransferableStock> { transferableStockA, transferableStockB }));
 
-
             this.Response = this.Browser.Get(
                 "/logistics/tpk/items",
                 with =>

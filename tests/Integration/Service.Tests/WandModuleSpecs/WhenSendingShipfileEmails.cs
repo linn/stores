@@ -33,7 +33,6 @@
                                                         new ConsignmentShipfileResource
                                                             {
                                                                 ConsignmentId = 1,
-                                                                
                                                             }
                                                     }
                                 };
@@ -43,8 +42,7 @@
                                   new ConsignmentShipfile
                                       {
                                           ConsignmentId = 1,
-                                          Consignment = new Consignment(),
-
+                                          Consignment = new Consignment()
                                       }
                               };
 

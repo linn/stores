@@ -824,7 +824,6 @@
             q.Property(e => e.Category).HasColumnName("CATEGORY").HasMaxLength(6).IsRequired();
         }
 
-
         private void QueryStoragePlaces(ModelBuilder builder)
         {
             var q = builder.Query<StoragePlace>();

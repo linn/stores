@@ -11,7 +11,6 @@
     using NSubstitute;
     using NUnit.Framework;
 
-
     public class WhenGettingAllApprovedCarrier : ContextBase
     {
         [SetUp]
@@ -34,7 +33,6 @@
 
             this.SuppliersService.GetSuppliers(Arg.Any<string>(), false, true)
                 .Returns(new SuccessResult<IEnumerable<Supplier>>(new List<Supplier> { supplierA, supplierB }));
-
 
             this.Response = this.Browser.Get(
                 "/inventory/suppliers-approved-carrier",

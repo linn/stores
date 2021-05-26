@@ -15,7 +15,6 @@
     {
         private IResult<ExportReturn> result;
 
-
         [SetUp]
         public void SetUp()
         {

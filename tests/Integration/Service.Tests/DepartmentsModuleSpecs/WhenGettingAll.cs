@@ -35,7 +35,6 @@
             this.DepartmentsService.GetOpenDepartments()
                 .Returns(new SuccessResult<IEnumerable<Department>>(new List<Department> { departmentA, departmentB }));
 
-
             this.Response = this.Browser.Get(
                 "/inventory/departments",
                 with =>

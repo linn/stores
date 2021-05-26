@@ -117,7 +117,6 @@
                                    Value = success
                                };
 
-
                 cmd.Parameters.Add(arg4);
                 success = ((OracleBoolean)cmd.Parameters[1].Value).IsTrue;
                 cmd.ExecuteNonQuery();
@@ -133,7 +132,7 @@
                 var cmd =
                     new OracleCommand(
                         "stores_oo.STORES_ERR_MESSAGE",
-                        connection) //  TODO - Move function to stores_pack
+                        connection)
                         {
                             CommandType = CommandType.StoredProcedure
                         };
@@ -349,7 +348,6 @@
                                    {
                                        Direction = ParameterDirection.Input, Value = state
                                    });
-
 
             var messageParameter = new OracleParameter("p_message", OracleDbType.Varchar2)
                                        {

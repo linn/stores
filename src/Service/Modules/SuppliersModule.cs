@@ -15,7 +15,6 @@
             this.suppliersService = suppliersFacadeService;
             this.Get("inventory/suppliers", _ => this.GetSuppliers());
             this.Get("inventory/suppliers-approved-carrier", _ => this.GetSuppliersApprovedCarrier());
-
         }
 
         private object GetSuppliers()

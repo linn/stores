@@ -26,7 +26,7 @@
             this.shipfileService = shipfileService;
             this.Get("/logistics/shipfiles", _ => this.GetShipfiles());
             this.Post("/logistics/shipfiles/send-emails", _ => this.SendEmails());
-            this.Delete("/logistics/shipfiles/{id}" , parameters => this.DeleteShipfile(parameters.id));
+            this.Delete("/logistics/shipfiles/{id}", parameters => this.DeleteShipfile(parameters.id));
         }
 
         private object WandItem()

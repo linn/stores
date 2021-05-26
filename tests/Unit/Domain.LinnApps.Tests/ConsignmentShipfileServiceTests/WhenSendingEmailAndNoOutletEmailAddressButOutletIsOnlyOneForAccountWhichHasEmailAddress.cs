@@ -48,7 +48,7 @@
                                                             }
                                       },
                               };
-            var outlet = new SalesOutlet { OutletAddressId =  1 };
+            var outlet = new SalesOutlet { OutletAddressId = 1 };
             var outlets = new List<SalesOutlet> { outlet };
 
             var consignment = new Consignment

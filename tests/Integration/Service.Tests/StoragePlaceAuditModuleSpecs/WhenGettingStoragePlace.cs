@@ -18,7 +18,7 @@
         [SetUp]
         public void SetUp()
         {
-            var sp1 = new StoragePlace { Name = "sp1", PalletNumber = 298};
+            var sp1 = new StoragePlace { Name = "sp1", PalletNumber = 298 };
 
             this.StoragePlaceService
                 .GetStoragePlace(Arg.Any<StoragePlaceRequestResource>()).Returns(

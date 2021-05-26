@@ -22,7 +22,6 @@
 
         protected IQueryRepository<SernosSequence> SernosSequenceRepository { get; private set; }
 
-
         [SetUp]
         public void EstablishContext()
         {

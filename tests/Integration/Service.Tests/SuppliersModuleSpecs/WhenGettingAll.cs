@@ -37,7 +37,6 @@
             this.SuppliersService.GetSuppliers()
                 .Returns(new SuccessResult<IEnumerable<Supplier>>(new List<Supplier> { supplierA, supplierB }));
 
-
             this.Response = this.Browser.Get(
                 "/inventory/suppliers",
                 with =>

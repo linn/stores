@@ -35,7 +35,6 @@
             this.SernosSequencesService.GetSequences()
                 .Returns(new SuccessResult<IEnumerable<SernosSequence>>(new List<SernosSequence> { sernosSequenceA, sernosSequenceB }));
 
-
             this.Response = this.Browser.Get(
                 "/inventory/sernos-sequences",
                 with =>

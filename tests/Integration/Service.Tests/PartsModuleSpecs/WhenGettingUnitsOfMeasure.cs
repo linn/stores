@@ -33,7 +33,6 @@
             this.UnitsOfMeasureService.GetUnitsOfMeasure()
                 .Returns(new SuccessResult<IEnumerable<UnitOfMeasure>>(new List<UnitOfMeasure> { unitA, unitB }));
 
-
             this.Response = this.Browser.Get(
                 "/inventory/units-of-measure",
                 with =>

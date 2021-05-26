@@ -44,7 +44,7 @@
                                     };
             this.toSend = new List<ConsignmentShipfile>
                               {
-                                  new ConsignmentShipfile { Id = 1, ConsignmentId = 1}
+                                  new ConsignmentShipfile { Id = 1, ConsignmentId = 1 }
                               };
 
             this.ShipfileRepository.FindById(1).Returns(this.shipfileData);
@@ -72,7 +72,6 @@
             correctBody += $"Despatch Note/Serial Number List {System.Environment.NewLine}";
             correctBody += $"These refer to goods that left the factory on 12/05/2008 09:34:58 {System.Environment.NewLine}";
             correctBody += "The shipment should arrive within four working days.";
-
 
             this.EmailService.Received().SendEmail(
                 "customer@linn.co.uk",

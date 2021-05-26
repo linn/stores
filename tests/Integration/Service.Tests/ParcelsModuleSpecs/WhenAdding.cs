@@ -49,7 +49,6 @@
             this.ParcelsFacadeService.Add(Arg.Any<ParcelResource>()) 
                 .Returns(new SuccessResult<Parcel>(parcel));
 
-
             this.Response = this.Browser.Post(
                 "/logistics/parcels",
                 with =>

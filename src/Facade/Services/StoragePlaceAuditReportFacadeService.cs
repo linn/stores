@@ -6,7 +6,7 @@
     using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps.Reports;
 
-    public class  StoragePlaceAuditReportFacadeService : IStoragePlaceAuditReportFacadeService
+    public class StoragePlaceAuditReportFacadeService : IStoragePlaceAuditReportFacadeService
     {
         private readonly IStoragePlaceAuditReportService storagePlaceAuditReportService;
 

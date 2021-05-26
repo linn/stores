@@ -6,7 +6,6 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
 
-
     public class SuppliersService : ISuppliersService
     {
         private readonly IQueryRepository<Supplier> repository;

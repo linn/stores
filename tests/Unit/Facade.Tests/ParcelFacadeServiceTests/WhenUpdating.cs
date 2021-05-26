@@ -45,7 +45,6 @@
 
             this.result = this.Sut.Add(this.resource);
 
-
             this.ParcelRepository.FindById(46287).Returns(parcel);
 
             this.result = this.Sut.Update(this.resource.ParcelNumber, this.resource);

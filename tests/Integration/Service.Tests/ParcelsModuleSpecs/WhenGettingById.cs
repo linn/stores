@@ -34,7 +34,6 @@
             this.ParcelsFacadeService.GetById(Arg.Any<int>()) 
                 .Returns(new SuccessResult<Parcel>(parcel));
 
-
             this.Response = this.Browser.Get(
                 "/logistics/parcels/1",
                 with =>
