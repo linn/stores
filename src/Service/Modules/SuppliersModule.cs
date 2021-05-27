@@ -21,10 +21,11 @@
         {
             var resource = this.Bind<SearchRequestResource>();
 
-            var results = this.suppliersService.GetSuppliers(resource.SearchTerm, returnClosed: false, returnOnlyApprovedCarriers: false);
-            return this.Negotiate
-                .WithModel(results)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+            var results = this.suppliersService.GetSuppliers(
+                resource.SearchTerm,
+                returnClosed: false,
+                returnOnlyApprovedCarriers: false);
+            return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");
         }
 
@@ -32,10 +33,11 @@
         {
             var resource = this.Bind<SearchRequestResource>();
 
-            var results = this.suppliersService.GetSuppliers(resource.SearchTerm, returnClosed: false, returnOnlyApprovedCarriers: true);
-            return this.Negotiate
-                .WithModel(results)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+            var results = this.suppliersService.GetSuppliers(
+                resource.SearchTerm,
+                returnClosed: false,
+                returnOnlyApprovedCarriers: true);
+            return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");
         }
     }

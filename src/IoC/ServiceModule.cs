@@ -58,6 +58,8 @@
             builder.RegisterType<EmailService>().As<IEmailService>();
             builder.RegisterType<PdfService>().As<IPdfService>();
             builder.RegisterType<TemplateEngine>().As<ITemplateEngine>();
+            builder.RegisterType<ImportBookService>().As<IImportBookService>();
+
 
             // facade services
             builder.RegisterType<PartFacadeService>()

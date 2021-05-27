@@ -3,7 +3,6 @@
     using System;
     using System.Linq;
     using System.Linq.Expressions;
-
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
 
@@ -41,7 +40,8 @@
             throw new NotImplementedException();
         }
 
-        public IQueryable<ImportBookTransactionCode> FilterBy(Expression<Func<ImportBookTransactionCode, bool>> expression)
+        public IQueryable<ImportBookTransactionCode> FilterBy(
+            Expression<Func<ImportBookTransactionCode, bool>> expression)
         {
             throw new NotImplementedException();
         }

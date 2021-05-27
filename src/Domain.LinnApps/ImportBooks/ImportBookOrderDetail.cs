@@ -1,8 +1,8 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.ImportBooks
 {
-    public class ImpBookOrderDetail
+    public class ImportBookOrderDetail
     {
-        public int ImpBookId { get; set; }
+        public int ImportBookId { get; set; }
         
         public int LineNumber { get; set; }
         
@@ -14,15 +14,15 @@
         
         public int Qty { get; set; }
         
-        public int DutyValue { get; set; }
+        public decimal DutyValue { get; set; }
         
-        public int FreightValue { get; set; }
+        public decimal FreightValue { get; set; }
         
-        public int VatValue { get; set; }
+        public decimal VatValue { get; set; }
         
-        public int OrderValue { get; set; }
+        public decimal OrderValue { get; set; }
         
-        public int Weight { get; set; }
+        public decimal Weight { get; set; }
         
         public int? LoanNumber { get; set; }
         

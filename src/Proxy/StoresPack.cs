@@ -350,9 +350,9 @@
                                    });
 
             var messageParameter = new OracleParameter("p_message", OracleDbType.Varchar2)
-                                       {
-                                           Direction = ParameterDirection.Output, Size = 4000
-                                       };
+                                   {
+                                       Direction = ParameterDirection.Output, Size = 4000
+                                   };
             cmd.Parameters.Add(messageParameter);
 
             var successParameter = new OracleParameter("p_success", OracleDbType.Int32)

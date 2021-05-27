@@ -1,11 +1,15 @@
 ﻿namespace Linn.Stores.Facade.Tests.ParcelFacadeServiceTests
 {
     using System;
+
     using FluentAssertions;
+
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
+
     using NSubstitute;
+
     using NUnit.Framework;
 
     public class WhenUpdating : ContextBase
@@ -18,30 +22,30 @@
         public void SetUp()
         {
             var parcel = new Parcel
-            {
-                ParcelNumber = 46287,
-                DateCreated = new DateTime(2019, 09, 29),
-                DateReceived = new DateTime(2019, 10, 13),
-                Weight = 0,
-                CheckedById = 33067,
-                ConsignmentNo = "numma 1"
-            };
+                         {
+                             ParcelNumber = 46287,
+                             DateCreated = new DateTime(2019, 09, 29),
+                             DateReceived = new DateTime(2019, 10, 13),
+                             Weight = 0,
+                             CheckedById = 33067,
+                             ConsignmentNo = "numma 1"
+                         };
 
             this.resource = new ParcelResource
-            {
-                ParcelNumber = 46287,
-                DateCreated = "2019-09-30T00:00:00.0000000",
-                DateReceived = "2019-10-14T00:00:00.0000000",
-                Weight = (decimal)0.12,
-                CheckedById = 33066,
-                ConsignmentNo = "numma 2",
-                CartonCount = 12,
-                PalletCount = 2,
-                CarrierId = 121,
-                SupplierId = 77,
-                SupplierInvoiceNo = "invoice no 33 & 1/3",
-                ImportBookNo = 2222
-            };
+                            {
+                                ParcelNumber = 46287,
+                                DateCreated = "2019-09-30T00:00:00.0000000",
+                                DateReceived = "2019-10-14T00:00:00.0000000",
+                                Weight = 0.12m,
+                                CheckedById = 33066,
+                                ConsignmentNo = "numma 2",
+                                CartonCount = 12,
+                                PalletCount = 2,
+                                CarrierId = 121,
+                                SupplierId = 77,
+                                SupplierInvoiceNo = "invoice no 33 & 1/3",
+                                ImportBookNo = 2222
+                            };
 
             this.result = this.Sut.Add(this.resource);
 
@@ -65,7 +69,7 @@
 
             dataResult.DateCreated.Should().Be(new DateTime(2019, 09, 30));
             dataResult.DateReceived.Should().Be(new DateTime(2019, 10, 14));
-            dataResult.Weight.Should().Be((decimal)0.12);
+            dataResult.Weight.Should().Be(0.12m);
             dataResult.CheckedById.Should().Be(33066);
             dataResult.ConsignmentNo.Should().Be("numma 2");
             dataResult.CartonCount.Should().Be(12);

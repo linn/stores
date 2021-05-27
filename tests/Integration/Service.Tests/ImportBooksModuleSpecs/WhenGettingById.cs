@@ -22,7 +22,7 @@
             this.ImportBooksFacadeService.GetById(123).Returns(new SuccessResult<ImportBook>(importBook));
 
             this.Response = this.Browser.Get(
-                "/inventory/import-books/123",
+                "/logistics/import-books/123",
                 with => { with.Header("Accept", "application/json"); }).Result;
         }
 

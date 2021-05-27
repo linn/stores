@@ -4,11 +4,15 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
+
     using FluentAssertions;
+
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources.RequestResources;
+
     using NSubstitute;
+
     using NUnit.Framework;
 
     public class WhenSearching : ContextBase
@@ -40,7 +44,7 @@
                                           ParcelNumber = 2,
                                           DateCreated = new DateTime(2020, 02, 29),
                                           DateReceived = new DateTime(2020, 03, 02),
-                                          Weight = (decimal)23.33,
+                                          Weight = 23.33m,
                                           CheckedById = 123,
                                           ConsignmentNo = "cosnginment 1",
                                           CartonCount = 1,

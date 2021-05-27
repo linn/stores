@@ -1,13 +1,13 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.ImportBooks
 {
-    public class ImpBookInvoiceDetail
+    public class ImportBookInvoiceDetail
     {
-        public int ImpBookId { get; set; }
+        public int ImportBookId { get; set; }
 
         public int LineNumber { get; set; }
 
         public string InvoiceNumber { get; set; }
 
-        public int InvoiceValue { get; set; }
+        public decimal InvoiceValue { get; set; }
     }
 }

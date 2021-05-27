@@ -57,7 +57,7 @@
             this.ReqMoveRepository = Substitute.For<IQueryRepository<ReqMove>>();
             this.ReqMoveRepository.FindBy(Arg.Any<Expression<Func<ReqMove, bool>>>()).ReturnsNull();
             this.Sut = new StockLocatorService(
-                this.StockLocatorRepository, 
+                this.StockLocatorRepository,
                 this.StoresPalletRepository,
                 this.StoragePlaceRepository,
                 this.StorageLocationRepository,

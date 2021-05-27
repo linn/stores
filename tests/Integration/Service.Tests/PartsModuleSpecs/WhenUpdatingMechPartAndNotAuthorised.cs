@@ -51,8 +51,7 @@
             };
             this.MechPartSourceService.Update(1, Arg.Any<MechPartSourceResource>())
                 .Returns(new SuccessResult<MechPartSource>(p));
-            this.AuthService
-                .HasPermissionFor(Arg.Any<string>(), Arg.Any<IEnumerable<string>>()).Returns(false);
+            this.AuthService.HasPermissionFor(Arg.Any<string>(), Arg.Any<IEnumerable<string>>()).Returns(false);
             this.Response = this.Browser.Put(
                 "inventory/parts/sources/1",
                 with =>

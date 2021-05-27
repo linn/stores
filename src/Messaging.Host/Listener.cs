@@ -28,8 +28,8 @@
                     {
                         using (var handlerScope = scope.BeginLifetimeScope("messageHandler"))
                         {
-                            //var handler = handlerScope.Resolve<DiscountCacheHandler>();
-                            //return handler.Execute(m);
+                            // var handler = handlerScope.Resolve<DiscountCacheHandler>();
+                            // return handler.Execute(m);
                             return true;
                         }
                     })

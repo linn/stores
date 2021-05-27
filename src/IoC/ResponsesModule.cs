@@ -114,10 +114,11 @@
                 .As<IResourceBuilder<IEnumerable<PartDataSheetValues>>>();
             builder.RegisterType<ErrorResourceBuilder>().As<IResourceBuilder<Error>>();
             builder.RegisterType<ImportBookResourceBuilder>().As<IResourceBuilder<ImportBook>>();
+            builder.RegisterType<ImportBooksResourceBuilder>().As<IResourceBuilder<IEnumerable<ImportBook>>>();
             builder.RegisterType<ImportBookInvoiceDetailResourceBuilder>()
-                .As<IResourceBuilder<ImpBookInvoiceDetail>>();
-            builder.RegisterType<ImportBookOrderDetailResourceBuilder>().As<IResourceBuilder<ImpBookOrderDetail>>();
-            builder.RegisterType<ImportBookPostEntryResourceBuilder>().As<IResourceBuilder<ImpBookPostEntry>>();
+                .As<IResourceBuilder<ImportBookInvoiceDetail>>();
+            builder.RegisterType<ImportBookOrderDetailResourceBuilder>().As<IResourceBuilder<ImportBookOrderDetail>>();
+            builder.RegisterType<ImportBookPostEntryResourceBuilder>().As<IResourceBuilder<ImportBookPostEntry>>();
             builder.RegisterType<TqmsCategoryResourceBuilder>()
                 .As<IResourceBuilder<TqmsCategory>>();
             builder.RegisterType<TqmsCategoriesResourceBuilder>()

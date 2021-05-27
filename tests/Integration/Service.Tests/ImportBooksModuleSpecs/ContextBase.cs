@@ -20,7 +20,8 @@
     {
         protected IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource> ImportBooksFacadeService
         {
-            get; private set;
+            get;
+            private set;
         }
 
         [SetUp]
@@ -31,24 +32,27 @@
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
-                    {
-                        with.Dependency(this.ImportBooksFacadeService);
-                        with.Dependency<IResourceBuilder<ImportBook>>(new ImportBookResourceBuilder());
-                        with.Module<ImportBooksModule>();
-                        with.ResponseProcessor<ImportBookResponseProcessor>();
-                        with.RequestStartup(
-                            (container, pipelines, context) =>
-                                {
-                                    var claims = new List<Claim>
-                                                     {
-                                                         new Claim(ClaimTypes.Role, "employee"),
-                                                         new Claim(ClaimTypes.NameIdentifier, "test-user")
-                                                     };
-                                    var user = new ClaimsIdentity(claims, "jwt");
+                {
+                    with.Dependency(this.ImportBooksFacadeService);
+                    with.Dependency<IResourceBuilder<ImportBook>>(new ImportBookResourceBuilder());
+                    with.Dependency<IResourceBuilder<IEnumerable<ImportBook>>>(new ImportBooksResourceBuilder());
+                    with.Module<ImportBooksModule>();
+                    with.ResponseProcessor<ImportBookResponseProcessor>();
+                    with.ResponseProcessor<ImportBooksResponseProcessor>();
 
-                                    context.CurrentUser = new ClaimsPrincipal(user);
-                                });
-                    });
+                    with.RequestStartup(
+                        (container, pipelines, context) =>
+                        {
+                            var claims = new List<Claim>
+                                         {
+                                             new Claim(ClaimTypes.Role, "employee"),
+                                             new Claim(ClaimTypes.NameIdentifier, "test-user")
+                                         };
+                            var user = new ClaimsIdentity(claims, "jwt");
+
+                            context.CurrentUser = new ClaimsPrincipal(user);
+                        });
+                });
 
             this.Browser = new Browser(bootstrapper);
         }

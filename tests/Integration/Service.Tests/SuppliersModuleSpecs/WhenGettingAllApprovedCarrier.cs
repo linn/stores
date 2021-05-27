@@ -2,13 +2,18 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+
     using FluentAssertions;
+
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
+
     using Nancy;
     using Nancy.Testing;
+
     using NSubstitute;
+
     using NUnit.Framework;
 
     public class WhenGettingAllApprovedCarrier : ContextBase
@@ -16,30 +21,15 @@
         [SetUp]
         public void SetUp()
         {
-            var supplierA = new Supplier
-            {
-                Id = 1,
-                Name = "Supplier A",
-                CountryCode = "DE",
-                ApprovedCarrier = "Y"
-            };
-            var supplierB = new Supplier
-            {
-                Id = 2,
-                Name = "Supplier B",
-                CountryCode = "RU",
-                ApprovedCarrier = "Y"
-            };
+            var supplierA = new Supplier { Id = 1, Name = "Supplier A", CountryCode = "DE", ApprovedCarrier = "Y" };
+            var supplierB = new Supplier { Id = 2, Name = "Supplier B", CountryCode = "RU", ApprovedCarrier = "Y" };
 
-            this.SuppliersService.GetSuppliers(Arg.Any<string>(), false, true)
-                .Returns(new SuccessResult<IEnumerable<Supplier>>(new List<Supplier> { supplierA, supplierB }));
+            this.SuppliersService.GetSuppliers(Arg.Any<string>(), false, true).Returns(
+                new SuccessResult<IEnumerable<Supplier>>(new List<Supplier> { supplierA, supplierB }));
 
             this.Response = this.Browser.Get(
                 "/inventory/suppliers-approved-carrier",
-                with =>
-                {
-                    with.Header("Accept", "application/json");
-                }).Result;
+                with => { with.Header("Accept", "application/json"); }).Result;
         }
 
         [Test]
