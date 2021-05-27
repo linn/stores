@@ -46,7 +46,10 @@
             this.consignmentRepository = consignmentRepository;
         }
 
-        public IEnumerable<ConsignmentShipfile> SendEmails(IEnumerable<ConsignmentShipfile> toSend, bool test = false)
+        public IEnumerable<ConsignmentShipfile> SendEmails(
+            IEnumerable<ConsignmentShipfile> toSend, 
+            bool test = false,
+            string testEmailAddress = null)
         {
             var withDetails = new List<ConsignmentShipfile>();
             foreach (var shipfile in toSend)
@@ -77,7 +80,7 @@
                         var pdf = this.pdfService.ConvertHtmlToPdf(render.Result, landscape: true);
                         
                         this.emailService.SendEmail(
-                            test ? ConfigurationManager.Configuration["SHIPFILES_TEST_ADDRESS"] : model.ToEmailAddress,
+                            test ? testEmailAddress : model.ToEmailAddress,
                             model.ToCustomerName,
                             null,
                             null,

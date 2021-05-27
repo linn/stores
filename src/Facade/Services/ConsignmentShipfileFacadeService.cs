@@ -40,7 +40,8 @@
                              {
                                  Id = s.Id, ConsignmentId = s.ConsignmentId
                              }), 
-                toSend.Test);
+                toSend.Test,
+                toSend.TestEmailAddress);
 
             if (!toSend.Test)
             {
