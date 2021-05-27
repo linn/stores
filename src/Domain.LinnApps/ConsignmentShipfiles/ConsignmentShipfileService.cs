@@ -268,23 +268,5 @@
             return consignment.Carrier != "TNT" ? "R" : "E";
         }
 
-        // private ConsignmentShipfilePdfModel FormatPdfData(ConsignmentShipfilePdfModel toFormat)
-        // {
-        //     var formattedPackingList = new List<PackingListItem>();
-        //     var groups = toFormat.PackingList.GroupBy(x => x.ContentsDescription);
-        //
-        //     foreach (var packingListItems in groups)
-        //     {
-        //         var formattedItem = packingListItems.First();
-        //         
-        //         var range = packingListItems.Max(x => x.Box) - packingListItems.Min(x => x.Box);
-        //         formattedItem.To = formattedItem.Box + range;
-        //         formattedItem.Count = range + 1;
-        //         formattedPackingList.Add(formattedItem);
-        //     }
-        //
-        //     toFormat.PackingList = formattedPackingList.ToArray();
-        //     return toFormat;
-        // }
     }
 }

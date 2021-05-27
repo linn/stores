@@ -29,7 +29,7 @@
             {
                 OrgId = 1,
                 ContactId = 1,
-                ContactDetails = new Contact { EmailAddress = "customer@linn.co.uk", AddressId = 1 }
+                ContactDetails = new Contact { EmailAddress = "outlet@linn.co.uk", AddressId = 1 }
             };
 
             var orders = new List<SalesOrder>
@@ -73,6 +73,9 @@
                               {
                                   new ConsignmentShipfile { Id = 1 }
                               };
+
+            this.PackingListService.BuildPackingList(Arg.Any<IEnumerable<PackingListItem>>())
+                .ReturnsForAnyArgs(new List<PackingListItem> { new PackingListItem { Box = 1 } });
 
             this.ShipfileRepository.FindById(1).Returns(this.shipfileData);
 

@@ -47,6 +47,9 @@
                                   new ConsignmentShipfile { Id = 1, ConsignmentId = 1 }
                               };
 
+            this.PackingListService.BuildPackingList(Arg.Any<IEnumerable<PackingListItem>>())
+                .ReturnsForAnyArgs(new List<PackingListItem> { new PackingListItem { Box = 1 } });
+
             this.ShipfileRepository.FindById(1).Returns(this.shipfileData);
 
             this.ConsignmentRepository.FindById(Arg.Any<int>()).Returns(consignment);

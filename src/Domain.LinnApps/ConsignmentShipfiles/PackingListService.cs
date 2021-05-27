@@ -6,7 +6,7 @@
     {
         public IEnumerable<PackingListItem> BuildPackingList(IEnumerable<PackingListItem> dataResult)
         {
-            throw new System.NotImplementedException();
+            return dataResult;
         }
     }
 }

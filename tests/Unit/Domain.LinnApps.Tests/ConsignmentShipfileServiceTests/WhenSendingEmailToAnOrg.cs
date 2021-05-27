@@ -76,6 +76,9 @@
 
             this.ShipfileRepository.FindById(1).Returns(this.shipfileData);
 
+            this.PackingListService.BuildPackingList(Arg.Any<IEnumerable<PackingListItem>>())
+                .ReturnsForAnyArgs(new List<PackingListItem> { new PackingListItem { Box = 1 } });
+
             this.SalesOrderRepository.FilterBy(Arg.Any<Expression<Func<SalesOrder, bool>>>()).Returns(orders.AsQueryable());
 
             this.ConsignmentRepository.FindById(1).Returns(consignment);
