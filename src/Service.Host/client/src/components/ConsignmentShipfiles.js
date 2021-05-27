@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@material-ui/data-grid';
 import Grid from '@material-ui/core/Grid';
-import { Title, ErrorCard, Loading } from '@linn-it/linn-form-components-library';
+import { Title, ErrorCard, Loading, InputField } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Page from '../containers/Page';
@@ -19,6 +19,7 @@ export default function ConsignmentShipfiles({
 }) {
     const [selectedRows, setSelectedRows] = useState([227165]);
     const [rows, setRows] = useState([]);
+    const [testEmailAddress, setTestEmailAddress] = useState();
 
     useEffect(() => {
         setRows(
@@ -89,21 +90,6 @@ export default function ConsignmentShipfiles({
                             <Button
                                 style={{ marginTop: '22px' }}
                                 variant="contained"
-                                onClick={() => {
-                                    clearErrors();
-                                    sendEmails({
-                                        shipfiles: selectedRows,
-                                        test: true
-                                    });
-                                }}
-                            >
-                                Test Selected
-                            </Button>
-                        </Grid>
-                        <Grid item xs={2}>
-                            <Button
-                                style={{ marginTop: '22px' }}
-                                variant="contained"
                                 color="secondary"
                                 onClick={() => {
                                     clearErrors();
@@ -113,6 +99,7 @@ export default function ConsignmentShipfiles({
                                 Delete Selected
                             </Button>
                         </Grid>
+                        <Grid item xs={8} />
                         <Grid item xs={12}>
                             <div style={{ height: 500, width: '100%' }}>
                                 <DataGrid
@@ -126,6 +113,31 @@ export default function ConsignmentShipfiles({
                                     hideFooter
                                 />
                             </div>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <InputField
+                                label="Send Test Email to Address"
+                                propertyName="testEmailAddress"
+                                onChange={(_, newValue) => setTestEmailAddress(newValue)}
+                                value={testEmailAddress}
+                            />
+                        </Grid>
+                        <Grid item xs={2}>
+                            <Button
+                                style={{ marginTop: '22px' }}
+                                variant="contained"
+                                disabled={!testEmailAddress}
+                                onClick={() => {
+                                    clearErrors();
+                                    sendEmails({
+                                        shipfiles: selectedRows,
+                                        test: true,
+                                        testEmailAddress
+                                    });
+                                }}
+                            >
+                                Test Selected
+                            </Button>
                         </Grid>
                     </>
                 )}
