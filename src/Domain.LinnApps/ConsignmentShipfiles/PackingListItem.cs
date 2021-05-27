@@ -2,7 +2,14 @@
 {
     public class PackingListItem
     {
-        public string Pallet { get; set; }
+        public PackingListItem(int? pallet, int? box, string contentsDescription)
+        {
+            this.Pallet = pallet;
+            this.Box = box;
+            this.ContentsDescription = contentsDescription;
+        }
+
+        public int? Pallet { get; set; }
 
         public int? Box { get; set; }
 
