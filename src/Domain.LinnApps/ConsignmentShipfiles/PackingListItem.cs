@@ -17,6 +17,8 @@
 
         public int? Count { get; set; }
 
+        public int Quantity { get; set; }
+
         public string ContentsDescription { get; set; }
     }
 }

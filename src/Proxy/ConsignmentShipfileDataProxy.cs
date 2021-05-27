@@ -102,7 +102,10 @@
                 var data = rows[i].ItemArray;
                 int.TryParse(data[2].ToString(), out var box);
                 int.TryParse(data[1].ToString(), out var pallet);
-                result.Add(new PackingListItem(pallet, box, data[3].ToString()));
+                int.TryParse(data[4].ToString(), out var qty);
+                var item = new PackingListItem(pallet, box, data[3].ToString());
+                item.Quantity = qty;
+                result.Add(item);
             }
 
             return result;
