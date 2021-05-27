@@ -986,12 +986,12 @@
             q.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
             q.Property(e => e.PortCode).HasColumnName("PORT_CODE").HasMaxLength(3);
             q.Property(e => e.CustomsEntryCodePrefix).HasColumnName("CUSTOMS_ENTRY_CODE_PREFIX").HasMaxLength(3);
-            q.HasMany(t => t.InvoiceDetails).WithOne()
-                .HasForeignKey(detail => new { detail.ImportBookId, detail.LineNumber });
-            q.HasMany(t => t.OrderDetails).WithOne()
-                .HasForeignKey(detail => new { detail.ImportBookId, detail.LineNumber });
-            q.HasMany(t => t.PostEntries).WithOne()
-                .HasForeignKey(entry => new { entry.ImportBookId, entry.LineNumber });
+            //q.HasMany(t => t.InvoiceDetails).WithOne()
+            //    .HasForeignKey(detail => new { detail.ImportBookId, detail.LineNumber });
+            //q.HasMany(t => t.OrderDetails).WithOne()
+            //    .HasForeignKey(detail => new { detail.ImportBookId, detail.LineNumber });
+            //q.HasMany(t => t.PostEntries).WithOne()
+            //    .HasForeignKey(entry => new { entry.ImportBookId, entry.LineNumber });
         }
 
         private void BuildImportBookInvoiceDetails(ModelBuilder builder)
