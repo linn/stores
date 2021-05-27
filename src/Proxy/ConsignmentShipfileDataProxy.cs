@@ -4,8 +4,8 @@
     using System.Linq;
 
     using Linn.Common.Proxy.LinnApps;
+    using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
-    using Linn.Stores.Domain.LinnApps.Models.Emails;
 
     public class ConsignmentShipfileDataProxy : IConsignmentShipfileDataService
     {

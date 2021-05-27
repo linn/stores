@@ -11,6 +11,7 @@
     using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
+    using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
@@ -59,7 +60,7 @@
             builder.RegisterType<PdfService>().As<IPdfService>();
             builder.RegisterType<TemplateEngine>().As<ITemplateEngine>();
             builder.RegisterType<ImportBookService>().As<IImportBookService>();
-
+            builder.RegisterType<PackingListService>().As<IPackingListService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
