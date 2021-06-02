@@ -23,9 +23,11 @@
                 // the first item we see, so add it to a new group unless it is the <<__ End of Input __> delimiter returned by the query
                 if (i == 0 && current.ContentsDescription != "<<__ End of input __>>")
                 {
-                    resultGroups.Add(packingListItems.First());
-                    resultGroups.First().Count = current.Box;
-                    resultGroups.First().To = current.Box;
+                    resultGroups.Add(new PackingListItem(current.Pallet, current.Box, current.ContentsDescription, current.Quantity)
+                                         {
+                                             Count = current.Box,
+                                             To = current.Box
+                                         });
                     qtyOfIdenticalItems += packingListItems.First().Quantity;
                     continue;
                 }
