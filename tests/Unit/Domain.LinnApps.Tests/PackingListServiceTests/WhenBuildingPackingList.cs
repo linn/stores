@@ -106,66 +106,18 @@
         {
             var dataResult = new List<PackingListItem>
                                  {
-                                     new PackingListItem(
-                                         null,
-                                         1,
-                                         "10 MISS 293, 8 MECH 845, 1 MISS 330, 8 MECH 846, 1 PCAS 754/PT, 24 MECH 867, 8 MCP 2319, 8 MECH 790, 1 PCAS 760/PT, 10 MECH 565, 24 MCP 2342",
-                                         1),
-                                     new PackingListItem(
-                                         null,
-                                         1,
-                                         "10 MISS 293, 8 MECH 845, 1 MISS 330, 8 MECH 846, 1 PCAS 754/PT, 24 MECH 867, 8 MCP 2319, 8 MECH 790, 1 PCAS 760/PT, 10 MECH 565, 24 MCP 2342",
-                                         8),
-                                     new PackingListItem(
-                                         null,
-                                         1,
-                                         "10 MISS 293, 8 MECH 845, 1 MISS 330, 8 MECH 846, 1 PCAS 754/PT, 24 MECH 867, 8 MCP 2319, 8 MECH 790, 1 PCAS 760/PT, 10 MECH 565, 24 MCP 2342",
-                                         8),
-                                     new PackingListItem(
-                                         null,
-                                         1,
-                                         "10 MISS 293, 8 MECH 845, 1 MISS 330, 8 MECH 846, 1 PCAS 754/PT, 24 MECH 867, 8 MCP 2319, 8 MECH 790, 1 PCAS 760/PT, 10 MECH 565, 24 MCP 2342",
-                                         1),
-                                     new PackingListItem(
-                                         null,
-                                         1,
-                                         "10 MISS 293, 8 MECH 845, 1 MISS 330, 8 MECH 846, 1 PCAS 754/PT, 24 MECH 867, 8 MCP 2319, 8 MECH 790, 1 PCAS 760/PT, 10 MECH 565, 24 MCP 2342",
-                                         24),
-                                     new PackingListItem(
-                                         null,
-                                         1,
-                                         "10 MISS 293, 8 MECH 845, 1 MISS 330, 8 MECH 846, 1 PCAS 754/PT, 24 MECH 867, 8 MCP 2319, 8 MECH 790, 1 PCAS 760/PT, 10 MECH 565, 24 MCP 2342",
-                                         8),
-                                     new PackingListItem(
-                                         null,
-                                         1,
-                                         "10 MISS 293, 8 MECH 845, 1 MISS 330, 8 MECH 846, 1 PCAS 754/PT, 24 MECH 867, 8 MCP 2319, 8 MECH 790, 1 PCAS 760/PT, 10 MECH 565, 24 MCP 2342",
-                                         24),
-                                     new PackingListItem(
-                                         null,
-                                         1,
-                                         "10 MISS 293, 8 MECH 845, 1 MISS 330, 8 MECH 846, 1 PCAS 754/PT, 24 MECH 867, 8 MCP 2319, 8 MECH 790, 1 PCAS 760/PT, 10 MECH 565, 24 MCP 2342",
-                                         10),
-                                     new PackingListItem(
-                                         null,
-                                         1,
-                                         "10 MISS 293, 8 MECH 845, 1 MISS 330, 8 MECH 846, 1 PCAS 754/PT, 24 MECH 867, 8 MCP 2319, 8 MECH 790, 1 PCAS 760/PT, 10 MECH 565, 24 MCP 2342",
-                                         8),
-                                     new PackingListItem(
-                                         null,
-                                         1,
-                                         "10 MISS 293, 8 MECH 845, 1 MISS 330, 8 MECH 846, 1 PCAS 754/PT, 24 MECH 867, 8 MCP 2319, 8 MECH 790, 1 PCAS 760/PT, 10 MECH 565, 24 MCP 2342",
-                                         10),
-                                     new PackingListItem(
-                                         null,
-                                         1,
-                                         "10 MISS 293, 8 MECH 845, 1 MISS 330, 8 MECH 846, 1 PCAS 754/PT, 24 MECH 867, 8 MCP 2319, 8 MECH 790, 1 PCAS 760/PT, 10 MECH 565, 24 MCP 2342",
-                                         1),
-                                     new PackingListItem(
-                                         null,
-                                         1,
-                                         "10 MISS 293, 8 MECH 845, 1 MISS 330, 8 MECH 846, 1 PCAS 754/PT, 24 MECH 867, 8 MCP 2319, 8 MECH 790, 1 PCAS 760/PT, 10 MECH 565, 24 MCP 2342",
-                                         1),
+                                     new PackingListItem(null, 1, "10 MISS 293, 8 MECH 845", 1),
+                                     new PackingListItem(null, 1, "10 MISS 293, 8 MECH 845", 8),
+                                     new PackingListItem(null, 1, "10 MISS 293, 8 MECH 845", 8),
+                                     new PackingListItem(null, 1, "10 MISS 293, 8 MECH 845", 1),
+                                     new PackingListItem(null, 1, "10 MISS 293, 8 MECH 845", 24),
+                                     new PackingListItem(null, 1, "10 MISS 293, 8 MECH 845", 8),
+                                     new PackingListItem(null, 1, "10 MISS 293, 8 MECH 845", 24),
+                                     new PackingListItem(null, 1, "10 MISS 293, 8 MECH 845", 10),
+                                     new PackingListItem(null, 1, "10 MISS 293, 8 MECH 845", 8),
+                                     new PackingListItem(null, 1, "10 MISS 293, 8 MECH 845", 10),
+                                     new PackingListItem(null, 1, "10 MISS 293, 8 MECH 845", 1),
+                                     new PackingListItem(null, 1, "10 MISS 293, 8 MECH 845", 1),
                                      new PackingListItem(999999, 999999, "<<__ End of input __>>", 0)
                                  };
 
@@ -175,12 +127,11 @@
             result.First().Box.Should().Be(1);
             result.First().To.Should().Be(1);
             result.First().Count.Should().Be(1);
-            result.First().ContentsDescription.Should().Be(
-                "10 MISS 293, 8 MECH 845, 1 MISS 330, 8 MECH 846, 1 PCAS 754/PT, 24 MECH 867, 8 MCP 2319, 8 MECH 790, 1 PCAS 760/PT, 10 MECH 565, 24 MCP 2342");
+            result.First().ContentsDescription.Should().Be("10 MISS 293, 8 MECH 845");
         }
 
         [Test]
-        public void Example7()
+        public void Example6()
         {
             var dataResult = new List<PackingListItem>
                                  {
