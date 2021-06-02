@@ -32,7 +32,7 @@
 
                 var prev = packingListItems.ElementAt(i - 1);
 
-                // no box information, so add item since it needs to be on its own line
+                // no box information, so add item since it needs to be on its own line witha count of 1
                 if (current.Box == null && current.ContentsDescription != "<<__ End of input __>>")
                 {
                     var group = new PackingListItem(
@@ -57,10 +57,10 @@
                     var item = desc.Remove(0, desc.IndexOf(' ') + 1);
                     group.ContentsDescription = $"{qtyOfIdenticalItems} {item}";
 
-                    // the box the group starts at
+                    // the box the group starts on
                     group.Box = minBox;
 
-                    // the box the group stretches to
+                    // the box the group ends on
                     group.To = maxBox;
 
                     // count is the range from max -> min, inclusive
@@ -72,7 +72,7 @@
                     maxBox = 0;
                 }
 
-                // the first time we see a new item that isn't 'identical' to the previous one, so add it to a new group
+                // the first time we see a new item that isn't 'identical' to the previous one, hence add it as a new group
                 if (!IsIdenticalItem(prev, current) && current.ContentsDescription != "<<__ End of input __>>")
                 {
                     minBox = current.Box ?? 0;
