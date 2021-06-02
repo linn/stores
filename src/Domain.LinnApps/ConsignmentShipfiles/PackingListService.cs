@@ -53,10 +53,19 @@
                     || current.ContentsDescription == "<<__ End of input __>>")
                 {
                     var group = resultGroups.Last();
-                    var desc = group.ContentsDescription;
-                    var item = desc.Remove(0, desc.IndexOf(' ') + 1);
-                    group.ContentsDescription = $"{qtyOfIdenticalItems} {item}";
 
+                    // descriptions with commas in them are already totalised
+                    if (!group.ContentsDescription.Contains(","))
+                    {
+                        var desc = group.ContentsDescription;
+
+                        // remove the individual item quantity from the string
+                        var item = desc.Remove(0, desc.IndexOf(' ') + 1);
+
+                        // and replace it with the counted up total
+                        group.ContentsDescription = $"{qtyOfIdenticalItems} {item}";
+                    }
+                    
                     // the box the group starts on
                     group.Box = minBox;
 
