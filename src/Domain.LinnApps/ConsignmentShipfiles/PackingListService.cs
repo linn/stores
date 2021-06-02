@@ -5,56 +5,111 @@
 
     public class PackingListService : IPackingListService
     {
+        // groups items into lines based on the IsIdenticalItem() test, and sums up quantities for the groups accordingly
         public IEnumerable<PackingListItem> BuildPackingList(IEnumerable<PackingListItem> dataResult)
         {
-            var result = new List<PackingListItem>();
-
+            var resultGroups = new List<PackingListItem>();
             var packingListItems = dataResult as PackingListItem[] ?? dataResult.ToArray();
-
-            var qtyOfIdenticalItems = 0;
-
+            var qtyOfIdenticalItems = 0m;
             var prevWasIdentical = false;
+
+            var minBox = 1;
+            var maxBox = 1;
             
             for (var i = 0; i < packingListItems.Length; i++)
             {
                 var current = packingListItems.ElementAt(i);
-
-                if (current.Box == null && current.Pallet == null)
+             
+                // the first item we see, so add it to a new group unless it is the <<__ End of Input __> delimiter returned by the query
+                if (i == 0 && current.ContentsDescription != "<<__ End of input __>>")
                 {
-                    result.Add(current);
-                    continue;
-                }
-
-                if (i == 0)
-                {
-                    result.Add(packingListItems.First());
+                    resultGroups.Add(packingListItems.First());
+                    resultGroups.First().Count = current.Box;
+                    resultGroups.First().To = current.Box;
+                    qtyOfIdenticalItems += packingListItems.First().Quantity;
                     continue;
                 }
 
                 var prev = packingListItems.ElementAt(i - 1);
-                if (this.IsIdenticalItem(prev, current))
+
+                // no box information, so add item since it needs to be on its own line
+                if (current.Box == null && current.ContentsDescription != "<<__ End of input __>>")
                 {
+                    var group = new PackingListItem(
+                        current.Pallet,
+                        current.Box,
+                        current.ContentsDescription,
+                        current.Quantity)
+                                    {
+                                        Count = 1
+                                    };
+                    resultGroups.Add(group);
+                    continue;
+                }
+
+                // we've come to the end of a group of 'identical' items (or the end of the list), so update the description for the previous group
+                if ((prevWasIdentical && !IsIdenticalItem(prev, current)) 
+                    || i == packingListItems.Length - 1 
+                    || current.ContentsDescription == "<<__ End of input __>>")
+                {
+                    var group = resultGroups.Last();
+                    var desc = group.ContentsDescription;
+                    var item = desc.Remove(0, desc.IndexOf(' ') + 1);
+                    group.ContentsDescription = $"{qtyOfIdenticalItems} {item}";
+
+                    // the box the group starts at
+                    group.Box = minBox;
+
+                    // the box the group stretches to
+                    group.To = maxBox;
+
+                    // count is the range from max -> min, inclusive
+                    group.Count = maxBox - minBox + 1;
+                   
+                    // reset  counters for the next group
+                    qtyOfIdenticalItems = 0;
+                    minBox = 0;
+                    maxBox = 0;
+                }
+
+                // the first time we see a new item that isn't 'identical' to the previous one, so add it to a new group
+                if (!IsIdenticalItem(prev, current) && current.ContentsDescription != "<<__ End of input __>>")
+                {
+                    minBox = current.Box ?? 0;
+                    maxBox = current.Box ?? 0;
+                    var group = new PackingListItem(
+                        current.Pallet,
+                        current.Box,
+                        current.ContentsDescription,
+                        current.Quantity)
+                                    {
+                                        Box = current.Box
+                                    };
+                    
+                    group.To = current.Box;
+                    group.Count = 1;
+                    resultGroups.Add(group);
                     qtyOfIdenticalItems += current.Quantity;
                 }
-                
-                if ((prevWasIdentical && !this.IsIdenticalItem(prev, current)) || i == packingListItems.Length - 1)
+                else
                 {
-                    // did you have the same box, or the same description?
-                    result.Last().ContentsDescription = "I need to be updated if i don't contain a ,";
+                    // else we've seen an item 'identical' to this before, so just count it up
+                    qtyOfIdenticalItems += current.Quantity;
+                    
+                    if (current.Box != null && current.Box >= maxBox)
+                    {
+                        maxBox = (int)current.Box;
+                    }
                 }
 
-                if (!this.IsIdenticalItem(prev, current))
-                {
-                    result.Add(current);
-                }
-
-                prevWasIdentical = this.IsIdenticalItem(prev, current);
+                // keep track of whether the previous item was 'identical' to the one before it
+                prevWasIdentical = IsIdenticalItem(prev, current);
             }
 
-            return result;
+            return resultGroups;
         }
 
-        private bool IsIdenticalItem(PackingListItem prev, PackingListItem current)
+        private static bool IsIdenticalItem(PackingListItem prev, PackingListItem current)
         {
             return (current.ContentsDescription == prev.ContentsDescription || current.Box == prev.Box)
                    && (current.Pallet == prev.Pallet || current.Pallet == null);

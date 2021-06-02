@@ -267,6 +267,5 @@
 
             return consignment.Carrier != "TNT" ? "R" : "E";
         }
-
     }
 }

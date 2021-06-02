@@ -75,7 +75,7 @@
                               };
 
             this.PackingListService.BuildPackingList(Arg.Any<IEnumerable<PackingListItem>>())
-                .ReturnsForAnyArgs(new List<PackingListItem> { new PackingListItem(1, 1, "desc") });
+                .ReturnsForAnyArgs(new List<PackingListItem> { new PackingListItem(1, 1, "desc", 1m) });
 
             this.ShipfileRepository.FindById(1).Returns(this.shipfileData);
 
