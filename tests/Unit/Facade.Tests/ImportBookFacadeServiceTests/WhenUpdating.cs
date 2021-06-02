@@ -4,6 +4,8 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using FluentAssertions;
+
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Resources.Parts;
@@ -21,6 +23,8 @@
         private ImportBookResource resource;
 
         private ImportBook from;
+
+        private IResult<ImportBook> result;
 
         [SetUp]
         public void SetUp()
@@ -237,152 +241,195 @@
                                 };
 
             this.ImportBookRepository.FindById(Arg.Any<int>()).Returns(this.from);
-            this.Sut.Update(this.impbookId, this.resource);
+            this.result = this.Sut.Update(this.impbookId, this.resource);
+        }
+
+        [Test]
+        public void ShouldCallReturnSuccessResult()
+        {
+            this.result.Should().BeOfType<SuccessResult<ImportBook>>();
         }
 
         [Test]
         public void ShouldCallDomainWithRightData()
         {
-            var to = new ImportBook()
-                         {
-                             Id = this.impbookId,
-                             DateCreated = this.now.AddDays(2),
-                             OrderDetails =
-                                 new List<ImportBookOrderDetail>
-                                     {
-                                         new ImportBookOrderDetail
-                                             {
-                                                 ImportBookId = this.impbookId,
-                                                 LineNumber = 1,
-                                                 OrderNumber = 111,
-                                                 RsnNumber = 222,
-                                                 OrderDescription = "kylo ren first order",
-                                                 Qty = 3,
-                                                 DutyValue = 91.12m,
-                                                 FreightValue = 92.12m,
-                                                 VatValue = 93.12m,
-                                                 OrderValue = 944.1m,
-                                                 Weight = 955.2m,
-                                                 LoanNumber = 999,
-                                                 LineType = "Type C",
-                                                 CpcNumber = 91,
-                                                 TariffCode = "121213",
-                                                 InsNumber = 92,
-                                                 VatRate = 93
-                                             }
-                                     },
-                             PostEntries = new List<ImportBookPostEntry>
-                                               {
-                                                   new ImportBookPostEntry
-                                                       {
-                                                           ImportBookId = this.impbookId,
-                                                           LineNumber = 1,
-                                                           EntryCodePrefix = "PR",
-                                                           EntryCode = "code blu",
-                                                           EntryDate = null,
-                                                           Reference = "refer fence",
-                                                           Duty = null,
-                                                           Vat = null
-                                                       },
-                                                   new ImportBookPostEntry
-                                                       {
-                                                           ImportBookId = this.impbookId,
-                                                           LineNumber = 2,
-                                                           EntryCodePrefix = "DL",
-                                                           EntryCode = "code blanc",
-                                                           EntryDate = this.now.AddDays(-6),
-                                                           Reference = "hocus pocus",
-                                                           Duty = 33,
-                                                           Vat = 44
-                                                       }
-                                               }
-                         };
-
             this.DomainService.Received().Update(
                 this.from,
                 Arg.Is<ImportBook>(
-                    x => x.ParcelNumber == 1 && x.SupplierId == 556 && x.ForeignCurrency == "YN" && x.Currency == "GBD"
-                         && x.CarrierId == 678 && x.OldArrivalPort == "Glesga" && x.FlightNumber == "sk123"
-                         && x.TransportId == 2 && x.TransportBillNumber == "1212" && x.TransactionId == 45
-                         && x.DeliveryTermCode == "dli" && x.ArrivalPort == "LAZ" && x.LineVatTotal == 12
-                         && x.Hwb == "hwbbb" && x.SupplierCostCurrency == "egg" && x.TransNature == "sea"
-                         && x.ArrivalDate == this.now.AddDays(3) && x.FreightCharges == 11.1m
-                         && x.HandlingCharge == 11.1m && x.ClearanceCharge == 11.1m && x.Cartage == 11.1m
-                         && x.Duty == 11.1m && x.Vat == 11.1m && x.Misc == 11.1m && x.CarriersInvTotal == 11.1m
-                         && x.CarriersVatTotal == 11.1m && x.TotalImportValue == 133.4m && x.Pieces == 1
-                         && x.Weight == 11.1m && x.CustomsEntryCode == "code green"
-                         && x.CustomsEntryCodeDate == this.now.AddDays(2) && x.LinnDuty == 12 && x.LinnVat == 11.1m
-                         && x.IprCpcNumber == 1 && x.EecgNumber == 1 && x.DateCancelled == this.now.AddDays(5)
-                         && x.CancelledBy == 33105 && x.CancelledReason == "cancel" && x.CarrierInvNumber == "inv123"
-                         && x.CarrierInvDate == this.now.AddDays(3) && x.CountryOfOrigin == "DE" && x.FcName == "FC1"
-                         && x.VaxRef == "VAX123" && x.Storage == 11.1m && x.NumCartons == 1 && x.NumPallets == 1
-                         && x.Comments == "now closed" && x.ExchangeRate == 11.1m && x.ExchangeCurrency == "BB"
-                         && x.BaseCurrency == "AA" && x.PeriodNumber == 47 && x.CreatedBy == 33105
-                         && x.PortCode == "g74" && x.CustomsEntryCodePrefix == "AA"));
+                    x => x.ParcelNumber == this.resource.ParcelNumber && x.SupplierId == this.resource.SupplierId
+                                                                      && x.ForeignCurrency
+                                                                      == this.resource.ForeignCurrency
+                                                                      && x.Currency == this.resource.Currency
+                                                                      && x.CarrierId == this.resource.CarrierId
+                                                                      && x.OldArrivalPort
+                                                                      == this.resource.OldArrivalPort
+                                                                      && x.FlightNumber == this.resource.FlightNumber
+                                                                      && x.TransportId == this.resource.TransportId
+                                                                      && x.TransportBillNumber
+                                                                      == this.resource.TransportBillNumber
+                                                                      && x.TransactionId == this.resource.TransactionId
+                                                                      && x.DeliveryTermCode
+                                                                      == this.resource.DeliveryTermCode
+                                                                      && x.ArrivalPort == "LAZ" && x.LineVatTotal == 12
+                                                                      && x.DeliveryTermCode
+                                                                      == this.resource.DeliveryTermCode
+                                                                      && x.ArrivalPort == this.resource.ArrivalPort
+                                                                      && x.LineVatTotal == this.resource.LineVatTotal
+                                                                      && x.Hwb == this.resource.Hwb
+                                                                      && x.SupplierCostCurrency
+                                                                      == this.resource.SupplierCostCurrency
+                                                                      && x.TransNature == this.resource.TransNature
+                                                                      && x.ArrivalDate == this.now.AddDays(3)
+                                                                      && x.FreightCharges
+                                                                      == this.resource.FreightCharges
+                                                                      && x.HandlingCharge
+                                                                      == this.resource.HandlingCharge
+                                                                      && x.ClearanceCharge
+                                                                      == this.resource.ClearanceCharge
+                                                                      && x.Cartage == this.resource.Cartage
+                                                                      && x.Duty == this.resource.Duty
+                                                                      && x.Vat == this.resource.Vat
+                                                                      && x.Misc == this.resource.Misc
+                                                                      && x.CarriersInvTotal
+                                                                      == this.resource.CarriersInvTotal
+                                                                      && x.CarriersVatTotal
+                                                                      == this.resource.CarriersVatTotal
+                                                                      && x.TotalImportValue
+                                                                      == this.resource.TotalImportValue
+                                                                      && x.Pieces == this.resource.Pieces
+                                                                      && x.Weight == this.resource.Weight
+                                                                      && x.CustomsEntryCode
+                                                                      == this.resource.CustomsEntryCode
+                                                                      && x.CustomsEntryCodeDate == this.now.AddDays(2)
+                                                                      && x.LinnDuty == this.resource.LinnDuty
+                                                                      && x.LinnVat == this.resource.LinnVat
+                                                                      && x.IprCpcNumber == this.resource.IprCpcNumber
+                                                                      && x.EecgNumber == this.resource.EecgNumber
+                                                                      && x.DateCancelled == this.now.AddDays(5)
+                                                                      && x.CancelledBy == 33105
+                                                                      && x.CancelledReason == "cancel"
+                                                                      && x.CarrierInvNumber == "inv123"
+                                                                      && x.CarrierInvDate == this.now.AddDays(3)
+                                                                      && x.CountryOfOrigin
+                                                                      == this.resource.CountryOfOrigin
+                                                                      && x.FcName == this.resource.FcName
+                                                                      && x.VaxRef == this.resource.VaxRef
+                                                                      && x.Storage == this.resource.Storage
+                                                                      && x.NumCartons == this.resource.NumCartons
+                                                                      && x.NumPallets == this.resource.NumPallets
+                                                                      && x.Comments == this.resource.Comments
+                                                                      && x.ExchangeRate == this.resource.ExchangeRate
+                                                                      && x.ExchangeCurrency
+                                                                      == this.resource.ExchangeCurrency
+                                                                      && x.BaseCurrency == this.resource.BaseCurrency
+                                                                      && x.PeriodNumber == this.resource.PeriodNumber
+                                                                      && x.CreatedBy == this.resource.CreatedBy
+                                                                      && x.PortCode == this.resource.PortCode
+                                                                      && x.CustomsEntryCodePrefix
+                                                                      == this.resource.CustomsEntryCodePrefix));
         }
 
         [Test]
         public void ShouldCallDomainWithInvoiceDetails()
         {
-            this.DomainService.Received().Update(
-                this.from,
-                Arg.Is<ImportBook>(
-                    z => z.InvoiceDetails.Any(
-                        x => x.ImportBookId == this.impbookId && x.InvoiceNumber == "123" && x.LineNumber == 1
-                             && x.InvoiceValue == 12.5m)));
+            var firstResource = this.resource.ImportBookInvoiceDetails.FirstOrDefault(x => x.LineNumber == 1);
+            var secondResource = this.resource.ImportBookInvoiceDetails.FirstOrDefault(x => x.LineNumber == 2);
 
             this.DomainService.Received().Update(
                 this.from,
                 Arg.Is<ImportBook>(
                     z => z.InvoiceDetails.Any(
-                        x => x.ImportBookId == this.impbookId && x.InvoiceNumber == "1234" && x.LineNumber == 2
-                             && x.InvoiceValue == 155.2m)));
+                        x => x.ImportBookId == this.impbookId && x.InvoiceNumber == firstResource.InvoiceNumber
+                                                              && x.LineNumber == firstResource.LineNumber
+                                                              && x.InvoiceValue == firstResource.InvoiceValue)));
+
+            this.DomainService.Received().Update(
+                this.from,
+                Arg.Is<ImportBook>(
+                    z => z.InvoiceDetails.Any(
+                        x => x.ImportBookId == this.impbookId && x.InvoiceNumber == secondResource.InvoiceNumber
+                                                              && x.LineNumber == secondResource.LineNumber
+                                                              && x.InvoiceValue == secondResource.InvoiceValue)));
         }
 
         [Test]
         public void ShouldCallDomainWithOrderDetails()
         {
-            this.DomainService.Received().Update(
-                this.from,
-                Arg.Is<ImportBook>(
-                    z => z.OrderDetails.Any(
-                        x => x.ImportBookId == this.impbookId && x.LineNumber == 2 && x.OrderNumber == 13
-                             && x.RsnNumber == 2 && x.OrderDescription == "palpatine final order" && x.Qty == 1
-                             && x.DutyValue == 21.12m && x.FreightValue == 22.12m && x.VatValue == 3.12m
-                             && x.OrderValue == 44.1m && x.Weight == 55.2m && x.LoanNumber == null
-                             && x.LineType == "TYpe B" && x.CpcNumber == null && x.TariffCode == "121213"
-                             && x.InsNumber == null && x.VatRate == null)));
+            var firstResource = this.resource.ImportBookOrderDetails.FirstOrDefault(x => x.LineNumber == 1);
+            var secondResource = this.resource.ImportBookOrderDetails.FirstOrDefault(x => x.LineNumber == 2);
 
             this.DomainService.Received().Update(
                 this.from,
                 Arg.Is<ImportBook>(
                     z => z.OrderDetails.Any(
-                        x => x.ImportBookId == this.impbookId && x.LineNumber == 1 && x.OrderNumber == 111
-                             && x.RsnNumber == 222 && x.OrderDescription == "kylo ren first order" && x.Qty == 3
-                             && x.DutyValue == 91.12m && x.FreightValue == 92.12m && x.VatValue == 93.12m
-                             && x.OrderValue == 944.1m && x.Weight == 955.2m && x.LoanNumber == 999
-                             && x.LineType == "Type C" && x.CpcNumber == 91 && x.TariffCode == "121213"
-                             && x.InsNumber == 92 && x.VatRate == 93)));
+                        x => x.ImportBookId == this.impbookId && x.LineNumber == firstResource.LineNumber
+                                                              && x.OrderNumber == firstResource.OrderNumber
+                                                              && x.RsnNumber == firstResource.RsnNumber
+                                                              && x.OrderDescription == firstResource.OrderDescription
+                                                              && x.Qty == firstResource.Qty
+                                                              && x.DutyValue == firstResource.DutyValue
+                                                              && x.FreightValue == firstResource.FreightValue
+                                                              && x.VatValue == firstResource.VatValue
+                                                              && x.OrderValue == firstResource.OrderValue
+                                                              && x.Weight == firstResource.Weight
+                                                              && x.LoanNumber == firstResource.LoanNumber
+                                                              && x.LineType == firstResource.LineType
+                                                              && x.CpcNumber == firstResource.CpcNumber
+                                                              && x.TariffCode == firstResource.TariffCode
+                                                              && x.InsNumber == firstResource.InsNumber
+                                                              && x.VatRate == firstResource.VatRate)));
+
+            this.DomainService.Received().Update(
+                this.from,
+                Arg.Is<ImportBook>(
+                    z => z.OrderDetails.Any(
+                        x => x.ImportBookId == this.impbookId && x.LineNumber == secondResource.LineNumber
+                                                              && x.OrderNumber == secondResource.OrderNumber
+                                                              && x.RsnNumber == secondResource.RsnNumber
+                                                              && x.OrderDescription == secondResource.OrderDescription
+                                                              && x.Qty == secondResource.Qty
+                                                              && x.DutyValue == secondResource.DutyValue
+                                                              && x.FreightValue == secondResource.FreightValue
+                                                              && x.VatValue == secondResource.VatValue
+                                                              && x.OrderValue == secondResource.OrderValue
+                                                              && x.Weight == secondResource.Weight
+                                                              && x.LoanNumber == secondResource.LoanNumber
+                                                              && x.LineType == secondResource.LineType
+                                                              && x.CpcNumber == secondResource.CpcNumber
+                                                              && x.TariffCode == secondResource.TariffCode
+                                                              && x.InsNumber == secondResource.InsNumber
+                                                              && x.VatRate == secondResource.VatRate)));
         }
 
         [Test]
         public void ShouldCallDomainWithPostEntries()
         {
-            this.DomainService.Received().Update(
-                this.from,
-                Arg.Is<ImportBook>(
-                    z => z.PostEntries.Any(
-                        x => x.ImportBookId == this.impbookId && x.LineNumber == 1 && x.EntryCodePrefix == "PR"
-                             && x.EntryCode == "code blu" && x.EntryDate == null && x.Reference == "refer fence"
-                             && x.Duty == null && x.Vat == null)));
+            var firstResource = this.resource.ImportBookPostEntries.FirstOrDefault(x => x.LineNumber == 1);
+            var secondResource = this.resource.ImportBookPostEntries.FirstOrDefault(x => x.LineNumber == 2);
 
             this.DomainService.Received().Update(
                 this.from,
                 Arg.Is<ImportBook>(
                     z => z.PostEntries.Any(
-                        x => x.ImportBookId == this.impbookId && x.LineNumber == 2 && x.EntryCodePrefix == "DL"
-                             && x.EntryCode == "code blanc" && x.EntryDate == this.now.AddDays(-6)
-                             && x.Reference == "hocus pocus" && x.Duty == 33 && x.Vat == 44)));
+                        x => x.ImportBookId == this.impbookId && x.LineNumber == firstResource.LineNumber
+                                                              && x.EntryCodePrefix == firstResource.EntryCodePrefix
+                                                              && x.EntryCode == firstResource.EntryCode
+                                                              && x.EntryDate == (DateTime?)null
+                                                              && x.Reference == firstResource.Reference
+                                                              && x.Duty == firstResource.Duty
+                                                              && x.Vat == firstResource.Vat)));
+
+            this.DomainService.Received().Update(
+                this.from,
+                Arg.Is<ImportBook>(
+                    z => z.PostEntries.Any(
+                        x => x.ImportBookId == this.impbookId && x.LineNumber == secondResource.LineNumber
+                                                              && x.EntryCodePrefix == secondResource.EntryCodePrefix
+                                                              && x.EntryCode == secondResource.EntryCode
+                                                              && x.EntryDate == this.now.AddDays(-6)
+                                                              && x.Reference == secondResource.Reference
+                                                              && x.Duty == secondResource.Duty
+                                                              && x.Vat == secondResource.Vat)));
         }
     }
 }
