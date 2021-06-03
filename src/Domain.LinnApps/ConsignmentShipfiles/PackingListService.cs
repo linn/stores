@@ -19,7 +19,7 @@
             for (var i = 0; i < packingListItems.Length; i++)
             {
                 var current = packingListItems.ElementAt(i);
-             
+               
                 // the first item we see, so add it to a new group unless it is the <<__ End of Input __> delimiter returned by the query
                 if (i == 0 && current.ContentsDescription != "<<__ End of input __>>")
                 {
@@ -50,8 +50,7 @@
                 }
 
                 // we've come to the end of a group of 'identical' items (or the end of the list), so update the description for the previous group
-                if ((prevWasIdentical && !IsIdenticalItem(prev, current)) 
-                    || i == packingListItems.Length - 1 
+                if ((prevWasIdentical && !IsIdenticalItem(prev, current))
                     || current.ContentsDescription == "<<__ End of input __>>")
                 {
                     var group = resultGroups.Last();
@@ -86,6 +85,7 @@
                 // the first time we see a new item that isn't 'identical' to the previous one, hence add it as a new group
                 if (!IsIdenticalItem(prev, current) && current.ContentsDescription != "<<__ End of input __>>")
                 {
+                    qtyOfIdenticalItems = 0;
                     minBox = current.Box ?? 0;
                     maxBox = current.Box ?? 0;
                     var group = new PackingListItem(

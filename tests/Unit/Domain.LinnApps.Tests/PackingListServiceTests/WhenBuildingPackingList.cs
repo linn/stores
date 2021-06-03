@@ -146,5 +146,57 @@
             result.ElementAt(2).Count.Should().Be(1);
             result.ElementAt(2).To.Should().Be(3);
         }
+
+        [Test]
+        public void WhenLotsOfSameItem()
+        {
+            var dataResult = new List<PackingListItem>
+                                 {                                 
+                                     new PackingListItem(1,   1,   "1 SK ARBB",   1),
+                                     new PackingListItem(1,   2,   "1 SK ALBB",   1),
+                                     new PackingListItem(1,   3,   "1 SK ALBB",   1),
+                                     new PackingListItem(1,   4,   "1 SK ARBB",   1),
+                                     new PackingListItem(1,   5,   "1 SK ALBB",   1),
+                                     new PackingListItem(1,   6,   "1 SK ARBB",   1),
+                                     new PackingListItem(1,   7,   "1 SK ALBB",   1),
+                                     new PackingListItem(1,   8,   "1 SK ALBB",   1),
+                                     new PackingListItem(999999,  999999,  "<<__ End of input __>>",  0)
+                                 };
+
+            var result = this.Sut.BuildPackingList(dataResult).ToList();
+            result.Count.Should().Be(6);
+
+            result.All(x => x.Pallet == 1).Should().BeTrue();
+
+            result.ElementAt(0).Box.Should().Be(1);
+            result.ElementAt(0).To.Should().Be(1);
+            result.ElementAt(0).Count.Should().Be(1);
+            result.ElementAt(0).ContentsDescription.Should().Be("1 SK ARBB");
+
+            result.ElementAt(1).Box.Should().Be(2);
+            result.ElementAt(1).To.Should().Be(3);
+            result.ElementAt(1).Count.Should().Be(2);
+            result.ElementAt(1).ContentsDescription.Should().Be("2 SK ALBB");
+
+            result.ElementAt(2).Box.Should().Be(4);
+            result.ElementAt(2).To.Should().Be(4);
+            result.ElementAt(2).Count.Should().Be(1);
+            result.ElementAt(2).ContentsDescription.Should().Be("1 SK ARBB");
+
+            result.ElementAt(3).Box.Should().Be(5);
+            result.ElementAt(3).To.Should().Be(5);
+            result.ElementAt(3).Count.Should().Be(1);
+            result.ElementAt(3).ContentsDescription.Should().Be("1 SK ALBB");
+
+            result.ElementAt(4).Box.Should().Be(6);
+            result.ElementAt(4).To.Should().Be(6);
+            result.ElementAt(4).Count.Should().Be(1);
+            result.ElementAt(4).ContentsDescription.Should().Be("1 SK ARBB");
+
+            result.ElementAt(5).Box.Should().Be(7);
+            result.ElementAt(5).To.Should().Be(8);
+            result.ElementAt(5).Count.Should().Be(2);
+            result.ElementAt(5).ContentsDescription.Should().Be("2 SK ALBB");
+        }
     }
 }
