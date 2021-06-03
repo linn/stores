@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Domain.LinnApps
+﻿namespace Linn.Stores.Domain.LinnApps.ConsignmentShipfiles
 {
     using System;
     using System.Collections.Generic;

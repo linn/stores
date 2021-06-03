@@ -4,8 +4,8 @@
     using System.Linq;
 
     using Linn.Common.Proxy.LinnApps;
+    using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
-    using Linn.Stores.Domain.LinnApps.Models.Emails;
 
     public class ConsignmentShipfileDataProxy : IConsignmentShipfileDataService
     {
@@ -43,13 +43,13 @@
                                  Reference = data[4].ToString(),
                                  OutletAddress = data[5].ToString().Split("\n"),
                                  CarriersReference = data[6].ToString(),
-                                 PackingList = this.GetPackingList(consignmentId).ToArray(),
+                                 PackingList = this.GetPackingListData(consignmentId).ToArray(),
                                  DespatchNotes = this.GetDespatchNote(consignmentId).ToArray()
                              };
             return result;
         }
 
-        private IEnumerable<PackingListItem> GetPackingList(int consignmentId)
+        private IEnumerable<PackingListItem> GetPackingListData(int consignmentId)
         {
             var sql = $@"
             (SELECT CI.CONSIGNMENT_ID,
@@ -91,7 +91,10 @@
             AND PALLET_NO IS NULL
             AND NOT EXISTS(SELECT PALLET_NO FROM CONSIGNMENT_ITEMS
             WHERE PALLET_NO IS NOT NULL AND CONTAINER_NO = CI.CONTAINER_NO
-            AND CONSIGNMENT_ID = CI.CONSIGNMENT_ID))
+            AND CONSIGNMENT_ID = CI.CONSIGNMENT_ID)
+            UNION ALL
+            SELECT  999999,999999,999999, '<<__ End of input __>>',0 from dual
+            )
             ORDER BY CONTAINER_NO";
 
             var rows = this.databaseService.ExecuteQuery(sql).Tables[0].Rows;
@@ -101,12 +104,10 @@
             {
                 var data = rows[i].ItemArray;
                 int.TryParse(data[2].ToString(), out var box);
-                result.Add(new PackingListItem
-                               {
-                                   Pallet = data[1].ToString(),
-                                   Box = box,
-                                   ContentsDescription = data[3].ToString()
-                               });
+                int.TryParse(data[1].ToString(), out var pallet);
+                decimal.TryParse(data[4].ToString(), out var qty);
+                var item = new PackingListItem(pallet, box, data[3].ToString(), qty);
+                result.Add(item);
             }
 
             return result;

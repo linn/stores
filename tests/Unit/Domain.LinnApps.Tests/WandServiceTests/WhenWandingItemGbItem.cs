@@ -2,6 +2,7 @@
 {
     using FluentAssertions;
 
+    using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
 

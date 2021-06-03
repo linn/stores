@@ -8,7 +8,7 @@
 
     using FluentAssertions;
 
-    using Linn.Stores.Domain.LinnApps.Models.Emails;
+    using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
 
     using NSubstitute;
 
@@ -29,7 +29,7 @@
             {
                 OrgId = 1,
                 ContactId = 1,
-                ContactDetails = new Contact { EmailAddress = "customer@linn.co.uk", AddressId = 1 }
+                ContactDetails = new Contact { EmailAddress = "outlet@linn.co.uk", AddressId = 1 }
             };
 
             var orders = new List<SalesOrder>
@@ -74,6 +74,9 @@
                                   new ConsignmentShipfile { Id = 1 }
                               };
 
+            this.PackingListService.BuildPackingList(Arg.Any<IEnumerable<PackingListItem>>())
+                .ReturnsForAnyArgs(new List<PackingListItem> { new PackingListItem(1, 1, "desc", 1m) });
+
             this.ShipfileRepository.FindById(1).Returns(this.shipfileData);
 
             this.SalesOrderRepository.FilterBy(Arg.Any<Expression<Func<SalesOrder, bool>>>()).Returns(orders.AsQueryable());
@@ -83,7 +86,7 @@
             this.DataService.GetPdfModelData(Arg.Any<int>(), Arg.Any<int>()).Returns(
                 new ConsignmentShipfilePdfModel
                 {
-                    PackingList = new PackingListItem[] { new PackingListItem { Box = 1 } },
+                    PackingList = new PackingListItem[] { },
                     DespatchNotes = new DespatchNote[] { new DespatchNote() },
                     DateDispatched = "12/05/2008 09:34:58",
                     ConsignmentNumber = "1"

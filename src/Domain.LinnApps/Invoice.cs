@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
+    using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
+
     public class Invoice
     {
         public int DocumentNumber { get; set; }

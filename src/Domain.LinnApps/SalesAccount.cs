@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
 
+    using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
+
     public class SalesAccount
     {
         public int AccountId { get; set; }

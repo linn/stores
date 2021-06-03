@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
 
+    using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
+
     public class SalesOrder
     {
         public int OrderNumber { get; set; }
