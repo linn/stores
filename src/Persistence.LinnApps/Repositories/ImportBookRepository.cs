@@ -3,8 +3,11 @@
     using System;
     using System.Linq;
     using System.Linq.Expressions;
+
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
+
+    using Microsoft.EntityFrameworkCore;
 
     public class ImportBookRepository : IRepository<ImportBook, int>
     {
@@ -17,7 +20,11 @@
 
         public ImportBook FindById(int key)
         {
-            return this.serviceDbContext.ImportBooks.Where(b => b.Id == key).ToList().FirstOrDefault();
+            return this.serviceDbContext.ImportBooks.Where(b => b.Id == key)
+                .Include(x => x.InvoiceDetails)
+                .Include(y => y.OrderDetails)
+                .Include(z => z.PostEntries)
+                .ToList().FirstOrDefault();
         }
 
         public IQueryable<ImportBook> FindAll()

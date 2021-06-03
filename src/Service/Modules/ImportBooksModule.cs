@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
+    using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources.Parts;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Service.Models;
@@ -12,15 +13,21 @@
     public sealed class ImportBooksModule : NancyModule
     {
         private readonly IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource> importBookFacadeService;
+        private readonly IImportBookExchangeRateService importBookExchangeRateService;
+
 
         public ImportBooksModule(
-            IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource> importBookFacadeService)
+            IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource> importBookFacadeService,
+            IImportBookExchangeRateService importBookExchangeRateService)
         {
             this.importBookFacadeService = importBookFacadeService;
+            this.importBookExchangeRateService = importBookExchangeRateService;
+
             this.Get("/logistics/import-books/{id}", parameters => this.GetImportBook(parameters.id));
             this.Put("/logistics/import-books/{id}", parameters => this.UpdateImportBook(parameters.id));
             this.Post("/logistics/import-books/", _ => this.CreateImportBook());
             this.Get("/logistics/import-books", parameters => this.GetImportBooks());
+            this.Get("/logistics/import-books/exchange-rates", parameters => this.GetImportBookExchangeRates());
         }
 
         private object GetImportBook(int id)
@@ -61,6 +68,16 @@
             var result = this.importBookFacadeService.Add(resource);
 
             return this.Negotiate.WithModel(result).WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetImportBookExchangeRates()
+        {
+            var resource = this.Bind<SearchRequestResource>();
+
+            var results = this.importBookExchangeRateService.GetExchangeRatesForDate(resource.SearchTerm);
+
+            return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
     }
 }

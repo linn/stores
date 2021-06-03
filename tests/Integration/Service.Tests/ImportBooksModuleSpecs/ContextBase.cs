@@ -6,6 +6,7 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Facade.ResourceBuilders;
+    using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources.Parts;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
@@ -23,20 +24,25 @@
             get;
             private set;
         }
+        protected IImportBookExchangeRateService ImportBookExchangeRateService;
+
 
         [SetUp]
         public void EstablishContext()
         {
             this.ImportBooksFacadeService =
                 Substitute.For<IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource>>();
+            this.ImportBookExchangeRateService = Substitute.For<IImportBookExchangeRateService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                 {
                     with.Dependency(this.ImportBooksFacadeService);
+                    with.Dependency(this.ImportBookExchangeRateService);
                     with.Dependency<IResourceBuilder<ImportBook>>(new ImportBookResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<ImportBook>>>(new ImportBooksResourceBuilder());
                     with.Module<ImportBooksModule>();
+
                     with.ResponseProcessor<ImportBookResponseProcessor>();
                     with.ResponseProcessor<ImportBooksResponseProcessor>();
 

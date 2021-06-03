@@ -1,10 +1,24 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.ImportBooks
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
+    using Linn.Common.Persistence;
+
     public class ImportBookService : IImportBookService
     {
+        private readonly IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey> exchangeRateRepository;
+        private readonly IRepository<LedgerPeriod, int> ledgerPeriodRepository;
+
+
+        public ImportBookService(IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey> exchangeRateRepository,
+                                 IRepository<LedgerPeriod, int> ledgerPeriodRepository)
+        {
+            this.exchangeRateRepository = exchangeRateRepository;
+            this.ledgerPeriodRepository = ledgerPeriodRepository;
+        }
+
         public void Update(ImportBook from, ImportBook to)
         {
             this.UpdateTopLevelProperties(from, to);
@@ -14,6 +28,18 @@
             this.UpdateOrderDetails(from.OrderDetails, to.OrderDetails);
 
             this.UpdatePostEntries(from.PostEntries, to.PostEntries);
+        }
+
+        public IEnumerable<ImportBookExchangeRate> GetExchangeRates(string date)
+        {
+            var unformattedDate = DateTime.Parse(date);
+            var formattedDate = unformattedDate.ToString("MMMYYYY");
+
+            var ledgerPeriod = this.ledgerPeriodRepository.FindBy(x => x.MonthName == formattedDate);
+            
+            var exchangeRates = this.exchangeRateRepository.FilterBy(x => x.PeriodNumber == ledgerPeriod.PeriodNumber);
+
+            return exchangeRates;
         }
 
         private void UpdateTopLevelProperties(ImportBook entity, ImportBook to)
