@@ -12,7 +12,7 @@
     public class WhenBuildingPackingList : ContextBase
     {
         [Test]
-        public void Example1()
+        public void WhenOneConsignmentItem()
         {
             var dataResult = new List<PackingListItem>
                                  {
@@ -26,21 +26,7 @@
         }
 
         [Test]
-        public void Example2()
-        {
-            var dataResult = new List<PackingListItem>
-                                 {
-                                     new PackingListItem(1, 1, "350/E/U/2", 1m),
-                                     new PackingListItem(999999, 999999, "<<__ End of input __>>", 0m)
-                                 };
-            var result = this.Sut.BuildPackingList(dataResult).ToList();
-
-            result.Count.Should().Be(1);
-            result.First().ContentsDescription.Should().Be("1 350/E/U/2");
-        }
-
-        [Test]
-        public void Example3()
+        public void WhenMultipleItemsAndSomeHaveNoBoxInformation()
         {
             var dataResult = new List<PackingListItem>
                                  {
@@ -75,7 +61,7 @@
         }
 
         [Test]
-        public void Example4()
+        public void WhenMultipleItemsAndNonIntegerTotals()
         {
             var dataResult = new List<PackingListItem>
                                  {
@@ -102,7 +88,7 @@
         }
 
         [Test]
-        public void Example5()
+        public void WhenCommaInDescription()
         {
             var dataResult = new List<PackingListItem>
                                  {
@@ -131,7 +117,7 @@
         }
 
         [Test]
-        public void Example6()
+        public void WhenMultipleItemsAndSomeHaveCommaInDescription()
         {
             var dataResult = new List<PackingListItem>
                                  {
