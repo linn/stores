@@ -19,6 +19,12 @@
             for (var i = 0; i < packingListItems.Length; i++)
             {
                 var current = packingListItems.ElementAt(i);
+
+                if (string.IsNullOrEmpty(current.ContentsDescription))
+                {
+                    // don't add blank lines that sometimes appear in the query result
+                    continue;
+                }
                
                 // the first item we see, so add it to a new group unless it is the <<__ End of Input __> delimiter returned by the query
                 if (i == 0 && current.ContentsDescription != "<<__ End of input __>>")

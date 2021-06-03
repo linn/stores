@@ -199,23 +199,72 @@
             result.ElementAt(5).ContentsDescription.Should().Be("2 SK ALBB");
         }
 
-        // [Test]
-        // public void WhenTrailingNullLine()
-        // {
-        //     var dataResult = new List<PackingListItem>
-        //                          {
-        //                              	new PackingListItem(null, 1,	"1 KLI DSM/H/3/B",	1),
-	       //                              new PackingListItem(null, 2,	"1 TRAMPOLIN/2",	1),
-	       //                              new PackingListItem(null, 3,	"1 KRYSTAL/B, 1 TRAMPOLIN/2, 1 KLI HDMI UPG, 1 350/E/U/2",	1),
-	       //                              new PackingListItem(null, 3,	"1 KRYSTAL/B, 1 TRAMPOLIN/2, 1 KLI HDMI UPG, 1 350/E/U/2",	1),
-	       //                              new PackingListItem(null, 3,	"1 KRYSTAL/B, 1 TRAMPOLIN/2, 1 KLI HDMI UPG, 1 350/E/U/2",	1),
-	       //                              new PackingListItem(null, 3,	"1 KRYSTAL/B, 1 TRAMPOLIN/2, 1 KLI HDMI UPG, 1 350/E/U/2",	1),
-	       //                              new PackingListItem(null, 3,	"1 KRYSTAL/B, 1 TRAMPOLIN/2, 1 KLI HDMI UPG, 1 350/E/U/2",	1),
-	       //                              new PackingListItem(null, 4,	"1 TRAMPOLIN/2"	,1),
-	       //                              new PackingListItem(null, 5,	"1 AK DS/UPG/3",	1),
-        //                                 new PackingListItem(999999,	999999,	"<<__ End of input __>>",	0),
-        //                                 new PackingListItem(null, null, string.Empty, null)
-        //                          };
-        // }
+        [Test]
+        public void WhenTrailingNullLine()
+        {
+            var dataResult = new List<PackingListItem>
+                                 {
+                                     new PackingListItem(null, 1, "1 KLI DSM/H/3/B", 1),
+                                     new PackingListItem(null, 2, "1 TRAMPOLIN/2", 1),
+                                     new PackingListItem(
+                                         null,
+                                         3,
+                                         "1 KRYSTAL/B, 1 TRAMPOLIN/2, 1 KLI HDMI UPG, 1 350/E/U/2",
+                                         1),
+                                     new PackingListItem(
+                                         null,
+                                         3,
+                                         "1 KRYSTAL/B, 1 TRAMPOLIN/2, 1 KLI HDMI UPG, 1 350/E/U/2",
+                                         1),
+                                     new PackingListItem(
+                                         null,
+                                         3,
+                                         "1 KRYSTAL/B, 1 TRAMPOLIN/2, 1 KLI HDMI UPG, 1 350/E/U/2",
+                                         1),
+                                     new PackingListItem(
+                                         null,
+                                         3,
+                                         "1 KRYSTAL/B, 1 TRAMPOLIN/2, 1 KLI HDMI UPG, 1 350/E/U/2",
+                                         1),
+                                     new PackingListItem(
+                                         null,
+                                         3,
+                                         "1 KRYSTAL/B, 1 TRAMPOLIN/2, 1 KLI HDMI UPG, 1 350/E/U/2",
+                                         1),
+                                     new PackingListItem(null, 4, "1 TRAMPOLIN/2", 1),
+                                     new PackingListItem(null, 5, "1 AK DS/UPG/3", 1),
+                                     new PackingListItem(999999, 999999, "<<__ End of input __>>", 0),
+                                     new PackingListItem(null, null, string.Empty, 0)
+                                 };
+
+            var result = this.Sut.BuildPackingList(dataResult).ToList();
+
+            result.Count.Should().Be(5);
+
+            result.ElementAt(0).Box.Should().Be(1);
+            result.ElementAt(0).To.Should().Be(1);
+            result.ElementAt(0).Count.Should().Be(1);
+            result.ElementAt(0).ContentsDescription.Should().Be("1 KLI DSM/H/3/B");
+
+            result.ElementAt(1).Box.Should().Be(2);
+            result.ElementAt(1).To.Should().Be(2);
+            result.ElementAt(1).Count.Should().Be(1);
+            result.ElementAt(1).ContentsDescription.Should().Be("1 TRAMPOLIN/2");
+
+            result.ElementAt(2).Box.Should().Be(3);
+            result.ElementAt(2).To.Should().Be(3);
+            result.ElementAt(2).Count.Should().Be(1);
+            result.ElementAt(2).ContentsDescription.Should().Be("1 KRYSTAL/B, 1 TRAMPOLIN/2, 1 KLI HDMI UPG, 1 350/E/U/2");
+
+            result.ElementAt(3).Box.Should().Be(4);
+            result.ElementAt(3).To.Should().Be(4);
+            result.ElementAt(3).Count.Should().Be(1);
+            result.ElementAt(3).ContentsDescription.Should().Be("1 TRAMPOLIN/2");
+
+            result.ElementAt(4).Box.Should().Be(5);
+            result.ElementAt(4).To.Should().Be(5);
+            result.ElementAt(4).Count.Should().Be(1);
+            result.ElementAt(4).ContentsDescription.Should().Be("1 AK DS/UPG/3");
+        }
     }
 }
