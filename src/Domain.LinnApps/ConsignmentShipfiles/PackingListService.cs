@@ -34,7 +34,7 @@
 
                 var prev = packingListItems.ElementAt(i - 1);
 
-                // no box information, so add item since it needs to be on its own line witha count of 1
+                // no box information, so add item since it needs to be on its own line with a count of 1
                 if (current.Box == null && current.ContentsDescription != "<<__ End of input __>>")
                 {
                     var group = new PackingListItem(
