@@ -28,7 +28,7 @@
                                              Count = current.Box,
                                              To = current.Box
                                          });
-                    qtyOfIdenticalItems += packingListItems.First().Quantity;
+                    qtyOfIdenticalItems += current.Quantity;
                     continue;
                 }
 
