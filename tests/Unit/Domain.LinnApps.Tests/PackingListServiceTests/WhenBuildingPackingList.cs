@@ -198,5 +198,24 @@
             result.ElementAt(5).Count.Should().Be(2);
             result.ElementAt(5).ContentsDescription.Should().Be("2 SK ALBB");
         }
+
+        // [Test]
+        // public void WhenTrailingNullLine()
+        // {
+        //     var dataResult = new List<PackingListItem>
+        //                          {
+        //                              	new PackingListItem(null, 1,	"1 KLI DSM/H/3/B",	1),
+	       //                              new PackingListItem(null, 2,	"1 TRAMPOLIN/2",	1),
+	       //                              new PackingListItem(null, 3,	"1 KRYSTAL/B, 1 TRAMPOLIN/2, 1 KLI HDMI UPG, 1 350/E/U/2",	1),
+	       //                              new PackingListItem(null, 3,	"1 KRYSTAL/B, 1 TRAMPOLIN/2, 1 KLI HDMI UPG, 1 350/E/U/2",	1),
+	       //                              new PackingListItem(null, 3,	"1 KRYSTAL/B, 1 TRAMPOLIN/2, 1 KLI HDMI UPG, 1 350/E/U/2",	1),
+	       //                              new PackingListItem(null, 3,	"1 KRYSTAL/B, 1 TRAMPOLIN/2, 1 KLI HDMI UPG, 1 350/E/U/2",	1),
+	       //                              new PackingListItem(null, 3,	"1 KRYSTAL/B, 1 TRAMPOLIN/2, 1 KLI HDMI UPG, 1 350/E/U/2",	1),
+	       //                              new PackingListItem(null, 4,	"1 TRAMPOLIN/2"	,1),
+	       //                              new PackingListItem(null, 5,	"1 AK DS/UPG/3",	1),
+        //                                 new PackingListItem(999999,	999999,	"<<__ End of input __>>",	0),
+        //                                 new PackingListItem(null, null, string.Empty, null)
+        //                          };
+        // }
     }
 }
