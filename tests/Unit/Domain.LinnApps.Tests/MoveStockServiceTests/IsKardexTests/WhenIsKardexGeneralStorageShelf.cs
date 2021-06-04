@@ -4,20 +4,20 @@
 
     using NUnit.Framework;
 
-    public class WhenIsKardexLocation : ContextBase
+    public class WhenIsKardexGeneralStorageShelf : ContextBase
     {
         private bool result;
 
         [SetUp]
         public void SetUp()
         {
-            this.result = this.Sut.IsKardexLocation("E-K1-") && this.Sut.IsKardexLocation("E-K2-");
+            this.result = this.Sut.IsKardexLocation("E-K4-01");
         }
 
         [Test]
         public void ShouldReturnTrue()
         {
-            this.result.Should().BeTrue();
+            this.result.Should().BeFalse();
         }
     }
 }

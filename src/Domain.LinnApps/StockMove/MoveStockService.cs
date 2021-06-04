@@ -180,6 +180,8 @@
         public bool IsKardexLocation(string location)
         {
             var kardexList = new List<string> { "K1", "K2", "K3", "K4", "K5" };
+            var kardexFixedLocationsList = new List<string> { "K1", "K2" };
+
             if (kardexList.Contains(location))
             {
                 return true;
@@ -190,7 +192,7 @@
                 return true;
             }
 
-            if (location.Length > 4 && kardexList.Select(k => $"E-{k}-").Contains(location.Substring(0, 5)))
+            if (location.Length > 4 && kardexFixedLocationsList.Select(k => $"E-{k}-").Contains(location.Substring(0, 5)))
             {
                 return true;
             }
