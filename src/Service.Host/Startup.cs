@@ -17,6 +17,8 @@ namespace Linn.Stores.Service.Host
     using Nancy;
     using Nancy.Owin;
 
+    using PuppeteerSharp;
+
     public class Startup
     {
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -38,7 +40,7 @@ namespace Linn.Stores.Service.Host
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
         {
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
@@ -60,9 +62,10 @@ namespace Linn.Stores.Service.Host
                     {
                         config.PassThroughWhenStatusCodesAre(HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden);
                     }));
-
+            app.ApplicationServices.GetService<Browser>();
             app.Use((context, next) => context.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme));
             app.PreparePuppeteerAsync(env).GetAwaiter().GetResult();
+            applicationLifetime.ApplicationStopping.Register(() => app.ApplicationServices.GetService<Browser>().CloseAsync());
         }
     }
 }
