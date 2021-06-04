@@ -6,8 +6,7 @@
     using Linn.Common.Nancy.Facade;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
 
-    public class
-        ImportBookTransactionCodesResponseProcessor : JsonResponseProcessor<IEnumerable<ImportBookTransactionCode>>
+    public class ImportBookTransactionCodesResponseProcessor : JsonResponseProcessor<IEnumerable<ImportBookTransactionCode>>
     {
         public ImportBookTransactionCodesResponseProcessor(
             IResourceBuilder<IEnumerable<ImportBookTransactionCode>> resourceBuilder)
