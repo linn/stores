@@ -6,7 +6,6 @@
 
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
-    using Linn.Stores.Domain.LinnApps.Parts;
 
     public class ImportBookExhangeRateRepository : IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey>
     {

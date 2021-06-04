@@ -3,7 +3,6 @@
     using System;
     using System.Linq;
     using System.Linq.Expressions;
-    using System.Security.Cryptography.X509Certificates;
 
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
