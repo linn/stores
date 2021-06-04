@@ -40,7 +40,7 @@ namespace Linn.Stores.Service.Host
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
@@ -64,7 +64,6 @@ namespace Linn.Stores.Service.Host
                     }));
             app.Use((context, next) => context.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme));
             app.PreparePuppeteerAsync(env).GetAwaiter().GetResult();
-            applicationLifetime.ApplicationStopping.Register(() => app.ApplicationServices.GetService<Browser>().CloseAsync());
         }
     }
 }
