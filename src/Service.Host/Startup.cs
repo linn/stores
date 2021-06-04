@@ -62,7 +62,6 @@ namespace Linn.Stores.Service.Host
                     {
                         config.PassThroughWhenStatusCodesAre(HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden);
                     }));
-            app.ApplicationServices.GetService<Browser>();
             app.Use((context, next) => context.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme));
             app.PreparePuppeteerAsync(env).GetAwaiter().GetResult();
             applicationLifetime.ApplicationStopping.Register(() => app.ApplicationServices.GetService<Browser>().CloseAsync());
