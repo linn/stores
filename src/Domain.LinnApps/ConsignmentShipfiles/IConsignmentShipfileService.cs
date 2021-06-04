@@ -4,9 +4,6 @@
 
     public interface IConsignmentShipfileService
     {
-        IEnumerable<ConsignmentShipfile> SendEmails(
-            IEnumerable<ConsignmentShipfile> toSend, 
-            bool test = false,
-            string testEmailAddress = null);
+        ConsignmentShipfile SendEmails(ConsignmentShipfile toSend, bool test = false, string testEmailAddress = null);
     }
 }

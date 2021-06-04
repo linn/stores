@@ -49,63 +49,57 @@
             this.packingListService = packingListService;
         }
 
-        public IEnumerable<ConsignmentShipfile> SendEmails(
-            IEnumerable<ConsignmentShipfile> toSend, 
+        public ConsignmentShipfile SendEmails(
+           ConsignmentShipfile toSend, 
             bool test = false,
             string testEmailAddress = null)
         {
-            var withDetails = new List<ConsignmentShipfile>();
-            foreach (var shipfile in toSend)
+            var data = this.shipfileRepository.FindById(toSend.Id);
+            var withDetails = data;
+
+            if (data.ShipfileSent == "Y")
             {
-                var data = this.shipfileRepository.FindById(shipfile.Id);
-                
-                if (data.ShipfileSent == "Y")
+                withDetails.Message = ShipfileStatusMessages.EmailAlreadySent;
+                return withDetails;
+            }
+
+            var models = this.BuildEmailModels(data);
+
+            // A message implies there is some problem with generating the email
+            if (data.Message == null)
+            {
+                // potentially an email to send to each outlet in this consignment?
+                foreach (var model in models)
                 {
-                    data.Message = ShipfileStatusMessages.EmailAlreadySent;
-                    withDetails.Add(data);
-                    continue;
+                    model.Subject = test ? model.ToEmailAddress : "Shipping Details";
+
+                    var render = this.templateEngine.Render(
+                        model.PdfAttachment,
+                        ConfigurationManager.Configuration["SHIPFILE_TEMPLATE_PATH"]);
+
+                    var pdf = this.pdfService.ConvertHtmlToPdf(render.Result, landscape: true);
+                    
+                    this.emailService.SendEmail(
+                        test ? testEmailAddress : model.ToEmailAddress,
+                        model.ToCustomerName,
+                        null,
+                        null,
+                        ConfigurationManager.Configuration["SHIPFILES_FROM_ADDRESS"],
+                        "Linn Shipping",
+                        model.Subject,
+                        model.Body,
+                        pdf.Result);
                 }
 
-                var models = this.BuildEmailModels(data);
-
-                // A message implies there is some problem with generating the email
-                if (data.Message == null)
+                if (test)
                 {
-                    // potentially an email to send to each outlet in this consignment?
-                    foreach (var model in models)
-                    {
-                        model.Subject = test ? model.ToEmailAddress : "Shipping Details";
-
-                        var render = this.templateEngine.Render(
-                            model.PdfAttachment,
-                            ConfigurationManager.Configuration["SHIPFILE_TEMPLATE_PATH"]);
-
-                        var pdf = this.pdfService.ConvertHtmlToPdf(render.Result, landscape: true);
-                        
-                        this.emailService.SendEmail(
-                            test ? testEmailAddress : model.ToEmailAddress,
-                            model.ToCustomerName,
-                            null,
-                            null,
-                            ConfigurationManager.Configuration["SHIPFILES_FROM_ADDRESS"],
-                            "Linn Shipping",
-                            model.Subject,
-                            model.Body,
-                            pdf.Result);
-                    }
-
-                    if (test)
-                    {
-                        data.Message = ShipfileStatusMessages.TestEmailSent;
-                    }
-                    else
-                    {
-                        data.Message = ShipfileStatusMessages.EmailSent;
-                        data.ShipfileSent = "Y";
-                    }
+                    withDetails.Message = ShipfileStatusMessages.TestEmailSent;
                 }
-
-                withDetails.Add(data);
+                else
+                {
+                    withDetails.Message = ShipfileStatusMessages.EmailSent;
+                    withDetails.ShipfileSent = "Y";
+                }
             }
 
             return withDetails;

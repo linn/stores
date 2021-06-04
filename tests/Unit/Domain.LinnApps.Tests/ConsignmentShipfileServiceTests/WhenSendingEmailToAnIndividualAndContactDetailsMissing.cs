@@ -14,9 +14,9 @@
 
     public class WhenSendingEmailToAnIndividualAndContactDetailsMissing : ContextBase
     {
-        private IEnumerable<ConsignmentShipfile> toSend;
+        private ConsignmentShipfile toSend;
 
-        private IEnumerable<ConsignmentShipfile> result;
+        private ConsignmentShipfile result;
 
         private ConsignmentShipfile shipfileData; 
 
@@ -36,13 +36,10 @@
                                                                   }
                                                       }
                                 };
-            this.toSend = new List<ConsignmentShipfile>
-                              {
-                                  new ConsignmentShipfile
+            this.toSend = new ConsignmentShipfile
                                       {
                                           Id = 1,
-                                      }
-                              };
+                                      };
 
             this.ShipfileRepository.FindById(1).Returns(this.shipfileData);
 
@@ -67,7 +64,7 @@
         [Test]
         public void ShouldUpdateStatusMessage()
         {
-            this.result.First().Message.Should().Be(ShipfileStatusMessages.NoContactDetails);
+            this.result.Message.Should().Be(ShipfileStatusMessages.NoContactDetails);
         }
     }
 }

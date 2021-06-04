@@ -106,7 +106,11 @@
                 int.TryParse(data[2].ToString(), out var box);
                 int.TryParse(data[1].ToString(), out var pallet);
                 decimal.TryParse(data[4].ToString(), out var qty);
-                var item = new PackingListItem(pallet, box, data[3].ToString(), qty);
+                var item = new PackingListItem(
+                    pallet == 0 ? (int?)null : pallet,
+                    box == 0 ? (int?)null : box,
+                    data[3].ToString(),
+                    qty);
                 result.Add(item);
             }
 

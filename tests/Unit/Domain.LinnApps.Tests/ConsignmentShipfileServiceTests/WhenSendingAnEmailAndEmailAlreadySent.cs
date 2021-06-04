@@ -1,8 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.ConsignmentShipfileServiceTests
 {
-    using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
 
     using FluentAssertions;
 
@@ -14,20 +12,17 @@
 
     public class WhenSendingAnEmailAndEmailAlreadySent : ContextBase
     {
-        private IEnumerable<ConsignmentShipfile> toSend;
+        private ConsignmentShipfile toSend;
 
-        private IEnumerable<ConsignmentShipfile> result;
+        private ConsignmentShipfile result;
 
        [SetUp]
         public void SetUp()
         {
-            this.toSend = new List<ConsignmentShipfile>
-                              {
-                                  new ConsignmentShipfile
+            this.toSend = new ConsignmentShipfile
                                       {
                                           Id = 1
-                                      }
-                              };
+                                      };
 
             this.ShipfileRepository.FindById(1).Returns(
                 new ConsignmentShipfile { ShipfileSent = "Y", Message = ShipfileStatusMessages.EmailSent });
@@ -53,7 +48,7 @@
         [Test]
         public void ShouldUpdateStatusMessage()
         {
-            this.result.First().Message.Should().Be(ShipfileStatusMessages.EmailAlreadySent);
+            this.result.Message.Should().Be(ShipfileStatusMessages.EmailAlreadySent);
         }
     }
 }

@@ -6,7 +6,6 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Resources;
-    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
     using Linn.Stores.Resources;
 
