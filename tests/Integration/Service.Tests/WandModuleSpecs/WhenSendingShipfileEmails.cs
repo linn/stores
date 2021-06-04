@@ -19,14 +19,14 @@
 
     public class WhenSendingShipfileEmails : ContextBase
     {
-        private ConsignmentShipfilesSendEmailsRequestResource resource;
+        private ConsignmentShipfileSendEmailsRequestResource resource;
 
         private IEnumerable<ConsignmentShipfile> result;
 
         [SetUp]
         public void SetUp()
         {
-            this.resource = new ConsignmentShipfilesSendEmailsRequestResource
+            this.resource = new ConsignmentShipfileSendEmailsRequestResource
                                 {
                                     Test = false,
                                     Shipfiles = new List<ConsignmentShipfileResource>
@@ -47,7 +47,7 @@
                                       }
                               };
 
-            this.ShipfileService.SendEmails(Arg.Any<ConsignmentShipfilesSendEmailsRequestResource>())
+            this.ShipfileService.SendEmails(Arg.Any<ConsignmentShipfileSendEmailsRequestResource>())
                 .Returns(new SuccessResult<IEnumerable<ConsignmentShipfile>>(this.result));
 
             this.Response = this.Browser.Post(
@@ -68,7 +68,7 @@
         [Test]
         public void ShouldCallFacadeService()
         {
-            this.ShipfileService.Received().SendEmails(Arg.Any<ConsignmentShipfilesSendEmailsRequestResource>());
+            this.ShipfileService.Received().SendEmails(Arg.Any<ConsignmentShipfileSendEmailsRequestResource>());
         }
 
         [Test]

@@ -2,9 +2,9 @@
 {
     using System.Collections.Generic;
 
-    public class ConsignmentShipfilesSendEmailsRequestResource
+    public class ConsignmentShipfileSendEmailsRequestResource
     {
-        public IEnumerable<ConsignmentShipfileResource> Shipfiles { get; set; }
+        public ConsignmentShipfileResource Shipfile { get; set; }
 
         public bool Test { get; set; }
 

@@ -49,21 +49,19 @@
             this.packingListService = packingListService;
         }
 
-        public IEnumerable<ConsignmentShipfile> SendEmails(
-            IEnumerable<ConsignmentShipfile> toSend, 
+        public ConsignmentShipfile SendEmails(
+           ConsignmentShipfile toSend, 
             bool test = false,
             string testEmailAddress = null)
         {
-            var withDetails = new List<ConsignmentShipfile>();
-            foreach (var shipfile in toSend)
-            {
-                var data = this.shipfileRepository.FindById(shipfile.Id);
+            var withDetails = new ConsignmentShipfile();
+            
+                var data = this.shipfileRepository.FindById(toSend.Id);
                 
                 if (data.ShipfileSent == "Y")
                 {
                     data.Message = ShipfileStatusMessages.EmailAlreadySent;
-                    withDetails.Add(data);
-                    continue;
+                    withDetails = data;
                 }
 
                 var models = this.BuildEmailModels(data);
@@ -105,9 +103,7 @@
                     }
                 }
 
-                withDetails.Add(data);
-            }
-
+                
             return withDetails;
         }
 
