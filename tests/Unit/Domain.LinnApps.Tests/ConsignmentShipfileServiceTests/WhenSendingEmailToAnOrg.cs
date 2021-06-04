@@ -70,8 +70,7 @@
             };
 
             this.toSend = new ConsignmentShipfile { Id = 1 };
-                             
-
+            
             this.ShipfileRepository.FindById(1).Returns(this.shipfileData);
 
             this.PackingListService.BuildPackingList(Arg.Any<IEnumerable<PackingListItem>>())
