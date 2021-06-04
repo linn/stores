@@ -17,7 +17,7 @@ export default function ConsignmentShipfiles({
     deleteShipfile,
     deleteLoading
 }) {
-    const [selectedRows, setSelectedRows] = useState([227165]);
+    const [selectedRows, setSelectedRows] = useState([]);
     const [rows, setRows] = useState([]);
     const [testEmailAddress, setTestEmailAddress] = useState();
 
@@ -78,9 +78,9 @@ export default function ConsignmentShipfiles({
                                 variant="contained"
                                 onClick={() => {
                                     clearErrors();
-                                    sendEmails({
-                                        shipfiles: selectedRows
-                                    });
+                                    selectedRows.forEach(r =>
+                                        sendEmails({ shipfile: r, test: true, testEmailAddress })
+                                    );
                                 }}
                             >
                                 Send Selected
@@ -129,11 +129,9 @@ export default function ConsignmentShipfiles({
                                 disabled={!testEmailAddress}
                                 onClick={() => {
                                     clearErrors();
-                                    sendEmails({
-                                        shipfiles: selectedRows,
-                                        test: true,
-                                        testEmailAddress
-                                    });
+                                    selectedRows.forEach(r =>
+                                        sendEmails({ shipfile: r, test: true, testEmailAddress })
+                                    );
                                 }}
                             >
                                 Test Selected
