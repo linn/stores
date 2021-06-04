@@ -5,6 +5,6 @@
 
     public interface IPdfService
     {
-        Task<Stream> ConvertHtmlToPdf(string html, bool landscape);
+        Task<Stream> ConvertHtmlToPdf(string html, bool landscape, bool showPageNumbers);
     }
 }
