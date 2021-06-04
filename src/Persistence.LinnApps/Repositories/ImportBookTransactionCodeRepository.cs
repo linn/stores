@@ -22,7 +22,7 @@
 
         public IQueryable<ImportBookTransactionCode> FindAll()
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.ImportBookTransactionCodes.Where(x => true);
         }
 
         public void Add(ImportBookTransactionCode entity)

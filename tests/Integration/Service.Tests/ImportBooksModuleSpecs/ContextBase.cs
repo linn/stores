@@ -24,8 +24,12 @@
             get;
             private set;
         }
+
         protected IImportBookExchangeRateService ImportBookExchangeRateService;
 
+        protected IImportBookTransactionCodeService ImportBookTransactionCodeService;
+
+        protected IImportBookTransportCodeService ImportBookTransportCodeService;
 
         [SetUp]
         public void EstablishContext()
@@ -33,32 +37,62 @@
             this.ImportBooksFacadeService =
                 Substitute.For<IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource>>();
             this.ImportBookExchangeRateService = Substitute.For<IImportBookExchangeRateService>();
+            this.ImportBookTransactionCodeService = Substitute.For<IImportBookTransactionCodeService>();
+            this.ImportBookTransportCodeService = Substitute.For<IImportBookTransportCodeService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
-                {
-                    with.Dependency(this.ImportBooksFacadeService);
-                    with.Dependency(this.ImportBookExchangeRateService);
-                    with.Dependency<IResourceBuilder<ImportBook>>(new ImportBookResourceBuilder());
-                    with.Dependency<IResourceBuilder<IEnumerable<ImportBook>>>(new ImportBooksResourceBuilder());
-                    with.Module<ImportBooksModule>();
+                    {
+                        with.Dependency(this.ImportBooksFacadeService);
+                        with.Dependency(this.ImportBookExchangeRateService);
+                        with.Dependency(this.ImportBookTransactionCodeService);
+                        with.Dependency(this.ImportBookTransportCodeService);
+                        with.Dependency<IResourceBuilder<ImportBook>>(new ImportBookResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<ImportBook>>>(new ImportBooksResourceBuilder());
+                        with.Dependency<IResourceBuilder<ImportBookExchangeRate>>(
+                            new ImportBookExchangeRateResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<ImportBookExchangeRate>>>(
+                            new ImportBookExchangeRatesResourceBuilder());
 
-                    with.ResponseProcessor<ImportBookResponseProcessor>();
-                    with.ResponseProcessor<ImportBooksResponseProcessor>();
+                        with.Dependency<IResourceBuilder<ImportBookTransportCode>>(
+                            new ImportBookTransportCodeResourceBuilder());
+                        with.Dependency<IResourceBuilder<ImportBookTransactionCode>>(
+                            new ImportBookTransactionCodeResourceBuilder());
 
-                    with.RequestStartup(
-                        (container, pipelines, context) =>
-                        {
-                            var claims = new List<Claim>
-                                         {
-                                             new Claim(ClaimTypes.Role, "employee"),
-                                             new Claim(ClaimTypes.NameIdentifier, "test-user")
-                                         };
-                            var user = new ClaimsIdentity(claims, "jwt");
 
-                            context.CurrentUser = new ClaimsPrincipal(user);
-                        });
-                });
+                        with.Dependency<IResourceBuilder<IEnumerable<ImportBookTransportCode>>>(
+                            new ImportBookTransportCodesResourceBuilder());
+
+                        with.Dependency<IResourceBuilder<IEnumerable<ImportBookTransactionCode>>>(
+                            new ImportBookTransactionCodesResourceBuilder());
+
+                        with.Module<ImportBooksModule>();
+
+                        with.ResponseProcessor<ImportBookResponseProcessor>();
+                        with.ResponseProcessor<ImportBooksResponseProcessor>();
+
+                        with.ResponseProcessor<ImportBookExchangeRateResponseProcessor>();
+                        with.ResponseProcessor<ImportBookExchangeRatesResponseProcessor>();
+
+                        with.ResponseProcessor<ImportBookTransactionCodeResponseProcessor>();
+                        with.ResponseProcessor<ImportBookTransactionCodesResponseProcessor>();
+
+                        with.ResponseProcessor<ImportBookTransportCodeResponseProcessor>();
+                        with.ResponseProcessor<ImportBookTransportCodesResponseProcessor>();
+
+                        with.RequestStartup(
+                            (container, pipelines, context) =>
+                                {
+                                    var claims = new List<Claim>
+                                                     {
+                                                         new Claim(ClaimTypes.Role, "employee"),
+                                                         new Claim(ClaimTypes.NameIdentifier, "test-user")
+                                                     };
+                                    var user = new ClaimsIdentity(claims, "jwt");
+
+                                    context.CurrentUser = new ClaimsPrincipal(user);
+                                });
+                    });
 
             this.Browser = new Browser(bootstrapper);
         }

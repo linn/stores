@@ -104,6 +104,9 @@
             builder.RegisterType<EmployeesService>().As<IEmployeeService>();
             builder.RegisterType<ImportBookFacadeService>()
                 .As<IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource>>();
+            builder.RegisterType<ImportBookExchangeRateService>().As<IImportBookExchangeRateService>();
+            builder.RegisterType<ImportBookTransactionCodeService>().As<IImportBookTransactionCodeService>();
+            builder.RegisterType<ImportBookTransportCodeService>().As<IImportBookTransportCodeService>();
             builder.RegisterType<PartDataSheetValuesService>().As<IPartDataSheetValuesService>();
             builder.RegisterType<TqmsCategoriesService>()
                 .As<IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>>();

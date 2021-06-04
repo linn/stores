@@ -44,7 +44,7 @@
 
         public IQueryable<ImportBookExchangeRate> FilterBy(Expression<Func<ImportBookExchangeRate, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.ImportBookExchangeRates.Where(expression);
         }
     }
 }
