@@ -77,9 +77,14 @@ export default function ConsignmentShipfiles({
                                 variant="contained"
                                 onClick={() => {
                                     clearErrors();
-                                    selectedRows.forEach(r =>
-                                        sendEmails({ shipfile: r, test: true, testEmailAddress })
-                                    );
+                                    selectedRows.forEach(r => {
+                                        setRows(shipfiles =>
+                                            shipfiles.map(s =>
+                                                s.id === r.id ? { ...r, status: 'Processing' } : s
+                                            )
+                                        );
+                                        sendEmails({ shipfile: r });
+                                    });
                                 }}
                             >
                                 Send Selected
