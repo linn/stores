@@ -26,7 +26,7 @@
 
             var pdfStream = page.PdfStreamAsync(pdfOptions).Result;
 
-            await this.browser.CloseAsync();
+            await page.CloseAsync();
 
             return pdfStream;
         }
