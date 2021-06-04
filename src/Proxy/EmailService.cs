@@ -61,6 +61,7 @@
                 var a = new MimePart("application", "pdf")
                                         {
                                             Content = content,
+                                            FileName = "Shipfile.pdf"
                                         };
 
                 var multipart = new Multipart("mixed") { emailBody, a };
