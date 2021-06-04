@@ -1,12 +1,8 @@
 ﻿namespace Linn.Stores.Service.Tests.WandModuleSpecs
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
     using FluentAssertions;
 
     using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
     using Linn.Stores.Resources;
 
@@ -21,7 +17,7 @@
     {
         private ConsignmentShipfileSendEmailsRequestResource resource;
 
-        private IEnumerable<ConsignmentShipfile> result;
+        private ConsignmentShipfile result;
 
         [SetUp]
         public void SetUp()
@@ -29,26 +25,20 @@
             this.resource = new ConsignmentShipfileSendEmailsRequestResource
                                 {
                                     Test = false,
-                                    Shipfiles = new List<ConsignmentShipfileResource>
-                                                    {
-                                                        new ConsignmentShipfileResource
+                                    Shipfile = new ConsignmentShipfileResource
                                                             {
                                                                 ConsignmentId = 1,
                                                             }
-                                                    }
                                 };
 
-            this.result = new List<ConsignmentShipfile>
-                              {
-                                  new ConsignmentShipfile
+            this.result = new ConsignmentShipfile
                                       {
                                           ConsignmentId = 1,
                                           Consignment = new Consignment()
-                                      }
-                              };
+                                      };
 
             this.ShipfileService.SendEmails(Arg.Any<ConsignmentShipfileSendEmailsRequestResource>())
-                .Returns(new SuccessResult<IEnumerable<ConsignmentShipfile>>(this.result));
+                .Returns(new SuccessResult<ConsignmentShipfile>(this.result));
 
             this.Response = this.Browser.Post(
                 $"/logistics/shipfiles/send-emails",
@@ -74,8 +64,8 @@
         [Test]
         public void ShouldReturnResult()
         {
-            var res = this.Response.Body.DeserializeJson<IEnumerable<ConsignmentShipfile>>();
-            res.First().ConsignmentId.Should().Be(1);
+            var res = this.Response.Body.DeserializeJson<ConsignmentShipfile>();
+            res.ConsignmentId.Should().Be(1);
         }
     }
 }

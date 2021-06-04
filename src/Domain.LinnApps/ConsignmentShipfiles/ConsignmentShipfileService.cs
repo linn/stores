@@ -60,6 +60,7 @@
             if (data.ShipfileSent == "Y")
             {
                 withDetails.Message = ShipfileStatusMessages.EmailAlreadySent;
+                return withDetails;
             }
 
             var models = this.BuildEmailModels(data);
