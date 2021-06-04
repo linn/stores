@@ -9,18 +9,16 @@
 
     public class PdfService : IPdfService
     {
+        private readonly Browser browser;
+
+        public PdfService(Browser browser)
+        {
+            this.browser = browser;
+        }
+
         public async Task<Stream> ConvertHtmlToPdf(string html, bool landscape)
         {
-            var browser =
-                await Puppeteer.LaunchAsync(new LaunchOptions
-                                                {
-                                                    Args = new[]
-                                                               {
-                                                                   "--no-sandbox"
-                                                               }, 
-                                                    Headless = true
-                                                });
-            var page = await browser.NewPageAsync();
+            var page = await this.browser.NewPageAsync();
 
             await page.SetContentAsync(html);
 
@@ -28,7 +26,7 @@
 
             var pdfStream = page.PdfStreamAsync(pdfOptions).Result;
 
-            await browser.CloseAsync();
+            await this.browser.CloseAsync();
 
             return pdfStream;
         }

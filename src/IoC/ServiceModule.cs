@@ -34,6 +34,8 @@
     using Linn.Stores.Resources.StockLocators;
     using Linn.Stores.Resources.Tqms;
 
+    using PuppeteerSharp;
+
     public class ServiceModule : Module
     {
         protected override void Load(ContainerBuilder builder)
@@ -165,6 +167,17 @@
             builder.RegisterType<ProductionTriggerLevelsProxy>().As<IProductionTriggerLevelsService>().WithParameter(
                 "rootUri",
                 ConfigurationManager.Configuration["PROXY_ROOT"]);
+
+            builder.Register(c => Puppeteer.LaunchAsync(new LaunchOptions
+                                                            {
+                                                                Args = new[]
+                                                                           {
+                                                                               "--no-sandbox"
+                                                                           },
+                                                                Headless = true
+                                                            }).Result)
+                .As<Browser>()
+                .SingleInstance();
         }
     }
 }
