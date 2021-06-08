@@ -6,7 +6,7 @@
     {
         public IEnumerable<WhatToWandLineResource> Lines { get; set; }
 
-        public ConsignmentResource Consignment { get; set; }
+        public TpkConsignmentResource Consignment { get; set; }
 
         public string Type { get; set; }
 

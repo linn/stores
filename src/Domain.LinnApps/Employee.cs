@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
 
+    using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.Parts;
 
     public class Employee
@@ -38,5 +39,7 @@
         public IEnumerable<MechPartSource> SourcesCancelled { get; set; }
 
         public IEnumerable<ExportReturn> ExportReturnsCreated { get; set; }
+
+        public IEnumerable<Consignment> ConsignmentClosedBy { get; set; }
     }
 }

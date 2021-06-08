@@ -11,6 +11,7 @@
     using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
+    using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
@@ -28,6 +29,7 @@
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Allocation;
+    using Linn.Stores.Resources.Consignments;
     using Linn.Stores.Resources.Parts;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Resources.Requisitions;
@@ -140,6 +142,7 @@
             builder.RegisterType<TqmsMasterFacadeService>().As<ISingleRecordFacadeService<TqmsMaster, TqmsMasterResource>>();
             builder.RegisterType<TqmsJobrefsFacadeService>().As<IFacadeService<TqmsJobRef, string, TqmsJobRefResource, TqmsJobRefResource>>();
             builder.RegisterType<ConsignmentShipfileFacadeService>().As<IConsignmentShipfileFacadeService>();
+            builder.RegisterType<ConsignmentFacadeService>().As<IFacadeService<Consignment, int, ConsignmentResource, ConsignmentResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
