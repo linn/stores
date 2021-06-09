@@ -12,14 +12,29 @@
     {
         public ConsignmentResource Build(Consignment consignment)
         {
+            var addressBuilder = new AddressResourceBuilder();
+            var employeeBuilder = new EmployeeResourceBuilder();
+
             return new ConsignmentResource
                        {
-                           AddressId = consignment.AddressId,
                            ConsignmentId = consignment.ConsignmentId,
-                           CountryCode = consignment.Address?.Country?.CountryCode,
-                           Country = consignment.Address?.Country?.DisplayName,
                            SalesAccountId = consignment.SalesAccountId,
-                           
+                           Address = consignment.Address == null
+                                         ? null
+                                         : addressBuilder.Build(consignment.Address),
+                           Status = consignment.Status,
+                           Carrier = consignment.Carrier,
+                           ClosedBy = consignment.ClosedBy == null 
+                                          ? null
+                                          : employeeBuilder.Build(consignment.ClosedBy),
+                           CustomerName = consignment.CustomerName,
+                           DateOpened = consignment.DateOpened.ToString("o"),
+                           DateClosed = consignment.DateClosed?.ToString("o"),
+                           DespatchLocationCode = consignment.DespatchLocationCode,
+                           HubId = consignment.HubId,
+                           ShippingMethod = consignment.ShippingMethod,
+                           Terms = consignment.Terms,
+                           Warehouse = consignment.Warehouse,
                            Links = this.BuildLinks(consignment).ToArray()
                        };
         }
