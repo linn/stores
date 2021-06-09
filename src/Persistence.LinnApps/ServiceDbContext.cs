@@ -1574,8 +1574,14 @@
         private void QueryIntercompanyInvoices(ModelBuilder builder)
         {
             var q = builder.Query<InterCompanyInvoice>().ToView("INTER_COMPANY_INVOICES");
+            q.Property(e => e.DocumentType).HasColumnName("DOCUMENT_TYPE").HasMaxLength(1);
             q.Property(e => e.DocumentNumber).HasColumnName("DOCUMENT_NUMBER");
+            q.Property(e => e.DocumentNumber).HasColumnName("DOCUMENT_DATE");
             q.Property(e => e.ExportReturnId).HasColumnName("EXPORT_RETURN_ID");
+            q.Property(e => e.DeliveryAddressId).HasColumnName("DELIVERY_ADDRESS");
+            q.Property(e => e.InvoiceAddressId).HasColumnName("INVOICE_ADDRESS");
+            q.HasOne(e => e.DeliveryAddress).WithMany(a => a.DeliveryInterCompanies).HasForeignKey(e => e.DeliveryAddressId);
+            q.HasOne(e => e.InvoiceAddress).WithMany(a => a.InvoiceInterCompanies).HasForeignKey(e => e.InvoiceAddress);
         }
 
         private void QueryTqmsSummaryByCategories(ModelBuilder builder)

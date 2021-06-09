@@ -30,5 +30,9 @@
         public DateTime? DateInvalid { get; set; }
 
         public List<Consignment> Consignments { get; set; }
+
+        public List<InterCompanyInvoice> InvoiceInterCompanies { get; set; }
+
+        public List<InterCompanyInvoice> DeliveryInterCompanies { get; set; }
     }
 }
