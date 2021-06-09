@@ -85,6 +85,8 @@ import parcels from './parcels/parcels';
 import parcel from './parcels/parcel';
 import suppliersApprovedCarrier from './suppliersApprovedCarrier';
 import shipfilesSendEmails from './shipfilesSendEmails';
+import consignment from './consignment';
+import consignments from './consignments';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -99,6 +101,8 @@ const rootReducer = history =>
         auditLocation,
         auditLocations,
         availableStock,
+        consignment,
+        consignments,
         consignmentShipfile,
         consignmentShipfiles,
         countries,

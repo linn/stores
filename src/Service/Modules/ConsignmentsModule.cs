@@ -28,7 +28,10 @@
 
         private object GetConsignments()
         {
-            return this.Negotiate.WithModel(this.consignmentFacadeService.GetAll());
+            return this.Negotiate
+                .WithModel(this.consignmentFacadeService.GetAll())
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
     }
 }

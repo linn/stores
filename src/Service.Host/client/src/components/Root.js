@@ -42,6 +42,7 @@ import StockLocatorPricesView from '../containers/stockLocatorUtility/StockLocat
 import TqmsSummaryByCategoryReportOptions from '../containers/reports/TqmsSummaryByCategoryReportOptions';
 import TqmsSummaryByCategoryReport from '../containers/reports/TqmsSummaryByCategoryReport';
 import ConsignmentShipfiles from '../containers/ConsignmentShipfiles';
+import Consignment from '../containers/consignments/Consignment';
 
 const Root = ({ store }) => (
     <div>
@@ -226,6 +227,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/logistics/shipfiles"
                                         component={ConsignmentShipfiles}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/consignments"
+                                        component={Consignment}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>

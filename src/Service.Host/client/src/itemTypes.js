@@ -297,3 +297,7 @@ export const consignmentShipfiles = new ItemType(
 export const parcel = new ItemType('parcel', 'PARCEL', '/logistics/parcels');
 
 export const parcels = new ItemType('parcels', 'PARCELS', '/logistics/parcels');
+
+export const consignment = new ItemType('consignment', 'CONSIGNMENT', '/logistics/consignments');
+
+export const consignments = new ItemType('consignments', 'CONSIGNMENTS', '/logistics/consignments');
