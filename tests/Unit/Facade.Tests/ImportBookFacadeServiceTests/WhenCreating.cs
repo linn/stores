@@ -30,7 +30,7 @@
         [SetUp]
         public void SetUp()
         {
-            this.resource = new ImportBookResource()
+            this.resource = new ImportBookResource
                                 {
                                     Id = this.impbookId,
                                     DateCreated = this.now.AddDays(2).ToString("o"),
@@ -177,8 +177,7 @@
                                                                         }
                                                                 }
                                 };
-
-            this.ImportBookRepository.FindById(Arg.Any<int>()).Returns(this.from);
+            
             this.result = this.Sut.Add(this.resource);
         }
 

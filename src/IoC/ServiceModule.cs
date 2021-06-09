@@ -110,8 +110,8 @@
             builder.RegisterType<ImportBookFacadeService>()
                 .As<IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource>>();
             builder.RegisterType<ImportBookExchangeRateService>().As<IImportBookExchangeRateService>();
-            builder.RegisterType<ImportBookTransactionCodeService>().As<IImportBookTransactionCodeService>();
-            builder.RegisterType<ImportBookTransportCodeService>().As<IImportBookTransportCodeService>();
+            builder.RegisterType<ImportBookTransactionCodeFacadeService>().As<IFacadeService<ImportBookTransactionCode, int, ImportBookTransactionCodeResource, ImportBookTransactionCodeResource>>();
+            builder.RegisterType<ImportBookTransportCodeFacadeService>().As<IFacadeService<ImportBookTransportCode, int, ImportBookTransportCodeResource, ImportBookTransportCodeResource>>();
             builder.RegisterType<PartDataSheetValuesService>().As<IPartDataSheetValuesService>();
             builder.RegisterType<TqmsCategoriesService>()
                 .As<IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>>();

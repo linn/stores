@@ -27,7 +27,7 @@
 
             this.ImportBookTransactionCodeRepository.FindAll().Returns(transactionCodes);
 
-            this.results = this.Sut.GetTransactionCodes();
+            this.results = this.Sut.GetAll();
         }
 
         [Test]

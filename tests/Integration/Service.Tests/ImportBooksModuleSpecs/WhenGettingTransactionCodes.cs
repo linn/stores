@@ -27,7 +27,7 @@
                                          new ImportBookTransactionCode { TransactionId = 2, Description = "40" },
                                      };
 
-            this.ImportBookTransactionCodeService.GetTransactionCodes().Returns(
+            this.ImportBookTransactionCodeFacadeService.GetAll().Returns(
                 new SuccessResult<IEnumerable<ImportBookTransactionCode>>(transportCodes));
 
             this.Response = this.Browser.Get(
@@ -44,7 +44,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ImportBookTransactionCodeService.Received().GetTransactionCodes();
+            this.ImportBookTransactionCodeFacadeService.Received().GetAll();
         }
 
         [Test]

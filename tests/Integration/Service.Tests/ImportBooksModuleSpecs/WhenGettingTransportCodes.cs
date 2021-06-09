@@ -27,7 +27,7 @@
                                          new ImportBookTransportCode { TransportId = 2, Description = "Rail" },
                                      };
 
-            this.ImportBookTransportCodeService.GetTransportCodes().Returns(
+            this.ImportBookTransportCodeFacadeService.GetAll().Returns(
                 new SuccessResult<IEnumerable<ImportBookTransportCode>>(transportCodes));
 
             this.Response = this.Browser.Get(
@@ -44,7 +44,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ImportBookTransportCodeService.Received().GetTransportCodes();
+            this.ImportBookTransportCodeFacadeService.Received().GetAll();
         }
 
         [Test]

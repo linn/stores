@@ -27,9 +27,9 @@
 
         protected IImportBookExchangeRateService ImportBookExchangeRateService;
 
-        protected IImportBookTransactionCodeService ImportBookTransactionCodeService;
+        protected IFacadeService<ImportBookTransactionCode, int, ImportBookTransactionCodeResource, ImportBookTransactionCodeResource> ImportBookTransactionCodeFacadeService;
 
-        protected IImportBookTransportCodeService ImportBookTransportCodeService;
+        protected IFacadeService<ImportBookTransportCode, int, ImportBookTransportCodeResource, ImportBookTransportCodeResource> ImportBookTransportCodeFacadeService;
 
         [SetUp]
         public void EstablishContext()
@@ -37,16 +37,16 @@
             this.ImportBooksFacadeService =
                 Substitute.For<IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource>>();
             this.ImportBookExchangeRateService = Substitute.For<IImportBookExchangeRateService>();
-            this.ImportBookTransactionCodeService = Substitute.For<IImportBookTransactionCodeService>();
-            this.ImportBookTransportCodeService = Substitute.For<IImportBookTransportCodeService>();
+            this.ImportBookTransactionCodeFacadeService = Substitute.For<IFacadeService<ImportBookTransactionCode, int, ImportBookTransactionCodeResource, ImportBookTransactionCodeResource>>();
+            this.ImportBookTransportCodeFacadeService = Substitute.For<IFacadeService<ImportBookTransportCode, int, ImportBookTransportCodeResource, ImportBookTransportCodeResource>>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
                         with.Dependency(this.ImportBooksFacadeService);
                         with.Dependency(this.ImportBookExchangeRateService);
-                        with.Dependency(this.ImportBookTransactionCodeService);
-                        with.Dependency(this.ImportBookTransportCodeService);
+                        with.Dependency(this.ImportBookTransactionCodeFacadeService);
+                        with.Dependency(this.ImportBookTransportCodeFacadeService);
                         with.Dependency<IResourceBuilder<ImportBook>>(new ImportBookResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<ImportBook>>>(new ImportBooksResourceBuilder());
                         with.Dependency<IResourceBuilder<ImportBookExchangeRate>>(

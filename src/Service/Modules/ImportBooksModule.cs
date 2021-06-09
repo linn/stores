@@ -18,20 +18,20 @@
 
         private readonly IImportBookExchangeRateService importBookExchangeRateService;
 
-        private readonly IImportBookTransportCodeService importBookTransportCodeService;
+        private readonly IFacadeService<ImportBookTransportCode, int, ImportBookTransportCodeResource, ImportBookTransportCodeResource> importBookTransportCodeService;
 
-        private readonly IImportBookTransactionCodeService importBookTransactionCodeService;
+        private readonly IFacadeService<ImportBookTransactionCode, int, ImportBookTransactionCodeResource, ImportBookTransactionCodeResource> importBookTransactionCodeFacadeService;
 
         public ImportBooksModule(
             IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource> importBookFacadeService,
             IImportBookExchangeRateService importBookExchangeRateService,
-            IImportBookTransportCodeService importBookTransportCodeService,
-            IImportBookTransactionCodeService importBookTransactionCodeService)
+            IFacadeService<ImportBookTransportCode, int, ImportBookTransportCodeResource, ImportBookTransportCodeResource> importBookTransportCodeService,
+            IFacadeService<ImportBookTransactionCode, int, ImportBookTransactionCodeResource, ImportBookTransactionCodeResource> importBookTransactionCodeFacadeService)
         {
             this.importBookFacadeService = importBookFacadeService;
             this.importBookExchangeRateService = importBookExchangeRateService;
             this.importBookTransportCodeService = importBookTransportCodeService;
-            this.importBookTransactionCodeService = importBookTransactionCodeService;
+            this.importBookTransactionCodeFacadeService = importBookTransactionCodeFacadeService;
 
             this.Get("/logistics/import-books/{id}", parameters => this.GetImportBook(parameters.id));
             this.Put("/logistics/import-books/{id}", parameters => this.UpdateImportBook(parameters.id));
@@ -93,14 +93,14 @@
 
         private object GetTransportCodes()
         {
-            var results = this.importBookTransportCodeService.GetTransportCodes();
+            var results = this.importBookTransportCodeService.GetAll();
 
             return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
 
         private object GetTransactionCodes()
         {
-            var results = this.importBookTransactionCodeService.GetTransactionCodes();
+            var results = this.importBookTransactionCodeFacadeService.GetAll();
 
             return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

@@ -27,7 +27,7 @@
 
             this.ImportBookTransportCodeRepository.FindAll().Returns(transportCode);
 
-            this.results = this.Sut.GetTransportCodes();
+            this.results = this.Sut.GetAll();
         }
 
         [Test]
