@@ -1,6 +1,6 @@
 ﻿namespace Linn.Stores.Resources.Tpk
 {
-    public class ConsignmentResource
+    public class TpkConsignmentResource
     {
         public int ConsignmentId { get; set; }
 

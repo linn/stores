@@ -1,6 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
-    using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
+    using Linn.Stores.Domain.LinnApps.Consignments;
 
     public class Invoice
     {

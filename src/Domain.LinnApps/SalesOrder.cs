@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
+    using Linn.Stores.Domain.LinnApps.Consignments;
 
     public class SalesOrder
     {

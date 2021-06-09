@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Domain.LinnApps.ConsignmentShipfiles
+﻿namespace Linn.Stores.Domain.LinnApps.Consignments
 {
     public class ConsignmentItem
     {

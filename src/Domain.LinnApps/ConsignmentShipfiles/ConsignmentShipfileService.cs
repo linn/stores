@@ -5,6 +5,7 @@
 
     using Linn.Common.Configuration;
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
 
     public class ConsignmentShipfileService : IConsignmentShipfileService
