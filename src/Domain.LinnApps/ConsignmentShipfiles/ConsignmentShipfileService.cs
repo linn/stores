@@ -1,12 +1,12 @@
-﻿namespace Linn.Stores.Domain.LinnApps
+﻿namespace Linn.Stores.Domain.LinnApps.ConsignmentShipfiles
 {
     using System.Collections.Generic;
     using System.Linq;
 
     using Linn.Common.Configuration;
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
-    using Linn.Stores.Domain.LinnApps.Models.Emails;
 
     public class ConsignmentShipfileService : IConsignmentShipfileService
     {
@@ -26,6 +26,8 @@
 
         private readonly IRepository<Consignment, int> consignmentRepository;
 
+        private readonly IPackingListService packingListService;
+
         public ConsignmentShipfileService(
             IEmailService emailService,
             ITemplateEngine templateEngine,
@@ -34,7 +36,8 @@
             IQueryRepository<SalesOrder> salesOrderRepository,
             IConsignmentShipfileDataService dataService,
             IQueryRepository<SalesOutlet> outletRepository,
-            IRepository<Consignment, int> consignmentRepository)
+            IRepository<Consignment, int> consignmentRepository,
+            IPackingListService packingListService)
         {
             this.emailService = emailService;
             this.pdfService = pdfService;
@@ -44,65 +47,60 @@
             this.outletRepository = outletRepository;
             this.dataService = dataService;
             this.consignmentRepository = consignmentRepository;
+            this.packingListService = packingListService;
         }
 
-        public IEnumerable<ConsignmentShipfile> SendEmails(
-            IEnumerable<ConsignmentShipfile> toSend, 
+        public ConsignmentShipfile SendEmails(
+           ConsignmentShipfile toSend, 
             bool test = false,
             string testEmailAddress = null)
         {
-            var withDetails = new List<ConsignmentShipfile>();
-            foreach (var shipfile in toSend)
+            var data = this.shipfileRepository.FindById(toSend.Id);
+            var withDetails = data;
+
+            if (data.ShipfileSent == "Y")
             {
-                var data = this.shipfileRepository.FindById(shipfile.Id);
-                
-                if (data.ShipfileSent == "Y")
+                withDetails.Message = ShipfileStatusMessages.EmailAlreadySent;
+                return withDetails;
+            }
+
+            var models = this.BuildEmailModels(data);
+
+            // A message implies there is some problem with generating the email
+            if (data.Message == null)
+            {
+                // potentially an email to send to each outlet in this consignment?
+                foreach (var model in models)
                 {
-                    data.Message = ShipfileStatusMessages.EmailAlreadySent;
-                    withDetails.Add(data);
-                    continue;
+                    model.Subject = test ? model.ToEmailAddress : "Shipping Details";
+
+                    var render = this.templateEngine.Render(
+                        model.PdfAttachment,
+                        ConfigurationManager.Configuration["SHIPFILE_TEMPLATE_PATH"]);
+
+                    var pdf = this.pdfService.ConvertHtmlToPdf(render.Result, landscape: true);
+                    
+                    this.emailService.SendEmail(
+                        test ? testEmailAddress : model.ToEmailAddress,
+                        model.ToCustomerName,
+                        null,
+                        null,
+                        ConfigurationManager.Configuration["SHIPFILES_FROM_ADDRESS"],
+                        "Linn Shipping",
+                        model.Subject,
+                        model.Body,
+                        pdf.Result);
                 }
 
-                var models = this.BuildEmailModels(data);
-
-                // A message implies there is some problem with generating the email
-                if (data.Message == null)
+                if (test)
                 {
-                    // potentially an email to send to each outlet in this consignment?
-                    foreach (var model in models)
-                    {
-                        model.Subject = test ? model.ToEmailAddress : "Shipping Details";
-
-                        var render = this.templateEngine.Render(
-                            model.PdfAttachment,
-                            ConfigurationManager.Configuration["SHIPFILE_TEMPLATE_PATH"]);
-
-                        var pdf = this.pdfService.ConvertHtmlToPdf(render.Result, landscape: true);
-                        
-                        this.emailService.SendEmail(
-                            test ? testEmailAddress : model.ToEmailAddress,
-                            model.ToCustomerName,
-                            null,
-                            null,
-                            ConfigurationManager.Configuration["SHIPFILES_FROM_ADDRESS"],
-                            "Linn Shipping",
-                            model.Subject,
-                            model.Body,
-                            pdf.Result);
-                    }
-
-                    if (test)
-                    {
-                        data.Message = ShipfileStatusMessages.TestEmailSent;
-                    }
-                    else
-                    {
-                        data.Message = ShipfileStatusMessages.EmailSent;
-                        data.ShipfileSent = "Y";
-                    }
+                    withDetails.Message = ShipfileStatusMessages.TestEmailSent;
                 }
-
-                withDetails.Add(data);
+                else
+                {
+                    withDetails.Message = ShipfileStatusMessages.EmailSent;
+                    withDetails.ShipfileSent = "Y";
+                }
             }
 
             return withDetails;
@@ -127,13 +125,13 @@
                 
                     var pdfData = this.dataService.GetPdfModelData(shipfile.ConsignmentId, (int)contact.AddressId);
 
-                    var pdfModel = this.FormatPdfData(pdfData);
+                    pdfData.PackingList = this.packingListService.BuildPackingList(pdfData.PackingList).ToArray();
 
-                    var body = this.BuildEmailBody(pdfModel);
+                    var body = this.BuildEmailBody(pdfData);
 
                         toSend.Add(new ConsignmentShipfileEmailModel
                                        {
-                                           PdfAttachment = pdfModel,
+                                           PdfAttachment = pdfData,
                                            ToCustomerName = contact.EmailAddress,
                                            ToEmailAddress = contact.EmailAddress,
                                            Body = body
@@ -177,12 +175,13 @@
 
                             // and send to account if possible
                             var pdfData = this.dataService.GetPdfModelData(shipfile.ConsignmentId, (int)account.ContactDetails.AddressId);
-                            var pdfModel = this.FormatPdfData(pdfData);
-                            var body = this.BuildEmailBody(pdfModel);
+                            pdfData.PackingList =
+                                this.packingListService.BuildPackingList(pdfData.PackingList).ToArray();
+                            var body = this.BuildEmailBody(pdfData);
 
                             toSend.Add(new ConsignmentShipfileEmailModel
                                            {
-                                               PdfAttachment = pdfModel,
+                                               PdfAttachment = pdfData,
                                                ToCustomerName = account.ContactDetails.EmailAddress,
                                                ToEmailAddress = account.ContactDetails.EmailAddress,
                                                Body = body
@@ -197,19 +196,22 @@
                 }
                 else
                 {
-                    // multiple outlets to email, email addresses all present and correct
                     toSend.AddRange(
-                        (from salesOutlet in outlets
-                         let pdfData = this.dataService.GetPdfModelData(shipfile.ConsignmentId, salesOutlet.OutletAddressId)
-                         let pdfModel = this.FormatPdfData(pdfData)
-                         let body = this.BuildEmailBody(pdfModel)
-                         select new ConsignmentShipfileEmailModel
-                                    {
-                                        PdfAttachment = pdfModel,
-                                        ToEmailAddress = salesOutlet.OrderContact.EmailAddress,
-                                        ToCustomerName = salesOutlet.OrderContact.EmailAddress,
-                                        Body = body
-                                    }).GroupBy(x => x.ToEmailAddress)
+                        outlets.Select(o =>
+                            {
+                                var pdfData = this.dataService.GetPdfModelData(
+                                    shipfile.ConsignmentId,
+                                    o.OutletAddressId);
+                                pdfData.PackingList = this.packingListService.BuildPackingList(pdfData.PackingList).ToArray();
+                                return new ConsignmentShipfileEmailModel
+                                           {
+                                               PdfAttachment = pdfData,
+                                               ToEmailAddress = o.OrderContact.EmailAddress,
+                                               ToCustomerName = o.OrderContact.EmailAddress,
+                                               Body = this.BuildEmailBody(pdfData)
+                                           };
+                            })
+                        .GroupBy(x => x.ToEmailAddress)
                         .Select(x => x.FirstOrDefault()));
                 }
             }
@@ -259,25 +261,6 @@
             }
 
             return consignment.Carrier != "TNT" ? "R" : "E";
-        }
-
-        private ConsignmentShipfilePdfModel FormatPdfData(ConsignmentShipfilePdfModel toFormat)
-        {
-            var formattedPackingList = new List<PackingListItem>();
-            var groups = toFormat.PackingList.GroupBy(x => x.ContentsDescription);
-
-            foreach (var packingListItems in groups)
-            {
-                var formattedItem = packingListItems.First();
-                
-                var range = packingListItems.Max(x => x.Box) - packingListItems.Min(x => x.Box);
-                formattedItem.To = formattedItem.Box + range;
-                formattedItem.Count = range + 1;
-                formattedPackingList.Add(formattedItem);
-            }
-
-            toFormat.PackingList = formattedPackingList.ToArray();
-            return toFormat;
         }
     }
 }

@@ -11,10 +11,7 @@
         [SetUp]
         public void SetUp()
         {
-            this.result = this.Sut.IsKardexLocation("E-K1-") && this.Sut.IsKardexLocation("E-K2-")
-                                                          && this.Sut.IsKardexLocation("E-K3-")
-                                                          && this.Sut.IsKardexLocation("E-K4-")
-                                                          && this.Sut.IsKardexLocation("E-K5-");
+            this.result = this.Sut.IsKardexLocation("E-K1-") && this.Sut.IsKardexLocation("E-K2-");
         }
 
         [Test]

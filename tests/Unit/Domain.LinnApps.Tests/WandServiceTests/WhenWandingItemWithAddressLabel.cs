@@ -5,6 +5,7 @@
 
     using FluentAssertions;
 
+    using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
 

@@ -3,6 +3,8 @@
     using Linn.Common.Configuration;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
+    using Linn.Stores.Domain.LinnApps.Consignments;
+    using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
@@ -279,7 +281,7 @@
             this.QueryStockQuantitIesForMrView(builder);
             this.BuildRequisitionHeaders(builder);
             this.QueryTpkView(builder);
-            this.QueryConsignments(builder);
+            this.BuildConsignments(builder);
             this.BuildExportReturns(builder);
             this.BuildExportReturnDetails(builder);
             this.BuildRequisitionLines(builder);
@@ -1495,7 +1497,7 @@
             q.Property(s => s.OrderLine).HasColumnName("ORDER_LINE");
         }
 
-        private void QueryConsignments(ModelBuilder builder)
+        private void BuildConsignments(ModelBuilder builder)
         {
             var q = builder.Entity<Consignment>().ToTable("CONSIGNMENTS");
             q.HasKey(c => c.ConsignmentId);
@@ -1503,10 +1505,19 @@
             q.Property(c => c.AddressId).HasColumnName("ADDRESS_ID");
             q.Property(c => c.SalesAccountId).HasColumnName("SALES_ACCOUNT_ID");
             q.Property(c => c.DateClosed).HasColumnName("DATE_CLOSED");
-            q.Property(c => c.CustomerName).HasColumnName("CUSTOMER_NAME");
+            q.Property(c => c.CustomerName).HasColumnName("CUSTOMER_NAME").HasMaxLength(50);
             q.HasOne(c => c.SalesAccount).WithMany(a => a.Consignments).HasForeignKey(c => c.SalesAccountId);
             q.HasOne(c => c.Address).WithMany(a => a.Consignments).HasForeignKey(o => o.AddressId);
-            q.Property(c => c.Carrier).HasColumnName("CARRIER");
+            q.Property(c => c.Carrier).HasColumnName("CARRIER").HasMaxLength(10);
+            q.Property(c => c.ShippingMethod).HasColumnName("SHIPPING_METHOD").HasMaxLength(1);
+            q.Property(c => c.Terms).HasColumnName("TERMS").HasMaxLength(30);
+            q.Property(c => c.Status).HasColumnName("STATUS").HasMaxLength(1);
+            q.Property(c => c.DateOpened).HasColumnName("DATE_OPENED");
+            q.Property(c => c.DespatchLocationCode).HasColumnName("DESPATCH_LOCATION_CODE").HasMaxLength(10);
+            q.Property(c => c.Warehouse).HasColumnName("WAREHOUSE").HasMaxLength(1);
+            q.Property(c => c.HubId).HasColumnName("HUB_ID");
+            q.HasOne(c => c.ClosedBy).WithMany(m => m.ConsignmentClosedBy).HasForeignKey(s => s.ClosedById);
+            q.Property(c => c.ClosedById).HasColumnName("CLOSED_BY");
         }
 
         private void QuerySalesOrders(ModelBuilder builder)

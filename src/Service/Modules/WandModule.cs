@@ -60,7 +60,7 @@
 
         private object SendEmails()
         {
-            var resource = this.Bind<ConsignmentShipfilesSendEmailsRequestResource>();
+            var resource = this.Bind<ConsignmentShipfileSendEmailsRequestResource>();
             return this.Negotiate.WithModel(this.shipfileService.SendEmails(resource));
         }
 

@@ -46,7 +46,7 @@
                                                                         AccountName = tpkResult.Report.Account.AccountName
                                                                     },
                                                       Type = tpkResult.Report.Type,
-                                                      Consignment = new ConsignmentResource
+                                                      Consignment = new TpkConsignmentResource
                                                                         {
                                                                             AddressId = tpkResult.Report.Consignment.AddressId,
                                                                             ConsignmentId = tpkResult.Report.Consignment.ConsignmentId,

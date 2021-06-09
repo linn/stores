@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
 
+    using Linn.Stores.Domain.LinnApps.Consignments;
+
     public class Address
     {
         public int Id { get; set; }

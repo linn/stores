@@ -343,7 +343,6 @@ export default function ExportReturn({
                                             propertyName="exportCustomsEntryCode"
                                             onChange={handleFieldChange}
                                             margin="dense"
-                                            disabled={!!exportReturn.dateProcessed}
                                         />
                                     </Grid>
                                     <Grid item xs={4}>
@@ -353,7 +352,6 @@ export default function ExportReturn({
                                             onChange={value =>
                                                 handleFieldChange('exportCustomsEntryDate', value)
                                             }
-                                            disabled={!!exportReturn.dateProcessed}
                                         />
                                     </Grid>
                                     <Grid item xs={4} />
@@ -364,7 +362,7 @@ export default function ExportReturn({
                                 <Button
                                     variant="outlined"
                                     color="primary"
-                                    disabled={!!exportReturn.dateProcessed || !state.editing}
+                                    disabled={!state.editing}
                                     onClick={handleSaveClick}
                                 >
                                     Save

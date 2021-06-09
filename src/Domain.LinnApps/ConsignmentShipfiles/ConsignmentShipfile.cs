@@ -1,5 +1,7 @@
-﻿namespace Linn.Stores.Domain.LinnApps
+﻿namespace Linn.Stores.Domain.LinnApps.ConsignmentShipfiles
 {
+    using Linn.Stores.Domain.LinnApps.Consignments;
+
     public class ConsignmentShipfile
     {
         public int Id { get; set; }

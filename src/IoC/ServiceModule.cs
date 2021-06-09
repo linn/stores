@@ -11,6 +11,8 @@
     using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
+    using Linn.Stores.Domain.LinnApps.Consignments;
+    using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
@@ -27,11 +29,14 @@
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Allocation;
+    using Linn.Stores.Resources.Consignments;
     using Linn.Stores.Resources.Parts;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Resources.Requisitions;
     using Linn.Stores.Resources.StockLocators;
     using Linn.Stores.Resources.Tqms;
+
+    using PuppeteerSharp;
 
     public class ServiceModule : Module
     {
@@ -59,7 +64,7 @@
             builder.RegisterType<PdfService>().As<IPdfService>();
             builder.RegisterType<TemplateEngine>().As<ITemplateEngine>();
             builder.RegisterType<ImportBookService>().As<IImportBookService>();
-
+            builder.RegisterType<PackingListService>().As<IPackingListService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -140,6 +145,7 @@
             builder.RegisterType<TqmsMasterFacadeService>().As<ISingleRecordFacadeService<TqmsMaster, TqmsMasterResource>>();
             builder.RegisterType<TqmsJobrefsFacadeService>().As<IFacadeService<TqmsJobRef, string, TqmsJobRefResource, TqmsJobRefResource>>();
             builder.RegisterType<ConsignmentShipfileFacadeService>().As<IConsignmentShipfileFacadeService>();
+            builder.RegisterType<ConsignmentFacadeService>().As<IFacadeService<Consignment, int, ConsignmentResource, ConsignmentResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
@@ -167,6 +173,17 @@
             builder.RegisterType<ProductionTriggerLevelsProxy>().As<IProductionTriggerLevelsService>().WithParameter(
                 "rootUri",
                 ConfigurationManager.Configuration["PROXY_ROOT"]);
+
+            builder.Register(c => Puppeteer.LaunchAsync(new LaunchOptions
+                                                            {
+                                                                Args = new[]
+                                                                           {
+                                                                               "--no-sandbox"
+                                                                           },
+                                                                Headless = true
+                                                            }).Result)
+                .As<Browser>()
+                .SingleInstance();
         }
     }
 }

@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
 
+    using Linn.Stores.Domain.LinnApps.Consignments;
+
     public class WhatToWandReport
     {
         public IEnumerable<WhatToWandLine> Lines { get; set; }

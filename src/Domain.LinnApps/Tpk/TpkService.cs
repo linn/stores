@@ -4,6 +4,7 @@
     using System.Linq;
 
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Tpk.Models;

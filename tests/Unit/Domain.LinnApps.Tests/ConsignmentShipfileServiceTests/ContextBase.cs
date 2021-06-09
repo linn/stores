@@ -1,6 +1,8 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.ConsignmentShipfileServiceTests
 {
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.Consignments;
+    using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
 
     using NSubstitute;
@@ -27,6 +29,8 @@
 
         protected IRepository<Consignment, int> ConsignmentRepository { get; private set; }
 
+        protected IPackingListService PackingListService { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -38,6 +42,7 @@
             this.OutletRepository = Substitute.For<IQueryRepository<SalesOutlet>>();
             this.ConsignmentRepository = Substitute.For<IRepository<Consignment, int>>();
             this.TemplateEngine = Substitute.For<ITemplateEngine>();
+            this.PackingListService = Substitute.For<IPackingListService>();
 
             this.Sut = new ConsignmentShipfileService(
                 this.EmailService,
@@ -47,7 +52,8 @@
                 this.SalesOrderRepository,
                 this.DataService,
                 this.OutletRepository,
-                this.ConsignmentRepository);
+                this.ConsignmentRepository,
+                this.PackingListService);
         }
     }
 }

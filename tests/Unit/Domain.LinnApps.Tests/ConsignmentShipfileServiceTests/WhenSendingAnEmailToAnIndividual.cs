@@ -6,7 +6,8 @@
 
     using FluentAssertions;
 
-    using Linn.Stores.Domain.LinnApps.Models.Emails;
+    using Linn.Stores.Domain.LinnApps.Consignments;
+    using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
 
     using NSubstitute;
 
@@ -14,9 +15,9 @@
 
     public class WhenSendingAnEmailToAnIndividual : ContextBase
     {
-        private IEnumerable<ConsignmentShipfile> toSend;
+        private ConsignmentShipfile toSend;
 
-        private IEnumerable<ConsignmentShipfile> result;
+        private ConsignmentShipfile result;
 
         private ConsignmentShipfile shipfileData;
 
@@ -42,10 +43,10 @@
                                         Id = 1,
                                         Consignment = consignment
                                     };
-            this.toSend = new List<ConsignmentShipfile>
-                              {
-                                  new ConsignmentShipfile { Id = 1, ConsignmentId = 1 }
-                              };
+            this.toSend = new ConsignmentShipfile { Id = 1, ConsignmentId = 1 };
+
+            this.PackingListService.BuildPackingList(Arg.Any<IEnumerable<PackingListItem>>())
+                .ReturnsForAnyArgs(new List<PackingListItem> { new PackingListItem(1, 1, "desc", 1m) });
 
             this.ShipfileRepository.FindById(1).Returns(this.shipfileData);
 
@@ -55,7 +56,7 @@
                 new ConsignmentShipfilePdfModel
                     {
                         ConsignmentNumber = "1",
-                        PackingList = new PackingListItem[] { new PackingListItem { Box = 1 } }, 
+                        PackingList = new PackingListItem[] { }, 
                         DespatchNotes = new DespatchNote[] { new DespatchNote() },
                         DateDispatched = "12/05/2008 09:34:58"
                 });
@@ -88,8 +89,8 @@
         [Test]
         public void ShouldUpdateStatusMessage()
         {
-            this.result.First().Message.Should().Be(ShipfileStatusMessages.EmailSent);
-            this.result.First().ShipfileSent.Should().Be("Y");
+            this.result.Message.Should().Be(ShipfileStatusMessages.EmailSent);
+            this.result.ShipfileSent.Should().Be("Y");
         }
     }
 }

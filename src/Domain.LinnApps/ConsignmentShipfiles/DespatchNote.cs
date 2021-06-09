@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Domain.LinnApps.Models.Emails
+﻿namespace Linn.Stores.Domain.LinnApps.ConsignmentShipfiles
 {
     public class DespatchNote
     {

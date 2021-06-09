@@ -9,6 +9,8 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
+    using Linn.Stores.Domain.LinnApps.Consignments;
+    using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Models;
@@ -186,6 +188,8 @@
             builder.RegisterType<ConsignmentShipfileResourceBuilder>().As<IResourceBuilder<ConsignmentShipfile>>();
             builder.RegisterType<ConsignmentShipfilesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<ConsignmentShipfile>>>();
+            builder.RegisterType<ConsignmentResourceBuilder>().As<IResourceBuilder<Consignment>>();
+            builder.RegisterType<ConsignmentsResourceBuilder>().As<IResourceBuilder<IEnumerable<Consignment>>>();
         }
     }
 }

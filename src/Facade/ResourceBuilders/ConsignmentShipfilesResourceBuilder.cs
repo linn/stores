@@ -5,7 +5,7 @@
     using System.Linq;
 
     using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
     using Linn.Stores.Resources;
 
     public class ConsignmentShipfilesResourceBuilder : IResourceBuilder<IEnumerable<ConsignmentShipfile>>

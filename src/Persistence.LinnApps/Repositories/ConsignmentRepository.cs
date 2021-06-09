@@ -5,7 +5,7 @@
     using System.Linq.Expressions;
 
     using Linn.Common.Persistence;
-    using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Consignments;
 
     using Microsoft.EntityFrameworkCore;
 
@@ -29,7 +29,10 @@
 
         public IQueryable<Consignment> FilterBy(Expression<Func<Consignment, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.Consignments.Where(expression)
+                .Include(c => c.Invoices)
+                .Include(a => a.Address)
+                .ThenInclude(c => c.Country);
         }
 
         public Consignment FindById(int key)
@@ -43,12 +46,15 @@
 
         public IQueryable<Consignment> FindAll()
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.Consignments.Where(c => c.Status == "L")
+                .Include(c => c.Invoices)
+                .Include(a => a.Address)
+                .ThenInclude(c => c.Country);
         }
 
-        public void Add(Consignment entity)
+    public void Add(Consignment entity)
         {
-            throw new NotImplementedException();
+            this.serviceDbContext.Consignments.Add(entity);
         }
 
         public void Remove(Consignment entity)
