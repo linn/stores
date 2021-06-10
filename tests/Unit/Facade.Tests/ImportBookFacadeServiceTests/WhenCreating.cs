@@ -9,7 +9,7 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
-    using Linn.Stores.Resources.Parts;
+    using Linn.Stores.Resources.ImportBooks;
 
     using NSubstitute;
 

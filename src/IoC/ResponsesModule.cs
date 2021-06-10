@@ -190,6 +190,8 @@
                 .As<IResourceBuilder<IEnumerable<ConsignmentShipfile>>>();
             builder.RegisterType<ConsignmentResourceBuilder>().As<IResourceBuilder<Consignment>>();
             builder.RegisterType<ConsignmentsResourceBuilder>().As<IResourceBuilder<IEnumerable<Consignment>>>();
+            builder.RegisterType<CurrencyResourceBuilder>().As<IResourceBuilder<Currency>>();
+            builder.RegisterType<CurrenciesResourceBuilder>().As<IResourceBuilder<IEnumerable<Currency>>>();
         }
     }
 }

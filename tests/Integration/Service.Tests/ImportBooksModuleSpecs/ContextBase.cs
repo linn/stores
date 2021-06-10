@@ -7,7 +7,7 @@
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
-    using Linn.Stores.Resources.Parts;
+    using Linn.Stores.Resources.ImportBooks;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
 

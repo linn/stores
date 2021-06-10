@@ -4,7 +4,7 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Facade.Services;
-    using Linn.Stores.Resources.Parts;
+    using Linn.Stores.Resources.ImportBooks;
 
     using NSubstitute;
 

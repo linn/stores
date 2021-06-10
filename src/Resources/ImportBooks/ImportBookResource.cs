@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Resources.Parts
+﻿namespace Linn.Stores.Resources.ImportBooks
 {
     using System.Collections.Generic;
     using Linn.Common.Resources;

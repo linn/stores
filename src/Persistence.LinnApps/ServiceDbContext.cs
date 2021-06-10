@@ -209,6 +209,8 @@
 
         public DbSet<PrinterMapping> PrinterMappings { get; set; }
 
+        public DbSet<Currency> Currencies { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -305,6 +307,7 @@
             this.BuildPersons(builder);
             this.BuildAddresses(builder);
             this.BuildPrinterMappings(builder);
+            this.BuildCurrencies(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1720,6 +1723,14 @@
             e.Property(a => a.PrinterType).HasColumnName("PRINTER_TYPE").HasMaxLength(50);
             e.Property(a => a.PrinterGroup).HasColumnName("PRINTER_GROUP").HasMaxLength(50);
             e.Property(a => a.DefaultForGroup).HasColumnName("DEFAULT_FOR_GROUP").HasMaxLength(50);
+        }
+
+        private void BuildCurrencies(ModelBuilder builder)
+        {
+            var e = builder.Entity<Currency>().ToTable("CURRENCIES");
+            e.HasKey(a => a.Code);
+            e.Property(a => a.Code).HasColumnName("CODE");
+            e.Property(a => a.Name).HasColumnName("NAME").HasMaxLength(100);
         }
     }
 }
