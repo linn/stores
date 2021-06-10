@@ -131,6 +131,10 @@
                 .As<IResourceBuilder<IEnumerable<ImportBookTransactionCode>>>();
             builder.RegisterType<ImportBookOrderDetailResourceBuilder>().As<IResourceBuilder<ImportBookOrderDetail>>();
             builder.RegisterType<ImportBookPostEntryResourceBuilder>().As<IResourceBuilder<ImportBookPostEntry>>();
+            builder.RegisterType<ImportBookCpcNumberResourceBuilder>().As<IResourceBuilder<ImportBookCpcNumber>>();
+            builder.RegisterType<ImportBookCpcNumbersResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<ImportBookCpcNumber>>>();
+
             builder.RegisterType<TqmsCategoryResourceBuilder>()
                 .As<IResourceBuilder<TqmsCategory>>();
             builder.RegisterType<TqmsCategoriesResourceBuilder>()
