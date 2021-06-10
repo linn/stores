@@ -78,7 +78,7 @@
             builder.RegisterType<ImportBookPostEntryRepository>()
                 .As<IRepository<ImportBookPostEntry, ImportBookPostEntryKey>>();
             builder.RegisterType<ImportBookRepository>().As<IRepository<ImportBook, int>>();
-            builder.RegisterType<LedgerPeriod>().As<IRepository<LedgerPeriod, int>>();
+            builder.RegisterType<LedgerPeriod>().As<IQueryRepository<LedgerPeriod>>();
             builder.RegisterType<ImportBookTransactionCodeRepository>()
                 .As<IRepository<ImportBookTransactionCode, int>>();
             builder.RegisterType<ImportBookTransportCodeRepository>().As<IRepository<ImportBookTransportCode, int>>();

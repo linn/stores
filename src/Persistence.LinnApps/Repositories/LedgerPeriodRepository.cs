@@ -7,7 +7,7 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
 
-    public class LedgerPeriodRepository : IRepository<LedgerPeriod, int>
+    public class LedgerPeriodRepository : IQueryRepository<LedgerPeriod>
     {
         private readonly ServiceDbContext serviceDbContext;
 
@@ -16,29 +16,14 @@
             this.serviceDbContext = serviceDbContext;
         }
 
-        public LedgerPeriod FindById(int key)
-        {
-            throw new NotImplementedException();
-        }
-
         public IQueryable<LedgerPeriod> FindAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Add(LedgerPeriod entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Remove(LedgerPeriod entity)
         {
             throw new NotImplementedException();
         }
 
         public LedgerPeriod FindBy(Expression<Func<LedgerPeriod, bool>> expression)
         {
-            return this.serviceDbContext.LedgerPeriods.Find(expression);
+            return this.serviceDbContext.LedgerPeriods.FirstOrDefault(expression);
         }
 
         public IQueryable<LedgerPeriod> FilterBy(Expression<Func<LedgerPeriod, bool>> expression)
