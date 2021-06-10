@@ -117,8 +117,18 @@
             builder.RegisterType<ErrorResourceBuilder>().As<IResourceBuilder<Error>>();
             builder.RegisterType<ImportBookResourceBuilder>().As<IResourceBuilder<ImportBook>>();
             builder.RegisterType<ImportBooksResourceBuilder>().As<IResourceBuilder<IEnumerable<ImportBook>>>();
+            builder.RegisterType<ImportBookExchangeRateResourceBuilder>().As<IResourceBuilder<ImportBookExchangeRate>>();
+            builder.RegisterType<ImportBookExchangeRatesResourceBuilder>().As<IResourceBuilder<IEnumerable<ImportBookExchangeRate>>>();
             builder.RegisterType<ImportBookInvoiceDetailResourceBuilder>()
                 .As<IResourceBuilder<ImportBookInvoiceDetail>>();
+            builder.RegisterType<ImportBookTransportCodeResourceBuilder>()
+                .As<IResourceBuilder<ImportBookTransportCode>>();
+            builder.RegisterType<ImportBookTransportCodesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<ImportBookTransportCode>>>();
+            builder.RegisterType<ImportBookTransactionCodeResourceBuilder>()
+                .As<IResourceBuilder<ImportBookTransactionCode>>();
+            builder.RegisterType<ImportBookTransactionCodesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<ImportBookTransactionCode>>>();
             builder.RegisterType<ImportBookOrderDetailResourceBuilder>().As<IResourceBuilder<ImportBookOrderDetail>>();
             builder.RegisterType<ImportBookPostEntryResourceBuilder>().As<IResourceBuilder<ImportBookPostEntry>>();
             builder.RegisterType<TqmsCategoryResourceBuilder>()

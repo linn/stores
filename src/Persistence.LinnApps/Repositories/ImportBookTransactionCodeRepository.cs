@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using System.Linq.Expressions;
+
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
 
@@ -22,7 +23,7 @@
 
         public IQueryable<ImportBookTransactionCode> FindAll()
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.ImportBookTransactionCodes.Where(x => true);
         }
 
         public void Add(ImportBookTransactionCode entity)

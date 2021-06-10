@@ -115,6 +115,8 @@
 
         public DbSet<ImportBookTransportCode> ImportBookTransportCodes { get; set; }
 
+        public DbSet<LedgerPeriod> LedgerPeriods { get; set; }
+
         public DbQuery<Port> Ports { get; set; }
 
         public DbSet<PartParamData> PartParamDataSheets { get; set; }
@@ -253,6 +255,7 @@
             this.BuildImportBookExchangeRates(builder);
             this.BuildImportBookTransactionCodes(builder);
             this.BuildImportBookTransportCodes(builder);
+            this.BuildLedgerPeriods(builder);
             this.QueryPorts(builder);
             builder.Model.Relational().MaxIdentifierLength = 30;
             this.BuildPartParamDataSheets(builder);
@@ -988,12 +991,12 @@
             q.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
             q.Property(e => e.PortCode).HasColumnName("PORT_CODE").HasMaxLength(3);
             q.Property(e => e.CustomsEntryCodePrefix).HasColumnName("CUSTOMS_ENTRY_CODE_PREFIX").HasMaxLength(3);
-            //q.HasMany(t => t.InvoiceDetails).WithOne()
-            //    .HasForeignKey(detail => new { detail.ImportBookId, detail.LineNumber });
-            //q.HasMany(t => t.OrderDetails).WithOne()
-            //    .HasForeignKey(detail => new { detail.ImportBookId, detail.LineNumber });
-            //q.HasMany(t => t.PostEntries).WithOne()
-            //    .HasForeignKey(entry => new { entry.ImportBookId, entry.LineNumber });
+            q.HasMany(t => t.InvoiceDetails).WithOne()
+                .HasForeignKey(detail => detail.ImportBookId);
+            q.HasMany(t => t.OrderDetails).WithOne()
+                .HasForeignKey(detail => detail.ImportBookId);
+            q.HasMany(t => t.PostEntries).WithOne()
+                .HasForeignKey(detail => detail.ImportBookId);
         }
 
         private void BuildImportBookInvoiceDetails(ModelBuilder builder)
@@ -1086,6 +1089,14 @@
             q.Property(e => e.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
         }
 
+        private void BuildLedgerPeriods(ModelBuilder builder)
+        {
+            var q = builder.Entity<LedgerPeriod>().ToTable("LEDGER_PERIODS");
+            q.HasKey(e => e.PeriodNumber);
+            q.Property(e => e.PeriodNumber).HasColumnName("PERIOD_NUMBER");
+            q.Property(e => e.MonthName).HasColumnName("MONTH_NAME");
+        }
+        
         private void QueryPorts(ModelBuilder builder)
         {
             var q = builder.Query<Port>().ToView("PORTS");
