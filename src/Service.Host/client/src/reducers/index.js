@@ -87,6 +87,8 @@ import suppliersApprovedCarrier from './suppliersApprovedCarrier';
 import shipfilesSendEmails from './shipfilesSendEmails';
 import consignment from './consignment';
 import consignments from './consignments';
+import hub from './hub';
+import hubs from './hubs';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -119,6 +121,8 @@ const rootReducer = history =>
         exportReturn,
         exportRsns,
         finishAllocation,
+        hub,
+        hubs,
         inspectedStates,
         interCompanyInvoices,
         makeIntercompanyInvoices,

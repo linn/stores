@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
-import { Loading, Dropdown } from '@linn-it/linn-form-components-library';
+import {
+    Loading,
+    Dropdown,
+    SaveBackCancelButtons,
+    utilities
+} from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
+import Button from '@material-ui/core/Button';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Table from '@material-ui/core/Table';
@@ -10,18 +16,37 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import moment from 'moment';
 import Page from '../../containers/Page';
 
 function Consignment({
-    consignment,
+    item,
     loading,
     requestErrors,
     openConsignments,
     getConsignment,
     optionsLoading,
-    startingTab
+    startingTab,
+    editStatus,
+    setEditStatus,
+    hub,
+    getHub
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
+    const [consignment, setConsignment] = useState(item);
+
+    useEffect(() => {
+        setConsignment(item);
+    }, [item]);
+
+    useEffect(() => {
+        if (consignment) {
+            const hubHref = utilities.getHref(consignment, 'hub');
+            if (hubHref) {
+                getHub(hubHref);
+            }
+        }
+    }, [consignment, getHub]);
 
     const TableItem = withStyles(() => ({
         body: {
@@ -60,6 +85,17 @@ function Consignment({
         }
     };
 
+    const startEdit = () => {
+        setEditStatus('edit');
+    };
+
+    const doSave = () => {};
+
+    const doCancel = () => {
+        setConsignment(item);
+        setEditStatus('view');
+    };
+
     return (
         <Page requestErrors={requestErrors} showRequestErrors>
             <Grid container spacing={3}>
@@ -73,7 +109,7 @@ function Consignment({
                         </Typography>
                     )}
                 </Grid>
-                <div>
+                <>
                     <Tabs
                         value={currentTab}
                         onChange={handleTabChange}
@@ -94,7 +130,7 @@ function Consignment({
                             />
                         </Grid>
                     )}
-                    {loading || !consignment ? (
+                    {currentTab !== 0 && (loading || !consignment) ? (
                         <Loading />
                     ) : (
                         currentTab === 1 && (
@@ -132,15 +168,26 @@ function Consignment({
                                             </TableRow>
                                             <TableRow key="Hub">
                                                 <TableItem>Hub</TableItem>
-                                                <TableItem>{consignment.hubId}</TableItem>
+                                                <TableItem>
+                                                    {consignment.hubId} - {hub && hub.description}
+                                                </TableItem>
                                             </TableRow>
                                             <TableRow key="DateOpened">
                                                 <TableItem>Date Opened</TableItem>
-                                                <TableItem>{consignment.dateOpened}</TableItem>
+                                                <TableItem>
+                                                    {moment(consignment.dateOpened).format(
+                                                        'DD MMM YYYY'
+                                                    )}
+                                                </TableItem>
                                             </TableRow>
                                             <TableRow key="DateClosed">
                                                 <TableItem>Date Closed</TableItem>
-                                                <TableItem>{consignment.dateClosed}</TableItem>
+                                                <TableItem>
+                                                    {consignment.dateClosed &&
+                                                        moment(consignment.dateClosed).format(
+                                                            'DD MMM YYYY'
+                                                        )}
+                                                </TableItem>
                                                 <TableItem>Closed By</TableItem>
                                                 <TableItem>
                                                     {consignment.closedBy &&
@@ -153,14 +200,27 @@ function Consignment({
                             </>
                         )
                     )}
-                </div>
+                </>
+                <Grid item xs={12}>
+                    {editStatus === 'view' ? (
+                        <Button variant="outlined" color="primary" onClick={startEdit}>
+                            Edit
+                        </Button>
+                    ) : (
+                        <SaveBackCancelButtons
+                            saveClick={doSave}
+                            backClick={() => {}}
+                            cancelClick={doCancel}
+                        />
+                    )}
+                </Grid>
             </Grid>
         </Page>
     );
 }
 
 Consignment.propTypes = {
-    consignment: PropTypes.shape({
+    item: PropTypes.shape({
         consignmentId: PropTypes.number,
         customerName: PropTypes.string,
         salesAccountId: PropTypes.number,
@@ -180,16 +240,22 @@ Consignment.propTypes = {
     openConsignments: PropTypes.arrayOf(PropTypes.shape({})),
     getConsignment: PropTypes.func.isRequired,
     optionsLoading: PropTypes.bool,
-    startingTab: PropTypes.number
+    startingTab: PropTypes.number,
+    editStatus: PropTypes.string,
+    setEditStatus: PropTypes.func.isRequired,
+    getHub: PropTypes.func.isRequired,
+    hub: PropTypes.shape({ hubId: PropTypes.number, description: PropTypes.string })
 };
 
 Consignment.defaultProps = {
-    consignment: null,
+    item: {},
     loading: false,
     requestErrors: null,
     openConsignments: [],
     optionsLoading: false,
-    startingTab: 0
+    startingTab: 0,
+    editStatus: 'view',
+    hub: null
 };
 
 export default Consignment;

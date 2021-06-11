@@ -222,5 +222,7 @@ export const shipfilesSendEmailsActionTypes = makeProcessActionTypes(
 );
 
 export const consignmentActionTypes = makeActionTypes(itemTypes.consignment.actionType);
-
 export const consignmentsActionTypes = makeActionTypes(itemTypes.consignments.actionType, false);
+
+export const hubActionTypes = makeActionTypes(itemTypes.hub.actionType);
+export const hubsActionTypes = makeActionTypes(itemTypes.hubs.actionType, false);

@@ -299,5 +299,7 @@ export const parcel = new ItemType('parcel', 'PARCEL', '/logistics/parcels');
 export const parcels = new ItemType('parcels', 'PARCELS', '/logistics/parcels');
 
 export const consignment = new ItemType('consignment', 'CONSIGNMENT', '/logistics/consignments');
-
 export const consignments = new ItemType('consignments', 'CONSIGNMENTS', '/logistics/consignments');
+
+export const hub = new ItemType('hub', 'HUB', '/logistics/hubs');
+export const hubs = new ItemType('hubs', 'HUBS', '/logistics/hubs');

@@ -12,6 +12,8 @@ import consignmentActions from '../../actions/consignmentActions';
 import consignmentsSelectors from '../../selectors/consignmentsSelectors';
 import consignmentsActions from '../../actions/consignmentsActions';
 import * as itemTypes from '../../itemTypes';
+import hubSelectors from '../../selectors/hubSelectors';
+import hubActions from '../../actions/hubActions';
 
 const getOptions = ownProps => {
     const options = queryString.parse(ownProps.location.search);
@@ -27,7 +29,7 @@ const initialise = ({ options }) => dispatch => {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-    consignment: consignmentSelectors.getItem(state),
+    item: consignmentSelectors.getItem(state),
     loading: consignmentSelectors.getLoading(state),
     snackbarVisible: consignmentSelectors.getSnackbarVisible(state),
     itemError: getItemError(state, itemTypes.consignment.item),
@@ -36,7 +38,9 @@ const mapStateToProps = (state, ownProps) => ({
     openConsignments: consignmentsSelectors.getItems(state),
     optionsLoading: consignmentsSelectors.getLoading(state),
     options: getOptions(ownProps),
-    startingTab: getOptions(ownProps).consignmentId ? 1 : 0
+    startingTab: getOptions(ownProps).consignmentId ? 1 : 0,
+    editStatus: consignmentSelectors.getEditStatus(state),
+    hub: hubSelectors.getItem(state)
 });
 
 const mapDispatchToProps = {
@@ -45,7 +49,8 @@ const mapDispatchToProps = {
     updateItem: consignmentActions.update,
     setEditStatus: consignmentActions.setEditStatus,
     setSnackbarVisible: consignmentActions.setSnackbarVisible,
-    getConsignment: consignmentActions.fetch
+    getConsignment: consignmentActions.fetch,
+    getHub: hubActions.fetchByHref
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Consignment));
