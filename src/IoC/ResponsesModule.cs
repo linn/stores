@@ -180,6 +180,8 @@
                 .As<IResourceBuilder<IEnumerable<ConsignmentShipfile>>>();
             builder.RegisterType<ConsignmentResourceBuilder>().As<IResourceBuilder<Consignment>>();
             builder.RegisterType<ConsignmentsResourceBuilder>().As<IResourceBuilder<IEnumerable<Consignment>>>();
+            builder.RegisterType<HubResourceBuilder>().As<IResourceBuilder<Hub>>();
+            builder.RegisterType<HubsResourceBuilder>().As<IResourceBuilder<IEnumerable<Hub>>>();
         }
     }
 }

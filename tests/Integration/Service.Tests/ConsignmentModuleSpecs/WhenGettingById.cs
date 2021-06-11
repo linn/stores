@@ -23,7 +23,7 @@
         public void SetUp()
         {
             this.consignmentId = 145;
-            this.consignment = new Consignment { ConsignmentId = this.consignmentId };
+            this.consignment = new Consignment { ConsignmentId = this.consignmentId, HubId = 123 };
 
             this.ConsignmentFacadeService.GetById(this.consignmentId)
                 .Returns(new SuccessResult<Consignment>(this.consignment));
@@ -53,6 +53,16 @@
         {
             var resultResource = this.Response.Body.DeserializeJson<ConsignmentResource>();
             resultResource.ConsignmentId.Should().Be(this.consignmentId);
+        }
+
+        [Test]
+        public void ShouldHaveCorrectLinkRels()
+        {
+            var resultResource = this.Response.Body.DeserializeJson<ConsignmentResource>();
+            resultResource.Links.Should().HaveCount(2);
+            resultResource.Links.Should().Contain(
+                a => a.Rel == "self" && a.Href == $"/logistics/consignments/{this.consignmentId}");
+            resultResource.Links.Should().Contain(b => b.Rel == "hub" && b.Href == "/logistics/hubs/123");
         }
     }
 }

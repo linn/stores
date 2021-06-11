@@ -49,6 +49,11 @@
         private IEnumerable<LinkResource> BuildLinks(Consignment consignment)
         {
             yield return new LinkResource("self", this.GetLocation(consignment));
+
+            if (consignment.HubId.HasValue)
+            {
+                yield return new LinkResource("hub", $"/logistics/hubs/{consignment.HubId}");
+            }
         }
     }
 }
