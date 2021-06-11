@@ -30,6 +30,7 @@
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Allocation;
     using Linn.Stores.Resources.Consignments;
+    using Linn.Stores.Resources.ImportBooks;
     using Linn.Stores.Resources.Parts;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Resources.Requisitions;
@@ -112,6 +113,7 @@
             builder.RegisterType<ImportBookExchangeRateService>().As<IImportBookExchangeRateService>();
             builder.RegisterType<ImportBookTransactionCodeFacadeService>().As<IFacadeService<ImportBookTransactionCode, int, ImportBookTransactionCodeResource, ImportBookTransactionCodeResource>>();
             builder.RegisterType<ImportBookTransportCodeFacadeService>().As<IFacadeService<ImportBookTransportCode, int, ImportBookTransportCodeResource, ImportBookTransportCodeResource>>();
+            builder.RegisterType<ImportBookCpcNumberFacadeService>().As<IFacadeService<ImportBookCpcNumber, int, ImportBookCpcNumberResource, ImportBookCpcNumberResource>>();
             builder.RegisterType<PartDataSheetValuesService>().As<IPartDataSheetValuesService>();
             builder.RegisterType<TqmsCategoriesService>()
                 .As<IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>>();
@@ -146,6 +148,8 @@
             builder.RegisterType<TqmsJobrefsFacadeService>().As<IFacadeService<TqmsJobRef, string, TqmsJobRefResource, TqmsJobRefResource>>();
             builder.RegisterType<ConsignmentShipfileFacadeService>().As<IConsignmentShipfileFacadeService>();
             builder.RegisterType<ConsignmentFacadeService>().As<IFacadeService<Consignment, int, ConsignmentResource, ConsignmentResource>>();
+            builder.RegisterType<CurrencyFacadeService>()
+                .As<IFacadeService<Currency, string, CurrencyResource, CurrencyResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
