@@ -220,3 +220,9 @@ export const parcelsActionTypes = makeActionTypes(itemTypes.parcels.actionType, 
 export const shipfilesSendEmailsActionTypes = makeProcessActionTypes(
     processTypes.shipfilesSendEmails.actionType
 );
+
+export const consignmentActionTypes = makeActionTypes(itemTypes.consignment.actionType);
+export const consignmentsActionTypes = makeActionTypes(itemTypes.consignments.actionType, false);
+
+export const hubActionTypes = makeActionTypes(itemTypes.hub.actionType);
+export const hubsActionTypes = makeActionTypes(itemTypes.hubs.actionType, false);

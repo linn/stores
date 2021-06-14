@@ -211,6 +211,8 @@
 
         public DbSet<Currency> Currencies { get; set; }
 
+        public DbSet<Hub> Hubs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -308,6 +310,7 @@
             this.BuildAddresses(builder);
             this.BuildPrinterMappings(builder);
             this.BuildCurrencies(builder);
+            this.BuildHubs(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1561,7 +1564,7 @@
             q.Property(e => e.NumCartons).HasColumnName("NUM_CARTONS");
             q.Property(e => e.GrossWeightKg).HasColumnName("GROSS_WEIGHT_KG");
             q.Property(e => e.GrossDimsM3).HasColumnName("GROSS_DIMS_M3");
-            q.Property(e => e.MadeIntercompanyInvoices).HasColumnName("MADE_INTERCO_INVS");
+            q.Property(e => e.MadeInterCompanyInvoices).HasColumnName("MADE_INTERCO_INVS");
             q.Property(e => e.DateProcessed).HasColumnName("DATE_PROCESSED");
             q.Property(e => e.ReturnForCredit).HasColumnName("RETURN_FOR_CREDIT");
             q.Property(e => e.ExportCustomsEntryCode).HasColumnName("EXPORT_CUSTOMS_ENTRY_CODE");
@@ -1731,6 +1734,19 @@
             e.HasKey(a => a.Code);
             e.Property(a => a.Code).HasColumnName("CODE");
             e.Property(a => a.Name).HasColumnName("NAME").HasMaxLength(100);
+        }
+
+        private void BuildHubs(ModelBuilder builder)
+        {
+            var h = builder.Entity<Hub>().ToTable("HUBS");
+            h.HasKey(a => a.HubId);
+            h.Property(a => a.HubId).HasColumnName("HUB_ID");
+            h.Property(a => a.Description).HasColumnName("DESCRIPTION").HasMaxLength(240);
+            h.Property(a => a.OrgId).HasColumnName("ORG_ID");
+            h.Property(a => a.AddressId).HasColumnName("ADDRESS_ID");
+            h.Property(a => a.CustomStamp).HasColumnName("CUSTOM_STAMP").HasMaxLength(10);
+            h.Property(a => a.CarrierCode).HasColumnName("CARRIER_CODE").HasMaxLength(10);
+            h.Property(a => a.EcHub).HasColumnName("EC_HUB").HasMaxLength(1);
         }
     }
 }

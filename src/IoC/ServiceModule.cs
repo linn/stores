@@ -150,6 +150,7 @@
             builder.RegisterType<ConsignmentFacadeService>().As<IFacadeService<Consignment, int, ConsignmentResource, ConsignmentResource>>();
             builder.RegisterType<CurrencyFacadeService>()
                 .As<IFacadeService<Currency, string, CurrencyResource, CurrencyResource>>();
+            builder.RegisterType<HubFacadeService>().As<IFacadeService<Hub, int, HubResource, HubResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

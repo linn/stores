@@ -36,7 +36,7 @@
                            NumCartons = exportReturn.NumCartons,
                            GrossWeightKg = exportReturn.GrossWeightKg,
                            GrossDimsM3 = exportReturn.GrossDimsM3,
-                           MadeIntercompanyInvoices = exportReturn.MadeIntercompanyInvoices,
+                           MadeIntercompanyInvoices = exportReturn.MadeInterCompanyInvoices,
                            DateProcessed = exportReturn.DateProcessed?.ToString("o"),
                            ReturnForCredit = exportReturn.ReturnForCredit,
                            ExportCustomsEntryCode = exportReturn.ExportCustomsEntryCode,

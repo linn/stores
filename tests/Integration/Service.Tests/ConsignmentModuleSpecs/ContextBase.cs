@@ -21,20 +21,28 @@
     {
         protected IFacadeService<Consignment, int, ConsignmentResource, ConsignmentResource> ConsignmentFacadeService { get; private set; }
 
+        protected IFacadeService<Hub, int, HubResource, HubResource> HubFacadeService { get; private set; }
+
         [SetUp]
         public void EstablishContext()
         {
             this.ConsignmentFacadeService = Substitute.For<IFacadeService<Consignment, int, ConsignmentResource, ConsignmentResource>>();
+            this.HubFacadeService = Substitute.For<IFacadeService<Hub, int, HubResource, HubResource>>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                 {
                     with.Dependency(this.ConsignmentFacadeService);
+                    with.Dependency(this.HubFacadeService);
                     with.Dependency<IResourceBuilder<Consignment>>(new ConsignmentResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<Consignment>>>(new ConsignmentsResourceBuilder());
+                    with.Dependency<IResourceBuilder<Hub>>(new HubResourceBuilder());
+                    with.Dependency<IResourceBuilder<IEnumerable<Hub>>>(new HubsResourceBuilder());
                     with.Module<ConsignmentsModule>();
                     with.ResponseProcessor<ConsignmentResponseProcessor>();
                     with.ResponseProcessor<ConsignmentsResponseProcessor>();
+                    with.ResponseProcessor<HubResponseProcessor>();
+                    with.ResponseProcessor<HubsResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {

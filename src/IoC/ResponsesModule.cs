@@ -196,6 +196,8 @@
             builder.RegisterType<ConsignmentsResourceBuilder>().As<IResourceBuilder<IEnumerable<Consignment>>>();
             builder.RegisterType<CurrencyResourceBuilder>().As<IResourceBuilder<Currency>>();
             builder.RegisterType<CurrenciesResourceBuilder>().As<IResourceBuilder<IEnumerable<Currency>>>();
+            builder.RegisterType<HubResourceBuilder>().As<IResourceBuilder<Hub>>();
+            builder.RegisterType<HubsResourceBuilder>().As<IResourceBuilder<IEnumerable<Hub>>>();
         }
     }
 }
