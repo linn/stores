@@ -30,9 +30,9 @@
 
             this.HubFacadeService.GetAll()
                 .Returns(new SuccessResult<IEnumerable<Hub>>(new List<Hub>
-                                                                         {
-                                                                             this.hub1, this.hub2
-                                                                         }));
+                                                                 {
+                                                                     this.hub1, this.hub2
+                                                                 }));
 
             this.Response = this.Browser.Get(
                 "/logistics/hubs",
