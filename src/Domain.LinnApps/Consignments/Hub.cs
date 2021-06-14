@@ -15,11 +15,5 @@
         public string CarrierCode { get; set; }
 
         public string EcHub { get; set; }
-
-        public string ReturnAccountingCompany { get; set; }
-
-        public int? ReturnAddressId { get; set; }
-
-        public string ReturnCustomStamp { get; set; }
     }
 }

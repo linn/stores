@@ -20,9 +20,6 @@
                 Description = hub.Description,
                 EcHub = hub.EcHub,
                 OrgId = hub.OrgId,
-                ReturnAccountingCompany = hub.ReturnAccountingCompany,
-                ReturnAddressId = hub.ReturnAddressId,
-                ReturnCustomStamp = hub.ReturnCustomStamp,
                 Links = this.BuildLinks(hub).ToArray()
             };
         }

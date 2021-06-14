@@ -1747,9 +1747,6 @@
             h.Property(a => a.CustomStamp).HasColumnName("CUSTOM_STAMP").HasMaxLength(10);
             h.Property(a => a.CarrierCode).HasColumnName("CARRIER_CODE").HasMaxLength(10);
             h.Property(a => a.EcHub).HasColumnName("EC_HUB").HasMaxLength(1);
-            h.Property(a => a.ReturnAccountingCompany).HasColumnName("RETURN_ACCOUNTING_COMPANY").HasMaxLength(10);
-            h.Property(a => a.ReturnAddressId).HasColumnName("RETURN_ADDRESS_ID");
-            h.Property(a => a.ReturnCustomStamp).HasColumnName("RETURN_CUSTOM_STAMP").HasMaxLength(10);
         }
     }
 }
