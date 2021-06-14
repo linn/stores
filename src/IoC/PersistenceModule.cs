@@ -78,6 +78,7 @@
             builder.RegisterType<ImportBookPostEntryRepository>()
                 .As<IRepository<ImportBookPostEntry, ImportBookPostEntryKey>>();
             builder.RegisterType<ImportBookRepository>().As<IRepository<ImportBook, int>>();
+            builder.RegisterType<LedgerPeriodRepository>().As<IRepository<LedgerPeriod, int>>();
             builder.RegisterType<ImportBookTransactionCodeRepository>()
                 .As<IRepository<ImportBookTransactionCode, int>>();
             builder.RegisterType<ImportBookTransportCodeRepository>().As<IRepository<ImportBookTransportCode, int>>();
@@ -123,6 +124,7 @@
             builder.RegisterType<TqmsJobRefRepository>().As<IRepository<TqmsJobRef, string>>();
             builder.RegisterType<ConsignmentShipfileRepository>().As<IRepository<ConsignmentShipfile, int>>();
             builder.RegisterType<PrinterMappingRepository>().As<IRepository<PrinterMapping, int>>();
+            builder.RegisterType<CurrencyRepository>().As<IRepository<Currency, string>>();
             builder.RegisterType<HubRepository>().As<IRepository<Hub, int>>();
         }
     }

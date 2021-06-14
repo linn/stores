@@ -117,10 +117,24 @@
             builder.RegisterType<ErrorResourceBuilder>().As<IResourceBuilder<Error>>();
             builder.RegisterType<ImportBookResourceBuilder>().As<IResourceBuilder<ImportBook>>();
             builder.RegisterType<ImportBooksResourceBuilder>().As<IResourceBuilder<IEnumerable<ImportBook>>>();
+            builder.RegisterType<ImportBookExchangeRateResourceBuilder>().As<IResourceBuilder<ImportBookExchangeRate>>();
+            builder.RegisterType<ImportBookExchangeRatesResourceBuilder>().As<IResourceBuilder<IEnumerable<ImportBookExchangeRate>>>();
             builder.RegisterType<ImportBookInvoiceDetailResourceBuilder>()
                 .As<IResourceBuilder<ImportBookInvoiceDetail>>();
+            builder.RegisterType<ImportBookTransportCodeResourceBuilder>()
+                .As<IResourceBuilder<ImportBookTransportCode>>();
+            builder.RegisterType<ImportBookTransportCodesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<ImportBookTransportCode>>>();
+            builder.RegisterType<ImportBookTransactionCodeResourceBuilder>()
+                .As<IResourceBuilder<ImportBookTransactionCode>>();
+            builder.RegisterType<ImportBookTransactionCodesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<ImportBookTransactionCode>>>();
             builder.RegisterType<ImportBookOrderDetailResourceBuilder>().As<IResourceBuilder<ImportBookOrderDetail>>();
             builder.RegisterType<ImportBookPostEntryResourceBuilder>().As<IResourceBuilder<ImportBookPostEntry>>();
+            builder.RegisterType<ImportBookCpcNumberResourceBuilder>().As<IResourceBuilder<ImportBookCpcNumber>>();
+            builder.RegisterType<ImportBookCpcNumbersResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<ImportBookCpcNumber>>>();
+
             builder.RegisterType<TqmsCategoryResourceBuilder>()
                 .As<IResourceBuilder<TqmsCategory>>();
             builder.RegisterType<TqmsCategoriesResourceBuilder>()
@@ -180,6 +194,8 @@
                 .As<IResourceBuilder<IEnumerable<ConsignmentShipfile>>>();
             builder.RegisterType<ConsignmentResourceBuilder>().As<IResourceBuilder<Consignment>>();
             builder.RegisterType<ConsignmentsResourceBuilder>().As<IResourceBuilder<IEnumerable<Consignment>>>();
+            builder.RegisterType<CurrencyResourceBuilder>().As<IResourceBuilder<Currency>>();
+            builder.RegisterType<CurrenciesResourceBuilder>().As<IResourceBuilder<IEnumerable<Currency>>>();
             builder.RegisterType<HubResourceBuilder>().As<IResourceBuilder<Hub>>();
             builder.RegisterType<HubsResourceBuilder>().As<IResourceBuilder<IEnumerable<Hub>>>();
         }

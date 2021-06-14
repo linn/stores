@@ -1,11 +1,14 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
     using System.Collections.Generic;
+
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
-    using Linn.Stores.Resources.Parts;
+    using Linn.Stores.Facade.Services;
+    using Linn.Stores.Resources.ImportBooks;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Service.Models;
+
     using Nancy;
     using Nancy.ModelBinding;
 
@@ -13,14 +16,36 @@
     {
         private readonly IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource> importBookFacadeService;
 
+        private readonly IImportBookExchangeRateService importBookExchangeRateService;
+
+        private readonly IFacadeService<ImportBookTransportCode, int, ImportBookTransportCodeResource, ImportBookTransportCodeResource> importBookTransportCodeService;
+
+        private readonly IFacadeService<ImportBookTransactionCode, int, ImportBookTransactionCodeResource, ImportBookTransactionCodeResource> importBookTransactionCodeFacadeService;
+
+        private readonly IFacadeService<ImportBookCpcNumber, int, ImportBookCpcNumberResource, ImportBookCpcNumberResource> importBookCpcNumberFacadeService;
+
         public ImportBooksModule(
-            IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource> importBookFacadeService)
+            IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource> importBookFacadeService,
+            IImportBookExchangeRateService importBookExchangeRateService,
+            IFacadeService<ImportBookTransportCode, int, ImportBookTransportCodeResource, ImportBookTransportCodeResource> importBookTransportCodeService,
+            IFacadeService<ImportBookTransactionCode, int, ImportBookTransactionCodeResource, ImportBookTransactionCodeResource> importBookTransactionCodeFacadeService,
+            IFacadeService<ImportBookCpcNumber, int, ImportBookCpcNumberResource, ImportBookCpcNumberResource> importBookCpcNumberFacadeService)
         {
             this.importBookFacadeService = importBookFacadeService;
+            this.importBookExchangeRateService = importBookExchangeRateService;
+            this.importBookTransportCodeService = importBookTransportCodeService;
+            this.importBookTransactionCodeFacadeService = importBookTransactionCodeFacadeService;
+            this.importBookCpcNumberFacadeService = importBookCpcNumberFacadeService;
+
             this.Get("/logistics/import-books/{id}", parameters => this.GetImportBook(parameters.id));
             this.Put("/logistics/import-books/{id}", parameters => this.UpdateImportBook(parameters.id));
             this.Post("/logistics/import-books/", _ => this.CreateImportBook());
             this.Get("/logistics/import-books", parameters => this.GetImportBooks());
+            this.Get("/logistics/import-books/exchange-rates", parameters => this.GetExchangeRates());
+            this.Get("/logistics/import-books/transport-codes", parameters => this.GetTransportCodes());
+            this.Get("/logistics/import-books/transaction-codes", parameters => this.GetTransactionCodes());
+            this.Get("/logistics/import-books/cpc-numbers", parameters => this.GetCpcNumbers());
+
         }
 
         private object GetImportBook(int id)
@@ -62,5 +87,36 @@
 
             return this.Negotiate.WithModel(result).WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
+
+        private object GetExchangeRates()
+        {
+            var resource = this.Bind<SearchRequestResource>();
+
+            var results = this.importBookExchangeRateService.GetExchangeRatesForDate(resource.SearchTerm);
+
+            return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetTransportCodes()
+        {
+            var results = this.importBookTransportCodeService.GetAll();
+
+            return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetTransactionCodes()
+        {
+            var results = this.importBookTransactionCodeFacadeService.GetAll();
+
+            return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetCpcNumbers()
+        {
+            var results = this.importBookCpcNumberFacadeService.GetAll();
+
+            return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+        
     }
 }

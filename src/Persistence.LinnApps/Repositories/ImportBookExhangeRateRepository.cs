@@ -6,7 +6,6 @@
 
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
-    using Linn.Stores.Domain.LinnApps.Parts;
 
     public class ImportBookExhangeRateRepository : IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey>
     {
@@ -44,7 +43,7 @@
 
         public IQueryable<ImportBookExchangeRate> FilterBy(Expression<Func<ImportBookExchangeRate, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.ImportBookExchangeRates.Where(expression);
         }
     }
 }

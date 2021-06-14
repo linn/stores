@@ -23,7 +23,7 @@
 
         public IQueryable<ImportBookCpcNumber> FindAll()
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.ImportBookCpcNumbers.Where(x => true);
         }
 
         public void Add(ImportBookCpcNumber entity)
