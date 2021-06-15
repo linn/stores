@@ -6,6 +6,8 @@
     using Linn.Stores.Service.Models;
 
     using Nancy;
+    using Nancy.ModelBinding;
+    using Nancy.Security;
 
     public sealed class ConsignmentsModule : NancyModule
     {
@@ -29,6 +31,15 @@
             this.Get("/logistics/hubs/{id:int}", p => this.GetHubById(p.id));
             this.Get("/logistics/carriers", _ => this.GetCarriers());
             this.Get("/logistics/carriers/{id}", p => this.GetCarrierById(p.id));
+            this.Put("/logistics/consignments/{id:int}", p => this.UpdateConsignment(p.id));
+        }
+
+        private object UpdateConsignment(int id)
+        {
+            this.RequiresAuthentication();
+            var resource = this.Bind<ConsignmentUpdateResource>();
+            var result = this.consignmentFacadeService.Update(id, resource);
+            return this.Negotiate.WithModel(result);
         }
 
         private object GetCarrierById(string id)

@@ -37,7 +37,8 @@ function Consignment({
     carrier,
     getCarrier,
     carriers,
-    carriersLoading
+    carriersLoading,
+    updateItem
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
 
@@ -54,18 +55,18 @@ function Consignment({
     }, [item]);
 
     useEffect(() => {
-        if (state.consignment) {
-            const hubHref = utilities.getHref(state.consignment, 'hub');
+        if (item) {
+            const hubHref = utilities.getHref(item, 'hub');
             if (hubHref) {
                 getHub(hubHref);
             }
 
-            const carrierHref = utilities.getHref(state.consignment, 'carrier');
+            const carrierHref = utilities.getHref(item, 'carrier');
             if (carrierHref) {
                 getCarrier(carrierHref);
             }
         }
-    }, [state.consignment, getHub, getCarrier]);
+    }, [item, getHub, getCarrier]);
 
     const useStyles = makeStyles(() => ({
         pullRight: {
@@ -84,6 +85,10 @@ function Consignment({
 
     const viewing = () => {
         return editStatus === 'view';
+    };
+
+    const editing = () => {
+        return editStatus === 'edit';
     };
 
     const updateField = (fieldName, newValue) => {
@@ -132,8 +137,8 @@ function Consignment({
         setcurrentTab(newValue);
     };
 
-    const showFreight = freigt => {
-        switch (freigt) {
+    const showShippingMethod = shippingMethod => {
+        switch (shippingMethod) {
             case 'S':
                 return 'Surface';
             case 'A':
@@ -150,7 +155,11 @@ function Consignment({
     };
 
     const closeConsignment = () => {};
-    const doSave = () => {};
+    const doSave = () => {
+        if (editing()) {
+            updateItem(item.consignmentId, state.consignment);
+        }
+    };
 
     const doCancel = () => {
         dispatch({
@@ -238,7 +247,7 @@ function Consignment({
                                                 <TableItem>Freight</TableItem>
                                                 <TableItem>
                                                     {viewing() ? (
-                                                        showFreight(
+                                                        showShippingMethod(
                                                             state.consignment.shippingMethod
                                                         )
                                                     ) : (
@@ -380,7 +389,8 @@ Consignment.propTypes = {
     carriers: PropTypes.arrayOf(
         PropTypes.shape({ carrierCode: PropTypes.string, name: PropTypes.string })
     ),
-    carriersLoading: PropTypes.bool
+    carriersLoading: PropTypes.bool,
+    updateItem: PropTypes.func.isRequired
 };
 
 Consignment.defaultProps = {

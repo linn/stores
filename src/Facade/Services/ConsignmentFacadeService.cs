@@ -22,7 +22,11 @@
 
         protected override void UpdateFromResource(Consignment entity, ConsignmentUpdateResource updateResource)
         {
-            throw new NotImplementedException();
+            entity.Carrier = updateResource.Carrier;
+            entity.Terms = updateResource.Terms;
+            entity.HubId = updateResource.HubId;
+            entity.ShippingMethod = updateResource.ShippingMethod;
+            entity.DespatchLocationCode = updateResource.DespatchLocationCode;
         }
 
         protected override Expression<Func<Consignment, bool>> SearchExpression(string searchTerm)
