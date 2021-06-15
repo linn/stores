@@ -215,6 +215,8 @@
 
         public DbSet<Carrier> Carriers { get; set; }
 
+        public DbSet<ShippingTerm> ShippingTerms { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -313,7 +315,8 @@
             this.BuildPrinterMappings(builder);
             this.BuildCurrencies(builder);
             this.BuildHubs(builder);
-            this.BuildCarriers(builder);
+            this.BuildShippingTerms(builder);
+            this.BuildShippingTerms(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1759,6 +1762,16 @@
             c.Property(a => a.CarrierCode).HasColumnName("CARRIER_CODE").HasMaxLength(10);
             c.Property(a => a.Name).HasColumnName("NAME").HasMaxLength(50);
             c.Property(a => a.DateInvalid).HasColumnName("DATE_INVALID");
+        }
+
+        private void BuildShippingTerms(ModelBuilder builder)
+        {
+            var table = builder.Entity<ShippingTerm>().ToTable("SHIPPING_TERMS");
+            table.HasKey(a => a.Code);
+            table.Property(a => a.Code).HasColumnName("CODE").HasMaxLength(20);
+            table.Property(a => a.Description).HasColumnName("DESCRIPTION").HasMaxLength(100);
+            table.Property(a => a.DateInvalid).HasColumnName("DATE_INVALID");
+            table.Property(a => a.BridgeId).HasColumnName("ID");
         }
     }
 }

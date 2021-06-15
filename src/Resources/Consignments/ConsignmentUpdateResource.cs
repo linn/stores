@@ -1,8 +1,6 @@
 ﻿namespace Linn.Stores.Resources.Consignments
 {
-    using Linn.Common.Resources;
-
-    public class ConsignmentUpdateResource : HypermediaResource
+    public class ConsignmentUpdateResource
     {
         public string Carrier { get; set; }
 
