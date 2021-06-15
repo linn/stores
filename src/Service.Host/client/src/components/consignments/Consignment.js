@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import Grid from '@material-ui/core/Grid';
 import {
     Loading,
@@ -15,9 +15,10 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import Page from '../../containers/Page';
+import consignmentReducer from './consignmentReducer';
 
 function Consignment({
     item,
@@ -33,20 +34,34 @@ function Consignment({
     getHub
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
-    const [consignment, setConsignment] = useState(item);
+
+    const [state, dispatch] = useReducer(consignmentReducer, {
+        consignment: null,
+        originalConsignment: null
+    });
 
     useEffect(() => {
-        setConsignment(item);
+        dispatch({
+            type: 'initialise',
+            payload: item
+        });
     }, [item]);
 
     useEffect(() => {
-        if (consignment) {
-            const hubHref = utilities.getHref(consignment, 'hub');
+        if (state.consignment) {
+            const hubHref = utilities.getHref(state.consignment, 'hub');
             if (hubHref) {
                 getHub(hubHref);
             }
         }
-    }, [consignment, getHub]);
+    }, [state.consignment, getHub]);
+
+    const useStyles = makeStyles(() => ({
+        pullRight: {
+            float: 'right'
+        }
+    }));
+    const classes = useStyles();
 
     const TableItem = withStyles(() => ({
         body: {
@@ -89,10 +104,14 @@ function Consignment({
         setEditStatus('edit');
     };
 
+    const closeConsignment = () => {};
     const doSave = () => {};
 
     const doCancel = () => {
-        setConsignment(item);
+        dispatch({
+            type: 'reset',
+            payload: null
+        });
         setEditStatus('view');
     };
 
@@ -102,12 +121,27 @@ function Consignment({
                 <Grid item xs={2}>
                     <Typography variant="h6">Consignment</Typography>
                 </Grid>
-                <Grid item xs={10}>
-                    {consignment && (
+                <Grid item xs={8}>
+                    {state.consignment && (
                         <Typography variant="h6">
-                            {consignment.consignmentId} {consignment.customerName}
+                            {state.consignment.consignmentId} {state.consignment.customerName}
                         </Typography>
                     )}
+                </Grid>
+                <Grid item xs={2}>
+                    <Button
+                        variant="outlined"
+                        color="red"
+                        className={classes.pullRight}
+                        onClick={closeConsignment}
+                        disabled={
+                            editStatus !== 'view' ||
+                            !state.consignment ||
+                            !state.consignment.status === 'L'
+                        }
+                    >
+                        Close Consignment
+                    </Button>
                 </Grid>
                 <>
                     <Tabs
@@ -130,7 +164,7 @@ function Consignment({
                             />
                         </Grid>
                     )}
-                    {currentTab !== 0 && (loading || !consignment) ? (
+                    {currentTab !== 0 && (loading || !state.consignment) ? (
                         <Loading />
                     ) : (
                         currentTab === 1 && (
@@ -141,41 +175,42 @@ function Consignment({
                                             <TableRow key="Account">
                                                 <TableItem>Account</TableItem>
                                                 <TableItem>
-                                                    {consignment.salesAccountId}{' '}
-                                                    {consignment.customerName}
+                                                    {state.consignment.salesAccountId}{' '}
+                                                    {state.consignment.customerName}
                                                 </TableItem>
                                             </TableRow>
                                             <TableRow key="Address">
                                                 <TableItem>Address</TableItem>
                                                 <TableItem>
-                                                    {consignment.address &&
-                                                        consignment.address.displayAddress}
+                                                    {state.consignment.address &&
+                                                        state.consignment.address.displayAddress}
                                                 </TableItem>
                                             </TableRow>
                                             <TableRow key="Freight">
                                                 <TableItem>Freight</TableItem>
                                                 <TableItem>
-                                                    {showFreight(consignment.shippingMethod)}
+                                                    {showFreight(state.consignment.shippingMethod)}
                                                 </TableItem>
                                             </TableRow>
                                             <TableRow key="Carrier">
                                                 <TableItem>Carrier</TableItem>
-                                                <TableItem>{consignment.carrier}</TableItem>
+                                                <TableItem>{state.consignment.carrier}</TableItem>
                                             </TableRow>
                                             <TableRow key="Terms">
                                                 <TableItem>Terms</TableItem>
-                                                <TableItem>{consignment.terms}</TableItem>
+                                                <TableItem>{state.consignment.terms}</TableItem>
                                             </TableRow>
                                             <TableRow key="Hub">
                                                 <TableItem>Hub</TableItem>
                                                 <TableItem>
-                                                    {consignment.hubId} - {hub && hub.description}
+                                                    {state.consignment.hubId} -{' '}
+                                                    {hub && hub.description}
                                                 </TableItem>
                                             </TableRow>
                                             <TableRow key="DateOpened">
                                                 <TableItem>Date Opened</TableItem>
                                                 <TableItem>
-                                                    {moment(consignment.dateOpened).format(
+                                                    {moment(state.consignment.dateOpened).format(
                                                         'DD MMM YYYY'
                                                     )}
                                                 </TableItem>
@@ -183,15 +218,15 @@ function Consignment({
                                             <TableRow key="DateClosed">
                                                 <TableItem>Date Closed</TableItem>
                                                 <TableItem>
-                                                    {consignment.dateClosed &&
-                                                        moment(consignment.dateClosed).format(
+                                                    {state.consignment.dateClosed &&
+                                                        moment(state.consignment.dateClosed).format(
                                                             'DD MMM YYYY'
                                                         )}
                                                 </TableItem>
                                                 <TableItem>Closed By</TableItem>
                                                 <TableItem>
-                                                    {consignment.closedBy &&
-                                                        consignment.closedBy.fullName}
+                                                    {state.consignment.closedBy &&
+                                                        state.consignment.closedBy.fullName}
                                                 </TableItem>
                                             </TableRow>
                                         </TableBody>
@@ -203,7 +238,12 @@ function Consignment({
                 </>
                 <Grid item xs={12}>
                     {editStatus === 'view' ? (
-                        <Button variant="outlined" color="primary" onClick={startEdit}>
+                        <Button
+                            variant="outlined"
+                            color="primary"
+                            className={classes.pullRight}
+                            onClick={startEdit}
+                        >
                             Edit
                         </Button>
                     ) : (
