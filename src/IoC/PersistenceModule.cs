@@ -126,6 +126,7 @@
             builder.RegisterType<PrinterMappingRepository>().As<IRepository<PrinterMapping, int>>();
             builder.RegisterType<CurrencyRepository>().As<IRepository<Currency, string>>();
             builder.RegisterType<HubRepository>().As<IRepository<Hub, int>>();
+            builder.RegisterType<CarrierRepository>().As<IRepository<Carrier, string>>();
         }
     }
 }

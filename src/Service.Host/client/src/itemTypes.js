@@ -303,3 +303,6 @@ export const consignments = new ItemType('consignments', 'CONSIGNMENTS', '/logis
 
 export const hub = new ItemType('hub', 'HUB', '/logistics/hubs');
 export const hubs = new ItemType('hubs', 'HUBS', '/logistics/hubs');
+
+export const carrier = new ItemType('carrier', 'CARRIER', '/logistics/carriers');
+export const carriers = new ItemType('carriers', 'CARRIERS', '/logistics/carriers');

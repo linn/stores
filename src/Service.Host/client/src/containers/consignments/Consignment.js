@@ -14,6 +14,12 @@ import consignmentsActions from '../../actions/consignmentsActions';
 import * as itemTypes from '../../itemTypes';
 import hubSelectors from '../../selectors/hubSelectors';
 import hubActions from '../../actions/hubActions';
+import hubsSelectors from '../../selectors/hubsSelectors';
+import hubsActions from '../../actions/hubsActions';
+import carrierSelectors from '../../selectors/carrierSelectors';
+import carrierActions from '../../actions/carrierActions';
+import carriersSelectors from '../../selectors/carriersSelectors';
+import carriersActions from '../../actions/carriersActions';
 
 const getOptions = ownProps => {
     const options = queryString.parse(ownProps.location.search);
@@ -26,6 +32,8 @@ const initialise = ({ options }) => dispatch => {
     }
 
     dispatch(consignmentsActions.fetch());
+    dispatch(hubsActions.fetch());
+    dispatch(carriersActions.fetch());
 };
 
 const mapStateToProps = (state, ownProps) => ({
@@ -40,7 +48,12 @@ const mapStateToProps = (state, ownProps) => ({
     options: getOptions(ownProps),
     startingTab: getOptions(ownProps).consignmentId ? 1 : 0,
     editStatus: consignmentSelectors.getEditStatus(state),
-    hub: hubSelectors.getItem(state)
+    hub: hubSelectors.getItem(state),
+    hubs: hubsSelectors.getItems(state),
+    hubsLoading: hubsSelectors.getLoading(state),
+    carrier: carrierSelectors.getItem(state),
+    carriers: carriersSelectors.getItems(state),
+    carriersLoading: carriersSelectors.getLoading(state)
 });
 
 const mapDispatchToProps = {
@@ -50,7 +63,8 @@ const mapDispatchToProps = {
     setEditStatus: consignmentActions.setEditStatus,
     setSnackbarVisible: consignmentActions.setSnackbarVisible,
     getConsignment: consignmentActions.fetch,
-    getHub: hubActions.fetchByHref
+    getHub: hubActions.fetchByHref,
+    getCarrier: carrierActions.fetchByHref
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Consignment));

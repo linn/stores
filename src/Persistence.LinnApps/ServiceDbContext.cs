@@ -213,6 +213,8 @@
 
         public DbSet<Hub> Hubs { get; set; }
 
+        public DbSet<Carrier> Carriers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -311,6 +313,7 @@
             this.BuildPrinterMappings(builder);
             this.BuildCurrencies(builder);
             this.BuildHubs(builder);
+            this.BuildCarriers(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1747,6 +1750,15 @@
             h.Property(a => a.CustomStamp).HasColumnName("CUSTOM_STAMP").HasMaxLength(10);
             h.Property(a => a.CarrierCode).HasColumnName("CARRIER_CODE").HasMaxLength(10);
             h.Property(a => a.EcHub).HasColumnName("EC_HUB").HasMaxLength(1);
+        }
+
+        private void BuildCarriers(ModelBuilder builder)
+        {
+            var c = builder.Entity<Carrier>().ToTable("CARRIERS");
+            c.HasKey(a => a.CarrierCode);
+            c.Property(a => a.CarrierCode).HasColumnName("CARRIER_CODE").HasMaxLength(10);
+            c.Property(a => a.Name).HasColumnName("NAME").HasMaxLength(50);
+            c.Property(a => a.DateInvalid).HasColumnName("DATE_INVALID");
         }
     }
 }

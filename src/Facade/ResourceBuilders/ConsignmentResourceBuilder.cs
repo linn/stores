@@ -54,6 +54,11 @@
             {
                 yield return new LinkResource("hub", $"/logistics/hubs/{consignment.HubId}");
             }
+
+            if (!string.IsNullOrEmpty(consignment.Carrier))
+            {
+                yield return new LinkResource("carrier", $"/logistics/carriers/{consignment.Carrier}");
+            }
         }
     }
 }

@@ -198,6 +198,8 @@
             builder.RegisterType<CurrenciesResourceBuilder>().As<IResourceBuilder<IEnumerable<Currency>>>();
             builder.RegisterType<HubResourceBuilder>().As<IResourceBuilder<Hub>>();
             builder.RegisterType<HubsResourceBuilder>().As<IResourceBuilder<IEnumerable<Hub>>>();
+            builder.RegisterType<CarrierResourceBuilder>().As<IResourceBuilder<Carrier>>();
+            builder.RegisterType<CarriersResourceBuilder>().As<IResourceBuilder<IEnumerable<Carrier>>>();
         }
     }
 }
