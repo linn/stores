@@ -6,8 +6,6 @@
 
     using Linn.Stores.Domain.LinnApps;
 
-    using Microsoft.AspNetCore.Razor.TagHelpers;
-
     using PuppeteerSharp;
 
     public class PdfService : IPdfService
