@@ -105,13 +105,47 @@ function Consignment({
     );
 
     TablePromptItem.propTypes = {
-        text: PropTypes.number,
+        text: PropTypes.string,
         width: PropTypes.number
     };
 
     TablePromptItem.defaultProps = {
-        width: 150,
-        text: null
+        text: null,
+        width: 150
+    };
+
+    const DisplayEditItem = ({
+        currentEditStatus,
+        displayText,
+        displayDescription,
+        editComponent,
+        allowCreate
+    }) => {
+        if (currentEditStatus === 'view' || (currentEditStatus === 'create' && !allowCreate)) {
+            if (displayText) {
+                return `${displayText} ${displayDescription ? ` - ${displayDescription}` : ''} `;
+            }
+
+            return '';
+        }
+
+        return editComponent;
+    };
+
+    DisplayEditItem.propTypes = {
+        currentEditStatus: PropTypes.string,
+        displayText: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        displayDescription: PropTypes.string,
+        editComponent: PropTypes.shape(),
+        allowCreate: PropTypes.bool
+    };
+
+    DisplayEditItem.defaultProps = {
+        currentEditStatus: 'view',
+        displayText: null,
+        displayDescription: null,
+        editComponent: <></>,
+        allowCreate: true
     };
 
     const TableItem = withStyles(() => ({
@@ -279,8 +313,8 @@ function Consignment({
                                     <Table size="small" style={{ paddingTop: '30px' }}>
                                         <TableBody>
                                             <TableRow key="Account">
-                                                <TablePromptItem text="Account" />
-                                                <TableItem>
+                                                <TablePromptItem text="Account" width={160} />
+                                                <TableItem style={{ width: 350 }}>
                                                     {state.consignment.salesAccountId}{' '}
                                                     {state.consignment.customerName}
                                                 </TableItem>
@@ -301,78 +335,85 @@ function Consignment({
                                             <TableRow key="Freight">
                                                 <TableItem>Freight</TableItem>
                                                 <TableItem>
-                                                    {viewing() ? (
-                                                        showShippingMethod(
+                                                    <DisplayEditItem
+                                                        currentEditStatus={editStatus}
+                                                        displayText={showShippingMethod(
                                                             state.consignment.shippingMethod
-                                                        )
-                                                    ) : (
-                                                        <Dropdown
-                                                            propertyName="shippingMethod"
-                                                            items={freightOptions()}
-                                                            onChange={updateField}
-                                                            value={state.consignment.shippingMethod}
-                                                            allowNoValue={false}
-                                                        />
-                                                    )}
+                                                        )}
+                                                        editComponent={
+                                                            <Dropdown
+                                                                propertyName="shippingMethod"
+                                                                items={freightOptions()}
+                                                                onChange={updateField}
+                                                                value={
+                                                                    state.consignment.shippingMethod
+                                                                }
+                                                                allowNoValue={false}
+                                                            />
+                                                        }
+                                                    />
                                                 </TableItem>
                                             </TableRow>
                                             <TableRow key="Carrier">
                                                 <TableItem>Carrier</TableItem>
                                                 <TableItem>
-                                                    {viewing() ? (
-                                                        <>
-                                                            {state.consignment.carrier} {' - '}
-                                                            {carrier && carrier.name}
-                                                        </>
-                                                    ) : (
-                                                        <Dropdown
-                                                            propertyName="carrier"
-                                                            items={carrierOptions()}
-                                                            onChange={updateField}
-                                                            value={state.consignment.carrier}
-                                                            optionsLoading={carriersLoading}
-                                                            allowNoValue={false}
-                                                        />
-                                                    )}
+                                                    <DisplayEditItem
+                                                        currentEditStatus={editStatus}
+                                                        displayText={state.consignment.carrier}
+                                                        displayDescription={carrier && carrier.name}
+                                                        editComponent={
+                                                            <Dropdown
+                                                                propertyName="carrier"
+                                                                items={carrierOptions()}
+                                                                onChange={updateField}
+                                                                value={state.consignment.carrier}
+                                                                optionsLoading={carriersLoading}
+                                                                allowNoValue={false}
+                                                            />
+                                                        }
+                                                    />
                                                 </TableItem>
                                             </TableRow>
                                             <TableRow key="Terms">
                                                 <TableItem>Terms</TableItem>
                                                 <TableItem>
-                                                    {viewing() ? (
-                                                        <>
-                                                            {state.consignment.terms} {' - '}
-                                                            {shippingTerm &&
-                                                                shippingTerm.description}
-                                                        </>
-                                                    ) : (
-                                                        <Dropdown
-                                                            propertyName="terms"
-                                                            items={shippingTermOptions()}
-                                                            onChange={updateField}
-                                                            value={state.consignment.terms}
-                                                            optionsLoading={shippingTermsLoading}
-                                                        />
-                                                    )}
+                                                    <DisplayEditItem
+                                                        currentEditStatus={editStatus}
+                                                        displayText={state.consignment.terms}
+                                                        displayDescription={
+                                                            shippingTerm && shippingTerm.description
+                                                        }
+                                                        editComponent={
+                                                            <Dropdown
+                                                                propertyName="terms"
+                                                                items={shippingTermOptions()}
+                                                                onChange={updateField}
+                                                                value={state.consignment.terms}
+                                                                optionsLoading={
+                                                                    shippingTermsLoading
+                                                                }
+                                                            />
+                                                        }
+                                                    />
                                                 </TableItem>
                                             </TableRow>
                                             <TableRow key="Hub">
                                                 <TableItem>Hub</TableItem>
                                                 <TableItem>
-                                                    {viewing() ? (
-                                                        <>
-                                                            {state.consignment.hubId} {' - '}
-                                                            {hub && hub.description}
-                                                        </>
-                                                    ) : (
-                                                        <Dropdown
-                                                            propertyName="hubId"
-                                                            items={hubOptions()}
-                                                            onChange={updateField}
-                                                            value={state.consignment.hubId}
-                                                            optionsLoading={hubsLoading}
-                                                        />
-                                                    )}
+                                                    <DisplayEditItem
+                                                        currentEditStatus={editStatus}
+                                                        displayText={state.consignment.hubId}
+                                                        displayDescription={hub && hub.description}
+                                                        editComponent={
+                                                            <Dropdown
+                                                                propertyName="hubId"
+                                                                items={hubOptions()}
+                                                                onChange={updateField}
+                                                                value={state.consignment.hubId}
+                                                                optionsLoading={hubsLoading}
+                                                            />
+                                                        }
+                                                    />
                                                 </TableItem>
                                             </TableRow>
                                             <TableRow key="DateOpened">
@@ -391,7 +432,7 @@ function Consignment({
                                                             'DD MMM YYYY'
                                                         )}
                                                 </TableItem>
-                                                <TableItem>Closed By</TableItem>
+                                                <TablePromptItem text="Closed By" />
                                                 <TableItem>
                                                     {state.consignment.closedBy &&
                                                         state.consignment.closedBy.fullName}
