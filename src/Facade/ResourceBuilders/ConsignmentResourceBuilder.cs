@@ -54,6 +54,16 @@
             {
                 yield return new LinkResource("hub", $"/logistics/hubs/{consignment.HubId}");
             }
+
+            if (!string.IsNullOrEmpty(consignment.Carrier))
+            {
+                yield return new LinkResource("carrier", $"/logistics/carriers/{consignment.Carrier}");
+            }
+
+            if (!string.IsNullOrEmpty(consignment.Terms))
+            {
+                yield return new LinkResource("shipping-term", $"/logistics/shipping-terms?searchTerm={consignment.Terms}&exactOnly=true");
+            }
         }
     }
 }

@@ -8,7 +8,7 @@
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Resources.Consignments;
 
-    public class ConsignmentFacadeService : FacadeService<Consignment, int, ConsignmentResource, ConsignmentResource>
+    public class ConsignmentFacadeService : FacadeService<Consignment, int, ConsignmentResource, ConsignmentUpdateResource>
     {
         public ConsignmentFacadeService(IRepository<Consignment, int> repository, ITransactionManager transactionManager)
             : base(repository, transactionManager)
@@ -20,9 +20,13 @@
             throw new NotImplementedException();
         }
 
-        protected override void UpdateFromResource(Consignment entity, ConsignmentResource updateResource)
+        protected override void UpdateFromResource(Consignment entity, ConsignmentUpdateResource updateResource)
         {
-            throw new NotImplementedException();
+            entity.Carrier = updateResource.Carrier;
+            entity.Terms = updateResource.Terms;
+            entity.HubId = updateResource.HubId;
+            entity.ShippingMethod = updateResource.ShippingMethod;
+            entity.DespatchLocationCode = updateResource.DespatchLocationCode;
         }
 
         protected override Expression<Func<Consignment, bool>> SearchExpression(string searchTerm)
