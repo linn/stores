@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.IoC
 {
+    using System.Threading;
+
     using Autofac;
 
     using Linn.Common.Authorisation;
@@ -191,6 +193,8 @@
                                                             }).Result)
                 .As<Browser>()
                 .SingleInstance();
+
+            builder.Register(c => new SemaphoreSlim(1)).As<SemaphoreSlim>().SingleInstance();
         }
     }
 }
