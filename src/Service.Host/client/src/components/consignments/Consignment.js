@@ -95,6 +95,25 @@ function Consignment({
     }));
     const classes = useStyles();
 
+    const TablePromptItem = ({ text, width }) => (
+        <TableCell
+            className={classes.tableCell}
+            style={{ width, borderBottom: 0, whiteSpace: 'pre-line', verticalAlign: 'top' }}
+        >
+            {text}
+        </TableCell>
+    );
+
+    TablePromptItem.propTypes = {
+        text: PropTypes.number,
+        width: PropTypes.number
+    };
+
+    TablePromptItem.defaultProps = {
+        width: 150,
+        text: null
+    };
+
     const TableItem = withStyles(() => ({
         body: {
             borderBottom: 0,
@@ -204,14 +223,14 @@ function Consignment({
                 <Grid item xs={2}>
                     <Typography variant="h6">Consignment</Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={7}>
                     {state.consignment && (
                         <Typography variant="h6">
                             {state.consignment.consignmentId} {state.consignment.customerName}
                         </Typography>
                     )}
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={3}>
                     <Button
                         variant="outlined"
                         className={classes.pullRight}
@@ -260,7 +279,7 @@ function Consignment({
                                     <Table size="small" style={{ paddingTop: '30px' }}>
                                         <TableBody>
                                             <TableRow key="Account">
-                                                <TableItem>Account</TableItem>
+                                                <TablePromptItem text="Account" />
                                                 <TableItem>
                                                     {state.consignment.salesAccountId}{' '}
                                                     {state.consignment.customerName}
