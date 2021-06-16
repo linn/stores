@@ -10,20 +10,27 @@
 
     public class PdfService : IPdfService
     {
-        private readonly Browser browser;
-
         private readonly SemaphoreSlim semaphore;
 
-        public PdfService(Browser browser, SemaphoreSlim semaphore)
+        public PdfService(SemaphoreSlim semaphore)
         {
-            this.browser = browser;
             this.semaphore = semaphore;
         }
 
         public async Task<Stream> ConvertHtmlToPdf(string html, bool landscape)
         {
+            var browser = Puppeteer.LaunchAsync(new LaunchOptions
+                                      {
+                                          Args = new[]
+                                                     {
+                                                         "--no-sandbox"
+                                                     },
+                                          Headless = true
+                                      }).Result;
+
             await this.semaphore.WaitAsync();
-            var page = await this.browser.NewPageAsync();
+            
+            var page = await browser.NewPageAsync();
 
             await page.SetContentAsync(html);
 

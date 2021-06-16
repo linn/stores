@@ -183,17 +183,6 @@
                 "rootUri",
                 ConfigurationManager.Configuration["PROXY_ROOT"]);
 
-            builder.Register(c => Puppeteer.LaunchAsync(new LaunchOptions
-                                                            {
-                                                                Args = new[]
-                                                                           {
-                                                                               "--no-sandbox"
-                                                                           },
-                                                                Headless = true
-                                                            }).Result)
-                .As<Browser>()
-                .SingleInstance();
-
             builder.Register(c => new SemaphoreSlim(1)).As<SemaphoreSlim>().SingleInstance();
         }
     }
