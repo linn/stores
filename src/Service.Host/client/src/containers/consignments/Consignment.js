@@ -20,6 +20,10 @@ import carrierSelectors from '../../selectors/carrierSelectors';
 import carrierActions from '../../actions/carrierActions';
 import carriersSelectors from '../../selectors/carriersSelectors';
 import carriersActions from '../../actions/carriersActions';
+import shippingTermSelectors from '../../selectors/shippingTermSelectors';
+import shippingTermActions from '../../actions/shippingTermActions';
+import shippingTermsSelectors from '../../selectors/shippingTermsSelectors';
+import shippingTermsActions from '../../actions/shippingTermsActions';
 
 const getOptions = ownProps => {
     const options = queryString.parse(ownProps.location.search);
@@ -34,6 +38,7 @@ const initialise = ({ options }) => dispatch => {
     dispatch(consignmentsActions.fetch());
     dispatch(hubsActions.fetch());
     dispatch(carriersActions.fetch());
+    dispatch(shippingTermsActions.fetch());
 };
 
 const mapStateToProps = (state, ownProps) => ({
@@ -53,18 +58,25 @@ const mapStateToProps = (state, ownProps) => ({
     hubsLoading: hubsSelectors.getLoading(state),
     carrier: carrierSelectors.getItem(state),
     carriers: carriersSelectors.getItems(state),
-    carriersLoading: carriersSelectors.getLoading(state)
+    carriersLoading: carriersSelectors.getLoading(state),
+    shippingTerm: shippingTermSelectors.getItem(state),
+    shippingTerms: shippingTermsSelectors.getItems(state),
+    shippingTermsLoading: shippingTermsSelectors.getLoading(state)
 });
 
 const mapDispatchToProps = {
     initialise,
     addItem: consignmentActions.add,
     updateItem: consignmentActions.update,
+    clearConsignmentErrors: consignmentActions.clearErrorsForItem,
     setEditStatus: consignmentActions.setEditStatus,
     setSnackbarVisible: consignmentActions.setSnackbarVisible,
     getConsignment: consignmentActions.fetch,
     getHub: hubActions.fetchByHref,
-    getCarrier: carrierActions.fetchByHref
+    clearHub: hubActions.clearItem,
+    getCarrier: carrierActions.fetchByHref,
+    getShippingTerm: shippingTermActions.fetchByHref,
+    clearShippingTerm: shippingTermActions.clearItem
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Consignment));

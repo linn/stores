@@ -229,3 +229,6 @@ export const hubsActionTypes = makeActionTypes(itemTypes.hubs.actionType, false)
 
 export const carrierActionTypes = makeActionTypes(itemTypes.carrier.actionType);
 export const carriersActionTypes = makeActionTypes(itemTypes.carriers.actionType, false);
+
+export const shippingTermActionTypes = makeActionTypes(itemTypes.shippingTerm.actionType);
+export const shippingTermsActionTypes = makeActionTypes(itemTypes.shippingTerms.actionType, false);

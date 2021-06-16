@@ -62,7 +62,7 @@
 
             if (!string.IsNullOrEmpty(consignment.Terms))
             {
-                yield return new LinkResource("terms", $"/logistics/shipping-terms?searchTerm={consignment.Terms}&exactOnly=true");
+                yield return new LinkResource("shipping-term", $"/logistics/shipping-terms?searchTerm={consignment.Terms}&exactOnly=true");
             }
         }
     }

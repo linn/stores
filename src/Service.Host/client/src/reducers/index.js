@@ -91,6 +91,8 @@ import hub from './hub';
 import hubs from './hubs';
 import carrier from './carrier';
 import carriers from './carriers';
+import shippingTerm from './shippingTerm';
+import shippingTerms from './shippingTerms';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -153,6 +155,8 @@ const rootReducer = history =>
         salesOutlets,
         sernosSequences,
         shipfilesSendEmails,
+        shippingTerm,
+        shippingTerms,
         sosAllocDetails,
         sosAllocHeads,
         stockLocator,

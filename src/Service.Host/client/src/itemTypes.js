@@ -306,3 +306,14 @@ export const hubs = new ItemType('hubs', 'HUBS', '/logistics/hubs');
 
 export const carrier = new ItemType('carrier', 'CARRIER', '/logistics/carriers');
 export const carriers = new ItemType('carriers', 'CARRIERS', '/logistics/carriers');
+
+export const shippingTerm = new ItemType(
+    'shippingTerm',
+    'SHIPPING_TERM',
+    '/logistics/shipping-terms'
+);
+export const shippingTerms = new ItemType(
+    'shippingTerms',
+    'SHIPPING_TERMS',
+    '/logistics/shipping-terms'
+);

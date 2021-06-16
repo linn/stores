@@ -4,7 +4,8 @@ import {
     Loading,
     Dropdown,
     SaveBackCancelButtons,
-    utilities
+    utilities,
+    ErrorCard
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
@@ -32,13 +33,21 @@ function Consignment({
     setEditStatus,
     hub,
     getHub,
+    clearHub,
     hubs,
     hubsLoading,
     carrier,
     getCarrier,
     carriers,
     carriersLoading,
-    updateItem
+    updateItem,
+    shippingTerm,
+    getShippingTerm,
+    clearShippingTerm,
+    shippingTerms,
+    shippingTermsLoading,
+    itemError,
+    clearConsignmentErrors
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
 
@@ -52,21 +61,32 @@ function Consignment({
             type: 'initialise',
             payload: item
         });
-    }, [item]);
+
+        clearConsignmentErrors();
+    }, [item, clearConsignmentErrors]);
 
     useEffect(() => {
         if (item) {
             const hubHref = utilities.getHref(item, 'hub');
             if (hubHref) {
                 getHub(hubHref);
+            } else {
+                clearHub();
             }
 
             const carrierHref = utilities.getHref(item, 'carrier');
             if (carrierHref) {
                 getCarrier(carrierHref);
             }
+
+            const shippingTermHref = utilities.getHref(item, 'shipping-term');
+            if (shippingTermHref) {
+                getShippingTerm(shippingTermHref);
+            } else {
+                clearShippingTerm();
+            }
         }
-    }, [item, getHub, getCarrier]);
+    }, [item, getHub, getCarrier, getShippingTerm, clearHub, clearShippingTerm]);
 
     const useStyles = makeStyles(() => ({
         pullRight: {
@@ -120,6 +140,13 @@ function Consignment({
         }));
     };
 
+    const shippingTermOptions = () => {
+        return shippingTerms?.map(h => ({
+            id: h.code,
+            displayText: `${h.code} - ${h.description}`
+        }));
+    };
+
     const freightOptions = () => {
         return [
             { id: 'S', displayText: 'Surface' },
@@ -166,7 +193,9 @@ function Consignment({
             type: 'reset',
             payload: null
         });
+
         setEditStatus('view');
+        clearConsignmentErrors();
     };
 
     return (
@@ -194,6 +223,13 @@ function Consignment({
                         Close Consignment
                     </Button>
                 </Grid>
+                {itemError && (
+                    <Grid item xs={12}>
+                        <ErrorCard
+                            errorMessage={itemError?.details?.errors?.[0] || itemError.statusText}
+                        />
+                    </Grid>
+                )}
                 <>
                     <Tabs
                         value={currentTab}
@@ -256,6 +292,7 @@ function Consignment({
                                                             items={freightOptions()}
                                                             onChange={updateField}
                                                             value={state.consignment.shippingMethod}
+                                                            allowNoValue={false}
                                                         />
                                                     )}
                                                 </TableItem>
@@ -275,13 +312,30 @@ function Consignment({
                                                             onChange={updateField}
                                                             value={state.consignment.carrier}
                                                             optionsLoading={carriersLoading}
+                                                            allowNoValue={false}
                                                         />
                                                     )}
                                                 </TableItem>
                                             </TableRow>
                                             <TableRow key="Terms">
                                                 <TableItem>Terms</TableItem>
-                                                <TableItem>{state.consignment.terms}</TableItem>
+                                                <TableItem>
+                                                    {viewing() ? (
+                                                        <>
+                                                            {state.consignment.terms} {' - '}
+                                                            {shippingTerm &&
+                                                                shippingTerm.description}
+                                                        </>
+                                                    ) : (
+                                                        <Dropdown
+                                                            propertyName="terms"
+                                                            items={shippingTermOptions()}
+                                                            onChange={updateField}
+                                                            value={state.consignment.terms}
+                                                            optionsLoading={shippingTermsLoading}
+                                                        />
+                                                    )}
+                                                </TableItem>
                                             </TableRow>
                                             <TableRow key="Hub">
                                                 <TableItem>Hub</TableItem>
@@ -379,6 +433,7 @@ Consignment.propTypes = {
     editStatus: PropTypes.string,
     setEditStatus: PropTypes.func.isRequired,
     getHub: PropTypes.func.isRequired,
+    clearHub: PropTypes.func.isRequired,
     hub: PropTypes.shape({ hubId: PropTypes.number, description: PropTypes.string }),
     hubs: PropTypes.arrayOf(
         PropTypes.shape({ hubId: PropTypes.number, description: PropTypes.string })
@@ -390,7 +445,23 @@ Consignment.propTypes = {
         PropTypes.shape({ carrierCode: PropTypes.string, name: PropTypes.string })
     ),
     carriersLoading: PropTypes.bool,
-    updateItem: PropTypes.func.isRequired
+    updateItem: PropTypes.func.isRequired,
+    getShippingTerm: PropTypes.func.isRequired,
+    clearShippingTerm: PropTypes.func.isRequired,
+    clearConsignmentErrors: PropTypes.func.isRequired,
+    shippingTerm: PropTypes.shape({ code: PropTypes.string, description: PropTypes.string }),
+    shippingTerms: PropTypes.arrayOf(
+        PropTypes.shape({ code: PropTypes.string, description: PropTypes.string })
+    ),
+    shippingTermsLoading: PropTypes.bool,
+    itemError: PropTypes.shape({
+        status: PropTypes.number,
+        statusText: PropTypes.string,
+        item: PropTypes.string,
+        details: PropTypes.shape({
+            errors: PropTypes.arrayOf(PropTypes.shape({}))
+        })
+    })
 };
 
 Consignment.defaultProps = {
@@ -406,7 +477,11 @@ Consignment.defaultProps = {
     hubsLoading: false,
     carrier: null,
     carriers: [],
-    carriersLoading: false
+    carriersLoading: false,
+    shippingTerm: null,
+    shippingTerms: [],
+    shippingTermsLoading: false,
+    itemError: null
 };
 
 export default Consignment;
