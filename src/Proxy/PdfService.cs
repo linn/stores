@@ -38,7 +38,7 @@
 
             var pdfStream = page.PdfStreamAsync(pdfOptions).Result;
 
-            await page.CloseAsync();
+            await browser.CloseAsync();
 
             this.semaphore.Release();
 
