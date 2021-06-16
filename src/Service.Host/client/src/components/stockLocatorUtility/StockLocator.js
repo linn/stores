@@ -148,7 +148,7 @@ function StockLocator({
                                     allowNewRowCreation={false}
                                     editable={false}
                                     allowNewRowCreations
-                                />{' '}
+                                />
                             </Grid>
                         )}
                         {quantitiesLoading && <Loading />}
