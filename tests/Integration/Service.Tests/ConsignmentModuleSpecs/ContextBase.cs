@@ -25,12 +25,15 @@
 
         protected IFacadeService<Carrier, string, CarrierResource, CarrierResource> CarrierFacadeService { get; private set; }
 
+        protected IFacadeService<ShippingTerm, int, ShippingTermResource, ShippingTermResource> ShippingTermFacadeService { get; private set; }
+
         [SetUp]
         public void EstablishContext()
         {
             this.ConsignmentFacadeService = Substitute.For<IFacadeService<Consignment, int, ConsignmentResource, ConsignmentUpdateResource>>();
             this.HubFacadeService = Substitute.For<IFacadeService<Hub, int, HubResource, HubResource>>();
             this.CarrierFacadeService = Substitute.For<IFacadeService<Carrier, string, CarrierResource, CarrierResource>>();
+            this.ShippingTermFacadeService = Substitute.For<IFacadeService<ShippingTerm, int, ShippingTermResource, ShippingTermResource>>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
@@ -38,10 +41,13 @@
                     with.Dependency(this.ConsignmentFacadeService);
                     with.Dependency(this.HubFacadeService);
                     with.Dependency(this.CarrierFacadeService);
+                    with.Dependency(this.ShippingTermFacadeService);
                     with.Dependency<IResourceBuilder<Consignment>>(new ConsignmentResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<Consignment>>>(new ConsignmentsResourceBuilder());
                     with.Dependency<IResourceBuilder<Hub>>(new HubResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<Hub>>>(new HubsResourceBuilder());
+                    with.Dependency<IResourceBuilder<ShippingTerm>>(new ShippingTermResourceBuilder());
+                    with.Dependency<IResourceBuilder<IEnumerable<ShippingTerm>>>(new ShippingTermsResourceBuilder());
                     with.Dependency<IResourceBuilder<Carrier>>(new CarrierResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<Carrier>>>(new CarriersResourceBuilder());
                     with.Module<ConsignmentsModule>();
@@ -51,7 +57,8 @@
                     with.ResponseProcessor<HubsResponseProcessor>();
                     with.ResponseProcessor<CarrierResponseProcessor>();
                     with.ResponseProcessor<CarriersResponseProcessor>();
-                    with.RequestStartup(
+                    with.ResponseProcessor<ShippingTermResponseProcessor>();
+                    with.ResponseProcessor<ShippingTermsResponseProcessor>(); with.RequestStartup(
                         (container, pipelines, context) =>
                         {
                             var claims = new List<Claim>

@@ -315,7 +315,7 @@
             this.BuildPrinterMappings(builder);
             this.BuildCurrencies(builder);
             this.BuildHubs(builder);
-            this.BuildShippingTerms(builder);
+            this.BuildCarriers(builder);
             this.BuildShippingTerms(builder);
             base.OnModelCreating(builder);
         }
@@ -1767,11 +1767,11 @@
         private void BuildShippingTerms(ModelBuilder builder)
         {
             var table = builder.Entity<ShippingTerm>().ToTable("SHIPPING_TERMS");
-            table.HasKey(a => a.Code);
+            table.HasKey(a => a.Id);
+            table.Property(a => a.Id).HasColumnName("ID");
             table.Property(a => a.Code).HasColumnName("CODE").HasMaxLength(20);
             table.Property(a => a.Description).HasColumnName("DESCRIPTION").HasMaxLength(100);
             table.Property(a => a.DateInvalid).HasColumnName("DATE_INVALID");
-            table.Property(a => a.BridgeId).HasColumnName("ID");
         }
     }
 }

@@ -17,14 +17,18 @@
 
         private readonly IFacadeService<Carrier, string, CarrierResource, CarrierResource> carrierFacadeService;
 
+        private readonly IFacadeService<ShippingTerm, int, ShippingTermResource, ShippingTermResource> shippingTermFacadeService;
+
         public ConsignmentsModule(
             IFacadeService<Consignment, int, ConsignmentResource, ConsignmentUpdateResource> consignmentFacadeService,
             IFacadeService<Hub, int, HubResource, HubResource> hubFacadeService,
-            IFacadeService<Carrier, string, CarrierResource, CarrierResource> carrierFacadeService)
+            IFacadeService<Carrier, string, CarrierResource, CarrierResource> carrierFacadeService,
+            IFacadeService<ShippingTerm, int, ShippingTermResource, ShippingTermResource> shippingTermFacadeService)
         {
             this.consignmentFacadeService = consignmentFacadeService;
             this.hubFacadeService = hubFacadeService;
             this.carrierFacadeService = carrierFacadeService;
+            this.shippingTermFacadeService = shippingTermFacadeService;
             this.Get("/logistics/consignments", _ => this.GetConsignments());
             this.Get("/logistics/consignments/{id:int}", p => this.GetConsignment(p.id));
             this.Get("/logistics/hubs", _ => this.GetHubs());
@@ -32,6 +36,21 @@
             this.Get("/logistics/carriers", _ => this.GetCarriers());
             this.Get("/logistics/carriers/{id}", p => this.GetCarrierById(p.id));
             this.Put("/logistics/consignments/{id:int}", p => this.UpdateConsignment(p.id));
+            this.Get("/logistics/shipping-terms", _ => this.GetShippingTerms());
+            this.Get("/logistics/shipping-terms/{id:int}", p => this.GetShippingTermById(p.id));
+        }
+
+        private object GetShippingTermById(int id)
+        {
+            return this.Negotiate
+                .WithModel(this.shippingTermFacadeService.GetById(id))
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
+        }
+
+        private object GetShippingTerms()
+        {
+            return this.Negotiate.WithModel(this.shippingTermFacadeService.GetAll());
         }
 
         private object UpdateConsignment(int id)

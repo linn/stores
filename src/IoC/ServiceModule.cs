@@ -152,6 +152,7 @@
                 .As<IFacadeService<Currency, string, CurrencyResource, CurrencyResource>>();
             builder.RegisterType<HubFacadeService>().As<IFacadeService<Hub, int, HubResource, HubResource>>();
             builder.RegisterType<CarrierFacadeService>().As<IFacadeService<Carrier, string, CarrierResource, CarrierResource>>();
+            builder.RegisterType<ShippingTermFacadeService>().As<IFacadeService<ShippingTerm, int, ShippingTermResource, ShippingTermResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

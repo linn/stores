@@ -134,7 +134,6 @@
             builder.RegisterType<ImportBookCpcNumberResourceBuilder>().As<IResourceBuilder<ImportBookCpcNumber>>();
             builder.RegisterType<ImportBookCpcNumbersResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<ImportBookCpcNumber>>>();
-
             builder.RegisterType<TqmsCategoryResourceBuilder>()
                 .As<IResourceBuilder<TqmsCategory>>();
             builder.RegisterType<TqmsCategoriesResourceBuilder>()
@@ -200,6 +199,8 @@
             builder.RegisterType<HubsResourceBuilder>().As<IResourceBuilder<IEnumerable<Hub>>>();
             builder.RegisterType<CarrierResourceBuilder>().As<IResourceBuilder<Carrier>>();
             builder.RegisterType<CarriersResourceBuilder>().As<IResourceBuilder<IEnumerable<Carrier>>>();
+            builder.RegisterType<ShippingTermResourceBuilder>().As<IResourceBuilder<ShippingTerm>>();
+            builder.RegisterType<ShippingTermsResourceBuilder>().As<IResourceBuilder<IEnumerable<ShippingTerm>>>();
         }
     }
 }

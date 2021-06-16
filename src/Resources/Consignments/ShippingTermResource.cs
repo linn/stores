@@ -2,7 +2,7 @@
 {
     public class ShippingTermResource
     {
-        public int BridgeId { get; set; }
+        public int Id { get; set; }
 
         public string Code { get; set; }
 
