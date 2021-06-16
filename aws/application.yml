@@ -126,7 +126,7 @@ Resources:
         Image: !Sub docker.io/linn/stores:${dockerTag}
         PortMappings:
         - ContainerPort: 5050
-        Memory: '200'
+        Memory: '500'
         LogConfiguration:
           LogDriver: gelf
           Options:
