@@ -17,7 +17,8 @@
 
         public ShippingTerm FindById(int key)
         {
-            return this.serviceDbContext.ShippingTerms.Where(p => p.Id == key)
+            return this.serviceDbContext.ShippingTerms
+                .Where(p => p.Id == key)
                 .ToList().FirstOrDefault();
         }
 
@@ -38,14 +39,13 @@
 
         public ShippingTerm FindBy(Expression<Func<ShippingTerm, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext
+                .ShippingTerms.Where(expression).ToList().FirstOrDefault();
         }
 
         public IQueryable<ShippingTerm> FilterBy(Expression<Func<ShippingTerm, bool>> expression)
         {
-            return this.serviceDbContext
-                .ShippingTerms
-                .Where(expression);
+            return this.serviceDbContext.ShippingTerms.Where(expression);
         }
     }
 }

@@ -27,7 +27,7 @@
 
         protected override Expression<Func<ShippingTerm, bool>> SearchExpression(string searchTerm)
         {
-            throw new NotImplementedException();
+            return s => s.Code == searchTerm;
         }
     }
 }

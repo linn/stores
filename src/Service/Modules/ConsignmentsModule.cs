@@ -1,8 +1,12 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Resources.Consignments;
+    using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Service.Models;
 
     using Nancy;
@@ -50,6 +54,20 @@
 
         private object GetShippingTerms()
         {
+            var resource = this.Bind<SearchRequestResource>();
+
+            if (!string.IsNullOrEmpty(resource.SearchTerm))
+            {
+                var results = this.shippingTermFacadeService.Search(resource.SearchTerm);
+                if (resource.ExactOnly)
+                {
+                    return this.Negotiate.WithModel(
+                        new SuccessResult<ShippingTerm>(((SuccessResult<IEnumerable<ShippingTerm>>)results).Data.FirstOrDefault()));
+                }
+
+                return this.Negotiate.WithModel(results);
+            }
+
             return this.Negotiate.WithModel(this.shippingTermFacadeService.GetAll());
         }
 
