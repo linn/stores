@@ -116,38 +116,40 @@ function StockLocator({
                 ) : (
                     <>
                         {items && (
-                            <SingleEditTable
-                                newRowPosition="top"
-                                columns={columns}
-                                rows={items.map((i, index) => ({
-                                    ...i,
-                                    id: index,
-                                    component: (
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                history.push(
-                                                    `/inventory/stock-locator/locators/batches?${queryString.stringify(
-                                                        {
-                                                            partNumber: i.partNumber,
-                                                            locationId: i.locationId,
-                                                            palletNumber: i.palletNumber?.toString(),
-                                                            state: i.state,
-                                                            category: i.category?.toString(),
-                                                            queryBatchView: true
-                                                        }
-                                                    )}`
-                                                );
-                                            }}
-                                        >
-                                            +
-                                        </button>
-                                    )
-                                }))}
-                                allowNewRowCreation={false}
-                                editable={false}
-                                allowNewRowCreations
-                            />
+                            <Grid item xs={12}>
+                                <SingleEditTable
+                                    newRowPosition="top"
+                                    columns={columns}
+                                    rows={items.map((i, index) => ({
+                                        ...i,
+                                        id: index,
+                                        component: (
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    history.push(
+                                                        `/inventory/stock-locator/locators/batches?${queryString.stringify(
+                                                            {
+                                                                partNumber: i.partNumber,
+                                                                locationId: i.locationId,
+                                                                palletNumber: i.palletNumber?.toString(),
+                                                                state: i.state,
+                                                                category: i.category?.toString(),
+                                                                queryBatchView: true
+                                                            }
+                                                        )}`
+                                                    );
+                                                }}
+                                            >
+                                                +
+                                            </button>
+                                        )
+                                    }))}
+                                    allowNewRowCreation={false}
+                                    editable={false}
+                                    allowNewRowCreations
+                                />{' '}
+                            </Grid>
                         )}
                         {quantitiesLoading && <Loading />}
                         {quantities?.length && selectedQuantities && !quantitiesLoading && (
