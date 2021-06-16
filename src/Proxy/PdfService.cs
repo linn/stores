@@ -23,7 +23,8 @@
                                       {
                                           Args = new[]
                                                      {
-                                                         "--no-sandbox"
+                                                         "--no-sandbox",
+                                                         "--disable-dev-shm-usage"
                                                      },
                                           Headless = true
                                       }).Result;
@@ -37,6 +38,8 @@
             var pdfOptions = new PdfOptions { Landscape = landscape };
 
             var pdfStream = page.PdfStreamAsync(pdfOptions).Result;
+
+            await page.CloseAsync();
 
             await browser.CloseAsync();
 
