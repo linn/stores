@@ -18,7 +18,8 @@ import {
     Dropdown,
     Loading,
     InputField,
-    SnackbarMessage
+    SnackbarMessage,
+    LinkButton
 } from '@linn-it/linn-form-components-library';
 
 import Page from '../containers/Page';
@@ -438,7 +439,7 @@ function Wand({
                             onChange={handleWandActionChange}
                         />
                     </Grid>
-                    <Grid item xs={8}>
+                    <Grid item xs={6}>
                         <InputField
                             fullWidth
                             autoFocus
@@ -457,6 +458,16 @@ function Wand({
                         >
                             {wandAction === 'W' ? 'Wand' : 'Unwand'}
                         </Button>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <LinkButton
+                            style={{ marginTop: '22px' }}
+                            className="hide-when-printing"
+                            tooltip="Go to consignment"
+                            disabled={!consignmentId}
+                            text="Consignment"
+                            to={`/logistics/consignments?consignmentId=${consignmentId}`}
+                        />
                     </Grid>
                     <Grid item xs={12}>
                         {doWandItemWorking || unallocateConsignmentLineWorking ? (

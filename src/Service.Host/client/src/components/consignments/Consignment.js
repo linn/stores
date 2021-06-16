@@ -13,6 +13,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
+import Tooltip from '@material-ui/core/Tooltip';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
@@ -265,16 +266,20 @@ function Consignment({
                     )}
                 </Grid>
                 <Grid item xs={3}>
-                    <Button
-                        variant="outlined"
-                        className={classes.pullRight}
-                        onClick={closeConsignment}
-                        disabled={
-                            !viewing() || !state.consignment || !state.consignment.status === 'L'
-                        }
-                    >
-                        Close Consignment
-                    </Button>
+                    <Tooltip title="Close Consignment - coming soon">
+                        <Button
+                            variant="outlined"
+                            className={classes.pullRight}
+                            onClick={closeConsignment}
+                            disabled={
+                                !viewing() ||
+                                !state.consignment ||
+                                !state.consignment.status === 'L'
+                            }
+                        >
+                            Close Consignment
+                        </Button>
+                    </Tooltip>
                 </Grid>
                 {itemError && (
                     <Grid item xs={12}>
