@@ -1528,8 +1528,8 @@
             q.Property(c => c.DespatchLocationCode).HasColumnName("DESPATCH_LOCATION_CODE").HasMaxLength(10);
             q.Property(c => c.Warehouse).HasColumnName("WAREHOUSE").HasMaxLength(1);
             q.Property(c => c.HubId).HasColumnName("HUB_ID");
-            q.HasOne(c => c.ClosedBy).WithMany(m => m.ConsignmentClosedBy).HasForeignKey(s => s.ClosedById);
             q.Property(c => c.ClosedById).HasColumnName("CLOSED_BY");
+            q.HasOne(c => c.ClosedBy).WithMany(m => m.ConsignmentClosedBy).HasForeignKey(s => s.ClosedById);
         }
 
         private void QuerySalesOrders(ModelBuilder builder)

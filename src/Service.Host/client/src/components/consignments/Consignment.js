@@ -181,26 +181,25 @@ function Consignment({
     };
 
     const hubOptions = () => {
-        return hubs?.map(h => ({
+        return utilities.sortEntityList(hubs, 'hubId')?.map(h => ({
             id: h.hubId,
             displayText: `${h.hubId} - ${h.description}`
         }));
     };
 
     const carrierOptions = () => {
-        return carriers?.map(c => ({
+        return utilities.sortEntityList(carriers, 'carrierCode')?.map(c => ({
             id: c.carrierCode,
             displayText: `${c.carrierCode} - ${c.name}`
         }));
     };
 
     const shippingTermOptions = () => {
-        return shippingTerms?.map(h => ({
+        return utilities.sortEntityList(shippingTerms, 'code')?.map(h => ({
             id: h.code,
             displayText: `${h.code} - ${h.description}`
         }));
     };
-
     const freightOptions = () => {
         return [
             { id: 'S', displayText: 'Surface' },
@@ -267,18 +266,20 @@ function Consignment({
                 </Grid>
                 <Grid item xs={3}>
                     <Tooltip title="Close Consignment - coming soon">
-                        <Button
-                            variant="outlined"
-                            className={classes.pullRight}
-                            onClick={closeConsignment}
-                            disabled={
-                                !viewing() ||
-                                !state.consignment ||
-                                !state.consignment.status === 'L'
-                            }
-                        >
-                            Close Consignment
-                        </Button>
+                        <span>
+                            <Button
+                                variant="outlined"
+                                className={classes.pullRight}
+                                onClick={closeConsignment}
+                                disabled={
+                                    !viewing() ||
+                                    !state.consignment ||
+                                    !state.consignment.status === 'L'
+                                }
+                            >
+                                Close Consignment
+                            </Button>
+                        </span>
                     </Tooltip>
                 </Grid>
                 {itemError && (

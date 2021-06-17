@@ -39,6 +39,7 @@
         {
             return this.serviceDbContext.Consignments
                 .Where(c => c.ConsignmentId == key)
+                .Include(c => c.ClosedBy)
                 .Include(a => a.Address)
                 .ThenInclude(c => c.Country)
                 .ToList().FirstOrDefault();
