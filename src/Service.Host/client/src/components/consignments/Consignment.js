@@ -172,6 +172,14 @@ function Consignment({
         return editStatus === 'edit';
     };
 
+    const viewMode = (createOnly = false) => {
+        if (viewing() || (editing() && createOnly)) {
+            return true;
+        }
+
+        return false;
+    };
+
     const updateField = (fieldName, newValue) => {
         dispatch({
             type: 'updateField',
@@ -281,7 +289,7 @@ function Consignment({
                                 disabled={
                                     !viewing() ||
                                     !state.consignment ||
-                                    !state.consignment.status === 'L'
+                                    state.consignment.status === 'C'
                                 }
                             >
                                 Close Consignment
@@ -438,12 +446,12 @@ function Consignment({
                                                         verticalAlign: 'top'
                                                     }}
                                                 >
-                                                    {viewing() ? (
-                                                        showText(
-                                                            state.consignment
-                                                                .customsEntryCodePrefix,
+                                                    {viewMode() ? (
+                                                        `${showText(
+                                                            state.consignment.customsEntryCodePrefix
+                                                        )} ${showText(
                                                             state.consignment.customsEntryCode
-                                                        )
+                                                        )}`
                                                     ) : (
                                                         <>
                                                             <InputField
@@ -477,7 +485,7 @@ function Consignment({
                                                         verticalAlign: 'top'
                                                     }}
                                                 >
-                                                    {viewing() ? (
+                                                    {viewMode() ? (
                                                         state.consignment.customsEntryCodeDate &&
                                                         moment(
                                                             state.consignment.customsEntryCodeDate
@@ -537,6 +545,7 @@ function Consignment({
                             color="primary"
                             className={classes.pullRight}
                             onClick={startEdit}
+                            disabled={!state.consignment || state.consignment.status === 'C'}
                         >
                             Edit
                         </Button>
