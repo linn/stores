@@ -180,17 +180,6 @@
             builder.RegisterType<ProductionTriggerLevelsProxy>().As<IProductionTriggerLevelsService>().WithParameter(
                 "rootUri",
                 ConfigurationManager.Configuration["PROXY_ROOT"]);
-
-            builder.Register(c => Puppeteer.LaunchAsync(new LaunchOptions
-                                                            {
-                                                                Args = new[]
-                                                                           {
-                                                                               "--no-sandbox"
-                                                                           },
-                                                                Headless = true
-                                                            }).Result)
-                .As<Browser>()
-                .SingleInstance();
         }
     }
 }
