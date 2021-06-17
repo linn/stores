@@ -19,7 +19,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import Page from '../../containers/Page';
 import consignmentReducer from './consignmentReducer';
@@ -94,6 +94,11 @@ function Consignment({
     const useStyles = makeStyles(() => ({
         pullRight: {
             float: 'right'
+        },
+        tableCell: {
+            borderBottom: 0,
+            whiteSpace: 'pre-line',
+            verticalAlign: 'top'
         }
     }));
     const classes = useStyles();
@@ -155,14 +160,6 @@ function Consignment({
         editComponent: <></>,
         allowCreate: true
     };
-
-    const TableItem = withStyles(() => ({
-        body: {
-            borderBottom: 0,
-            whiteSpace: 'pre-line',
-            verticalAlign: 'top'
-        }
-    }))(TableCell);
 
     const viewing = () => {
         return editStatus === 'view';
@@ -335,27 +332,30 @@ function Consignment({
                                         <TableBody>
                                             <TableRow key="Account">
                                                 <TablePromptItem text="Account" width={160} />
-                                                <TableItem style={{ width: 350 }}>
+                                                <TableCell
+                                                    className={classes.tableCell}
+                                                    style={{ width: 350 }}
+                                                >
                                                     {state.consignment.salesAccountId}{' '}
                                                     {state.consignment.customerName}
-                                                </TableItem>
+                                                </TableCell>
                                             </TableRow>
                                             <TableRow key="Address">
-                                                <TableItem>Address</TableItem>
-                                                <TableItem>
+                                                <TablePromptItem text="Address" />
+                                                <TableCell className={classes.tableCell}>
                                                     {state.consignment.address &&
                                                         state.consignment.address.displayAddress}
-                                                </TableItem>
+                                                </TableCell>
                                             </TableRow>
                                             <TableRow key="Despatch Location">
-                                                <TableItem>Despatch Location</TableItem>
-                                                <TableItem>
+                                                <TablePromptItem text="Despatch Location" />
+                                                <TableCell className={classes.tableCell}>
                                                     {state.consignment.despatchLocationCode}
-                                                </TableItem>
+                                                </TableCell>
                                             </TableRow>
                                             <TableRow key="Freight">
-                                                <TableItem>Freight</TableItem>
-                                                <TableItem>
+                                                <TablePromptItem text="Freight" />
+                                                <TableCell className={classes.tableCell}>
                                                     <DisplayEditItem
                                                         currentEditStatus={editStatus}
                                                         displayText={showShippingMethod(
@@ -373,11 +373,11 @@ function Consignment({
                                                             />
                                                         }
                                                     />
-                                                </TableItem>
+                                                </TableCell>
                                             </TableRow>
                                             <TableRow key="Carrier">
-                                                <TableItem>Carrier</TableItem>
-                                                <TableItem>
+                                                <TablePromptItem text="Carrier" />
+                                                <TableCell className={classes.tableCell}>
                                                     <DisplayEditItem
                                                         currentEditStatus={editStatus}
                                                         displayText={state.consignment.carrier}
@@ -393,11 +393,11 @@ function Consignment({
                                                             />
                                                         }
                                                     />
-                                                </TableItem>
+                                                </TableCell>
                                             </TableRow>
                                             <TableRow key="Terms">
-                                                <TableItem>Terms</TableItem>
-                                                <TableItem>
+                                                <TablePromptItem text="Terms" />
+                                                <TableCell className={classes.tableCell}>
                                                     <DisplayEditItem
                                                         currentEditStatus={editStatus}
                                                         displayText={state.consignment.terms}
@@ -416,11 +416,11 @@ function Consignment({
                                                             />
                                                         }
                                                     />
-                                                </TableItem>
+                                                </TableCell>
                                             </TableRow>
                                             <TableRow key="Hub">
-                                                <TableItem>Hub</TableItem>
-                                                <TableItem>
+                                                <TablePromptItem text="Hub" />
+                                                <TableCell className={classes.tableCell}>
                                                     <DisplayEditItem
                                                         currentEditStatus={editStatus}
                                                         displayText={state.consignment.hubId}
@@ -435,17 +435,11 @@ function Consignment({
                                                             />
                                                         }
                                                     />
-                                                </TableItem>
+                                                </TableCell>
                                             </TableRow>
                                             <TableRow key="CustomsEntry">
-                                                <TableItem>Customs Entry Code</TableItem>
-                                                <TableCell
-                                                    style={{
-                                                        borderBottom: 0,
-                                                        whiteSpace: 'pre-line',
-                                                        verticalAlign: 'top'
-                                                    }}
-                                                >
+                                                <TablePromptItem text="Customs Entry Code" />
+                                                <TableCell className={classes.tableCell}>
                                                     {viewMode() ? (
                                                         `${showText(
                                                             state.consignment.customsEntryCodePrefix
@@ -478,13 +472,7 @@ function Consignment({
                                                     )}
                                                 </TableCell>
                                                 <TablePromptItem text="Entry Code Date" />
-                                                <TableCell
-                                                    style={{
-                                                        borderBottom: 0,
-                                                        whiteSpace: 'pre-line',
-                                                        verticalAlign: 'top'
-                                                    }}
-                                                >
+                                                <TableCell className={classes.tableCell}>
                                                     {viewMode() ? (
                                                         state.consignment.customsEntryCodeDate &&
                                                         moment(
@@ -510,26 +498,26 @@ function Consignment({
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow key="DateOpened">
-                                                <TableItem>Date Opened</TableItem>
-                                                <TableItem>
+                                                <TablePromptItem text="Date Opened" />
+                                                <TableCell className={classes.tableCell}>
                                                     {moment(state.consignment.dateOpened).format(
                                                         'DD MMM YYYY'
                                                     )}
-                                                </TableItem>
+                                                </TableCell>
                                             </TableRow>
                                             <TableRow key="DateClosed">
-                                                <TableItem>Date Closed</TableItem>
-                                                <TableItem>
+                                                <TablePromptItem text="Date Closed" />
+                                                <TableCell className={classes.tableCell}>
                                                     {state.consignment.dateClosed &&
                                                         moment(state.consignment.dateClosed).format(
                                                             'DD MMM YYYY'
                                                         )}
-                                                </TableItem>
+                                                </TableCell>
                                                 <TablePromptItem text="Closed By" />
-                                                <TableItem>
+                                                <TableCell className={classes.tableCell}>
                                                     {state.consignment.closedBy &&
                                                         state.consignment.closedBy.fullName}
-                                                </TableItem>
+                                                </TableCell>
                                             </TableRow>
                                         </TableBody>
                                     </Table>
