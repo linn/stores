@@ -1,6 +1,5 @@
 ﻿namespace Linn.Stores.Proxy
 {
-    using System;
     using System.IO;
     using System.Net.Http;
     using System.Text;
@@ -24,7 +23,6 @@
                 using (var multiPartStream = new MultipartFormDataContent())
                 {
                     var bytes = Encoding.UTF8.GetBytes(html);
-                    multiPartStream.Add(new StringContent("{}"), "metadata");
                     multiPartStream.Add(new ByteArrayContent(bytes, 0, bytes.Length), "files", "file.html");
                     var request =
                         new HttpRequestMessage(HttpMethod.Post, this.htmlToPdfConverterServiceUrl)
@@ -39,10 +37,13 @@
                         var res = await response.Content.ReadAsStreamAsync();
                         return res;
                     }
+                    
+                    throw new PdfServiceException("Pdf generation failed in API call: " 
+                                                  + response.StatusCode 
+                                                  + " - " 
+                                                  + response.ReasonPhrase);
                 }
             }
-
-            throw new NotImplementedException();
         }
     }
 }
