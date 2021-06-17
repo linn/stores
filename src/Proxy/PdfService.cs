@@ -22,26 +22,36 @@
             {
                 using (var multiPartStream = new MultipartFormDataContent())
                 {
+                    var landscapeString = landscape ? "true" : "false";
                     var bytes = Encoding.UTF8.GetBytes(html);
-                    multiPartStream.Add(new ByteArrayContent(bytes, 0, bytes.Length), "files", "file.html");
+                    
+                    multiPartStream.Add(
+                        new ByteArrayContent(bytes, 0, bytes.Length), 
+                        "files", 
+                        "index.html");
+                    
+                    multiPartStream.Add(new StringContent(landscapeString), "landscape");
+                    
                     var request =
                         new HttpRequestMessage(HttpMethod.Post, this.htmlToPdfConverterServiceUrl)
                             {
                                 Content = multiPartStream
                             };
 
-                    var response = await client.SendAsync(request, HttpCompletionOption.ResponseContentRead);
-                    
-                    if (response.IsSuccessStatusCode)
+                    var response = await client.SendAsync(
+                                       request, 
+                                       HttpCompletionOption.ResponseContentRead);
+
+                    if (!response.IsSuccessStatusCode)
                     {
-                        var res = await response.Content.ReadAsStreamAsync();
-                        return res;
+                        throw new PdfServiceException(
+                            "Pdf generation failed in API call: " 
+                            + response.StatusCode + " - " 
+                            + response.ReasonPhrase);
                     }
-                    
-                    throw new PdfServiceException("Pdf generation failed in API call: " 
-                                                  + response.StatusCode 
-                                                  + " - " 
-                                                  + response.ReasonPhrase);
+
+                    var res = await response.Content.ReadAsStreamAsync();
+                    return res;
                 }
             }
         }
