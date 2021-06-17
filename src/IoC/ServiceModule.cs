@@ -60,7 +60,9 @@
             builder.RegisterType<TqmsReportsService>().As<ITqmsReportsService>();
             builder.RegisterType<ConsignmentShipfileService>().As<IConsignmentShipfileService>();
             builder.RegisterType<EmailService>().As<IEmailService>();
-            builder.RegisterType<PdfService>().As<IPdfService>();
+            builder.RegisterType<PdfService>().As<IPdfService>().WithParameter(
+                "htmlToPdfConverterServiceUrl",
+                ConfigurationManager.Configuration["HTML_TO_PDF_API_CONVERSION_ENDPOINT"]);
             builder.RegisterType<TemplateEngine>().As<ITemplateEngine>();
             builder.RegisterType<ImportBookService>().As<IImportBookService>();
             builder.RegisterType<PackingListService>().As<IPackingListService>();
