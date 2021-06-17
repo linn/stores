@@ -46,5 +46,13 @@
         public string Warehouse { get; set; }
 
         public int? HubId { get; set; }
+
+        public string CustomsEntryCodePrefix { get; set; }
+
+        public string CustomsEntryCode { get; set; }
+
+        public DateTime? CustomsEntryCodeDate { get; set; }
+
+        public IEnumerable<ConsignmentPallet> Pallets { get; set; }
     }
 }

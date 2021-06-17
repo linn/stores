@@ -35,6 +35,9 @@
                            ShippingMethod = consignment.ShippingMethod,
                            Terms = consignment.Terms,
                            Warehouse = consignment.Warehouse,
+                           CustomsEntryCodePrefix = consignment.CustomsEntryCodePrefix,
+                           CustomsEntryCode = consignment.CustomsEntryCode,
+                           CustomsEntryCodeDate = consignment.CustomsEntryCodeDate?.ToString("o"),
                            Links = this.BuildLinks(consignment).ToArray()
                        };
         }

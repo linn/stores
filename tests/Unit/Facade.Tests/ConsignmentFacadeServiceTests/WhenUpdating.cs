@@ -1,6 +1,9 @@
 ﻿namespace Linn.Stores.Facade.Tests.ConsignmentFacadeServiceTests
 {
+    using System;
+
     using FluentAssertions;
+    using FluentAssertions.Extensions;
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Consignments;
@@ -28,6 +31,12 @@
 
         private string newDespatchLocationCode;
 
+        private string newCustomsEntryCodePrefix;
+
+        private string newCustomsEntryCode;
+
+        private string newCustomsEntryCodeDate;
+
         [SetUp]
         public void SetUp()
         {
@@ -37,6 +46,9 @@
             this.newShippingMethod = "Air";
             this.newTerms = "C3PO";
             this.newDespatchLocationCode = "Linn";
+            this.newCustomsEntryCodePrefix = "PP";
+            this.newCustomsEntryCode = "ENTRY";
+            this.newCustomsEntryCodeDate = 1.February(2030).ToString("o");
 
             var consignment = new Consignment
                                   {
@@ -54,7 +66,10 @@
                                           Carrier = this.newCarrierCode,
                                           ShippingMethod = this.newShippingMethod,
                                           Terms = this.newTerms,
-                                          DespatchLocationCode = this.newDespatchLocationCode
+                                          DespatchLocationCode = this.newDespatchLocationCode,
+                                          CustomsEntryCodePrefix = this.newCustomsEntryCodePrefix,
+                                          CustomsEntryCode = this.newCustomsEntryCode,
+                                          CustomsEntryCodeDate = this.newCustomsEntryCodeDate
                                       };
                                           
             this.ConsignmentRepository.FindById(this.consignmentId).Returns(consignment);
@@ -73,6 +88,9 @@
             updatedConsignment.HubId.Should().Be(this.newHubId);
             updatedConsignment.ShippingMethod.Should().Be(this.newShippingMethod);
             updatedConsignment.DespatchLocationCode.Should().Be(this.newDespatchLocationCode);
+            updatedConsignment.CustomsEntryCodePrefix.Should().Be(this.newCustomsEntryCodePrefix);
+            updatedConsignment.CustomsEntryCode.Should().Be(this.newCustomsEntryCode);
+            updatedConsignment.CustomsEntryCodeDate.Should().Be(DateTime.Parse(this.newCustomsEntryCodeDate));
         }
     }
 }

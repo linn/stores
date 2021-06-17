@@ -5,7 +5,9 @@ import {
     Dropdown,
     SaveBackCancelButtons,
     utilities,
-    ErrorCard
+    ErrorCard,
+    InputField,
+    DatePicker
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
@@ -97,10 +99,7 @@ function Consignment({
     const classes = useStyles();
 
     const TablePromptItem = ({ text, width }) => (
-        <TableCell
-            className={classes.tableCell}
-            style={{ width, borderBottom: 0, whiteSpace: 'pre-line', verticalAlign: 'top' }}
-        >
+        <TableCell style={{ width, borderBottom: 0, whiteSpace: 'pre-line', verticalAlign: 'top' }}>
             {text}
         </TableCell>
     );
@@ -113,6 +112,14 @@ function Consignment({
     TablePromptItem.defaultProps = {
         text: null,
         width: 150
+    };
+
+    const showText = (displayText, displayDescription) => {
+        if (displayText) {
+            return `${displayText} ${displayDescription ? ` - ${displayDescription}` : ''} `;
+        }
+
+        return '';
     };
 
     const DisplayEditItem = ({
@@ -421,6 +428,78 @@ function Consignment({
                                                         }
                                                     />
                                                 </TableItem>
+                                            </TableRow>
+                                            <TableRow key="CustomsEntry">
+                                                <TableItem>Customs Entry Code</TableItem>
+                                                <TableCell
+                                                    style={{
+                                                        borderBottom: 0,
+                                                        whiteSpace: 'pre-line',
+                                                        verticalAlign: 'top'
+                                                    }}
+                                                >
+                                                    {viewing() ? (
+                                                        showText(
+                                                            state.consignment
+                                                                .customsEntryCodePrefix,
+                                                            state.consignment.customsEntryCode
+                                                        )
+                                                    ) : (
+                                                        <>
+                                                            <InputField
+                                                                placeholder="Prefix"
+                                                                propertyName="customsEntryCodePrefix"
+                                                                value={
+                                                                    state.consignment
+                                                                        .customsEntryCodePrefix
+                                                                }
+                                                                onChange={updateField}
+                                                                maxLength={3}
+                                                            />
+                                                            <InputField
+                                                                placeholder="Entry Code"
+                                                                propertyName="customsEntryCode"
+                                                                value={
+                                                                    state.consignment
+                                                                        .customsEntryCode
+                                                                }
+                                                                onChange={updateField}
+                                                                maxLength={20}
+                                                            />
+                                                        </>
+                                                    )}
+                                                </TableCell>
+                                                <TablePromptItem text="Entry Code Date" />
+                                                <TableCell
+                                                    style={{
+                                                        borderBottom: 0,
+                                                        whiteSpace: 'pre-line',
+                                                        verticalAlign: 'top'
+                                                    }}
+                                                >
+                                                    {viewing() ? (
+                                                        state.consignment.customsEntryCodeDate &&
+                                                        moment(
+                                                            state.consignment.customsEntryCodeDate
+                                                        ).format('DD MMM YYYY')
+                                                    ) : (
+                                                        <DatePicker
+                                                            value={
+                                                                state.consignment
+                                                                    .customsEntryCodeDate
+                                                                    ? state.consignment
+                                                                          .customsEntryCodeDate
+                                                                    : null
+                                                            }
+                                                            onChange={value => {
+                                                                updateField(
+                                                                    'customsEntryCodeDate',
+                                                                    value
+                                                                );
+                                                            }}
+                                                        />
+                                                    )}
+                                                </TableCell>
                                             </TableRow>
                                             <TableRow key="DateOpened">
                                                 <TableItem>Date Opened</TableItem>

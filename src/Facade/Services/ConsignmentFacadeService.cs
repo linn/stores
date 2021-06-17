@@ -27,6 +27,11 @@
             entity.HubId = updateResource.HubId;
             entity.ShippingMethod = updateResource.ShippingMethod;
             entity.DespatchLocationCode = updateResource.DespatchLocationCode;
+            entity.CustomsEntryCodePrefix = updateResource.CustomsEntryCodePrefix;
+            entity.CustomsEntryCode = updateResource.CustomsEntryCode;
+            entity.CustomsEntryCodeDate = string.IsNullOrEmpty(updateResource.CustomsEntryCodeDate)
+                                              ? (DateTime?)null
+                                              : DateTime.Parse(updateResource.CustomsEntryCodeDate);
         }
 
         protected override Expression<Func<Consignment, bool>> SearchExpression(string searchTerm)

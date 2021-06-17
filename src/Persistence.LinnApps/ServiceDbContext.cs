@@ -289,6 +289,7 @@
             this.QueryStockQuantitIesForMrView(builder);
             this.BuildRequisitionHeaders(builder);
             this.QueryTpkView(builder);
+            this.BuildConsignmentPallets(builder);
             this.BuildConsignments(builder);
             this.BuildExportReturns(builder);
             this.BuildExportReturnDetails(builder);
@@ -1529,7 +1530,11 @@
             q.Property(c => c.Warehouse).HasColumnName("WAREHOUSE").HasMaxLength(1);
             q.Property(c => c.HubId).HasColumnName("HUB_ID");
             q.Property(c => c.ClosedById).HasColumnName("CLOSED_BY");
+            q.Property(c => c.CustomsEntryCodePrefix).HasColumnName("CUSTOMS_ENTRY_CODE_PREFIX").HasMaxLength(3);
+            q.Property(c => c.CustomsEntryCode).HasColumnName("CUSTOMS_ENTRY_CODE").HasMaxLength(20);
+            q.Property(c => c.CustomsEntryCodeDate).HasColumnName("CUSTOMS_ENTRY_CODE_DATE");
             q.HasOne(c => c.ClosedBy).WithMany(m => m.ConsignmentClosedBy).HasForeignKey(s => s.ClosedById);
+            q.HasMany(c => c.Pallets).WithOne().HasForeignKey(cp => cp.ConsignmentId);
         }
 
         private void QuerySalesOrders(ModelBuilder builder)
@@ -1772,6 +1777,18 @@
             table.Property(a => a.Code).HasColumnName("CODE").HasMaxLength(20);
             table.Property(a => a.Description).HasColumnName("DESCRIPTION").HasMaxLength(100);
             table.Property(a => a.DateInvalid).HasColumnName("DATE_INVALID");
+        }
+
+        private void BuildConsignmentPallets(ModelBuilder builder)
+        {
+            var table = builder.Entity<ConsignmentPallet>().ToTable("CONSIGNMENT_PALLETS");
+            table.HasKey(a => new { a.ConsignmentId, a.PalletNumber });
+            table.Property(a => a.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            table.Property(a => a.PalletNumber).HasColumnName("PALLET_NO");
+            table.Property(a => a.Weight).HasColumnName("WEIGHT");
+            table.Property(a => a.Height).HasColumnName("HEIGHT");
+            table.Property(a => a.Width).HasColumnName("WIDTH");
+            table.Property(a => a.Depth).HasColumnName("DEPTH");
         }
     }
 }
