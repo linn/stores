@@ -62,7 +62,7 @@
             builder.RegisterType<EmailService>().As<IEmailService>();
             builder.RegisterType<PdfService>().As<IPdfService>().WithParameter(
                 "htmlToPdfConverterServiceUrl",
-                ConfigurationManager.Configuration["HTML_TO_PDF_API_CONVERSION_ENDPOINT"]);
+                ConfigurationManager.Configuration["PDF_SERVICE_ROOT"]);
             builder.RegisterType<TemplateEngine>().As<ITemplateEngine>();
             builder.RegisterType<ImportBookService>().As<IImportBookService>();
             builder.RegisterType<PackingListService>().As<IPackingListService>();
