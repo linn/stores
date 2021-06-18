@@ -17,8 +17,6 @@ namespace Linn.Stores.Service.Host
     using Nancy;
     using Nancy.Owin;
 
-    using PuppeteerSharp;
-
     public class Startup
     {
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -63,7 +61,6 @@ namespace Linn.Stores.Service.Host
                         config.PassThroughWhenStatusCodesAre(HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden);
                     }));
             app.Use((context, next) => context.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme));
-            app.PreparePuppeteerAsync(env).GetAwaiter().GetResult();
         }
     }
 }

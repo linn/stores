@@ -37,8 +37,6 @@
     using Linn.Stores.Resources.StockLocators;
     using Linn.Stores.Resources.Tqms;
 
-    using PuppeteerSharp;
-
     public class ServiceModule : Module
     {
         protected override void Load(ContainerBuilder builder)
@@ -62,7 +60,9 @@
             builder.RegisterType<TqmsReportsService>().As<ITqmsReportsService>();
             builder.RegisterType<ConsignmentShipfileService>().As<IConsignmentShipfileService>();
             builder.RegisterType<EmailService>().As<IEmailService>();
-            builder.RegisterType<PdfService>().As<IPdfService>();
+            builder.RegisterType<PdfService>().As<IPdfService>().WithParameter(
+                "htmlToPdfConverterServiceUrl",
+                ConfigurationManager.Configuration["PDF_SERVICE_ROOT"]);
             builder.RegisterType<TemplateEngine>().As<ITemplateEngine>();
             builder.RegisterType<ImportBookService>().As<IImportBookService>();
             builder.RegisterType<PackingListService>().As<IPackingListService>();
@@ -180,17 +180,6 @@
             builder.RegisterType<ProductionTriggerLevelsProxy>().As<IProductionTriggerLevelsService>().WithParameter(
                 "rootUri",
                 ConfigurationManager.Configuration["PROXY_ROOT"]);
-
-            builder.Register(c => Puppeteer.LaunchAsync(new LaunchOptions
-                                                            {
-                                                                Args = new[]
-                                                                           {
-                                                                               "--no-sandbox"
-                                                                           },
-                                                                Headless = true
-                                                            }).Result)
-                .As<Browser>()
-                .SingleInstance();
         }
     }
 }
