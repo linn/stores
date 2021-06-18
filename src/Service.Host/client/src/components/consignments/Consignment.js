@@ -7,7 +7,10 @@ import {
     utilities,
     ErrorCard,
     InputField,
-    DatePicker
+    DatePicker,
+    SingleEditTable,
+    GroupEditTable,
+    useGroupEditTable
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
@@ -67,6 +70,28 @@ function Consignment({
 
         clearConsignmentErrors();
     }, [item, clearConsignmentErrors]);
+
+    const {
+        data: palletData,
+        addRow: addPallet,
+        updateRow: updatePallet,
+        resetRow,
+        removeRow: removePallet,
+        setEditing: setPalletsEditing,
+        setRowToBeDeleted: setPalletRowToBeDeleted,
+        setRowToBeSaved: setPalletRowToBeSaved
+    } = useGroupEditTable({
+        rows: state.consignment?.pallets
+    });
+
+    useEffect(() => {
+        if (palletData && !palletData.some(a => a.editing)) {
+            dispatch({
+                type: 'updatePallets',
+                payload: palletData
+            });
+        }
+    }, [palletData]);
 
     useEffect(() => {
         if (item) {
@@ -262,6 +287,41 @@ function Consignment({
         setEditStatus('view');
         clearConsignmentErrors();
     };
+
+    const palletColumns = [
+        {
+            title: 'Pallet No',
+            id: 'palletNumber',
+            type: 'text',
+            editable: false
+        },
+        {
+            title: 'Weight',
+            id: 'weight',
+            type: 'text',
+            editable: true
+        },
+        {
+            title: 'Height',
+            id: 'height',
+            type: 'text',
+            editable: true,
+            required: true
+        },
+        {
+            title: 'Width',
+            id: 'width',
+            type: 'text',
+            editable: true
+        },
+        {
+            title: 'Depth',
+            id: 'depth',
+            type: 'text',
+            editable: true,
+            required: true
+        }
+    ];
 
     return (
         <Page requestErrors={requestErrors} showRequestErrors>
@@ -538,12 +598,42 @@ function Consignment({
                             )}
                             {currentTab === 2 && (
                                 <>
-                                    <Grid container spacing={3}>
-                                        <Grid item xs={6}>
-                                            <Typography variant="h6">Details</Typography>
+                                    <Grid container spacing={3} style={{ paddingTop: '30px' }}>
+                                        <Grid item xs={1}>
+                                            <Typography variant="subtitle2">Pallets</Typography>
                                         </Grid>
-                                        <Grid item xs={6}>
-                                            <span>sdlfja;sdlfjksdaflkjs;klj</span>
+                                        <Grid item xs={7}>
+                                            <SingleEditTable
+                                                columns={palletColumns}
+                                                rows={state.consignment.pallets}
+                                                saveRow={updatePallet}
+                                                createRow={addPallet}
+                                                editable={!viewing()}
+                                                allowNewRowCreation
+                                                closeEditingOnSave
+                                            />
+                                        </Grid>
+                                        <Grid item xs={4} />
+                                        <Grid item xs={12}>
+                                            {palletData && (
+                                                <GroupEditTable
+                                                    columns={palletColumns}
+                                                    rows={palletData}
+                                                    updateRow={updatePallet}
+                                                    addRow={addPallet}
+                                                    removeRow={removePallet}
+                                                    resetRow={resetRow}
+                                                    handleEditClick={setPalletsEditing}
+                                                    tableValid={() => true}
+                                                    editable
+                                                    allowNewRowCreation
+                                                    deleteRowPreEdit={false}
+                                                    setRowToBeSaved={setPalletRowToBeSaved}
+                                                    setRowToBeDeleted={setPalletRowToBeDeleted}
+                                                    closeRowOnClickAway
+                                                    removeRowOnDelete
+                                                />
+                                            )}
                                         </Grid>
                                     </Grid>
                                 </>
