@@ -327,203 +327,214 @@ function Consignment({
                     ) : (
                         <>
                             {currentTab === 1 && (
-                            <>
-                                <Grid item xs={12}>
-                                    <Table size="small" style={{ paddingTop: '30px' }}>
-                                        <TableBody>
-                                            <TableRow key="Account">
-                                                <TablePromptItem text="Account" width={160} />
-                                                <TableCell
-                                                    className={classes.tableCell}
-                                                    style={{ width: 350 }}
-                                                >
-                                                    {state.consignment.salesAccountId}{' '}
-                                                    {state.consignment.customerName}
-                                                </TableCell>
-                                            </TableRow>
-                                            <TableRow key="Address">
-                                                <TablePromptItem text="Address" />
-                                                <TableCell className={classes.tableCell}>
-                                                    {state.consignment.address &&
-                                                        state.consignment.address.displayAddress}
-                                                </TableCell>
-                                            </TableRow>
-                                            <TableRow key="Despatch Location">
-                                                <TablePromptItem text="Despatch Location" />
-                                                <TableCell className={classes.tableCell}>
-                                                    {state.consignment.despatchLocationCode}
-                                                </TableCell>
-                                            </TableRow>
-                                            <TableRow key="Freight">
-                                                <TablePromptItem text="Freight" />
-                                                <TableCell className={classes.tableCell}>
-                                                    <DisplayEditItem
-                                                        currentEditStatus={editStatus}
-                                                        displayText={showShippingMethod(
-                                                            state.consignment.shippingMethod
+                                <>
+                                    <Grid item xs={12}>
+                                        <Table size="small" style={{ paddingTop: '30px' }}>
+                                            <TableBody>
+                                                <TableRow key="Account">
+                                                    <TablePromptItem text="Account" width={160} />
+                                                    <TableCell
+                                                        className={classes.tableCell}
+                                                        style={{ width: 350 }}
+                                                    >
+                                                        {state.consignment.salesAccountId}{' '}
+                                                        {state.consignment.customerName}
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow key="Address">
+                                                    <TablePromptItem text="Address" />
+                                                    <TableCell className={classes.tableCell}>
+                                                        {state.consignment.address &&
+                                                            state.consignment.address
+                                                                .displayAddress}
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow key="Despatch Location">
+                                                    <TablePromptItem text="Despatch Location" />
+                                                    <TableCell className={classes.tableCell}>
+                                                        {state.consignment.despatchLocationCode}
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow key="Freight">
+                                                    <TablePromptItem text="Freight" />
+                                                    <TableCell className={classes.tableCell}>
+                                                        <DisplayEditItem
+                                                            currentEditStatus={editStatus}
+                                                            displayText={showShippingMethod(
+                                                                state.consignment.shippingMethod
+                                                            )}
+                                                            editComponent={
+                                                                <Dropdown
+                                                                    propertyName="shippingMethod"
+                                                                    items={freightOptions()}
+                                                                    onChange={updateField}
+                                                                    value={
+                                                                        state.consignment
+                                                                            .shippingMethod
+                                                                    }
+                                                                    allowNoValue={false}
+                                                                />
+                                                            }
+                                                        />
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow key="Carrier">
+                                                    <TablePromptItem text="Carrier" />
+                                                    <TableCell className={classes.tableCell}>
+                                                        <DisplayEditItem
+                                                            currentEditStatus={editStatus}
+                                                            displayText={state.consignment.carrier}
+                                                            displayDescription={
+                                                                carrier && carrier.name
+                                                            }
+                                                            editComponent={
+                                                                <Dropdown
+                                                                    propertyName="carrier"
+                                                                    items={carrierOptions()}
+                                                                    onChange={updateField}
+                                                                    value={
+                                                                        state.consignment.carrier
+                                                                    }
+                                                                    optionsLoading={carriersLoading}
+                                                                    allowNoValue={false}
+                                                                />
+                                                            }
+                                                        />
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow key="Terms">
+                                                    <TablePromptItem text="Terms" />
+                                                    <TableCell className={classes.tableCell}>
+                                                        <DisplayEditItem
+                                                            currentEditStatus={editStatus}
+                                                            displayText={state.consignment.terms}
+                                                            displayDescription={
+                                                                shippingTerm?.description
+                                                            }
+                                                            editComponent={
+                                                                <Dropdown
+                                                                    propertyName="terms"
+                                                                    items={shippingTermOptions()}
+                                                                    onChange={updateField}
+                                                                    value={state.consignment.terms}
+                                                                    optionsLoading={
+                                                                        shippingTermsLoading
+                                                                    }
+                                                                />
+                                                            }
+                                                        />
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow key="Hub">
+                                                    <TablePromptItem text="Hub" />
+                                                    <TableCell className={classes.tableCell}>
+                                                        <DisplayEditItem
+                                                            currentEditStatus={editStatus}
+                                                            displayText={state.consignment.hubId}
+                                                            displayDescription={
+                                                                hub && hub.description
+                                                            }
+                                                            editComponent={
+                                                                <Dropdown
+                                                                    propertyName="hubId"
+                                                                    items={hubOptions()}
+                                                                    onChange={updateField}
+                                                                    value={state.consignment.hubId}
+                                                                    optionsLoading={hubsLoading}
+                                                                />
+                                                            }
+                                                        />
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow key="CustomsEntry">
+                                                    <TablePromptItem text="Customs Entry Code" />
+                                                    <TableCell className={classes.tableCell}>
+                                                        {viewMode() ? (
+                                                            `${showText(
+                                                                state.consignment
+                                                                    .customsEntryCodePrefix
+                                                            )} ${showText(
+                                                                state.consignment.customsEntryCode
+                                                            )}`
+                                                        ) : (
+                                                            <>
+                                                                <InputField
+                                                                    placeholder="Prefix"
+                                                                    propertyName="customsEntryCodePrefix"
+                                                                    value={
+                                                                        state.consignment
+                                                                            .customsEntryCodePrefix
+                                                                    }
+                                                                    onChange={updateField}
+                                                                    maxLength={3}
+                                                                />
+                                                                <InputField
+                                                                    placeholder="Entry Code"
+                                                                    propertyName="customsEntryCode"
+                                                                    value={
+                                                                        state.consignment
+                                                                            .customsEntryCode
+                                                                    }
+                                                                    onChange={updateField}
+                                                                    maxLength={20}
+                                                                />
+                                                            </>
                                                         )}
-                                                        editComponent={
-                                                            <Dropdown
-                                                                propertyName="shippingMethod"
-                                                                items={freightOptions()}
-                                                                onChange={updateField}
-                                                                value={
-                                                                    state.consignment.shippingMethod
-                                                                }
-                                                                allowNoValue={false}
-                                                            />
-                                                        }
-                                                    />
-                                                </TableCell>
-                                            </TableRow>
-                                            <TableRow key="Carrier">
-                                                <TablePromptItem text="Carrier" />
-                                                <TableCell className={classes.tableCell}>
-                                                    <DisplayEditItem
-                                                        currentEditStatus={editStatus}
-                                                        displayText={state.consignment.carrier}
-                                                        displayDescription={carrier && carrier.name}
-                                                        editComponent={
-                                                            <Dropdown
-                                                                propertyName="carrier"
-                                                                items={carrierOptions()}
-                                                                onChange={updateField}
-                                                                value={state.consignment.carrier}
-                                                                optionsLoading={carriersLoading}
-                                                                allowNoValue={false}
-                                                            />
-                                                        }
-                                                    />
-                                                </TableCell>
-                                            </TableRow>
-                                            <TableRow key="Terms">
-                                                <TablePromptItem text="Terms" />
-                                                <TableCell className={classes.tableCell}>
-                                                    <DisplayEditItem
-                                                        currentEditStatus={editStatus}
-                                                        displayText={state.consignment.terms}
-                                                        displayDescription={
-                                                            shippingTerm && shippingTerm.description
-                                                        }
-                                                        editComponent={
-                                                            <Dropdown
-                                                                propertyName="terms"
-                                                                items={shippingTermOptions()}
-                                                                onChange={updateField}
-                                                                value={state.consignment.terms}
-                                                                optionsLoading={
-                                                                    shippingTermsLoading
-                                                                }
-                                                            />
-                                                        }
-                                                    />
-                                                </TableCell>
-                                            </TableRow>
-                                            <TableRow key="Hub">
-                                                <TablePromptItem text="Hub" />
-                                                <TableCell className={classes.tableCell}>
-                                                    <DisplayEditItem
-                                                        currentEditStatus={editStatus}
-                                                        displayText={state.consignment.hubId}
-                                                        displayDescription={hub && hub.description}
-                                                        editComponent={
-                                                            <Dropdown
-                                                                propertyName="hubId"
-                                                                items={hubOptions()}
-                                                                onChange={updateField}
-                                                                value={state.consignment.hubId}
-                                                                optionsLoading={hubsLoading}
-                                                            />
-                                                        }
-                                                    />
-                                                </TableCell>
-                                            </TableRow>
-                                            <TableRow key="CustomsEntry">
-                                                <TablePromptItem text="Customs Entry Code" />
-                                                <TableCell className={classes.tableCell}>
-                                                    {viewMode() ? (
-                                                        `${showText(
-                                                            state.consignment.customsEntryCodePrefix
-                                                        )} ${showText(
-                                                            state.consignment.customsEntryCode
-                                                        )}`
-                                                    ) : (
-                                                        <>
-                                                            <InputField
-                                                                placeholder="Prefix"
-                                                                propertyName="customsEntryCodePrefix"
-                                                                value={
-                                                                    state.consignment
-                                                                        .customsEntryCodePrefix
-                                                                }
-                                                                onChange={updateField}
-                                                                maxLength={3}
-                                                            />
-                                                            <InputField
-                                                                placeholder="Entry Code"
-                                                                propertyName="customsEntryCode"
-                                                                value={
-                                                                    state.consignment
-                                                                        .customsEntryCode
-                                                                }
-                                                                onChange={updateField}
-                                                                maxLength={20}
-                                                            />
-                                                        </>
-                                                    )}
-                                                </TableCell>
-                                                <TablePromptItem text="Entry Code Date" />
-                                                <TableCell className={classes.tableCell}>
-                                                    {viewMode() ? (
-                                                        state.consignment.customsEntryCodeDate &&
-                                                        moment(
-                                                            state.consignment.customsEntryCodeDate
-                                                        ).format('DD MMM YYYY')
-                                                    ) : (
-                                                        <DatePicker
-                                                            value={
+                                                    </TableCell>
+                                                    <TablePromptItem text="Entry Code Date" />
+                                                    <TableCell className={classes.tableCell}>
+                                                        {viewMode() ? (
+                                                            state.consignment
+                                                                .customsEntryCodeDate &&
+                                                            moment(
                                                                 state.consignment
                                                                     .customsEntryCodeDate
-                                                                    ? state.consignment
-                                                                          .customsEntryCodeDate
-                                                                    : null
-                                                            }
-                                                            onChange={value => {
-                                                                updateField(
-                                                                    'customsEntryCodeDate',
-                                                                    value
-                                                                );
-                                                            }}
-                                                        />
-                                                    )}
-                                                </TableCell>
-                                            </TableRow>
-                                            <TableRow key="DateOpened">
-                                                <TablePromptItem text="Date Opened" />
-                                                <TableCell className={classes.tableCell}>
-                                                    {moment(state.consignment.dateOpened).format(
-                                                        'DD MMM YYYY'
-                                                    )}
-                                                </TableCell>
-                                            </TableRow>
-                                            <TableRow key="DateClosed">
-                                                <TablePromptItem text="Date Closed" />
-                                                <TableCell className={classes.tableCell}>
-                                                    {state.consignment.dateClosed &&
-                                                        moment(state.consignment.dateClosed).format(
-                                                            'DD MMM YYYY'
+                                                            ).format('DD MMM YYYY')
+                                                        ) : (
+                                                            <DatePicker
+                                                                value={
+                                                                    state.consignment
+                                                                        .customsEntryCodeDate
+                                                                        ? state.consignment
+                                                                              .customsEntryCodeDate
+                                                                        : null
+                                                                }
+                                                                onChange={value => {
+                                                                    updateField(
+                                                                        'customsEntryCodeDate',
+                                                                        value
+                                                                    );
+                                                                }}
+                                                            />
                                                         )}
-                                                </TableCell>
-                                                <TablePromptItem text="Closed By" />
-                                                <TableCell className={classes.tableCell}>
-                                                    {state.consignment.closedBy &&
-                                                        state.consignment.closedBy.fullName}
-                                                </TableCell>
-                                            </TableRow>
-                                        </TableBody>
-                                    </Table>
-                                </Grid>
-                            </>
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow key="DateOpened">
+                                                    <TablePromptItem text="Date Opened" />
+                                                    <TableCell className={classes.tableCell}>
+                                                        {moment(
+                                                            state.consignment.dateOpened
+                                                        ).format('DD MMM YYYY')}
+                                                    </TableCell>
+                                                </TableRow>
+                                                <TableRow key="DateClosed">
+                                                    <TablePromptItem text="Date Closed" />
+                                                    <TableCell className={classes.tableCell}>
+                                                        {state.consignment.dateClosed &&
+                                                            moment(
+                                                                state.consignment.dateClosed
+                                                            ).format('DD MMM YYYY')}
+                                                    </TableCell>
+                                                    <TablePromptItem text="Closed By" />
+                                                    <TableCell className={classes.tableCell}>
+                                                        {state.consignment.closedBy &&
+                                                            state.consignment.closedBy.fullName}
+                                                    </TableCell>
+                                                </TableRow>
+                                            </TableBody>
+                                        </Table>
+                                    </Grid>
+                                </>
                             )}
                             {currentTab === 2 && (
                                 <>
