@@ -325,7 +325,8 @@ function Consignment({
                     {currentTab !== 0 && (loading || !state.consignment) ? (
                         <Loading />
                     ) : (
-                        currentTab === 1 && (
+                        <>
+                            {currentTab === 1 && (
                             <>
                                 <Grid item xs={12}>
                                     <Table size="small" style={{ paddingTop: '30px' }}>
@@ -523,7 +524,20 @@ function Consignment({
                                     </Table>
                                 </Grid>
                             </>
-                        )
+                            )}
+                            {currentTab === 2 && (
+                                <>
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={6}>
+                                            <Typography variant="h6">Details</Typography>
+                                        </Grid>
+                                        <Grid item xs={6}>
+                                            <span>sdlfja;sdlfjksdaflkjs;klj</span>
+                                        </Grid>
+                                    </Grid>
+                                </>
+                            )}
+                        </>
                     )}
                 </>
                 <Grid item xs={12}>
