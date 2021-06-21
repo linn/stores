@@ -19,22 +19,16 @@ export default function consignmentReducer(state = initialState, action) {
                 ...state,
                 consignment: { ...state.consignment, [action.fieldName]: action.payload }
             };
-        case 'createPallet': {
-            const newPallets = state.consignment.pallets.slice();
-            const nextPalletNumber = state.consignment.pallets
-                ? state.consignment.pallets.length + 1
-                : 1;
-            newPallets.push({ palletNumber: nextPalletNumber });
-            return {
-                ...state,
-                consignment: { ...state.consignment, pallets: newPallets }
-            };
-        }
         case 'updatePallets': {
-            const newPallets = action.payload;
-            if (newPallets?.length > 0) {
-                newPallets[0].palletNumber = 1;
+            let newPallets = [];
+            if (action.payload?.length > 0) {
+                newPallets = action.payload.map(item => {
+                    return { ...item, consignmentId: state.consignment.consignmentId };
+                });
+            } else {
+                newPallets = [];
             }
+
             return {
                 ...state,
                 consignment: { ...state.consignment, pallets: newPallets }

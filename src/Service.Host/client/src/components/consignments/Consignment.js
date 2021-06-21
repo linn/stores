@@ -8,7 +8,6 @@ import {
     ErrorCard,
     InputField,
     DatePicker,
-    SingleEditTable,
     GroupEditTable,
     useGroupEditTable
 } from '@linn-it/linn-form-components-library';
@@ -81,7 +80,7 @@ function Consignment({
         setRowToBeDeleted: setPalletRowToBeDeleted,
         setRowToBeSaved: setPalletRowToBeSaved
     } = useGroupEditTable({
-        rows: state.consignment?.pallets
+        rows: item?.pallets
     });
 
     useEffect(() => {
@@ -288,36 +287,47 @@ function Consignment({
         clearConsignmentErrors();
     };
 
+    const checkRow = row => {
+        if (palletData.filter(pallet => pallet.palletNumber === row.palletNumber).length > 1) {
+            return false;
+        }
+
+        return true;
+    };
+
     const palletColumns = [
         {
             title: 'Pallet No',
             id: 'palletNumber',
-            type: 'text',
-            editable: false
+            type: 'number',
+            editable: true,
+            required: true
         },
         {
             title: 'Weight',
             id: 'weight',
-            type: 'text',
-            editable: true
+            type: 'number',
+            editable: true,
+            required: true
         },
         {
             title: 'Height',
             id: 'height',
-            type: 'text',
+            type: 'number',
             editable: true,
             required: true
         },
         {
             title: 'Width',
             id: 'width',
-            type: 'text',
-            editable: true
+            type: 'number',
+            editable: true,
+            required: true
         },
         {
             title: 'Depth',
             id: 'depth',
-            type: 'text',
+            type: 'number',
             editable: true,
             required: true
         }
@@ -602,19 +612,7 @@ function Consignment({
                                         <Grid item xs={1}>
                                             <Typography variant="subtitle2">Pallets</Typography>
                                         </Grid>
-                                        <Grid item xs={7}>
-                                            <SingleEditTable
-                                                columns={palletColumns}
-                                                rows={state.consignment.pallets}
-                                                saveRow={updatePallet}
-                                                createRow={addPallet}
-                                                editable={!viewing()}
-                                                allowNewRowCreation
-                                                closeEditingOnSave
-                                            />
-                                        </Grid>
-                                        <Grid item xs={4} />
-                                        <Grid item xs={12}>
+                                        <Grid item xs={8}>
                                             {palletData && (
                                                 <GroupEditTable
                                                     columns={palletColumns}
@@ -624,17 +622,18 @@ function Consignment({
                                                     removeRow={removePallet}
                                                     resetRow={resetRow}
                                                     handleEditClick={setPalletsEditing}
-                                                    tableValid={() => true}
-                                                    editable
+                                                    editable={!viewing()}
                                                     allowNewRowCreation
                                                     deleteRowPreEdit={false}
                                                     setRowToBeSaved={setPalletRowToBeSaved}
                                                     setRowToBeDeleted={setPalletRowToBeDeleted}
-                                                    closeRowOnClickAway
+                                                    closeRowOnClickAway={false}
                                                     removeRowOnDelete
+                                                    validateRow={checkRow}
                                                 />
                                             )}
                                         </Grid>
+                                        <Grid item xs={3} />
                                     </Grid>
                                 </>
                             )}
@@ -676,6 +675,7 @@ Consignment.propTypes = {
         carrier: PropTypes.string,
         terms: PropTypes.string,
         hubId: PropTypes.number,
+        pallets: PropTypes.arrayOf(PropTypes.shape({})),
         closedBy: PropTypes.shape({ id: PropTypes.number, fullName: PropTypes.string }),
         address: PropTypes.shape({ id: PropTypes.number, displayAddress: PropTypes.string })
     }),
