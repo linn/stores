@@ -53,6 +53,6 @@
 
         public DateTime? CustomsEntryCodeDate { get; set; }
 
-        public IEnumerable<ConsignmentPallet> Pallets { get; set; }
+        public IList<ConsignmentPallet> Pallets { get; set; }
     }
 }

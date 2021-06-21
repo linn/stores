@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Facade.Tests.ConsignmentFacadeServiceTests
 {
     using System;
+    using System.Collections.Generic;
 
     using FluentAssertions;
     using FluentAssertions.Extensions;
@@ -57,7 +58,18 @@
                                       Carrier = "Clumsy",
                                       Terms = "R2D2",
                                       ShippingMethod = "Throw",
-                                      DespatchLocationCode = "MoonBase Alpha"
+                                      DespatchLocationCode = "MoonBase Alpha",
+                                      Pallets = new List<ConsignmentPallet>
+                                                    {
+                                                        new ConsignmentPallet
+                                                            {
+                                                                PalletNumber = 1, Depth = 0, Height = 0, Weight = 0, Width = 0
+                                                            },
+                                                        new ConsignmentPallet
+                                                            {
+                                                                PalletNumber = 12, Depth = 0, Height = 0, Weight = 0, Width = 0
+                                                            },
+                                                    }
                                   };
 
             this.updateResource = new ConsignmentUpdateResource
@@ -69,7 +81,18 @@
                                           DespatchLocationCode = this.newDespatchLocationCode,
                                           CustomsEntryCodePrefix = this.newCustomsEntryCodePrefix,
                                           CustomsEntryCode = this.newCustomsEntryCode,
-                                          CustomsEntryCodeDate = this.newCustomsEntryCodeDate
+                                          CustomsEntryCodeDate = this.newCustomsEntryCodeDate,
+                                          Pallets = new List<ConsignmentPalletResource>
+                                                        {
+                                                            new ConsignmentPalletResource
+                                                                {
+                                                                    PalletNumber = 1, Depth = 11, Height = 21, Weight = 31, Width = 41
+                                                                },
+                                                            new ConsignmentPalletResource
+                                                                {
+                                                                    PalletNumber = 2, Depth = 1, Height = 2, Weight = 3, Width = 4
+                                                                }
+                                                        }
                                       };
                                           
             this.ConsignmentRepository.FindById(this.consignmentId).Returns(consignment);
@@ -91,6 +114,9 @@
             updatedConsignment.CustomsEntryCodePrefix.Should().Be(this.newCustomsEntryCodePrefix);
             updatedConsignment.CustomsEntryCode.Should().Be(this.newCustomsEntryCode);
             updatedConsignment.CustomsEntryCodeDate.Should().Be(DateTime.Parse(this.newCustomsEntryCodeDate));
+            updatedConsignment.Pallets.Should().Contain(p => p.PalletNumber == 1 && p.Depth == 11 && p.Height == 21 && p.Weight == 31 & p.Width == 41);
+            updatedConsignment.Pallets.Should().Contain(p => p.PalletNumber == 2 && p.Depth == 1 && p.Height == 2 && p.Weight == 3 & p.Width == 4);
+            updatedConsignment.Pallets.Should().NotContain(p => p.PalletNumber == 12);
         }
     }
 }

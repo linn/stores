@@ -55,6 +55,7 @@ function Consignment({
     clearConsignmentErrors
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
+    const [editablePallets, setEditablePallets] = useState([]);
 
     const [state, dispatch] = useReducer(consignmentReducer, {
         consignment: null,
@@ -67,6 +68,13 @@ function Consignment({
             payload: item
         });
 
+        setEditablePallets(
+            item?.pallets
+                ? utilities
+                      .sortEntityList(item?.pallets, 'palletNumber')
+                      ?.map(p => ({ ...p, id: p.palletNumber }))
+                : []
+        );
         clearConsignmentErrors();
     }, [item, clearConsignmentErrors]);
 
@@ -80,7 +88,7 @@ function Consignment({
         setRowToBeDeleted: setPalletRowToBeDeleted,
         setRowToBeSaved: setPalletRowToBeSaved
     } = useGroupEditTable({
-        rows: item?.pallets
+        rows: editablePallets
     });
 
     useEffect(() => {

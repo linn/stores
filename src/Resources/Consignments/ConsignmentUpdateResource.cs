@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Resources.Consignments
 {
+    using System.Collections.Generic;
+
     public class ConsignmentUpdateResource
     {
         public string Carrier { get; set; }
@@ -17,5 +19,7 @@
         public string CustomsEntryCode { get; set; }
 
         public string CustomsEntryCodeDate { get; set; }
+
+        public IEnumerable<ConsignmentPalletResource> Pallets { get; set; } = new List<ConsignmentPalletResource>();
     }
 }
