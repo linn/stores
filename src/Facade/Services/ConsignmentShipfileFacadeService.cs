@@ -1,11 +1,12 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
-    using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
+    using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
 
     public class ConsignmentShipfileFacadeService : IConsignmentShipfileFacadeService
@@ -31,17 +32,14 @@
             return new SuccessResult<IEnumerable<ConsignmentShipfile>>(this.repository.FindAll());
         }
 
-        public IResult<ConsignmentShipfile> SendEmails(
-            ConsignmentShipfileSendEmailsRequestResource toSend)
+        public IResult<IEnumerable<ConsignmentShipfile>> SendEmails(
+           ConsignmentShipfilesSendEmailsRequestResource toSend)
         {
             try
             {
                 var result = this.domainService.SendEmails(
-                    new ConsignmentShipfile
-                        {
-                            Id = toSend.Shipfile.Id, 
-                            ConsignmentId = toSend.Shipfile.ConsignmentId
-                        },
+                    toSend.Shipfiles.Select(
+                        s => new ConsignmentShipfile { Id = s.Id, ConsignmentId = s.ConsignmentId }),
                     toSend.Test,
                     toSend.TestEmailAddress);
 
@@ -50,11 +48,11 @@
                     this.transactionManager.Commit();
                 }
 
-                return new SuccessResult<ConsignmentShipfile>(result);
+                return new SuccessResult<IEnumerable<ConsignmentShipfile>>(result);
             }
-            catch (Exception e)
+            catch (PdfServiceException exception)
             {
-                return new ServerFailureResult<ConsignmentShipfile>(e.Message);
+                return new ServerFailureResult<IEnumerable<ConsignmentShipfile>>(exception.Message);
             }
         }
 

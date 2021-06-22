@@ -54,7 +54,10 @@ Parameters:
     Description: Email address test shipfiles are sent to
   shipfilesFromAddress:
     Type: String
-    Description: Email address shipfiles are sent from  
+    Description: Email address shipfiles are sent from
+  pdfServiceRoot:
+    Type: String
+    Description: Pdf Service API root url  
   environmentSuffix:
     Type: String
     AllowedValues:
@@ -167,6 +170,8 @@ Resources:
           Value: !Ref shipfilesTestAddress
         - Name: SHIPFILES_FROM_ADDRESS
           Value: !Ref shipfilesFromAddress
+        - Name: PDF_SERVICE_ROOT
+          Value: !Ref pdfServiceRoot
         - Name: SHIPFILE_TEMPLATE_PATH
           Value: !Ref shipfileTemplatePath
         - Name: awsRegion
