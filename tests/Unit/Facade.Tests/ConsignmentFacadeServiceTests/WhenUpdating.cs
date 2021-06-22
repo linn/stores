@@ -69,8 +69,19 @@
                                                             {
                                                                 PalletNumber = 12, Depth = 0, Height = 0, Weight = 0, Width = 0
                                                             },
+                                                    },
+                                      Items = new List<ConsignmentItem>
+                                                    {
+                                                        new ConsignmentItem
+                                                            {
+                                                                ItemNumber = 1, Depth = 0, Height = 0, Weight = 0, Width = 0
+                                                            },
+                                                        new ConsignmentItem
+                                                            {
+                                                                ItemNumber = 12, Depth = 0, Height = 0, Weight = 0, Width = 0
+                                                            },
                                                     }
-                                  };
+            };
 
             this.updateResource = new ConsignmentUpdateResource
                                       {
@@ -92,8 +103,19 @@
                                                                 {
                                                                     PalletNumber = 2, Depth = 1, Height = 2, Weight = 3, Width = 4
                                                                 }
+                                                        },
+                                          Items = new List<ConsignmentItemResource>
+                                                        {
+                                                            new ConsignmentItemResource
+                                                                {
+                                                                    ItemNumber = 1, Depth = 11, Height = 21, Weight = 31, Width = 41
+                                                                },
+                                                            new ConsignmentItemResource
+                                                                {
+                                                                    ItemNumber = 2, Depth = 1, Height = 2, Weight = 3, Width = 4
+                                                                }
                                                         }
-                                      };
+            };
                                           
             this.ConsignmentRepository.FindById(this.consignmentId).Returns(consignment);
 
@@ -117,6 +139,9 @@
             updatedConsignment.Pallets.Should().Contain(p => p.PalletNumber == 1 && p.Depth == 11 && p.Height == 21 && p.Weight == 31 & p.Width == 41);
             updatedConsignment.Pallets.Should().Contain(p => p.PalletNumber == 2 && p.Depth == 1 && p.Height == 2 && p.Weight == 3 & p.Width == 4);
             updatedConsignment.Pallets.Should().NotContain(p => p.PalletNumber == 12);
+            updatedConsignment.Items.Should().Contain(p => p.ItemNumber == 1 && p.Depth == 11 && p.Height == 21 && p.Weight == 31 & p.Width == 41);
+            updatedConsignment.Items.Should().Contain(p => p.ItemNumber == 2 && p.Depth == 1 && p.Height == 2 && p.Weight == 3 & p.Width == 4);
+            updatedConsignment.Items.Should().NotContain(p => p.ItemNumber == 12);
         }
     }
 }

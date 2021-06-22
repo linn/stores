@@ -23,7 +23,7 @@
 
         public IEnumerable<Invoice> Invoices { get; set; }
 
-        public IEnumerable<ConsignmentItem> Items { get; set; }
+        public IList<ConsignmentItem> Items { get; set; }
         
         public Address Address { get; set; }
 

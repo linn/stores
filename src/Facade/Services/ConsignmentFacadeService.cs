@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
 
@@ -34,21 +35,32 @@
                                               ? (DateTime?)null
                                               : DateTime.Parse(updateResource.CustomsEntryCodeDate);
 
-            foreach (var updatePallet in updateResource.Pallets)
+            this.UpdatePallets(entity, updateResource.Pallets.ToList());
+            this.UpdateItems(entity, updateResource.Items.ToList());
+        }
+
+        protected override Expression<Func<Consignment, bool>> SearchExpression(string searchTerm)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void UpdatePallets(Consignment entity, IList<ConsignmentPalletResource> updatePallets)
+        {
+            foreach (var updatePallet in updatePallets)
             {
-                var existingPallet =
-                    entity.Pallets.FirstOrDefault(a => a.PalletNumber == updatePallet.PalletNumber);
+                var existingPallet = entity.Pallets.FirstOrDefault(a => a.PalletNumber == updatePallet.PalletNumber);
                 if (existingPallet == null)
                 {
-                    entity.Pallets.Add(new ConsignmentPallet
-                                           {
-                                               ConsignmentId = entity.ConsignmentId,
-                                               PalletNumber = updatePallet.PalletNumber,
-                                               Weight = updatePallet.Weight,
-                                               Width = updatePallet.Width,
-                                               Height = updatePallet.Height,
-                                               Depth = updatePallet.Depth
-                                           });
+                    entity.Pallets.Add(
+                        new ConsignmentPallet
+                            {
+                                ConsignmentId = entity.ConsignmentId,
+                                PalletNumber = updatePallet.PalletNumber,
+                                Weight = updatePallet.Weight,
+                                Width = updatePallet.Width,
+                                Height = updatePallet.Height,
+                                Depth = updatePallet.Depth
+                            });
                 }
                 else
                 {
@@ -59,7 +71,7 @@
                 }
 
                 var removedPallets = entity.Pallets.Where(
-                    e => updateResource.Pallets.Select(a => a.PalletNumber).Contains(e.PalletNumber) == false).ToList();
+                    e => updatePallets.Select(a => a.PalletNumber).Contains(e.PalletNumber) == false).ToList();
                 foreach (var removedPallet in removedPallets)
                 {
                     entity.Pallets.RemoveAt(entity.Pallets.IndexOf(removedPallet));
@@ -67,9 +79,67 @@
             }
         }
 
-        protected override Expression<Func<Consignment, bool>> SearchExpression(string searchTerm)
+        private void UpdateItems(Consignment entity, IList<ConsignmentItemResource> updateItems)
         {
-            throw new NotImplementedException();
+            foreach (var itemResource in updateItems)
+            {
+                var existingItem = entity.Items.FirstOrDefault(a => a.ItemNumber == itemResource.ItemNumber);
+                if (existingItem == null)
+                {
+                    entity.Items.Add(
+                        new ConsignmentItem
+                            {
+                                ConsignmentId = entity.ConsignmentId,
+                                ItemNumber = itemResource.ItemNumber,
+                                ItemBaseWeight = itemResource.ItemBaseWeight,
+                                PalletNumber = itemResource.PalletNumber,
+                                ContainerNumber = itemResource.ContainerNumber,
+                                ContainerType = itemResource.ContainerType,
+                                ItemDescription = itemResource.ItemDescription,
+                                ItemType = itemResource.ItemType,
+                                MaybeHalfAPair = itemResource.MaybeHalfAPair,
+                                OrderLine = itemResource.OrderLine,
+                                OrderNumber = itemResource.OrderNumber,
+                                RsnNumber = itemResource.RsnNumber,
+                                Quantity = itemResource.Quantity,
+                                SerialNumber = itemResource.SerialNumber,
+                                Weight = itemResource.Weight,
+                                Width = itemResource.Width,
+                                Height = itemResource.Height,
+                                Depth = itemResource.Depth
+                            });
+                }
+                else
+                {
+                    existingItem.Weight = itemResource.Weight;
+                    existingItem.Height = itemResource.Height;
+                    existingItem.Width = itemResource.Width;
+                    existingItem.Depth = itemResource.Depth;
+                    existingItem.PalletNumber = itemResource.PalletNumber;
+                    existingItem.ContainerNumber = itemResource.ContainerNumber;
+                    existingItem.ContainerType = itemResource.ContainerType;
+                    existingItem.ItemDescription = itemResource.ItemDescription;
+                    existingItem.ItemType = itemResource.ItemType;
+                    existingItem.MaybeHalfAPair = itemResource.MaybeHalfAPair;
+                    existingItem.OrderLine = itemResource.OrderLine;
+                    existingItem.OrderNumber = itemResource.OrderNumber;
+                    existingItem.RsnNumber = itemResource.RsnNumber;
+                    existingItem.Quantity = itemResource.Quantity;
+                    existingItem.SerialNumber = itemResource.SerialNumber;
+                    existingItem.Weight = itemResource.Weight;
+                    existingItem.Width = itemResource.Width;
+                    existingItem.Height = itemResource.Height;
+                    existingItem.Depth = itemResource.Depth;
+                    existingItem.ItemBaseWeight = itemResource.ItemBaseWeight;
+                }
+
+                var removedItems = entity.Items.Where(
+                    e => updateItems.Select(a => a.ItemNumber).Contains(e.ItemNumber) == false).ToList();
+                foreach (var removedItem in removedItems)
+                {
+                    entity.Items.RemoveAt(entity.Items.IndexOf(removedItem));
+                }
+            }
         }
     }
 }

@@ -1699,7 +1699,6 @@
             entity.Property(i => i.OrderNumber).HasColumnName("ORDER_NUMBER");
             entity.Property(i => i.OrderLine).HasColumnName("ORDER_LINE");
             entity.HasOne(i => i.SalesOrder).WithMany(o => o.ConsignmentItems).HasForeignKey(i => i.OrderNumber);
-            // entity.HasOne(i => i.Consignment).WithMany(c => c.Items).HasForeignKey(i => i.ConsignmentId);
         }
 
         private void BuildContacts(ModelBuilder builder)
