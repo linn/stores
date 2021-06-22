@@ -42,9 +42,9 @@ export default function ConsignmentShipfiles({
     const columns = [
         { field: 'id', headerName: 'Id', width: 0, hide: true },
         { field: 'consignmentId', headerName: 'Consignment', width: 140 },
-        { field: 'dateClosed', headerName: 'DispatchedOn', width: 100 },
-        { field: 'customerName', headerName: 'Customer', width: 150 },
-        { field: 'invoiceNumbers', headerName: 'Invoices', width: 400 },
+        { field: 'dateClosed', headerName: 'DispatchedOn', width: 200 },
+        { field: 'customerName', headerName: 'Customer', width: 300 },
+        { field: 'invoiceNumbers', headerName: 'Invoices', width: 300 },
         { field: 'status', headerName: 'Status', width: 200 }
     ];
     const handleSelectRow = selected => {
