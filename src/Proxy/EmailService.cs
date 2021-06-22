@@ -53,7 +53,7 @@
 
             using (var stream = pdfAttachment)
             {
-                byte[] buffer = new byte[stream.Length];
+                var buffer = new byte[stream.Length];
                 stream.Seek(0, SeekOrigin.Begin);
                 stream.Flush();
                 stream.Read(buffer, 0, (int)stream.Length);

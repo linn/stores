@@ -89,7 +89,7 @@
                             null,
                             null,
                             ConfigurationManager.Configuration["SHIPFILES_FROM_ADDRESS"],
-                            "Linn Shipping",
+                            "Linn Orders",
                             model.Subject,
                             model.Body,
                             pdf.Result);
