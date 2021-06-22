@@ -1,9 +1,9 @@
-﻿namespace Linn.Stores.Domain.LinnApps.Consignments
+﻿namespace Linn.Stores.Resources.Consignments
 {
-    public class ConsignmentItem
+    public class ConsignmentItemResource
     {
         public int ConsignmentId { get; set; }
-        
+
         public int ItemNumber { get; set; }
 
         public string ItemType { get; set; }
@@ -37,9 +37,5 @@
         public string ItemDescription { get; set; }
 
         public int? RsnNumber { get; set; }
-
-        public SalesOrder SalesOrder { get; set; }
-
-        // public Consignment Consignment { get; set; }
     }
 }

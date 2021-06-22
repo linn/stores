@@ -22,6 +22,7 @@
         {
             return this.serviceDbContext.Consignments.Where(expression)
                 .Include(c => c.Pallets)
+                .Include(c => c.Items)
                 .Include(c => c.Invoices)
                 .Include(a => a.Address)
                 .ThenInclude(c => c.Country)
@@ -41,6 +42,7 @@
             return this.serviceDbContext.Consignments
                 .Where(c => c.ConsignmentId == key)
                 .Include(c => c.Pallets)
+                .Include(c => c.Items)
                 .Include(c => c.ClosedBy)
                 .Include(a => a.Address)
                 .ThenInclude(c => c.Country)

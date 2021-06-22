@@ -321,7 +321,7 @@ DetailsTab.propTypes = {
         address: PropTypes.shape({ id: PropTypes.number, displayAddress: PropTypes.string })
     }),
     updateField: PropTypes.func.isRequired,
-    viewMode: PropTypes.string.isRequired,
+    viewMode: PropTypes.bool.isRequired,
     editStatus: PropTypes.string.isRequired,
     hub: PropTypes.shape({ hubId: PropTypes.number, description: PropTypes.string }),
     hubs: PropTypes.arrayOf(

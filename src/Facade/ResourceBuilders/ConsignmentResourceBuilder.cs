@@ -44,6 +44,28 @@
                                                  Height = pallet.Height,
                                                  Width = pallet.Width
                                              }),
+                           Items = consignment.Items?.Select(
+                               item => new ConsignmentItemResource
+                                           {
+                                                ConsignmentId = item.ConsignmentId,
+                                                ItemNumber = item.ItemNumber,
+                                                ItemType = item.ItemType,
+                                                Quantity = item.Quantity,
+                                                SerialNumber = item.SerialNumber,
+                                                Weight = item.Weight,
+                                                Width = item.Width,
+                                                Height = item.Height,
+                                                Depth = item.Depth,
+                                                ContainerNumber = item.ContainerNumber,
+                                                PalletNumber = item.PalletNumber,
+                                                ContainerType = item.ContainerType,
+                                                MaybeHalfAPair = item.MaybeHalfAPair,
+                                                OrderNumber = item.OrderNumber,
+                                                OrderLine = item.OrderLine,
+                                                ItemBaseWeight = item.ItemBaseWeight,
+                                                ItemDescription = item.ItemDescription,
+                                                RsnNumber = item.RsnNumber
+                                           }),
                            Links = this.BuildLinks(consignment).ToArray()
                        };
         }

@@ -199,8 +199,6 @@
 
         public DbSet<Invoice> Invoices { get; set; }
 
-        public DbSet<ConsignmentItem> ConsignmentItems { get; set; }
-
         public DbSet<Contact> Contacts { get; set; }
 
         public DbSet<Person> Persons { get; set; }
@@ -1535,6 +1533,7 @@
             q.Property(c => c.CustomsEntryCodeDate).HasColumnName("CUSTOMS_ENTRY_CODE_DATE");
             q.HasOne(c => c.ClosedBy).WithMany(m => m.ConsignmentClosedBy).HasForeignKey(s => s.ClosedById);
             q.HasMany(c => c.Pallets).WithOne().HasForeignKey(cp => cp.ConsignmentId);
+            q.HasMany(c => c.Items).WithOne().HasForeignKey(ci => ci.ConsignmentId);
         }
 
         private void QuerySalesOrders(ModelBuilder builder)
@@ -1680,12 +1679,27 @@
         {   
             var entity = builder.Entity<ConsignmentItem>().ToTable("CONSIGNMENT_ITEMS");
             entity.ToTable("CONSIGNMENT_ITEMS");
-            entity.HasKey(i => new { i.ItemNumber, i.ConsignmentId });
-            entity.Property(i => i.ItemNumber).HasColumnName("ITEM_NO");
+            entity.HasKey(i => new { i.ConsignmentId, i.ItemNumber });
             entity.Property(i => i.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            entity.Property(i => i.ItemNumber).HasColumnName("ITEM_NO");
+            entity.Property(i => i.ItemType).HasColumnName("ITEM_TYPE").HasMaxLength(1);
+            entity.Property(i => i.SerialNumber).HasColumnName("SERIAL_NUMBER");
+            entity.Property(i => i.Quantity).HasColumnName("QTY");
+            entity.Property(i => i.MaybeHalfAPair).HasColumnName("MAY_BE_HALF_A_PAIR").HasMaxLength(1);
+            entity.Property(i => i.Weight).HasColumnName("WEIGHT");
+            entity.Property(i => i.Height).HasColumnName("HEIGHT");
+            entity.Property(i => i.Depth).HasColumnName("DEPTH");
+            entity.Property(i => i.Width).HasColumnName("WIDTH");
+            entity.Property(i => i.ContainerType).HasColumnName("CONTAINER_TYPE").HasMaxLength(8);
+            entity.Property(i => i.ContainerNumber).HasColumnName("CONTAINER_NO");
+            entity.Property(i => i.PalletNumber).HasColumnName("PALLET_NO");
+            entity.Property(i => i.ItemBaseWeight).HasColumnName("ITEM_BASE_WEIGHT");
+            entity.Property(i => i.ItemDescription).HasColumnName("ITEM_DESCRIPTION").HasMaxLength(50);
+            entity.Property(i => i.RsnNumber).HasColumnName("RSN_NUMBER");
             entity.Property(i => i.OrderNumber).HasColumnName("ORDER_NUMBER");
+            entity.Property(i => i.OrderLine).HasColumnName("ORDER_LINE");
             entity.HasOne(i => i.SalesOrder).WithMany(o => o.ConsignmentItems).HasForeignKey(i => i.OrderNumber);
-            entity.HasOne(i => i.Consignment).WithMany(c => c.Items).HasForeignKey(i => i.ConsignmentId);
+            // entity.HasOne(i => i.Consignment).WithMany(c => c.Items).HasForeignKey(i => i.ConsignmentId);
         }
 
         private void BuildContacts(ModelBuilder builder)
