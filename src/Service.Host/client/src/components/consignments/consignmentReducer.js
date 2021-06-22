@@ -1,5 +1,18 @@
 const initialState = {};
 
+const getItemType = itemTypeDisplay => {
+    switch (itemTypeDisplay) {
+        case 'Loose Item':
+            return 'I';
+        case 'Sealed Box':
+            return 'S';
+        case 'Open Carton':
+            return 'C';
+        default:
+            return itemTypeDisplay;
+    }
+};
+
 export default function consignmentReducer(state = initialState, action) {
     switch (action.type) {
         case 'initialise': {
@@ -32,6 +45,25 @@ export default function consignmentReducer(state = initialState, action) {
             return {
                 ...state,
                 consignment: { ...state.consignment, pallets: newPallets }
+            };
+        }
+        case 'updateItems': {
+            let newItems = [];
+            if (action.payload?.length > 0) {
+                newItems = action.payload.map(item => {
+                    return {
+                        ...item,
+                        consignmentId: state.consignment.consignmentId,
+                        itemType: getItemType(item.itemTypeDisplay)
+                    };
+                });
+            } else {
+                newItems = [];
+            }
+
+            return {
+                ...state,
+                consignment: { ...state.consignment, items: newItems }
             };
         }
         default:

@@ -50,11 +50,26 @@ function Consignment({
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
     const [editablePallets, setEditablePallets] = useState([]);
+    const [editableItems, setEditableItems] = useState([]);
+    const [saveDisabled, setSaveDisabled] = useState(false);
 
     const [state, dispatch] = useReducer(consignmentReducer, {
         consignment: null,
         originalConsignment: null
     });
+
+    const getItemTypeDisplay = itemType => {
+        switch (itemType) {
+            case 'I':
+                return 'Loose Item';
+            case 'S':
+                return 'Sealed Box';
+            case 'C':
+                return 'Open Carton';
+            default:
+                return itemType;
+        }
+    };
 
     useEffect(() => {
         dispatch({
@@ -69,6 +84,17 @@ function Consignment({
                       ?.map(p => ({ ...p, id: p.palletNumber }))
                 : []
         );
+
+        setEditableItems(
+            item?.items
+                ? utilities.sortEntityList(item?.items, 'itemNumber')?.map(p => ({
+                      ...p,
+                      id: p.itemNumber,
+                      itemTypeDisplay: getItemTypeDisplay(p.itemType)
+                  }))
+                : []
+        );
+
         clearConsignmentErrors();
     }, [item, clearConsignmentErrors]);
 
@@ -86,11 +112,16 @@ function Consignment({
     });
 
     useEffect(() => {
-        if (palletData && !palletData.some(a => a.editing)) {
-            dispatch({
-                type: 'updatePallets',
-                payload: palletData
-            });
+        if (palletData) {
+            if (!palletData.some(a => a.editing)) {
+                dispatch({
+                    type: 'updatePallets',
+                    payload: palletData
+                });
+                setSaveDisabled(false);
+            } else {
+                setSaveDisabled(true);
+            }
         }
     }, [palletData]);
 
@@ -181,6 +212,24 @@ function Consignment({
             payload: null
         });
 
+        setEditablePallets(
+            item?.pallets
+                ? utilities
+                      .sortEntityList(item?.pallets, 'palletNumber')
+                      ?.map(p => ({ ...p, id: p.palletNumber }))
+                : []
+        );
+
+        setEditableItems(
+            item?.items
+                ? utilities.sortEntityList(item?.items, 'itemNumber')?.map(p => ({
+                      ...p,
+                      id: p.itemNumber,
+                      itemTypeDisplay: getItemTypeDisplay(p.itemType)
+                  }))
+                : []
+        );
+
         setEditStatus('view');
         clearConsignmentErrors();
     };
@@ -268,6 +317,7 @@ function Consignment({
                             {currentTab === 2 && (
                                 <ItemsTab
                                     palletData={palletData}
+                                    editableItems={editableItems}
                                     addPallet={addPallet}
                                     updatePallet={updatePallet}
                                     resetRow={resetRow}
@@ -276,6 +326,8 @@ function Consignment({
                                     setPalletRowToBeDeleted={setPalletRowToBeDeleted}
                                     setPalletRowToBeSaved={setPalletRowToBeSaved}
                                     viewing={viewing()}
+                                    dispatch={dispatch}
+                                    setSaveDisabled={setSaveDisabled}
                                 />
                             )}
                         </>
@@ -297,6 +349,7 @@ function Consignment({
                             saveClick={doSave}
                             backClick={() => {}}
                             cancelClick={doCancel}
+                            saveDisabled={saveDisabled}
                         />
                     )}
                 </Grid>
@@ -317,6 +370,7 @@ Consignment.propTypes = {
         terms: PropTypes.string,
         hubId: PropTypes.number,
         pallets: PropTypes.arrayOf(PropTypes.shape({})),
+        items: PropTypes.arrayOf(PropTypes.shape({})),
         closedBy: PropTypes.shape({ id: PropTypes.number, fullName: PropTypes.string }),
         address: PropTypes.shape({ id: PropTypes.number, displayAddress: PropTypes.string })
     }),
