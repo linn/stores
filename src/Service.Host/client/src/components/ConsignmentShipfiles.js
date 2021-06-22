@@ -77,6 +77,13 @@ export default function ConsignmentShipfiles({
                                 variant="contained"
                                 onClick={() => {
                                     clearErrors();
+                                    selectedRows.forEach(r => {
+                                        setRows(shipfiles =>
+                                            shipfiles.map(s =>
+                                                s.id === r.id ? { ...r, status: 'Processing' } : s
+                                            )
+                                        );
+                                    });
                                     sendEmails({
                                         shipfiles: selectedRows
                                     });
@@ -128,6 +135,13 @@ export default function ConsignmentShipfiles({
                                 disabled={!testEmailAddress}
                                 onClick={() => {
                                     clearErrors();
+                                    selectedRows.forEach(r => {
+                                        setRows(shipfiles =>
+                                            shipfiles.map(s =>
+                                                s.id === r.id ? { ...r, status: 'Processing' } : s
+                                            )
+                                        );
+                                    });
                                     sendEmails({
                                         shipfiles: selectedRows,
                                         test: true,
