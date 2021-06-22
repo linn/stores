@@ -106,7 +106,14 @@
                     }
                 }
 
-                withDetails.Add(data);
+                withDetails.Add(new ConsignmentShipfile
+                                    {
+                                        ConsignmentId = data.ConsignmentId,
+                                        Id = data.Id,
+                                        Consignment = data.Consignment,
+                                        Message = data.Message,
+                                        ShipfileSent = data.ShipfileSent
+                                    });
             }
 
             return withDetails;
