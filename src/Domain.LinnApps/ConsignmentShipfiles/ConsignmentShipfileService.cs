@@ -50,57 +50,63 @@
             this.packingListService = packingListService;
         }
 
-        public ConsignmentShipfile SendEmails(
-           ConsignmentShipfile toSend, 
+        public IEnumerable<ConsignmentShipfile> SendEmails(
+            IEnumerable<ConsignmentShipfile> toSend,
             bool test = false,
             string testEmailAddress = null)
         {
-            var data = this.shipfileRepository.FindById(toSend.Id);
-            var withDetails = data;
-
-            if (data.ShipfileSent == "Y")
+            var withDetails = new List<ConsignmentShipfile>();
+            foreach (var shipfile in toSend)
             {
-                withDetails.Message = ShipfileStatusMessages.EmailAlreadySent;
-                return withDetails;
-            }
+                var data = this.shipfileRepository.FindById(shipfile.Id);
 
-            var models = this.BuildEmailModels(data);
-
-            // A message implies there is some problem with generating the email
-            if (data.Message == null)
-            {
-                // potentially an email to send to each outlet in this consignment?
-                foreach (var model in models)
+                if (data.ShipfileSent == "Y")
                 {
-                    model.Subject = test ? model.ToEmailAddress : "Shipping Details";
-
-                    var render = this.templateEngine.Render(
-                        model.PdfAttachment,
-                        ConfigurationManager.Configuration["SHIPFILE_TEMPLATE_PATH"]);
-
-                    var pdf = this.pdfService.ConvertHtmlToPdf(render.Result, landscape: true);
-                    
-                    this.emailService.SendEmail(
-                        test ? testEmailAddress : model.ToEmailAddress,
-                        model.ToCustomerName,
-                        null,
-                        null,
-                        ConfigurationManager.Configuration["SHIPFILES_FROM_ADDRESS"],
-                        "Linn Shipping",
-                        model.Subject,
-                        model.Body,
-                        pdf.Result);
+                    data.Message = ShipfileStatusMessages.EmailAlreadySent;
+                    withDetails.Add(data);
+                    continue;
                 }
 
-                if (test)
+                var models = this.BuildEmailModels(data);
+
+                // A message implies there is some problem with generating the email
+                if (data.Message == null)
                 {
-                    withDetails.Message = ShipfileStatusMessages.TestEmailSent;
+                    // potentially an email to send to each outlet in this consignment?
+                    foreach (var model in models)
+                    {
+                        model.Subject = test ? model.ToEmailAddress : "Shipping Details";
+
+                        var render = this.templateEngine.Render(
+                            model.PdfAttachment,
+                            ConfigurationManager.Configuration["SHIPFILE_TEMPLATE_PATH"]);
+
+                        var pdf = this.pdfService.ConvertHtmlToPdf(render.Result, landscape: true);
+
+                        this.emailService.SendEmail(
+                            test ? testEmailAddress : model.ToEmailAddress,
+                            model.ToCustomerName,
+                            null,
+                            null,
+                            ConfigurationManager.Configuration["SHIPFILES_FROM_ADDRESS"],
+                            "Linn Shipping",
+                            model.Subject,
+                            model.Body,
+                            pdf.Result);
+                    }
+
+                    if (test)
+                    {
+                        data.Message = ShipfileStatusMessages.TestEmailSent;
+                    }
+                    else
+                    {
+                        data.Message = ShipfileStatusMessages.EmailSent;
+                        data.ShipfileSent = "Y";
+                    }
                 }
-                else
-                {
-                    withDetails.Message = ShipfileStatusMessages.EmailSent;
-                    withDetails.ShipfileSent = "Y";
-                }
+
+                withDetails.Add(data);
             }
 
             return withDetails;
@@ -109,7 +115,7 @@
         private IEnumerable<ConsignmentShipfileEmailModel> BuildEmailModels(ConsignmentShipfile shipfile)
         {
             var toSend = new List<ConsignmentShipfileEmailModel>();
-            
+
             var account = shipfile.Consignment.SalesAccount;
 
             if (account.OrgId == null)
@@ -122,20 +128,20 @@
                 else
                 {
                     var contact = account.ContactDetails;
-                
+
                     var pdfData = this.dataService.GetPdfModelData(shipfile.ConsignmentId, (int)contact.AddressId);
 
                     pdfData.PackingList = this.packingListService.BuildPackingList(pdfData.PackingList).ToArray();
 
                     var body = this.BuildEmailBody(pdfData);
 
-                        toSend.Add(new ConsignmentShipfileEmailModel
-                                       {
-                                           PdfAttachment = pdfData,
-                                           ToCustomerName = contact.EmailAddress,
-                                           ToEmailAddress = contact.EmailAddress,
-                                           Body = body
-                                       });
+                    toSend.Add(new ConsignmentShipfileEmailModel
+                    {
+                        PdfAttachment = pdfData,
+                        ToCustomerName = contact.EmailAddress,
+                        ToEmailAddress = contact.EmailAddress,
+                        Body = body
+                    });
                 }
             }
             else
@@ -162,7 +168,7 @@
                     {
                         var outlet =
                            accountOutlets.First();
-                        
+
                         // and it is the same address as the account
                         if (outlet.OutletAddressId == account.ContactDetails.AddressId && account.ContactDetails.AddressId != null)
                         {
@@ -180,12 +186,12 @@
                             var body = this.BuildEmailBody(pdfData);
 
                             toSend.Add(new ConsignmentShipfileEmailModel
-                                           {
-                                               PdfAttachment = pdfData,
-                                               ToCustomerName = account.ContactDetails.EmailAddress,
-                                               ToEmailAddress = account.ContactDetails.EmailAddress,
-                                               Body = body
-                                           });
+                            {
+                                PdfAttachment = pdfData,
+                                ToCustomerName = account.ContactDetails.EmailAddress,
+                                ToEmailAddress = account.ContactDetails.EmailAddress,
+                                Body = body
+                            });
                         }
                     }
                     else
@@ -198,19 +204,19 @@
                 {
                     toSend.AddRange(
                         outlets.Select(o =>
+                        {
+                            var pdfData = this.dataService.GetPdfModelData(
+                                shipfile.ConsignmentId,
+                                o.OutletAddressId);
+                            pdfData.PackingList = this.packingListService.BuildPackingList(pdfData.PackingList).ToArray();
+                            return new ConsignmentShipfileEmailModel
                             {
-                                var pdfData = this.dataService.GetPdfModelData(
-                                    shipfile.ConsignmentId,
-                                    o.OutletAddressId);
-                                pdfData.PackingList = this.packingListService.BuildPackingList(pdfData.PackingList).ToArray();
-                                return new ConsignmentShipfileEmailModel
-                                           {
-                                               PdfAttachment = pdfData,
-                                               ToEmailAddress = o.OrderContact.EmailAddress,
-                                               ToCustomerName = o.OrderContact.EmailAddress,
-                                               Body = this.BuildEmailBody(pdfData)
-                                           };
-                            })
+                                PdfAttachment = pdfData,
+                                ToEmailAddress = o.OrderContact.EmailAddress,
+                                ToCustomerName = o.OrderContact.EmailAddress,
+                                Body = this.BuildEmailBody(pdfData)
+                            };
+                        })
                         .GroupBy(x => x.ToEmailAddress)
                         .Select(x => x.FirstOrDefault()));
                 }
@@ -240,7 +246,7 @@
 
             if (code == "E")
             {
-                 body += "The shipment should arrive within four working days.";
+                body += "The shipment should arrive within four working days.";
             }
 
             if (code == "U")

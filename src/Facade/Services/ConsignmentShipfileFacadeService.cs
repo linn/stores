@@ -1,7 +1,7 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
-    using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
@@ -31,31 +31,25 @@
             return new SuccessResult<IEnumerable<ConsignmentShipfile>>(this.repository.FindAll());
         }
 
-        public IResult<ConsignmentShipfile> SendEmails(
-            ConsignmentShipfileSendEmailsRequestResource toSend)
+        public IResult<IEnumerable<ConsignmentShipfile>> SendEmails(
+           ConsignmentShipfilesSendEmailsRequestResource toSend)
         {
-            try
-            {
-                var result = this.domainService.SendEmails(
-                    new ConsignmentShipfile
-                        {
-                            Id = toSend.Shipfile.Id, 
-                            ConsignmentId = toSend.Shipfile.ConsignmentId
-                        },
-                    toSend.Test,
-                    toSend.TestEmailAddress);
+            var result = this.domainService.SendEmails(
+                toSend.Shipfiles.Select(
+                    s => new ConsignmentShipfile
+                    {
+                        Id = s.Id,
+                        ConsignmentId = s.ConsignmentId
+                    }),
+                toSend.Test,
+                toSend.TestEmailAddress);
 
-                if (!toSend.Test)
-                {
-                    this.transactionManager.Commit();
-                }
-
-                return new SuccessResult<ConsignmentShipfile>(result);
-            }
-            catch (Exception e)
+            if (!toSend.Test)
             {
-                return new ServerFailureResult<ConsignmentShipfile>(e.Message);
+                this.transactionManager.Commit();
             }
+
+            return new SuccessResult<IEnumerable<ConsignmentShipfile>>(result);
         }
 
         public IResult<ConsignmentShipfile> DeleteShipfile(int id)
