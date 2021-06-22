@@ -4,31 +4,31 @@ import { GroupEditTable, useGroupEditTable } from '@linn-it/linn-form-components
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
-function ItemsTab({
-    palletData,
-    addPallet,
-    updatePallet,
-    resetRow,
-    removePallet,
-    setPalletsEditing,
-    setPalletRowToBeDeleted,
-    setPalletRowToBeSaved,
-    viewing,
-    editableItems,
-    dispatch,
-    setSaveDisabled
-}) {
+function ItemsTab({ viewing, editableItems, editablePallets, dispatch, setSaveDisabled }) {
     const {
         data: itemsData,
         addRow: addItem,
         updateRow: updateItem,
-        resetItemRow,
+        resetRow: resetItemRow,
         removeRow: removeItem,
         setEditing: setItemsEditing,
         setRowToBeDeleted: setItemRowToBeDeleted,
         setRowToBeSaved: setItemRowToBeSaved
     } = useGroupEditTable({
         rows: editableItems
+    });
+
+    const {
+        data: palletData,
+        addRow: addPallet,
+        updateRow: updatePallet,
+        resetRow,
+        removeRow: removePallet,
+        setEditing: setPalletsEditing,
+        setRowToBeDeleted: setPalletRowToBeDeleted,
+        setRowToBeSaved: setPalletRowToBeSaved
+    } = useGroupEditTable({
+        rows: editablePallets
     });
 
     const checkRow = row => {
@@ -52,6 +52,20 @@ function ItemsTab({
             }
         }
     }, [itemsData, dispatch, setSaveDisabled]);
+
+    useEffect(() => {
+        if (palletData) {
+            if (!palletData.some(a => a.editing)) {
+                dispatch({
+                    type: 'updatePallets',
+                    payload: palletData
+                });
+                setSaveDisabled(false);
+            } else {
+                setSaveDisabled(true);
+            }
+        }
+    }, [palletData, dispatch, setSaveDisabled]);
 
     const palletColumns = [
         {
@@ -250,18 +264,11 @@ function ItemsTab({
 }
 
 ItemsTab.propTypes = {
-    palletData: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    addPallet: PropTypes.func.isRequired,
-    updatePallet: PropTypes.func.isRequired,
-    resetRow: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired,
     setSaveDisabled: PropTypes.func.isRequired,
-    removePallet: PropTypes.func.isRequired,
-    setPalletsEditing: PropTypes.func.isRequired,
-    setPalletRowToBeDeleted: PropTypes.func.isRequired,
-    setPalletRowToBeSaved: PropTypes.func.isRequired,
     viewing: PropTypes.bool.isRequired,
-    editableItems: PropTypes.arrayOf(PropTypes.shape({})).isRequired
+    editableItems: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    editablePallets: PropTypes.arrayOf(PropTypes.shape({})).isRequired
 };
 
 export default ItemsTab;

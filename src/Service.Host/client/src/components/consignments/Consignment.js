@@ -5,8 +5,7 @@ import {
     Dropdown,
     SaveBackCancelButtons,
     utilities,
-    ErrorCard,
-    useGroupEditTable
+    ErrorCard
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
@@ -97,33 +96,6 @@ function Consignment({
 
         clearConsignmentErrors();
     }, [item, clearConsignmentErrors]);
-
-    const {
-        data: palletData,
-        addRow: addPallet,
-        updateRow: updatePallet,
-        resetRow,
-        removeRow: removePallet,
-        setEditing: setPalletsEditing,
-        setRowToBeDeleted: setPalletRowToBeDeleted,
-        setRowToBeSaved: setPalletRowToBeSaved
-    } = useGroupEditTable({
-        rows: editablePallets
-    });
-
-    useEffect(() => {
-        if (palletData) {
-            if (!palletData.some(a => a.editing)) {
-                dispatch({
-                    type: 'updatePallets',
-                    payload: palletData
-                });
-                setSaveDisabled(false);
-            } else {
-                setSaveDisabled(true);
-            }
-        }
-    }, [palletData]);
 
     useEffect(() => {
         if (item) {
@@ -316,15 +288,8 @@ function Consignment({
                             )}
                             {currentTab === 2 && (
                                 <ItemsTab
-                                    palletData={palletData}
                                     editableItems={editableItems}
-                                    addPallet={addPallet}
-                                    updatePallet={updatePallet}
-                                    resetRow={resetRow}
-                                    removePallet={removePallet}
-                                    setPalletsEditing={setPalletsEditing}
-                                    setPalletRowToBeDeleted={setPalletRowToBeDeleted}
-                                    setPalletRowToBeSaved={setPalletRowToBeSaved}
+                                    editablePallets={editablePallets}
                                     viewing={viewing()}
                                     dispatch={dispatch}
                                     setSaveDisabled={setSaveDisabled}
