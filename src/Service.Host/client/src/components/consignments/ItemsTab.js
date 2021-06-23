@@ -148,7 +148,8 @@ function ItemsTab({ viewing, editableItems, editablePallets, dispatch, setSaveDi
             id: 'itemDescription',
             type: 'text',
             editable: true,
-            required: true
+            required: true,
+            textFieldRows: 4
         },
         {
             title: 'Weight',
