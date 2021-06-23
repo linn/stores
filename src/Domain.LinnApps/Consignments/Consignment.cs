@@ -23,7 +23,7 @@
 
         public IEnumerable<Invoice> Invoices { get; set; }
 
-        public IEnumerable<ConsignmentItem> Items { get; set; }
+        public IList<ConsignmentItem> Items { get; set; }
         
         public Address Address { get; set; }
 
@@ -46,5 +46,13 @@
         public string Warehouse { get; set; }
 
         public int? HubId { get; set; }
+
+        public string CustomsEntryCodePrefix { get; set; }
+
+        public string CustomsEntryCode { get; set; }
+
+        public DateTime? CustomsEntryCodeDate { get; set; }
+
+        public IList<ConsignmentPallet> Pallets { get; set; }
     }
 }

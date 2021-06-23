@@ -19,14 +19,10 @@
                        {
                            ConsignmentId = consignment.ConsignmentId,
                            SalesAccountId = consignment.SalesAccountId,
-                           Address = consignment.Address == null
-                                         ? null
-                                         : addressBuilder.Build(consignment.Address),
+                           Address = consignment.Address == null ? null : addressBuilder.Build(consignment.Address),
                            Status = consignment.Status,
                            Carrier = consignment.Carrier,
-                           ClosedBy = consignment.ClosedBy == null 
-                                          ? null
-                                          : employeeBuilder.Build(consignment.ClosedBy),
+                           ClosedBy = consignment.ClosedBy == null ? null : employeeBuilder.Build(consignment.ClosedBy),
                            CustomerName = consignment.CustomerName,
                            DateOpened = consignment.DateOpened.ToString("o"),
                            DateClosed = consignment.DateClosed?.ToString("o"),
@@ -35,6 +31,41 @@
                            ShippingMethod = consignment.ShippingMethod,
                            Terms = consignment.Terms,
                            Warehouse = consignment.Warehouse,
+                           CustomsEntryCodePrefix = consignment.CustomsEntryCodePrefix,
+                           CustomsEntryCode = consignment.CustomsEntryCode,
+                           CustomsEntryCodeDate = consignment.CustomsEntryCodeDate?.ToString("o"),
+                           Pallets = consignment.Pallets?.Select(
+                               pallet => new ConsignmentPalletResource
+                                             {
+                                                 ConsignmentId = pallet.ConsignmentId,
+                                                 PalletNumber = pallet.PalletNumber,
+                                                 Weight = pallet.Weight,
+                                                 Depth = pallet.Depth,
+                                                 Height = pallet.Height,
+                                                 Width = pallet.Width
+                                             }),
+                           Items = consignment.Items?.Select(
+                               item => new ConsignmentItemResource
+                                           {
+                                                ConsignmentId = item.ConsignmentId,
+                                                ItemNumber = item.ItemNumber,
+                                                ItemType = item.ItemType,
+                                                Quantity = item.Quantity,
+                                                SerialNumber = item.SerialNumber,
+                                                Weight = item.Weight,
+                                                Width = item.Width,
+                                                Height = item.Height,
+                                                Depth = item.Depth,
+                                                ContainerNumber = item.ContainerNumber,
+                                                PalletNumber = item.PalletNumber,
+                                                ContainerType = item.ContainerType,
+                                                MaybeHalfAPair = item.MaybeHalfAPair,
+                                                OrderNumber = item.OrderNumber,
+                                                OrderLine = item.OrderLine,
+                                                ItemBaseWeight = item.ItemBaseWeight,
+                                                ItemDescription = item.ItemDescription,
+                                                RsnNumber = item.RsnNumber
+                                           }),
                            Links = this.BuildLinks(consignment).ToArray()
                        };
         }

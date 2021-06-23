@@ -11,16 +11,13 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
 import Tooltip from '@material-ui/core/Tooltip';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
 import Typography from '@material-ui/core/Typography';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import moment from 'moment';
+import { makeStyles } from '@material-ui/core/styles';
 import Page from '../../containers/Page';
 import consignmentReducer from './consignmentReducer';
+import DetailsTab from './DetailsTab';
+import ItemsTab from './ItemsTab';
 
 function Consignment({
     item,
@@ -51,17 +48,51 @@ function Consignment({
     clearConsignmentErrors
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
+    const [editablePallets, setEditablePallets] = useState([]);
+    const [editableItems, setEditableItems] = useState([]);
+    const [saveDisabled, setSaveDisabled] = useState(false);
 
     const [state, dispatch] = useReducer(consignmentReducer, {
         consignment: null,
         originalConsignment: null
     });
 
+    const getItemTypeDisplay = itemType => {
+        switch (itemType) {
+            case 'I':
+                return 'Loose Item';
+            case 'S':
+                return 'Sealed Box';
+            case 'C':
+                return 'Open Carton';
+            default:
+                return itemType;
+        }
+    };
+
     useEffect(() => {
         dispatch({
             type: 'initialise',
             payload: item
         });
+
+        setEditablePallets(
+            item?.pallets
+                ? utilities
+                      .sortEntityList(item?.pallets, 'palletNumber')
+                      ?.map(p => ({ ...p, id: p.palletNumber }))
+                : []
+        );
+
+        setEditableItems(
+            item?.items
+                ? utilities.sortEntityList(item?.items, 'itemNumber')?.map(p => ({
+                      ...p,
+                      id: p.itemNumber,
+                      itemTypeDisplay: getItemTypeDisplay(p.itemType)
+                  }))
+                : []
+        );
 
         clearConsignmentErrors();
     }, [item, clearConsignmentErrors]);
@@ -96,73 +127,20 @@ function Consignment({
     }));
     const classes = useStyles();
 
-    const TablePromptItem = ({ text, width }) => (
-        <TableCell
-            className={classes.tableCell}
-            style={{ width, borderBottom: 0, whiteSpace: 'pre-line', verticalAlign: 'top' }}
-        >
-            {text}
-        </TableCell>
-    );
-
-    TablePromptItem.propTypes = {
-        text: PropTypes.string,
-        width: PropTypes.number
-    };
-
-    TablePromptItem.defaultProps = {
-        text: null,
-        width: 150
-    };
-
-    const DisplayEditItem = ({
-        currentEditStatus,
-        displayText,
-        displayDescription,
-        editComponent,
-        allowCreate
-    }) => {
-        if (currentEditStatus === 'view' || (currentEditStatus === 'create' && !allowCreate)) {
-            if (displayText) {
-                return `${displayText} ${displayDescription ? ` - ${displayDescription}` : ''} `;
-            }
-
-            return '';
-        }
-
-        return editComponent;
-    };
-
-    DisplayEditItem.propTypes = {
-        currentEditStatus: PropTypes.string,
-        displayText: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        displayDescription: PropTypes.string,
-        editComponent: PropTypes.shape(),
-        allowCreate: PropTypes.bool
-    };
-
-    DisplayEditItem.defaultProps = {
-        currentEditStatus: 'view',
-        displayText: null,
-        displayDescription: null,
-        editComponent: <></>,
-        allowCreate: true
-    };
-
-    const TableItem = withStyles(() => ({
-        body: {
-            borderBottom: 0,
-            whiteSpace: 'pre-line',
-            verticalAlign: 'top'
-        }
-    }))(TableCell);
-
     const viewing = () => {
         return editStatus === 'view';
     };
 
     const editing = () => {
         return editStatus === 'edit';
+    };
+
+    const viewMode = (createOnly = false) => {
+        if (viewing() || (editing() && createOnly)) {
+            return true;
+        }
+
+        return false;
     };
 
     const updateField = (fieldName, newValue) => {
@@ -180,35 +158,6 @@ function Consignment({
         }));
     };
 
-    const hubOptions = () => {
-        return hubs?.map(h => ({
-            id: h.hubId,
-            displayText: `${h.hubId} - ${h.description}`
-        }));
-    };
-
-    const carrierOptions = () => {
-        return carriers?.map(c => ({
-            id: c.carrierCode,
-            displayText: `${c.carrierCode} - ${c.name}`
-        }));
-    };
-
-    const shippingTermOptions = () => {
-        return shippingTerms?.map(h => ({
-            id: h.code,
-            displayText: `${h.code} - ${h.description}`
-        }));
-    };
-
-    const freightOptions = () => {
-        return [
-            { id: 'S', displayText: 'Surface' },
-            { id: 'A', displayText: 'Air' },
-            { id: 'W', displayText: 'Sea' }
-        ];
-    };
-
     const handleSelectConsignment = (_property, newValue) => {
         getConsignment(newValue);
         setcurrentTab(1);
@@ -216,19 +165,6 @@ function Consignment({
 
     const handleTabChange = (_event, newValue) => {
         setcurrentTab(newValue);
-    };
-
-    const showShippingMethod = shippingMethod => {
-        switch (shippingMethod) {
-            case 'S':
-                return 'Surface';
-            case 'A':
-                return 'Air';
-            case 'W':
-                return 'Sea';
-            default:
-                return 'Other';
-        }
     };
 
     const startEdit = () => {
@@ -247,6 +183,24 @@ function Consignment({
             type: 'reset',
             payload: null
         });
+
+        setEditablePallets(
+            item?.pallets
+                ? utilities
+                      .sortEntityList(item?.pallets, 'palletNumber')
+                      ?.map(p => ({ ...p, id: p.palletNumber }))
+                : []
+        );
+
+        setEditableItems(
+            item?.items
+                ? utilities.sortEntityList(item?.items, 'itemNumber')?.map(p => ({
+                      ...p,
+                      id: p.itemNumber,
+                      itemTypeDisplay: getItemTypeDisplay(p.itemType)
+                  }))
+                : []
+        );
 
         setEditStatus('view');
         clearConsignmentErrors();
@@ -267,18 +221,20 @@ function Consignment({
                 </Grid>
                 <Grid item xs={3}>
                     <Tooltip title="Close Consignment - coming soon">
-                        <Button
-                            variant="outlined"
-                            className={classes.pullRight}
-                            onClick={closeConsignment}
-                            disabled={
-                                !viewing() ||
-                                !state.consignment ||
-                                !state.consignment.status === 'L'
-                            }
-                        >
-                            Close Consignment
-                        </Button>
+                        <span>
+                            <Button
+                                variant="outlined"
+                                className={classes.pullRight}
+                                onClick={closeConsignment}
+                                disabled={
+                                    !viewing() ||
+                                    !state.consignment ||
+                                    state.consignment.status === 'C'
+                                }
+                            >
+                                Close Consignment
+                            </Button>
+                        </span>
                     </Tooltip>
                 </Grid>
                 {itemError && (
@@ -312,142 +268,34 @@ function Consignment({
                     {currentTab !== 0 && (loading || !state.consignment) ? (
                         <Loading />
                     ) : (
-                        currentTab === 1 && (
-                            <>
-                                <Grid item xs={12}>
-                                    <Table size="small" style={{ paddingTop: '30px' }}>
-                                        <TableBody>
-                                            <TableRow key="Account">
-                                                <TablePromptItem text="Account" width={160} />
-                                                <TableItem style={{ width: 350 }}>
-                                                    {state.consignment.salesAccountId}{' '}
-                                                    {state.consignment.customerName}
-                                                </TableItem>
-                                            </TableRow>
-                                            <TableRow key="Address">
-                                                <TableItem>Address</TableItem>
-                                                <TableItem>
-                                                    {state.consignment.address &&
-                                                        state.consignment.address.displayAddress}
-                                                </TableItem>
-                                            </TableRow>
-                                            <TableRow key="Despatch Location">
-                                                <TableItem>Despatch Location</TableItem>
-                                                <TableItem>
-                                                    {state.consignment.despatchLocationCode}
-                                                </TableItem>
-                                            </TableRow>
-                                            <TableRow key="Freight">
-                                                <TableItem>Freight</TableItem>
-                                                <TableItem>
-                                                    <DisplayEditItem
-                                                        currentEditStatus={editStatus}
-                                                        displayText={showShippingMethod(
-                                                            state.consignment.shippingMethod
-                                                        )}
-                                                        editComponent={
-                                                            <Dropdown
-                                                                propertyName="shippingMethod"
-                                                                items={freightOptions()}
-                                                                onChange={updateField}
-                                                                value={
-                                                                    state.consignment.shippingMethod
-                                                                }
-                                                                allowNoValue={false}
-                                                            />
-                                                        }
-                                                    />
-                                                </TableItem>
-                                            </TableRow>
-                                            <TableRow key="Carrier">
-                                                <TableItem>Carrier</TableItem>
-                                                <TableItem>
-                                                    <DisplayEditItem
-                                                        currentEditStatus={editStatus}
-                                                        displayText={state.consignment.carrier}
-                                                        displayDescription={carrier && carrier.name}
-                                                        editComponent={
-                                                            <Dropdown
-                                                                propertyName="carrier"
-                                                                items={carrierOptions()}
-                                                                onChange={updateField}
-                                                                value={state.consignment.carrier}
-                                                                optionsLoading={carriersLoading}
-                                                                allowNoValue={false}
-                                                            />
-                                                        }
-                                                    />
-                                                </TableItem>
-                                            </TableRow>
-                                            <TableRow key="Terms">
-                                                <TableItem>Terms</TableItem>
-                                                <TableItem>
-                                                    <DisplayEditItem
-                                                        currentEditStatus={editStatus}
-                                                        displayText={state.consignment.terms}
-                                                        displayDescription={
-                                                            shippingTerm && shippingTerm.description
-                                                        }
-                                                        editComponent={
-                                                            <Dropdown
-                                                                propertyName="terms"
-                                                                items={shippingTermOptions()}
-                                                                onChange={updateField}
-                                                                value={state.consignment.terms}
-                                                                optionsLoading={
-                                                                    shippingTermsLoading
-                                                                }
-                                                            />
-                                                        }
-                                                    />
-                                                </TableItem>
-                                            </TableRow>
-                                            <TableRow key="Hub">
-                                                <TableItem>Hub</TableItem>
-                                                <TableItem>
-                                                    <DisplayEditItem
-                                                        currentEditStatus={editStatus}
-                                                        displayText={state.consignment.hubId}
-                                                        displayDescription={hub && hub.description}
-                                                        editComponent={
-                                                            <Dropdown
-                                                                propertyName="hubId"
-                                                                items={hubOptions()}
-                                                                onChange={updateField}
-                                                                value={state.consignment.hubId}
-                                                                optionsLoading={hubsLoading}
-                                                            />
-                                                        }
-                                                    />
-                                                </TableItem>
-                                            </TableRow>
-                                            <TableRow key="DateOpened">
-                                                <TableItem>Date Opened</TableItem>
-                                                <TableItem>
-                                                    {moment(state.consignment.dateOpened).format(
-                                                        'DD MMM YYYY'
-                                                    )}
-                                                </TableItem>
-                                            </TableRow>
-                                            <TableRow key="DateClosed">
-                                                <TableItem>Date Closed</TableItem>
-                                                <TableItem>
-                                                    {state.consignment.dateClosed &&
-                                                        moment(state.consignment.dateClosed).format(
-                                                            'DD MMM YYYY'
-                                                        )}
-                                                </TableItem>
-                                                <TablePromptItem text="Closed By" />
-                                                <TableItem>
-                                                    {state.consignment.closedBy &&
-                                                        state.consignment.closedBy.fullName}
-                                                </TableItem>
-                                            </TableRow>
-                                        </TableBody>
-                                    </Table>
-                                </Grid>
-                            </>
-                        )
+                        <>
+                            {currentTab === 1 && (
+                                <DetailsTab
+                                    consignment={state.consignment}
+                                    hub={hub}
+                                    hubs={hubs}
+                                    updateField={updateField}
+                                    viewMode={viewMode()}
+                                    editStatus={editStatus}
+                                    hubsLoading={hubsLoading}
+                                    carrier={carrier}
+                                    carriers={carriers}
+                                    carriersLoading={carriersLoading}
+                                    shippingTerm={shippingTerm}
+                                    shippingTerms={shippingTerms}
+                                    shippingTermsLoading={shippingTermsLoading}
+                                />
+                            )}
+                            {currentTab === 2 && (
+                                <ItemsTab
+                                    editableItems={editableItems}
+                                    editablePallets={editablePallets}
+                                    viewing={viewing()}
+                                    dispatch={dispatch}
+                                    setSaveDisabled={setSaveDisabled}
+                                />
+                            )}
+                        </>
                     )}
                 </>
                 <Grid item xs={12}>
@@ -457,6 +305,7 @@ function Consignment({
                             color="primary"
                             className={classes.pullRight}
                             onClick={startEdit}
+                            disabled={!state.consignment || state.consignment.status === 'C'}
                         >
                             Edit
                         </Button>
@@ -465,6 +314,7 @@ function Consignment({
                             saveClick={doSave}
                             backClick={() => {}}
                             cancelClick={doCancel}
+                            saveDisabled={saveDisabled}
                         />
                     )}
                 </Grid>
@@ -484,6 +334,8 @@ Consignment.propTypes = {
         carrier: PropTypes.string,
         terms: PropTypes.string,
         hubId: PropTypes.number,
+        pallets: PropTypes.arrayOf(PropTypes.shape({})),
+        items: PropTypes.arrayOf(PropTypes.shape({})),
         closedBy: PropTypes.shape({ id: PropTypes.number, fullName: PropTypes.string }),
         address: PropTypes.shape({ id: PropTypes.number, displayAddress: PropTypes.string })
     }),

@@ -51,7 +51,7 @@ const mapStateToProps = (state, ownProps) => ({
     openConsignments: consignmentsSelectors.getItems(state),
     optionsLoading: consignmentsSelectors.getLoading(state),
     options: getOptions(ownProps),
-    startingTab: getOptions(ownProps).consignmentId ? 1 : 0,
+    startingTab: getOptions(ownProps).consignmentId ? 2 : 0,
     editStatus: consignmentSelectors.getEditStatus(state),
     hub: hubSelectors.getItem(state),
     hubs: hubsSelectors.getItems(state),

@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Resources.Consignments
 {
+    using System.Collections.Generic;
+
     using Linn.Common.Resources;
 
     public class ConsignmentResource : HypermediaResource
@@ -31,5 +33,15 @@
         public string Warehouse { get; set; }
 
         public int? HubId { get; set; }
+
+        public string CustomsEntryCodePrefix { get; set; }
+
+        public string CustomsEntryCode { get; set; }
+
+        public string CustomsEntryCodeDate { get; set; }
+
+        public IEnumerable<ConsignmentPalletResource> Pallets { get; set; }
+
+        public IEnumerable<ConsignmentItemResource> Items { get; set; }
     }
 }
