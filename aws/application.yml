@@ -99,8 +99,10 @@ Resources:
           - Effect: Allow
             Action:
             - sqs:SendMessage
+            - ses:SendEmail
+            - ses:SendRawEmail
             Resource:
-              Fn::ImportValue: logging-queue-arn
+              Fn::ImportValue: '*'
       - PolicyName: kms
         PolicyDocument:
           Version: '2012-10-17'
