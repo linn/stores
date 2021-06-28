@@ -10,7 +10,6 @@
     using Linn.Common.Configuration;
     using Linn.Stores.Domain.LinnApps;
 
-    using MailKit.Net.Smtp;
 
     using MimeKit;
 
