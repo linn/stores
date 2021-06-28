@@ -2,6 +2,10 @@
 {
     using System.Collections.Generic;
     using System.IO;
+    using System.Threading.Tasks;
+
+    using Amazon.SimpleEmail;
+    using Amazon.SimpleEmail.Model;
 
     using Linn.Common.Configuration;
     using Linn.Stores.Domain.LinnApps;
@@ -12,6 +16,13 @@
 
     public class EmailService : IEmailService
     {
+        private readonly IAmazonSimpleEmailService emailService;
+
+        public EmailService(IAmazonSimpleEmailService emailService)
+        {
+            this.emailService = emailService;
+        }
+
         public void SendEmail(
             string toAddress,
             string toName,
@@ -46,10 +57,7 @@
 
             message.Subject = subject;
 
-            var emailBody = new TextPart("plain")
-                               {
-                                   Text = body
-                               };
+            var emailBody = new TextPart("plain") { Text = body };
 
             using (var stream = pdfAttachment)
             {
@@ -58,23 +66,25 @@
                 stream.Flush();
                 stream.Read(buffer, 0, (int)stream.Length);
                 var content = new MimeContent(stream);
-                var a = new MimePart("application", "pdf")
-                                        {
-                                            Content = content,
-                                            FileName = "Shipfile.pdf"
-                                        };
+                var a = new MimePart("application", "pdf") { Content = content, FileName = "Shipfile.pdf" };
 
                 var multipart = new Multipart("mixed") { emailBody, a };
 
                 message.Body = multipart;
 
-                using (var client = new SmtpClient())
-                {
-                    client.Connect(smtpHost, 25, false);
-                    client.Send(message);
-                    client.Disconnect(true);
-                }
+                var response = this.emailService.SendRawEmailAsync(new SendRawEmailRequest
+                                                        {
+                                                            RawMessage = new RawMessage(GetMessageStream(message))
+                                                        });
+                Task.WaitAll(response);
             }
+        }
+
+        private static MemoryStream GetMessageStream(MimeMessage message)
+        {
+            var stream = new MemoryStream();
+            message.WriteTo(stream);
+            return stream;
         }
     }
 }
