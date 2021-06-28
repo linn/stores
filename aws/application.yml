@@ -101,8 +101,7 @@ Resources:
             - sqs:SendMessage
             - ses:SendEmail
             - ses:SendRawEmail
-            Resource:
-              Fn::ImportValue: '*'
+            Resource: '*'
       - PolicyName: kms
         PolicyDocument:
           Version: '2012-10-17'
