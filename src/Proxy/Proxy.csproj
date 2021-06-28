@@ -10,7 +10,6 @@
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.3.0" />
     <PackageReference Include="Linn.Common.Configuration" Version="2.0.0" />
     <PackageReference Include="Linn.Common.Proxy" Version="3.0.1" />
-    <PackageReference Include="MailKit" Version="2.11.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Linn.Common.Proxy.LinnApps" Version="1.0.1" />
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="2.19.60" />
