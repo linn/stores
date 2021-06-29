@@ -65,7 +65,14 @@
                 stream.Flush();
                 stream.Read(buffer, 0, (int)stream.Length);
                 var content = new MimeContent(stream);
-                var a = new MimePart("application", "pdf") { Content = content, FileName = "Shipfile.pdf" };
+                var a = new MimePart("application", "pdf")
+                            {
+                                Content = content,
+                                FileName = "Shipfile.pdf",
+                                ContentDisposition = new ContentDisposition("attachment"),
+                                ContentTransferEncoding = ContentEncoding.Base64
+                            };
+
 
                 var multipart = new Multipart("mixed") { emailBody, a };
 
