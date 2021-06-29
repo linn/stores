@@ -33,7 +33,6 @@
             string body,
             Stream pdfAttachment)
         {
-            var smtpHost = ConfigurationManager.Configuration["SMTP_HOSTNAME"];
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(fromName, fromAddress));
             message.To.Add(new MailboxAddress(toName, toAddress));
