@@ -1,5 +1,8 @@
 ﻿namespace Linn.Stores.IoC
 {
+    using Amazon;
+    using Amazon.SimpleEmail;
+
     using Autofac;
 
     using Linn.Common.Authorisation;
@@ -180,6 +183,10 @@
             builder.RegisterType<ProductionTriggerLevelsProxy>().As<IProductionTriggerLevelsService>().WithParameter(
                 "rootUri",
                 ConfigurationManager.Configuration["PROXY_ROOT"]);
+
+            // ses
+            builder.Register<AmazonSimpleEmailServiceClient>(x =>
+                new AmazonSimpleEmailServiceClient(RegionEndpoint.EUWest1)).As<IAmazonSimpleEmailService>();
         }
     }
 }
