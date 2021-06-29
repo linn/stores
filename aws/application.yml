@@ -99,7 +99,8 @@ Resources:
           - Effect: Allow
             Action:
             - sqs:SendMessage
-            Resource: Fn::ImportValue: logging-queue-arn
+            Resource: 
+              Fn::ImportValue: logging-queue-arn
           - Effect: Allow
             Action:
             - ses:SendEmail
