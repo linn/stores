@@ -201,6 +201,9 @@
             builder.RegisterType<CarriersResourceBuilder>().As<IResourceBuilder<IEnumerable<Carrier>>>();
             builder.RegisterType<ShippingTermResourceBuilder>().As<IResourceBuilder<ShippingTerm>>();
             builder.RegisterType<ShippingTermsResourceBuilder>().As<IResourceBuilder<IEnumerable<ShippingTerm>>>();
+            builder.RegisterType<LoanDetailResourceBuilder>().As<IResourceBuilder<LoanDetail>>();
+            builder.RegisterType<LoanDetailsResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<LoanDetail>>>();
         }
     }
 }

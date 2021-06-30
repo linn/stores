@@ -1,6 +1,9 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
+    using System.Collections.Generic;
+
     using Linn.Common.Facade;
+    using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Resources.RequestResources;
@@ -9,9 +12,14 @@
     {
         private readonly IGoodsInService domainService;
 
-        public GoodsInFacadeService(IGoodsInService domainService)
+        private readonly IQueryRepository<LoanDetail> loanDetailRepository;
+
+        public GoodsInFacadeService(
+            IGoodsInService domainService,
+            IQueryRepository<LoanDetail> loanDetailRepository)
         {
             this.domainService = domainService;
+            this.loanDetailRepository = loanDetailRepository;
         }
 
         public IResult<ProcessResult> DoBookIn(BookInRequestResource requestResource)
@@ -40,6 +48,13 @@
             }
 
             return new BadRequestResult<ProcessResult>(result.Message);
+        }
+
+        public IResult<IEnumerable<LoanDetail>> GetLoanDetails(int loanNumber)
+        {
+            return new SuccessResult<IEnumerable<LoanDetail>>(
+                this.loanDetailRepository
+                    .FilterBy(x => x.LoanNumber == loanNumber));
         }
     }
 }

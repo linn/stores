@@ -128,6 +128,7 @@
             builder.RegisterType<HubRepository>().As<IRepository<Hub, int>>();
             builder.RegisterType<CarrierRepository>().As<IRepository<Carrier, string>>();
             builder.RegisterType<ShippingTermRepository>().As<IRepository<ShippingTerm, int>>();
+            builder.RegisterType<LoanDetailsRepository>().As<IQueryRepository<LoanDetail>>();
         }
     }
 }

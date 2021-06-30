@@ -215,6 +215,8 @@
 
         public DbSet<ShippingTerm> ShippingTerms { get; set; }
 
+        public DbQuery<LoanDetail> LoanDetails;
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -316,6 +318,7 @@
             this.BuildHubs(builder);
             this.BuildCarriers(builder);
             this.BuildShippingTerms(builder);
+            this.QueryLoanDetails(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1802,6 +1805,18 @@
             table.Property(a => a.Height).HasColumnName("HEIGHT");
             table.Property(a => a.Width).HasColumnName("WIDTH");
             table.Property(a => a.Depth).HasColumnName("DEPTH");
+        }
+
+        private void QueryLoanDetails(ModelBuilder builder)
+        {
+            var q = builder.Query<LoanDetail>().ToView("OS_LOAN_DETAIL_VIEW;");
+            q.Property(e => e.LoanNumber).HasColumnName("LOAN_NUMBER");
+            q.Property(e => e.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
+            q.Property(e => e.Line).HasColumnName("LINE_NUMBER");
+            q.Property(e => e.QtyOnLoan).HasColumnName("ITEM_QTY");
+            q.Property(e => e.SerialNumber).HasColumnName("SERIAL_NUMBER");
+            q.Property(e => e.SerialNumber2).HasColumnName("SERIAL_NUMBER_2");
+            q.Property(e => e.ItemNumber).HasColumnName("ITEM_NUMBER");
         }
     }
 }
