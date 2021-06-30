@@ -156,6 +156,7 @@
             builder.RegisterType<HubFacadeService>().As<IFacadeService<Hub, int, HubResource, HubResource>>();
             builder.RegisterType<CarrierFacadeService>().As<IFacadeService<Carrier, string, CarrierResource, CarrierResource>>();
             builder.RegisterType<ShippingTermFacadeService>().As<IFacadeService<ShippingTerm, int, ShippingTermResource, ShippingTermResource>>();
+            builder.RegisterType<GoodsInFacadeService>().As<IGoodsInFacadeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
@@ -177,6 +178,7 @@
             builder.RegisterType<ConsignmentShipfileDataProxy>()
                 .As<IConsignmentShipfileDataService>();
             builder.RegisterType<BartenderLabelPack>().As<IBartenderLabelPack>();
+            builder.RegisterType<GoodsInPack>().As<IGoodsInPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();
