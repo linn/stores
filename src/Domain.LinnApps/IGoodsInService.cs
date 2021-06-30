@@ -1,8 +1,10 @@
-﻿namespace Linn.Stores.Domain.LinnApps.ExternalServices
+﻿namespace Linn.Stores.Domain.LinnApps
 {
-    public interface IGoodsInPack
+    using Linn.Stores.Domain.LinnApps.Models;
+
+    public interface IGoodsInService
     {
-        void DoBookIn(
+        ProcessResult DoBookIn(
             int bookInRef,
             string transactionType,
             int createdBy,
@@ -18,9 +20,6 @@
             string comments,
             string condition,
             string rsnAccessories,
-            int reqNumber,
-            out bool success);
-
-        string GetErrorMessage();
+            int reqNumber);
     }
 }

@@ -69,6 +69,7 @@
             builder.RegisterType<TemplateEngine>().As<ITemplateEngine>();
             builder.RegisterType<ImportBookService>().As<IImportBookService>();
             builder.RegisterType<PackingListService>().As<IPackingListService>();
+            builder.RegisterType<GoodsInService>().As<IGoodsInService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()

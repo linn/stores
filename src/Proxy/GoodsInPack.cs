@@ -25,5 +25,10 @@
         {
             throw new System.NotImplementedException();
         }
+
+        public string GetErrorMessage()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
