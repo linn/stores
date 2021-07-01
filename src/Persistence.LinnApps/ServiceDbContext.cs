@@ -1254,6 +1254,7 @@
             e.Property(l => l.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
             e.Property(l => l.DateInvalid).HasColumnName("DATE_INVALID");
             e.Property(l => l.LocationType).HasColumnName("LOCATION_TYPE").HasMaxLength(1);
+            e.Property(l => l.DefaultStockPool).HasColumnName("DEFAULT_STOCK_POOL").HasMaxLength(10);
         }
 
         private void BuildInspectedStates(ModelBuilder builder)

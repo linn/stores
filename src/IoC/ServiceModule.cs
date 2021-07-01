@@ -125,7 +125,7 @@
             builder.RegisterType<StockLocatorsFacadeService>()
                 .As<IStockLocatorFacadeService>();
             builder.RegisterType<StorageLocationService>()
-                .As<IFacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource>>();
+                .As<IFacadeFilterService<StorageLocation, int, StorageLocationResource, StorageLocationResource, StorageLocationResource>>();
             builder.RegisterType<InspectedStateService>()
                 .As<IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource>>();
             builder.RegisterType<WarehouseFacadeService>().As<IWarehouseFacadeService>();

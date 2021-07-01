@@ -26,7 +26,7 @@
             get; private set;
         }
 
-        protected IFacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource>
+        protected IFacadeFilterService<StorageLocation, int, StorageLocationResource, StorageLocationResource, StorageLocationResource>
             StorageLocationService
         {
             get;
@@ -53,7 +53,7 @@
             this.QuantitiesService = Substitute.For<IStockQuantitiesService>();
 
             this.StorageLocationService = Substitute
-                .For<IFacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource>>();
+                .For<IFacadeFilterService<StorageLocation, int, StorageLocationResource, StorageLocationResource, StorageLocationResource>>();
 
             this.StateService = Substitute
                 .For<IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource>>();
