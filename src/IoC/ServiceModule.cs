@@ -158,6 +158,7 @@
             builder.RegisterType<CarrierFacadeService>().As<IFacadeService<Carrier, string, CarrierResource, CarrierResource>>();
             builder.RegisterType<ShippingTermFacadeService>().As<IFacadeService<ShippingTerm, int, ShippingTermResource, ShippingTermResource>>();
             builder.RegisterType<GoodsInFacadeService>().As<IGoodsInFacadeService>();
+            builder.RegisterType<SalesArticleService>().As<ISalesArticleService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

@@ -17,15 +17,20 @@
         private readonly IFacadeFilterService<StorageLocation, int,
             StorageLocationResource, StorageLocationResource, StorageLocationResource> storageLocationService;
 
+        private readonly ISalesArticleService salesArticleService;
+
         public GoodsInModule(
             IGoodsInFacadeService service,
-            IFacadeFilterService<StorageLocation, int, StorageLocationResource, StorageLocationResource, StorageLocationResource> storageLocationService)
+            IFacadeFilterService<StorageLocation, int, StorageLocationResource, StorageLocationResource, StorageLocationResource> storageLocationService,
+            ISalesArticleService salesArticleService)
         {
             this.service = service;
             this.storageLocationService = storageLocationService;
+            this.salesArticleService = salesArticleService;
             this.Post("/logistics/book-in", _ => this.DoBookIn());
             this.Get("/logistics/loan-details", _ => this.GetLoanDetails());
             this.Get("/logistics/goods-in/dem-locations", _ => this.GetDemLocations());
+            this.Get("/inventory/sales-articles", _ => this.GetDemLocations());
         }
 
         private object DoBookIn()
@@ -50,6 +55,13 @@
                             {
                                 DefaultStockPool = "DEM STOCK"
                             }));
+        }
+
+        private object SearchSalesArticles()
+        {
+            var searchTerm = this.Bind<SearchRequestResource>().SearchTerm;
+            var result = this.salesArticleService.SearchLiveSalesArticles(searchTerm);
+            return this.Negotiate.WithModel(result);
         }
     }
 }

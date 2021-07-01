@@ -204,6 +204,9 @@
             builder.RegisterType<LoanDetailResourceBuilder>().As<IResourceBuilder<LoanDetail>>();
             builder.RegisterType<LoanDetailsResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<LoanDetail>>>();
+            builder.RegisterType<SalesArticleResourceBuilder>().As<IResourceBuilder<SalesArticle>>();
+            builder.RegisterType<SalesArticlesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<SalesArticle>>>();
         }
     }
 }
