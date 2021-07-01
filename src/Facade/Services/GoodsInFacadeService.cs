@@ -52,9 +52,8 @@
 
         public IResult<IEnumerable<LoanDetail>> GetLoanDetails(int loanNumber)
         {
-            return new SuccessResult<IEnumerable<LoanDetail>>(
-                this.loanDetailRepository
-                    .FilterBy(x => x.LoanNumber == loanNumber));
+            var res = this.loanDetailRepository.FilterBy(x => x.LoanNumber == loanNumber);
+            return new SuccessResult<IEnumerable<LoanDetail>>(res);
         }
     }
 }

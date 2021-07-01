@@ -17,6 +17,7 @@
         {
             this.service = service;
             this.Post("/logistics/book-in", _ => this.DoBookIn());
+            this.Get("/logistics/loan-details", _ => this.GetLoanDetails());
         }
 
         private object DoBookIn()
