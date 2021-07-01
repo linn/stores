@@ -371,5 +371,10 @@
                 Success = int.Parse(successParameter.Value.ToString()) == 1
             };
         }
+
+        public int GetQuantityBookedIn(int purchaseOrderNumber, int line)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

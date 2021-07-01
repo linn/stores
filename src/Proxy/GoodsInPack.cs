@@ -30,5 +30,25 @@
         {
             throw new System.NotImplementedException();
         }
+
+        public void GetPurchaseOrderDetails(
+            int orderNumber,
+            int orderLine,
+            out string partNumber,
+            out string description,
+            out string uom,
+            out int orderQty,
+            out string qcPart,
+            out string manufPartNumber,
+            out string docType,
+            out string errorMess)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool PartHasStorageType(string partNumber, out int bookInLoc, out string kardex, out bool newPart)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
