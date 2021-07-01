@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.IoC
 {
     using System.Collections.Generic;
+    using System.Diagnostics;
 
     using Autofac;
 
@@ -207,6 +208,7 @@
             builder.RegisterType<SalesArticleResourceBuilder>().As<IResourceBuilder<SalesArticle>>();
             builder.RegisterType<SalesArticlesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<SalesArticle>>>();
+            builder.RegisterType<ProcessResultResourceBuilder>().As<IResourceBuilder<ProcessResult>>();
         }
     }
 }
