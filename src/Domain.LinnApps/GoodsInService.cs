@@ -53,5 +53,10 @@
                 success, 
                 success ? null : this.goodsInPack.GetErrorMessage());
         }
+
+        public ValidatePurchaseOrderResult ValidatePurchaseOrder(int orderNumber)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

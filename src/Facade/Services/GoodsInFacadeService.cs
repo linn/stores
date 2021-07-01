@@ -55,5 +55,11 @@
             var res = this.loanDetailRepository.FilterBy(x => x.LoanNumber == loanNumber);
             return new SuccessResult<IEnumerable<LoanDetail>>(res);
         }
+
+        public IResult<ValidatePurchaseOrderResult> ValidatePurchaseOrder(int orderNumber)
+        {
+            return new SuccessResult<ValidatePurchaseOrderResult>(
+                this.domainService.ValidatePurchaseOrder(orderNumber));
+        }
     }
 }

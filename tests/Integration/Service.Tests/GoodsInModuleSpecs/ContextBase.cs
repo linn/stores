@@ -65,10 +65,14 @@
 
                         with.Dependency<IResourceBuilder<ProcessResult>>(new ProcessResultResourceBuilder());
 
+                        with.Dependency<IResourceBuilder<ValidatePurchaseOrderResult>>(
+                            new ValidatePurchaseOrderResultResourceBuilder());
+
                         with.ResponseProcessor<SalesArticlesResponseProcessor>();
                         with.ResponseProcessor<StorageLocationsResponseProcessor>();
                         with.ResponseProcessor<LoanDetailsResponseProcessor>();
                         with.ResponseProcessor<ProcessResultResponseProcessor>();
+                        with.ResponseProcessor<ValidatePurchaseOrderResultResponseProcessor>();
 
                         with.RequestStartup(
                             (container, pipelines, context) =>

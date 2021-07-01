@@ -31,20 +31,20 @@
             this.Get("/logistics/loan-details", _ => this.GetLoanDetails());
             this.Get("/logistics/goods-in/dem-locations", _ => this.GetDemLocations());
             this.Get("/inventory/sales-articles", _ => this.SearchSalesArticles());
+            this.Get("/logistics/purchase-orders/validate", _ => this.ValidatePurchaseOrder());
         }
 
         private object DoBookIn()
         {
-            var resource = this.Bind<BookInRequestResource>();
-            var result = this.service.DoBookIn(resource);
-            return this.Negotiate.WithModel(this.service.DoBookIn(resource));
+            return this.Negotiate
+                .WithModel(
+                    this.service.DoBookIn(this.Bind<BookInRequestResource>()));
         }
 
         private object GetLoanDetails()
         {
-            var resource = this.Bind<LoanDetailResource>();
-            var result = this.service.GetLoanDetails(resource.LoanNumber);
-            return this.Negotiate.WithModel(result);
+            return this.Negotiate.WithModel(
+                this.service.GetLoanDetails(this.Bind<LoanDetailResource>().LoanNumber));
         }
 
         private object GetDemLocations()
@@ -59,9 +59,16 @@
 
         private object SearchSalesArticles()
         {
-            var searchTerm = this.Bind<SearchRequestResource>().SearchTerm;
-            var result = this.salesArticleService.SearchLiveSalesArticles(searchTerm);
-            return this.Negotiate.WithModel(result);
+            return this.Negotiate.WithModel(
+                this.salesArticleService.SearchLiveSalesArticles(
+                    this.Bind<SearchRequestResource>().SearchTerm));
+        }
+
+        private object ValidatePurchaseOrder()
+        {
+            return this.Negotiate.WithModel(
+                this.service.ValidatePurchaseOrder(
+                    this.Bind<ValidatePurchaseOrderRequestResource>().OrderNumber));
         }
     }
 }

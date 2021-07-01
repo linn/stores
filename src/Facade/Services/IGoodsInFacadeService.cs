@@ -12,5 +12,7 @@
         IResult<ProcessResult> DoBookIn(BookInRequestResource requestResource);
 
         IResult<IEnumerable<LoanDetail>> GetLoanDetails(int loanNumber);
+
+        IResult<ValidatePurchaseOrderResult> ValidatePurchaseOrder(int orderNumber);
     }
 }

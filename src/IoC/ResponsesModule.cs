@@ -209,6 +209,8 @@
             builder.RegisterType<SalesArticlesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<SalesArticle>>>();
             builder.RegisterType<ProcessResultResourceBuilder>().As<IResourceBuilder<ProcessResult>>();
+            builder.RegisterType<ValidatePurchaseOrderResultResourceBuilder>()
+                .As<IResourceBuilder<ValidatePurchaseOrderResult>>();
         }
     }
 }
