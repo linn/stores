@@ -1490,7 +1490,7 @@
             e.HasKey(a => a.ArticleNumber);
             e.Property(a => a.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
             e.Property(a => a.PhaseOutDate).HasColumnName("PHASE_OUT_DATE");
-            e.Property(a => a.Description).HasColumnName("DESCRIPTION");
+            e.Property(a => a.Description).HasColumnName("INVOICE_DESCRIPTION");
         }
 
         private void QueryTpkView(ModelBuilder builder)

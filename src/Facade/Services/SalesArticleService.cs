@@ -19,7 +19,7 @@
         {
             return new SuccessResult<IEnumerable<SalesArticle>>(
                 this.repository.FilterBy(x => x.PhaseOutDate == null 
-                                            && x.ArticleNumber == searchTerm.ToUpper()));
+                                            && x.ArticleNumber.Contains(searchTerm.ToUpper())));
         }
     }
 }

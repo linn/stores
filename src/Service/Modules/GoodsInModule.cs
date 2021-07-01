@@ -30,7 +30,7 @@
             this.Post("/logistics/book-in", _ => this.DoBookIn());
             this.Get("/logistics/loan-details", _ => this.GetLoanDetails());
             this.Get("/logistics/goods-in/dem-locations", _ => this.GetDemLocations());
-            this.Get("/inventory/sales-articles", _ => this.GetDemLocations());
+            this.Get("/inventory/sales-articles", _ => this.SearchSalesArticles());
         }
 
         private object DoBookIn()
