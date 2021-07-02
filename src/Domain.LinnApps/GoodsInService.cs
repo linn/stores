@@ -87,24 +87,18 @@
                 out var docType,
                 out var message);
 
-            if (!string.IsNullOrEmpty(message))
-            {
-                result.OrderNumber = null;
-                result.OrderLine = null;
-            }
-
             var part = this.partsRepository.FindBy(
                 x => x.PartNumber.Equals(partNumber.ToUpper()) 
                       && x.QcOnReceipt.Equals("Y"));
 
-            if (string.IsNullOrEmpty(part.QcInformation))
+            if (!string.IsNullOrEmpty(part.QcInformation))
             {
                 result.PartQcWarning = part.QcInformation;
             }
 
             if (!this.goodsInPack.PartHasStorageType(
                     partNumber,
-                    out var bookInLocation,
+                    out _,
                     out var kardex,
                     out var newPart))
             {
@@ -133,7 +127,8 @@
             result.QcPart = qualityControlPart;
             result.DocumentType = docType;
 
-            result.State = part.QcOnReceipt.Equals("Y") ? "QC" : "STORES";
+            result.State = !string.IsNullOrEmpty(part.QcOnReceipt) 
+                                    && part.QcOnReceipt.Equals("Y") ? "QC" : "STORES";
 
             return result;
         }

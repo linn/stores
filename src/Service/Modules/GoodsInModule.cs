@@ -68,7 +68,7 @@
         {
             return this.Negotiate.WithModel(
                 this.service.ValidatePurchaseOrder(
-                    this.Bind<ValidatePurchaseOrderRequestResource>().OrderNumber));
+                    this.Bind<ValidatePurchaseOrderRequestResource>().OrderNumber, 1));
         }
     }
 }

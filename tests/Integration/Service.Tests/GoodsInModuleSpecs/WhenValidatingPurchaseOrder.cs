@@ -24,7 +24,7 @@
                                      {
                                          BookInMessage = "Validated!"
                                      };
-            this.Service.ValidatePurchaseOrder(Arg.Any<int>()).Returns(
+            this.Service.ValidatePurchaseOrder(Arg.Any<int>(), Arg.Any<int>()).Returns(
                 new SuccessResult<ValidatePurchaseOrderResult>(this.result));
 
             this.Response = this.Browser.Get(
@@ -43,7 +43,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.Service.Received().ValidatePurchaseOrder(Arg.Any<int>());
+            this.Service.Received().ValidatePurchaseOrder(Arg.Any<int>(), Arg.Any<int>());
         }
 
         [Test]
