@@ -45,7 +45,7 @@
                 connection.Open();
                 var cmd =
                     new OracleCommand(
-                        "goods_in_pack.STORES_ERR_MESSAGE",
+                        "goods_in_pack.GET_ERR_MESS",
                         connection)
                         {
                             CommandType = CommandType.StoredProcedure
