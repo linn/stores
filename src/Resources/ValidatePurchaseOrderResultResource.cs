@@ -26,5 +26,10 @@
 
         public string PartQcWarning { get; set; }
 
+        public string Storage { get; set; }
+
+        public string TransactionType { get; set; }
+
+        public string State { get; set; }
     }
 }

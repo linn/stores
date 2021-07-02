@@ -13,6 +13,6 @@
 
         IResult<IEnumerable<LoanDetail>> GetLoanDetails(int loanNumber);
 
-        IResult<ValidatePurchaseOrderResult> ValidatePurchaseOrder(int orderNumber);
+        IResult<ValidatePurchaseOrderResult> ValidatePurchaseOrder(int orderNumber, int line);
     }
 }

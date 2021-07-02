@@ -22,7 +22,10 @@
                              PartDescription = model.PartDescription,
                              PartNumber = model.PartNumber,
                              QcPart = model.QcPart,
-                             PartQcWarning = model.PartQcWarning
+                             PartQcWarning = model.PartQcWarning,
+                             Storage = model.Storage,
+                             TransactionType = model.TransactionType,
+                             State = model.State
                        };
         }
 

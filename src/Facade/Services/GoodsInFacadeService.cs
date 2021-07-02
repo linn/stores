@@ -56,10 +56,10 @@
             return new SuccessResult<IEnumerable<LoanDetail>>(res);
         }
 
-        public IResult<ValidatePurchaseOrderResult> ValidatePurchaseOrder(int orderNumber)
+        public IResult<ValidatePurchaseOrderResult> ValidatePurchaseOrder(int orderNumber, int line)
         {
             return new SuccessResult<ValidatePurchaseOrderResult>(
-                this.domainService.ValidatePurchaseOrder(orderNumber));
+                this.domainService.ValidatePurchaseOrder(orderNumber, line));
         }
     }
 }

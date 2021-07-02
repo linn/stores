@@ -9,10 +9,16 @@
     {
         private readonly IGoodsInPack goodsInPack;
 
+        private readonly IStoresPack storesPack;
+
         private readonly IRepository<Part, int> partsRepository;
 
-        public GoodsInService(IGoodsInPack goodsInPack, IRepository<Part, int> partsRepository)
+        public GoodsInService(
+            IGoodsInPack goodsInPack,
+            IStoresPack storesPack,
+            IRepository<Part, int> partsRepository)
         {
+            this.storesPack = storesPack;
             this.goodsInPack = goodsInPack;
             this.partsRepository = partsRepository;
         }
@@ -59,7 +65,9 @@
                 success ? null : this.goodsInPack.GetErrorMessage());
         }
 
-        public ValidatePurchaseOrderResult ValidatePurchaseOrder(int orderNumber, int line = 1)
+        public ValidatePurchaseOrderResult ValidatePurchaseOrder(
+            int orderNumber, 
+            int line = 1)
         {
             var result = new ValidatePurchaseOrderResult
                              {
@@ -86,12 +94,46 @@
             }
 
             var part = this.partsRepository.FindBy(
-                x => x.PartNumber.Equals(partNumber.ToUpper()) && x.QcOnReceipt.Equals("Y"));
+                x => x.PartNumber.Equals(partNumber.ToUpper()) 
+                      && x.QcOnReceipt.Equals("Y"));
 
             if (string.IsNullOrEmpty(part.QcInformation))
             {
-
+                result.PartQcWarning = part.QcInformation;
             }
+
+            if (!this.goodsInPack.PartHasStorageType(
+                    partNumber,
+                    out var bookInLocation,
+                    out var kardex,
+                    out var newPart))
+            {
+                if (newPart)
+                {
+                    result.BookInMessage = "New part - enter storage type or location";
+                }
+
+                result.Storage = "BB";
+            }
+            else
+            {
+                result.Storage = kardex;
+            }
+
+            result.OrderNumber = orderNumber;
+            result.OrderLine = line;
+            result.TransactionType = "O";
+            result.QtyBookedIn = this.storesPack.GetQuantityBookedIn(orderNumber, line);
+
+            result.ManufacturersPartNumber = manufacturerPartNumber;
+            result.PartNumber = partNumber;
+            result.PartDescription = description;
+            result.OrderUnitOfMeasure = uom;
+            result.OrderQty = orderQty;
+            result.QcPart = qualityControlPart;
+            result.DocumentType = docType;
+
+            result.State = part.QcOnReceipt.Equals("Y") ? "QC" : "STORES";
 
             return result;
         }
