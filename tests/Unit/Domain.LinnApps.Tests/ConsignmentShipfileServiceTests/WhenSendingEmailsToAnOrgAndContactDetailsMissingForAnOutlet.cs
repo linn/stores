@@ -96,7 +96,8 @@
                 Arg.Any<string>(),
                 Arg.Any<string>(),
                 Arg.Any<string>(),
-                Arg.Any<Stream>());
+                Arg.Any<Stream>(),
+                Arg.Any<string>());
         }
         [Test]
         public void ShouldUpdateStatusMessage()

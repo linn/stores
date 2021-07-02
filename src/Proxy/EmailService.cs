@@ -31,7 +31,8 @@
             string fromName,
             string subject,
             string body,
-            Stream pdfAttachment)
+            Stream pdfAttachment,
+            string attachmentName)
         {
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(fromName, fromAddress));
@@ -59,21 +60,31 @@
 
             using (var stream = pdfAttachment)
             {
-                var buffer = new byte[stream.Length];
-                stream.Seek(0, SeekOrigin.Begin);
-                stream.Flush();
-                stream.Read(buffer, 0, (int)stream.Length);
-                var content = new MimeContent(stream);
-                var a = new MimePart("application", "pdf")
-                            {
-                                Content = content,
-                                FileName = "Shipfile.pdf",
-                                ContentDisposition = new ContentDisposition("attachment"),
-                                ContentTransferEncoding = ContentEncoding.Base64
-                            };
+                Multipart multipart;
+
+                if (stream != null)
+                {
+                    var buffer = new byte[stream.Length];
+                    stream.Seek(0, SeekOrigin.Begin);
+                    stream.Flush();
+                    stream.Read(buffer, 0, (int)stream.Length);
+                    var content = new MimeContent(stream);
+                    var a = new MimePart("application", "pdf")
+                                {
+                                    Content = content,
+                                    FileName = $"{attachmentName}.pdf",
+                                    ContentDisposition = new ContentDisposition("attachment"),
+                                    ContentTransferEncoding = ContentEncoding.Base64
+                                };
 
 
-                var multipart = new Multipart("mixed") { emailBody, a };
+                    multipart = new Multipart("mixed") { emailBody, a };
+                }
+                else
+                {
+                    multipart = new Multipart("mixed") { emailBody };
+                }
+
 
                 message.Body = multipart;
 
