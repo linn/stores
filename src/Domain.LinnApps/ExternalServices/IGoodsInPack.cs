@@ -30,11 +30,11 @@
             out string description,
             out string uom,
             out int orderQty,
-            out string qcPart,
-            out string manufPartNumber,
+            out string qualityControlPart,
+            out string manufacturerPartNumber,
             out string docType,
-            out string errorMess);
+            out string message);
 
-        bool PartHasStorageType(string partNumber, out int bookInLoc, out string kardex, out bool newPart);
+        bool PartHasStorageType(string partNumber, out int bookInLocation, out string kardex, out bool newPart);
     }
 }

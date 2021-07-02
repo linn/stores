@@ -137,7 +137,7 @@
                             CommandType = CommandType.StoredProcedure
                         };
 
-                var result = new OracleParameter("G_ERR", OracleDbType.Int32)
+                var result = new OracleParameter("G_ERR", OracleDbType.Varchar2)
                                  {
                                      Direction = ParameterDirection.ReturnValue, Size = 50
                                  };
@@ -374,7 +374,41 @@
 
         public int GetQuantityBookedIn(int purchaseOrderNumber, int line)
         {
-            throw new NotImplementedException();
+            using (var connection = this.databaseService.GetConnection())
+            {
+                connection.Open();
+                var cmd = new OracleCommand("stores_oo.qty_booked_in", connection)
+                              {
+                                  CommandType = CommandType.StoredProcedure
+                              };
+
+                var arg1 = new OracleParameter("p_order_number", OracleDbType.Int32)
+                               {
+                                   Direction = ParameterDirection.Input,
+                                   Size = 50,
+                                   Value = purchaseOrderNumber
+                               };
+                cmd.Parameters.Add(arg1);
+
+                var arg2 = new OracleParameter("p_order_line", OracleDbType.Int32)
+                               {
+                                   Direction = ParameterDirection.Input,
+                                   Size = 50,
+                                   Value = line
+                               };
+                cmd.Parameters.Add(arg2);
+
+                var result = new OracleParameter("result", OracleDbType.Int32)
+                                 {
+                                     Direction = ParameterDirection.ReturnValue,
+                                     Size = 50
+                                 };
+                cmd.Parameters.Add(result);
+
+                cmd.ExecuteNonQuery();
+                connection.Close();
+                return int.Parse(result.Value.ToString());
+            }
         }
     }
 }
