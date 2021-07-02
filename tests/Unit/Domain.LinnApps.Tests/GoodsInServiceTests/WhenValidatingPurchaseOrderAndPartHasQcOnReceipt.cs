@@ -33,7 +33,6 @@
                     out Arg.Any<string>(),
                     out Arg.Any<string>()))
                 .Do(x => x[2] = "PART");
-
         }
 
         [Test]

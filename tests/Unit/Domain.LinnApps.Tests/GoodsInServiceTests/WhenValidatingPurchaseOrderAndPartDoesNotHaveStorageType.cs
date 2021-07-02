@@ -43,7 +43,7 @@
         }
 
         [Test]
-        public void ShouldSetStorageBB()
+        public void ShouldSetStorageBb()
         {
             this.result.Storage.Should().Be("BB");
         }
