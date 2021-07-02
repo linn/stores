@@ -11,6 +11,9 @@
         {
             return new ValidatePurchaseOrderResultResource
                        {
+                             OrderNumber = model.OrderNumber,
+                             OrderLine = model.OrderLine,
+                             QtyBookedIn = model.QtyBookedIn,
                              BookInMessage = model.BookInMessage,
                              DocumentType = model.DocumentType,
                              ManufacturersPartNumber = model.ManufacturersPartNumber,
@@ -18,7 +21,8 @@
                              OrderUnitOfMeasure = model.OrderUnitOfMeasure,
                              PartDescription = model.PartDescription,
                              PartNumber = model.PartNumber,
-                             QcPart = model.QcPart
+                             QcPart = model.QcPart,
+                             PartQcWarning = model.PartQcWarning
                        };
         }
 

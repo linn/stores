@@ -22,6 +22,6 @@
             string rsnAccessories,
             int reqNumber);
 
-        ValidatePurchaseOrderResult ValidatePurchaseOrder(int orderNumber);
+        ValidatePurchaseOrderResult ValidatePurchaseOrder(int orderNumber, int line);
     }
 }
