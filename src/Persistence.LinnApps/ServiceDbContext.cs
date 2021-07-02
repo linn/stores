@@ -217,6 +217,8 @@
 
         public DbQuery<LoanDetail> LoanDetails { get; set; }
 
+        public DbSet<CartonType> CartonTypes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -319,6 +321,7 @@
             this.BuildCarriers(builder);
             this.BuildShippingTerms(builder);
             this.QueryLoanDetails(builder);
+            this.BuildCartonTypes(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1820,6 +1823,14 @@
             q.Property(e => e.SerialNumber).HasColumnName("SERIAL_NUMBER");
             q.Property(e => e.SerialNumber2).HasColumnName("SERIAL_NUMBER2");
             q.Property(e => e.ItemNumber).HasColumnName("ITEM_NUMBER");
+        }
+
+        private void BuildCartonTypes(ModelBuilder builder)
+        {
+            var table = builder.Entity<CartonType>().ToTable("CARTON_TYPES");
+            table.HasKey(a => a.CartonTypeName);
+            table.Property(a => a.CartonTypeName).HasColumnName("CARTON_TYPE").HasMaxLength(10);
+            table.Property(a => a.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
         }
     }
 }

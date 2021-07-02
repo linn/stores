@@ -211,6 +211,8 @@
             builder.RegisterType<ProcessResultResourceBuilder>().As<IResourceBuilder<ProcessResult>>();
             builder.RegisterType<ValidatePurchaseOrderResultResourceBuilder>()
                 .As<IResourceBuilder<ValidatePurchaseOrderResult>>();
+            builder.RegisterType<CartonTypeResourceBuilder>().As<IResourceBuilder<CartonType>>();
+            builder.RegisterType<CartonTypesResourceBuilder>().As<IResourceBuilder<IEnumerable<CartonType>>>();
         }
     }
 }
