@@ -17,7 +17,7 @@
     {
         private readonly IStockLocatorFacadeService service;
 
-        private readonly IFacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource>
+        private readonly IFacadeFilterService<StorageLocation, int, StorageLocationResource, StorageLocationResource, StorageLocationResource>
             storageLocationService;
 
         private readonly IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource>
@@ -29,7 +29,7 @@
 
         public StockLocatorsModule(
             IStockLocatorFacadeService service,
-            IFacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource> storageLocationService,
+            IFacadeFilterService<StorageLocation, int, StorageLocationResource, StorageLocationResource, StorageLocationResource> storageLocationService,
             IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource> inspectedStateService,
             IStockQuantitiesService stockQuantitiesService,
             IStockLocatorPricesService pricesService)

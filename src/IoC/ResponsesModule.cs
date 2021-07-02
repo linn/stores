@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.IoC
 {
     using System.Collections.Generic;
+    using System.Diagnostics;
 
     using Autofac;
 
@@ -201,6 +202,15 @@
             builder.RegisterType<CarriersResourceBuilder>().As<IResourceBuilder<IEnumerable<Carrier>>>();
             builder.RegisterType<ShippingTermResourceBuilder>().As<IResourceBuilder<ShippingTerm>>();
             builder.RegisterType<ShippingTermsResourceBuilder>().As<IResourceBuilder<IEnumerable<ShippingTerm>>>();
+            builder.RegisterType<LoanDetailResourceBuilder>().As<IResourceBuilder<LoanDetail>>();
+            builder.RegisterType<LoanDetailsResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<LoanDetail>>>();
+            builder.RegisterType<SalesArticleResourceBuilder>().As<IResourceBuilder<SalesArticle>>();
+            builder.RegisterType<SalesArticlesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<SalesArticle>>>();
+            builder.RegisterType<ProcessResultResourceBuilder>().As<IResourceBuilder<ProcessResult>>();
+            builder.RegisterType<ValidatePurchaseOrderResultResourceBuilder>()
+                .As<IResourceBuilder<ValidatePurchaseOrderResult>>();
             builder.RegisterType<CartonTypeResourceBuilder>().As<IResourceBuilder<CartonType>>();
             builder.RegisterType<CartonTypesResourceBuilder>().As<IResourceBuilder<IEnumerable<CartonType>>>();
         }
