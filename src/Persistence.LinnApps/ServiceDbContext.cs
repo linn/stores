@@ -215,6 +215,8 @@
 
         public DbSet<ShippingTerm> ShippingTerms { get; set; }
 
+        public DbSet<CartonType> CartonTypes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -316,6 +318,7 @@
             this.BuildHubs(builder);
             this.BuildCarriers(builder);
             this.BuildShippingTerms(builder);
+            this.BuildCartonTypes(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1802,6 +1805,14 @@
             table.Property(a => a.Height).HasColumnName("HEIGHT");
             table.Property(a => a.Width).HasColumnName("WIDTH");
             table.Property(a => a.Depth).HasColumnName("DEPTH");
+        }
+
+        private void BuildCartonTypes(ModelBuilder builder)
+        {
+            var table = builder.Entity<CartonType>().ToTable("CARTON_TYPES");
+            table.HasKey(a => a.CartonTypeName);
+            table.Property(a => a.CartonTypeName).HasColumnName("CARTON_TYPE").HasMaxLength(10);
+            table.Property(a => a.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
         }
     }
 }

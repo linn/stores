@@ -23,12 +23,16 @@
 
         private readonly IFacadeService<ShippingTerm, int, ShippingTermResource, ShippingTermResource> shippingTermFacadeService;
 
+        private readonly IFacadeService<CartonType, string, CartonTypeResource, CartonTypeResource> cartonTypeFacadeService;
+
         public ConsignmentsModule(
             IFacadeService<Consignment, int, ConsignmentResource, ConsignmentUpdateResource> consignmentFacadeService,
             IFacadeService<Hub, int, HubResource, HubResource> hubFacadeService,
             IFacadeService<Carrier, string, CarrierResource, CarrierResource> carrierFacadeService,
-            IFacadeService<ShippingTerm, int, ShippingTermResource, ShippingTermResource> shippingTermFacadeService)
+            IFacadeService<ShippingTerm, int, ShippingTermResource, ShippingTermResource> shippingTermFacadeService,
+            IFacadeService<CartonType, string, CartonTypeResource, CartonTypeResource> cartonTypeFacadeService)
         {
+            this.cartonTypeFacadeService = cartonTypeFacadeService;
             this.consignmentFacadeService = consignmentFacadeService;
             this.hubFacadeService = hubFacadeService;
             this.carrierFacadeService = carrierFacadeService;
@@ -42,6 +46,21 @@
             this.Put("/logistics/consignments/{id:int}", p => this.UpdateConsignment(p.id));
             this.Get("/logistics/shipping-terms", _ => this.GetShippingTerms());
             this.Get("/logistics/shipping-terms/{id:int}", p => this.GetShippingTermById(p.id));
+            this.Get("/logistics/carton-types", _ => this.GetCartonTypes());
+            this.Get("/logistics/carton-types/{id*}", p => this.GetCartonTypeById(p.id));
+        }
+
+        private object GetCartonTypeById(string id)
+        {
+            return this.Negotiate
+                .WithModel(this.cartonTypeFacadeService.GetById(id))
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
+        }
+
+        private object GetCartonTypes()
+        {
+            return this.Negotiate.WithModel(this.cartonTypeFacadeService.GetAll());
         }
 
         private object GetShippingTermById(int id)
