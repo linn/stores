@@ -69,6 +69,7 @@
             builder.RegisterType<TemplateEngine>().As<ITemplateEngine>();
             builder.RegisterType<ImportBookService>().As<IImportBookService>();
             builder.RegisterType<PackingListService>().As<IPackingListService>();
+            builder.RegisterType<GoodsInService>().As<IGoodsInService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -124,7 +125,7 @@
             builder.RegisterType<StockLocatorsFacadeService>()
                 .As<IStockLocatorFacadeService>();
             builder.RegisterType<StorageLocationService>()
-                .As<IFacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource>>();
+                .As<IFacadeFilterService<StorageLocation, int, StorageLocationResource, StorageLocationResource, StorageLocationResource>>();
             builder.RegisterType<InspectedStateService>()
                 .As<IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource>>();
             builder.RegisterType<WarehouseFacadeService>().As<IWarehouseFacadeService>();
@@ -156,6 +157,8 @@
             builder.RegisterType<HubFacadeService>().As<IFacadeService<Hub, int, HubResource, HubResource>>();
             builder.RegisterType<CarrierFacadeService>().As<IFacadeService<Carrier, string, CarrierResource, CarrierResource>>();
             builder.RegisterType<ShippingTermFacadeService>().As<IFacadeService<ShippingTerm, int, ShippingTermResource, ShippingTermResource>>();
+            builder.RegisterType<GoodsInFacadeService>().As<IGoodsInFacadeService>();
+            builder.RegisterType<SalesArticleService>().As<ISalesArticleService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
@@ -177,6 +180,7 @@
             builder.RegisterType<ConsignmentShipfileDataProxy>()
                 .As<IConsignmentShipfileDataService>();
             builder.RegisterType<BartenderLabelPack>().As<IBartenderLabelPack>();
+            builder.RegisterType<GoodsInPack>().As<IGoodsInPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

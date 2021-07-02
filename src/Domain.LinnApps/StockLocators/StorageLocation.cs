@@ -15,6 +15,8 @@
 
         public string LocationType { get; set; }
 
+        public string DefaultStockPool { get; set; }
+
         public DateTime? DateInvalid { get; set; }
 
         public IEnumerable<StockLocator> StockLocators { get; set; }

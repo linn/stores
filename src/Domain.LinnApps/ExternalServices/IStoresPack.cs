@@ -36,5 +36,7 @@
             DateTime? toStockDate,
             string state,
             string stockPool);
+
+        int GetQuantityBookedIn(int purchaseOrderNumber, int line);
     }
 }

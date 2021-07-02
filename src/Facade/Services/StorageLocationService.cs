@@ -8,7 +8,8 @@
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Resources.StockLocators;
 
-    public class StorageLocationService : FacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource>
+    public class StorageLocationService 
+        : FacadeFilterService<StorageLocation, int, StorageLocationResource, StorageLocationResource, StorageLocationResource>
     {
         public StorageLocationService(IRepository<StorageLocation, int> repository, ITransactionManager transactionManager)
             : base(repository, transactionManager)
@@ -29,6 +30,11 @@
         {
             return l => (l.Description.ToUpper().Contains(searchTerm.ToUpper())
                         || l.LocationCode.ToUpper().Contains(searchTerm.ToUpper())) && l.DateInvalid == null;
+        }
+
+        protected override Expression<Func<StorageLocation, bool>> FilterExpression(StorageLocationResource searchResource)
+        {
+            return l => l.DefaultStockPool == searchResource.DefaultStockPool;
         }
     }
 }
