@@ -73,35 +73,50 @@ function ItemsTab({ viewing, editableItems, editablePallets, dispatch, setSaveDi
             id: 'palletNumber',
             type: 'number',
             editable: true,
-            required: true
+            required: true,
+            style: {
+                body: { minWidth: '110px', maxWidth: '110px' }
+            }
         },
         {
             title: 'Weight',
             id: 'weight',
             type: 'number',
             editable: true,
-            required: true
+            required: true,
+            style: {
+                body: { minWidth: '110px', maxWidth: '110px' }
+            }
         },
         {
             title: 'Height',
             id: 'height',
             type: 'number',
             editable: true,
-            required: true
+            required: true,
+            style: {
+                body: { minWidth: '110px', maxWidth: '110px' }
+            }
         },
         {
             title: 'Width',
             id: 'width',
             type: 'number',
             editable: true,
-            required: true
+            required: true,
+            style: {
+                body: { minWidth: '110px', maxWidth: '110px' }
+            }
         },
         {
             title: 'Depth',
             id: 'depth',
             type: 'number',
             editable: true,
-            required: true
+            required: true,
+            style: {
+                body: { minWidth: '110px', maxWidth: '110px' }
+            }
         }
     ];
 
@@ -111,19 +126,28 @@ function ItemsTab({ viewing, editableItems, editablePallets, dispatch, setSaveDi
             id: 'itemNumber',
             type: 'number',
             editable: true,
-            required: true
+            required: true,
+            style: {
+                body: { minWidth: '100px' }
+            }
         },
         {
             title: 'Container',
             id: 'containerNumber',
             type: 'number',
-            editable: true
+            editable: true,
+            style: {
+                body: { minWidth: '100px' }
+            }
         },
         {
             title: 'Pallet No',
             id: 'palletNumber',
             type: 'number',
-            editable: true
+            editable: true,
+            style: {
+                body: { minWidth: '100px' }
+            }
         },
         {
             title: 'Item Type',
@@ -134,7 +158,10 @@ function ItemsTab({ viewing, editableItems, editablePallets, dispatch, setSaveDi
                 { id: 'Loose Item', displayText: 'Loose Item' },
                 { id: 'Open Carton', displayText: 'Open Carton' },
                 { id: 'Sealed Box', displayText: 'Sealed Box' }
-            ]
+            ],
+            style: {
+                body: { minWidth: '180px' }
+            }
         },
         {
             title: 'Qty',
@@ -149,35 +176,49 @@ function ItemsTab({ viewing, editableItems, editablePallets, dispatch, setSaveDi
             type: 'text',
             editable: true,
             required: true,
-            textFieldRows: 4
+            style: {
+                body: { minWidth: '300px' }
+            }
         },
         {
             title: 'Weight',
             id: 'weight',
             type: 'number',
             editable: true,
-            required: true
+            required: true,
+            style: {
+                body: { minWidth: '110px' }
+            }
         },
         {
             title: 'Height',
             id: 'height',
             type: 'number',
             editable: true,
-            required: true
+            required: true,
+            style: {
+                body: { minWidth: '110px' }
+            }
         },
         {
             title: 'Width',
             id: 'width',
             type: 'number',
             editable: true,
-            required: true
+            required: true,
+            style: {
+                body: { minWidth: '110px' }
+            }
         },
         {
             title: 'Depth',
             id: 'depth',
             type: 'number',
             editable: true,
-            required: true
+            required: true,
+            style: {
+                body: { minWidth: '110px' }
+            }
         },
         {
             title: 'Order No',
@@ -189,7 +230,10 @@ function ItemsTab({ viewing, editableItems, editablePallets, dispatch, setSaveDi
             title: 'Line',
             id: 'orderLine',
             type: 'number',
-            editable: true
+            editable: true,
+            style: {
+                body: { minWidth: '100px' }
+            }
         },
         {
             title: 'Rsn No',
@@ -201,7 +245,10 @@ function ItemsTab({ viewing, editableItems, editablePallets, dispatch, setSaveDi
             title: 'Container Type',
             id: 'containterType',
             type: 'text',
-            editable: true
+            editable: true,
+            style: {
+                body: { minWidth: '180px' }
+            }
         }
     ];
 
@@ -234,11 +281,13 @@ function ItemsTab({ viewing, editableItems, editablePallets, dispatch, setSaveDi
                     )}
                 </Grid>
                 <Grid item xs={3} />
+            </Grid>
+            <Grid container spacing={3} style={{ paddingTop: '50px' }}>
                 <Grid item xs={1}>
                     <Typography variant="subtitle2">Items</Typography>
                 </Grid>
                 <Grid item xs={11}>
-                    {palletData && (
+                    {itemsData && (
                         <GroupEditTable
                             columns={itemColumns}
                             rows={itemsData}
