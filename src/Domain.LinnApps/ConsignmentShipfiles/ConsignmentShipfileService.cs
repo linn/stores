@@ -92,7 +92,8 @@
                             "Linn Orders",
                             model.Subject,
                             model.Body,
-                            pdf.Result);
+                            pdf.Result,
+                            "Shipfile");
                     }
 
                     if (test)
