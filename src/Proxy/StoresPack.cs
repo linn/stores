@@ -385,7 +385,6 @@
                 var arg1 = new OracleParameter("p_order_number", OracleDbType.Int32)
                                {
                                    Direction = ParameterDirection.Input,
-                                   Size = 50,
                                    Value = purchaseOrderNumber
                                };
                 cmd.Parameters.Add(arg1);
@@ -393,7 +392,6 @@
                 var arg2 = new OracleParameter("p_order_line", OracleDbType.Int32)
                                {
                                    Direction = ParameterDirection.Input,
-                                   Size = 50,
                                    Value = line
                                };
                 cmd.Parameters.Add(arg2);
@@ -401,13 +399,13 @@
                 var result = new OracleParameter("result", OracleDbType.Int32)
                                  {
                                      Direction = ParameterDirection.ReturnValue,
-                                     Size = 50
                                  };
                 cmd.Parameters.Add(result);
 
                 cmd.ExecuteNonQuery();
                 connection.Close();
-                return int.Parse(result.Value.ToString());
+                int.TryParse(result.Value.ToString(), out var res);
+                return res;
             }
         }
     }

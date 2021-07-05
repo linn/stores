@@ -162,7 +162,7 @@
                 partNumber = partNumberParam.Value.ToString();
                 description = partDescriptionParam.Value.ToString();
                 uom = uomParam.Value.ToString();
-                orderQty = int.Parse(orderQtyParam.Value.ToString());
+                int.TryParse(orderQtyParam.Value.ToString(), out orderQty);
                 qualityControlPart = qualityControlPartParam.Value.ToString();
                 manufacturerPartNumber = manufacturerPartParam.Value.ToString();
                 docType = docTypeParam.Value.ToString();
@@ -175,7 +175,7 @@
             using (var connection = this.databaseService.GetConnection())
             {
                 connection.Open();
-                var cmd = new OracleCommand("goods_in_pack.part_has_storage_type", connection)
+                var cmd = new OracleCommand("goods_in_pack.part_has_storage_type_wrapper", connection)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
@@ -214,9 +214,10 @@
 
                 cmd.ExecuteNonQuery();
 
-                bookInLocation = int.Parse(bookInLocationParameter.Value.ToString());
+                int.TryParse(bookInLocationParameter.Value.ToString(), out bookInLocation);
                 kardex = kardexParam.Value.ToString();
-                newPart = int.Parse(newPartParam.Value.ToString()) == 0;
+                int.TryParse(newPartParam.Value.ToString(), out var newPartInt);
+                newPart = newPartInt == 0;
                 connection.Close();
 
                 return int.Parse(result.Value.ToString()) == 0;

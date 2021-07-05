@@ -91,7 +91,7 @@
                 x => x.PartNumber.Equals(partNumber.ToUpper()) 
                       && x.QcOnReceipt.Equals("Y"));
 
-            if (!string.IsNullOrEmpty(part.QcInformation))
+            if (!string.IsNullOrEmpty(part?.QcInformation))
             {
                 result.PartQcWarning = part.QcInformation;
             }
@@ -112,6 +112,7 @@
             else
             {
                 result.Storage = kardex;
+                result.BookInMessage = message;
             }
 
             result.OrderNumber = orderNumber;
@@ -126,8 +127,7 @@
             result.OrderQty = orderQty;
             result.QcPart = qualityControlPart;
             result.DocumentType = docType;
-
-            result.State = !string.IsNullOrEmpty(part.QcOnReceipt) 
+            result.State = !string.IsNullOrEmpty(part?.QcOnReceipt) 
                                     && part.QcOnReceipt.Equals("Y") ? "QC" : "STORES";
 
             return result;
