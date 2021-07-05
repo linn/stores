@@ -180,37 +180,41 @@
                     CommandType = CommandType.StoredProcedure
                 };
 
-                var partNumberParam = new OracleParameter("p_part_number", OracleDbType.Varchar2)
+                var arg1 = new OracleParameter("p_part_number", OracleDbType.Varchar2)
                 {
                     Direction = ParameterDirection.Input,
-                    Size = 50
+                    Size = 200,
+                    Value = partNumber
                 };
-                cmd.Parameters.Add(partNumberParam);
+                
 
                 var bookInLocationParameter = new OracleParameter("p_bookin_loc", OracleDbType.Int32)
                 {
                     Direction = ParameterDirection.Output
                 };
-                cmd.Parameters.Add(bookInLocationParameter);
 
                 var kardexParam = new OracleParameter("p_kardex", OracleDbType.Varchar2)
                 {
                     Direction = ParameterDirection.Output,
-                    Size = 50
+                    Size = 200
                 };
-                cmd.Parameters.Add(kardexParam);
 
                 var newPartParam = new OracleParameter("p_new_part", OracleDbType.Int32)
                 {
                     Direction = ParameterDirection.Output
                 };
-                cmd.Parameters.Add(newPartParam);
+                
 
                 var result = new OracleParameter("result", OracleDbType.Int32)
                                  {
                                      Direction = ParameterDirection.ReturnValue
                                  };
+
                 cmd.Parameters.Add(result);
+                cmd.Parameters.Add(arg1);
+                cmd.Parameters.Add(bookInLocationParameter);
+                cmd.Parameters.Add(kardexParam);
+                cmd.Parameters.Add(newPartParam);
 
                 cmd.ExecuteNonQuery();
 
@@ -218,8 +222,8 @@
                 kardex = kardexParam.Value.ToString();
                 int.TryParse(newPartParam.Value.ToString(), out var newPartInt);
                 newPart = newPartInt == 0;
+                
                 connection.Close();
-
                 return int.Parse(result.Value.ToString()) == 0;
             }
         }

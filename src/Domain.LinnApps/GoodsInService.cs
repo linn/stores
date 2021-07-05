@@ -96,11 +96,13 @@
                 result.PartQcWarning = part.QcInformation;
             }
 
-            if (!this.goodsInPack.PartHasStorageType(
-                    partNumber,
-                    out _,
-                    out var kardex,
-                    out var newPart))
+            var partHasStorageType = !this.goodsInPack.PartHasStorageType(
+                                         partNumber,
+                                         out _,
+                                         out var kardex,
+                                         out var newPart);
+
+            if (partHasStorageType)
             {
                 if (newPart)
                 {

@@ -26,7 +26,7 @@
                              Storage = model.Storage,
                              TransactionType = model.TransactionType,
                              State = model.State
-                       };
+            };
         }
 
         object IResourceBuilder<ValidatePurchaseOrderResult>.Build(ValidatePurchaseOrderResult model) => this.Build(model);
