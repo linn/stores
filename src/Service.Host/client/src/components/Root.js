@@ -43,6 +43,8 @@ import TqmsSummaryByCategoryReportOptions from '../containers/reports/TqmsSummar
 import TqmsSummaryByCategoryReport from '../containers/reports/TqmsSummaryByCategoryReport';
 import ConsignmentShipfiles from '../containers/ConsignmentShipfiles';
 import Consignment from '../containers/consignments/Consignment';
+import ImportBook from '../containers/importBooks/ImportBook';
+import ImportBooks from '../containers/importBooks/ImportBooks';
 
 const Root = ({ store }) => (
     <div>
@@ -232,6 +234,16 @@ const Root = ({ store }) => (
                                         exact
                                         path="/logistics/consignments"
                                         component={Consignment}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/import-books/:id"
+                                        component={ImportBook}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/import-books"
+                                        component={ImportBooks}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>

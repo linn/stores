@@ -13,7 +13,7 @@ import {
     LinkButton
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
-import ImportBookTab from '../../containers/importBooks/tabs/ImportBookTab';
+import ImpBookTab from '../../containers/importBooks/tabs/ImpBookTab';
 import ImportBookReducer from './ImportBookReducer';
 
 function ImportBook({
@@ -195,7 +195,7 @@ function ImportBook({
                                 <Tab label="Comments" />
                             </Tabs>
                             {tab === 0 && (
-                                <ImportBookTab
+                                <ImpBookTab
                                     id={state.impbook.id}
                                     dateCreated={state.impbook.dateCreated}
                                     editStatus={editStatus}

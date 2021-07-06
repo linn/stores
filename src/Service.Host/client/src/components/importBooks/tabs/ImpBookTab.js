@@ -9,7 +9,7 @@ import {
     SearchInputField
 } from '@linn-it/linn-form-components-library';
 
-function ImportBookTab({
+function ImpBookTab({
     handleFieldChange,
     dateCreated,
     parcelNumber,
@@ -81,12 +81,144 @@ function ImportBookTab({
                 />
             </Grid>
 
+            <Grid item xs={1} />
+
+            <Grid item xs={6}>
+                <InputField
+                    label="Vax ref"
+                    fullWidth
+                    onChange={handleFieldChange}
+                    propertyName="vaxRef"
+                    value={vaxRef}
+                    required
+                />
+            </Grid>
+
+            <Grid item xs={4}>
+                <Dropdown
+                    items={employees.map(e => ({
+                        displayText: `${e.fullName} (${e.id})`,
+                        id: parseInt(e.id, 10)
+                    }))}
+                    propertyName="createdBy"
+                    fullWidth
+                    value={createdBy}
+                    label="Created by"
+                    required
+                    onChange={handleFieldChange}
+                    type="number"
+                />
+            </Grid>
+
+            <Grid item xs={6}>
+                <InputField
+                    label="Parcel Number"
+                    fullWidth
+                    onChange={handleFieldChange}
+                    propertyName="parcelNumber"
+                    value={parcelNumber}
+                    required
+                />
+            </Grid>
+            <Grid item xs={6}>
+                <LinkButton text="View Parcel" to={`/logistics/parcels/${parcelNumber}`} />
+            </Grid>
+
+            <Grid item xs={6}>
+                <div className={classes.displayInline}>
+                    <Typeahead
+                        label="Supplier"
+                        title="Search for a supplier"
+                        onSelect={handleSupplierChange}
+                        items={suppliersSearchResults}
+                        loading={suppliersSearchLoading}
+                        fetchItems={searchSuppliers}
+                        clearSearch={() => clearSuppliersSearch}
+                        value={`${parcel.supplierId} - ${supplierNameValue()}`}
+                        modal
+                        links={false}
+                        history={history}
+                        debounce={1000}
+                        minimumSearchTermLength={2}
+                    />
+                </div>
+                <div className={classes.marginTop1}>
+                    <Tooltip title="Clear Supplier search">
+                        <Button variant="outlined" onClick={clearSupplier}>
+                            X
+                        </Button>
+                    </Tooltip>
+                </div>
+            </Grid>
+            <Grid item xs={3}>
+                <InputField
+                    label="Supplier Country"
+                    value={supplierCountryValue()}
+                    disabled
+                    fullwidth
+                />
+            </Grid>
+
+            {/* ,
+    supplierId,
+    foreignCurrency,
+    currency,
+    carrier,
+    OldArrivalPort,
+    flightNumber,
+    transportId,
+    transportBillNumber,
+    transactionId,
+    deliveryTermCode,
+    arrivalPort,
+    lineVatTotal,
+    hwb,
+    supplierCostCurrency,
+    transNature,
+    arrivalDate,
+    freightCharges,
+    handlingCharge,
+    clearanceCharge,
+    cartage,
+    duty,
+    vat,
+    misc,
+    carriersInvTotal,
+    carriersVatTotal,
+    totalImportValue,
+    pieces,
+    weight,
+    customsEntryCode,
+    customsEntryCodeDate,
+    linnDuty,
+    linnVat,
+    iprCpcNumber,
+    eecgNumber,
+    dateCancelled,
+    cancelledBy,
+    cancelledReason,
+    carrierInvNumber,
+    carrierInvDate,
+    countryOfOrigin,
+    fcName,
+    storage,
+    numCartons,
+    numPallets,
+    comments,
+    exchangeRate,
+    exchangeCurrency,
+    baseCurrency,
+    periodNumber,
+    ,
+    portCode,
+    customsEntryCodePrefix */}
+
             <Grid item xs={9} />
         </Grid>
     );
 }
 
-ImportBookTab.propTypes = {
+ImpBookTab.propTypes = {
     handleFieldChange: PropTypes.func.isRequired,
     dateCreated: PropTypes.string.isRequired,
     parcelNumber: PropTypes.number,
@@ -145,7 +277,7 @@ ImportBookTab.propTypes = {
     customsEntryCodePrefix: ''
 };
 
-ImportBookTab.defaultProps = {
+ImpBookTab.defaultProps = {
     parcelNumber: null,
     currency: '',
     OldArrivalPort: '',
@@ -195,4 +327,4 @@ ImportBookTab.defaultProps = {
     customsEntryCodePrefix: ''
 };
 
-export default ImportBookTab;
+export default ImpBookTab;

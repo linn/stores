@@ -93,6 +93,8 @@ import carrier from './carrier';
 import carriers from './carriers';
 import shippingTerm from './shippingTerm';
 import shippingTerms from './shippingTerms';
+import importBook from './importBooks/importBook';
+import importBooks from './importBooks/importBook';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -129,6 +131,8 @@ const rootReducer = history =>
         finishAllocation,
         hub,
         hubs,
+        importBook,
+        importBooks,
         inspectedStates,
         interCompanyInvoices,
         makeIntercompanyInvoices,

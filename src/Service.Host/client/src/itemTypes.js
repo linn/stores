@@ -317,3 +317,7 @@ export const shippingTerms = new ItemType(
     'SHIPPING_TERMS',
     '/logistics/shipping-terms'
 );
+
+export const importBook = new ItemType('importBook', 'IMPORT_BOOK', '/logistics/import-books');
+
+export const importBooks = new ItemType('importBooks', 'IMPORT_BOOKS', '/logistics/import-books');
