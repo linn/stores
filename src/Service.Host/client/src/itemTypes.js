@@ -312,8 +312,23 @@ export const shippingTerm = new ItemType(
     'SHIPPING_TERM',
     '/logistics/shipping-terms'
 );
+
 export const shippingTerms = new ItemType(
     'shippingTerms',
     'SHIPPING_TERMS',
     '/logistics/shipping-terms'
+);
+
+export const demLocations = new ItemType(
+    'demLocations',
+    '/logistics/goods-in/dem-locations',
+    'DEM_LOCATIONS'
+);
+
+export const loanDetails = new ItemType('loanDetails', '/logistics/loan-details', 'LOAN_DETAILS');
+
+export const validatePurchaseOrderResult = new ItemType(
+    'validatePurchaseOrderResult',
+    'VALIDATE_PURCHASE_ORDER_RESULT',
+    '/logistics/purchase-orders/validate'
 );

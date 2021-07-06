@@ -93,6 +93,9 @@ import carrier from './carrier';
 import carriers from './carriers';
 import shippingTerm from './shippingTerm';
 import shippingTerms from './shippingTerms';
+import demLoactions from './demLocations';
+import loanDetails from './loanDetails';
+import validatePurchaseOrderResult from './validatePurchaseOrderResult';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -115,6 +118,7 @@ const rootReducer = history =>
         consignmentShipfiles,
         countries,
         createAuditReqs,
+        demLoactions,
         departments,
         decrementRules,
         deptStockParts,
@@ -131,6 +135,7 @@ const rootReducer = history =>
         hubs,
         inspectedStates,
         interCompanyInvoices,
+        loanDetails,
         makeIntercompanyInvoices,
         manufacturers,
         mechPartSource,
@@ -181,6 +186,7 @@ const rootReducer = history =>
         unallocateConsignmentLine,
         unitsOfMeasure,
         unpickItemsAllocation,
+        validatePurchaseOrderResult,
         wandConsignments,
         wandItems,
         workstationTopUpStatus,

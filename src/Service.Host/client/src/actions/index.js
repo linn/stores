@@ -232,3 +232,11 @@ export const carriersActionTypes = makeActionTypes(itemTypes.carriers.actionType
 
 export const shippingTermActionTypes = makeActionTypes(itemTypes.shippingTerm.actionType);
 export const shippingTermsActionTypes = makeActionTypes(itemTypes.shippingTerms.actionType, false);
+
+export const demLocationsActionTypes = makeActionTypes(itemTypes.demLocations.actionType, false);
+
+export const loanDetailsActionTypes = makeActionTypes(itemTypes.loanDetails.actionType, false);
+
+export const validatePurchaseOrderActionTypes = makeActionTypes(
+    itemTypes.validatePurchaseOrderResult.actionType
+);
