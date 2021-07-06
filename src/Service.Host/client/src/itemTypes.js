@@ -321,8 +321,8 @@ export const shippingTerms = new ItemType(
 
 export const demLocations = new ItemType(
     'demLocations',
-    '/logistics/goods-in/dem-locations',
-    'DEM_LOCATIONS'
+    'DEM_LOCATIONS',
+    '/logistics/goods-in/dem-locations'
 );
 
 export const loanDetails = new ItemType('loanDetails', '/logistics/loan-details', 'LOAN_DETAILS');
@@ -331,4 +331,10 @@ export const validatePurchaseOrderResult = new ItemType(
     'validatePurchaseOrderResult',
     'VALIDATE_PURCHASE_ORDER_RESULT',
     '/logistics/purchase-orders/validate'
+);
+
+export const salesArticles = new ItemType(
+    'salesArticles',
+    'SALES_ARTICLES',
+    'inventory/sales-articles'
 );

@@ -240,3 +240,5 @@ export const loanDetailsActionTypes = makeActionTypes(itemTypes.loanDetails.acti
 export const validatePurchaseOrderActionTypes = makeActionTypes(
     itemTypes.validatePurchaseOrderResult.actionType
 );
+
+export const salesArticlesActionTypes = makeActionTypes(itemTypes.salesArticles.actionType);

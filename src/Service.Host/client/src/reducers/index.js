@@ -93,9 +93,10 @@ import carrier from './carrier';
 import carriers from './carriers';
 import shippingTerm from './shippingTerm';
 import shippingTerms from './shippingTerms';
-import demLoactions from './demLocations';
+import demLocations from './demLocations';
 import loanDetails from './loanDetails';
 import validatePurchaseOrderResult from './validatePurchaseOrderResult';
+import salesArticles from './salesArticles';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -118,7 +119,7 @@ const rootReducer = history =>
         consignmentShipfiles,
         countries,
         createAuditReqs,
-        demLoactions,
+        demLocations,
         departments,
         decrementRules,
         deptStockParts,
@@ -157,6 +158,7 @@ const rootReducer = history =>
         reqMoves,
         rootProducts,
         salesAccounts,
+        salesArticles,
         salesOutlets,
         sernosSequences,
         shipfilesSendEmails,
