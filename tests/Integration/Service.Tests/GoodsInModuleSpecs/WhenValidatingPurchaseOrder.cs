@@ -28,7 +28,7 @@
                 new SuccessResult<ValidatePurchaseOrderResult>(this.result));
 
             this.Response = this.Browser.Get(
-                $"/logistics/purchase-orders/validate",
+                $"/logistics/purchase-orders/validate/1",
                 with =>
                     {
                         with.Header("Accept", "application/json");
