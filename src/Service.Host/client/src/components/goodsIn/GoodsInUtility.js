@@ -5,7 +5,9 @@ import { InputField, Typeahead } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 
 function GoodsInUtility({
+    validatePurchaseOrder,
     validatePurchaseOrderResult,
+    validatePurchaseOrderResultLoading,
     searchDemLocations,
     demLocationsSearchLoading,
     demLocationsSearchResults,
@@ -27,7 +29,11 @@ function GoodsInUtility({
                     <InputField
                         fullWidth
                         disabled
-                        value={validatePurchaseOrderResult?.bookInMessage}
+                        value={
+                            validatePurchaseOrderResultLoading
+                                ? 'loading'
+                                : validatePurchaseOrderResult?.bookInMessage
+                        }
                         label="Message"
                         propertyName="bookInMessage"
                     />
@@ -39,6 +45,9 @@ function GoodsInUtility({
                         label="PO Number"
                         propertyName="purchaseOrderNumber"
                         onChange={handleFieldChange}
+                        textFieldProps={{
+                            onBlur: () => validatePurchaseOrder(formData.purchaseOrderNumber)
+                        }}
                     />
                 </Grid>
                 <Grid item xs={8} />
@@ -100,7 +109,9 @@ GoodsInUtility.propTypes = {
     validatePurchaseOrderResult: PropTypes.shape({
         bookInMessage: PropTypes.string
     }),
+    validatePurchaseOrderResultLoading: PropTypes.bool,
     searchDemLocations: PropTypes.func.isRequired,
+    validatePurchaseOrder: PropTypes.func.isRequired,
     demLocationsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     demLocationsSearchLoading: PropTypes.bool,
     searchSalesArticles: PropTypes.func.isRequired,
@@ -113,6 +124,7 @@ GoodsInUtility.propTypes = {
 
 GoodsInUtility.defaultProps = {
     validatePurchaseOrderResult: null,
+    validatePurchaseOrderResultLoading: false,
     demLocationsSearchResults: [],
     demLocationsSearchLoading: false,
     salesArticlesSearchResults: [],

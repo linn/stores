@@ -11,6 +11,7 @@ import salesArticlesActions from '../../actions/salesArticlesActions';
 
 const mapStateToProps = state => ({
     validatePurchaseOrderResult: validatePurchaseOrderResultSelectors.getItem(state),
+    validatePurchaseOrderResultLoading: validatePurchaseOrderResultSelectors.getLoading(state),
     demLocationsSearchResults: demLocationsSelectors
         .getSearchItems(state)
         .map(c => ({ id: c.id, name: c.locationCode, description: c.description })),
