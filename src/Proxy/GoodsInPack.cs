@@ -159,14 +159,18 @@
                 cmd.ExecuteNonQuery();
                 connection.Close();
 
-                partNumber = partNumberParam.Value?.ToString();
-                description = partDescriptionParam.Value?.ToString();
-                uom = uomParam.Value?.ToString();
+                partNumber = partNumberParam.Value.ToString().Equals("null") ? null : partNumberParam.Value.ToString();
+                description = partDescriptionParam.Value.ToString().Equals("null") ? null : partDescriptionParam.Value.ToString();
+                uom = uomParam.Value.ToString().Equals("null") ? null : uomParam.Value.ToString();
                 int.TryParse(orderQtyParam.Value.ToString(), out orderQty);
-                qualityControlPart = qualityControlPartParam.Value?.ToString();
-                manufacturerPartNumber = manufacturerPartParam.Value?.ToString();
-                docType = docTypeParam.Value?.ToString();
-                message = messageParam.Value?.ToString();
+                qualityControlPart = qualityControlPartParam.Value.ToString().Equals("null") 
+                                         ? null 
+                                         : qualityControlPartParam.Value.ToString();
+                manufacturerPartNumber = manufacturerPartParam.Value.ToString().Equals("null") 
+                                             ? null 
+                                             : manufacturerPartParam.Value.ToString();
+                docType = docTypeParam.Value.ToString().Equals("null") ? null : docTypeParam.Value.ToString();
+                message = messageParam.Value.ToString().Equals("null") ? null : messageParam.Value.ToString();
             }
         }
 
