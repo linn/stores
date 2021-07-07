@@ -336,5 +336,5 @@ export const validatePurchaseOrderResult = new ItemType(
 export const salesArticles = new ItemType(
     'salesArticles',
     'SALES_ARTICLES',
-    'inventory/sales-articles'
+    '/inventory/sales-articles'
 );
