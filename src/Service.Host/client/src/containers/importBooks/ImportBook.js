@@ -18,8 +18,7 @@ const mapStateToProps = (state, { match }) => ({
     itemError: getItemError(state, itemTypes.part.item),
     privileges: getPrivileges(state),
     userName: getUserName(state),
-    userNumber: getUserNumber(state),
-    partsSearchResults: importBookSelectors.getSearchItems(state)
+    userNumber: getUserNumber(state)
 });
 
 const mapDispatchToProps = dispatch => {

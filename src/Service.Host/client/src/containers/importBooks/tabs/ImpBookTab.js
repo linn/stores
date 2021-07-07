@@ -1,33 +1,34 @@
 import { connect } from 'react-redux';
 import { initialiseOnMount } from '@linn-it/linn-form-components-library';
-import BuildTab from '../../../components/parts/tabs/BuildTab';
-import sernosSequencesActions from '../../../actions/sernosSequencesActions';
-import sernosSequencesSelectors from '../../../selectors/sernosSequencesSelectors';
-import assemblyTechnologiesSelectors from '../../../selectors/assemblyTechnologiesSelectors';
-import assemblyTechnologiesActions from '../../../actions/assemblyTechnologiesActions';
-import decrementRulesSelectors from '../../../selectors/decrementRulesSelectors';
-import decrementRulesActions from '../../../actions/decrementRulesActions';
+import ImpBookTab from '../../../components/importBooks/tabs/ImpBookTab';
+import employeesActions from '../../../actions/employeesActions';
+import employeesSelectors from '../../../selectors/employeesSelectors';
+import suppliersSelectors from '../../../selectors/suppliersSelectors';
+import suppliersActions from '../../../actions/suppliersActions';
 import config from '../../../config';
 
 const mapStateToProps = state => ({
-    sernosSequencesSearchResults: sernosSequencesSelectors
-        .getSearchItems(state)
-        .map?.(s => ({ name: s.sequenceName, description: s.description })),
-    sernosSequencesSearchLoading: sernosSequencesSelectors.getSearchLoading(state),
-    assemblyTechnologies: assemblyTechnologiesSelectors.getItems(state),
-    decrementRules: decrementRulesSelectors.getItems(state),
-    appRoot: config.appRoot
+    suppliersSearchResults: suppliersSelectors.getSearchItems(state).map?.(c => ({
+        id: c.id,
+        name: c.id.toString(),
+        description: c.name,
+        country: c.countryCode
+    })),
+    suppliersSearchLoading: suppliersSelectors.getSearchLoading(state),
+    employees: employeesSelectors.getItems(state),
+    appRoot: config.appRoot,
+    supplierItem: suppliersSelectors.getItem(state)
 });
 
 const initialise = () => dispatch => {
-    dispatch(assemblyTechnologiesActions.fetch());
-    dispatch(decrementRulesActions.fetch());
+    dispatch(employeesActions.fetch());
 };
 
 const mapDispatchToProps = {
     initialise,
-    searchSernosSequences: sernosSequencesActions.search,
-    clearSernosSequencesSearch: sernosSequencesActions.clearSearch
+    searchSuppliers: suppliersActions.search,
+    clearSuppliersSearch: suppliersActions.clearSearch,
+    getSupplier: suppliersActions.fetchById
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(BuildTab));
+export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(ImpBookTab));

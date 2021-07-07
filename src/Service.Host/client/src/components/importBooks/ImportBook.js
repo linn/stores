@@ -94,8 +94,18 @@ function ImportBook({
 
     const [state, dispatch] = useReducer(ImportBookReducer, {
         impbook: creating() ? defaultImpBook : { id: '' },
-        prevImpbook: { id: '' }
+        prevImpBook: { id: '' }
     });
+
+    useEffect(() => {
+        if (item && item !== state.prevImpBook) {
+            if (editStatus === 'create') {
+                dispatch({ type: 'initialise', payload: defaultImpBook });
+            } else {
+                dispatch({ type: 'initialise', payload: item });
+            }
+        }
+    }, [item, state.prevImpBook, editStatus, defaultImpBook]);
 
     const viewing = () => editStatus === 'view';
 
@@ -146,7 +156,11 @@ function ImportBook({
         <Page>
             <Grid container spacing={3}>
                 <Grid item xs={10}>
-                    {creating() ? <Title text="" /> : <Title text="Import Book" />}
+                    {creating() ? (
+                        <Title text="Create Import Book" />
+                    ) : (
+                        <Title text="Import Book" />
+                    )}
                 </Grid>
                 <Grid item xs={2} />
 
@@ -199,6 +213,9 @@ function ImportBook({
                                     id={state.impbook.id}
                                     dateCreated={state.impbook.dateCreated}
                                     editStatus={editStatus}
+                                    handleFieldChange={handleFieldChange}
+                                    parcelNumber={state.parcelNumber}
+                                    supplierId={state.supplierId}
                                 />
                             )}
                             <Grid item xs={12}>

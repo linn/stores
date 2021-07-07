@@ -6,14 +6,13 @@ import importBooksSelectors from '../../selectors/importBooksSelectors';
 import { getPrivileges } from '../../selectors/userSelectors';
 
 const mapStateToProps = state => ({
-    items: importBooksActions.getSearchItems(state),
-    loading: importBooksActions.getSearchLoading(state),
+    items: importBooksSelectors.getSearchItems(state),
+    loading: importBooksSelectors.getSearchLoading(state),
     privileges: getPrivileges(state)
 });
 
 const initialise = () => dispatch => {
-    console.info(importBooksActions);
-    dispatch(importBooksSelectors.fetch());
+    dispatch(importBooksActions.fetch());
 };
 
 const mapDispatchToProps = {

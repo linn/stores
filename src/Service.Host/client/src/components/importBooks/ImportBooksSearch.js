@@ -10,7 +10,7 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
     };
 
     const searchItems = () => {
-        return result?.map(item => ({
+        return items?.map(item => ({
             ...item,
             name: item.id.toString(),
             description: `${item.id}, created ${item.dateCreated}`,

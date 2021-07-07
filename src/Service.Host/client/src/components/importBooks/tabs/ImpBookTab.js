@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
 import Grid from '@material-ui/core/Grid';
 import {
     InputField,
@@ -8,8 +10,17 @@ import {
     LinkButton,
     SearchInputField
 } from '@linn-it/linn-form-components-library';
+import { makeStyles } from '@material-ui/styles';
 
 function ImpBookTab({
+    employees,
+    suppliersSearchResults,
+    suppliersSearchLoading,
+    searchSuppliers,
+    clearSuppliersSearch,
+    getSupplier,
+    supplierItem,
+
     handleFieldChange,
     dateCreated,
     parcelNumber,
@@ -67,6 +78,49 @@ function ImpBookTab({
     portCode,
     customsEntryCodePrefix
 }) {
+    const [supplier, setSupplier] = useState({ id: -1, name: 'loading', country: 'loading' });
+
+    useEffect(() => {
+        if (supplierId && supplier.id !== supplierId) {
+            getSupplier(supplierId);
+            setSupplier({
+                ...supplier,
+                id: supplierId
+            });
+        }
+    }, [supplierId, supplier, getSupplier]);
+
+    useEffect(() => {
+        if (
+            supplierItem &&
+            supplier.id !== supplierItem.id &&
+            supplier.name !== supplierItem.name
+        ) {
+            setSupplier({
+                ...supplier,
+                id: supplierItem.id,
+                name: supplierItem.name,
+                country: supplierItem.country
+            });
+        }
+    }, [supplierItem, supplier]);
+
+    const clearSupplier = () => {
+        handleFieldChange('supplierId', '');
+        setSupplier({ ...supplier, name: '', country: '' });
+    };
+
+    const handleSupplierChange = supplierParam => {
+        handleFieldChange('supplierId', supplierParam.id);
+    };
+
+    const useStyles = makeStyles(() => ({
+        displayInline: {
+            display: 'inline'
+        }
+    }));
+    const classes = useStyles();
+
     return (
         <Grid container spacing={3}>
             <Grid item xs={5}>
@@ -134,10 +188,10 @@ function ImpBookTab({
                         loading={suppliersSearchLoading}
                         fetchItems={searchSuppliers}
                         clearSearch={() => clearSuppliersSearch}
-                        value={`${parcel.supplierId} - ${supplierNameValue()}`}
+                        value={`${supplierId} - ${supplier.name}`}
                         modal
                         links={false}
-                        history={history}
+                        // history={history}
                         debounce={1000}
                         minimumSearchTermLength={2}
                     />
@@ -151,12 +205,7 @@ function ImpBookTab({
                 </div>
             </Grid>
             <Grid item xs={3}>
-                <InputField
-                    label="Supplier Country"
-                    value={supplierCountryValue()}
-                    disabled
-                    fullwidth
-                />
+                <InputField label="Supplier Country" value={supplier.country} disabled fullwidth />
             </Grid>
 
             {/* ,
@@ -219,6 +268,19 @@ function ImpBookTab({
 }
 
 ImpBookTab.propTypes = {
+    employees: PropTypes.arrayOf(PropTypes.shape({})),
+    suppliersSearchResults: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    suppliersSearchLoading: PropTypes.bool.isRequired,
+    searchSuppliers: PropTypes.func.isRequired,
+    clearSuppliersSearch: PropTypes.func.isRequired,
+    supplierItem: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number,
+            name: PropTypes.string,
+            country: PropTypes.string
+        })
+    ),
+
     handleFieldChange: PropTypes.func.isRequired,
     dateCreated: PropTypes.string.isRequired,
     parcelNumber: PropTypes.number,
@@ -278,6 +340,8 @@ ImpBookTab.propTypes = {
 };
 
 ImpBookTab.defaultProps = {
+    employees: [{ id: '-1', fullname: 'loading..' }],
+    supplierItem: { id: 0, name: '', country: '' },
     parcelNumber: null,
     currency: '',
     OldArrivalPort: '',

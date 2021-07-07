@@ -94,7 +94,7 @@ import carriers from './carriers';
 import shippingTerm from './shippingTerm';
 import shippingTerms from './shippingTerms';
 import importBook from './importBooks/importBook';
-import importBooks from './importBooks/importBook';
+import importBooks from './importBooks/importBooks';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
