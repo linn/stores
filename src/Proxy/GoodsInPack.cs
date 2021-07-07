@@ -159,14 +159,14 @@
                 cmd.ExecuteNonQuery();
                 connection.Close();
 
-                partNumber = partNumberParam.Value.ToString();
-                description = partDescriptionParam.Value.ToString();
-                uom = uomParam.Value.ToString();
+                partNumber = partNumberParam.Value?.ToString();
+                description = partDescriptionParam.Value?.ToString();
+                uom = uomParam.Value?.ToString();
                 int.TryParse(orderQtyParam.Value.ToString(), out orderQty);
-                qualityControlPart = qualityControlPartParam.Value.ToString();
-                manufacturerPartNumber = manufacturerPartParam.Value.ToString();
-                docType = docTypeParam.Value.ToString();
-                message = messageParam.Value.ToString();
+                qualityControlPart = qualityControlPartParam.Value?.ToString();
+                manufacturerPartNumber = manufacturerPartParam.Value?.ToString();
+                docType = docTypeParam.Value?.ToString();
+                message = messageParam.Value?.ToString();
             }
         }
 
