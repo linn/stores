@@ -98,7 +98,15 @@ function ImportBook({
     });
 
     useEffect(() => {
-        if (item && item !== state.prevImpBook) {
+        if (item && item.id !== state.prevImpBook.id) {
+            console.log(
+                `item.id is ${item.id} and state.prevImpBook.id is ${
+                    state.prevImpBook.id
+                } and them !== is ${item.id !== state.prevImpBook.id}`
+            );
+            console.log('in init useEffect');
+            console.info(state.prevImpbook);
+            console.info(item);
             if (editStatus === 'create') {
                 dispatch({ type: 'initialise', payload: defaultImpBook });
             } else {
@@ -176,7 +184,7 @@ function ImportBook({
                         <Loading />
                     </Grid>
                 ) : (
-                    (state.impbook.id || creating()) &&
+                    (state.id || creating()) &&
                     itemError?.status !== 404 && (
                         <>
                             <SnackbarMessage
@@ -188,7 +196,7 @@ function ImportBook({
                                 <InputField
                                     fullWidth
                                     disabled
-                                    value={creating() ? 'New' : state.impbook?.id}
+                                    value={creating() ? 'New' : state.id}
                                     label="Import Book Id"
                                     maxLength={8}
                                     helperText="This field cannot be changed"
@@ -196,28 +204,47 @@ function ImportBook({
                                     propertyName="id"
                                 />
                             </Grid>
-                            <Tabs
-                                value={tab}
-                                onChange={handleTabChange}
-                                indicatorColor="primary"
-                                textColor="primary"
-                                style={{ paddingBottom: '40px' }}
-                            >
-                                <Tab label="Import Book" />
-                                <Tab label="Order Details" />
-                                <Tab label="Post Entries" />
-                                <Tab label="Comments" />
-                            </Tabs>
+                            <Grid item xs={1} />
+                            <Grid item xs={8}>
+                                <Tabs
+                                    value={tab}
+                                    onChange={handleTabChange}
+                                    indicatorColor="primary"
+                                    textColor="primary"
+                                    style={{ paddingBottom: '40px' }}
+                                >
+                                    <Tab label="Import Book" />
+                                    <Tab label="Order Details" />
+                                    <Tab label="Post Entries" />
+                                    <Tab label="Comments" />
+                                </Tabs>
+                            </Grid>
+
                             {tab === 0 && (
                                 <ImpBookTab
-                                    id={state.impbook.id}
-                                    dateCreated={state.impbook.dateCreated}
+                                    dateCreated={state.dateCreated}
                                     editStatus={editStatus}
                                     handleFieldChange={handleFieldChange}
                                     parcelNumber={state.parcelNumber}
+                                    vaxRef={state.vaxRef}
                                     supplierId={state.supplierId}
+                                    foreignCurrency={state.foreignCurrency}
+                                    eecgNumber={state.eecgNumber}
+                                    currency={state.currency}
+                                    exchangeRate={state.exchangeRate}
+                                    totalImportValue={state.totalImportValue}
+                                    createdBy={state.createdBy}
+                                    freightCharges={state.freightCharges}
+                                    handlingCharge={state.handlingCharge}
+                                    clearanceCharge={state.clearanceCharge}
+                                    cartage={state.cartage}
+                                    storage={state.storage}
+                                    duty={state.duty}
+                                    vat={state.vat}
+                                    misc={state.misc}
                                 />
                             )}
+
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons
                                     saveDisabled={viewing() || impbookInvalid()}

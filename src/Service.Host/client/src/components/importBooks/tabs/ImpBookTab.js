@@ -18,8 +18,7 @@ function ImpBookTab({
     suppliersSearchLoading,
     searchSuppliers,
     clearSuppliersSearch,
-    getSupplier,
-    supplierItem,
+    allSuppliers,
 
     handleFieldChange,
     dateCreated,
@@ -80,135 +79,208 @@ function ImpBookTab({
 }) {
     const [supplier, setSupplier] = useState({ id: -1, name: 'loading', country: 'loading' });
 
-    useEffect(() => {
-        if (supplierId && supplier.id !== supplierId) {
-            getSupplier(supplierId);
-            setSupplier({
-                ...supplier,
-                id: supplierId
-            });
-        }
-    }, [supplierId, supplier, getSupplier]);
+    const [localSuppliers, setLocalSuppliers] = useState([{}]);
 
     useEffect(() => {
-        if (
-            supplierItem &&
-            supplier.id !== supplierItem.id &&
-            supplier.name !== supplierItem.name
-        ) {
-            setSupplier({
-                ...supplier,
-                id: supplierItem.id,
-                name: supplierItem.name,
-                country: supplierItem.country
-            });
+        if (allSuppliers) {
+            setLocalSuppliers([...allSuppliers]);
         }
-    }, [supplierItem, supplier]);
+    }, [allSuppliers]);
+
+    const supplierCountryValue = () => {
+        if (localSuppliers.length && supplierId) {
+            const tempSupplier = localSuppliers.find(x => x.id === supplierId);
+            if (!tempSupplier) {
+                return '-';
+            }
+            return tempSupplier.countryCode;
+        }
+        if (!supplierId) {
+            return '';
+        }
+
+        return 'loading..';
+    };
+
+    const supplierNameValue = () => {
+        if (localSuppliers.length && supplierId) {
+            const tempSupplier = localSuppliers.find(x => x.id === supplierId);
+            if (!tempSupplier) {
+                return 'undefined supplier';
+            }
+            return tempSupplier.name;
+        }
+        if (!supplierId) {
+            return '';
+        }
+        return 'loading..';
+    };
 
     const clearSupplier = () => {
         handleFieldChange('supplierId', '');
-        setSupplier({ ...supplier, name: '', country: '' });
     };
 
     const handleSupplierChange = supplierParam => {
         handleFieldChange('supplierId', supplierParam.id);
     };
 
-    const useStyles = makeStyles(() => ({
+    const useStyles = makeStyles(theme => ({
         displayInline: {
             display: 'inline'
+        },
+        marginTop1: {
+            marginTop: theme.spacing(1),
+            display: 'inline-block',
+            width: '2em'
         }
     }));
     const classes = useStyles();
 
     return (
-        <Grid container spacing={3}>
-            <Grid item xs={5}>
-                <SearchInputField
-                    label="Date Created"
-                    fullWidth
-                    onChange={handleFieldChange}
-                    propertyName="dateCreated"
-                    type="date"
-                    value={dateCreated}
-                    required
-                />
-            </Grid>
-
-            <Grid item xs={1} />
-
-            <Grid item xs={6}>
-                <InputField
-                    label="Vax ref"
-                    fullWidth
-                    onChange={handleFieldChange}
-                    propertyName="vaxRef"
-                    value={vaxRef}
-                    required
-                />
-            </Grid>
-
-            <Grid item xs={4}>
-                <Dropdown
-                    items={employees.map(e => ({
-                        displayText: `${e.fullName} (${e.id})`,
-                        id: parseInt(e.id, 10)
-                    }))}
-                    propertyName="createdBy"
-                    fullWidth
-                    value={createdBy}
-                    label="Created by"
-                    required
-                    onChange={handleFieldChange}
-                    type="number"
-                />
-            </Grid>
-
-            <Grid item xs={6}>
-                <InputField
-                    label="Parcel Number"
-                    fullWidth
-                    onChange={handleFieldChange}
-                    propertyName="parcelNumber"
-                    value={parcelNumber}
-                    required
-                />
-            </Grid>
-            <Grid item xs={6}>
-                <LinkButton text="View Parcel" to={`/logistics/parcels/${parcelNumber}`} />
-            </Grid>
-
-            <Grid item xs={6}>
-                <div className={classes.displayInline}>
-                    <Typeahead
-                        label="Supplier"
-                        title="Search for a supplier"
-                        onSelect={handleSupplierChange}
-                        items={suppliersSearchResults}
-                        loading={suppliersSearchLoading}
-                        fetchItems={searchSuppliers}
-                        clearSearch={() => clearSuppliersSearch}
-                        value={`${supplierId} - ${supplier.name}`}
-                        modal
-                        links={false}
-                        // history={history}
-                        debounce={1000}
-                        minimumSearchTermLength={2}
+        <>
+            <Grid container spacing={1} item xs={6}>
+                <Grid item xs={6}>
+                    <SearchInputField
+                        label="Date Created"
+                        fullWidth
+                        onChange={handleFieldChange}
+                        propertyName="dateCreated"
+                        type="date"
+                        value={dateCreated}
+                        required
                     />
-                </div>
-                <div className={classes.marginTop1}>
-                    <Tooltip title="Clear Supplier search">
-                        <Button variant="outlined" onClick={clearSupplier}>
-                            X
-                        </Button>
-                    </Tooltip>
-                </div>
-            </Grid>
-            <Grid item xs={3}>
-                <InputField label="Supplier Country" value={supplier.country} disabled fullwidth />
-            </Grid>
+                </Grid>
 
-            {/* ,
+                <Grid item xs={6}>
+                    <Dropdown
+                        items={employees.map(e => ({
+                            displayText: `${e.fullName} (${e.id})`,
+                            id: parseInt(e.id, 10)
+                        }))}
+                        propertyName="createdBy"
+                        fullWidth
+                        value={createdBy}
+                        label="Created by"
+                        onChange={handleFieldChange}
+                        type="number"
+                    />
+                </Grid>
+
+                <Grid item xs={6}>
+                    <InputField
+                        label="Vax ref"
+                        fullWidth
+                        onChange={handleFieldChange}
+                        propertyName="vaxRef"
+                        value={vaxRef}
+                        required
+                    />
+                </Grid>
+                <Grid item xs={6} />
+
+                <Grid item xs={6}>
+                    <InputField
+                        label="Parcel Number"
+                        fullWidth
+                        onChange={handleFieldChange}
+                        propertyName="parcelNumber"
+                        value={parcelNumber}
+                        required
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                    <LinkButton text="View Parcel" to={`/logistics/parcels/${parcelNumber}`} />
+                </Grid>
+
+                <Grid item xs={6}>
+                    <div className={classes.displayInline}>
+                        <Typeahead
+                            label="Supplier"
+                            title="Search for a supplier"
+                            onSelect={handleSupplierChange}
+                            items={suppliersSearchResults}
+                            loading={suppliersSearchLoading}
+                            fetchItems={searchSuppliers}
+                            clearSearch={() => clearSuppliersSearch}
+                            value={`${supplierId} - ${supplierNameValue()}`}
+                            modal
+                            links={false}
+                            // history={history}
+                            debounce={1000}
+                            minimumSearchTermLength={2}
+                        />
+                    </div>
+                    <div className={classes.marginTop1}>
+                        <Tooltip title="Clear Supplier search">
+                            <Button variant="outlined" onClick={clearSupplier}>
+                                X
+                            </Button>
+                        </Tooltip>
+                    </div>
+                </Grid>
+                <Grid item xs={3}>
+                    <InputField
+                        label="Supplier Country"
+                        value={supplierCountryValue()}
+                        disabled
+                        fullwidth
+                    />
+                </Grid>
+                <Grid item xs={3}>
+                    {/* TODO look up how this should actually be calculated and set, not sure eec member is based on eecgnumber */}
+                    <InputField
+                        label="EEC member"
+                        value={eecgNumber ? 'Yes' : 'No'}
+                        disabled
+                        fullwidth
+                    />
+                </Grid>
+
+                <Grid item xs={4}>
+                    <Dropdown
+                        items={[
+                            { id: 'Y', displayText: 'Yes' },
+                            { id: 'N', displayText: 'No' }
+                        ]}
+                        propertyName="foreignCurrency"
+                        fullWidth
+                        value={foreignCurrency}
+                        label="Foreign Currency"
+                        onChange={handleFieldChange}
+                    />
+                </Grid>
+
+                <Grid item xs={4}>
+                    {/* Todo change this to a search/typeahead and implement rest of required stuff
+                    also should this be currency or foreign currency?
+                     */}
+                    <InputField
+                        fullWidth
+                        value={currency}
+                        label="Currency"
+                        maxLength={8}
+                        onChange={handleFieldChange}
+                        propertyName="currency"
+                    />
+                </Grid>
+
+                <Grid item xs={4}>
+                    {/* Todo implement exchange rate lookup - might need to be its own popup function */}
+                    <InputField
+                        fullWidth
+                        value={exchangeRate}
+                        label="Exchange Rate"
+                        maxLength={8}
+                        onChange={handleFieldChange}
+                        propertyName="exchangeRate"
+                    />
+                </Grid>
+
+                <Grid item xs={6}>
+                    <InputField label="Total Import Value" value={totalImportValue} fullwidth />
+                </Grid>
+
+                {/* ,
     supplierId,
     foreignCurrency,
     currency,
@@ -225,13 +297,8 @@ function ImpBookTab({
     supplierCostCurrency,
     transNature,
     arrivalDate,
-    freightCharges,
-    handlingCharge,
-    clearanceCharge,
-    cartage,
-    duty,
-    vat,
-    misc,
+
+    
     carriersInvTotal,
     carriersVatTotal,
     totalImportValue,
@@ -262,8 +329,42 @@ function ImpBookTab({
     portCode,
     customsEntryCodePrefix */}
 
-            <Grid item xs={9} />
-        </Grid>
+                <Grid item xs={9} />
+            </Grid>
+
+            <Grid container spacing={1} item xs={1} />
+
+            <Grid container spacing={1} item xs={5}>
+                <Grid item xs={6}>
+                    <InputField label="Freight Charges" value={freightCharges} fullwidth />
+                </Grid>
+                <Grid item xs={6}>
+                    <InputField label="Handling Charge" value={handlingCharge} fullwidth />
+                </Grid>
+                <Grid item xs={6}>
+                    <InputField label="Clearance Charge" value={clearanceCharge} fullwidth />
+                </Grid>
+                <Grid item xs={6}>
+                    <InputField label="Cartage" value={cartage} fullwidth />
+                </Grid>
+                <Grid item xs={6}>
+                    <InputField label="Storage" value={storage} fullwidth />
+                </Grid>
+                <Grid item xs={6}>
+                    <InputField label="Duty" value={duty} fullwidth />
+                </Grid>
+                <Grid item xs={6}>
+                    <InputField label="Vat" value={vat} fullwidth />
+                </Grid>
+                <Grid item xs={6}>
+                    <InputField label="Misc" value={misc} fullwidth />
+                </Grid>
+
+                {/* <Grid item xs={6}>
+                    <InputField label="Net total" value={netTotal} fullwidth />
+                </Grid> */}
+            </Grid>
+        </>
     );
 }
 
@@ -280,6 +381,7 @@ ImpBookTab.propTypes = {
             country: PropTypes.string
         })
     ),
+    getSupplier: PropTypes.func.isRequired,
 
     handleFieldChange: PropTypes.func.isRequired,
     dateCreated: PropTypes.string.isRequired,

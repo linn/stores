@@ -17,11 +17,13 @@ const mapStateToProps = state => ({
     suppliersSearchLoading: suppliersSelectors.getSearchLoading(state),
     employees: employeesSelectors.getItems(state),
     appRoot: config.appRoot,
-    supplierItem: suppliersSelectors.getItem(state)
+    supplierItem: suppliersSelectors.getItem(state),
+    allSuppliers: suppliersSelectors.getItems(state)
 });
 
 const initialise = () => dispatch => {
     dispatch(employeesActions.fetch());
+    dispatch(suppliersActions.fetch());
 };
 
 const mapDispatchToProps = {
