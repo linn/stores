@@ -39,7 +39,7 @@ function ImportBook({
         supplierId: null,
         foreignCurrency: '',
         currency: '',
-        carrier: null,
+        carrierId: null,
         OldArrivalPort: '',
         flightNumber: '',
         transportId: null,
@@ -99,14 +99,6 @@ function ImportBook({
 
     useEffect(() => {
         if (item && item.id !== state.prevImpBook.id) {
-            console.log(
-                `item.id is ${item.id} and state.prevImpBook.id is ${
-                    state.prevImpBook.id
-                } and them !== is ${item.id !== state.prevImpBook.id}`
-            );
-            console.log('in init useEffect');
-            console.info(state.prevImpbook);
-            console.info(item);
             if (editStatus === 'create') {
                 dispatch({ type: 'initialise', payload: defaultImpBook });
             } else {
@@ -233,6 +225,13 @@ function ImportBook({
                                     currency={state.currency}
                                     exchangeRate={state.exchangeRate}
                                     totalImportValue={state.totalImportValue}
+                                    carrierId={state.carrierId}
+                                    carrierInvDate={state.carrierInvDate}
+                                    carrierInvNumber={state.carrierInvNumber}
+                                    transportId={state.transportId}
+                                    transportBillNumber={state.transportBillNumber}
+                                    transactionId={state.transactionId}
+
                                     createdBy={state.createdBy}
                                     freightCharges={state.freightCharges}
                                     handlingCharge={state.handlingCharge}
@@ -269,7 +268,7 @@ ImportBook.propTypes = {
         supplierId: PropTypes.number.isRequired,
         foreignCurrency: PropTypes.string.isRequired,
         currency: PropTypes.string,
-        carrier: PropTypes.number.isRequired,
+        carrierId: PropTypes.number.isRequired,
         OldArrivalPort: PropTypes.string,
         flightNumber: PropTypes.string,
         transportId: PropTypes.number.isRequired,

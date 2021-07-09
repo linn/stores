@@ -1086,7 +1086,7 @@
 
         private void BuildImportBookTransactionCodes(ModelBuilder builder)
         {
-            var q = builder.Entity<ImportBookTransactionCode>().ToTable("IMP_BOOK_TRANSACTION_CODES");
+            var q = builder.Entity<ImportBookTransactionCode>().ToTable("IMPBOOK_TRANSACTION_CODES");
             q.HasKey(e => e.TransactionId);
             q.Property(e => e.TransactionId).HasColumnName("TRANSACTION_ID");
             q.Property(e => e.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);

@@ -19,6 +19,12 @@ function ImpBookTab({
     searchSuppliers,
     clearSuppliersSearch,
     allSuppliers,
+    carriersSearchResults,
+    carriersSearchLoading,
+    searchCarriers,
+    clearCarriersSearch,
+    transportCodes,
+    transactionCodes,
 
     handleFieldChange,
     dateCreated,
@@ -26,7 +32,7 @@ function ImpBookTab({
     supplierId,
     foreignCurrency,
     currency,
-    carrier,
+    carrierId,
     OldArrivalPort,
     flightNumber,
     transportId,
@@ -116,12 +122,35 @@ function ImpBookTab({
         return 'loading..';
     };
 
+    const carrierNameValue = () => {
+        if (localSuppliers.length && carrierId) {
+            const tempCarrier = localSuppliers.find(x => x.id === carrierId);
+            if (!tempCarrier) {
+                return 'undefined carrier';
+            }
+            return tempCarrier.name;
+        }
+        if (!carrierId) {
+            return '';
+        }
+
+        return 'loading..';
+    };
+
     const clearSupplier = () => {
         handleFieldChange('supplierId', '');
     };
 
+    const clearCarrier = () => {
+        handleFieldChange('carrierId', '');
+    };
+
     const handleSupplierChange = supplierParam => {
         handleFieldChange('supplierId', supplierParam.id);
+    };
+
+    const handleCarrierChange = carrierParam => {
+        handleFieldChange('carrierId', carrierParam.id);
     };
 
     const useStyles = makeStyles(theme => ({
@@ -132,6 +161,12 @@ function ImpBookTab({
             marginTop: theme.spacing(1),
             display: 'inline-block',
             width: '2em'
+        },
+        gapAbove: {
+            marginTop: theme.spacing(8)
+        },
+        negativeTopMargin: {
+            marginTop: theme.spacing(-4)
         }
     }));
     const classes = useStyles();
@@ -139,6 +174,17 @@ function ImpBookTab({
     return (
         <>
             <Grid container spacing={1} item xs={6}>
+                <Grid item xs={6}>
+                    <InputField
+                        label="Vax ref"
+                        fullWidth
+                        onChange={handleFieldChange}
+                        propertyName="vaxRef"
+                        value={vaxRef}
+                    />
+                </Grid>
+                <Grid item xs={6} />
+
                 <Grid item xs={6}>
                     <SearchInputField
                         label="Date Created"
@@ -168,26 +214,14 @@ function ImpBookTab({
 
                 <Grid item xs={6}>
                     <InputField
-                        label="Vax ref"
-                        fullWidth
-                        onChange={handleFieldChange}
-                        propertyName="vaxRef"
-                        value={vaxRef}
-                        required
-                    />
-                </Grid>
-                <Grid item xs={6} />
-
-                <Grid item xs={6}>
-                    <InputField
                         label="Parcel Number"
                         fullWidth
                         onChange={handleFieldChange}
                         propertyName="parcelNumber"
                         value={parcelNumber}
-                        required
                     />
                 </Grid>
+
                 <Grid item xs={6}>
                     <LinkButton text="View Parcel" to={`/logistics/parcels/${parcelNumber}`} />
                 </Grid>
@@ -208,6 +242,7 @@ function ImpBookTab({
                             // history={history}
                             debounce={1000}
                             minimumSearchTermLength={2}
+                            required
                         />
                     </div>
                     <div className={classes.marginTop1}>
@@ -247,6 +282,7 @@ function ImpBookTab({
                         value={foreignCurrency}
                         label="Foreign Currency"
                         onChange={handleFieldChange}
+                        required
                     />
                 </Grid>
 
@@ -273,18 +309,114 @@ function ImpBookTab({
                         maxLength={8}
                         onChange={handleFieldChange}
                         propertyName="exchangeRate"
+                        disabled
                     />
                 </Grid>
 
                 <Grid item xs={6}>
                     <InputField label="Total Import Value" value={totalImportValue} fullwidth />
                 </Grid>
+                <Grid item xs={2} />
+
+                <Grid item xs={4} className={classes.negativeTopMargin}>
+                    <LinkButton
+                        text="Exchange Rates"
+                        // to={''}
+                    />
+                </Grid>
+
+                <Grid item xs={12} className={classes.gapAbove}>
+                    <div className={classes.displayInline}>
+                        <Typeahead
+                            label="Carrier"
+                            title="Search for a carrier"
+                            onSelect={handleCarrierChange}
+                            items={carriersSearchResults}
+                            loading={carriersSearchLoading}
+                            fetchItems={searchCarriers}
+                            clearSearch={() => clearCarriersSearch}
+                            value={`${carrierId} - ${carrierNameValue()}`}
+                            modal
+                            links={false}
+                            // history={history}
+                            debounce={1000}
+                            minimumSearchTermLength={2}
+                            required
+                        />
+                    </div>
+                    <div className={classes.marginTop1}>
+                        <Tooltip title="Clear Supplier search">
+                            <Button variant="outlined" onClick={clearCarrier}>
+                                X
+                            </Button>
+                        </Tooltip>
+                    </div>
+                </Grid>
+
+                <Grid item xs={6}>
+                    <InputField
+                        label="Carrier Invoice No"
+                        fullWidth
+                        onChange={handleFieldChange}
+                        propertyName="carrierInvNumber"
+                        value={carrierInvNumber}
+                    />
+                </Grid>
+
+                <Grid item xs={6}>
+                    <SearchInputField
+                        label="carrier Invoice Date"
+                        fullWidth
+                        onChange={handleFieldChange}
+                        propertyName="carrierInvDate"
+                        type="date"
+                        value={carrierInvDate}
+                    />
+                </Grid>
+
+                <Grid item xs={6}>
+                    <Dropdown
+                        items={transportCodes.map(e => ({
+                            displayText: `${e.transportId} (${e.description})`,
+                            id: parseInt(e.transportId, 10)
+                        }))}
+                        propertyName="transportId"
+                        fullWidth
+                        value={transportId}
+                        label="Mode of Transport"
+                        onChange={handleFieldChange}
+                    />
+                </Grid>
+
+                <Grid item xs={6}>
+                    <InputField
+                        label="Transport Bill Number"
+                        fullWidth
+                        onChange={handleFieldChange}
+                        propertyName="transportBillNumber"
+                        value={transportBillNumber}
+                    />
+                </Grid>
+
+                <Grid item xs={6}>
+                    <Dropdown
+                        items={transactionCodes.map(e => ({
+                            displayText: `${e.transactionId} (${e.description})`,
+                            id: parseInt(e.transactionId, 10)
+                        }))}
+                        propertyName="transactionId"
+                        fullWidth
+                        value={transactionId}
+                        label="Transaction Code"
+                        onChange={handleFieldChange}
+                    />
+                </Grid>
 
                 {/* ,
     supplierId,
     foreignCurrency,
     currency,
-    carrier,
+    carrierId,
     OldArrivalPort,
     flightNumber,
     transportId,
@@ -370,26 +502,38 @@ function ImpBookTab({
 
 ImpBookTab.propTypes = {
     employees: PropTypes.arrayOf(PropTypes.shape({})),
-    suppliersSearchResults: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    suppliersSearchResults: PropTypes.arrayOf(
+        PropTypes.shape({ id: PropTypes.number, name: PropTypes.string, country: PropTypes.string })
+    ).isRequired,
     suppliersSearchLoading: PropTypes.bool.isRequired,
     searchSuppliers: PropTypes.func.isRequired,
     clearSuppliersSearch: PropTypes.func.isRequired,
-    supplierItem: PropTypes.arrayOf(
+    allSuppliers: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.number,
             name: PropTypes.string,
             country: PropTypes.string
         })
     ),
-    getSupplier: PropTypes.func.isRequired,
-
+    carriersSearchResults: PropTypes.arrayOf(
+        PropTypes.shape({ id: PropTypes.number, name: PropTypes.string, country: PropTypes.string })
+    ).isRequired,
+    carriersSearchLoading: PropTypes.bool.isRequired,
+    searchCarriers: PropTypes.func.isRequired,
+    clearCarriersSearch: PropTypes.func.isRequired,
+    transportCodes: PropTypes.arrayOf(
+        PropTypes.shape({ transportId: PropTypes.number, description: PropTypes.string })
+    ).isRequired,
+    transactionCodes: PropTypes.arrayOf(
+        PropTypes.shape({ transactionId: PropTypes.number, description: PropTypes.string })
+    ).isRequired,
     handleFieldChange: PropTypes.func.isRequired,
     dateCreated: PropTypes.string.isRequired,
     parcelNumber: PropTypes.number,
     supplierId: PropTypes.number.isRequired,
     foreignCurrency: PropTypes.string.isRequired,
     currency: PropTypes.string,
-    carrier: PropTypes.number.isRequired,
+    carrierId: PropTypes.number.isRequired,
     OldArrivalPort: PropTypes.string,
     flightNumber: PropTypes.string,
     transportId: PropTypes.number.isRequired,
@@ -443,7 +587,7 @@ ImpBookTab.propTypes = {
 
 ImpBookTab.defaultProps = {
     employees: [{ id: '-1', fullname: 'loading..' }],
-    supplierItem: { id: 0, name: '', country: '' },
+    allSuppliers: [{ id: 0, name: 'loading', country: 'loading' }],
     parcelNumber: null,
     currency: '',
     OldArrivalPort: '',
