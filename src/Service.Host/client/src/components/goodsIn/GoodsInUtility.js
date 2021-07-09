@@ -6,6 +6,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import { InputField, Typeahead, Dropdown, DatePicker } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 
@@ -21,7 +22,10 @@ function GoodsInUtility({
     storagePlacesSearchLoading,
     searchSalesArticles,
     salesArticlesSearchResults,
-    salesArticlesSearchLoading
+    salesArticlesSearchLoading,
+    bookInResult,
+    bookInResultLoading,
+    doBookIn
 }) {
     const [formData, setFormData] = useState({
         purchaseOrderNumber: null,
@@ -40,6 +44,15 @@ function GoodsInUtility({
         }
     }, [validatePurchaseOrderResult]);
 
+    const getMessage = () => {
+        if (validatePurchaseOrderResultLoading || bookInResultLoading) {
+            return 'loading';
+        }
+        if (bookInResult?.message) {
+            return bookInResult?.message;
+        }
+        return validatePurchaseOrderResult?.bookInMessage;
+    };
     return (
         <Page>
             <Grid container spacing={3}>
@@ -47,11 +60,7 @@ function GoodsInUtility({
                     <InputField
                         fullWidth
                         disabled
-                        value={
-                            validatePurchaseOrderResultLoading
-                                ? 'loading'
-                                : validatePurchaseOrderResult?.bookInMessage
-                        }
+                        value={getMessage()}
                         label="Message"
                         propertyName="bookInMessage"
                     />
@@ -333,6 +342,15 @@ function GoodsInUtility({
                         </AccordionDetails>
                     </Accordion>
                 </Grid>
+                <Grid item xs={12}>
+                    <Button
+                        className="hide-when-printing"
+                        variant="contained"
+                        onClick={() => doBookIn(formData)}
+                    >
+                        Book In
+                    </Button>
+                </Grid>
             </Grid>
         </Page>
     );
@@ -364,10 +382,18 @@ GoodsInUtility.propTypes = {
     salesArticlesSearchLoading: PropTypes.bool,
     searchStoragePlaces: PropTypes.func.isRequired,
     storagePlacesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
-    storagePlacesSearchLoading: PropTypes.bool
+    storagePlacesSearchLoading: PropTypes.bool,
+    bookInResult: PropTypes.shape({
+        success: PropTypes.bool,
+        message: PropTypes.string
+    }),
+    bookInResultLoading: PropTypes.bool,
+    doBookIn: PropTypes.func.isRequired
 };
 
 GoodsInUtility.defaultProps = {
+    bookInResult: null,
+    bookInResultLoading: false.valueOf,
     validatePurchaseOrderResult: null,
     validatePurchaseOrderResultLoading: false,
     demLocationsSearchResults: [],

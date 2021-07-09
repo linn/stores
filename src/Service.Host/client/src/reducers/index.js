@@ -97,6 +97,7 @@ import demLocations from './demLocations';
 import loanDetails from './loanDetails';
 import validatePurchaseOrderResult from './validatePurchaseOrderResult';
 import salesArticles from './salesArticles';
+import doBookIn from './doBookIn';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -126,6 +127,7 @@ const rootReducer = history =>
         despatchLocations,
         despatchPalletQueueReport,
         despatchPickingSummaryReport,
+        doBookIn,
         doStockMove,
         doWandItem,
         employees,

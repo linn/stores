@@ -242,3 +242,7 @@ export const validatePurchaseOrderActionTypes = makeActionTypes(
 );
 
 export const salesArticlesActionTypes = makeActionTypes(itemTypes.salesArticles.actionType);
+
+export const doBookInActionTypes = makeProcessActionTypes(
+    processTypes.doBookInActionTypes.actionType
+);

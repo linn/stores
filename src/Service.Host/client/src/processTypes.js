@@ -75,3 +75,5 @@ export const shipfilesSendEmails = new ItemType(
     'SHIPFILES_SEND_EMAILS',
     '/logistics/shipfiles/send-emails'
 );
+
+export const doBookIn = new ItemType('doBookIn', 'DO_BOOK_IN', '/logistics/book-in');
