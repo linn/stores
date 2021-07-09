@@ -31,7 +31,7 @@
             this.Get("/logistics/loan-details", _ => this.GetLoanDetails());
             this.Get("/logistics/goods-in/dem-locations", _ => this.GetDemLocations());
             this.Get("/inventory/sales-articles", _ => this.SearchSalesArticles());
-            this.Get("/logistics/purchase-orders/validate", _ => this.ValidatePurchaseOrder());
+            this.Get("/logistics/purchase-orders/validate/{id}", parameters => this.ValidatePurchaseOrder(parameters.id));
         }
 
         private object DoBookIn()
@@ -64,11 +64,11 @@
                     this.Bind<SearchRequestResource>().SearchTerm));
         }
 
-        private object ValidatePurchaseOrder()
+        private object ValidatePurchaseOrder(int id)
         {
             return this.Negotiate.WithModel(
                 this.service.ValidatePurchaseOrder(
-                    this.Bind<ValidatePurchaseOrderRequestResource>().OrderNumber, 1));
+                    id, 1));
         }
     }
 }

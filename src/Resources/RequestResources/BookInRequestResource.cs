@@ -2,8 +2,6 @@
 {
     public class BookInRequestResource
     {
-        public int BookInRef { get; set; }
-
         public string TransactionType { get; set; }
 
         public int CreatedBy { get; set; }
@@ -12,11 +10,11 @@
 
         public int Qty { get; set; }
 
-        public int OrderNumber { get; set; }
+        public int? OrderNumber { get; set; }
 
-        public int OrderLine { get; set; }
+        public int? OrderLine { get; set; }
 
-        public int RsnNumber { get; set; }
+        public int? RsnNumber { get; set; }
 
         public string StoragePlace { get; set; }
 
@@ -32,6 +30,10 @@
 
         public string RsnAccessories { get; set; }
 
-        public int ReqNumber { get; set; }
+        public int? ReqNumber { get; set; }
+
+        public int? LoanNumber { get; set; }
+
+        public int? LoanLine { get; set; }
     }
 }

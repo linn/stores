@@ -5,14 +5,15 @@
     public interface IGoodsInService
     {
         ProcessResult DoBookIn(
-            int bookInRef,
             string transactionType,
             int createdBy,
             string partNumber,
             int qty,
-            int orderNumber,
-            int orderLine,
-            int rsnNumber,
+            int? orderNumber,
+            int? orderLine,
+            int? loanNumber,
+            int? loanLine,
+            int? rsnNumber,
             string storagePlace,
             string storageType,
             string demLocation,
@@ -20,7 +21,7 @@
             string comments,
             string condition,
             string rsnAccessories,
-            int reqNumber);
+            int? reqNumber);
 
         ValidatePurchaseOrderResult ValidatePurchaseOrder(int orderNumber, int line);
     }

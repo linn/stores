@@ -25,13 +25,14 @@
         public IResult<ProcessResult> DoBookIn(BookInRequestResource requestResource)
         {
             var result = this.domainService.DoBookIn(
-                requestResource.BookInRef,
                 requestResource.TransactionType,
                 requestResource.CreatedBy,
                 requestResource.PartNumber,
                 requestResource.Qty,
                 requestResource.OrderNumber,
                 requestResource.OrderLine,
+                requestResource.LoanNumber,
+                requestResource.LoanLine,
                 requestResource.RsnNumber,
                 requestResource.StoragePlace,
                 requestResource.StorageType,

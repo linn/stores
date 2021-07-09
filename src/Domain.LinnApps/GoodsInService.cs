@@ -24,14 +24,15 @@
         }
 
         public ProcessResult DoBookIn(
-            int bookInRef,
             string transactionType,
             int createdBy,
             string partNumber,
             int qty,
-            int orderNumber,
-            int orderLine,
-            int rsnNumber,
+            int? orderNumber,
+            int? orderLine,
+            int? loanNumber,
+            int? loanLine,
+            int? rsnNumber,
             string storagePlace,
             string storageType,
             string demLocation,
@@ -39,16 +40,17 @@
             string comments,
             string condition,
             string rsnAccessories,
-            int reqNumber)
+            int? reqNumber)
         {
             this.goodsInPack.DoBookIn(
-                bookInRef,
                 transactionType,
                 createdBy,
                 partNumber,
                 qty,
                 orderNumber,
                 orderLine,
+                loanNumber,
+                loanLine,
                 rsnNumber,
                 storagePlace,
                 storageType,
@@ -91,16 +93,18 @@
                 x => x.PartNumber.Equals(partNumber.ToUpper()) 
                       && x.QcOnReceipt.Equals("Y"));
 
-            if (!string.IsNullOrEmpty(part.QcInformation))
+            if (!string.IsNullOrEmpty(part?.QcInformation))
             {
                 result.PartQcWarning = part.QcInformation;
             }
 
-            if (!this.goodsInPack.PartHasStorageType(
-                    partNumber,
-                    out _,
-                    out var kardex,
-                    out var newPart))
+            var partHasStorageType = this.goodsInPack.PartHasStorageType(
+                                         partNumber,
+                                         out _,
+                                         out var kardex,
+                                         out var newPart);
+
+            if (!partHasStorageType)
             {
                 if (newPart)
                 {
@@ -112,6 +116,7 @@
             else
             {
                 result.Storage = kardex;
+                result.BookInMessage = message;
             }
 
             result.OrderNumber = orderNumber;
@@ -126,8 +131,7 @@
             result.OrderQty = orderQty;
             result.QcPart = qualityControlPart;
             result.DocumentType = docType;
-
-            result.State = !string.IsNullOrEmpty(part.QcOnReceipt) 
+            result.State = !string.IsNullOrEmpty(part?.QcOnReceipt) 
                                     && part.QcOnReceipt.Equals("Y") ? "QC" : "STORES";
 
             return result;
