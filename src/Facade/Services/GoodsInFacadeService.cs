@@ -32,6 +32,8 @@
                 requestResource.Qty,
                 requestResource.OrderNumber,
                 requestResource.OrderLine,
+                requestResource.LoanNumber,
+                requestResource.LoanLine,
                 requestResource.RsnNumber,
                 requestResource.StoragePlace,
                 requestResource.StorageType,

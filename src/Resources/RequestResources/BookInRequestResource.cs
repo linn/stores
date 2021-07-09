@@ -33,5 +33,9 @@
         public string RsnAccessories { get; set; }
 
         public int ReqNumber { get; set; }
+
+        public int? LoanNumber { get; set; }
+
+        public int? LoanLine { get; set; }
     }
 }

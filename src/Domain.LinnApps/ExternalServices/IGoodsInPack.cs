@@ -10,6 +10,8 @@
             int qty,
             int orderNumber,
             int orderLine,
+            int? loanNumber,
+            int? loanLine,
             int rsnNumber,
             string storagePlace,
             string storageType,

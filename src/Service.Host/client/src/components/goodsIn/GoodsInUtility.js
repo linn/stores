@@ -6,7 +6,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
-import { InputField, Typeahead, Dropdown } from '@linn-it/linn-form-components-library';
+import { InputField, Typeahead, Dropdown, DatePicker } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 
 function GoodsInUtility({
@@ -23,7 +23,10 @@ function GoodsInUtility({
     salesArticlesSearchResults,
     salesArticlesSearchLoading
 }) {
-    const [formData, setFormData] = useState({ purchaseOrderNumber: null });
+    const [formData, setFormData] = useState({
+        purchaseOrderNumber: null,
+        dateReceived: new Date()
+    });
     const handleFieldChange = (propertyName, newValue) => {
         setFormData({ ...formData, [propertyName]: newValue });
     };
@@ -192,6 +195,17 @@ function GoodsInUtility({
                         onChange={handleFieldChange}
                     />
                 </Grid>
+
+                <Grid item xs={3}>
+                    <DatePicker
+                        label="Date Received"
+                        value={formData?.dateReceived}
+                        onChange={value => {
+                            handleFieldChange('dateReceived', value);
+                        }}
+                    />
+                </Grid>
+
                 <Grid item xs={12}>
                     <Accordion expanded={bookInPoExpanded}>
                         <AccordionSummary

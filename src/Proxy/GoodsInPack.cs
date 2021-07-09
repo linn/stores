@@ -24,6 +24,8 @@
             int qty,
             int orderNumber,
             int orderLine,
+            int? loanNumber,
+            int? loanLine,
             int rsnNumber,
             string storagePlace,
             string storageType,
@@ -35,7 +37,160 @@
             int reqNumber,
             out bool success)
         {
-            throw new System.NotImplementedException();
+            using (var connection = this.databaseService.GetConnection())
+            {
+                connection.Open();
+                var cmd =
+                    new OracleCommand(
+                        "goods_in_pack.do_bookin_wrapper",
+                        connection)
+                        {
+                            CommandType = CommandType.StoredProcedure
+                        };
+                var bookinRefParam = new OracleParameter("p_bookin_ref", OracleDbType.Int32)
+                               {
+                                   Direction = ParameterDirection.Input,
+                                   Value = bookInRef
+                               };
+                cmd.Parameters.Add(bookinRefParam);
+
+                var transTypeParam = new OracleParameter("p_trans_type", OracleDbType.Varchar2)
+                               {
+                                   Direction = ParameterDirection.Input,
+                                   Size = 50,
+                                   Value = transactionType
+                               };
+                cmd.Parameters.Add(transTypeParam);
+
+                var createdByParam = new OracleParameter("p_created_by", OracleDbType.Int32)
+                               {
+                                   Direction = ParameterDirection.Input,
+                                   Value = createdBy
+                               };
+                cmd.Parameters.Add(createdByParam);
+
+                var partNumberParam = new OracleParameter("p_part_number", OracleDbType.Varchar2)
+                                         {
+                                             Direction = ParameterDirection.Input,
+                                             Size = 50,
+                                             Value = partNumber
+                                         };
+                cmd.Parameters.Add(partNumberParam);
+
+                var qtyParam = new OracleParameter("p_qty", OracleDbType.Int32)
+                                         {
+                                             Direction = ParameterDirection.Input,
+                                             Value = qty
+                                         };
+                cmd.Parameters.Add(qtyParam);
+
+                var orderNumberParam = new OracleParameter("p_order_number", OracleDbType.Int32)
+                                   {
+                                       Direction = ParameterDirection.Input,
+                                       Value = orderNumber
+                                   };
+                cmd.Parameters.Add(orderNumberParam);
+
+                var orderLineParam = new OracleParameter("p_order_line", OracleDbType.Int32)
+                                           {
+                                               Direction = ParameterDirection.Input,
+                                               Value = orderLine
+                                           };
+                cmd.Parameters.Add(orderLineParam);
+
+                var loanNumberParam = new OracleParameter("p_loan_number", OracleDbType.Int32)
+                                         {
+                                             Direction = ParameterDirection.Input,
+                                             Value = loanNumber
+                                         };
+                cmd.Parameters.Add(loanNumberParam);
+
+                var loanLineParam = new OracleParameter("p_loan_line", OracleDbType.Int32)
+                                          {
+                                              Direction = ParameterDirection.Input,
+                                              Value = loanLine
+                                          };
+                cmd.Parameters.Add(loanLineParam);
+
+                var rsnNumberParam = new OracleParameter("p_rsn_number", OracleDbType.Int32)
+                                            {
+                                                Direction = ParameterDirection.Input,
+                                                Value = rsnNumber
+                                            };
+                cmd.Parameters.Add(rsnNumberParam);
+
+                var storagePlaceParam = new OracleParameter("p_storage_place", OracleDbType.Varchar2)
+                                          {
+                                              Direction = ParameterDirection.Input,
+                                              Size = 50,
+                                              Value = storagePlace
+                                          };
+                cmd.Parameters.Add(storagePlaceParam);
+
+                var storageTypeParam = new OracleParameter("p_storage_type", OracleDbType.Varchar2)
+                                            {
+                                                Direction = ParameterDirection.Input,
+                                                Size = 50,
+                                                Value = storageType
+                                            };
+                cmd.Parameters.Add(storageTypeParam);
+
+                var demLocationParam = new OracleParameter("p_dem_location", OracleDbType.Varchar2)
+                                           {
+                                               Direction = ParameterDirection.Input, Size = 50, Value = demLocation
+                                           };
+                cmd.Parameters.Add(demLocationParam);
+
+                var stateParam = new OracleParameter("p_state", OracleDbType.Varchar2)
+                                           {
+                                               Direction = ParameterDirection.Input,
+                                               Size = 50,
+                                               Value = state
+                                           };
+                cmd.Parameters.Add(stateParam);
+
+                var commentsParam = new OracleParameter("p_comments", OracleDbType.Varchar2)
+                                     {
+                                         Direction = ParameterDirection.Input,
+                                         Size = 2000,
+                                         Value = comments
+                                     };
+                cmd.Parameters.Add(commentsParam);
+
+                var rsnConditionParam = new OracleParameter("p_rsn_condition", OracleDbType.Varchar2)
+                                        {
+                                            Direction = ParameterDirection.Input,
+                                            Size = 2000,
+                                            Value = condition
+                                        };
+                cmd.Parameters.Add(rsnConditionParam);
+
+                var rsnAccessoriesParam = new OracleParameter("p_rsn_accs", OracleDbType.Varchar2)
+                                            {
+                                                Direction = ParameterDirection.Input,
+                                                Size = 2000,
+                                                Value = rsnAccessories
+                                            };
+                cmd.Parameters.Add(rsnAccessoriesParam);
+
+                var reqNumberParam = new OracleParameter("p_req_number", OracleDbType.Int32)
+                                         {
+                                             Direction = ParameterDirection.Input,
+                                             Value = reqNumber
+                                         };
+                cmd.Parameters.Add(reqNumberParam);
+
+                var successParam = new OracleParameter("p_success_int", OracleDbType.Int32)
+                                         {
+                                             Direction = ParameterDirection.InputOutput,
+                                             Value = 1
+                                         };
+                cmd.Parameters.Add(reqNumberParam);
+
+                success = true;
+                cmd.ExecuteNonQuery();
+                connection.Close();
+            }
         }
 
         public string GetErrorMessage()
