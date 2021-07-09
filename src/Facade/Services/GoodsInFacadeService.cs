@@ -25,7 +25,6 @@
         public IResult<ProcessResult> DoBookIn(BookInRequestResource requestResource)
         {
             var result = this.domainService.DoBookIn(
-                requestResource.BookInRef,
                 requestResource.TransactionType,
                 requestResource.CreatedBy,
                 requestResource.PartNumber,

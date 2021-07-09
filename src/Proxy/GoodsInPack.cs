@@ -17,16 +17,15 @@
         }
 
         public void DoBookIn(
-            int bookInRef,
             string transactionType,
             int createdBy,
             string partNumber,
             int qty,
-            int orderNumber,
-            int orderLine,
+            int? orderNumber,
+            int? orderLine,
             int? loanNumber,
             int? loanLine,
-            int rsnNumber,
+            int? rsnNumber,
             string storagePlace,
             string storageType,
             string demLocation,
@@ -34,12 +33,13 @@
             string comments,
             string condition,
             string rsnAccessories,
-            int reqNumber,
+            int? reqNumber,
             out bool success)
         {
             using (var connection = this.databaseService.GetConnection())
             {
                 connection.Open();
+                var bookInRef = this.databaseService.GetIdSequence("bookin_seq");
                 var cmd =
                     new OracleCommand(
                         "goods_in_pack.do_bookin_wrapper",
@@ -185,10 +185,11 @@
                                              Direction = ParameterDirection.InputOutput,
                                              Value = 1
                                          };
-                cmd.Parameters.Add(reqNumberParam);
+                cmd.Parameters.Add(successParam);
 
-                success = true;
                 cmd.ExecuteNonQuery();
+
+                success = int.Parse(successParam.Value.ToString()) == 0;
                 connection.Close();
             }
         }

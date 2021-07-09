@@ -3,16 +3,15 @@
     public interface IGoodsInPack
     {
         void DoBookIn(
-            int bookInRef,
             string transactionType,
             int createdBy,
             string partNumber,
             int qty,
-            int orderNumber,
-            int orderLine,
+            int? orderNumber,
+            int? orderLine,
             int? loanNumber,
             int? loanLine,
-            int rsnNumber,
+            int? rsnNumber,
             string storagePlace,
             string storageType,
             string demLocation,
@@ -20,7 +19,7 @@
             string comments,
             string condition,
             string rsnAccessories,
-            int reqNumber,
+            int? reqNumber,
             out bool success);
 
         string GetErrorMessage();
