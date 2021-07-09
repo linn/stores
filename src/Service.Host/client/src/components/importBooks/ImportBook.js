@@ -231,7 +231,11 @@ function ImportBook({
                                     transportId={state.transportId}
                                     transportBillNumber={state.transportBillNumber}
                                     transactionId={state.transactionId}
-
+                                    deliveryTermCode={state.deliveryTermCode}
+                                    arrivalPort={state.arrivalPort}
+                                    flightNumber={state.flightNumber}
+                                    hwb={state.hwb}
+                                    arrivalDate={state.arrivalDate}
                                     createdBy={state.createdBy}
                                     freightCharges={state.freightCharges}
                                     handlingCharge={state.handlingCharge}
@@ -241,6 +245,16 @@ function ImportBook({
                                     duty={state.duty}
                                     vat={state.vat}
                                     misc={state.misc}
+                                    carriersInvTotal={state.carriersInvTotal}
+                                    carriersVatTotal={state.carriersVatTotal}
+                                    numPallets={state.numPallets}
+                                    numCartons={state.numCartons}
+                                    weight={state.weight}
+                                    customsEntryCode={state.customsEntryCode}
+                                    customsEntryCodePrefix={state.customsEntryCodePrefix}
+                                    customsEntryCodeDate={state.customsEntryCodeDate}
+                                    linnDuty={state.linnDuty}
+                                    linnVat={state.linnVat}
                                 />
                             )}
 

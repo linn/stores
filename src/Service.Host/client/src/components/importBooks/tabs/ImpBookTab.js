@@ -173,7 +173,7 @@ function ImpBookTab({
 
     return (
         <>
-            <Grid container spacing={1} item xs={6}>
+            <Grid container spacing={1} item xs={7}>
                 <Grid item xs={6}>
                     <InputField
                         label="Vax ref"
@@ -223,7 +223,12 @@ function ImpBookTab({
                 </Grid>
 
                 <Grid item xs={6}>
-                    <LinkButton text="View Parcel" to={`/logistics/parcels/${parcelNumber}`} />
+                    {/* todo might add new param to link button component to open this in a new tab */}
+                    <LinkButton
+                        text="View Parcel"
+                        to={`/logistics/parcels/${parcelNumber}`}
+                        external
+                    />
                 </Grid>
 
                 <Grid item xs={6}>
@@ -401,7 +406,7 @@ function ImpBookTab({
                 <Grid item xs={6}>
                     <Dropdown
                         items={transactionCodes.map(e => ({
-                            displayText: `${e.transactionId} (${e.description})`,
+                            displayText: `${e.transactionId}`,
                             id: parseInt(e.transactionId, 10)
                         }))}
                         propertyName="transactionId"
@@ -409,6 +414,61 @@ function ImpBookTab({
                         value={transactionId}
                         label="Transaction Code"
                         onChange={handleFieldChange}
+                    />
+                </Grid>
+
+                <Grid item xs={6}>
+                    {/* todo implement delivery term code stuff, not sure if backend is done yet */}
+                    <Dropdown
+                        items={[]}
+                        propertyName="deliveryTermCode"
+                        fullWidth
+                        value={deliveryTermCode}
+                        label="Delivery Term Code"
+                        onChange={handleFieldChange}
+                    />
+                </Grid>
+
+                <Grid item xs={6}>
+{/* todo implement arrival ports, not sure if backend is done yet for this either */}
+
+                    <Dropdown
+                        items={[]}
+                        propertyName="arrivalPort"
+                        fullWidth
+                        value={arrivalPort}
+                        label="Arrival Port"
+                        onChange={handleFieldChange}
+                    />
+                </Grid>
+
+                <Grid item xs={6}>
+                    <InputField
+                        label="Flight Number"
+                        fullWidth
+                        onChange={handleFieldChange}
+                        propertyName="flightNumber"
+                        value={flightNumber}
+                    />
+                </Grid>
+
+                <Grid item xs={6}>
+                    <InputField
+                        label="HWB"
+                        fullWidth
+                        onChange={handleFieldChange}
+                        propertyName="hwb"
+                        value={hwb}
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                    <SearchInputField
+                        label="Arrival Date"
+                        fullWidth
+                        onChange={handleFieldChange}
+                        propertyName="arrivalDate"
+                        type="date"
+                        value={arrivalDate}
                     />
                 </Grid>
 
@@ -466,35 +526,225 @@ function ImpBookTab({
 
             <Grid container spacing={1} item xs={1} />
 
-            <Grid container spacing={1} item xs={5}>
-                <Grid item xs={6}>
-                    <InputField label="Freight Charges" value={freightCharges} fullwidth />
+            <Grid container spacing={1} item xs={4}>
+                <Grid item xs={12}>
+                    <InputField
+                        label="Freight Charges"
+                        value={freightCharges}
+                        onChange={handleFieldChange}
+                        type="number"
+                        propertyName="freightCharges"
+                        fullwidth
+                    />
                 </Grid>
                 <Grid item xs={6}>
-                    <InputField label="Handling Charge" value={handlingCharge} fullwidth />
+                    <InputField
+                        label="Handling Charge"
+                        value={handlingCharge}
+                        onChange={handleFieldChange}
+                        type="number"
+                        propertyName="handlingCharge"
+                        fullwidth
+                    />
                 </Grid>
                 <Grid item xs={6}>
-                    <InputField label="Clearance Charge" value={clearanceCharge} fullwidth />
+                    <InputField
+                        label="Clearance Charge"
+                        value={clearanceCharge}
+                        onChange={handleFieldChange}
+                        propertyName="clearanceCharge"
+                        type="number"
+                        fullwidth
+                    />
                 </Grid>
                 <Grid item xs={6}>
-                    <InputField label="Cartage" value={cartage} fullwidth />
+                    <InputField
+                        label="Cartage"
+                        value={cartage}
+                        onChange={handleFieldChange}
+                        type="number"
+                        propertyName="cartage"
+                        fullwidth
+                    />
                 </Grid>
                 <Grid item xs={6}>
-                    <InputField label="Storage" value={storage} fullwidth />
+                    <InputField
+                        label="Storage"
+                        value={storage}
+                        onChange={handleFieldChange}
+                        type="number"
+                        propertyName="storage"
+                        fullwidth
+                    />
                 </Grid>
                 <Grid item xs={6}>
-                    <InputField label="Duty" value={duty} fullwidth />
+                    <InputField
+                        label="Duty"
+                        value={duty}
+                        onChange={handleFieldChange}
+                        propertyName="duty"
+                        type="number"
+                        fullwidth
+                    />
                 </Grid>
                 <Grid item xs={6}>
-                    <InputField label="Vat" value={vat} fullwidth />
+                    <InputField
+                        label="Vat"
+                        value={vat}
+                        onChange={handleFieldChange}
+                        propertyName="vat"
+                        type="number"
+                        fullwidth
+                    />
                 </Grid>
-                <Grid item xs={6}>
-                    <InputField label="Misc" value={misc} fullwidth />
+                <Grid item xs={12}>
+                    <InputField
+                        label="Misc"
+                        value={misc}
+                        onChange={handleFieldChange}
+                        propertyName="misc"
+                        type="number"
+                        fullwidth
+                    />
                 </Grid>
 
-                {/* <Grid item xs={6}>
-                    <InputField label="Net total" value={netTotal} fullwidth />
-                </Grid> */}
+                <Grid item xs={4}>
+                    <InputField
+                        label="Net total (inv)"
+                        value={carriersInvTotal}
+                        onChange={handleFieldChange}
+                        propertyName="carriersInvTotal"
+                        fullwidth
+                        type="number"
+                    />
+                </Grid>
+
+                <Grid item xs={4}>
+                    <InputField
+                        label="Freight Vat"
+                        value={carriersVatTotal}
+                        onChange={handleFieldChange}
+                        propertyName="carriersVatTotal"
+                        fullwidth
+                        type="number"
+                    />
+                </Grid>
+
+                <Grid item xs={4}>
+                    <InputField
+                        label="Grand total"
+                        value={carriersInvTotal + carriersVatTotal}
+                        fullwidth
+                        type="number"
+                    />
+                </Grid>
+
+                <Grid item xs={4}>
+                    <InputField
+                        label="Number of Cartons"
+                        value={numCartons}
+                        onChange={handleFieldChange}
+                        propertyName="numCartons"
+                        fullwidth
+                        type="number"
+                    />
+                </Grid>
+                <Grid item xs={4}>
+                    <InputField
+                        label="Number of Pallets"
+                        value={numPallets}
+                        onChange={handleFieldChange}
+                        propertyName="numPallets"
+                        fullwidth
+                        type="number"
+                    />
+                </Grid>
+                <Grid item xs={4}>
+                    <InputField
+                        label="Weight"
+                        value={weight}
+                        onChange={handleFieldChange}
+                        propertyName="weight"
+                        fullwidth
+                        type="number"
+                    />
+                </Grid>
+
+                <Grid item xs={2}>
+                    <InputField
+                        label="Prefix"
+                        value={customsEntryCodePrefix}
+                        onChange={handleFieldChange}
+                        propertyName="customsEntryCodePrefix"
+                        fullwidth
+                    />
+                </Grid>
+                <Grid item xs={10}>
+                    <InputField
+                        label="Customs Entry Code"
+                        value={customsEntryCode}
+                        onChange={handleFieldChange}
+                        propertyName="customsEntryCode"
+                        fullwidth
+                    />
+                </Grid>
+
+                <Grid item xs={12}>
+                    <SearchInputField
+                        label="Customs Entry Date"
+                        fullWidth
+                        onChange={handleFieldChange}
+                        propertyName="customsEntryCodeDate"
+                        type="date"
+                        value={customsEntryCodeDate}
+                    />
+                </Grid>
+
+                <Grid item xs={6}>
+                    <InputField
+                        label="Linn Duty"
+                        value={linnDuty}
+                        onChange={handleFieldChange}
+                        propertyName="linnDuty"
+                        fullwidth
+                        type="number"
+                    />
+                </Grid>
+
+                <Grid item xs={6}>
+                    <InputField
+                        label="Linn Vat"
+                        value={linnVat}
+                        onChange={handleFieldChange}
+                        propertyName="linnVat"
+                        fullwidth
+                        type="number"
+                    />
+                </Grid>
+
+                {/* empty grid items to force the stuff in the right hand column up 
+and stop it spreading to the full height of the left hand column */}
+                <Grid item xs={12} />
+                <Grid item xs={12} />
+                <Grid item xs={12} />
+                <Grid item xs={12} />
+                <Grid item xs={12} />
+                <Grid item xs={12} />
+                <Grid item xs={12} />
+                <Grid item xs={12} />
+                <Grid item xs={12} />
+                <Grid item xs={12} />
+                <Grid item xs={12} />
+                <Grid item xs={12} />
+                <Grid item xs={12} />
+                <Grid item xs={12} />
+                <Grid item xs={12} />
+                <Grid item xs={12} />
+                <Grid item xs={12} />
+                <Grid item xs={12} />
+                <Grid item xs={12} />
+                <Grid item xs={12} />
+                <Grid item xs={12} />
             </Grid>
         </>
     );

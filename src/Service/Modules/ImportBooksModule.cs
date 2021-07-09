@@ -117,6 +117,5 @@
 
             return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
-        
     }
 }
