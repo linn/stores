@@ -289,6 +289,7 @@
             this.BuildSalesArticles(builder);
             this.QuerySalesOrders(builder);
             this.QuerySalesOrderDetails(builder);
+            this.QueryCurrencies(builder);
             this.QueryIntercompanyInvoices(builder);
             this.QueryTqmsSummaryByCategories(builder);
             this.BuildTqmsMaster(builder);
@@ -1571,6 +1572,13 @@
             q.Property(e => e.Depth).HasColumnName("DEPTH");
         }
 
+        private void QueryCurrencies(ModelBuilder builder)
+        {
+            var q = builder.Query<Currency>().ToView("CURRENCIES");
+            q.Property(e => e.CurrencyCode).HasColumnName("CODE").HasMaxLength(4);
+            q.Property(e => e.CurrencyName).HasColumnName("NAME").HasMaxLength(50);
+        }
+
         private void QueryIntercompanyInvoices(ModelBuilder builder)
         {
             var q = builder.Query<InterCompanyInvoice>().ToView("INTER_COMPANY_INVOICES");
@@ -1580,8 +1588,17 @@
             q.Property(e => e.ExportReturnId).HasColumnName("EXPORT_RETURN_ID");
             q.Property(e => e.DeliveryAddressId).HasColumnName("DELIVERY_ADDRESS");
             q.Property(e => e.InvoiceAddressId).HasColumnName("INVOICE_ADDRESS");
+            q.Property(e => e.CurrencyCode).HasColumnName("CURRENCY").HasMaxLength(4); 
+            q.Property(e => e.NetTotal).HasColumnName("NET_TOTAL");
+            q.Property(e => e.VATTotal).HasColumnName("VAT_TOTAL");
+            q.Property(e => e.DocumentTotal).HasColumnName("DOCUMENT_TOTAL");
+            q.Property(e => e.NetTotal).HasColumnName("GROSS_WEIGHT_KG");
+            q.Property(e => e.VATTotal).HasColumnName("GROSS_DIMS_M3");
+            q.Property(e => e.DocumentTotal).HasColumnName("TERMS").HasMaxLength(30);
+            q.Property(e => e.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
             q.HasOne(e => e.DeliveryAddress).WithMany(a => a.DeliveryInterCompanies).HasForeignKey(e => e.DeliveryAddressId);
-            q.HasOne(e => e.InvoiceAddress).WithMany(a => a.InvoiceInterCompanies).HasForeignKey(e => e.InvoiceAddress);
+            q.HasOne(e => e.InvoiceAddress).WithMany(a => a.InvoiceInterCompanies).HasForeignKey(e => e.InvoiceAddressId);
+          //  q.HasOne(e => e.Currency).WithMany(a => a.InterCompanies).HasForeignKey(e => e.CurrencyCode);
         }
 
         private void QueryTqmsSummaryByCategories(ModelBuilder builder)

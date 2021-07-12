@@ -1,4 +1,6 @@
-﻿namespace Linn.Stores.Domain.LinnApps
+﻿using System.Text;
+
+namespace Linn.Stores.Domain.LinnApps
 {
     using System;
 
@@ -21,5 +23,23 @@
         public int DeliveryAddressId { get; set; }
 
         public Address DeliveryAddress { get; set; }
+
+        public decimal NetTotal { get; set; }
+
+        public decimal VATTotal { get; set; }
+
+        public decimal DocumentTotal { get; set; }
+
+        public string CurrencyCode { get; set; }
+
+        public Currency Currency { get; set; }
+
+        public decimal GrossWeightKG { get; set; }
+
+        public decimal GrossDimsM3 { get; set; }
+
+        public string Terms { get; set; }
+
+        public int? ConsignmentId { get; set; }
     }
 }
