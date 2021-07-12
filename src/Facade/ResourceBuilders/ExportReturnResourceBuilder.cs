@@ -40,7 +40,7 @@
                            DateProcessed = exportReturn.DateProcessed?.ToString("o"),
                            ReturnForCredit = exportReturn.ReturnForCredit,
                            ExportCustomsEntryCode = exportReturn.ExportCustomsEntryCode,
-                           ExportCustomsCodeDate = exportReturn.ExportCustomsCodeDate?.ToString("o"),
+                           ExportCustomsEntryDate = exportReturn.ExportCustomsCodeDate?.ToString("o"),
                            RaisedBy =
                                exportReturn.RaisedBy != null
                                    ? this.employeeResourceBuilder.Build(exportReturn.RaisedBy)
