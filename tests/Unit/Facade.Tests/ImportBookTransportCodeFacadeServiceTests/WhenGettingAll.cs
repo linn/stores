@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Facade.Tests.ImportBookTransportCodeServiceTests
+﻿namespace Linn.Stores.Facade.Tests.ImportBookTransportCodeFacadeServiceTests
 {
     using System.Collections.Generic;
     using System.Linq;

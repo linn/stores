@@ -29,7 +29,7 @@
         {
             var cpcNumbers = new List<ImportBookCpcNumber> { this.firstCpc, this.secondCpc };
 
-            this.importBookCpcNumberFacadeService.GetAll().Returns(
+            this.ImportBookCpcNumberFacadeService.GetAll().Returns(
                 new SuccessResult<IEnumerable<ImportBookCpcNumber>>(cpcNumbers));
 
             this.Response = this.Browser.Get(
@@ -46,7 +46,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.importBookCpcNumberFacadeService.Received().GetAll();
+            this.ImportBookCpcNumberFacadeService.Received().GetAll();
         }
 
         [Test]

@@ -471,56 +471,6 @@ function ImpBookTab({
                         value={arrivalDate}
                     />
                 </Grid>
-
-                {/* ,
-    supplierId,
-    foreignCurrency,
-    currency,
-    carrierId,
-    OldArrivalPort,
-    flightNumber,
-    transportId,
-    transportBillNumber,
-    transactionId,
-    deliveryTermCode,
-    arrivalPort,
-    lineVatTotal,
-    hwb,
-    supplierCostCurrency,
-    transNature,
-    arrivalDate,
-
-    
-    carriersInvTotal,
-    carriersVatTotal,
-    totalImportValue,
-    pieces,
-    weight,
-    customsEntryCode,
-    customsEntryCodeDate,
-    linnDuty,
-    linnVat,
-    iprCpcNumber,
-    eecgNumber,
-    dateCancelled,
-    cancelledBy,
-    cancelledReason,
-    carrierInvNumber,
-    carrierInvDate,
-    countryOfOrigin,
-    fcName,
-    storage,
-    numCartons,
-    numPallets,
-    comments,
-    exchangeRate,
-    exchangeCurrency,
-    baseCurrency,
-    periodNumber,
-    ,
-    portCode,
-    customsEntryCodePrefix */}
-
                 <Grid item xs={9} />
             </Grid>
 

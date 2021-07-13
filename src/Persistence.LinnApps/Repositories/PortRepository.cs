@@ -28,7 +28,7 @@
 
         public IQueryable<Port> FindAll()
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.Ports.Where(x => true);
         }
     }
 }
