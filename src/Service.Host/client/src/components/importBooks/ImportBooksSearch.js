@@ -15,7 +15,6 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
             name: item.id.toString(),
             description: `${item.id}, created ${item.dateCreated}`,
             href: item.href
-            //todo check href might need to do get self thing
         }));
     };
 

@@ -115,6 +115,7 @@ function ImportBook({
         setTab(value);
     };
 
+    //todo implement create
     // useEffect(() => {
     //     if (editStatus === 'create') {
     //         dispatch({ type: 'fieldChange', fieldName: 'to be updated on create init', payload: null });
@@ -122,7 +123,7 @@ function ImportBook({
     // }, [editStatus]);
 
     const impbookInvalid = () => {
-        //todo make this actually check!
+        //todo make this actually check fields when complete!
         return false;
     };
     const handleSaveClick = () => {

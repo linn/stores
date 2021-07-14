@@ -223,7 +223,7 @@ function ImpBookTab({
                 </Grid>
 
                 <Grid item xs={6}>
-                    {/* todo might add new param to link button component to open this in a new tab */}
+                    {/* todo might add new param to link button shared component to open this in a new tab */}
                     <LinkButton
                         text="View Parcel"
                         to={`/logistics/parcels/${parcelNumber}`}
@@ -306,7 +306,7 @@ function ImpBookTab({
                 </Grid>
 
                 <Grid item xs={4}>
-                    {/* Todo implement exchange rate lookup - might need to be its own popup function */}
+                    {/* Todo implement exchange rate lookup actions on rest of frontend, actions etc */}
                     <InputField
                         fullWidth
                         value={exchangeRate}
@@ -343,7 +343,6 @@ function ImpBookTab({
                             value={`${carrierId} - ${carrierNameValue()}`}
                             modal
                             links={false}
-                            // history={history}
                             debounce={1000}
                             minimumSearchTermLength={2}
                             required
@@ -418,7 +417,7 @@ function ImpBookTab({
                 </Grid>
 
                 <Grid item xs={6}>
-                    {/* todo implement delivery term code stuff, not sure if backend is done yet */}
+                    {/* todo implement delivery term code stuff  */}
                     <Dropdown
                         items={[]}
                         propertyName="deliveryTermCode"
@@ -430,7 +429,7 @@ function ImpBookTab({
                 </Grid>
 
                 <Grid item xs={6}>
-{/* todo implement arrival ports, not sure if backend is done yet for this either */}
+                {/* todo implement arrival ports */}
 
                     <Dropdown
                         items={[]}
@@ -673,7 +672,10 @@ function ImpBookTab({
                 </Grid>
 
                 {/* empty grid items to force the stuff in the right hand column up 
-and stop it spreading to the full height of the left hand column */}
+                and stop it spreading to the full height of the left hand column. 
+                Ain't pretty but working for now without spending ages on it - can 
+                maybe do this with margin/css or something else at some point,
+                but not sure it'd be reliable on all screens, will have a think */}
                 <Grid item xs={12} />
                 <Grid item xs={12} />
                 <Grid item xs={12} />
