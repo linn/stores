@@ -1,8 +1,6 @@
 ﻿namespace Linn.Stores.Resources.ImportBooks
 {
-    using Linn.Common.Resources;
-
-    public class ImportBookDeliveryTermResource : HypermediaResource
+    public class ImportBookDeliveryTermResource
     {
         public string DeliveryTermCode { get; set; }
 

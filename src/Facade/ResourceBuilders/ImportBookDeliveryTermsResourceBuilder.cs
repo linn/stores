@@ -12,9 +12,9 @@
         private readonly ImportBookDeliveryTermResourceBuilder importBookDeliveryTermResourceBuilder =
             new ImportBookDeliveryTermResourceBuilder();
 
-        public IEnumerable<ImportBookDeliveryTermResource> Build(IEnumerable<ImportBookDeliveryTerm> cpcNumbers)
+        public IEnumerable<ImportBookDeliveryTermResource> Build(IEnumerable<ImportBookDeliveryTerm> deliveryTerms)
         {
-            return cpcNumbers.OrderBy(b => b.DeliveryTermCode).Select(a => this.importBookDeliveryTermResourceBuilder.Build(a));
+            return deliveryTerms.OrderBy(b => b.DeliveryTermCode).Select(a => this.importBookDeliveryTermResourceBuilder.Build(a));
         }
 
         object IResourceBuilder<IEnumerable<ImportBookDeliveryTerm>>.Build(IEnumerable<ImportBookDeliveryTerm> model) =>

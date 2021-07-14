@@ -2,7 +2,7 @@
 {
     using Linn.Common.Resources;
 
-    public class ImportBookTransactionCodeResource : HypermediaResource
+    public class ImportBookTransactionCodeResource
     {
         public int TransactionId { get; set; }
 
