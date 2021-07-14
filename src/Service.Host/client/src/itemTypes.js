@@ -313,10 +313,31 @@ export const shippingTerm = new ItemType(
     'SHIPPING_TERM',
     '/logistics/shipping-terms'
 );
+
 export const shippingTerms = new ItemType(
     'shippingTerms',
     'SHIPPING_TERMS',
     '/logistics/shipping-terms'
+);
+
+export const demLocations = new ItemType(
+    'demLocations',
+    'DEM_LOCATIONS',
+    '/logistics/goods-in/dem-locations'
+);
+
+export const loanDetails = new ItemType('loanDetails', '/logistics/loan-details', 'LOAN_DETAILS');
+
+export const validatePurchaseOrderResult = new ItemType(
+    'validatePurchaseOrderResult',
+    'VALIDATE_PURCHASE_ORDER_RESULT',
+    '/logistics/purchase-orders/validate'
+);
+
+export const salesArticles = new ItemType(
+    'salesArticles',
+    'SALES_ARTICLES',
+    '/inventory/sales-articles'
 );
 
 export const importBook = new ItemType('importBook', 'IMPORT_BOOK', '/logistics/import-books');

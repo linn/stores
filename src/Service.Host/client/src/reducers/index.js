@@ -93,6 +93,11 @@ import carrier from './carrier';
 import carriers from './carriers';
 import shippingTerm from './shippingTerm';
 import shippingTerms from './shippingTerms';
+import demLocations from './demLocations';
+import loanDetails from './loanDetails';
+import validatePurchaseOrderResult from './validatePurchaseOrderResult';
+import salesArticles from './salesArticles';
+import doBookIn from './doBookIn';
 import importBook from './importBooks/importBook';
 import importBooks from './importBooks/importBooks';
 import impbookExchangeRates from './importBooks/impbookExchangeRates';
@@ -121,12 +126,14 @@ const rootReducer = history =>
         consignmentShipfiles,
         countries,
         createAuditReqs,
+        demLocations,
         departments,
         decrementRules,
         deptStockParts,
         despatchLocations,
         despatchPalletQueueReport,
         despatchPickingSummaryReport,
+        doBookIn,
         doStockMove,
         doWandItem,
         employees,
@@ -143,6 +150,7 @@ const rootReducer = history =>
         importBooks,
         inspectedStates,
         interCompanyInvoices,
+        loanDetails,
         makeIntercompanyInvoices,
         manufacturers,
         mechPartSource,
@@ -164,6 +172,7 @@ const rootReducer = history =>
         reqMoves,
         rootProducts,
         salesAccounts,
+        salesArticles,
         salesOutlets,
         sernosSequences,
         shipfilesSendEmails,
@@ -193,6 +202,7 @@ const rootReducer = history =>
         unallocateConsignmentLine,
         unitsOfMeasure,
         unpickItemsAllocation,
+        validatePurchaseOrderResult,
         wandConsignments,
         wandItems,
         workstationTopUpStatus,

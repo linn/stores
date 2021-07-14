@@ -215,6 +215,10 @@
 
         public DbSet<ShippingTerm> ShippingTerms { get; set; }
 
+        public DbQuery<LoanDetail> LoanDetails { get; set; }
+
+        public DbSet<CartonType> CartonTypes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -316,6 +320,8 @@
             this.BuildHubs(builder);
             this.BuildCarriers(builder);
             this.BuildShippingTerms(builder);
+            this.QueryLoanDetails(builder);
+            this.BuildCartonTypes(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1251,6 +1257,7 @@
             e.Property(l => l.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
             e.Property(l => l.DateInvalid).HasColumnName("DATE_INVALID");
             e.Property(l => l.LocationType).HasColumnName("LOCATION_TYPE").HasMaxLength(1);
+            e.Property(l => l.DefaultStockPool).HasColumnName("DEFAULT_STOCK_POOL").HasMaxLength(10);
         }
 
         private void BuildInspectedStates(ModelBuilder builder)
@@ -1485,6 +1492,8 @@
             var e = builder.Entity<SalesArticle>().ToTable("SALES_ARTICLES");
             e.HasKey(a => a.ArticleNumber);
             e.Property(a => a.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
+            e.Property(a => a.PhaseOutDate).HasColumnName("PHASE_OUT_DATE");
+            e.Property(a => a.Description).HasColumnName("INVOICE_DESCRIPTION");
         }
 
         private void QueryTpkView(ModelBuilder builder)
@@ -1802,6 +1811,26 @@
             table.Property(a => a.Height).HasColumnName("HEIGHT");
             table.Property(a => a.Width).HasColumnName("WIDTH");
             table.Property(a => a.Depth).HasColumnName("DEPTH");
+        }
+
+        private void QueryLoanDetails(ModelBuilder builder)
+        {
+            var q = builder.Query<LoanDetail>().ToView("OS_LOAN_DETAIL_VIEW");
+            q.Property(e => e.LoanNumber).HasColumnName("LOAN_NUMBER");
+            q.Property(e => e.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
+            q.Property(e => e.Line).HasColumnName("LINE_NUMBER");
+            q.Property(e => e.QtyOnLoan).HasColumnName("ITEM_QTY");
+            q.Property(e => e.SerialNumber).HasColumnName("SERIAL_NUMBER");
+            q.Property(e => e.SerialNumber2).HasColumnName("SERIAL_NUMBER2");
+            q.Property(e => e.ItemNumber).HasColumnName("ITEM_NUMBER");
+        }
+
+        private void BuildCartonTypes(ModelBuilder builder)
+        {
+            var table = builder.Entity<CartonType>().ToTable("CARTON_TYPES");
+            table.HasKey(a => a.CartonTypeName);
+            table.Property(a => a.CartonTypeName).HasColumnName("CARTON_TYPE").HasMaxLength(10);
+            table.Property(a => a.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
         }
     }
 }

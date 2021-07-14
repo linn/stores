@@ -14,6 +14,7 @@
             string fromName,
             string subject, 
             string body, 
-            Stream pdfAttachment);
+            Stream pdfAttachment,
+            string attachmentName);
     }
 }

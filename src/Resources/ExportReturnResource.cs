@@ -44,7 +44,7 @@
 
         public string ExportCustomsEntryCode { get; set; }
 
-        public string ExportCustomsCodeDate { get; set; }
+        public string ExportCustomsEntryDate { get; set; }
 
         public IEnumerable<ExportReturnDetailResource> ExportReturnDetails { get; set; }
 
