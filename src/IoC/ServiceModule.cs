@@ -114,6 +114,7 @@
             builder.RegisterType<EmployeesService>().As<IEmployeeService>();
             builder.RegisterType<ImportBookFacadeService>()
                 .As<IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource>>();
+            builder.RegisterType<ImportBookDeliveryTermFacadeService>().As<IFacadeService<ImportBookDeliveryTerm, string, ImportBookDeliveryTermResource, ImportBookDeliveryTermResource>>();
             builder.RegisterType<ImportBookExchangeRateService>().As<IImportBookExchangeRateService>();
             builder.RegisterType<ImportBookTransactionCodeFacadeService>().As<IFacadeService<ImportBookTransactionCode, int, ImportBookTransactionCodeResource, ImportBookTransactionCodeResource>>();
             builder.RegisterType<ImportBookTransportCodeFacadeService>().As<IFacadeService<ImportBookTransportCode, int, ImportBookTransportCodeResource, ImportBookTransportCodeResource>>();
@@ -160,6 +161,7 @@
             builder.RegisterType<GoodsInFacadeService>().As<IGoodsInFacadeService>();
             builder.RegisterType<SalesArticleService>().As<ISalesArticleService>();
             builder.RegisterType<CartonTypeFacadeService>().As<IFacadeService<CartonType, string, CartonTypeResource, CartonTypeResource>>();
+            builder.RegisterType<PortFacadeService>().As<IFacadeService<Port, string, PortResource, PortResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

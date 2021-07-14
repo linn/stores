@@ -117,7 +117,7 @@
 
         public DbSet<LedgerPeriod> LedgerPeriods { get; set; }
 
-        public DbQuery<Port> Ports { get; set; }
+        public DbSet<Port> Ports { get; set; }
 
         public DbSet<PartParamData> PartParamDataSheets { get; set; }
 
@@ -266,7 +266,7 @@
             this.BuildImportBookTransactionCodes(builder);
             this.BuildImportBookTransportCodes(builder);
             this.BuildLedgerPeriods(builder);
-            this.QueryPorts(builder);
+            this.BuildPorts(builder);
             builder.Model.Relational().MaxIdentifierLength = 30;
             this.BuildPartParamDataSheets(builder);
             this.QueryPartDataSheetValues(builder);
@@ -1092,7 +1092,7 @@
 
         private void BuildImportBookTransactionCodes(ModelBuilder builder)
         {
-            var q = builder.Entity<ImportBookTransactionCode>().ToTable("IMP_BOOK_TRANSACTION_CODES");
+            var q = builder.Entity<ImportBookTransactionCode>().ToTable("IMPBOOK_TRANSACTION_CODES");
             q.HasKey(e => e.TransactionId);
             q.Property(e => e.TransactionId).HasColumnName("TRANSACTION_ID");
             q.Property(e => e.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
@@ -1114,9 +1114,10 @@
             q.Property(e => e.MonthName).HasColumnName("MONTH_NAME");
         }
         
-        private void QueryPorts(ModelBuilder builder)
+        private void BuildPorts(ModelBuilder builder)
         {
-            var q = builder.Query<Port>().ToView("PORTS");
+            var q = builder.Entity<Port>().ToTable("PORTS");
+            q.HasKey(e => e.PortCode);
             q.Property(e => e.PortCode).HasColumnName("PORT_CODE").HasMaxLength(3);
             q.Property(e => e.Description).HasColumnName("DESCRIPTION").HasMaxLength(30);
         }

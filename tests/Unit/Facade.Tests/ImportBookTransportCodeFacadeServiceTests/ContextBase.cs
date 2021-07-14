@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Facade.Tests.ImportBookTransportCodeServiceTests
+﻿namespace Linn.Stores.Facade.Tests.ImportBookTransportCodeFacadeServiceTests
 {
     using Linn.Common.Facade;
     using Linn.Common.Persistence;

@@ -1,8 +1,6 @@
 ﻿namespace Linn.Stores.Resources.ImportBooks
 {
-    using Linn.Common.Resources;
-
-    public class ImportBookExchangeRateResource : HypermediaResource
+    public class ImportBookExchangeRateResource
     {
         public int PeriodNumber { get; set; }
 

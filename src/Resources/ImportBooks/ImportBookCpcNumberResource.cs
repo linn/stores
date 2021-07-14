@@ -1,8 +1,6 @@
 ﻿namespace Linn.Stores.Resources.ImportBooks
 {
-    using Linn.Common.Resources;
-
-    public class ImportBookCpcNumberResource : HypermediaResource
+    public class ImportBookCpcNumberResource
     {
         public int CpcNumber { get; set; }
 

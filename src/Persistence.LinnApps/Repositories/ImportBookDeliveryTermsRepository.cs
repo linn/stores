@@ -23,7 +23,7 @@
 
         public IQueryable<ImportBookDeliveryTerm> FindAll()
         {
-            return this.serviceDbContext.ImportBookDeliveryTerms.Where(x => true);
+            return this.serviceDbContext.ImportBookDeliveryTerms;
         }
 
         public void Add(ImportBookDeliveryTerm entity)

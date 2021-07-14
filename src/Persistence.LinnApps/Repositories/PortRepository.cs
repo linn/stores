@@ -7,7 +7,7 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
 
-    public class PortRepository : IQueryRepository<Port>
+    public class PortRepository : IRepository<Port, string>
     {
         private readonly ServiceDbContext serviceDbContext;
 
@@ -27,6 +27,21 @@
         }
 
         public IQueryable<Port> FindAll()
+        {
+            return this.serviceDbContext.Ports;
+        }
+
+        public Port FindById(string key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Add(Port entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(Port entity)
         {
             throw new NotImplementedException();
         }

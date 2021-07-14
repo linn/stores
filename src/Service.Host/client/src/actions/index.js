@@ -244,3 +244,23 @@ export const validatePurchaseOrderActionTypes = makeActionTypes(
 export const salesArticlesActionTypes = makeActionTypes(itemTypes.salesArticles.actionType);
 
 export const doBookInActionTypes = makeProcessActionTypes(processTypes.doBookIn.actionType);
+
+export const importBookActionTypes = makeActionTypes(itemTypes.importBook.actionType);
+export const importBooksActionTypes = makeActionTypes(itemTypes.importBooks.actionType, false);
+
+export const impbookExchangeRatesActionTypes = makeActionTypes(
+    itemTypes.impbookExchangeRates.actionType,
+    false
+);
+export const impbookTransactionCodesActionTypes = makeActionTypes(
+    itemTypes.impbookTransactionCodes.actionType,
+    false
+);
+export const impbookTransportCodesActionTypes = makeActionTypes(
+    itemTypes.impbookTransportCodes.actionType,
+    false
+);
+export const impbookCpcNumbersActionTypes = makeActionTypes(
+    itemTypes.impbookCpcNumbers.actionType,
+    false
+);

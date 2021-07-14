@@ -24,18 +24,26 @@
 
         private readonly IFacadeService<ImportBookCpcNumber, int, ImportBookCpcNumberResource, ImportBookCpcNumberResource> importBookCpcNumberFacadeService;
 
+        private readonly IFacadeService<ImportBookDeliveryTerm, string, ImportBookDeliveryTermResource, ImportBookDeliveryTermResource> importBookDeliveryTermFacadeService;
+
+        private readonly IFacadeService<Port, string, PortResource, PortResource> portFacadeService;
+
         public ImportBooksModule(
             IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource> importBookFacadeService,
             IImportBookExchangeRateService importBookExchangeRateService,
             IFacadeService<ImportBookTransportCode, int, ImportBookTransportCodeResource, ImportBookTransportCodeResource> importBookTransportCodeService,
             IFacadeService<ImportBookTransactionCode, int, ImportBookTransactionCodeResource, ImportBookTransactionCodeResource> importBookTransactionCodeFacadeService,
-            IFacadeService<ImportBookCpcNumber, int, ImportBookCpcNumberResource, ImportBookCpcNumberResource> importBookCpcNumberFacadeService)
+            IFacadeService<ImportBookCpcNumber, int, ImportBookCpcNumberResource, ImportBookCpcNumberResource> importBookCpcNumberFacadeService,
+            IFacadeService<ImportBookDeliveryTerm, string, ImportBookDeliveryTermResource, ImportBookDeliveryTermResource> importBookDeliveryTermFacadeService,
+            IFacadeService<Port, string, PortResource, PortResource> portFacadeService)
         {
             this.importBookFacadeService = importBookFacadeService;
             this.importBookExchangeRateService = importBookExchangeRateService;
             this.importBookTransportCodeService = importBookTransportCodeService;
             this.importBookTransactionCodeFacadeService = importBookTransactionCodeFacadeService;
             this.importBookCpcNumberFacadeService = importBookCpcNumberFacadeService;
+            this.importBookDeliveryTermFacadeService = importBookDeliveryTermFacadeService;
+            this.portFacadeService = portFacadeService;
 
             this.Get("/logistics/import-books/{id}", parameters => this.GetImportBook(parameters.id));
             this.Put("/logistics/import-books/{id}", parameters => this.UpdateImportBook(parameters.id));
@@ -45,7 +53,8 @@
             this.Get("/logistics/import-books/transport-codes", parameters => this.GetTransportCodes());
             this.Get("/logistics/import-books/transaction-codes", parameters => this.GetTransactionCodes());
             this.Get("/logistics/import-books/cpc-numbers", parameters => this.GetCpcNumbers());
-
+            this.Get("/logistics/import-books/ports", parameters => this.GetPorts());
+            this.Get("/logistics/import-books/delivery-terms", parameters => this.GetDeliveryTerms());
         }
 
         private object GetImportBook(int id)
@@ -117,6 +126,17 @@
 
             return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
-        
+        private object GetPorts()
+        {
+            var results = this.portFacadeService.GetAll();
+
+            return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+        private object GetDeliveryTerms()
+        {
+            var results = this.importBookDeliveryTermFacadeService.GetAll();
+
+            return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
     }
 }

@@ -11,6 +11,7 @@ export const sernosSequences = new ItemType(
 );
 
 export const suppliers = new ItemType('suppliers', 'SUPPLIERS', '/inventory/suppliers');
+
 export const suppliersApprovedCarrier = new ItemType(
     'suppliersApprovedCarrier',
     'SUPPLIERS_APPROVED_CARRER',
@@ -337,4 +338,32 @@ export const salesArticles = new ItemType(
     'salesArticles',
     'SALES_ARTICLES',
     '/inventory/sales-articles'
+);
+
+export const importBook = new ItemType('importBook', 'IMPORT_BOOK', '/logistics/import-books');
+
+export const importBooks = new ItemType('importBooks', 'IMPORT_BOOKS', '/logistics/import-books');
+
+export const impbookExchangeRates = new ItemType(
+    'impbookExchangeRates',
+    'IMPORT_BOOK_EXCHANGE_RATES',
+    '/logistics/import-books/exchange-rates'
+);
+
+export const impbookTransportCodes = new ItemType(
+    'impbookTransportCodes',
+    'IMPORT_BOOK_TRANSPORT_CODES',
+    '/logistics/import-books/transport-codes'
+);
+
+export const impbookTransactionCodes = new ItemType(
+    'impbookTransactionCodes',
+    'IMPORT_BOOK_TRANSACTION_CODES',
+    '/logistics/import-books/transaction-codes'
+);
+
+export const impbookCpcNumbers = new ItemType(
+    'impbookCpcNumbers',
+    'IMPORT_BOOK_CPC_NUMBERS',
+    '/logistics/import-books/cpc-numbers'
 );

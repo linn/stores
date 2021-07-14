@@ -118,6 +118,8 @@
             builder.RegisterType<ErrorResourceBuilder>().As<IResourceBuilder<Error>>();
             builder.RegisterType<ImportBookResourceBuilder>().As<IResourceBuilder<ImportBook>>();
             builder.RegisterType<ImportBooksResourceBuilder>().As<IResourceBuilder<IEnumerable<ImportBook>>>();
+            builder.RegisterType<ImportBookDeliveryTermResourceBuilder>().As<IResourceBuilder<ImportBookDeliveryTerm>>();
+            builder.RegisterType<ImportBookDeliveryTermsResourceBuilder>().As<IResourceBuilder<IEnumerable<ImportBookDeliveryTerm>>>();
             builder.RegisterType<ImportBookExchangeRateResourceBuilder>().As<IResourceBuilder<ImportBookExchangeRate>>();
             builder.RegisterType<ImportBookExchangeRatesResourceBuilder>().As<IResourceBuilder<IEnumerable<ImportBookExchangeRate>>>();
             builder.RegisterType<ImportBookInvoiceDetailResourceBuilder>()
@@ -213,6 +215,8 @@
                 .As<IResourceBuilder<ValidatePurchaseOrderResult>>();
             builder.RegisterType<CartonTypeResourceBuilder>().As<IResourceBuilder<CartonType>>();
             builder.RegisterType<CartonTypesResourceBuilder>().As<IResourceBuilder<IEnumerable<CartonType>>>();
+            builder.RegisterType<PortResourceBuilder>().As<IResourceBuilder<Port>>();
+            builder.RegisterType<PortsResourceBuilder>().As<IResourceBuilder<IEnumerable<Port>>>();
         }
     }
 }

@@ -98,6 +98,12 @@ import loanDetails from './loanDetails';
 import validatePurchaseOrderResult from './validatePurchaseOrderResult';
 import salesArticles from './salesArticles';
 import doBookIn from './doBookIn';
+import importBook from './importBooks/importBook';
+import importBooks from './importBooks/importBooks';
+import impbookExchangeRates from './importBooks/impbookExchangeRates';
+import impbookTransactionCodes from './importBooks/impbookTransactionCodes';
+import impbookTransportCodes from './importBooks/impbookTransportCodes';
+import impbookCpcNumbers from './importBooks/impbookCpcNumbers';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -136,6 +142,12 @@ const rootReducer = history =>
         finishAllocation,
         hub,
         hubs,
+        impbookCpcNumbers,
+        impbookExchangeRates,
+        impbookTransactionCodes,
+        impbookTransportCodes,
+        importBook,
+        importBooks,
         inspectedStates,
         interCompanyInvoices,
         loanDetails,
