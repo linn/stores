@@ -23,7 +23,7 @@
 
         public IQueryable<Currency> FindAll()
         {
-            return this.serviceDbContext.Currencies.Where(x => true);
+            return this.serviceDbContext.Currencies;
         }
 
         public void Add(Currency entity)
