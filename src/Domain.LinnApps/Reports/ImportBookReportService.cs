@@ -70,7 +70,7 @@
 
             reportLayout.SetGridData(values);
             var model = reportLayout.GetResultsModel();
-            model.RowDrillDownTemplates.Add(new DrillDownModel("Id", "/logistics/import-books/{rowId}"));
+            model.RowDrillDownTemplates.Add(new DrillDownModel("Id", "/logistics/import-books/{rowTitle}"));
             model.RowHeader = "Import Book Number/Ref";
 
             return model;
@@ -84,31 +84,35 @@
             values.Add(
                 new CalculationValueModel
                     {
-                        RowId = impbook.Id.ToString(),
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                         ColumnId = "RsnNo",
-                        TextDisplay = orderDetail.RsnNumber?.ToString()
-                    });
+                        TextDisplay = orderDetail.RsnNumber?.ToString(),
+                        RowTitle = impbook.Id.ToString()
+                });
             values.Add(
                 new CalculationValueModel
                     {
-                        RowId = impbook.Id.ToString(),
-                        ColumnId = "Currency",
-                        TextDisplay = impbook.Currency
-                    });
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                    ColumnId = "Currency",
+                        TextDisplay = impbook.Currency,
+                        RowTitle = impbook.Id.ToString()
+                });
             values.Add(
                 new CalculationValueModel
                     {
-                        RowId = impbook.Id.ToString(),
-                        ColumnId = "CustomsEntryCodeDate",
-                        TextDisplay = impbook.CustomsEntryCodeDate?.ToString("o")
-                    });
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                    ColumnId = "CustomsEntryCodeDate",
+                        TextDisplay = impbook.CustomsEntryCodeDate?.ToString("o"),
+                        RowTitle = impbook.Id.ToString()
+                });
             values.Add(
                 new CalculationValueModel
                     {
-                        RowId = impbook.Id.ToString(),
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                         ColumnId = "TariffCode",
-                        TextDisplay = orderDetail.TariffCode
-                    });
+                        TextDisplay = orderDetail.TariffCode,
+                        RowTitle = impbook.Id.ToString()
+                });
         }
 
         private string GenerateReportTitle(DateTime fromDate, DateTime toDate)
