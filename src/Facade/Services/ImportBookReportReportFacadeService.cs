@@ -1,51 +1,40 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq.Expressions;
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
+    using Linn.Stores.Domain.LinnApps.Reports;
     using Linn.Stores.Resources.ImportBooks;
 
     public class ImportBookReportReportFacadeService : IImportBookReportFacadeService
-        
     {
-        private readonly IImportBookReportService importBookService;
+        private readonly IImportBookReportService reportService;
 
         public ImportBookReportReportFacadeService(
             IRepository<ImportBook, int> repository,
-            IImportBookReportService importBookService)
+            IImportBookReportService reportService)
         {
-            this.importBookService = importBookService;
+            this.reportService = reportService;
         }
 
-        public IResult<IEnumerable<ImportBook>> GetImpbookIPRReport(IPRSearchResource resource)
+        public IResult<ResultsModel> GetImpbookIPRReport(IPRSearchResource resource)
         {
             DateTime from;
             DateTime to;
             try
             {
-                from = DateTime.Parse(resource.fromDate);
-                to = DateTime.Parse(resource.toDate);
+                from = DateTime.Parse(resource.FromDate);
+                to = DateTime.Parse(resource.ToDate);
             }
             catch (Exception)
             {
                 return new BadRequestResult<ResultsModel>("Invalid dates supplied to assembly fails details report");
             }
 
-            return new SuccessResult<ResultsModel>(
-                this.reportService.GetAssemblyFailsDetailsReport(
-                    from,
-                    to,
-                    resource.BoardPartNumber,
-                    resource.CircuitPartNumber,
-                    resource.FaultCode,
-                    resource.CitCode,
-                    resource.Board,
-                    resource.Person));
+            return new SuccessResult<ResultsModel>(this.reportService.GetIPRReport(from, to));
         }
     }
 }

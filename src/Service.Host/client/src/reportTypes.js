@@ -30,3 +30,9 @@ export const tqmsSummaryByCategoryReport = new ItemType(
     'TQMS_SUMMARY_BY_CATEGORY_REPORT',
     '/inventory/tqms-category-summary/report'
 );
+
+export const impbookIprReport = new ItemType(
+    'impbookIprReport',
+    'IMPBOOK_IPR_REPORT',
+    '/logistics/import-books/ipr/report'
+);

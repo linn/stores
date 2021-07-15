@@ -46,6 +46,8 @@ import Consignment from '../containers/consignments/Consignment';
 import GoodsInUtility from '../containers/goodsIn/GoodsInUtility';
 import ImportBook from '../containers/importBooks/ImportBook';
 import ImportBooks from '../containers/importBooks/ImportBooks';
+import ImportBooksIprReportOptions from '../containers/reports/ImpbookIprReportOptions';
+import ImportBooksIprReport from '../containers/reports/ImpbookIprReport';
 
 const Root = ({ store }) => (
     <div>
@@ -241,6 +243,16 @@ const Root = ({ store }) => (
                                         exact
                                         path="/logistics/goods-in-utility"
                                         component={GoodsInUtility}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/import-books/ipr"
+                                        component={ImportBooksIprReportOptions}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/import-books/ipr/report"
+                                        component={ImportBooksIprReport}
                                     />
                                     <Route
                                         exact

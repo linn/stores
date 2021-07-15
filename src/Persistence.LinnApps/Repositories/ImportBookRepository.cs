@@ -49,7 +49,7 @@
 
         public IQueryable<ImportBook> FilterBy(Expression<Func<ImportBook, bool>> expression)
         {
-            return this.serviceDbContext.ImportBooks.Where(expression);
+            return this.serviceDbContext.ImportBooks.Where(expression).Include(y => y.OrderDetails);
         }
     }
 }

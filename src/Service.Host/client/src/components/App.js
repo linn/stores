@@ -59,6 +59,9 @@ function App() {
                 <ListItem component={Link} to="/inventory/tqms-category-summary" button>
                     <Typography color="primary">TQMS Summary Report</Typography>
                 </ListItem>
+                <ListItem component={Link} to="/logistics/import-books/ipr" button>
+                    <Typography color="primary">IPR Import Books Report</Typography>
+                </ListItem>
             </List>
         </Page>
     );

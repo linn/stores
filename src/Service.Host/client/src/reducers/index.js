@@ -104,6 +104,7 @@ import impbookExchangeRates from './importBooks/impbookExchangeRates';
 import impbookTransactionCodes from './importBooks/impbookTransactionCodes';
 import impbookTransportCodes from './importBooks/impbookTransportCodes';
 import impbookCpcNumbers from './importBooks/impbookCpcNumbers';
+import impbookIprReport from './impbookIprReport';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -144,6 +145,7 @@ const rootReducer = history =>
         hubs,
         impbookCpcNumbers,
         impbookExchangeRates,
+        impbookIprReport,
         impbookTransactionCodes,
         impbookTransportCodes,
         importBook,
