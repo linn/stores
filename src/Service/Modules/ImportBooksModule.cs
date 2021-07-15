@@ -71,7 +71,8 @@
 
             if (string.IsNullOrWhiteSpace(resource.SearchTerm))
             {
-                return new BadRequestResult<IEnumerable<ImportBook>>("Search term cannot be empty");
+                return this.Negotiate.WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                    .WithView("Index");
             }
 
             var results = this.importBookFacadeService.Search(resource.SearchTerm);
