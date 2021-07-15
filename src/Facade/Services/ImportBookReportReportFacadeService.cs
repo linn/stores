@@ -31,7 +31,7 @@
             }
             catch (Exception)
             {
-                return new BadRequestResult<ResultsModel>("Invalid dates supplied to assembly fails details report");
+                return new BadRequestResult<ResultsModel>("Invalid dates supplied to impbook IPR report");
             }
 
             return new SuccessResult<ResultsModel>(this.reportService.GetIPRReport(from, to));

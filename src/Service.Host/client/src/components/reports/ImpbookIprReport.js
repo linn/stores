@@ -17,7 +17,7 @@ const handleBackClick = (history, options) => {
     history.push(uri);
 };
 
-const AssemblyFailsDetails = ({ reportData, loading, history, options, config }) => (
+const ImpbookIprReport = ({ reportData, loading, history, options, config }) => (
     <Page>
         <Grid container spacing={3} justify="center">
             <Grid item xs={12}>
@@ -52,7 +52,7 @@ const AssemblyFailsDetails = ({ reportData, loading, history, options, config })
     </Page>
 );
 
-AssemblyFailsDetails.propTypes = {
+ImpbookIprReport.propTypes = {
     reportData: PropTypes.shape({ title: PropTypes.string }),
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,
     loading: PropTypes.bool,
@@ -63,10 +63,10 @@ AssemblyFailsDetails.propTypes = {
     config: PropTypes.shape({ appRoot: PropTypes.string }).isRequired
 };
 
-AssemblyFailsDetails.defaultProps = {
+ImpbookIprReport.defaultProps = {
     reportData: {},
     options: {},
     loading: false
 };
 
-export default AssemblyFailsDetails;
+export default ImpbookIprReport;
