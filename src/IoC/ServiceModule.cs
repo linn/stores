@@ -70,6 +70,8 @@
             builder.RegisterType<ImportBookService>().As<IImportBookService>();
             builder.RegisterType<PackingListService>().As<IPackingListService>();
             builder.RegisterType<GoodsInService>().As<IGoodsInService>();
+            builder.RegisterType<ImportBookReportService>()
+                .As<IImportBookReportService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -114,6 +116,8 @@
             builder.RegisterType<EmployeesService>().As<IEmployeeService>();
             builder.RegisterType<ImportBookFacadeService>()
                 .As<IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource>>();
+            builder.RegisterType<ImportBookReportReportFacadeService>()
+                .As<IImportBookReportFacadeService>();
             builder.RegisterType<ImportBookDeliveryTermFacadeService>().As<IFacadeService<ImportBookDeliveryTerm, string, ImportBookDeliveryTermResource, ImportBookDeliveryTermResource>>();
             builder.RegisterType<ImportBookExchangeRateService>().As<IImportBookExchangeRateService>();
             builder.RegisterType<ImportBookTransactionCodeFacadeService>().As<IFacadeService<ImportBookTransactionCode, int, ImportBookTransactionCodeResource, ImportBookTransactionCodeResource>>();

@@ -45,9 +45,10 @@
             this.importBookDeliveryTermFacadeService = importBookDeliveryTermFacadeService;
             this.portFacadeService = portFacadeService;
 
+            this.Get("/logistics/import-books/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/logistics/import-books/{id}", parameters => this.GetImportBook(parameters.id));
             this.Put("/logistics/import-books/{id}", parameters => this.UpdateImportBook(parameters.id));
-            this.Post("/logistics/import-books/", _ => this.CreateImportBook());
+            this.Post("/logistics/import-books", _ => this.CreateImportBook());
             this.Get("/logistics/import-books", parameters => this.GetImportBooks());
             this.Get("/logistics/import-books/exchange-rates", parameters => this.GetExchangeRates());
             this.Get("/logistics/import-books/transport-codes", parameters => this.GetTransportCodes());
@@ -70,7 +71,8 @@
 
             if (string.IsNullOrWhiteSpace(resource.SearchTerm))
             {
-                return new BadRequestResult<IEnumerable<ImportBook>>("Search term cannot be empty");
+                return this.Negotiate.WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                    .WithView("Index");
             }
 
             var results = this.importBookFacadeService.Search(resource.SearchTerm);
