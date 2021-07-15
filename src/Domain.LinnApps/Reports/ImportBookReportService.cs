@@ -69,7 +69,7 @@
 
             reportLayout.SetGridData(values);
             var model = reportLayout.GetResultsModel();
-            model.RowDrillDownTemplates.Add(new DrillDownModel("Id", "/logistics/import-books"));
+            model.RowDrillDownTemplates.Add(new DrillDownModel("Id", "/logistics/import-books/{textValue}"));
             model.RowHeader = "Import Book Number/Ref";
 
             return model;
