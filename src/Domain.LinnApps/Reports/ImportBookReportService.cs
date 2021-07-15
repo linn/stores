@@ -44,7 +44,6 @@
                 null,
                 new List<AxisDetailsModel>
                     {
-                        // new AxisDetailsModel("Id", "Import Book No Ref", GridDisplayType.TextValue),
                         new AxisDetailsModel("RsnNo", "Unique RSN No", GridDisplayType.TextValue) { AllowWrap = false },
                         new AxisDetailsModel("Currency", GridDisplayType.TextValue) { AllowWrap = false },
                         new AxisDetailsModel(
