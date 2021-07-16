@@ -11,6 +11,10 @@ import transportCodesActions from '../../../actions/impbookTransportCodesActions
 import transportCodesSelectors from '../../../selectors/impbookTransportCodesSelectors';
 import transactionCodesActions from '../../../actions/impbookTransactionCodesActions';
 import transactionCodesSelectors from '../../../selectors/impbookTransactionCodesSelectors';
+import impbookDeliveryTermsActions from '../../../actions/impbookDeliveryTermsActions';
+import impbookDeliveryTermsSelectors from '../../../selectors/impbookDeliveryTermsSelectors';
+import portsActions from '../../../actions/portsActions';
+import portsSelectors from '../../../selectors/portsSelectors';
 import config from '../../../config';
 
 const mapStateToProps = state => ({
@@ -33,7 +37,9 @@ const mapStateToProps = state => ({
     })),
     carriersSearchLoading: suppliersApprovedCarrierSelectors.getSearchLoading(state),
     transportCodes: transportCodesSelectors.getItems(state),
-    transactionCodes: transactionCodesSelectors.getItems(state)
+    transactionCodes: transactionCodesSelectors.getItems(state),
+    deliveryTerms: impbookDeliveryTermsActions.getItems(state),
+    ports: portsSelectors.getItems(state)
 });
 
 const initialise = () => dispatch => {
@@ -41,6 +47,8 @@ const initialise = () => dispatch => {
     dispatch(suppliersActions.fetch());
     dispatch(transportCodesActions.fetch());
     dispatch(transactionCodesActions.fetch());
+    dispatch(impbookDeliveryTermsActions.fetch());
+    dispatch(portsActions.fetch());
 };
 
 const mapDispatchToProps = {

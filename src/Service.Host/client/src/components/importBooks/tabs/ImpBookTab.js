@@ -25,7 +25,8 @@ function ImpBookTab({
     clearCarriersSearch,
     transportCodes,
     transactionCodes,
-
+    deliveryTerms,
+    ports,
     handleFieldChange,
     dateCreated,
     parcelNumber,
@@ -267,10 +268,10 @@ function ImpBookTab({
                     />
                 </Grid>
                 <Grid item xs={3}>
-                    {/* TODO look up how this should actually be calculated and set, not sure eec member is based on eecgnumber */}
+                    {/* TODO set this based on supplier country being an EC member*/}
                     <InputField
-                        label="EEC member"
-                        value={eecgNumber ? 'Yes' : 'No'}
+                        label="EC member"
+                        // value={supplierECMember()}
                         disabled
                         fullwidth
                     />
@@ -293,7 +294,6 @@ function ImpBookTab({
 
                 <Grid item xs={4}>
                     {/* Todo change this to a search/typeahead and implement rest of required stuff
-                    also should this be currency or foreign currency?
                      */}
                     <InputField
                         fullWidth
@@ -417,9 +417,11 @@ function ImpBookTab({
                 </Grid>
 
                 <Grid item xs={6}>
-                    {/* todo implement delivery term code stuff  */}
                     <Dropdown
-                        items={[]}
+                        items={deliveryTerms.map(e => ({
+                            displayText: `${e.deliveryTermCode} (${e.description})`,
+                            id: parseInt(e.deliveryTermCode, 10)
+                        }))}
                         propertyName="deliveryTermCode"
                         fullWidth
                         value={deliveryTermCode}
@@ -429,10 +431,11 @@ function ImpBookTab({
                 </Grid>
 
                 <Grid item xs={6}>
-                {/* todo implement arrival ports */}
-
                     <Dropdown
-                        items={[]}
+                        items={ports.map(e => ({
+                            displayText: `${e.portCode} (${e.description})`,
+                            id: parseInt(e.portCode, 10)
+                        }))}
                         propertyName="arrivalPort"
                         fullWidth
                         value={arrivalPort}
@@ -728,6 +731,12 @@ ImpBookTab.propTypes = {
     ).isRequired,
     transactionCodes: PropTypes.arrayOf(
         PropTypes.shape({ transactionId: PropTypes.number, description: PropTypes.string })
+    ).isRequired,
+    deliveryTerms: PropTypes.arrayOf(
+        PropTypes.shape({ deliveryTermCode: PropTypes.number, description: PropTypes.string })
+    ).isRequired,
+    ports: PropTypes.arrayOf(
+        PropTypes.shape({ portCode: PropTypes.number, description: PropTypes.string })
     ).isRequired,
     handleFieldChange: PropTypes.func.isRequired,
     dateCreated: PropTypes.string.isRequired,

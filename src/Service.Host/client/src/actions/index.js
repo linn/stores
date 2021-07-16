@@ -268,3 +268,10 @@ export const impbookCpcNumbersActionTypes = makeActionTypes(
 export const impbookIprReportActionTypes = makeReportActionTypes(
     reportTypes.impbookIprReport.actionType
 );
+
+export const impbookDeliveryTermsActionTypes = makeReportActionTypes(
+    itemTypes.impbookDeliveryTerms.actionType,
+    false
+);
+
+export const portsActionTypes = makeActionTypes(itemTypes.ports.actionType, false);
