@@ -271,7 +271,7 @@ function ImpBookTab({
                     {/* TODO set this based on supplier country being an EC member*/}
                     <InputField
                         label="EC member"
-                        // value={supplierECMember()}
+                        value={eecgNumber ? 'Yes' : 'No'}
                         disabled
                         fullwidth
                     />

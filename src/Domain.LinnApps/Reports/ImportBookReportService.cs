@@ -131,7 +131,7 @@
                     {
                         RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                         ColumnId = "CustomsEntryCodeDate",
-                        TextDisplay = impbook.CustomsEntryCodeDate?.ToString("o"),
+                        TextDisplay = impbook.CustomsEntryCodeDate?.ToString("yyyy/MM/dd"),
                         RowTitle = impbook.Id.ToString()
                     });
             values.Add(
