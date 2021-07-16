@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using System.Linq.Expressions;
+    using System.Security.Cryptography.X509Certificates;
 
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
@@ -49,7 +50,9 @@
 
         public IQueryable<ImportBook> FilterBy(Expression<Func<ImportBook, bool>> expression)
         {
-            return this.serviceDbContext.ImportBooks.Where(expression).Include(y => y.OrderDetails);
+            return this.serviceDbContext.ImportBooks.Where(expression)
+                .Include(y => y.OrderDetails)
+                .Include(x => x.InvoiceDetails);
         }
     }
 }
