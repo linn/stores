@@ -38,7 +38,7 @@ const mapStateToProps = state => ({
     carriersSearchLoading: suppliersApprovedCarrierSelectors.getSearchLoading(state),
     transportCodes: transportCodesSelectors.getItems(state),
     transactionCodes: transactionCodesSelectors.getItems(state),
-    deliveryTerms: impbookDeliveryTermsActions.getItems(state),
+    deliveryTerms: impbookDeliveryTermsSelectors.getItems(state),
     ports: portsSelectors.getItems(state)
 });
 
