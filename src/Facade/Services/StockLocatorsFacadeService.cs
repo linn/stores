@@ -44,6 +44,7 @@
             {
                 return new BadRequestResult<StockLocator>(ex.Message);
             }
+
             return new SuccessResult<StockLocator>(toDelete);
         }
 
