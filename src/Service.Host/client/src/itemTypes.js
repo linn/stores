@@ -367,3 +367,5 @@ export const impbookCpcNumbers = new ItemType(
     'IMPORT_BOOK_CPC_NUMBERS',
     '/logistics/import-books/cpc-numbers'
 );
+
+export const cartonTypes = new ItemType('cartonTypes', 'CARTON_TYPES', '/logistics/carton-types');

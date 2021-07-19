@@ -15,7 +15,7 @@ export default function InputFields({ exportReturn, handleFieldChange, calculate
                     propertyName="carrierCode"
                     onChange={handleFieldChange}
                     margin="dense"
-                    disabled={!!exportReturn.dateProcessed}                    
+                    disabled={!!exportReturn.dateProcessed}
                 />
             </Grid>
             <Grid item xs={6}>

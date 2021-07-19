@@ -28,7 +28,4 @@ const mapDispatchToProps = {
     initialise
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(initialiseOnMount(ImpbookIprReport));
+export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(ImpbookIprReport));

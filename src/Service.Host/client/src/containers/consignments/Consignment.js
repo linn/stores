@@ -24,6 +24,8 @@ import shippingTermSelectors from '../../selectors/shippingTermSelectors';
 import shippingTermActions from '../../actions/shippingTermActions';
 import shippingTermsSelectors from '../../selectors/shippingTermsSelectors';
 import shippingTermsActions from '../../actions/shippingTermsActions';
+import cartonTypesSelectors from '../../selectors/cartonTypesSelectors';
+import cartonTypesActions from '../../actions/cartonTypesActions';
 
 const getOptions = ownProps => {
     const options = queryString.parse(ownProps.location.search);
@@ -37,6 +39,7 @@ const initialise = ({ options }) => dispatch => {
 
     dispatch(consignmentsActions.fetch());
     dispatch(hubsActions.fetch());
+    dispatch(cartonTypesActions.fetch());
     dispatch(carriersActions.fetch());
     dispatch(shippingTermsActions.fetch());
 };
@@ -61,7 +64,8 @@ const mapStateToProps = (state, ownProps) => ({
     carriersLoading: carriersSelectors.getLoading(state),
     shippingTerm: shippingTermSelectors.getItem(state),
     shippingTerms: shippingTermsSelectors.getItems(state),
-    shippingTermsLoading: shippingTermsSelectors.getLoading(state)
+    shippingTermsLoading: shippingTermsSelectors.getLoading(state),
+    cartonTypes: cartonTypesSelectors.getItems(state)
 });
 
 const mapDispatchToProps = {
