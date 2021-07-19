@@ -45,7 +45,8 @@ function Consignment({
     shippingTerms,
     shippingTermsLoading,
     itemError,
-    clearConsignmentErrors
+    clearConsignmentErrors,
+    cartonTypes
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
     const [editablePallets, setEditablePallets] = useState([]);
@@ -293,6 +294,7 @@ function Consignment({
                                     viewing={viewing()}
                                     dispatch={dispatch}
                                     setSaveDisabled={setSaveDisabled}
+                                    cartonTypes={cartonTypes}
                                 />
                             )}
                         </>
@@ -378,7 +380,10 @@ Consignment.propTypes = {
         details: PropTypes.shape({
             errors: PropTypes.arrayOf(PropTypes.shape({}))
         })
-    })
+    }),
+    cartonTypes: PropTypes.arrayOf(
+        PropTypes.shape({ cartonTypeName: PropTypes.string, description: PropTypes.string })
+    )
 };
 
 Consignment.defaultProps = {
@@ -398,7 +403,8 @@ Consignment.defaultProps = {
     shippingTerm: null,
     shippingTerms: [],
     shippingTermsLoading: false,
-    itemError: null
+    itemError: null,
+    cartonTypes: []
 };
 
 export default Consignment;

@@ -9,8 +9,7 @@ import {
     Loading,
     Title,
     ErrorCard,
-    SnackbarMessage,
-    LinkButton
+    SnackbarMessage
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 import ImpBookTab from '../../containers/importBooks/tabs/ImpBookTab';
@@ -27,10 +26,7 @@ function ImportBook({
     addItem,
     updateItem,
     setEditStatus,
-    setSnackbarVisible,
-    privileges,
-    userName,
-    userNumber
+    setSnackbarVisible
 }) {
     const defaultImpBook = {
         id: null,
@@ -351,10 +347,7 @@ ImportBook.propTypes = {
     updateItem: PropTypes.func.isRequired,
     loading: PropTypes.bool,
     setEditStatus: PropTypes.func.isRequired,
-    setSnackbarVisible: PropTypes.func.isRequired,
-    privileges: PropTypes.arrayOf(PropTypes.string),
-    userName: PropTypes.string,
-    userNumber: PropTypes.number
+    setSnackbarVisible: PropTypes.func.isRequired
 };
 
 ImportBook.defaultProps = {
@@ -362,10 +355,7 @@ ImportBook.defaultProps = {
     snackbarVisible: false,
     loading: true,
     itemError: null,
-    itemId: null,
-    privileges: null,
-    userName: null,
-    userNumber: null
+    itemId: null
 };
 
 export default ImportBook;
