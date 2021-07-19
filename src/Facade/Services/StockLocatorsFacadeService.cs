@@ -6,6 +6,7 @@
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Common.Proxy.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Resources.StockLocators;
@@ -35,7 +36,14 @@
         public IResult<StockLocator> Delete(StockLocatorResource resource)
         {
             var toDelete = this.repository.FindById(resource.Id);
-            this.domainService.DeleteStockLocator(toDelete, resource.UserPrivileges);
+            try
+            {
+                this.domainService.DeleteStockLocator(toDelete, resource.UserPrivileges);
+            }
+            catch (StockLocatorException ex)
+            {
+                return new BadRequestResult<StockLocator>(ex.Message);
+            }
             return new SuccessResult<StockLocator>(toDelete);
         }
 
