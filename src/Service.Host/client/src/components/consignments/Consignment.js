@@ -152,13 +152,6 @@ function Consignment({
         });
     };
 
-    const openConsignmentOptions = () => {
-        return openConsignments?.map(c => ({
-            id: c.consignmentId,
-            displayText: c.customerName
-        }));
-    };
-
     const handleSelectConsignment = (_property, newValue) => {
         getConsignment(newValue);
         setcurrentTab(1);
@@ -260,7 +253,7 @@ function Consignment({
                             <Dropdown
                                 label="Select consignment"
                                 propertyName="consignmentSelect"
-                                items={openConsignmentOptions()}
+                                items={openConsignments}
                                 onChange={handleSelectConsignment}
                                 optionsLoading={optionsLoading}
                             />
@@ -345,7 +338,9 @@ Consignment.propTypes = {
     requestErrors: PropTypes.arrayOf(
         PropTypes.shape({ message: PropTypes.string, name: PropTypes.string })
     ),
-    openConsignments: PropTypes.arrayOf(PropTypes.shape({})),
+    openConsignments: PropTypes.arrayOf(
+        PropTypes.shape({ id: PropTypes.number, displayText: PropTypes.string })
+    ),
     getConsignment: PropTypes.func.isRequired,
     optionsLoading: PropTypes.bool,
     startingTab: PropTypes.number,

@@ -51,7 +51,10 @@ const mapStateToProps = (state, ownProps) => ({
     itemError: getItemError(state, itemTypes.consignment.item),
     userNumber: getUserNumber(state),
     requestErrors: getRequestErrors(state)?.filter(error => error.type !== 'FETCH_ERROR'),
-    openConsignments: consignmentsSelectors.getItems(state),
+    openConsignments: consignmentsSelectors.getItems(state)?.map(c => ({
+        id: c.consignmentId,
+        displayText: `${c.consignmentId} ${c.customerName}`
+    })),
     optionsLoading: consignmentsSelectors.getLoading(state),
     options: getOptions(ownProps),
     startingTab: getOptions(ownProps).consignmentId ? 2 : 0,
