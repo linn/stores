@@ -2,10 +2,9 @@
 set -ev
 
 # install aws cli
-curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
-unzip awscli-bundle.zip
-./awscli-bundle/install -b ~/bin/aws
-export PATH=~/bin:$PATH
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
 
 # deploy on aws
 if [ "${TRAVIS_BRANCH}" = "master" ]; then
