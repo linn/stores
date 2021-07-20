@@ -15,16 +15,20 @@
 
         private readonly IRepository<Part, int> partsRepository;
 
+        private readonly IRepository<GoodsInLogEntry, int> goodsInLog;
+
         public GoodsInService(
             IGoodsInPack goodsInPack,
             IStoresPack storesPack,
             IPalletAnalysisPack palletAnalysisPack,
-            IRepository<Part, int> partsRepository)
+            IRepository<Part, int> partsRepository,
+            IRepository<GoodsInLogEntry, int> goodsInLog)
         {
             this.storesPack = storesPack;
             this.goodsInPack = goodsInPack;
             this.palletAnalysisPack = palletAnalysisPack;
             this.partsRepository = partsRepository;
+            this.goodsInLog = goodsInLog;
         }
 
         public ProcessResult DoBookIn(
@@ -47,6 +51,8 @@
             string rsnAccessories,
             int? reqNumber)
         {
+            var x = this.goodsInLog.FindById(9206);
+
             if (string.IsNullOrEmpty(ontoLocation))
             {
                 if ((string.IsNullOrEmpty(storageType) && transactionType.Equals("O")) 

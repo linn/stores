@@ -21,6 +21,8 @@
 
         protected IRepository<Part, int> PartsRepository { get; private set; }
 
+        protected IRepository<GoodsInLogEntry, int> GoodsInLog { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -28,11 +30,13 @@
             this.StoresPack = Substitute.For<IStoresPack>();
             this.PalletAnalysisPack = Substitute.For<IPalletAnalysisPack>();
             this.PartsRepository = Substitute.For<IRepository<Part, int>>();
+            this.GoodsInLog = Substitute.For<IRepository<GoodsInLogEntry, int>>();
             this.Sut = new GoodsInService(
                 this.GoodsInPack, 
                 this.StoresPack, 
                 this.PalletAnalysisPack, 
-                this.PartsRepository);
+                this.PartsRepository,
+                this.GoodsInLog);
         }
     }
 }

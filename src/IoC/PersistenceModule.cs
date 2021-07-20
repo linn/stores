@@ -132,6 +132,7 @@
             builder.RegisterType<LoanDetailsRepository>().As<IQueryRepository<LoanDetail>>();
             builder.RegisterType<SalesArticleRepository>().As<IQueryRepository<SalesArticle>>();
             builder.RegisterType<CartonTypeRepository>().As<IRepository<CartonType, string>>();
+            builder.RegisterType<GoodsInLogRepository>().As<IRepository<GoodsInLogEntry, int>>();
         }
     }
 }
