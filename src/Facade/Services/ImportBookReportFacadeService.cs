@@ -3,19 +3,15 @@
     using System;
 
     using Linn.Common.Facade;
-    using Linn.Common.Persistence;
     using Linn.Common.Reporting.Models;
-    using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Reports;
     using Linn.Stores.Resources.ImportBooks;
 
-    public class ImportBookReportReportFacadeService : IImportBookReportFacadeService
+    public class ImportBookReportFacadeService : IImportBookReportFacadeService
     {
         private readonly IImportBookReportService reportService;
 
-        public ImportBookReportReportFacadeService(
-            IRepository<ImportBook, int> repository,
-            IImportBookReportService reportService)
+        public ImportBookReportFacadeService(IImportBookReportService reportService)
         {
             this.reportService = reportService;
         }
