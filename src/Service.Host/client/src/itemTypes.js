@@ -375,3 +375,5 @@ export const impbookDeliveryTerms = new ItemType(
 );
 
 export const ports = new ItemType('ports', 'PORTS', '/logistics/import-books/ports');
+
+export const cartonTypes = new ItemType('cartonTypes', 'CARTON_TYPES', '/logistics/carton-types');

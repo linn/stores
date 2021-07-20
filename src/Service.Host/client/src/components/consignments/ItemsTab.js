@@ -1,10 +1,21 @@
 import React, { useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
-import { GroupEditTable, useGroupEditTable } from '@linn-it/linn-form-components-library';
+import {
+    GroupEditTable,
+    useGroupEditTable,
+    utilities
+} from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
-function ItemsTab({ viewing, editableItems, editablePallets, dispatch, setSaveDisabled }) {
+function ItemsTab({
+    viewing,
+    editableItems,
+    editablePallets,
+    dispatch,
+    setSaveDisabled,
+    cartonTypes
+}) {
     const {
         data: itemsData,
         addRow: addItem,
@@ -66,6 +77,13 @@ function ItemsTab({ viewing, editableItems, editablePallets, dispatch, setSaveDi
             }
         }
     }, [palletData, dispatch, setSaveDisabled]);
+
+    const cartonTypesOptions = () => {
+        return utilities.sortEntityList(cartonTypes, 'cartonTypeName')?.map(ct => ({
+            id: ct.cartonTypeName,
+            displayText: `${ct.cartonTypeName} - ${ct.description}`
+        }));
+    };
 
     const palletColumns = [
         {
@@ -243,9 +261,10 @@ function ItemsTab({ viewing, editableItems, editablePallets, dispatch, setSaveDi
         },
         {
             title: 'Container Type',
-            id: 'containterType',
-            type: 'text',
+            id: 'containerType',
+            type: 'dropdown',
             editable: true,
+            options: cartonTypesOptions(),
             style: {
                 body: { minWidth: '180px' }
             }
@@ -318,7 +337,10 @@ ItemsTab.propTypes = {
     setSaveDisabled: PropTypes.func.isRequired,
     viewing: PropTypes.bool.isRequired,
     editableItems: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    editablePallets: PropTypes.arrayOf(PropTypes.shape({})).isRequired
+    editablePallets: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    cartonTypes: PropTypes.arrayOf(
+        PropTypes.shape({ cartonTypeName: PropTypes.string, description: PropTypes.string })
+    ).isRequired
 };
 
 export default ItemsTab;

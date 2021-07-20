@@ -107,6 +107,7 @@ import impbookCpcNumbers from './importBooks/impbookCpcNumbers';
 import impbookIprReport from './impbookIprReport';
 import impbookDeliveryTerms from './importBooks/impbookDeliveryTerms';
 import ports from './importBooks/ports';
+import cartonTypes from './cartonTypes';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -123,6 +124,7 @@ const rootReducer = history =>
         availableStock,
         carrier,
         carriers,
+        cartonTypes,
         consignment,
         consignments,
         consignmentShipfile,
