@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.IoC
 {
     using System.Collections.Generic;
-    using System.Diagnostics;
 
     using Autofac;
 
