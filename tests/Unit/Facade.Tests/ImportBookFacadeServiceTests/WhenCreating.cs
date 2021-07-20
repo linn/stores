@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Facade.Tests.ImportBookFacadeTests
+﻿namespace Linn.Stores.Facade.Tests.ImportBookFacadeServiceTests
 {
     using System;
     using System.Collections.Generic;
@@ -9,9 +9,8 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
+    using Linn.Stores.Facade.Tests.ImportBookFacadeTests;
     using Linn.Stores.Resources.ImportBooks;
-
-    using NSubstitute;
 
     using NUnit.Framework;
 

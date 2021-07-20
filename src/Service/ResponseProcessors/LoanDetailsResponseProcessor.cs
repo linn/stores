@@ -4,9 +4,7 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Nancy.Facade;
-    using Linn.Stores.Domain.LinnApps;
-
-    using Nancy.Responses.Negotiation;
+    using Linn.Stores.Domain.LinnApps.GoodsIn;
 
     public class LoanDetailsResponseProcessor : JsonResponseProcessor<IEnumerable<LoanDetail>>
     {

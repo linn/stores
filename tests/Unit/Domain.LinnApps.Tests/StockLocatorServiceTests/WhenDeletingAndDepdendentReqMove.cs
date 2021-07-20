@@ -12,7 +12,6 @@
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
     using NSubstitute;
-    using NSubstitute.ReturnsExtensions;
 
     using NUnit.Framework;
 

@@ -2,6 +2,7 @@
 {
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
+    using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.Parts;
 
     using NSubstitute;

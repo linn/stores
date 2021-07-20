@@ -4,7 +4,6 @@
     using System.Security.Claims;
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
-    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
     using Linn.Stores.Facade.ResourceBuilders;
