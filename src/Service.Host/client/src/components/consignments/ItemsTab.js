@@ -14,7 +14,8 @@ function ItemsTab({
     editablePallets,
     dispatch,
     setSaveDisabled,
-    cartonTypes
+    cartonTypes,
+    setEditStatus
 }) {
     const {
         data: itemsData,
@@ -26,7 +27,8 @@ function ItemsTab({
         setRowToBeDeleted: setItemRowToBeDeleted,
         setRowToBeSaved: setItemRowToBeSaved
     } = useGroupEditTable({
-        rows: editableItems
+        rows: editableItems,
+        setEditStatus
     });
 
     const {
@@ -39,7 +41,8 @@ function ItemsTab({
         setRowToBeDeleted: setPalletRowToBeDeleted,
         setRowToBeSaved: setPalletRowToBeSaved
     } = useGroupEditTable({
-        rows: editablePallets
+        rows: editablePallets,
+        setEditStatus
     });
 
     const checkRow = row => {
@@ -287,7 +290,7 @@ function ItemsTab({
                             removeRow={removePallet}
                             resetRow={resetRow}
                             handleEditClick={setPalletsEditing}
-                            editable={!viewing}
+                            editable
                             allowNewRowCreation
                             deleteRowPreEdit={false}
                             setRowToBeSaved={setPalletRowToBeSaved}
@@ -315,7 +318,7 @@ function ItemsTab({
                             removeRow={removeItem}
                             resetRow={resetItemRow}
                             handleEditClick={setItemsEditing}
-                            editable={!viewing}
+                            editable
                             allowNewRowCreation
                             deleteRowPreEdit={false}
                             setRowToBeSaved={setItemRowToBeSaved}
@@ -340,7 +343,8 @@ ItemsTab.propTypes = {
     editablePallets: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     cartonTypes: PropTypes.arrayOf(
         PropTypes.shape({ cartonTypeName: PropTypes.string, description: PropTypes.string })
-    ).isRequired
+    ).isRequired,
+    setEditStatus: PropTypes.func.isRequired
 };
 
 export default ItemsTab;

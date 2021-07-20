@@ -288,6 +288,7 @@ function Consignment({
                                     dispatch={dispatch}
                                     setSaveDisabled={setSaveDisabled}
                                     cartonTypes={cartonTypes}
+                                    setEditStatus={setEditStatus}
                                 />
                             )}
                         </>
