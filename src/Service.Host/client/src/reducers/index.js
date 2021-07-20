@@ -105,6 +105,8 @@ import impbookTransactionCodes from './importBooks/impbookTransactionCodes';
 import impbookTransportCodes from './importBooks/impbookTransportCodes';
 import impbookCpcNumbers from './importBooks/impbookCpcNumbers';
 import impbookIprReport from './impbookIprReport';
+import impbookDeliveryTerms from './importBooks/impbookDeliveryTerms';
+import ports from './importBooks/ports';
 import cartonTypes from './cartonTypes';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
@@ -146,6 +148,7 @@ const rootReducer = history =>
         hub,
         hubs,
         impbookCpcNumbers,
+        impbookDeliveryTerms,
         impbookExchangeRates,
         impbookIprReport,
         impbookTransactionCodes,
@@ -172,6 +175,7 @@ const rootReducer = history =>
         partStorageTypes,
         partTemplates,
         pickItemsAllocation,
+        ports,
         productAnalysisCodes,
         reqMoves,
         rootProducts,

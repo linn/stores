@@ -26,13 +26,9 @@
         public ResultsModel GetIPRReport(DateTime from, DateTime to)
         {
             var iprImpbooks = this.impbookRepository.FilterBy(
-                x =>
-
-                    // x.IprCpcNumber.HasValue && x.IprCpcNumber.Value == 13 &&
-                    // todo check if I can just use that ^, not sure it'll be populated reliably 
-                    x.OrderDetails.Any(z => z.CpcNumber.HasValue && z.CpcNumber.Value == this.IprCpcNumberId)
-                    && x.CustomsEntryCodeDate.HasValue && from < x.CustomsEntryCodeDate.Value
-                    && x.CustomsEntryCodeDate.Value < to);
+                x => x.OrderDetails.Any(z => z.CpcNumber.HasValue && z.CpcNumber.Value == this.IprCpcNumberId)
+                     && x.CustomsEntryCodeDate.HasValue && from < x.CustomsEntryCodeDate.Value
+                     && x.CustomsEntryCodeDate.Value < to);
 
             var reportLayout = new SimpleGridLayout(
                 this.reportingHelper,
@@ -46,9 +42,17 @@
                     {
                         new AxisDetailsModel("RsnNo", "Unique RSN No", GridDisplayType.TextValue) { AllowWrap = false },
                         new AxisDetailsModel("Currency", GridDisplayType.TextValue) { AllowWrap = false },
+                        new AxisDetailsModel("ForeignValue", "Value", GridDisplayType.TextValue) { AllowWrap = false },
+                        new AxisDetailsModel("GBPValue", "GBP Value", GridDisplayType.TextValue) { AllowWrap = false },
+                        new AxisDetailsModel("CarrierId", "Carrier Id", GridDisplayType.TextValue) { AllowWrap = false },
                         new AxisDetailsModel(
                             "CustomsEntryCodeDate",
                             "Date of Entry (customs)",
+                            GridDisplayType.TextValue),
+                        new AxisDetailsModel("CustomsEntryCode", "Entry Code (with prefix)", GridDisplayType.TextValue),
+                        new AxisDetailsModel(
+                            "ShippingRef",
+                            "Shipping Ref (transport bill no)",
                             GridDisplayType.TextValue),
                         new AxisDetailsModel("TariffCode", "Commodity (tariff) code", GridDisplayType.TextValue)
                             {
@@ -87,23 +91,67 @@
                         ColumnId = "RsnNo",
                         TextDisplay = orderDetail.RsnNumber?.ToString(),
                         RowTitle = impbook.Id.ToString()
-                });
+                    });
             values.Add(
                 new CalculationValueModel
                     {
                         RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "Currency",
+                        ColumnId = "Currency",
                         TextDisplay = impbook.Currency,
                         RowTitle = impbook.Id.ToString()
-                });
+                    });
             values.Add(
                 new CalculationValueModel
                     {
                         RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "CustomsEntryCodeDate",
-                        TextDisplay = impbook.CustomsEntryCodeDate?.ToString("o"),
+                        ColumnId = "ForeignValue",
+                        TextDisplay = impbook.InvoiceDetails.Sum(x => x.InvoiceValue).ToString(),
                         RowTitle = impbook.Id.ToString()
-                });
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "GBPValue",
+                        TextDisplay = impbook.TotalImportValue.ToString(),
+                        RowTitle = impbook.Id.ToString()
+                    });
+
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "CarrierId",
+                        TextDisplay = impbook.CarrierId.ToString(),
+                        RowTitle = impbook.Id.ToString()
+                    });
+
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "CustomsEntryCodeDate",
+                        TextDisplay = impbook.CustomsEntryCodeDate?.ToString("yyyy/MM/dd"),
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "CustomsEntryCode",
+                        TextDisplay = $"{impbook.CustomsEntryCodePrefix} - {impbook.CustomsEntryCode}",
+                        RowTitle = impbook.Id.ToString()
+                    });
+
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "ShippingRef",
+                        TextDisplay = impbook.TransportBillNumber,
+                        RowTitle = impbook.Id.ToString()
+                    });
+
             values.Add(
                 new CalculationValueModel
                     {
@@ -111,7 +159,7 @@
                         ColumnId = "TariffCode",
                         TextDisplay = orderDetail.TariffCode,
                         RowTitle = impbook.Id.ToString()
-                });
+                    });
         }
 
         private string GenerateReportTitle(DateTime fromDate, DateTime toDate)

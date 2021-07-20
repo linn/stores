@@ -20,11 +20,8 @@
 
         public ImportBook FindById(int key)
         {
-            return this.serviceDbContext.ImportBooks.Where(b => b.Id == key)
-                .Include(x => x.InvoiceDetails)
-                .Include(y => y.OrderDetails)
-                .Include(z => z.PostEntries)
-                .ToList().FirstOrDefault();
+            return this.serviceDbContext.ImportBooks.Where(b => b.Id == key).Include(x => x.InvoiceDetails)
+                .Include(y => y.OrderDetails).Include(z => z.PostEntries).ToList().FirstOrDefault();
         }
 
         public IQueryable<ImportBook> FindAll()
@@ -49,7 +46,8 @@
 
         public IQueryable<ImportBook> FilterBy(Expression<Func<ImportBook, bool>> expression)
         {
-            return this.serviceDbContext.ImportBooks.Where(expression).Include(y => y.OrderDetails);
+            return this.serviceDbContext.ImportBooks.Where(expression).Include(y => y.OrderDetails)
+                .Include(x => x.InvoiceDetails);
         }
     }
 }
