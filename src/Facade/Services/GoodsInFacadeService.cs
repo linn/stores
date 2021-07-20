@@ -36,6 +36,7 @@
                 requestResource.RsnNumber,
                 requestResource.StoragePlace,
                 requestResource.StorageType,
+                requestResource.OntoLocation,
                 requestResource.DemLocation,
                 requestResource.State,
                 requestResource.Comments,

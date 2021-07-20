@@ -17,6 +17,7 @@
             string storagePlace,
             string storageType,
             string demLocation,
+            string ontoLocation,
             string state,
             string comments,
             string condition,

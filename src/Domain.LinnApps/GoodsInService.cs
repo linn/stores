@@ -11,15 +11,19 @@
 
         private readonly IStoresPack storesPack;
 
+        private readonly IPalletAnalysisPack palletAnalysisPack;
+
         private readonly IRepository<Part, int> partsRepository;
 
         public GoodsInService(
             IGoodsInPack goodsInPack,
             IStoresPack storesPack,
+            IPalletAnalysisPack palletAnalysisPack,
             IRepository<Part, int> partsRepository)
         {
             this.storesPack = storesPack;
             this.goodsInPack = goodsInPack;
+            this.palletAnalysisPack = palletAnalysisPack;
             this.partsRepository = partsRepository;
         }
 
@@ -36,12 +40,32 @@
             string storagePlace,
             string storageType,
             string demLocation,
+            string ontoLocation,
             string state,
             string comments,
             string condition,
             string rsnAccessories,
             int? reqNumber)
         {
+            if (string.IsNullOrEmpty(ontoLocation))
+            {
+                if ((string.IsNullOrEmpty(storageType) && transactionType.Equals("O")) 
+                    || transactionType.Equals("L") || transactionType.Equals("D"))
+                {
+                    return new ProcessResult(false, "Onto location/pallet must be entered");
+                }
+            }
+
+            if (ontoLocation != null 
+                && ontoLocation.StartsWith("P") 
+                && !string.IsNullOrEmpty(partNumber))
+            {
+                if (!this.palletAnalysisPack.CanPutPartOnPallet(partNumber, ontoLocation))
+                {
+                    return new ProcessResult(false, this.palletAnalysisPack.Message());
+                }
+            }
+
             this.goodsInPack.DoBookIn(
                 transactionType,
                 createdBy,

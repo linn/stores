@@ -22,6 +22,8 @@
 
         public string DemLocation { get; set; }
 
+        public string OntoLocation { get; set; }
+
         public string State { get; set; }
 
         public string Comments { get; set; }

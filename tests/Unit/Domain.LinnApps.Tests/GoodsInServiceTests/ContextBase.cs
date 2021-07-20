@@ -16,6 +16,8 @@
 
         protected IStoresPack StoresPack { get; private set; }
 
+        protected IPalletAnalysisPack PalletAnalysisPack { get; private set; }
+
         protected IRepository<Part, int> PartsRepository { get; private set; }
 
         [SetUp]
@@ -23,8 +25,13 @@
         {
             this.GoodsInPack = Substitute.For<IGoodsInPack>();
             this.StoresPack = Substitute.For<IStoresPack>();
+            this.PalletAnalysisPack = Substitute.For<IPalletAnalysisPack>();
             this.PartsRepository = Substitute.For<IRepository<Part, int>>();
-            this.Sut = new GoodsInService(this.GoodsInPack, this.StoresPack, this.PartsRepository);
+            this.Sut = new GoodsInService(
+                this.GoodsInPack, 
+                this.StoresPack, 
+                this.PalletAnalysisPack, 
+                this.PartsRepository);
         }
     }
 }
