@@ -60,7 +60,7 @@
                 && ontoLocation.StartsWith("P") 
                 && !string.IsNullOrEmpty(partNumber))
             {
-                if (!this.palletAnalysisPack.CanPutPartOnPallet(partNumber, ontoLocation))
+                if (!this.palletAnalysisPack.CanPutPartOnPallet(partNumber, ontoLocation.TrimStart('P')))
                 {
                     return new ProcessResult(false, this.palletAnalysisPack.Message());
                 }

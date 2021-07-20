@@ -15,7 +15,7 @@
         [SetUp]
         public void SetUp()
         {
-            this.PalletAnalysisPack.CanPutPartOnPallet("PART", "P1234").Returns(false);
+            this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1234").Returns(false);
             this.PalletAnalysisPack.Message().Returns("Cannot put a PART part on a PALLET pallet");
             this.processResult = this.Sut.DoBookIn(
                 "O",
