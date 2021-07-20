@@ -36,10 +36,22 @@ const mapStateToProps = state => ({
         country: c.countryCode
     })),
     carriersSearchLoading: suppliersApprovedCarrierSelectors.getSearchLoading(state),
-    transportCodes: transportCodesSelectors.getItems(state),
-    transactionCodes: transactionCodesSelectors.getItems(state),
-    deliveryTerms: impbookDeliveryTermsSelectors.getItems(state),
-    ports: portsSelectors.getItems(state)
+    transportCodes: transportCodesSelectors.getItems(state)?.map(e => ({
+        displayText: `${e.transportId} (${e.description})`,
+        id: parseInt(e.transportId, 10)
+    })),
+    transactionCodes: transactionCodesSelectors.getItems(state)?.map(e => ({
+        displayText: `${e.transactionId}`,
+        id: parseInt(e.transactionId, 10)
+    })),
+    deliveryTerms: impbookDeliveryTermsSelectors.getItems(state)?.map(e => ({
+        displayText: `${e.deliveryTermCode} (${e.description})`,
+        id: parseInt(e.deliveryTermCode, 10)
+    })),
+    ports: portsSelectors.getItems(state)?.map(e => ({
+        displayText: `${e.portCode} (${e.description})`,
+        id: parseInt(e.portCode, 10)
+    }))
 });
 
 const initialise = () => dispatch => {

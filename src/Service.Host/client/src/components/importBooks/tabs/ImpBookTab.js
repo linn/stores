@@ -380,10 +380,7 @@ function ImpBookTab({
 
                 <Grid item xs={6}>
                     <Dropdown
-                        items={transportCodes.map(e => ({
-                            displayText: `${e.transportId} (${e.description})`,
-                            id: parseInt(e.transportId, 10)
-                        }))}
+                        items={transportCodes}
                         propertyName="transportId"
                         fullWidth
                         value={transportId}
@@ -404,10 +401,7 @@ function ImpBookTab({
 
                 <Grid item xs={6}>
                     <Dropdown
-                        items={transactionCodes.map(e => ({
-                            displayText: `${e.transactionId}`,
-                            id: parseInt(e.transactionId, 10)
-                        }))}
+                        items={transactionCodes}
                         propertyName="transactionId"
                         fullWidth
                         value={transactionId}
@@ -418,10 +412,7 @@ function ImpBookTab({
 
                 <Grid item xs={6}>
                     <Dropdown
-                        items={deliveryTerms.map(e => ({
-                            displayText: `${e.deliveryTermCode} (${e.description})`,
-                            id: parseInt(e.deliveryTermCode, 10)
-                        }))}
+                        items={deliveryTerms}
                         propertyName="deliveryTermCode"
                         fullWidth
                         value={deliveryTermCode}
@@ -432,10 +423,7 @@ function ImpBookTab({
 
                 <Grid item xs={6}>
                     <Dropdown
-                        items={ports.map(e => ({
-                            displayText: `${e.portCode} (${e.description})`,
-                            id: parseInt(e.portCode, 10)
-                        }))}
+                        items={ports}
                         propertyName="arrivalPort"
                         fullWidth
                         value={arrivalPort}
