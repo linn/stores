@@ -284,7 +284,6 @@ function Consignment({
                                 <ItemsTab
                                     editableItems={editableItems}
                                     editablePallets={editablePallets}
-                                    viewing={viewing()}
                                     dispatch={dispatch}
                                     setSaveDisabled={setSaveDisabled}
                                     cartonTypes={cartonTypes}
