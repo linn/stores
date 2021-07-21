@@ -20,16 +20,13 @@
 
         public IResult<ResultsModel> GetImpbookIPRReport(IPRSearchResource resource)
         {
-            DateTime from;
-            DateTime to;
-            try
+            var fromValid = DateTime.TryParse(resource.FromDate, out var from);
+            var toValid = DateTime.TryParse(resource.ToDate, out var to);
+
+            if (!fromValid || !toValid)
             {
-                from = DateTime.Parse(resource.FromDate);
-                to = DateTime.Parse(resource.ToDate);
-            }
-            catch (Exception)
-            {
-                return new BadRequestResult<ResultsModel>("Invalid dates supplied to impbook IPR report");
+                return new BadRequestResult<ResultsModel>(
+                    "Invalid dates supplied to impbook IPR report");
             }
 
             return new SuccessResult<ResultsModel>(this.reportService.GetIPRReport(from, to));
@@ -37,14 +34,10 @@
 
         public IResult<IEnumerable<IEnumerable<string>>> GetImpbookIprReportExport(IPRSearchResource resource)
         {
-            DateTime from;
-            DateTime to;
-            try
-            {
-                from = DateTime.Parse(resource.FromDate);
-                to = DateTime.Parse(resource.ToDate);
-            }
-            catch (Exception)
+            var fromValid = DateTime.TryParse(resource.FromDate, out var from);
+            var toValid = DateTime.TryParse(resource.ToDate, out var to);
+
+            if (!fromValid || !toValid)
             {
                 return new BadRequestResult<IEnumerable<IEnumerable<string>>>(
                     "Invalid dates supplied to impbook IPR report export");
