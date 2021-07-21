@@ -17,6 +17,7 @@
 
             this.Get("/logistics/import-books/ipr/report", _ => this.GetIPRReport());
             this.Get("/logistics/import-books/ipr", _ => this.IPRReportOptions());
+            this.Get("/logistics/import-books/ipr/report/export", _ => this.GetIPRExport());
         }
 
         private object GetIPRReport()
@@ -25,6 +26,15 @@
 
             var results = this.importBookReportFacadeService.GetImpbookIPRReport(resource);
             return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
+        }
+
+        private object GetIPRExport()
+        {
+            var resource = this.Bind<IPRSearchResource>();
+
+            var results = this.importBookReportFacadeService.GetImpbookIprReportExport(resource);
+            return this.Negotiate.WithModel(results).WithAllowedMediaRange("text/csv")
                 .WithView("Index");
         }
 

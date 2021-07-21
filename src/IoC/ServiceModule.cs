@@ -116,7 +116,7 @@
             builder.RegisterType<EmployeesService>().As<IEmployeeService>();
             builder.RegisterType<ImportBookFacadeService>()
                 .As<IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource>>();
-            builder.RegisterType<ImportBookReportReportFacadeService>()
+            builder.RegisterType<ImportBookReportFacadeService>()
                 .As<IImportBookReportFacadeService>();
             builder.RegisterType<ImportBookDeliveryTermFacadeService>().As<IFacadeService<ImportBookDeliveryTerm, string, ImportBookDeliveryTermResource, ImportBookDeliveryTermResource>>();
             builder.RegisterType<ImportBookExchangeRateService>().As<IImportBookExchangeRateService>();
