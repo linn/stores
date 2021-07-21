@@ -1,12 +1,13 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.GoodsIn
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
     public class GoodsInService : IGoodsInService
     {
@@ -83,11 +84,9 @@
                                             TransactionType = transactionType,
                                             DateCreated = DateTime.Now,
                                             CreatedBy = createdBy,
-                                            //WandString
                                             ArticleNumber = partNumber,
                                             Quantity = qty,
                                             ManufacturersPartNumber = manufacturersPartNumber,
-                                            //SerialNumber
                                             OrderNumber = orderNumber,
                                             OrderLine = orderLine,
                                             LoanNumber = loanNumber,
@@ -100,9 +99,7 @@
                                             RsnAccessories = rsnAccessories,
                                             Comments = comments,
                                             State = state,
-                                            // StorageType
-                                            // if :bookin.wand_string is null and :bookin.storage_type is not null then
-                                            // :log.storage_type := :bookin.storage_type;
+                                            StorageType = storageType
                                         });
             }
 
