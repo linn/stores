@@ -203,7 +203,14 @@
             int qty,
             int? orderLine)
         {
-            return "";
+            return this.storesPack.ValidOrderQty(
+                       orderNumber, 
+                       orderLine ?? 1, 
+                       qty, 
+                       out _, 
+                       out _) 
+                       ? string.Empty 
+                       : "Order is Overbooked";
         }
     }
 }
