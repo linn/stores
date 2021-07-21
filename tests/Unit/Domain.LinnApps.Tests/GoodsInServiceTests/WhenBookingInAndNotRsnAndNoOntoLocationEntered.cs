@@ -2,6 +2,7 @@
 {
     using FluentAssertions;
 
+    using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.Models;
 
     using NUnit.Framework;
@@ -17,6 +18,7 @@
                 "O",
                 1,
                 "PART",
+                null,
                 1,
                 1,
                 1,
@@ -31,7 +33,9 @@
                 null,
                 null,
                 null,
-                null);
+                null,
+                1,
+                new GoodsInLogEntry[0]);
         }
 
         [Test]

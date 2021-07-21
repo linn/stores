@@ -4,6 +4,9 @@
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     public class GoodsInService : IGoodsInService
     {
@@ -35,6 +38,7 @@
             string transactionType,
             int createdBy,
             string partNumber,
+            string manufacturersPartNumber,
             int qty,
             int? orderNumber,
             int? orderLine,
@@ -49,10 +53,10 @@
             string comments,
             string condition,
             string rsnAccessories,
-            int? reqNumber)
+            int? reqNumber,
+            int? numberOfLines,
+            IEnumerable<GoodsInLogEntry> lines)
         {
-            var x = this.goodsInLog.FindById(9206);
-
             if (string.IsNullOrEmpty(ontoLocation))
             {
                 if ((string.IsNullOrEmpty(storageType) && transactionType.Equals("O")) 
@@ -70,6 +74,36 @@
                 {
                     return new ProcessResult(false, this.palletAnalysisPack.Message());
                 }
+            }
+
+            if (lines.Count() < numberOfLines)
+            {
+                this.goodsInLog.Add(new GoodsInLogEntry
+                                        {
+                                            TransactionType = transactionType,
+                                            DateCreated = DateTime.Now,
+                                            CreatedBy = createdBy,
+                                            //WandString
+                                            ArticleNumber = partNumber,
+                                            Quantity = qty,
+                                            ManufacturersPartNumber = manufacturersPartNumber,
+                                            //SerialNumber
+                                            OrderNumber = orderNumber,
+                                            OrderLine = orderLine,
+                                            LoanNumber = loanNumber,
+                                            LoanLine = loanLine,
+                                            RsnNumber = rsnNumber,
+                                            StoragePlace = storagePlace,
+                                            BookInRef = this.goodsInPack.GetNextBookInRef(),
+                                            DemLocation = demLocation,
+                                            LogCondition = condition,
+                                            RsnAccessories = rsnAccessories,
+                                            Comments = comments,
+                                            State = state,
+                                            // StorageType
+                                            // if :bookin.wand_string is null and :bookin.storage_type is not null then
+                                            // :log.storage_type := :bookin.storage_type;
+                                        });
             }
 
             this.goodsInPack.DoBookIn(

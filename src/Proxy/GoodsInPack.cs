@@ -39,7 +39,7 @@
             using (var connection = this.databaseService.GetConnection())
             {
                 connection.Open();
-                var bookInRef = this.databaseService.GetIdSequence("bookin_seq");
+                var bookInRef = this.GetNextBookInRef();
                 var cmd =
                     new OracleCommand(
                         "goods_in_pack.do_bookin_wrapper",
@@ -386,6 +386,11 @@
                 connection.Close();
                 return int.Parse(result.Value.ToString()) == 0;
             }
+        }
+
+        public int GetNextBookInRef()
+        {
+            return this.databaseService.GetIdSequence("bookin_seq");
         }
     }
 }

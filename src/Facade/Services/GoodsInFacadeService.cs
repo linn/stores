@@ -1,6 +1,8 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
@@ -28,6 +30,7 @@
                 requestResource.TransactionType,
                 requestResource.CreatedBy,
                 requestResource.PartNumber,
+                requestResource.ManufacturersPartNumber,
                 requestResource.Qty,
                 requestResource.OrderNumber,
                 requestResource.OrderLine,
@@ -42,7 +45,33 @@
                 requestResource.Comments,
                 requestResource.Condition,
                 requestResource.RsnAccessories,
-                requestResource.ReqNumber);
+                requestResource.ReqNumber,
+                requestResource.NumberOfLines,
+                requestResource.Lines.Select(l => new GoodsInLogEntry
+                                                      {
+                                                          LoanNumber = l.LoanNumber,
+                                                          OrderLine = l.OrderLine,
+                                                          ArticleNumber = l.ArticleNumber,
+                                                          BookInRef = l.BookInRef,
+                                                          Comments = l.Comments,
+                                                          CreatedBy = l.CreatedBy,
+                                                          DateCreated = DateTime.Parse(l.DateCreated),
+                                                          DemLocation = l.DemLocation,
+                                                          Id = l.Id,
+                                                          ManufacturersPartNumber = l.ManufacturersPartNumber,
+                                                          State = l.State,
+                                                          OrderNumber = l.OrderNumber,
+                                                          SerialNumber = l.SerialNumber,
+                                                          LoanLine = l.LoanLine,
+                                                          LogCondition = l.LogCondition,
+                                                          Quantity = l.Quantity,
+                                                          RsnAccessories = l.RsnAccessories,
+                                                          RsnNumber = l.RsnNumber,
+                                                          StoragePlace = l.StoragePlace,
+                                                          StorageType = l.StorageType,
+                                                          TransactionType = l.TransactionType,
+                                                          WandString = l.WandString
+                                                      }));
 
             if (result.Success)
             {

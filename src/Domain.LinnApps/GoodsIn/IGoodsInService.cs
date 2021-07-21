@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.GoodsIn
 {
+    using System.Collections.Generic;
+
     using Linn.Stores.Domain.LinnApps.Models;
 
     public interface IGoodsInService
@@ -8,6 +10,7 @@
             string transactionType,
             int createdBy,
             string partNumber,
+            string manufacturersPartNumber,
             int qty,
             int? orderNumber,
             int? orderLine,
@@ -22,7 +25,9 @@
             string comments,
             string condition,
             string rsnAccessories,
-            int? reqNumber);
+            int? reqNumber,
+            int? numberOfLines,
+            IEnumerable<GoodsInLogEntry> lines);
 
         ValidatePurchaseOrderResult ValidatePurchaseOrder(int orderNumber, int line);
     }

@@ -37,5 +37,7 @@
             out string message);
 
         bool PartHasStorageType(string partNumber, out int bookInLocation, out string kardex, out bool newPart);
+
+        int GetNextBookInRef();
     }
 }
