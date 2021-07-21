@@ -4,6 +4,7 @@
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.GoodsIn;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Resources.StockLocators;
 

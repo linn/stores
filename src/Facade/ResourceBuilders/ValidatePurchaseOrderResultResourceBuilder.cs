@@ -2,8 +2,7 @@
 {
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.GoodsIn;
-    using Linn.Stores.Resources;
-
+    using Linn.Stores.Resources.GoodsIn;
 
     public class ValidatePurchaseOrderResultResourceBuilder : IResourceBuilder<ValidatePurchaseOrderResult>
     {

@@ -8,7 +8,7 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.Models;
-    using Linn.Stores.Resources.RequestResources;
+    using Linn.Stores.Resources.GoodsIn;
 
     public class GoodsInFacadeService : IGoodsInFacadeService
     {

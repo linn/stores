@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Resources
+﻿namespace Linn.Stores.Resources.GoodsIn
 {
     public class BookInLineResource
     {

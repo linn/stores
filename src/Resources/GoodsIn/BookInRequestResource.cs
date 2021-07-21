@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Resources.RequestResources
+﻿namespace Linn.Stores.Resources.GoodsIn
 {
     using System.Collections.Generic;
 
