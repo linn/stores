@@ -92,5 +92,13 @@
             return new SuccessResult<ValidatePurchaseOrderResult>(
                 this.domainService.ValidatePurchaseOrder(orderNumber, line));
         }
+
+        public IResult<ProcessResult> ValidatePurchaseOrderQty(int orderNumber, int orderLine, int qty)
+        {
+            return new SuccessResult<ProcessResult>(this.domainService.ValidatePurchaseOrderQty(
+                orderNumber,
+                orderLine,
+                qty));
+        }
     }
 }

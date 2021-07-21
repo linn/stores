@@ -198,19 +198,22 @@
             return result;
         }
 
-        public string ValidatePurchaseOrderQty(
+        public ProcessResult ValidatePurchaseOrderQty(
             int orderNumber, 
             int qty,
             int? orderLine)
         {
-            return this.storesPack.ValidOrderQty(
-                       orderNumber, 
-                       orderLine ?? 1, 
-                       qty, 
-                       out _, 
-                       out _) 
-                       ? string.Empty 
-                       : "Order is Overbooked";
+            var valid = this.storesPack.ValidOrderQty(orderNumber, orderLine ?? 1, qty, out _, out _);
+            return valid 
+                       ? new ProcessResult
+                             {
+                                 Success = true
+                             }
+                       : new ProcessResult
+                             {
+                                 Success = false,
+                                 Message = $"Order {orderNumber} is overbooked"
+                             };
         }
     }
 }

@@ -31,7 +31,7 @@
 
         ValidatePurchaseOrderResult ValidatePurchaseOrder(int orderNumber, int line);
 
-        string ValidatePurchaseOrderQty(
+        ProcessResult ValidatePurchaseOrderQty(
             int orderNumber, 
             int qty,
             int? orderLine = 1);
