@@ -12,7 +12,7 @@
     public class ImportBookReportService : IImportBookReportService
     {
         private readonly IRepository<ImportBook, int> impbookRepository;
-
+        
         private readonly IReportingHelper reportingHelper;
 
         private readonly int IprCpcNumberId = 13;
@@ -29,6 +29,61 @@
                 x => x.OrderDetails.Any(z => z.CpcNumber.HasValue && z.CpcNumber.Value == this.IprCpcNumberId)
                      && x.CustomsEntryCodeDate.HasValue && from < x.CustomsEntryCodeDate.Value
                      && x.CustomsEntryCodeDate.Value < to);
+
+            var reportLayout = new SimpleGridLayout(
+                this.reportingHelper,
+                CalculationValueModelType.TextValue,
+                null,
+                this.GenerateReportTitle(from, to));
+
+            reportLayout.AddColumnComponent(
+                null,
+                new List<AxisDetailsModel>
+                    {
+                        new AxisDetailsModel("RsnNo", "Unique RSN No", GridDisplayType.TextValue) { AllowWrap = false },
+                        new AxisDetailsModel("Currency", GridDisplayType.TextValue) { AllowWrap = false },
+                        new AxisDetailsModel("ForeignValue", "Value", GridDisplayType.TextValue) { AllowWrap = false },
+                        new AxisDetailsModel("GBPValue", "GBP Value", GridDisplayType.TextValue) { AllowWrap = false },
+                        new AxisDetailsModel("CarrierId", "Carrier Id", GridDisplayType.TextValue) { AllowWrap = false },
+                        new AxisDetailsModel(
+                            "CustomsEntryCodeDate",
+                            "Date of Entry (customs)",
+                            GridDisplayType.TextValue),
+                        new AxisDetailsModel("CustomsEntryCode", "Entry Code (with prefix)", GridDisplayType.TextValue),
+                        new AxisDetailsModel(
+                            "ShippingRef",
+                            "Shipping Ref (transport bill no)",
+                            GridDisplayType.TextValue),
+                        new AxisDetailsModel("TariffCode", "Commodity (tariff) code", GridDisplayType.TextValue)
+                            {
+                                AllowWrap = false
+                            },
+                    });
+
+            var values = new List<CalculationValueModel>();
+
+            foreach (var impbook in iprImpbooks)
+            {
+                foreach (var orderDetail in impbook.OrderDetails.Where(
+                    x => x.CpcNumber.HasValue && x.CpcNumber.Value == this.IprCpcNumberId))
+                {
+                    this.ExtractDetails(values, impbook, orderDetail);
+                }
+            }
+
+            reportLayout.SetGridData(values);
+            var model = reportLayout.GetResultsModel();
+            model.RowDrillDownTemplates.Add(new DrillDownModel("Id", "/logistics/import-books/{textValue}"));
+            model.RowHeader = "Import Book Number/Ref";
+
+            return model;
+        }
+
+        public ResultsModel GetEUReport(DateTime from, DateTime to)
+        {
+
+            var iprImpbooks = this.impbookRepository.FilterBy(
+                x => IsAnEUCountry(x.FullSupplier.CountryCode));
 
             var reportLayout = new SimpleGridLayout(
                 this.reportingHelper,
@@ -165,6 +220,11 @@
         private string GenerateReportTitle(DateTime fromDate, DateTime toDate)
         {
             return $"IPR Impbooks between {fromDate:dd-MMM-yyyy} and {toDate:dd-MMM-yyyy}";
+        }
+
+        private bool IsAnEUCountry(string countryCode)
+        {
+            return true;
         }
     }
 }

@@ -1014,6 +1014,7 @@
                 .HasForeignKey(detail => detail.ImportBookId);
             q.HasMany(t => t.PostEntries).WithOne()
                 .HasForeignKey(detail => detail.ImportBookId);
+            q.HasOne(d => d.FullSupplier).WithOne().HasForeignKey<ImportBook>(s => s.SupplierId);
         }
 
         private void BuildImportBookInvoiceDetails(ModelBuilder builder)
