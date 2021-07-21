@@ -197,5 +197,13 @@
 
             return result;
         }
+
+        public string ValidatePurchaseOrderQty(
+            int orderNumber, 
+            int qty,
+            int? orderLine)
+        {
+            return "";
+        }
     }
 }

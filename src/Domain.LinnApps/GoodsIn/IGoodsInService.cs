@@ -30,5 +30,10 @@
             IEnumerable<GoodsInLogEntry> lines);
 
         ValidatePurchaseOrderResult ValidatePurchaseOrder(int orderNumber, int line);
+
+        string ValidatePurchaseOrderQty(
+            int orderNumber, 
+            int qty,
+            int? orderLine = 1);
     }
 }
