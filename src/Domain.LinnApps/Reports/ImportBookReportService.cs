@@ -41,23 +41,39 @@
                 new List<AxisDetailsModel>
                     {
                         new AxisDetailsModel("RsnNo", "Unique RSN No", GridDisplayType.TextValue) { AllowWrap = false },
-                        new AxisDetailsModel("Currency", GridDisplayType.TextValue) { AllowWrap = false },
-                        new AxisDetailsModel("ForeignValue", "Value", GridDisplayType.TextValue) { AllowWrap = false },
-                        new AxisDetailsModel("GBPValue", "GBP Value", GridDisplayType.TextValue) { AllowWrap = false },
-                        new AxisDetailsModel("CarrierId", "Carrier Id", GridDisplayType.TextValue) { AllowWrap = false },
+
+                        new AxisDetailsModel("InvNo", "Job Ref or Invoice Number", GridDisplayType.TextValue) { AllowWrap = false },
+                        new AxisDetailsModel("CustomerName", "Customer Name", GridDisplayType.TextValue) { AllowWrap = false },
+                        new AxisDetailsModel("SupplierCountry", "Country Importing From", GridDisplayType.TextValue) { AllowWrap = false },
+                        new AxisDetailsModel("Carrier", "Import Agent (Carrier)", GridDisplayType.TextValue) { AllowWrap = false },
+
+                        new AxisDetailsModel(
+                            "ShippingRef",
+                            "Import AWB/Transport Bill No (Shipping Ref)",
+                            GridDisplayType.TextValue),
+                        new AxisDetailsModel("CustomsEntryCode", "Import Entry Code", GridDisplayType.TextValue),
                         new AxisDetailsModel(
                             "CustomsEntryCodeDate",
                             "Date of Entry (customs)",
                             GridDisplayType.TextValue),
-                        new AxisDetailsModel("CustomsEntryCode", "Entry Code (with prefix)", GridDisplayType.TextValue),
-                        new AxisDetailsModel(
-                            "ShippingRef",
-                            "Shipping Ref (transport bill no)",
-                            GridDisplayType.TextValue),
+                        new AxisDetailsModel("EconomicCode", "Economic Code", GridDisplayType.TextValue),
                         new AxisDetailsModel("TariffCode", "Commodity (tariff) code", GridDisplayType.TextValue)
                             {
                                 AllowWrap = false
                             },
+                        new AxisDetailsModel("OrderDescription", "Goods Description", GridDisplayType.TextValue),
+                        new AxisDetailsModel("DutyRate", "Rate Of Duty", GridDisplayType.TextValue),
+                        new AxisDetailsModel("Qty", "Quantity", GridDisplayType.TextValue),
+
+
+
+                        new AxisDetailsModel("Currency", GridDisplayType.TextValue) { AllowWrap = false },
+                        new AxisDetailsModel("ForeignValue", "Value", GridDisplayType.TextValue) { AllowWrap = false },
+                        new AxisDetailsModel("GBPValue", "GBP Value", GridDisplayType.TextValue) { AllowWrap = false },
+                     
+                       
+                    
+                     
                     });
 
             var values = new List<CalculationValueModel>();
@@ -99,7 +115,7 @@
                         new AxisDetailsModel("Currency", GridDisplayType.TextValue) { AllowWrap = false },
                         new AxisDetailsModel("ForeignValue", "Value", GridDisplayType.TextValue) { AllowWrap = false },
                         new AxisDetailsModel("GBPValue", "GBP Value", GridDisplayType.TextValue) { AllowWrap = false },
-                        new AxisDetailsModel("CarrierId", "Carrier Id", GridDisplayType.TextValue) { AllowWrap = false },
+                        new AxisDetailsModel("Carrier", "Carrier Id", GridDisplayType.TextValue) { AllowWrap = false },
                         new AxisDetailsModel(
                             "CustomsEntryCodeDate",
                             "Date of Entry (customs)",
@@ -176,8 +192,8 @@
                 new CalculationValueModel
                     {
                         RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                        ColumnId = "CarrierId",
-                        TextDisplay = impbook.CarrierId.ToString(),
+                        ColumnId = "Carrier",
+                        TextDisplay = $"{impbook.SupplierId} - {impbook.FullSupplier.Name}",
                         RowTitle = impbook.Id.ToString()
                     });
 
