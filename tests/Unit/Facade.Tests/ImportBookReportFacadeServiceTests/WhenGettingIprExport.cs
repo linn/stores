@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Facade.Tests.ImportBookReportFacadeServiceTests
 {
+    using System.Collections.Generic;
+
     using FluentAssertions;
     using FluentAssertions.Extensions;
 
@@ -11,9 +13,9 @@
 
     using NUnit.Framework;
 
-    public class WhenGettingIprReport : ContextBase
+    public class WhenGettingIprExport : ContextBase
     {
-        private IResult<ResultsModel> result;
+        private IResult<IEnumerable<IEnumerable<string>>> result;
 
         [SetUp]
         public void SetUp()
@@ -21,7 +23,7 @@
             var resource = new IPRSearchResource { FromDate = "01-Jan-2021", ToDate = "01-Jun-2021" };
             this.ReportService.GetIPRReport(1.January(2021), 1.June(2021)).Returns(
                 new ResultsModel { ReportTitle = new NameModel("IPR Import Books Report") });
-            this.result = this.Sut.GetImpbookIPRReport(resource);
+            this.result = this.Sut.GetImpbookIprReportExport(resource);
         }
 
         [Test]
@@ -33,9 +35,8 @@
         [Test]
         public void ShouldReturnSuccess()
         {
-            this.result.Should().BeOfType<SuccessResult<ResultsModel>>();
-            var dataResult = ((SuccessResult<ResultsModel>)this.result).Data;
-            dataResult.ReportTitle.DisplayValue.Should().Be("IPR Import Books Report");
+            this.result.Should().BeOfType<SuccessResult<IEnumerable<IEnumerable<string>>>>();
+            var dataResult = ((SuccessResult<IEnumerable<IEnumerable<string>>>)this.result).Data;
         }
     }
 }

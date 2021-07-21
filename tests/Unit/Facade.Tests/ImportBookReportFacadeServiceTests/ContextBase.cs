@@ -1,5 +1,4 @@
 ﻿namespace Linn.Stores.Facade.Tests.ImportBookReportFacadeServiceTests
-
 {
     using Linn.Stores.Domain.LinnApps.Reports;
     using Linn.Stores.Facade.Services;

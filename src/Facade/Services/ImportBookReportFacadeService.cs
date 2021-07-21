@@ -1,9 +1,11 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
     using System;
+    using System.Collections.Generic;
 
     using Linn.Common.Facade;
     using Linn.Common.Reporting.Models;
+    using Linn.Common.Reporting.Resources.Extensions;
     using Linn.Stores.Domain.LinnApps.Reports;
     using Linn.Stores.Resources.ImportBooks;
 
@@ -31,6 +33,25 @@
             }
 
             return new SuccessResult<ResultsModel>(this.reportService.GetIPRReport(from, to));
+        }
+
+        public IResult<IEnumerable<IEnumerable<string>>> GetImpbookIprReportExport(IPRSearchResource resource)
+        {
+            DateTime from;
+            DateTime to;
+            try
+            {
+                from = DateTime.Parse(resource.FromDate);
+                to = DateTime.Parse(resource.ToDate);
+            }
+            catch (Exception)
+            {
+                return new BadRequestResult<IEnumerable<IEnumerable<string>>>(
+                    "Invalid dates supplied to impbook IPR report export");
+            }
+
+            return new SuccessResult<IEnumerable<IEnumerable<string>>>(
+                this.reportService.GetIPRReport(from, to).ConvertToCsvList());
         }
     }
 }

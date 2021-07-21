@@ -35,6 +35,7 @@
                         with.Module<ImportBooksReportModule>();
 
                         with.ResponseProcessor<ResultsModelJsonResponseProcessor>();
+                        with.ResponseProcessor<IEnumerableCsvResponseProcessor>();
 
                         with.RequestStartup(
                             (container, pipelines, context) =>

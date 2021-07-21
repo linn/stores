@@ -7,7 +7,6 @@
     using Linn.Common.Facade;
     using Linn.Common.Reporting.Models;
     using Linn.Common.Reporting.Resources.ReportResultResources;
-    using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Resources.ImportBooks;
 
     using Nancy;

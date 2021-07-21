@@ -23,7 +23,6 @@ const ImpbookIprReport = ({ reportData, loading, history, options, config }) => 
             <Grid item xs={12}>
                 {!loading && reportData ? (
                     <ExportButton
-                        disabled
                         href={`${config.appRoot}/logistics/import-books/ipr/report/export?fromDate=${options.fromDate}&toDate=${options.toDate}`}
                     />
                 ) : (
