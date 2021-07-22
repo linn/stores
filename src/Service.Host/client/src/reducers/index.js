@@ -108,6 +108,7 @@ import impbookIprReport from './impbookIprReport';
 import impbookDeliveryTerms from './importBooks/impbookDeliveryTerms';
 import ports from './importBooks/ports';
 import cartonTypes from './cartonTypes';
+import validatePurchaseOrderBookInQtyResult from './validatePurchaseOrderBookInQtyResult';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -210,6 +211,7 @@ const rootReducer = history =>
         unallocateConsignmentLine,
         unitsOfMeasure,
         unpickItemsAllocation,
+        validatePurchaseOrderBookInQtyResult,
         validatePurchaseOrderResult,
         wandConsignments,
         wandItems,
