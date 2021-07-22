@@ -110,7 +110,7 @@
                               };
             this.ImpbookRepository.FilterBy(Arg.Any<Expression<Func<ImportBook, bool>>>())
                 .Returns(iprImpBooks.AsQueryable());
-            this.result = this.Sut.GetIPRReport(1.January(2021), 1.June(2021));
+            this.result = this.Sut.GetIPRReport(1.January(2021), 1.June(2021), true);
         }
 
         [Test]

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { DatePicker, Title } from '@linn-it/linn-form-components-library';
+import { DatePicker, Title, OnOffSwitch } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Page from '../../containers/Page';
 
@@ -15,11 +15,14 @@ function ImpbookIprReportOptions({ history, prevOptions }) {
     const [toDate, setToDate] = useState(
         prevOptions.toDate ? new Date(prevOptions.toDate) : new Date()
     );
+    const [iprResults, setIprResults] = useState(
+        prevOptions.iprResults ? prevOptions.iprResults : true
+    );
 
     const handleClick = () =>
         history.push({
             pathname: `/logistics/import-books/ipr/report`,
-            search: `?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}`
+            search: `?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}&iprResults=${iprResults}`
         });
 
     return (
@@ -46,6 +49,14 @@ function ImpbookIprReportOptions({ history, prevOptions }) {
                         onChange={setToDate}
                     />
                 </Grid>
+                <Grid item xs={3}>
+                    <OnOffSwitch
+                        label="Show Ipr (off means show non IPR)"
+                        onChange={() => setIprResults(!iprResults)}
+                        propertyName="showIpr"
+                        value={iprResults}
+                    />
+                </Grid>
                 <Grid item xs={6} />
                 <Grid item xs={12}>
                     <Button
@@ -66,7 +77,8 @@ ImpbookIprReportOptions.propTypes = {
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,
     prevOptions: PropTypes.shape({
         fromDate: PropTypes.string,
-        toDate: PropTypes.string
+        toDate: PropTypes.string,
+        iprResults: PropTypes.bool
     }).isRequired
 };
 

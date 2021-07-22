@@ -7,7 +7,6 @@ import {
 } from '@linn-it/linn-form-components-library';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
-import Page from '../../containers/Page';
 
 const handleBackClick = (history, options) => {
     const uri = `/logistics/import-books/eu?fromDate=${encodeURIComponent(
@@ -19,11 +18,14 @@ const handleBackClick = (history, options) => {
 
 const ImpbookEuReport = ({ reportData, loading, history, options, config }) => (
     <>
-        <Grid container spacing={3} justify="center">
+        <Grid style={{ marginTop: 40 }} container spacing={3} justify="center">
+            <Grid item xs={12}>
+                <BackButton backClick={() => handleBackClick(history, options)} />
+            </Grid>
             <Grid item xs={12}>
                 {!loading && reportData ? (
                     <ExportButton
-                        href={`${config.appRoot}/logistics/import-books/eu/report/export?fromDate=${options.fromDate}&toDate=${options.toDate}`}
+                        href={`${config.appRoot}/logistics/import-books/eu/report/export?fromDate=${options.fromDate}&toDate=${options.toDate}&euResults=${options.euResults}`}
                     />
                 ) : (
                     ''
@@ -57,7 +59,8 @@ ImpbookEuReport.propTypes = {
     loading: PropTypes.bool,
     options: PropTypes.shape({
         fromDate: PropTypes.instanceOf(Date),
-        toDate: PropTypes.instanceOf(Date)
+        toDate: PropTypes.instanceOf(Date),
+        euResults: PropTypes.bool
     }),
     config: PropTypes.shape({ appRoot: PropTypes.string }).isRequired
 };
@@ -68,4 +71,4 @@ ImpbookEuReport.defaultProps = {
     loading: false
 };
 
-export default ImpbookIprReport;
+export default ImpbookEuReport;

@@ -29,7 +29,7 @@
                     "Invalid dates supplied to impbook IPR report");
             }
 
-            return new SuccessResult<ResultsModel>(this.reportService.GetIPRReport(from, to));
+            return new SuccessResult<ResultsModel>(this.reportService.GetIPRReport(from, to, resource.IprResults));
         }
 
         public IResult<IEnumerable<IEnumerable<string>>> GetImpbookIprReportExport(IPRSearchResource resource)
@@ -44,7 +44,7 @@
             }
 
             return new SuccessResult<IEnumerable<IEnumerable<string>>>(
-                this.reportService.GetIPRReport(from, to).ConvertToCsvList());
+                this.reportService.GetIPRExport(from, to, resource.IprResults).ConvertToCsvList());
         }
     }
 }

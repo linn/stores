@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { DatePicker, Title } from '@linn-it/linn-form-components-library';
+import { DatePicker, Title, OnOffSwitch } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Page from '../../containers/Page';
 
@@ -15,11 +15,14 @@ function ImpbookEuReportOptions({ history, prevOptions }) {
     const [toDate, setToDate] = useState(
         prevOptions.toDate ? new Date(prevOptions.toDate) : new Date()
     );
+    const [euResults, setEuResults] = useState(
+        prevOptions.euResults ? prevOptions.euResults : true
+    );
 
     const handleClick = () =>
         history.push({
             pathname: `/logistics/import-books/eu/report`,
-            search: `?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}`
+            search: `?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}&euResults=${euResults}`
         });
 
     return (
@@ -45,8 +48,16 @@ function ImpbookEuReportOptions({ history, prevOptions }) {
                         minDate={fromDate.toString()}
                         onChange={setToDate}
                     />
+                    <Grid item xs={3}>
+                        <OnOffSwitch
+                            label="Show EU (off means show ROW)"
+                            onChange={() => setEuResults(!euResults)}
+                            propertyName="showIpr"
+                            value={euResults}
+                        />
+                    </Grid>
                 </Grid>
-                <Grid item xs={6} />
+                <Grid item xs={3} />
                 <Grid item xs={12}>
                     <Button
                         color="primary"
@@ -66,7 +77,8 @@ ImpbookEuReportOptions.propTypes = {
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,
     prevOptions: PropTypes.shape({
         fromDate: PropTypes.string,
-        toDate: PropTypes.string
+        toDate: PropTypes.string,
+        euResults: PropTypes.bool
     }).isRequired
 };
 
