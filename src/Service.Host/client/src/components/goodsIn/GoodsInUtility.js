@@ -117,10 +117,8 @@ function GoodsInUtility({
                         textFieldProps={{
                             onBlur: () =>
                                 validatePurchaseOrderBookInQty(
-                                    `orderNumber=${formData.purchaseOrderNumber}&qty=${
-                                        formData.qty
-                                    }&orderLine=${1}&`,
-                                    null
+                                    `qty=${formData.qty}&orderLine=${1}&orderNumber`,
+                                    formData.purchaseOrderNumber
                                 )
                         }}
                         onChange={handleFieldChange}
