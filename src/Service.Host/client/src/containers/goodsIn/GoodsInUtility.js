@@ -10,6 +10,8 @@ import salesArticlesSelectors from '../../selectors/salesArticlesSelectors';
 import salesArticlesActions from '../../actions/salesArticlesActions';
 import doBookInSelectors from '../../selectors/doBookInSelectors';
 import doBookInActions from '../../actions/doBookInActions';
+import validatePurchaseOrderBookInQtyResultActions from '../../actions/validatePurchaseOrderBookInQtyResultActions';
+import validatePurchaseOrderBookInQtyResultSelectors from '../../selectors/validatePurchaseOrderBookInQtyResultSelectors';
 
 const mapStateToProps = state => ({
     validatePurchaseOrderResult: validatePurchaseOrderResultSelectors.getItem(state),
@@ -25,7 +27,13 @@ const mapStateToProps = state => ({
         .map(c => ({ ...c, name: c.articleNumber })),
     salesArticlesSearchLoading: salesArticlesSelectors.getSearchLoading(state),
     bookInResult: doBookInSelectors.getData(state),
-    bookInResultLoading: doBookInSelectors.getWorking(state)
+    bookInResultLoading: doBookInSelectors.getWorking(state),
+    validatePurchaseOrderBookInQtyResult: validatePurchaseOrderBookInQtyResultSelectors.getItem(
+        state
+    ),
+    validatePurchaseOrderBookInQtyResultLoading: validatePurchaseOrderBookInQtyResultSelectors.getLoading(
+        state
+    )
 });
 
 const mapDispatchToProps = {
@@ -33,7 +41,8 @@ const mapDispatchToProps = {
     searchDemLocations: demLocationsActions.search,
     searchStoragePlaces: storagePlacesActions.search,
     searchSalesArticles: salesArticlesActions.search,
-    doBookIn: doBookInActions.requestProcessStart
+    doBookIn: doBookInActions.requestProcessStart,
+    validatePurchaseOrderBookInQty: validatePurchaseOrderBookInQtyResultActions.fetchByQueryString
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GoodsInUtility);

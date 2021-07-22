@@ -17,8 +17,6 @@
     {
         private RequisitionProcessResult result;
 
-        private int fromLocationId;
-
         private int toLocationId;
 
         private string storageType;

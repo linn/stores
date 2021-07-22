@@ -1,6 +1,6 @@
-﻿namespace Linn.Stores.Domain.LinnApps
+﻿namespace Linn.Stores.Resources.GoodsIn
 {
-    public class ValidatePurchaseOrderResult
+    public class ValidatePurchaseOrderResultResource
     {
         public int? OrderNumber { get; set; }
 

@@ -1,5 +1,9 @@
-﻿namespace Linn.Stores.Domain.LinnApps
+﻿namespace Linn.Stores.Domain.LinnApps.GoodsIn
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models;
@@ -11,22 +15,31 @@
 
         private readonly IStoresPack storesPack;
 
+        private readonly IPalletAnalysisPack palletAnalysisPack;
+
         private readonly IRepository<Part, int> partsRepository;
+
+        private readonly IRepository<GoodsInLogEntry, int> goodsInLog;
 
         public GoodsInService(
             IGoodsInPack goodsInPack,
             IStoresPack storesPack,
-            IRepository<Part, int> partsRepository)
+            IPalletAnalysisPack palletAnalysisPack,
+            IRepository<Part, int> partsRepository,
+            IRepository<GoodsInLogEntry, int> goodsInLog)
         {
             this.storesPack = storesPack;
             this.goodsInPack = goodsInPack;
+            this.palletAnalysisPack = palletAnalysisPack;
             this.partsRepository = partsRepository;
+            this.goodsInLog = goodsInLog;
         }
 
         public ProcessResult DoBookIn(
             string transactionType,
             int createdBy,
             string partNumber,
+            string manufacturersPartNumber,
             int qty,
             int? orderNumber,
             int? orderLine,
@@ -36,12 +49,60 @@
             string storagePlace,
             string storageType,
             string demLocation,
+            string ontoLocation,
             string state,
             string comments,
             string condition,
             string rsnAccessories,
-            int? reqNumber)
+            int? reqNumber,
+            int? numberOfLines,
+            IEnumerable<GoodsInLogEntry> lines)
         {
+            if (string.IsNullOrEmpty(ontoLocation))
+            {
+                if ((string.IsNullOrEmpty(storageType) && transactionType == "O") 
+                    || transactionType == "L" || transactionType == "D")
+                {
+                    return new ProcessResult(false, "Onto location/pallet must be entered");
+                }
+            }
+
+            if (ontoLocation != null 
+                && ontoLocation.StartsWith("P") 
+                && !string.IsNullOrEmpty(partNumber))
+            {
+                if (!this.palletAnalysisPack.CanPutPartOnPallet(partNumber, ontoLocation.TrimStart('P')))
+                {
+                    return new ProcessResult(false, this.palletAnalysisPack.Message());
+                }
+            }
+
+            if (lines.Count() < numberOfLines)
+            {
+                this.goodsInLog.Add(new GoodsInLogEntry
+                                        {
+                                            TransactionType = transactionType,
+                                            DateCreated = DateTime.Now,
+                                            CreatedBy = createdBy,
+                                            ArticleNumber = partNumber,
+                                            Quantity = qty,
+                                            ManufacturersPartNumber = manufacturersPartNumber,
+                                            OrderNumber = orderNumber,
+                                            OrderLine = orderLine,
+                                            LoanNumber = loanNumber,
+                                            LoanLine = loanLine,
+                                            RsnNumber = rsnNumber,
+                                            StoragePlace = storagePlace,
+                                            BookInRef = this.goodsInPack.GetNextBookInRef(),
+                                            DemLocation = demLocation,
+                                            LogCondition = condition,
+                                            RsnAccessories = rsnAccessories,
+                                            Comments = comments,
+                                            State = state,
+                                            StorageType = storageType
+                                        });
+            }
+
             this.goodsInPack.DoBookIn(
                 transactionType,
                 createdBy,
@@ -135,6 +196,24 @@
                                     && part.QcOnReceipt.Equals("Y") ? "QC" : "STORES";
 
             return result;
+        }
+
+        public ProcessResult ValidatePurchaseOrderQty(
+            int orderNumber, 
+            int qty,
+            int? orderLine)
+        {
+            var valid = this.storesPack.ValidOrderQty(orderNumber, orderLine ?? 1, qty, out _, out _);
+            return valid 
+                       ? new ProcessResult
+                             {
+                                 Success = true
+                             }
+                       : new ProcessResult
+                             {
+                                 Success = false,
+                                 Message = $"Order {orderNumber} is overbooked"
+                             };
         }
     }
 }

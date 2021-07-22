@@ -25,12 +25,18 @@ function GoodsInUtility({
     salesArticlesSearchLoading,
     bookInResult,
     bookInResultLoading,
-    doBookIn
+    doBookIn,
+    validatePurchaseOrderBookInQtyResult,
+    validatePurchaseOrderBookInQty,
+    validatePurchaseOrderBookInQtyResultLoading
 }) {
     const [formData, setFormData] = useState({
         purchaseOrderNumber: null,
         dateReceived: new Date()
     });
+
+    const [message, setMessage] = useState({ error: false, text: '' });
+
     const handleFieldChange = (propertyName, newValue) => {
         setFormData({ ...formData, [propertyName]: newValue });
     };
@@ -44,15 +50,23 @@ function GoodsInUtility({
         }
     }, [validatePurchaseOrderResult]);
 
-    const getMessage = () => {
-        if (validatePurchaseOrderResultLoading || bookInResultLoading) {
-            return 'loading';
+    useEffect(() => {
+        if (validatePurchaseOrderBookInQtyResult?.success) {
+            setFormData(d => ({ ...d, noLines: 1 }));
         }
+
+        setMessage({
+            error: !validatePurchaseOrderBookInQtyResult?.success,
+            text: validatePurchaseOrderBookInQtyResult?.message
+        });
+    }, [validatePurchaseOrderBookInQtyResult]);
+
+    useEffect(() => {
         if (bookInResult?.message) {
-            return bookInResult?.message;
+            setMessage({ error: false, text: bookInResult.message });
         }
-        return validatePurchaseOrderResult?.bookInMessage;
-    };
+    }, [bookInResult]);
+
     return (
         <Page>
             <Grid container spacing={3}>
@@ -60,7 +74,13 @@ function GoodsInUtility({
                     <InputField
                         fullWidth
                         disabled
-                        value={getMessage()}
+                        value={
+                            validatePurchaseOrderResultLoading ||
+                            validatePurchaseOrderBookInQtyResultLoading ||
+                            bookInResultLoading
+                                ? 'loading'
+                                : message.text
+                        }
                         label="Message"
                         propertyName="bookInMessage"
                     />
@@ -94,6 +114,13 @@ function GoodsInUtility({
                         value={formData.qty}
                         label="Qty"
                         propertyName="qty"
+                        textFieldProps={{
+                            onBlur: () =>
+                                validatePurchaseOrderBookInQty(
+                                    `qty=${formData.qty}&orderLine=${1}&orderNumber`,
+                                    formData.purchaseOrderNumber
+                                )
+                        }}
                         onChange={handleFieldChange}
                     />
                 </Grid>
@@ -388,7 +415,13 @@ GoodsInUtility.propTypes = {
         message: PropTypes.string
     }),
     bookInResultLoading: PropTypes.bool,
-    doBookIn: PropTypes.func.isRequired
+    doBookIn: PropTypes.func.isRequired,
+    validatePurchaseOrderBookInQtyResult: PropTypes.shape({
+        success: PropTypes.bool,
+        message: PropTypes.string
+    }),
+    validatePurchaseOrderBookInQty: PropTypes.func.isRequired,
+    validatePurchaseOrderBookInQtyResultLoading: PropTypes.bool
 };
 
 GoodsInUtility.defaultProps = {
@@ -401,7 +434,9 @@ GoodsInUtility.defaultProps = {
     salesArticlesSearchResults: [],
     salesArticlesSearchLoading: false,
     storagePlacesSearchResults: [],
-    storagePlacesSearchLoading: false
+    storagePlacesSearchLoading: false,
+    validatePurchaseOrderBookInQtyResult: null,
+    validatePurchaseOrderBookInQtyResultLoading: false
 };
 
 export default GoodsInUtility;

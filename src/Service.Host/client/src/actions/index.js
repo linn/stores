@@ -277,3 +277,7 @@ export const impbookDeliveryTermsActionTypes = makeReportActionTypes(
 export const portsActionTypes = makeActionTypes(itemTypes.ports.actionType, false);
 
 export const cartonTypesActionTypes = makeActionTypes(itemTypes.cartonTypes.actionType, false);
+
+export const validatePurchaseOrderBookInQtyResultActionTypes = makeActionTypes(
+    itemTypes.validatePurchaseOrderBookInQtyResult.actionType
+);

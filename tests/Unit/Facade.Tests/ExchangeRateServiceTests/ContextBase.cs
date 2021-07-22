@@ -1,8 +1,6 @@
 ﻿namespace Linn.Stores.Facade.Tests.ExchangeRateServiceTests
 {
     using Linn.Common.Persistence;
-    using Linn.Common.Proxy.LinnApps;
-    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Facade.Services;
     using NSubstitute;

@@ -38,5 +38,7 @@
             string stockPool);
 
         int GetQuantityBookedIn(int purchaseOrderNumber, int line);
+
+        bool ValidOrderQty(int orderNumber, int orderLine, int qty, out int qtyRec, out int ourQty);
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Domain.LinnApps
+﻿namespace Linn.Stores.Domain.LinnApps.GoodsIn
 {
     public class LoanDetail
     {

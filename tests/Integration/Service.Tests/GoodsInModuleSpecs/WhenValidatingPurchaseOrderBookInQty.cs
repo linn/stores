@@ -4,6 +4,7 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.GoodsIn;
+    using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Resources.GoodsIn;
 
     using Nancy;
@@ -13,22 +14,23 @@
 
     using NUnit.Framework;
 
-    public class WhenValidatingPurchaseOrder : ContextBase
+    public class WhenValidatingPurchaseOrderBookInQty : ContextBase
     {
-        private ValidatePurchaseOrderResult result;
+        private ProcessResult result;
 
         [SetUp]
         public void SetUp()
         {
-            this.result = new ValidatePurchaseOrderResult
-                                     {
-                                         BookInMessage = "Validated!"
-                                     };
-            this.Service.ValidatePurchaseOrder(Arg.Any<int>(), Arg.Any<int>()).Returns(
-                new SuccessResult<ValidatePurchaseOrderResult>(this.result));
+            this.result = new ProcessResult
+                              {
+                                  Success = false,
+                                  Message = "Order is full Booked!"
+                              };
+            this.Service.ValidatePurchaseOrderQty(Arg.Any<int>(), Arg.Any<int>(), Arg.Any<int>()).Returns(
+                new SuccessResult<ProcessResult>(this.result));
 
             this.Response = this.Browser.Get(
-                $"/logistics/purchase-orders/validate/1",
+                $"/logistics/purchase-orders/validate-qty",
                 with =>
                     {
                         with.Header("Accept", "application/json");
@@ -43,14 +45,14 @@
         [Test]
         public void ShouldCallService()
         {
-            this.Service.Received().ValidatePurchaseOrder(Arg.Any<int>(), Arg.Any<int>());
+            this.Service.Received().ValidatePurchaseOrderQty(Arg.Any<int>(), Arg.Any<int>(), Arg.Any<int>());
         }
 
         [Test]
         public void ShouldReturnResource()
         {
-            var resource = this.Response.Body.DeserializeJson<ValidatePurchaseOrderResultResource>();
-            resource.BookInMessage.Should().Be("Validated!");
+            var resource = this.Response.Body.DeserializeJson<ProcessResult>();
+            resource.Message.Should().Be("Order is full Booked!");
         }
     }
 }

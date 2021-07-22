@@ -377,3 +377,9 @@ export const impbookDeliveryTerms = new ItemType(
 export const ports = new ItemType('ports', 'PORTS', '/logistics/import-books/ports');
 
 export const cartonTypes = new ItemType('cartonTypes', 'CARTON_TYPES', '/logistics/carton-types');
+
+export const validatePurchaseOrderBookInQtyResult = new ItemType(
+    'validatePurchaseOrderBookInQtyResult',
+    'VALIDATE_PURCHASE_ORDER_BOOKIN_QTY_RESULT',
+    '/logistics/purchase-orders/validate-qty'
+);
