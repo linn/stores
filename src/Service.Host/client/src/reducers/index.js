@@ -105,6 +105,7 @@ import impbookTransactionCodes from './importBooks/impbookTransactionCodes';
 import impbookTransportCodes from './importBooks/impbookTransportCodes';
 import impbookCpcNumbers from './importBooks/impbookCpcNumbers';
 import impbookIprReport from './impbookIprReport';
+import impbookEuReport from './impbookEuReport';
 import impbookDeliveryTerms from './importBooks/impbookDeliveryTerms';
 import ports from './importBooks/ports';
 import cartonTypes from './cartonTypes';
@@ -150,6 +151,7 @@ const rootReducer = history =>
         impbookCpcNumbers,
         impbookDeliveryTerms,
         impbookExchangeRates,
+        impbookEuReport,
         impbookIprReport,
         impbookTransactionCodes,
         impbookTransportCodes,

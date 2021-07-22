@@ -218,7 +218,7 @@
                     {
                         RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                         ColumnId = "ExchangeRate",
-                        TextDisplay = string.Empty,
+                        TextDisplay = impbook.ExchangeRate.HasValue ? impbook.ExchangeRate.Value.ToString() : string.Empty,
                         RowTitle = impbook.Id.ToString()
                     });
             values.Add(
