@@ -55,7 +55,7 @@
             if (!fromValid || !toValid)
             {
                 return new BadRequestResult<ResultsModel>(
-                    "Invalid dates supplied to impbook IPR report");
+                    "Invalid dates supplied to impbook EU report");
             }
 
             return new SuccessResult<ResultsModel>(this.reportService.GetEUReport(from, to, resource.EuResults));
@@ -69,7 +69,7 @@
             if (!fromValid || !toValid)
             {
                 return new BadRequestResult<IEnumerable<IEnumerable<string>>>(
-                    "Invalid dates supplied to impbook IPR report export");
+                    "Invalid dates supplied to impbook EU report export");
             }
 
             return new SuccessResult<IEnumerable<IEnumerable<string>>>(
