@@ -124,5 +124,6 @@
         public IList<ImportBookPostEntry> PostEntries { get; set; }
 
         public Supplier FullSupplier { get; set; }
+        public Supplier FullCarrier { get; set; }
     }
 }

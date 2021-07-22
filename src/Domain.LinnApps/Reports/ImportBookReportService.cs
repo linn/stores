@@ -12,7 +12,7 @@
     public class ImportBookReportService : IImportBookReportService
     {
         private readonly IRepository<ImportBook, int> impbookRepository;
-        
+
         private readonly IReportingHelper reportingHelper;
 
         private readonly int IprCpcNumberId = 13;
@@ -41,12 +41,10 @@
                 new List<AxisDetailsModel>
                     {
                         new AxisDetailsModel("RsnNo", "Unique RSN No", GridDisplayType.TextValue) { AllowWrap = false },
-
-                        new AxisDetailsModel("InvNo", "Job Ref or Invoice Number", GridDisplayType.TextValue) { AllowWrap = false },
-                        new AxisDetailsModel("CustomerName", "Customer Name", GridDisplayType.TextValue) { AllowWrap = false },
-                        new AxisDetailsModel("SupplierCountry", "Country Importing From", GridDisplayType.TextValue) { AllowWrap = false },
-                        new AxisDetailsModel("Carrier", "Import Agent (Carrier)", GridDisplayType.TextValue) { AllowWrap = false },
-
+                        new AxisDetailsModel("InvNo", "Job Ref or Invoice Number", GridDisplayType.TextValue),
+                        new AxisDetailsModel("CustomerName", "Customer Name", GridDisplayType.TextValue),
+                        new AxisDetailsModel("SupplierCountry", "Country Importing From", GridDisplayType.TextValue),
+                        new AxisDetailsModel("Carrier", "Import Agent (Carrier)", GridDisplayType.TextValue),
                         new AxisDetailsModel(
                             "ShippingRef",
                             "Import AWB/Transport Bill No (Shipping Ref)",
@@ -57,81 +55,19 @@
                             "Date of Entry (customs)",
                             GridDisplayType.TextValue),
                         new AxisDetailsModel("EconomicCode", "Economic Code", GridDisplayType.TextValue),
-                        new AxisDetailsModel("TariffCode", "Commodity (tariff) code", GridDisplayType.TextValue)
-                            {
-                                AllowWrap = false
-                            },
+                        new AxisDetailsModel("TariffCode", "Commodity (tariff) code", GridDisplayType.TextValue),
                         new AxisDetailsModel("OrderDescription", "Goods Description", GridDisplayType.TextValue),
                         new AxisDetailsModel("DutyRate", "Rate Of Duty", GridDisplayType.TextValue),
                         new AxisDetailsModel("Qty", "Quantity", GridDisplayType.TextValue),
-
-
-
-                        new AxisDetailsModel("Currency", GridDisplayType.TextValue) { AllowWrap = false },
-                        new AxisDetailsModel("ForeignValue", "Value", GridDisplayType.TextValue) { AllowWrap = false },
-                        new AxisDetailsModel("GBPValue", "GBP Value", GridDisplayType.TextValue) { AllowWrap = false },
-                     
-                       
-                    
-                     
+                        new AxisDetailsModel("OriginalCurrency", "Original Currency", GridDisplayType.TextValue),
+                        new AxisDetailsModel("ForeignValue", "Value (in original currency)", GridDisplayType.TextValue),
+                        new AxisDetailsModel("ExchangeRate", "R/E", GridDisplayType.TextValue),
+                        new AxisDetailsModel("Currency", GridDisplayType.TextValue),
+                        new AxisDetailsModel("GBPValue", "GBP/Customs Value", GridDisplayType.TextValue),
+                        new AxisDetailsModel("Quarter", "Quarter or Month for BOD", GridDisplayType.TextValue),
                     });
 
-            var values = new List<CalculationValueModel>();
-
-            foreach (var impbook in iprImpbooks)
-            {
-                foreach (var orderDetail in impbook.OrderDetails.Where(
-                    x => x.CpcNumber.HasValue && x.CpcNumber.Value == this.IprCpcNumberId))
-                {
-                    this.ExtractDetails(values, impbook, orderDetail);
-                }
-            }
-
-            reportLayout.SetGridData(values);
-            var model = reportLayout.GetResultsModel();
-            model.RowDrillDownTemplates.Add(new DrillDownModel("Id", "/logistics/import-books/{textValue}"));
-            model.RowHeader = "Import Book Number/Ref";
-
-            return model;
-        }
-
-        public ResultsModel GetEUReport(DateTime from, DateTime to)
-        {
-
-            var iprImpbooks = this.impbookRepository.FilterBy(
-                x => IsAnEUCountry(x.FullSupplier.CountryCode));
-
-            var reportLayout = new SimpleGridLayout(
-                this.reportingHelper,
-                CalculationValueModelType.TextValue,
-                null,
-                this.GenerateReportTitle(from, to));
-
-            reportLayout.AddColumnComponent(
-                null,
-                new List<AxisDetailsModel>
-                    {
-                        new AxisDetailsModel("RsnNo", "Unique RSN No", GridDisplayType.TextValue) { AllowWrap = false },
-                        new AxisDetailsModel("Currency", GridDisplayType.TextValue) { AllowWrap = false },
-                        new AxisDetailsModel("ForeignValue", "Value", GridDisplayType.TextValue) { AllowWrap = false },
-                        new AxisDetailsModel("GBPValue", "GBP Value", GridDisplayType.TextValue) { AllowWrap = false },
-                        new AxisDetailsModel("Carrier", "Carrier Id", GridDisplayType.TextValue) { AllowWrap = false },
-                        new AxisDetailsModel(
-                            "CustomsEntryCodeDate",
-                            "Date of Entry (customs)",
-                            GridDisplayType.TextValue),
-                        new AxisDetailsModel("CustomsEntryCode", "Entry Code (with prefix)", GridDisplayType.TextValue),
-                        new AxisDetailsModel(
-                            "ShippingRef",
-                            "Shipping Ref (transport bill no)",
-                            GridDisplayType.TextValue),
-                        new AxisDetailsModel("TariffCode", "Commodity (tariff) code", GridDisplayType.TextValue)
-                            {
-                                AllowWrap = false
-                            },
-                    });
-
-            var values = new List<CalculationValueModel>();
+            var values = new List<CalculationValueModel>(); 
 
             foreach (var impbook in iprImpbooks)
             {
@@ -167,7 +103,105 @@
                 new CalculationValueModel
                     {
                         RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                        ColumnId = "Currency",
+                        ColumnId = "InvNo",
+                        TextDisplay = string.Empty,
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "CustomerName",
+                        TextDisplay = string.Empty,
+                        RowTitle = impbook.Id.ToString()
+                    });
+
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "SupplierCountry",
+                        TextDisplay = impbook.FullSupplier.CountryCode,
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "Carrier",
+                        TextDisplay = $"{impbook.CarrierId} - {impbook.FullCarrier.Name}",
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "ShippingRef",
+                        TextDisplay = impbook.TransportBillNumber,
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "CustomsEntryCode",
+                        TextDisplay = $"{impbook.CustomsEntryCodePrefix} - {impbook.CustomsEntryCode}",
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "CustomsEntryCodeDate",
+                        TextDisplay = impbook.CustomsEntryCodeDate?.ToString("dd-MMM-yyyy"),
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "EconomicCode",
+                        TextDisplay = string.Empty,
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "TariffCode",
+                        TextDisplay = orderDetail.TariffCode,
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "OrderDescription",
+                        TextDisplay = orderDetail.OrderDescription,
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "DutyRate",
+                        TextDisplay = string.Empty,
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "Qty",
+                        TextDisplay = orderDetail.Qty.ToString(),
+                        RowTitle = impbook.Id.ToString()
+                    });
+
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "OriginalCurrency",
                         TextDisplay = impbook.Currency,
                         RowTitle = impbook.Id.ToString()
                     });
@@ -183,52 +217,33 @@
                 new CalculationValueModel
                     {
                         RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "ExchangeRate",
+                        TextDisplay = string.Empty,
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "Currency",
+                        TextDisplay = string.Empty,
+                        RowTitle = impbook.Id.ToString()
+                    });
+
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                         ColumnId = "GBPValue",
                         TextDisplay = impbook.TotalImportValue.ToString(),
                         RowTitle = impbook.Id.ToString()
                     });
-
             values.Add(
                 new CalculationValueModel
                     {
                         RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                        ColumnId = "Carrier",
-                        TextDisplay = $"{impbook.SupplierId} - {impbook.FullSupplier.Name}",
-                        RowTitle = impbook.Id.ToString()
-                    });
-
-            values.Add(
-                new CalculationValueModel
-                    {
-                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                        ColumnId = "CustomsEntryCodeDate",
-                        TextDisplay = impbook.CustomsEntryCodeDate?.ToString("yyyy/MM/dd"),
-                        RowTitle = impbook.Id.ToString()
-                    });
-            values.Add(
-                new CalculationValueModel
-                    {
-                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                        ColumnId = "CustomsEntryCode",
-                        TextDisplay = $"{impbook.CustomsEntryCodePrefix} - {impbook.CustomsEntryCode}",
-                        RowTitle = impbook.Id.ToString()
-                    });
-
-            values.Add(
-                new CalculationValueModel
-                    {
-                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                        ColumnId = "ShippingRef",
-                        TextDisplay = impbook.TransportBillNumber,
-                        RowTitle = impbook.Id.ToString()
-                    });
-
-            values.Add(
-                new CalculationValueModel
-                    {
-                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                        ColumnId = "TariffCode",
-                        TextDisplay = orderDetail.TariffCode,
+                        ColumnId = "Quarter",
+                        TextDisplay = string.Empty,
                         RowTitle = impbook.Id.ToString()
                     });
         }
