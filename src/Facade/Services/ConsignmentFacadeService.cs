@@ -8,13 +8,20 @@
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Consignments;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Resources.Consignments;
 
     public class ConsignmentFacadeService : FacadeService<Consignment, int, ConsignmentResource, ConsignmentUpdateResource>
     {
-        public ConsignmentFacadeService(IRepository<Consignment, int> repository, ITransactionManager transactionManager)
+        private readonly IConsignmentService consignmentService;
+
+        public ConsignmentFacadeService(
+            IRepository<Consignment, int> repository,
+            ITransactionManager transactionManager,
+            IConsignmentService consignmentService)
             : base(repository, transactionManager)
         {
+            this.consignmentService = consignmentService;
         }
 
         protected override Consignment CreateFromResource(ConsignmentResource resource)
@@ -24,19 +31,34 @@
 
         protected override void UpdateFromResource(Consignment entity, ConsignmentUpdateResource updateResource)
         {
-            entity.Carrier = updateResource.Carrier;
-            entity.Terms = updateResource.Terms;
-            entity.HubId = updateResource.HubId;
-            entity.ShippingMethod = updateResource.ShippingMethod;
-            entity.DespatchLocationCode = updateResource.DespatchLocationCode;
-            entity.CustomsEntryCodePrefix = updateResource.CustomsEntryCodePrefix;
-            entity.CustomsEntryCode = updateResource.CustomsEntryCode;
-            entity.CustomsEntryCodeDate = string.IsNullOrEmpty(updateResource.CustomsEntryCodeDate)
-                                              ? (DateTime?)null
-                                              : DateTime.Parse(updateResource.CustomsEntryCodeDate);
+            if (updateResource.Status == "C" && entity.Status == "L")
+            {
+                if (!updateResource.ClosedById.HasValue)
+                {
+                    throw new ConsignmentCloseException("Closed by id must be provided to close consignment");
+                }
 
-            this.UpdatePallets(entity, updateResource.Pallets.ToList());
-            this.UpdateItems(entity, updateResource.Items.ToList());
+                this.consignmentService.CloseConsignment(entity, updateResource.ClosedById.Value);
+
+                entity.ClosedById = updateResource.ClosedById;
+                entity.Status = "C";
+            }
+            else
+            {
+                entity.Carrier = updateResource.Carrier;
+                entity.Terms = updateResource.Terms;
+                entity.HubId = updateResource.HubId;
+                entity.ShippingMethod = updateResource.ShippingMethod;
+                entity.DespatchLocationCode = updateResource.DespatchLocationCode;
+                entity.CustomsEntryCodePrefix = updateResource.CustomsEntryCodePrefix;
+                entity.CustomsEntryCode = updateResource.CustomsEntryCode;
+                entity.CustomsEntryCodeDate = string.IsNullOrEmpty(updateResource.CustomsEntryCodeDate)
+                                                  ? (DateTime?)null
+                                                  : DateTime.Parse(updateResource.CustomsEntryCodeDate);
+
+                this.UpdatePallets(entity, updateResource.Pallets.ToList());
+                this.UpdateItems(entity, updateResource.Items.ToList());
+            }
         }
 
         protected override Expression<Func<Consignment, bool>> SearchExpression(string searchTerm)

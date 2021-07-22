@@ -72,6 +72,7 @@
             builder.RegisterType<GoodsInService>().As<IGoodsInService>();
             builder.RegisterType<ImportBookReportService>()
                 .As<IImportBookReportService>();
+            builder.RegisterType<ConsignmentService>().As<IConsignmentService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
