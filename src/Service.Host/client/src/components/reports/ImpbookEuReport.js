@@ -9,9 +9,10 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 
 const handleBackClick = (history, options) => {
-    const uri = `/logistics/import-books/eu?fromDate=${encodeURIComponent(
-        options.fromDate
-    )}&toDate=${encodeURIComponent(options.toDate)}`;
+    const uri = `/logistics/import-books/eu?
+    fromDate=${encodeURIComponent(options.fromDate)}
+    &toDate=${encodeURIComponent(options.toDate)}
+    &euResults=${options.euResults}`;
 
     history.push(uri);
 };

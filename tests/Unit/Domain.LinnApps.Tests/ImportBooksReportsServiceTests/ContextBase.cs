@@ -14,17 +14,21 @@
         protected IImportBookReportService Sut { get; private set; }
 
         protected IRepository<ImportBook, int> ImpbookRepository { get; private set; }
-        
+        protected IRepository<Country, string> CountryRepository { get; private set; }
+
+
         protected IReportingHelper ReportingHelper { get; private set; }
 
         [SetUp]
         public void SetUpContext()
         {
             this.ImpbookRepository = Substitute.For<IRepository<ImportBook, int>>();
+            this.CountryRepository = Substitute.For<IRepository<Country, string>>();
+
             this.ReportingHelper = new ReportingHelper();
 
             this.Sut = new ImportBookReportService(
-                this.ImpbookRepository,
+                this.ImpbookRepository, this.CountryRepository,
                 this.ReportingHelper);
         }
     }

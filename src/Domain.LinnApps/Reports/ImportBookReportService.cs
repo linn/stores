@@ -193,9 +193,6 @@
                         new AxisDetailsModel("Qty", "Quantity", GridDisplayType.TextValue),
                         new AxisDetailsModel("OriginalCurrency", "Original Currency", GridDisplayType.TextValue),
                         new AxisDetailsModel("ForeignValue", "Value (in original currency)", GridDisplayType.TextValue),
-                        new AxisDetailsModel("ExchangeRate", "R/E", GridDisplayType.TextValue),
-                        new AxisDetailsModel("Currency", GridDisplayType.TextValue),
-                        new AxisDetailsModel("GBPValue", "GBP/Customs Value", GridDisplayType.TextValue),
                     });
         }
 
@@ -246,6 +243,8 @@
                         TextDisplay = orderDetail.RsnNumber?.ToString(),
                         RowTitle = impbook.Id.ToString()
                     });
+
+            //todo add invoice number from intercompany
 
             values.Add(
                 new CalculationValueModel
@@ -325,32 +324,8 @@
                     {
                         RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                         ColumnId = "ForeignValue",
+                        //todo change this to be value from intercompany inv
                         TextDisplay = impbook.InvoiceDetails.Sum(x => x.InvoiceValue).ToString(),
-                        RowTitle = impbook.Id.ToString()
-                    });
-            values.Add(
-                new CalculationValueModel
-                    {
-                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                        ColumnId = "ExchangeRate",
-                        TextDisplay = impbook.ExchangeRate.HasValue ? impbook.ExchangeRate.Value.ToString() : string.Empty,
-                        RowTitle = impbook.Id.ToString()
-                    });
-            values.Add(
-                new CalculationValueModel
-                    {
-                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                        ColumnId = "Currency",
-                        TextDisplay = string.Empty,
-                        RowTitle = impbook.Id.ToString()
-                    });
-
-            values.Add(
-                new CalculationValueModel
-                    {
-                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                        ColumnId = "GBPValue",
-                        TextDisplay = impbook.TotalImportValue.ToString(),
                         RowTitle = impbook.Id.ToString()
                     });
         }
@@ -479,6 +454,7 @@
                 {
                     RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                     ColumnId = "ForeignValue",
+                    //todo change this to be value from intercompany 
                     TextDisplay = impbook.InvoiceDetails.Sum(x => x.InvoiceValue).ToString(),
                     RowTitle = impbook.Id.ToString()
                 });
@@ -487,7 +463,7 @@
                 {
                     RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                     ColumnId = "ExchangeRate",
-                    TextDisplay = impbook.ExchangeRate.HasValue ? impbook.ExchangeRate.Value.ToString() : string.Empty,
+                    TextDisplay = string.Empty,
                     RowTitle = impbook.Id.ToString()
                 });
             values.Add(
@@ -504,7 +480,7 @@
                 {
                     RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                     ColumnId = "GBPValue",
-                    TextDisplay = impbook.TotalImportValue.ToString(),
+                    TextDisplay = string.Empty,
                     RowTitle = impbook.Id.ToString()
                 });
             values.Add(
@@ -528,11 +504,6 @@
         {
             var nonText = eu ? "" : "Non-";
             return $"{nonText}EU Impbooks between {fromDate:dd-MMM-yyyy} and {toDate:dd-MMM-yyyy}";
-        }
-
-        private bool IsAnEUCountry(string countryCode)
-        {
-            return true;
         }
     }
 }

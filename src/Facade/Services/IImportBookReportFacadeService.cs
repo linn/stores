@@ -11,5 +11,9 @@
         IResult<ResultsModel> GetImpbookIPRReport(IPRSearchResource resource);
 
         IResult<IEnumerable<IEnumerable<string>>> GetImpbookIprReportExport(IPRSearchResource resource);
+
+        IResult<ResultsModel> GetImpbookEuReport(EUSearchResource resource);
+
+        IResult<IEnumerable<IEnumerable<string>>> GetImpbookEuReportExport(EUSearchResource resource);
     }
 }

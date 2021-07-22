@@ -15,7 +15,7 @@
 
     using NUnit.Framework;
 
-    public class WhenGettingIprReport : ContextBase
+    public class WhenGettingIprExport: ContextBase
     {
         private readonly int iprCpcNumberId = 13;
 
@@ -122,7 +122,7 @@
                               };
             this.ImpbookRepository.FilterBy(Arg.Any<Expression<Func<ImportBook, bool>>>())
                 .Returns(this.iprImpBooks.AsQueryable());
-            this.result = this.Sut.GetIPRReport(1.January(2021), 1.June(2021), true);
+            this.result = this.Sut.GetIPRExport(1.January(2021), 1.June(2021), true);
         }
 
         [Test]
@@ -158,6 +158,22 @@
                 .Be("1");
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("SupplierCountry"))
                 .Should().Be("DK");
+            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("InvNo"))
+                .Should().Be(string.Empty);
+            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("CustomerName"))
+                .Should().Be(string.Empty);
+            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("EconomicCode"))
+                .Should().Be(string.Empty);
+            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("DutyRate"))
+                .Should().Be(string.Empty);
+            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("ExchangeRate"))
+                .Should().Be(string.Empty);
+            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("Currency"))
+                .Should().Be(string.Empty);
+            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("GBPValue"))
+                .Should().Be(string.Empty);
+            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("Quarter"))
+                .Should().Be(string.Empty);
         }
     }
 }

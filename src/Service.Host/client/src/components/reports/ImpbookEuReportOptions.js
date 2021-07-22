@@ -48,16 +48,15 @@ function ImpbookEuReportOptions({ history, prevOptions }) {
                         minDate={fromDate.toString()}
                         onChange={setToDate}
                     />
-                    <Grid item xs={3}>
-                        <OnOffSwitch
-                            label="Show EU (off means show ROW)"
-                            onChange={() => setEuResults(!euResults)}
-                            propertyName="showIpr"
-                            value={euResults}
-                        />
-                    </Grid>
                 </Grid>
-                <Grid item xs={3} />
+                <Grid item xs={6}>
+                    <OnOffSwitch
+                        label="Show EU (off means show ROW)"
+                        onChange={() => setEuResults(!euResults)}
+                        propertyName="showIpr"
+                        value={euResults}
+                    />
+                </Grid>
                 <Grid item xs={12}>
                     <Button
                         color="primary"

@@ -49,7 +49,7 @@ function ImpbookIprReportOptions({ history, prevOptions }) {
                         onChange={setToDate}
                     />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={6}>
                     <OnOffSwitch
                         label="Show Ipr (off means show non IPR)"
                         onChange={() => setIprResults(!iprResults)}
@@ -57,7 +57,6 @@ function ImpbookIprReportOptions({ history, prevOptions }) {
                         value={iprResults}
                     />
                 </Grid>
-                <Grid item xs={6} />
                 <Grid item xs={12}>
                     <Button
                         color="primary"
