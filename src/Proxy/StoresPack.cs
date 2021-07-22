@@ -419,6 +419,12 @@
                                   CommandType = CommandType.StoredProcedure
                               };
 
+                var result = new OracleParameter("result", OracleDbType.Int32)
+                                 {
+                                     Direction = ParameterDirection.ReturnValue,
+                                 };
+                cmd.Parameters.Add(result);
+
                 var arg1 = new OracleParameter("p_order_number", OracleDbType.Int32)
                                {
                                    Direction = ParameterDirection.Input,
@@ -451,12 +457,6 @@
                                    Direction = ParameterDirection.InputOutput,
                                };
                 cmd.Parameters.Add(arg5);
-
-                var result = new OracleParameter("result", OracleDbType.Int32)
-                                 {
-                                     Direction = ParameterDirection.ReturnValue,
-                                 };
-                cmd.Parameters.Add(result);
 
                 cmd.ExecuteNonQuery();
                 connection.Close();

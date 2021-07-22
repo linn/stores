@@ -97,8 +97,8 @@
         {
             return new SuccessResult<ProcessResult>(this.domainService.ValidatePurchaseOrderQty(
                 orderNumber,
-                orderLine,
-                qty));
+                qty,
+                orderLine));
         }
     }
 }
