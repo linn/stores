@@ -4,8 +4,7 @@ import * as itemTypes from '../itemTypes';
 
 const defaultState = {
     loading: false,
-    item: null,
-    editStatus: 'view'
+    item: null
 };
 
 export default itemStoreFactory(

@@ -380,6 +380,6 @@ export const cartonTypes = new ItemType('cartonTypes', 'CARTON_TYPES', '/logisti
 
 export const validatePurchaseOrderBookInQtyResult = new ItemType(
     'validatePurchaseOrderBookInQtyResult',
-    'VALIDATE_PURCAHSE_ORDER_BOOKIN_QTY_RESULT',
+    'VALIDATE_PURCHASE_ORDER_BOOKIN_QTY_RESULT',
     '/logistics/purchase-orders/validate-qty'
 );

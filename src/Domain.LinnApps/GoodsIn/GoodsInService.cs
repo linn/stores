@@ -60,8 +60,8 @@
         {
             if (string.IsNullOrEmpty(ontoLocation))
             {
-                if ((string.IsNullOrEmpty(storageType) && transactionType.Equals("O")) 
-                    || transactionType.Equals("L") || transactionType.Equals("D"))
+                if ((string.IsNullOrEmpty(storageType) && transactionType == "O") 
+                    || transactionType == "L" || transactionType == "D")
                 {
                     return new ProcessResult(false, "Onto location/pallet must be entered");
                 }

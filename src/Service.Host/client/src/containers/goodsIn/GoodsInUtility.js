@@ -30,6 +30,9 @@ const mapStateToProps = state => ({
     bookInResultLoading: doBookInSelectors.getWorking(state),
     validatePurchaseOrderBookInQtyResult: validatePurchaseOrderBookInQtyResultSelectors.getItem(
         state
+    ),
+    validatePurchaseOrderBookInQtyResultLoading: validatePurchaseOrderBookInQtyResultSelectors.getLoading(
+        state
     )
 });
 
@@ -39,7 +42,7 @@ const mapDispatchToProps = {
     searchStoragePlaces: storagePlacesActions.search,
     searchSalesArticles: salesArticlesActions.search,
     doBookIn: doBookInActions.requestProcessStart,
-    validatePurchaseOrderBookInQty: validatePurchaseOrderBookInQtyResultActions.searchWithOptions
+    validatePurchaseOrderBookInQty: validatePurchaseOrderBookInQtyResultActions.fetchByQueryString
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GoodsInUtility);

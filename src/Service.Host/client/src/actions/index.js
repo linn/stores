@@ -279,6 +279,5 @@ export const portsActionTypes = makeActionTypes(itemTypes.ports.actionType, fals
 export const cartonTypesActionTypes = makeActionTypes(itemTypes.cartonTypes.actionType, false);
 
 export const validatePurchaseOrderBookInQtyResultActionTypes = makeActionTypes(
-    itemTypes.validatePurchaseOrderBookInQtyResult,
-    false
+    itemTypes.validatePurchaseOrderBookInQtyResult.actionType
 );
