@@ -13,26 +13,26 @@
 
     using NUnit.Framework;
 
-    public class WhenGettingIprExport : ContextBase
+    public class WhenGettingEuReportExport : ContextBase
     {
         [SetUp]
         public void SetUp()
         {
             var results = new List<List<string>>();
 
-            var resource = new IPRSearchResource { FromDate = "01-Jan-2021", ToDate = "01-Jun-2021", IprResults = true};
+            var resource = new EUSearchResource { FromDate = "01-Jan-2021", ToDate = "01-Jun-2021", EuResults = true };
 
-            this.ImportBookReportFacadeService.GetImpbookIprReportExport(Arg.Any<IPRSearchResource>()).Returns(
+            this.ImportBookReportFacadeService.GetImpbookEuReportExport(Arg.Any<EUSearchResource>()).Returns(
                 new SuccessResult<IEnumerable<IEnumerable<string>>>(results));
 
             this.Response = this.Browser.Get(
-                "/logistics/import-books/ipr/report/export",
+                "/logistics/import-books/eu/report/export",
                 with =>
                     {
                         with.Header("Accept", "text/csv");
                         with.Query("fromDate", resource.FromDate);
                         with.Query("toDate", resource.ToDate);
-                        with.Query("iprResults", resource.IprResults.ToString());
+                        with.Query("EuResults", resource.EuResults.ToString());
                     }).Result;
         }
 
@@ -45,7 +45,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ImportBookReportFacadeService.Received().GetImpbookIprReportExport(Arg.Any<IPRSearchResource>());
+            this.ImportBookReportFacadeService.Received().GetImpbookEuReportExport(Arg.Any<EUSearchResource>());
         }
     }
 }

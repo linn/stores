@@ -29,7 +29,7 @@
                     "Invalid dates supplied to impbook IPR report");
             }
 
-            return new SuccessResult<ResultsModel>(this.reportService.GetIPRReport(from, to));
+            return new SuccessResult<ResultsModel>(this.reportService.GetIPRReport(from, to, resource.IprResults));
         }
 
         public IResult<IEnumerable<IEnumerable<string>>> GetImpbookIprReportExport(IPRSearchResource resource)
@@ -44,7 +44,36 @@
             }
 
             return new SuccessResult<IEnumerable<IEnumerable<string>>>(
-                this.reportService.GetIPRReport(from, to).ConvertToCsvList());
+                this.reportService.GetIPRExport(from, to, resource.IprResults).ConvertToCsvList());
+        }
+
+        public IResult<ResultsModel> GetImpbookEuReport(EUSearchResource resource)
+        {
+            var fromValid = DateTime.TryParse(resource.FromDate, out var from);
+            var toValid = DateTime.TryParse(resource.ToDate, out var to);
+
+            if (!fromValid || !toValid)
+            {
+                return new BadRequestResult<ResultsModel>(
+                    "Invalid dates supplied to impbook EU report");
+            }
+
+            return new SuccessResult<ResultsModel>(this.reportService.GetEUReport(from, to, resource.EuResults));
+        }
+
+        public IResult<IEnumerable<IEnumerable<string>>> GetImpbookEuReportExport(EUSearchResource resource)
+        {
+            var fromValid = DateTime.TryParse(resource.FromDate, out var from);
+            var toValid = DateTime.TryParse(resource.ToDate, out var to);
+
+            if (!fromValid || !toValid)
+            {
+                return new BadRequestResult<IEnumerable<IEnumerable<string>>>(
+                    "Invalid dates supplied to impbook EU report export");
+            }
+
+            return new SuccessResult<IEnumerable<IEnumerable<string>>>(
+                this.reportService.GetEUExport(from, to, resource.EuResults).ConvertToCsvList());
         }
     }
 }

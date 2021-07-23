@@ -6,7 +6,7 @@ import { DatePicker, Title, OnOffSwitch } from '@linn-it/linn-form-components-li
 import PropTypes from 'prop-types';
 import Page from '../../containers/Page';
 
-function ImpbookIprReportOptions({ history, prevOptions }) {
+function ImpbookEuReportOptions({ history, prevOptions }) {
     const defaultStartDate = new Date();
     defaultStartDate.setDate(defaultStartDate.getDate() - 90);
     const [fromDate, setFromDate] = useState(
@@ -15,19 +15,19 @@ function ImpbookIprReportOptions({ history, prevOptions }) {
     const [toDate, setToDate] = useState(
         prevOptions.toDate ? new Date(prevOptions.toDate) : new Date()
     );
-    const [iprResults, setIprResults] = useState(
-        prevOptions.iprResults ? prevOptions.iprResults : true
+    const [euResults, setEuResults] = useState(
+        prevOptions.euResults ? prevOptions.euResults : true
     );
 
     const handleClick = () =>
         history.push({
-            pathname: `/logistics/import-books/ipr/report`,
-            search: `?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}&iprResults=${iprResults}`
+            pathname: `/logistics/import-books/eu/report`,
+            search: `?fromDate=${fromDate.toISOString()}&toDate=${toDate.toISOString()}&euResults=${euResults}`
         });
 
     return (
         <Page>
-            <Title text="IPR Import Books" />
+            <Title text="EU Import Books" />
             <Grid style={{ marginTop: 40 }} container spacing={3} justify="center">
                 <Grid item xs={12}>
                     <Typography variant="h6" gutterBottom>
@@ -51,10 +51,10 @@ function ImpbookIprReportOptions({ history, prevOptions }) {
                 </Grid>
                 <Grid item xs={6}>
                     <OnOffSwitch
-                        label="Show Ipr (off means show non IPR)"
-                        onChange={() => setIprResults(!iprResults)}
+                        label="Show EU (off means show ROW)"
+                        onChange={() => setEuResults(!euResults)}
                         propertyName="showIpr"
-                        value={iprResults}
+                        value={euResults}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -72,13 +72,13 @@ function ImpbookIprReportOptions({ history, prevOptions }) {
     );
 }
 
-ImpbookIprReportOptions.propTypes = {
+ImpbookEuReportOptions.propTypes = {
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,
     prevOptions: PropTypes.shape({
         fromDate: PropTypes.string,
         toDate: PropTypes.string,
-        iprResults: PropTypes.bool
+        euResults: PropTypes.bool
     }).isRequired
 };
 
-export default ImpbookIprReportOptions;
+export default ImpbookEuReportOptions;

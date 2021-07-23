@@ -13,23 +13,23 @@
 
     using NUnit.Framework;
 
-    public class WhenGettingIprExport : ContextBase
+    public class WhenGettingEuExport : ContextBase
     {
         private IResult<IEnumerable<IEnumerable<string>>> result;
 
         [SetUp]
         public void SetUp()
         {
-            var resource = new IPRSearchResource { FromDate = "01-Jan-2021", ToDate = "01-Jun-2021", IprResults = true};
-            this.ReportService.GetIPRExport(1.January(2021), 1.June(2021), true).Returns(
-                new ResultsModel { ReportTitle = new NameModel("IPR Import Books Report") });
-            this.result = this.Sut.GetImpbookIprReportExport(resource);
+            var resource = new EUSearchResource { FromDate = "01-Jan-2021", ToDate = "01-Jun-2021", EuResults = true};
+            this.ReportService.GetEUExport(1.January(2021), 1.June(2021), true).Returns(
+                new ResultsModel { ReportTitle = new NameModel("EU Import Books Report") });
+            this.result = this.Sut.GetImpbookEuReportExport(resource);
         }
 
         [Test]
         public void ShouldGetReport()
         {
-            this.ReportService.Received().GetIPRExport(1.January(2021), 1.June(2021), true);
+            this.ReportService.Received().GetEUExport(1.January(2021), 1.June(2021), true);
         }
 
         [Test]

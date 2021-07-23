@@ -16,29 +16,29 @@
 
     using NUnit.Framework;
 
-    public class WhenGettingIprReport : ContextBase
+    public class WhenGettingEuReport : ContextBase
     {
         [SetUp]
         public void SetUp()
         {
             var results = new ResultsModel(new[] { "col1" });
 
-            var resource = new IPRSearchResource { FromDate = "01-Jan-2021", ToDate = "01-Jun-2021", IprResults = true };
+            var resource = new EUSearchResource { FromDate = "01-Jan-2021", ToDate = "01-Jun-2021", EuResults = true };
 
-            this.ImportBookReportFacadeService.GetImpbookIPRReport(Arg.Any<IPRSearchResource>()).Returns(
+            this.ImportBookReportFacadeService.GetImpbookEuReport(Arg.Any<EUSearchResource>()).Returns(
                 new SuccessResult<ResultsModel>(results)
                     {
-                        Data = new ResultsModel { ReportTitle = new NameModel("IPR Import Books Report") }
+                        Data = new ResultsModel { ReportTitle = new NameModel("EU Import Books Report") }
                     });
 
             this.Response = this.Browser.Get(
-                "/logistics/import-books/ipr/report",
+                "/logistics/import-books/eu/report",
                 with =>
                     {
                         with.Header("Accept", "application/json");
                         with.Query("fromDate", resource.FromDate);
                         with.Query("toDate", resource.ToDate);
-                        with.Query("iprResults", resource.IprResults.ToString());
+                        with.Query("euResults", resource.EuResults.ToString());
                     }).Result;
         }
 
@@ -51,14 +51,14 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ImportBookReportFacadeService.Received().GetImpbookIPRReport(Arg.Any<IPRSearchResource>());
+            this.ImportBookReportFacadeService.Received().GetImpbookEuReport(Arg.Any<EUSearchResource>());
         }
 
         [Test]
         public void ShouldReturnReport()
         {
             var resource = this.Response.Body.DeserializeJson<ReportReturnResource>();
-            resource.ReportResults.First().title.displayString.Should().Be("IPR Import Books Report");
+            resource.ReportResults.First().title.displayString.Should().Be("EU Import Books Report");
         }
     }
 }

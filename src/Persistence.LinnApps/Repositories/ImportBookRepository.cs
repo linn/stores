@@ -47,7 +47,8 @@
         public IQueryable<ImportBook> FilterBy(Expression<Func<ImportBook, bool>> expression)
         {
             return this.serviceDbContext.ImportBooks.Where(expression).Include(y => y.OrderDetails)
-                .Include(x => x.InvoiceDetails);
+                .Include(x => x.InvoiceDetails).Include(z => z.FullSupplier)
+                .Include(a => a.FullCarrier);
         }
     }
 }
