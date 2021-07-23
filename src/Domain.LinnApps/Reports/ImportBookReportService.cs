@@ -159,9 +159,10 @@
 
             foreach (var impbook in iprImpbooks)
             {
+                var isInEU = euCountries.Contains(impbook.Supplier.CountryCode);
                 foreach (var orderDetail in impbook.OrderDetails)
                 {
-                    this.ExtractExportDetails(values, impbook, orderDetail);
+                    this.ExtractExportDetails(values, impbook, orderDetail, isInEU);
                 }
             }
 
