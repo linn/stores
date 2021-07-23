@@ -141,9 +141,9 @@
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("OriginalCurrency"))
                 .Should().Be("EUR");
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("ForeignValue"))
-                .Should().Be("7788");
+                .Should().Be(string.Empty);
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("Carrier")).Should()
-                .Be("99 - DHL");
+                .Be("DHL");
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("CustomsEntryCodeDate"))
                 .Should().Be("01-Feb-2021");
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("CustomsEntryCode"))
