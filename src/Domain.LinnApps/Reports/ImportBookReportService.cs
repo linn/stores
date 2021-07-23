@@ -100,11 +100,11 @@
 
         public ResultsModel GetEUReport(DateTime from, DateTime to, bool euResults = true)
         {
-            var euCountries = this.countryRepository.FilterBy(x => x.ECMember == "Y").ToList();
+            var euCountries = this.countryRepository.FilterBy(x => x.ECMember == "Y").Select(z => z.CountryCode).ToList();
 
             var iprImpbooks = this.impbookRepository.FilterBy(
                 x =>
-                         (euCountries.Any(z => z.CountryCode == x.FullSupplier.CountryCode) == euResults)
+                    (euCountries.Contains(x.FullSupplier.CountryCode) == euResults)
                      && x.CustomsEntryCodeDate.HasValue && from < x.CustomsEntryCodeDate.Value
                      && x.CustomsEntryCodeDate.Value < to);
 
@@ -136,11 +136,11 @@
 
         public ResultsModel GetEUExport(DateTime from, DateTime to, bool euResults = true)
         {
-            var euCountries = this.countryRepository.FilterBy(x => x.ECMember == "Y").ToList();
+            var euCountries = this.countryRepository.FilterBy(x => x.ECMember == "Y").Select(z => z.CountryCode).ToList();
 
             var iprImpbooks = this.impbookRepository.FilterBy(
                 x =>
-                    (euCountries.Any(z => z.CountryCode == x.FullSupplier.CountryCode) == euResults)
+                    (euCountries.Contains(x.FullSupplier.CountryCode) == euResults)
                     && x.CustomsEntryCodeDate.HasValue && from < x.CustomsEntryCodeDate.Value
                     && x.CustomsEntryCodeDate.Value < to);
 
