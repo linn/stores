@@ -65,6 +65,8 @@
 
         public ResultsModel GetIPRExport(DateTime from, DateTime to, bool iprResults = true)
         {
+            var euCountries = this.countryRepository.FilterBy(x => x.ECMember == "Y").Select(z => z.CountryCode).ToList();
+
             var iprImpbooks = this.impbookRepository.FilterBy(
                 x => x.OrderDetails.Any(z =>
                          (z.CpcNumber.HasValue && z.CpcNumber.Value == this.IprCpcNumberId) == iprResults)
@@ -83,10 +85,11 @@
 
             foreach (var impbook in iprImpbooks)
             {
+                var isInEU = euCountries.Contains(impbook.Supplier.CountryCode);
                 foreach (var orderDetail in impbook.OrderDetails.Where(
                     x => (x.CpcNumber.HasValue && x.CpcNumber.Value == this.IprCpcNumberId) == iprResults))
                 {
-                    this.ExtractExportDetails(values, impbook, orderDetail);
+                    this.ExtractExportDetails(values, impbook, orderDetail, isInEU);
                 }
             }
 
@@ -104,7 +107,7 @@
 
             var iprImpbooks = this.impbookRepository.FilterBy(
                 x =>
-                    (euCountries.Contains(x.FullSupplier.CountryCode) == euResults)
+                    (euCountries.Contains(x.Supplier.CountryCode) == euResults)
                      && x.CustomsEntryCodeDate.HasValue && from < x.CustomsEntryCodeDate.Value
                      && x.CustomsEntryCodeDate.Value < to);
 
@@ -140,7 +143,7 @@
 
             var iprImpbooks = this.impbookRepository.FilterBy(
                 x =>
-                    (euCountries.Contains(x.FullSupplier.CountryCode) == euResults)
+                    (euCountries.Contains(x.Supplier.CountryCode) == euResults)
                     && x.CustomsEntryCodeDate.HasValue && from < x.CustomsEntryCodeDate.Value
                     && x.CustomsEntryCodeDate.Value < to);
 
@@ -251,7 +254,7 @@
                     {
                         RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                         ColumnId = "SupplierCountry",
-                        TextDisplay = impbook.FullSupplier.CountryCode,
+                        TextDisplay = impbook.Supplier.CountryCode,
                         RowTitle = impbook.Id.ToString()
                     });
             values.Add(
@@ -259,7 +262,7 @@
                     {
                         RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                         ColumnId = "Carrier",
-                        TextDisplay = $"{impbook.CarrierId} - {impbook.FullCarrier.Name}",
+                        TextDisplay = impbook.Carrier.Name,
                         RowTitle = impbook.Id.ToString()
                     });
             values.Add(
@@ -325,7 +328,7 @@
                         RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                         ColumnId = "ForeignValue",
                         //todo change this to be value from intercompany inv
-                        TextDisplay = impbook.InvoiceDetails.Sum(x => x.InvoiceValue).ToString(),
+                        TextDisplay = string.Empty,
                         RowTitle = impbook.Id.ToString()
                     });
         }
@@ -333,7 +336,8 @@
         private void ExtractExportDetails(
         ICollection<CalculationValueModel> values,
         ImportBook impbook,
-        ImportBookOrderDetail orderDetail)
+        ImportBookOrderDetail orderDetail,
+        bool isInEU = false)
         {
             values.Add(
                 new CalculationValueModel
@@ -356,7 +360,7 @@
                 {
                     RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                     ColumnId = "CustomerName",
-                    TextDisplay = string.Empty,
+                    TextDisplay = isInEU ? "Linn Belgium" : string.Empty,
                     RowTitle = impbook.Id.ToString()
                 });
 
@@ -365,7 +369,7 @@
                 {
                     RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                     ColumnId = "SupplierCountry",
-                    TextDisplay = impbook.FullSupplier.CountryCode,
+                    TextDisplay = isInEU ? "Belgium" : impbook.Supplier.CountryCode,
                     RowTitle = impbook.Id.ToString()
                 });
             values.Add(
@@ -373,7 +377,7 @@
                 {
                     RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                     ColumnId = "Carrier",
-                    TextDisplay = $"{impbook.CarrierId} - {impbook.FullCarrier.Name}",
+                    TextDisplay = impbook.Carrier.Name,
                     RowTitle = impbook.Id.ToString()
                 });
             values.Add(
@@ -455,7 +459,7 @@
                     RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                     ColumnId = "ForeignValue",
                     //todo change this to be value from intercompany 
-                    TextDisplay = impbook.InvoiceDetails.Sum(x => x.InvoiceValue).ToString(),
+                    TextDisplay = string.Empty,
                     RowTitle = impbook.Id.ToString()
                 });
             values.Add(

@@ -79,8 +79,8 @@
                                                                            InvoiceValue = 4455
                                                                        }
                                                                },
-                                          FullSupplier = new Supplier { CountryCode = "DK" },
-                                          FullCarrier = new Supplier { Name = "DHL" }
+                                          Supplier = new Supplier { CountryCode = "DK" },
+                                          Carrier = new Supplier { Name = "DHL" }
                                       },
                                   new ImportBook
                                       {
@@ -116,8 +116,8 @@
                                                                            InvoiceValue = 2111
                                                                        }
                                                                },
-                                          FullSupplier = new Supplier { CountryCode = "DK" },
-                                          FullCarrier = new Supplier { Name = "DHL" }
+                                          Supplier = new Supplier { CountryCode = "DK" },
+                                          Carrier = new Supplier { Name = "DHL" }
                                       },
                               };
             this.ImpbookRepository.FilterBy(Arg.Any<Expression<Func<ImportBook, bool>>>())
