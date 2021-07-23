@@ -189,6 +189,8 @@
                 .As<IConsignmentShipfileDataService>();
             builder.RegisterType<BartenderLabelPack>().As<IBartenderLabelPack>();
             builder.RegisterType<GoodsInPack>().As<IGoodsInPack>();
+            builder.RegisterType<ConsignmentProxyService>().As<IConsignmentProxyService>();
+            builder.RegisterType<InvoicingPack>().As<IInvoicingPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

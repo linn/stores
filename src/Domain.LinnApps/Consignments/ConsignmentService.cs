@@ -2,14 +2,24 @@
 {
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Exceptions;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
 
     public class ConsignmentService : IConsignmentService
     {
         private readonly IRepository<Employee, int> employeeRepository;
 
-        public ConsignmentService(IRepository<Employee, int> employeeRepository)
+        private readonly IConsignmentProxyService consignmentProxyService;
+
+        private readonly IInvoicingPack invoicingPack;
+
+        public ConsignmentService(
+            IRepository<Employee, int> employeeRepository,
+            IConsignmentProxyService consignmentProxyService,
+            IInvoicingPack invoicingPack)
         {
             this.employeeRepository = employeeRepository;
+            this.consignmentProxyService = consignmentProxyService;
+            this.invoicingPack = invoicingPack;
         }
 
         public void CloseConsignment(Consignment consignment, int closedById)
@@ -24,6 +34,14 @@
             {
                 throw new ConsignmentCloseException(
                     $"Could not close consignment {consignment.ConsignmentId} is already closed");
+            }
+
+            var canClose = this.consignmentProxyService.CanCloseAllocation(consignment.ConsignmentId);
+
+            if (!canClose.Success)
+            {
+                throw new ConsignmentCloseException(
+                    $"Cannot close consignment {consignment.ConsignmentId}. {canClose.Message}");
             }
         }
     }
