@@ -191,6 +191,7 @@
             builder.RegisterType<GoodsInPack>().As<IGoodsInPack>();
             builder.RegisterType<ConsignmentProxyService>().As<IConsignmentProxyService>();
             builder.RegisterType<InvoicingPack>().As<IInvoicingPack>();
+            builder.RegisterType<ExportBookPack>().As<IExportBookPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();
