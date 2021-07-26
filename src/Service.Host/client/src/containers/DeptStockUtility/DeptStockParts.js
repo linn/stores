@@ -13,8 +13,10 @@ const mapStateToProps = state => ({
     itemsLoading: deptStockPartsSelectors.getLoading(state)
 });
 
-const initialise = () => dispatch => {
-    dispatch(deptStockPartsActions.fetch());
+const initialise = props => dispatch => {
+    if (!props.items || props.items.length === 0) {
+        dispatch(deptStockPartsActions.fetch());
+    }
 };
 
 const mapDispatchToProps = {
