@@ -43,6 +43,14 @@
                 throw new ConsignmentCloseException(
                     $"Cannot close consignment {consignment.ConsignmentId}. {canClose.Message}");
             }
+
+            var invoiceResult = this.invoicingPack.InvoiceConsignment(consignment.ConsignmentId, closedById);
+
+            if (!invoiceResult.Success)
+            {
+                throw new ConsignmentCloseException(
+                    $"Failed to invoice consignment {consignment.ConsignmentId}. {invoiceResult.Message}");
+            }
         }
     }
 }

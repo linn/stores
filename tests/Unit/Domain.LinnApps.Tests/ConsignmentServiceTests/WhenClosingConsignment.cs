@@ -15,6 +15,8 @@
         {
             this.ConsignmentProxyService.CanCloseAllocation(this.ConsignmentId)
                 .Returns(new ProcessResult(true, "ok"));
+            this.InvoicingPack.InvoiceConsignment(this.ConsignmentId, this.closedById)
+                .Returns(new ProcessResult(true, "invoiced ok"));
 
             this.Sut.CloseConsignment(this.Consignment, this.closedById);
         }
@@ -23,6 +25,13 @@
         public void ShouldCallCanCloseConsignmentProxy()
         {
             this.ConsignmentProxyService.Received().CanCloseAllocation(this.Consignment.ConsignmentId);
+        }
+
+
+        [Test]
+        public void ShouldInvoiceConsignment()
+        {
+            this.InvoicingPack.Received().InvoiceConsignment(this.Consignment.ConsignmentId, this.closedById);
         }
     }
 }
