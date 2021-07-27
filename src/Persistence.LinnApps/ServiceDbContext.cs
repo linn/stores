@@ -5,6 +5,7 @@
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
+    using Linn.Stores.Domain.LinnApps.ExportBooks;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
@@ -218,6 +219,8 @@
         public DbQuery<LoanDetail> LoanDetails { get; set; }
 
         public DbSet<CartonType> CartonTypes { get; set; }
+        
+        public DbSet<ExportBook> ExportBooks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -322,6 +325,7 @@
             this.BuildShippingTerms(builder);
             this.QueryLoanDetails(builder);
             this.BuildCartonTypes(builder);
+            this.BuildExportBooks(builder);
             base.OnModelCreating(builder);
         }
 
@@ -360,6 +364,7 @@
             builder.Entity<Country>().Property(c => c.DisplayName).HasColumnName("DISPLAY_NAME").HasMaxLength(50);
             builder.Entity<Country>().Property(c => c.TradeCurrency).HasColumnName("TRADE_CURRENCY").HasMaxLength(4);
             builder.Entity<Country>().Property(c => c.ECMember).HasColumnName("EEC_MEMBER").HasMaxLength(1);
+            builder.Entity<Country>().Property(c => c.NumberOfCopiesOfDispatchDocuments).HasColumnName("COPIES_OF_DISP_DOCS");
             builder.Entity<Country>().Property(c => c.DateInvalid).HasColumnName("DATE_INVALID");
         }
 
@@ -1832,6 +1837,14 @@
             table.HasKey(a => a.CartonTypeName);
             table.Property(a => a.CartonTypeName).HasColumnName("CARTON_TYPE").HasMaxLength(10);
             table.Property(a => a.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
+        }
+
+        private void BuildExportBooks(ModelBuilder builder)
+        {
+            var table = builder.Entity<ExportBook>().ToTable("EXPBOOKS");
+            table.HasKey(a => a.ExportId);
+            table.Property(a => a.ExportId).HasColumnName("EXPBOOK_ID");
+            table.Property(a => a.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
         }
     }
 }
