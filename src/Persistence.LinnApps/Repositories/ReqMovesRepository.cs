@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using System.Linq.Expressions;
+    using System.Security.Cryptography.X509Certificates;
 
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Requisitions;
@@ -33,7 +34,9 @@
 
         public ReqMove FindById(ReqMoveKey key)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.ReqMoves.Where(
+                x => x.ReqNumber == key.ReqNumber && x.LineNumber == key.LineNumber && x.Sequence == key.Seq)
+                .ToList().FirstOrDefault();
         }
 
         public IQueryable<ReqMove> FindAll()
