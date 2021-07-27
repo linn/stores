@@ -31,7 +31,7 @@
 
         private readonly IRepository<Part, int> partRepository;
 
-        private readonly IQueryRepository<ReqMove> reqMoveRepository;
+        private readonly IRepository<ReqMove, ReqMoveKey> reqMoveRepository;
 
         public StockLocatorService(
             IRepository<StockLocator, int> stockLocatorRepository,
@@ -43,7 +43,7 @@
             IStockLocatorLocationsViewService locationsViewService,
             IQueryRepository<StockLocatorPrices> stockLocatorView,
             IRepository<Part, int> partRepository,
-            IQueryRepository<ReqMove> reqMoveRepository)
+            IRepository<ReqMove, ReqMoveKey> reqMoveRepository)
         {
             this.stockLocatorRepository = stockLocatorRepository;
             this.palletRepository = palletRepository;
@@ -126,6 +126,14 @@
             if (!this.authService.HasPermissionFor(AuthorisedAction.CreateStockLocator, privileges))
             {
                 throw new StockLocatorException("You are not authorised to delete.");
+            }
+
+            foreach (var dependentReqMove 
+                in this.reqMoveRepository.FilterBy(m => m.StockLocatorId == toDelete.Id))
+            {
+                dependentReqMove.StockLocatorId = null;
+                dependentReqMove.Remarks =
+                    $"Referenced stock locator for departmental stock {toDelete.PartNumber} deleted on {DateTime.Today.ToShortDateString()}";
             }
 
             if (this.reqMoveRepository.FindBy(m => m.StockLocatorId == toDelete.Id) != null)

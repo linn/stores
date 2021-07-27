@@ -39,7 +39,7 @@
 
         protected IQueryRepository<StockLocatorPrices> StockLocatorView { get; private set; }
 
-        protected IQueryRepository<ReqMove> ReqMoveRepository { get; private set; }
+        protected IRepository<ReqMove, ReqMoveKey> ReqMoveRepository { get; private set; }
 
         [SetUp]
         public void SetUpContext()
@@ -54,7 +54,7 @@
             this.AuthService = Substitute.For<IAuthorisationService>();
             this.LocationsViewService = Substitute.For<IStockLocatorLocationsViewService>();
             this.StockLocatorView = Substitute.For<IQueryRepository<StockLocatorPrices>>();
-            this.ReqMoveRepository = Substitute.For<IQueryRepository<ReqMove>>();
+            this.ReqMoveRepository = Substitute.For<IRepository<ReqMove, ReqMoveKey>>();
             this.ReqMoveRepository.FindBy(Arg.Any<Expression<Func<ReqMove, bool>>>()).ReturnsNull();
             this.Sut = new StockLocatorService(
                 this.StockLocatorRepository,
