@@ -40,7 +40,7 @@
         [Test]
         public void ShouldPrintExportBook()
         {
-            this.PrintInvoiceDispatcher.PrintInvoice(1, "E", "CUSTOMER MASTER", "Y");
+            this.PrintInvoiceDispatcher.Received().PrintInvoice(1, "E", "CUSTOMER MASTER", "Y");
         }
     }
 }
