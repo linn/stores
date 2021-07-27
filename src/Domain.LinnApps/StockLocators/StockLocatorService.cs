@@ -131,17 +131,10 @@
             foreach (var dependentReqMove 
                 in this.reqMoveRepository.FilterBy(m => m.StockLocatorId == toDelete.Id))
             {
-                var reqMove = this.reqMoveRepository.FindById(
-                    new ReqMoveKey
-                        {
-                            LineNumber = dependentReqMove.LineNumber,
-                            ReqNumber = dependentReqMove.ReqNumber,
-                            Seq = dependentReqMove.Sequence
-                        });
-                reqMove.Remarks =
+                dependentReqMove.Remarks =
                     $"Referenced stock locator for departmental stock {toDelete.PartNumber} from Pallet {toDelete.PalletNumber} deleted on {DateTime.Today.ToShortDateString()}";
-                reqMove.StockLocatorId = null;
-                reqMove.StockLocator = null;
+                dependentReqMove.StockLocatorId = null;
+                dependentReqMove.StockLocator = null;
             }
 
             this.stockLocatorRepository.Remove(toDelete);
