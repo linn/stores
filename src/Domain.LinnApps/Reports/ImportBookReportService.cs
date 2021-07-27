@@ -355,9 +355,7 @@
                         RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                         ColumnId = "ForeignValue",
                         TextDisplay =
-                            exportReturnDetail != null
-                                ? exportReturnDetail.CustomsValue?.ToString()
-                                : string.Empty,
+                            exportReturnDetail != null ? exportReturnDetail.CustomsValue?.ToString() : string.Empty,
                         RowTitle = impbook.Id.ToString()
                     });
         }
@@ -393,7 +391,7 @@
                             exportReturnDetail != null
                                 ? exportReturnDetail.InterCompanyInvoice.DocumentNumber.ToString()
                                 : string.Empty,
-                    RowTitle = impbook.Id.ToString()
+                        RowTitle = impbook.Id.ToString()
                     });
             values.Add(
                 new CalculationValueModel
@@ -499,10 +497,8 @@
                         RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                         ColumnId = "ForeignValue",
                         TextDisplay =
-                            exportReturnDetail != null
-                                ? exportReturnDetail.CustomsValue?.ToString()
-                                : string.Empty,
-                    RowTitle = impbook.Id.ToString()
+                            exportReturnDetail != null ? exportReturnDetail.CustomsValue?.ToString() : string.Empty,
+                        RowTitle = impbook.Id.ToString()
                     });
             values.Add(
                 new CalculationValueModel
