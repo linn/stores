@@ -117,7 +117,7 @@
             builder.RegisterType<StockAvailableRepository>().As<IQueryRepository<AvailableStock>>();
             builder.RegisterType<StockLocatorPricesRepository>().As<IQueryRepository<StockLocatorPrices>>();
             builder.RegisterType<PartStorageTypeRepository>().As<IRepository<PartStorageType, int>>();
-            builder.RegisterType<InterCompanyInvoiceRepository>().As<IQueryRepository<InterCompanyInvoice>>();
+            builder.RegisterType<InterCompanyInvoiceRepository>().As<IRepository<InterCompanyInvoice, InterCompanyInvoiceKey>>();
             builder.RegisterType<ReqMovesRepository>().As<IQueryRepository<ReqMove>>();
             builder.RegisterType<TqmsSummaryByCategoryRepository>().As<IQueryRepository<TqmsSummaryByCategory>>();
             builder.RegisterType<TqmsOutstandingLoansByCategoryRepository>().As<IQueryRepository<TqmsOutstandingLoansByCategory>>();

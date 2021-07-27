@@ -184,7 +184,7 @@
 
         public DbQuery<SalesOrderDetail> SalesOrderDetails { get; set; }
 
-        public DbQuery<InterCompanyInvoice> IntercompanyInvoices { get; set; }
+        public DbSet<InterCompanyInvoice> IntercompanyInvoices { get; set; }
 
         public DbSet<ReqMove> ReqMoves { get; set; }
 
@@ -307,7 +307,7 @@
             this.BuildSalesArticles(builder);
             this.QuerySalesOrders(builder);
             this.QuerySalesOrderDetails(builder);
-            this.QueryIntercompanyInvoices(builder);
+            this.BuildIntercompanyInvoices(builder);
             this.QueryTqmsSummaryByCategories(builder);
             this.BuildTqmsMaster(builder);
             this.BuildTqmsJobRefs(builder);
@@ -1622,12 +1622,17 @@
             q.Property(e => e.Width).HasColumnName("WIDTH");
             q.Property(e => e.Height).HasColumnName("HEIGHT");
             q.Property(e => e.Depth).HasColumnName("DEPTH");
+            q.HasOne(e => e.InterCompanyInvoice).WithOne()
+                .HasPrincipalKey<InterCompanyInvoice>(x=>x.ExportReturnId)
+                .HasForeignKey<ExportReturnDetail>(z=>z.ReturnId);
         }
 
-        private void QueryIntercompanyInvoices(ModelBuilder builder)
+        private void BuildIntercompanyInvoices(ModelBuilder builder)
         {
-            var q = builder.Query<InterCompanyInvoice>().ToView("INTER_COMPANY_INVOICES");
+            var q = builder.Entity<InterCompanyInvoice>().ToTable("INTER_COMPANY_INVOICES");
+            q.HasKey(e => new { e.DocumentNumber, e.DocumentType });
             q.Property(e => e.DocumentNumber).HasColumnName("DOCUMENT_NUMBER");
+            q.Property(e => e.DocumentType).HasColumnName("DOCUMENT_TYPE").HasMaxLength(1);
             q.Property(e => e.ExportReturnId).HasColumnName("EXPORT_RETURN_ID");
         }
 
