@@ -7,7 +7,7 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
 
-    public class InterCompanyInvoiceRepository : IRepository<InterCompanyInvoice, InterCompanyInvoiceKey>
+    public class InterCompanyInvoiceRepository : IQueryRepository<InterCompanyInvoice>
     {
         private ServiceDbContext serviceDbContext;
 
@@ -27,21 +27,6 @@
         }
 
         public IQueryable<InterCompanyInvoice> FindAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public InterCompanyInvoice FindById(InterCompanyInvoiceKey key)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Add(InterCompanyInvoice entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Remove(InterCompanyInvoice entity)
         {
             throw new NotImplementedException();
         }

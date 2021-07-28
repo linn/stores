@@ -8,9 +8,9 @@
 
     public class InterCompanyInvoiceService : IInterCompanyInvoiceService
     {
-        private readonly IRepository<InterCompanyInvoice, InterCompanyInvoiceKey> repository;
+        private readonly IQueryRepository<InterCompanyInvoice> repository;
 
-        public InterCompanyInvoiceService(IRepository<InterCompanyInvoice, InterCompanyInvoiceKey> repository)
+        public InterCompanyInvoiceService(IQueryRepository<InterCompanyInvoice> repository)
         {
             this.repository = repository;
         }
