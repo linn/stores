@@ -46,7 +46,8 @@ function Consignment({
     shippingTermsLoading,
     itemError,
     clearConsignmentErrors,
-    cartonTypes
+    cartonTypes,
+    userNumber
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
     const [editablePallets, setEditablePallets] = useState([]);
@@ -165,7 +166,12 @@ function Consignment({
         setEditStatus('edit');
     };
 
-    const closeConsignment = () => {};
+    const closeConsignment = () => {
+        if (viewing()) {
+            updateItem(item.consignmentId, { status: 'C', closedById: userNumber });
+        }
+    };
+
     const doSave = () => {
         if (editing()) {
             updateItem(item.consignmentId, state.consignment);
@@ -214,7 +220,7 @@ function Consignment({
                     )}
                 </Grid>
                 <Grid item xs={3}>
-                    <Tooltip title="Close Consignment - coming soon">
+                    <Tooltip title="Close Consignment">
                         <span>
                             <Button
                                 variant="outlined"
@@ -378,7 +384,8 @@ Consignment.propTypes = {
     }),
     cartonTypes: PropTypes.arrayOf(
         PropTypes.shape({ cartonTypeName: PropTypes.string, description: PropTypes.string })
-    )
+    ),
+    userNumber: PropTypes.number.isRequired
 };
 
 Consignment.defaultProps = {

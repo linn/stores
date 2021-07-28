@@ -31,8 +31,13 @@
 
         protected override void UpdateFromResource(Consignment entity, ConsignmentUpdateResource updateResource)
         {
-            if (updateResource.Status == "C" && entity.Status == "L")
+            if (updateResource.Status == "C")
             {
+                if (entity.Status != "L")
+                {
+                    throw new ConsignmentEditException($"You cannot edit closed consignment {entity.ConsignmentId}.");
+                }
+
                 if (!updateResource.ClosedById.HasValue)
                 {
                     throw new ConsignmentCloseException("Closed by id must be provided to close consignment");
