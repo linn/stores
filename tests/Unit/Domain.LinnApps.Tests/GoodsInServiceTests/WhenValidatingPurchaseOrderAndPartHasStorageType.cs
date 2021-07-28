@@ -5,6 +5,7 @@
 
     using FluentAssertions;
 
+    using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.Parts;
 
     using NSubstitute;

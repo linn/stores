@@ -3,8 +3,6 @@
     using System;
     using System.Linq.Expressions;
 
-    using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-
     using FluentAssertions;
 
     using Linn.Stores.Domain.LinnApps.Parts;

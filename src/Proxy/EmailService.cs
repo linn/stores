@@ -7,7 +7,6 @@
     using Amazon.SimpleEmail;
     using Amazon.SimpleEmail.Model;
 
-    using Linn.Common.Configuration;
     using Linn.Stores.Domain.LinnApps;
 
 

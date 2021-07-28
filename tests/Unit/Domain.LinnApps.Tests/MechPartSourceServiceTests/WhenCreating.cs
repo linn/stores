@@ -4,7 +4,6 @@
 
     using FluentAssertions;
 
-    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Parts;
 
     using NUnit.Framework;

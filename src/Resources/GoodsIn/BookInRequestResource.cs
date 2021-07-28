@@ -1,5 +1,7 @@
-﻿namespace Linn.Stores.Resources.RequestResources
+﻿namespace Linn.Stores.Resources.GoodsIn
 {
+    using System.Collections.Generic;
+
     public class BookInRequestResource
     {
         public string TransactionType { get; set; }
@@ -7,6 +9,8 @@
         public int CreatedBy { get; set; }
 
         public string PartNumber { get; set; }
+
+        public string ManufacturersPartNumber { get; set; }
 
         public int Qty { get; set; }
 
@@ -22,6 +26,8 @@
 
         public string DemLocation { get; set; }
 
+        public string OntoLocation { get; set; }
+
         public string State { get; set; }
 
         public string Comments { get; set; }
@@ -35,5 +41,9 @@
         public int? LoanNumber { get; set; }
 
         public int? LoanLine { get; set; }
+
+        public int? NumberOfLines { get; set; }
+
+        public IEnumerable<BookInLineResource> Lines { get; set; }
     }
 }

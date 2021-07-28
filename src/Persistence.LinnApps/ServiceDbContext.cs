@@ -5,6 +5,7 @@
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
+    using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.ExportBooks;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
@@ -184,7 +185,7 @@
 
         public DbQuery<SalesOrderDetail> SalesOrderDetails { get; set; }
 
-        public DbQuery<InterCompanyInvoice> IntercompanyInvoices { get; set; }
+        public DbSet<InterCompanyInvoice> IntercompanyInvoices { get; set; }
 
         public DbSet<ReqMove> ReqMoves { get; set; }
 
@@ -221,6 +222,8 @@
         public DbSet<CartonType> CartonTypes { get; set; }
         
         public DbSet<ExportBook> ExportBooks { get; set; }
+
+        public DbSet<GoodsInLogEntry> GoodsInLog { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -307,7 +310,7 @@
             this.BuildSalesArticles(builder);
             this.QuerySalesOrders(builder);
             this.QuerySalesOrderDetails(builder);
-            this.QueryIntercompanyInvoices(builder);
+            this.BuildIntercompanyInvoices(builder);
             this.QueryTqmsSummaryByCategories(builder);
             this.BuildTqmsMaster(builder);
             this.BuildTqmsJobRefs(builder);
@@ -325,6 +328,7 @@
             this.BuildShippingTerms(builder);
             this.QueryLoanDetails(builder);
             this.BuildCartonTypes(builder);
+            this.BuildGoodsInLog(builder);
             this.BuildExportBooks(builder);
             base.OnModelCreating(builder);
         }
@@ -1019,6 +1023,8 @@
                 .HasForeignKey(detail => detail.ImportBookId);
             q.HasMany(t => t.PostEntries).WithOne()
                 .HasForeignKey(detail => detail.ImportBookId);
+            q.HasOne(d => d.Supplier).WithOne().HasForeignKey<ImportBook>(s => s.SupplierId);
+            q.HasOne(d => d.Carrier).WithOne().HasForeignKey<ImportBook>(s => s.CarrierId);
         }
 
         private void BuildImportBookInvoiceDetails(ModelBuilder builder)
@@ -1621,12 +1627,17 @@
             q.Property(e => e.Width).HasColumnName("WIDTH");
             q.Property(e => e.Height).HasColumnName("HEIGHT");
             q.Property(e => e.Depth).HasColumnName("DEPTH");
+            q.HasOne(e => e.InterCompanyInvoice).WithOne()
+                .HasPrincipalKey<InterCompanyInvoice>(x=>x.ExportReturnId)
+                .HasForeignKey<ExportReturnDetail>(z=>z.ReturnId);
         }
 
-        private void QueryIntercompanyInvoices(ModelBuilder builder)
+        private void BuildIntercompanyInvoices(ModelBuilder builder)
         {
-            var q = builder.Query<InterCompanyInvoice>().ToView("INTER_COMPANY_INVOICES");
+            var q = builder.Entity<InterCompanyInvoice>().ToTable("INTER_COMPANY_INVOICES");
+            q.HasKey(e => new { e.DocumentNumber, e.DocumentType });
             q.Property(e => e.DocumentNumber).HasColumnName("DOCUMENT_NUMBER");
+            q.Property(e => e.DocumentType).HasColumnName("DOCUMENT_TYPE").HasMaxLength(1);
             q.Property(e => e.ExportReturnId).HasColumnName("EXPORT_RETURN_ID");
         }
 
@@ -1837,6 +1848,34 @@
             table.HasKey(a => a.CartonTypeName);
             table.Property(a => a.CartonTypeName).HasColumnName("CARTON_TYPE").HasMaxLength(10);
             table.Property(a => a.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
+        }
+
+        private void BuildGoodsInLog(ModelBuilder builder)
+        {
+            var table = builder.Entity<GoodsInLogEntry>().ToTable("GOODS_IN_LOG");
+            table.HasKey(e => e.Id);
+            table.Property(e => e.Id).HasColumnName("GILOG_ID");
+            table.Property(e => e.LoanNumber).HasColumnName("LOAN_NUMBER");
+            table.Property(e => e.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(15);
+            table.Property(e => e.OrderLine).HasColumnName("ORDER_LINE");
+            table.Property(e => e.ManufacturersPartNumber).HasColumnName("MANUF_PART_NUMBER").HasMaxLength(20);
+            table.Property(e => e.State).HasColumnName("STATE").HasMaxLength(10);
+            table.Property(e => e.BookInRef).HasColumnName("BOOKIN_REF");
+            table.Property(e => e.Comments).HasColumnName("COMMENTS").HasMaxLength(2000);
+            table.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
+            table.Property(e => e.DateCreated).HasColumnName("DATE_CREATED");
+            table.Property(e => e.TransactionType).HasColumnName("TRANS_TYPE").HasMaxLength(1);
+            table.Property(e => e.WandString).HasColumnName("WAND_STRING").HasMaxLength(20);
+            table.Property(e => e.LoanLine).HasColumnName("LINE_NUMBER");
+            table.Property(e => e.RsnNumber).HasColumnName("RSN_NUMBER");
+            table.Property(e => e.Quantity).HasColumnName("QTY");
+            table.Property(e => e.SerialNumber).HasColumnName("SERIAL_NUMBER");
+            table.Property(e => e.OrderNumber).HasColumnName("ORDER_NUMBER");
+            table.Property(e => e.StoragePlace).HasColumnName("STORAGE_PLACE").HasMaxLength(16);
+            table.Property(e => e.DemLocation).HasColumnName("DEM_LOCATION").HasMaxLength(16);
+            table.Property(e => e.LogCondition).HasColumnName("CONDITION").HasMaxLength(2000);
+            table.Property(e => e.RsnAccessories).HasColumnName("RSN_ACCESSORIES").HasMaxLength(2000);
+            table.Property(e => e.StorageType).HasColumnName("STORAGE_TYPE").HasMaxLength(4);
         }
 
         private void BuildExportBooks(ModelBuilder builder)

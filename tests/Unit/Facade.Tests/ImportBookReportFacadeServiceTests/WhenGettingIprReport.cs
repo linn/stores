@@ -18,8 +18,8 @@
         [SetUp]
         public void SetUp()
         {
-            var resource = new IPRSearchResource { FromDate = "01-Jan-2021", ToDate = "01-Jun-2021" };
-            this.ReportService.GetIPRReport(1.January(2021), 1.June(2021)).Returns(
+            var resource = new IPRSearchResource { FromDate = "01-Jan-2021", ToDate = "01-Jun-2021", IprResults = true };
+            this.ReportService.GetIPRReport(1.January(2021), 1.June(2021), true).Returns(
                 new ResultsModel { ReportTitle = new NameModel("IPR Import Books Report") });
             this.result = this.Sut.GetImpbookIPRReport(resource);
         }
@@ -27,7 +27,7 @@
         [Test]
         public void ShouldGetReport()
         {
-            this.ReportService.Received().GetIPRReport(1.January(2021), 1.June(2021));
+            this.ReportService.Received().GetIPRReport(1.January(2021), 1.June(2021), true);
         }
 
         [Test]

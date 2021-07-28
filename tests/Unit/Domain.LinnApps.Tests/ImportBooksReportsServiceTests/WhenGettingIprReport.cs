@@ -45,21 +45,27 @@
                                                                          CpcNumber = this.iprCpcNumberId,
                                                                          RsnNumber = 140111,
                                                                          TariffCode = "849500001111",
-                                                                         LineNumber = 3
+                                                                         LineNumber = 3,
+                                                                         Qty = 1,
+                                                                         OrderDescription = "carrots"
                                                                      },
                                                                  new ImportBookOrderDetail
                                                                      {
                                                                          CpcNumber = this.iprCpcNumberId,
                                                                          RsnNumber = 140234,
                                                                          TariffCode = "849500002222",
-                                                                         LineNumber = 2
+                                                                         LineNumber = 2,
+                                                                         Qty = 1,
+                                                                         OrderDescription = "onions"
                                                                      },
                                                                  new ImportBookOrderDetail
                                                                      {
                                                                          CpcNumber = 999999,
                                                                          RsnNumber = 140234,
                                                                          TariffCode = "849500002222",
-                                                                         LineNumber = 1
+                                                                         LineNumber = 1,
+                                                                         Qty = 1,
+                                                                         OrderDescription = "garlic"
                                                                      }
                                                              },
                                           InvoiceDetails = new List<ImportBookInvoiceDetail>
@@ -72,7 +78,9 @@
                                                                        {
                                                                            InvoiceValue = 4455
                                                                        }
-                                                               }
+                                                               },
+                                          Supplier = new Supplier { CountryCode = "DK" },
+                                          Carrier = new Supplier { Name = "DHL" }
                                       },
                                   new ImportBook
                                       {
@@ -92,7 +100,9 @@
                                                               CpcNumber = this.iprCpcNumberId,
                                                               RsnNumber = 140333,
                                                               TariffCode = "8495abc",
-                                                              LineNumber = 1
+                                                              LineNumber = 1,
+                                                              Qty = 1,
+                                                              OrderDescription = "potatoes"
                                                           },
                                                   },
                                           InvoiceDetails = new List<ImportBookInvoiceDetail>
@@ -105,12 +115,14 @@
                                                                        {
                                                                            InvoiceValue = 2111
                                                                        }
-                                                               }
+                                                               },
+                                          Supplier = new Supplier { CountryCode = "DK" },
+                                          Carrier = new Supplier { Name = "DHL" }
                                       },
                               };
             this.ImpbookRepository.FilterBy(Arg.Any<Expression<Func<ImportBook, bool>>>())
-                .Returns(iprImpBooks.AsQueryable());
-            this.result = this.Sut.GetIPRReport(1.January(2021), 1.June(2021));
+                .Returns(this.iprImpBooks.AsQueryable());
+            this.result = this.Sut.GetIPRReport(1.January(2021), 1.June(2021), true);
         }
 
         [Test]
@@ -126,22 +138,26 @@
             this.result.Rows.Count().Should().Be(3);
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("RsnNo")).Should()
                 .Be("140111");
-            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("Currency")).Should()
-                .Be("EUR");
-            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("ForeignValue")).Should()
-                .Be("7788");
-            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("GBPValue")).Should()
-                .Be("5555");
-            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("CarrierId")).Should()
-                .Be("99");
-            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("CustomsEntryCodeDate")).Should()
-                .Be("2021/02/01");
-            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("CustomsEntryCode")).Should()
-                .Be("PR - 01312u1891");
+            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("OriginalCurrency"))
+                .Should().Be("EUR");
+            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("ForeignValue"))
+                .Should().Be(string.Empty);
+            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("Carrier")).Should()
+                .Be("DHL");
+            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("CustomsEntryCodeDate"))
+                .Should().Be("01-Feb-2021");
+            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("CustomsEntryCode"))
+                .Should().Be("PR - 01312u1891");
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("ShippingRef")).Should()
                 .Be("EdStob555");
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("TariffCode")).Should()
                 .Be("849500001111");
+            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("OrderDescription"))
+                .Should().Be("carrots");
+            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("Qty")).Should()
+                .Be("1");
+            this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("SupplierCountry"))
+                .Should().Be("DK");
         }
     }
 }

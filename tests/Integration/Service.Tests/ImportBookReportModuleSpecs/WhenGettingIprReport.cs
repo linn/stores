@@ -23,7 +23,7 @@
         {
             var results = new ResultsModel(new[] { "col1" });
 
-            var resource = new IPRSearchResource { FromDate = "01-Jan-2021", ToDate = "01-Jun-2021" };
+            var resource = new IPRSearchResource { FromDate = "01-Jan-2021", ToDate = "01-Jun-2021", IprResults = true };
 
             this.ImportBookReportFacadeService.GetImpbookIPRReport(Arg.Any<IPRSearchResource>()).Returns(
                 new SuccessResult<ResultsModel>(results)
@@ -38,6 +38,7 @@
                         with.Header("Accept", "application/json");
                         with.Query("fromDate", resource.FromDate);
                         with.Query("toDate", resource.ToDate);
+                        with.Query("iprResults", resource.IprResults.ToString());
                     }).Result;
         }
 

@@ -36,3 +36,9 @@ export const impbookIprReport = new ItemType(
     'IMPBOOK_IPR_REPORT',
     '/logistics/import-books/ipr/report'
 );
+
+export const impbookEuReport = new ItemType(
+    'impbookEuReport',
+    'IMPBOOK_EU_REPORT',
+    '/logistics/import-books/eu/report'
+);

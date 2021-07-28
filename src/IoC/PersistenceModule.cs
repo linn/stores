@@ -8,6 +8,7 @@
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
+    using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.ExportBooks;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
@@ -118,7 +119,7 @@
             builder.RegisterType<StockLocatorPricesRepository>().As<IQueryRepository<StockLocatorPrices>>();
             builder.RegisterType<PartStorageTypeRepository>().As<IRepository<PartStorageType, int>>();
             builder.RegisterType<InterCompanyInvoiceRepository>().As<IQueryRepository<InterCompanyInvoice>>();
-            builder.RegisterType<ReqMovesRepository>().As<IQueryRepository<ReqMove>>();
+            builder.RegisterType<ReqMovesRepository>().As<IRepository<ReqMove, ReqMoveKey>>();
             builder.RegisterType<TqmsSummaryByCategoryRepository>().As<IQueryRepository<TqmsSummaryByCategory>>();
             builder.RegisterType<TqmsOutstandingLoansByCategoryRepository>().As<IQueryRepository<TqmsOutstandingLoansByCategory>>();
             builder.RegisterType<TqmsMasterRepository>().As<ISingleRecordRepository<TqmsMaster>>();
@@ -132,6 +133,7 @@
             builder.RegisterType<LoanDetailsRepository>().As<IQueryRepository<LoanDetail>>();
             builder.RegisterType<SalesArticleRepository>().As<IQueryRepository<SalesArticle>>();
             builder.RegisterType<CartonTypeRepository>().As<IRepository<CartonType, string>>();
+            builder.RegisterType<GoodsInLogRepository>().As<IRepository<GoodsInLogEntry, int>>();
             builder.RegisterType<ExportBookRepository>().As<IRepository<ExportBook, int>>();
         }
     }

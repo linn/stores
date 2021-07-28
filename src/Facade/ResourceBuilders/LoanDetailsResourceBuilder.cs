@@ -5,7 +5,7 @@
     using System.Linq;
 
     using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Resources;
 
     public class LoanDetailsResourceBuilder : IResourceBuilder<IEnumerable<LoanDetail>>

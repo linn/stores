@@ -12,7 +12,7 @@
 
         public decimal Quantity { get; set; }
 
-        public int StockLocatorId { get; set; }
+        public int? StockLocatorId { get; set; }
 
         public StockLocator StockLocator { get; set; }
 

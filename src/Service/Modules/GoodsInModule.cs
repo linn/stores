@@ -4,6 +4,7 @@
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.GoodsIn;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Resources.StockLocators;
 
@@ -32,6 +33,7 @@
             this.Get("/logistics/goods-in/dem-locations", _ => this.GetDemLocations());
             this.Get("/inventory/sales-articles", _ => this.SearchSalesArticles());
             this.Get("/logistics/purchase-orders/validate/{id}", parameters => this.ValidatePurchaseOrder(parameters.id));
+            this.Get("/logistics/purchase-orders/validate-qty", _ => this.ValidatePurchaseOrderBookInQty());
         }
 
         private object DoBookIn()
@@ -69,6 +71,14 @@
             return this.Negotiate.WithModel(
                 this.service.ValidatePurchaseOrder(
                     id, 1));
+        }
+
+        private object ValidatePurchaseOrderBookInQty()
+        {
+            var resource = this.Bind<ValidateBookInPurchaseOrderQtyRequestResource>();
+            var orderLine = resource.OrderLine ?? 1;
+            return this.Negotiate.WithModel(
+                this.service.ValidatePurchaseOrderQty(resource.OrderNumber, orderLine, resource.Qty));
         }
     }
 }

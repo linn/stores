@@ -48,6 +48,8 @@ import ImportBook from '../containers/importBooks/ImportBook';
 import ImportBooks from '../containers/importBooks/ImportBooks';
 import ImportBooksIprReportOptions from '../containers/reports/ImpbookIprReportOptions';
 import ImportBooksIprReport from '../containers/reports/ImpbookIprReport';
+import ImportBooksEuReportOptions from '../containers/reports/ImpbookEuReportOptions';
+import ImportBooksEuReport from '../containers/reports/ImpbookEuReport';
 
 const Root = ({ store }) => (
     <div>
@@ -253,6 +255,16 @@ const Root = ({ store }) => (
                                         exact
                                         path="/logistics/import-books/ipr/report"
                                         component={ImportBooksIprReport}
+                                    />
+                                           <Route
+                                        exact
+                                        path="/logistics/import-books/eu"
+                                        component={ImportBooksEuReportOptions}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/import-books/eu/report"
+                                        component={ImportBooksEuReport}
                                     />
                                     <Route
                                         exact
