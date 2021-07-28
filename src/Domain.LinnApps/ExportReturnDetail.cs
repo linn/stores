@@ -39,5 +39,7 @@
         public double? Depth { get; set; }
 
         public ExportReturn ExportReturn { get; set; }
+
+        public InterCompanyInvoice InterCompanyInvoice { get; set; }
     }
 }
