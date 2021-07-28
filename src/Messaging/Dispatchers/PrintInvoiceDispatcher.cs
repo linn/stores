@@ -11,7 +11,7 @@
 
     public class PrintInvoiceDispatcher : IPrintInvoiceDispatcher
     {
-        private const string ContentType = "application/json";
+        private readonly string contentType = "application/json";
 
         private readonly string routingKey = "orawin.invoice.print";
 
@@ -47,7 +47,7 @@
 
             var body = Encoding.UTF8.GetBytes(json);
 
-            this.messageDispatcher.Dispatch(this.routingKey, body, ContentType);
+            this.messageDispatcher.Dispatch(this.routingKey, body, this.contentType);
         }
     }
 }
