@@ -24,6 +24,8 @@
 
         private readonly IRepository<ExportBook, int> exportBookRepository;
 
+        private string invoicePrinter = "Invoice";
+
         public ConsignmentService(
             IRepository<Employee, int> employeeRepository,
             IRepository<Consignment, int> consignmentRepository,
@@ -107,12 +109,14 @@
                         consignmentInvoice.DocumentNumber,
                         consignmentInvoice.DocumentType,
                         "CUSTOMER MASTER",
-                        "Y");
+                        "Y",
+                        this.invoicePrinter);
                     this.printInvoiceDispatcher.PrintInvoice(
                         consignmentInvoice.DocumentNumber,
                         consignmentInvoice.DocumentType,
                         "DELIVERY NOTE",
-                        "N");
+                        "N",
+                        this.invoicePrinter);
                 }
             }
         }
@@ -121,7 +125,7 @@
         {
             for (var i = 1; i <= numberOfCopies; i++)
             {
-                this.printConsignmentNoteDispatcher.PrintConsignmentNote(consignment.ConsignmentId);
+                this.printConsignmentNoteDispatcher.PrintConsignmentNote(consignment.ConsignmentId, this.invoicePrinter);
             }
         }
 
@@ -131,7 +135,12 @@
                 this.exportBookRepository.FilterBy(a => a.ConsignmentId == consignment.ConsignmentId);
             foreach (var exportBook in exportBooks)
             {
-                this.printInvoiceDispatcher.PrintInvoice(exportBook.ExportId, "E", "CUSTOMER MASTER", "Y");
+                this.printInvoiceDispatcher.PrintInvoice(
+                    exportBook.ExportId,
+                    "E",
+                    "CUSTOMER MASTER",
+                    "Y",
+                    this.invoicePrinter);
             }
         }
     }

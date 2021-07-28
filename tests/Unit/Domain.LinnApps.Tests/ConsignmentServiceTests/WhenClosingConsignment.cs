@@ -43,22 +43,22 @@
         }
 
         [Test]
-        public void ShouldPrintConsignmentNote()
+        public void ShouldNotPrintConsignmentNote()
         {
-            this.PrintConsignmentNoteDispatcher.Received().PrintConsignmentNote(1);
+            this.PrintConsignmentNoteDispatcher.DidNotReceive().PrintConsignmentNote(Arg.Any<int>(), Arg.Any<string>());
         }
 
         [Test]
         public void ShouldPrintTwoInvoices()
         {
-            this.PrintInvoiceDispatcher.Received().PrintInvoice(123, "I", "CUSTOMER MASTER", "Y");
-            this.PrintInvoiceDispatcher.Received().PrintInvoice(123, "I", "DELIVERY NOTE", "N");
+            this.PrintInvoiceDispatcher.Received().PrintInvoice(123, "I", "CUSTOMER MASTER", "Y", Arg.Any<string>());
+            this.PrintInvoiceDispatcher.Received().PrintInvoice(123, "I", "DELIVERY NOTE", "N", Arg.Any<string>());
         }
 
         [Test]
         public void ShouldNotPrintExportBook()
         {
-            this.PrintInvoiceDispatcher.DidNotReceive().PrintInvoice(1, "E", "CUSTOMER MASTER", "Y");
+            this.PrintInvoiceDispatcher.DidNotReceive().PrintInvoice(1, "E", "CUSTOMER MASTER", "Y", Arg.Any<string>());
         }
     }
 }

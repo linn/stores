@@ -2,6 +2,6 @@
 {
     public interface IPrintInvoiceDispatcher
     {
-        void PrintInvoice(int documentNumber, string documentType, string copyType, string showPrices);
+        void PrintInvoice(int documentNumber, string documentType, string copyType, string showPrices, string printer);
     }
 }

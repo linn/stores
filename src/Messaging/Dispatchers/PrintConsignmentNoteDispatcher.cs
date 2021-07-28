@@ -22,11 +22,12 @@
             this.messageDispatcher = messageDispatcher;
         }
 
-        public void PrintConsignmentNote(int consignmentId)
+        public void PrintConsignmentNote(int consignmentId, string printer)
         {
             var resource = new PrintConsignmentNoteMessageResource
                                {
-                                   ConsignmentId = consignmentId
+                                   ConsignmentId = consignmentId,
+                                   Printer = printer
                                };
 
             var json = JsonConvert.SerializeObject(

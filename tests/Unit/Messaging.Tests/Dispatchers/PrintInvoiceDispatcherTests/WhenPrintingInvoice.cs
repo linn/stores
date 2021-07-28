@@ -9,7 +9,7 @@
         [SetUp]
         public void SetUp()
         {
-            this.Sut.PrintInvoice(4321, "I", "MASTER", "Y");
+            this.Sut.PrintInvoice(4321, "I", "MASTER", "Y", "invoice");
         }
 
         [Test]

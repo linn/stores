@@ -12,7 +12,7 @@
         public void SetUp()
         {
             this.consignmentId = 123;
-            this.Sut.PrintConsignmentNote(this.consignmentId);
+            this.Sut.PrintConsignmentNote(this.consignmentId, "invoice");
         }
 
         [Test]

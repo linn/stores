@@ -40,7 +40,13 @@
         [Test]
         public void ShouldPrintExportBook()
         {
-            this.PrintInvoiceDispatcher.Received().PrintInvoice(1, "E", "CUSTOMER MASTER", "Y");
+            this.PrintInvoiceDispatcher.Received().PrintInvoice(1, "E", "CUSTOMER MASTER", "Y", Arg.Any<string>());
+        }
+
+        [Test]
+        public void ShouldPrintConsignmentNote()
+        {
+            this.PrintConsignmentNoteDispatcher.Received().PrintConsignmentNote(this.ConsignmentId, Arg.Any<string>());
         }
     }
 }

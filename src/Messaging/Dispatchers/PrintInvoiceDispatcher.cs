@@ -22,14 +22,20 @@
             this.messageDispatcher = messageDispatcher;
         }
 
-        public void PrintInvoice(int documentNumber, string documentType, string copyType, string showPrices)
+        public void PrintInvoice(
+            int documentNumber,
+            string documentType,
+            string copyType,
+            string showPrices,
+            string printer)
         {
             var resource = new PrintInvoiceMessageResource
                                {
                                    DocumentNumber = documentNumber,
                                    DocumentType = documentType,
                                    CopyType = copyType,
-                                   ShowPrices = showPrices
+                                   ShowPrices = showPrices,
+                                   Printer = printer
                                };
 
             var json = JsonConvert.SerializeObject(

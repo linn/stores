@@ -2,6 +2,6 @@
 {
     public interface IPrintConsignmentNoteDispatcher
     {
-        void PrintConsignmentNote(int consignmentId);
+        void PrintConsignmentNote(int consignmentId, string printer);
     }
 }
