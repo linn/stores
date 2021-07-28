@@ -15,6 +15,11 @@
             {
                 ReqNumber = requisition.ReqNumber,
                 Document1 = requisition.Document1,
+                Lines = requisition.Lines.Select(l => new RequisitionLineResource
+                                                          {
+                                                              TransactionCode = l.TransactionCode,
+                                                              Line = l.LineNumber
+                                                          }),
                 Links = this.BuildLinks(requisition).ToArray()
             };
         }

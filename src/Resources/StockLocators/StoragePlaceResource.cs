@@ -9,5 +9,7 @@
         public int? LocationId { get; set; }
 
         public int? PalletNumber { get; set; }
+
+        public string SiteCode { get; set; }
     }
 }

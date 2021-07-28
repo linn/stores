@@ -857,6 +857,7 @@
             q.Property(e => e.Name).HasColumnName("STORAGE_PLACE");
             q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
             q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(e => e.SiteCode).HasColumnName("SITE_CODE");
         }
 
         private void QueryStoresBudgets(ModelBuilder builder)
@@ -1403,6 +1404,7 @@
             r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
             r.Property(l => l.LineNumber).HasColumnName("LINE_NUMBER");
             r.Property(l => l.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            r.Property(l => l.TransactionCode).HasColumnName("TRANSACTION_CODE").HasMaxLength(10);
             r.HasMany(t => t.Moves).WithOne().HasForeignKey(reqMove => new { reqMove.ReqNumber, reqMove.LineNumber });
         }
 

@@ -7,7 +7,12 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import makeStyles from '@material-ui/styles/makeStyles';
 import { InputField, Typeahead, Dropdown, DatePicker } from '@linn-it/linn-form-components-library';
+import QcLabelPrintScreen from '../../containers/goodsIn/QcLabelPrintScreen';
 import Page from '../../containers/Page';
 
 function GoodsInUtility({
@@ -32,8 +37,16 @@ function GoodsInUtility({
 }) {
     const [formData, setFormData] = useState({
         purchaseOrderNumber: null,
-        dateReceived: new Date()
+        dateReceived: new Date(),
+        lines: []
     });
+
+    const useStyles = makeStyles(theme => ({
+        dialog: {
+            margin: theme.spacing(6),
+            minWidth: theme.spacing(62)
+        }
+    }));
 
     const [message, setMessage] = useState({ error: false, text: '' });
 
@@ -41,6 +54,8 @@ function GoodsInUtility({
         setFormData({ ...formData, [propertyName]: newValue });
     };
     const [bookInPoExpanded, setBookInPoExpanded] = useState(false);
+
+    const [dialogOpen, setDialogOpen] = useState(false);
 
     useEffect(() => {
         if (validatePurchaseOrderResult?.documentType === 'PO') {
@@ -52,7 +67,7 @@ function GoodsInUtility({
 
     useEffect(() => {
         if (validatePurchaseOrderBookInQtyResult?.success) {
-            setFormData(d => ({ ...d, noLines: 1 }));
+            setFormData(d => ({ ...d, numberOfLines: 1 }));
         }
 
         setMessage({
@@ -65,11 +80,34 @@ function GoodsInUtility({
         if (bookInResult?.message) {
             setMessage({ error: false, text: bookInResult.message });
         }
+        if (bookInResult?.success) {
+            setDialogOpen(true)
+        }
     }, [bookInResult]);
+
+    const classes = useStyles();
 
     return (
         <Page>
             <Grid container spacing={3}>
+                <Dialog open={dialogOpen} fullWidth maxWidth="md">
+                    <div>
+                        <IconButton
+                            className={classes.pullRight}
+                            aria-label="Close"
+                            onClick={() => setDialogOpen(false)}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <div className={classes.dialog}>
+                            <QcLabelPrintScreen
+                                bookinLocationId={formData?.ontoLocationId}
+                                palletNumber={formData?.palletNumber}
+                                partNumber={validatePurchaseOrderResult?.partNumber}
+                            />
+                        </div>
+                    </div>
+                </Dialog>
                 <Grid item xs={12}>
                     <InputField
                         fullWidth
@@ -94,7 +132,10 @@ function GoodsInUtility({
                         propertyName="purchaseOrderNumber"
                         onChange={handleFieldChange}
                         textFieldProps={{
-                            onBlur: () => validatePurchaseOrder(formData.purchaseOrderNumber)
+                            onBlur: () =>
+                                formData.purchaseOrderNumber
+                                    ? validatePurchaseOrder(formData.purchaseOrderNumber)
+                                    : {}
                         }}
                     />
                 </Grid>
@@ -116,6 +157,7 @@ function GoodsInUtility({
                         propertyName="qty"
                         textFieldProps={{
                             onBlur: () =>
+                                formData.qty &&
                                 validatePurchaseOrderBookInQty(
                                     `qty=${formData.qty}&orderLine=${1}&orderNumber`,
                                     formData.purchaseOrderNumber
@@ -187,17 +229,22 @@ function GoodsInUtility({
                 <Grid item xs={1}>
                     <InputField
                         fullWidth
-                        value={formData.noLines}
+                        value={formData.numberOfLines}
                         label="#Lines"
-                        propertyName="noLines"
+                        propertyName="numberOfLines"
                         onChange={handleFieldChange}
                     />
                 </Grid>
                 <Grid item xs={3}>
                     <Typeahead
-                        onSelect={newValue => {
-                            handleFieldChange('ontoLocation', newValue.name);
-                        }}
+                        onSelect={newValue =>
+                            setFormData(d => ({
+                                ...d,
+                                ontoLocation: newValue.name,
+                                ontoLocationId: newValue.locationId,
+                                palletNumber: newValue.palletNumber
+                            }))
+                        }
                         label="Onto Location"
                         modal
                         items={storagePlacesSearchResults}
@@ -231,7 +278,6 @@ function GoodsInUtility({
                         onChange={handleFieldChange}
                     />
                 </Grid>
-
                 <Grid item xs={3}>
                     <DatePicker
                         label="Date Received"
@@ -241,7 +287,6 @@ function GoodsInUtility({
                         }}
                     />
                 </Grid>
-
                 <Grid item xs={12}>
                     <Accordion expanded={bookInPoExpanded}>
                         <AccordionSummary

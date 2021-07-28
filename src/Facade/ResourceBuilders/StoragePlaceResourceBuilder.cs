@@ -17,7 +17,8 @@
                            LocationId = storagePlace.LocationId,
                            PalletNumber = storagePlace.PalletNumber,
                            Description = storagePlace.Description,
-                           Name = storagePlace.Name
+                           Name = storagePlace.Name,
+                           SiteCode = storagePlace.SiteCode
                        };
         }
 

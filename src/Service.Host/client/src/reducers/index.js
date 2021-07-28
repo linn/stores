@@ -110,6 +110,7 @@ import impbookDeliveryTerms from './importBooks/impbookDeliveryTerms';
 import ports from './importBooks/ports';
 import cartonTypes from './cartonTypes';
 import validatePurchaseOrderBookInQtyResult from './validatePurchaseOrderBookInQtyResult';
+import req from './req';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -180,6 +181,7 @@ const rootReducer = history =>
         pickItemsAllocation,
         ports,
         productAnalysisCodes,
+        req,
         reqMoves,
         rootProducts,
         salesAccounts,

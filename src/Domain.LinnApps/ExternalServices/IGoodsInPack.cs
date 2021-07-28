@@ -19,7 +19,7 @@
             string comments,
             string condition,
             string rsnAccessories,
-            int? reqNumber,
+            out int? reqNumber,
             out bool success);
 
         string GetErrorMessage();

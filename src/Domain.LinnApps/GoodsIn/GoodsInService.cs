@@ -35,7 +35,7 @@
             this.goodsInLog = goodsInLog;
         }
 
-        public ProcessResult DoBookIn(
+        public BookinResult DoBookIn(
             string transactionType,
             int createdBy,
             string partNumber,
@@ -63,7 +63,7 @@
                 if ((string.IsNullOrEmpty(storageType) && transactionType == "O") 
                     || transactionType == "L" || transactionType == "D")
                 {
-                    return new ProcessResult(false, "Onto location/pallet must be entered");
+                    return new BookinResult(false, "Onto location/pallet must be entered");
                 }
             }
 
@@ -73,7 +73,7 @@
             {
                 if (!this.palletAnalysisPack.CanPutPartOnPallet(partNumber, ontoLocation.TrimStart('P')))
                 {
-                    return new ProcessResult(false, this.palletAnalysisPack.Message());
+                    return new BookinResult(false, this.palletAnalysisPack.Message());
                 }
             }
 
@@ -120,12 +120,15 @@
                 comments,
                 condition,
                 rsnAccessories,
-                reqNumber,
+                out var reqNumberResult,
                 out var success);
 
-            return new ProcessResult(
+            return new BookinResult(
                 success, 
-                success ? null : this.goodsInPack.GetErrorMessage());
+                success ? null : this.goodsInPack.GetErrorMessage())
+                       {
+                           ReqNumber = reqNumberResult
+                       };
         }
 
         public ValidatePurchaseOrderResult ValidatePurchaseOrder(

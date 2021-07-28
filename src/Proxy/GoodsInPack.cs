@@ -33,7 +33,7 @@
             string comments,
             string condition,
             string rsnAccessories,
-            int? reqNumber,
+            out int? reqNumber,
             out bool success)
         {
             using (var connection = this.databaseService.GetConnection())
@@ -176,7 +176,6 @@
                 var reqNumberParam = new OracleParameter("p_req_number", OracleDbType.Int32)
                                          {
                                              Direction = ParameterDirection.Input,
-                                             Value = reqNumber
                                          };
                 cmd.Parameters.Add(reqNumberParam);
 
@@ -188,6 +187,15 @@
                 cmd.Parameters.Add(successParam);
 
                 cmd.ExecuteNonQuery();
+                reqNumber = int.Parse(reqNumberParam.Value.ToString());
+                if (int.TryParse(reqNumberParam.Value.ToString(), out var reqNumberResult))
+                {
+                    reqNumber = reqNumberResult;
+                }
+                else
+                {
+                    reqNumber = null;
+                }
 
                 success = int.Parse(successParam.Value.ToString()) == 0;
                 connection.Close();
