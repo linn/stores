@@ -18,27 +18,27 @@
 
     public class WhenGettingDeliveryTerms : ContextBase
     {
-        private IList<ImportBookDeliveryTerm> deliveryTerms = new List<ImportBookDeliveryTerm>
-                                                                  {
-                                                                      new ImportBookDeliveryTerm
-                                                                          {
-                                                                              DeliveryTermCode = "abc",
-                                                                              Description = "a ship",
-                                                                              Comments = "none"
-                                                                          },
-                                                                      new ImportBookDeliveryTerm
-                                                                          {
-                                                                              DeliveryTermCode = "def",
-                                                                              Description = "something else",
-                                                                              Comments = "maybe a ship"
-                                                                          },
-                                                                  };
+        private readonly IList<ImportBookDeliveryTerm> deliveryTerms = new List<ImportBookDeliveryTerm>
+                                                                           {
+                                                                               new ImportBookDeliveryTerm
+                                                                                   {
+                                                                                       DeliveryTermCode = "abc",
+                                                                                       Description = "a ship",
+                                                                                       Comments = "none"
+                                                                                   },
+                                                                               new ImportBookDeliveryTerm
+                                                                                   {
+                                                                                       DeliveryTermCode = "def",
+                                                                                       Description = "something else",
+                                                                                       Comments = "maybe a ship"
+                                                                                   },
+                                                                           };
 
         [SetUp]
         public void SetUp()
         {
             this.ImportBookDeliveryTermFacadeService.GetAll().Returns(
-                new SuccessResult<IEnumerable<ImportBookDeliveryTerm>>(deliveryTerms));
+                new SuccessResult<IEnumerable<ImportBookDeliveryTerm>>(this.deliveryTerms));
 
             this.Response = this.Browser.Get(
                 "/logistics/import-books/delivery-terms",
@@ -60,8 +60,8 @@
         [Test]
         public void ShouldReturnResource()
         {
-            var resource = this.Response.Body.DeserializeJson<IEnumerable<ImportBookDeliveryTermResource>>();
-            resource.Count().Should().Be(2);
+            var resource = this.Response.Body.DeserializeJson<IEnumerable<ImportBookDeliveryTermResource>>().ToList();
+            resource.Count.Should().Be(2);
             resource.Any(
                 x => x.DeliveryTermCode == this.deliveryTerms[0].DeliveryTermCode
                      && x.Description == this.deliveryTerms[0].Description

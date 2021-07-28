@@ -26,7 +26,7 @@
         [SetUp]
         public void SetUp()
         {
-            iprImpBooks = new List<ImportBook>
+            this.iprImpBooks = new List<ImportBook>
                               {
                                   new ImportBook
                                       {
