@@ -92,6 +92,7 @@
             updatedConsignment.HubId.Should().Be(this.existingHubId);
             updatedConsignment.Status.Should().Be("C");
             updatedConsignment.ClosedById.Should().Be(this.closedById);
+            updatedConsignment.DateClosed.Should().HaveValue();
         }
     }
 }

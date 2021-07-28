@@ -42,6 +42,7 @@
 
                 entity.ClosedById = updateResource.ClosedById;
                 entity.Status = "C";
+                entity.DateClosed = DateTime.Now;
             }
             else
             {
