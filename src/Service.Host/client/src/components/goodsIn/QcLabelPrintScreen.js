@@ -24,6 +24,16 @@ function QcLabelPrintScreen({
     storagePlace,
     transactionCode
 }) {
+    useEffect(() => {
+        if (transactionCode) {
+            if (docType === 'WO') {
+                // hide document line field?
+            }
+            else {
+                // show document line field?
+            }
+        }
+    }, [transactionCode])
     return (
         <Grid container spacing={3}>
             <Grid item xs={12}>
