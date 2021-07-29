@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Facade.Tests.ImportBookFacadeTests
+﻿namespace Linn.Stores.Facade.Tests.ImportBookFacadeServiceTests
 {
     using System;
     using System.Collections.Generic;
@@ -92,7 +92,7 @@
                                 PostEntries = new List<ImportBookPostEntry>()
                             };
 
-            this.resource = new ImportBookResource()
+            this.resource = new ImportBookResource
                                 {
                                     Id = this.impbookId,
                                     DateCreated = this.now.AddDays(2).ToString("o"),

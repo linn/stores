@@ -57,7 +57,7 @@
                 .ThenInclude(c => c.Country);
         }
 
-    public void Add(Consignment entity)
+        public void Add(Consignment entity)
         {
             this.serviceDbContext.Consignments.Add(entity);
         }

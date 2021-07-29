@@ -33,7 +33,9 @@
             this.ReportingHelper = new ReportingHelper();
 
             this.Sut = new ImportBookReportService(
-                this.ImpbookRepository, this.CountryRepository, this.ExportReturnDetailRepository,
+                this.ImpbookRepository,
+                this.CountryRepository,
+                this.ExportReturnDetailRepository,
                 this.ReportingHelper);
         }
     }

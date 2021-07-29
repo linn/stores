@@ -23,5 +23,9 @@
         public IEnumerable<ConsignmentPalletResource> Pallets { get; set; } = new List<ConsignmentPalletResource>();
 
         public IEnumerable<ConsignmentItemResource> Items { get; set; } = new List<ConsignmentItemResource>();
+
+        public string Status { get; set; }
+
+        public int? ClosedById { get; set; }
     }
 }

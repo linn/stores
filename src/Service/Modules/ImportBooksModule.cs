@@ -126,12 +126,14 @@
 
             return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
+
         private object GetPorts()
         {
             var results = this.portFacadeService.GetAll();
 
             return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
+
         private object GetDeliveryTerms()
         {
             var results = this.importBookDeliveryTermFacadeService.GetAll();

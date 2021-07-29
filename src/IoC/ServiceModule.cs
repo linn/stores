@@ -72,6 +72,7 @@
             builder.RegisterType<GoodsInService>().As<IGoodsInService>();
             builder.RegisterType<ImportBookReportService>()
                 .As<IImportBookReportService>();
+            builder.RegisterType<ConsignmentService>().As<IConsignmentService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -189,6 +190,9 @@
             builder.RegisterType<BartenderLabelPack>().As<IBartenderLabelPack>();
             builder.RegisterType<GoodsInPack>().As<IGoodsInPack>();
             builder.RegisterType<PalletAnalysisPack>().As<IPalletAnalysisPack>();
+            builder.RegisterType<ConsignmentProxyService>().As<IConsignmentProxyService>();
+            builder.RegisterType<InvoicingPack>().As<IInvoicingPack>();
+            builder.RegisterType<ExportBookPack>().As<IExportBookPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();
