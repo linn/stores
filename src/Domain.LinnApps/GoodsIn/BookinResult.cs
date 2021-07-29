@@ -10,5 +10,8 @@
 
         public int? ReqNumber { get; set; }
 
+        public string QcState { get; set; }
+
+        public string DocType { get; set; }
     }
 }

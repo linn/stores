@@ -222,6 +222,8 @@
 
         public DbSet<GoodsInLogEntry> GoodsInLog { get; set; }
 
+        public DbSet<StoresTransactionDefinition> StoresTransactionDefinitions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -326,6 +328,7 @@
             this.QueryLoanDetails(builder);
             this.BuildCartonTypes(builder);
             this.BuildGoodsInLog(builder);
+            this.BuildStoresTransactionDefinitions(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1868,6 +1871,17 @@
             table.Property(e => e.LogCondition).HasColumnName("CONDITION").HasMaxLength(2000);
             table.Property(e => e.RsnAccessories).HasColumnName("RSN_ACCESSORIES").HasMaxLength(2000);
             table.Property(e => e.StorageType).HasColumnName("STORAGE_TYPE").HasMaxLength(4);
+        }
+
+        private void BuildStoresTransactionDefinitions(ModelBuilder builder)
+        {
+            var q = builder.Entity<StoresTransactionDefinition>().ToTable("STORES_TRANS_DEFS");
+            q.HasKey(d => d.TransactionCode);
+            q.Property(d => d.TransactionCode).HasColumnName("TRANSACTION_CODE");
+            q.Property(d => d.QcType).HasColumnName("QC_TYPE");
+            q.Property(d => d.DocType).HasColumnName("DOC1_TYPE");
+            q.HasMany(d => d.RequisitionLines).WithOne(l => l.TransactionDefinition)
+                .HasForeignKey(l => l.TransactionCode);
         }
     }
 }

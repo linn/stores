@@ -400,5 +400,10 @@
         {
             return this.databaseService.GetIdSequence("bookin_seq");
         }
+
+        public int GetNextLogId()
+        {
+            return this.databaseService.GetIdSequence("gilog_seq");
+        }
     }
 }

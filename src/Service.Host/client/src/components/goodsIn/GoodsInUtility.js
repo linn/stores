@@ -81,7 +81,7 @@ function GoodsInUtility({
             setMessage({ error: false, text: bookInResult.message });
         }
         if (bookInResult?.success) {
-            setDialogOpen(true)
+            setDialogOpen(true);
         }
     }, [bookInResult]);
 
@@ -104,6 +104,9 @@ function GoodsInUtility({
                                 bookinLocationId={formData?.ontoLocationId}
                                 palletNumber={formData?.palletNumber}
                                 partNumber={validatePurchaseOrderResult?.partNumber}
+                                reqNumber={bookInResult?.reqNumber}
+                                qcState={bookInResult?.qcState}
+                                docType={bookInResult?.docType}
                             />
                         </div>
                     </div>

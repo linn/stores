@@ -8,6 +8,7 @@
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Requisitions;
 
     public class GoodsInService : IGoodsInService
     {
@@ -21,18 +22,22 @@
 
         private readonly IRepository<GoodsInLogEntry, int> goodsInLog;
 
+        private readonly IRepository<RequisitionHeader, int> reqRepository;
+
         public GoodsInService(
             IGoodsInPack goodsInPack,
             IStoresPack storesPack,
             IPalletAnalysisPack palletAnalysisPack,
             IRepository<Part, int> partsRepository,
-            IRepository<GoodsInLogEntry, int> goodsInLog)
+            IRepository<GoodsInLogEntry, int> goodsInLog,
+            IRepository<RequisitionHeader, int> reqRepository)
         {
             this.storesPack = storesPack;
             this.goodsInPack = goodsInPack;
             this.palletAnalysisPack = palletAnalysisPack;
             this.partsRepository = partsRepository;
             this.goodsInLog = goodsInLog;
+            this.reqRepository = reqRepository;
         }
 
         public BookinResult DoBookIn(
@@ -81,6 +86,7 @@
             {
                 this.goodsInLog.Add(new GoodsInLogEntry
                                         {
+                                            Id = this.goodsInPack.GetNextLogId(),
                                             TransactionType = transactionType,
                                             DateCreated = DateTime.Now,
                                             CreatedBy = createdBy,
@@ -123,12 +129,22 @@
                 out var reqNumberResult,
                 out var success);
 
-            return new BookinResult(
-                success, 
-                success ? null : this.goodsInPack.GetErrorMessage())
-                       {
-                           ReqNumber = reqNumberResult
-                       };
+            var result = new BookinResult(
+                success,
+                success ? null : this.goodsInPack.GetErrorMessage());
+
+            if (!reqNumberResult.HasValue)
+            {
+                return result;
+            }
+
+            var req = this.reqRepository.FindById((int)reqNumberResult);
+            result.ReqNumber = req.ReqNumber;
+            var transDef = req.Lines.FirstOrDefault()?.TransactionDefinition;
+            result.DocType = transDef?.DocType;
+            result.QcState = transDef?.DocType;
+
+            return result;
         }
 
         public ValidatePurchaseOrderResult ValidatePurchaseOrder(

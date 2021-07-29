@@ -21,7 +21,8 @@ function QcLabelPrintScreen({
     dateBooked,
     qcInfo,
     numberOfContainers,
-    storagePlace
+    storagePlace,
+    transactionCode
 }) {
     return (
         <Grid container spacing={3}>
