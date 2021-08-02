@@ -21,6 +21,7 @@ import LifeCycleTab from './tabs/LifeCycleTab';
 import partReducer from './partReducer';
 
 function Part({
+    copy,
     editStatus,
     itemError,
     history,
@@ -67,6 +68,16 @@ function Part({
         part: creating() ? defaultPart : { partNumber: '' },
         prevPart: { partNumber: '' }
     });
+
+    useEffect(() => {
+        if (copy && state.part?.linnProduced === 'N') {
+            dispatch({
+                type: 'fieldChange',
+                fieldName: 'preferredSupplier',
+                payload: { name: null, description: null }
+            });
+        }
+    }, [copy, state.part.linnProduced]);
 
     // checking whether partNumber already exists when partNumber is entered
     useEffect(() => {
@@ -234,7 +245,7 @@ function Part({
                     <Grid item xs={2} />
                 ) : (
                     <Grid item xs={2}>
-                        <LinkButton to="/inventory/parts/create" text="Copy" />
+                        <LinkButton to="/inventory/parts/create?copy=true" text="Copy" />
                     </Grid>
                 )}
                 {itemError && (
@@ -445,6 +456,7 @@ function Part({
 }
 
 Part.propTypes = {
+    copy: PropTypes.bool,
     item: PropTypes.shape({
         part: PropTypes.string,
         description: PropTypes.string,
@@ -484,6 +496,7 @@ Part.propTypes = {
 };
 
 Part.defaultProps = {
+    copy: false,
     item: null,
     snackbarVisible: false,
     loading: true,
