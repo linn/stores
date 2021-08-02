@@ -28,6 +28,7 @@ import partsSelectors from '../../selectors/partsSelectors';
 const creating = match => match?.url?.endsWith('/create');
 
 const mapStateToProps = (state, { match, location }) => ({
+    copy: !!queryString.parse(location.search.split('?')[1])?.copy,
     item: creating(match) ? null : partSelectors.getItem(state),
     itemId: creating(match) ? null : match.params.id,
     editStatus: creating(match) ? 'create' : partSelectors.getEditStatus(state),
