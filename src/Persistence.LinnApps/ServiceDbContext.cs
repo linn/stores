@@ -1893,19 +1893,21 @@
 
         private void BuildPlCreditDebitNotes(ModelBuilder builder)
         {
-            var table = builder.Entity<PlCreditDebitNote>().ToTable("PL_CREDIT_DEBIT_NOTES");
-            table.HasKey(a => a.NoteNumber);
-            table.Property(a => a.NoteNumber).HasColumnName("CDNOTE_ID");
-            table.Property(a => a.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
-            table.Property(a => a.OrderQty).HasColumnName("ORDER_QTY");
-            table.Property(a => a.ClosedBy).HasColumnName("CLOSED_BY");
-            table.Property(a => a.DateClosed).HasColumnName("DATE_CLOSED");
-            table.Property(a => a.NetTotal).HasColumnName("NET_TOTAL");
-            table.Property(a => a.NoteType).HasColumnName("CDNOTE_TYPE").HasMaxLength(1);
-            table.Property(a => a.OriginalOrderNumber).HasColumnName("ORIGINAL_ORDER_NUMBER");
-            table.Property(a => a.ReturnsOrderNumber).HasColumnName("RETURNS_ORDER_NUMBER");
-            table.Property(a => a.Notes).HasColumnName("NOTES").HasMaxLength(200);
-            table.Property(a => a.ReasonClosed).HasColumnName("REASON_CLOSED").HasMaxLength(2000);
+            var entity = builder.Entity<PlCreditDebitNote>().ToTable("PL_CREDIT_DEBIT_NOTES");
+            entity.HasKey(a => a.NoteNumber);
+            entity.Property(a => a.NoteNumber).HasColumnName("CDNOTE_ID");
+            entity.Property(a => a.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            entity.Property(a => a.OrderQty).HasColumnName("ORDER_QTY");
+            entity.Property(a => a.ClosedBy).HasColumnName("CLOSED_BY");
+            entity.Property(a => a.DateClosed).HasColumnName("DATE_CLOSED");
+            entity.Property(a => a.NetTotal).HasColumnName("NET_TOTAL");
+            entity.Property(a => a.NoteType).HasColumnName("CDNOTE_TYPE").HasMaxLength(1);
+            entity.Property(a => a.OriginalOrderNumber).HasColumnName("ORIGINAL_ORDER_NUMBER");
+            entity.Property(a => a.ReturnsOrderNumber).HasColumnName("RETURNS_ORDER_NUMBER");
+            entity.Property(a => a.Notes).HasColumnName("NOTES").HasMaxLength(200);
+            entity.Property(a => a.ReasonClosed).HasColumnName("REASON_CLOSED").HasMaxLength(2000);
+            entity.Property(a => a.SupplierId).HasColumnName("SUPPLIER_ID");
+            entity.HasOne(a => a.Supplier).WithMany(s => s.PlCreditDebitNotes).HasForeignKey(a => a.SupplierId);
         }
     }
 }

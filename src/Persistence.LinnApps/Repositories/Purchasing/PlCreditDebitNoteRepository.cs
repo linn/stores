@@ -7,6 +7,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Purchasing;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class PlCreditDebitNoteRepository : IRepository<PlCreditDebitNote, int>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -43,7 +45,8 @@
 
         public IQueryable<PlCreditDebitNote> FilterBy(Expression<Func<PlCreditDebitNote, bool>> expression)
         {
-            return this.serviceDbContext.PlCreditDebitNotes.Where(expression);
+            return this.serviceDbContext.PlCreditDebitNotes.Include(n => n.Supplier)
+                .Where(expression);
         }
     }
 }
