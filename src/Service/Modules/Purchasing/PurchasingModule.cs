@@ -24,7 +24,10 @@
         private object GetDebitNotes()
         {
             var resource = this.Bind<SearchRequestResource>();
-            var results = this.service.FilterBy(new PlCreditDebitNoteResource());
+            var results = this.service.FilterBy(new PlCreditDebitNoteResource
+                                                    {
+                                                        SupplierName = resource?.SearchTerm
+                                                    });
 
             return this.Negotiate
                 .WithModel(results)

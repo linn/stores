@@ -36,7 +36,8 @@
 
         protected override Expression<Func<PlCreditDebitNote, bool>> FilterExpression(PlCreditDebitNoteResource searchResource)
         {
-            return x => x.DateClosed == null; // todo - filter by supplier
+            return x => x.DateClosed == null && (string.IsNullOrEmpty(searchResource.SupplierName)
+                                                 || x.Supplier.Name.Contains(searchResource.SupplierName.ToUpper()));
         }
     }
 }
