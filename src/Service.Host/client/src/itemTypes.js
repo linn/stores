@@ -383,3 +383,15 @@ export const validatePurchaseOrderBookInQtyResult = new ItemType(
     'VALIDATE_PURCHASE_ORDER_BOOKIN_QTY_RESULT',
     '/logistics/purchase-orders/validate-qty'
 );
+
+export const debitNote = new ItemType(
+    'debitNote',
+    'DEBIT_NOTE',
+    '/inventory/purchasing/debit-notes'
+);
+
+export const debitNotes = new ItemType(
+    'debitNotes',
+    'DEBIT_NOTES',
+    '/inventory/purchasing/debit-notes'
+);
