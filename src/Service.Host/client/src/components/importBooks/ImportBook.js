@@ -13,6 +13,7 @@ import {
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 import ImpBookTab from '../../containers/importBooks/tabs/ImpBookTab';
+import OrderDetailsTab from '../../containers/importBooks/tabs/OrderDetailsTab';
 import ImportBookReducer from './ImportBookReducer';
 
 function ImportBook({
@@ -149,6 +150,15 @@ function ImportBook({
         dispatch({ type: 'fieldChange', fieldName: propertyName, payload: newValue });
     };
 
+    const handleOrderDetailChange = (lineId, newValue) => {
+        setEditStatus('edit');
+        dispatch({
+            type: 'orderDetailFieldChange',
+            lineId,
+            payload: newValue
+        });
+    };
+
     return (
         <Page>
             <Grid container spacing={3}>
@@ -255,6 +265,18 @@ function ImportBook({
                                 />
                             )}
 
+                            {tab === 1 && (
+                                <OrderDetailsTab
+                                    dateCreated={state.orderDetals}
+                                    handleFieldChange={handleFieldChange}
+                                    handleOrderDetailsChange={handleOrderDetailChange}
+                                    impbookId={state.id}
+                                    // remainingTotal,
+                                    // remainingDutyTotal,
+                                    // remainingWeight,
+                                    // invoiceDate={state.invoiceDate}
+                                />
+                            )}
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons
                                     saveDisabled={viewing() || impbookInvalid()}
