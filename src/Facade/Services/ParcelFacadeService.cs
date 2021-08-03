@@ -11,8 +11,6 @@
 
     public class ParcelFacadeService : FacadeFilterService<Parcel, int, ParcelResource, ParcelResource, ParcelSearchRequestResource>
     {
-        private readonly IRepository<Parcel, int> parcelRepository;
-
         private readonly IDatabaseService databaseService;
 
         public ParcelFacadeService(
@@ -21,7 +19,6 @@
             IDatabaseService databaseService)
             : base(parcelRepository, transactionManager)
         {
-            this.parcelRepository = parcelRepository;
             this.databaseService = databaseService;
         }
 
