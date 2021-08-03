@@ -24,9 +24,7 @@
         private object GetDebitNotes()
         {
             var resource = this.Bind<SearchRequestResource>();
-            var results = string.IsNullOrEmpty(resource.SearchTerm)
-                              ? this.service.GetAll()
-                              : this.service.FilterBy(new PlCreditDebitNoteResource());
+            var results = this.service.FilterBy(new PlCreditDebitNoteResource());
 
             return this.Negotiate
                 .WithModel(results)

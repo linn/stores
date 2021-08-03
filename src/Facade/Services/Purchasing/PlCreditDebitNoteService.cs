@@ -5,34 +5,38 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.Purchasing;
     using Linn.Stores.Resources.Purchasing;
 
     public class PlCreditDebitNoteService : 
-        FacadeFilterService<PlCreditDebitNoteService, int, PlCreditDebitNoteResource, PlCreditDebitNoteResource, PlCreditDebitNoteResource>
+        FacadeFilterService<PlCreditDebitNote, int, PlCreditDebitNoteResource, PlCreditDebitNoteResource, PlCreditDebitNoteResource>
     {
-        public PlCreditDebitNoteService(IRepository<PlCreditDebitNoteService, int> repository, ITransactionManager transactionManager)
+        private IRepository<PlCreditDebitNote, int> repository;
+
+        public PlCreditDebitNoteService(IRepository<PlCreditDebitNote, int> repository, ITransactionManager transactionManager)
             : base(repository, transactionManager)
         {
+            this.repository = repository;
         }
 
-        protected override PlCreditDebitNoteService CreateFromResource(PlCreditDebitNoteResource resource)
+        protected override PlCreditDebitNote CreateFromResource(PlCreditDebitNoteResource resource)
         {
             throw new NotImplementedException();
         }
 
-        protected override void UpdateFromResource(PlCreditDebitNoteService entity, PlCreditDebitNoteResource updateResource)
+        protected override void UpdateFromResource(PlCreditDebitNote entity, PlCreditDebitNoteResource updateResource)
         {
             throw new NotImplementedException();
         }
 
-        protected override Expression<Func<PlCreditDebitNoteService, bool>> SearchExpression(string searchTerm)
+        protected override Expression<Func<PlCreditDebitNote, bool>> SearchExpression(string searchTerm)
         {
             throw new NotImplementedException();
         }
 
-        protected override Expression<Func<PlCreditDebitNoteService, bool>> FilterExpression(PlCreditDebitNoteResource searchResource)
+        protected override Expression<Func<PlCreditDebitNote, bool>> FilterExpression(PlCreditDebitNoteResource searchResource)
         {
-            throw new NotImplementedException();
+            return x => x.DateClosed == null; // todo - filter by supplier
         }
     }
 }
