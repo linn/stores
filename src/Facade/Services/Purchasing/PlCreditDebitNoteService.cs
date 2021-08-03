@@ -11,12 +11,9 @@
     public class PlCreditDebitNoteService : 
         FacadeFilterService<PlCreditDebitNote, int, PlCreditDebitNoteResource, PlCreditDebitNoteResource, PlCreditDebitNoteResource>
     {
-        private IRepository<PlCreditDebitNote, int> repository;
-
         public PlCreditDebitNoteService(IRepository<PlCreditDebitNote, int> repository, ITransactionManager transactionManager)
             : base(repository, transactionManager)
         {
-            this.repository = repository;
         }
 
         protected override PlCreditDebitNote CreateFromResource(PlCreditDebitNoteResource resource)
@@ -26,7 +23,9 @@
 
         protected override void UpdateFromResource(PlCreditDebitNote entity, PlCreditDebitNoteResource updateResource)
         {
-            throw new NotImplementedException();
+            entity.DateClosed = DateTime.Today;
+            entity.ClosedBy = updateResource.ClosedBy;
+            entity.ReasonClosed = updateResource.ReasonClosed;
         }
 
         protected override Expression<Func<PlCreditDebitNote, bool>> SearchExpression(string searchTerm)

@@ -47,8 +47,10 @@
                         with.Dependency(this.DebitNoteService);
                         with.Dependency<IResourceBuilder<PlCreditDebitNote>>(new PlCreditDebitNoteResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<PlCreditDebitNote>>>(new PlCreditDebitNotesResourceBuilder());
-
+                        with.Dependency(this.DebitNoteRepository);
                         with.Module<PurchasingModule>();
+
+                        with.ResponseProcessor<PlCreditDebitNoteResponseProcessor>();
                         with.ResponseProcessor<PlCreditDebitNotesResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>

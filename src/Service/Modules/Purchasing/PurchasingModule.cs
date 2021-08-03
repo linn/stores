@@ -19,6 +19,7 @@
         {
             this.service = service;
             this.Get("inventory/purchasing/debit-notes", _ => this.GetDebitNotes());
+            this.Put("inventory/purchasing/debit-notes/{id}", parameters => this.UpdateDebitNote(parameters.id));
         }
 
         private object GetDebitNotes()
@@ -33,6 +34,15 @@
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");
+        }
+
+        private object UpdateDebitNote(int id)
+        {
+            // todo - any auth?
+            var resource = this.Bind<PlCreditDebitNoteResource>();
+            var result = this.service.Update(id, resource);
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
     }
 }

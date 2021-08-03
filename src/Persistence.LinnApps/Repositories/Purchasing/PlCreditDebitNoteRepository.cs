@@ -20,7 +20,8 @@
 
         public PlCreditDebitNote FindById(int key)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.PlCreditDebitNotes
+                .Where(n => n.NoteNumber == key).ToList().FirstOrDefault();
         }
 
         public IQueryable<PlCreditDebitNote> FindAll()
