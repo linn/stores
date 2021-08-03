@@ -9,6 +9,13 @@
 
     public class PlCreditDebitNoteRepository : IRepository<PlCreditDebitNote, int>
     {
+        private readonly ServiceDbContext serviceDbContext;
+
+        public PlCreditDebitNoteRepository(ServiceDbContext serviceDbContext)
+        {
+            this.serviceDbContext = serviceDbContext;
+        }
+
         public PlCreditDebitNote FindById(int key)
         {
             throw new NotImplementedException();
@@ -36,7 +43,7 @@
 
         public IQueryable<PlCreditDebitNote> FilterBy(Expression<Func<PlCreditDebitNote, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.PlCreditDebitNotes.Where(expression);
         }
     }
 }
