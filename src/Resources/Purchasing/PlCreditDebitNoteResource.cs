@@ -23,5 +23,9 @@
         public int? ClosedBy { get; set; }
 
         public string ReasonClosed { get; set; }
+
+        public int? SupplierId { get; set; }
+
+        public string SupplierName { get; set; }
     }
 }

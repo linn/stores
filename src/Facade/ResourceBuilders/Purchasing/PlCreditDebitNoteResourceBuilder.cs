@@ -12,6 +12,17 @@
         {
             return new PlCreditDebitNoteResource
                        {
+                           OrderQty = note.OrderQty,
+                           PartNumber = note.PartNumber,
+                           DateClosed = note.DateClosed?.ToString("o"),
+                           SupplierId = note.SupplierId,
+                           ClosedBy = note.ClosedBy,
+                           NetTotal = note.NetTotal,
+                           NoteNumber = note.NoteNumber,
+                           OriginalOrderNumber = note.OriginalOrderNumber,
+                           ReturnsOrderNumber = note.ReturnsOrderNumber,
+                           Notes = note.Notes,
+                           SupplierName = note.Supplier.Name
                        };
         }
 

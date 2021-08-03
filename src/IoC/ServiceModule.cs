@@ -20,6 +20,7 @@
     using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Purchasing;
     using Linn.Stores.Domain.LinnApps.Reports;
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.StockLocators;
@@ -196,7 +197,7 @@
             builder.RegisterType<InvoicingPack>().As<IInvoicingPack>();
             builder.RegisterType<ExportBookPack>().As<IExportBookPack>();
             builder.RegisterType<PlCreditDebitNoteService>()
-                .As<IFacadeFilterService<PlCreditDebitNoteService, int, PlCreditDebitNoteResource, PlCreditDebitNoteResource, PlCreditDebitNoteResource>>();
+                .As<IFacadeFilterService<PlCreditDebitNote, int, PlCreditDebitNoteResource, PlCreditDebitNoteResource, PlCreditDebitNoteResource>>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();
