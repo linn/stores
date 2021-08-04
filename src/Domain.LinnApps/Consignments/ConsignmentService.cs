@@ -94,23 +94,27 @@
                 this.PrintConsignmentNote(consignment, numberOfCopies);
             }
 
-            this.PrintInvoices(updatedConsignment, numberOfCopies);
+            this.PrintInvoices(updatedConsignment, consignment.Address.Country.CountryCode, numberOfCopies);
 
             this.MaybePrintExportBook(consignment);
         }
 
-        private void PrintInvoices(Consignment updatedConsignment, int numberOfCopies)
+        private void PrintInvoices(Consignment updatedConsignment, string countryCode, int numberOfCopies)
         {
             foreach (var consignmentInvoice in updatedConsignment.Invoices)
             {
                 for (var i = 1; i <= numberOfCopies; i++)
                 {
-                    this.printInvoiceDispatcher.PrintInvoice(
-                        consignmentInvoice.DocumentNumber,
-                        consignmentInvoice.DocumentType,
-                        "CUSTOMER MASTER",
-                        "Y",
-                        this.invoicePrinter);
+                    if (countryCode != "GB")
+                    {
+                        this.printInvoiceDispatcher.PrintInvoice(
+                            consignmentInvoice.DocumentNumber,
+                            consignmentInvoice.DocumentType,
+                            "CUSTOMER MASTER",
+                            "Y",
+                            this.invoicePrinter);
+                    }
+
                     this.printInvoiceDispatcher.PrintInvoice(
                         consignmentInvoice.DocumentNumber,
                         consignmentInvoice.DocumentType,

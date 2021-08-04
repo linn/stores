@@ -6,7 +6,7 @@
 
     using NUnit.Framework;
 
-    public class WhenClosingConsignment : ContextBase
+    public class WhenClosingUkConsignment : ContextBase
     {
         private int closedById = 123;
 
@@ -49,9 +49,9 @@
         }
 
         [Test]
-        public void ShouldPrintTwoInvoices()
+        public void ShouldPrintOneInvoice()
         {
-            this.PrintInvoiceDispatcher.Received().PrintInvoice(123, "I", "CUSTOMER MASTER", "Y", Arg.Any<string>());
+            this.PrintInvoiceDispatcher.DidNotReceive().PrintInvoice(123, "I", "CUSTOMER MASTER", "Y", Arg.Any<string>());
             this.PrintInvoiceDispatcher.Received().PrintInvoice(123, "I", "DELIVERY NOTE", "N", Arg.Any<string>());
         }
 

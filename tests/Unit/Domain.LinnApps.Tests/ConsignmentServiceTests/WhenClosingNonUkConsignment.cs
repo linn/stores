@@ -48,5 +48,12 @@
         {
             this.PrintConsignmentNoteDispatcher.Received().PrintConsignmentNote(this.ConsignmentId, Arg.Any<string>());
         }
+
+        [Test]
+        public void ShouldPrintTwoInvoices()
+        {
+            this.PrintInvoiceDispatcher.Received().PrintInvoice(123, "I", "CUSTOMER MASTER", "Y", Arg.Any<string>());
+            this.PrintInvoiceDispatcher.Received().PrintInvoice(123, "I", "DELIVERY NOTE", "N", Arg.Any<string>());
+        }
     }
 }
