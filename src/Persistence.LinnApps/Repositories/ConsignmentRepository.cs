@@ -24,6 +24,7 @@
                 .Include(c => c.Pallets)
                 .Include(c => c.Items)
                 .Include(c => c.Invoices)
+                .Include(c => c.ClosedBy)
                 .Include(a => a.Address)
                 .ThenInclude(c => c.Country)
                 .ToList().FirstOrDefault();
@@ -43,6 +44,7 @@
                 .Where(c => c.ConsignmentId == key)
                 .Include(c => c.Pallets)
                 .Include(c => c.Items)
+                .Include(c => c.Invoices)
                 .Include(c => c.ClosedBy)
                 .Include(a => a.Address)
                 .ThenInclude(c => c.Country)
