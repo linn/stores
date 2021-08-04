@@ -24,6 +24,7 @@ function OrderDetailsTab({
     handleOrderDetailChange,
     cpcNumbers
 }) {
+
     const [supplier, setSupplier] = useState({ id: -1, name: 'loading', country: 'loading' });
 
     const handleCarrierChange = carrierParam => {
@@ -261,12 +262,13 @@ function OrderDetailsTab({
                 </Grid>
             </Grid>
 
-            <Grid container spacing={1} item xs={7} className={classes.gapAbove}>
+            <Grid container spacing={1} item xs={12} className={classes.gapAbove}>
                 <SingleEditTable
                     columns={columns}
-                    rows={orderDetails}
+                    rows={orderDetails ?? [{}]}
                     saveRow={updateRow}
                     // editable={!displayOnly}
+                    //todo add createRow function
                     allowNewRowCreation={false}
                 />
             </Grid>

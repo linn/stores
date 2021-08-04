@@ -14,6 +14,9 @@ import {
 import Page from '../../containers/Page';
 import ImpBookTab from '../../containers/importBooks/tabs/ImpBookTab';
 import OrderDetailsTab from '../../containers/importBooks/tabs/OrderDetailsTab';
+import PostEntriesTab from './tabs/PostEntriesTab';
+import CommentsTab from '../../containers/importBooks/tabs/CommentsTab';
+
 import ImportBookReducer from './ImportBookReducer';
 
 function ImportBook({
@@ -159,6 +162,15 @@ function ImportBook({
         });
     };
 
+    const handlePostEntryChange = (lineId, newValue) => {
+        setEditStatus('edit');
+        dispatch({
+            type: 'postEntryFieldChange',
+            lineId,
+            payload: newValue
+        });
+    };
+
     return (
         <Page>
             <Grid container spacing={3}>
@@ -267,16 +279,34 @@ function ImportBook({
 
                             {tab === 1 && (
                                 <OrderDetailsTab
-                                    dateCreated={state.orderDetals}
+                                    orderDetails={state.orderDetails}
                                     handleFieldChange={handleFieldChange}
                                     handleOrderDetailsChange={handleOrderDetailChange}
-                                    impbookId={state.id}
                                     // remainingTotal,
                                     // remainingDutyTotal,
                                     // remainingWeight,
                                     // invoiceDate={state.invoiceDate}
                                 />
                             )}
+                            {tab === 2 && (
+                                <PostEntriesTab
+                                    PostEntries={state.postEntries}
+                                    handlePostEntryChange={handlePostEntryChange}
+                                />
+                            )}
+                            {tab === 3 && (
+                                <CommentsTab
+                                    comments={state.comments}
+                                    dateCancelled={state.dateCancelled}
+                                    cancelledBy={state.cancelledBy}
+                                    cancelledReason={state.cancelledReason}
+                                    handleFieldChange={handleFieldChange}
+
+                                />
+                            )}
+
+
+
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons
                                     saveDisabled={viewing() || impbookInvalid()}

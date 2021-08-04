@@ -20,12 +20,21 @@ export default function importBookReducer(state = initialState, action) {
                 [action.fieldName]: action.payload
             };
         case 'orderDetailFieldChange':
-            // const newDetail = ;
+            const newDetail = action.payload;
             return {
                 ...state,
                 orderDetails: {
                     ...state.orderDetails.filter(x => x.lineNumber !== action.lineNumber),
-                    action.payload
+                    newDetail
+                }
+            };
+        case 'postEntryFieldChange':
+            const newEntry = action.payload;
+            return {
+                ...state,
+                postEntries: {
+                    ...state.postEntries.filter(x => x.lineNumber !== action.lineNumber),
+                    newEntry
                 }
             };
         default:

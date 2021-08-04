@@ -4,8 +4,8 @@ import OrderDetailsTab from '../../../components/importBooks/tabs/OrderDetailsTa
 import cpcNumbersActions from '../../../actions/impbookCpcNumbersActions';
 import cpcNumbersSelectors from '../../../selectors/impbookCpcNumbersSelectors';
 
-const mapStateToProps = () => ({
-    cpcNumbers: cpcNumbersSelectors.getItems()?.map(x => ({
+const mapStateToProps = state => ({
+    cpcNumbers: cpcNumbersSelectors.getItems(state)?.map(x => ({
         displayText: `${x.cpcNumber === 13 ? `${x.cpcNumber} (IPR)` : x.cpcNumber} - ${
             x.description
         }`,
