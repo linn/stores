@@ -39,15 +39,6 @@ function DebitNotes({
 
     const classes = useStyles();
 
-    // useEffect(() => {
-    //     if (items !== prevDebitNotes) {
-    //         if (items) {
-    //             setPrevDebitNotes(items);
-    //             setDebitNotes(items);
-    //         }
-    //     }
-    // }, [items, debitNotes, prevDebitNotes, options]);
-
     useEffect(() => {
         setRows(
             items.map(s => ({
@@ -222,9 +213,6 @@ function DebitNotes({
                         )}
                     </Grid>
                 )}
-                {/* <Grid item xs={12}>
-                    <BackButton backClick={() => history.push('/inventory/dept-stock-parts')} />
-                </Grid> */}
             </Grid>
         </Page>
     );
