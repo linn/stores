@@ -18,7 +18,7 @@ import {
 import PropTypes from 'prop-types';
 import Page from '../../containers/Page';
 
-function DebitNoteUtility({
+function DebitNotes({
     items,
     itemsLoading,
     itemsError,
@@ -140,6 +140,24 @@ function DebitNoteUtility({
                                         propertyName="closeReason"
                                     />
                                 </Grid>
+                                <Grid item xs={2}>
+                                    <Button
+                                        style={{ marginTop: '22px' }}
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => {
+                                            selectedRows.forEach(r =>
+                                                updateDebitNote(r.noteNumber, {
+                                                    ...r,
+                                                    reasonClosed: closeReason
+                                                })
+                                            );
+                                            setDialogOpen(false);
+                                        }}
+                                    >
+                                        Confirm
+                                    </Button>
+                                </Grid>
                             </Grid>
                         </div>
                     </div>
@@ -147,13 +165,16 @@ function DebitNoteUtility({
                 <Grid item xs={12}>
                     <Title text="Open Debit Notes" />
                 </Grid>
-                {/* {itemError && (
+                {updateDebitNoteError && (
                     <Grid item xs={12}>
                         <ErrorCard
-                            errorMessage={itemError?.details?.errors?.[0] || itemError.statusText}
+                            errorMessage={
+                                updateDebitNoteError?.details?.errors?.[0] ||
+                                updateDebitNoteError.statusText
+                            }
                         />
                     </Grid>
-                )} */}
+                )}
                 {itemsLoading || debitNoteLoading ? (
                     <Grid item xs={12}>
                         <Loading />
@@ -188,8 +209,8 @@ function DebitNoteUtility({
                                 <Grid item xs={2}>
                                     <Button
                                         style={{ marginTop: '22px' }}
-                                        variant="contained"
-                                        color="secondary"
+                                        colour="primary"
+                                        variant="outlined"
                                         onClick={() => {
                                             setDialogOpen(true);
                                             //clearErrors();
@@ -212,7 +233,7 @@ function DebitNoteUtility({
     );
 }
 
-DebitNoteUtility.propTypes = {
+DebitNotes.propTypes = {
     items: PropTypes.arrayOf(PropTypes.shape({})),
     itemsLoading: PropTypes.bool,
     debitNoteLoading: PropTypes.bool,
@@ -230,7 +251,7 @@ DebitNoteUtility.propTypes = {
     history: PropTypes.shape({ push: PropTypes.func }).isRequired
 };
 
-DebitNoteUtility.defaultProps = {
+DebitNotes.defaultProps = {
     itemsLoading: false,
     items: [],
     debitNoteLoading: false,
@@ -238,4 +259,4 @@ DebitNoteUtility.defaultProps = {
     itemError: null
 };
 
-export default DebitNoteUtility;
+export default DebitNotes;

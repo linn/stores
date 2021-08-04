@@ -5,13 +5,15 @@ import debitNotesActions from '../../actions/purchasing/debitNotesActions';
 import debitNoteActions from '../../actions/purchasing/debitNoteActions';
 import debitNoteSelectors from '../../selectors/purchasing/debitNoteSelectors';
 import debitNotesSelectors from '../../selectors/purchasing/debitNotesSelectors';
-import { debitNotes } from '../../itemTypes';
+import { debitNotes, debitNote } from '../../itemTypes';
 
 const mapStateToProps = state => ({
     items: debitNotesSelectors.getItems(state),
     itemsLoading: debitNotesSelectors.getLoading(state),
     snackbarVisible: debitNoteSelectors.getSnackbarVisible(state),
-    itemsError: getItemError(state, debitNotes.item)
+    itemsError: getItemError(state, debitNotes.item),
+    updateDebitNoteError: getItemError(state, debitNote.item),
+    debitNoteLoading: debitNoteSelectors.getLoading(state)
 });
 
 const initialise = () => dispatch => {

@@ -1,13 +1,18 @@
 ﻿namespace Linn.Stores.Service.Modules.Purchasing
 {
+    using System;
+    using System.Linq;
+
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Purchasing;
     using Linn.Stores.Resources.Purchasing;
     using Linn.Stores.Resources.RequestResources;
+    using Linn.Stores.Service.Extensions;
     using Linn.Stores.Service.Models;
 
     using Nancy;
     using Nancy.ModelBinding;
+    using Nancy.Security;
 
     public sealed class PurchasingModule : NancyModule
     {
@@ -38,11 +43,21 @@
 
         private object UpdateDebitNote(int id)
         {
-            // todo - any auth?
+            this.RequiresAuthentication();
             var resource = this.Bind<PlCreditDebitNoteResource>();
-            var result = this.service.Update(id, resource);
-            return this.Negotiate.WithModel(result)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+            resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
+            var closedByUri = this.Context.CurrentUser.GetEmployeeUri();
+            resource.ClosedBy = int.Parse(closedByUri.Split("/").Last());
+            try
+            {
+                var result = this.service.Update(id, resource);
+                return this.Negotiate.WithModel(result)
+                    .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+            }
+            catch (Exception e)
+            {
+                return new BadRequestResult<PlCreditDebitNote>(e.Message);
+            }
         }
     }
 }

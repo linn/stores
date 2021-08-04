@@ -3,6 +3,7 @@
     using System;
     using System.Linq.Expressions;
 
+    using Linn.Common.Authorisation;
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Purchasing;
@@ -11,9 +12,12 @@
     public class PlCreditDebitNoteService : 
         FacadeFilterService<PlCreditDebitNote, int, PlCreditDebitNoteResource, PlCreditDebitNoteResource, PlCreditDebitNoteResource>
     {
-        public PlCreditDebitNoteService(IRepository<PlCreditDebitNote, int> repository, ITransactionManager transactionManager)
+        private readonly IAuthorisationService authService;
+
+        public PlCreditDebitNoteService(IRepository<PlCreditDebitNote, int> repository, ITransactionManager transactionManager, IAuthorisationService authService)
             : base(repository, transactionManager)
         {
+            this.authService = authService;
         }
 
         protected override PlCreditDebitNote CreateFromResource(PlCreditDebitNoteResource resource)
@@ -23,6 +27,11 @@
 
         protected override void UpdateFromResource(PlCreditDebitNote entity, PlCreditDebitNoteResource updateResource)
         {
+            if (!this.authService.HasPermissionFor("pl-credit-debit-note.update", updateResource.UserPrivileges))
+            {
+                throw new Exception("You are not authorised to update credit/debit notes");
+            }
+
             entity.DateClosed = DateTime.Today;
             entity.ClosedBy = updateResource.ClosedBy;
             entity.ReasonClosed = updateResource.ReasonClosed;

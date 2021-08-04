@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Resources.Purchasing
 {
+    using System.Collections.Generic;
+
     public class PlCreditDebitNoteResource
     {
         public int NoteNumber { get; set; }
@@ -27,5 +29,7 @@
         public int? SupplierId { get; set; }
 
         public string SupplierName { get; set; }
+
+        public IEnumerable<string> UserPrivileges { get; set; }
     }
 }
