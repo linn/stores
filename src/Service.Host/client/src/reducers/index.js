@@ -110,6 +110,8 @@ import impbookDeliveryTerms from './importBooks/impbookDeliveryTerms';
 import ports from './importBooks/ports';
 import cartonTypes from './cartonTypes';
 import validatePurchaseOrderBookInQtyResult from './validatePurchaseOrderBookInQtyResult';
+import debitNote from './purchasing/debitNote';
+import debitNotes from './purchasing/debitNotes';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -133,6 +135,8 @@ const rootReducer = history =>
         consignmentShipfiles,
         countries,
         createAuditReqs,
+        debitNote,
+        debitNotes,
         demLocations,
         departments,
         decrementRules,

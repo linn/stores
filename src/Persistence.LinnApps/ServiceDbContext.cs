@@ -5,11 +5,12 @@
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
-    using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.ExportBooks;
+    using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
+    using Linn.Stores.Domain.LinnApps.Purchasing;
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
@@ -19,6 +20,7 @@
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation;
+
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
 
@@ -225,6 +227,8 @@
 
         public DbSet<GoodsInLogEntry> GoodsInLog { get; set; }
 
+        public DbSet<PlCreditDebitNote> PlCreditDebitNotes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -330,6 +334,7 @@
             this.BuildCartonTypes(builder);
             this.BuildGoodsInLog(builder);
             this.BuildExportBooks(builder);
+            this.BuildPlCreditDebitNotes(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1884,6 +1889,25 @@
             table.HasKey(a => a.ExportId);
             table.Property(a => a.ExportId).HasColumnName("EXPBOOK_ID");
             table.Property(a => a.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+        }
+
+        private void BuildPlCreditDebitNotes(ModelBuilder builder)
+        {
+            var entity = builder.Entity<PlCreditDebitNote>().ToTable("PL_CREDIT_DEBIT_NOTES");
+            entity.HasKey(a => a.NoteNumber);
+            entity.Property(a => a.NoteNumber).HasColumnName("CDNOTE_ID");
+            entity.Property(a => a.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            entity.Property(a => a.OrderQty).HasColumnName("ORDER_QTY");
+            entity.Property(a => a.ClosedBy).HasColumnName("CLOSED_BY");
+            entity.Property(a => a.DateClosed).HasColumnName("DATE_CLOSED");
+            entity.Property(a => a.NetTotal).HasColumnName("NET_TOTAL");
+            entity.Property(a => a.NoteType).HasColumnName("CDNOTE_TYPE").HasMaxLength(1);
+            entity.Property(a => a.OriginalOrderNumber).HasColumnName("ORIGINAL_ORDER_NUMBER");
+            entity.Property(a => a.ReturnsOrderNumber).HasColumnName("RETURNS_ORDER_NUMBER");
+            entity.Property(a => a.Notes).HasColumnName("NOTES").HasMaxLength(200);
+            entity.Property(a => a.ReasonClosed).HasColumnName("REASON_CLOSED").HasMaxLength(2000);
+            entity.Property(a => a.SupplierId).HasColumnName("SUPPLIER_ID");
+            entity.HasOne(a => a.Supplier).WithMany(s => s.PlCreditDebitNotes).HasForeignKey(a => a.SupplierId);
         }
     }
 }
