@@ -162,7 +162,7 @@ function OrderDetailsTab({
         }
     ];
 
-    //todo
+    //todo - implement the below checks to disable fields
     // BEGIN
 //     IF :IMPBOOK_ORDER_DETAIL.LINE_TYPE IN ('PO','RO') THEN
 //     ACTIVATE_FIELD('ORDER_NUMBER');

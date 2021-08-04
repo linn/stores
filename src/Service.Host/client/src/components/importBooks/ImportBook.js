@@ -301,11 +301,8 @@ function ImportBook({
                                     cancelledBy={state.cancelledBy}
                                     cancelledReason={state.cancelledReason}
                                     handleFieldChange={handleFieldChange}
-
                                 />
                             )}
-
-
 
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons
