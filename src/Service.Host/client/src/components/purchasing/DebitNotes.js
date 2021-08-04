@@ -12,7 +12,6 @@ import {
     Loading,
     SnackbarMessage,
     ErrorCard,
-    BackButton,
     InputField
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
@@ -21,14 +20,12 @@ import Page from '../../containers/Page';
 function DebitNotes({
     items,
     itemsLoading,
-    itemsError,
     updateDebitNote,
     updateDebitNoteError,
     debitNoteLoading,
     snackbarVisible,
     setSnackbarVisible
 }) {
-    //const [prevDebitNotes, setPrevDebitNotes] = useState(null);
     const [rows, setRows] = useState([]);
     const [selectedRows, setSelectedRows] = useState([]);
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -107,7 +104,7 @@ function DebitNotes({
         }
     ];
     return (
-        <Page>
+        <Page showBreadcrumbs={false}>
             <SnackbarMessage
                 visible={snackbarVisible}
                 onClose={() => setSnackbarVisible(false)}
@@ -240,15 +237,12 @@ DebitNotes.propTypes = {
     options: PropTypes.shape({ partNumber: PropTypes.string }).isRequired,
     snackbarVisible: PropTypes.bool,
     setSnackbarVisible: PropTypes.func.isRequired,
-    itemError: PropTypes.shape({
-        status: PropTypes.number,
+    history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+    updateDebitNote: PropTypes.func.isRequired,
+    updateDebitNoteError: PropTypes.shape({
         statusText: PropTypes.string,
-        item: PropTypes.string,
-        details: PropTypes.shape({
-            errors: PropTypes.arrayOf(PropTypes.shape({}))
-        })
-    }),
-    history: PropTypes.shape({ push: PropTypes.func }).isRequired
+        details: PropTypes.shape({ errors: PropTypes.arrayOf(PropTypes.string) })
+    })
 };
 
 DebitNotes.defaultProps = {
@@ -256,7 +250,7 @@ DebitNotes.defaultProps = {
     items: [],
     debitNoteLoading: false,
     snackbarVisible: false,
-    itemError: null
+    updateDebitNoteError: null
 };
 
 export default DebitNotes;
