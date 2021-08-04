@@ -201,8 +201,6 @@ function DebitNotes({
                                         variant="outlined"
                                         onClick={() => {
                                             setDialogOpen(true);
-                                            //clearErrors();
-                                            //selectedRows.forEach(r => deleteShipfile(r.id, null));
                                         }}
                                     >
                                         Close Selected
