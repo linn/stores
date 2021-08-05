@@ -279,7 +279,7 @@ function ImportBook({
 
                             {tab === 1 && (
                                 <OrderDetailsTab
-                                    orderDetails={state.orderDetails}
+                                    orderDetails={state.importBookOrderDetails}
                                     handleFieldChange={handleFieldChange}
                                     handleOrderDetailsChange={handleOrderDetailChange}
                                     // remainingTotal,
@@ -290,7 +290,7 @@ function ImportBook({
                             )}
                             {tab === 2 && (
                                 <PostEntriesTab
-                                    PostEntries={state.postEntries}
+                                    postEntries={state.importBookPostEntries}
                                     handlePostEntryChange={handlePostEntryChange}
                                 />
                             )}

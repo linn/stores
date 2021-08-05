@@ -1,21 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import Tooltip from '@material-ui/core/Tooltip';
 import Grid from '@material-ui/core/Grid';
-import {
-    InputField,
-    Dropdown,
-    Typeahead,
-    LinkButton,
-    SearchInputField,
-    SingleEditTable
-} from '@linn-it/linn-form-components-library';
+import { InputField, LinkButton, SingleEditTable } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
 
 function OrderDetailsTab({
     orderDetails,
-    impbookId,
     handleFieldChange,
     remainingTotal,
     remainingDutyTotal,
@@ -24,13 +14,6 @@ function OrderDetailsTab({
     handleOrderDetailChange,
     cpcNumbers
 }) {
-
-    const [supplier, setSupplier] = useState({ id: -1, name: 'loading', country: 'loading' });
-
-    const handleCarrierChange = carrierParam => {
-        handleFieldChange('carrierId', carrierParam.id);
-    };
-
     const updateRow = detail => {
         handleOrderDetailChange(detail.lineNumber, detail);
     };
@@ -157,46 +140,46 @@ function OrderDetailsTab({
             id: 'postDuty',
             type: 'checkbox',
             //todo figure out what this is meant to do - it doesn't seem to be stored in db so must be to run an operation related to the duty?
-            //also check if freightValue is ever needed, it isn't in the old form
+            //also check if freightValue is ever needed, it isn't in the old form but is in the d[]
             editable: false
         }
     ];
 
     //todo - implement the below checks to disable fields
+    //looks like I'll need to edit the shared components to check for disabled with the row
     // BEGIN
-//     IF :IMPBOOK_ORDER_DETAIL.LINE_TYPE IN ('PO','RO') THEN
-//     ACTIVATE_FIELD('ORDER_NUMBER');
-//     DEACTIVATE_FIELD('RSN_NUMBER');
-//     DEACTIVATE_FIELD('LOAN_NUMBER');
-//     DEACTIVATE_FIELD('INS_NUMBER2');
-// ELSIF :IMPBOOK_ORDER_DETAIL.LINE_TYPE = 'RSN' THEN
-//     ACTIVATE_FIELD('RSN_NUMBER');
-//     DEACTIVATE_FIELD('ORDER_NUMBER');
-//     DEACTIVATE_FIELD('LOAN_NUMBER');
-//     DEACTIVATE_FIELD('INS_NUMBER2');
-// ELSIF :IMPBOOK_ORDER_DETAIL.LINE_TYPE = 'LOAN' THEN
-//     ACTIVATE_FIELD('LOAN_NUMBER');
-//     DEACTIVATE_FIELD('RSN_NUMBER');
-//     DEACTIVATE_FIELD('ORDER_NUMBER');
-//     DEACTIVATE_FIELD('INS_NUMBER2');
-// ELSIF :IMPBOOK_ORDER_DETAIL.LINE_TYPE = 'INS' THEN
-//     DEACTIVATE_FIELD('LOAN_NUMBER');
-//     DEACTIVATE_FIELD('RSN_NUMBER');
-//     DEACTIVATE_FIELD('ORDER_NUMBER');
-//     ACTIVATE_FIELD('INS_NUMBER2');
-// ELSE
-//     DEACTIVATE_FIELD('LOAN_NUMBER');
-//     DEACTIVATE_FIELD('RSN_NUMBER');
-//     DEACTIVATE_FIELD('ORDER_NUMBER');
-//     DEACTIVATE_FIELD('INS_NUMBER2');
-// END IF;
+    //     IF :IMPBOOK_ORDER_DETAIL.LINE_TYPE IN ('PO','RO') THEN
+    //     ACTIVATE_FIELD('ORDER_NUMBER');
+    //     DEACTIVATE_FIELD('RSN_NUMBER');
+    //     DEACTIVATE_FIELD('LOAN_NUMBER');
+    //     DEACTIVATE_FIELD('INS_NUMBER2');
+    // ELSIF :IMPBOOK_ORDER_DETAIL.LINE_TYPE = 'RSN' THEN
+    //     ACTIVATE_FIELD('RSN_NUMBER');
+    //     DEACTIVATE_FIELD('ORDER_NUMBER');
+    //     DEACTIVATE_FIELD('LOAN_NUMBER');
+    //     DEACTIVATE_FIELD('INS_NUMBER2');
+    // ELSIF :IMPBOOK_ORDER_DETAIL.LINE_TYPE = 'LOAN' THEN
+    //     ACTIVATE_FIELD('LOAN_NUMBER');
+    //     DEACTIVATE_FIELD('RSN_NUMBER');
+    //     DEACTIVATE_FIELD('ORDER_NUMBER');
+    //     DEACTIVATE_FIELD('INS_NUMBER2');
+    // ELSIF :IMPBOOK_ORDER_DETAIL.LINE_TYPE = 'INS' THEN
+    //     DEACTIVATE_FIELD('LOAN_NUMBER');
+    //     DEACTIVATE_FIELD('RSN_NUMBER');
+    //     DEACTIVATE_FIELD('ORDER_NUMBER');
+    //     ACTIVATE_FIELD('INS_NUMBER2');
+    // ELSE
+    //     DEACTIVATE_FIELD('LOAN_NUMBER');
+    //     DEACTIVATE_FIELD('RSN_NUMBER');
+    //     DEACTIVATE_FIELD('ORDER_NUMBER');
+    //     DEACTIVATE_FIELD('INS_NUMBER2');
+    // END IF;
 
-
-// if :IMPBOOK_ORDER_DETAIL.LINE_TYPE IN ('RSN','RETURNS','LOAN') then
-//  :impbook_order_detail.vat_rate := 0;
-// else
-//      :impbook_order_detail.vat_rate := sales_tax_pack.GET_VAT_RATE_country(:impbook.l_supp_country);
-// end if;
+    // if :IMPBOOK_ORDER_DETAIL.LINE_TYPE IN ('RSN','RETURNS','LOAN') then
+    //  :impbook_order_detail.vat_rate := 0;
+    // else
+    //      :impbook_order_detail.vat_rate := sales_tax_pack.GET_VAT_RATE_country(:impbook.l_supp_country);
+    // end if;
 
     return (
         <>
@@ -236,7 +219,7 @@ function OrderDetailsTab({
                 <Grid item xs={3}>
                     <LinkButton
                         text="Calculate Weights"
-                        // to={`/logistics/parcels/${parcelNumber}`}
+                        //todo to={`/logistics/`}
                         disabled
                         external
                     />
@@ -255,7 +238,7 @@ function OrderDetailsTab({
                 <Grid item xs={3}>
                     <LinkButton
                         text="Post Duty"
-                        // to={`/logistics/parcels/${parcelNumber}`}
+                        //todo to={`/logistics/`}
                         disabled
                         external
                     />
@@ -278,7 +261,13 @@ function OrderDetailsTab({
 
 OrderDetailsTab.propTypes = {
     orderDetails: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    handleFieldChange: PropTypes.func.isRequired
+    handleFieldChange: PropTypes.func.isRequired,
+    remainingTotal: PropTypes.number.isRequired,
+    remainingDutyTotal: PropTypes.number.isRequired,
+    remainingWeight: PropTypes.number.isRequired,
+    invoiceDate: PropTypes.string.isRequired,
+    handleOrderDetailChange: PropTypes.func.isRequired,
+    cpcNumbers: PropTypes.arrayOf(PropTypes.shape({})).isRequired
 };
 
 OrderDetailsTab.defaultProps = {};
