@@ -79,9 +79,9 @@
                            CreatedBy = model.CreatedBy,
                            PortCode = model.PortCode,
                            CustomsEntryCodePrefix = model.CustomsEntryCodePrefix,
-                           ImportBookPostEntries = this.postEntriesResourceBuilder.Build(model.PostEntries),
-                           ImportBookOrderDetails = this.orderDetailsResourceBuilder.Build(model.OrderDetails),
-                           ImportBookInvoiceDetails = this.invoiceDetailsResourceBuilder.Build(model.InvoiceDetails),
+                           ImportBookPostEntries = model.PostEntries != null ? this.postEntriesResourceBuilder.Build(model.PostEntries) : new List<ImportBookPostEntryResource>(),
+                           ImportBookOrderDetails = model.OrderDetails != null ? this.orderDetailsResourceBuilder.Build(model.OrderDetails) : new List<ImportBookOrderDetailResource>(),
+                           ImportBookInvoiceDetails = model.InvoiceDetails != null ? this.invoiceDetailsResourceBuilder.Build(model.InvoiceDetails) : new List<ImportBookInvoiceDetailResource>(),
                            Links = this.BuildLinks(model).ToArray()
                        };
         }
