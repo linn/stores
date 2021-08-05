@@ -41,7 +41,6 @@ function OrderDetailsTab({
             title: 'Line Type',
             id: 'lineType',
             type: 'dropdown',
-            //fill out options
             options: ['PO', 'RSN', 'RETURNS', 'RO', 'LOAN', 'SAMPLES', 'SUNDRY', 'INS'],
             editable: false
         },
@@ -128,11 +127,11 @@ function OrderDetailsTab({
             id: 'cpcNumber',
             type: 'dropdown',
             options: cpcNumbers
-            //todo fill out this with dropdown
-            //include something to make it obvious that the one with id 13 is IPR
-            // and not the very similar code with extra 0s - an extra badge or "IPR" button to set it to id 13?
+            //todo check that this works when editing is sorted & that
+            // "IPR" text for id 13 is obvious enough to prevent mistakes
+            // if not maybe consider a popup or an IPR button to fill in the IPR cpc number
 
-            //todo work out if need below when I just want it to act like every other field
+            //also work out if need below when I just want it to act like every other field
             //selectSearchResult: update
         },
         {

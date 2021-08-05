@@ -282,6 +282,7 @@ function ImportBook({
                                     orderDetails={state.importBookOrderDetails}
                                     handleFieldChange={handleFieldChange}
                                     handleOrderDetailsChange={handleOrderDetailChange}
+                                    //todo - work out where below fields should come from and populate them
                                     // remainingTotal,
                                     // remainingDutyTotal,
                                     // remainingWeight,
