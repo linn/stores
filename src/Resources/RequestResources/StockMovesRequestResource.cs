@@ -1,9 +1,7 @@
 ﻿namespace Linn.Stores.Resources.RequestResources
 {
-    public class StockMovesRequestResource
+    public class StockMovesRequestResource : SearchRequestResource
     {
-        public string PartNumber { get; set; }
-
         public int? PalletNumber { get; set; }
 
         public int? LocationId { get; set; }

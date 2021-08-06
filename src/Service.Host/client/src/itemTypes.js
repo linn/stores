@@ -395,3 +395,9 @@ export const debitNotes = new ItemType(
     'DEBIT_NOTES',
     '/inventory/purchasing/debit-notes'
 );
+
+export const stockMoves = new ItemType(
+    'stockMoves',
+    'STOCK-MOVES',
+    '/inventory/stock-locators/stock-moves'
+);

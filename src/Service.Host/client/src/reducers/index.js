@@ -112,6 +112,7 @@ import cartonTypes from './cartonTypes';
 import validatePurchaseOrderBookInQtyResult from './validatePurchaseOrderBookInQtyResult';
 import debitNote from './purchasing/debitNote';
 import debitNotes from './purchasing/debitNotes';
+import stockMoves from './stockLocators/stockMoves';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -200,6 +201,7 @@ const rootReducer = history =>
         stockLocatorLocations,
         stockLocatorPrices,
         stockLocators,
+        stockMoves,
         stockPools,
         stockQuantities,
         storageLocations,
