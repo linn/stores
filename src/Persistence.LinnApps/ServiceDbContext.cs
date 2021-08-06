@@ -1403,6 +1403,7 @@
             r.HasKey(l => l.ReqNumber);
             r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
             r.Property(l => l.Document1).HasColumnName("DOCUMENT_1");
+            r.Property(l => l.DateCreated).HasColumnName("DATE_CREATED");
             r.HasMany(t => t.Lines).WithOne().HasForeignKey(requisitionLine => requisitionLine.ReqNumber);
             r.HasMany(h => h.Moves).WithOne(m => m.Header).HasForeignKey(h => h.ReqNumber);
         }

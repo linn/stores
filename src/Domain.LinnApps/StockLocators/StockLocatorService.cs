@@ -304,7 +304,7 @@
                         l.PartNumber == partNumber
                         && (l.PalletNumber == palletNumber)
                         && l.QuantityAllocated > 0)
-                    .Select(l => l.Id);
+                    .Select(l => l.Id).ToList();
             }
             else
             {
@@ -312,7 +312,7 @@
                         l.PartNumber == partNumber
                         && l.LocationId == locationId
                         && l.QuantityAllocated > 0)
-                    .Select(l => l.Id);
+                    .Select(l => l.Id).ToList();
             }
             
             return this.reqMoveRepository.FilterBy(m 
@@ -320,7 +320,7 @@
                    && locators.Contains((int)m.StockLocatorId)
                    && m.DateBooked == null
                    && m.DateCancelled == null)
-                .Select(m => new StockMove(m));
+                .Select(m => new StockMove(m)).ToList();
         }
     }
 }
