@@ -292,5 +292,35 @@
                      && (batchDate == null || x.BatchDate.Value.Date.Equals(batchDate.Value.Date))
                      && (string.IsNullOrEmpty(state) || x.State == state));
         }
+
+        public IEnumerable<StockMove> GetMoves(string partNumber, int? palletNumber, int? locationId)
+        {
+            IEnumerable<int> locators;
+
+            // this could be done in way less lines
+            if (palletNumber != null)
+            {
+                locators = this.stockLocatorRepository.FilterBy(l =>
+                        l.PartNumber == partNumber
+                        && (l.PalletNumber == palletNumber)
+                        && l.QuantityAllocated > 0)
+                    .Select(l => l.Id);
+            }
+            else
+            {
+                locators = this.stockLocatorRepository.FilterBy(l =>
+                        l.PartNumber == partNumber
+                        && l.LocationId == locationId
+                        && l.QuantityAllocated > 0)
+                    .Select(l => l.Id);
+            }
+            
+            return this.reqMoveRepository.FilterBy(m 
+                => m.StockLocatorId.HasValue 
+                   && locators.Contains((int)m.StockLocatorId)
+                   && m.DateBooked == null
+                   && m.DateCancelled == null)
+                .Select(m => new StockMove(m));
+        }
     }
 }

@@ -8,6 +8,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Requisitions;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class ReqMovesRepository : IRepository<ReqMove, ReqMoveKey>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -29,7 +31,9 @@
 
         public IQueryable<ReqMove> FilterBy(Expression<Func<ReqMove, bool>> expression)
         {
-            return this.serviceDbContext.ReqMoves.Where(expression);
+            return this.serviceDbContext.ReqMoves.Where(expression)
+                .Include(m => m.Header)
+                .ThenInclude(h => h.Lines);
         }
 
         public ReqMove FindById(ReqMoveKey key)

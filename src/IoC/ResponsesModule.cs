@@ -222,6 +222,9 @@
                 .As<IResourceBuilder<PlCreditDebitNote>>();
             builder.RegisterType<PlCreditDebitNotesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<PlCreditDebitNote>>>();
+            builder.RegisterType<StockMoveResourceBuilder>().As<IResourceBuilder<StockMove>>();
+            builder.RegisterType<StockMovesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<StockMove>>>();
         }
     }
 }

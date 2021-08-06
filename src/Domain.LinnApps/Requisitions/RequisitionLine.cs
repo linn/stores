@@ -11,5 +11,7 @@
         public string PartNumber { get; set; }
 
         public IEnumerable<ReqMove> Moves { get; set; }
+
+        public string TransactionCode { get; set; }
     }
 }

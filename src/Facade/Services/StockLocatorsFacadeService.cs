@@ -83,6 +83,12 @@
                 searchResource.Category));
         }
 
+        public IResult<IEnumerable<StockMove>> GetMoves(string partNumber, int? palletNumber, int? locationId)
+        {
+            return new SuccessResult<IEnumerable<StockMove>>(
+                this.domainService.GetMoves(partNumber, palletNumber, locationId));
+        }
+
         public IResult<IEnumerable<StockLocator>> FilterBy(StockLocatorResource searchResource)
         {
             throw new NotImplementedException();
