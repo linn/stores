@@ -4,6 +4,10 @@
 
     public class StockMove : ReqMove
     {
+        public StockMove()
+        {
+        }
+
         public StockMove(ReqMove reqMove)
         {
             this.ReqNumber = reqMove.ReqNumber;

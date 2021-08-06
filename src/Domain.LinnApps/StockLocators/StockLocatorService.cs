@@ -297,7 +297,6 @@
         {
             IEnumerable<int> locators;
 
-            // this could be done in way less lines
             if (palletNumber != null)
             {
                 locators = this.stockLocatorRepository.FilterBy(l =>
