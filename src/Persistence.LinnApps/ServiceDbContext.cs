@@ -1403,7 +1403,9 @@
             r.HasKey(l => l.ReqNumber);
             r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
             r.Property(l => l.Document1).HasColumnName("DOCUMENT_1");
+            r.Property(l => l.DateCreated).HasColumnName("DATE_CREATED");
             r.HasMany(t => t.Lines).WithOne().HasForeignKey(requisitionLine => requisitionLine.ReqNumber);
+            r.HasMany(h => h.Moves).WithOne(m => m.Header).HasForeignKey(h => h.ReqNumber);
         }
 
         private void BuildRequisitionLines(ModelBuilder builder)
@@ -1413,6 +1415,7 @@
             r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
             r.Property(l => l.LineNumber).HasColumnName("LINE_NUMBER");
             r.Property(l => l.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            r.Property(l => l.TransactionCode).HasColumnName("TRANSACTION_CODE").HasMaxLength(10);
             r.HasMany(t => t.Moves).WithOne().HasForeignKey(reqMove => new { reqMove.ReqNumber, reqMove.LineNumber });
         }
 
@@ -1432,6 +1435,8 @@
             r.Property(l => l.LocationId).HasColumnName("LOCATION_ID");
             r.Property(l => l.Remarks).HasColumnName("REMARKS").HasMaxLength(2000);
             r.HasOne(l => l.Location).WithMany(s => s.ReqMoves).HasForeignKey(l => l.LocationId);
+            r.Property(l => l.DateBooked).HasColumnName("DATE_BOOKED");
+            r.Property(l => l.DateCancelled).HasColumnName("DATE_CANCELLED");
         }
 
         private void BuildWandLogs(ModelBuilder builder)

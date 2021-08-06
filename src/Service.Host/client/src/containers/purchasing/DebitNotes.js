@@ -22,7 +22,8 @@ const initialise = () => dispatch => {
 
 const mapDispatchToProps = {
     initialise,
-    updateDebitNote: debitNoteActions.update
+    updateDebitNote: debitNoteActions.update,
+    setSnackbarVisible: debitNoteActions.setSnackbarVisible
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(DebitNotes));

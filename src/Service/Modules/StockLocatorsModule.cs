@@ -50,6 +50,7 @@
             this.Get("/inventory/stock-locators-by-location/", _ => this.GetStockLocatorsByLocation());
             this.Get("/inventory/stock-quantities/", _ => this.GetStockQuantities());
             this.Get("/inventory/stock-locators/prices", _ => this.GetPrices());
+            this.Get("/inventory/stock-locators/stock-moves", _ => this.GetMoves());
         }
 
         private object GetStockLocators()
@@ -135,6 +136,15 @@
             var resource = this.Bind<StockLocatorResource>();
 
             return this.Negotiate.WithModel(this.pricesService.GetPrices(resource));
+        }
+
+        private object GetMoves()
+        {
+            var resource = this.Bind<StockMovesRequestResource>();
+            var result = this.service.GetMoves(resource.SearchTerm, resource.PalletNumber, resource.LocationId);
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
     }
 }

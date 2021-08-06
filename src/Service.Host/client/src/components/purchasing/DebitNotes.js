@@ -66,27 +66,27 @@ function DebitNotes({
         {
             headerName: 'Supplier',
             field: 'supplierName',
-            width: 200
+            width: 250
         },
         {
             headerName: 'Qty',
             field: 'orderQty',
-            width: 200
+            width: 100
         },
         {
             headerName: 'Order No',
             field: 'originalOrderNumber',
-            width: 200
+            width: 100
         },
         {
             headerName: 'Returns Order',
             field: 'returnsOrderNumber',
-            width: 200
+            width: 100
         },
         {
             headerName: 'Net Total',
             field: 'netTotal',
-            width: 200
+            width: 100
         },
         {
             headerName: 'Comments',
