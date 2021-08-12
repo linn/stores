@@ -149,7 +149,6 @@ function DebitNotes({
                                             selectedRows.forEach(r =>
                                                 updateDebitNote(r.noteNumber, {
                                                     ...r,
-                                                    notes: null,
                                                     close: true,
                                                     reasonClosed: closeReason
                                                 })
