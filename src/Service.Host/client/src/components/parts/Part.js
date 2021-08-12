@@ -47,10 +47,10 @@ function Part({
         partNumber: '',
         description: '',
         accountingCompany: 'LINN',
-        psuPart: false,
-        stockControlled: true,
-        cccCriticalPart: false,
-        safetyCriticalPart: false,
+        psuPart: 'N',
+        stockControlled: 'N',
+        cccCriticalPart: 'N',
+        safetyCriticalPart: 'N',
         paretoCode: 'U',
         createdBy: userNumber,
         createdByName: userName,
@@ -59,8 +59,8 @@ function Part({
         preferredSupplier: 4415,
         preferredSupplierName: 'Linn Products Ltd',
         qcInformation: '',
-        qcOnReceipt: false,
-        orderHold: false
+        qcOnReceipt: 'N',
+        orderHold: 'N'
     };
     const creating = () => editStatus === 'create';
 
