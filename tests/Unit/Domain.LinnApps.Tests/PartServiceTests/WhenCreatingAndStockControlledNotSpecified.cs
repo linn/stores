@@ -49,7 +49,7 @@
         {
             this.result.Should().BeOfType<CreatePartException>();
             this.result.Message.Should()
-                .Be("Must specify whether part is stock controlled");
+                .Be("Must specify whether part is stock controlled.");
         }
     }
 }

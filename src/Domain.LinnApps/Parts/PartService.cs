@@ -179,7 +179,7 @@
 
             if (string.IsNullOrEmpty(partToCreate.StockControlled))
             {
-                throw new CreatePartException("Must specify whether part is stock controlled");
+                throw new CreatePartException("Must specify whether part is stock controlled.");
             }
 
             var partRoot = this.partPack.PartRoot(partToCreate.PartNumber);
