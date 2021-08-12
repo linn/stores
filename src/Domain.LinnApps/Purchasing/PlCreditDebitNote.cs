@@ -22,6 +22,8 @@
 
         public DateTime? DateClosed { get; set; }
 
+        public DateTime DateCreated { get; set; }
+
         public int? ClosedBy { get; set; }
 
         public string ReasonClosed { get; set; }

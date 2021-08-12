@@ -1913,6 +1913,7 @@
             entity.Property(a => a.ReasonClosed).HasColumnName("REASON_CLOSED").HasMaxLength(2000);
             entity.Property(a => a.SupplierId).HasColumnName("SUPPLIER_ID");
             entity.HasOne(a => a.Supplier).WithMany(s => s.PlCreditDebitNotes).HasForeignKey(a => a.SupplierId);
+            entity.Property(a => a.DateCreated).HasColumnName("DATE_CREATED");
         }
     }
 }

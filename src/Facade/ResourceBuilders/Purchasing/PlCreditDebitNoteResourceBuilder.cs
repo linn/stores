@@ -22,7 +22,8 @@
                            OriginalOrderNumber = note.OriginalOrderNumber,
                            ReturnsOrderNumber = note.ReturnsOrderNumber,
                            Notes = note.Notes,
-                           SupplierName = note.Supplier?.Name
+                           SupplierName = note.Supplier?.Name,
+                           DateCreated = note.DateCreated.ToShortDateString()
                        };
         }
 
