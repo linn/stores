@@ -62,8 +62,7 @@ function DebitNotes({
         {
             headerName: '#',
             field: 'noteNumber',
-            width: 100,
-            hide: true
+            width: 100
         },
         {
             headerName: 'Part',
