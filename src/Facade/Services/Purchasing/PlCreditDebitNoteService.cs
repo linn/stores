@@ -32,9 +32,16 @@
                 throw new Exception("You are not authorised to update credit/debit notes");
             }
 
-            entity.DateClosed = DateTime.Today;
-            entity.ClosedBy = updateResource.ClosedBy;
-            entity.ReasonClosed = updateResource.ReasonClosed;
+            if (string.IsNullOrEmpty(updateResource.Notes))
+            {
+                entity.DateClosed = DateTime.Today;
+                entity.ClosedBy = updateResource.ClosedBy;
+                entity.ReasonClosed = updateResource.ReasonClosed;
+            }
+            else
+            {
+                entity.Notes = updateResource.Notes;
+            }
         }
 
         protected override Expression<Func<PlCreditDebitNote, bool>> SearchExpression(string searchTerm)

@@ -31,5 +31,7 @@
         public string SupplierName { get; set; }
 
         public IEnumerable<string> UserPrivileges { get; set; }
+
+        public string DateCreated { get; set; }
     }
 }

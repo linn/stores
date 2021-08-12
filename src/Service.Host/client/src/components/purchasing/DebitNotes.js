@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { DataGrid } from '@material-ui/data-grid';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import makeStyles from '@material-ui/styles/makeStyles';
+import { DataGrid } from '@material-ui/data-grid';
 import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -29,11 +29,17 @@ function DebitNotes({
     const [rows, setRows] = useState([]);
     const [selectedRows, setSelectedRows] = useState([]);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [commentsDialogOpen, setCommentsDialogOpen] = useState(false);
+
     const [closeReason, setCloseReason] = useState('');
+    const [comments, setComments] = useState('');
     const useStyles = makeStyles(theme => ({
         dialog: {
             margin: theme.spacing(6),
             minWidth: theme.spacing(62)
+        },
+        total: {
+            float: 'right'
         }
     }));
 
@@ -56,12 +62,18 @@ function DebitNotes({
         {
             headerName: '#',
             field: 'noteNumber',
-            width: 100
+            width: 100,
+            hide: true
         },
         {
             headerName: 'Part',
             field: 'partNumber',
-            width: 200
+            width: 150
+        },
+        {
+            headerName: 'Created',
+            field: 'dateCreated',
+            width: 150
         },
         {
             headerName: 'Supplier',
@@ -81,12 +93,12 @@ function DebitNotes({
         {
             headerName: 'Returns Order',
             field: 'returnsOrderNumber',
-            width: 100
+            width: 200
         },
         {
             headerName: 'Net Total',
             field: 'netTotal',
-            width: 100
+            width: 200
         },
         {
             headerName: 'Comments',
@@ -137,6 +149,7 @@ function DebitNotes({
                                             selectedRows.forEach(r =>
                                                 updateDebitNote(r.noteNumber, {
                                                     ...r,
+                                                    notes: null,
                                                     reasonClosed: closeReason
                                                 })
                                             );
@@ -150,6 +163,55 @@ function DebitNotes({
                         </div>
                     </div>
                 </Dialog>
+
+                <Dialog open={commentsDialogOpen} fullWidth maxWidth="md">
+                    <div>
+                        <IconButton
+                            className={classes.pullRight}
+                            aria-label="Close"
+                            onClick={() => setCommentsDialogOpen(false)}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <div className={classes.dialog}>
+                            <Grid container spacing={3}>
+                                <Grid item xs={12}>
+                                    <Typography variant="h5" gutterBottom>
+                                        Edit Comments
+                                    </Typography>
+                                </Grid>
+
+                                <Grid item xs={12}>
+                                    <InputField
+                                        fullWidth
+                                        value={comments}
+                                        onChange={(_, newValue) => setComments(newValue)}
+                                        label="Comments"
+                                        propertyName="comments"
+                                    />
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <Button
+                                        style={{ marginTop: '22px' }}
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => {
+                                            updateDebitNote(selectedRows[0].noteNumber, {
+                                                ...selectedRows[0],
+                                                notes: comments
+                                            });
+
+                                            setCommentsDialogOpen(false);
+                                        }}
+                                    >
+                                        Save
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </div>
+                    </div>
+                </Dialog>
+
                 <Grid item xs={12}>
                     <Title text="Open Debit Notes" />
                 </Grid>
@@ -168,7 +230,7 @@ function DebitNotes({
                         <Loading />
                     </Grid>
                 ) : (
-                    <Grid item xs={12}>
+                    <>
                         {rows && (
                             <>
                                 <Grid item xs={12}>
@@ -207,9 +269,39 @@ function DebitNotes({
                                     </Button>
                                 </Grid>
                                 <Grid item xs={10} />
+                                <Grid item xs={4}>
+                                    <Button
+                                        style={{ marginTop: '22px' }}
+                                        colour="primary"
+                                        variant="outlined"
+                                        disabled={selectedRows.length !== 1}
+                                        onClick={() => {
+                                            setComments(selectedRows[0].notes);
+                                            setCommentsDialogOpen(true);
+                                        }}
+                                    >
+                                        Edit Comments of Selected
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={4} />
+                                <Grid item xs={4}>
+                                    <Typography
+                                        className={classes.dialog}
+                                        variant="h5"
+                                        gutterBottom
+                                    >
+                                        Total Outstanding: £
+                                        {rows.length > 0
+                                            ? rows
+                                                  .map(r => r.netTotal)
+                                                  .reduce((a, b) => a + b, 0)
+                                                  .toFixed(2)
+                                            : ''}
+                                    </Typography>
+                                </Grid>
                             </>
                         )}
-                    </Grid>
+                    </>
                 )}
             </Grid>
         </Page>
