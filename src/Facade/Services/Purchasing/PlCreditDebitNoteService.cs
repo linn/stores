@@ -32,7 +32,7 @@
                 throw new Exception("You are not authorised to update credit/debit notes");
             }
 
-            if (string.IsNullOrEmpty(updateResource.Notes))
+            if (updateResource.Close.GetValueOrDefault())
             {
                 entity.DateClosed = DateTime.Today;
                 entity.ClosedBy = updateResource.ClosedBy;

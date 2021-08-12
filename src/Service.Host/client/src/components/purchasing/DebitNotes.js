@@ -149,7 +149,7 @@ function DebitNotes({
                                             selectedRows.forEach(r =>
                                                 updateDebitNote(r.noteNumber, {
                                                     ...r,
-                                                    notes: null,
+                                                    close: true,
                                                     reasonClosed: closeReason
                                                 })
                                             );
@@ -200,7 +200,7 @@ function DebitNotes({
                                                 ...selectedRows[0],
                                                 notes: comments
                                             });
-
+                                            setSelectedRows([]);
                                             setCommentsDialogOpen(false);
                                         }}
                                     >

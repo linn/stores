@@ -33,5 +33,7 @@
         public IEnumerable<string> UserPrivileges { get; set; }
 
         public string DateCreated { get; set; }
+
+        public bool? Close { get; set; }
     }
 }
