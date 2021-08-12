@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DataGrid } from '@material-ui/data-grid';
+import { columnMenuStateSelector, DataGrid } from '@material-ui/data-grid';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import makeStyles from '@material-ui/styles/makeStyles';
@@ -29,7 +29,10 @@ function DebitNotes({
     const [rows, setRows] = useState([]);
     const [selectedRows, setSelectedRows] = useState([]);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [commentsDialogOpen, setCommentsDialogOpen] = useState(false);
+
     const [closeReason, setCloseReason] = useState('');
+    const [comments, setComments] = useState('');
     const useStyles = makeStyles(theme => ({
         dialog: {
             margin: theme.spacing(6),
@@ -150,6 +153,55 @@ function DebitNotes({
                         </div>
                     </div>
                 </Dialog>
+
+                <Dialog open={commentsDialogOpen} fullWidth maxWidth="md">
+                    <div>
+                        <IconButton
+                            className={classes.pullRight}
+                            aria-label="Close"
+                            onClick={() => setCommentsDialogOpen(false)}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <div className={classes.dialog}>
+                            <Grid container spacing={3}>
+                                <Grid item xs={12}>
+                                    <Typography variant="h5" gutterBottom>
+                                        Edit Comments
+                                    </Typography>
+                                </Grid>
+
+                                <Grid item xs={12}>
+                                    <InputField
+                                        fullWidth
+                                        value={comments}
+                                        onChange={(_, newValue) => setComments(newValue)}
+                                        label="Comments"
+                                        propertyName="comments"
+                                    />
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <Button
+                                        style={{ marginTop: '22px' }}
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => {
+                                            updateDebitNote(selectedRows[0].noteNumber, {
+                                                ...selectedRows[0],
+                                                notes: comments
+                                            });
+
+                                            setCommentsDialogOpen(false);
+                                        }}
+                                    >
+                                        Save
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </div>
+                    </div>
+                </Dialog>
+
                 <Grid item xs={12}>
                     <Title text="Open Debit Notes" />
                 </Grid>
@@ -206,7 +258,21 @@ function DebitNotes({
                                         Close Selected
                                     </Button>
                                 </Grid>
-                                <Grid item xs={10} />
+                                <Grid item xs={2}>
+                                    <Button
+                                        style={{ marginTop: '22px' }}
+                                        colour="primary"
+                                        variant="outlined"
+                                        disabled={selectedRows.length !== 1}
+                                        onClick={() => {
+                                            setComments(selectedRows[0].notes);
+                                            setCommentsDialogOpen(true);
+                                        }}
+                                    >
+                                        Edit Comments of Selected
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={8} />
                             </>
                         )}
                     </Grid>
