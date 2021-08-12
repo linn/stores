@@ -70,12 +70,39 @@ function Part({
     });
 
     useEffect(() => {
-        if (copy && state.part?.linnProduced === 'N') {
+        if (copy) {
             dispatch({
                 type: 'fieldChange',
-                fieldName: 'preferredSupplier',
-                payload: { name: null, description: null }
+                fieldName: 'currencyUnitPrice',
+                payload: null
             });
+            dispatch({
+                type: 'fieldChange',
+                fieldName: 'baseUnitPrice',
+                payload: null
+            });
+            dispatch({
+                type: 'fieldChange',
+                fieldName: 'materialPrice',
+                payload: null
+            });
+            dispatch({
+                type: 'fieldChange',
+                fieldName: 'labourPrice',
+                payload: null
+            });
+            dispatch({
+                type: 'fieldChange',
+                fieldName: 'costingPrice',
+                payload: null
+            });
+            if (state.part?.linnProduced === 'N') {
+                dispatch({
+                    type: 'fieldChange',
+                    fieldName: 'preferredSupplier',
+                    payload: { name: null, description: null }
+                });
+            }
         }
     }, [copy, state.part.linnProduced]);
 
