@@ -35,5 +35,6 @@
         public string DateCreated { get; set; }
 
         public bool? Close { get; set; }
+
     }
 }
