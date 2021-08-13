@@ -47,7 +47,10 @@ function Consignment({
     itemError,
     clearConsignmentErrors,
     cartonTypes,
-    userNumber
+    userNumber,
+    printCartonLabel,
+    printCartonLabelWorking,
+    printCartonLabelResult
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
     const [editablePallets, setEditablePallets] = useState([]);
@@ -385,7 +388,13 @@ Consignment.propTypes = {
     cartonTypes: PropTypes.arrayOf(
         PropTypes.shape({ cartonTypeName: PropTypes.string, description: PropTypes.string })
     ),
-    userNumber: PropTypes.number.isRequired
+    userNumber: PropTypes.number.isRequired,
+    printCartonLabelWorking: PropTypes.bool,
+    printCartonLabel: PropTypes.func.isRequired,
+    printCartonLabelResult: PropTypes.shape({
+        success: PropTypes.bool,
+        message: PropTypes.string
+    })
 };
 
 Consignment.defaultProps = {
@@ -406,7 +415,9 @@ Consignment.defaultProps = {
     shippingTerms: [],
     shippingTermsLoading: false,
     itemError: null,
-    cartonTypes: []
+    cartonTypes: [],
+    printCartonLabelWorking: false,
+    printCartonLabelResult: null
 };
 
 export default Consignment;

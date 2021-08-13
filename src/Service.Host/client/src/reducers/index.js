@@ -113,6 +113,7 @@ import validatePurchaseOrderBookInQtyResult from './validatePurchaseOrderBookInQ
 import debitNote from './purchasing/debitNote';
 import debitNotes from './purchasing/debitNotes';
 import stockMoves from './stockLocators/stockMoves';
+import printCartonLabel from './printCartonLabel';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -184,6 +185,7 @@ const rootReducer = history =>
         partTemplates,
         pickItemsAllocation,
         ports,
+        printCartonLabel,
         productAnalysisCodes,
         reqMoves,
         rootProducts,
