@@ -15,7 +15,7 @@
 
     using NUnit.Framework;
 
-    public class WhenCreatingAndPartNumberAlreadyInUse : ContextBase
+    public class WhenCreatingAndStockControlledNotSpecified : ContextBase
     {
         private Part part;
 
@@ -26,7 +26,7 @@
         [SetUp]
         public void SetUp()
         {
-            this.part = new Part { StockControlled = "N" };
+            this.part = new Part { StockControlled = null };
             this.privileges = new List<string> { "part.admin" };
 
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
@@ -49,7 +49,7 @@
         {
             this.result.Should().BeOfType<CreatePartException>();
             this.result.Message.Should()
-                .Be("A Part with that Part Number already exists.");
+                .Be("Must specify whether part is stock controlled.");
         }
     }
 }

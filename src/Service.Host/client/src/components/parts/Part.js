@@ -47,10 +47,10 @@ function Part({
         partNumber: '',
         description: '',
         accountingCompany: 'LINN',
-        psuPart: false,
-        stockControlled: true,
-        cccCriticalPart: false,
-        safetyCriticalPart: false,
+        psuPart: 'N',
+        stockControlled: 'N',
+        cccCriticalPart: 'N',
+        safetyCriticalPart: 'N',
         paretoCode: 'U',
         createdBy: userNumber,
         createdByName: userName,
@@ -59,8 +59,8 @@ function Part({
         preferredSupplier: 4415,
         preferredSupplierName: 'Linn Products Ltd',
         qcInformation: '',
-        qcOnReceipt: false,
-        orderHold: false
+        qcOnReceipt: 'N',
+        orderHold: 'N'
     };
     const creating = () => editStatus === 'create';
 
@@ -70,12 +70,39 @@ function Part({
     });
 
     useEffect(() => {
-        if (copy && state.part?.linnProduced === 'N') {
+        if (copy) {
             dispatch({
                 type: 'fieldChange',
-                fieldName: 'preferredSupplier',
-                payload: { name: null, description: null }
+                fieldName: 'currencyUnitPrice',
+                payload: null
             });
+            dispatch({
+                type: 'fieldChange',
+                fieldName: 'baseUnitPrice',
+                payload: null
+            });
+            dispatch({
+                type: 'fieldChange',
+                fieldName: 'materialPrice',
+                payload: null
+            });
+            dispatch({
+                type: 'fieldChange',
+                fieldName: 'labourPrice',
+                payload: null
+            });
+            dispatch({
+                type: 'fieldChange',
+                fieldName: 'costingPrice',
+                payload: null
+            });
+            if (state.part?.linnProduced === 'N') {
+                dispatch({
+                    type: 'fieldChange',
+                    fieldName: 'preferredSupplier',
+                    payload: { name: null, description: null }
+                });
+            }
         }
     }, [copy, state.part.linnProduced]);
 
