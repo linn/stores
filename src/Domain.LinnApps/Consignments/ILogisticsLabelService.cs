@@ -4,6 +4,11 @@
 
     public interface ILogisticsLabelService
     {
-        ProcessResult PrintCartonLabel(int consignmentId, int firstCarton, int? lastCarton, int userNumber);
+        ProcessResult PrintCartonLabel(
+            int consignmentId,
+            int firstCarton,
+            int? lastCarton,
+            int userNumber,
+            int numberOfCopies = 1);
     }
 }

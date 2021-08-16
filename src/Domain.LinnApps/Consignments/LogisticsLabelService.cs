@@ -25,9 +25,15 @@
             this.printerMappingRepository = printerMappingRepository;
         }
 
-        public ProcessResult PrintCartonLabel(int consignmentId, int firstCarton, int? lastCarton, int userNumber)
+        public ProcessResult PrintCartonLabel(
+            int consignmentId,
+            int firstCarton,
+            int? lastCarton,
+            int userNumber,
+            int numberOfCopies = 1)
         {
             var consignment = this.consignmentRepository.FindById(consignmentId);
+            var labelCount = 0;
 
             if (!lastCarton.HasValue)
             {
@@ -43,13 +49,15 @@
                 this.bartenderLabelPack.PrintLabels(
                     $"CartonLabel{consignmentId}item{i}",
                     printerName,
-                    1,
+                    numberOfCopies,
                     "dispatchaddress.btw",
                     labelData,
                     ref labelMessage);
+
+                labelCount += numberOfCopies;
             }
 
-            return new ProcessResult(true, "ok");
+            return new ProcessResult(true, $"{labelCount} carton label(s) printed");
         }
 
         private string GetLabelInformation(Consignment consignment, int cartonNumber)

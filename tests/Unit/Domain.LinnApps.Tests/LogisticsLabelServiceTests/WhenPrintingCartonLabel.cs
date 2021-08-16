@@ -50,7 +50,7 @@
         [Test]
         public void ShouldReturnResult()
         {
-            this.result.Message.Should().Be("ok");
+            this.result.Message.Should().Be("1 carton label(s) printed");
             this.result.Success.Should().BeTrue();
         }
     }

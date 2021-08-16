@@ -88,7 +88,8 @@ const mapDispatchToProps = {
     getCarrier: carrierActions.fetchByHref,
     getShippingTerm: shippingTermActions.fetchByHref,
     clearShippingTerm: shippingTermActions.clearItem,
-    printCartonLabel: printCartonLabelActions.requestProcessStart
+    printCartonLabel: printCartonLabelActions.requestProcessStart,
+    clearCartonLabelData: printCartonLabelActions.clearProcessData
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Consignment));

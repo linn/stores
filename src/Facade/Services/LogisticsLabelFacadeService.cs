@@ -26,7 +26,8 @@
                         resource.ConsignmentId,
                         resource.FirstItem,
                         resource.LastItem,
-                        resource.UserNumber);
+                        resource.UserNumber,
+                        resource.NumberOfCopies);
                     break;
                 default:
                     throw new ProcessException($"Cannot print label type {resource.LabelType}");

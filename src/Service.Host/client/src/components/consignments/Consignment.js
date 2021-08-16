@@ -5,7 +5,8 @@ import {
     Dropdown,
     SaveBackCancelButtons,
     utilities,
-    ErrorCard
+    ErrorCard,
+    InputField
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
@@ -13,6 +14,10 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/core/styles';
 import Page from '../../containers/Page';
 import consignmentReducer from './consignmentReducer';
@@ -50,12 +55,19 @@ function Consignment({
     userNumber,
     printCartonLabel,
     printCartonLabelWorking,
-    printCartonLabelResult
+    printCartonLabelResult,
+    clearCartonLabelData
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
     const [editablePallets, setEditablePallets] = useState([]);
     const [editableItems, setEditableItems] = useState([]);
     const [saveDisabled, setSaveDisabled] = useState(false);
+    const [showCartonLabel, setShowCartonLabel] = useState(false);
+    const [cartonLabelOptions, setCartonLabelOptions] = useState({
+        numberOfCopies: 1,
+        firstItem: 1,
+        lastItem: 1
+    });
 
     const [state, dispatch] = useReducer(consignmentReducer, {
         consignment: null,
@@ -209,6 +221,26 @@ function Consignment({
         clearConsignmentErrors();
     };
 
+    const showCartonLabelForm = () => {
+        clearCartonLabelData();
+        setShowCartonLabel(true);
+    };
+
+    const doPrintCartonLabel = () => {
+        printCartonLabel({
+            labelType: 'Carton',
+            consignmentId: item.consignmentId,
+            firstItem: cartonLabelOptions.firstItem,
+            lastItem: cartonLabelOptions.lastItem,
+            numberOfCopies: cartonLabelOptions.numberOfCopies,
+            userNumber
+        });
+    };
+
+    const updateCartonLabelOptions = (itemName, value) => {
+        setCartonLabelOptions({ ...cartonLabelOptions, [itemName]: value });
+    };
+
     return (
         <Page requestErrors={requestErrors} showRequestErrors>
             <Grid container spacing={3}>
@@ -303,6 +335,11 @@ function Consignment({
                     )}
                 </>
                 <Grid item xs={12}>
+                    {currentTab === 2 && (
+                        <Button variant="outlined" color="primary" onClick={showCartonLabelForm}>
+                            Carton Label
+                        </Button>
+                    )}
                     {editStatus === 'view' ? (
                         <Button
                             variant="outlined"
@@ -323,6 +360,70 @@ function Consignment({
                     )}
                 </Grid>
             </Grid>
+            <Dialog
+                open={showCartonLabel}
+                onClose={() => setShowCartonLabel(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                fullWidth
+                maxWidth="sm"
+            >
+                <DialogTitle id="alert-dialog-title">Print Carton Label</DialogTitle>
+                <DialogContent>
+                    <>
+                        <Grid container>
+                            <Grid item xs={6}>
+                                <InputField
+                                    label="First Carton"
+                                    placeholder="First Carton"
+                                    propertyName="firstItem"
+                                    value={cartonLabelOptions.firstItem}
+                                    onChange={updateCartonLabelOptions}
+                                    maxLength={3}
+                                />
+                                <InputField
+                                    label="Last Carton"
+                                    placeholder="Last Carton"
+                                    propertyName="lastItem"
+                                    value={cartonLabelOptions.lastItem}
+                                    onChange={updateCartonLabelOptions}
+                                    maxLength={3}
+                                />
+                                <InputField
+                                    label="Copies"
+                                    placeholder="Copies To Print"
+                                    propertyName="numberOfCopies"
+                                    value={cartonLabelOptions.numberOfCopies}
+                                    onChange={updateCartonLabelOptions}
+                                    maxLength={3}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Button
+                                    style={{ marginTop: '30px', marginBottom: '40px' }}
+                                    onClick={doPrintCartonLabel}
+                                    variant="contained"
+                                    color="primary"
+                                >
+                                    Print Carton Label
+                                </Button>
+                                {printCartonLabelWorking ? (
+                                    <Loading />
+                                ) : (
+                                    <Typography variant="h6">
+                                        {printCartonLabelResult?.message}
+                                    </Typography>
+                                )}
+                            </Grid>
+                        </Grid>
+                    </>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setShowCartonLabel(false)} variant="contained" autoFocus>
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Page>
     );
 }
@@ -394,7 +495,8 @@ Consignment.propTypes = {
     printCartonLabelResult: PropTypes.shape({
         success: PropTypes.bool,
         message: PropTypes.string
-    })
+    }),
+    clearCartonLabelData: PropTypes.func.isRequired
 };
 
 Consignment.defaultProps = {

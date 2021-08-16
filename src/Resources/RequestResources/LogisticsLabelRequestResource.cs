@@ -11,5 +11,7 @@
         public int? LastItem { get; set; }
 
         public int UserNumber { get; set; }
+
+        public int NumberOfCopies { get; set; } = 1;
     }
 }

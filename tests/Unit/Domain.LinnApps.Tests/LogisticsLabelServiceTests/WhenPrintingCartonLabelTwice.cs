@@ -8,7 +8,7 @@
 
     using NUnit.Framework;
 
-    public class WhenPrintingCartonLabels : ContextBase
+    public class WhenPrintingCartonLabelTwice : ContextBase
     {
         private ProcessResult result;
 
@@ -16,17 +16,21 @@
 
         private int? lastCarton;
 
+        private int numberOfCopies;
+
         [SetUp]
         public void SetUp()
         {
             this.firstCarton = 2;
-            this.lastCarton = 3;
+            this.lastCarton = 2;
+            this.numberOfCopies = 2;
 
             this.result = this.Sut.PrintCartonLabel(
                 this.ConsignmentId,
                 this.firstCarton,
                 this.lastCarton,
-                this.UserNumber);
+                this.UserNumber,
+                this.numberOfCopies);
         }
 
         [Test]
@@ -36,19 +40,12 @@
         }
 
         [Test]
-        public void ShouldPrintLabels()
+        public void ShouldPrintLabel()
         {
             this.BartenderLabelPack.Received().PrintLabels(
                 $"CartonLabel{this.ConsignmentId}item{2}",
                 "DispatchLabels1",
-                1,
-                "dispatchaddress.btw",
-                Arg.Any<string>(),
-                ref Arg.Any<string>());
-            this.BartenderLabelPack.Received().PrintLabels(
-                $"CartonLabel{this.ConsignmentId}item{3}",
-                "DispatchLabels1",
-                1,
+                this.numberOfCopies,
                 "dispatchaddress.btw",
                 Arg.Any<string>(),
                 ref Arg.Any<string>());

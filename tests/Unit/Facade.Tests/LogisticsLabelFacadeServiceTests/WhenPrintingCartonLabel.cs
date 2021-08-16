@@ -23,14 +23,20 @@
         {
             this.resource = new LogisticsLabelRequestResource
                                 {
-                                    ConsignmentId = 880, FirstItem = 123, LastItem = 456, LabelType = "Carton", UserNumber = 123
+                                    ConsignmentId = 880,
+                                    FirstItem = 123,
+                                    LastItem = 456,
+                                    LabelType = "Carton",
+                                    UserNumber = 123,
+                                    NumberOfCopies = 2
                                 };
             this.serviceResult = new ProcessResult(true, "ok");
             this.LogisticsLabelService.PrintCartonLabel(
                     this.resource.ConsignmentId,
                     this.resource.FirstItem,
                     this.resource.LastItem, 
-                    this.resource.UserNumber)
+                    this.resource.UserNumber,
+                    this.resource.NumberOfCopies)
                 .Returns(this.serviceResult);
 
             this.result = this.Sut.PrintLabel(this.resource);
@@ -43,7 +49,8 @@
                 this.resource.ConsignmentId,
                 this.resource.FirstItem,
                 this.resource.LastItem,
-                this.resource.UserNumber);
+                this.resource.UserNumber,
+                this.resource.NumberOfCopies);
         }
 
         [Test]
