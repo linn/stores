@@ -223,6 +223,20 @@ function Consignment({
 
     const showCartonLabelForm = () => {
         clearCartonLabelData();
+
+        let maxContainer = 1;
+        const containerItems = state.consignment.items?.filter(a => a.containerNumber);
+        if (containerItems && containerItems.length > 0) {
+            const containerNumbers = containerItems.map(a => a.containerNumber);
+            maxContainer = Math.max(...containerNumbers);
+        }
+
+        setCartonLabelOptions({
+            ...cartonLabelOptions,
+            firstItem: maxContainer,
+            lastItem: maxContainer
+        });
+
         setShowCartonLabel(true);
     };
 
