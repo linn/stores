@@ -170,6 +170,7 @@
             builder.RegisterType<SalesArticleService>().As<ISalesArticleService>();
             builder.RegisterType<CartonTypeFacadeService>().As<IFacadeService<CartonType, string, CartonTypeResource, CartonTypeResource>>();
             builder.RegisterType<PortFacadeService>().As<IFacadeService<Port, string, PortResource, PortResource>>();
+            builder.RegisterType<LogisticsLabelFacadeService>().As<ILogisticsLabelFacadeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
@@ -198,6 +199,7 @@
             builder.RegisterType<ExportBookPack>().As<IExportBookPack>();
             builder.RegisterType<PlCreditDebitNoteService>()
                 .As<IFacadeFilterService<PlCreditDebitNote, int, PlCreditDebitNoteResource, PlCreditDebitNoteResource, PlCreditDebitNoteResource>>();
+            builder.RegisterType<LogisticsLabelService>().As<ILogisticsLabelService>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();
