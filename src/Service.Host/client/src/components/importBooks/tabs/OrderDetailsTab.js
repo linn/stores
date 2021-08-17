@@ -1,7 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import { InputField, LinkButton, SingleEditTable } from '@linn-it/linn-form-components-library';
+import {
+    Dropdown,
+    InputField,
+    LinkButton,
+    SingleEditTable
+} from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
 
 function OrderDetailsTab({
@@ -12,7 +17,8 @@ function OrderDetailsTab({
     remainingWeight,
     invoiceDate,
     handleOrderDetailChange,
-    cpcNumbers
+    cpcNumbers,
+    allowedToEdit
 }) {
     const updateRow = detail => {
         handleOrderDetailChange(detail.lineNumber, detail);
@@ -36,116 +42,207 @@ function OrderDetailsTab({
     }));
     const classes = useStyles();
 
-    const columns = [
-        {
-            title: 'Line Type',
-            id: 'lineType',
-            type: 'dropdown',
-            options: ['PO', 'RSN', 'RETURNS', 'RO', 'LOAN', 'SAMPLES', 'SUNDRY', 'INS'],
-            editable: false
-        },
-        {
-            title: 'Order Number',
-            id: 'orderNumber',
-            type: 'text',
-            editable: false
-        },
-        {
-            title: 'Rsn Number',
-            id: 'rsnNumber',
-            type: 'text',
-            editable: false
-        },
-        {
-            title: 'Loan Number',
-            id: 'loanNumber',
-            type: 'number',
-            editable: false
-        },
-        {
-            title: 'Ins Number',
-            id: 'insNumber',
-            type: 'number',
-            editable: false
-        },
-        {
-            title: 'Order Description',
-            id: 'orderDescription',
-            type: 'text',
-            editable: false
-        },
-        {
-            title: 'Order Description',
-            id: 'orderDescription',
-            type: 'text',
-            editable: false
-        },
-        {
-            title: 'Tariff Number',
-            id: 'tariffCode',
-            type: 'text',
-            editable: false
-        },
-        {
-            title: 'Qty',
-            id: 'qty',
-            type: 'number',
-            editable: false
-        },
-        {
-            title: 'Order Value',
-            id: 'orderValue',
-            type: 'number',
-            editable: false
-        },
-        {
-            title: 'Duty Value',
-            id: 'dutyValue',
-            type: 'number',
-            editable: false
-        },
-        {
-            title: 'VatRate',
-            id: 'vatRate',
-            type: 'number',
-            editable: false
-        },
-        {
-            title: 'VatValue',
-            id: 'vatValue',
-            type: 'number',
-            editable: false
-        },
-        {
-            title: 'Weight',
-            id: 'weight',
-            type: 'number',
-            editable: false
-        },
-        {
-            title: 'Cpc Number',
-            id: 'cpcNumber',
-            type: 'dropdown',
-            options: cpcNumbers
-            //todo check that this works when editing is sorted & that
-            // "IPR" text for id 13 is obvious enough to prevent mistakes
-            // if not maybe consider a popup or an IPR button to fill in the IPR cpc number
+    const lineTypes = ['PO', 'RSN', 'RETURNS', 'RO', 'LOAN', 'SAMPLES', 'SUNDRY', 'INS'];
 
-            //also work out if need below when I just want it to act like every other field
-            //selectSearchResult: update
-        },
-        {
-            title: 'Post Duty',
-            id: 'postDuty',
-            type: 'checkbox',
-            //todo figure out what this is meant to do - it doesn't seem to be stored in db so must be to run an operation related to the duty?
-            //also check if freightValue is ever needed, it isn't in the old form but is in the d[]
-            editable: false
-        }
-    ];
+    // const EditableRow = ({ row, updateRow }) => {
+    const editRow = (e, row, propertyName, newValue, event) => {
+        console.log('propname is '+ propertyName + ' newv is ' + newValue);
+        console.info(e);
+        console.info(event);
 
+
+        console.info(row);
+        // updateRow({ ...row, [propertyName]: newValue });
+    };
+
+    // return (
+    //     <>
+    //         <Grid item xs={2}>
+    //             <Dropdown
+    //                 items={lineTypes}
+    //                 label="Line Type"
+    //                 fullWidth
+    //                 onChange={editRow}
+    //                 propertyName="lineType"
+    //                 value={row.lineType}
+    //             />
+    //         </Grid>
+
+    //         {(row.lineType === 'PO' || row.lineType === 'RO') && (
+    //             <Grid item xs={2}>
+    //                 <InputField
+    //                     label="Order Number"
+    //                     fullWidth
+    //                     onChange={editRow}
+    //                     propertyName="orderNumber"
+    //                     type="number"
+    //                     value={row.orderNumber}
+    //                 />
+    //             </Grid>
+    //         )}
+
+    //         {row.lineType === 'RSN' && (
+    //             <Grid item xs={2}>
+    //                 <InputField
+    //                     label="RSN Number"
+    //                     fullWidth
+    //                     onChange={editRow}
+    //                     propertyName="rsnNumber"
+    //                     type="number"
+    //                     value={row.rsnNumber}
+    //                 />
+    //             </Grid>
+    //         )}
+
+    //         {row.lineType === 'LOAN' && (
+    //             <Grid item xs={2}>
+    //                 <InputField
+    //                     label="Loan Number"
+    //                     fullWidth
+    //                     onChange={editRow}
+    //                     propertyName="loanNumber"
+    //                     type="number"
+    //                     value={row.loanNumber}
+    //                 />
+    //             </Grid>
+    //         )}
+
+    //         {row.lineType === 'INS' && (
+    //             <Grid item xs={2}>
+    //                 <InputField
+    //                     label="Ins Number"
+    //                     fullWidth
+    //                     onChange={editRow}
+    //                     propertyName="insNumber"
+    //                     type="number"
+    //                     value={row.insNumber}
+    //                 />
+    //             </Grid>
+    //         )}
+
+    //         <Grid item xs={2}>
+    //             <InputField
+    //                 label="Order Description"
+    //                 fullWidth
+    //                 onChange={editRow}
+    //                 propertyName="orderDescription"
+    //                 type="text"
+    //                 value={row.orderDescription}
+    //             />
+    //         </Grid>
+    //         <Grid item xs={2}>
+    //             <InputField
+    //                 label="Tariff Code"
+    //                 fullWidth
+    //                 onChange={editRow}
+    //                 propertyName="tariffCode"
+    //                 type="text"
+    //                 value={row.tariffCode}
+    //             />
+    //         </Grid>
+    //         <Grid item xs={2}>
+    //             <InputField
+    //                 label="Tariff Number"
+    //                 fullWidth
+    //                 onChange={editRow}
+    //                 propertyName="tariffNumber"
+    //                 type="number"
+    //                 value={row.tariffNumber}
+    //             />
+    //         </Grid>
+    //         <Grid item xs={2}>
+    //             <InputField
+    //                 label="Qty"
+    //                 fullWidth
+    //                 onChange={editRow}
+    //                 propertyName="qty"
+    //                 type="number"
+    //                 value={row.qty}
+    //             />
+    //         </Grid>
+    //         <Grid item xs={2}>
+    //             <InputField
+    //                 label="Order Value"
+    //                 fullWidth
+    //                 onChange={editRow}
+    //                 propertyName="orderValue"
+    //                 type="number"
+    //                 value={row.orderValue}
+    //             />
+    //         </Grid>
+    //         <Grid item xs={2}>
+    //             <InputField
+    //                 label="Duty Value"
+    //                 fullWidth
+    //                 onChange={editRow}
+    //                 propertyName="dutyValue"
+    //                 type="number"
+    //                 value={row.dutyValue}
+    //             />
+    //         </Grid>
+    //         <Grid item xs={2}>
+    //             <InputField
+    //                 label="Vat Rate"
+    //                 fullWidth
+    //                 onChange={editRow}
+    //                 propertyName="vatRate"
+    //                 type="number"
+    //                 value={row.vatRate}
+    //             />
+    //         </Grid>
+    //         <Grid item xs={2}>
+    //             <InputField
+    //                 label="Vat Value"
+    //                 fullWidth
+    //                 onChange={editRow}
+    //                 propertyName="vatValue"
+    //                 type="number"
+    //                 value={row.vatValue}
+    //             />
+    //         </Grid>
+    //         <Grid item xs={2}>
+    //             <InputField
+    //                 label="Weight"
+    //                 fullWidth
+    //                 onChange={editRow}
+    //                 propertyName="weight"
+    //                 type="number"
+    //                 value={row.weight}
+    //             />
+    //         </Grid>
+    //         <Grid item xs={2}>
+    //             <Dropdown
+    //                 items={cpcNumbers}
+    //                 label="Cpc Number"
+    //                 fullWidth
+    //                 onChange={editRow}
+    //                 propertyName="cpcNumber"
+    //                 value={row.cpcNumber}
+    //             />
+    //         </Grid>
+    //         <Grid item xs={2}>
+    //             {/* //todo check that this works when editing is sorted & that
+    //     // "IPR" text for id 13 is obvious enough to prevent mistakes
+    //     // if not maybe consider a popup or an IPR button to fill in the IPR cpc number
+
+    //     //also work out if need below when I just want it to act like every other field
+    //     //selectSearchResult: update */}
+    //         </Grid>
+    //         <Grid item xs={2}>
+    //             <LinkButton
+    //                 text="Post Duty"
+    //                 //todo to={`/logistics/`}
+    //                 disabled
+    //                 external
+    //             />
+    //         </Grid>
+    //         </>
+    //     );
+    // };
     //todo - implement the below checks to disable fields
     //looks like I'll need to edit the shared components to check for disabled with the row
+
+    //maybe could make this just new components for each linetype? Like a small component with the fields
     // BEGIN
     //     IF :IMPBOOK_ORDER_DETAIL.LINE_TYPE IN ('PO','RO') THEN
     //     ACTIVATE_FIELD('ORDER_NUMBER');
@@ -214,7 +311,7 @@ function OrderDetailsTab({
                         value={remainingWeight}
                     />
                 </Grid>
-
+                {/* Are these fields even used? Check with Rhona */}
                 <Grid item xs={3}>
                     <LinkButton
                         text="Calculate Weights"
@@ -244,15 +341,209 @@ function OrderDetailsTab({
                 </Grid>
             </Grid>
 
+            {/* foreach orderDetails 
+            
+            if lineType = blah, use blah row component with those fields
+
+            create needs a dropdown for each type
+            can't edit the row type, delete the row and make a new one for ease?
+            */}
+
             <Grid container spacing={1} item xs={12} className={classes.gapAbove}>
-                <SingleEditTable
+                {orderDetails.map(row => (
+                    <>
+                        <Grid item xs={2}>
+                            <Dropdown
+                                items={lineTypes}
+                                label="Line Type"
+                                fullWidth
+                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                propertyName="lineType"
+                                value={row.lineType}
+                            />
+                        </Grid>
+
+                        {(row.lineType === 'PO' || row.lineType === 'RO') && (
+                            <Grid item xs={2}>
+                                <InputField
+                                    label="Order Number"
+                                    fullWidth
+                                    onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                    propertyName="orderNumber"
+                                    type="number"
+                                    value={row.orderNumber}
+                                />
+                            </Grid>
+                        )}
+
+                        {row.lineType === 'RSN' && (
+                            <Grid item xs={2}>
+                                <InputField
+                                    label="RSN Number"
+                                    fullWidth
+                                    onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                    propertyName="rsnNumber"
+                                    type="number"
+                                    value={row.rsnNumber}
+                                />
+                            </Grid>
+                        )}
+
+                        {row.lineType === 'LOAN' && (
+                            <Grid item xs={2}>
+                                <InputField
+                                    label="Loan Number"
+                                    fullWidth
+                                    onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                    propertyName="loanNumber"
+                                    type="number"
+                                    value={row.loanNumber}
+                                />
+                            </Grid>
+                        )}
+
+                        {row.lineType === 'INS' && (
+                            <Grid item xs={2}>
+                                <InputField
+                                    label="Ins Number"
+                                    fullWidth
+                                    onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                    propertyName="insNumber"
+                                    type="number"
+                                    value={row.insNumber}
+                                />
+                            </Grid>
+                        )}
+
+                        <Grid item xs={2}>
+                            <InputField
+                                label="Order Description"
+                                fullWidth
+                                onChange={e => editRow(e, row)}
+                                propertyName="orderDescription"
+                                type="text"
+                                value={row.orderDescription}
+                            />
+                        </Grid>
+                        <Grid item xs={2}>
+                            <InputField
+                                label="Tariff Code"
+                                fullWidth
+                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                propertyName="tariffCode"
+                                type="text"
+                                value={row.tariffCode}
+                            />
+                        </Grid>
+                        <Grid item xs={2}>
+                            <InputField
+                                label="Tariff Number"
+                                fullWidth
+                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                propertyName="tariffNumber"
+                                type="number"
+                                value={row.tariffNumber}
+                            />
+                        </Grid>
+                        <Grid item xs={2}>
+                            <InputField
+                                label="Qty"
+                                fullWidth
+                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                propertyName="qty"
+                                type="number"
+                                value={row.qty}
+                            />
+                        </Grid>
+                        <Grid item xs={2}>
+                            <InputField
+                                label="Order Value"
+                                fullWidth
+                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                propertyName="orderValue"
+                                type="number"
+                                value={row.orderValue}
+                            />
+                        </Grid>
+                        <Grid item xs={2}>
+                            <InputField
+                                label="Duty Value"
+                                fullWidth
+                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                propertyName="dutyValue"
+                                type="number"
+                                value={row.dutyValue}
+                            />
+                        </Grid>
+                        <Grid item xs={2}>
+                            <InputField
+                                label="Vat Rate"
+                                fullWidth
+                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                propertyName="vatRate"
+                                type="number"
+                                value={row.vatRate}
+                            />
+                        </Grid>
+                        <Grid item xs={2}>
+                            <InputField
+                                label="Vat Value"
+                                fullWidth
+                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                propertyName="vatValue"
+                                type="number"
+                                value={row.vatValue}
+                            />
+                        </Grid>
+                        <Grid item xs={2}>
+                            <InputField
+                                label="Weight"
+                                fullWidth
+                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                propertyName="weight"
+                                type="number"
+                                value={row.weight}
+                            />
+                        </Grid>
+                        <Grid item xs={2}>
+                            <Dropdown
+                                items={cpcNumbers}
+                                label="Cpc Number"
+                                fullWidth
+                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                propertyName="cpcNumber"
+                                value={row.cpcNumber}
+                            />
+                        </Grid>
+                        <Grid item xs={2}>
+                            {/* //todo check that this works when editing is sorted & that
+            // "IPR" text for id 13 is obvious enough to prevent mistakes
+            // if not maybe consider a popup or an IPR button to fill in the IPR cpc number
+
+            //also work out if need below when I just want it to act like every other field
+            //selectSearchResult: update */}
+                        </Grid>
+                        <Grid item xs={2}>
+                            <LinkButton
+                                text="Post Duty"
+                                //todo to={`/logistics/`}
+                                disabled
+                                external
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} />
+                    </>
+                ))}
+
+                {/* <SingleEditTable
                     columns={columns}
                     rows={orderDetails ?? [{}]}
                     saveRow={updateRow}
                     // editable={!displayOnly}
                     //todo add createRow function
                     allowNewRowCreation={false}
-                />
+                /> */}
             </Grid>
         </>
     );

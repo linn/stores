@@ -171,6 +171,9 @@ function ImportBook({
         });
     };
 
+    const allowedToEdit = true;
+    //todo implement permissions check ^
+
     return (
         <Page>
             <Grid container spacing={3}>
@@ -281,7 +284,8 @@ function ImportBook({
                                 <OrderDetailsTab
                                     orderDetails={state.importBookOrderDetails}
                                     handleFieldChange={handleFieldChange}
-                                    handleOrderDetailsChange={handleOrderDetailChange}
+                                    handleOrderDetailChange={handleOrderDetailChange}
+                                    allowedToEdit={allowedToEdit}
                                     //todo - work out where below fields should come from and populate them
                                     // remainingTotal,
                                     // remainingDutyTotal,
