@@ -82,7 +82,12 @@
                 }
             }
 
-            if (lines.Count() < numberOfLines)
+            var goodsInLogEntries = lines as GoodsInLogEntry[] ?? lines.ToArray();
+
+            // A bookin to just one location. In this case this method won't be called with
+            // an array of 'lines'
+            // so we need to add one entry to the bookin log to reflect this bookin
+            if (!goodsInLogEntries.Any())
             {
                 this.goodsInLog.Add(new GoodsInLogEntry
                                         {
@@ -109,6 +114,17 @@
                                         });
             }
 
+            // the request included multiple lines,
+            // e.g. booking a PO line into multiple locations or booking in multiple PO's at once
+            // so add each to the log under the same bookin ref
+            var bookinRef = this.goodsInPack.GetNextBookInRef();
+            foreach (var goodsInLogEntry in goodsInLogEntries)
+            {
+                goodsInLogEntry.BookInRef = bookinRef;
+                this.goodsInLog.Add(goodsInLogEntry);
+            }
+
+            // need to make sure changes are commited by this point.
             this.goodsInPack.DoBookIn(
                 transactionType,
                 createdBy,

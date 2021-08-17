@@ -11,7 +11,14 @@ import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import makeStyles from '@material-ui/styles/makeStyles';
-import { InputField, Typeahead, Dropdown, DatePicker } from '@linn-it/linn-form-components-library';
+import { DataGrid } from '@material-ui/data-grid';
+import {
+    InputField,
+    Typeahead,
+    Dropdown,
+    DatePicker,
+    Title
+} from '@linn-it/linn-form-components-library';
 import QcLabelPrintScreen from '../../containers/goodsIn/QcLabelPrintScreen';
 import Page from '../../containers/Page';
 
@@ -87,6 +94,103 @@ function GoodsInUtility({
 
     const classes = useStyles();
 
+    const tableColumns = [
+        {
+            headerName: 'id',
+            field: 'id',
+            width: 100,
+            hide: true
+        },
+        {
+            headerName: 'Trans Type',
+            field: 'transactionType',
+            width: 200
+        },
+        {
+            headerName: 'Createed',
+            field: 'dateCreated',
+            width: 100,
+            hide: true
+        },
+        {
+            headerName: 'By',
+            field: 'createdBy',
+            width: 100,
+            hide: true
+        },
+        {
+            headerName: 'Wandstring',
+            field: 'wandstring',
+            hide: true
+        },
+        {
+            headerName: 'Article',
+            field: 'articleNumber',
+            width: 200
+        },
+        {
+            headerName: 'LocId',
+            field: 'locationId',
+            width: 200,
+            hide: true
+        },
+        {
+            headerName: 'Loc',
+            field: 'location',
+            width: 200
+        },
+        {
+            headerName: 'Qty',
+            field: 'quantity',
+            width: 100
+        },
+        {
+            headerName: 'Serial',
+            field: 'serialNumber',
+            width: 200,
+            hide: true
+        },
+        {
+            headerName: 'Order',
+            field: 'orderNumber',
+            width: 200
+        },
+        {
+            headerName: 'Line',
+            field: 'orderLine',
+            width: 200,
+            hide: true
+        },
+        {
+            headerName: 'S/Type',
+            field: 'storageType',
+            width: 200
+        },
+        {
+            headerName: 'Manuf Part',
+            field: 'manufacturersPartNumber',
+            width: 200
+        },
+        {
+            headerName: 'State',
+            field: 'state',
+            width: 200
+        },
+        {
+            headerName: 'Description',
+            field: 'description',
+            width: 300,
+            hide: true
+        }
+    ];
+
+    const [rows, setRows] = useState([]);
+    const [selectedRows, setSelectedRows] = useState([]);
+
+    const handleSelectRow = selected => {
+        setSelectedRows(rows.filter(r => selected.rowIds.includes(r.id.toString())));
+    };
+
     return (
         <Page>
             <Grid container spacing={3}>
@@ -112,6 +216,9 @@ function GoodsInUtility({
                     </div>
                 </Dialog>
                 <Grid item xs={12}>
+                    <Title text="Goods In Utility" />
+                </Grid>
+                <Grid item xs={6}>
                     <InputField
                         fullWidth
                         disabled
@@ -126,6 +233,8 @@ function GoodsInUtility({
                         propertyName="bookInMessage"
                     />
                 </Grid>
+                <Grid item xs={6} />
+
                 <Grid item xs={4}>
                     <InputField
                         fullWidth
@@ -142,16 +251,7 @@ function GoodsInUtility({
                         }}
                     />
                 </Grid>
-                <Grid item xs={1}>
-                    <InputField
-                        fullWidth
-                        value={validatePurchaseOrderResult?.orderLine}
-                        disabled
-                        label="Line"
-                        propertyName="orderLine"
-                        onChange={handleFieldChange}
-                    />
-                </Grid>
+
                 <Grid item xs={1}>
                     <InputField
                         fullWidth
@@ -178,7 +278,7 @@ function GoodsInUtility({
                         onChange={handleFieldChange}
                     />
                 </Grid>
-                <Grid item xs={4} />
+                <Grid item xs={5} />
                 <Grid item xs={3}>
                     <InputField
                         fullWidth
@@ -220,24 +320,7 @@ function GoodsInUtility({
                         placeholder="Search Locations"
                     />
                 </Grid>
-                <Grid item xs={2}>
-                    <InputField
-                        fullWidth
-                        value={formData.bookInRef}
-                        label="Bookin Ref"
-                        propertyName="bookInRef"
-                        onChange={handleFieldChange}
-                    />
-                </Grid>
-                <Grid item xs={1}>
-                    <InputField
-                        fullWidth
-                        value={formData.numberOfLines}
-                        label="#Lines"
-                        propertyName="numberOfLines"
-                        onChange={handleFieldChange}
-                    />
-                </Grid>
+                <Grid item xs={3} />
                 <Grid item xs={3}>
                     <Typeahead
                         onSelect={newValue =>
@@ -421,9 +504,64 @@ function GoodsInUtility({
                     <Button
                         className="hide-when-printing"
                         variant="contained"
-                        onClick={() => doBookIn(formData)}
+                        disabled={
+                            !validatePurchaseOrderResult ||
+                            !formData.ontoLocationId ||
+                            !formData.qty
+                        }
+                        onClick={() =>
+                            setRows(r => [
+                                ...r,
+                                {
+                                    id: r.length + 1,
+                                    articleNumber: validatePurchaseOrderResult.partNumber,
+                                    transactionType: validatePurchaseOrderResult.transactionType,
+                                    dateCreated: new Date().toISOString(),
+                                    location: formData.ontoLocation,
+                                    locationId: formData.ontoLocationId,
+                                    quantity: formData.qty,
+                                    orderNumber: validatePurchaseOrderResult.orderNumber,
+                                    state: validatePurchaseOrderResult.state,
+                                    orderLine: validatePurchaseOrderResult.orderLine,
+                                    storageType: formData.sType
+                                }
+                            ])
+                        }
+                    >
+                        Add Line
+                    </Button>
+                    <Button
+                        className="hide-when-printing"
+                        variant="contained"
+                        onClick={() => doBookIn({ ...formData, lines: rows })}
                     >
                         Book In
+                    </Button>
+                </Grid>
+                <Grid item xs={12}>
+                    <div style={{ height: 250, width: '100%', marginTop: '100px' }}>
+                        <DataGrid
+                            rows={rows}
+                            columns={tableColumns}
+                            density="standard"
+                            rowHeight={34}
+                            checkboxSelection
+                            onSelectionChange={handleSelectRow}
+                            hideFooter
+                        />
+                    </div>
+                </Grid>
+                <Grid item xs={2}>
+                    <Button
+                        style={{ marginTop: '22px' }}
+                        variant="contained"
+                        color="secondary"
+                        disabled={selectedRows.length < 1}
+                        onClick={() =>
+                            setRows(rows.filter(r => !selectedRows.map(x => x.id).includes(r.id)))
+                        }
+                    >
+                        Clear Selected
                     </Button>
                 </Grid>
             </Grid>
@@ -445,7 +583,8 @@ GoodsInUtility.propTypes = {
         partNumber: PropTypes.string,
         partDescription: PropTypes.string,
         orderUnitOfMeasure: PropTypes.string,
-        manufacturersPartNumber: PropTypes.string
+        manufacturersPartNumber: PropTypes.string,
+        transactionType: PropTypes.string
     }),
     validatePurchaseOrderResultLoading: PropTypes.bool,
     searchDemLocations: PropTypes.func.isRequired,
@@ -460,7 +599,10 @@ GoodsInUtility.propTypes = {
     storagePlacesSearchLoading: PropTypes.bool,
     bookInResult: PropTypes.shape({
         success: PropTypes.bool,
-        message: PropTypes.string
+        message: PropTypes.string,
+        reqNumber: PropTypes.number,
+        qcState: PropTypes.string,
+        docType: PropTypes.string
     }),
     bookInResultLoading: PropTypes.bool,
     doBookIn: PropTypes.func.isRequired,

@@ -38,9 +38,10 @@
 
         private object DoBookIn()
         {
+            var resource = this.Bind<BookInRequestResource>();
             return this.Negotiate
                 .WithModel(
-                    this.service.DoBookIn(this.Bind<BookInRequestResource>()));
+                    this.service.DoBookIn(resource));
         }
 
         private object GetLoanDetails()
