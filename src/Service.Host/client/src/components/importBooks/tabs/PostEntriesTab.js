@@ -4,9 +4,21 @@ import Grid from '@material-ui/core/Grid';
 import { SingleEditTable } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
 
-function PostEntriesTab({ postEntries, handlePostEntryChange }) {
-    const updateRow = detail => {
-        handlePostEntryChange(detail.lineNumber, detail);
+function PostEntriesTab({
+    postEntries,
+    handlePostEntryChange,
+    addPostEntry,
+    removePostEntry,
+    allowedToEdit
+}) {
+    const updateRow = (detail, propertyName, newValue) => {
+        //update detail property and pass it oooot
+        handlePostEntryChange(detail.lineNumber, { ...detail, [propertyName]: newValue });
+    };
+
+    const deleteRow = id => {
+        console.log('params are : id - ');
+        // removePostEntry(detail.lineNumber, detail);
     };
 
     const useStyles = makeStyles(theme => ({
@@ -77,10 +89,15 @@ function PostEntriesTab({ postEntries, handlePostEntryChange }) {
                 <SingleEditTable
                     columns={columns}
                     rows={postEntries ?? [{}]}
-                    saveRow={updateRow}
-                    // editable={!displayOnly}
-                    //todo add createRow function
-                    allowNewRowCreation={false}
+                    saveRow={(item, _setItem, propertyName, newValue) => {
+                        updateRow(item, propertyName, newValue);
+                    }}
+                    createRow={addPostEntry}
+                    deleteRow={deleteRow}
+                    //todo tomorrow fix this or ask about it!
+                    allowNewRowCreations
+                    removeRowOnDelete
+                    editable={allowedToEdit}
                 />
             </Grid>
         </>

@@ -88,7 +88,9 @@ function ImportBook({
         periodNumber: null,
         createdBy: null,
         portCode: '',
-        customsEntryCodePrefix: ''
+        customsEntryCodePrefix: '',
+        importBookOrderDetails: null,
+        importBookPostEntries: null
     };
     const creating = () => editStatus === 'create';
 
@@ -115,7 +117,6 @@ function ImportBook({
         setTab(value);
     };
 
-    //todo implement create
     // useEffect(() => {
     //     if (editStatus === 'create') {
     //         dispatch({ type: 'fieldChange', fieldName: 'to be updated on create init', payload: null });
@@ -127,6 +128,8 @@ function ImportBook({
         return false;
     };
     const handleSaveClick = () => {
+        console.info(state);
+
         if (creating()) {
             addItem(state.impbook);
         } else {
@@ -186,6 +189,21 @@ function ImportBook({
         });
     };
 
+    const handleAddPostEntryRow = () => {
+        setEditStatus('edit');
+        dispatch({
+            type: 'postEntryAdd'
+        });
+    };
+
+    const handleRemovePostEntryRow = lineNumber => {
+        setEditStatus('edit');
+        dispatch({
+            type: 'postEntryRemove',
+            lineNumber
+        });
+    };
+
     const allowedToEdit = true;
     //todo implement permissions check ^
 
@@ -213,7 +231,7 @@ function ImportBook({
                         <Loading />
                     </Grid>
                 ) : (
-                    (state.id || creating()) &&
+                    (state.impbook.id || creating()) &&
                     itemError?.status !== 404 && (
                         <>
                             <SnackbarMessage
@@ -225,7 +243,7 @@ function ImportBook({
                                 <InputField
                                     fullWidth
                                     disabled
-                                    value={creating() ? 'New' : state.id}
+                                    value={creating() ? 'New' : state.impbook.id}
                                     label="Import Book Id"
                                     maxLength={8}
                                     helperText="This field cannot be changed"
@@ -251,53 +269,53 @@ function ImportBook({
 
                             {tab === 0 && (
                                 <ImpBookTab
-                                    dateCreated={state.dateCreated}
+                                    dateCreated={state.impbook.dateCreated}
                                     editStatus={editStatus}
                                     handleFieldChange={handleFieldChange}
-                                    parcelNumber={state.parcelNumber}
-                                    vaxRef={state.vaxRef}
-                                    supplierId={state.supplierId}
-                                    foreignCurrency={state.foreignCurrency}
-                                    eecgNumber={state.eecgNumber}
-                                    currency={state.currency}
-                                    exchangeRate={state.exchangeRate}
-                                    totalImportValue={state.totalImportValue}
-                                    carrierId={state.carrierId}
-                                    carrierInvDate={state.carrierInvDate}
-                                    carrierInvNumber={state.carrierInvNumber}
-                                    transportId={state.transportId}
-                                    transportBillNumber={state.transportBillNumber}
-                                    transactionId={state.transactionId}
-                                    deliveryTermCode={state.deliveryTermCode}
-                                    arrivalPort={state.arrivalPort}
-                                    flightNumber={state.flightNumber}
-                                    hwb={state.hwb}
-                                    arrivalDate={state.arrivalDate}
-                                    createdBy={state.createdBy}
-                                    freightCharges={state.freightCharges}
-                                    handlingCharge={state.handlingCharge}
-                                    clearanceCharge={state.clearanceCharge}
-                                    cartage={state.cartage}
-                                    storage={state.storage}
-                                    duty={state.duty}
-                                    vat={state.vat}
-                                    misc={state.misc}
-                                    carriersInvTotal={state.carriersInvTotal}
-                                    carriersVatTotal={state.carriersVatTotal}
-                                    numPallets={state.numPallets}
-                                    numCartons={state.numCartons}
-                                    weight={state.weight}
-                                    customsEntryCode={state.customsEntryCode}
-                                    customsEntryCodePrefix={state.customsEntryCodePrefix}
-                                    customsEntryCodeDate={state.customsEntryCodeDate}
-                                    linnDuty={state.linnDuty}
-                                    linnVat={state.linnVat}
+                                    parcelNumber={state.impbook.parcelNumber}
+                                    vaxRef={state.impbook.vaxRef}
+                                    supplierId={state.impbook.supplierId}
+                                    foreignCurrency={state.impbook.foreignCurrency}
+                                    eecgNumber={state.impbook.eecgNumber}
+                                    currency={state.impbook.currency}
+                                    exchangeRate={state.impbook.exchangeRate}
+                                    totalImportValue={state.impbook.totalImportValue}
+                                    carrierId={state.impbook.carrierId}
+                                    carrierInvDate={state.impbook.carrierInvDate}
+                                    carrierInvNumber={state.impbook.carrierInvNumber}
+                                    transportId={state.impbook.transportId}
+                                    transportBillNumber={state.impbook.transportBillNumber}
+                                    transactionId={state.impbook.transactionId}
+                                    deliveryTermCode={state.impbook.deliveryTermCode}
+                                    arrivalPort={state.impbook.arrivalPort}
+                                    flightNumber={state.impbook.flightNumber}
+                                    hwb={state.impbook.hwb}
+                                    arrivalDate={state.impbook.arrivalDate}
+                                    createdBy={state.impbook.createdBy}
+                                    freightCharges={state.impbook.freightCharges}
+                                    handlingCharge={state.impbook.handlingCharge}
+                                    clearanceCharge={state.impbook.clearanceCharge}
+                                    cartage={state.impbook.cartage}
+                                    storage={state.impbook.storage}
+                                    duty={state.impbook.duty}
+                                    vat={state.impbook.vat}
+                                    misc={state.impbook.misc}
+                                    carriersInvTotal={state.impbook.carriersInvTotal}
+                                    carriersVatTotal={state.impbook.carriersVatTotal}
+                                    numPallets={state.impbook.numPallets}
+                                    numCartons={state.impbook.numCartons}
+                                    weight={state.impbook.weight}
+                                    customsEntryCode={state.impbook.customsEntryCode}
+                                    customsEntryCodePrefix={state.impbook.customsEntryCodePrefix}
+                                    customsEntryCodeDate={state.impbook.customsEntryCodeDate}
+                                    linnDuty={state.impbook.linnDuty}
+                                    linnVat={state.impbook.linnVat}
                                 />
                             )}
 
                             {tab === 1 && (
                                 <OrderDetailsTab
-                                    orderDetails={state.importBookOrderDetails}
+                                    orderDetails={state.impbook.importBookOrderDetails}
                                     handleFieldChange={handleFieldChange}
                                     handleOrderDetailChange={handleOrderDetailChange}
                                     allowedToEdit={allowedToEdit}
@@ -307,21 +325,24 @@ function ImportBook({
                                     // remainingTotal,
                                     // remainingDutyTotal,
                                     // remainingWeight,
-                                    // invoiceDate={state.invoiceDate}
+                                    // invoiceDate={state.impbook.invoiceDate}
                                 />
                             )}
                             {tab === 2 && (
                                 <PostEntriesTab
-                                    postEntries={state.importBookPostEntries}
+                                    postEntries={state.impbook.importBookPostEntries}
                                     handlePostEntryChange={handlePostEntryChange}
+                                    addPostEntry={handleAddPostEntryRow}
+                                    removePostEntry={handleRemovePostEntryRow}
+                                    allowedToEdit={allowedToEdit}
                                 />
                             )}
                             {tab === 3 && (
                                 <CommentsTab
-                                    comments={state.comments}
-                                    dateCancelled={state.dateCancelled}
-                                    cancelledBy={state.cancelledBy}
-                                    cancelledReason={state.cancelledReason}
+                                    comments={state.impbook.comments}
+                                    dateCancelled={state.impbook.dateCancelled}
+                                    cancelledBy={state.impbook.cancelledBy}
+                                    cancelledReason={state.impbook.cancelledReason}
                                     handleFieldChange={handleFieldChange}
                                 />
                             )}

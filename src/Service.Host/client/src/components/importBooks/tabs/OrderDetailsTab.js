@@ -40,15 +40,19 @@ function OrderDetailsTab({
     }));
     const classes = useStyles();
 
-    const lineTypes = ['PO', 'RSN', 'RETURNS', 'RO', 'LOAN', 'SAMPLES', 'SUNDRY', 'INS'];
+    const lineTypes = [
+        { id: 'PO', displayText: 'PO' },
+        { id: 'RSN', displayText: 'RSN' },
+        { id: 'RETURNS', displayText: 'RETURNS' },
+        { id: 'LOAN', displayText: 'LOAN' },
+        { id: 'SAMPLES', displayText: 'SAMPLES' },
+        { id: 'SUNDRY', displayText: 'SUNDRY' },
+        { id: 'INS', displayText: 'INS' }
+    ];
 
     const editRow = (row, propertyName, newValue) => {
         updateRow({ ...row, [propertyName]: newValue });
     };
-
-    // const addRow = lineType => {
-    //     addNewRow(lineType);
-    // };
 
     return (
         <>
@@ -120,7 +124,7 @@ function OrderDetailsTab({
 
             <Grid container spacing={1} item xs={12} className={classes.gapAbove}>
                 {/* todo implement add row and delete row buttons and functions */}
-                {orderDetails.map(row => (
+                {orderDetails?.map(row => (
                     <>
                         <Grid item xs={1}>
                             <Dropdown

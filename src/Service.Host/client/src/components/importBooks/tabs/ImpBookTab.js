@@ -80,7 +80,7 @@ function ImpBookTab({
     portCode,
     customsEntryCodePrefix
 }) {
-//todo remove params which aren't needed (will need some for un-implemented stuff)
+    //todo remove params which aren't needed (will need some for un-implemented stuff)
     const [localSuppliers, setLocalSuppliers] = useState([{}]);
 
     useEffect(() => {
@@ -314,7 +314,13 @@ function ImpBookTab({
                 </Grid>
 
                 <Grid item xs={6}>
-                    <InputField label="Total Import Value" value={totalImportValue} fullwidth />
+                    <InputField
+                        label="Total Import Value"
+                        value={totalImportValue}
+                        onChange={handleFieldChange}
+                        propertyName="totalImportValue"
+                        fullwidth
+                    />
                 </Grid>
                 <Grid item xs={2} />
 
@@ -571,6 +577,7 @@ function ImpBookTab({
                         value={carriersInvTotal + carriersVatTotal}
                         fullwidth
                         type="number"
+                        disabled
                     />
                 </Grid>
 

@@ -46,11 +46,11 @@ const mapStateToProps = state => ({
     })),
     deliveryTerms: impbookDeliveryTermsSelectors.getItems(state)?.map(e => ({
         displayText: `${e.deliveryTermCode} (${e.description})`,
-        id: parseInt(e.deliveryTermCode, 10)
+        id: e.deliveryTermCode
     })),
     ports: portsSelectors.getItems(state)?.map(e => ({
         displayText: `${e.portCode} (${e.description})`,
-        id: parseInt(e.portCode, 10)
+        id: e.portCode
     }))
 });
 

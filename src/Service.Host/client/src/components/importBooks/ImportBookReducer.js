@@ -3,7 +3,7 @@ const initialState = { impbook: { id: '' } };
 export default function importBookReducer(state = initialState, action) {
     switch (action.type) {
         case 'initialise':
-            return { ...state, ...action.payload, prevImpBook: action.payload };
+            return { ...state, impbook: action.payload, prevImpBook: action.payload };
         case 'fieldChange':
             if (action.fieldName === 'something with multiple bits') {
                 return {
@@ -17,50 +17,83 @@ export default function importBookReducer(state = initialState, action) {
             }
             return {
                 ...state,
-                [action.fieldName]: action.payload
+                impbook: { ...state.impbook, [action.fieldName]: action.payload }
             };
         case 'orderDetailFieldChange':
             return {
                 ...state,
-                importBookOrderDetails: [
-                    ...state.importBookOrderDetails.filter(x => x.lineNumber !== action.lineNumber),
-                    action.payload
-                ]
+                impbook: {
+                    ...state.impbook,
+                    importBookOrderDetails: [
+                        ...state.impbook.importBookOrderDetails.filter(
+                            x => x.lineNumber !== action.lineNumber
+                        ),
+                        action.payload
+                    ]
+                }
             };
         case 'orderDetailAdd':
             return {
                 ...state,
-                importBookOrderDetails: [
-                    ...state.importBookOrderDetails,
-                    {
-                        lineNumber:
-                            Math.max([
-                                state.importBookOrderDetails?.map(x => {
-                                    return x.lineNumber;
-                                })
-                            ]) + 1
-                    }
-                ]
+                impbook: {
+                    ...state.impbook,
+                    importBookOrderDetails: [
+                        ...state.impbook.importBookOrderDetails,
+                        {
+                            lineNumber:
+                                Math.max([
+                                    state.impbook.importBookOrderDetails?.map(x => {
+                                        return x.lineNumber;
+                                    })
+                                ]) + 1
+                        }
+                    ]
+                }
             };
         case 'orderDetailRemove':
             return {
                 ...state,
-                importBookOrderDetails: [
-                    ...state.importBookOrderDetails.filter(x => x.lineNumber !== action.lineNumber)
-                ]
+                impbook: {
+                    ...state.impbook,
+                    importBookOrderDetails: [
+                        ...state.impbook.importBookOrderDetails.filter(
+                            x => x.lineNumber !== action.lineNumber
+                        )
+                    ]
+                }
             };
         case 'postEntryFieldChange':
             return {
                 ...state,
-                importBookPostEntries: [
-                    ...state.importBookPostEntries.filter(x => x.lineNumber !== action.lineId),
-                    action.payload
-                ]
+                impbook: {
+                    ...state.impbook,
+                    importBookPostEntries: [
+                        ...state.impbook.importBookPostEntries.filter(
+                            x => x.lineNumber !== action.lineId
+                        ),
+                        action.payload
+                    ]
+                }
             };
         case 'postEntryAdd':
             return {
                 ...state,
-                importBookPostEntries: [...state.importBookPostEntries, action.payload]
+                impbook: {
+                    ...state.impbook,
+                    importBookPostEntries: [...state.impbook.importBookPostEntries, action.payload]
+                }
+            };
+        case 'postEntryRemove':
+            return {
+                ...state,
+                impbook: {
+                    ...state.impbook,
+                    importBookPostEntries: [
+                        ...state.impbook.importBookPostEntries.filter(
+                            x => x.lineNumber !== action.lineId
+                        )
+                    ]
+                }
             };
         default:
             return state;
