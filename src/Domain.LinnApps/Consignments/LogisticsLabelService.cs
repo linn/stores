@@ -60,6 +60,54 @@
             return new ProcessResult(true, $"{labelCount} carton label(s) printed");
         }
 
+        public ProcessResult PrintPalletLabel(
+            int consignmentId,
+            int firstPallet,
+            int? lastPallet,
+            int userNumber,
+            int numberOfCopies = 1)
+        {
+            var consignment = this.consignmentRepository.FindById(consignmentId);
+            var labelCount = 0;
+
+            if (!lastPallet.HasValue)
+            {
+                lastPallet = firstPallet;
+            }
+
+            var labelMessage = string.Empty;
+            for (int i = firstPallet; i <= lastPallet.Value; i++)
+            {
+                var labelData = this.GetPalletLabelInfo(consignment, i);
+                var printerName = this.GetPrinter(userNumber);
+
+                this.bartenderLabelPack.PrintLabels(
+                    $"PalletLabel{consignmentId}pallet{i}",
+                    printerName,
+                    numberOfCopies,
+                    "dispatchpallet.btw",
+                    labelData,
+                    ref labelMessage);
+
+                labelCount += numberOfCopies;
+            }
+
+            return new ProcessResult(true, $"{labelCount} pallet label(s) printed");
+        }
+
+        private string GetPalletLabelInfo(Consignment consignment, int palletNumber)
+        {
+            var pallet = consignment.Pallets.First(a => a.PalletNumber == palletNumber);
+
+            var labelInfo = $"\"{this.GetPrintAddress(consignment.Address)}\"";
+            labelInfo += $", \"{palletNumber}\"";
+            labelInfo += $", \"Pallet Number {palletNumber}\"";
+            labelInfo += $", \"{pallet.Weight}\"";
+            labelInfo += $", \"{consignment.ConsignmentId}\"";
+
+            return labelInfo;
+        }
+
         private string GetLabelInformation(Consignment consignment, int cartonNumber)
         {
             var item = consignment.Items.First(a => a.ContainerNumber == cartonNumber);

@@ -29,6 +29,14 @@
                         resource.UserNumber,
                         resource.NumberOfCopies);
                     break;
+                case "Pallet":
+                    labelServiceResult = this.logisticsLabelService.PrintPalletLabel(
+                        resource.ConsignmentId,
+                        resource.FirstItem,
+                        resource.LastItem,
+                        resource.UserNumber,
+                        resource.NumberOfCopies);
+                    break;
                 default:
                     throw new ProcessException($"Cannot print label type {resource.LabelType}");
             }
