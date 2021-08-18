@@ -24,7 +24,6 @@
                 null,
                 null,
                 null,
-                null,
                 ontoLocation: "P1234",
                 null,
                 null,

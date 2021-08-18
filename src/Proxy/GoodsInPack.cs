@@ -17,6 +17,7 @@
         }
 
         public void DoBookIn(
+            int bookInRef,
             string transactionType,
             int createdBy,
             string partNumber,
@@ -39,7 +40,6 @@
             using (var connection = this.databaseService.GetConnection())
             {
                 connection.Open();
-                var bookInRef = this.GetNextBookInRef();
                 var cmd =
                     new OracleCommand(
                         "goods_in_pack.do_bookin_wrapper",
@@ -185,9 +185,11 @@
                                              Value = 1
                                          };
                 cmd.Parameters.Add(successParam);
-
+               
                 cmd.ExecuteNonQuery();
-                reqNumber = int.Parse(reqNumberParam.Value.ToString());
+                var successInt = int.Parse(successParam.Value.ToString());
+
+                success = successInt == 0;
                 if (int.TryParse(reqNumberParam.Value.ToString(), out var reqNumberResult))
                 {
                     reqNumber = reqNumberResult;
@@ -197,7 +199,6 @@
                     reqNumber = null;
                 }
 
-                success = int.Parse(successParam.Value.ToString()) == 0;
                 connection.Close();
             }
         }

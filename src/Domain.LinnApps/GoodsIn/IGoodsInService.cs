@@ -17,7 +17,6 @@
             int? loanNumber,
             int? loanLine,
             int? rsnNumber,
-            string storagePlace,
             string storageType,
             string demLocation,
             string ontoLocation,

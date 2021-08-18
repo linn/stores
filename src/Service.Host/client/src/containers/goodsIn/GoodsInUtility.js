@@ -12,6 +12,7 @@ import doBookInSelectors from '../../selectors/doBookInSelectors';
 import doBookInActions from '../../actions/doBookInActions';
 import validatePurchaseOrderBookInQtyResultActions from '../../actions/validatePurchaseOrderBookInQtyResultActions';
 import validatePurchaseOrderBookInQtyResultSelectors from '../../selectors/validatePurchaseOrderBookInQtyResultSelectors';
+import { getUserNumber } from '../../selectors/userSelectors';
 
 const mapStateToProps = state => ({
     validatePurchaseOrderResult: validatePurchaseOrderResultSelectors.getItem(state),
@@ -33,7 +34,8 @@ const mapStateToProps = state => ({
     ),
     validatePurchaseOrderBookInQtyResultLoading: validatePurchaseOrderBookInQtyResultSelectors.getLoading(
         state
-    )
+    ),
+    userNumber: getUserNumber(state)
 });
 
 const mapDispatchToProps = {

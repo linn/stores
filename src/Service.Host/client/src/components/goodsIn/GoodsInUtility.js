@@ -40,10 +40,11 @@ function GoodsInUtility({
     doBookIn,
     validatePurchaseOrderBookInQtyResult,
     validatePurchaseOrderBookInQty,
-    validatePurchaseOrderBookInQtyResultLoading
+    validatePurchaseOrderBookInQtyResultLoading,
+    userNumber
 }) {
     const [formData, setFormData] = useState({
-        purchaseOrderNumber: null,
+        orderNumber: null,
         dateReceived: new Date(),
         lines: []
     });
@@ -107,7 +108,7 @@ function GoodsInUtility({
             width: 200
         },
         {
-            headerName: 'Createed',
+            headerName: 'Created',
             field: 'dateCreated',
             width: 100,
             hide: true
@@ -238,15 +239,15 @@ function GoodsInUtility({
                 <Grid item xs={4}>
                     <InputField
                         fullWidth
-                        value={formData.purchaseOrderNumber}
+                        value={formData.orderNumber}
                         label="PO Number"
                         disabled={validatePurchaseOrderResultLoading}
-                        propertyName="purchaseOrderNumber"
+                        propertyName="orderNumber"
                         onChange={handleFieldChange}
                         textFieldProps={{
                             onBlur: () =>
-                                formData.purchaseOrderNumber
-                                    ? validatePurchaseOrder(formData.purchaseOrderNumber)
+                                formData.orderNumber
+                                    ? validatePurchaseOrder(formData.orderNumber)
                                     : {}
                         }}
                     />
@@ -263,7 +264,7 @@ function GoodsInUtility({
                                 formData.qty &&
                                 validatePurchaseOrderBookInQty(
                                     `qty=${formData.qty}&orderLine=${1}&orderNumber`,
-                                    formData.purchaseOrderNumber
+                                    formData.orderNumber
                                 )
                         }}
                         onChange={handleFieldChange}
@@ -272,9 +273,9 @@ function GoodsInUtility({
                 <Grid item xs={2}>
                     <InputField
                         fullWidth
-                        value={formData.sType}
+                        value={formData.storageType}
                         label="S/Type"
-                        propertyName="sType"
+                        propertyName="storageType"
                         onChange={handleFieldChange}
                     />
                 </Grid>
@@ -523,7 +524,8 @@ function GoodsInUtility({
                                     orderNumber: validatePurchaseOrderResult.orderNumber,
                                     state: validatePurchaseOrderResult.state,
                                     orderLine: validatePurchaseOrderResult.orderLine,
-                                    storageType: formData.sType
+                                    storageType: formData.storageType,
+                                    createdBy: userNumber
                                 }
                             ])
                         }
@@ -533,7 +535,19 @@ function GoodsInUtility({
                     <Button
                         className="hide-when-printing"
                         variant="contained"
-                        onClick={() => doBookIn({ ...formData, lines: rows })}
+                        //disabled - when...
+                        onClick={() =>
+                            doBookIn({
+                                ...formData,
+                                lines: rows,
+                                createdBy: userNumber,
+                                transactionType: validatePurchaseOrderResult.transactionType,
+                                partNumber: validatePurchaseOrderResult.partNumber,
+                                manufacturersPartNumber:
+                                    validatePurchaseOrderResult.manufacturersPartNumber,
+                                state: validatePurchaseOrderResult.state
+                            })
+                        }
                     >
                         Book In
                     </Button>
@@ -611,7 +625,8 @@ GoodsInUtility.propTypes = {
         message: PropTypes.string
     }),
     validatePurchaseOrderBookInQty: PropTypes.func.isRequired,
-    validatePurchaseOrderBookInQtyResultLoading: PropTypes.bool
+    validatePurchaseOrderBookInQtyResultLoading: PropTypes.bool,
+    userNumber: PropTypes.number.isRequired
 };
 
 GoodsInUtility.defaultProps = {
