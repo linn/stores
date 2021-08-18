@@ -45,14 +45,8 @@ function OrderDetailsTab({
     const lineTypes = ['PO', 'RSN', 'RETURNS', 'RO', 'LOAN', 'SAMPLES', 'SUNDRY', 'INS'];
 
     // const EditableRow = ({ row, updateRow }) => {
-    const editRow = (e, row, propertyName, newValue, event) => {
-        console.log('propname is '+ propertyName + ' newv is ' + newValue);
-        console.info(e);
-        console.info(event);
-
-
-        console.info(row);
-        // updateRow({ ...row, [propertyName]: newValue });
+    const editRow = (row, propertyName, newValue) => {
+        updateRow({ ...row, [propertyName]: newValue });
     };
 
     // return (
@@ -357,7 +351,9 @@ function OrderDetailsTab({
                                 items={lineTypes}
                                 label="Line Type"
                                 fullWidth
-                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                onChange={(propertyName, newValue) =>
+                                    editRow(row, propertyName, newValue)
+                                }
                                 propertyName="lineType"
                                 value={row.lineType}
                             />
@@ -368,7 +364,9 @@ function OrderDetailsTab({
                                 <InputField
                                     label="Order Number"
                                     fullWidth
-                                    onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                    onChange={(propertyName, newValue) =>
+                                        editRow(row, propertyName, newValue)
+                                    }
                                     propertyName="orderNumber"
                                     type="number"
                                     value={row.orderNumber}
@@ -381,7 +379,9 @@ function OrderDetailsTab({
                                 <InputField
                                     label="RSN Number"
                                     fullWidth
-                                    onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                    onChange={(propertyName, newValue) =>
+                                        editRow(row, propertyName, newValue)
+                                    }
                                     propertyName="rsnNumber"
                                     type="number"
                                     value={row.rsnNumber}
@@ -394,7 +394,9 @@ function OrderDetailsTab({
                                 <InputField
                                     label="Loan Number"
                                     fullWidth
-                                    onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                    onChange={(propertyName, newValue) =>
+                                        editRow(row, propertyName, newValue)
+                                    }
                                     propertyName="loanNumber"
                                     type="number"
                                     value={row.loanNumber}
@@ -407,7 +409,9 @@ function OrderDetailsTab({
                                 <InputField
                                     label="Ins Number"
                                     fullWidth
-                                    onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                    onChange={(propertyName, newValue) =>
+                                        editRow(row, propertyName, newValue)
+                                    }
                                     propertyName="insNumber"
                                     type="number"
                                     value={row.insNumber}
@@ -419,7 +423,9 @@ function OrderDetailsTab({
                             <InputField
                                 label="Order Description"
                                 fullWidth
-                                onChange={e => editRow(e, row)}
+                                onChange={(propertyName, newValue) =>
+                                    editRow(row, propertyName, newValue)
+                                }
                                 propertyName="orderDescription"
                                 type="text"
                                 value={row.orderDescription}
@@ -429,7 +435,9 @@ function OrderDetailsTab({
                             <InputField
                                 label="Tariff Code"
                                 fullWidth
-                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                onChange={(propertyName, newValue) =>
+                                    editRow(row, propertyName, newValue)
+                                }
                                 propertyName="tariffCode"
                                 type="text"
                                 value={row.tariffCode}
@@ -439,7 +447,9 @@ function OrderDetailsTab({
                             <InputField
                                 label="Tariff Number"
                                 fullWidth
-                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                onChange={(propertyName, newValue) =>
+                                    editRow(row, propertyName, newValue)
+                                }
                                 propertyName="tariffNumber"
                                 type="number"
                                 value={row.tariffNumber}
@@ -449,7 +459,9 @@ function OrderDetailsTab({
                             <InputField
                                 label="Qty"
                                 fullWidth
-                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                onChange={(propertyName, newValue) =>
+                                    editRow(row, propertyName, newValue)
+                                }
                                 propertyName="qty"
                                 type="number"
                                 value={row.qty}
@@ -459,7 +471,9 @@ function OrderDetailsTab({
                             <InputField
                                 label="Order Value"
                                 fullWidth
-                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                onChange={(propertyName, newValue) =>
+                                    editRow(row, propertyName, newValue)
+                                }
                                 propertyName="orderValue"
                                 type="number"
                                 value={row.orderValue}
@@ -469,7 +483,9 @@ function OrderDetailsTab({
                             <InputField
                                 label="Duty Value"
                                 fullWidth
-                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                onChange={(propertyName, newValue) =>
+                                    editRow(row, propertyName, newValue)
+                                }
                                 propertyName="dutyValue"
                                 type="number"
                                 value={row.dutyValue}
@@ -479,7 +495,9 @@ function OrderDetailsTab({
                             <InputField
                                 label="Vat Rate"
                                 fullWidth
-                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                onChange={(propertyName, newValue) =>
+                                    editRow(row, propertyName, newValue)
+                                }
                                 propertyName="vatRate"
                                 type="number"
                                 value={row.vatRate}
@@ -489,7 +507,9 @@ function OrderDetailsTab({
                             <InputField
                                 label="Vat Value"
                                 fullWidth
-                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                onChange={(propertyName, newValue) =>
+                                    editRow(row, propertyName, newValue)
+                                }
                                 propertyName="vatValue"
                                 type="number"
                                 value={row.vatValue}
@@ -499,7 +519,9 @@ function OrderDetailsTab({
                             <InputField
                                 label="Weight"
                                 fullWidth
-                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                onChange={(propertyName, newValue) =>
+                                    editRow(row, propertyName, newValue)
+                                }
                                 propertyName="weight"
                                 type="number"
                                 value={row.weight}
@@ -510,7 +532,9 @@ function OrderDetailsTab({
                                 items={cpcNumbers}
                                 label="Cpc Number"
                                 fullWidth
-                                onChange={e => editRow(row, e.propertyName, e.newValue)}
+                                onChange={(propertyName, newValue) =>
+                                    editRow(row, propertyName, newValue)
+                                }
                                 propertyName="cpcNumber"
                                 value={row.cpcNumber}
                             />
