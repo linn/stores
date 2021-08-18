@@ -1,12 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import {
-    Dropdown,
-    InputField,
-    LinkButton,
-    SingleEditTable
-} from '@linn-it/linn-form-components-library';
+import Button from '@material-ui/core/Button';
+import { Dropdown, InputField, LinkButton } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
 
 function OrderDetailsTab({
@@ -18,7 +14,9 @@ function OrderDetailsTab({
     invoiceDate,
     handleOrderDetailChange,
     cpcNumbers,
-    allowedToEdit
+    allowedToEdit,
+    addOrderDetailRow,
+    removeOrderDetailRow
 }) {
     const updateRow = detail => {
         handleOrderDetailChange(detail.lineNumber, detail);
@@ -44,232 +42,13 @@ function OrderDetailsTab({
 
     const lineTypes = ['PO', 'RSN', 'RETURNS', 'RO', 'LOAN', 'SAMPLES', 'SUNDRY', 'INS'];
 
-    // const EditableRow = ({ row, updateRow }) => {
     const editRow = (row, propertyName, newValue) => {
         updateRow({ ...row, [propertyName]: newValue });
     };
 
-    // return (
-    //     <>
-    //         <Grid item xs={2}>
-    //             <Dropdown
-    //                 items={lineTypes}
-    //                 label="Line Type"
-    //                 fullWidth
-    //                 onChange={editRow}
-    //                 propertyName="lineType"
-    //                 value={row.lineType}
-    //             />
-    //         </Grid>
-
-    //         {(row.lineType === 'PO' || row.lineType === 'RO') && (
-    //             <Grid item xs={2}>
-    //                 <InputField
-    //                     label="Order Number"
-    //                     fullWidth
-    //                     onChange={editRow}
-    //                     propertyName="orderNumber"
-    //                     type="number"
-    //                     value={row.orderNumber}
-    //                 />
-    //             </Grid>
-    //         )}
-
-    //         {row.lineType === 'RSN' && (
-    //             <Grid item xs={2}>
-    //                 <InputField
-    //                     label="RSN Number"
-    //                     fullWidth
-    //                     onChange={editRow}
-    //                     propertyName="rsnNumber"
-    //                     type="number"
-    //                     value={row.rsnNumber}
-    //                 />
-    //             </Grid>
-    //         )}
-
-    //         {row.lineType === 'LOAN' && (
-    //             <Grid item xs={2}>
-    //                 <InputField
-    //                     label="Loan Number"
-    //                     fullWidth
-    //                     onChange={editRow}
-    //                     propertyName="loanNumber"
-    //                     type="number"
-    //                     value={row.loanNumber}
-    //                 />
-    //             </Grid>
-    //         )}
-
-    //         {row.lineType === 'INS' && (
-    //             <Grid item xs={2}>
-    //                 <InputField
-    //                     label="Ins Number"
-    //                     fullWidth
-    //                     onChange={editRow}
-    //                     propertyName="insNumber"
-    //                     type="number"
-    //                     value={row.insNumber}
-    //                 />
-    //             </Grid>
-    //         )}
-
-    //         <Grid item xs={2}>
-    //             <InputField
-    //                 label="Order Description"
-    //                 fullWidth
-    //                 onChange={editRow}
-    //                 propertyName="orderDescription"
-    //                 type="text"
-    //                 value={row.orderDescription}
-    //             />
-    //         </Grid>
-    //         <Grid item xs={2}>
-    //             <InputField
-    //                 label="Tariff Code"
-    //                 fullWidth
-    //                 onChange={editRow}
-    //                 propertyName="tariffCode"
-    //                 type="text"
-    //                 value={row.tariffCode}
-    //             />
-    //         </Grid>
-    //         <Grid item xs={2}>
-    //             <InputField
-    //                 label="Tariff Number"
-    //                 fullWidth
-    //                 onChange={editRow}
-    //                 propertyName="tariffNumber"
-    //                 type="number"
-    //                 value={row.tariffNumber}
-    //             />
-    //         </Grid>
-    //         <Grid item xs={2}>
-    //             <InputField
-    //                 label="Qty"
-    //                 fullWidth
-    //                 onChange={editRow}
-    //                 propertyName="qty"
-    //                 type="number"
-    //                 value={row.qty}
-    //             />
-    //         </Grid>
-    //         <Grid item xs={2}>
-    //             <InputField
-    //                 label="Order Value"
-    //                 fullWidth
-    //                 onChange={editRow}
-    //                 propertyName="orderValue"
-    //                 type="number"
-    //                 value={row.orderValue}
-    //             />
-    //         </Grid>
-    //         <Grid item xs={2}>
-    //             <InputField
-    //                 label="Duty Value"
-    //                 fullWidth
-    //                 onChange={editRow}
-    //                 propertyName="dutyValue"
-    //                 type="number"
-    //                 value={row.dutyValue}
-    //             />
-    //         </Grid>
-    //         <Grid item xs={2}>
-    //             <InputField
-    //                 label="Vat Rate"
-    //                 fullWidth
-    //                 onChange={editRow}
-    //                 propertyName="vatRate"
-    //                 type="number"
-    //                 value={row.vatRate}
-    //             />
-    //         </Grid>
-    //         <Grid item xs={2}>
-    //             <InputField
-    //                 label="Vat Value"
-    //                 fullWidth
-    //                 onChange={editRow}
-    //                 propertyName="vatValue"
-    //                 type="number"
-    //                 value={row.vatValue}
-    //             />
-    //         </Grid>
-    //         <Grid item xs={2}>
-    //             <InputField
-    //                 label="Weight"
-    //                 fullWidth
-    //                 onChange={editRow}
-    //                 propertyName="weight"
-    //                 type="number"
-    //                 value={row.weight}
-    //             />
-    //         </Grid>
-    //         <Grid item xs={2}>
-    //             <Dropdown
-    //                 items={cpcNumbers}
-    //                 label="Cpc Number"
-    //                 fullWidth
-    //                 onChange={editRow}
-    //                 propertyName="cpcNumber"
-    //                 value={row.cpcNumber}
-    //             />
-    //         </Grid>
-    //         <Grid item xs={2}>
-    //             {/* //todo check that this works when editing is sorted & that
-    //     // "IPR" text for id 13 is obvious enough to prevent mistakes
-    //     // if not maybe consider a popup or an IPR button to fill in the IPR cpc number
-
-    //     //also work out if need below when I just want it to act like every other field
-    //     //selectSearchResult: update */}
-    //         </Grid>
-    //         <Grid item xs={2}>
-    //             <LinkButton
-    //                 text="Post Duty"
-    //                 //todo to={`/logistics/`}
-    //                 disabled
-    //                 external
-    //             />
-    //         </Grid>
-    //         </>
-    //     );
+    // const addRow = lineType => {
+    //     addNewRow(lineType);
     // };
-    //todo - implement the below checks to disable fields
-    //looks like I'll need to edit the shared components to check for disabled with the row
-
-    //maybe could make this just new components for each linetype? Like a small component with the fields
-    // BEGIN
-    //     IF :IMPBOOK_ORDER_DETAIL.LINE_TYPE IN ('PO','RO') THEN
-    //     ACTIVATE_FIELD('ORDER_NUMBER');
-    //     DEACTIVATE_FIELD('RSN_NUMBER');
-    //     DEACTIVATE_FIELD('LOAN_NUMBER');
-    //     DEACTIVATE_FIELD('INS_NUMBER2');
-    // ELSIF :IMPBOOK_ORDER_DETAIL.LINE_TYPE = 'RSN' THEN
-    //     ACTIVATE_FIELD('RSN_NUMBER');
-    //     DEACTIVATE_FIELD('ORDER_NUMBER');
-    //     DEACTIVATE_FIELD('LOAN_NUMBER');
-    //     DEACTIVATE_FIELD('INS_NUMBER2');
-    // ELSIF :IMPBOOK_ORDER_DETAIL.LINE_TYPE = 'LOAN' THEN
-    //     ACTIVATE_FIELD('LOAN_NUMBER');
-    //     DEACTIVATE_FIELD('RSN_NUMBER');
-    //     DEACTIVATE_FIELD('ORDER_NUMBER');
-    //     DEACTIVATE_FIELD('INS_NUMBER2');
-    // ELSIF :IMPBOOK_ORDER_DETAIL.LINE_TYPE = 'INS' THEN
-    //     DEACTIVATE_FIELD('LOAN_NUMBER');
-    //     DEACTIVATE_FIELD('RSN_NUMBER');
-    //     DEACTIVATE_FIELD('ORDER_NUMBER');
-    //     ACTIVATE_FIELD('INS_NUMBER2');
-    // ELSE
-    //     DEACTIVATE_FIELD('LOAN_NUMBER');
-    //     DEACTIVATE_FIELD('RSN_NUMBER');
-    //     DEACTIVATE_FIELD('ORDER_NUMBER');
-    //     DEACTIVATE_FIELD('INS_NUMBER2');
-    // END IF;
-
-    // if :IMPBOOK_ORDER_DETAIL.LINE_TYPE IN ('RSN','RETURNS','LOAN') then
-    //  :impbook_order_detail.vat_rate := 0;
-    // else
-    //      :impbook_order_detail.vat_rate := sales_tax_pack.GET_VAT_RATE_country(:impbook.l_supp_country);
-    // end if;
 
     return (
         <>
@@ -282,6 +61,7 @@ function OrderDetailsTab({
                         propertyName="remainingTotal"
                         type="number"
                         value={remainingTotal}
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
                 <Grid item xs={3}>
@@ -293,6 +73,7 @@ function OrderDetailsTab({
                         type="number"
                         value={remainingDutyTotal}
                         required
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
                 <Grid item xs={3}>
@@ -303,6 +84,7 @@ function OrderDetailsTab({
                         propertyName="remainingWeight"
                         type="number"
                         value={remainingWeight}
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
                 {/* Are these fields even used? Check with Rhona */}
@@ -323,6 +105,7 @@ function OrderDetailsTab({
                         propertyName="invoiceDate"
                         type="date"
                         value={invoiceDate}
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
                 <Grid item xs={3}>
@@ -335,15 +118,8 @@ function OrderDetailsTab({
                 </Grid>
             </Grid>
 
-            {/* foreach orderDetails 
-            
-            if lineType = blah, use blah row component with those fields
-
-            create needs a dropdown for each type
-            can't edit the row type, delete the row and make a new one for ease?
-            */}
-
             <Grid container spacing={1} item xs={12} className={classes.gapAbove}>
+                {/* todo implement add row and delete row buttons and functions */}
                 {orderDetails.map(row => (
                     <>
                         <Grid item xs={2}>
@@ -356,6 +132,8 @@ function OrderDetailsTab({
                                 }
                                 propertyName="lineType"
                                 value={row.lineType}
+                                disabled={!allowedToEdit}
+                                required
                             />
                         </Grid>
 
@@ -370,6 +148,7 @@ function OrderDetailsTab({
                                     propertyName="orderNumber"
                                     type="number"
                                     value={row.orderNumber}
+                                    disabled={!allowedToEdit}
                                 />
                             </Grid>
                         )}
@@ -385,6 +164,7 @@ function OrderDetailsTab({
                                     propertyName="rsnNumber"
                                     type="number"
                                     value={row.rsnNumber}
+                                    disabled={!allowedToEdit}
                                 />
                             </Grid>
                         )}
@@ -400,6 +180,7 @@ function OrderDetailsTab({
                                     propertyName="loanNumber"
                                     type="number"
                                     value={row.loanNumber}
+                                    disabled={!allowedToEdit}
                                 />
                             </Grid>
                         )}
@@ -415,6 +196,7 @@ function OrderDetailsTab({
                                     propertyName="insNumber"
                                     type="number"
                                     value={row.insNumber}
+                                    disabled={!allowedToEdit}
                                 />
                             </Grid>
                         )}
@@ -429,6 +211,7 @@ function OrderDetailsTab({
                                 propertyName="orderDescription"
                                 type="text"
                                 value={row.orderDescription}
+                                disabled={!allowedToEdit}
                             />
                         </Grid>
                         <Grid item xs={2}>
@@ -441,6 +224,7 @@ function OrderDetailsTab({
                                 propertyName="tariffCode"
                                 type="text"
                                 value={row.tariffCode}
+                                disabled={!allowedToEdit}
                             />
                         </Grid>
                         <Grid item xs={2}>
@@ -453,6 +237,7 @@ function OrderDetailsTab({
                                 propertyName="tariffNumber"
                                 type="number"
                                 value={row.tariffNumber}
+                                disabled={!allowedToEdit}
                             />
                         </Grid>
                         <Grid item xs={2}>
@@ -465,6 +250,7 @@ function OrderDetailsTab({
                                 propertyName="qty"
                                 type="number"
                                 value={row.qty}
+                                disabled={!allowedToEdit}
                             />
                         </Grid>
                         <Grid item xs={2}>
@@ -477,6 +263,7 @@ function OrderDetailsTab({
                                 propertyName="orderValue"
                                 type="number"
                                 value={row.orderValue}
+                                disabled={!allowedToEdit}
                             />
                         </Grid>
                         <Grid item xs={2}>
@@ -489,6 +276,7 @@ function OrderDetailsTab({
                                 propertyName="dutyValue"
                                 type="number"
                                 value={row.dutyValue}
+                                disabled={!allowedToEdit}
                             />
                         </Grid>
                         <Grid item xs={2}>
@@ -501,6 +289,7 @@ function OrderDetailsTab({
                                 propertyName="vatRate"
                                 type="number"
                                 value={row.vatRate}
+                                disabled={!allowedToEdit}
                             />
                         </Grid>
                         <Grid item xs={2}>
@@ -513,6 +302,7 @@ function OrderDetailsTab({
                                 propertyName="vatValue"
                                 type="number"
                                 value={row.vatValue}
+                                disabled={!allowedToEdit}
                             />
                         </Grid>
                         <Grid item xs={2}>
@@ -525,6 +315,7 @@ function OrderDetailsTab({
                                 propertyName="weight"
                                 type="number"
                                 value={row.weight}
+                                disabled={!allowedToEdit}
                             />
                         </Grid>
                         <Grid item xs={2}>
@@ -537,6 +328,7 @@ function OrderDetailsTab({
                                 }
                                 propertyName="cpcNumber"
                                 value={row.cpcNumber}
+                                disabled={!allowedToEdit}
                             />
                         </Grid>
                         <Grid item xs={2}>
@@ -557,17 +349,19 @@ function OrderDetailsTab({
                         </Grid>
 
                         <Grid item xs={12} />
+
+                        {/* delete row button */}
                     </>
                 ))}
+                {/* add row button */}
 
-                {/* <SingleEditTable
-                    columns={columns}
-                    rows={orderDetails ?? [{}]}
-                    saveRow={updateRow}
-                    // editable={!displayOnly}
-                    //todo add createRow function
-                    allowNewRowCreation={false}
-                /> */}
+                <Button
+                    style={{ marginTop: '22px' }}
+                    variant="contained"
+                    onClick={addOrderDetailRow}
+                >
+                   Add new order detail
+                </Button>
             </Grid>
         </>
     );
@@ -581,7 +375,8 @@ OrderDetailsTab.propTypes = {
     remainingWeight: PropTypes.number.isRequired,
     invoiceDate: PropTypes.string.isRequired,
     handleOrderDetailChange: PropTypes.func.isRequired,
-    cpcNumbers: PropTypes.arrayOf(PropTypes.shape({})).isRequired
+    cpcNumbers: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    allowedToEdit: PropTypes.bool.isRequired
 };
 
 OrderDetailsTab.defaultProps = {};

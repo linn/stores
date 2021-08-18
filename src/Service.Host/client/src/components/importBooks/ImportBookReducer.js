@@ -27,6 +27,28 @@ export default function importBookReducer(state = initialState, action) {
                     action.payload
                 ]
             };
+        case 'orderDetailAdd':
+            return {
+                ...state,
+                importBookOrderDetails: [
+                    ...state.importBookOrderDetails,
+                    {
+                        lineId:
+                            Math.max([
+                                state.importBookOrderDetails.map(x => {
+                                    return x.lineId;
+                                })
+                            ]) + 1
+                    }
+                ]
+            };
+        case 'orderDetailRemove':
+            return {
+                ...state,
+                importBookOrderDetails: [
+                    ...state.importBookOrderDetails.filter(x => x.lineNumber !== action.lineId)
+                ]
+            };
         case 'postEntryFieldChange':
             return {
                 ...state,
@@ -34,6 +56,11 @@ export default function importBookReducer(state = initialState, action) {
                     ...state.importBookPostEntries.filter(x => x.lineNumber !== action.lineId),
                     action.payload
                 ]
+            };
+        case 'postEntryAdd':
+            return {
+                ...state,
+                importBookPostEntries: [...state.importBookPostEntries, action.payload]
             };
         default:
             return state;

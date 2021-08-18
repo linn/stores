@@ -171,6 +171,21 @@ function ImportBook({
         });
     };
 
+    const handleAddOrderDetailRow = () => {
+        setEditStatus('edit');
+        dispatch({
+            type: 'orderDetailAdd'
+        });
+    };
+
+    const handleRemoveOrderDetailRow = lineId => {
+        setEditStatus('edit');
+        dispatch({
+            type: 'orderDetailRemove',
+            payload: lineId
+        });
+    };
+
     const allowedToEdit = true;
     //todo implement permissions check ^
 
@@ -286,6 +301,8 @@ function ImportBook({
                                     handleFieldChange={handleFieldChange}
                                     handleOrderDetailChange={handleOrderDetailChange}
                                     allowedToEdit={allowedToEdit}
+                                    addOrderDetailRow={handleAddOrderDetailRow}
+                                    removeOrderDetailRow={handleRemoveOrderDetailRow}
                                     //todo - work out where below fields should come from and populate them
                                     // remainingTotal,
                                     // remainingDutyTotal,
