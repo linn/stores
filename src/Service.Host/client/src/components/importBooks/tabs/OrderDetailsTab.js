@@ -122,7 +122,7 @@ function OrderDetailsTab({
                 {/* todo implement add row and delete row buttons and functions */}
                 {orderDetails.map(row => (
                     <>
-                        <Grid item xs={2}>
+                        <Grid item xs={1}>
                             <Dropdown
                                 items={lineTypes}
                                 label="Line Type"
@@ -201,7 +201,7 @@ function OrderDetailsTab({
                             </Grid>
                         )}
 
-                        <Grid item xs={2}>
+                        <Grid item xs={3}>
                             <InputField
                                 label="Order Description"
                                 fullWidth
@@ -227,7 +227,7 @@ function OrderDetailsTab({
                                 disabled={!allowedToEdit}
                             />
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item xs={1}>
                             <InputField
                                 label="Tariff Number"
                                 fullWidth
@@ -240,7 +240,7 @@ function OrderDetailsTab({
                                 disabled={!allowedToEdit}
                             />
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item xs={1}>
                             <InputField
                                 label="Qty"
                                 fullWidth
@@ -279,7 +279,7 @@ function OrderDetailsTab({
                                 disabled={!allowedToEdit}
                             />
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item xs={1}>
                             <InputField
                                 label="Vat Rate"
                                 fullWidth
@@ -305,7 +305,7 @@ function OrderDetailsTab({
                                 disabled={!allowedToEdit}
                             />
                         </Grid>
-                        <Grid item xs={2}>
+                        <Grid item xs={1}>
                             <InputField
                                 label="Weight"
                                 fullWidth
@@ -331,14 +331,10 @@ function OrderDetailsTab({
                                 disabled={!allowedToEdit}
                             />
                         </Grid>
-                        <Grid item xs={2}>
-                            {/* //todo check that this works when editing is sorted & that
-            // "IPR" text for id 13 is obvious enough to prevent mistakes
-            // if not maybe consider a popup or an IPR button to fill in the IPR cpc number
-
-            //also work out if need below when I just want it to act like every other field
-            //selectSearchResult: update */}
-                        </Grid>
+                        {/* //todo 
+                        check that "IPR" text for id 13 is obvious enough to prevent mistakes
+                        if not maybe consider a popup or an IPR button to fill in the IPR cpc number
+                        also work out if 'post duty' function below is still needed and if so what it should do */}
                         <Grid item xs={2}>
                             <LinkButton
                                 text="Post Duty"
@@ -348,19 +344,28 @@ function OrderDetailsTab({
                             />
                         </Grid>
 
-                        <Grid item xs={12} />
+                        <Grid item xs={2}>
+                            <Button
+                                style={{ marginTop: '22px' }}
+                                variant="contained"
+                                onClick={() => removeOrderDetailRow(row.lineNumber)}
+                            >
+                                Remove order detail
+                            </Button>
+                            {/* todo change this to wee bin symbol thing */}
+                        </Grid>
 
-                        {/* delete row button */}
+                        <Grid item xs={12} />
+                        <Grid item xs={12} />
                     </>
                 ))}
-                {/* add row button */}
 
                 <Button
                     style={{ marginTop: '22px' }}
                     variant="contained"
                     onClick={addOrderDetailRow}
                 >
-                   Add new order detail
+                    Add new order detail
                 </Button>
             </Grid>
         </>
@@ -376,7 +381,9 @@ OrderDetailsTab.propTypes = {
     invoiceDate: PropTypes.string.isRequired,
     handleOrderDetailChange: PropTypes.func.isRequired,
     cpcNumbers: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    allowedToEdit: PropTypes.bool.isRequired
+    allowedToEdit: PropTypes.bool.isRequired,
+    addOrderDetailRow: PropTypes.func.isRequired,
+    removeOrderDetailRow: PropTypes.func.isRequired
 };
 
 OrderDetailsTab.defaultProps = {};

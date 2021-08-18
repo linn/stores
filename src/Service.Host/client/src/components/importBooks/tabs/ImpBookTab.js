@@ -64,9 +64,6 @@ function ImpBookTab({
     linnVat,
     iprCpcNumber,
     eecgNumber,
-    dateCancelled,
-    cancelledBy,
-    cancelledReason,
     carrierInvNumber,
     carrierInvDate,
     countryOfOrigin,
@@ -75,7 +72,6 @@ function ImpBookTab({
     storage,
     numCartons,
     numPallets,
-    comments,
     exchangeRate,
     exchangeCurrency,
     baseCurrency,
@@ -84,8 +80,7 @@ function ImpBookTab({
     portCode,
     customsEntryCodePrefix
 }) {
-    const [supplier, setSupplier] = useState({ id: -1, name: 'loading', country: 'loading' });
-
+//todo remove params which aren't needed (will need some for un-implemented stuff)
     const [localSuppliers, setLocalSuppliers] = useState([{}]);
 
     useEffect(() => {
@@ -763,9 +758,6 @@ ImpBookTab.propTypes = {
     linnVat: PropTypes.number,
     iprCpcNumber: PropTypes.number,
     eecgNumber: PropTypes.number,
-    dateCancelled: PropTypes.string,
-    cancelledBy: PropTypes.number,
-    cancelledReason: PropTypes.string,
     carrierInvNumber: PropTypes.string,
     carrierInvDate: PropTypes.string,
     countryOfOrigin: PropTypes.string,
@@ -774,7 +766,6 @@ ImpBookTab.propTypes = {
     storage: PropTypes.number,
     numCartons: PropTypes.number,
     numPallets: PropTypes.number,
-    comments: PropTypes.string,
     exchangeRate: PropTypes.number,
     exchangeCurrency: PropTypes.string,
     baseCurrency: PropTypes.string,
@@ -815,9 +806,6 @@ ImpBookTab.defaultProps = {
     linnVat: null,
     iprCpcNumber: null,
     eecgNumber: null,
-    dateCancelled: null,
-    cancelledBy: null,
-    cancelledReason: '',
     carrierInvNumber: '',
     carrierInvDate: new Date(),
     countryOfOrigin: '',
@@ -826,7 +814,6 @@ ImpBookTab.defaultProps = {
     storage: null,
     numCartons: null,
     numPallets: null,
-    comments: '',
     exchangeRate: null,
     exchangeCurrency: '',
     baseCurrency: '',

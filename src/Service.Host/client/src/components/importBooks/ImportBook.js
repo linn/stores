@@ -153,11 +153,11 @@ function ImportBook({
         dispatch({ type: 'fieldChange', fieldName: propertyName, payload: newValue });
     };
 
-    const handleOrderDetailChange = (lineId, newValue) => {
+    const handleOrderDetailChange = (lineNumber, newValue) => {
         setEditStatus('edit');
         dispatch({
             type: 'orderDetailFieldChange',
-            lineId,
+            lineNumber,
             payload: newValue
         });
     };
@@ -178,11 +178,11 @@ function ImportBook({
         });
     };
 
-    const handleRemoveOrderDetailRow = lineId => {
+    const handleRemoveOrderDetailRow = lineNumber => {
         setEditStatus('edit');
         dispatch({
             type: 'orderDetailRemove',
-            payload: lineId
+            lineNumber
         });
     };
 
