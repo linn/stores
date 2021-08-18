@@ -53,10 +53,10 @@ function Consignment({
     clearConsignmentErrors,
     cartonTypes,
     userNumber,
-    printCartonLabel,
-    printCartonLabelWorking,
-    printCartonLabelResult,
-    clearCartonLabelData
+    printConsignmentLabel,
+    printConsignmentLabelWorking,
+    printConsignmentLabelResult,
+    clearConsignmentLabelData
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
     const [editablePallets, setEditablePallets] = useState([]);
@@ -68,7 +68,12 @@ function Consignment({
         firstItem: 1,
         lastItem: 1
     });
-
+    const [showPalletLabel, setShowPalletLabel] = useState(false);
+    const [palletLabelOptions, setPalletLabelOptions] = useState({
+        numberOfCopies: 1,
+        firstItem: 1,
+        lastItem: 1
+    });
     const [state, dispatch] = useReducer(consignmentReducer, {
         consignment: null,
         originalConsignment: null
@@ -222,7 +227,7 @@ function Consignment({
     };
 
     const showCartonLabelForm = () => {
-        clearCartonLabelData();
+        clearConsignmentLabelData();
 
         let maxContainer = 1;
         const containerItems = state.consignment.items?.filter(a => a.containerNumber);
@@ -241,7 +246,7 @@ function Consignment({
     };
 
     const doPrintCartonLabel = () => {
-        printCartonLabel({
+        printConsignmentLabel({
             labelType: 'Carton',
             consignmentId: item.consignmentId,
             firstItem: cartonLabelOptions.firstItem,
@@ -253,6 +258,40 @@ function Consignment({
 
     const updateCartonLabelOptions = (itemName, value) => {
         setCartonLabelOptions({ ...cartonLabelOptions, [itemName]: value });
+    };
+
+    const updatePalletLabelOptions = (itemName, value) => {
+        setPalletLabelOptions({ ...palletLabelOptions, [itemName]: value });
+    };
+
+    const showPalletLabelForm = () => {
+        clearConsignmentLabelData();
+
+        let maxPalletNumber = 1;
+        const pallets = state.consignment.pallets?.filter(a => a.palletNumber);
+        if (pallets && pallets.length > 0) {
+            const palletNumbers = pallets.map(a => a.palletNumber);
+            maxPalletNumber = Math.max(...palletNumbers);
+        }
+
+        setPalletLabelOptions({
+            ...palletLabelOptions,
+            firstItem: maxPalletNumber,
+            lastItem: maxPalletNumber
+        });
+
+        setShowPalletLabel(true);
+    };
+
+    const doPrintPalletLabel = () => {
+        printConsignmentLabel({
+            labelType: 'Pallet',
+            consignmentId: item.consignmentId,
+            firstItem: palletLabelOptions.firstItem,
+            lastItem: palletLabelOptions.lastItem,
+            numberOfCopies: palletLabelOptions.numberOfCopies,
+            userNumber
+        });
     };
 
     return (
@@ -350,9 +389,22 @@ function Consignment({
                 </>
                 <Grid item xs={12}>
                     {currentTab === 2 && (
-                        <Button variant="outlined" color="primary" onClick={showCartonLabelForm}>
-                            Carton Label
-                        </Button>
+                        <>
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={showCartonLabelForm}
+                            >
+                                Carton Label
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={showPalletLabelForm}
+                            >
+                                Pallet Label
+                            </Button>
+                        </>
                     )}
                     {editStatus === 'view' ? (
                         <Button
@@ -421,11 +473,11 @@ function Consignment({
                                 >
                                     Print Carton Label
                                 </Button>
-                                {printCartonLabelWorking ? (
+                                {printConsignmentLabelWorking ? (
                                     <Loading />
                                 ) : (
                                     <Typography variant="h6">
-                                        {printCartonLabelResult?.message}
+                                        {printConsignmentLabelResult?.message}
                                     </Typography>
                                 )}
                             </Grid>
@@ -434,6 +486,70 @@ function Consignment({
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setShowCartonLabel(false)} variant="contained" autoFocus>
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={showPalletLabel}
+                onClose={() => setShowPalletLabel(false)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                fullWidth
+                maxWidth="sm"
+            >
+                <DialogTitle id="alert-dialog-title">Print Pallet Label</DialogTitle>
+                <DialogContent>
+                    <>
+                        <Grid container>
+                            <Grid item xs={6}>
+                                <InputField
+                                    label="First Pallet"
+                                    placeholder="First Pallet"
+                                    propertyName="firstItem"
+                                    value={palletLabelOptions.firstItem}
+                                    onChange={updatePalletLabelOptions}
+                                    maxLength={3}
+                                />
+                                <InputField
+                                    label="Last Pallet"
+                                    placeholder="Last Pallet"
+                                    propertyName="lastItem"
+                                    value={palletLabelOptions.lastItem}
+                                    onChange={updatePalletLabelOptions}
+                                    maxLength={3}
+                                />
+                                <InputField
+                                    label="Copies"
+                                    placeholder="Copies To Print"
+                                    propertyName="numberOfCopies"
+                                    value={palletLabelOptions.numberOfCopies}
+                                    onChange={updatePalletLabelOptions}
+                                    maxLength={3}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Button
+                                    style={{ marginTop: '30px', marginBottom: '40px' }}
+                                    onClick={doPrintPalletLabel}
+                                    variant="contained"
+                                    color="primary"
+                                >
+                                    Print Pallet Label
+                                </Button>
+                                {printConsignmentLabelWorking ? (
+                                    <Loading />
+                                ) : (
+                                    <Typography variant="h6">
+                                        {printConsignmentLabelResult?.message}
+                                    </Typography>
+                                )}
+                            </Grid>
+                        </Grid>
+                    </>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setShowPalletLabel(false)} variant="contained" autoFocus>
                         Close
                     </Button>
                 </DialogActions>
@@ -504,13 +620,13 @@ Consignment.propTypes = {
         PropTypes.shape({ cartonTypeName: PropTypes.string, description: PropTypes.string })
     ),
     userNumber: PropTypes.number.isRequired,
-    printCartonLabelWorking: PropTypes.bool,
-    printCartonLabel: PropTypes.func.isRequired,
-    printCartonLabelResult: PropTypes.shape({
+    printConsignmentLabelWorking: PropTypes.bool,
+    printConsignmentLabel: PropTypes.func.isRequired,
+    printConsignmentLabelResult: PropTypes.shape({
         success: PropTypes.bool,
         message: PropTypes.string
     }),
-    clearCartonLabelData: PropTypes.func.isRequired
+    clearConsignmentLabelData: PropTypes.func.isRequired
 };
 
 Consignment.defaultProps = {
@@ -532,8 +648,8 @@ Consignment.defaultProps = {
     shippingTermsLoading: false,
     itemError: null,
     cartonTypes: [],
-    printCartonLabelWorking: false,
-    printCartonLabelResult: null
+    printConsignmentLabelWorking: false,
+    printConsignmentLabelResult: null
 };
 
 export default Consignment;

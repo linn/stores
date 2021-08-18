@@ -292,6 +292,6 @@ export const debitNotesActionTypes = makeActionTypes(itemTypes.debitNotes.action
 
 export const stockMovesActionTypes = makeActionTypes(itemTypes.stockMoves.actionType);
 
-export const printCartonLabelActionTypes = makeProcessActionTypes(
-    processTypes.printCartonLabel.actionType
+export const printConsignmentLabelActionTypes = makeProcessActionTypes(
+    processTypes.printConsignmentLabel.actionType
 );

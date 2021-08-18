@@ -22,23 +22,39 @@
             switch (resource.LabelType)
             {
                 case "Carton":
-                    labelServiceResult = this.logisticsLabelService.PrintCartonLabel(
-                        resource.ConsignmentId,
-                        resource.FirstItem,
-                        resource.LastItem,
-                        resource.UserNumber,
-                        resource.NumberOfCopies);
+                    try
+                    {
+                        labelServiceResult = this.logisticsLabelService.PrintCartonLabel(
+                            resource.ConsignmentId,
+                            resource.FirstItem,
+                            resource.LastItem,
+                            resource.UserNumber,
+                            resource.NumberOfCopies);
+                    }
+                    catch (ProcessException exception)
+                    {
+                        return new BadRequestResult<ProcessResult>(exception.Message);
+                    }
+
                     break;
                 case "Pallet":
-                    labelServiceResult = this.logisticsLabelService.PrintPalletLabel(
-                        resource.ConsignmentId,
-                        resource.FirstItem,
-                        resource.LastItem,
-                        resource.UserNumber,
-                        resource.NumberOfCopies);
+                    try
+                    {
+                        labelServiceResult = this.logisticsLabelService.PrintPalletLabel(
+                            resource.ConsignmentId,
+                            resource.FirstItem,
+                            resource.LastItem,
+                            resource.UserNumber,
+                            resource.NumberOfCopies);
+                    }
+                    catch (ProcessException exception)
+                    {
+                        return new BadRequestResult<ProcessResult>(exception.Message);
+                    }
+
                     break;
                 default:
-                    throw new ProcessException($"Cannot print label type {resource.LabelType}");
+                    return new BadRequestResult<ProcessResult>($"Cannot print label type {resource.LabelType}");
             }
 
             return new SuccessResult<ProcessResult>(new ProcessResult(labelServiceResult.Success, labelServiceResult.Message));
