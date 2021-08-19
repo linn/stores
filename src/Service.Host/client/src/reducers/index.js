@@ -110,6 +110,10 @@ import impbookDeliveryTerms from './importBooks/impbookDeliveryTerms';
 import ports from './importBooks/ports';
 import cartonTypes from './cartonTypes';
 import validatePurchaseOrderBookInQtyResult from './validatePurchaseOrderBookInQtyResult';
+import debitNote from './purchasing/debitNote';
+import debitNotes from './purchasing/debitNotes';
+import stockMoves from './stockLocators/stockMoves';
+import printConsignmentLabel from './printConsignmentLabel';
 import currencies from './currencies';
 import exchangeRates from './exchangeRates';
 
@@ -136,6 +140,8 @@ const rootReducer = history =>
         countries,
         createAuditReqs,
         currencies,
+        debitNote,
+        debitNotes,
         demLocations,
         departments,
         decrementRules,
@@ -183,6 +189,7 @@ const rootReducer = history =>
         partTemplates,
         pickItemsAllocation,
         ports,
+        printConsignmentLabel,
         productAnalysisCodes,
         reqMoves,
         rootProducts,
@@ -200,6 +207,7 @@ const rootReducer = history =>
         stockLocatorLocations,
         stockLocatorPrices,
         stockLocators,
+        stockMoves,
         stockPools,
         stockQuantities,
         storageLocations,

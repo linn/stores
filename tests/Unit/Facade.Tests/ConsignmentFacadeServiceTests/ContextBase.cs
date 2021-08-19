@@ -16,14 +16,18 @@
 
         protected ITransactionManager TransactionManager { get; private set; }
 
+        protected IConsignmentService ConsignmentService { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
             this.ConsignmentRepository = Substitute.For<IRepository<Consignment, int>>();
             this.TransactionManager = Substitute.For<ITransactionManager>();
+            this.ConsignmentService = Substitute.For<IConsignmentService>();
             this.Sut = new ConsignmentFacadeService(
                 this.ConsignmentRepository,
-                this.TransactionManager);
+                this.TransactionManager,
+                this.ConsignmentService);
         }
     }
 }

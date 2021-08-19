@@ -16,6 +16,7 @@
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Purchasing;
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Requisitions.Models;
     using Linn.Stores.Domain.LinnApps.StockLocators;
@@ -26,6 +27,7 @@
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Facade.ResourceBuilders;
+    using Linn.Stores.Facade.ResourceBuilders.Purchasing;
 
     public class ResponsesModule : Module
     {
@@ -216,6 +218,13 @@
             builder.RegisterType<CartonTypesResourceBuilder>().As<IResourceBuilder<IEnumerable<CartonType>>>();
             builder.RegisterType<PortResourceBuilder>().As<IResourceBuilder<Port>>();
             builder.RegisterType<PortsResourceBuilder>().As<IResourceBuilder<IEnumerable<Port>>>();
+            builder.RegisterType<PlCreditDebitNoteResourceBuilder>()
+                .As<IResourceBuilder<PlCreditDebitNote>>();
+            builder.RegisterType<PlCreditDebitNotesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<PlCreditDebitNote>>>();
+            builder.RegisterType<StockMoveResourceBuilder>().As<IResourceBuilder<StockMove>>();
+            builder.RegisterType<StockMovesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<StockMove>>>();
         }
     }
 }

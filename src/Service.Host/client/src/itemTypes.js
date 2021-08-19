@@ -384,6 +384,24 @@ export const validatePurchaseOrderBookInQtyResult = new ItemType(
     '/logistics/purchase-orders/validate-qty'
 );
 
+export const debitNote = new ItemType(
+    'debitNote',
+    'DEBIT_NOTE',
+    '/inventory/purchasing/debit-notes'
+);
+
+export const debitNotes = new ItemType(
+    'debitNotes',
+    'DEBIT_NOTES',
+    '/inventory/purchasing/debit-notes'
+);
+
+export const stockMoves = new ItemType(
+    'stockMoves',
+    'STOCK-MOVES',
+    '/inventory/stock-locators/stock-moves'
+);
+
 export const currencies = new ItemType('currencies', 'CURRENCIES', '/logistics/currencies');
 
 export const exchangeRates = new ItemType(

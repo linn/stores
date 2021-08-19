@@ -15,18 +15,18 @@
 
     using NUnit.Framework;
 
-    public class WhenCreating: ContextBase
+    public class WhenCreating : ContextBase
     {
         private readonly DateTime now = DateTime.Now;
+
         [SetUp]
         public void SetUp()
         {
-
             var importBookResource = new ImportBookResource
                                      {
                                          ParcelNumber = 4,
                                          SupplierId = 2,
-                                         DateCreated = now.ToString("o"),
+                                         DateCreated = this.now.ToString("o"),
                                          CarrierId = 4,
                                          Weight = 00.70m,
                                          Comments = "Rsn 1234 raised as BRG, but Customs charged duty incorrectly."

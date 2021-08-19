@@ -15,6 +15,7 @@
         protected IFacadeService<ImportBookTransactionCode, int, ImportBookTransactionCodeResource, ImportBookTransactionCodeResource> Sut { get; private set; }
 
         protected IRepository<ImportBookTransactionCode, int> ImportBookTransactionCodeRepository { get; private set; }
+
         protected ITransactionManager TransactionManager { get; private set; }
 
         [SetUp]

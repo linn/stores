@@ -25,7 +25,8 @@
         {
             this.to = new Part
                           {
-                              TqmsCategoryOverride = "override"
+                              TqmsCategoryOverride = "override",
+                              StockControlled = "N"
                           };
             this.privileges = new List<string> { "part.admin" };
             this.PartRepository.FilterBy(Arg.Any<Expression<Func<Part, bool>>>())

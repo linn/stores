@@ -23,4 +23,8 @@
     <ProjectReference Include="..\..\..\src\Service\Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="PurchasingModuleSpecs\" />
+  </ItemGroup>
+
 </Project>

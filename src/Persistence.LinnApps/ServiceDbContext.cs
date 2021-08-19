@@ -5,10 +5,12 @@
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
+    using Linn.Stores.Domain.LinnApps.ExportBooks;
     using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
+    using Linn.Stores.Domain.LinnApps.Purchasing;
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
@@ -18,6 +20,7 @@
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation;
+
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
 
@@ -219,8 +222,12 @@
         public DbQuery<LoanDetail> LoanDetails { get; set; }
 
         public DbSet<CartonType> CartonTypes { get; set; }
+        
+        public DbSet<ExportBook> ExportBooks { get; set; }
 
         public DbSet<GoodsInLogEntry> GoodsInLog { get; set; }
+
+        public DbSet<PlCreditDebitNote> PlCreditDebitNotes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -326,6 +333,8 @@
             this.QueryLoanDetails(builder);
             this.BuildCartonTypes(builder);
             this.BuildGoodsInLog(builder);
+            this.BuildExportBooks(builder);
+            this.BuildPlCreditDebitNotes(builder);
             base.OnModelCreating(builder);
         }
 
@@ -364,6 +373,7 @@
             builder.Entity<Country>().Property(c => c.DisplayName).HasColumnName("DISPLAY_NAME").HasMaxLength(50);
             builder.Entity<Country>().Property(c => c.TradeCurrency).HasColumnName("TRADE_CURRENCY").HasMaxLength(4);
             builder.Entity<Country>().Property(c => c.ECMember).HasColumnName("EEC_MEMBER").HasMaxLength(1);
+            builder.Entity<Country>().Property(c => c.NumberOfCopiesOfDispatchDocuments).HasColumnName("COPIES_OF_DISP_DOCS");
             builder.Entity<Country>().Property(c => c.DateInvalid).HasColumnName("DATE_INVALID");
         }
 
@@ -1393,7 +1403,9 @@
             r.HasKey(l => l.ReqNumber);
             r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
             r.Property(l => l.Document1).HasColumnName("DOCUMENT_1");
+            r.Property(l => l.DateCreated).HasColumnName("DATE_CREATED");
             r.HasMany(t => t.Lines).WithOne().HasForeignKey(requisitionLine => requisitionLine.ReqNumber);
+            r.HasMany(h => h.Moves).WithOne(m => m.Header).HasForeignKey(h => h.ReqNumber);
         }
 
         private void BuildRequisitionLines(ModelBuilder builder)
@@ -1403,6 +1415,7 @@
             r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
             r.Property(l => l.LineNumber).HasColumnName("LINE_NUMBER");
             r.Property(l => l.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            r.Property(l => l.TransactionCode).HasColumnName("TRANSACTION_CODE").HasMaxLength(10);
             r.HasMany(t => t.Moves).WithOne().HasForeignKey(reqMove => new { reqMove.ReqNumber, reqMove.LineNumber });
         }
 
@@ -1422,6 +1435,8 @@
             r.Property(l => l.LocationId).HasColumnName("LOCATION_ID");
             r.Property(l => l.Remarks).HasColumnName("REMARKS").HasMaxLength(2000);
             r.HasOne(l => l.Location).WithMany(s => s.ReqMoves).HasForeignKey(l => l.LocationId);
+            r.Property(l => l.DateBooked).HasColumnName("DATE_BOOKED");
+            r.Property(l => l.DateCancelled).HasColumnName("DATE_CANCELLED");
         }
 
         private void BuildWandLogs(ModelBuilder builder)
@@ -1871,6 +1886,34 @@
             table.Property(e => e.LogCondition).HasColumnName("CONDITION").HasMaxLength(2000);
             table.Property(e => e.RsnAccessories).HasColumnName("RSN_ACCESSORIES").HasMaxLength(2000);
             table.Property(e => e.StorageType).HasColumnName("STORAGE_TYPE").HasMaxLength(4);
+        }
+
+        private void BuildExportBooks(ModelBuilder builder)
+        {
+            var table = builder.Entity<ExportBook>().ToTable("EXPBOOKS");
+            table.HasKey(a => a.ExportId);
+            table.Property(a => a.ExportId).HasColumnName("EXPBOOK_ID");
+            table.Property(a => a.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+        }
+
+        private void BuildPlCreditDebitNotes(ModelBuilder builder)
+        {
+            var entity = builder.Entity<PlCreditDebitNote>().ToTable("PL_CREDIT_DEBIT_NOTES");
+            entity.HasKey(a => a.NoteNumber);
+            entity.Property(a => a.NoteNumber).HasColumnName("CDNOTE_ID");
+            entity.Property(a => a.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            entity.Property(a => a.OrderQty).HasColumnName("ORDER_QTY");
+            entity.Property(a => a.ClosedBy).HasColumnName("CLOSED_BY");
+            entity.Property(a => a.DateClosed).HasColumnName("DATE_CLOSED");
+            entity.Property(a => a.NetTotal).HasColumnName("NET_TOTAL");
+            entity.Property(a => a.NoteType).HasColumnName("CDNOTE_TYPE").HasMaxLength(1);
+            entity.Property(a => a.OriginalOrderNumber).HasColumnName("ORIGINAL_ORDER_NUMBER");
+            entity.Property(a => a.ReturnsOrderNumber).HasColumnName("RETURNS_ORDER_NUMBER");
+            entity.Property(a => a.Notes).HasColumnName("NOTES").HasMaxLength(200);
+            entity.Property(a => a.ReasonClosed).HasColumnName("REASON_CLOSED").HasMaxLength(2000);
+            entity.Property(a => a.SupplierId).HasColumnName("SUPPLIER_ID");
+            entity.HasOne(a => a.Supplier).WithMany(s => s.PlCreditDebitNotes).HasForeignKey(a => a.SupplierId);
+            entity.Property(a => a.DateCreated).HasColumnName("DATE_CREATED");
         }
     }
 }

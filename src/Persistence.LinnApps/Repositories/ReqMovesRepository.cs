@@ -3,10 +3,11 @@
     using System;
     using System.Linq;
     using System.Linq.Expressions;
-    using System.Security.Cryptography.X509Certificates;
 
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Requisitions;
+
+    using Microsoft.EntityFrameworkCore;
 
     public class ReqMovesRepository : IRepository<ReqMove, ReqMoveKey>
     {
@@ -29,13 +30,17 @@
 
         public IQueryable<ReqMove> FilterBy(Expression<Func<ReqMove, bool>> expression)
         {
-            return this.serviceDbContext.ReqMoves.Where(expression);
+            return this.serviceDbContext.ReqMoves.Where(expression)
+                .Include(m => m.StockLocator)
+                .Include(m => m.Header)
+                .ThenInclude(h => h.Lines);
         }
 
         public ReqMove FindById(ReqMoveKey key)
         {
             return this.serviceDbContext.ReqMoves.Where(
-                x => x.ReqNumber == key.ReqNumber && x.LineNumber == key.LineNumber && x.Sequence == key.Seq)
+                x => x.ReqNumber == key.ReqNumber 
+                     && x.LineNumber == key.LineNumber && x.Sequence == key.Seq)
                 .ToList().FirstOrDefault();
         }
 

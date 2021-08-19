@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Requisitions
 {
+    using System;
+
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
     public class ReqMove
@@ -27,5 +29,11 @@
         public string Booked { get; set; }
 
         public string Remarks { get; set; }
+
+        public RequisitionHeader Header { get; set; }
+
+        public DateTime? DateBooked { get; set; }
+
+        public DateTime? DateCancelled { get; set; }
     }
 }

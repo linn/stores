@@ -12,6 +12,8 @@ import stockLocatorLocationsActions from '../../actions/stockLocatorLocationsAct
 import stockQuantitiesActions from '../../actions/stockQuantitiesActions';
 import stockQuantitiesSelectors from '../../selectors/stockQuantitiesSelectors';
 import * as itemTypes from '../../itemTypes';
+import stockMovesSelectors from '../../selectors/stockMovesSelectors';
+import stockMovesActions from '../../actions/stockMovesActions';
 
 const mapStateToProps = (state, { location }) => ({
     items: stockLocatorLocationsSelectors.getSearchItems(state),
@@ -21,7 +23,9 @@ const mapStateToProps = (state, { location }) => ({
     quantities: stockQuantitiesSelectors.getItem(state),
     quantitiesLoading: stockQuantitiesSelectors.getLoading(state),
     itemError: getItemError(state, itemTypes.stockLocator.item),
-    previousPaths: getPreviousPaths(state)
+    previousPaths: getPreviousPaths(state),
+    moves: stockMovesSelectors.getSearchItems(state),
+    movesLoading: stockMovesSelectors.getSearchLoading(state)
 });
 
 const initialise = ({ options, history, previousPaths }) => dispatch => {
@@ -45,7 +49,9 @@ const initialise = ({ options, history, previousPaths }) => dispatch => {
 
 const mapDispatchToProps = {
     initialise,
-    fetchItems: stockLocatorLocationsActions.searchWithOptions
+    fetchItems: stockLocatorLocationsActions.searchWithOptions,
+    fetchMoves: stockMovesActions.searchWithOptions,
+    clearMoves: stockMovesActions.clearSearch
 };
 
 export default connect(

@@ -59,7 +59,10 @@
         <div class="box a">Consignment Number: {{ consignment_number }}</div>
         <div class="box b"></div>
         <div class="box c">Date dispatched: {{ date_dispatched }}</div>
-        <div class="box d">Carrier: {{ carrier }}</div>
+        <div class="box d">
+            <div> Carrier: {{ carrier }} </div>
+            <div> Ref: {{ carriers_reference }} </div>
+        </div>
         <div class="box e">
             <div>Outlet Address:</div>
             {{ for item in outlet_address }}
