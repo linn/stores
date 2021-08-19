@@ -68,6 +68,9 @@
                         with.Dependency<IResourceBuilder<ValidatePurchaseOrderResult>>(
                             new ValidatePurchaseOrderResultResourceBuilder());
 
+                        with.Dependency<IResourceBuilder<BookInResult>>(new BookInResultResourceBuilder());
+                        
+                        with.ResponseProcessor<BookInResultResponseProcessor>();
                         with.ResponseProcessor<SalesArticlesResponseProcessor>();
                         with.ResponseProcessor<StorageLocationsResponseProcessor>();
                         with.ResponseProcessor<LoanDetailsResponseProcessor>();

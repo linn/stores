@@ -24,7 +24,7 @@
             this.loanDetailRepository = loanDetailRepository;
         }
 
-        public IResult<ProcessResult> DoBookIn(BookInRequestResource requestResource)
+        public IResult<BookInResult> DoBookIn(BookInRequestResource requestResource)
         {
             var lines = requestResource.Lines?.Select(
                 l => new GoodsInLogEntry
@@ -75,10 +75,10 @@
 
             if (result.Success)
             {
-                return new SuccessResult<ProcessResult>(result);
+                return new SuccessResult<BookInResult>(result);
             }
 
-            return new BadRequestResult<ProcessResult>(result.Message);
+            return new BadRequestResult<BookInResult>(result.Message);
         }
 
         public IResult<IEnumerable<LoanDetail>> GetLoanDetails(int loanNumber)

@@ -6,7 +6,7 @@
 
     public interface IGoodsInService
     {
-        BookinResult DoBookIn(
+        BookInResult DoBookIn(
             string transactionType,
             int createdBy,
             string partNumber,

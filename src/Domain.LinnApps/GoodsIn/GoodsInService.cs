@@ -41,7 +41,7 @@
             this.reqRepository = reqRepository;
         }
 
-        public BookinResult DoBookIn(
+        public BookInResult DoBookIn(
             string transactionType,
             int createdBy,
             string partNumber,
@@ -68,7 +68,7 @@
                 if ((string.IsNullOrEmpty(storageType) && transactionType == "O") 
                     || transactionType == "L" || transactionType == "D")
                 {
-                    return new BookinResult(false, "Onto location/pallet must be entered");
+                    return new BookInResult(false, "Onto location/pallet must be entered");
                 }
             }
 
@@ -78,7 +78,7 @@
             {
                 if (!this.palletAnalysisPack.CanPutPartOnPallet(partNumber, ontoLocation.TrimStart('P')))
                 {
-                    return new BookinResult(false, this.palletAnalysisPack.Message());
+                    return new BookInResult(false, this.palletAnalysisPack.Message());
                 }
             }
 
@@ -147,7 +147,7 @@
                 out var reqNumberResult,
                 out var success);
 
-            var result = new BookinResult(
+            var result = new BookInResult(
                 success,
                 success ? null : this.goodsInPack.GetErrorMessage());
 

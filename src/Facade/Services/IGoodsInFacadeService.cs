@@ -9,7 +9,7 @@
 
     public interface IGoodsInFacadeService
     {
-        IResult<ProcessResult> DoBookIn(BookInRequestResource requestResource);
+        IResult<BookInResult> DoBookIn(BookInRequestResource requestResource);
 
         IResult<IEnumerable<LoanDetail>> GetLoanDetails(int loanNumber);
 

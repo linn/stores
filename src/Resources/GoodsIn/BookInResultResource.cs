@@ -1,13 +1,7 @@
-﻿namespace Linn.Stores.Domain.LinnApps.GoodsIn
+﻿namespace Linn.Stores.Resources.GoodsIn
 {
-    using Linn.Stores.Domain.LinnApps.Models;
-
-    public class BookInResult : ProcessResult
+    public class BookInResultResource : ProcessResultResource
     {
-        public BookInResult(bool success, string message) : base(success, message)
-        {
-        }
-
         public int? ReqNumber { get; set; }
 
         public string QcState { get; set; }

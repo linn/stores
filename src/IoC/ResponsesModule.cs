@@ -216,6 +216,7 @@
             builder.RegisterType<CartonTypesResourceBuilder>().As<IResourceBuilder<IEnumerable<CartonType>>>();
             builder.RegisterType<PortResourceBuilder>().As<IResourceBuilder<Port>>();
             builder.RegisterType<PortsResourceBuilder>().As<IResourceBuilder<IEnumerable<Port>>>();
+            builder.RegisterType<BookInResultResourceBuilder>().As<IResourceBuilder<BookInResult>>();
         }
     }
 }
