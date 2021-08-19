@@ -1,10 +1,9 @@
 ﻿namespace Linn.Stores.Facade.Tests.LogisticsLabelFacadeServiceTests
 {
-    using System;
-
     using FluentAssertions;
 
-    using Linn.Stores.Domain.LinnApps.Exceptions;
+    using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Resources.RequestResources;
 
     using NUnit.Framework;
@@ -13,7 +12,7 @@
     {
         private LogisticsLabelRequestResource resource;
 
-        private Action action;
+        private IResult<ProcessResult> result;
 
         [SetUp]
         public void SetUp()
@@ -22,13 +21,16 @@
                                 {
                                     LabelType = "Does Not Exist"
                                 };
-            this.action = () => this.Sut.PrintLabel(this.resource);
+
+            this.result = this.Sut.PrintLabel(this.resource);
         }
 
         [Test]
-        public void ShouldThrowException()
+        public void ShouldReturnBadRequest()
         {
-            this.action.Should().Throw<ProcessException>();
+            this.result.Should().BeOfType<BadRequestResult<ProcessResult>>();
+            var dataResult = (BadRequestResult<ProcessResult>)this.result;
+            dataResult.Message.Should().Be("Cannot print label type Does Not Exist");
         }
     }
 }

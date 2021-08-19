@@ -10,5 +10,12 @@
             int? lastCarton,
             int userNumber,
             int numberOfCopies = 1);
+
+        ProcessResult PrintPalletLabel(
+            int consignmentId,
+            int firstPallet,
+            int? lastPallet,
+            int userNumber,
+            int numberOfCopies = 1);
     }
 }

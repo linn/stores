@@ -42,12 +42,25 @@
                                        Address =
                                            new Address
                                                {
+                                                   Addressee = "Big Shop",
                                                    Line1 = "this",
                                                    Line2 = "address",
                                                    PostCode = "d",
                                                    CountryCode = "FR",
                                                    Country = new Country { CountryCode = "FR", DisplayName = "France" }
                                                },
+                                       Pallets = new List<ConsignmentPallet>
+                                                     {
+                                                         new ConsignmentPallet
+                                                             {
+                                                                 ConsignmentId = this.ConsignmentId,
+                                                                 Depth = 12,
+                                                                 Height = 14,
+                                                                 PalletNumber = 1,
+                                                                 Weight = 16,
+                                                                 Width = 18
+                                                             }
+                                                     },
                                        Items = new List<ConsignmentItem>
                                                    {
                                                        new ConsignmentItem
