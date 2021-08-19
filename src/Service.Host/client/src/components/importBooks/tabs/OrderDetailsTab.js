@@ -134,268 +134,272 @@ function OrderDetailsTab({
                     <Divider className={classes.dividerMarginBottomOnly} />
                 </Grid>
 
-                {orderDetails?.map(row => (
-                    <>
-                        <Grid item xs={1}>
-                            <Dropdown
-                                items={lineTypes}
-                                label="Line Type"
-                                fullWidth
-                                onChange={(propertyName, newValue) =>
-                                    editRow(row, propertyName, newValue)
-                                }
-                                propertyName="lineType"
-                                value={row.lineType}
-                                disabled={!allowedToEdit}
-                                required
-                            />
-                        </Grid>
-
-                        {(row.lineType === 'PO' || row.lineType === 'RO') && (
-                            <Grid item xs={2}>
-                                <InputField
-                                    label="Order Number"
+                {orderDetails
+                    ?.sort((a, b) => {
+                        return a.lineNumber - b.lineNumber;
+                    })
+                    .map(row => (
+                        <>
+                            <Grid item xs={1}>
+                                <Dropdown
+                                    items={lineTypes}
+                                    label="Line Type"
                                     fullWidth
                                     onChange={(propertyName, newValue) =>
                                         editRow(row, propertyName, newValue)
                                     }
-                                    propertyName="orderNumber"
-                                    type="number"
-                                    value={row.orderNumber}
+                                    propertyName="lineType"
+                                    value={row.lineType}
                                     disabled={!allowedToEdit}
+                                    required
                                 />
                             </Grid>
-                        )}
 
-                        {row.lineType === 'RSN' && (
-                            <Grid item xs={2}>
+                            {(row.lineType === 'PO' || row.lineType === 'RO') && (
+                                <Grid item xs={2}>
+                                    <InputField
+                                        label="Order Number"
+                                        fullWidth
+                                        onChange={(propertyName, newValue) =>
+                                            editRow(row, propertyName, newValue)
+                                        }
+                                        propertyName="orderNumber"
+                                        type="number"
+                                        value={row.orderNumber}
+                                        disabled={!allowedToEdit}
+                                    />
+                                </Grid>
+                            )}
+
+                            {row.lineType === 'RSN' && (
+                                <Grid item xs={2}>
+                                    <InputField
+                                        label="RSN Number"
+                                        fullWidth
+                                        onChange={(propertyName, newValue) =>
+                                            editRow(row, propertyName, newValue)
+                                        }
+                                        propertyName="rsnNumber"
+                                        type="number"
+                                        value={row.rsnNumber}
+                                        disabled={!allowedToEdit}
+                                        maxLength={6}
+                                    />
+                                </Grid>
+                            )}
+
+                            {row.lineType === 'LOAN' && (
+                                <Grid item xs={2}>
+                                    <InputField
+                                        label="Loan Number"
+                                        fullWidth
+                                        onChange={(propertyName, newValue) =>
+                                            editRow(row, propertyName, newValue)
+                                        }
+                                        propertyName="loanNumber"
+                                        type="number"
+                                        value={row.loanNumber}
+                                        disabled={!allowedToEdit}
+                                        maxLength={6}
+                                    />
+                                </Grid>
+                            )}
+
+                            {row.lineType === 'INS' && (
+                                <Grid item xs={2}>
+                                    <InputField
+                                        label="Ins Number"
+                                        fullWidth
+                                        onChange={(propertyName, newValue) =>
+                                            editRow(row, propertyName, newValue)
+                                        }
+                                        propertyName="insNumber"
+                                        type="number"
+                                        value={row.insNumber}
+                                        disabled={!allowedToEdit}
+                                        maxLength={10}
+                                    />
+                                </Grid>
+                            )}
+
+                            <Grid item xs={3}>
                                 <InputField
-                                    label="RSN Number"
+                                    label="Order Description"
                                     fullWidth
                                     onChange={(propertyName, newValue) =>
                                         editRow(row, propertyName, newValue)
                                     }
-                                    propertyName="rsnNumber"
-                                    type="number"
-                                    value={row.rsnNumber}
+                                    propertyName="orderDescription"
+                                    type="text"
+                                    value={row.orderDescription}
                                     disabled={!allowedToEdit}
+                                    required
+                                    maxLength={2000}
+                                />
+                            </Grid>
+                            <Grid item xs={2}>
+                                <InputField
+                                    label="Tariff Code"
+                                    fullWidth
+                                    onChange={(propertyName, newValue) =>
+                                        editRow(row, propertyName, newValue)
+                                    }
+                                    propertyName="tariffCode"
+                                    type="text"
+                                    value={row.tariffCode}
+                                    disabled={!allowedToEdit}
+                                    maxLength={12}
+                                />
+                            </Grid>
+                            <Grid item xs={1}>
+                                <InputField
+                                    label="Tariff Number"
+                                    fullWidth
+                                    onChange={(propertyName, newValue) =>
+                                        editRow(row, propertyName, newValue)
+                                    }
+                                    propertyName="tariffNumber"
+                                    type="number"
+                                    value={row.tariffNumber}
+                                    disabled={!allowedToEdit}
+                                    //todo this doesn't exist in db!! What is it?!?! Can I remove?
+                                />
+                            </Grid>
+                            <Grid item xs={1}>
+                                <InputField
+                                    label="Qty"
+                                    fullWidth
+                                    onChange={(propertyName, newValue) =>
+                                        editRow(row, propertyName, newValue)
+                                    }
+                                    propertyName="qty"
+                                    type="number"
+                                    value={row.qty}
+                                    disabled={!allowedToEdit}
+                                    required
                                     maxLength={6}
                                 />
                             </Grid>
-                        )}
-
-                        {row.lineType === 'LOAN' && (
                             <Grid item xs={2}>
                                 <InputField
-                                    label="Loan Number"
+                                    label="Order Value"
                                     fullWidth
                                     onChange={(propertyName, newValue) =>
                                         editRow(row, propertyName, newValue)
                                     }
-                                    propertyName="loanNumber"
+                                    propertyName="orderValue"
                                     type="number"
-                                    value={row.loanNumber}
+                                    value={row.orderValue}
                                     disabled={!allowedToEdit}
-                                    maxLength={6}
+                                    required
+                                    maxLength={14}
+                                    decimalPlaces={2}
                                 />
                             </Grid>
-                        )}
-
-                        {row.lineType === 'INS' && (
                             <Grid item xs={2}>
                                 <InputField
-                                    label="Ins Number"
+                                    label="Duty Value"
                                     fullWidth
                                     onChange={(propertyName, newValue) =>
                                         editRow(row, propertyName, newValue)
                                     }
-                                    propertyName="insNumber"
+                                    propertyName="dutyValue"
                                     type="number"
-                                    value={row.insNumber}
+                                    value={row.dutyValue}
                                     disabled={!allowedToEdit}
+                                    required
+                                    maxLength={14}
+                                    decimalPlaces={2}
+                                />
+                            </Grid>
+                            <Grid item xs={1}>
+                                <InputField
+                                    label="Vat Rate"
+                                    fullWidth
+                                    onChange={(propertyName, newValue) =>
+                                        editRow(row, propertyName, newValue)
+                                    }
+                                    propertyName="vatRate"
+                                    type="number"
+                                    value={row.vatRate}
+                                    disabled={!allowedToEdit}
+                                />
+                            </Grid>
+                            <Grid item xs={2}>
+                                <InputField
+                                    label="Vat Value"
+                                    fullWidth
+                                    onChange={(propertyName, newValue) =>
+                                        editRow(row, propertyName, newValue)
+                                    }
+                                    propertyName="vatValue"
+                                    type="number"
+                                    value={row.vatValue}
+                                    disabled={!allowedToEdit}
+                                    required
+                                    maxLength={14}
+                                    decimalPlaces={2}
+                                />
+                            </Grid>
+                            <Grid item xs={1}>
+                                <InputField
+                                    label="Weight"
+                                    fullWidth
+                                    onChange={(propertyName, newValue) =>
+                                        editRow(row, propertyName, newValue)
+                                    }
+                                    propertyName="weight"
+                                    type="number"
+                                    value={row.weight}
+                                    disabled={!allowedToEdit}
+                                    required
                                     maxLength={10}
+                                    decimalPlaces={2}
                                 />
                             </Grid>
-                        )}
-
-                        <Grid item xs={3}>
-                            <InputField
-                                label="Order Description"
-                                fullWidth
-                                onChange={(propertyName, newValue) =>
-                                    editRow(row, propertyName, newValue)
-                                }
-                                propertyName="orderDescription"
-                                type="text"
-                                value={row.orderDescription}
-                                disabled={!allowedToEdit}
-                                required
-                                maxLength={2000}
-                            />
-                        </Grid>
-                        <Grid item xs={2}>
-                            <InputField
-                                label="Tariff Code"
-                                fullWidth
-                                onChange={(propertyName, newValue) =>
-                                    editRow(row, propertyName, newValue)
-                                }
-                                propertyName="tariffCode"
-                                type="text"
-                                value={row.tariffCode}
-                                disabled={!allowedToEdit}
-                                maxLength={12}
-                            />
-                        </Grid>
-                        <Grid item xs={1}>
-                            <InputField
-                                label="Tariff Number"
-                                fullWidth
-                                onChange={(propertyName, newValue) =>
-                                    editRow(row, propertyName, newValue)
-                                }
-                                propertyName="tariffNumber"
-                                type="number"
-                                value={row.tariffNumber}
-                                disabled={!allowedToEdit}
-                                //todo this doesn't exist in db!! What is it?!?! Can I remove?
-                            />
-                        </Grid>
-                        <Grid item xs={1}>
-                            <InputField
-                                label="Qty"
-                                fullWidth
-                                onChange={(propertyName, newValue) =>
-                                    editRow(row, propertyName, newValue)
-                                }
-                                propertyName="qty"
-                                type="number"
-                                value={row.qty}
-                                disabled={!allowedToEdit}
-                                required
-                                maxLength={6}
-                            />
-                        </Grid>
-                        <Grid item xs={2}>
-                            <InputField
-                                label="Order Value"
-                                fullWidth
-                                onChange={(propertyName, newValue) =>
-                                    editRow(row, propertyName, newValue)
-                                }
-                                propertyName="orderValue"
-                                type="number"
-                                value={row.orderValue}
-                                disabled={!allowedToEdit}
-                                required
-                                maxLength={14}
-                                decimalPlaces={2}
-                            />
-                        </Grid>
-                        <Grid item xs={2}>
-                            <InputField
-                                label="Duty Value"
-                                fullWidth
-                                onChange={(propertyName, newValue) =>
-                                    editRow(row, propertyName, newValue)
-                                }
-                                propertyName="dutyValue"
-                                type="number"
-                                value={row.dutyValue}
-                                disabled={!allowedToEdit}
-                                required
-                                maxLength={14}
-                                decimalPlaces={2}
-                            />
-                        </Grid>
-                        <Grid item xs={1}>
-                            <InputField
-                                label="Vat Rate"
-                                fullWidth
-                                onChange={(propertyName, newValue) =>
-                                    editRow(row, propertyName, newValue)
-                                }
-                                propertyName="vatRate"
-                                type="number"
-                                value={row.vatRate}
-                                disabled={!allowedToEdit}
-                            />
-                        </Grid>
-                        <Grid item xs={2}>
-                            <InputField
-                                label="Vat Value"
-                                fullWidth
-                                onChange={(propertyName, newValue) =>
-                                    editRow(row, propertyName, newValue)
-                                }
-                                propertyName="vatValue"
-                                type="number"
-                                value={row.vatValue}
-                                disabled={!allowedToEdit}
-                                required
-                                maxLength={14}
-                                decimalPlaces={2}
-                            />
-                        </Grid>
-                        <Grid item xs={1}>
-                            <InputField
-                                label="Weight"
-                                fullWidth
-                                onChange={(propertyName, newValue) =>
-                                    editRow(row, propertyName, newValue)
-                                }
-                                propertyName="weight"
-                                type="number"
-                                value={row.weight}
-                                disabled={!allowedToEdit}
-                                required
-                                maxLength={10}
-                                decimalPlaces={2}
-                            />
-                        </Grid>
-                        <Grid item xs={2}>
-                            <Dropdown
-                                items={cpcNumbers}
-                                label="Cpc Number"
-                                fullWidth
-                                onChange={(propertyName, newValue) =>
-                                    editRow(row, propertyName, newValue)
-                                }
-                                propertyName="cpcNumber"
-                                value={row.cpcNumber}
-                                disabled={!allowedToEdit}
-                            />
-                        </Grid>
-                        {/* //todo 
+                            <Grid item xs={2}>
+                                <Dropdown
+                                    items={cpcNumbers}
+                                    label="Cpc Number"
+                                    fullWidth
+                                    onChange={(propertyName, newValue) =>
+                                        editRow(row, propertyName, newValue)
+                                    }
+                                    propertyName="cpcNumber"
+                                    value={row.cpcNumber}
+                                    disabled={!allowedToEdit}
+                                />
+                            </Grid>
+                            {/* //todo 
                         check that "IPR" text for id 13 is obvious enough to prevent mistakes
                         if not maybe consider a popup or an IPR button to fill in the IPR cpc number
                         also work out if 'post duty' function below is still needed and if so what it should do */}
-                        <Grid item xs={2}>
-                            <LinkButton
-                                text="Post Duty"
-                                //todo to={`/logistics/`}
-                                disabled
-                                external
-                            />
-                        </Grid>
+                            <Grid item xs={2}>
+                                <LinkButton
+                                    text="Post Duty"
+                                    //todo to={`/logistics/`}
+                                    disabled
+                                    external
+                                />
+                            </Grid>
 
-                        <Grid item xs={2}>
-                            <Tooltip title="Remove order detail" aria-label="add">
-                                <Button
-                                    className={classes.marginTop1}
-                                    onClick={() => removeOrderDetailRow(row.lineNumber)}
-                                    disabled={!allowedToEdit}
-                                >
-                                    <DeleteIcon data-testid="deleteIcon" />
-                                </Button>
-                            </Tooltip>
-                        </Grid>
+                            <Grid item xs={2}>
+                                <Tooltip title="Remove order detail" aria-label="add">
+                                    <Button
+                                        className={classes.marginTop1}
+                                        onClick={() => removeOrderDetailRow(row.lineNumber)}
+                                        disabled={!allowedToEdit}
+                                    >
+                                        <DeleteIcon data-testid="deleteIcon" />
+                                    </Button>
+                                </Tooltip>
+                            </Grid>
 
-                        <Grid item xs={12}>
-                            <Divider className={classes.dividerMargins} />
-                        </Grid>
-                    </>
-                ))}
+                            <Grid item xs={12}>
+                                <Divider className={classes.dividerMargins} />
+                            </Grid>
+                        </>
+                    ))}
 
                 <Button
                     style={{ marginTop: '22px' }}
