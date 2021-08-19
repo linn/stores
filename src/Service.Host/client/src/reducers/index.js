@@ -110,6 +110,8 @@ import impbookDeliveryTerms from './importBooks/impbookDeliveryTerms';
 import ports from './importBooks/ports';
 import cartonTypes from './cartonTypes';
 import validatePurchaseOrderBookInQtyResult from './validatePurchaseOrderBookInQtyResult';
+import currencies from './currencies';
+import exchangeRates from './exchangeRates';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -133,6 +135,7 @@ const rootReducer = history =>
         consignmentShipfiles,
         countries,
         createAuditReqs,
+        currencies,
         demLocations,
         departments,
         decrementRules,
@@ -144,6 +147,7 @@ const rootReducer = history =>
         doStockMove,
         doWandItem,
         employees,
+        exchangeRates,
         exportReturn,
         exportRsns,
         finishAllocation,

@@ -80,9 +80,9 @@ function ImpBookTab({
     portCode,
     customsEntryCodePrefix,
     allowedToEdit,
-    countries
+    countries,
+    currencies
 }) {
-    //todo remove params which aren't needed ^ (might need some for un-implemented invoice details stuff)
     const [localSuppliers, setLocalSuppliers] = useState([{}]);
 
     useEffect(() => {
@@ -240,7 +240,6 @@ function ImpBookTab({
                 </Grid>
 
                 <Grid item xs={6}>
-                    {/* possible todo might add new param to link button shared component to open this in a new tab */}
                     <LinkButton
                         text="View Parcel"
                         to={`/logistics/parcels/${parcelNumber}`}
@@ -309,21 +308,18 @@ function ImpBookTab({
                 </Grid>
 
                 <Grid item xs={4}>
-                    {/* Todo change this to a search/typeahead and implement rest of required stuff
-                     */}
-                    <InputField
+                    <Dropdown
+                        items={currencies}
+                        propertyName="currency"
                         fullWidth
                         value={currency}
-                        label="Currency"
-                        maxLength={8}
+                        label="currency"
                         onChange={handleFieldChange}
-                        propertyName="currency"
                         disabled={!allowedToEdit}
                     />
                 </Grid>
 
                 <Grid item xs={4}>
-                    {/* Todo implement exchange rate lookup actions on rest of frontend, actions etc */}
                     <InputField
                         fullWidth
                         value={exchangeRate}
@@ -536,6 +532,7 @@ function ImpBookTab({
                         propertyName="clearanceCharge"
                         type="number"
                         fullwidth
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
                 <Grid item xs={6}>

@@ -383,3 +383,11 @@ export const validatePurchaseOrderBookInQtyResult = new ItemType(
     'VALIDATE_PURCHASE_ORDER_BOOKIN_QTY_RESULT',
     '/logistics/purchase-orders/validate-qty'
 );
+
+export const currencies = new ItemType('currencies', 'CURRENCIES', '/logistics/currencies');
+
+export const exchangeRates = new ItemType(
+    'exchangeRates',
+    'EXCHANGE_RATES',
+    '/logistics/import-books/exchange-rates'
+);

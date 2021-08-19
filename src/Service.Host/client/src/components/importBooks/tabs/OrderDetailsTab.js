@@ -98,7 +98,6 @@ function OrderDetailsTab({
                         disabled={!allowedToEdit}
                     />
                 </Grid>
-                {/* Are these fields even used? Check with Rhona */}
                 <Grid item xs={3}>
                     <LinkButton
                         text="Calculate Weights"
@@ -262,7 +261,6 @@ function OrderDetailsTab({
                                     type="number"
                                     value={row.tariffNumber}
                                     disabled={!allowedToEdit}
-                                    //todo this doesn't exist in db!! What is it?!?! Can I remove?
                                 />
                             </Grid>
                             <Grid item xs={1}>
@@ -370,10 +368,6 @@ function OrderDetailsTab({
                                     disabled={!allowedToEdit}
                                 />
                             </Grid>
-                            {/* //todo 
-                        check that "IPR" text for id 13 is obvious enough to prevent mistakes
-                        if not maybe consider a popup or an IPR button to fill in the IPR cpc number
-                        also work out if 'post duty' function below is still needed and if so what it should do */}
                             <Grid item xs={2}>
                                 <LinkButton
                                     text="Post Duty"

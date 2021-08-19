@@ -285,3 +285,7 @@ export const cartonTypesActionTypes = makeActionTypes(itemTypes.cartonTypes.acti
 export const validatePurchaseOrderBookInQtyResultActionTypes = makeActionTypes(
     itemTypes.validatePurchaseOrderBookInQtyResult.actionType
 );
+
+export const currenciesActionTypes = makeActionTypes(itemTypes.currencies.actionType);
+
+export const exchangeRatesActionTypes = makeActionTypes(itemTypes.exchangeRates.actionType);

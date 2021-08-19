@@ -63,9 +63,9 @@ function PostEntriesTab({ postEntries, updatePostEntries, allowedToEdit }) {
                     columnsInfo={columns}
                     content={postEntries ?? [{}]}
                     updateContent={updatePostEntries}
-                    allowedToEdit={!allowedToEdit}
-                    allowedToCreate={!allowedToEdit}
-                    allowedToDelete={!allowedToEdit}
+                    allowedToEdit={allowedToEdit}
+                    allowedToCreate={allowedToEdit}
+                    allowedToDelete={allowedToEdit}
                 />
             </Grid>
         </>

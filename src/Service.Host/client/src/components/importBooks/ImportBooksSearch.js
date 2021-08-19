@@ -15,12 +15,10 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
     };
 
     const canCreate = () => {
-        return true;
-        //todo uncomment below and implement priveleges fully + assign them to users
-        // if (!(privileges.length < 1)) {
-        //     return privileges.some(priv => priv === 'import-books.admin');
-        // }
-        // return false;
+        if (!(privileges.length < 1)) {
+            return privileges.some(priv => priv === 'import-books.admin');
+        }
+        return false;
     };
 
     return (

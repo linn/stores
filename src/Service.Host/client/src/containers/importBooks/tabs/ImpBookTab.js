@@ -17,7 +17,11 @@ import portsActions from '../../../actions/portsActions';
 import portsSelectors from '../../../selectors/portsSelectors';
 import countriesActions from '../../../actions/countriesActions';
 import countriesSelectors from '../../../selectors/countriesSelectors';
+import currenciesActions from '../../../actions/currenciesActions';
+import currenciesSelectors from '../../../selectors/currenciesSelectors';
 import config from '../../../config';
+import exchangeRatesActions from '../../../actions/exchangeRatesActions';
+import exchangeRatesSelectors from '../../../selectors/exchangeRatesSelectors';
 
 const mapStateToProps = state => ({
     suppliersSearchResults: suppliersSelectors.getSearchItems(state).map?.(c => ({
@@ -54,7 +58,11 @@ const mapStateToProps = state => ({
         displayText: `${e.portCode} (${e.description})`,
         id: e.portCode
     })),
-    countries: countriesSelectors.getItems(state)
+    countries: countriesSelectors.getItems(state),
+    currencies: currenciesSelectors.getItems(state)?.map(c => ({
+        displayText: `${c.code} - ${c.name}`,
+        id: c.code
+    }))
 });
 
 const initialise = props => dispatch => {
@@ -81,6 +89,7 @@ const initialise = props => dispatch => {
         dispatch(impbookDeliveryTermsActions.fetch());
         dispatch(portsActions.fetch());
         dispatch(countriesActions.fetch());
+        dispatch(currenciesActions.fetch());
     }
 };
 

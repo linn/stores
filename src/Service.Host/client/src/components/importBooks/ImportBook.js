@@ -30,7 +30,8 @@ function ImportBook({
     addItem,
     updateItem,
     setEditStatus,
-    setSnackbarVisible
+    setSnackbarVisible,
+    privileges
 }) {
     const defaultImpBook = {
         id: null,
@@ -118,7 +119,6 @@ function ImportBook({
     };
 
     const impbookInvalid = () => {
-        //todo make this actually check fields when complete!
         return false;
     };
     const handleSaveClick = () => {
@@ -180,8 +180,12 @@ function ImportBook({
         });
     };
 
-    const allowedToEdit = true;
-    //todo implement permissions check ^
+    const allowedToEdit = () => {
+        if (!(privileges.length < 1)) {
+            return privileges.some(priv => priv === 'import-books.admin');
+        }
+        return false;
+    };
 
     return (
         <Page>
@@ -286,7 +290,7 @@ function ImportBook({
                                     customsEntryCodeDate={state.impbook.customsEntryCodeDate}
                                     linnDuty={state.impbook.linnDuty}
                                     linnVat={state.impbook.linnVat}
-                                    allowedToEdit={allowedToEdit}
+                                    allowedToEdit={allowedToEdit()}
                                 />
                             )}
 
@@ -295,21 +299,16 @@ function ImportBook({
                                     orderDetails={state.impbook.importBookOrderDetails}
                                     handleFieldChange={handleFieldChange}
                                     handleOrderDetailChange={handleOrderDetailChange}
-                                    allowedToEdit={allowedToEdit}
+                                    allowedToEdit={allowedToEdit()}
                                     addOrderDetailRow={handleAddOrderDetailRow}
                                     removeOrderDetailRow={handleRemoveOrderDetailRow}
-                                    //todo - work out where below fields should come from and populate them
-                                    // remainingTotal,
-                                    // remainingDutyTotal,
-                                    // remainingWeight,
-                                    // invoiceDate={state.impbook.invoiceDate}
                                 />
                             )}
                             {tab === 2 && (
                                 <PostEntriesTab
                                     postEntries={state.impbook.importBookPostEntries}
                                     updatePostEntries={handleUpdatePostEntries}
-                                    allowedToEdit={allowedToEdit}
+                                    allowedToEdit={allowedToEdit()}
                                 />
                             )}
                             {tab === 3 && (
@@ -319,13 +318,13 @@ function ImportBook({
                                     cancelledBy={state.impbook.cancelledBy}
                                     cancelledReason={state.impbook.cancelledReason}
                                     handleFieldChange={handleFieldChange}
-                                    allowedToEdit={allowedToEdit}
+                                    allowedToEdit={allowedToEdit()}
                                 />
                             )}
 
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons
-                                    saveDisabled={viewing() || !allowedToEdit || impbookInvalid()}
+                                    saveDisabled={viewing() || !allowedToEdit() || impbookInvalid()}
                                     saveClick={handleSaveClick}
                                     cancelClick={handleCancelClick}
                                     backClick={handleBackClick}
@@ -415,7 +414,8 @@ ImportBook.propTypes = {
     updateItem: PropTypes.func.isRequired,
     loading: PropTypes.bool,
     setEditStatus: PropTypes.func.isRequired,
-    setSnackbarVisible: PropTypes.func.isRequired
+    setSnackbarVisible: PropTypes.func.isRequired,
+    privileges: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
 ImportBook.defaultProps = {
