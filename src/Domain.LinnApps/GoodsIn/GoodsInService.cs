@@ -161,7 +161,6 @@
             var reqLine = req.Lines.FirstOrDefault();
             result.DocType = reqLine?.TransactionDefinition?.DocType;
 
-
             if (transactionType.Equals("O") && orderNumber.HasValue && partNumber != "PACK 1329")
             {
                 result.QcState = state.Equals("QC") ? "QUARANTINE" : "PASS";
@@ -169,12 +168,32 @@
 
             result.TransactionCode = reqLine?.TransactionCode;
 
-            result.QcInfo = this.partsRepository
-                .FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()))
+            var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
+
+            result.QcInfo = part
                 ?.QcInformation;
 
             // do we need to set kardex location here based on presence of StorageType?
 
+            if (orderNumber.HasValue)
+            {
+                this.goodsInPack.GetPurchaseOrderDetails(
+                    orderNumber.Value,
+                    orderLine.Value,
+                    out _,
+                    out _,
+                    out var uom,
+                    out _,
+                    out _,
+                    out _,
+                    out _,
+                    out _);
+                result.UnitOfMeasure = uom;
+            }
+
+            result.QtyReceived = qty;
+            result.PartNumber = partNumber;
+            result.PartDescription = part.Description;
             return result;
         }
 

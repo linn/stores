@@ -11,5 +11,13 @@
         public string QcInfo { get; set; }
 
         public string TransactionCode { get; set; }
+
+        public int QtyReceived { get; set; }
+
+        public string UnitOfMeasure { get; set; }
+
+        public string PartNumber { get; set; }
+
+        public string Description { get; set; }
     }
 }

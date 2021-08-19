@@ -19,6 +19,10 @@
                            QcInfo = model.QcInfo,
                            QcState = model.QcState,
                            ReqNumber = model.ReqNumber,
+                           QtyReceived = model.QtyReceived,
+                           UnitOfMeasure = model.UnitOfMeasure,
+                           PartNumber = model.PartNumber,
+                           Description = model.PartDescription
                            // links -> to parcel ut?
                        };
         }
