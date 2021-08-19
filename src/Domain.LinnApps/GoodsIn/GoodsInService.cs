@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection.Metadata.Ecma335;
 
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
@@ -157,9 +158,22 @@
 
             var req = this.reqRepository.FindById((int)reqNumberResult);
             result.ReqNumber = req.ReqNumber;
-            var transDef = req.Lines.FirstOrDefault()?.TransactionDefinition;
-            result.DocType = transDef?.DocType;
-            result.QcState = transDef?.DocType;
+            var reqLine = req.Lines.FirstOrDefault();
+            result.DocType = reqLine?.TransactionDefinition?.DocType;
+
+
+            if (transactionType.Equals("O") && orderNumber.HasValue && partNumber != "PACK 1329")
+            {
+                result.QcState = state.Equals("QC") ? "QUARANTINE" : "PASS";
+            }
+
+            result.TransactionCode = reqLine?.TransactionCode;
+
+            result.QcInfo = this.partsRepository
+                .FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()))
+                ?.QcInformation;
+
+            // do we need to set kardex location here based on presence of StorageType?
 
             return result;
         }

@@ -13,5 +13,9 @@
         public string QcState { get; set; }
 
         public string DocType { get; set; }
+
+        public string QcInfo { get; set; }
+
+        public string TransactionCode { get; set; }
     }
 }

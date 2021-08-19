@@ -11,23 +11,23 @@ import reqActions from '../../actions/reqActions';
 
 const mapStateToProps = state => ({
     storagePlace: storagePlaceSelectors.getItem(state),
-    qcInfo: partsSelectors.getSearchItems(state)?.[0]?.qcInformation 
+    qcInfo: partsSelectors.getSearchItems(state)?.[0]?.qcInformation
 });
 
-const initialise = props => dispatch => {
-    dispatch(
-        storagePlaceActions.fetchByQueryString(
-            'locationId',
-            `${props.bookinLocationId ? props.bookinLocationId : ''}&palletNumber=${
-                props.palletNumber
-            }`
-        )
-    );
-    dispatch(partsActions.search(props?.partNumber));
-};
+// const initialise = props => dispatch => {
+//     dispatch(
+//         storagePlaceActions.fetchByQueryString(
+//             'locationId',
+//             `${props.bookinLocationId ? props.bookinLocationId : ''}&palletNumber=${
+//                 props.palletNumber
+//             }`
+//         )
+//     );
+//     dispatch(partsActions.search(props?.partNumber));
+// };
 
 const mapDispatchToProps = {
-    initialise
+    // initialise
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(QcLabelPrintScreen));
