@@ -15,6 +15,8 @@ import impbookDeliveryTermsActions from '../../../actions/impbookDeliveryTermsAc
 import impbookDeliveryTermsSelectors from '../../../selectors/impbookDeliveryTermsSelectors';
 import portsActions from '../../../actions/portsActions';
 import portsSelectors from '../../../selectors/portsSelectors';
+import countriesActions from '../../../actions/countriesActions';
+import countriesSelectors from '../../../selectors/countriesSelectors';
 import config from '../../../config';
 
 const mapStateToProps = state => ({
@@ -51,16 +53,35 @@ const mapStateToProps = state => ({
     ports: portsSelectors.getItems(state)?.map(e => ({
         displayText: `${e.portCode} (${e.description})`,
         id: e.portCode
-    }))
+    })),
+    countries: countriesSelectors.getItems(state)
 });
 
-const initialise = () => dispatch => {
-    dispatch(employeesActions.fetch());
-    dispatch(suppliersActions.fetch());
-    dispatch(transportCodesActions.fetch());
-    dispatch(transactionCodesActions.fetch());
-    dispatch(impbookDeliveryTermsActions.fetch());
-    dispatch(portsActions.fetch());
+const initialise = props => dispatch => {
+    if (
+        !props.employees ||
+        props.employees.length === 0 ||
+        !props.allSuppliers ||
+        props.allSuppliers.length === 0 ||
+        !props.transportCodes ||
+        props.transportCodes.length === 0 ||
+        !props.transactionCodes ||
+        props.transactionCodes.length === 0 ||
+        !props.deliveryTerms ||
+        props.deliveryTerms.length === 0 ||
+        !props.ports ||
+        props.ports.length === 0 ||
+        !props.countries ||
+        props.countries.length === 0
+    ) {
+        dispatch(employeesActions.fetch());
+        dispatch(suppliersActions.fetch());
+        dispatch(transportCodesActions.fetch());
+        dispatch(transactionCodesActions.fetch());
+        dispatch(impbookDeliveryTermsActions.fetch());
+        dispatch(portsActions.fetch());
+        dispatch(countriesActions.fetch());
+    }
 };
 
 const mapDispatchToProps = {

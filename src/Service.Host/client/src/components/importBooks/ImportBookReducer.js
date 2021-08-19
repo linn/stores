@@ -62,37 +62,12 @@ export default function importBookReducer(state = initialState, action) {
                     ]
                 }
             };
-        case 'postEntryFieldChange':
+        case 'postEntriesUpdate':
             return {
                 ...state,
                 impbook: {
                     ...state.impbook,
-                    importBookPostEntries: [
-                        ...state.impbook.importBookPostEntries.filter(
-                            x => x.lineNumber !== action.lineId
-                        ),
-                        action.payload
-                    ]
-                }
-            };
-        case 'postEntryAdd':
-            return {
-                ...state,
-                impbook: {
-                    ...state.impbook,
-                    importBookPostEntries: [...state.impbook.importBookPostEntries, action.payload]
-                }
-            };
-        case 'postEntryRemove':
-            return {
-                ...state,
-                impbook: {
-                    ...state.impbook,
-                    importBookPostEntries: [
-                        ...state.impbook.importBookPostEntries.filter(
-                            x => x.lineNumber !== action.lineId
-                        )
-                    ]
+                    importBookPostEntries: action.entries
                 }
             };
         default:

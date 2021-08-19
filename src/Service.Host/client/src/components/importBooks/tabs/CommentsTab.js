@@ -9,7 +9,8 @@ function CommentsTab({
     dateCancelled,
     cancelledBy,
     cancelledReason,
-    employees
+    employees,
+    allowedToEdit
 }) {
     return (
         <Grid container spacing={1} item xs={7}>
@@ -22,6 +23,7 @@ function CommentsTab({
                     type="text"
                     rows={3}
                     value={comments}
+                    disabled={!allowedToEdit}
                 />
             </Grid>
             <Grid item xs={3}>
@@ -32,7 +34,7 @@ function CommentsTab({
                     propertyName="dateCancelled"
                     type="date"
                     value={dateCancelled}
-                    required
+                    disabled={!allowedToEdit}
                 />
             </Grid>
             <Grid item xs={3}>
@@ -47,6 +49,7 @@ function CommentsTab({
                     label="Cancelled by"
                     onChange={handleFieldChange}
                     type="number"
+                    disabled={!allowedToEdit}
                 />
             </Grid>
 
@@ -58,6 +61,7 @@ function CommentsTab({
                     propertyName="cancelledReason"
                     type="text"
                     value={cancelledReason}
+                    disabled={!allowedToEdit}
                 />
             </Grid>
         </Grid>
@@ -72,7 +76,8 @@ CommentsTab.propTypes = {
     cancelledReason: PropTypes.string.isRequired,
     employees: PropTypes.arrayOf(
         PropTypes.shape({ id: PropTypes.string, fullName: PropTypes.string })
-    ).isRequired
+    ).isRequired,
+    allowedToEdit: PropTypes.func.isRequired
 };
 
 CommentsTab.defaultProps = {};

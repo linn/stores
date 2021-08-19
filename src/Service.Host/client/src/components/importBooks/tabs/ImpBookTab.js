@@ -78,9 +78,11 @@ function ImpBookTab({
     periodNumber,
     createdBy,
     portCode,
-    customsEntryCodePrefix
+    customsEntryCodePrefix,
+    allowedToEdit,
+    countries
 }) {
-    //todo remove params which aren't needed (will need some for un-implemented stuff)
+    //todo remove params which aren't needed ^ (might need some for un-implemented invoice details stuff)
     const [localSuppliers, setLocalSuppliers] = useState([{}]);
 
     useEffect(() => {
@@ -133,6 +135,21 @@ function ImpBookTab({
         return 'loading..';
     };
 
+    const countryIsInEU = () => {
+        if (localSuppliers.length && supplierId) {
+            const tempSupplier = localSuppliers.find(x => x.id === supplierId);
+            if (!tempSupplier) {
+                return '';
+            }
+            const country = countries.find(x => x.countryCode === tempSupplier.countryCode);
+            return country?.eCMember;
+        }
+        if (!supplierId) {
+            return '';
+        }
+        return 'loading..';
+    };
+
     const clearSupplier = () => {
         handleFieldChange('supplierId', '');
     };
@@ -177,6 +194,7 @@ function ImpBookTab({
                         onChange={handleFieldChange}
                         propertyName="vaxRef"
                         value={vaxRef}
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
                 <Grid item xs={6} />
@@ -190,6 +208,7 @@ function ImpBookTab({
                         type="date"
                         value={dateCreated}
                         required
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -205,6 +224,7 @@ function ImpBookTab({
                         label="Created by"
                         onChange={handleFieldChange}
                         type="number"
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -215,11 +235,12 @@ function ImpBookTab({
                         onChange={handleFieldChange}
                         propertyName="parcelNumber"
                         value={parcelNumber}
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
                 <Grid item xs={6}>
-                    {/* todo might add new param to link button shared component to open this in a new tab */}
+                    {/* possible todo might add new param to link button shared component to open this in a new tab */}
                     <LinkButton
                         text="View Parcel"
                         to={`/logistics/parcels/${parcelNumber}`}
@@ -244,11 +265,16 @@ function ImpBookTab({
                             debounce={1000}
                             minimumSearchTermLength={2}
                             required
+                            disabled={!allowedToEdit}
                         />
                     </div>
                     <div className={classes.marginTop1}>
                         <Tooltip title="Clear Supplier search">
-                            <Button variant="outlined" onClick={clearSupplier}>
+                            <Button
+                                variant="outlined"
+                                onClick={clearSupplier}
+                                disabled={!allowedToEdit}
+                            >
                                 X
                             </Button>
                         </Tooltip>
@@ -263,13 +289,7 @@ function ImpBookTab({
                     />
                 </Grid>
                 <Grid item xs={3}>
-                    {/* TODO set this based on supplier country being an EC member*/}
-                    <InputField
-                        label="EC member"
-                        value={eecgNumber ? 'Yes' : 'No'}
-                        disabled
-                        fullwidth
-                    />
+                    <InputField label="EC (EU) member" value={countryIsInEU()} disabled fullwidth />
                 </Grid>
 
                 <Grid item xs={4}>
@@ -284,6 +304,7 @@ function ImpBookTab({
                         label="Foreign Currency"
                         onChange={handleFieldChange}
                         required
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -297,6 +318,7 @@ function ImpBookTab({
                         maxLength={8}
                         onChange={handleFieldChange}
                         propertyName="currency"
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -320,11 +342,12 @@ function ImpBookTab({
                         onChange={handleFieldChange}
                         propertyName="totalImportValue"
                         fullwidth
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
                 <Grid item xs={2} />
 
-                <Grid item xs={4} className={classes.negativeTopMargin}>
+                <Grid item xs={4} className={classes.negativeTopMargin} disabled>
                     <LinkButton
                         text="Exchange Rates"
                         // to={''}
@@ -347,11 +370,16 @@ function ImpBookTab({
                             debounce={1000}
                             minimumSearchTermLength={2}
                             required
+                            disabled={!allowedToEdit}
                         />
                     </div>
                     <div className={classes.marginTop1}>
                         <Tooltip title="Clear Supplier search">
-                            <Button variant="outlined" onClick={clearCarrier}>
+                            <Button
+                                variant="outlined"
+                                onClick={clearCarrier}
+                                disabled={!allowedToEdit}
+                            >
                                 X
                             </Button>
                         </Tooltip>
@@ -365,6 +393,7 @@ function ImpBookTab({
                         onChange={handleFieldChange}
                         propertyName="carrierInvNumber"
                         value={carrierInvNumber}
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -376,6 +405,7 @@ function ImpBookTab({
                         propertyName="carrierInvDate"
                         type="date"
                         value={carrierInvDate}
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -387,6 +417,7 @@ function ImpBookTab({
                         value={transportId}
                         label="Mode of Transport"
                         onChange={handleFieldChange}
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -397,6 +428,7 @@ function ImpBookTab({
                         onChange={handleFieldChange}
                         propertyName="transportBillNumber"
                         value={transportBillNumber}
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -408,6 +440,7 @@ function ImpBookTab({
                         value={transactionId}
                         label="Transaction Code"
                         onChange={handleFieldChange}
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -419,6 +452,7 @@ function ImpBookTab({
                         value={deliveryTermCode}
                         label="Delivery Term Code"
                         onChange={handleFieldChange}
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -430,6 +464,7 @@ function ImpBookTab({
                         value={arrivalPort}
                         label="Arrival Port"
                         onChange={handleFieldChange}
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -440,6 +475,7 @@ function ImpBookTab({
                         onChange={handleFieldChange}
                         propertyName="flightNumber"
                         value={flightNumber}
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -450,6 +486,7 @@ function ImpBookTab({
                         onChange={handleFieldChange}
                         propertyName="hwb"
                         value={hwb}
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
                 <Grid item xs={6}>
@@ -460,6 +497,7 @@ function ImpBookTab({
                         propertyName="arrivalDate"
                         type="date"
                         value={arrivalDate}
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
                 <Grid item xs={9} />
@@ -476,6 +514,7 @@ function ImpBookTab({
                         type="number"
                         propertyName="freightCharges"
                         fullwidth
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
                 <Grid item xs={6}>
@@ -486,6 +525,7 @@ function ImpBookTab({
                         type="number"
                         propertyName="handlingCharge"
                         fullwidth
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
                 <Grid item xs={6}>
@@ -506,6 +546,7 @@ function ImpBookTab({
                         type="number"
                         propertyName="cartage"
                         fullwidth
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
                 <Grid item xs={6}>
@@ -516,6 +557,7 @@ function ImpBookTab({
                         type="number"
                         propertyName="storage"
                         fullwidth
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
                 <Grid item xs={6}>
@@ -526,6 +568,7 @@ function ImpBookTab({
                         propertyName="duty"
                         type="number"
                         fullwidth
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
                 <Grid item xs={6}>
@@ -536,6 +579,7 @@ function ImpBookTab({
                         propertyName="vat"
                         type="number"
                         fullwidth
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -546,6 +590,7 @@ function ImpBookTab({
                         propertyName="misc"
                         type="number"
                         fullwidth
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -557,6 +602,7 @@ function ImpBookTab({
                         propertyName="carriersInvTotal"
                         fullwidth
                         type="number"
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -568,6 +614,7 @@ function ImpBookTab({
                         propertyName="carriersVatTotal"
                         fullwidth
                         type="number"
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -589,6 +636,7 @@ function ImpBookTab({
                         propertyName="numCartons"
                         fullwidth
                         type="number"
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
                 <Grid item xs={4}>
@@ -599,6 +647,7 @@ function ImpBookTab({
                         propertyName="numPallets"
                         fullwidth
                         type="number"
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
                 <Grid item xs={4}>
@@ -609,6 +658,7 @@ function ImpBookTab({
                         propertyName="weight"
                         fullwidth
                         type="number"
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -619,6 +669,7 @@ function ImpBookTab({
                         onChange={handleFieldChange}
                         propertyName="customsEntryCodePrefix"
                         fullwidth
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
                 <Grid item xs={10}>
@@ -628,6 +679,7 @@ function ImpBookTab({
                         onChange={handleFieldChange}
                         propertyName="customsEntryCode"
                         fullwidth
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -639,6 +691,7 @@ function ImpBookTab({
                         propertyName="customsEntryCodeDate"
                         type="date"
                         value={customsEntryCodeDate}
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -650,6 +703,7 @@ function ImpBookTab({
                         propertyName="linnDuty"
                         fullwidth
                         type="number"
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -661,6 +715,7 @@ function ImpBookTab({
                         propertyName="linnVat"
                         fullwidth
                         type="number"
+                        disabled={!allowedToEdit}
                     />
                 </Grid>
 
@@ -779,7 +834,9 @@ ImpBookTab.propTypes = {
     periodNumber: PropTypes.number,
     createdBy: PropTypes.number,
     portCode: PropTypes.string,
-    customsEntryCodePrefix: ''
+    customsEntryCodePrefix: '',
+    allowedToEdit: PropTypes.bool.isRequired,
+    countries: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 ImpBookTab.defaultProps = {
@@ -827,7 +884,8 @@ ImpBookTab.defaultProps = {
     periodNumber: null,
     createdBy: null,
     portCode: '',
-    customsEntryCodePrefix: ''
+    customsEntryCodePrefix: '',
+    countries: [{ id: '-1', countryCode: 'loading..' }]
 };
 
 export default ImpBookTab;

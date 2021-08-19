@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
+import Tooltip from '@material-ui/core/Tooltip';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { Dropdown, InputField, LinkButton } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
 
@@ -32,10 +35,14 @@ function OrderDetailsTab({
             width: '2em'
         },
         gapAbove: {
-            marginTop: theme.spacing(8)
+            marginTop: theme.spacing(2)
         },
-        negativeTopMargin: {
-            marginTop: theme.spacing(-4)
+        dividerMargins: {
+            marginTop: '10px',
+            marginBottom: '10px'
+        },
+        dividerMarginBottomOnly: {
+            marginBottom: '10px'
         }
     }));
     const classes = useStyles();
@@ -123,7 +130,10 @@ function OrderDetailsTab({
             </Grid>
 
             <Grid container spacing={1} item xs={12} className={classes.gapAbove}>
-                {/* todo implement add row and delete row buttons and functions */}
+                <Grid item xs={12}>
+                    <Divider className={classes.dividerMarginBottomOnly} />
+                </Grid>
+
                 {orderDetails?.map(row => (
                     <>
                         <Grid item xs={1}>
@@ -169,6 +179,7 @@ function OrderDetailsTab({
                                     type="number"
                                     value={row.rsnNumber}
                                     disabled={!allowedToEdit}
+                                    maxLength={6}
                                 />
                             </Grid>
                         )}
@@ -185,6 +196,7 @@ function OrderDetailsTab({
                                     type="number"
                                     value={row.loanNumber}
                                     disabled={!allowedToEdit}
+                                    maxLength={6}
                                 />
                             </Grid>
                         )}
@@ -201,6 +213,7 @@ function OrderDetailsTab({
                                     type="number"
                                     value={row.insNumber}
                                     disabled={!allowedToEdit}
+                                    maxLength={10}
                                 />
                             </Grid>
                         )}
@@ -216,6 +229,8 @@ function OrderDetailsTab({
                                 type="text"
                                 value={row.orderDescription}
                                 disabled={!allowedToEdit}
+                                required
+                                maxLength={2000}
                             />
                         </Grid>
                         <Grid item xs={2}>
@@ -229,6 +244,7 @@ function OrderDetailsTab({
                                 type="text"
                                 value={row.tariffCode}
                                 disabled={!allowedToEdit}
+                                maxLength={12}
                             />
                         </Grid>
                         <Grid item xs={1}>
@@ -242,6 +258,7 @@ function OrderDetailsTab({
                                 type="number"
                                 value={row.tariffNumber}
                                 disabled={!allowedToEdit}
+                                //todo this doesn't exist in db!! What is it?!?! Can I remove?
                             />
                         </Grid>
                         <Grid item xs={1}>
@@ -255,6 +272,8 @@ function OrderDetailsTab({
                                 type="number"
                                 value={row.qty}
                                 disabled={!allowedToEdit}
+                                required
+                                maxLength={6}
                             />
                         </Grid>
                         <Grid item xs={2}>
@@ -268,6 +287,9 @@ function OrderDetailsTab({
                                 type="number"
                                 value={row.orderValue}
                                 disabled={!allowedToEdit}
+                                required
+                                maxLength={14}
+                                decimalPlaces={2}
                             />
                         </Grid>
                         <Grid item xs={2}>
@@ -281,6 +303,9 @@ function OrderDetailsTab({
                                 type="number"
                                 value={row.dutyValue}
                                 disabled={!allowedToEdit}
+                                required
+                                maxLength={14}
+                                decimalPlaces={2}
                             />
                         </Grid>
                         <Grid item xs={1}>
@@ -307,6 +332,9 @@ function OrderDetailsTab({
                                 type="number"
                                 value={row.vatValue}
                                 disabled={!allowedToEdit}
+                                required
+                                maxLength={14}
+                                decimalPlaces={2}
                             />
                         </Grid>
                         <Grid item xs={1}>
@@ -320,6 +348,9 @@ function OrderDetailsTab({
                                 type="number"
                                 value={row.weight}
                                 disabled={!allowedToEdit}
+                                required
+                                maxLength={10}
+                                decimalPlaces={2}
                             />
                         </Grid>
                         <Grid item xs={2}>
@@ -349,18 +380,20 @@ function OrderDetailsTab({
                         </Grid>
 
                         <Grid item xs={2}>
-                            <Button
-                                style={{ marginTop: '22px' }}
-                                variant="contained"
-                                onClick={() => removeOrderDetailRow(row.lineNumber)}
-                            >
-                                Remove order detail
-                            </Button>
-                            {/* todo change this to wee bin symbol thing */}
+                            <Tooltip title="Remove order detail" aria-label="add">
+                                <Button
+                                    className={classes.marginTop1}
+                                    onClick={() => removeOrderDetailRow(row.lineNumber)}
+                                    disabled={!allowedToEdit}
+                                >
+                                    <DeleteIcon data-testid="deleteIcon" />
+                                </Button>
+                            </Tooltip>
                         </Grid>
 
-                        <Grid item xs={12} />
-                        <Grid item xs={12} />
+                        <Grid item xs={12}>
+                            <Divider className={classes.dividerMargins} />
+                        </Grid>
                     </>
                 ))}
 
@@ -368,6 +401,7 @@ function OrderDetailsTab({
                     style={{ marginTop: '22px' }}
                     variant="contained"
                     onClick={addOrderDetailRow}
+                    disabled={!allowedToEdit}
                 >
                     Add new order detail
                 </Button>

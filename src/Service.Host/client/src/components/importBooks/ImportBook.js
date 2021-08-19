@@ -117,19 +117,11 @@ function ImportBook({
         setTab(value);
     };
 
-    // useEffect(() => {
-    //     if (editStatus === 'create') {
-    //         dispatch({ type: 'fieldChange', fieldName: 'to be updated on create init', payload: null });
-    //     }
-    // }, [editStatus]);
-
     const impbookInvalid = () => {
         //todo make this actually check fields when complete!
         return false;
     };
     const handleSaveClick = () => {
-        console.info(state);
-
         if (creating()) {
             addItem(state.impbook);
         } else {
@@ -165,15 +157,6 @@ function ImportBook({
         });
     };
 
-    const handlePostEntryChange = (lineId, newValue) => {
-        setEditStatus('edit');
-        dispatch({
-            type: 'postEntryFieldChange',
-            lineId,
-            payload: newValue
-        });
-    };
-
     const handleAddOrderDetailRow = () => {
         setEditStatus('edit');
         dispatch({
@@ -189,18 +172,11 @@ function ImportBook({
         });
     };
 
-    const handleAddPostEntryRow = () => {
+    const handleUpdatePostEntries = entries => {
         setEditStatus('edit');
         dispatch({
-            type: 'postEntryAdd'
-        });
-    };
-
-    const handleRemovePostEntryRow = lineNumber => {
-        setEditStatus('edit');
-        dispatch({
-            type: 'postEntryRemove',
-            lineNumber
+            type: 'postEntriesUpdate',
+            entries
         });
     };
 
@@ -310,6 +286,7 @@ function ImportBook({
                                     customsEntryCodeDate={state.impbook.customsEntryCodeDate}
                                     linnDuty={state.impbook.linnDuty}
                                     linnVat={state.impbook.linnVat}
+                                    allowedToEdit={allowedToEdit}
                                 />
                             )}
 
@@ -331,9 +308,7 @@ function ImportBook({
                             {tab === 2 && (
                                 <PostEntriesTab
                                     postEntries={state.impbook.importBookPostEntries}
-                                    handlePostEntryChange={handlePostEntryChange}
-                                    addPostEntry={handleAddPostEntryRow}
-                                    removePostEntry={handleRemovePostEntryRow}
+                                    updatePostEntries={handleUpdatePostEntries}
                                     allowedToEdit={allowedToEdit}
                                 />
                             )}
@@ -344,12 +319,13 @@ function ImportBook({
                                     cancelledBy={state.impbook.cancelledBy}
                                     cancelledReason={state.impbook.cancelledReason}
                                     handleFieldChange={handleFieldChange}
+                                    allowedToEdit={allowedToEdit}
                                 />
                             )}
 
                             <Grid item xs={12}>
                                 <SaveBackCancelButtons
-                                    saveDisabled={viewing() || impbookInvalid()}
+                                    saveDisabled={viewing() || !allowedToEdit || impbookInvalid()}
                                     saveClick={handleSaveClick}
                                     cancelClick={handleCancelClick}
                                     backClick={handleBackClick}
