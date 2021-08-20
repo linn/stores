@@ -25,5 +25,7 @@
         public string PartNumber { get; set; }
 
         public string PartDescription { get; set; }
+
+        public string DocumentType { get; private set; }
     }
 }

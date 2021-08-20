@@ -26,6 +26,8 @@
 
         protected IRepository<RequisitionHeader, int> ReqRepository { get; private set; }
 
+        protected IPurchaseOrderPack purchaseOrderPack { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -34,14 +36,16 @@
             this.PalletAnalysisPack = Substitute.For<IPalletAnalysisPack>();
             this.PartsRepository = Substitute.For<IRepository<Part, int>>();
             this.GoodsInLog = Substitute.For<IRepository<GoodsInLogEntry, int>>();
-            this.ReqRepository = Substitute.For<IRepository<RequisitionHeader, int>> ();
+            this.ReqRepository = Substitute.For<IRepository<RequisitionHeader, int>>();
+            this.purchaseOrderPack = Substitute.For<IPurchaseOrderPack>();
             this.Sut = new GoodsInService(
                 this.GoodsInPack, 
                 this.StoresPack, 
                 this.PalletAnalysisPack, 
                 this.PartsRepository,
                 this.GoodsInLog,
-                this.ReqRepository);
+                this.ReqRepository,
+                this.purchaseOrderPack);
         }
     }
 }

@@ -28,12 +28,11 @@ function QcLabelPrintScreen({
         if (transactionCode) {
             if (docType === 'WO') {
                 // hide document line field?
-            }
-            else {
+            } else {
                 // show document line field?
             }
         }
-    }, [transactionCode])
+    }, [transactionCode]);
     return (
         <Grid container spacing={3}>
             <Grid item xs={12}>
@@ -41,12 +40,36 @@ function QcLabelPrintScreen({
                     Label Details
                 </Typography>
             </Grid>
-            <Grid item xs={12}>
-                <Typography variant="h5" gutterBottom>
-                    {storagePlace?.siteCode}
-                </Typography>
+            <Grid item xs={3}>
+                <InputField
+                    fullWidth
+                    disabled
+                    value={docType}
+                    label="Document Type"
+                    propertyName="docType"
+                />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={3}>
+                <InputField
+                    fullWidth
+                    disabled
+                    value={docType}
+                    label="Order Number"
+                    propertyName="orderNumber"
+                />
+            </Grid>
+            <Grid item xs={6} />
+            <Grid item xs={3}>
+                <InputField
+                    fullWidth
+                    disabled
+                    value={qcState}
+                    label="QC State"
+                    propertyName="orderNumber"
+                />
+            </Grid>
+            <Grid item xs={9} />
+            <Grid item xs={4}>
                 <InputField
                     fullWidth
                     disabled
@@ -55,7 +78,46 @@ function QcLabelPrintScreen({
                     propertyName="partNumber"
                 />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={4}>
+                <InputField
+                    fullWidth
+                    disabled
+                    value={partDescription}
+                    label="Part Description"
+                    propertyName="partDescription"
+                />
+            </Grid>
+            <Grid item xs={4} />
+            <Grid item xs={2}>
+                <InputField
+                    fullWidth
+                    disabled
+                    value={qtyReceived}
+                    label="Qty Received"
+                    propertyName="qtyReceived"
+                />
+            </Grid>
+            <Grid item xs={3}>
+                <InputField
+                    fullWidth
+                    disabled
+                    value={unitOfMeasure}
+                    label="Unit of Measure"
+                    propertyName="unitOfMeasure"
+                />
+            </Grid>
+            <Grid item xs={7} />
+            <Grid item xs={4}>
+                <InputField
+                    fullWidth
+                    disabled
+                    value={deliveryRef}
+                    label="Delivery Ref"
+                    propertyName="deliveryRef"
+                />
+            </Grid>
+            <Grid item xs={8} />
+            <Grid item xs={6}>
                 <InputField
                     fullWidth
                     disabled
@@ -64,6 +126,7 @@ function QcLabelPrintScreen({
                     propertyName="qcInfo"
                 />
             </Grid>
+            <Grid item xs={6} />
         </Grid>
     );
 }

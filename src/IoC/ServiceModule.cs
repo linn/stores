@@ -189,6 +189,7 @@
             builder.RegisterType<BartenderLabelPack>().As<IBartenderLabelPack>();
             builder.RegisterType<GoodsInPack>().As<IGoodsInPack>();
             builder.RegisterType<PalletAnalysisPack>().As<IPalletAnalysisPack>();
+            builder.RegisterType<PurchaseOrderPack>().As<IPurchaseOrderPack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

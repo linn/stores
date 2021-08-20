@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection.Metadata.Ecma335;
+    using System.Runtime.CompilerServices;
 
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
@@ -25,13 +26,17 @@
 
         private readonly IRepository<RequisitionHeader, int> reqRepository;
 
+        private readonly IPurchaseOrderPack purchaseOrderPack;
+        
+
         public GoodsInService(
             IGoodsInPack goodsInPack,
             IStoresPack storesPack,
             IPalletAnalysisPack palletAnalysisPack,
             IRepository<Part, int> partsRepository,
             IRepository<GoodsInLogEntry, int> goodsInLog,
-            IRepository<RequisitionHeader, int> reqRepository)
+            IRepository<RequisitionHeader, int> reqRepository,
+            IPurchaseOrderPack purchaseOrderPack)
         {
             this.storesPack = storesPack;
             this.goodsInPack = goodsInPack;
@@ -39,6 +44,7 @@
             this.partsRepository = partsRepository;
             this.goodsInLog = goodsInLog;
             this.reqRepository = reqRepository;
+            this.purchaseOrderPack = purchaseOrderPack;
         }
 
         public BookInResult DoBookIn(
@@ -125,7 +131,7 @@
                 this.goodsInLog.Add(goodsInLogEntry);
             }
 
-            // need to make sure changes are commited by this point.
+            // need to make sure changes are committed by this point.
             this.goodsInPack.DoBookIn(
                 bookinRef,
                 transactionType,
@@ -189,11 +195,13 @@
                     out _,
                     out _);
                 result.UnitOfMeasure = uom;
+                result.DocType = this.purchaseOrderPack.GetDocumentType(orderNumber.Value);
             }
 
             result.QtyReceived = qty;
             result.PartNumber = partNumber;
             result.PartDescription = part.Description;
+            
             return result;
         }
 

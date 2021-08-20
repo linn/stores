@@ -209,6 +209,7 @@ function GoodsInUtility({
                                 bookinLocationId={formData?.ontoLocationId}
                                 palletNumber={formData?.palletNumber}
                                 partNumber={validatePurchaseOrderResult?.partNumber}
+                                partDescription={validatePurchaseOrder?.description}
                                 reqNumber={bookInResult?.reqNumber}
                                 qcState={bookInResult?.qcState}
                                 docType={bookInResult?.docType}
