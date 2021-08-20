@@ -20,8 +20,6 @@ import countriesSelectors from '../../../selectors/countriesSelectors';
 import currenciesActions from '../../../actions/currenciesActions';
 import currenciesSelectors from '../../../selectors/currenciesSelectors';
 import config from '../../../config';
-import exchangeRatesActions from '../../../actions/exchangeRatesActions';
-import exchangeRatesSelectors from '../../../selectors/exchangeRatesSelectors';
 
 const mapStateToProps = state => ({
     suppliersSearchResults: suppliersSelectors.getSearchItems(state).map?.(c => ({
