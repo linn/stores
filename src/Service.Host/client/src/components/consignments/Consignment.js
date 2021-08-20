@@ -226,20 +226,26 @@ function Consignment({
         clearConsignmentErrors();
     };
 
-    const showCartonLabelForm = () => {
-        clearConsignmentLabelData();
-
-        let maxContainer = 1;
-        const containerItems = state.consignment.items?.filter(a => a.containerNumber);
+    const getMaxCarton = () => {
+        let maxContainer = 0;
+        const containerItems = editableItems?.filter(a => a.containerNumber);
         if (containerItems && containerItems.length > 0) {
             const containerNumbers = containerItems.map(a => a.containerNumber);
             maxContainer = Math.max(...containerNumbers);
         }
 
+        return maxContainer;
+    };
+
+    const showCartonLabelForm = () => {
+        clearConsignmentLabelData();
+
+        const maxCarton = getMaxCarton();
+
         setCartonLabelOptions({
             ...cartonLabelOptions,
-            firstItem: maxContainer,
-            lastItem: maxContainer
+            firstItem: maxCarton,
+            lastItem: maxCarton
         });
 
         setShowCartonLabel(true);
@@ -264,20 +270,34 @@ function Consignment({
         setPalletLabelOptions({ ...palletLabelOptions, [itemName]: value });
     };
 
+    const getMaxItemNumber = () => {
+        let maxItem = 0;
+        if (editableItems && editableItems.length > 0) {
+            const itemNumbers = editableItems.map(a => a.itemNumber);
+            maxItem = Math.max(...itemNumbers);
+        }
+
+        return maxItem;
+    };
+
+    const getMaxPalletNumber = () => {
+        let maxPalletNo = 0;
+        if (editablePallets && editablePallets.length > 0) {
+            const palletNumbers = editablePallets.map(a => a.palletNumber);
+            maxPalletNo = Math.max(...palletNumbers);
+        }
+
+        return maxPalletNo;
+    };
+
     const showPalletLabelForm = () => {
         clearConsignmentLabelData();
-
-        let maxPalletNumber = 1;
-        const pallets = state.consignment.pallets?.filter(a => a.palletNumber);
-        if (pallets && pallets.length > 0) {
-            const palletNumbers = pallets.map(a => a.palletNumber);
-            maxPalletNumber = Math.max(...palletNumbers);
-        }
+        const maxPallet = getMaxPalletNumber();
 
         setPalletLabelOptions({
             ...palletLabelOptions,
-            firstItem: maxPalletNumber,
-            lastItem: maxPalletNumber
+            firstItem: maxPallet,
+            lastItem: maxPallet
         });
 
         setShowPalletLabel(true);
@@ -292,6 +312,42 @@ function Consignment({
             numberOfCopies: palletLabelOptions.numberOfCopies,
             userNumber
         });
+    };
+
+    const addPallet = () => {
+        const pallets = editablePallets.slice();
+        const maxPallet = getMaxPalletNumber();
+
+        pallets.push({
+            palletNumber: maxPallet + 1,
+            id: maxPallet + 1,
+            weight: 18,
+            consignmentId: item.consignmentId,
+            height: 10,
+            width: 120,
+            depth: 100
+        });
+
+        setEditablePallets(pallets);
+    };
+
+    const addCarton = () => {
+        const maxCarton = getMaxCarton();
+        const maxItem = getMaxItemNumber();
+        const items = editableItems.slice();
+
+        items.push({
+            containerNumber: maxCarton + 1,
+            id: maxItem + 1,
+            itemNumber: maxItem + 1,
+            consignmentId: item.consignmentId,
+            itemTypeDisplay: getItemTypeDisplay('C'),
+            itemType: 'C',
+            itemDescription: 'SUNDRIES',
+            quantity: 1
+        });
+
+        setEditableItems(items);
     };
 
     return (
@@ -390,6 +446,22 @@ function Consignment({
                 <Grid item xs={12}>
                     {currentTab === 2 && (
                         <>
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={addCarton}
+                                disabled={viewing()}
+                            >
+                                Add Carton
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={addPallet}
+                                disabled={viewing()}
+                            >
+                                Add Pallet
+                            </Button>
                             <Button
                                 variant="outlined"
                                 color="primary"

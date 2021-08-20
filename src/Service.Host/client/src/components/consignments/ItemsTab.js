@@ -290,7 +290,7 @@ function ItemsTab({
                             resetRow={resetRow}
                             handleEditClick={setPalletsEditing}
                             editable
-                            allowNewRowCreation
+                            allowNewRowCreation={false}
                             deleteRowPreEdit={false}
                             setRowToBeSaved={setPalletRowToBeSaved}
                             setRowToBeDeleted={setPalletRowToBeDeleted}
