@@ -114,6 +114,8 @@ import debitNote from './purchasing/debitNote';
 import debitNotes from './purchasing/debitNotes';
 import stockMoves from './stockLocators/stockMoves';
 import printConsignmentLabel from './printConsignmentLabel';
+import currencies from './currencies';
+import exchangeRates from './exchangeRates';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -137,6 +139,7 @@ const rootReducer = history =>
         consignmentShipfiles,
         countries,
         createAuditReqs,
+        currencies,
         debitNote,
         debitNotes,
         demLocations,
@@ -150,6 +153,7 @@ const rootReducer = history =>
         doStockMove,
         doWandItem,
         employees,
+        exchangeRates,
         exportReturn,
         exportRsns,
         finishAllocation,

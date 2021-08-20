@@ -89,6 +89,15 @@
                 with.Dependency<IResourceBuilder<IEnumerable<ImportBookDeliveryTerm>>>(
                     new ImportBookDeliveryTermsResourceBuilder());
 
+                with.Dependency<IResourceBuilder<IEnumerable<ImportBookOrderDetail>>>(new ImportBookOrderDetailsResourceBuilder());
+                with.Dependency<IResourceBuilder<ImportBookOrderDetail>>(new ImportBookOrderDetailResourceBuilder());
+
+                with.Dependency<IResourceBuilder<IEnumerable<ImportBookPostEntry>>>(new ImportBookPostEntriesResourceBuilder());
+                with.Dependency<IResourceBuilder<ImportBookPostEntry>>(new ImportBookPostEntryResourceBuilder());
+
+                with.Dependency<IResourceBuilder<IEnumerable<ImportBookInvoiceDetail>>>(new ImportBookInvoiceDetailsResourceBuilder());
+                with.Dependency<IResourceBuilder<ImportBookInvoiceDetail>>(new ImportBookInvoiceDetailResourceBuilder());
+
                 with.Module<ImportBooksModule>();
 
                 with.ResponseProcessor<ImportBookResponseProcessor>();
@@ -106,7 +115,7 @@
                 with.ResponseProcessor<ImportBookCpcNumbersResponseProcessor>();
                 with.ResponseProcessor<PortsResponseProcessor>();
                 with.ResponseProcessor<ImportBookDeliveryTermsResponseProcessor>();
-
+                
 
                 with.RequestStartup(
                     (container, pipelines, context) =>

@@ -249,7 +249,7 @@
             ImportBookOrderDetail orderDetail,
             bool isInEU)
         {
-            var exportReturnDetail = (ExportReturnDetail)null;
+            ExportReturnDetail exportReturnDetail = null;
 
             if (isInEU && orderDetail.RsnNumber.HasValue)
             {
@@ -366,7 +366,7 @@
             ImportBookOrderDetail orderDetail,
             bool isInEU)
         {
-            var exportReturnDetail = (ExportReturnDetail)null;
+            ExportReturnDetail exportReturnDetail = null;
 
             if (isInEU && orderDetail.RsnNumber.HasValue)
             {

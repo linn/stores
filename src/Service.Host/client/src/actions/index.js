@@ -295,3 +295,7 @@ export const stockMovesActionTypes = makeActionTypes(itemTypes.stockMoves.action
 export const printConsignmentLabelActionTypes = makeProcessActionTypes(
     processTypes.printConsignmentLabel.actionType
 );
+
+export const currenciesActionTypes = makeActionTypes(itemTypes.currencies.actionType);
+
+export const exchangeRatesActionTypes = makeActionTypes(itemTypes.exchangeRates.actionType);

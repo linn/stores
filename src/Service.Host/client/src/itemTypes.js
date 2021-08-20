@@ -401,3 +401,11 @@ export const stockMoves = new ItemType(
     'STOCK-MOVES',
     '/inventory/stock-locators/stock-moves'
 );
+
+export const currencies = new ItemType('currencies', 'CURRENCIES', '/logistics/currencies');
+
+export const exchangeRates = new ItemType(
+    'exchangeRates',
+    'EXCHANGE_RATES',
+    '/logistics/import-books/exchange-rates'
+);
