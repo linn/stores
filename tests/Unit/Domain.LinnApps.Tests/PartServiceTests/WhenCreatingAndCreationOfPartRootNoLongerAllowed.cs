@@ -20,7 +20,7 @@
         [SetUp]
         public void SetUp()
         {
-            this.part = new Part { PartNumber = "CAP 431" };
+            this.part = new Part { PartNumber = "CAP 431", StockControlled = "N" };
             this.privileges = new List<string> { "part.admin" };
             this.PartPack.PartRoot("CAP 431").Returns("CAP");
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);

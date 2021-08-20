@@ -34,7 +34,7 @@ function StockViewerOptions({
         partNumber: '',
         storageLocation: '',
         locationId: '',
-        stockPool: '',
+        stockPoolCode: '',
         batchRef: '',
         state: ''
     });
@@ -74,6 +74,7 @@ function StockViewerOptions({
                     <LinkButton
                         text="VIEW STOCK LOCATORS"
                         disabled={
+                            !options.stockPoolCode &&
                             !options.batchRef &&
                             !options.partNumber &&
                             !(options.storageLocation || options.palletNumber)
@@ -130,9 +131,9 @@ function StockViewerOptions({
                         loading={stockPoolsLoading}
                         label="Stock Pool"
                         title="Search Stock Pools"
-                        value={options.stockPool}
+                        value={options.stockPoolCode}
                         onSelect={newValue =>
-                            setOptions({ ...options, stockPool: newValue.stockPoolCode })
+                            setOptions({ ...options, stockPoolCode: newValue.stockPoolCode })
                         }
                         history={history}
                         debounce={1000}

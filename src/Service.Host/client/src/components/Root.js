@@ -50,6 +50,7 @@ import ImportBooksIprReportOptions from '../containers/reports/ImpbookIprReportO
 import ImportBooksIprReport from '../containers/reports/ImpbookIprReport';
 import ImportBooksEuReportOptions from '../containers/reports/ImpbookEuReportOptions';
 import ImportBooksEuReport from '../containers/reports/ImpbookEuReport';
+import DebitNotes from '../containers/purchasing/DebitNotes';
 
 const Root = ({ store }) => (
     <div>
@@ -256,7 +257,7 @@ const Root = ({ store }) => (
                                         path="/logistics/import-books/ipr/report"
                                         component={ImportBooksIprReport}
                                     />
-                                           <Route
+                                    <Route
                                         exact
                                         path="/logistics/import-books/eu"
                                         component={ImportBooksEuReportOptions}
@@ -275,6 +276,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/logistics/import-books"
                                         component={ImportBooks}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/purchasing/debit-notes"
+                                        component={DebitNotes}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>

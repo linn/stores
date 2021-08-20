@@ -15,6 +15,10 @@ import impbookDeliveryTermsActions from '../../../actions/impbookDeliveryTermsAc
 import impbookDeliveryTermsSelectors from '../../../selectors/impbookDeliveryTermsSelectors';
 import portsActions from '../../../actions/portsActions';
 import portsSelectors from '../../../selectors/portsSelectors';
+import countriesActions from '../../../actions/countriesActions';
+import countriesSelectors from '../../../selectors/countriesSelectors';
+import currenciesActions from '../../../actions/currenciesActions';
+import currenciesSelectors from '../../../selectors/currenciesSelectors';
 import config from '../../../config';
 
 const mapStateToProps = state => ({
@@ -46,21 +50,45 @@ const mapStateToProps = state => ({
     })),
     deliveryTerms: impbookDeliveryTermsSelectors.getItems(state)?.map(e => ({
         displayText: `${e.deliveryTermCode} (${e.description})`,
-        id: parseInt(e.deliveryTermCode, 10)
+        id: e.deliveryTermCode
     })),
     ports: portsSelectors.getItems(state)?.map(e => ({
         displayText: `${e.portCode} (${e.description})`,
-        id: parseInt(e.portCode, 10)
+        id: e.portCode
+    })),
+    countries: countriesSelectors.getItems(state),
+    currencies: currenciesSelectors.getItems(state)?.map(c => ({
+        displayText: `${c.code} - ${c.name}`,
+        id: c.code
     }))
 });
 
-const initialise = () => dispatch => {
-    dispatch(employeesActions.fetch());
-    dispatch(suppliersActions.fetch());
-    dispatch(transportCodesActions.fetch());
-    dispatch(transactionCodesActions.fetch());
-    dispatch(impbookDeliveryTermsActions.fetch());
-    dispatch(portsActions.fetch());
+const initialise = props => dispatch => {
+    if (
+        !props.employees ||
+        props.employees.length === 0 ||
+        !props.allSuppliers ||
+        props.allSuppliers.length === 0 ||
+        !props.transportCodes ||
+        props.transportCodes.length === 0 ||
+        !props.transactionCodes ||
+        props.transactionCodes.length === 0 ||
+        !props.deliveryTerms ||
+        props.deliveryTerms.length === 0 ||
+        !props.ports ||
+        props.ports.length === 0 ||
+        !props.countries ||
+        props.countries.length === 0
+    ) {
+        dispatch(employeesActions.fetch());
+        dispatch(suppliersActions.fetch());
+        dispatch(transportCodesActions.fetch());
+        dispatch(transactionCodesActions.fetch());
+        dispatch(impbookDeliveryTermsActions.fetch());
+        dispatch(portsActions.fetch());
+        dispatch(countriesActions.fetch());
+        dispatch(currenciesActions.fetch());
+    }
 };
 
 const mapDispatchToProps = {

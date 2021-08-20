@@ -61,6 +61,7 @@
                     builder.RegisterModule<LoggingModule>();
                     builder.RegisterModule<ServiceModule>();
                     builder.RegisterModule<ResponsesModule>();
+                    builder.RegisterModule<MessagingModule>();
                 });
 
             base.ConfigureApplicationContainer(existingContainer);

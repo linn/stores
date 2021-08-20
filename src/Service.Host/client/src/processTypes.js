@@ -77,3 +77,9 @@ export const shipfilesSendEmails = new ItemType(
 );
 
 export const doBookIn = new ItemType('doBookIn', 'DO_BOOK_IN', '/logistics/book-in');
+
+export const printConsignmentLabel = new ItemType(
+    'printConsignmentLabel',
+    'PRINT_CONSIGNMENT_LABEL',
+    '/logistics/labels'
+);

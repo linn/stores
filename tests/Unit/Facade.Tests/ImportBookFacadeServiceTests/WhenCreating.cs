@@ -9,7 +9,6 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
-    using Linn.Stores.Facade.Tests.ImportBookFacadeTests;
     using Linn.Stores.Resources.ImportBooks;
 
     using NUnit.Framework;
@@ -21,8 +20,6 @@
         private readonly DateTime now = DateTime.Now;
 
         private ImportBookResource resource;
-
-        private ImportBook from;
 
         private IResult<ImportBook> result;
 

@@ -152,7 +152,7 @@ function ItemsTab({
             }
         },
         {
-            title: 'Container',
+            title: 'Carton',
             id: 'containerNumber',
             type: 'number',
             editable: true,
@@ -318,7 +318,7 @@ function ItemsTab({
                             resetRow={resetItemRow}
                             handleEditClick={setItemsEditing}
                             editable
-                            allowNewRowCreation
+                            allowNewRowCreation={false}
                             deleteRowPreEdit={false}
                             setRowToBeSaved={setItemRowToBeSaved}
                             setRowToBeDeleted={setItemRowToBeDeleted}

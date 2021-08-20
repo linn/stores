@@ -287,3 +287,17 @@ export const validatePurchaseOrderBookInQtyResultActionTypes = makeActionTypes(
 );
 
 export const reqActionTypes = makeActionTypes(itemTypes.req.actionType);
+
+export const debitNoteActionTypes = makeActionTypes(itemTypes.debitNote.actionType);
+
+export const debitNotesActionTypes = makeActionTypes(itemTypes.debitNotes.actionType);
+
+export const stockMovesActionTypes = makeActionTypes(itemTypes.stockMoves.actionType);
+
+export const printConsignmentLabelActionTypes = makeProcessActionTypes(
+    processTypes.printConsignmentLabel.actionType
+);
+
+export const currenciesActionTypes = makeActionTypes(itemTypes.currencies.actionType);
+
+export const exchangeRatesActionTypes = makeActionTypes(itemTypes.exchangeRates.actionType);

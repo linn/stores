@@ -13,7 +13,11 @@ import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Dialog from '@material-ui/core/Dialog';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 import PropTypes from 'prop-types';
+import makeStyles from '@material-ui/styles/makeStyles';
 import queryString from 'query-string';
 import Page from '../../containers/Page';
 
@@ -24,9 +28,23 @@ function StockLocator({
     quantities,
     quantitiesLoading,
     options,
-    fetchItems
+    fetchItems,
+    moves,
+    movesLoading,
+    fetchMoves,
+    clearMoves
 }) {
     const [selectedQuantities, setSelectQuantities] = useState();
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    const useStyles = makeStyles(theme => ({
+        dialog: {
+            margin: theme.spacing(6),
+            width: '80%'
+        }
+    }));
+
+    const classes = useStyles();
 
     useEffect(() => {
         if (Object.values(queryString.parse(options)).some(x => x !== null && x !== '')) {
@@ -61,14 +79,14 @@ function StockLocator({
         },
         {
             title: '',
-            id: 'component',
+            id: 'drillDownButtonComponent',
             type: 'component',
             editable: false
         },
         {
             title: 'Qty Allocated',
-            id: 'quantityAllocated',
-            type: 'number',
+            id: 'qtyAllocatedComponent',
+            type: 'component',
             editable: false
         },
         {
@@ -96,9 +114,96 @@ function StockLocator({
             editable: false
         }
     ];
+
+    const moveColumns = [
+        {
+            title: 'Part',
+            id: 'partNumber',
+            type: 'text',
+            editable: false
+        },
+        {
+            title: 'Qty Allocated',
+            id: 'qtyAllocated',
+            type: 'number',
+            editable: false
+        },
+        {
+            title: 'Trans Code',
+            id: 'transactionCode',
+            type: 'text',
+            editable: false
+        },
+        {
+            title: 'Batch Ref',
+            id: 'batchRef',
+            type: 'text',
+            editable: false
+        },
+        {
+            title: 'Req',
+            id: 'reqNumber',
+            type: 'number',
+            editable: false
+        },
+        {
+            title: 'Line',
+            id: 'lineNumber',
+            type: 'number',
+            editable: false
+        },
+        {
+            title: 'Sequence',
+            id: 'sequence',
+            type: 'number',
+            editable: false
+        }
+    ];
     return (
         <Page>
             <Grid container spacing={3}>
+                <Dialog open={dialogOpen} fullWidth maxWidth="lg">
+                    <div>
+                        <IconButton
+                            className={classes.pullRight}
+                            aria-label="Close"
+                            onClick={() => {
+                                clearMoves();
+                                setDialogOpen(false);
+                            }}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <div className={classes.dialog}>
+                            <Grid container spacing={3}>
+                                <Grid item xs={12}>
+                                    <Typography variant="h5" gutterBottom>
+                                        Stock Moves
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    {movesLoading && <Loading />}
+                                </Grid>
+                                <Grid item xs={12}>
+                                    {moves?.length ? (
+                                        <SingleEditTable
+                                            editable={false}
+                                            allowNewRowCreation={false}
+                                            newRowPosition="top"
+                                            columns={moveColumns}
+                                            rows={moves.map((i, index) => ({
+                                                ...i,
+                                                id: index
+                                            }))}
+                                        />
+                                    ) : (
+                                        <> </>
+                                    )}
+                                </Grid>
+                            </Grid>
+                        </div>
+                    </div>
+                </Dialog>
                 <Grid item xs={12}>
                     <Title text="Stock Locations" />
                 </Grid>
@@ -123,7 +228,7 @@ function StockLocator({
                                     rows={items.map((i, index) => ({
                                         ...i,
                                         id: index,
-                                        component: (
+                                        drillDownButtonComponent: (
                                             <button
                                                 type="button"
                                                 onClick={() => {
@@ -143,6 +248,24 @@ function StockLocator({
                                             >
                                                 +
                                             </button>
+                                        ),
+                                        qtyAllocatedComponent: (
+                                            <>
+                                                {i.quantityAllocated && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            fetchMoves(
+                                                                i.partNumber,
+                                                                `&palletNumber=${i.palletNumber}&locationId=${i.locationId}`
+                                                            );
+                                                            setDialogOpen(true);
+                                                        }}
+                                                    >
+                                                        {i.quantityAllocated}
+                                                    </button>
+                                                )}
+                                            </>
                                         )
                                     }))}
                                     allowNewRowCreation={false}
@@ -280,14 +403,20 @@ StockLocator.propTypes = {
             otherStockAllocated: PropTypes.number
         })
     ),
-    quantitiesLoading: PropTypes.bool
+    quantitiesLoading: PropTypes.bool,
+    moves: PropTypes.arrayOf(PropTypes.shape({})),
+    movesLoading: PropTypes.bool,
+    fetchMoves: PropTypes.func.isRequired,
+    clearMoves: PropTypes.func.isRequired
 };
 
 StockLocator.defaultProps = {
     items: [],
     itemsLoading: true,
     quantities: null,
-    quantitiesLoading: false
+    quantitiesLoading: false,
+    moves: [],
+    movesLoading: false
 };
 
 export default StockLocator;

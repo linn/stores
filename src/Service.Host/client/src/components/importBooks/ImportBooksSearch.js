@@ -5,10 +5,6 @@ import PropTypes from 'prop-types';
 import Page from '../../containers/Page';
 
 function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, privileges }) {
-    const createUrl = () => {
-        '/logistics/import-books';
-    };
-
     const searchItems = () => {
         return items?.map(item => ({
             ...item,
@@ -32,7 +28,7 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
                 <Grid item xs={1}>
                     <LinkButton
                         text="Create"
-                        to={createUrl()}
+                        to="/logistics/import-books/create"
                         disabled={!canCreate()}
                         tooltip={
                             canCreate() ? null : 'You are not authorised to create import books.'

@@ -17,5 +17,7 @@
         public StoresTransactionDefinition TransactionDefinition { get; set; }
 
         public IEnumerable<ReqMove> Moves { get; set; }
+
+        public string TransactionCode { get; set; }
     }
 }

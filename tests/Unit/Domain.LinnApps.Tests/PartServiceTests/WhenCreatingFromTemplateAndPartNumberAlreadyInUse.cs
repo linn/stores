@@ -25,7 +25,7 @@
         [SetUp]
         public void SetUp()
         {
-            this.part = new Part();
+            this.part = new Part { StockControlled = "N" };
             this.privileges = new List<string> { "part.admin" };
 
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
@@ -35,6 +35,7 @@
                                  new Part
                                      {
                                          PartNumber = "CAP 431"
+                                         
                                      }
                              }.AsQueryable());
             this.PartRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>()).Returns(new Part());

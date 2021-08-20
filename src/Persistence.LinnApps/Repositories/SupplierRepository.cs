@@ -25,7 +25,7 @@
 
         public IQueryable<Supplier> FilterBy(Expression<Func<Supplier, bool>> expression)
         {
-            return this.serviceDbContext.Suppliers.Where(expression);
+            return this.serviceDbContext.Suppliers.Where(expression).AsNoTracking();
         }
 
         public IQueryable<Supplier> FindAll()

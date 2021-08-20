@@ -26,8 +26,9 @@
         {
             this.part = new Part
                             {
-                                PartNumber = "CAp 431"
-                            };
+                                PartNumber = "CAp 431",
+                                StockControlled = "N"
+            };
             this.privileges = new List<string> { "part.admin" };
 
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);

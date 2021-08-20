@@ -26,6 +26,8 @@ import shippingTermsSelectors from '../../selectors/shippingTermsSelectors';
 import shippingTermsActions from '../../actions/shippingTermsActions';
 import cartonTypesSelectors from '../../selectors/cartonTypesSelectors';
 import cartonTypesActions from '../../actions/cartonTypesActions';
+import printConsignmentLabelActions from '../../actions/printConsignmentLabelActions';
+import printConsignmentLabelSelectors from '../../selectors/printConsignmentLabelSelectors';
 
 const getOptions = ownProps => {
     const options = queryString.parse(ownProps.location.search);
@@ -68,7 +70,9 @@ const mapStateToProps = (state, ownProps) => ({
     shippingTerm: shippingTermSelectors.getItem(state),
     shippingTerms: shippingTermsSelectors.getItems(state),
     shippingTermsLoading: shippingTermsSelectors.getLoading(state),
-    cartonTypes: cartonTypesSelectors.getItems(state)
+    cartonTypes: cartonTypesSelectors.getItems(state),
+    printConsignmentLabelWorking: printConsignmentLabelSelectors.getWorking(state),
+    printConsignmentLabelResult: printConsignmentLabelSelectors.getData(state)
 });
 
 const mapDispatchToProps = {
@@ -83,7 +87,9 @@ const mapDispatchToProps = {
     clearHub: hubActions.clearItem,
     getCarrier: carrierActions.fetchByHref,
     getShippingTerm: shippingTermActions.fetchByHref,
-    clearShippingTerm: shippingTermActions.clearItem
+    clearShippingTerm: shippingTermActions.clearItem,
+    printConsignmentLabel: printConsignmentLabelActions.requestProcessStart,
+    clearConsignmentLabelData: printConsignmentLabelActions.clearProcessData
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Consignment));

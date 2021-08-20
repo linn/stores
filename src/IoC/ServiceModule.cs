@@ -20,6 +20,7 @@
     using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Purchasing;
     using Linn.Stores.Domain.LinnApps.Reports;
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.StockLocators;
@@ -29,12 +30,14 @@
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Facade.Services;
+    using Linn.Stores.Facade.Services.Purchasing;
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Allocation;
     using Linn.Stores.Resources.Consignments;
     using Linn.Stores.Resources.ImportBooks;
     using Linn.Stores.Resources.Parts;
+    using Linn.Stores.Resources.Purchasing;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Resources.Requisitions;
     using Linn.Stores.Resources.StockLocators;
@@ -72,6 +75,7 @@
             builder.RegisterType<GoodsInService>().As<IGoodsInService>();
             builder.RegisterType<ImportBookReportService>()
                 .As<IImportBookReportService>();
+            builder.RegisterType<ConsignmentService>().As<IConsignmentService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -166,6 +170,7 @@
             builder.RegisterType<SalesArticleService>().As<ISalesArticleService>();
             builder.RegisterType<CartonTypeFacadeService>().As<IFacadeService<CartonType, string, CartonTypeResource, CartonTypeResource>>();
             builder.RegisterType<PortFacadeService>().As<IFacadeService<Port, string, PortResource, PortResource>>();
+            builder.RegisterType<LogisticsLabelFacadeService>().As<ILogisticsLabelFacadeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
@@ -190,6 +195,12 @@
             builder.RegisterType<GoodsInPack>().As<IGoodsInPack>();
             builder.RegisterType<PalletAnalysisPack>().As<IPalletAnalysisPack>();
             builder.RegisterType<PurchaseOrderPack>().As<IPurchaseOrderPack>();
+            builder.RegisterType<ConsignmentProxyService>().As<IConsignmentProxyService>();
+            builder.RegisterType<InvoicingPack>().As<IInvoicingPack>();
+            builder.RegisterType<ExportBookPack>().As<IExportBookPack>();
+            builder.RegisterType<PlCreditDebitNoteService>()
+                .As<IFacadeFilterService<PlCreditDebitNote, int, PlCreditDebitNoteResource, PlCreditDebitNoteResource, PlCreditDebitNoteResource>>();
+            builder.RegisterType<LogisticsLabelService>().As<ILogisticsLabelService>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();

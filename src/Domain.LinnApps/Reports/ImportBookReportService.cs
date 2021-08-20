@@ -12,27 +12,34 @@
     public class ImportBookReportService : IImportBookReportService
     {
         private readonly IRepository<ImportBook, int> impbookRepository;
+
         private readonly IRepository<Country, string> countryRepository;
 
+        private readonly IRepository<ExportReturnDetail, ExportReturnDetailKey> exportReturnDetailRepository;
 
         private readonly IReportingHelper reportingHelper;
 
         private readonly int IprCpcNumberId = 13;
 
-        public ImportBookReportService(IRepository<ImportBook, int> impbookRepository,
-                                       IRepository<Country, string> countryRepository,
-                                       IReportingHelper reportingHelper)
+        public ImportBookReportService(
+            IRepository<ImportBook, int> impbookRepository,
+            IRepository<Country, string> countryRepository,
+            IRepository<ExportReturnDetail, ExportReturnDetailKey> exportReturnDetailRepository,
+            IReportingHelper reportingHelper)
         {
             this.impbookRepository = impbookRepository;
             this.countryRepository = countryRepository;
+            this.exportReturnDetailRepository = exportReturnDetailRepository;
             this.reportingHelper = reportingHelper;
         }
 
         public ResultsModel GetIPRReport(DateTime from, DateTime to, bool iprResults = true)
         {
+            var euCountries = this.countryRepository.FilterBy(x => x.ECMember == "Y").Select(z => z.CountryCode)
+                .ToList();
             var iprImpbooks = this.impbookRepository.FilterBy(
-                x => x.OrderDetails.Any(z => 
-                         (z.CpcNumber.HasValue && z.CpcNumber.Value == this.IprCpcNumberId) == iprResults)
+                x => x.OrderDetails.Any(
+                         z => (z.CpcNumber.HasValue && z.CpcNumber.Value == this.IprCpcNumberId) == iprResults)
                      && x.CustomsEntryCodeDate.HasValue && from < x.CustomsEntryCodeDate.Value
                      && x.CustomsEntryCodeDate.Value < to);
 
@@ -44,14 +51,16 @@
 
             this.AddReportColumns(reportLayout);
 
-            var values = new List<CalculationValueModel>(); 
+            var values = new List<CalculationValueModel>();
 
             foreach (var impbook in iprImpbooks)
             {
+                var isInEU = euCountries.Contains(impbook.Supplier.CountryCode);
+
                 foreach (var orderDetail in impbook.OrderDetails.Where(
                     x => (x.CpcNumber.HasValue && x.CpcNumber.Value == this.IprCpcNumberId) == iprResults))
                 {
-                    this.ExtractDetails(values, impbook, orderDetail);
+                    this.ExtractDetails(values, impbook, orderDetail, isInEU);
                 }
             }
 
@@ -65,11 +74,12 @@
 
         public ResultsModel GetIPRExport(DateTime from, DateTime to, bool iprResults = true)
         {
-            var euCountries = this.countryRepository.FilterBy(x => x.ECMember == "Y").Select(z => z.CountryCode).ToList();
+            var euCountries = this.countryRepository.FilterBy(x => x.ECMember == "Y").Select(z => z.CountryCode)
+                .ToList();
 
             var iprImpbooks = this.impbookRepository.FilterBy(
-                x => x.OrderDetails.Any(z =>
-                         (z.CpcNumber.HasValue && z.CpcNumber.Value == this.IprCpcNumberId) == iprResults)
+                x => x.OrderDetails.Any(
+                         z => (z.CpcNumber.HasValue && z.CpcNumber.Value == this.IprCpcNumberId) == iprResults)
                      && x.CustomsEntryCodeDate.HasValue && from < x.CustomsEntryCodeDate.Value
                      && x.CustomsEntryCodeDate.Value < to);
 
@@ -103,13 +113,12 @@
 
         public ResultsModel GetEUReport(DateTime from, DateTime to, bool euResults = true)
         {
-            var euCountries = this.countryRepository.FilterBy(x => x.ECMember == "Y").Select(z => z.CountryCode).ToList();
+            var euCountries = this.countryRepository.FilterBy(x => x.ECMember == "Y").Select(z => z.CountryCode)
+                .ToList();
 
             var iprImpbooks = this.impbookRepository.FilterBy(
-                x =>
-                    (euCountries.Contains(x.Supplier.CountryCode) == euResults)
-                     && x.CustomsEntryCodeDate.HasValue && from < x.CustomsEntryCodeDate.Value
-                     && x.CustomsEntryCodeDate.Value < to);
+                x => (euCountries.Contains(x.Supplier.CountryCode) == euResults) && x.CustomsEntryCodeDate.HasValue
+                     && from < x.CustomsEntryCodeDate.Value && x.CustomsEntryCodeDate.Value < to);
 
             var reportLayout = new SimpleGridLayout(
                 this.reportingHelper,
@@ -125,7 +134,7 @@
             {
                 foreach (var orderDetail in impbook.OrderDetails)
                 {
-                    this.ExtractDetails(values, impbook, orderDetail);
+                    this.ExtractDetails(values, impbook, orderDetail, euResults);
                 }
             }
 
@@ -139,13 +148,12 @@
 
         public ResultsModel GetEUExport(DateTime from, DateTime to, bool euResults = true)
         {
-            var euCountries = this.countryRepository.FilterBy(x => x.ECMember == "Y").Select(z => z.CountryCode).ToList();
+            var euCountries = this.countryRepository.FilterBy(x => x.ECMember == "Y").Select(z => z.CountryCode)
+                .ToList();
 
             var iprImpbooks = this.impbookRepository.FilterBy(
-                x =>
-                    (euCountries.Contains(x.Supplier.CountryCode) == euResults)
-                    && x.CustomsEntryCodeDate.HasValue && from < x.CustomsEntryCodeDate.Value
-                    && x.CustomsEntryCodeDate.Value < to);
+                x => (euCountries.Contains(x.Supplier.CountryCode) == euResults) && x.CustomsEntryCodeDate.HasValue
+                     && from < x.CustomsEntryCodeDate.Value && x.CustomsEntryCodeDate.Value < to);
 
             var reportLayout = new SimpleGridLayout(
                 this.reportingHelper,
@@ -181,7 +189,8 @@
                 new List<AxisDetailsModel>
                     {
                         new AxisDetailsModel("RsnNo", "Unique RSN No", GridDisplayType.TextValue) { AllowWrap = false },
-                         new AxisDetailsModel("SupplierCountry", "Country Importing From", GridDisplayType.TextValue),
+                        new AxisDetailsModel("InvNo", "Job Ref or Invoice Number", GridDisplayType.TextValue),
+                        new AxisDetailsModel("SupplierCountry", "Country Importing From", GridDisplayType.TextValue),
                         new AxisDetailsModel("Carrier", "Import Agent (Carrier)", GridDisplayType.TextValue),
                         new AxisDetailsModel(
                             "ShippingRef",
@@ -237,8 +246,17 @@
         private void ExtractDetails(
             ICollection<CalculationValueModel> values,
             ImportBook impbook,
-            ImportBookOrderDetail orderDetail)
+            ImportBookOrderDetail orderDetail,
+            bool isInEU)
         {
+            ExportReturnDetail exportReturnDetail = null;
+
+            if (isInEU && orderDetail.RsnNumber.HasValue)
+            {
+                exportReturnDetail = this.exportReturnDetailRepository.FindBy(
+                    x => x.RsnNumber == orderDetail.RsnNumber.Value);
+            }
+
             values.Add(
                 new CalculationValueModel
                     {
@@ -247,9 +265,17 @@
                         TextDisplay = orderDetail.RsnNumber?.ToString(),
                         RowTitle = impbook.Id.ToString()
                     });
-
-            //todo add invoice number from intercompany
-
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "InvNo",
+                        TextDisplay =
+                            exportReturnDetail != null
+                                ? exportReturnDetail.InterCompanyInvoice.DocumentNumber.ToString()
+                                : string.Empty,
+                        RowTitle = impbook.Id.ToString()
+                    });
             values.Add(
                 new CalculationValueModel
                     {
@@ -328,186 +354,197 @@
                     {
                         RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                         ColumnId = "ForeignValue",
-                        //todo change this to be value from intercompany inv
-                        TextDisplay = string.Empty,
+                        TextDisplay =
+                            exportReturnDetail != null ? exportReturnDetail.CustomsValue?.ToString() : string.Empty,
                         RowTitle = impbook.Id.ToString()
                     });
         }
 
         private void ExtractExportDetails(
-        ICollection<CalculationValueModel> values,
-        ImportBook impbook,
-        ImportBookOrderDetail orderDetail,
-        bool isInEU = false)
+            ICollection<CalculationValueModel> values,
+            ImportBook impbook,
+            ImportBookOrderDetail orderDetail,
+            bool isInEU)
         {
-            values.Add(
-                new CalculationValueModel
-                {
-                    RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "RsnNo",
-                    TextDisplay = orderDetail.RsnNumber?.ToString(),
-                    RowTitle = impbook.Id.ToString()
-                });
-            values.Add(
-                new CalculationValueModel
-                {
-                    RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "InvNo",
-                    TextDisplay = string.Empty,
-                    RowTitle = impbook.Id.ToString()
-                });
-            values.Add(
-                new CalculationValueModel
-                {
-                    RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "CustomerName",
-                    TextDisplay = isInEU ? "Linn Belgium" : string.Empty,
-                    RowTitle = impbook.Id.ToString()
-                });
+            ExportReturnDetail exportReturnDetail = null;
+
+            if (isInEU && orderDetail.RsnNumber.HasValue)
+            {
+                exportReturnDetail = this.exportReturnDetailRepository.FindBy(
+                    x => x.RsnNumber == orderDetail.RsnNumber.Value);
+            }
 
             values.Add(
                 new CalculationValueModel
-                {
-                    RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "SupplierCountry",
-                    TextDisplay = isInEU ? "Belgium" : impbook.Supplier.CountryCode,
-                    RowTitle = impbook.Id.ToString()
-                });
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "RsnNo",
+                        TextDisplay = orderDetail.RsnNumber?.ToString(),
+                        RowTitle = impbook.Id.ToString()
+                    });
             values.Add(
                 new CalculationValueModel
-                {
-                    RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "Carrier",
-                    TextDisplay = impbook.Carrier.Name,
-                    RowTitle = impbook.Id.ToString()
-                });
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "InvNo",
+                        TextDisplay =
+                            exportReturnDetail != null
+                                ? exportReturnDetail.InterCompanyInvoice.DocumentNumber.ToString()
+                                : string.Empty,
+                        RowTitle = impbook.Id.ToString()
+                    });
             values.Add(
                 new CalculationValueModel
-                {
-                    RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "ShippingRef",
-                    TextDisplay = impbook.TransportBillNumber,
-                    RowTitle = impbook.Id.ToString()
-                });
-            values.Add(
-                new CalculationValueModel
-                {
-                    RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "CustomsEntryCode",
-                    TextDisplay = $"{impbook.CustomsEntryCodePrefix} - {impbook.CustomsEntryCode}",
-                    RowTitle = impbook.Id.ToString()
-                });
-            values.Add(
-                new CalculationValueModel
-                {
-                    RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "CustomsEntryCodeDate",
-                    TextDisplay = impbook.CustomsEntryCodeDate?.ToString("dd-MMM-yyyy"),
-                    RowTitle = impbook.Id.ToString()
-                });
-            values.Add(
-                new CalculationValueModel
-                {
-                    RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "EconomicCode",
-                    TextDisplay = string.Empty,
-                    RowTitle = impbook.Id.ToString()
-                });
-            values.Add(
-                new CalculationValueModel
-                {
-                    RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "TariffCode",
-                    TextDisplay = orderDetail.TariffCode,
-                    RowTitle = impbook.Id.ToString()
-                });
-            values.Add(
-                new CalculationValueModel
-                {
-                    RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "OrderDescription",
-                    TextDisplay = orderDetail.OrderDescription,
-                    RowTitle = impbook.Id.ToString()
-                });
-            values.Add(
-                new CalculationValueModel
-                {
-                    RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "DutyRate",
-                    TextDisplay = string.Empty,
-                    RowTitle = impbook.Id.ToString()
-                });
-            values.Add(
-                new CalculationValueModel
-                {
-                    RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "Qty",
-                    TextDisplay = orderDetail.Qty.ToString(),
-                    RowTitle = impbook.Id.ToString()
-                });
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "CustomerName",
+                        TextDisplay = isInEU ? "Linn Belgium" : string.Empty,
+                        RowTitle = impbook.Id.ToString()
+                    });
 
             values.Add(
                 new CalculationValueModel
-                {
-                    RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "OriginalCurrency",
-                    TextDisplay = impbook.Currency,
-                    RowTitle = impbook.Id.ToString()
-                });
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "SupplierCountry",
+                        TextDisplay = isInEU ? "Belgium" : impbook.Supplier.CountryCode,
+                        RowTitle = impbook.Id.ToString()
+                    });
             values.Add(
                 new CalculationValueModel
-                {
-                    RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "ForeignValue",
-                    //todo change this to be value from intercompany 
-                    TextDisplay = string.Empty,
-                    RowTitle = impbook.Id.ToString()
-                });
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "Carrier",
+                        TextDisplay = impbook.Carrier.Name,
+                        RowTitle = impbook.Id.ToString()
+                    });
             values.Add(
                 new CalculationValueModel
-                {
-                    RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "ExchangeRate",
-                    TextDisplay = string.Empty,
-                    RowTitle = impbook.Id.ToString()
-                });
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "ShippingRef",
+                        TextDisplay = impbook.TransportBillNumber,
+                        RowTitle = impbook.Id.ToString()
+                    });
             values.Add(
                 new CalculationValueModel
-                {
-                    RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "Currency",
-                    TextDisplay = string.Empty,
-                    RowTitle = impbook.Id.ToString()
-                });
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "CustomsEntryCode",
+                        TextDisplay = $"{impbook.CustomsEntryCodePrefix} - {impbook.CustomsEntryCode}",
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "CustomsEntryCodeDate",
+                        TextDisplay = impbook.CustomsEntryCodeDate?.ToString("dd-MMM-yyyy"),
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "EconomicCode",
+                        TextDisplay = string.Empty,
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "TariffCode",
+                        TextDisplay = orderDetail.TariffCode,
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "OrderDescription",
+                        TextDisplay = orderDetail.OrderDescription,
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "DutyRate",
+                        TextDisplay = string.Empty,
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "Qty",
+                        TextDisplay = orderDetail.Qty.ToString(),
+                        RowTitle = impbook.Id.ToString()
+                    });
 
             values.Add(
                 new CalculationValueModel
-                {
-                    RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "GBPValue",
-                    TextDisplay = string.Empty,
-                    RowTitle = impbook.Id.ToString()
-                });
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "OriginalCurrency",
+                        TextDisplay = impbook.Currency,
+                        RowTitle = impbook.Id.ToString()
+                    });
             values.Add(
                 new CalculationValueModel
-                {
-                    RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
-                    ColumnId = "Quarter",
-                    TextDisplay = string.Empty,
-                    RowTitle = impbook.Id.ToString()
-                });
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "ForeignValue",
+                        TextDisplay =
+                            exportReturnDetail != null ? exportReturnDetail.CustomsValue?.ToString() : string.Empty,
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "ExchangeRate",
+                        TextDisplay = string.Empty,
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "Currency",
+                        TextDisplay = string.Empty,
+                        RowTitle = impbook.Id.ToString()
+                    });
+
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "GBPValue",
+                        TextDisplay = string.Empty,
+                        RowTitle = impbook.Id.ToString()
+                    });
+            values.Add(
+                new CalculationValueModel
+                    {
+                        RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
+                        ColumnId = "Quarter",
+                        TextDisplay = string.Empty,
+                        RowTitle = impbook.Id.ToString()
+                    });
         }
 
         private string GenerateIprReportTitle(DateTime fromDate, DateTime toDate, bool ipr)
         {
-            var nonText = ipr ? "" : "Non-";
+            var nonText = ipr ? string.Empty : "Non-";
 
             return $"{nonText}IPR Impbooks between {fromDate:dd-MMM-yyyy} and {toDate:dd-MMM-yyyy}";
         }
 
         private string GenerateEUReportTitle(DateTime fromDate, DateTime toDate, bool eu)
         {
-            var nonText = eu ? "" : "Non-";
+            var nonText = eu ? string.Empty : "Non-";
             return $"{nonText}EU Impbooks between {fromDate:dd-MMM-yyyy} and {toDate:dd-MMM-yyyy}";
         }
     }

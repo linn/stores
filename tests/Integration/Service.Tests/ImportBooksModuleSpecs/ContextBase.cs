@@ -19,23 +19,19 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource> ImportBooksFacadeService
-        {
-            get;
-            private set;
-        }
+        protected IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource> ImportBooksFacadeService { get; private set; }
 
-        protected IImportBookExchangeRateService ImportBookExchangeRateService;
+        protected IImportBookExchangeRateService ImportBookExchangeRateService { get; private set; }
 
-        protected IFacadeService<ImportBookTransactionCode, int, ImportBookTransactionCodeResource, ImportBookTransactionCodeResource> ImportBookTransactionCodeFacadeService;
+        protected IFacadeService<ImportBookTransactionCode, int, ImportBookTransactionCodeResource, ImportBookTransactionCodeResource> ImportBookTransactionCodeFacadeService { get; private set; }
 
-        protected IFacadeService<ImportBookTransportCode, int, ImportBookTransportCodeResource, ImportBookTransportCodeResource> ImportBookTransportCodeFacadeService;
+        protected IFacadeService<ImportBookTransportCode, int, ImportBookTransportCodeResource, ImportBookTransportCodeResource> ImportBookTransportCodeFacadeService { get; private set; }
 
-        protected IFacadeService<ImportBookCpcNumber, int, ImportBookCpcNumberResource, ImportBookCpcNumberResource> ImportBookCpcNumberFacadeService;
+        protected IFacadeService<ImportBookCpcNumber, int, ImportBookCpcNumberResource, ImportBookCpcNumberResource> ImportBookCpcNumberFacadeService { get; private set; }
 
-        protected IFacadeService<ImportBookDeliveryTerm, string, ImportBookDeliveryTermResource, ImportBookDeliveryTermResource> ImportBookDeliveryTermFacadeService;
+        protected IFacadeService<ImportBookDeliveryTerm, string, ImportBookDeliveryTermResource, ImportBookDeliveryTermResource> ImportBookDeliveryTermFacadeService { get; private set; }
 
-        protected IFacadeService<Port, string, PortResource, PortResource> PortFacadeService;
+        protected IFacadeService<Port, string, PortResource, PortResource> PortFacadeService { get; private set; }
 
         [SetUp]
         public void EstablishContext()
@@ -93,6 +89,15 @@
                 with.Dependency<IResourceBuilder<IEnumerable<ImportBookDeliveryTerm>>>(
                     new ImportBookDeliveryTermsResourceBuilder());
 
+                with.Dependency<IResourceBuilder<IEnumerable<ImportBookOrderDetail>>>(new ImportBookOrderDetailsResourceBuilder());
+                with.Dependency<IResourceBuilder<ImportBookOrderDetail>>(new ImportBookOrderDetailResourceBuilder());
+
+                with.Dependency<IResourceBuilder<IEnumerable<ImportBookPostEntry>>>(new ImportBookPostEntriesResourceBuilder());
+                with.Dependency<IResourceBuilder<ImportBookPostEntry>>(new ImportBookPostEntryResourceBuilder());
+
+                with.Dependency<IResourceBuilder<IEnumerable<ImportBookInvoiceDetail>>>(new ImportBookInvoiceDetailsResourceBuilder());
+                with.Dependency<IResourceBuilder<ImportBookInvoiceDetail>>(new ImportBookInvoiceDetailResourceBuilder());
+
                 with.Module<ImportBooksModule>();
 
                 with.ResponseProcessor<ImportBookResponseProcessor>();
@@ -110,7 +115,7 @@
                 with.ResponseProcessor<ImportBookCpcNumbersResponseProcessor>();
                 with.ResponseProcessor<PortsResponseProcessor>();
                 with.ResponseProcessor<ImportBookDeliveryTermsResponseProcessor>();
-
+                
 
                 with.RequestStartup(
                     (container, pipelines, context) =>
@@ -127,6 +132,5 @@
             });
             this.Browser = new Browser(bootstrapper);
         }
-
     }
 }

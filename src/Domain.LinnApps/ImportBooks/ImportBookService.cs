@@ -11,9 +11,9 @@
         private readonly IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey> exchangeRateRepository;
         private readonly IRepository<LedgerPeriod, int> ledgerPeriodRepository;
 
-
-        public ImportBookService(IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey> exchangeRateRepository,
-                                 IRepository<LedgerPeriod, int> ledgerPeriodRepository)
+        public ImportBookService(
+            IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey> exchangeRateRepository,
+            IRepository<LedgerPeriod, int> ledgerPeriodRepository)
         {
             this.exchangeRateRepository = exchangeRateRepository;
             this.ledgerPeriodRepository = ledgerPeriodRepository;

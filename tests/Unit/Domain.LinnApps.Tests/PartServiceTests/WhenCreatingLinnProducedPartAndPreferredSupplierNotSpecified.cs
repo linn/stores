@@ -22,7 +22,7 @@
         [SetUp]
         public void SetUp()
         {
-            this.partToCreate = new Part { LinnProduced = "Y" };
+            this.partToCreate = new Part { LinnProduced = "Y", StockControlled = "N" };
             this.privileges = new List<string> { "part.admin" };
             this.PartRepository.FilterBy(Arg.Any<Expression<Func<Part, bool>>>())
                 .Returns(new List<Part>

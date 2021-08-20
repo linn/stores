@@ -7,6 +7,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class ExportReturnDetailRepository : IRepository<ExportReturnDetail, ExportReturnDetailKey>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -39,7 +41,10 @@
 
         public ExportReturnDetail FindBy(Expression<Func<ExportReturnDetail, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.ExportReturnDetails.Where(expression)
+                .Include(x => x.InterCompanyInvoice)
+                .ToList()
+                .FirstOrDefault();
         }
 
         public IQueryable<ExportReturnDetail> FilterBy(Expression<Func<ExportReturnDetail, bool>> expression)
