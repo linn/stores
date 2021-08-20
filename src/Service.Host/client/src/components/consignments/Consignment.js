@@ -60,6 +60,7 @@ function Consignment({
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
     const [editablePallets, setEditablePallets] = useState([]);
+    const [consignmentIdSelect, setConsignmentIdSelect] = useState(null);
     const [editableItems, setEditableItems] = useState([]);
     const [saveDisabled, setSaveDisabled] = useState(false);
     const [showCartonLabel, setShowCartonLabel] = useState(false);
@@ -237,6 +238,16 @@ function Consignment({
         return maxContainer;
     };
 
+    const getMaxPalletNumber = () => {
+        let maxPalletNo = 0;
+        if (editablePallets && editablePallets.length > 0) {
+            const palletNumbers = editablePallets.map(a => a.palletNumber);
+            maxPalletNo = Math.max(...palletNumbers);
+        }
+
+        return maxPalletNo;
+    };
+
     const showCartonLabelForm = () => {
         clearConsignmentLabelData();
 
@@ -278,16 +289,6 @@ function Consignment({
         }
 
         return maxItem;
-    };
-
-    const getMaxPalletNumber = () => {
-        let maxPalletNo = 0;
-        if (editablePallets && editablePallets.length > 0) {
-            const palletNumbers = editablePallets.map(a => a.palletNumber);
-            maxPalletNo = Math.max(...palletNumbers);
-        }
-
-        return maxPalletNo;
     };
 
     const showPalletLabelForm = () => {
@@ -399,15 +400,36 @@ function Consignment({
                         <Tab label="Consignment Items" />
                     </Tabs>
                     {currentTab === 0 && (
-                        <Grid item xs={12}>
-                            <Dropdown
-                                label="Select consignment"
-                                propertyName="consignmentSelect"
-                                items={openConsignments}
-                                onChange={handleSelectConsignment}
-                                optionsLoading={optionsLoading}
-                            />
-                        </Grid>
+                        <>
+                            <Grid item xs={12}>
+                                <Dropdown
+                                    label="Select open consignment"
+                                    propertyName="consignmentSelect"
+                                    items={openConsignments}
+                                    onChange={handleSelectConsignment}
+                                    optionsLoading={optionsLoading}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <InputField
+                                    label="Select Consignment By Id"
+                                    placeholder="Consignment Id"
+                                    propertyName="consignmentIdSelect"
+                                    value={consignmentIdSelect}
+                                    onChange={(_, val) => setConsignmentIdSelect(val)}
+                                />
+                                <Button
+                                    style={{ marginTop: '10px' }}
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={() =>
+                                        handleSelectConsignment(null, consignmentIdSelect)
+                                    }
+                                >
+                                    Show Consignment
+                                </Button>
+                            </Grid>
+                        </>
                     )}
                     {currentTab !== 0 && (loading || !state.consignment) ? (
                         <Loading />
@@ -443,7 +465,7 @@ function Consignment({
                         </>
                     )}
                 </>
-                <Grid item xs={12}>
+                <Grid item xs={12} style={{ marginTop: '20px' }}>
                     {currentTab === 2 && (
                         <>
                             <Button
