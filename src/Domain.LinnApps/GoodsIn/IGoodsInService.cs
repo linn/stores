@@ -39,6 +39,7 @@
             string docType,
             string partNumber,
             string deliveryRef,
+            int qty,
             int userNumber,
             int orderNumber,
             int numberOfLabels,

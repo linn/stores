@@ -23,6 +23,8 @@
             return this.serviceDbContext
                 .PurchaseOrders.Where(x => x.OrderNumber == key)
                 .Include(o => o.Supplier)
+                .Include(o => o.Details)
+                .AsNoTracking()
                 .ToList().FirstOrDefault();
         }
 

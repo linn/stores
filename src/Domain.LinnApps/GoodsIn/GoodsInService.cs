@@ -6,6 +6,7 @@
 
     using Linn.Common.Domain.LinnApps.RemoteServices;
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
@@ -311,6 +312,7 @@
             string docType,
             string partNumber,
             string deliveryRef,
+            int qty,
             int userNumber,
             int orderNumber,
             int numberOfLabels,
@@ -322,7 +324,101 @@
             var labelType = this.labelTypeRepository.FindBy(x => x.Code == qcState);
             var user = this.authUserRepository.FindBy(x => x.UserNumber == userNumber);
             var purchaseOrder = this.purchaseOrderRepository.FindById(orderNumber);
-            var part = this.partsRepository.FilterBy(x => x.PartNumber == partNumber.ToUpper());
+            var part = this.partsRepository.FindBy(x => x.PartNumber == partNumber.ToUpper());
+
+            var printString = string.Empty;
+
+            if (docType != "PO")
+            {
+                throw new NotImplementedException();
+            }
+
+            if (numberOfLines > qty)
+            {
+                throw new PrintGoodsInLabelException(
+                    $"Quantity Received was only {qty}. Quantity Entered adds up to {numberOfLines}.");
+            }
+
+            if (numberOfLines < qty)
+            {
+                throw new PrintGoodsInLabelException(
+                    $"Quantity Received was {qty}. Quantity Entered only adds up to {numberOfLines}.");
+            }
+
+            foreach (var line in lines)
+            {
+                switch (qcState)
+                {
+                    case "QUARANTINE":
+                        printString += docType;
+                        printString += orderNumber;
+                        printString += ",";
+                        printString += part.Description;
+                        printString += ",";
+                        printString += deliveryRef;
+                        printString += ",";
+                        printString += DateTime.Now.ToShortDateString();
+                        printString += ",";
+                        printString += part.OurUnitOfMeasure;
+                        printString += ",";
+                        printString += user.Initials;
+                        printString += ",";
+                        printString += DateTime.Now.ToShortDateString();
+                        printString += ",";
+                        printString += string.IsNullOrEmpty(part.QcInformation) ? "NO QC INFO" : part.QcInformation;
+                        printString += ",";
+                        printString += purchaseOrder.SupplierId;
+                        printString += ",";
+                        printString += purchaseOrder.Supplier.Name;
+                        printString += ",";
+                        printString += qty;
+                        printString += ",";
+                        printString += numberOfLabels;
+                        printString += ",";
+                        printString += line.Qty;
+                        printString += ",";
+                        printString += line.LineNumber;
+                        printString += ",";
+                        printString += qcState;
+                        printString += ",";
+                        printString += "DATE TESTED";
+                        printString += ",";
+                        printString += reqNumber;
+                        break;
+                    case "PASS":
+                        var partMessage = purchaseOrder.Details.FirstOrDefault()?.RohsCompliant == "Y"
+                                              ? "**ROHS Compliant**"
+                                              : null;
+                        printString += orderNumber;
+                        printString += ",";
+                        printString += partNumber;
+                        printString += ",";
+                        printString += line.Qty;
+                        printString += ",";
+                        printString += user.Initials;
+                        printString += ",";
+                        printString += part.Description;
+                        printString += ",";
+                        printString += reqNumber;
+                        printString += ",";
+                        printString += DateTime.Today.ToShortDateString();
+                        printString += ",";
+                        printString += partMessage;
+                        break;
+                }
+
+                var message = string.Empty;
+                var success = this.bartender.PrintLabels(
+                    $"QC {orderNumber}", 
+                    labelType.DefaultPrinter, 
+                    1, 
+                    labelType.FileName, 
+                    printString, 
+                    ref message);
+
+                return new ProcessResult(success, message);
+            }
+            
             throw new NotImplementedException();
         }
     }

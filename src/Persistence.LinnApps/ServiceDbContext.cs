@@ -237,6 +237,8 @@
 
         public DbQuery<AuthUser> AuthUsers { get; set; }
 
+        public DbSet<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -348,6 +350,7 @@
             this.BuildPurchaseOrders(builder);
             this.QueryAuthUsers(builder);
             base.OnModelCreating(builder);
+            this.BuildPurchaseOrderDetails(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -1957,6 +1960,17 @@
             entity.HasOne(o => o.Supplier).WithMany(s => s.PurchaseOrders).HasForeignKey(o => o.SupplierId);
             entity.Property(o => o.OurQty).HasColumnName("OUR_QTY");
             entity.Property(o => o.DocumentType).HasColumnName("DOCUMENT_TYPE");
+        }
+
+        private void BuildPurchaseOrderDetails(ModelBuilder builder)
+        {
+            var entity = builder.Entity<PurchaseOrderDetail>().ToTable("PL_ORDER_DETAILS");
+            entity.HasKey(a => new { a.OrderNumber, a.Line}); 
+            entity.Property(o => o.OrderNumber).HasColumnName("ORDER_NUMBER");
+            entity.Property(o => o.Line).HasColumnName("ORDER_LINE");
+            entity.Property(o => o.RohsCompliant).HasColumnName("ROHS_COMPLIANT");
+            entity.HasOne(d => d.PurchaseOrder).WithMany(o => o.Details)
+                .HasForeignKey(d => d.OrderNumber);
         }
 
         private void QueryAuthUsers(ModelBuilder builder)
