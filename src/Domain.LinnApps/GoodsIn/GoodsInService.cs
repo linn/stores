@@ -29,7 +29,11 @@
 
         private readonly IQueryRepository<StoresLabelType> labelTypeRepository;
 
-        private IBartenderLabelPack bartender;
+        private readonly IBartenderLabelPack bartender;
+
+        private readonly IRepository<PurchaseOrder, int> purchaseOrderRepository;
+
+        private readonly IQueryRepository<AuthUser> authUserRepository;
 
         public GoodsInService(
             IGoodsInPack goodsInPack,
@@ -40,7 +44,9 @@
             IRepository<RequisitionHeader, int> reqRepository,
             IPurchaseOrderPack purchaseOrderPack,
             IQueryRepository<StoresLabelType> labelTypeRepository,
-            IBartenderLabelPack bartender)
+            IBartenderLabelPack bartender,
+            IRepository<PurchaseOrder, int> purchaseOrderRepository,
+            IQueryRepository<AuthUser> authUserRepository)
         {
             this.storesPack = storesPack;
             this.goodsInPack = goodsInPack;
@@ -50,7 +56,9 @@
             this.reqRepository = reqRepository;
             this.purchaseOrderPack = purchaseOrderPack;
             this.labelTypeRepository = labelTypeRepository;
+            this.purchaseOrderRepository = purchaseOrderRepository;
             this.bartender = bartender;
+            this.authUserRepository = authUserRepository;
         }
 
         public BookInResult DoBookIn(
@@ -299,10 +307,23 @@
                              };
         }
 
-        public ProcessResult PrintLabels(BookInResult bookInData)
+        public ProcessResult PrintLabels(
+            string docType,
+            string partNumber,
+            string deliveryRef,
+            int userNumber,
+            int orderNumber,
+            int numberOfLabels,
+            int numberOfLines,
+            string qcState,
+            int reqNumber,
+            IEnumerable<GoodsInLabelLine> lines)
         {
-            var labelType = this.labelTypeRepository.FindBy(x => x.Code == bookInData.QcState);
-            return new ProcessResult(false, string.Empty);
+            var labelType = this.labelTypeRepository.FindBy(x => x.Code == qcState);
+            var user = this.authUserRepository.FindBy(x => x.UserNumber == userNumber);
+            var purchaseOrder = this.purchaseOrderRepository.FindById(orderNumber);
+            var part = this.partsRepository.FilterBy(x => x.PartNumber == partNumber.ToUpper());
+            throw new NotImplementedException();
         }
     }
 }

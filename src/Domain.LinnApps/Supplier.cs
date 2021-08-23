@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
 
+    using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Purchasing;
 
@@ -25,5 +26,7 @@
         public string ApprovedCarrier { get; set; }
 
         public IEnumerable<PlCreditDebitNote> PlCreditDebitNotes { get; set; }
+
+        public IEnumerable<PurchaseOrder> PurchaseOrders { get; set; }
     }
 }

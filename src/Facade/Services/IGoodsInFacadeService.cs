@@ -16,5 +16,8 @@
         IResult<ValidatePurchaseOrderResult> ValidatePurchaseOrder(int orderNumber, int line);
 
         IResult<ProcessResult> ValidatePurchaseOrderQty(int orderNumber, int orderLine, int qty);
+
+        IResult<ProcessResult> 
+            PrintGoodsInLabels(PrintGoodsInLabelsRequestResource requestResource);
     }
 }

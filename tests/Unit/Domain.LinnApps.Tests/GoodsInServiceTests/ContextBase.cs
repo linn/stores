@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.GoodsInServiceTests
 {
+    using Linn.Common.Domain.LinnApps.RemoteServices;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.GoodsIn;
@@ -30,6 +31,12 @@
 
         protected IQueryRepository<StoresLabelType> LabelTypeRepository { get; private set; }
 
+        protected IBartenderLabelPack Bartender { get; private set; }
+
+        protected IRepository<PurchaseOrder, int> PurchaseOrderRepository { get; private set; }
+
+        protected IQueryRepository<AuthUser> AuthUserRepository { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -41,6 +48,9 @@
             this.ReqRepository = Substitute.For<IRepository<RequisitionHeader, int>>();
             this.PurchaseOrderPack = Substitute.For<IPurchaseOrderPack>();
             this.LabelTypeRepository = Substitute.For<IQueryRepository<StoresLabelType>>();
+            this.Bartender = Substitute.For<IBartenderLabelPack>();
+            this.PurchaseOrderRepository = Substitute.For<IRepository<PurchaseOrder, int>>();
+            this.AuthUserRepository = Substitute.For<IQueryRepository<AuthUser>>();
             this.Sut = new GoodsInService(
                 this.GoodsInPack, 
                 this.StoresPack, 
@@ -49,7 +59,10 @@
                 this.GoodsInLog,
                 this.ReqRepository,
                 this.PurchaseOrderPack,
-                this.LabelTypeRepository);
+                this.LabelTypeRepository,
+                this.Bartender,
+                this.PurchaseOrderRepository,
+                this.AuthUserRepository);
         }
     }
 }

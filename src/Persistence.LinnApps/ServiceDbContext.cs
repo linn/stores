@@ -233,6 +233,10 @@
 
         public DbQuery<StoresLabelType> StoresLabelTypes { get; set; }
 
+        public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+
+        public DbQuery<AuthUser> AuthUsers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -341,6 +345,8 @@
             this.BuildExportBooks(builder);
             this.BuildPlCreditDebitNotes(builder);
             this.QueryStoresLabelTypes(builder);
+            this.BuildPurchaseOrders(builder);
+            this.QueryAuthUsers(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1940,6 +1946,25 @@
             query.Property(t => t.Code).HasColumnName("LABEL_TYPE_CODE");
             query.Property(t => t.DefaultPrinter).HasColumnName("DEFAULT_PRINTER");
             query.Property(t => t.FileName).HasColumnName("FILENAME");
+        }
+
+        private void BuildPurchaseOrders(ModelBuilder builder)
+        {
+            var entity = builder.Entity<PurchaseOrder>().ToTable("PL_ORDERS");
+            entity.HasKey(o => o.OrderNumber);
+            entity.Property(o => o.OrderNumber).HasColumnName("ORDER_NUMBER");
+            entity.Property(o => o.SupplierId).HasColumnName("SUPP_SUPPLIER_ID");
+            entity.HasOne(o => o.Supplier).WithMany(s => s.PurchaseOrders).HasForeignKey(o => o.SupplierId);
+            entity.Property(o => o.OurQty).HasColumnName("OUR_QTY");
+            entity.Property(o => o.DocumentType).HasColumnName("DOCUMENT_TYPE");
+        }
+
+        private void QueryAuthUsers(ModelBuilder builder)
+        {
+            var query = builder.Query<AuthUser>().ToView("AUTH_USER_VIEW");
+            query.Property(t => t.UserNumber).HasColumnName("USER_NUMBER");
+            query.Property(t => t.Initials).HasColumnName("INITIALS");
+            query.Property(t => t.UserNumber).HasColumnName("USER_NAME");
         }
     }
 }

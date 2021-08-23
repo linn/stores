@@ -35,6 +35,16 @@
             int qty,
             int? orderLine = 1);
 
-        ProcessResult PrintLabels(BookInResult bookInData);
+        ProcessResult PrintLabels(
+            string docType,
+            string partNumber,
+            string deliveryRef,
+            int userNumber,
+            int orderNumber,
+            int numberOfLabels,
+            int numberOfLines,
+            string qcState,
+            int reqNumber,
+            IEnumerable<GoodsInLabelLine> lines);
     }
 }

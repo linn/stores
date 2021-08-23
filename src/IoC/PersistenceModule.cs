@@ -141,6 +141,8 @@
             builder.RegisterType<ExportBookRepository>().As<IRepository<ExportBook, int>>();
             builder.RegisterType<PlCreditDebitNoteRepository>().As<IRepository<PlCreditDebitNote, int>>();
             builder.RegisterType<StoresLabelTypeRepository>().As<IQueryRepository<StoresLabelType>>();
+            builder.RegisterType<PurchaseOrderRepository>().As<IRepository<PurchaseOrder, int>>();
+            builder.RegisterType<AuthUserRepository>().As<IQueryRepository<AuthUser>>();
         }
     }
 }

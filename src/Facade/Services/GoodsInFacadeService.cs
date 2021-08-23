@@ -100,5 +100,10 @@
                 qty,
                 orderLine));
         }
+
+        public IResult<ProcessResult> PrintGoodsInLabels(PrintGoodsInLabelsRequestResource requestResource)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
