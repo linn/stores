@@ -349,61 +349,63 @@
             {
                 switch (qcState)
                 {
+                    // todo - I think every value in the print string needs double quotes round it
                     case "QUARANTINE":
-                        printString += docType;
-                        printString += orderNumber;
-                        printString += ",";
+                        printString += $"\"{docType}{orderNumber}";
+                        printString += "\",\"";
                         printString += part.Description;
-                        printString += ",";
+                        printString += "\",\"";
                         printString += deliveryRef;
-                        printString += ",";
-                        printString += DateTime.Now.ToShortDateString();
-                        printString += ",";
+                        printString += "\",\"";
+                        printString += DateTime.Now.ToString("MMMddyyyy").ToUpper();
+                        printString += "\",\"";
                         printString += part.OurUnitOfMeasure;
-                        printString += ",";
+                        printString += "\",\"";
                         printString += user.Initials;
-                        printString += ",";
-                        printString += DateTime.Now.ToShortDateString();
-                        printString += ",";
+                        printString += "\",\"";
+                        printString += DateTime.Now.ToString("MMMddyyyy").ToUpper();
+                        printString += "\",\"";
                         printString += string.IsNullOrEmpty(part.QcInformation) ? "NO QC INFO" : part.QcInformation;
-                        printString += ",";
+                        printString += "\",\"";
                         printString += purchaseOrder.SupplierId;
-                        printString += ",";
+                        printString += "\",\"";
                         printString += purchaseOrder.Supplier.Name;
-                        printString += ",";
+                        printString += "\",\"";
                         printString += qty;
-                        printString += ",";
+                        printString += "\",\"";
                         printString += numberOfLabels;
-                        printString += ",";
+                        printString += "\",\"";
                         printString += line.Qty;
-                        printString += ",";
+                        printString += "\",\"";
                         printString += line.LineNumber;
-                        printString += ",";
+                        printString += "\",\"";
                         printString += qcState;
-                        printString += ",";
+                        printString += "\",\"";
                         printString += "DATE TESTED";
-                        printString += ",";
+                        printString += "\",\"";
                         printString += reqNumber;
+                        printString += "\"";
                         break;
                     case "PASS":
                         var partMessage = purchaseOrder.Details.FirstOrDefault()?.RohsCompliant == "Y"
                                               ? "**ROHS Compliant**"
                                               : null;
                         printString += orderNumber;
-                        printString += ",";
+                        printString += "\",\"";
                         printString += partNumber;
-                        printString += ",";
+                        printString += "\",\"";
                         printString += line.Qty;
-                        printString += ",";
+                        printString += "\",\"";
                         printString += user.Initials;
-                        printString += ",";
+                        printString += "\",\"";
                         printString += part.Description;
-                        printString += ",";
+                        printString += "\",\"";
                         printString += reqNumber;
-                        printString += ",";
-                        printString += DateTime.Today.ToShortDateString();
-                        printString += ",";
+                        printString += "\",\"";
+                        printString += DateTime.Now.ToString("MMMddyyyy").ToUpper();
+                        printString += "\",\"";
                         printString += partMessage;
+                        printString += "\"";
                         break;
                 }
 
