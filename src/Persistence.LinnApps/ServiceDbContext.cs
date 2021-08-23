@@ -231,6 +231,8 @@
         
         public DbSet<PlCreditDebitNote> PlCreditDebitNotes { get; set; }
 
+        public DbQuery<StoresLabelType> StoresLabelTypes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -338,6 +340,7 @@
             this.BuildStoresTransactionDefinitions(builder);
             this.BuildExportBooks(builder);
             this.BuildPlCreditDebitNotes(builder);
+            this.QueryStoresLabelTypes(builder);
             base.OnModelCreating(builder);
         }
 
@@ -1929,6 +1932,14 @@
             entity.Property(a => a.SupplierId).HasColumnName("SUPPLIER_ID");
             entity.HasOne(a => a.Supplier).WithMany(s => s.PlCreditDebitNotes).HasForeignKey(a => a.SupplierId);
             entity.Property(a => a.DateCreated).HasColumnName("DATE_CREATED");
+        }
+
+        private void QueryStoresLabelTypes(ModelBuilder builder)
+        {
+            var query = builder.Query<StoresLabelType>().ToView("STORES_LABEL_TYPES");
+            query.Property(t => t.Code).HasColumnName("LABEL_TYPE_CODE");
+            query.Property(t => t.DefaultPrinter).HasColumnName("DEFAULT_PRINTER");
+            query.Property(t => t.FileName).HasColumnName("FILENAME");
         }
     }
 }

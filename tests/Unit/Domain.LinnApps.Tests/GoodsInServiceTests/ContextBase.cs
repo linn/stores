@@ -26,7 +26,9 @@
 
         protected IRepository<RequisitionHeader, int> ReqRepository { get; private set; }
 
-        protected IPurchaseOrderPack purchaseOrderPack { get; private set; }
+        protected IPurchaseOrderPack PurchaseOrderPack { get; private set; }
+
+        protected IQueryRepository<StoresLabelType> LabelTypeRepository { get; private set; }
 
         [SetUp]
         public void SetUpContext()
@@ -37,7 +39,8 @@
             this.PartsRepository = Substitute.For<IRepository<Part, int>>();
             this.GoodsInLog = Substitute.For<IRepository<GoodsInLogEntry, int>>();
             this.ReqRepository = Substitute.For<IRepository<RequisitionHeader, int>>();
-            this.purchaseOrderPack = Substitute.For<IPurchaseOrderPack>();
+            this.PurchaseOrderPack = Substitute.For<IPurchaseOrderPack>();
+            this.LabelTypeRepository = Substitute.For<IQueryRepository<StoresLabelType>>();
             this.Sut = new GoodsInService(
                 this.GoodsInPack, 
                 this.StoresPack, 
@@ -45,7 +48,8 @@
                 this.PartsRepository,
                 this.GoodsInLog,
                 this.ReqRepository,
-                this.purchaseOrderPack);
+                this.PurchaseOrderPack,
+                this.LabelTypeRepository);
         }
     }
 }

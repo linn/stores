@@ -8,8 +8,8 @@
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
-    using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.ExportBooks;
+    using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
@@ -140,6 +140,7 @@
                 .As<IQueryRepository<StoresTransactionDefinition>>();
             builder.RegisterType<ExportBookRepository>().As<IRepository<ExportBook, int>>();
             builder.RegisterType<PlCreditDebitNoteRepository>().As<IRepository<PlCreditDebitNote, int>>();
+            builder.RegisterType<StoresLabelTypeRepository>().As<IQueryRepository<StoresLabelType>>();
         }
     }
 }

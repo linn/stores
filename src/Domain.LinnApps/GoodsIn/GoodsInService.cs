@@ -3,9 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection.Metadata.Ecma335;
-    using System.Runtime.CompilerServices;
 
+    using Linn.Common.Domain.LinnApps.RemoteServices;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models;
@@ -27,7 +26,10 @@
         private readonly IRepository<RequisitionHeader, int> reqRepository;
 
         private readonly IPurchaseOrderPack purchaseOrderPack;
-        
+
+        private readonly IQueryRepository<StoresLabelType> labelTypeRepository;
+
+        private IBartenderLabelPack bartender;
 
         public GoodsInService(
             IGoodsInPack goodsInPack,
@@ -36,7 +38,9 @@
             IRepository<Part, int> partsRepository,
             IRepository<GoodsInLogEntry, int> goodsInLog,
             IRepository<RequisitionHeader, int> reqRepository,
-            IPurchaseOrderPack purchaseOrderPack)
+            IPurchaseOrderPack purchaseOrderPack,
+            IQueryRepository<StoresLabelType> labelTypeRepository,
+            IBartenderLabelPack bartender)
         {
             this.storesPack = storesPack;
             this.goodsInPack = goodsInPack;
@@ -45,6 +49,8 @@
             this.goodsInLog = goodsInLog;
             this.reqRepository = reqRepository;
             this.purchaseOrderPack = purchaseOrderPack;
+            this.labelTypeRepository = labelTypeRepository;
+            this.bartender = bartender;
         }
 
         public BookInResult DoBookIn(
@@ -201,7 +207,7 @@
             result.QtyReceived = qty;
             result.PartNumber = partNumber;
             result.PartDescription = part.Description;
-            
+
             return result;
         }
 
@@ -291,6 +297,12 @@
                                  Success = false,
                                  Message = $"Order {orderNumber} is overbooked"
                              };
+        }
+
+        public ProcessResult PrintLabels(BookInResult bookInData)
+        {
+            var labelType = this.labelTypeRepository.FindBy(x => x.Code == bookInData.QcState);
+            return new ProcessResult(false, string.Empty);
         }
     }
 }

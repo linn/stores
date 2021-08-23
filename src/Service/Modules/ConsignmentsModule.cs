@@ -88,19 +88,20 @@
         {
             var resource = this.Bind<SearchRequestResource>();
 
-            if (!string.IsNullOrEmpty(resource.SearchTerm))
+            if (string.IsNullOrEmpty(resource.SearchTerm))
             {
-                var results = this.shippingTermFacadeService.Search(resource.SearchTerm);
-                if (resource.ExactOnly)
-                {
-                    return this.Negotiate.WithModel(
-                        new SuccessResult<ShippingTerm>(((SuccessResult<IEnumerable<ShippingTerm>>)results).Data.FirstOrDefault()));
-                }
-
-                return this.Negotiate.WithModel(results);
+                return this.Negotiate.WithModel(this.shippingTermFacadeService.GetAll());
+            }
+                
+            var results = this.shippingTermFacadeService.Search(resource.SearchTerm);
+            if (resource.ExactOnly)
+            {
+                return this.Negotiate.WithModel(
+                    new SuccessResult<ShippingTerm>(((SuccessResult<IEnumerable<ShippingTerm>>)results).Data.FirstOrDefault()));
             }
 
-            return this.Negotiate.WithModel(this.shippingTermFacadeService.GetAll());
+            return this.Negotiate.WithModel(results);
+
         }
 
         private object UpdateConsignment(int id)

@@ -34,5 +34,7 @@
             int orderNumber, 
             int qty,
             int? orderLine = 1);
+
+        ProcessResult PrintLabels(BookInResult bookInData);
     }
 }
