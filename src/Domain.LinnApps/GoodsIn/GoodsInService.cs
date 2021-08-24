@@ -305,27 +305,26 @@
             var purchaseOrder = this.purchaseOrderRepository.FindById(orderNumber);
             var part = this.partsRepository.FindBy(x => x.PartNumber == partNumber.ToUpper());
 
-            var printString = string.Empty;
 
             if (docType != "PO")
             {
                 throw new NotImplementedException();
             }
 
-            if (numberOfLines > qty)
+            if (numberOfLines != qty)
             {
-                throw new PrintGoodsInLabelException(
-                    $"Quantity Received was only {qty}. Quantity Entered adds up to {numberOfLines}.");
+                return new ProcessResult(
+                    false,
+                    $"Quantity Received was {qty}. Quantity Entered is {numberOfLines}.");
             }
 
-            if (numberOfLines < qty)
-            {
-                throw new PrintGoodsInLabelException(
-                    $"Quantity Received was {qty}. Quantity Entered only adds up to {numberOfLines}.");
-            }
+            string message = string.Empty;
+            bool success = false;
 
             foreach (var line in lines)
             {
+                var printString = string.Empty;
+
                 switch (qcState)
                 {
                     case "QUARANTINE":
@@ -387,18 +386,19 @@
                         break;
                 }
 
-                var message = string.Empty;
-                var success = this.bartender.PrintLabels(
+                message = string.Empty;
+                success = this.bartender.PrintLabels(
                     $"QC {orderNumber}", 
                     labelType.DefaultPrinter, 
                     1, 
                     labelType.FileName, 
                     printString, 
                     ref message);
-
-                return new ProcessResult(success, message);
             }
-            
+
+            return new ProcessResult(success, message);
+
+
             throw new NotImplementedException();
         }
     }

@@ -14,7 +14,7 @@
 
     using NUnit.Framework;
 
-    public class WhenPrintingLabelsAndQcQuarantined : ContextBase
+    public class WhenPrintingLabelsAndNumberOfLinesDifferentToQty : ContextBase
     {
         private ProcessResult result;
 
@@ -39,10 +39,10 @@
             {
                 OrderNumber = 1,
                 Supplier = new Supplier
-                               {
-                                   Id = 1,
-                                   Name = "SUPPLIER"
-                               },
+                {
+                    Id = 1,
+                    Name = "SUPPLIER"
+                },
                 Details = new List<PurchaseOrderDetail>
                               {
                                   new PurchaseOrderDetail
@@ -57,14 +57,6 @@
                     PartNumber = "PART"
                 });
 
-            this.Bartender.PrintLabels(
-                "QC 1",
-                "Printer",
-                1,
-                "template.ext",
-                "\"PO1\",\"\",\"DELIVERY-REF\",\"AUG242021\",\"\",\"SU\",\"AUG242021\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"1\",\"1\",\"1\",\"1\",\"QUARANTINE\",\"DATE TESTED\",\"1\"",
-                ref Arg.Any<string>()).Returns(true);
-
             this.result = this.Sut.PrintLabels(
                 "PO",
                 "PART",
@@ -73,7 +65,7 @@
                 1,
                 1,
                 1,
-                1,
+                2,
                 "QUARANTINE",
                 1,
                 new List<GoodsInLabelLine>
@@ -87,21 +79,11 @@
         }
 
         [Test]
-        public void ShouldCallBartenderWithCorrectParameters()
+        public void ShouldReturnFail()
         {
-            this.Bartender.Received(1).PrintLabels(
-                "QC 1",
-                "Printer",
-                1,
-                "template.ext",
-                "\"PO1\",\"\",\"DELIVERY-REF\",\"AUG242021\",\"\",\"SU\",\"AUG242021\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"1\",\"1\",\"1\",\"1\",\"QUARANTINE\",\"DATE TESTED\",\"1\"",
-                ref Arg.Any<string>());
-        }
-
-        [Test]
-        public void ShouldReturnSuccess()
-        {
-            this.result.Success.Should().BeTrue();
+            this.result.Success.Should().BeFalse();
+            this.result.Message.Should().Be(
+                "Quantity Received was 1. Quantity Entered is 2.");
         }
     }
 }

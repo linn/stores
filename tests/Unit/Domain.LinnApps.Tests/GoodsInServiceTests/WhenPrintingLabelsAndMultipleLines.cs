@@ -14,7 +14,7 @@
 
     using NUnit.Framework;
 
-    public class WhenPrintingLabelsAndQcQuarantined : ContextBase
+    public class WhenPrintingLabelsAndMultipleLines : ContextBase
     {
         private ProcessResult result;
 
@@ -24,7 +24,7 @@
             this.LabelTypeRepository.FindBy(Arg.Any<Expression<Func<StoresLabelType, bool>>>())
                 .Returns(new StoresLabelType
                 {
-                    Code = "QUARANTINE",
+                    Code = "PASS",
                     FileName = "template.ext",
                     DefaultPrinter = "Printer"
                 });
@@ -38,18 +38,13 @@
             this.PurchaseOrderRepository.FindById(1).Returns(new PurchaseOrder
             {
                 OrderNumber = 1,
-                Supplier = new Supplier
-                               {
-                                   Id = 1,
-                                   Name = "SUPPLIER"
-                               },
                 Details = new List<PurchaseOrderDetail>
-                              {
-                                  new PurchaseOrderDetail
-                                      {
-                                          RohsCompliant = "Y"
-                                      }
-                              }
+                                                                                   {
+                                                                                       new PurchaseOrderDetail
+                                                                                           {
+                                                                                               RohsCompliant = "Y"
+                                                                                           }
+                                                                                   }
             });
             this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>())
                 .Returns(new Part
@@ -60,9 +55,9 @@
             this.Bartender.PrintLabels(
                 "QC 1",
                 "Printer",
-                1,
+                Arg.Any<int>(),
                 "template.ext",
-                "\"PO1\",\"\",\"DELIVERY-REF\",\"AUG242021\",\"\",\"SU\",\"AUG242021\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"1\",\"1\",\"1\",\"1\",\"QUARANTINE\",\"DATE TESTED\",\"1\"",
+                Arg.Any<string>(),
                 ref Arg.Any<string>()).Returns(true);
 
             this.result = this.Sut.PrintLabels(
@@ -74,14 +69,24 @@
                 1,
                 1,
                 1,
-                "QUARANTINE",
+                "PASS",
                 1,
                 new List<GoodsInLabelLine>
                     {
-                        new ()
+                        new () 
                             {
                                 LineNumber = 1,
                                 Qty = 1
+                            },
+                        new ()
+                            {
+                                LineNumber = 2,
+                                Qty = 2
+                            },
+                        new ()
+                            {
+                                LineNumber = 3,
+                                Qty = 3
                             }
                     });
         }
@@ -94,7 +99,21 @@
                 "Printer",
                 1,
                 "template.ext",
-                "\"PO1\",\"\",\"DELIVERY-REF\",\"AUG242021\",\"\",\"SU\",\"AUG242021\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"1\",\"1\",\"1\",\"1\",\"QUARANTINE\",\"DATE TESTED\",\"1\"",
+                "1\",\"PART\",\"1\",\"SU\",\"\",\"1\",\"AUG242021\",\"**ROHS Compliant**\"",
+                ref Arg.Any<string>());
+            this.Bartender.Received(1).PrintLabels(
+                "QC 1",
+                "Printer",
+                1,
+                "template.ext",
+                "1\",\"PART\",\"2\",\"SU\",\"\",\"1\",\"AUG242021\",\"**ROHS Compliant**\"",
+                ref Arg.Any<string>());
+            this.Bartender.Received(1).PrintLabels(
+                "QC 1",
+                "Printer",
+                1,
+                "template.ext",
+                "1\",\"PART\",\"3\",\"SU\",\"\",\"1\",\"AUG242021\",\"**ROHS Compliant**\"",
                 ref Arg.Any<string>());
         }
 
