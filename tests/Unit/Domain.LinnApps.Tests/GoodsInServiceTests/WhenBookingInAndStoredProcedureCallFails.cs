@@ -69,7 +69,7 @@
                 out var success))
                 .Do(x =>
                 {
-                    x[17] = 1;
+                    x[17] = null;
                     x[18] = false;
                 });
 
