@@ -14,25 +14,26 @@
 
     using NUnit.Framework;
 
-    public class WhenBookingIn : ContextBase
+    public class WhenBookingInAndStoredProcedureCallFails : ContextBase
     {
         private BookInResult result;
 
         [SetUp]
         public void SetUp()
         {
+            this.GoodsInPack.GetErrorMessage().Returns("Something went wrong...");
             this.PurchaseOrderPack.GetDocumentType(1).Returns("PO");
             this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1234").Returns(true);
             this.GoodsInPack.GetNextBookInRef().ReturnsForAnyArgs(1);
-            this.ReqRepository.FindById(1).Returns(new RequisitionHeader { ReqNumber = 1,  });
+            this.ReqRepository.FindById(1).Returns(new RequisitionHeader { ReqNumber = 1, });
             this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>())
                 .Returns(new Part
-                    {
-                        PartNumber = "PART",
-                        Description = "A PART",
-                        QcInformation = "Some Info"
-                    });
-            
+                {
+                    PartNumber = "PART",
+                    Description = "A PART",
+                    QcInformation = "Some Info"
+                });
+
             this.GoodsInPack.When(x => x.GetPurchaseOrderDetails(
                 1,
                 1,
@@ -64,14 +65,14 @@
                 null,
                 null,
                 null,
-                out var reqNumber, 
+                out var reqNumber,
                 out var success))
                 .Do(x =>
-                    {
-                        x[17] = 1;
-                        x[18] = true;
-                    });
-            
+                {
+                    x[17] = 1;
+                    x[18] = false;
+                });
+
             this.result = this.Sut.DoBookIn(
                 "O",
                 1,
@@ -130,14 +131,10 @@
         }
 
         [Test]
-        public void ShouldReturnSuccessResult()
+        public void ShouldReturnFailResult()
         {
-            this.result.Success.Should().BeTrue();
-            this.result.DocType.Should().Be("PO");
-            this.result.PartNumber.Should().Be("PART");
-            this.result.QcState.Should().Be("PASS");
-            this.result.QcInfo.Should().Be("Some Info");
-            this.result.UnitOfMeasure.Should().Be("ONES");
+            this.result.Success.Should().BeFalse();
+            this.result.Message.Should().Be("Something went wrong...");
         }
     }
 }
