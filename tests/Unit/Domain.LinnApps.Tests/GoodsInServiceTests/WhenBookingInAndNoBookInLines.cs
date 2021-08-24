@@ -1,17 +1,21 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.GoodsInServiceTests
 {
+    using FluentAssertions;
+
     using Linn.Stores.Domain.LinnApps.GoodsIn;
     using NSubstitute;
 
     using NUnit.Framework;
 
-    public class WhenBookingInAndNumberOfBookInLinesLessThanNumberOfLinesParameter : ContextBase
+    public class WhenBookingInAndNoBookInLines : ContextBase
     {
+        private BookInResult result;
+
         [SetUp]
         public void SetUp()
         {
             this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1234").Returns(true);
-            this.Sut.DoBookIn(
+            this.result = this.Sut.DoBookIn(
                 "O",
                 1,
                 "PART",
@@ -35,9 +39,10 @@
         }
 
         [Test]
-        public void ShouldCreateGoodsInLogEntry()
+        public void ShouldReturnFailState()
         {
-            this.GoodsInLog.Received().Add(Arg.Any<GoodsInLogEntry>());
+            this.result.Success.Should().BeFalse();
+            this.result.Message.Should().Be("Nothing to book in");
         }
     }
 }

@@ -106,36 +106,15 @@
             var goodsInLogEntries = lines as GoodsInLogEntry[] ?? lines.ToArray();
             var bookinRef = this.goodsInPack.GetNextBookInRef();
 
-            // A bookin to just one location. In this case this method won't be called with
-            // an array of 'lines'
-            // so we need to add one entry to the bookin log to reflect this bookin
+            //// A bookin to just one location. In this case this method won't be called with
+            //// an array of 'lines'
+            //// so we need to add one entry to the bookin log to reflect this bookin
             if (!goodsInLogEntries.Any())
             {
-                this.goodsInLog.Add(new GoodsInLogEntry
-                                        {
-                                            Id = this.goodsInPack.GetNextLogId(),
-                                            TransactionType = transactionType,
-                                            DateCreated = DateTime.Now,
-                                            CreatedBy = createdBy,
-                                            ArticleNumber = partNumber,
-                                            Quantity = qty,
-                                            ManufacturersPartNumber = manufacturersPartNumber,
-                                            OrderNumber = orderNumber,
-                                            OrderLine = orderLine,
-                                            LoanNumber = loanNumber,
-                                            LoanLine = loanLine,
-                                            RsnNumber = rsnNumber,
-                                            StoragePlace = ontoLocation,
-                                            BookInRef = bookinRef,
-                                            DemLocation = demLocation,
-                                            LogCondition = condition,
-                                            RsnAccessories = rsnAccessories,
-                                            Comments = comments,
-                                            State = state,
-                                            StorageType = storageType
-                                        });
+                return new BookInResult(false, "Nothing to book in");
             }
 
+            // todo - fix front end to always pass lines
             // the request included multiple lines,
             // e.g. booking a PO line into multiple locations or booking in multiple PO's at once
             // so add each to the log under the same bookin ref
@@ -179,12 +158,12 @@
 
             var req = this.reqRepository.FindById((int)reqNumberResult);
             result.ReqNumber = req.ReqNumber;
-            var reqLine = req.Lines.FirstOrDefault();
+            var reqLine = req.Lines?.FirstOrDefault();
             result.DocType = reqLine?.TransactionDefinition?.DocType;
 
             if (transactionType.Equals("O") && orderNumber.HasValue && partNumber != "PACK 1329")
             {
-                result.QcState = state.Equals("QC") ? "QUARANTINE" : "PASS";
+                result.QcState = !string.IsNullOrEmpty(state) && state.Equals("QC") ? "QUARANTINE" : "PASS";
             }
 
             result.TransactionCode = reqLine?.TransactionCode;
@@ -349,7 +328,6 @@
             {
                 switch (qcState)
                 {
-                    // todo - I think every value in the print string needs double quotes round it
                     case "QUARANTINE":
                         printString += $"\"{docType}{orderNumber}";
                         printString += "\",\"";
