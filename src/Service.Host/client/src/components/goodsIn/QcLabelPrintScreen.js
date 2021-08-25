@@ -1,38 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import { InputField } from '@linn-it/linn-form-components-library';
+import { Description } from '@material-ui/icons';
 
 function QcLabelPrintScreen({
-    bookInLocation,
-    palletNumber,
     docType,
     orderNumber,
-    orderLine,
     qcState,
     partNumber,
     partDescription,
     qtyReceived,
     unitOfMeasure,
-    deliveryRef,
-    testedBy,
-    initials,
-    dateBooked,
+    reqNumber,
     qcInfo,
-    numberOfContainers,
-    storagePlace,
-    transactionCode
+    printLabels
 }) {
-    useEffect(() => {
-        if (transactionCode) {
-            if (docType === 'WO') {
-                // hide document line field?
-            } else {
-                // show document line field?
-            }
-        }
-    }, [transactionCode]);
+    const [deliveryRef, setDeliveryRef] = useState('');
+    const [numContainers, setNumContainers] = useState(qtyReceived);
+
     return (
         <Grid container spacing={3}>
             <Grid item xs={12}>
@@ -118,8 +106,8 @@ function QcLabelPrintScreen({
             <Grid item xs={4}>
                 <InputField
                     fullWidth
-                    disabled
                     value={deliveryRef}
+                    onChange={(_, newValue) => setDeliveryRef(newValue)}
                     label="Delivery Ref"
                     propertyName="deliveryRef"
                 />
@@ -135,8 +123,69 @@ function QcLabelPrintScreen({
                 />
             </Grid>
             <Grid item xs={6} />
+            <Grid item xs={2}>
+                <InputField
+                    fullWidth
+                    value={numContainers}
+                    onChange={(_, newValue) => setNumContainers(newValue)}
+                    label="# Containers"
+                    propertyName="numberOfContainers"
+                />
+            </Grid>
+            <Grid item xs={10} />
+
+            <Grid item xs={2}>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() =>
+                        printLabels({
+                            documentType: docType,
+                            partNumber,
+                            partDescription: Description,
+                            deliveryRef,
+                            qcInformation: qcInfo,
+                            qty: qtyReceived,
+                            orderNumber,
+                            numberOfLabels: numContainers,
+                            numberOfLines: qtyReceived,
+                            qcState,
+                            reqNumber,
+                            lines: []
+                        })
+                    }
+                >
+                    Print
+                </Button>
+            </Grid>
+            <Grid item xs={10} />
         </Grid>
     );
 }
+
+QcLabelPrintScreen.propTypes = {
+    docType: PropTypes.string,
+    orderNumber: PropTypes.number,
+    qcState: PropTypes.string,
+    partNumber: PropTypes.string,
+    partDescription: PropTypes.string,
+    qtyReceived: PropTypes.number,
+    unitOfMeasure: PropTypes.string,
+    reqNumber: PropTypes.number,
+    qcInfo: PropTypes.string,
+    printLabels: PropTypes.func.isRequired
+};
+
+QcLabelPrintScreen.defaultProps = {
+    docType: null,
+    orderNumber: null,
+    qcState: null,
+    partNumber: null,
+    partDescription: null,
+    qtyReceived: null,
+    unitOfMeasure: null,
+    reqNumber: null,
+    qcInfo: null
+};
 
 export default QcLabelPrintScreen;

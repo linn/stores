@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System.Linq;
+
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Facade.Services;
@@ -7,6 +9,7 @@
     using Linn.Stores.Resources.GoodsIn;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Resources.StockLocators;
+    using Linn.Stores.Service.Extensions;
 
     using Nancy;
     using Nancy.ModelBinding;
@@ -86,7 +89,8 @@
         private object PrintLabels()
         {
             var resource = this.Bind<PrintGoodsInLabelsRequestResource>();
-
+            var closedByUri = this.Context.CurrentUser.GetEmployeeUri();
+            resource.UserNumber = int.Parse(closedByUri.Split("/").Last());
             return this.Negotiate.WithModel(this.service.PrintGoodsInLabels(resource));
         }
     }

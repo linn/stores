@@ -8,7 +8,6 @@
     using Linn.Stores.Domain.LinnApps.Purchasing;
     using Linn.Stores.Facade.ResourceBuilders.Purchasing;
     using Linn.Stores.Resources.Purchasing;
-    using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.Modules.Purchasing;
     using Linn.Stores.Service.ResponseProcessors;
 
