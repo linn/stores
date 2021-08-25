@@ -70,7 +70,7 @@
                 1,
                 new List<GoodsInLabelLine>
                     {
-                        new ()
+                        new GoodsInLabelLine
                             {
                                 LineNumber = 1,
                                 Qty = 1

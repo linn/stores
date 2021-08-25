@@ -75,17 +75,17 @@
                 1,
                 new List<GoodsInLabelLine>
                     {
-                        new () 
+                        new GoodsInLabelLine
                             {
                                 LineNumber = 1,
                                 Qty = 1
                             },
-                        new ()
+                        new GoodsInLabelLine
                             {
                                 LineNumber = 2,
                                 Qty = 2
                             },
-                        new ()
+                        new GoodsInLabelLine
                             {
                                 LineNumber = 3,
                                 Qty = 3
