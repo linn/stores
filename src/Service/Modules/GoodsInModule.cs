@@ -34,6 +34,7 @@
             this.Get("/inventory/sales-articles", _ => this.SearchSalesArticles());
             this.Get("/logistics/purchase-orders/validate/{id}", parameters => this.ValidatePurchaseOrder(parameters.id));
             this.Get("/logistics/purchase-orders/validate-qty", _ => this.ValidatePurchaseOrderBookInQty());
+            this.Post("/logistics/goods-in/print-labels", _ => this.PrintLabels());
         }
 
         private object DoBookIn()
@@ -80,6 +81,13 @@
             var orderLine = resource.OrderLine ?? 1;
             return this.Negotiate.WithModel(
                 this.service.ValidatePurchaseOrderQty(resource.OrderNumber, orderLine, resource.Qty));
+        }
+
+        private object PrintLabels()
+        {
+            var resource = this.Bind<PrintGoodsInLabelsRequestResource>();
+
+            return this.Negotiate.WithModel(this.service.PrintGoodsInLabels(resource));
         }
     }
 }

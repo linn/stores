@@ -12,16 +12,21 @@
 
         public string DeliveryRef { get; set; }
 
-
-        public string UnitOfMeasure { get; set; }
-
         public string QcInformation { get; set; }
 
         public int Qty { get; set; }
 
         public int LineNumber { get; set; }
 
-        public string QcDate { get; set; }
+        public int UserNumber { get; set; }
+        
+        public int OrderNumber { get; set; }
+                    
+        public int NumberOfLabels { get; set; }
+                    
+        public int NumberOfLines { get; set; }
+                    
+        public string QcState { get; set; }
 
         public int ReqNumber { get; set; }
 

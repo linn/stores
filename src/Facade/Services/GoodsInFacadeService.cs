@@ -103,7 +103,23 @@
 
         public IResult<ProcessResult> PrintGoodsInLabels(PrintGoodsInLabelsRequestResource requestResource)
         {
-            throw new NotImplementedException();
+            return new SuccessResult<ProcessResult>(this.domainService
+                .PrintLabels(
+                    requestResource.DocumentType,
+                    requestResource.PartNumber, 
+                    requestResource.DeliveryRef, 
+                    requestResource.Qty, 
+                    requestResource.UserNumber,
+                    requestResource.OrderNumber,
+                    requestResource.NumberOfLabels,
+                    requestResource.NumberOfLines,
+                    requestResource.QcState,
+                    requestResource.ReqNumber,
+                    requestResource.Lines.Select(x => new GoodsInLabelLine
+                                                          {
+                                                              LineNumber = x.LineNumber,
+                                                              Qty = x.Qty
+                                                          })));
         }
     }
 }

@@ -305,7 +305,6 @@
             var purchaseOrder = this.purchaseOrderRepository.FindById(orderNumber);
             var part = this.partsRepository.FindBy(x => x.PartNumber == partNumber.ToUpper());
 
-
             if (docType != "PO")
             {
                 throw new NotImplementedException();

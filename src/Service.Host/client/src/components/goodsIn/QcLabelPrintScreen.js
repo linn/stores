@@ -58,7 +58,16 @@ function QcLabelPrintScreen({
                     propertyName="orderNumber"
                 />
             </Grid>
-            <Grid item xs={6} />
+            <Grid item xs={3}>
+                <InputField
+                    fullWidth
+                    disabled
+                    value={docType}
+                    label="Req Number"
+                    propertyName="reqNumber"
+                />
+            </Grid>
+            <Grid item xs={3} />
             <Grid item xs={3}>
                 <InputField
                     fullWidth
@@ -78,16 +87,15 @@ function QcLabelPrintScreen({
                     propertyName="partNumber"
                 />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={8}>
                 <InputField
                     fullWidth
                     disabled
                     value={partDescription}
                     label="Part Description"
-                    propertyName="partDescription"
+                    propertyName="description"
                 />
             </Grid>
-            <Grid item xs={4} />
             <Grid item xs={2}>
                 <InputField
                     fullWidth

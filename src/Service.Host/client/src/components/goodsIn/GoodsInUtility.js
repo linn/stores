@@ -195,7 +195,7 @@ function GoodsInUtility({
     return (
         <Page>
             <Grid container spacing={3}>
-                <Dialog open={dialogOpen} fullWidth maxWidth="md">
+                <Dialog open={true} fullWidth maxWidth="md">
                     <div>
                         <IconButton
                             className={classes.pullRight}
@@ -206,13 +206,22 @@ function GoodsInUtility({
                         </IconButton>
                         <div className={classes.dialog}>
                             <QcLabelPrintScreen
-                                bookinLocationId={formData?.ontoLocationId}
-                                palletNumber={formData?.palletNumber}
-                                partNumber={validatePurchaseOrderResult?.partNumber}
-                                partDescription={validatePurchaseOrder?.description}
-                                reqNumber={bookInResult?.reqNumber}
-                                qcState={bookInResult?.qcState}
-                                docType={bookInResult?.docType}
+                                // bookinLocationId={formData?.ontoLocationId} delete?
+                                // palletNumber={formData?.palletNumber} delete?
+                                // partNumber={validatePurchaseOrderResult?.partNumber}
+                                // partDescription={validatePurchaseOrder?.description}
+                                // reqNumber={bookInResult?.reqNumber}
+                                // qcState={bookInResult?.qcState}
+                                // docType={bookInResult?.docType}
+                                // unitOfMeasure={bookInResult?.unitOfMeasure}
+                                // qtyReceived={bookInResult?.qtyReceived}
+                                partNumber="2S-505"
+                                partDescription="CONTINUOUS INVOICE STATIONERY LINN PART NO. 2S-505 DESENSITISED"
+                                reqNumber={12345}
+                                qcState="PASS"
+                                docType="PO"
+                                unitOfMeasure="BOX of 750"
+                                qtyReceived={1}
                             />
                         </div>
                     </div>
@@ -634,7 +643,9 @@ GoodsInUtility.propTypes = {
         message: PropTypes.string,
         reqNumber: PropTypes.number,
         qcState: PropTypes.string,
-        docType: PropTypes.string
+        docType: PropTypes.string,
+        unitOfMeasure: PropTypes.string,
+        qtyReceived: PropTypes.number
     }),
     bookInResultLoading: PropTypes.bool,
     doBookIn: PropTypes.func.isRequired,
