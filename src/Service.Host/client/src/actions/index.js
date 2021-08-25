@@ -301,3 +301,7 @@ export const printConsignmentLabelActionTypes = makeProcessActionTypes(
 export const currenciesActionTypes = makeActionTypes(itemTypes.currencies.actionType);
 
 export const exchangeRatesActionTypes = makeActionTypes(itemTypes.exchangeRates.actionType);
+
+export const printGoodsInLabelsActionTypes = makeProcessActionTypes(
+    processTypes.printGoodsInLabels.actionType
+);

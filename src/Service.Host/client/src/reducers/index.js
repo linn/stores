@@ -117,6 +117,7 @@ import stockMoves from './stockLocators/stockMoves';
 import printConsignmentLabel from './printConsignmentLabel';
 import currencies from './currencies';
 import exchangeRates from './exchangeRates';
+import printGoodsInLabels from './printGoodsInLabels';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -191,6 +192,7 @@ const rootReducer = history =>
         pickItemsAllocation,
         ports,
         printConsignmentLabel,
+        printGoodsInLabels,
         productAnalysisCodes,
         req,
         reqMoves,
