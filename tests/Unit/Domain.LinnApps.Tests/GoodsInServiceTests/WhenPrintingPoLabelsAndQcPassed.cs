@@ -4,8 +4,6 @@
     using System.Collections.Generic;
     using System.Linq.Expressions;
 
-    using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
-
     using FluentAssertions;
 
     using Linn.Stores.Domain.LinnApps.GoodsIn;
@@ -18,6 +16,8 @@
 
     public class WhenPrintingPoLabelsAndQcPassed : ContextBase
     {
+        private readonly string dateString = DateTime.Today.ToString("MMMddyyyy").ToUpper();
+
         private ProcessResult result;
 
         [SetUp]
@@ -37,17 +37,18 @@
                                  Name = "Some User",
                                  UserNumber = 1
                              });
-            this.PurchaseOrderRepository.FindById(1).Returns(new PurchaseOrder
-                                                                 {
-                                                                     OrderNumber = 1,
-                                                                     Details = new List<PurchaseOrderDetail>
-                                                                                   {
-                                                                                       new PurchaseOrderDetail
-                                                                                           {
-                                                                                               RohsCompliant = "Y"
-                                                                                           }
-                                                                                   }
-                                                                 });
+            this.PurchaseOrderRepository.FindById(1)
+                .Returns(new PurchaseOrder
+                            {
+                                OrderNumber = 1,
+                                Details = new List<PurchaseOrderDetail>
+                                              {
+                                                  new PurchaseOrderDetail
+                                                      {
+                                                          RohsCompliant = "Y"
+                                                      }
+                                              }
+                            });
             this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>())
                 .Returns(new Part
                              {
@@ -59,7 +60,7 @@
                 "Printer",
                 1,
                 "template.ext",
-                "1\",\"PART\",\"1\",\"SU\",\"\",\"1\",\"AUG242021\",\"**ROHS Compliant**\"",
+                $"1\",\"PART\",\"1\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"",
                 ref Arg.Any<string>()).Returns(true);
 
             this.result = this.Sut.PrintLabels(
@@ -91,7 +92,7 @@
                 "Printer",
                 1,
                 "template.ext",
-                "1\",\"PART\",\"1\",\"SU\",\"\",\"1\",\"AUG242021\",\"**ROHS Compliant**\"",
+                $"1\",\"PART\",\"1\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"",
                 ref Arg.Any<string>());
         }
 

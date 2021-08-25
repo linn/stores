@@ -16,6 +16,8 @@
 
     public class WhenPrintingLabelsAndMultipleLines : ContextBase
     {
+        private readonly string dateString = DateTime.Today.ToString("MMMddyyyy").ToUpper();
+
         private ProcessResult result;
 
         [SetUp]
@@ -92,28 +94,28 @@
         }
 
         [Test]
-        public void ShouldCallBartenderWithCorrectParameters()
+        public void ShouldCallBartenderForEachLineWithCorrectParameters()
         {
             this.Bartender.Received(1).PrintLabels(
                 "QC 1",
                 "Printer",
                 1,
                 "template.ext",
-                "1\",\"PART\",\"1\",\"SU\",\"\",\"1\",\"AUG242021\",\"**ROHS Compliant**\"",
+                $"1\",\"PART\",\"1\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"",
                 ref Arg.Any<string>());
             this.Bartender.Received(1).PrintLabels(
                 "QC 1",
                 "Printer",
                 1,
                 "template.ext",
-                "1\",\"PART\",\"2\",\"SU\",\"\",\"1\",\"AUG242021\",\"**ROHS Compliant**\"",
+                $"1\",\"PART\",\"2\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"",
                 ref Arg.Any<string>());
             this.Bartender.Received(1).PrintLabels(
                 "QC 1",
                 "Printer",
                 1,
                 "template.ext",
-                "1\",\"PART\",\"3\",\"SU\",\"\",\"1\",\"AUG242021\",\"**ROHS Compliant**\"",
+                $"1\",\"PART\",\"3\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"",
                 ref Arg.Any<string>());
         }
 

@@ -16,6 +16,8 @@
 
     public class WhenPrintingLabelsAndQcQuarantined : ContextBase
     {
+        private readonly string dateString = DateTime.Today.ToString("MMMddyyyy").ToUpper();
+
         private ProcessResult result;
 
         [SetUp]
@@ -62,7 +64,7 @@
                 "Printer",
                 1,
                 "template.ext",
-                "\"PO1\",\"\",\"DELIVERY-REF\",\"AUG242021\",\"\",\"SU\",\"AUG242021\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"1\",\"1\",\"1\",\"1\",\"QUARANTINE\",\"DATE TESTED\",\"1\"",
+                $"\"PO1\",\"\",\"DELIVERY-REF\",\"{this.dateString}\",\"\",\"SU\",\"{this.dateString}\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"1\",\"1\",\"1\",\"1\",\"QUARANTINE\",\"DATE TESTED\",\"1\"",
                 ref Arg.Any<string>()).Returns(true);
 
             this.result = this.Sut.PrintLabels(
@@ -94,7 +96,7 @@
                 "Printer",
                 1,
                 "template.ext",
-                "\"PO1\",\"\",\"DELIVERY-REF\",\"AUG242021\",\"\",\"SU\",\"AUG242021\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"1\",\"1\",\"1\",\"1\",\"QUARANTINE\",\"DATE TESTED\",\"1\"",
+                $"\"PO1\",\"\",\"DELIVERY-REF\",\"{this.dateString}\",\"\",\"SU\",\"{this.dateString}\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"1\",\"1\",\"1\",\"1\",\"QUARANTINE\",\"DATE TESTED\",\"1\"",
                 ref Arg.Any<string>());
         }
 
