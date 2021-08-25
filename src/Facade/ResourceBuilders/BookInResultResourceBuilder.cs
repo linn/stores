@@ -23,7 +23,6 @@
                            UnitOfMeasure = model.UnitOfMeasure,
                            PartNumber = model.PartNumber,
                            Description = model.PartDescription
-                           // links -> to parcel ut?
                        };
         }
 

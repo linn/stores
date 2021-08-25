@@ -298,7 +298,7 @@
 
             if (docType != "PO")
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException("Printing for this document type not yet implemented.");
             }
 
             if (numberOfLines != qty)
@@ -308,8 +308,8 @@
                     $"Quantity Received was {qty}. Quantity Entered is {numberOfLines}.");
             }
 
-            string message = string.Empty;
-            bool success = false;
+            var message = string.Empty;
+            var success = false;
 
             foreach (var line in lines)
             {
@@ -387,9 +387,6 @@
             }
 
             return new ProcessResult(success, message);
-
-
-            throw new NotImplementedException();
         }
     }
 }
