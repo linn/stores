@@ -537,18 +537,35 @@ function GoodsInUtility({
                         className="hide-when-printing"
                         variant="contained"
                         //disabled - when...
-                        onClick={() =>
+                        onClick={() => {
+                            const row = {
+                                id: 1,
+                                articleNumber: validatePurchaseOrderResult.partNumber,
+                                transactionType: validatePurchaseOrderResult.transactionType,
+                                dateCreated: new Date().toISOString(),
+                                location: formData.ontoLocation,
+                                locationId: formData.ontoLocationId,
+                                quantity: formData.qty,
+                                orderNumber: validatePurchaseOrderResult.orderNumber,
+                                state: validatePurchaseOrderResult.state,
+                                orderLine: validatePurchaseOrderResult.orderLine,
+                                storageType: formData.storageType,
+                                createdBy: userNumber
+                            };
+                            if (rows.length === 0) {
+                                setRows(r => [...r, row]);
+                            }
                             doBookIn({
                                 ...formData,
-                                lines: rows,
+                                lines: rows.length > 0 ? rows : [row],
                                 createdBy: userNumber,
                                 transactionType: validatePurchaseOrderResult.transactionType,
                                 partNumber: validatePurchaseOrderResult.partNumber,
                                 manufacturersPartNumber:
                                     validatePurchaseOrderResult.manufacturersPartNumber,
                                 state: validatePurchaseOrderResult.state
-                            })
-                        }
+                            });
+                        }}
                     >
                         Book In
                     </Button>
