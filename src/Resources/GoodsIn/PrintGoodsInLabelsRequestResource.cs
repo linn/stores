@@ -16,8 +16,6 @@
 
         public int Qty { get; set; }
 
-        public int LineNumber { get; set; }
-
         public int UserNumber { get; set; }
         
         public int OrderNumber { get; set; }
