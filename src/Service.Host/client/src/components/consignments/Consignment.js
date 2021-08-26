@@ -351,6 +351,21 @@ function Consignment({
         setEditableItems(items);
     };
 
+    const addItem = () => {
+        const maxItem = getMaxItemNumber();
+        const items = editableItems.slice();
+
+        items.push({
+            id: maxItem + 1,
+            itemNumber: maxItem + 1,
+            consignmentId: item.consignmentId,
+            itemTypeDisplay: getItemTypeDisplay('I'),
+            itemType: 'I'
+        });
+
+        setEditableItems(items);
+    };
+
     return (
         <Page requestErrors={requestErrors} showRequestErrors>
             <Grid container spacing={3}>
@@ -471,6 +486,14 @@ function Consignment({
                             <Button
                                 variant="outlined"
                                 color="primary"
+                                onClick={addPallet}
+                                disabled={viewing()}
+                            >
+                                Add Pallet
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                color="primary"
                                 onClick={addCarton}
                                 disabled={viewing()}
                             >
@@ -479,10 +502,10 @@ function Consignment({
                             <Button
                                 variant="outlined"
                                 color="primary"
-                                onClick={addPallet}
+                                onClick={addItem}
                                 disabled={viewing()}
                             >
-                                Add Pallet
+                                Add Item
                             </Button>
                             <Button
                                 variant="outlined"
