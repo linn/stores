@@ -60,6 +60,7 @@ function Consignment({
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
     const [editablePallets, setEditablePallets] = useState([]);
+    const [consignmentIdSelect, setConsignmentIdSelect] = useState(null);
     const [editableItems, setEditableItems] = useState([]);
     const [saveDisabled, setSaveDisabled] = useState(false);
     const [showCartonLabel, setShowCartonLabel] = useState(false);
@@ -226,20 +227,36 @@ function Consignment({
         clearConsignmentErrors();
     };
 
-    const showCartonLabelForm = () => {
-        clearConsignmentLabelData();
-
-        let maxContainer = 1;
-        const containerItems = state.consignment.items?.filter(a => a.containerNumber);
+    const getMaxCarton = () => {
+        let maxContainer = 0;
+        const containerItems = editableItems?.filter(a => a.containerNumber);
         if (containerItems && containerItems.length > 0) {
             const containerNumbers = containerItems.map(a => a.containerNumber);
             maxContainer = Math.max(...containerNumbers);
         }
 
+        return maxContainer;
+    };
+
+    const getMaxPalletNumber = () => {
+        let maxPalletNo = 0;
+        if (editablePallets && editablePallets.length > 0) {
+            const palletNumbers = editablePallets.map(a => a.palletNumber);
+            maxPalletNo = Math.max(...palletNumbers);
+        }
+
+        return maxPalletNo;
+    };
+
+    const showCartonLabelForm = () => {
+        clearConsignmentLabelData();
+
+        const maxCarton = getMaxCarton();
+
         setCartonLabelOptions({
             ...cartonLabelOptions,
-            firstItem: maxContainer,
-            lastItem: maxContainer
+            firstItem: maxCarton,
+            lastItem: maxCarton
         });
 
         setShowCartonLabel(true);
@@ -264,20 +281,24 @@ function Consignment({
         setPalletLabelOptions({ ...palletLabelOptions, [itemName]: value });
     };
 
+    const getMaxItemNumber = () => {
+        let maxItem = 0;
+        if (editableItems && editableItems.length > 0) {
+            const itemNumbers = editableItems.map(a => a.itemNumber);
+            maxItem = Math.max(...itemNumbers);
+        }
+
+        return maxItem;
+    };
+
     const showPalletLabelForm = () => {
         clearConsignmentLabelData();
-
-        let maxPalletNumber = 1;
-        const pallets = state.consignment.pallets?.filter(a => a.palletNumber);
-        if (pallets && pallets.length > 0) {
-            const palletNumbers = pallets.map(a => a.palletNumber);
-            maxPalletNumber = Math.max(...palletNumbers);
-        }
+        const maxPallet = getMaxPalletNumber();
 
         setPalletLabelOptions({
             ...palletLabelOptions,
-            firstItem: maxPalletNumber,
-            lastItem: maxPalletNumber
+            firstItem: maxPallet,
+            lastItem: maxPallet
         });
 
         setShowPalletLabel(true);
@@ -292,6 +313,57 @@ function Consignment({
             numberOfCopies: palletLabelOptions.numberOfCopies,
             userNumber
         });
+    };
+
+    const addPallet = () => {
+        const pallets = editablePallets.slice();
+        const maxPallet = getMaxPalletNumber();
+
+        pallets.push({
+            palletNumber: maxPallet + 1,
+            id: maxPallet + 1,
+            weight: 18,
+            consignmentId: item.consignmentId,
+            height: 10,
+            width: 120,
+            depth: 100
+        });
+
+        setEditablePallets(pallets);
+    };
+
+    const addCarton = () => {
+        const maxCarton = getMaxCarton();
+        const maxItem = getMaxItemNumber();
+        const items = editableItems.slice();
+
+        items.push({
+            containerNumber: maxCarton + 1,
+            id: maxItem + 1,
+            itemNumber: maxItem + 1,
+            consignmentId: item.consignmentId,
+            itemTypeDisplay: getItemTypeDisplay('C'),
+            itemType: 'C',
+            itemDescription: 'SUNDRIES',
+            quantity: 1
+        });
+
+        setEditableItems(items);
+    };
+
+    const addItem = () => {
+        const maxItem = getMaxItemNumber();
+        const items = editableItems.slice();
+
+        items.push({
+            id: maxItem + 1,
+            itemNumber: maxItem + 1,
+            consignmentId: item.consignmentId,
+            itemTypeDisplay: getItemTypeDisplay('I'),
+            itemType: 'I'
+        });
+
+        setEditableItems(items);
     };
 
     return (
@@ -343,15 +415,36 @@ function Consignment({
                         <Tab label="Consignment Items" />
                     </Tabs>
                     {currentTab === 0 && (
-                        <Grid item xs={12}>
-                            <Dropdown
-                                label="Select consignment"
-                                propertyName="consignmentSelect"
-                                items={openConsignments}
-                                onChange={handleSelectConsignment}
-                                optionsLoading={optionsLoading}
-                            />
-                        </Grid>
+                        <>
+                            <Grid item xs={12}>
+                                <Dropdown
+                                    label="Select open consignment"
+                                    propertyName="consignmentSelect"
+                                    items={openConsignments}
+                                    onChange={handleSelectConsignment}
+                                    optionsLoading={optionsLoading}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <InputField
+                                    label="Select Consignment By Id"
+                                    placeholder="Consignment Id"
+                                    propertyName="consignmentIdSelect"
+                                    value={consignmentIdSelect}
+                                    onChange={(_, val) => setConsignmentIdSelect(val)}
+                                />
+                                <Button
+                                    style={{ marginTop: '10px' }}
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={() =>
+                                        handleSelectConsignment(null, consignmentIdSelect)
+                                    }
+                                >
+                                    Show Consignment
+                                </Button>
+                            </Grid>
+                        </>
                     )}
                     {currentTab !== 0 && (loading || !state.consignment) ? (
                         <Loading />
@@ -387,9 +480,33 @@ function Consignment({
                         </>
                     )}
                 </>
-                <Grid item xs={12}>
+                <Grid item xs={12} style={{ marginTop: '20px' }}>
                     {currentTab === 2 && (
                         <>
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={addPallet}
+                                disabled={viewing()}
+                            >
+                                Add Pallet
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={addCarton}
+                                disabled={viewing()}
+                            >
+                                Add Carton
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                onClick={addItem}
+                                disabled={viewing()}
+                            >
+                                Add Item
+                            </Button>
                             <Button
                                 variant="outlined"
                                 color="primary"

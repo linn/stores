@@ -3,7 +3,7 @@
     public class ConsignmentItem
     {
         public int ConsignmentId { get; set; }
-        
+
         public int ItemNumber { get; set; }
 
         public string ItemType { get; set; }
