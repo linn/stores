@@ -237,8 +237,6 @@
 
         public DbQuery<AuthUser> AuthUsers { get; set; }
 
-        public DbSet<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
