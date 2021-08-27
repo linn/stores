@@ -194,6 +194,7 @@
             builder.RegisterType<BartenderLabelPack>().As<IBartenderLabelPack>();
             builder.RegisterType<GoodsInPack>().As<IGoodsInPack>();
             builder.RegisterType<PalletAnalysisPack>().As<IPalletAnalysisPack>();
+            builder.RegisterType<PurchaseOrderPack>().As<IPurchaseOrderPack>();
             builder.RegisterType<ConsignmentProxyService>().As<IConsignmentProxyService>();
             builder.RegisterType<InvoicingPack>().As<IInvoicingPack>();
             builder.RegisterType<ExportBookPack>().As<IExportBookPack>();

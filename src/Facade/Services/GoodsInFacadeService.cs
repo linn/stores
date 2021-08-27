@@ -24,7 +24,7 @@
             this.loanDetailRepository = loanDetailRepository;
         }
 
-        public IResult<ProcessResult> DoBookIn(BookInRequestResource requestResource)
+        public IResult<BookInResult> DoBookIn(BookInRequestResource requestResource)
         {
             var lines = requestResource.Lines?.Select(
                 l => new GoodsInLogEntry
@@ -37,7 +37,6 @@
                              CreatedBy = l.CreatedBy,
                              DateCreated = DateTime.Parse(l.DateCreated),
                              DemLocation = l.DemLocation,
-                             Id = l.Id,
                              ManufacturersPartNumber = l.ManufacturersPartNumber,
                              State = l.State,
                              OrderNumber = l.OrderNumber,
@@ -47,7 +46,7 @@
                              Quantity = l.Quantity,
                              RsnAccessories = l.RsnAccessories,
                              RsnNumber = l.RsnNumber,
-                             StoragePlace = l.StoragePlace,
+                             StoragePlace = l.Location,
                              StorageType = l.StorageType,
                              TransactionType = l.TransactionType,
                              WandString = l.WandString
@@ -59,14 +58,13 @@
                 requestResource.ManufacturersPartNumber,
                 requestResource.Qty,
                 requestResource.OrderNumber,
-                requestResource.OrderLine,
+                requestResource.OrderLine ?? 1,
                 requestResource.LoanNumber,
                 requestResource.LoanLine,
                 requestResource.RsnNumber,
-                requestResource.StoragePlace,
                 requestResource.StorageType,
-                requestResource.OntoLocation,
                 requestResource.DemLocation,
+                requestResource.OntoLocation,
                 requestResource.State,
                 requestResource.Comments,
                 requestResource.Condition,
@@ -77,10 +75,10 @@
 
             if (result.Success)
             {
-                return new SuccessResult<ProcessResult>(result);
+                return new SuccessResult<BookInResult>(result);
             }
 
-            return new BadRequestResult<ProcessResult>(result.Message);
+            return new BadRequestResult<BookInResult>(result.Message);
         }
 
         public IResult<IEnumerable<LoanDetail>> GetLoanDetails(int loanNumber)
@@ -101,6 +99,27 @@
                 orderNumber,
                 qty,
                 orderLine));
+        }
+
+        public IResult<ProcessResult> PrintGoodsInLabels(PrintGoodsInLabelsRequestResource requestResource)
+        {
+            return new SuccessResult<ProcessResult>(this.domainService
+                .PrintLabels(
+                    requestResource.DocumentType,
+                    requestResource.PartNumber, 
+                    requestResource.DeliveryRef, 
+                    requestResource.Qty, 
+                    requestResource.UserNumber,
+                    requestResource.OrderNumber,
+                    requestResource.NumberOfLabels,
+                    requestResource.NumberOfLines,
+                    requestResource.QcState,
+                    requestResource.ReqNumber,
+                    requestResource.Lines.Select(x => new GoodsInLabelLine
+                                                          {
+                                                              LineNumber = x.LineNumber,
+                                                              Qty = x.Qty
+                                                          })));
         }
     }
 }

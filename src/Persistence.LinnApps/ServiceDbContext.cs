@@ -227,7 +227,15 @@
 
         public DbSet<GoodsInLogEntry> GoodsInLog { get; set; }
 
+        public DbSet<StoresTransactionDefinition> StoresTransactionDefinitions { get; set; }
+        
         public DbSet<PlCreditDebitNote> PlCreditDebitNotes { get; set; }
+
+        public DbQuery<StoresLabelType> StoresLabelTypes { get; set; }
+
+        public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+
+        public DbQuery<AuthUser> AuthUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -333,9 +341,14 @@
             this.QueryLoanDetails(builder);
             this.BuildCartonTypes(builder);
             this.BuildGoodsInLog(builder);
+            this.BuildStoresTransactionDefinitions(builder);
             this.BuildExportBooks(builder);
             this.BuildPlCreditDebitNotes(builder);
+            this.QueryStoresLabelTypes(builder);
+            this.BuildPurchaseOrders(builder);
+            this.QueryAuthUsers(builder);
             base.OnModelCreating(builder);
+            this.BuildPurchaseOrderDetails(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -867,6 +880,7 @@
             q.Property(e => e.Name).HasColumnName("STORAGE_PLACE");
             q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
             q.Property(e => e.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(e => e.SiteCode).HasColumnName("SITE_CODE");
         }
 
         private void QueryStoresBudgets(ModelBuilder builder)
@@ -1888,6 +1902,17 @@
             table.Property(e => e.StorageType).HasColumnName("STORAGE_TYPE").HasMaxLength(4);
         }
 
+        private void BuildStoresTransactionDefinitions(ModelBuilder builder)
+        {
+            var q = builder.Entity<StoresTransactionDefinition>().ToTable("STORES_TRANS_DEFS");
+            q.HasKey(d => d.TransactionCode);
+            q.Property(d => d.TransactionCode).HasColumnName("TRANSACTION_CODE");
+            q.Property(d => d.QcType).HasColumnName("QC_TYPE");
+            q.Property(d => d.DocType).HasColumnName("DOC1_TYPE");
+            q.HasMany(d => d.RequisitionLines).WithOne(l => l.TransactionDefinition)
+                .HasForeignKey(l => l.TransactionCode);
+        }
+        
         private void BuildExportBooks(ModelBuilder builder)
         {
             var table = builder.Entity<ExportBook>().ToTable("EXPBOOKS");
@@ -1914,6 +1939,44 @@
             entity.Property(a => a.SupplierId).HasColumnName("SUPPLIER_ID");
             entity.HasOne(a => a.Supplier).WithMany(s => s.PlCreditDebitNotes).HasForeignKey(a => a.SupplierId);
             entity.Property(a => a.DateCreated).HasColumnName("DATE_CREATED");
+        }
+
+        private void QueryStoresLabelTypes(ModelBuilder builder)
+        {
+            var query = builder.Query<StoresLabelType>().ToView("STORES_LABEL_TYPES");
+            query.Property(t => t.Code).HasColumnName("LABEL_TYPE_CODE");
+            query.Property(t => t.DefaultPrinter).HasColumnName("DEFAULT_PRINTER");
+            query.Property(t => t.FileName).HasColumnName("FILENAME");
+        }
+
+        private void BuildPurchaseOrders(ModelBuilder builder)
+        {
+            var entity = builder.Entity<PurchaseOrder>().ToTable("PL_ORDERS");
+            entity.HasKey(o => o.OrderNumber);
+            entity.Property(o => o.OrderNumber).HasColumnName("ORDER_NUMBER");
+            entity.Property(o => o.SupplierId).HasColumnName("SUPP_SUPPLIER_ID");
+            entity.HasOne(o => o.Supplier).WithMany(s => s.PurchaseOrders).HasForeignKey(o => o.SupplierId);
+            entity.Property(o => o.OurQty).HasColumnName("OUR_QTY");
+            entity.Property(o => o.DocumentType).HasColumnName("DOCUMENT_TYPE");
+        }
+
+        private void BuildPurchaseOrderDetails(ModelBuilder builder)
+        {
+            var entity = builder.Entity<PurchaseOrderDetail>().ToTable("PL_ORDER_DETAILS");
+            entity.HasKey(a => new { a.OrderNumber, a.Line}); 
+            entity.Property(o => o.OrderNumber).HasColumnName("ORDER_NUMBER");
+            entity.Property(o => o.Line).HasColumnName("ORDER_LINE");
+            entity.Property(o => o.RohsCompliant).HasColumnName("ROHS_COMPLIANT");
+            entity.HasOne(d => d.PurchaseOrder).WithMany(o => o.Details)
+                .HasForeignKey(d => d.OrderNumber);
+        }
+
+        private void QueryAuthUsers(ModelBuilder builder)
+        {
+            var query = builder.Query<AuthUser>().ToView("AUTH_USER_VIEW");
+            query.Property(t => t.UserNumber).HasColumnName("USER_NUMBER");
+            query.Property(t => t.Initials).HasColumnName("INITIALS");
+            query.Property(t => t.UserNumber).HasColumnName("USER_NAME");
         }
     }
 }

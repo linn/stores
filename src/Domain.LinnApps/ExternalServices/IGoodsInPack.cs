@@ -3,6 +3,7 @@
     public interface IGoodsInPack
     {
         void DoBookIn(
+            int bookInRef,
             string transactionType,
             int createdBy,
             string partNumber,
@@ -19,7 +20,7 @@
             string comments,
             string condition,
             string rsnAccessories,
-            int? reqNumber,
+            out int? reqNumber,
             out bool success);
 
         string GetErrorMessage();
@@ -39,5 +40,7 @@
         bool PartHasStorageType(string partNumber, out int bookInLocation, out string kardex, out bool newPart);
 
         int GetNextBookInRef();
+
+        int GetNextLogId();
     }
 }

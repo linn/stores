@@ -7,7 +7,19 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import { InputField, Typeahead, Dropdown, DatePicker } from '@linn-it/linn-form-components-library';
+import Dialog from '@material-ui/core/Dialog';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import makeStyles from '@material-ui/styles/makeStyles';
+import { DataGrid } from '@material-ui/data-grid';
+import {
+    InputField,
+    Typeahead,
+    Dropdown,
+    DatePicker,
+    Title
+} from '@linn-it/linn-form-components-library';
+import QcLabelPrintScreen from '../../containers/goodsIn/QcLabelPrintScreen';
 import Page from '../../containers/Page';
 
 function GoodsInUtility({
@@ -28,12 +40,21 @@ function GoodsInUtility({
     doBookIn,
     validatePurchaseOrderBookInQtyResult,
     validatePurchaseOrderBookInQty,
-    validatePurchaseOrderBookInQtyResultLoading
+    validatePurchaseOrderBookInQtyResultLoading,
+    userNumber
 }) {
     const [formData, setFormData] = useState({
-        purchaseOrderNumber: null,
-        dateReceived: new Date()
+        orderNumber: null,
+        dateReceived: new Date(),
+        lines: []
     });
+
+    const useStyles = makeStyles(theme => ({
+        dialog: {
+            margin: theme.spacing(6),
+            minWidth: theme.spacing(62)
+        }
+    }));
 
     const [message, setMessage] = useState({ error: false, text: '' });
 
@@ -41,6 +62,8 @@ function GoodsInUtility({
         setFormData({ ...formData, [propertyName]: newValue });
     };
     const [bookInPoExpanded, setBookInPoExpanded] = useState(false);
+
+    const [dialogOpen, setDialogOpen] = useState(false);
 
     useEffect(() => {
         if (validatePurchaseOrderResult?.documentType === 'PO') {
@@ -52,7 +75,7 @@ function GoodsInUtility({
 
     useEffect(() => {
         if (validatePurchaseOrderBookInQtyResult?.success) {
-            setFormData(d => ({ ...d, noLines: 1 }));
+            setFormData(d => ({ ...d, numberOfLines: 1 }));
         }
 
         setMessage({
@@ -65,12 +88,140 @@ function GoodsInUtility({
         if (bookInResult?.message) {
             setMessage({ error: false, text: bookInResult.message });
         }
+        if (bookInResult?.success) {
+            setDialogOpen(true);
+        }
     }, [bookInResult]);
+
+    const classes = useStyles();
+
+    const tableColumns = [
+        {
+            headerName: 'id',
+            field: 'id',
+            width: 100,
+            hide: true
+        },
+        {
+            headerName: 'Trans Type',
+            field: 'transactionType',
+            width: 200
+        },
+        {
+            headerName: 'Created',
+            field: 'dateCreated',
+            width: 100,
+            hide: true
+        },
+        {
+            headerName: 'By',
+            field: 'createdBy',
+            width: 100,
+            hide: true
+        },
+        {
+            headerName: 'Wandstring',
+            field: 'wandstring',
+            hide: true
+        },
+        {
+            headerName: 'Article',
+            field: 'articleNumber',
+            width: 200
+        },
+        {
+            headerName: 'LocId',
+            field: 'locationId',
+            width: 200,
+            hide: true
+        },
+        {
+            headerName: 'Loc',
+            field: 'location',
+            width: 200
+        },
+        {
+            headerName: 'Qty',
+            field: 'quantity',
+            width: 100
+        },
+        {
+            headerName: 'Serial',
+            field: 'serialNumber',
+            width: 200,
+            hide: true
+        },
+        {
+            headerName: 'Order',
+            field: 'orderNumber',
+            width: 200
+        },
+        {
+            headerName: 'Line',
+            field: 'orderLine',
+            width: 200,
+            hide: true
+        },
+        {
+            headerName: 'S/Type',
+            field: 'storageType',
+            width: 200
+        },
+        {
+            headerName: 'Manuf Part',
+            field: 'manufacturersPartNumber',
+            width: 200
+        },
+        {
+            headerName: 'State',
+            field: 'state',
+            width: 200
+        },
+        {
+            headerName: 'Description',
+            field: 'description',
+            width: 300,
+            hide: true
+        }
+    ];
+
+    const [rows, setRows] = useState([]);
+    const [selectedRows, setSelectedRows] = useState([]);
+
+    const handleSelectRow = selected => {
+        setSelectedRows(rows.filter(r => selected.rowIds.includes(r.id.toString())));
+    };
 
     return (
         <Page>
             <Grid container spacing={3}>
+                <Dialog open={dialogOpen} fullWidth maxWidth="md">
+                    <div>
+                        <IconButton
+                            className={classes.pullRight}
+                            aria-label="Close"
+                            onClick={() => setDialogOpen(false)}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <div className={classes.dialog}>
+                            <QcLabelPrintScreen
+                                partNumber={validatePurchaseOrderResult?.partNumber}
+                                partDescription={validatePurchaseOrder?.description}
+                                reqNumber={bookInResult?.reqNumber}
+                                qcState={bookInResult?.qcState}
+                                qcInfo={bookInResult?.qcInfo}
+                                docType={bookInResult?.docType}
+                                unitOfMeasure={bookInResult?.unitOfMeasure}
+                                qtyReceived={bookInResult?.qtyReceived}
+                            />
+                        </div>
+                    </div>
+                </Dialog>
                 <Grid item xs={12}>
+                    <Title text="Goods In Utility" />
+                </Grid>
+                <Grid item xs={6}>
                     <InputField
                         fullWidth
                         disabled
@@ -85,29 +236,25 @@ function GoodsInUtility({
                         propertyName="bookInMessage"
                     />
                 </Grid>
+                <Grid item xs={6} />
+
                 <Grid item xs={4}>
                     <InputField
                         fullWidth
-                        value={formData.purchaseOrderNumber}
+                        value={formData.orderNumber}
                         label="PO Number"
                         disabled={validatePurchaseOrderResultLoading}
-                        propertyName="purchaseOrderNumber"
+                        propertyName="orderNumber"
                         onChange={handleFieldChange}
                         textFieldProps={{
-                            onBlur: () => validatePurchaseOrder(formData.purchaseOrderNumber)
+                            onBlur: () =>
+                                formData.orderNumber
+                                    ? validatePurchaseOrder(formData.orderNumber)
+                                    : {}
                         }}
                     />
                 </Grid>
-                <Grid item xs={1}>
-                    <InputField
-                        fullWidth
-                        value={validatePurchaseOrderResult?.orderLine}
-                        disabled
-                        label="Line"
-                        propertyName="orderLine"
-                        onChange={handleFieldChange}
-                    />
-                </Grid>
+
                 <Grid item xs={1}>
                     <InputField
                         fullWidth
@@ -116,9 +263,10 @@ function GoodsInUtility({
                         propertyName="qty"
                         textFieldProps={{
                             onBlur: () =>
+                                formData.qty &&
                                 validatePurchaseOrderBookInQty(
                                     `qty=${formData.qty}&orderLine=${1}&orderNumber`,
-                                    formData.purchaseOrderNumber
+                                    formData.orderNumber
                                 )
                         }}
                         onChange={handleFieldChange}
@@ -127,13 +275,13 @@ function GoodsInUtility({
                 <Grid item xs={2}>
                     <InputField
                         fullWidth
-                        value={formData.sType}
+                        value={formData.storageType}
                         label="S/Type"
-                        propertyName="sType"
+                        propertyName="storageType"
                         onChange={handleFieldChange}
                     />
                 </Grid>
-                <Grid item xs={4} />
+                <Grid item xs={5} />
                 <Grid item xs={3}>
                     <InputField
                         fullWidth
@@ -175,29 +323,17 @@ function GoodsInUtility({
                         placeholder="Search Locations"
                     />
                 </Grid>
-                <Grid item xs={2}>
-                    <InputField
-                        fullWidth
-                        value={formData.bookInRef}
-                        label="Bookin Ref"
-                        propertyName="bookInRef"
-                        onChange={handleFieldChange}
-                    />
-                </Grid>
-                <Grid item xs={1}>
-                    <InputField
-                        fullWidth
-                        value={formData.noLines}
-                        label="#Lines"
-                        propertyName="noLines"
-                        onChange={handleFieldChange}
-                    />
-                </Grid>
+                <Grid item xs={3} />
                 <Grid item xs={3}>
                     <Typeahead
-                        onSelect={newValue => {
-                            handleFieldChange('ontoLocation', newValue.name);
-                        }}
+                        onSelect={newValue =>
+                            setFormData(d => ({
+                                ...d,
+                                ontoLocation: newValue.name,
+                                ontoLocationId: newValue.locationId,
+                                palletNumber: newValue.palletNumber
+                            }))
+                        }
                         label="Onto Location"
                         modal
                         items={storagePlacesSearchResults}
@@ -231,7 +367,6 @@ function GoodsInUtility({
                         onChange={handleFieldChange}
                     />
                 </Grid>
-
                 <Grid item xs={3}>
                     <DatePicker
                         label="Date Received"
@@ -241,7 +376,6 @@ function GoodsInUtility({
                         }}
                     />
                 </Grid>
-
                 <Grid item xs={12}>
                     <Accordion expanded={bookInPoExpanded}>
                         <AccordionSummary
@@ -371,11 +505,93 @@ function GoodsInUtility({
                 </Grid>
                 <Grid item xs={12}>
                     <Button
-                        className="hide-when-printing"
                         variant="contained"
-                        onClick={() => doBookIn(formData)}
+                        disabled={
+                            !validatePurchaseOrderResult ||
+                            !formData.ontoLocationId ||
+                            !formData.qty
+                        }
+                        onClick={() =>
+                            setRows(r => [
+                                ...r,
+                                {
+                                    id: r.length + 1,
+                                    articleNumber: validatePurchaseOrderResult.partNumber,
+                                    transactionType: validatePurchaseOrderResult.transactionType,
+                                    dateCreated: new Date().toISOString(),
+                                    location: formData.ontoLocation,
+                                    locationId: formData.ontoLocationId,
+                                    quantity: formData.qty,
+                                    orderNumber: validatePurchaseOrderResult.orderNumber,
+                                    state: validatePurchaseOrderResult.state,
+                                    orderLine: validatePurchaseOrderResult.orderLine,
+                                    storageType: formData.storageType,
+                                    createdBy: userNumber
+                                }
+                            ])
+                        }
+                    >
+                        Add Line
+                    </Button>
+                    <Button
+                        variant="contained"
+                        onClick={() => {
+                            const row = {
+                                id: 1,
+                                articleNumber: validatePurchaseOrderResult.partNumber,
+                                transactionType: validatePurchaseOrderResult.transactionType,
+                                dateCreated: new Date().toISOString(),
+                                location: formData.ontoLocation,
+                                locationId: formData.ontoLocationId,
+                                quantity: formData.qty,
+                                orderNumber: validatePurchaseOrderResult.orderNumber,
+                                state: validatePurchaseOrderResult.state,
+                                orderLine: validatePurchaseOrderResult.orderLine,
+                                storageType: formData.storageType,
+                                createdBy: userNumber
+                            };
+                            if (rows.length === 0) {
+                                setRows(r => [...r, row]);
+                            }
+                            doBookIn({
+                                ...formData,
+                                lines: rows.length > 0 ? rows : [row],
+                                createdBy: userNumber,
+                                transactionType: validatePurchaseOrderResult.transactionType,
+                                partNumber: validatePurchaseOrderResult.partNumber,
+                                manufacturersPartNumber:
+                                    validatePurchaseOrderResult.manufacturersPartNumber,
+                                state: validatePurchaseOrderResult.state
+                            });
+                        }}
                     >
                         Book In
+                    </Button>
+                </Grid>
+                <Grid item xs={12}>
+                    <div style={{ height: 250, width: '100%', marginTop: '100px' }}>
+                        <DataGrid
+                            rows={rows}
+                            columns={tableColumns}
+                            density="standard"
+                            rowHeight={34}
+                            checkboxSelection
+                            onSelectionChange={handleSelectRow}
+                            hideFooter
+                        />
+                    </div>
+                </Grid>
+                <Grid item xs={2}>
+                    <Button
+                        style={{ marginTop: '22px' }}
+                        variant="contained"
+                        color="secondary"
+                        disabled={selectedRows.length < 1}
+                        onClick={() =>
+                            setRows(rows.filter(r => !selectedRows.map(x => x.id).includes(r.id)))
+                        }
+                    >
+                        Clear Selected
                     </Button>
                 </Grid>
             </Grid>
@@ -397,7 +613,8 @@ GoodsInUtility.propTypes = {
         partNumber: PropTypes.string,
         partDescription: PropTypes.string,
         orderUnitOfMeasure: PropTypes.string,
-        manufacturersPartNumber: PropTypes.string
+        manufacturersPartNumber: PropTypes.string,
+        transactionType: PropTypes.string
     }),
     validatePurchaseOrderResultLoading: PropTypes.bool,
     searchDemLocations: PropTypes.func.isRequired,
@@ -412,7 +629,13 @@ GoodsInUtility.propTypes = {
     storagePlacesSearchLoading: PropTypes.bool,
     bookInResult: PropTypes.shape({
         success: PropTypes.bool,
-        message: PropTypes.string
+        message: PropTypes.string,
+        reqNumber: PropTypes.number,
+        qcState: PropTypes.string,
+        docType: PropTypes.string,
+        unitOfMeasure: PropTypes.string,
+        qtyReceived: PropTypes.number,
+        qcInfo: PropTypes.string
     }),
     bookInResultLoading: PropTypes.bool,
     doBookIn: PropTypes.func.isRequired,
@@ -421,7 +644,8 @@ GoodsInUtility.propTypes = {
         message: PropTypes.string
     }),
     validatePurchaseOrderBookInQty: PropTypes.func.isRequired,
-    validatePurchaseOrderBookInQtyResultLoading: PropTypes.bool
+    validatePurchaseOrderBookInQtyResultLoading: PropTypes.bool,
+    userNumber: PropTypes.number.isRequired
 };
 
 GoodsInUtility.defaultProps = {

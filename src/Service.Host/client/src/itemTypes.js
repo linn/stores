@@ -115,7 +115,7 @@ export const sosAllocDetails = new ItemType(
 export const storagePlace = new ItemType(
     'storagePlace',
     'STORAGE_PLACE',
-    'inventory/storage-places'
+    '/inventory/storage-place'
 );
 
 export const storagePlaces = new ItemType(
@@ -383,6 +383,8 @@ export const validatePurchaseOrderBookInQtyResult = new ItemType(
     'VALIDATE_PURCHASE_ORDER_BOOKIN_QTY_RESULT',
     '/logistics/purchase-orders/validate-qty'
 );
+
+export const req = new ItemType('req', 'REQ', '/logistics/requisitions');
 
 export const debitNote = new ItemType(
     'debitNote',

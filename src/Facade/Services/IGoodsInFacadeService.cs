@@ -9,12 +9,15 @@
 
     public interface IGoodsInFacadeService
     {
-        IResult<ProcessResult> DoBookIn(BookInRequestResource requestResource);
+        IResult<BookInResult> DoBookIn(BookInRequestResource requestResource);
 
         IResult<IEnumerable<LoanDetail>> GetLoanDetails(int loanNumber);
 
         IResult<ValidatePurchaseOrderResult> ValidatePurchaseOrder(int orderNumber, int line);
 
         IResult<ProcessResult> ValidatePurchaseOrderQty(int orderNumber, int orderLine, int qty);
+
+        IResult<ProcessResult> 
+            PrintGoodsInLabels(PrintGoodsInLabelsRequestResource requestResource);
     }
 }

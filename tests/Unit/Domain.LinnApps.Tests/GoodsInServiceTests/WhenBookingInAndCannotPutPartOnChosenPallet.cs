@@ -21,7 +21,7 @@
             this.processResult = this.Sut.DoBookIn(
                 "O",
                 1,
-                partNumber: "PART",
+                "PART",
                 null,
                 1,
                 1,
@@ -31,8 +31,7 @@
                 null,
                 null,
                 null,
-                null,
-                ontoLocation: "P1234",
+                "P1234",
                 null,
                 null,
                 null,

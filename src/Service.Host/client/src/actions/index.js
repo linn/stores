@@ -286,6 +286,8 @@ export const validatePurchaseOrderBookInQtyResultActionTypes = makeActionTypes(
     itemTypes.validatePurchaseOrderBookInQtyResult.actionType
 );
 
+export const reqActionTypes = makeActionTypes(itemTypes.req.actionType);
+
 export const debitNoteActionTypes = makeActionTypes(itemTypes.debitNote.actionType);
 
 export const debitNotesActionTypes = makeActionTypes(itemTypes.debitNotes.actionType);
@@ -299,3 +301,7 @@ export const printConsignmentLabelActionTypes = makeProcessActionTypes(
 export const currenciesActionTypes = makeActionTypes(itemTypes.currencies.actionType);
 
 export const exchangeRatesActionTypes = makeActionTypes(itemTypes.exchangeRates.actionType);
+
+export const printGoodsInLabelsActionTypes = makeProcessActionTypes(
+    processTypes.printGoodsInLabels.actionType
+);

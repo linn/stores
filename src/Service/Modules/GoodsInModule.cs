@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System.Linq;
+
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Facade.Services;
@@ -7,6 +9,7 @@
     using Linn.Stores.Resources.GoodsIn;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Resources.StockLocators;
+    using Linn.Stores.Service.Extensions;
 
     using Nancy;
     using Nancy.ModelBinding;
@@ -34,13 +37,15 @@
             this.Get("/inventory/sales-articles", _ => this.SearchSalesArticles());
             this.Get("/logistics/purchase-orders/validate/{id}", parameters => this.ValidatePurchaseOrder(parameters.id));
             this.Get("/logistics/purchase-orders/validate-qty", _ => this.ValidatePurchaseOrderBookInQty());
+            this.Post("/logistics/goods-in/print-labels", _ => this.PrintLabels());
         }
 
         private object DoBookIn()
         {
+            var resource = this.Bind<BookInRequestResource>();
             return this.Negotiate
                 .WithModel(
-                    this.service.DoBookIn(this.Bind<BookInRequestResource>()));
+                    this.service.DoBookIn(resource));
         }
 
         private object GetLoanDetails()
@@ -79,6 +84,14 @@
             var orderLine = resource.OrderLine ?? 1;
             return this.Negotiate.WithModel(
                 this.service.ValidatePurchaseOrderQty(resource.OrderNumber, orderLine, resource.Qty));
+        }
+
+        private object PrintLabels()
+        {
+            var resource = this.Bind<PrintGoodsInLabelsRequestResource>();
+            var closedByUri = this.Context.CurrentUser.GetEmployeeUri();
+            resource.UserNumber = int.Parse(closedByUri.Split("/").Last());
+            return this.Negotiate.WithModel(this.service.PrintGoodsInLabels(resource));
         }
     }
 }

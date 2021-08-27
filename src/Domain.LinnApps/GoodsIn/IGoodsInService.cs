@@ -6,7 +6,7 @@
 
     public interface IGoodsInService
     {
-        ProcessResult DoBookIn(
+        BookInResult DoBookIn(
             string transactionType,
             int createdBy,
             string partNumber,
@@ -17,7 +17,6 @@
             int? loanNumber,
             int? loanLine,
             int? rsnNumber,
-            string storagePlace,
             string storageType,
             string demLocation,
             string ontoLocation,
@@ -35,5 +34,18 @@
             int orderNumber, 
             int qty,
             int? orderLine = 1);
+
+        ProcessResult PrintLabels(
+            string docType,
+            string partNumber,
+            string deliveryRef,
+            int qty,
+            int userNumber,
+            int orderNumber,
+            int numberOfLabels,
+            int numberOfLines,
+            string qcState,
+            int reqNumber,
+            IEnumerable<GoodsInLabelLine> lines);
     }
 }

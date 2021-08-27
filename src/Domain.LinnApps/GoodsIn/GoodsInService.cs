@@ -4,10 +4,13 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Linn.Common.Domain.LinnApps.RemoteServices;
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Requisitions;
 
     public class GoodsInService : IGoodsInService
     {
@@ -21,21 +24,45 @@
 
         private readonly IRepository<GoodsInLogEntry, int> goodsInLog;
 
+        private readonly IRepository<RequisitionHeader, int> reqRepository;
+
+        private readonly IPurchaseOrderPack purchaseOrderPack;
+
+        private readonly IQueryRepository<StoresLabelType> labelTypeRepository;
+
+        private readonly IBartenderLabelPack bartender;
+
+        private readonly IRepository<PurchaseOrder, int> purchaseOrderRepository;
+
+        private readonly IQueryRepository<AuthUser> authUserRepository;
+
         public GoodsInService(
             IGoodsInPack goodsInPack,
             IStoresPack storesPack,
             IPalletAnalysisPack palletAnalysisPack,
             IRepository<Part, int> partsRepository,
-            IRepository<GoodsInLogEntry, int> goodsInLog)
+            IRepository<GoodsInLogEntry, int> goodsInLog,
+            IRepository<RequisitionHeader, int> reqRepository,
+            IPurchaseOrderPack purchaseOrderPack,
+            IQueryRepository<StoresLabelType> labelTypeRepository,
+            IBartenderLabelPack bartender,
+            IRepository<PurchaseOrder, int> purchaseOrderRepository,
+            IQueryRepository<AuthUser> authUserRepository)
         {
             this.storesPack = storesPack;
             this.goodsInPack = goodsInPack;
             this.palletAnalysisPack = palletAnalysisPack;
             this.partsRepository = partsRepository;
             this.goodsInLog = goodsInLog;
+            this.reqRepository = reqRepository;
+            this.purchaseOrderPack = purchaseOrderPack;
+            this.labelTypeRepository = labelTypeRepository;
+            this.purchaseOrderRepository = purchaseOrderRepository;
+            this.bartender = bartender;
+            this.authUserRepository = authUserRepository;
         }
 
-        public ProcessResult DoBookIn(
+        public BookInResult DoBookIn(
             string transactionType,
             int createdBy,
             string partNumber,
@@ -46,7 +73,6 @@
             int? loanNumber,
             int? loanLine,
             int? rsnNumber,
-            string storagePlace,
             string storageType,
             string demLocation,
             string ontoLocation,
@@ -63,7 +89,7 @@
                 if ((string.IsNullOrEmpty(storageType) && transactionType == "O") 
                     || transactionType == "L" || transactionType == "D")
                 {
-                    return new ProcessResult(false, "Onto location/pallet must be entered");
+                    return new BookInResult(false, "Onto location/pallet must be entered");
                 }
             }
 
@@ -73,37 +99,27 @@
             {
                 if (!this.palletAnalysisPack.CanPutPartOnPallet(partNumber, ontoLocation.TrimStart('P')))
                 {
-                    return new ProcessResult(false, this.palletAnalysisPack.Message());
+                    return new BookInResult(false, this.palletAnalysisPack.Message());
                 }
             }
 
-            if (lines.Count() < numberOfLines)
+            var goodsInLogEntries = lines as GoodsInLogEntry[] ?? lines.ToArray();
+            var bookinRef = this.goodsInPack.GetNextBookInRef();
+
+            if (!goodsInLogEntries.Any())
             {
-                this.goodsInLog.Add(new GoodsInLogEntry
-                                        {
-                                            TransactionType = transactionType,
-                                            DateCreated = DateTime.Now,
-                                            CreatedBy = createdBy,
-                                            ArticleNumber = partNumber,
-                                            Quantity = qty,
-                                            ManufacturersPartNumber = manufacturersPartNumber,
-                                            OrderNumber = orderNumber,
-                                            OrderLine = orderLine,
-                                            LoanNumber = loanNumber,
-                                            LoanLine = loanLine,
-                                            RsnNumber = rsnNumber,
-                                            StoragePlace = storagePlace,
-                                            BookInRef = this.goodsInPack.GetNextBookInRef(),
-                                            DemLocation = demLocation,
-                                            LogCondition = condition,
-                                            RsnAccessories = rsnAccessories,
-                                            Comments = comments,
-                                            State = state,
-                                            StorageType = storageType
-                                        });
+                return new BookInResult(false, "Nothing to book in");
+            }
+
+            foreach (var goodsInLogEntry in goodsInLogEntries)
+            {
+                goodsInLogEntry.Id = this.goodsInPack.GetNextLogId();
+                goodsInLogEntry.BookInRef = bookinRef;
+                this.goodsInLog.Add(goodsInLogEntry);
             }
 
             this.goodsInPack.DoBookIn(
+                bookinRef,
                 transactionType,
                 createdBy,
                 partNumber,
@@ -113,19 +129,65 @@
                 loanNumber,
                 loanLine,
                 rsnNumber,
-                storagePlace,
+                ontoLocation,
                 storageType,
                 demLocation,
                 state,
                 comments,
                 condition,
                 rsnAccessories,
-                reqNumber,
+                out var reqNumberResult,
                 out var success);
 
-            return new ProcessResult(
-                success, 
+            var result = new BookInResult(
+                success,
                 success ? null : this.goodsInPack.GetErrorMessage());
+
+            if (!reqNumberResult.HasValue)
+            {
+                return result;
+            }
+
+            var req = this.reqRepository.FindById((int)reqNumberResult);
+            result.ReqNumber = req.ReqNumber;
+            var reqLine = req.Lines?.FirstOrDefault();
+            result.DocType = reqLine?.TransactionDefinition?.DocType;
+
+            if (transactionType.Equals("O") && orderNumber.HasValue && partNumber != "PACK 1329")
+            {
+                result.QcState = !string.IsNullOrEmpty(state) && state.Equals("QC") ? "QUARANTINE" : "PASS";
+            }
+
+            result.TransactionCode = reqLine?.TransactionCode;
+
+            var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
+
+            result.QcInfo = part
+                ?.QcInformation;
+
+            // do we need to set kardex location here based on presence of StorageType?
+            if (orderNumber.HasValue)
+            {
+                this.goodsInPack.GetPurchaseOrderDetails(
+                    orderNumber.Value,
+                    orderLine.Value,
+                    out _,
+                    out _,
+                    out var uom,
+                    out _,
+                    out _,
+                    out _,
+                    out _,
+                    out _);
+                result.UnitOfMeasure = uom;
+                result.DocType = this.purchaseOrderPack.GetDocumentType(orderNumber.Value);
+            }
+
+            result.QtyReceived = qty;
+            result.PartNumber = partNumber;
+            result.PartDescription = part.Description;
+
+            return result;
         }
 
         public ValidatePurchaseOrderResult ValidatePurchaseOrder(
@@ -214,6 +276,117 @@
                                  Success = false,
                                  Message = $"Order {orderNumber} is overbooked"
                              };
+        }
+
+        public ProcessResult PrintLabels(
+            string docType,
+            string partNumber,
+            string deliveryRef,
+            int qty,
+            int userNumber,
+            int orderNumber,
+            int numberOfLabels,
+            int numberOfLines,
+            string qcState,
+            int reqNumber,
+            IEnumerable<GoodsInLabelLine> lines)
+        {
+            var labelType = this.labelTypeRepository.FindBy(x => x.Code == qcState);
+            var user = this.authUserRepository.FindBy(x => x.UserNumber == userNumber);
+            var purchaseOrder = this.purchaseOrderRepository.FindById(orderNumber);
+            var part = this.partsRepository.FindBy(x => x.PartNumber == partNumber.ToUpper());
+
+            if (docType != "PO")
+            {
+                throw new NotImplementedException("Printing for this document type not yet implemented.");
+            }
+
+            if (numberOfLines != qty)
+            {
+                return new ProcessResult(
+                    false,
+                    $"Quantity Received was {qty}. Quantity Entered is {numberOfLines}.");
+            }
+
+            var message = string.Empty;
+            var success = false;
+
+            foreach (var line in lines)
+            {
+                var printString = string.Empty;
+
+                switch (qcState)
+                {
+                    case "QUARANTINE":
+                        printString += $"\"{docType}{orderNumber}";
+                        printString += "\",\"";
+                        printString += part.Description;
+                        printString += "\",\"";
+                        printString += deliveryRef;
+                        printString += "\",\"";
+                        printString += DateTime.Now.ToString("MMMddyyyy").ToUpper();
+                        printString += "\",\"";
+                        printString += part.OurUnitOfMeasure;
+                        printString += "\",\"";
+                        printString += user.Initials;
+                        printString += "\",\"";
+                        printString += DateTime.Now.ToString("MMMddyyyy").ToUpper();
+                        printString += "\",\"";
+                        printString += string.IsNullOrEmpty(part.QcInformation) ? "NO QC INFO" : part.QcInformation;
+                        printString += "\",\"";
+                        printString += purchaseOrder.SupplierId;
+                        printString += "\",\"";
+                        printString += purchaseOrder.Supplier.Name;
+                        printString += "\",\"";
+                        printString += qty;
+                        printString += "\",\"";
+                        printString += numberOfLabels;
+                        printString += "\",\"";
+                        printString += line.Qty;
+                        printString += "\",\"";
+                        printString += line.LineNumber;
+                        printString += "\",\"";
+                        printString += qcState;
+                        printString += "\",\"";
+                        printString += "DATE TESTED";
+                        printString += "\",\"";
+                        printString += reqNumber;
+                        printString += "\"";
+                        break;
+                    case "PASS":
+                        var partMessage = purchaseOrder.Details.FirstOrDefault()?.RohsCompliant == "Y"
+                                              ? "**ROHS Compliant**"
+                                              : null;
+                        printString += orderNumber;
+                        printString += "\",\"";
+                        printString += partNumber;
+                        printString += "\",\"";
+                        printString += line.Qty;
+                        printString += "\",\"";
+                        printString += user.Initials;
+                        printString += "\",\"";
+                        printString += part.Description;
+                        printString += "\",\"";
+                        printString += reqNumber;
+                        printString += "\",\"";
+                        printString += DateTime.Now.ToString("MMMddyyyy").ToUpper();
+                        printString += "\",\"";
+                        printString += partMessage;
+                        printString += "\"";
+                        break;
+                }
+
+                message = string.Empty;
+                success = this.bartender.PrintLabels(
+                    $"QC {orderNumber}", 
+                    labelType.DefaultPrinter, 
+                    1, 
+                    labelType.FileName, 
+                    printString, 
+                    ref message);
+            }
+
+            return new ProcessResult(success, message);
         }
     }
 }

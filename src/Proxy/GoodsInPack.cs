@@ -17,6 +17,7 @@
         }
 
         public void DoBookIn(
+            int bookInRef,
             string transactionType,
             int createdBy,
             string partNumber,
@@ -33,13 +34,12 @@
             string comments,
             string condition,
             string rsnAccessories,
-            int? reqNumber,
+            out int? reqNumber,
             out bool success)
         {
             using (var connection = this.databaseService.GetConnection())
             {
                 connection.Open();
-                var bookInRef = this.GetNextBookInRef();
                 var cmd =
                     new OracleCommand(
                         "goods_in_pack.do_bookin_wrapper",
@@ -176,7 +176,6 @@
                 var reqNumberParam = new OracleParameter("p_req_number", OracleDbType.Int32)
                                          {
                                              Direction = ParameterDirection.Input,
-                                             Value = reqNumber
                                          };
                 cmd.Parameters.Add(reqNumberParam);
 
@@ -186,10 +185,20 @@
                                              Value = 1
                                          };
                 cmd.Parameters.Add(successParam);
-
+               
                 cmd.ExecuteNonQuery();
+                var successInt = int.Parse(successParam.Value.ToString());
 
-                success = int.Parse(successParam.Value.ToString()) == 0;
+                success = successInt == 0;
+                if (int.TryParse(reqNumberParam.Value.ToString(), out var reqNumberResult))
+                {
+                    reqNumber = reqNumberResult;
+                }
+                else
+                {
+                    reqNumber = null;
+                }
+
                 connection.Close();
             }
         }
@@ -391,6 +400,11 @@
         public int GetNextBookInRef()
         {
             return this.databaseService.GetIdSequence("bookin_seq");
+        }
+
+        public int GetNextLogId()
+        {
+            return this.databaseService.GetIdSequence("gilog_seq");
         }
     }
 }

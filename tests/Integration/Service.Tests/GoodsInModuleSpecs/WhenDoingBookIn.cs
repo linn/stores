@@ -3,7 +3,7 @@
     using FluentAssertions;
 
     using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps.Models;
+    using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.GoodsIn;
 
@@ -16,18 +16,15 @@
 
     public class WhenDoingBookIn : ContextBase
     {
-        private ProcessResult successResult;
+        private BookInResult successResult;
 
         [SetUp]
         public void SetUp()
         {
-            this.successResult = new ProcessResult
-                                     {
-                                         Success = true,
-                                         Message = "Success!"
-            };
+            this.successResult = new BookInResult(true, "Success!");
+
             this.Service.DoBookIn(Arg.Any<BookInRequestResource>()).Returns(
-                new SuccessResult<ProcessResult>(this.successResult));
+                new SuccessResult<BookInResult>(this.successResult));
 
             this.Response = this.Browser.Post(
                 $"/logistics/book-in",

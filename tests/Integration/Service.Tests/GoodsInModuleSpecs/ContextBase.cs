@@ -68,6 +68,9 @@
                         with.Dependency<IResourceBuilder<ValidatePurchaseOrderResult>>(
                             new ValidatePurchaseOrderResultResourceBuilder());
 
+                        with.Dependency<IResourceBuilder<BookInResult>>(new BookInResultResourceBuilder());
+                        
+                        with.ResponseProcessor<BookInResultResponseProcessor>();
                         with.ResponseProcessor<SalesArticlesResponseProcessor>();
                         with.ResponseProcessor<StorageLocationsResponseProcessor>();
                         with.ResponseProcessor<LoanDetailsResponseProcessor>();
@@ -80,6 +83,7 @@
                                     var claims = new List<Claim>
                                                      {
                                                          new Claim(ClaimTypes.Role, "employee"),
+                                                         new Claim("employee", "employees/123"),
                                                          new Claim(ClaimTypes.NameIdentifier, "test-user")
                                                      };
                                     var user = new ClaimsIdentity(claims, "jwt");
