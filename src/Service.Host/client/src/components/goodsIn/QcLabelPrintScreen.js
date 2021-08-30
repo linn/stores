@@ -4,7 +4,6 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { InputField } from '@linn-it/linn-form-components-library';
-import { Description } from '@material-ui/icons';
 
 function QcLabelPrintScreen({
     docType,
@@ -142,13 +141,13 @@ function QcLabelPrintScreen({
                         printLabels({
                             documentType: docType,
                             partNumber,
-                            partDescription: Description,
+                            partDescription,
                             deliveryRef,
                             qcInformation: qcInfo,
                             qty: qtyReceived,
                             orderNumber,
                             numberOfLabels: numContainers,
-                            numberOfLines: qtyReceived,
+                            numberOfLines: numContainers,
                             qcState,
                             reqNumber,
                             lines: []

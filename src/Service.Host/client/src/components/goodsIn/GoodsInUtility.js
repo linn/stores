@@ -63,7 +63,7 @@ function GoodsInUtility({
     };
     const [bookInPoExpanded, setBookInPoExpanded] = useState(false);
 
-    const [dialogOpen, setDialogOpen] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(true);
 
     useEffect(() => {
         if (validatePurchaseOrderResult?.documentType === 'PO') {
@@ -206,14 +206,22 @@ function GoodsInUtility({
                         </IconButton>
                         <div className={classes.dialog}>
                             <QcLabelPrintScreen
-                                partNumber={validatePurchaseOrderResult?.partNumber}
-                                partDescription={validatePurchaseOrder?.description}
-                                reqNumber={bookInResult?.reqNumber}
-                                qcState={bookInResult?.qcState}
-                                qcInfo={bookInResult?.qcInfo}
-                                docType={bookInResult?.docType}
-                                unitOfMeasure={bookInResult?.unitOfMeasure}
-                                qtyReceived={bookInResult?.qtyReceived}
+                                // partNumber={validatePurchaseOrderResult?.partNumber}
+                                // partDescription={validatePurchaseOrder?.description}
+                                // reqNumber={bookInResult?.reqNumber}
+                                // qcState={bookInResult?.qcState}
+                                // qcInfo={bookInResult?.qcInfo}
+                                // docType={bookInResult?.docType}
+                                // unitOfMeasure={bookInResult?.unitOfMeasure}
+                                // qtyReceived={bookInResult?.qtyReceived}
+                                partNumber="PART"
+                                partDescription="DESCRIPTION"
+                                reqNumber={12345}
+                                qcState="PASS"
+                                qcInfo="info"
+                                docType="PO"
+                                unitOfMeasure="ONES"
+                                qtyReceived={1}
                             />
                         </div>
                     </div>
