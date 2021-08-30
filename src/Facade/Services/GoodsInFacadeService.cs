@@ -89,6 +89,7 @@
 
         public IResult<ValidatePurchaseOrderResult> ValidatePurchaseOrder(int orderNumber, int line)
         {
+            var result = this.domainService.ValidatePurchaseOrder(orderNumber, line);
             return new SuccessResult<ValidatePurchaseOrderResult>(
                 this.domainService.ValidatePurchaseOrder(orderNumber, line));
         }

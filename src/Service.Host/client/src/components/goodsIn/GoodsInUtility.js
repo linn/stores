@@ -77,12 +77,17 @@ function GoodsInUtility({
         if (validatePurchaseOrderBookInQtyResult?.success) {
             setFormData(d => ({ ...d, numberOfLines: 1 }));
         }
-
-        setMessage({
-            error: !validatePurchaseOrderBookInQtyResult?.success,
-            text: validatePurchaseOrderBookInQtyResult?.message
-        });
-    }, [validatePurchaseOrderBookInQtyResult]);
+        if (validatePurchaseOrderResult?.message) {
+            setMessage({
+                text: validatePurchaseOrderResult?.message
+            });
+        } else if (validatePurchaseOrderBookInQtyResult) {
+            setMessage({
+                error: !validatePurchaseOrderBookInQtyResult?.success,
+                text: validatePurchaseOrderBookInQtyResult?.message
+            });
+        }
+    }, [validatePurchaseOrderBookInQtyResult, validatePurchaseOrderResult]);
 
     useEffect(() => {
         if (bookInResult?.message) {
@@ -269,6 +274,9 @@ function GoodsInUtility({
                         value={formData.qty}
                         label="Qty"
                         propertyName="qty"
+                        disabled={
+                            !validatePurchaseOrderResult || validatePurchaseOrderResult?.message
+                        }
                         textFieldProps={{
                             onBlur: () =>
                                 formData.qty &&
@@ -622,7 +630,8 @@ GoodsInUtility.propTypes = {
         partDescription: PropTypes.string,
         orderUnitOfMeasure: PropTypes.string,
         manufacturersPartNumber: PropTypes.string,
-        transactionType: PropTypes.string
+        transactionType: PropTypes.string,
+        message: PropTypes.string
     }),
     validatePurchaseOrderResultLoading: PropTypes.bool,
     searchDemLocations: PropTypes.func.isRequired,

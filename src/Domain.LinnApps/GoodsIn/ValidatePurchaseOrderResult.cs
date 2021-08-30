@@ -14,7 +14,7 @@
 
         public string OrderUnitOfMeasure { get; set; }
 
-        public int OrderQty { get; set; }
+        public int? OrderQty { get; set; }
 
         public string QcPart { get; set; }
 
@@ -31,5 +31,7 @@
         public string TransactionType { get; set; }
 
         public string State { get; set; }
+
+        public string Message { get; set; }
     }
 }

@@ -24,7 +24,8 @@
                              PartQcWarning = model.PartQcWarning,
                              Storage = model.Storage,
                              TransactionType = model.TransactionType,
-                             State = model.State
+                             State = model.State,
+                             Message = model.Message
             };
         }
 

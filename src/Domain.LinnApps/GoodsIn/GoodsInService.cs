@@ -212,6 +212,12 @@
                 out var docType,
                 out var message);
 
+            if (!string.IsNullOrEmpty(message))
+            {
+                result.Message = message;
+                return result;
+            }
+
             var part = this.partsRepository.FindBy(
                 x => x.PartNumber.Equals(partNumber.ToUpper()) 
                       && x.QcOnReceipt.Equals("Y"));
