@@ -55,6 +55,7 @@ function Wand({
     const [printLabels, setPrintLabels] = useState('Y');
 
     const wandStringInput = useRef(null);
+    const manualSelectInput = useRef(null);
 
     useEffect(() => {
         setWandString(null);
@@ -122,10 +123,9 @@ function Wand({
 
     const classes = useStyles();
 
-    const handleConsignmentChange = newValue => {
-        setConsignmentId(newValue.target.value ? parseInt(newValue.target.value, 10) : null);
-        if (newValue.target.value) {
-            getItems(newValue.target.value);
+    const loadConsignmentItems = id => {
+        if (id) {
+            getItems(id);
         } else {
             clearItems();
         }
@@ -133,6 +133,11 @@ function Wand({
         setResultStyle('noMessage');
         setWandMessage('');
         wandStringInput.current.focus();
+    };
+
+    const handleConsignmentChange = newValue => {
+        setConsignmentId(newValue.target.value ? parseInt(newValue.target.value, 10) : null);
+        loadConsignmentItems(newValue.target.value);
     };
 
     const handleSelectRow = row => {
@@ -177,6 +182,10 @@ function Wand({
         setWandString(newValue);
     };
 
+    const handleManualSelectChange = (_propertyName, newValue) => {
+        setConsignmentId(newValue);
+    };
+
     const handleWand = () => {
         if (wandString && consignmentId) {
             doWandItem({ consignmentId, userNumber, wandAction, wandString, printLabels });
@@ -188,6 +197,12 @@ function Wand({
     const handleOnKeyPress = data => {
         if (data.keyCode === 13 || data.keyCode === 9) {
             handleWand();
+        }
+    };
+
+    const handleManualSelectOnKeyPress = data => {
+        if (data.keyCode === 13 || data.keyCode === 9) {
+            loadConsignmentItems(consignmentId);
         }
     };
 
@@ -297,6 +312,10 @@ function Wand({
         { field: 'requisitionLine', headerName: 'Req Line', width: 110, hide: true }
     ];
     const focusProp = { inputRef: wandStringInput, onKeyDown: handleOnKeyPress };
+    const manualSelectProp = {
+        inputRef: manualSelectInput,
+        onKeyDown: handleManualSelectOnKeyPress
+    };
 
     const getResultClass = style => {
         switch (style) {
@@ -378,7 +397,7 @@ function Wand({
                 <Loading />
             ) : (
                 <Grid container spacing={3}>
-                    <Grid item xs={10}>
+                    <Grid item xs={8}>
                         <InputLabel
                             classes={{ root: classes.label, asterisk: classes.labelAsterisk }}
                         >
@@ -414,6 +433,14 @@ function Wand({
                                 </MenuItem>
                             ))}
                         </TextField>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <InputField
+                            value={consignmentId}
+                            label="Manual Select"
+                            onChange={handleManualSelectChange}
+                            textFieldProps={manualSelectProp}
+                        />
                     </Grid>
                     <Grid item xs={2}>
                         <Dropdown
