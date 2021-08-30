@@ -524,7 +524,8 @@ function GoodsInUtility({
                         variant="contained"
                         disabled={
                             !validatePurchaseOrderResult ||
-                            !formData.ontoLocationId ||
+                            validatePurchaseOrderResult?.message ||
+                            !formData.ontoLocation ||
                             !formData.qty
                         }
                         onClick={() =>
@@ -551,6 +552,12 @@ function GoodsInUtility({
                     </Button>
                     <Button
                         variant="contained"
+                        disabled={
+                            !validatePurchaseOrderResult ||
+                            validatePurchaseOrderResult?.message ||
+                            !formData.ontoLocation ||
+                            !formData.qty
+                        }
                         onClick={() => {
                             const row = {
                                 id: 1,
