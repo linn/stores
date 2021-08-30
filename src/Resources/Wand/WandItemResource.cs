@@ -35,5 +35,7 @@
         public string TypeOfSerialNumber { get; set; }
 
         public string WandStringSuggestion { get; set; }
+
+        public string FunctionCode { get; set; }
     }
 }
