@@ -52,7 +52,7 @@
         [Test]
         public void ShouldSetMessage()
         {
-            this.result.BookInMessage.Should().Be("New part - enter storage type or location");
+            this.result.Message.Should().Be("New part - enter storage type or location");
         }
     }
 }

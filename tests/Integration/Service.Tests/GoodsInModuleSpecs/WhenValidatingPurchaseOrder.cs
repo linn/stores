@@ -22,7 +22,7 @@
         {
             this.result = new ValidatePurchaseOrderResult
                                      {
-                                         BookInMessage = "Validated!"
+                                         Message = "Validated!"
                                      };
             this.Service.ValidatePurchaseOrder(Arg.Any<int>(), Arg.Any<int>()).Returns(
                 new SuccessResult<ValidatePurchaseOrderResult>(this.result));
@@ -50,7 +50,7 @@
         public void ShouldReturnResource()
         {
             var resource = this.Response.Body.DeserializeJson<ValidatePurchaseOrderResultResource>();
-            resource.BookInMessage.Should().Be("Validated!");
+            resource.Message.Should().Be("Validated!");
         }
     }
 }

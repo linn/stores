@@ -141,7 +141,7 @@
 
             var result = new BookInResult(
                 success,
-                success ? null : this.goodsInPack.GetErrorMessage());
+                success ? "Book In Successful!" : this.goodsInPack.GetErrorMessage());
 
             if (!reqNumberResult.HasValue)
             {
@@ -237,7 +237,7 @@
             {
                 if (newPart)
                 {
-                    result.BookInMessage = "New part - enter storage type or location";
+                    result.Message = "New part - enter storage type or location";
                 }
 
                 result.Storage = "BB";
@@ -245,7 +245,7 @@
             else
             {
                 result.Storage = kardex;
-                result.BookInMessage = message;
+                result.Message = message;
             }
 
             result.OrderNumber = orderNumber;
@@ -262,6 +262,13 @@
             result.DocumentType = docType;
             result.State = !string.IsNullOrEmpty(part?.QcOnReceipt) 
                                     && part.QcOnReceipt.Equals("Y") ? "QC" : "STORES";
+
+            if (!string.IsNullOrEmpty(uom)
+                    && uom.StartsWith("REEL") 
+                    && string.IsNullOrEmpty(manufacturerPartNumber))
+            {
+                result.Message += "\nNo manufacturer part number on part supplier - see Purchasing";
+            }
 
             return result;
         }

@@ -22,8 +22,6 @@
 
         public string DocumentType { get; set; }
 
-        public string BookInMessage { get; set; }
-
         public string PartQcWarning { get; set; }
 
         public string Storage { get; set; }

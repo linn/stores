@@ -49,14 +49,28 @@ function GoodsInUtility({
         lines: []
     });
 
+    const [message, setMessage] = useState({ error: false, text: '', success: false });
+
+    const getMessageColour = () => {
+        if (message?.success) {
+            return 'limegreen';
+        }
+        if (message?.error) {
+            return 'red';
+        }
+        return 'black';
+    };
+
     const useStyles = makeStyles(theme => ({
         dialog: {
             margin: theme.spacing(6),
             minWidth: theme.spacing(62)
+        },
+        notchedOutline: {
+            borderWidth: '3px',
+            borderColor: `${getMessageColour()} !important`
         }
     }));
-
-    const [message, setMessage] = useState({ error: false, text: '' });
 
     const handleFieldChange = (propertyName, newValue) => {
         setFormData({ ...formData, [propertyName]: newValue });
@@ -77,9 +91,10 @@ function GoodsInUtility({
         if (validatePurchaseOrderBookInQtyResult?.success) {
             setFormData(d => ({ ...d, numberOfLines: 1 }));
         }
-        if (validatePurchaseOrderResult?.message) {
+        if (validatePurchaseOrderResult) {
             setMessage({
-                text: validatePurchaseOrderResult?.message
+                error: !!validatePurchaseOrderResult.message,
+                text: validatePurchaseOrderResult.message
             });
         } else if (validatePurchaseOrderBookInQtyResult) {
             setMessage({
@@ -91,7 +106,7 @@ function GoodsInUtility({
 
     useEffect(() => {
         if (bookInResult?.message) {
-            setMessage({ error: false, text: bookInResult.message });
+            setMessage({ error: false, text: bookInResult.message, success: bookInResult.success });
         }
         if (bookInResult?.success) {
             setDialogOpen(true);
@@ -238,6 +253,15 @@ function GoodsInUtility({
                     <InputField
                         fullWidth
                         disabled
+                        textFieldProps={{
+                            InputProps: {
+                                classes: {
+                                    notchedOutline: classes.notchedOutline
+                                }
+                            }
+                        }}
+                        error={message.error}
+                        rows={3}
                         value={
                             validatePurchaseOrderResultLoading ||
                             validatePurchaseOrderBookInQtyResultLoading ||
@@ -246,7 +270,7 @@ function GoodsInUtility({
                                 : message.text
                         }
                         label="Message"
-                        propertyName="bookInMessage"
+                        propertyName="message"
                     />
                 </Grid>
                 <Grid item xs={6} />
