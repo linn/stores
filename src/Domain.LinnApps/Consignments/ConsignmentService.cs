@@ -8,8 +8,6 @@
 
     public class ConsignmentService : IConsignmentService
     {
-        private readonly IRepository<Employee, int> employeeRepository;
-
         private readonly IConsignmentProxyService consignmentProxyService;
 
         private readonly IInvoicingPack invoicingPack;
@@ -20,28 +18,28 @@
 
         private readonly IPrintConsignmentNoteDispatcher printConsignmentNoteDispatcher;
 
+        private readonly IRepository<PrinterMapping, int> printerMappingRepository;
+
         private readonly IRepository<Consignment, int> consignmentRepository;
 
         private readonly IRepository<ExportBook, int> exportBookRepository;
 
-        private string invoicePrinter = "Invoice";
-
         public ConsignmentService(
-            IRepository<Employee, int> employeeRepository,
             IRepository<Consignment, int> consignmentRepository,
             IRepository<ExportBook, int> exportBookRepository,
             IConsignmentProxyService consignmentProxyService,
             IInvoicingPack invoicingPack,
             IExportBookPack exportBookPack,
             IPrintInvoiceDispatcher printInvoiceDispatcher,
-            IPrintConsignmentNoteDispatcher printConsignmentNoteDispatcher)
+            IPrintConsignmentNoteDispatcher printConsignmentNoteDispatcher,
+            IRepository<PrinterMapping, int> printerMappingRepository)
         {
-            this.employeeRepository = employeeRepository;
             this.consignmentProxyService = consignmentProxyService;
             this.invoicingPack = invoicingPack;
             this.exportBookPack = exportBookPack;
             this.printInvoiceDispatcher = printInvoiceDispatcher;
             this.printConsignmentNoteDispatcher = printConsignmentNoteDispatcher;
+            this.printerMappingRepository = printerMappingRepository;
             this.consignmentRepository = consignmentRepository;
             this.exportBookRepository = exportBookRepository;
         }
@@ -81,25 +79,35 @@
                 this.exportBookPack.MakeExportBookFromConsignment(consignment.ConsignmentId);
             }
 
-            this.PrintDocuments(consignment);
+            var printer = this.GetPrinter(closedById);
+
+            this.PrintDocuments(consignment, printer);
         }
 
-        private void PrintDocuments(Consignment consignment)
+        private void PrintDocuments(Consignment consignment, string printerName)
         {
             var updatedConsignment = this.consignmentRepository.FindById(consignment.ConsignmentId);
             var numberOfCopies = consignment.Address.Country.NumberOfCopiesOfDispatchDocuments ?? 1;
 
             if (consignment.Address.Country.CountryCode != "GB")
             {
-                this.PrintConsignmentNote(consignment, numberOfCopies);
+                this.PrintConsignmentNote(consignment, numberOfCopies, printerName);
             }
 
-            this.PrintInvoices(updatedConsignment, consignment.Address.Country.CountryCode, numberOfCopies);
+            this.PrintInvoices(
+                updatedConsignment,
+                consignment.Address.Country.CountryCode,
+                numberOfCopies,
+                printerName);
 
-            this.MaybePrintExportBook(consignment);
+            this.MaybePrintExportBook(consignment, printerName);
         }
 
-        private void PrintInvoices(Consignment updatedConsignment, string countryCode, int numberOfCopies)
+        private void PrintInvoices(
+            Consignment updatedConsignment,
+            string countryCode,
+            int numberOfCopies,
+            string printerName)
         {
             foreach (var consignmentInvoice in updatedConsignment.Invoices)
             {
@@ -112,7 +120,7 @@
                             consignmentInvoice.DocumentType,
                             "CUSTOMER MASTER",
                             "Y",
-                            this.invoicePrinter);
+                            printerName);
                     }
 
                     this.printInvoiceDispatcher.PrintInvoice(
@@ -120,20 +128,20 @@
                         consignmentInvoice.DocumentType,
                         "DELIVERY NOTE",
                         "N",
-                        this.invoicePrinter);
+                        printerName);
                 }
             }
         }
 
-        private void PrintConsignmentNote(Consignment consignment, int numberOfCopies)
+        private void PrintConsignmentNote(Consignment consignment, int numberOfCopies, string printerName)
         {
             for (var i = 1; i <= numberOfCopies; i++)
             {
-                this.printConsignmentNoteDispatcher.PrintConsignmentNote(consignment.ConsignmentId, this.invoicePrinter);
+                this.printConsignmentNoteDispatcher.PrintConsignmentNote(consignment.ConsignmentId, printerName);
             }
         }
 
-        private void MaybePrintExportBook(Consignment consignment)
+        private void MaybePrintExportBook(Consignment consignment, string printerName)
         {
             var exportBooks =
                 this.exportBookRepository.FilterBy(a => a.ConsignmentId == consignment.ConsignmentId);
@@ -144,8 +152,24 @@
                     "E",
                     "CUSTOMER MASTER",
                     "Y",
-                    this.invoicePrinter);
+                    printerName);
             }
+        }
+
+        private string GetPrinter(int userNumber)
+        {
+            var printer = this.printerMappingRepository.FindBy(
+                a => a.UserNumber == userNumber && a.PrinterGroup == "DISPATCH-INVOICE");
+
+            if (!string.IsNullOrEmpty(printer?.PrinterName))
+            {
+                return printer.PrinterName;
+            }
+
+            printer = this.printerMappingRepository.FindBy(
+                a => a.DefaultForGroup == "Y" && a.PrinterGroup == "DISPATCH-INVOICE");
+
+            return printer?.PrinterName;
         }
     }
 }

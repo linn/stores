@@ -91,17 +91,6 @@ function Wand({
             wandResult.wandLog.id &&
             lastWandLogId !== wandResult.wandLog.id
         ) {
-            // data that will be needed to print address label
-            // const consignmentDetails = wandConsignments.find(
-            //     a => a.consignmentId === consignmentId
-            // );
-            // const wandedItem = items.find(
-            //     a =>
-            //         a.orderNumber === wandResult.wandLog.orderNumber &&
-            //         a.orderLine === wandResult.wandLog.orderLine
-            // );
-
-            // we now have enough information to optionally print a label here
             setLastWandLogId(wandResult.wandLog.id);
         }
     }, [wandResult, consignmentId, wandConsignments, lastWandLogId, items]);
@@ -226,6 +215,18 @@ function Wand({
         return classes.noMessage;
     };
 
+    const getQtyClass = (functionCode, allWanded) => {
+        if (functionCode === 'INVOICE' && allWanded) {
+            return classes.ok;
+        }
+
+        if (functionCode === 'ALLOC') {
+            return classes.notOk;
+        }
+
+        return classes.noMessage;
+    };
+
     const columns = [
         {
             field: 'partNumber',
@@ -247,7 +248,7 @@ function Wand({
             headerName: 'Scanned',
             width: 120,
             cellClassName: params => {
-                return params.row.allWanded ? classes.ok : classes.noMessage;
+                return getQtyClass(params.row.functionCode, params.row.allWanded);
             }
         },
         { field: 'partDescription', headerName: 'Description', width: 230 },

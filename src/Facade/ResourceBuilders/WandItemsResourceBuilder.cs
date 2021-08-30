@@ -29,6 +29,7 @@
                              RequisitionLine = w.RequisitionLine,
                              AllWanded = w.AllWanded == "Y",
                              BoxesPerProduct = w.BoxesPerProduct,
+                             FunctionCode = w.FunctionCode,
                              BoxesWanded =
                                  string.IsNullOrWhiteSpace(w.BoxesWanded) ? null : this.GetBoxesWanded(w.BoxesWanded),
                              TypeOfSerialNumber = w.TypeOfSerialNumber,

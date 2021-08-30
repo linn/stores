@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Linq.Expressions;
 
     using Linn.Common.Persistence;
@@ -18,8 +17,6 @@
     public class ContextBase
     {
         protected IConsignmentService Sut { get; private set; }
-
-        protected IRepository<Employee, int> EmployeeRepository { get; private set; }
 
         protected IRepository<Consignment, int> ConsignmentRepository { get; private set; }
         
@@ -39,10 +36,11 @@
 
         protected IPrintConsignmentNoteDispatcher PrintConsignmentNoteDispatcher { get; private set; }
 
+        protected IRepository<PrinterMapping, int> PrinterMappingRepository { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
-            this.EmployeeRepository = Substitute.For<IRepository<Employee, int>>();
             this.ConsignmentRepository = Substitute.For<IRepository<Consignment, int>>();
             this.ExportBookRepository = Substitute.For<IRepository<ExportBook, int>>();
             this.ConsignmentProxyService = Substitute.For<IConsignmentProxyService>();
@@ -50,6 +48,7 @@
             this.ExportBookPack = Substitute.For<IExportBookPack>();
             this.PrintInvoiceDispatcher = Substitute.For<IPrintInvoiceDispatcher>();
             this.PrintConsignmentNoteDispatcher = Substitute.For<IPrintConsignmentNoteDispatcher>();
+            this.PrinterMappingRepository = Substitute.For<IRepository<PrinterMapping, int>>();
 
             this.ConsignmentId = 808;
             this.Consignment = new Consignment
@@ -68,16 +67,18 @@
                                            new Invoice { DocumentNumber = 456, DocumentType = "I" }
                                        }
                     });
+            this.PrinterMappingRepository.FindBy(Arg.Any<Expression<Func<PrinterMapping, bool>>>())
+                .Returns(new PrinterMapping { PrinterName = "Invoice" });
 
             this.Sut = new ConsignmentService(
-                this.EmployeeRepository,
                 this.ConsignmentRepository,
                 this.ExportBookRepository,
                 this.ConsignmentProxyService,
                 this.InvoicingPack,
                 this.ExportBookPack,
                 this.PrintInvoiceDispatcher,
-                this.PrintConsignmentNoteDispatcher);
+                this.PrintConsignmentNoteDispatcher,
+                this.PrinterMappingRepository);
         }
     }
 }

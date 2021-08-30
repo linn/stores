@@ -1362,6 +1362,7 @@
             q.Property(v => v.AllWanded).HasColumnName("ALL_WANDED");
             q.Property(v => v.BoxesWanded).HasColumnName("BOXES_WANDED");
             q.Property(v => v.TypeOfSerialNumber).HasColumnName("TYPE_OF_SERIAL_NUMBER");
+            q.Property(v => v.FunctionCode).HasColumnName("FUNCTION_CODE");
         }
 
         private void QueryExportRsns(ModelBuilder builder)
