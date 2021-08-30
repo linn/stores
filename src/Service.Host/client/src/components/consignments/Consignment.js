@@ -103,7 +103,7 @@ function Consignment({
             item?.pallets
                 ? utilities
                       .sortEntityList(item?.pallets, 'palletNumber')
-                      ?.map(p => ({ ...p, id: p.palletNumber }))
+                      ?.map(p => ({ ...p, id: p.palletNumber, addToPallet: p.palletNumber }))
                 : []
         );
 

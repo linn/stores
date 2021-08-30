@@ -1,12 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import {
     GroupEditTable,
     useGroupEditTable,
-    utilities
+    utilities,
+    InputField
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
 
 function ItemsTab({
     editableItems,
@@ -43,6 +49,8 @@ function ItemsTab({
         rows: editablePallets,
         setEditStatus
     });
+
+    const [addToPalletNumber, setAddToPalletNumber] = useState(0);
 
     const checkRow = row => {
         if (palletData.filter(pallet => pallet.palletNumber === row.palletNumber).length > 1) {
@@ -85,6 +93,10 @@ function ItemsTab({
             id: ct.cartonTypeName,
             displayText: `${ct.cartonTypeName} - ${ct.description}`
         }));
+    };
+
+    const addToPallet = palletNumber => {
+        setAddToPalletNumber(palletNumber);
     };
 
     const palletColumns = [
@@ -137,6 +149,19 @@ function ItemsTab({
             style: {
                 body: { minWidth: '110px', maxWidth: '110px' }
             }
+        },
+        {
+            title: 'Component',
+            id: 'addToPallet',
+            type: 'component',
+            editable: true,
+            component: ({ value }) => (
+                <div>
+                    <button onClick={() => addToPallet(value)} type="button">
+                        Add To {value}
+                    </button>
+                </div>
+            )
         }
     ];
 
@@ -330,6 +355,47 @@ function ItemsTab({
                     )}
                 </Grid>
             </Grid>
+            <Dialog
+                open={addToPalletNumber > 0}
+                onClose={() => setAddToPalletNumber(0)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                fullWidth
+                maxWidth="sm"
+            >
+                <DialogTitle id="alert-dialog-title">Print Pallet Label</DialogTitle>
+                <DialogContent>
+                    <>
+                        <Grid container>
+                            <Grid item xs={6}>
+                                <InputField
+                                    label="First Pallet"
+                                    placeholder="First Pallet"
+                                    propertyName="firstItem"
+                                    // value={palletLabelOptions.firstItem}
+                                    // onChange={updatePalletLabelOptions}
+                                    maxLength={3}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Button
+                                    style={{ marginTop: '30px', marginBottom: '40px' }}
+                                    onClick={() => {}}
+                                    variant="contained"
+                                    color="primary"
+                                >
+                                    Print Pallet Label
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setAddToPalletNumber(0)} variant="contained" autoFocus>
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
     );
 }
