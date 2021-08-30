@@ -31,5 +31,7 @@
         public string BoxesWanded { get; set; }
 
         public string TypeOfSerialNumber { get; set; }
+
+        public string FunctionCode { get; set; }
     }
 }
