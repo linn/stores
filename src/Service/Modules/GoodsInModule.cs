@@ -11,6 +11,8 @@
     using Linn.Stores.Resources.StockLocators;
     using Linn.Stores.Service.Extensions;
 
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     using Nancy;
     using Nancy.ModelBinding;
 
@@ -38,6 +40,7 @@
             this.Get("/logistics/purchase-orders/validate/{id}", parameters => this.ValidatePurchaseOrder(parameters.id));
             this.Get("/logistics/purchase-orders/validate-qty", _ => this.ValidatePurchaseOrderBookInQty());
             this.Post("/logistics/goods-in/print-labels", _ => this.PrintLabels());
+            this.Get("/logistics/goods-in/validate-storage-type", _ => this.ValidateStorageType());
         }
 
         private object DoBookIn()
@@ -84,6 +87,13 @@
             var orderLine = resource.OrderLine ?? 1;
             return this.Negotiate.WithModel(
                 this.service.ValidatePurchaseOrderQty(resource.OrderNumber, orderLine, resource.Qty));
+        }
+
+        private object ValidateStorageType()
+        {
+            var resource = this.Bind<ValidateStorageTypeRequestResource>();
+            var result = this.service.ValidateStorageType(resource);
+            return this.Negotiate.WithModel(result);
         }
 
         private object PrintLabels()

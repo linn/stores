@@ -406,5 +406,92 @@
         {
             return this.databaseService.GetIdSequence("gilog_seq");
         }
+
+        public void GetKardexLocations(
+            int? orderNumber,
+            string docType,
+            string partNumber,
+            string storageType,
+            out int? locationId,
+            out string locationCode,
+            int? qty)
+        {
+            using (var connection = this.databaseService.GetConnection())
+            {
+                connection.Open();
+                var cmd = new OracleCommand("goods_in_pack.get_kardex_locations", connection)
+                              {
+                                  CommandType = CommandType.StoredProcedure
+                              };
+
+                var arg1 = new OracleParameter("p_order_number", OracleDbType.Int32)
+                               {
+                                   Direction = ParameterDirection.Input, Size = 50, Value = orderNumber
+                               };
+                cmd.Parameters.Add(arg1);
+
+                var docTypeParameter = new OracleParameter("p_doc_type", OracleDbType.Varchar2)
+                                          {
+                                              Direction = ParameterDirection.Input,
+                                              Size = 50,
+                                              Value = docType
+                                          };
+                cmd.Parameters.Add(docTypeParameter);
+
+                var partNumberParam = new OracleParameter("p_part_number", OracleDbType.Varchar2)
+                                          {
+                                              Direction = ParameterDirection.Input, 
+                                              Size = 50,
+                                              Value = partNumber
+                                          };
+                cmd.Parameters.Add(partNumberParam);
+
+                var storageTypeParameter = new OracleParameter("p_storage_type", OracleDbType.Varchar2)
+                                          {
+                                              Direction = ParameterDirection.Input,
+                                              Size = 50,
+                                              Value = storageType
+                                          };
+                cmd.Parameters.Add(storageTypeParameter);
+
+                var locationIdParameter = new OracleParameter("p_location_id", OracleDbType.Int32)
+                                               {
+                                                   Direction = ParameterDirection.Output,
+                                                   Size = 50
+                                               };
+                
+                cmd.Parameters.Add(locationIdParameter);
+
+                var locationCodeParameter = new OracleParameter("p_location_code", OracleDbType.Varchar2)
+                                               {
+                                                   Direction = ParameterDirection.Output, 
+                                                   Size = 50
+                                               };
+                cmd.Parameters.Add(locationCodeParameter);
+
+                var qtyParameter = new OracleParameter("p_qty", OracleDbType.Int32)
+                                          {
+                                              Direction = ParameterDirection.Input,
+                                              Size = 50,
+                                              Value = qty
+                                          };
+                cmd.Parameters.Add(qtyParameter);
+
+                cmd.ExecuteNonQuery();
+
+
+                if (int.TryParse(locationIdParameter.Value.ToString(), out var result))
+                {
+                    locationId = result;
+                }
+                else
+                {
+                    locationId = null;
+                }
+
+                locationCode = locationCodeParameter.Value.ToString();
+                connection.Close();
+            }
+        }
     }
 }

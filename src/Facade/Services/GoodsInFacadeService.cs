@@ -122,5 +122,15 @@
                                                               Qty = x.Qty
                                                           })));
         }
+
+        public IResult<ValidateStorageTypeResult> ValidateStorageType(ValidateStorageTypeRequestResource requestResource)
+        {
+            return new SuccessResult<ValidateStorageTypeResult>(this.domainService.ValidateStorageType(
+                null,
+                null,
+                null,
+                requestResource.StorageType,
+                null));
+        }
     }
 }

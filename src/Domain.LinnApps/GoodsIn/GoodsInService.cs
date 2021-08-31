@@ -6,7 +6,6 @@
 
     using Linn.Common.Domain.LinnApps.RemoteServices;
     using Linn.Common.Persistence;
-    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
@@ -400,6 +399,30 @@
             }
 
             return new ProcessResult(success, message);
+        }
+
+        public ValidateStorageTypeResult ValidateStorageType(
+            int? orderNumber,
+            string docType,
+            string partNumber,
+            string storageType,
+            int? qty)
+        {
+            this.goodsInPack.GetKardexLocations(
+                orderNumber,
+                docType,
+                partNumber,
+                storageType,
+                out var locationId,
+                out var locationCode,
+                qty);
+
+            return new ValidateStorageTypeResult
+                       {
+                           LocationCode = locationCode,
+                           LocationId = locationId,
+                           Message = this.goodsInPack.GetErrorMessage()
+                       };
         }
     }
 }

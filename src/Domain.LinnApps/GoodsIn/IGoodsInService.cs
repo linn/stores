@@ -47,5 +47,12 @@
             string qcState,
             int reqNumber,
             IEnumerable<GoodsInLabelLine> lines);
+
+        ValidateStorageTypeResult ValidateStorageType(
+            int? orderNumber,
+            string docType,
+            string partNumber,
+            string storageType,
+            int? qty);
     }
 }
