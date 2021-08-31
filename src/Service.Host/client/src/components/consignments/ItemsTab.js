@@ -133,37 +133,73 @@ function ItemsTab({
         setAddToPalletNumber(palletNumber);
     };
 
-    const addItemsToPallet = (palletNumber, first, last) => {
-        const selectedPallet = palletData.find(a => a.palletNumber === palletNumber);
-        for (let i = first; i <= last; i += 1) {
-            const currentItem = itemsData.find(a => a.itemNumber === i);
-            currentItem.palletNumber = palletNumber;
-            selectedPallet.weight += currentItem.weight;
+    const okToPalletise = item => {
+        if (item && !item.palletNumber) {
+            if (item.itemType === 'I' && item.containerNumber) {
+                return false;
+            }
 
-            setEditStatus('edit');
-            setPalletRowToBeSaved(palletNumber, true);
-            setItemRowToBeSaved(i, true);
+            return true;
         }
 
-        setAddToPalletNumber(0);
+        return false;
     };
 
-    const addCartonsToPallet = (palletNumber, first, last) => {
+    const addItemToPallet = (palletNumber, itemNumber) => {
         const selectedPallet = palletData.find(a => a.palletNumber === palletNumber);
-        for (let i = first; i <= last; i += 1) {
-            const currentItem = itemsData.find(a => a.containerNumber === i);
+        const currentItem = itemsData.find(a => a.itemNumber === itemNumber);
 
-            if (currentItem) {
-                currentItem.palletNumber = palletNumber;
-                selectedPallet.weight += currentItem.weight;
+        if (okToPalletise(currentItem)) {
+            currentItem.palletNumber = palletNumber;
+            selectedPallet.weight += currentItem.weight;
+        }
+    };
+
+    const addItemsToPallet = (palletNumber, first, last) => {
+        const selectedPallet = palletData.find(a => a.palletNumber === palletNumber);
+        if (selectedPallet) {
+            for (let i = first; i <= last; i += 1) {
+                addItemToPallet(palletNumber, i);
+                setItemRowToBeSaved(i, true);
             }
 
             setEditStatus('edit');
             setPalletRowToBeSaved(palletNumber, true);
-            setItemRowToBeSaved(i, true);
+            setAddToPalletNumber(0);
+        }
+    };
+
+    const okToCartonise = item => {
+        if (item && !item.containerNumber) {
+            return true;
         }
 
-        setAddToPalletNumber(0);
+        return false;
+    };
+
+    const addCartonToPallet = (palletNumber, containerNumber) => {
+        const selectedPallet = palletData.find(a => a.palletNumber === palletNumber);
+        const currentItem = itemsData.find(a => a.containerNumber === containerNumber);
+
+        if (okToPalletise(currentItem)) {
+            currentItem.palletNumber = palletNumber;
+            selectedPallet.weight += currentItem.weight;
+        }
+    };
+
+    const addCartonsToPallet = (palletNumber, first, last) => {
+        const selectedPallet = palletData.find(a => a.palletNumber === palletNumber);
+        if (selectedPallet) {
+            for (let i = first; i <= last; i += 1) {
+                addCartonToPallet(palletNumber, i);
+
+                setItemRowToBeSaved(i, true);
+            }
+
+            setEditStatus('edit');
+            setPalletRowToBeSaved(palletNumber, true);
+            setAddToPalletNumber(0);
+        }
     };
 
     const handleAddItemsToPallet = () => {
