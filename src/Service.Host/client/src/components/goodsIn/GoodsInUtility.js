@@ -251,6 +251,7 @@ function GoodsInUtility({
                                 partNumber="PART"
                                 partDescription="DESCRIPTION"
                                 reqNumber={12345}
+                                orderNumber={1}
                                 qcState="PASS"
                                 qcInfo="info"
                                 docType="PO"

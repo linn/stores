@@ -9,5 +9,7 @@
         public string RohsCompliant { get; set; }
 
         public PurchaseOrder PurchaseOrder { get; set; }
+
+        public int? OurQty { get; set; }
     }
 }

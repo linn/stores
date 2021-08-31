@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import { InputField } from '@linn-it/linn-form-components-library';
+import { ErrorCard, InputField, Loading } from '@linn-it/linn-form-components-library';
 
 function QcLabelPrintScreen({
     docType,
@@ -15,7 +15,9 @@ function QcLabelPrintScreen({
     unitOfMeasure,
     reqNumber,
     qcInfo,
-    printLabels
+    printLabels,
+    printLabelsResult,
+    printLabelsLoading
 }) {
     const [deliveryRef, setDeliveryRef] = useState('');
     const [numContainers, setNumContainers] = useState(qtyReceived);
@@ -40,7 +42,7 @@ function QcLabelPrintScreen({
                 <InputField
                     fullWidth
                     disabled
-                    value={docType}
+                    value={orderNumber}
                     label="Order Number"
                     propertyName="orderNumber"
                 />
@@ -49,7 +51,7 @@ function QcLabelPrintScreen({
                 <InputField
                     fullWidth
                     disabled
-                    value={docType}
+                    value={reqNumber}
                     label="Req Number"
                     propertyName="reqNumber"
                 />
@@ -158,6 +160,12 @@ function QcLabelPrintScreen({
                 </Button>
             </Grid>
             <Grid item xs={10} />
+            <Grid item xs={12}>
+                {printLabelsResult?.success === false && (
+                    <ErrorCard errorMessage={printLabelsResult?.message} />
+                )}
+                {printLabelsLoading && <Loading />}
+            </Grid>
         </Grid>
     );
 }
@@ -172,7 +180,9 @@ QcLabelPrintScreen.propTypes = {
     unitOfMeasure: PropTypes.string,
     reqNumber: PropTypes.number,
     qcInfo: PropTypes.string,
-    printLabels: PropTypes.func.isRequired
+    printLabels: PropTypes.func.isRequired,
+    printLabelsResult: PropTypes.shape({ message: PropTypes.string, success: PropTypes.bool }),
+    printLabelsLoading: PropTypes.bool
 };
 
 QcLabelPrintScreen.defaultProps = {
@@ -184,7 +194,9 @@ QcLabelPrintScreen.defaultProps = {
     qtyReceived: null,
     unitOfMeasure: null,
     reqNumber: null,
-    qcInfo: null
+    qcInfo: null,
+    printLabelsResult: null,
+    printLabelsLoading: false
 };
 
 export default QcLabelPrintScreen;
