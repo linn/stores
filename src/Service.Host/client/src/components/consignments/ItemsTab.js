@@ -20,7 +20,8 @@ function ItemsTab({
     dispatch,
     setSaveDisabled,
     cartonTypes,
-    setEditStatus
+    setEditStatus,
+    viewing
 }) {
     const {
         data: itemsData,
@@ -100,7 +101,16 @@ function ItemsTab({
     };
 
     const addToPallet = palletNumber => {
-        setAddToPalletNumber(palletNumber);
+        if (!palletNumber) {
+            const selectedPallet = palletData.find(a => a.editing);
+            if (selectedPallet) {
+                setAddToPalletNumber(selectedPallet.palletNumber);
+            } else {
+                setAddToPalletNumber(1);
+            }
+        } else {
+            setAddToPalletNumber(palletNumber);
+        }
     };
 
     const handleSetFirstItem = (_, itemNumber) => {
@@ -119,12 +129,35 @@ function ItemsTab({
         setLastCarton(cartonNumber);
     };
 
+    const handleChangePalletNumber = (_, palletNumber) => {
+        setAddToPalletNumber(palletNumber);
+    };
+
     const addItemsToPallet = (palletNumber, first, last) => {
-        const pallet2 = palletData.find(a => a.palletNumber === palletNumber);
+        const selectedPallet = palletData.find(a => a.palletNumber === palletNumber);
         for (let i = first; i <= last; i += 1) {
             const currentItem = itemsData.find(a => a.itemNumber === i);
             currentItem.palletNumber = palletNumber;
-            pallet2.weight += currentItem.weight;
+            selectedPallet.weight += currentItem.weight;
+
+            setEditStatus('edit');
+            setPalletRowToBeSaved(palletNumber, true);
+            setItemRowToBeSaved(i, true);
+        }
+
+        setAddToPalletNumber(0);
+    };
+
+    const addCartonsToPallet = (palletNumber, first, last) => {
+        const selectedPallet = palletData.find(a => a.palletNumber === palletNumber);
+        for (let i = first; i <= last; i += 1) {
+            const currentItem = itemsData.find(a => a.containerNumber === i);
+
+            if (currentItem) {
+                currentItem.palletNumber = palletNumber;
+                selectedPallet.weight += currentItem.weight;
+            }
+
             setEditStatus('edit');
             setPalletRowToBeSaved(palletNumber, true);
             setItemRowToBeSaved(i, true);
@@ -135,6 +168,10 @@ function ItemsTab({
 
     const handleAddItemsToPallet = () => {
         addItemsToPallet(addToPalletNumber, firstItem, lastItem);
+    };
+
+    const handleAddCartonsToPallet = () => {
+        addCartonsToPallet(addToPalletNumber, firstCarton, lastCarton);
     };
 
     const palletColumns = [
@@ -187,20 +224,6 @@ function ItemsTab({
             style: {
                 body: { minWidth: '110px', maxWidth: '110px' }
             }
-        },
-        {
-            title: ' ',
-            id: 'addToPallet',
-            type: 'component',
-            editable: true,
-            // eslint-disable-next-line react/prop-types
-            component: ({ value }) => (
-                <div>
-                    <button onClick={() => addToPallet(value)} type="button">
-                        Add To {value}
-                    </button>
-                </div>
-            )
         }
     ];
 
@@ -343,7 +366,7 @@ function ItemsTab({
                 <Grid item xs={1}>
                     <Typography variant="subtitle2">Pallets</Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={7}>
                     {palletData && (
                         <GroupEditTable
                             columns={palletColumns}
@@ -365,7 +388,36 @@ function ItemsTab({
                         />
                     )}
                 </Grid>
-                <Grid item xs={3} />
+                <Grid item xs={2}>
+                    {palletData.length > 0 ? (
+                        <Button
+                            style={{ marginTop: '40px' }}
+                            onClick={() => addToPallet()}
+                            variant="outlined"
+                            color="primary"
+                            disabled={viewing}
+                        >
+                            Add To Pallet
+                        </Button>
+                    ) : (
+                        ''
+                    )}
+                </Grid>
+                <Grid item xs={2}>
+                    {itemsData.length > 0 && itemsData.find(a => a.containerNumber) ? (
+                        <Button
+                            style={{ marginTop: '40px' }}
+                            onClick={() => addToPallet()}
+                            variant="outlined"
+                            color="primary"
+                            disabled={viewing}
+                        >
+                            Add To Carton
+                        </Button>
+                    ) : (
+                        ''
+                    )}
+                </Grid>
             </Grid>
             <Grid container spacing={3} style={{ paddingTop: '50px' }}>
                 <Grid item xs={1}>
@@ -406,11 +458,24 @@ function ItemsTab({
                 <DialogContent>
                     <>
                         <Grid container>
+                            <Grid item xs={3} style={{ marginBottom: '40px' }}>
+                                <InputField
+                                    label="Pallet Number"
+                                    placeholder="Pallet Number"
+                                    propertyName="palletNumber"
+                                    type="number"
+                                    value={addToPalletNumber}
+                                    onChange={handleChangePalletNumber}
+                                    maxLength={3}
+                                />
+                            </Grid>
+                            <Grid item xs={9} />
                             <Grid item xs={3}>
                                 <InputField
                                     label="First Item"
                                     placeholder="First Item"
                                     propertyName="firstItem"
+                                    type="number"
                                     value={firstItem}
                                     onChange={handleSetFirstItem}
                                     maxLength={3}
@@ -421,6 +486,7 @@ function ItemsTab({
                                     label="Last Item"
                                     placeholder="Last Item"
                                     propertyName="lastItem"
+                                    type="number"
                                     value={lastItem}
                                     onChange={handleSetLastItem}
                                     maxLength={3}
@@ -442,6 +508,7 @@ function ItemsTab({
                                     label="First Carton"
                                     placeholder="First Carton"
                                     propertyName="firstCarton"
+                                    type="number"
                                     value={firstCarton}
                                     onChange={handleSetFirstCarton}
                                     maxLength={3}
@@ -452,6 +519,7 @@ function ItemsTab({
                                     label="Last Carton"
                                     placeholder="Last Carton"
                                     propertyName="lastCarton"
+                                    type="number"
                                     value={lastCarton}
                                     onChange={handleSetLastCarton}
                                     maxLength={3}
@@ -461,7 +529,7 @@ function ItemsTab({
                             <Grid item xs={5}>
                                 <Button
                                     style={{ marginTop: '23px', marginBottom: '40px' }}
-                                    onClick={handleAddItemsToPallet}
+                                    onClick={handleAddCartonsToPallet}
                                     variant="contained"
                                     color="primary"
                                 >
@@ -489,7 +557,8 @@ ItemsTab.propTypes = {
     cartonTypes: PropTypes.arrayOf(
         PropTypes.shape({ cartonTypeName: PropTypes.string, description: PropTypes.string })
     ).isRequired,
-    setEditStatus: PropTypes.func.isRequired
+    setEditStatus: PropTypes.func.isRequired,
+    viewing: PropTypes.bool.isRequired
 };
 
 export default ItemsTab;

@@ -475,6 +475,7 @@ function Consignment({
                                     setSaveDisabled={setSaveDisabled}
                                     cartonTypes={cartonTypes}
                                     setEditStatus={setEditStatus}
+                                    viewing={viewing()}
                                 />
                             )}
                         </>
