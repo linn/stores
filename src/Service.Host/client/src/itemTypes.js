@@ -411,3 +411,9 @@ export const exchangeRates = new ItemType(
     'EXCHANGE_RATES',
     '/logistics/import-books/exchange-rates'
 );
+
+export const validateStorageTypeResult = new ItemType(
+    'validateStorageTypeResult',
+    'VALIDATE_STORAGE_TYPE_RESULT',
+    '/logistics/goods-in/validate-storage-type'
+);

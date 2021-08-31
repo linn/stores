@@ -41,7 +41,10 @@ function GoodsInUtility({
     validatePurchaseOrderBookInQtyResult,
     validatePurchaseOrderBookInQty,
     validatePurchaseOrderBookInQtyResultLoading,
-    userNumber
+    userNumber,
+    validateStorageType,
+    validateStorageTypeResult,
+    validateStorageTypeResultLoading
 }) {
     const [formData, setFormData] = useState({
         orderNumber: null,
@@ -88,21 +91,31 @@ function GoodsInUtility({
     }, [validatePurchaseOrderResult]);
 
     useEffect(() => {
-        if (validatePurchaseOrderBookInQtyResult?.success) {
-            setFormData(d => ({ ...d, numberOfLines: 1 }));
-        }
         if (validatePurchaseOrderResult) {
             setMessage({
                 error: !!validatePurchaseOrderResult.message,
                 text: validatePurchaseOrderResult.message
             });
-        } else if (validatePurchaseOrderBookInQtyResult) {
+        }
+    }, [validatePurchaseOrderResult]);
+
+    useEffect(() => {
+        if (validatePurchaseOrderBookInQtyResult) {
+            if (validatePurchaseOrderBookInQtyResult.success) {
+                setFormData(d => ({ ...d, numberOfLines: 1 }));
+            }
             setMessage({
                 error: !validatePurchaseOrderBookInQtyResult?.success,
                 text: validatePurchaseOrderBookInQtyResult?.message
             });
         }
-    }, [validatePurchaseOrderBookInQtyResult, validatePurchaseOrderResult]);
+    }, [validatePurchaseOrderBookInQtyResult]);
+
+    useEffect(() => {
+        if (validateStorageTypeResult) {
+            setMessage({ error: true, text: validateStorageTypeResult?.message });
+        }
+    }, [validateStorageTypeResult]);
 
     useEffect(() => {
         if (bookInResult?.message) {
@@ -234,6 +247,7 @@ function GoodsInUtility({
                                 // docType={bookInResult?.docType}
                                 // unitOfMeasure={bookInResult?.unitOfMeasure}
                                 // qtyReceived={bookInResult?.qtyReceived}
+                                //kardexLocation={bookInResult?.kardexLocation}
                                 partNumber="PART"
                                 partDescription="DESCRIPTION"
                                 reqNumber={12345}
@@ -265,7 +279,8 @@ function GoodsInUtility({
                         value={
                             validatePurchaseOrderResultLoading ||
                             validatePurchaseOrderBookInQtyResultLoading ||
-                            bookInResultLoading
+                            bookInResultLoading ||
+                            validateStorageTypeResultLoading
                                 ? 'loading'
                                 : message.text
                         }
@@ -299,7 +314,7 @@ function GoodsInUtility({
                         label="Qty"
                         propertyName="qty"
                         disabled={
-                            !validatePurchaseOrderResult || validatePurchaseOrderResult?.message
+                            !validatePurchaseOrderResult || !!validatePurchaseOrderResult?.message
                         }
                         textFieldProps={{
                             onBlur: () =>
@@ -317,8 +332,19 @@ function GoodsInUtility({
                         fullWidth
                         value={formData.storageType}
                         label="S/Type"
+                        disabled={
+                            !validatePurchaseOrderResult ||
+                            (validatePurchaseOrderResult.message !==
+                                'New part - enter storage type or location' &&
+                                validatePurchaseOrderResult.storage === 'BB')
+                        }
                         propertyName="storageType"
                         onChange={handleFieldChange}
+                        textFieldProps={{
+                            onBlur: () =>
+                                formData.storageType &&
+                                validateStorageType(`storageType`, formData.storageType)
+                        }}
                     />
                 </Grid>
                 <Grid item xs={5} />
@@ -392,7 +418,7 @@ function GoodsInUtility({
                         propertyName="state"
                         fullWidth
                         allowNoValue
-                        value={validatePurchaseOrderResult?.state}
+                        value={validatePurchaseOrderResult?.state || ''}
                         label="State"
                         onChange={handleFieldChange}
                         type="state"
@@ -548,7 +574,7 @@ function GoodsInUtility({
                         variant="contained"
                         disabled={
                             !validatePurchaseOrderResult ||
-                            validatePurchaseOrderResult?.message ||
+                            !!validatePurchaseOrderResult?.message ||
                             !formData.ontoLocation ||
                             !formData.qty
                         }
@@ -578,7 +604,7 @@ function GoodsInUtility({
                         variant="contained"
                         disabled={
                             !validatePurchaseOrderResult ||
-                            validatePurchaseOrderResult?.message ||
+                            !!validatePurchaseOrderResult?.message ||
                             !formData.ontoLocation ||
                             !formData.qty
                         }
@@ -664,6 +690,9 @@ GoodsInUtility.propTypes = {
         transactionType: PropTypes.string,
         message: PropTypes.string
     }),
+    validateStorageType: PropTypes.func.isRequired,
+    validateStorageTypeResult: PropTypes.shape({ message: PropTypes.string }),
+    validateStorageTypeResultLoading: PropTypes.bool,
     validatePurchaseOrderResultLoading: PropTypes.bool,
     searchDemLocations: PropTypes.func.isRequired,
     validatePurchaseOrder: PropTypes.func.isRequired,
@@ -683,7 +712,8 @@ GoodsInUtility.propTypes = {
         docType: PropTypes.string,
         unitOfMeasure: PropTypes.string,
         qtyReceived: PropTypes.number,
-        qcInfo: PropTypes.string
+        qcInfo: PropTypes.string,
+        kardexLocation: PropTypes.string
     }),
     bookInResultLoading: PropTypes.bool,
     doBookIn: PropTypes.func.isRequired,
@@ -701,6 +731,8 @@ GoodsInUtility.defaultProps = {
     bookInResultLoading: false.valueOf,
     validatePurchaseOrderResult: null,
     validatePurchaseOrderResultLoading: false,
+    validateStorageTypeResult: null,
+    validateStorageTypeResultLoading: false,
     demLocationsSearchResults: [],
     demLocationsSearchLoading: false,
     salesArticlesSearchResults: [],

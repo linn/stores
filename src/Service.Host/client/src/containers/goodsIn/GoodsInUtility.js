@@ -12,6 +12,8 @@ import doBookInSelectors from '../../selectors/doBookInSelectors';
 import doBookInActions from '../../actions/doBookInActions';
 import validatePurchaseOrderBookInQtyResultActions from '../../actions/validatePurchaseOrderBookInQtyResultActions';
 import validatePurchaseOrderBookInQtyResultSelectors from '../../selectors/validatePurchaseOrderBookInQtyResultSelectors';
+import validateStorageTypeActions from '../../actions/validateStorageTypeActions';
+import validateStorageTypeResultSelectors from '../../selectors/validateStorageTypeResultSelectors';
 import { getUserNumber } from '../../selectors/userSelectors';
 
 const mapStateToProps = state => ({
@@ -35,7 +37,9 @@ const mapStateToProps = state => ({
     validatePurchaseOrderBookInQtyResultLoading: validatePurchaseOrderBookInQtyResultSelectors.getLoading(
         state
     ),
-    userNumber: getUserNumber(state)
+    userNumber: getUserNumber(state),
+    validateStorageTypeResult: validateStorageTypeResultSelectors.getItem(state),
+    validateStorageTypeResultLoading: validateStorageTypeResultSelectors.getLoading(state)
 });
 
 const mapDispatchToProps = {
@@ -44,7 +48,8 @@ const mapDispatchToProps = {
     searchStoragePlaces: storagePlacesActions.search,
     searchSalesArticles: salesArticlesActions.search,
     doBookIn: doBookInActions.requestProcessStart,
-    validatePurchaseOrderBookInQty: validatePurchaseOrderBookInQtyResultActions.fetchByQueryString
+    validatePurchaseOrderBookInQty: validatePurchaseOrderBookInQtyResultActions.fetchByQueryString,
+    validateStorageType: validateStorageTypeActions.fetchByQueryString
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GoodsInUtility);
