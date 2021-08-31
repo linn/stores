@@ -52,6 +52,7 @@ function ItemsTab({
     });
 
     const [addToPalletNumber, setAddToPalletNumber] = useState(0);
+    const [addToCartonNumber, setAddToCartonNumber] = useState(0);
     const [firstItem, setFirstItem] = useState(1);
     const [lastItem, setLastItem] = useState(1);
     const [firstCarton, setFirstCarton] = useState(1);
@@ -113,6 +114,19 @@ function ItemsTab({
         }
     };
 
+    const addToCarton = containerNumber => {
+        if (!containerNumber) {
+            const selectedCarton = itemsData.find(a => a.editing);
+            if (selectedCarton) {
+                setAddToCartonNumber(selectedCarton.containerNumber);
+            } else {
+                setAddToCartonNumber(1);
+            }
+        } else {
+            setAddToCartonNumber(containerNumber);
+        }
+    };
+
     const handleSetFirstItem = (_, itemNumber) => {
         setFirstItem(itemNumber);
     };
@@ -133,6 +147,34 @@ function ItemsTab({
         setAddToPalletNumber(palletNumber);
     };
 
+    const handleChangeCartonNumber = (_, containerNumber) => {
+        setAddToCartonNumber(containerNumber);
+    };
+
+    const recalculatePallet = palletNumber => {
+        let weight = 10;
+        let height = 0;
+        const setValues = item => {
+            if (item.height > height) {
+                height = item.height;
+            }
+
+            weight += item.weight;
+        };
+
+        const selectedPallet = palletData.find(a => a.palletNumber === palletNumber);
+        if (selectedPallet) {
+            itemsData.filter(i => i.palletNumber === palletNumber).forEach(b => setValues(b));
+
+            selectedPallet.height = height > selectedPallet.height ? height : selectedPallet.height;
+            selectedPallet.weight = weight;
+            selectedPallet.width = selectedPallet.width < 120 ? 120 : selectedPallet.width;
+            selectedPallet.depth = selectedPallet.depth < 100 ? 100 : selectedPallet.depth;
+
+            setPalletRowToBeSaved(palletNumber, true);
+        }
+    };
+
     const okToPalletise = item => {
         if (item && !item.palletNumber) {
             if (item.itemType === 'I' && item.containerNumber) {
@@ -149,9 +191,9 @@ function ItemsTab({
         const selectedPallet = palletData.find(a => a.palletNumber === palletNumber);
         const currentItem = itemsData.find(a => a.itemNumber === itemNumber);
 
-        if (okToPalletise(currentItem)) {
+        if (selectedPallet && okToPalletise(currentItem)) {
             currentItem.palletNumber = palletNumber;
-            selectedPallet.weight += currentItem.weight;
+            setItemRowToBeSaved(currentItem.itemNumber, true);
         }
     };
 
@@ -160,30 +202,22 @@ function ItemsTab({
         if (selectedPallet) {
             for (let i = first; i <= last; i += 1) {
                 addItemToPallet(palletNumber, i);
-                setItemRowToBeSaved(i, true);
             }
 
+            recalculatePallet(palletNumber);
             setEditStatus('edit');
             setPalletRowToBeSaved(palletNumber, true);
             setAddToPalletNumber(0);
         }
     };
 
-    const okToCartonise = item => {
-        if (item && !item.containerNumber) {
-            return true;
-        }
-
-        return false;
-    };
-
     const addCartonToPallet = (palletNumber, containerNumber) => {
         const selectedPallet = palletData.find(a => a.palletNumber === palletNumber);
         const currentItem = itemsData.find(a => a.containerNumber === containerNumber);
 
-        if (okToPalletise(currentItem)) {
+        if (selectedPallet && okToPalletise(currentItem)) {
             currentItem.palletNumber = palletNumber;
-            selectedPallet.weight += currentItem.weight;
+            setItemRowToBeSaved(currentItem.itemNumber, true);
         }
     };
 
@@ -192,18 +226,75 @@ function ItemsTab({
         if (selectedPallet) {
             for (let i = first; i <= last; i += 1) {
                 addCartonToPallet(palletNumber, i);
-
-                setItemRowToBeSaved(i, true);
             }
 
+            recalculatePallet(palletNumber);
             setEditStatus('edit');
             setPalletRowToBeSaved(palletNumber, true);
             setAddToPalletNumber(0);
         }
     };
 
+    const recalculateCarton = containerNumber => {
+        let weight = 0;
+        const setValues = item => {
+            if (item.itemType === 'C'){
+                weight += item.itemBaseWeight;
+            } else {
+                weight += item.weight;
+            }
+        };
+
+        // eslint-disable-next-line prettier/prettier
+        const selectedCarton = itemsData.find(a => a.itemType === 'C' && a.containerNumber === containerNumber);
+
+        if (selectedCarton) {
+            itemsData.filter(i => i.containerNumber === containerNumber).forEach(b => setValues(b));
+
+            selectedCarton.weight = weight;
+
+            setItemRowToBeSaved(selectedCarton.itemNumber, true);
+        }
+    };
+
+    const okToCartonise = item => {
+        if (item && item.itemType === 'I' && !item.containerNumber && !item.palletNumber) {
+            return true;
+        }
+
+        return false;
+    };
+
+    const addItemToCarton = (containerNumber, itemNumber) => {
+        const selectedCarton = itemsData.find(a => a.containerNumber === containerNumber);
+        const selectedItem = itemsData.find(a => a.itemNumber === itemNumber);
+
+        if (selectedCarton && okToCartonise(selectedItem)) {
+            selectedItem.containerNumber = containerNumber;
+            setItemRowToBeSaved(selectedItem.itemNumber, true);
+        }
+    };
+
+    const addItemsToCarton = (containerNumber, first, last) => {
+        const selectedCarton = itemsData.find(a => a.containerNumber === containerNumber);
+        if (selectedCarton) {
+            setItemRowToBeSaved(selectedCarton.itemNumber, true);
+            for (let i = first; i <= last; i += 1) {
+                addItemToCarton(containerNumber, i);
+            }
+
+            recalculateCarton(containerNumber);
+            setEditStatus('edit');
+            setAddToCartonNumber(0);
+        }
+    };
+
     const handleAddItemsToPallet = () => {
         addItemsToPallet(addToPalletNumber, firstItem, lastItem);
+    };
+
+    const handleAddItemsToCarton = () => {
+        addItemsToCarton(addToCartonNumber, firstItem, lastItem);
     };
 
     const handleAddCartonsToPallet = () => {
@@ -443,7 +534,7 @@ function ItemsTab({
                     {itemsData.length > 0 && itemsData.find(a => a.containerNumber) ? (
                         <Button
                             style={{ marginTop: '40px' }}
-                            onClick={() => addToPallet()}
+                            onClick={() => addToCarton()}
                             variant="outlined"
                             color="primary"
                             disabled={viewing}
@@ -505,7 +596,18 @@ function ItemsTab({
                                     maxLength={3}
                                 />
                             </Grid>
-                            <Grid item xs={9} />
+                            <Grid item xs={1} />
+                            <Grid item xs={3}>
+                                <Button
+                                    style={{ marginTop: '23px', marginBottom: '40px' }}
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={() => recalculatePallet(addToPalletNumber)}
+                                >
+                                    Recalculate
+                                </Button>
+                            </Grid>
+                            <Grid item xs={5} />
                             <Grid item xs={3}>
                                 <InputField
                                     label="First Item"
@@ -577,6 +679,83 @@ function ItemsTab({
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setAddToPalletNumber(0)} variant="contained" autoFocus>
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={addToCartonNumber > 0}
+                onClose={() => setAddToCartonNumber(0)}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                fullWidth
+                maxWidth="sm"
+            >
+                <DialogTitle id="alert-dialog-title">Add to carton {addToCartonNumber}</DialogTitle>
+                <DialogContent>
+                    <>
+                        <Grid container>
+                            <Grid item xs={3} style={{ marginBottom: '40px' }}>
+                                <InputField
+                                    label="Carton Number"
+                                    placeholder="Carton Number"
+                                    propertyName="containerNumber"
+                                    type="number"
+                                    value={addToCartonNumber}
+                                    onChange={handleChangeCartonNumber}
+                                    maxLength={3}
+                                />
+                            </Grid>
+                            <Grid item xs={1} />
+                            <Grid item xs={3}>
+                                <Button
+                                    style={{ marginTop: '23px', marginBottom: '40px' }}
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={() => recalculateCarton(addToCartonNumber)}
+                                >
+                                    Recalculate
+                                </Button>
+                            </Grid>
+                            <Grid item xs={5} />
+                            <Grid item xs={3}>
+                                <InputField
+                                    label="First Item"
+                                    placeholder="First Item"
+                                    propertyName="firstItem"
+                                    type="number"
+                                    value={firstItem}
+                                    onChange={handleSetFirstItem}
+                                    maxLength={3}
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <InputField
+                                    label="Last Item"
+                                    placeholder="Last Item"
+                                    propertyName="lastItem"
+                                    type="number"
+                                    value={lastItem}
+                                    onChange={handleSetLastItem}
+                                    maxLength={3}
+                                />
+                            </Grid>
+                            <Grid item xs={1} />
+                            <Grid item xs={5}>
+                                <Button
+                                    style={{ marginTop: '23px', marginBottom: '40px' }}
+                                    onClick={handleAddItemsToCarton}
+                                    variant="contained"
+                                    color="primary"
+                                >
+                                    Add To Carton {addToCartonNumber}
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setAddToCartonNumber(0)} variant="contained" autoFocus>
                         Close
                     </Button>
                 </DialogActions>
