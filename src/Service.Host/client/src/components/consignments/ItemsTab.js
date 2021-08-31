@@ -51,6 +51,10 @@ function ItemsTab({
     });
 
     const [addToPalletNumber, setAddToPalletNumber] = useState(0);
+    const [firstItem, setFirstItem] = useState(1);
+    const [lastItem, setLastItem] = useState(1);
+    const [firstCarton, setFirstCarton] = useState(1);
+    const [lastCarton, setLastCarton] = useState(1);
 
     const checkRow = row => {
         if (palletData.filter(pallet => pallet.palletNumber === row.palletNumber).length > 1) {
@@ -97,6 +101,40 @@ function ItemsTab({
 
     const addToPallet = palletNumber => {
         setAddToPalletNumber(palletNumber);
+    };
+
+    const handleSetFirstItem = (_, itemNumber) => {
+        setFirstItem(itemNumber);
+    };
+
+    const handleSetLastItem = (_, itemNumber) => {
+        setLastItem(itemNumber);
+    };
+
+    const handleSetFirstCarton = (_, cartonNumber) => {
+        setFirstCarton(cartonNumber);
+    };
+
+    const handleSetLastCarton = (_, cartonNumber) => {
+        setLastCarton(cartonNumber);
+    };
+
+    const addItemsToPallet = (palletNumber, first, last) => {
+        const pallet2 = palletData.find(a => a.palletNumber === palletNumber);
+        for (let i = first; i <= last; i += 1) {
+            const currentItem = itemsData.find(a => a.itemNumber === i);
+            currentItem.palletNumber = palletNumber;
+            pallet2.weight += currentItem.weight;
+            setEditStatus('edit');
+            setPalletRowToBeSaved(palletNumber, true);
+            setItemRowToBeSaved(i, true);
+        }
+
+        setAddToPalletNumber(0);
+    };
+
+    const handleAddItemsToPallet = () => {
+        addItemsToPallet(addToPalletNumber, firstItem, lastItem);
     };
 
     const palletColumns = [
@@ -151,10 +189,11 @@ function ItemsTab({
             }
         },
         {
-            title: 'Component',
+            title: ' ',
             id: 'addToPallet',
             type: 'component',
             editable: true,
+            // eslint-disable-next-line react/prop-types
             component: ({ value }) => (
                 <div>
                     <button onClick={() => addToPallet(value)} type="button">
@@ -363,28 +402,70 @@ function ItemsTab({
                 fullWidth
                 maxWidth="sm"
             >
-                <DialogTitle id="alert-dialog-title">Print Pallet Label</DialogTitle>
+                <DialogTitle id="alert-dialog-title">Add to pallet {addToPalletNumber}</DialogTitle>
                 <DialogContent>
                     <>
                         <Grid container>
-                            <Grid item xs={6}>
+                            <Grid item xs={3}>
                                 <InputField
-                                    label="First Pallet"
-                                    placeholder="First Pallet"
+                                    label="First Item"
+                                    placeholder="First Item"
                                     propertyName="firstItem"
-                                    // value={palletLabelOptions.firstItem}
-                                    // onChange={updatePalletLabelOptions}
+                                    value={firstItem}
+                                    onChange={handleSetFirstItem}
                                     maxLength={3}
                                 />
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={3}>
+                                <InputField
+                                    label="Last Item"
+                                    placeholder="Last Item"
+                                    propertyName="lastItem"
+                                    value={lastItem}
+                                    onChange={handleSetLastItem}
+                                    maxLength={3}
+                                />
+                            </Grid>
+                            <Grid item xs={1} />
+                            <Grid item xs={5}>
                                 <Button
-                                    style={{ marginTop: '30px', marginBottom: '40px' }}
-                                    onClick={() => {}}
+                                    style={{ marginTop: '23px', marginBottom: '40px' }}
+                                    onClick={handleAddItemsToPallet}
                                     variant="contained"
                                     color="primary"
                                 >
-                                    Print Pallet Label
+                                    Add To Pallet {addToPalletNumber}
+                                </Button>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <InputField
+                                    label="First Carton"
+                                    placeholder="First Carton"
+                                    propertyName="firstCarton"
+                                    value={firstCarton}
+                                    onChange={handleSetFirstCarton}
+                                    maxLength={3}
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <InputField
+                                    label="Last Carton"
+                                    placeholder="Last Carton"
+                                    propertyName="lastCarton"
+                                    value={lastCarton}
+                                    onChange={handleSetLastCarton}
+                                    maxLength={3}
+                                />
+                            </Grid>
+                            <Grid item xs={1} />
+                            <Grid item xs={5}>
+                                <Button
+                                    style={{ marginTop: '23px', marginBottom: '40px' }}
+                                    onClick={handleAddItemsToPallet}
+                                    variant="contained"
+                                    color="primary"
+                                >
+                                    Add To Pallet {addToPalletNumber}
                                 </Button>
                             </Grid>
                         </Grid>
