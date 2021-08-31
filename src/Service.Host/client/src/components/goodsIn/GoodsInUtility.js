@@ -409,7 +409,7 @@ function GoodsInUtility({
                         links={false}
                         clearSearch={() => {}}
                         placeholder="Search Locations"
-                        minimumSearchTermLength={3}
+                        minimumSearchTermLength={4}
                     />
                 </Grid>
                 <Grid item xs={3}>

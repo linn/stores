@@ -23,7 +23,9 @@ const mapStateToProps = state => ({
         .getSearchItems(state)
         .map(c => ({ id: c.id, name: c.locationCode, description: c.description })),
     demLocationsSearchLoading: demLocationsSelectors.getSearchLoading(state),
-    storagePlacesSearchResults: storagePlacesSelectors.getSearchItems(state),
+    storagePlacesSearchResults: storagePlacesSelectors
+        .getSearchItems(state)
+        .map(i => ({ ...i, id: i.name })),
     storagePlacesSearchLoading: storagePlacesSelectors.getSearchLoading(state),
     salesArticlesSearchResults: salesArticlesSelectors
         .getSearchItems(state)
