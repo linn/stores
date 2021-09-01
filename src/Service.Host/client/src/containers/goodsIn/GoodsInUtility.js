@@ -16,7 +16,7 @@ import validateStorageTypeActions from '../../actions/validateStorageTypeActions
 import validateStorageTypeResultSelectors from '../../selectors/validateStorageTypeResultSelectors';
 import { getUserNumber } from '../../selectors/userSelectors';
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, { match }) => ({
     validatePurchaseOrderResult: validatePurchaseOrderResultSelectors.getItem(state),
     validatePurchaseOrderResultLoading: validatePurchaseOrderResultSelectors.getLoading(state),
     demLocationsSearchResults: demLocationsSelectors
@@ -41,7 +41,8 @@ const mapStateToProps = state => ({
     ),
     userNumber: getUserNumber(state),
     validateStorageTypeResult: validateStorageTypeResultSelectors.getItem(state),
-    validateStorageTypeResultLoading: validateStorageTypeResultSelectors.getLoading(state)
+    validateStorageTypeResultLoading: validateStorageTypeResultSelectors.getLoading(state),
+    match
 });
 
 const mapDispatchToProps = {

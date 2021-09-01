@@ -14,7 +14,7 @@
 
         public string ArticleNumber { get; set; }
 
-        public int LocationId { get; set; }
+        public int? LocationId { get; set; }
 
         public string Location { get; set; }
 
@@ -36,7 +36,7 @@
 
         public string StoragePlace { get; set; }
 
-        public int BookInRef { get; set; }
+        public int? BookInRef { get; set; }
 
         public string DemLocation { get; set; }
 

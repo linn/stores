@@ -21,6 +21,7 @@ import {
 } from '@linn-it/linn-form-components-library';
 import QcLabelPrintScreen from '../../containers/goodsIn/QcLabelPrintScreen';
 import Page from '../../containers/Page';
+import Parcel from '../../containers/parcels/Parcel';
 
 function GoodsInUtility({
     validatePurchaseOrder,
@@ -44,7 +45,8 @@ function GoodsInUtility({
     userNumber,
     validateStorageType,
     validateStorageTypeResult,
-    validateStorageTypeResultLoading
+    validateStorageTypeResultLoading,
+    match
 }) {
     const [formData, setFormData] = useState({
         orderNumber: null,
@@ -80,7 +82,9 @@ function GoodsInUtility({
     };
     const [bookInPoExpanded, setBookInPoExpanded] = useState(false);
 
-    const [dialogOpen, setDialogOpen] = useState(true);
+    const [printDialogOpen, setPrintDialogOpen] = useState(true);
+
+    const [parcelDialogOpen, setParcelDialogOpen] = useState(true);
 
     useEffect(() => {
         if (validatePurchaseOrderResult?.documentType === 'PO') {
@@ -122,7 +126,7 @@ function GoodsInUtility({
             setMessage({ error: false, text: bookInResult.message, success: bookInResult.success });
         }
         if (bookInResult?.success) {
-            setDialogOpen(true);
+            setPrintDialogOpen(true);
         }
     }, [bookInResult]);
 
@@ -228,12 +232,12 @@ function GoodsInUtility({
     return (
         <Page>
             <Grid container spacing={3}>
-                <Dialog open={dialogOpen} fullWidth maxWidth="md">
+                <Dialog open={printDialogOpen} fullWidth maxWidth="md">
                     <div>
                         <IconButton
                             className={classes.pullRight}
                             aria-label="Close"
-                            onClick={() => setDialogOpen(false)}
+                            onClick={() => setPrintDialogOpen(false)}
                         >
                             <CloseIcon />
                         </IconButton>
@@ -257,6 +261,24 @@ function GoodsInUtility({
                                 docType="PO"
                                 unitOfMeasure="ONES"
                                 qtyReceived={1}
+                            />
+                        </div>
+                    </div>
+                </Dialog>
+                <Dialog open={parcelDialogOpen} fullWidth maxWidth="md">
+                    <div>
+                        <IconButton
+                            className={classes.pullRight}
+                            aria-label="Close"
+                            onClick={() => setParcelDialogOpen(false)}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <div className={classes.dialog}>
+                            <Parcel
+                                comments={bookInResult?.parcelComments}
+                                match={match}
+                                inDialogBox
                             />
                         </div>
                     </div>
@@ -314,6 +336,7 @@ function GoodsInUtility({
                         value={formData.qty}
                         label="Qty"
                         propertyName="qty"
+                        type="number"
                         disabled={
                             !validatePurchaseOrderResult || !!validatePurchaseOrderResult?.message
                         }
@@ -714,7 +737,8 @@ GoodsInUtility.propTypes = {
         unitOfMeasure: PropTypes.string,
         qtyReceived: PropTypes.number,
         qcInfo: PropTypes.string,
-        kardexLocation: PropTypes.string
+        kardexLocation: PropTypes.string,
+        parcelComments: PropTypes.string
     }),
     bookInResultLoading: PropTypes.bool,
     doBookIn: PropTypes.func.isRequired,
@@ -724,7 +748,8 @@ GoodsInUtility.propTypes = {
     }),
     validatePurchaseOrderBookInQty: PropTypes.func.isRequired,
     validatePurchaseOrderBookInQtyResultLoading: PropTypes.bool,
-    userNumber: PropTypes.number.isRequired
+    userNumber: PropTypes.number.isRequired,
+    match: PropTypes.shape({}).isRequired
 };
 
 GoodsInUtility.defaultProps = {
