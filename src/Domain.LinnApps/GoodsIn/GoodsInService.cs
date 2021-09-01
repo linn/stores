@@ -193,6 +193,16 @@
                     return result;
                 }
 
+                result.CreateParcel = this.goodsInPack.ParcelRequired(
+                    orderNumber,
+                    rsnNumber,
+                    loanNumber,
+                    out var supplierId);
+
+                if (!result.CreateParcel)
+                {
+                    return result;
+                }
 
                 if (orderNumber.HasValue)
                 {
@@ -208,12 +218,6 @@
                     // todo
                     throw new NotImplementedException("Booking in this document type is not supported yet.");
                 }
-
-                result.CreateParcel = this.goodsInPack.ParcelRequired(
-                    orderNumber,
-                    rsnNumber,
-                    loanNumber,
-                    out var supplierId);
                 result.SupplierId = supplierId;
                 result.CreatedBy = createdBy;
             }
