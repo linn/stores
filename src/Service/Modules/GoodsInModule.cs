@@ -11,8 +11,6 @@
     using Linn.Stores.Resources.StockLocators;
     using Linn.Stores.Service.Extensions;
 
-    using Microsoft.EntityFrameworkCore.Migrations;
-
     using Nancy;
     using Nancy.ModelBinding;
 
