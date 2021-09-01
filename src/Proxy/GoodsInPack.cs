@@ -479,7 +479,6 @@
 
                 cmd.ExecuteNonQuery();
 
-
                 if (int.TryParse(locationIdParameter.Value.ToString(), out var result))
                 {
                     locationId = result;
@@ -494,10 +493,11 @@
             }
         }
 
-        public bool ParcelRequired(int? orderNumber, 
-                                   int? rsnNumber, 
-                                   int? loanNumber, 
-                                   out int? supplierId)
+        public bool ParcelRequired(
+            int? orderNumber,
+            int? rsnNumber,
+            int? loanNumber,
+            out int? supplierId)
         {
             using (var connection = this.databaseService.GetConnection())
             {
