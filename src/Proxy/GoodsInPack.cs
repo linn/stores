@@ -493,5 +493,72 @@
                 connection.Close();
             }
         }
+
+        public bool ParcelRequired(int? orderNumber, 
+                                   int? rsnNumber, 
+                                   int? loanNumber, 
+                                   out int? supplierId)
+        {
+            using (var connection = this.databaseService.GetConnection())
+            {
+                connection.Open();
+                var cmd = new OracleCommand("goods_in_pack.parcel_required_wrapper", connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                var arg1 = new OracleParameter("p_order_number", OracleDbType.Int32)
+                {
+                    Direction = ParameterDirection.Input,
+                    Size = 50,
+                    Value = orderNumber
+                };
+                cmd.Parameters.Add(arg1);
+
+                var arg2 = new OracleParameter("p_rsn_number", OracleDbType.Int32)
+                               {
+                                   Direction = ParameterDirection.Input,
+                                   Size = 50,
+                                   Value = rsnNumber
+                               };
+                cmd.Parameters.Add(arg2);
+
+                var arg3 = new OracleParameter("p_loan_number", OracleDbType.Int32)
+                               {
+                                   Direction = ParameterDirection.Input,
+                                   Size = 50,
+                                   Value = loanNumber
+                               };
+                cmd.Parameters.Add(arg3);
+
+                var supplierIdParameter = new OracleParameter("p_supplier_id", OracleDbType.Int32)
+                               {
+                                   Direction = ParameterDirection.Output,
+                                   Size = 50,
+                               };
+                cmd.Parameters.Add(supplierIdParameter);
+
+                var result = new OracleParameter("result", OracleDbType.Int32)
+                {
+                    Direction = ParameterDirection.ReturnValue
+                };
+                cmd.Parameters.Add(result);
+
+                cmd.ExecuteNonQuery();
+
+                connection.Close();
+
+                if (int.TryParse(supplierIdParameter.Value.ToString(), out var s))
+                {
+                    supplierId = s;
+                }
+                else
+                {
+                    supplierId = null;
+                }
+
+                return int.Parse(result.Value.ToString()) == 0;
+            }
+        }
     }
 }

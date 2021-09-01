@@ -156,7 +156,6 @@
             {
                 result.QcState = !string.IsNullOrEmpty(state) && state.Equals("QC") ? "QUARANTINE" : "PASS";
 
-
                 result.TransactionCode = reqLine?.TransactionCode;
 
                 var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
@@ -179,7 +178,7 @@
                         out _,
                         out _,
                         out _,
-                        out _,
+                        out var docType,
                         out _);
                     result.UnitOfMeasure = uom;
                     result.DocType = this.purchaseOrderPack.GetDocumentType(orderNumber.Value);
@@ -188,6 +187,35 @@
                 result.QtyReceived = qty;
                 result.PartNumber = partNumber;
                 result.PartDescription = part.Description;
+
+                if (!new[] { "L", "O", "R" }.Contains(transactionType))
+                {
+                    return result;
+                }
+
+
+                if (orderNumber.HasValue)
+                {
+                    result.ParcelComments = $"{result.DocType}{orderNumber}";
+                }
+                else if (rsnNumber.HasValue)
+                {
+                    // todo
+                    throw new NotImplementedException("Booking in this document type is not supported yet.");
+                }
+                else if (loanNumber.HasValue)
+                {
+                    // todo
+                    throw new NotImplementedException("Booking in this document type is not supported yet.");
+                }
+
+                result.CreateParcel = this.goodsInPack.ParcelRequired(
+                    orderNumber,
+                    rsnNumber,
+                    loanNumber,
+                    out var supplierId);
+                result.SupplierId = supplierId;
+                result.CreatedBy = createdBy;
             }
 
             return result;

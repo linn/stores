@@ -51,5 +51,11 @@
             out int? locationId, 
             out string locationCode, 
             int? qty);
+
+        bool ParcelRequired(
+            int? orderNumber, 
+            int? rsnNumber, 
+            int? loanNumber, 
+            out int? supplierId);
     }
 }
