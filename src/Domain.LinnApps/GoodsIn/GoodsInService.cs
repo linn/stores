@@ -83,6 +83,11 @@
             int? numberOfLines,
             IEnumerable<GoodsInLogEntry> lines)
         {
+            if (!orderNumber.HasValue || transactionType != "O")
+            {
+                throw new NotImplementedException("Booking in this document type is not supported yet.");
+            }
+
             if (string.IsNullOrEmpty(ontoLocation))
             {
                 if ((string.IsNullOrEmpty(storageType) && transactionType == "O") 
@@ -152,76 +157,73 @@
             var reqLine = req.Lines?.FirstOrDefault();
             result.DocType = reqLine?.TransactionDefinition?.DocType;
 
-            if (transactionType.Equals("O") && orderNumber.HasValue && partNumber != "PACK 1329")
+            result.QcState = !string.IsNullOrEmpty(state) && state.Equals("QC") ? "QUARANTINE" : "PASS";
+            
+            result.TransactionCode = reqLine?.TransactionCode;
+            
+            var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
+            
+            result.QcInfo = part?.QcInformation;
+            
+            if (!string.IsNullOrEmpty(storageType))
             {
-                result.QcState = !string.IsNullOrEmpty(state) && state.Equals("QC") ? "QUARANTINE" : "PASS";
-
-                result.TransactionCode = reqLine?.TransactionCode;
-
-                var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
-
-                result.QcInfo = part?.QcInformation;
-
-                if (!string.IsNullOrEmpty(storageType))
-                {
-                    result.KardexLocation = ontoLocation;
-                }
-
-                if (orderNumber.HasValue)
-                {
-                    this.goodsInPack.GetPurchaseOrderDetails(
-                        orderNumber.Value,
-                        orderLine.Value,
-                        out _,
-                        out _,
-                        out var uom,
-                        out _,
-                        out _,
-                        out _,
-                        out var docType,
-                        out _);
-                    result.UnitOfMeasure = uom;
-                    result.DocType = this.purchaseOrderPack.GetDocumentType(orderNumber.Value);
-                }
-
-                result.QtyReceived = qty;
-                result.PartNumber = partNumber;
-                result.PartDescription = part.Description;
-
-                if (!new[] { "L", "O", "R" }.Contains(transactionType))
-                {
-                    return result;
-                }
-
-                result.CreateParcel = this.goodsInPack.ParcelRequired(
+                result.KardexLocation = ontoLocation;
+            }
+            
+            if (orderNumber.HasValue)
+            {
+                this.goodsInPack.GetPurchaseOrderDetails(
+                    orderNumber.Value,
+                    orderLine.Value,
+                    out _,
+                    out _,
+                    out var uom,
+                    out _,
+                    out _,
+                    out _,
+                    out _,
+                    out _);
+                result.UnitOfMeasure = uom;
+                result.DocType = this.purchaseOrderPack.GetDocumentType(orderNumber.Value);
+            }
+            
+            result.QtyReceived = qty;
+            result.PartNumber = partNumber;
+            result.PartDescription = part.Description;
+            
+            if (!new[] { "L", "O", "R" }.Contains(transactionType) 
+                || !this.goodsInPack.ParcelRequired(
                     orderNumber,
                     rsnNumber,
                     loanNumber,
-                    out var supplierId);
-
-                if (!result.CreateParcel)
-                {
-                    return result;
-                }
-
-                if (orderNumber.HasValue)
-                {
-                    result.ParcelComments = $"{result.DocType}{orderNumber}";
-                }
-                else if (rsnNumber.HasValue)
-                {
-                    // todo
-                    throw new NotImplementedException("Booking in this document type is not supported yet.");
-                }
-                else if (loanNumber.HasValue)
-                {
-                    // todo
-                    throw new NotImplementedException("Booking in this document type is not supported yet.");
-                }
-                result.SupplierId = supplierId;
-                result.CreatedBy = createdBy;
+                    out _))
+            {
+                return result;
+            }
+            
+            result.CreateParcel = this.goodsInPack.ParcelRequired(
+                orderNumber,
+                rsnNumber,
+                loanNumber,
+                out var supplierId);
+            
+            if (orderNumber.HasValue)
+            {
+                result.ParcelComments = $"{result.DocType}{orderNumber}";
+            }
+            else if (rsnNumber.HasValue)
+            {
+                // todo
+                throw new NotImplementedException("Booking in this document type is not supported yet.");
+            }
+            else if (loanNumber.HasValue)
+            {
+                // todo
+                throw new NotImplementedException("Booking in this document type is not supported yet.");
             }
 
+            result.SupplierId = supplierId;
+            result.CreatedBy = createdBy;
             return result;
         }
 
