@@ -556,8 +556,8 @@ Parcel.defaultProps = {
     suppliers: [{}],
     carriersSearchLoading: false,
     suppliersSearchLoading: false,
-    supplierId: null,
-    comments: null,
+    supplierId: '',
+    comments: '',
     inDialogBox: false
 };
 

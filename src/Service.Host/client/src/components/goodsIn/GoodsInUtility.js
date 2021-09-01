@@ -82,9 +82,9 @@ function GoodsInUtility({
     };
     const [bookInPoExpanded, setBookInPoExpanded] = useState(false);
 
-    const [printDialogOpen, setPrintDialogOpen] = useState(true);
+    const [printDialogOpen, setPrintDialogOpen] = useState(false);
 
-    const [parcelDialogOpen, setParcelDialogOpen] = useState(true);
+    const [parcelDialogOpen, setParcelDialogOpen] = useState(false);
 
     useEffect(() => {
         if (validatePurchaseOrderResult?.documentType === 'PO') {
@@ -127,6 +127,9 @@ function GoodsInUtility({
         }
         if (bookInResult?.success) {
             setPrintDialogOpen(true);
+        }
+        if (bookInResult?.createParcel) {
+            setParcelDialogOpen(true);
         }
     }, [bookInResult]);
 
@@ -243,15 +246,7 @@ function GoodsInUtility({
                         </IconButton>
                         <div className={classes.dialog}>
                             <QcLabelPrintScreen
-                                // partNumber={validatePurchaseOrderResult?.partNumber}
-                                // partDescription={validatePurchaseOrder?.description}
-                                // reqNumber={bookInResult?.reqNumber}
-                                // qcState={bookInResult?.qcState}
-                                // qcInfo={bookInResult?.qcInfo}
-                                // docType={bookInResult?.docType}
-                                // unitOfMeasure={bookInResult?.unitOfMeasure}
-                                // qtyReceived={bookInResult?.qtyReceived}
-                                //kardexLocation={bookInResult?.kardexLocation}
+                                kardexLocation={bookInResult?.kardexLocation}
                                 partNumber="PART"
                                 partDescription="DESCRIPTION"
                                 reqNumber={12345}
@@ -277,6 +272,7 @@ function GoodsInUtility({
                         <div className={classes.dialog}>
                             <Parcel
                                 comments={bookInResult?.parcelComments}
+                                supplierId={bookInResult?.supplierId}
                                 match={match}
                                 inDialogBox
                             />
@@ -738,7 +734,9 @@ GoodsInUtility.propTypes = {
         qtyReceived: PropTypes.number,
         qcInfo: PropTypes.string,
         kardexLocation: PropTypes.string,
-        parcelComments: PropTypes.string
+        parcelComments: PropTypes.string,
+        supplierId: PropTypes.number,
+        createParcel: PropTypes.bool
     }),
     bookInResultLoading: PropTypes.bool,
     doBookIn: PropTypes.func.isRequired,
