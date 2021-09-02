@@ -9,6 +9,14 @@ export default function importBookReducer(state = initialState, action) {
                 ...state,
                 impbook: { ...state.impbook, [action.fieldName]: action.payload }
             };
+        case 'invoiceDetailsUpdate':
+            return {
+                ...state,
+                impbook: {
+                    ...state.impbook,
+                    importBookInvoiceDetails: action.details
+                }
+            };
         case 'orderDetailFieldChange':
             return {
                 ...state,
