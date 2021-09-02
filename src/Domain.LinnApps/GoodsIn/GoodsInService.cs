@@ -370,6 +370,8 @@
                     case "QUARANTINE":
                         printString += $"\"{docType}{orderNumber}";
                         printString += "\",\"";
+                        printString += part.PartNumber;
+                        printString += "\",\"";
                         printString += part.Description;
                         printString += "\",\"";
                         printString += deliveryRef;
