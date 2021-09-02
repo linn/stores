@@ -404,6 +404,7 @@
                         printString += "\",\"";
                         printString += reqNumber;
                         printString += "\"";
+                        printString += Environment.NewLine;
                         break;
                     case "PASS":
                         var partMessage = purchaseOrder.Details.FirstOrDefault()?.RohsCompliant == "Y"
@@ -425,6 +426,7 @@
                         printString += "\",\"";
                         printString += partMessage;
                         printString += "\"";
+                        printString += Environment.NewLine;
                         break;
                 }
 

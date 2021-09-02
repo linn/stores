@@ -65,7 +65,7 @@
                 "Printer",
                 1,
                 "template.ext",
-                $"\"PO1\",\"PART\",\"DESCRIPTION\",\"DELIVERY-REF\",\"{this.dateString}\",\"\",\"SU\",\"{this.dateString}\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"1\",\"1\",\"1\",\"1\",\"QUARANTINE\",\"DATE TESTED\",\"1\"",
+                $"\"PO1\",\"PART\",\"DESCRIPTION\",\"DELIVERY-REF\",\"{this.dateString}\",\"\",\"SU\",\"{this.dateString}\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"1\",\"1\",\"1\",\"1\",\"QUARANTINE\",\"DATE TESTED\",\"1\"{Environment.NewLine}",
                 ref Arg.Any<string>()).Returns(true);
 
             this.result = this.Sut.PrintLabels(
@@ -97,7 +97,7 @@
                 "Printer",
                 1,
                 "template.ext",
-                $"\"PO1\",\"PART\",\"DESCRIPTION\",\"DELIVERY-REF\",\"{this.dateString}\",\"\",\"SU\",\"{this.dateString}\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"1\",\"1\",\"1\",\"1\",\"QUARANTINE\",\"DATE TESTED\",\"1\"",
+                $"\"PO1\",\"PART\",\"DESCRIPTION\",\"DELIVERY-REF\",\"{this.dateString}\",\"\",\"SU\",\"{this.dateString}\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"1\",\"1\",\"1\",\"1\",\"QUARANTINE\",\"DATE TESTED\",\"1\"{Environment.NewLine}",
                 ref Arg.Any<string>());
         }
 
