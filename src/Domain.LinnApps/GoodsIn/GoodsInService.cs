@@ -6,7 +6,6 @@
 
     using Linn.Common.Domain.LinnApps.RemoteServices;
     using Linn.Common.Persistence;
-    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
@@ -84,6 +83,11 @@
             int? numberOfLines,
             IEnumerable<GoodsInLogEntry> lines)
         {
+            if (!orderNumber.HasValue || transactionType != "O")
+            {
+                throw new NotImplementedException("Booking in this document type is not supported yet.");
+            }
+
             if (string.IsNullOrEmpty(ontoLocation))
             {
                 if ((string.IsNullOrEmpty(storageType) && transactionType == "O") 
@@ -141,7 +145,7 @@
 
             var result = new BookInResult(
                 success,
-                success ? null : this.goodsInPack.GetErrorMessage());
+                success ? "Book In Successful!" : this.goodsInPack.GetErrorMessage());
 
             if (!reqNumberResult.HasValue)
             {
@@ -153,19 +157,19 @@
             var reqLine = req.Lines?.FirstOrDefault();
             result.DocType = reqLine?.TransactionDefinition?.DocType;
 
-            if (transactionType.Equals("O") && orderNumber.HasValue && partNumber != "PACK 1329")
-            {
-                result.QcState = !string.IsNullOrEmpty(state) && state.Equals("QC") ? "QUARANTINE" : "PASS";
-            }
-
+            result.QcState = !string.IsNullOrEmpty(state) && state.Equals("QC") ? "QUARANTINE" : "PASS";
+            
             result.TransactionCode = reqLine?.TransactionCode;
-
+            
             var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
-
-            result.QcInfo = part
-                ?.QcInformation;
-
-            // do we need to set kardex location here based on presence of StorageType?
+            
+            result.QcInfo = part?.QcInformation;
+            
+            if (!string.IsNullOrEmpty(storageType))
+            {
+                result.KardexLocation = ontoLocation;
+            }
+            
             if (orderNumber.HasValue)
             {
                 this.goodsInPack.GetPurchaseOrderDetails(
@@ -182,11 +186,44 @@
                 result.UnitOfMeasure = uom;
                 result.DocType = this.purchaseOrderPack.GetDocumentType(orderNumber.Value);
             }
-
+            
             result.QtyReceived = qty;
             result.PartNumber = partNumber;
             result.PartDescription = part.Description;
+            
+            if (!new[] { "L", "O", "R" }.Contains(transactionType) 
+                || !this.goodsInPack.ParcelRequired(
+                    orderNumber,
+                    rsnNumber,
+                    loanNumber,
+                    out _))
+            {
+                return result;
+            }
+            
+            result.CreateParcel = this.goodsInPack.ParcelRequired(
+                orderNumber,
+                rsnNumber,
+                loanNumber,
+                out var supplierId);
+            
+            if (orderNumber.HasValue)
+            {
+                result.ParcelComments = $"{result.DocType}{orderNumber}";
+            }
+            else if (rsnNumber.HasValue)
+            {
+                // todo
+                throw new NotImplementedException("Booking in this document type is not supported yet.");
+            }
+            else if (loanNumber.HasValue)
+            {
+                // todo
+                throw new NotImplementedException("Booking in this document type is not supported yet.");
+            }
 
+            result.SupplierId = supplierId;
+            result.CreatedBy = createdBy;
             return result;
         }
 
@@ -212,6 +249,12 @@
                 out var docType,
                 out var message);
 
+            if (!string.IsNullOrEmpty(message))
+            {
+                result.Message = message;
+                return result;
+            }
+
             var part = this.partsRepository.FindBy(
                 x => x.PartNumber.Equals(partNumber.ToUpper()) 
                       && x.QcOnReceipt.Equals("Y"));
@@ -231,7 +274,7 @@
             {
                 if (newPart)
                 {
-                    result.BookInMessage = "New part - enter storage type or location";
+                    result.Message = "New part - enter storage type or location";
                 }
 
                 result.Storage = "BB";
@@ -239,7 +282,7 @@
             else
             {
                 result.Storage = kardex;
-                result.BookInMessage = message;
+                result.Message = message;
             }
 
             result.OrderNumber = orderNumber;
@@ -256,6 +299,13 @@
             result.DocumentType = docType;
             result.State = !string.IsNullOrEmpty(part?.QcOnReceipt) 
                                     && part.QcOnReceipt.Equals("Y") ? "QC" : "STORES";
+
+            if (!string.IsNullOrEmpty(uom)
+                    && uom.StartsWith("REEL") 
+                    && string.IsNullOrEmpty(manufacturerPartNumber))
+            {
+                result.Message += "\nNo manufacturer part number on part supplier - see Purchasing";
+            }
 
             return result;
         }
@@ -320,6 +370,8 @@
                     case "QUARANTINE":
                         printString += $"\"{docType}{orderNumber}";
                         printString += "\",\"";
+                        printString += part.PartNumber;
+                        printString += "\",\"";
                         printString += part.Description;
                         printString += "\",\"";
                         printString += deliveryRef;
@@ -352,6 +404,7 @@
                         printString += "\",\"";
                         printString += reqNumber;
                         printString += "\"";
+                        printString += Environment.NewLine;
                         break;
                     case "PASS":
                         var partMessage = purchaseOrder.Details.FirstOrDefault()?.RohsCompliant == "Y"
@@ -373,6 +426,7 @@
                         printString += "\",\"";
                         printString += partMessage;
                         printString += "\"";
+                        printString += Environment.NewLine;
                         break;
                 }
 
@@ -387,6 +441,30 @@
             }
 
             return new ProcessResult(success, message);
+        }
+
+        public ValidateStorageTypeResult ValidateStorageType(
+            int? orderNumber,
+            string docType,
+            string partNumber,
+            string storageType,
+            int? qty)
+        {
+            this.goodsInPack.GetKardexLocations(
+                orderNumber,
+                docType,
+                partNumber?.ToUpper(),
+                storageType?.ToUpper(),
+                out var locationId,
+                out var locationCode,
+                qty);
+
+            return new ValidateStorageTypeResult
+                       {
+                           LocationCode = locationCode,
+                           LocationId = locationId,
+                           Message = this.goodsInPack.GetErrorMessage()
+                       };
         }
     }
 }

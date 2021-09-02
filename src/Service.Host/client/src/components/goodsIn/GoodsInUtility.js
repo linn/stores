@@ -21,6 +21,7 @@ import {
 } from '@linn-it/linn-form-components-library';
 import QcLabelPrintScreen from '../../containers/goodsIn/QcLabelPrintScreen';
 import Page from '../../containers/Page';
+import Parcel from '../../containers/parcels/Parcel';
 
 function GoodsInUtility({
     validatePurchaseOrder,
@@ -41,7 +42,11 @@ function GoodsInUtility({
     validatePurchaseOrderBookInQtyResult,
     validatePurchaseOrderBookInQty,
     validatePurchaseOrderBookInQtyResultLoading,
-    userNumber
+    userNumber,
+    validateStorageType,
+    validateStorageTypeResult,
+    validateStorageTypeResultLoading,
+    match
 }) {
     const [formData, setFormData] = useState({
         orderNumber: null,
@@ -49,21 +54,37 @@ function GoodsInUtility({
         lines: []
     });
 
+    const [message, setMessage] = useState({ error: false, text: '', success: false });
+
+    const getMessageColour = () => {
+        if (message?.success) {
+            return 'limegreen';
+        }
+        if (message?.error) {
+            return 'red';
+        }
+        return 'black';
+    };
+
     const useStyles = makeStyles(theme => ({
         dialog: {
             margin: theme.spacing(6),
             minWidth: theme.spacing(62)
+        },
+        notchedOutline: {
+            borderWidth: '3px',
+            borderColor: `${getMessageColour()} !important`
         }
     }));
-
-    const [message, setMessage] = useState({ error: false, text: '' });
 
     const handleFieldChange = (propertyName, newValue) => {
         setFormData({ ...formData, [propertyName]: newValue });
     };
     const [bookInPoExpanded, setBookInPoExpanded] = useState(false);
 
-    const [dialogOpen, setDialogOpen] = useState(false);
+    const [printDialogOpen, setPrintDialogOpen] = useState(false);
+
+    const [parcelDialogOpen, setParcelDialogOpen] = useState(false);
 
     useEffect(() => {
         if (validatePurchaseOrderResult?.documentType === 'PO') {
@@ -74,22 +95,41 @@ function GoodsInUtility({
     }, [validatePurchaseOrderResult]);
 
     useEffect(() => {
-        if (validatePurchaseOrderBookInQtyResult?.success) {
-            setFormData(d => ({ ...d, numberOfLines: 1 }));
+        if (validatePurchaseOrderResult) {
+            setMessage({
+                error: !!validatePurchaseOrderResult.message,
+                text: validatePurchaseOrderResult.message
+            });
         }
+    }, [validatePurchaseOrderResult]);
 
-        setMessage({
-            error: !validatePurchaseOrderBookInQtyResult?.success,
-            text: validatePurchaseOrderBookInQtyResult?.message
-        });
+    useEffect(() => {
+        if (validatePurchaseOrderBookInQtyResult) {
+            if (validatePurchaseOrderBookInQtyResult.success) {
+                setFormData(d => ({ ...d, numberOfLines: 1 }));
+            }
+            setMessage({
+                error: !validatePurchaseOrderBookInQtyResult?.success,
+                text: validatePurchaseOrderBookInQtyResult?.message
+            });
+        }
     }, [validatePurchaseOrderBookInQtyResult]);
 
     useEffect(() => {
+        if (validateStorageTypeResult) {
+            setMessage({ error: true, text: validateStorageTypeResult?.message });
+        }
+    }, [validateStorageTypeResult]);
+
+    useEffect(() => {
         if (bookInResult?.message) {
-            setMessage({ error: false, text: bookInResult.message });
+            setMessage({ error: false, text: bookInResult.message, success: bookInResult.success });
         }
         if (bookInResult?.success) {
-            setDialogOpen(true);
+            setPrintDialogOpen(true);
+        }
+        if (bookInResult?.createParcel) {
+            setParcelDialogOpen(true);
         }
     }, [bookInResult]);
 
@@ -195,25 +235,46 @@ function GoodsInUtility({
     return (
         <Page>
             <Grid container spacing={3}>
-                <Dialog open={dialogOpen} fullWidth maxWidth="md">
+                <Dialog open={printDialogOpen} fullWidth maxWidth="md">
                     <div>
                         <IconButton
                             className={classes.pullRight}
                             aria-label="Close"
-                            onClick={() => setDialogOpen(false)}
+                            onClick={() => setPrintDialogOpen(false)}
                         >
                             <CloseIcon />
                         </IconButton>
                         <div className={classes.dialog}>
                             <QcLabelPrintScreen
-                                partNumber={validatePurchaseOrderResult?.partNumber}
-                                partDescription={validatePurchaseOrder?.description}
-                                reqNumber={bookInResult?.reqNumber}
-                                qcState={bookInResult?.qcState}
-                                qcInfo={bookInResult?.qcInfo}
-                                docType={bookInResult?.docType}
-                                unitOfMeasure={bookInResult?.unitOfMeasure}
-                                qtyReceived={bookInResult?.qtyReceived}
+                                kardexLocation={bookInResult?.kardexLocation}
+                                partNumber="PART"
+                                partDescription="DESCRIPTION"
+                                reqNumber={12345}
+                                orderNumber={1}
+                                qcState="PASS"
+                                qcInfo="info"
+                                docType="PO"
+                                unitOfMeasure="ONES"
+                                qtyReceived={1}
+                            />
+                        </div>
+                    </div>
+                </Dialog>
+                <Dialog open={parcelDialogOpen} fullWidth maxWidth="md">
+                    <div>
+                        <IconButton
+                            className={classes.pullRight}
+                            aria-label="Close"
+                            onClick={() => setParcelDialogOpen(false)}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <div className={classes.dialog}>
+                            <Parcel
+                                comments={bookInResult?.parcelComments}
+                                supplierId={bookInResult?.supplierId}
+                                match={match}
+                                inDialogBox
                             />
                         </div>
                     </div>
@@ -225,15 +286,25 @@ function GoodsInUtility({
                     <InputField
                         fullWidth
                         disabled
+                        textFieldProps={{
+                            InputProps: {
+                                classes: {
+                                    notchedOutline: classes.notchedOutline
+                                }
+                            }
+                        }}
+                        error={message.error}
+                        rows={3}
                         value={
                             validatePurchaseOrderResultLoading ||
                             validatePurchaseOrderBookInQtyResultLoading ||
-                            bookInResultLoading
+                            bookInResultLoading ||
+                            validateStorageTypeResultLoading
                                 ? 'loading'
                                 : message.text
                         }
                         label="Message"
-                        propertyName="bookInMessage"
+                        propertyName="message"
                     />
                 </Grid>
                 <Grid item xs={6} />
@@ -261,6 +332,10 @@ function GoodsInUtility({
                         value={formData.qty}
                         label="Qty"
                         propertyName="qty"
+                        type="number"
+                        disabled={
+                            !validatePurchaseOrderResult || !!validatePurchaseOrderResult?.message
+                        }
                         textFieldProps={{
                             onBlur: () =>
                                 formData.qty &&
@@ -277,8 +352,19 @@ function GoodsInUtility({
                         fullWidth
                         value={formData.storageType}
                         label="S/Type"
+                        disabled={
+                            !validatePurchaseOrderResult ||
+                            (validatePurchaseOrderResult.message !==
+                                'New part - enter storage type or location' &&
+                                validatePurchaseOrderResult.storage === 'BB')
+                        }
                         propertyName="storageType"
                         onChange={handleFieldChange}
+                        textFieldProps={{
+                            onBlur: () =>
+                                formData.storageType &&
+                                validateStorageType(`storageType`, formData.storageType)
+                        }}
                     />
                 </Grid>
                 <Grid item xs={5} />
@@ -352,7 +438,7 @@ function GoodsInUtility({
                         propertyName="state"
                         fullWidth
                         allowNoValue
-                        value={validatePurchaseOrderResult?.state}
+                        value={validatePurchaseOrderResult?.state || ''}
                         label="State"
                         onChange={handleFieldChange}
                         type="state"
@@ -508,7 +594,8 @@ function GoodsInUtility({
                         variant="contained"
                         disabled={
                             !validatePurchaseOrderResult ||
-                            !formData.ontoLocationId ||
+                            !!validatePurchaseOrderResult?.message ||
+                            !formData.ontoLocation ||
                             !formData.qty
                         }
                         onClick={() =>
@@ -535,6 +622,12 @@ function GoodsInUtility({
                     </Button>
                     <Button
                         variant="contained"
+                        disabled={
+                            !validatePurchaseOrderResult ||
+                            !!validatePurchaseOrderResult?.message ||
+                            !formData.ontoLocation ||
+                            !formData.qty
+                        }
                         onClick={() => {
                             const row = {
                                 id: 1,
@@ -614,8 +707,12 @@ GoodsInUtility.propTypes = {
         partDescription: PropTypes.string,
         orderUnitOfMeasure: PropTypes.string,
         manufacturersPartNumber: PropTypes.string,
-        transactionType: PropTypes.string
+        transactionType: PropTypes.string,
+        message: PropTypes.string
     }),
+    validateStorageType: PropTypes.func.isRequired,
+    validateStorageTypeResult: PropTypes.shape({ message: PropTypes.string }),
+    validateStorageTypeResultLoading: PropTypes.bool,
     validatePurchaseOrderResultLoading: PropTypes.bool,
     searchDemLocations: PropTypes.func.isRequired,
     validatePurchaseOrder: PropTypes.func.isRequired,
@@ -635,7 +732,11 @@ GoodsInUtility.propTypes = {
         docType: PropTypes.string,
         unitOfMeasure: PropTypes.string,
         qtyReceived: PropTypes.number,
-        qcInfo: PropTypes.string
+        qcInfo: PropTypes.string,
+        kardexLocation: PropTypes.string,
+        parcelComments: PropTypes.string,
+        supplierId: PropTypes.number,
+        createParcel: PropTypes.bool
     }),
     bookInResultLoading: PropTypes.bool,
     doBookIn: PropTypes.func.isRequired,
@@ -645,7 +746,8 @@ GoodsInUtility.propTypes = {
     }),
     validatePurchaseOrderBookInQty: PropTypes.func.isRequired,
     validatePurchaseOrderBookInQtyResultLoading: PropTypes.bool,
-    userNumber: PropTypes.number.isRequired
+    userNumber: PropTypes.number.isRequired,
+    match: PropTypes.shape({}).isRequired
 };
 
 GoodsInUtility.defaultProps = {
@@ -653,6 +755,8 @@ GoodsInUtility.defaultProps = {
     bookInResultLoading: false.valueOf,
     validatePurchaseOrderResult: null,
     validatePurchaseOrderResultLoading: false,
+    validateStorageTypeResult: null,
+    validateStorageTypeResultLoading: false,
     demLocationsSearchResults: [],
     demLocationsSearchLoading: false,
     salesArticlesSearchResults: [],

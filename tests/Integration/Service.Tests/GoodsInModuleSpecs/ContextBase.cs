@@ -69,13 +69,17 @@
                             new ValidatePurchaseOrderResultResourceBuilder());
 
                         with.Dependency<IResourceBuilder<BookInResult>>(new BookInResultResourceBuilder());
-                        
+
+                        with.Dependency<IResourceBuilder<ValidateStorageTypeResult>>(
+                            new ValidateStorageTypeResultResourceBuilder());
+
                         with.ResponseProcessor<BookInResultResponseProcessor>();
                         with.ResponseProcessor<SalesArticlesResponseProcessor>();
                         with.ResponseProcessor<StorageLocationsResponseProcessor>();
                         with.ResponseProcessor<LoanDetailsResponseProcessor>();
                         with.ResponseProcessor<ProcessResultResponseProcessor>();
                         with.ResponseProcessor<ValidatePurchaseOrderResultResponseProcessor>();
+                        with.ResponseProcessor<ValidateStorageTypeResultResponseProcessor>();
 
                         with.RequestStartup(
                             (container, pipelines, context) =>

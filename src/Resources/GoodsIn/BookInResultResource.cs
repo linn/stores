@@ -19,5 +19,15 @@
         public string PartNumber { get; set; }
 
         public string Description { get; set; }
+
+        public string KardexLocation { get; set; }
+
+        public bool CreateParcel { get; set; }
+
+        public string ParcelComments { get; set; }
+
+        public int? SupplierId { get; set; }
+
+        public int? CreatedBy { get; set; }
     }
 }

@@ -42,5 +42,20 @@
         int GetNextBookInRef();
 
         int GetNextLogId();
+
+        void GetKardexLocations(
+            int? orderNumber,
+            string docType, 
+            string partNumber, 
+            string storageType, 
+            out int? locationId, 
+            out string locationCode, 
+            int? qty);
+
+        bool ParcelRequired(
+            int? orderNumber, 
+            int? rsnNumber, 
+            int? loanNumber, 
+            out int? supplierId);
     }
 }

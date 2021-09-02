@@ -19,5 +19,8 @@
 
         IResult<ProcessResult> 
             PrintGoodsInLabels(PrintGoodsInLabelsRequestResource requestResource);
+
+        IResult<ValidateStorageTypeResult> 
+            ValidateStorageType(ValidateStorageTypeRequestResource requestResource);
     }
 }

@@ -13,22 +13,22 @@
 
     using NUnit.Framework;
 
-    public class WhenValidatingPurchaseOrder : ContextBase
+    public class WhenValidatingStorageType : ContextBase
     {
-        private ValidatePurchaseOrderResult result;
+        private ValidateStorageTypeResult result;
 
         [SetUp]
         public void SetUp()
         {
-            this.result = new ValidatePurchaseOrderResult
-                                     {
-                                         Message = "Validated!"
-                                     };
-            this.Service.ValidatePurchaseOrder(Arg.Any<int>(), Arg.Any<int>()).Returns(
-                new SuccessResult<ValidatePurchaseOrderResult>(this.result));
+            this.result = new ValidateStorageTypeResult
+                            {
+                                  Message = "Validated!"
+                            };
+            this.Service.ValidateStorageType(Arg.Any<ValidateStorageTypeRequestResource>()).Returns(
+                new SuccessResult<ValidateStorageTypeResult>(this.result));
 
             this.Response = this.Browser.Get(
-                $"/logistics/purchase-orders/validate/1",
+                $"/logistics/goods-in/validate-storage-type",
                 with =>
                     {
                         with.Header("Accept", "application/json");
@@ -43,13 +43,13 @@
         [Test]
         public void ShouldCallService()
         {
-            this.Service.Received().ValidatePurchaseOrder(Arg.Any<int>(), Arg.Any<int>());
+            this.Service.Received().ValidateStorageType(Arg.Any<ValidateStorageTypeRequestResource>());
         }
 
         [Test]
         public void ShouldReturnResource()
         {
-            var resource = this.Response.Body.DeserializeJson<ValidatePurchaseOrderResultResource>();
+            var resource = this.Response.Body.DeserializeJson<ValidateStorageTypeResultResource>();
             resource.Message.Should().Be("Validated!");
         }
     }

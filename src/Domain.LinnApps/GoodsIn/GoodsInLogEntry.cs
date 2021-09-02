@@ -34,7 +34,7 @@
 
         public string StoragePlace { get; set; }
 
-        public int BookInRef { get; set; }
+        public int? BookInRef { get; set; }
 
         public string DemLocation { get; set; }
 

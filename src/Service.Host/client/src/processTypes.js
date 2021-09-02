@@ -87,5 +87,5 @@ export const printConsignmentLabel = new ItemType(
 export const printGoodsInLabels = new ItemType(
     'printGoodsInLabels',
     'PRINT_GOODS_IN_LABELS',
-    'logisitcs/goods-in/print-labels'
+    '/logistics/goods-in/print-labels'
 );

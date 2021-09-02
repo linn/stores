@@ -22,7 +22,12 @@
                            QtyReceived = model.QtyReceived,
                            UnitOfMeasure = model.UnitOfMeasure,
                            PartNumber = model.PartNumber,
-                           Description = model.PartDescription
+                           Description = model.PartDescription,
+                           KardexLocation = model.KardexLocation,
+                           CreateParcel = model.CreateParcel,
+                           ParcelComments = model.ParcelComments,
+                           SupplierId = model.SupplierId,
+                           CreatedBy = model.CreatedBy
                        };
         }
 

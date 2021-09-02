@@ -5,23 +5,21 @@
 
     using FluentAssertions;
 
-    using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.Parts;
 
     using NSubstitute;
 
     using NUnit.Framework;
 
-    public class WhenValidatingPurchaseOrderAndPartDoesNotHaveStorageTypeAndPartIsNew : ContextBase
+    public class WhenValidatingPurchaseOrderForPartsWithReelUnitsAndNoManufacturerPartNumber 
+        : ContextBase
     {
-        private ValidatePurchaseOrderResult result;
-
         [SetUp]
         public void SetUp()
         {
             this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>()).Returns(new Part
                 {
-                    QcInformation = "I have some information"
+                    OurUnitOfMeasure = "REEL"
                 });
 
             this.GoodsInPack.When(x => x.GetPurchaseOrderDetails(
@@ -35,24 +33,20 @@
                     out Arg.Any<string>(),
                     out Arg.Any<string>(),
                     out Arg.Any<string>()))
-                .Do(x => x[2] = "PART");
-
-            this.GoodsInPack.PartHasStorageType("PART", out Arg.Any<int>(), out Arg.Any<string>(), out Arg.Any<bool>())
-                .Returns(false);
-            this.GoodsInPack.When(x => x.PartHasStorageType(
-                    "PART",
-                    out Arg.Any<int>(),
-                    out Arg.Any<string>(),
-                    out Arg.Any<bool>()))
-                .Do(x => x[3] = true);
-
-            this.result = this.Sut.ValidatePurchaseOrder(100, 1);
+                .Do(x =>
+                    {
+                        x[4] = "REEL";
+                        x[7] = null;
+                    });
         }
 
         [Test]
-        public void ShouldSetMessage()
+        public void ShouldSetStateStores()
         {
-            this.result.Message.Should().Be("New part - enter storage type or location");
+            this.Sut.ValidatePurchaseOrder(100, 1).Message
+                .Contains(
+                    "No manufacturer part number on part supplier - see Purchasing")
+                .Should().BeTrue();
         }
     }
 }

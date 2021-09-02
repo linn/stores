@@ -1957,7 +1957,6 @@
             entity.Property(o => o.OrderNumber).HasColumnName("ORDER_NUMBER");
             entity.Property(o => o.SupplierId).HasColumnName("SUPP_SUPPLIER_ID");
             entity.HasOne(o => o.Supplier).WithMany(s => s.PurchaseOrders).HasForeignKey(o => o.SupplierId);
-            entity.Property(o => o.OurQty).HasColumnName("OUR_QTY");
             entity.Property(o => o.DocumentType).HasColumnName("DOCUMENT_TYPE");
         }
 
@@ -1968,6 +1967,7 @@
             entity.Property(o => o.OrderNumber).HasColumnName("ORDER_NUMBER");
             entity.Property(o => o.Line).HasColumnName("ORDER_LINE");
             entity.Property(o => o.RohsCompliant).HasColumnName("ROHS_COMPLIANT");
+            entity.Property(o => o.OurQty).HasColumnName("OUR_QTY");
             entity.HasOne(d => d.PurchaseOrder).WithMany(o => o.Details)
                 .HasForeignKey(d => d.OrderNumber);
         }
@@ -1977,7 +1977,7 @@
             var query = builder.Query<AuthUser>().ToView("AUTH_USER_VIEW");
             query.Property(t => t.UserNumber).HasColumnName("USER_NUMBER");
             query.Property(t => t.Initials).HasColumnName("INITIALS");
-            query.Property(t => t.UserNumber).HasColumnName("USER_NAME");
+            query.Property(t => t.Name).HasColumnName("USER_NAME");
         }
     }
 }

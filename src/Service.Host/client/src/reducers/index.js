@@ -118,6 +118,7 @@ import printConsignmentLabel from './printConsignmentLabel';
 import currencies from './currencies';
 import exchangeRates from './exchangeRates';
 import printGoodsInLabels from './printGoodsInLabels';
+import validateStorageTypeResult from './validateStorageTypeResult';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -231,6 +232,7 @@ const rootReducer = history =>
         unpickItemsAllocation,
         validatePurchaseOrderBookInQtyResult,
         validatePurchaseOrderResult,
+        validateStorageTypeResult,
         wandConsignments,
         wandItems,
         workstationTopUpStatus,

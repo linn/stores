@@ -226,6 +226,8 @@
             builder.RegisterType<StockMoveResourceBuilder>().As<IResourceBuilder<StockMove>>();
             builder.RegisterType<StockMovesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<StockMove>>>();
+            builder.RegisterType<ValidateStorageTypeResultResourceBuilder>()
+                .As<IResourceBuilder<ValidateStorageTypeResult>>();
         }
     }
 }

@@ -8,8 +8,6 @@
 
         public int SupplierId { get; set; }
 
-        public int OurQty { get; set; }
-
         public string DocumentType { get; set; }
 
         public Supplier Supplier { get; set; }

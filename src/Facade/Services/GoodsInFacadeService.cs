@@ -89,6 +89,7 @@
 
         public IResult<ValidatePurchaseOrderResult> ValidatePurchaseOrder(int orderNumber, int line)
         {
+            var result = this.domainService.ValidatePurchaseOrder(orderNumber, line);
             return new SuccessResult<ValidatePurchaseOrderResult>(
                 this.domainService.ValidatePurchaseOrder(orderNumber, line));
         }
@@ -120,6 +121,16 @@
                                                               LineNumber = x.LineNumber,
                                                               Qty = x.Qty
                                                           })));
+        }
+
+        public IResult<ValidateStorageTypeResult> ValidateStorageType(ValidateStorageTypeRequestResource requestResource)
+        {
+            return new SuccessResult<ValidateStorageTypeResult>(this.domainService.ValidateStorageType(
+                null,
+                null,
+                null,
+                requestResource.StorageType,
+                null));
         }
     }
 }

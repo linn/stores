@@ -136,8 +136,6 @@
             builder.RegisterType<SalesArticleRepository>().As<IQueryRepository<SalesArticle>>();
             builder.RegisterType<CartonTypeRepository>().As<IRepository<CartonType, string>>();
             builder.RegisterType<GoodsInLogRepository>().As<IRepository<GoodsInLogEntry, int>>();
-            builder.RegisterType<StoresTransactionDefinitionRepository>()
-                .As<IQueryRepository<StoresTransactionDefinition>>();
             builder.RegisterType<ExportBookRepository>().As<IRepository<ExportBook, int>>();
             builder.RegisterType<PlCreditDebitNoteRepository>().As<IRepository<PlCreditDebitNote, int>>();
             builder.RegisterType<StoresLabelTypeRepository>().As<IQueryRepository<StoresLabelType>>();

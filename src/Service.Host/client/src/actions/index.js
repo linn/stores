@@ -305,3 +305,7 @@ export const exchangeRatesActionTypes = makeActionTypes(itemTypes.exchangeRates.
 export const printGoodsInLabelsActionTypes = makeProcessActionTypes(
     processTypes.printGoodsInLabels.actionType
 );
+
+export const validateStorageTypeActionTypes = makeActionTypes(
+    itemTypes.validateStorageTypeResult.actionType
+);

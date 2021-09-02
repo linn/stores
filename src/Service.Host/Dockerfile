@@ -1,4 +1,4 @@
-﻿FROM microsoft/dotnet:2.2-runtime
+﻿FROM mcr.microsoft.com/dotnet/core/runtime:2.2
 
 ARG gitBranch=unspecified
 ENV TZ=Europe/London

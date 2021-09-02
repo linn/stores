@@ -13,7 +13,6 @@
                              OrderNumber = model.OrderNumber,
                              OrderLine = model.OrderLine,
                              QtyBookedIn = model.QtyBookedIn,
-                             BookInMessage = model.BookInMessage,
                              DocumentType = model.DocumentType,
                              ManufacturersPartNumber = model.ManufacturersPartNumber,
                              OrderQty = model.OrderQty,
@@ -24,7 +23,8 @@
                              PartQcWarning = model.PartQcWarning,
                              Storage = model.Storage,
                              TransactionType = model.TransactionType,
-                             State = model.State
+                             State = model.State,
+                             Message = model.Message
             };
         }
 
