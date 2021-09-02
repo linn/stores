@@ -120,7 +120,8 @@
                                                           {
                                                               LineNumber = x.LineNumber,
                                                               Qty = x.Qty
-                                                          })));
+                                                          }),
+                    requestResource.KardexLocation));
         }
 
         public IResult<ValidateStorageTypeResult> ValidateStorageType(ValidateStorageTypeRequestResource requestResource)

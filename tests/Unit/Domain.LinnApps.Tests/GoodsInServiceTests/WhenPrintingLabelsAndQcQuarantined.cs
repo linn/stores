@@ -86,7 +86,8 @@
                                 LineNumber = 1,
                                 Qty = 1
                             }
-                    });
+                    },
+                null);
         }
 
         [Test]

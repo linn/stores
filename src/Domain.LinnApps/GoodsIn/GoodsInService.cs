@@ -339,8 +339,28 @@
             int numberOfLines,
             string qcState,
             int reqNumber,
-            IEnumerable<GoodsInLabelLine> lines)
+            IEnumerable<GoodsInLabelLine> lines,
+            string kardexLocation)
         {
+            var message = string.Empty;
+            var success = false;
+
+            if (!string.IsNullOrEmpty(kardexLocation))
+            {
+                var labelName = $"KGI{orderNumber}";
+                var data = $"\"{kardexLocation.Replace("\"", "''")}\",\"{reqNumber}\"";
+                var kardexLabelType = this.labelTypeRepository.FindBy(x => x.Code == "KARDEX");
+                success = this.bartender.PrintLabels(
+                    labelName,
+                    kardexLabelType.DefaultPrinter,
+                    1,
+                    kardexLabelType.FileName,
+                    data,
+                    ref message);
+
+                return new ProcessResult { Message = message, Success = success };
+            }
+
             var labelType = this.labelTypeRepository.FindBy(x => x.Code == qcState);
             var user = this.authUserRepository.FindBy(x => x.UserNumber == userNumber);
             var purchaseOrder = this.purchaseOrderRepository.FindById(orderNumber);
@@ -357,9 +377,6 @@
                     false,
                     $"Quantity Received was {qty}. Quantity Entered is {numberOfLines}.");
             }
-
-            var message = string.Empty;
-            var success = false;
 
             foreach (var line in lines)
             {
