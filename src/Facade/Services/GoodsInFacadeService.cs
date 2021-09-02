@@ -73,12 +73,7 @@
                 requestResource.NumberOfLines,
                 lines);
 
-            if (result.Success)
-            {
-                return new SuccessResult<BookInResult>(result);
-            }
-
-            return new BadRequestResult<BookInResult>(result.Message);
+            return new SuccessResult<BookInResult>(result);
         }
 
         public IResult<IEnumerable<LoanDetail>> GetLoanDetails(int loanNumber)

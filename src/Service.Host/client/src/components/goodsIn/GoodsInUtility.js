@@ -17,7 +17,8 @@ import {
     Typeahead,
     Dropdown,
     DatePicker,
-    Title
+    Title,
+    CheckboxWithLabel
 } from '@linn-it/linn-form-components-library';
 import QcLabelPrintScreen from '../../containers/goodsIn/QcLabelPrintScreen';
 import Page from '../../containers/Page';
@@ -56,8 +57,10 @@ function GoodsInUtility({
 
     const [message, setMessage] = useState({ error: false, text: '', success: false });
 
+    const [multipleBookIn, setMultipleBookIn] = useState(false);
+
     const getMessageColour = () => {
-        if (message?.success) {
+        if (bookInResult?.success) {
             return 'limegreen';
         }
         if (message?.error) {
@@ -123,15 +126,18 @@ function GoodsInUtility({
 
     useEffect(() => {
         if (bookInResult?.message) {
-            setMessage({ error: false, text: bookInResult.message, success: bookInResult.success });
+            setMessage({ error: !bookInResult?.success, text: bookInResult.message });
         }
         if (bookInResult?.success) {
             setPrintDialogOpen(true);
         }
-        if (bookInResult?.createParcel) {
+    }, [bookInResult]);
+
+    useEffect(() => {
+        if (bookInResult?.createParcel && !multipleBookIn) {
             setParcelDialogOpen(true);
         }
-    }, [bookInResult]);
+    }, [bookInResult, multipleBookIn]);
 
     const classes = useStyles();
 
@@ -590,6 +596,13 @@ function GoodsInUtility({
                     </Accordion>
                 </Grid>
                 <Grid item xs={12}>
+                    <CheckboxWithLabel
+                        label="Multiple Book In?"
+                        checked={multipleBookIn}
+                        onChange={() => setMultipleBookIn(m => !m)}
+                    />
+                </Grid>
+                <Grid item xs={12}>
                     <Button
                         variant="contained"
                         disabled={
@@ -630,7 +643,7 @@ function GoodsInUtility({
                         }
                         onClick={() => {
                             const row = {
-                                id: 1,
+                                id: rows.length + 1,
                                 articleNumber: validatePurchaseOrderResult.partNumber,
                                 transactionType: validatePurchaseOrderResult.transactionType,
                                 dateCreated: new Date().toISOString(),
@@ -643,9 +656,8 @@ function GoodsInUtility({
                                 storageType: formData.storageType,
                                 createdBy: userNumber
                             };
-                            if (rows.length === 0) {
-                                setRows(r => [...r, row]);
-                            }
+                            setRows(r => [...r, row]);
+
                             doBookIn({
                                 ...formData,
                                 lines: rows.length > 0 ? rows : [row],
