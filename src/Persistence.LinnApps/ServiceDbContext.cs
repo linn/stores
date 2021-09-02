@@ -1920,6 +1920,7 @@
             table.HasKey(a => a.ExportId);
             table.Property(a => a.ExportId).HasColumnName("EXPBOOK_ID");
             table.Property(a => a.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            table.HasOne(i => i.Consignment).WithMany(c => c.ExportBooks).HasForeignKey(i => i.ConsignmentId);
         }
 
         private void BuildPlCreditDebitNotes(ModelBuilder builder)
