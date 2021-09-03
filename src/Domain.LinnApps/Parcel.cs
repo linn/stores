@@ -1,6 +1,10 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
+
+    using Linn.Stores.Domain.LinnApps.ImportBooks;
 
     public class Parcel
     {
@@ -34,6 +38,8 @@
 
         public string CancellationReason { get; set; }
 
-        public int? ImportBookNo { get; set; }
+        public IList<int> ImportBookNos { get; set; }
+
+        public IList<ImportBook> Impbooks { get; set; }
     }
 }

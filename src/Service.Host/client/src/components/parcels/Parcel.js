@@ -438,14 +438,28 @@ function Parcel({
                         </Grid>
 
                         <Grid item xs={4}>
-                            <InputField
-                                fullWidth
-                                value={parcel.importBookNo}
-                                label="Import Book Number"
-                                maxLength={8}
-                                onChange={handleFieldChange}
-                                propertyName="importBookNo"
-                            />
+                            {parcel.importBookNos ? (
+                                parcel.importBookNos.map(impNumber => {
+                                    return (
+                                        <InputField
+                                            fullWidth
+                                            value={impNumber}
+                                            label="Import Book Number"
+                                            maxLength={8}
+                                            onChange={handleFieldChange}
+                                            propertyName={`importBookNo${impNumber}`}
+                                            disabled
+                                        />
+                                    );
+                                })
+                            ) : (
+                                <InputField
+                                    fullWidth
+                                    value="No Impbooks for parcel"
+                                    propertyName="importBookNo"
+                                    disabled
+                                />
+                            )}
                         </Grid>
 
                         <Grid item xs={12}>

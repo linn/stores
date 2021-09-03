@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Resources
 {
+    using System.Collections.Generic;
+
     using Linn.Common.Resources;
 
     public class ParcelResource : HypermediaResource
@@ -34,6 +36,6 @@
 
         public string CancellationReason { get; set; }
 
-        public int? ImportBookNo { get; set; }
+        public IList<int> ImportBookNos { get; set; }
     }
 }
