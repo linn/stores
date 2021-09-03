@@ -8,7 +8,8 @@ import {
     Dropdown,
     Typeahead,
     LinkButton,
-    SearchInputField
+    SearchInputField,
+    TableWithInlineEditing
 } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
 
@@ -34,54 +35,28 @@ function ImpBookTab({
     foreignCurrency,
     currency,
     carrierId,
-    OldArrivalPort,
-    flightNumber,
     transportId,
     transportBillNumber,
     transactionId,
     deliveryTermCode,
     arrivalPort,
-    lineVatTotal,
-    hwb,
-    supplierCostCurrency,
-    transNature,
     arrivalDate,
-    freightCharges,
-    handlingCharge,
-    clearanceCharge,
-    cartage,
-    duty,
-    vat,
-    misc,
-    carriersInvTotal,
-    carriersVatTotal,
     totalImportValue,
-    pieces,
     weight,
     customsEntryCode,
     customsEntryCodeDate,
     linnDuty,
     linnVat,
-    iprCpcNumber,
-    eecgNumber,
-    carrierInvNumber,
-    carrierInvDate,
-    countryOfOrigin,
-    fcName,
-    vaxRef,
-    storage,
     numCartons,
     numPallets,
-    exchangeRate,
-    exchangeCurrency,
-    baseCurrency,
-    periodNumber,
     createdBy,
-    portCode,
     customsEntryCodePrefix,
     allowedToEdit,
     countries,
-    currencies
+    currencies,
+    handleUpdateInvoiceDetails,
+    invoiceDetails,
+    totalInvoiceValue
 }) {
     const [localSuppliers, setLocalSuppliers] = useState([{}]);
 
@@ -187,18 +162,6 @@ function ImpBookTab({
     return (
         <>
             <Grid container spacing={1} item xs={7}>
-                <Grid item xs={6}>
-                    <InputField
-                        label="Vax ref"
-                        fullWidth
-                        onChange={handleFieldChange}
-                        propertyName="vaxRef"
-                        value={vaxRef}
-                        disabled={!allowedToEdit}
-                    />
-                </Grid>
-                <Grid item xs={6} />
-
                 <Grid item xs={6}>
                     <SearchInputField
                         label="Date Created"
@@ -318,19 +281,6 @@ function ImpBookTab({
                         disabled={!allowedToEdit}
                     />
                 </Grid>
-
-                <Grid item xs={4}>
-                    <InputField
-                        fullWidth
-                        value={exchangeRate}
-                        label="Exchange Rate"
-                        maxLength={8}
-                        onChange={handleFieldChange}
-                        propertyName="exchangeRate"
-                        disabled
-                    />
-                </Grid>
-
                 <Grid item xs={6}>
                     <InputField
                         label="Total Import Value"
@@ -343,13 +293,42 @@ function ImpBookTab({
                 </Grid>
                 <Grid item xs={2} />
 
-                <Grid item xs={4} className={classes.negativeTopMargin} disabled>
-                    <LinkButton
-                        text="Exchange Rates"
-                        // to={''}
+                <Grid item xs={12} className={classes.gapAbove}>
+                    <TableWithInlineEditing
+                        columnsInfo={[
+                            {
+                                title: 'Invoice Number',
+                                key: 'invoiceNumber',
+                                type: 'text'
+                            },
+                            {
+                                title: 'Invoice Value',
+                                key: 'invoiceValue',
+                                type: 'number',
+                                decimalPlaces: 2
+                            }
+                        ]}
+                        content={invoiceDetails ?? [{}]}
+                        updateContent={handleUpdateInvoiceDetails}
+                        allowedToEdit={allowedToEdit}
+                        allowedToCreate={allowedToEdit}
+                        allowedToDelete={allowedToEdit}
                     />
                 </Grid>
-
+                <Grid item xs={6} />
+                <Grid item xs={6}>
+                    <InputField
+                        label="Total Invoice Value"
+                        value={totalInvoiceValue}
+                        onChange={handleFieldChange}
+                        propertyName="totalImportValue"
+                        fullwidth
+                        type="number"
+                        maxLength={20}
+                        decimalPlaces={2}
+                        disabled
+                    />
+                </Grid>
                 <Grid item xs={12} className={classes.gapAbove}>
                     <div className={classes.displayInline}>
                         <Typeahead
@@ -381,30 +360,6 @@ function ImpBookTab({
                         </Tooltip>
                     </div>
                 </Grid>
-
-                <Grid item xs={6}>
-                    <InputField
-                        label="Carrier Invoice No"
-                        fullWidth
-                        onChange={handleFieldChange}
-                        propertyName="carrierInvNumber"
-                        value={carrierInvNumber}
-                        disabled={!allowedToEdit}
-                    />
-                </Grid>
-
-                <Grid item xs={6}>
-                    <SearchInputField
-                        label="carrier Invoice Date"
-                        fullWidth
-                        onChange={handleFieldChange}
-                        propertyName="carrierInvDate"
-                        type="date"
-                        value={carrierInvDate}
-                        disabled={!allowedToEdit}
-                    />
-                </Grid>
-
                 <Grid item xs={6}>
                     <Dropdown
                         items={transportCodes}
@@ -465,27 +420,6 @@ function ImpBookTab({
                 </Grid>
 
                 <Grid item xs={6}>
-                    <InputField
-                        label="Flight Number"
-                        fullWidth
-                        onChange={handleFieldChange}
-                        propertyName="flightNumber"
-                        value={flightNumber}
-                        disabled={!allowedToEdit}
-                    />
-                </Grid>
-
-                <Grid item xs={6}>
-                    <InputField
-                        label="HWB"
-                        fullWidth
-                        onChange={handleFieldChange}
-                        propertyName="hwb"
-                        value={hwb}
-                        disabled={!allowedToEdit}
-                    />
-                </Grid>
-                <Grid item xs={6}>
                     <SearchInputField
                         label="Arrival Date"
                         fullWidth
@@ -502,130 +436,7 @@ function ImpBookTab({
             <Grid container spacing={1} item xs={1} />
 
             <Grid container spacing={1} item xs={4}>
-                <Grid item xs={12}>
-                    <InputField
-                        label="Freight Charges"
-                        value={freightCharges}
-                        onChange={handleFieldChange}
-                        type="number"
-                        propertyName="freightCharges"
-                        fullwidth
-                        disabled={!allowedToEdit}
-                    />
-                </Grid>
                 <Grid item xs={6}>
-                    <InputField
-                        label="Handling Charge"
-                        value={handlingCharge}
-                        onChange={handleFieldChange}
-                        type="number"
-                        propertyName="handlingCharge"
-                        fullwidth
-                        disabled={!allowedToEdit}
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    <InputField
-                        label="Clearance Charge"
-                        value={clearanceCharge}
-                        onChange={handleFieldChange}
-                        propertyName="clearanceCharge"
-                        type="number"
-                        fullwidth
-                        disabled={!allowedToEdit}
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    <InputField
-                        label="Cartage"
-                        value={cartage}
-                        onChange={handleFieldChange}
-                        type="number"
-                        propertyName="cartage"
-                        fullwidth
-                        disabled={!allowedToEdit}
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    <InputField
-                        label="Storage"
-                        value={storage}
-                        onChange={handleFieldChange}
-                        type="number"
-                        propertyName="storage"
-                        fullwidth
-                        disabled={!allowedToEdit}
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    <InputField
-                        label="Duty"
-                        value={duty}
-                        onChange={handleFieldChange}
-                        propertyName="duty"
-                        type="number"
-                        fullwidth
-                        disabled={!allowedToEdit}
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    <InputField
-                        label="Vat"
-                        value={vat}
-                        onChange={handleFieldChange}
-                        propertyName="vat"
-                        type="number"
-                        fullwidth
-                        disabled={!allowedToEdit}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <InputField
-                        label="Misc"
-                        value={misc}
-                        onChange={handleFieldChange}
-                        propertyName="misc"
-                        type="number"
-                        fullwidth
-                        disabled={!allowedToEdit}
-                    />
-                </Grid>
-
-                <Grid item xs={4}>
-                    <InputField
-                        label="Net total (inv)"
-                        value={carriersInvTotal}
-                        onChange={handleFieldChange}
-                        propertyName="carriersInvTotal"
-                        fullwidth
-                        type="number"
-                        disabled={!allowedToEdit}
-                    />
-                </Grid>
-
-                <Grid item xs={4}>
-                    <InputField
-                        label="Freight Vat"
-                        value={carriersVatTotal}
-                        onChange={handleFieldChange}
-                        propertyName="carriersVatTotal"
-                        fullwidth
-                        type="number"
-                        disabled={!allowedToEdit}
-                    />
-                </Grid>
-
-                <Grid item xs={4}>
-                    <InputField
-                        label="Grand total"
-                        value={carriersInvTotal + carriersVatTotal}
-                        fullwidth
-                        type="number"
-                        disabled
-                    />
-                </Grid>
-
-                <Grid item xs={4}>
                     <InputField
                         label="Number of Cartons"
                         value={numCartons}
@@ -636,7 +447,7 @@ function ImpBookTab({
                         disabled={!allowedToEdit}
                     />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={6}>
                     <InputField
                         label="Number of Pallets"
                         value={numPallets}
@@ -647,7 +458,7 @@ function ImpBookTab({
                         disabled={!allowedToEdit}
                     />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={12}>
                     <InputField
                         label="Weight"
                         value={weight}
@@ -787,53 +598,28 @@ ImpBookTab.propTypes = {
     foreignCurrency: PropTypes.string.isRequired,
     currency: PropTypes.string,
     carrierId: PropTypes.number.isRequired,
-    OldArrivalPort: PropTypes.string,
-    flightNumber: PropTypes.string,
     transportId: PropTypes.number.isRequired,
     transportBillNumber: PropTypes.string,
     transactionId: PropTypes.number.isRequired,
     deliveryTermCode: PropTypes.string.isRequired,
     arrivalPort: PropTypes.string,
-    lineVatTotal: PropTypes.number,
-    hwb: PropTypes.string,
-    supplierCostCurrency: PropTypes.string,
-    transNature: PropTypes.string,
     arrivalDate: PropTypes.string,
-    freightCharges: PropTypes.number,
-    handlingCharge: PropTypes.number,
-    clearanceCharge: PropTypes.number,
-    cartage: PropTypes.number,
-    duty: PropTypes.number,
-    vat: PropTypes.number,
-    misc: PropTypes.number,
-    carriersInvTotal: PropTypes.number,
-    carriersVatTotal: PropTypes.number,
     totalImportValue: PropTypes.number.isRequired,
-    pieces: PropTypes.number,
     weight: PropTypes.number,
     customsEntryCode: PropTypes.string,
     customsEntryCodeDate: PropTypes.string,
     linnDuty: PropTypes.number,
     linnVat: PropTypes.number,
-    iprCpcNumber: PropTypes.number,
-    eecgNumber: PropTypes.number,
-    carrierInvNumber: PropTypes.string,
-    carrierInvDate: PropTypes.string,
-    countryOfOrigin: PropTypes.string,
-    fcName: PropTypes.string,
-    vaxRef: PropTypes.string,
-    storage: PropTypes.number,
     numCartons: PropTypes.number,
     numPallets: PropTypes.number,
-    exchangeRate: PropTypes.number,
-    exchangeCurrency: PropTypes.string,
-    baseCurrency: PropTypes.string,
-    periodNumber: PropTypes.number,
     createdBy: PropTypes.number,
-    portCode: PropTypes.string,
     customsEntryCodePrefix: '',
     allowedToEdit: PropTypes.bool.isRequired,
-    countries: PropTypes.arrayOf(PropTypes.shape({}))
+    countries: PropTypes.arrayOf(PropTypes.shape({})),
+    invoiceDetails: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    currencies: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    handleUpdateInvoiceDetails: PropTypes.func.isRequired,
+    totalInvoiceValue: PropTypes.number
 };
 
 ImpBookTab.defaultProps = {
@@ -841,48 +627,20 @@ ImpBookTab.defaultProps = {
     allSuppliers: [{ id: 0, name: 'loading', country: 'loading' }],
     parcelNumber: null,
     currency: '',
-    OldArrivalPort: '',
-    flightNumber: '',
     transportBillNumber: '',
     arrivalPort: '',
-    lineVatTotal: null,
-    hwb: '',
-    supplierCostCurrency: '',
-    transNature: '',
     arrivalDate: new Date(),
-    freightCharges: null,
-    handlingCharge: null,
-    clearanceCharge: null,
-    cartage: null,
-    duty: null,
-    vat: null,
-    misc: null,
-    carriersInvTotal: null,
-    carriersVatTotal: null,
-    pieces: null,
     weight: null,
     customsEntryCode: '',
     customsEntryCodeDate: new Date(),
     linnDuty: null,
     linnVat: null,
-    iprCpcNumber: null,
-    eecgNumber: null,
-    carrierInvNumber: '',
-    carrierInvDate: new Date(),
-    countryOfOrigin: '',
-    fcName: '',
-    vaxRef: '',
-    storage: null,
     numCartons: null,
     numPallets: null,
-    exchangeRate: null,
-    exchangeCurrency: '',
-    baseCurrency: '',
-    periodNumber: null,
     createdBy: null,
-    portCode: '',
     customsEntryCodePrefix: '',
-    countries: [{ id: '-1', countryCode: 'loading..' }]
+    countries: [{ id: '-1', countryCode: 'loading..' }],
+    totalInvoiceValue: 0
 };
 
 export default ImpBookTab;

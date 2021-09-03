@@ -180,11 +180,31 @@ function ImportBook({
         });
     };
 
+    const handleUpdateInvoiceDetails = details => {
+        setEditStatus('edit');
+        dispatch({
+            type: 'invoiceDetailsUpdate',
+            details
+        });
+    };
+
     const allowedToEdit = () => {
         if (!(privileges.length < 1)) {
             return privileges.some(priv => priv === 'import-books.admin');
         }
         return false;
+    };
+
+    const totalInvoiceValue = () => {
+        let total = `${state.impbook.importBookInvoiceDetails?.reduce(
+            (a, v) => a + v.invoiceValue,
+            0
+        )}`;
+        if (total) {
+            total = `${parseFloat(total).toFixed(2)}`;
+        }
+
+        return total;
     };
 
     return (
@@ -291,6 +311,9 @@ function ImportBook({
                                     linnDuty={state.impbook.linnDuty}
                                     linnVat={state.impbook.linnVat}
                                     allowedToEdit={allowedToEdit()}
+                                    invoiceDetails={state.impbook.importBookInvoiceDetails}
+                                    handleUpdateInvoiceDetails={handleUpdateInvoiceDetails}
+                                    totalInvoiceValue={totalInvoiceValue()}
                                 />
                             )}
 
@@ -302,6 +325,9 @@ function ImportBook({
                                     allowedToEdit={allowedToEdit()}
                                     addOrderDetailRow={handleAddOrderDetailRow}
                                     removeOrderDetailRow={handleRemoveOrderDetailRow}
+                                    totalInvoiceValue={totalInvoiceValue()}
+                                    duty={state.impbook.linnDuty}
+                                    weight={state.impbook.weight}
                                 />
                             )}
                             {tab === 2 && (
@@ -309,6 +335,7 @@ function ImportBook({
                                     postEntries={state.impbook.importBookPostEntries}
                                     updatePostEntries={handleUpdatePostEntries}
                                     allowedToEdit={allowedToEdit()}
+                                    totalInvoiceValue={totalInvoiceValue()}
                                 />
                             )}
                             {tab === 3 && (
