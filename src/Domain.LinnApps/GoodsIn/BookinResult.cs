@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.GoodsIn
 {
+    using System.Collections.Generic;
+
     using Linn.Stores.Domain.LinnApps.Models;
 
     public class BookInResult : ProcessResult
@@ -35,5 +37,7 @@
         public int? SupplierId { get; set; }
 
         public int? CreatedBy { get; set; }
+
+        public IEnumerable<GoodsInLogEntry> Lines { get; set; }
     }
 }

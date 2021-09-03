@@ -81,6 +81,7 @@
             string rsnAccessories,
             int? reqNumber,
             int? numberOfLines,
+            bool? multipleBookIn,
             IEnumerable<GoodsInLogEntry> lines)
         {
             if (!orderNumber.HasValue || transactionType != "O")
@@ -147,6 +148,11 @@
                 success,
                 success ? "Book In Successful!" : this.goodsInPack.GetErrorMessage());
 
+            if (success)
+            {
+                result.Lines = goodsInLogEntries;
+            }
+
             if (!reqNumberResult.HasValue)
             {
                 return result;
@@ -191,7 +197,8 @@
             result.PartNumber = partNumber;
             result.PartDescription = part.Description;
             
-            if (!new[] { "L", "O", "R" }.Contains(transactionType) 
+            if ((multipleBookIn != null && multipleBookIn.Value) 
+                || !new[] { "L", "O", "R" }.Contains(transactionType) 
                 || !this.goodsInPack.ParcelRequired(
                     orderNumber,
                     rsnNumber,

@@ -11,15 +11,15 @@ import { makeStyles } from '@material-ui/styles';
 function OrderDetailsTab({
     orderDetails,
     handleFieldChange,
-    remainingTotal,
-    remainingDutyTotal,
-    remainingWeight,
     invoiceDate,
     handleOrderDetailChange,
     cpcNumbers,
     allowedToEdit,
     addOrderDetailRow,
-    removeOrderDetailRow
+    removeOrderDetailRow,
+    totalInvoiceValue,
+    duty,
+    weight
 }) {
     const updateRow = detail => {
         handleOrderDetailChange(detail.lineNumber, detail);
@@ -61,6 +61,42 @@ function OrderDetailsTab({
         updateRow({ ...row, [propertyName]: newValue });
     };
 
+    const calcRemainingTotal = () => {
+        const orderDetailsTotal = orderDetails?.reduce((a, v) => a + v.orderValue, 0);
+
+        let remaining = `${totalInvoiceValue - orderDetailsTotal}`;
+
+        if (remaining) {
+            remaining = `${parseFloat(remaining).toFixed(2)}`;
+        }
+
+        return remaining || 0;
+    };
+
+    const calcRemainingDuty = () => {
+        const orderDetailsDutyTotal = orderDetails?.reduce((a, v) => a + v.dutyValue, 0);
+
+        let remaining = `${duty - orderDetailsDutyTotal}`;
+
+        if (remaining) {
+            remaining = `${parseFloat(remaining).toFixed(2)}`;
+        }
+
+        return remaining || 0;
+    };
+
+    const calcRemainingWeight = () => {
+        const orderDetailsWeightTotal = orderDetails?.reduce((a, v) => a + v.weight, 0);
+
+        let remaining = `${weight - orderDetailsWeightTotal}`;
+
+        if (remaining) {
+            remaining = `${parseFloat(remaining).toFixed(2)}`;
+        }
+
+        return remaining || 0;
+    };
+
     return (
         <>
             <Grid container spacing={1} item xs={7}>
@@ -68,42 +104,31 @@ function OrderDetailsTab({
                     <InputField
                         label="Remaining Total"
                         fullWidth
-                        onChange={handleFieldChange}
                         propertyName="remainingTotal"
                         type="number"
-                        value={remainingTotal}
-                        disabled={!allowedToEdit}
+                        value={calcRemainingTotal()}
+                        disabled
                     />
                 </Grid>
                 <Grid item xs={3}>
                     <InputField
                         label="Remaining Duty Total"
                         fullWidth
-                        onChange={handleFieldChange}
                         propertyName="remainingDutyTotal"
                         type="number"
-                        value={remainingDutyTotal}
+                        value={calcRemainingDuty()}
                         required
-                        disabled={!allowedToEdit}
+                        disabled
                     />
                 </Grid>
                 <Grid item xs={3}>
                     <InputField
                         label="Remaining Weight"
                         fullWidth
-                        onChange={handleFieldChange}
                         propertyName="remainingWeight"
                         type="number"
-                        value={remainingWeight}
-                        disabled={!allowedToEdit}
-                    />
-                </Grid>
-                <Grid item xs={3}>
-                    <LinkButton
-                        text="Calculate Weights"
-                        //todo to={`/logistics/`}
+                        value={calcRemainingWeight()}
                         disabled
-                        external
                     />
                 </Grid>
 
@@ -411,9 +436,9 @@ function OrderDetailsTab({
 OrderDetailsTab.propTypes = {
     orderDetails: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     handleFieldChange: PropTypes.func.isRequired,
-    remainingTotal: PropTypes.number.isRequired,
-    remainingDutyTotal: PropTypes.number.isRequired,
-    remainingWeight: PropTypes.number.isRequired,
+    totalInvoiceValue: PropTypes.number.isRequired,
+    duty: PropTypes.number.isRequired,
+    weight: PropTypes.number.isRequired,
     invoiceDate: PropTypes.string.isRequired,
     handleOrderDetailChange: PropTypes.func.isRequired,
     cpcNumbers: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
