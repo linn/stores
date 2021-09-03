@@ -148,6 +148,11 @@
                 success,
                 success ? "Book In Successful!" : this.goodsInPack.GetErrorMessage());
 
+            if (success)
+            {
+                result.Lines = goodsInLogEntries;
+            }
+
             if (!reqNumberResult.HasValue)
             {
                 return result;

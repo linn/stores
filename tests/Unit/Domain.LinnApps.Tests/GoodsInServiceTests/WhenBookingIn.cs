@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Linq.Expressions;
 
     using FluentAssertions;
@@ -71,6 +72,8 @@
                         x[17] = 1;
                         x[18] = true;
                     });
+
+            this.GoodsInPack.GetNextLogId().Returns(1111);
             
             this.result = this.Sut.DoBookIn(
                 "O",
@@ -139,6 +142,8 @@
             this.result.QcState.Should().Be("PASS");
             this.result.QcInfo.Should().Be("Some Info");
             this.result.UnitOfMeasure.Should().Be("ONES");
+            this.result.Lines.Count().Should().Be(1);
+            this.result.Lines.First().Id.Should().Be(1111);
         }
     }
 }
