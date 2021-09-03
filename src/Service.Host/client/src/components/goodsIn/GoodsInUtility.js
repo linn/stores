@@ -124,7 +124,7 @@ function GoodsInUtility({
 
     useEffect(() => {
         if (bookInResult?.message) {
-            setMessage({ error: !bookInResult?.success, text: bookInResult.message });
+            setMessage({ error: !bookInResult.success, text: bookInResult.message });
         }
         if (bookInResult?.success) {
             setPrintDialogOpen(true);
