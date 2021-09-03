@@ -59,6 +59,13 @@ function GoodsInUtility({
 
     const [multipleBookIn, setMultipleBookIn] = useState(false);
 
+    const [logEntries, setLogEntries] = useState([]);
+
+    const [lines, setLines] = useState([]);
+
+    const [rows, setRows] = useState([...logEntries, ...lines]);
+    const [selectedRows, setSelectedRows] = useState([]);
+
     const getMessageColour = () => {
         if (bookInResult?.success) {
             return 'limegreen';
@@ -88,6 +95,10 @@ function GoodsInUtility({
     const [printDialogOpen, setPrintDialogOpen] = useState(false);
 
     const [parcelDialogOpen, setParcelDialogOpen] = useState(false);
+
+    useEffect(() => {
+        setRows([...logEntries, ...lines]);
+    }, [logEntries, lines]);
 
     useEffect(() => {
         if (validatePurchaseOrderResult?.documentType === 'PO') {
@@ -130,6 +141,8 @@ function GoodsInUtility({
         }
         if (bookInResult?.success) {
             setPrintDialogOpen(true);
+            setLines([]);
+            setLogEntries(r => [...r, ...bookInResult.lines]);
         }
         if (bookInResult?.createParcel) {
             setParcelDialogOpen(true);
@@ -180,7 +193,7 @@ function GoodsInUtility({
         },
         {
             headerName: 'Loc',
-            field: 'location',
+            field: 'storagePlace',
             width: 200
         },
         {
@@ -227,9 +240,6 @@ function GoodsInUtility({
             hide: true
         }
     ];
-
-    const [rows, setRows] = useState([]);
-    const [selectedRows, setSelectedRows] = useState([]);
 
     const handleSelectRow = selected => {
         setSelectedRows(rows.filter(r => selected.rowIds.includes(r.id.toString())));
@@ -609,14 +619,14 @@ function GoodsInUtility({
                             !formData.qty
                         }
                         onClick={() =>
-                            setRows(r => [
-                                ...r,
+                            setLines(l => [
+                                ...l,
                                 {
-                                    id: r.length + 1,
+                                    id: l.length + 1,
                                     articleNumber: validatePurchaseOrderResult.partNumber,
                                     transactionType: validatePurchaseOrderResult.transactionType,
                                     dateCreated: new Date().toISOString(),
-                                    location: formData.ontoLocation,
+                                    storagePlace: formData.ontoLocation,
                                     locationId: formData.ontoLocationId,
                                     quantity: formData.qty,
                                     orderNumber: validatePurchaseOrderResult.orderNumber,
@@ -640,7 +650,6 @@ function GoodsInUtility({
                         }
                         onClick={() => {
                             const row = {
-                                id: rows.length + 1,
                                 articleNumber: validatePurchaseOrderResult.partNumber,
                                 transactionType: validatePurchaseOrderResult.transactionType,
                                 dateCreated: new Date().toISOString(),
@@ -653,12 +662,12 @@ function GoodsInUtility({
                                 storageType: formData.storageType,
                                 createdBy: userNumber
                             };
-                            setRows(r => [...r, row]);
+                            //setRows(r => [...r, row]);
 
                             doBookIn({
                                 ...formData,
                                 multipleBookIn,
-                                lines: rows.length > 0 ? rows : [row],
+                                lines: lines.length > 0 ? lines : [row],
                                 createdBy: userNumber,
                                 transactionType: validatePurchaseOrderResult.transactionType,
                                 partNumber: validatePurchaseOrderResult.partNumber,
@@ -746,7 +755,8 @@ GoodsInUtility.propTypes = {
         kardexLocation: PropTypes.string,
         parcelComments: PropTypes.string,
         supplierId: PropTypes.number,
-        createParcel: PropTypes.bool
+        createParcel: PropTypes.bool,
+        lines: PropTypes.arrayOf(PropTypes.shape({}))
     }),
     bookInResultLoading: PropTypes.bool,
     doBookIn: PropTypes.func.isRequired,
