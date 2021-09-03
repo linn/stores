@@ -238,7 +238,7 @@ function ItemsTab({
     const recalculateCarton = containerNumber => {
         let weight = 0;
         const setValues = item => {
-            if (item.itemType === 'C'){
+            if (item.itemType === 'C') {
                 weight += item.itemBaseWeight;
             } else {
                 weight += item.weight;

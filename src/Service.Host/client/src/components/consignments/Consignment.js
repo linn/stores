@@ -23,6 +23,7 @@ import Page from '../../containers/Page';
 import consignmentReducer from './consignmentReducer';
 import DetailsTab from './DetailsTab';
 import ItemsTab from './ItemsTab';
+import InvoicesTab from './InvoicesTab';
 
 function Consignment({
     item,
@@ -413,6 +414,7 @@ function Consignment({
                         <Tab label="Select" />
                         <Tab label="Details" />
                         <Tab label="Consignment Items" />
+                        <Tab label="Documents" />
                     </Tabs>
                     {currentTab === 0 && (
                         <>
@@ -476,6 +478,13 @@ function Consignment({
                                     cartonTypes={cartonTypes}
                                     setEditStatus={setEditStatus}
                                     viewing={viewing()}
+                                />
+                            )}
+                            {currentTab === 3 && (
+                                <InvoicesTab
+                                    invoices={state.consignment.invoices}
+                                    exportBooks={state.consignment.exportBooks}
+                                    printDocuments={() => {}}
                                 />
                             )}
                         </>
