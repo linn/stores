@@ -71,14 +71,10 @@
                 requestResource.RsnAccessories,
                 requestResource.ReqNumber,
                 requestResource.NumberOfLines,
+                requestResource.MultipleBookIn,
                 lines);
 
-            if (result.Success)
-            {
-                return new SuccessResult<BookInResult>(result);
-            }
-
-            return new BadRequestResult<BookInResult>(result.Message);
+            return new SuccessResult<BookInResult>(result);
         }
 
         public IResult<IEnumerable<LoanDetail>> GetLoanDetails(int loanNumber)
@@ -120,7 +116,8 @@
                                                           {
                                                               LineNumber = x.LineNumber,
                                                               Qty = x.Qty
-                                                          })));
+                                                          }),
+                    requestResource.KardexLocation));
         }
 
         public IResult<ValidateStorageTypeResult> ValidateStorageType(ValidateStorageTypeRequestResource requestResource)

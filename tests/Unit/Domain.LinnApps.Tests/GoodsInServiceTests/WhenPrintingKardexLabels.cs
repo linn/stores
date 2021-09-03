@@ -14,10 +14,8 @@
 
     using NUnit.Framework;
 
-    public class WhenPrintingPoLabelsAndQcPassed : ContextBase
+    public class WhenPrintingKardexLabels : ContextBase
     {
-        private readonly string dateString = DateTime.Today.ToString("MMMddyyyy").ToUpper();
-
         private ProcessResult result;
 
         [SetUp]
@@ -25,42 +23,42 @@
         {
             this.LabelTypeRepository.FindBy(Arg.Any<Expression<Func<StoresLabelType, bool>>>())
                 .Returns(new StoresLabelType
-                             {
-                                 Code = "PASS",
-                                 FileName = "template.ext",
-                                 DefaultPrinter = "Printer"
-                             });
+                {
+                    Code = "KARDEX",
+                    FileName = "kardex-template.ext",
+                    DefaultPrinter = "Printer"
+                });
             this.AuthUserRepository.FindBy(Arg.Any<Expression<Func<AuthUser, bool>>>())
                 .Returns(new AuthUser
-                             {
-                                 Initials = "SU",
-                                 Name = "Some User",
-                                 UserNumber = 1
-                             });
+                {
+                    Initials = "SU",
+                    Name = "Some User",
+                    UserNumber = 1
+                });
             this.PurchaseOrderRepository.FindById(1)
                 .Returns(new PurchaseOrder
-                            {
-                                OrderNumber = 1,
-                                Details = new List<PurchaseOrderDetail>
+                {
+                    OrderNumber = 1,
+                    Details = new List<PurchaseOrderDetail>
                                               {
                                                   new PurchaseOrderDetail
                                                       {
                                                           RohsCompliant = "Y"
                                                       }
                                               }
-                            });
+                });
             this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>())
                 .Returns(new Part
-                             {
-                                 PartNumber = "PART"
-                             });
+                {
+                    PartNumber = "PART"
+                });
 
             this.Bartender.PrintLabels(
-                "QC 1",
+                "KGI1",
                 "Printer",
                 1,
-                "template.ext",
-                $"1\",\"PART\",\"1\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"{Environment.NewLine}",
+                "kardex-template.ext",
+                $"\"kardex-location\",\"1\"",
                 ref Arg.Any<string>()).Returns(true);
 
             this.result = this.Sut.PrintLabels(
@@ -74,26 +72,19 @@
                 1,
                 "PASS",
                 1,
-                new List<GoodsInLabelLine>
-                    {
-                        new GoodsInLabelLine
-                            {
-                                      LineNumber = 1,
-                                      Qty = 1
-                                  }
-                    },
-                null);
+                null,
+                "kardex-location");
         }
 
         [Test]
         public void ShouldCallBartenderWithCorrectParameters()
         {
             this.Bartender.Received(1).PrintLabels(
-                "QC 1",
+                "KGI1",
                 "Printer",
                 1,
-                "template.ext",
-                $"1\",\"PART\",\"1\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"{Environment.NewLine}",
+                "kardex-template.ext",
+                $"\"kardex-location\",\"1\"",
                 ref Arg.Any<string>());
         }
 

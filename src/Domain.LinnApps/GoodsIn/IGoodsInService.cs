@@ -26,6 +26,7 @@
             string rsnAccessories,
             int? reqNumber,
             int? numberOfLines,
+            bool? multipleBookIn,
             IEnumerable<GoodsInLogEntry> lines);
 
         ValidatePurchaseOrderResult ValidatePurchaseOrder(int orderNumber, int line);
@@ -46,7 +47,8 @@
             int numberOfLines,
             string qcState,
             int reqNumber,
-            IEnumerable<GoodsInLabelLine> lines);
+            IEnumerable<GoodsInLabelLine> lines,
+            string kardexLocation);
 
         ValidateStorageTypeResult ValidateStorageType(
             int? orderNumber,

@@ -17,7 +17,8 @@ function QcLabelPrintScreen({
     qcInfo,
     printLabels,
     printLabelsResult,
-    printLabelsLoading
+    printLabelsLoading,
+    kardexLocation
 }) {
     const [deliveryRef, setDeliveryRef] = useState('');
     const [numContainers, setNumContainers] = useState(qtyReceived);
@@ -142,6 +143,7 @@ function QcLabelPrintScreen({
                     onClick={() =>
                         printLabels({
                             documentType: docType,
+                            kardexLocation,
                             partNumber,
                             partDescription,
                             deliveryRef,
@@ -182,7 +184,8 @@ QcLabelPrintScreen.propTypes = {
     qcInfo: PropTypes.string,
     printLabels: PropTypes.func.isRequired,
     printLabelsResult: PropTypes.shape({ message: PropTypes.string, success: PropTypes.bool }),
-    printLabelsLoading: PropTypes.bool
+    printLabelsLoading: PropTypes.bool,
+    kardexLocation: PropTypes.string
 };
 
 QcLabelPrintScreen.defaultProps = {
@@ -196,7 +199,8 @@ QcLabelPrintScreen.defaultProps = {
     reqNumber: null,
     qcInfo: null,
     printLabelsResult: null,
-    printLabelsLoading: false
+    printLabelsLoading: false,
+    kardexLocation: null
 };
 
 export default QcLabelPrintScreen;

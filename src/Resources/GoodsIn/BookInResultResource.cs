@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Resources.GoodsIn
 {
+    using System.Collections.Generic;
+
     public class BookInResultResource : ProcessResultResource
     {
         public int? ReqNumber { get; set; }
@@ -29,5 +31,7 @@
         public int? SupplierId { get; set; }
 
         public int? CreatedBy { get; set; }
+
+        public IEnumerable<GoodsInLogEntryResource> Lines { get; set; }
     }
 }

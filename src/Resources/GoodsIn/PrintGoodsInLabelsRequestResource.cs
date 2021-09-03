@@ -29,5 +29,7 @@
         public int ReqNumber { get; set; }
 
         public IEnumerable<GoodsInLabelLineResource> Lines { get; set; }
+
+        public string KardexLocation { get; set; }
     }
 }

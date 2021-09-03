@@ -90,7 +90,8 @@
                                 LineNumber = 3,
                                 Qty = 3
                             }
-                    });
+                    },
+                null);
         }
 
         [Test]
