@@ -55,7 +55,7 @@ function GoodsInUtility({
         lines: []
     });
 
-    const [message, setMessage] = useState({ error: false, text: '', success: false });
+    const [message, setMessage] = useState({ error: false, text: '' });
 
     const [multipleBookIn, setMultipleBookIn] = useState(false);
 
@@ -107,13 +107,15 @@ function GoodsInUtility({
     }, [validatePurchaseOrderResult]);
 
     useEffect(() => {
-        if (validatePurchaseOrderBookInQtyResult?.success) {
-            setFormData(d => ({ ...d, numberOfLines: 1 }));
+        if (validatePurchaseOrderBookInQtyResult) {
+            if (validatePurchaseOrderBookInQtyResult.success) {
+                setFormData(d => ({ ...d, numberOfLines: 1 }));
+            }
+            setMessage({
+                error: !validatePurchaseOrderBookInQtyResult?.success,
+                text: validatePurchaseOrderBookInQtyResult?.message
+            });
         }
-        setMessage({
-            error: !validatePurchaseOrderBookInQtyResult?.success,
-            text: validatePurchaseOrderBookInQtyResult?.message
-        });
     }, [validatePurchaseOrderBookInQtyResult]);
 
     useEffect(() => {
@@ -655,6 +657,7 @@ function GoodsInUtility({
 
                             doBookIn({
                                 ...formData,
+                                multipleBookIn,
                                 lines: rows.length > 0 ? rows : [row],
                                 createdBy: userNumber,
                                 transactionType: validatePurchaseOrderResult.transactionType,
