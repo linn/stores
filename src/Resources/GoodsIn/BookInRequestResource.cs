@@ -45,5 +45,7 @@
         public int? NumberOfLines { get; set; }
 
         public IEnumerable<BookInLineResource> Lines { get; set; }
+
+        public bool? MultipleBookIn { get; set; }
     }
 }

@@ -92,6 +92,7 @@
                 null,
                 null,
                 1,
+                false,
                 new List<GoodsInLogEntry>
                     {
                         new GoodsInLogEntry

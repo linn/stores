@@ -71,6 +71,7 @@
                 requestResource.RsnAccessories,
                 requestResource.ReqNumber,
                 requestResource.NumberOfLines,
+                requestResource.MultipleBookIn,
                 lines);
 
             return new SuccessResult<BookInResult>(result);

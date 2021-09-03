@@ -107,15 +107,13 @@ function GoodsInUtility({
     }, [validatePurchaseOrderResult]);
 
     useEffect(() => {
-        if (validatePurchaseOrderBookInQtyResult) {
-            if (validatePurchaseOrderBookInQtyResult.success) {
-                setFormData(d => ({ ...d, numberOfLines: 1 }));
-            }
-            setMessage({
-                error: !validatePurchaseOrderBookInQtyResult?.success,
-                text: validatePurchaseOrderBookInQtyResult?.message
-            });
+        if (validatePurchaseOrderBookInQtyResult?.success) {
+            setFormData(d => ({ ...d, numberOfLines: 1 }));
         }
+        setMessage({
+            error: !validatePurchaseOrderBookInQtyResult?.success,
+            text: validatePurchaseOrderBookInQtyResult?.message
+        });
     }, [validatePurchaseOrderBookInQtyResult]);
 
     useEffect(() => {
@@ -131,13 +129,10 @@ function GoodsInUtility({
         if (bookInResult?.success) {
             setPrintDialogOpen(true);
         }
-    }, [bookInResult]);
-
-    useEffect(() => {
-        if (bookInResult?.createParcel && !multipleBookIn) {
+        if (bookInResult?.createParcel) {
             setParcelDialogOpen(true);
         }
-    }, [bookInResult, multipleBookIn]);
+    }, [bookInResult]);
 
     const classes = useStyles();
 
