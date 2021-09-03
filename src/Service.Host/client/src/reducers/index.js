@@ -119,6 +119,7 @@ import currencies from './currencies';
 import exchangeRates from './exchangeRates';
 import printGoodsInLabels from './printGoodsInLabels';
 import validateStorageTypeResult from './validateStorageTypeResult';
+import printConsignmentDocuments from './printConsignmentDocuments';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -192,6 +193,7 @@ const rootReducer = history =>
         partTemplates,
         pickItemsAllocation,
         ports,
+        printConsignmentDocuments,
         printConsignmentLabel,
         printGoodsInLabels,
         productAnalysisCodes,
