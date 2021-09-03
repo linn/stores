@@ -13,26 +13,24 @@
 
     using NUnit.Framework;
 
-    public class WhenPrintingLabel : ContextBase
+    public class WhenPrintingConsignmentDocuments : ContextBase
     {
-        private LogisticsLabelRequestResource requestResource;
+        private PrintConsignmentDocumentsRequestResource requestResource;
 
         [SetUp]
         public void SetUp()
         {
-            this.requestResource = new LogisticsLabelRequestResource
-                                       {
+            this.requestResource = new PrintConsignmentDocumentsRequestResource
+            {
                                            ConsignmentId = 1,
-                                           FirstItem = 1,
-                                           LastItem = 2,
-                                           LabelType = "Carton"
+                                           UserNumber = 32198
                                        };
 
-            this.LogisticsProcessesFacadeService.PrintLabel(Arg.Any<LogisticsLabelRequestResource>())
+            this.LogisticsProcessesFacadeService.PrintConsignmentDocuments(Arg.Any<PrintConsignmentDocumentsRequestResource>())
                 .Returns(new SuccessResult<ProcessResult>(new ProcessResult(true, "ok")));
 
             this.Response = this.Browser.Post(
-                $"/logistics/labels",
+                "/logistics/print-consignment-documents",
                 with =>
                     {
                         with.Header("Accept", "application/json");
@@ -50,12 +48,10 @@
         [Test]
         public void ShouldCallService()
         {
-            this.LogisticsProcessesFacadeService.Received().PrintLabel(
-                Arg.Is<LogisticsLabelRequestResource>(
-                    r => r.LabelType == this.requestResource.LabelType
-                         && r.ConsignmentId == this.requestResource.ConsignmentId
-                         && r.FirstItem == this.requestResource.FirstItem
-                         && r.LastItem == this.requestResource.LastItem));
+            this.LogisticsProcessesFacadeService.Received().PrintConsignmentDocuments(
+                Arg.Is<PrintConsignmentDocumentsRequestResource>(
+                    r => r.ConsignmentId == this.requestResource.ConsignmentId
+                         && r.UserNumber == this.requestResource.UserNumber));
         }
 
         [Test]

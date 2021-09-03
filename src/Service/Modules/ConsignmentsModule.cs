@@ -26,7 +26,7 @@
 
         private readonly IFacadeService<CartonType, string, CartonTypeResource, CartonTypeResource> cartonTypeFacadeService;
 
-        private readonly ILogisticsLabelFacadeService logisticsLabelFacadeService;
+        private readonly ILogisticsProcessesFacadeService logisticsProcessesFacadeService;
 
         public ConsignmentsModule(
             IFacadeService<Consignment, int, ConsignmentResource, ConsignmentUpdateResource> consignmentFacadeService,
@@ -34,10 +34,10 @@
             IFacadeService<Carrier, string, CarrierResource, CarrierResource> carrierFacadeService,
             IFacadeService<ShippingTerm, int, ShippingTermResource, ShippingTermResource> shippingTermFacadeService,
             IFacadeService<CartonType, string, CartonTypeResource, CartonTypeResource> cartonTypeFacadeService,
-            ILogisticsLabelFacadeService logisticsLabelFacadeService)
+            ILogisticsProcessesFacadeService logisticsProcessesFacadeService)
         {
             this.cartonTypeFacadeService = cartonTypeFacadeService;
-            this.logisticsLabelFacadeService = logisticsLabelFacadeService;
+            this.logisticsProcessesFacadeService = logisticsProcessesFacadeService;
             this.consignmentFacadeService = consignmentFacadeService;
             this.hubFacadeService = hubFacadeService;
             this.carrierFacadeService = carrierFacadeService;
@@ -54,13 +54,20 @@
             this.Get("/logistics/carton-types", _ => this.GetCartonTypes());
             this.Get("/logistics/carton-types/{id*}", p => this.GetCartonTypeById(p.id));
             this.Post("/logistics/labels", _ => this.PrintLabels());
+            this.Post("/logistics/print-consignment-documents", _ => this.PrintDocuments());
+        }
+
+        private object PrintDocuments()
+        {
+            var resource = this.Bind<PrintConsignmentDocumentsRequestResource>();
+            return this.Negotiate.WithModel(this.logisticsProcessesFacadeService.PrintConsignmentDocuments(resource));
         }
 
         private object PrintLabels()
         {
             var resource = this.Bind<LogisticsLabelRequestResource>();
 
-            return this.Negotiate.WithModel(this.logisticsLabelFacadeService.PrintLabel(resource));
+            return this.Negotiate.WithModel(this.logisticsProcessesFacadeService.PrintLabel(resource));
         }
 
         private object GetCartonTypeById(string id)

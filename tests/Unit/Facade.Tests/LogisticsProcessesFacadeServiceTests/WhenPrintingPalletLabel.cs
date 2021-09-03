@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Facade.Tests.LogisticsLabelFacadeServiceTests
+﻿namespace Linn.Stores.Facade.Tests.LogisticsProcessesFacadeServiceTests
 {
     using FluentAssertions;
 
@@ -10,7 +10,7 @@
 
     using NUnit.Framework;
 
-    public class WhenPrintingCartonLabel : ContextBase
+    public class WhenPrintingPalletLabel : ContextBase
     {
         private LogisticsLabelRequestResource resource;
 
@@ -26,12 +26,12 @@
                                     ConsignmentId = 880,
                                     FirstItem = 123,
                                     LastItem = 456,
-                                    LabelType = "Carton",
+                                    LabelType = "Pallet",
                                     UserNumber = 123,
                                     NumberOfCopies = 2
                                 };
             this.serviceResult = new ProcessResult(true, "ok");
-            this.LogisticsLabelService.PrintCartonLabel(
+            this.LogisticsLabelService.PrintPalletLabel(
                     this.resource.ConsignmentId,
                     this.resource.FirstItem,
                     this.resource.LastItem, 
@@ -45,7 +45,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.LogisticsLabelService.Received().PrintCartonLabel(
+            this.LogisticsLabelService.Received().PrintPalletLabel(
                 this.resource.ConsignmentId,
                 this.resource.FirstItem,
                 this.resource.LastItem,

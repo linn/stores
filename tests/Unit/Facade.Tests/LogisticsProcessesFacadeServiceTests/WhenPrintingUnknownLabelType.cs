@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Facade.Tests.LogisticsLabelFacadeServiceTests
+﻿namespace Linn.Stores.Facade.Tests.LogisticsProcessesFacadeServiceTests
 {
     using FluentAssertions;
 

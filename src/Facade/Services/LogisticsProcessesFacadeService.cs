@@ -6,13 +6,18 @@
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Resources.RequestResources;
 
-    public class LogisticsLabelFacadeService : ILogisticsLabelFacadeService
+    public class LogisticsProcessesFacadeService : ILogisticsProcessesFacadeService
     {
         private readonly ILogisticsLabelService logisticsLabelService;
 
-        public LogisticsLabelFacadeService(ILogisticsLabelService logisticsLabelService)
+        private readonly IConsignmentService consignmentService;
+
+        public LogisticsProcessesFacadeService(
+            ILogisticsLabelService logisticsLabelService,
+            IConsignmentService consignmentService)
         {
             this.logisticsLabelService = logisticsLabelService;
+            this.consignmentService = consignmentService;
         }
 
         public IResult<ProcessResult> PrintLabel(LogisticsLabelRequestResource resource)
@@ -57,7 +62,23 @@
                     return new BadRequestResult<ProcessResult>($"Cannot print label type {resource.LabelType}");
             }
 
-            return new SuccessResult<ProcessResult>(new ProcessResult(labelServiceResult.Success, labelServiceResult.Message));
+            return new SuccessResult<ProcessResult>(labelServiceResult);
+        }
+
+        public IResult<ProcessResult> PrintConsignmentDocuments(PrintConsignmentDocumentsRequestResource resource)
+        {
+            ProcessResult result;
+
+            try
+            {
+                result = this.consignmentService.PrintConsignmentDocuments(resource.ConsignmentId, resource.UserNumber);
+            }
+            catch (ProcessException exception)
+            {
+                return new BadRequestResult<ProcessResult>(exception.Message);
+            }
+
+            return new SuccessResult<ProcessResult>(result);
         }
     }
 }
