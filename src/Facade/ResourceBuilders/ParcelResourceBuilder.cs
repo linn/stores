@@ -29,7 +29,7 @@
                 CancellationReason = parcel.CancellationReason,
                 CancelledBy = parcel.CancelledBy,
                 Links = this.BuildLinks(parcel).ToArray(),
-                ImportBookNos = parcel.Impbooks.Any() ? parcel.Impbooks.Select(i => i.Id).ToList() : null
+                ImportBookNos = ((parcel.Impbooks != null) && parcel.Impbooks.Any()) ? parcel.Impbooks.Select(i => i.Id).ToList() : null
             };
         }
 

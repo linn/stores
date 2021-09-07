@@ -974,7 +974,6 @@
             e.Property(c => c.CancellationReason).HasColumnName("REASON_CANCELLED");
             e.Property(c => c.CancelledBy).HasColumnName("CANCELLED_BY");
             e.HasMany(p => p.Impbooks).WithOne().HasForeignKey(imp => imp.ParcelNumber);
-
         }
 
         private void BuildImportBooks(ModelBuilder builder)

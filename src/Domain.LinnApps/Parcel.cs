@@ -1,7 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
     using System;
-    using System.Collections;
+
     using System.Collections.Generic;
 
     using Linn.Stores.Domain.LinnApps.ImportBooks;
@@ -37,8 +37,6 @@
         public int? CancelledBy { get; set; }
 
         public string CancellationReason { get; set; }
-
-        public IList<int> ImportBookNos { get; set; }
 
         public IList<ImportBook> Impbooks { get; set; }
     }
