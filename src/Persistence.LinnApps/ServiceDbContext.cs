@@ -963,7 +963,6 @@
             e.Property(c => c.DateReceived).HasColumnName("DATE_RECEIVED");
             e.Property(c => c.SupplierInvoiceNo).HasColumnName("SUPPLIER_INV_NUMBERS").HasMaxLength(500);
             e.Property(c => c.ConsignmentNo).HasColumnName("CONSIGNMENT_NUMBER").HasMaxLength(20);
-            e.Property(c => c.ImportBookNo).HasColumnName("IMPORT_BOOK_NUM").HasMaxLength(8);
             e.Property(c => c.Weight).HasColumnName("WEIGHT");
             e.Property(c => c.CheckedById).HasColumnName("CHECKED_BY");
             e.Property(c => c.SupplierId).HasColumnName("SUPPLIER_ID");
@@ -974,6 +973,7 @@
             e.Property(c => c.DateCancelled).HasColumnName("DATE_CANCELLED").HasMaxLength(2000);
             e.Property(c => c.CancellationReason).HasColumnName("REASON_CANCELLED");
             e.Property(c => c.CancelledBy).HasColumnName("CANCELLED_BY");
+            e.HasMany(p => p.Impbooks).WithOne().HasForeignKey(imp => imp.ParcelNumber);
         }
 
         private void BuildImportBooks(ModelBuilder builder)
