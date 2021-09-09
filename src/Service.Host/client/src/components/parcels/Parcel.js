@@ -296,6 +296,7 @@ function Parcel({
                                     onSelect={handleSupplierChange}
                                     items={suppliersSearchResults}
                                     loading={suppliersSearchLoading}
+                                    propertyName="supplier"
                                     fetchItems={searchSuppliers}
                                     clearSearch={() => clearSuppliersSearch}
                                     value={`${parcel.supplierId} - ${supplierNameValue()}`}
@@ -340,6 +341,7 @@ function Parcel({
                                     history={history}
                                     debounce={1000}
                                     minimumSearchTermLength={2}
+                                    propertyName="carrier"
                                 />
                             </div>
                             <div className={classes.marginTop1}>

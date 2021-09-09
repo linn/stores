@@ -18,7 +18,6 @@ const clearCarriersSearch = jest.fn();
 const history = {
     push: jest.fn()
 };
-const applicationState = {};
 
 const item = {
     parcelNumber: 52828,
@@ -64,7 +63,6 @@ test('On Create - page renders all fields without crashing...', () => {
     const { getByText, queryByText } = render(
         <Parcel
             editStatus="create"
-            applicationState={applicationState}
             searchCarriers={searchCarriers}
             searchSuppliers={searchSuppliers}
             clearCarriersSearch={clearCarriersSearch}
@@ -98,7 +96,6 @@ test('On View -  page renders populated fields', () => {
         <Parcel
             item={item}
             editStatus="view"
-            applicationState={applicationState}
             fetchItems={fetchItems}
             searchCarriers={searchCarriers}
             searchSuppliers={searchSuppliers}

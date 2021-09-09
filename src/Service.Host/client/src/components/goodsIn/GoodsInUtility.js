@@ -326,7 +326,7 @@ function GoodsInUtility({
                     <InputField
                         fullWidth
                         value={formData.orderNumber}
-                        label="PO Number"
+                        label="Order Number"
                         disabled={validatePurchaseOrderResultLoading}
                         propertyName="orderNumber"
                         onChange={handleFieldChange}
@@ -398,6 +398,7 @@ function GoodsInUtility({
                         label="Article"
                         modal
                         items={salesArticlesSearchResults}
+                        propertyName="salesArticle"
                         value={formData?.salesArticle}
                         loading={salesArticlesSearchLoading}
                         fetchItems={searchSalesArticles}
@@ -412,6 +413,7 @@ function GoodsInUtility({
                             handleFieldChange('demLocation', newValue.name);
                         }}
                         label="Dem Location"
+                        propertyName="demLocation"
                         modal
                         items={demLocationsSearchResults}
                         value={formData?.demLocation}
@@ -435,6 +437,7 @@ function GoodsInUtility({
                         }
                         label="Onto Location"
                         modal
+                        propertyName="ontoLocation"
                         items={storagePlacesSearchResults}
                         value={formData?.ontoLocation}
                         loading={storagePlacesSearchLoading}
@@ -772,7 +775,7 @@ GoodsInUtility.propTypes = {
 
 GoodsInUtility.defaultProps = {
     bookInResult: null,
-    bookInResultLoading: false.valueOf,
+    bookInResultLoading: false,
     validatePurchaseOrderResult: null,
     validatePurchaseOrderResultLoading: false,
     validateStorageTypeResult: null,
