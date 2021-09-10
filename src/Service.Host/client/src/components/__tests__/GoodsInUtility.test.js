@@ -3,31 +3,18 @@
  */
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, screen } from '@testing-library/react';
 import render from '../../test-utils';
 import GoodsInUtility from '../goodsIn/GoodsInUtility';
 
 const validatePurchaseOrder = jest.fn();
-// const validatePurchaseOrderResultLoading = null;
 const searchDemLocations = jest.fn();
-// const demLocationsSearchLoading = null;
-// const demLocationsSearchResults = null;
 const searchStoragePlaces = jest.fn();
 const storagePlacesSearchResults = [{ name: 'LOC', id: 1 }];
-// const storagePlacesSearchLoading = null;
 const searchSalesArticles = jest.fn();
-// const salesArticlesSearchResults = null;
-// const salesArticlesSearchLoading = null;
-// const bookInResult = null;
-// const bookInResultLoading = null;
 const doBookIn = jest.fn();
-// const validatePurchaseOrderBookInQtyResult = null;
 const validatePurchaseOrderBookInQty = jest.fn();
-// const validatePurchaseOrderBookInQtyResultLoading = null;
-// const userNumber = null;
 const validateStorageType = jest.fn();
-// const validateStorageTypeResult = null;
-// const validateStorageTypeResultLoading = null;
 const match = { url: '/goods-in-utility' };
 const userNumber = 33087;
 
@@ -256,8 +243,16 @@ describe('when Book In button clicked', () => {
     });
 
     test('should call doBookIn', async () => {
-        await waitFor(() =>
-            expect(screen.getByRole('button', { name: 'Book In' })).not.toHaveClass('Mui-disabled')
+        const button = await screen.findByText('Book In');
+        fireEvent.click(button);
+
+        expect(doBookIn).toHaveBeenCalledWith(
+            expect.objectContaining({
+                partNumber: 'A PART',
+                orderNumber: 123456,
+                ontoLocation: 'LOC',
+                qty: 1
+            })
         );
     });
 });
