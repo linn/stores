@@ -325,6 +325,7 @@ function GoodsInUtility({
                 <Grid item xs={4}>
                     <InputField
                         fullWidth
+                        type="number"
                         value={formData.orderNumber}
                         label="Order Number"
                         disabled={validatePurchaseOrderResultLoading}
@@ -495,7 +496,8 @@ function GoodsInUtility({
                                         fullWidth
                                         value={validatePurchaseOrderResult?.orderNumber}
                                         label="Order No"
-                                        propertyName="orderNumber"
+                                        propertyName="purchaseOrderNumber"
+                                        disabled
                                         onChange={handleFieldChange}
                                     />
                                 </Grid>
@@ -521,7 +523,7 @@ function GoodsInUtility({
                                     <InputField
                                         fullWidth
                                         value={validatePurchaseOrderResult?.orderQty}
-                                        label="Qty"
+                                        label="Order Qty"
                                         type="number"
                                         propertyName="orderQty"
                                         onChange={handleFieldChange}
@@ -665,7 +667,6 @@ function GoodsInUtility({
                                 storageType: formData.storageType,
                                 createdBy: userNumber
                             };
-                            //setRows(r => [...r, row]);
 
                             doBookIn({
                                 ...formData,
