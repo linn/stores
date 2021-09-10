@@ -1,6 +1,9 @@
+/**
+ * @jest-environment jest-environment-jsdom-sixteen
+ */
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { cleanup, fireEvent, screen } from '@testing-library/react';
+import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
 import render from '../../test-utils';
 import GoodsInUtility from '../goodsIn/GoodsInUtility';
 
@@ -10,7 +13,7 @@ const searchDemLocations = jest.fn();
 // const demLocationsSearchLoading = null;
 // const demLocationsSearchResults = null;
 const searchStoragePlaces = jest.fn();
-// const storagePlacesSearchResults = null;
+const storagePlacesSearchResults = [{ name: 'LOC', id: 1 }];
 // const storagePlacesSearchLoading = null;
 const searchSalesArticles = jest.fn();
 // const salesArticlesSearchResults = null;
@@ -35,7 +38,7 @@ const defaultRender = props =>
             searchDemLocations={searchDemLocations}
             demLocationsSearchResults={[]}
             searchStoragePlaces={searchStoragePlaces}
-            storagePlacesSearchResults={[]}
+            storagePlacesSearchResults={storagePlacesSearchResults}
             searchSalesArticles={searchSalesArticles}
             salesArticlesSearchResults={[]}
             doBookIn={doBookIn}
@@ -202,5 +205,59 @@ describe('When Qty Entered', () => {
         qtyField.blur();
 
         expect(validatePurchaseOrderBookInQty).not.toHaveBeenCalled();
+    });
+
+    describe('When validatePurchaseOrderBookInQty loading', () => {
+        test('Should Show loading text', () => {
+            defaultRender({
+                validatePurchaseOrderBookInQtyResultLoading: true
+            });
+            expect(screen.getByDisplayValue('loading')).toBeInTheDocument();
+        });
+    });
+
+    describe('When validatePurchaseOrderBookInQty result has error message', () => {
+        beforeEach(() => {
+            defaultRender({
+                validatePurchaseOrderResult: {
+                    message: 'Order is overbooked'
+                }
+            });
+        });
+
+        test('Should Show Message text', () => {
+            expect(screen.getByDisplayValue('Order is overbooked')).toBeInTheDocument();
+        });
+    });
+});
+
+describe('when Book In button clicked', () => {
+    beforeEach(async () => {
+        defaultRender({
+            validatePurchaseOrderResult: {
+                message: null,
+                orderNumber: 123456,
+                partNumber: 'A PART',
+                documentType: 'PO'
+            }
+        });
+        const orderNumberField = screen.getByLabelText('Order Number');
+        fireEvent.change(orderNumberField, { target: { value: 123456 } });
+        const qtyField = screen.getByLabelText('Qty');
+        fireEvent.change(qtyField, { target: { value: 1 } });
+
+        // open the location search
+        const locationField = screen.getByLabelText('Onto Location');
+        fireEvent.click(locationField);
+
+        // select a result to close the dialog
+        const searchResult = await screen.findByText('LOC');
+        fireEvent.click(searchResult);
+    });
+
+    test('should call doBookIn', async () => {
+        await waitFor(() =>
+            expect(screen.getByRole('button', { name: 'Book In' })).not.toHaveClass('Mui-disabled')
+        );
     });
 });
