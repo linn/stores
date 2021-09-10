@@ -1,10 +1,17 @@
 import React from 'react';
+import { Loading } from '@linn-it/linn-form-components-library';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 
-function InvoicesTab({ invoices, exportBooks, printDocuments }) {
+function InvoicesTab({
+    invoices,
+    exportBooks,
+    printDocuments,
+    printDocumentsWorking,
+    printDocumentsResult
+}) {
     return (
         <>
             <Grid container spacing={3} style={{ paddingTop: '30px' }}>
@@ -61,6 +68,11 @@ function InvoicesTab({ invoices, exportBooks, printDocuments }) {
                         >
                             Reprint Documents
                         </Button>
+                        {printDocumentsWorking ? (
+                            <Loading />
+                        ) : (
+                            <Typography variant="h6"> {printDocumentsResult?.message}</Typography>
+                        )}
                     </Grid>
                 </>
             </Grid>
@@ -71,12 +83,19 @@ function InvoicesTab({ invoices, exportBooks, printDocuments }) {
 InvoicesTab.propTypes = {
     invoices: PropTypes.arrayOf(PropTypes.shape({})),
     exportBooks: PropTypes.arrayOf(PropTypes.shape({})),
-    printDocuments: PropTypes.func.isRequired
+    printDocuments: PropTypes.func.isRequired,
+    printDocumentsWorking: PropTypes.bool,
+    printDocumentsResult: PropTypes.shape({
+        success: PropTypes.bool,
+        message: PropTypes.string
+    })
 };
 
 InvoicesTab.defaultProps = {
     invoices: [],
-    exportBooks: []
+    exportBooks: [],
+    printDocumentsWorking: false,
+    printDocumentsResult: null
 };
 
 export default InvoicesTab;

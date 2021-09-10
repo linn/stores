@@ -57,7 +57,11 @@ function Consignment({
     printConsignmentLabel,
     printConsignmentLabelWorking,
     printConsignmentLabelResult,
-    clearConsignmentLabelData
+    clearConsignmentLabelData,
+    printDocuments,
+    printDocumentsWorking,
+    printDocumentsResult,
+    printDocumentsClearData
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
     const [editablePallets, setEditablePallets] = useState([]);
@@ -367,6 +371,11 @@ function Consignment({
         setEditableItems(items);
     };
 
+    const handlePrintDocuments = () => {
+        printDocumentsClearData();
+        printDocuments({ consignmentId: item.consignmentId, userNumber });
+    };
+
     return (
         <Page requestErrors={requestErrors} showRequestErrors>
             <Grid container spacing={3}>
@@ -484,7 +493,9 @@ function Consignment({
                                 <InvoicesTab
                                     invoices={state.consignment.invoices}
                                     exportBooks={state.consignment.exportBooks}
-                                    printDocuments={() => {}}
+                                    printDocuments={handlePrintDocuments}
+                                    printDocumentsWorking={printDocumentsWorking}
+                                    printDocumentsResult={printDocumentsResult}
                                 />
                             )}
                         </>
@@ -753,7 +764,14 @@ Consignment.propTypes = {
         success: PropTypes.bool,
         message: PropTypes.string
     }),
-    clearConsignmentLabelData: PropTypes.func.isRequired
+    clearConsignmentLabelData: PropTypes.func.isRequired,
+    printDocumentsWorking: PropTypes.bool,
+    printDocuments: PropTypes.func.isRequired,
+    printDocumentsResult: PropTypes.shape({
+        success: PropTypes.bool,
+        message: PropTypes.string
+    }),
+    printDocumentsClearData: PropTypes.func.isRequired
 };
 
 Consignment.defaultProps = {
@@ -776,7 +794,9 @@ Consignment.defaultProps = {
     itemError: null,
     cartonTypes: [],
     printConsignmentLabelWorking: false,
-    printConsignmentLabelResult: null
+    printConsignmentLabelResult: null,
+    printDocumentsWorking: false,
+    printDocumentsResult: null
 };
 
 export default Consignment;
