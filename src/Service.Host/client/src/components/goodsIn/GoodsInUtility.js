@@ -685,8 +685,9 @@ function GoodsInUtility({
                     </Button>
                 </Grid>
                 <Grid item xs={12}>
-                    <div style={{ height: 250, width: '100%', marginTop: '100px' }}>
+                    <div style={{ width: '100%', marginTop: '100px' }}>
                         <DataGrid
+                            autoHeight
                             rows={rows}
                             columns={tableColumns}
                             density="standard"

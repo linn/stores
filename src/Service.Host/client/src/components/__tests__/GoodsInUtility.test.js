@@ -219,7 +219,7 @@ describe('When Qty Entered', () => {
 });
 
 describe('when Book In button clicked', () => {
-    beforeEach(async () => {
+    beforeAll(async () => {
         defaultRender({
             validatePurchaseOrderResult: {
                 message: null,
@@ -254,5 +254,41 @@ describe('when Book In button clicked', () => {
                 qty: 1
             })
         );
+    });
+
+    describe('when bookInResultLoading', () => {
+        beforeAll(() => {
+            defaultRender({ bookInResultLoading: true });
+        });
+
+        test('Should Show loading text', () => {
+            expect(screen.getByDisplayValue('loading')).toBeInTheDocument();
+        });
+    });
+
+    describe('when bookInResult returns succesfully', () => {
+        beforeEach(() => {
+            defaultRender({
+                openLabelPrinter: false,
+                bookInResult: {
+                    success: true,
+                    message: 'Book In Succesful!',
+                    createParcel: false,
+                    lines: [
+                        { id: 1, transactionType: 'SOME-TRANS-TYPE' },
+                        { id: 2, transactionType: 'OTHER-TRANS-TYPE' }
+                    ]
+                }
+            });
+        });
+
+        test('Should show message', () => {
+            expect(screen.getByDisplayValue('Book In Succesful!')).toBeInTheDocument();
+        });
+
+        test('Should add lines to table', async () => {
+            expect(screen.getByText('SOME-TRANS-TYPE')).toBeInTheDocument();
+            expect(screen.getByText('OTHER-TRANS-TYPE')).toBeInTheDocument();
+        });
     });
 });
