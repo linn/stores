@@ -1,6 +1,10 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Consignments
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.Consignments.Models;
     using Linn.Stores.Domain.LinnApps.Dispatchers;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExportBooks;
@@ -101,6 +105,85 @@
             this.MaybePrintExportBook(consignment, printerName);
 
             return new ProcessResult(true, $"Documents printed for consignment {consignmentId}");
+        }
+
+        public PackingList GetPackingList(int consignmentId)
+        {
+            var consignment = this.consignmentRepository.FindById(consignmentId);
+            if (consignment == null)
+            {
+                throw new NotFoundException($"Could not find consignment {consignmentId}");
+            }
+
+            var result = new PackingList
+                             {
+                                 SenderAddress = new Address
+                                                     {
+                                                         Addressee = "Linn Products Ltd",
+                                                         Line1 = "Glasgow Road",
+                                                         Line2 = "Eaglesham",
+                                                         Line3 = "Glasgow",
+                                                         CountryCode = "GB",
+                                                         PostCode = "G76 0EQ",
+                                                         Country = new Country { DisplayName = "United Kingdom", CountryCode = "GB" }
+                                                     },
+                                 DeliveryAddress = consignment.Address,
+                                 DespatchDate = consignment.DateClosed,
+                                 ConsignmentId = consignmentId
+            };
+
+            var items = consignment.Items.Where(this.CanBePutOnPallet).ToList();
+            result.Items = items.Select(
+                i => new PackingListItem
+                         {
+                             ContainerNumber = i.ContainerNumber,
+                             ItemNumber = i.ItemNumber,
+                             Description = this.PackingListDescription(i, items)
+                         }).ToList();
+
+            result.Pallets = consignment.Pallets.Select(
+                p => new PackingListPallet
+                         {
+                             PalletNumber = p.PalletNumber,
+                             DisplayWeight = $"{p.Weight} Kgs",
+                             DisplayDimensions = $"{p.Height} x {p.Width} x {p.Depth} cm",
+                             Volume = p.Height / 100m * p.Width / 100m * p.Depth / 100m,
+                             Items = consignment.Items.Where(a => a.PalletNumber == p.PalletNumber)
+                                 .Select(b => new PackingListItem
+                                                  {
+                                                      ContainerNumber = b.ContainerNumber,
+                                                      ItemNumber = b.ItemNumber,
+                                                      Description = this.PackingListDescription(b, consignment.Items)
+                                                  }).ToList()
+                         }).ToList();
+
+            return result;
+        }
+
+        private string PackingListDescription(ConsignmentItem selectedItem, IEnumerable<ConsignmentItem> items)
+        {
+            if (selectedItem.ItemType == "I" && !selectedItem.ContainerNumber.HasValue)
+            {
+                return $"{selectedItem.Quantity} {selectedItem.ItemDescription}";
+            }
+
+            var description = string.Empty;
+            foreach (var item in items.Where(
+                a => (a.ItemType == "I" || a.ItemType == "S")
+                     && a.ContainerNumber == selectedItem.ContainerNumber))
+            {
+                var qty = item.MaybeHalfAPair == "N" ? item.Quantity : item.Quantity * 2;
+                description += $"{qty} {item.ItemDescription}";
+            }
+
+            return description;
+        }
+
+        private bool CanBePutOnPallet(ConsignmentItem consignmentItem)
+        {
+            return (consignmentItem.ItemType == "I" && consignmentItem.ContainerNumber is null
+                                                         && consignmentItem.PalletNumber is null)
+                   || consignmentItem.ItemType == "S" || consignmentItem.ItemType == "C";
         }
 
         private void PrintDocuments(Consignment consignment, int userNumber)
