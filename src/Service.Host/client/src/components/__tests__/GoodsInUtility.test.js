@@ -274,6 +274,7 @@ describe('when Book In button clicked', () => {
                     success: true,
                     message: 'Book In Succesful!',
                     createParcel: false,
+                    reqNumber: 500123,
                     lines: [
                         { id: 1, transactionType: 'SOME-TRANS-TYPE' },
                         { id: 2, transactionType: 'OTHER-TRANS-TYPE' }
@@ -289,6 +290,11 @@ describe('when Book In button clicked', () => {
         test('Should add lines to table', async () => {
             expect(screen.getByText('SOME-TRANS-TYPE')).toBeInTheDocument();
             expect(screen.getByText('OTHER-TRANS-TYPE')).toBeInTheDocument();
+        });
+
+        test('Should open label print dialog', async () => {
+            expect(screen.getByText('Label Details')).toBeInTheDocument();
+            expect(screen.getByDisplayValue('500123')).toBeInTheDocument();
         });
     });
 });
