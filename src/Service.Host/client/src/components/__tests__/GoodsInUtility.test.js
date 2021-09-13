@@ -477,7 +477,7 @@ describe('When adding multiple lines to a book in...', () => {
         })
     );
 
-    test('should add lines to Book In', async () => {
+    test('should call doBookIn with lines', async () => {
         const orderNumberField = screen.getByLabelText('Order Number');
         fireEvent.change(orderNumberField, { target: { value: 123456 } });
         const qtyField = screen.getByLabelText('Qty');
