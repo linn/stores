@@ -526,6 +526,7 @@ function GoodsInUtility({
                                         fullWidth
                                         value={validatePurchaseOrderResult?.orderQty}
                                         label="Order Qty"
+                                        disabled={!validatePurchaseOrderResult}
                                         type="number"
                                         propertyName="orderQty"
                                         onChange={handleFieldChange}
@@ -775,7 +776,7 @@ GoodsInUtility.propTypes = {
     validatePurchaseOrderBookInQtyResultLoading: PropTypes.bool,
     userNumber: PropTypes.number.isRequired,
     match: PropTypes.shape({}).isRequired,
-    history: PropTypes.shape({ push: jest.fn() }).isRequired
+    history: PropTypes.shape({ push: PropTypes.func }).isRequired
 };
 
 GoodsInUtility.defaultProps = {

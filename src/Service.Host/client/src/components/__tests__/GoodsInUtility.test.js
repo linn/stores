@@ -39,7 +39,7 @@ const defaultRender = props =>
         />
     );
 
-afterEach(cleanup);
+afterEach(() => cleanup());
 
 describe('On initial load', () => {
     beforeEach(() => {
@@ -50,9 +50,11 @@ describe('On initial load', () => {
         expect(screen.getByText('Goods In Utility')).toBeInTheDocument();
     });
 
-    test('Buttons should be disabled', () => {
+    test('Inputs should be disabled', () => {
         expect(screen.getByRole('button', { name: 'Add Line' })).toHaveClass('Mui-disabled');
         expect(screen.getByRole('button', { name: 'Book In' })).toHaveClass('Mui-disabled');
+        expect(screen.getByLabelText('S/Type')).toHaveClass('Mui-disabled');
+        expect(screen.getByRole('spinbutton', { name: 'Qty' })).toHaveClass('Mui-disabled');
     });
 });
 
@@ -61,11 +63,8 @@ describe('When Order Number Entered', () => {
         validatePurchaseOrder.mockClear();
     });
 
-    beforeAll(() => {
-        defaultRender();
-    });
-
     test('Should call validation function onBlur if orderNumber input', () => {
+        defaultRender();
         const orderNumberField = screen.getByLabelText('Order Number');
         orderNumberField.focus();
         fireEvent.change(orderNumberField, { target: { value: 123456 } });
@@ -121,6 +120,40 @@ describe('When Order Number Entered', () => {
         test('Should Open Purchase Order Book In Section', () => {
             expect(screen.getByDisplayValue('A PART')).toBeInTheDocument();
         });
+
+        describe('When New Part', () => {
+            beforeEach(() => {
+                defaultRender({
+                    validatePurchaseOrderResult: {
+                        orderNumber: 123456,
+                        partNumber: 'A PART',
+                        documentType: 'PO',
+                        message: 'New part - enter storage type or location'
+                    }
+                });
+            });
+
+            test('Should enable storageType Field', () => {
+                expect(screen.getByLabelText('S/Type')).not.toHaveClass('Mui-disabled');
+            });
+        });
+    });
+
+    describe('When Storage is BB', () => {
+        beforeEach(() => {
+            defaultRender({
+                validatePurchaseOrderResult: {
+                    storage: 'BB',
+                    orderNumber: 123456,
+                    partNumber: 'A PART',
+                    documentType: 'PO'
+                }
+            });
+        });
+
+        test('Should disable storageType Field', () => {
+            expect(screen.getByLabelText('S/Type')).toHaveClass('Mui-disabled');
+        });
     });
 
     describe('When validatePurchaseOrderResult errors', () => {
@@ -142,6 +175,68 @@ describe('When Order Number Entered', () => {
 
         test('Should disable Book In button', () => {
             expect(screen.getByRole('button', { name: 'Book In' })).toBeInTheDocument();
+        });
+    });
+});
+
+describe('When Storage Type Entered', () => {
+    afterEach(() => {
+        validateStorageType.mockClear();
+    });
+
+    test('Should call validation function onBlur if storageType input', async () => {
+        defaultRender({
+            validatePurchaseOrderResult: {
+                orderNumber: 123456,
+                partNumber: 'A PART',
+                documentType: 'PO',
+                message: 'New part - enter storage type or location'
+            }
+        });
+        const storageTypeField = screen.getByLabelText('S/Type');
+        storageTypeField.focus();
+        fireEvent.change(storageTypeField, { target: { value: 'K1' } });
+        storageTypeField.blur();
+        expect(validateStorageType).toHaveBeenCalledWith('storageType', 'K1');
+    });
+
+    test('Should not call validation function onBlur if storageType blank', async () => {
+        defaultRender({
+            validatePurchaseOrderResult: {
+                orderNumber: 123456,
+                partNumber: 'A PART',
+                documentType: 'PO',
+                message: 'New part - enter storage type or location'
+            }
+        });
+        const storageTypeField = screen.getByLabelText('S/Type');
+        storageTypeField.focus();
+        fireEvent.change(storageTypeField, { target: { value: '' } });
+        storageTypeField.blur();
+        expect(validateStorageType).not.toHaveBeenCalled();
+    });
+
+    describe('When validateStorageTypeResult loading', () => {
+        beforeEach(() => {
+            defaultRender({
+                validateStorageTypeResultLoading: true
+            });
+        });
+
+        test('Should Show loading text', () => {
+            expect(screen.getByDisplayValue('loading')).toBeInTheDocument();
+        });
+    });
+
+    describe('When validateStorageTypeResult returns', () => {
+        beforeEach(() => {
+            defaultRender({
+                validateStorageTypeResult: { message: 'Storage Type Valid' }
+            });
+        });
+
+        test('Should Show message text', () => {
+            expect(screen.getByDisplayValue('Storage Type Valid')).toBeInTheDocument();
         });
     });
 });
@@ -220,7 +315,7 @@ describe('When Qty Entered', () => {
 });
 
 describe('when Book In button clicked', () => {
-    beforeAll(async () => {
+    beforeEach(async () => {
         defaultRender({
             validatePurchaseOrderResult: {
                 message: null,
@@ -229,6 +324,9 @@ describe('when Book In button clicked', () => {
                 documentType: 'PO'
             }
         });
+
+        afterEach(() => cleanup());
+
         const orderNumberField = screen.getByLabelText('Order Number');
         fireEvent.change(orderNumberField, { target: { value: 123456 } });
         const qtyField = screen.getByLabelText('Qty');
@@ -257,12 +355,30 @@ describe('when Book In button clicked', () => {
         );
     });
 
-    describe('when bookInResultLoading', () => {
-        beforeAll(() => {
-            defaultRender({ bookInResultLoading: true });
-        });
+    describe('when multipleBookIn checkbox selected', () => {
+        test('should call doBookIn with multipeBookIn flag', async () => {
+            // click the checkbox
+            const checkboxes = await screen.findAllByRole('checkbox');
+            fireEvent.click(checkboxes[0]);
+            const button = await screen.findByText('Book In');
+            fireEvent.click(button);
 
+            expect(doBookIn).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    partNumber: 'A PART',
+                    orderNumber: 123456,
+                    ontoLocation: 'LOC',
+                    multipleBookIn: true,
+                    qty: 1
+                })
+            );
+        });
+    });
+
+    describe('when bookInResultLoading', () => {
         test('Should Show loading text', () => {
+            defaultRender({ bookInResultLoading: true });
+
             expect(screen.getByDisplayValue('loading')).toBeInTheDocument();
         });
     });
@@ -346,5 +462,45 @@ describe('when Book In button clicked', () => {
         test('Should not open parcel dialog', () => {
             expect(screen.queryByText('Create Parcel')).not.toBeInTheDocument();
         });
+    });
+});
+
+describe('when adding multiple lines to a book in', () => {
+    beforeAll(() =>
+        defaultRender({
+            validatePurchaseOrderResult: {
+                message: null,
+                orderNumber: 123456,
+                partNumber: 'A PART',
+                documentType: 'PO'
+            }
+        })
+    );
+
+    test('should add lines to Book In', async () => {
+        const orderNumberField = screen.getByLabelText('Order Number');
+        fireEvent.change(orderNumberField, { target: { value: 123456 } });
+        const qtyField = screen.getByLabelText('Qty');
+        fireEvent.change(qtyField, { target: { value: 1 } });
+
+        // open the location search
+        const locationField = screen.getByLabelText('Onto Location');
+        fireEvent.click(locationField);
+
+        // select a result to close the dialog
+        const searchResult = await screen.findByText('LOC');
+        fireEvent.click(searchResult);
+        const addLineButton = await screen.findByText('Add Line');
+        fireEvent.click(addLineButton);
+        const doBookInButton = await screen.findByText('Book In');
+        fireEvent.click(doBookInButton);
+
+        await waitFor(() =>
+            expect(doBookIn).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    lines: expect.arrayContaining([expect.objectContaining({ quantity: 1 })])
+                })
+            )
+        );
     });
 });
