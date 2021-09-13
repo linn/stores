@@ -160,7 +160,7 @@ describe('When Qty Entered', () => {
                 documentType: 'PO'
             }
         });
-        // enter an order number so we are able tocenter a qty
+        // enter an order number so we are able to enter a qty
         const orderNumberField = screen.getByLabelText('Order Number');
         fireEvent.change(orderNumberField, { target: { value: 123456 } });
     });
@@ -267,7 +267,7 @@ describe('when Book In button clicked', () => {
         });
     });
 
-    describe('when bookInResult returns succesfully and not createParcel', () => {
+    describe('when bookInResult returns succesfully', () => {
         beforeEach(() => {
             defaultRender({
                 bookInResult: {
@@ -301,27 +301,50 @@ describe('when Book In button clicked', () => {
             expect(screen.queryByText('Create Parcel')).not.toBeInTheDocument();
         });
     });
-});
 
-describe('when bookInResult returns succesfully and create parcel', () => {
-    beforeAll(() => {
-        defaultRender({
-            bookInResult: {
-                success: true,
-                message: 'Book In Succesful!',
-                createParcel: true,
-                supplierId: 123,
-                parcelComments: 'I need a parcel',
-                reqNumber: 500123,
-                lines: [
-                    { id: 1, transactionType: 'SOME-TRANS-TYPE' },
-                    { id: 2, transactionType: 'OTHER-TRANS-TYPE' }
-                ]
-            }
+    describe('when create parcel', () => {
+        beforeAll(() => {
+            defaultRender({
+                bookInResult: {
+                    success: true,
+                    message: 'Book In Succesful!',
+                    createParcel: true,
+                    supplierId: 123,
+                    parcelComments: 'I need a parcel',
+                    reqNumber: 500123,
+                    lines: [
+                        { id: 1, transactionType: 'SOME-TRANS-TYPE' },
+                        { id: 2, transactionType: 'OTHER-TRANS-TYPE' }
+                    ]
+                }
+            });
+        });
+
+        test('Should open parcel dialog', async () => {
+            await waitFor(() => expect(screen.getByText('Create Parcel')).toBeInTheDocument());
         });
     });
 
-    test('Should open parcel dialog', async () => {
-        await waitFor(() => expect(screen.getByText('Create Parcel')).toBeInTheDocument());
+    describe('when not create parcel', () => {
+        beforeAll(() => {
+            defaultRender({
+                bookInResult: {
+                    success: true,
+                    message: 'Book In Succesful!',
+                    createParcel: false,
+                    supplierId: 123,
+                    parcelComments: 'I need a parcel',
+                    reqNumber: 500123,
+                    lines: [
+                        { id: 1, transactionType: 'SOME-TRANS-TYPE' },
+                        { id: 2, transactionType: 'OTHER-TRANS-TYPE' }
+                    ]
+                }
+            });
+        });
+
+        test('Should not open parcel dialog', () => {
+            expect(screen.queryByText('Create Parcel')).not.toBeInTheDocument();
+        });
     });
 });
