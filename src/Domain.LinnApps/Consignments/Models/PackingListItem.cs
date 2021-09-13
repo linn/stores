@@ -7,5 +7,11 @@
         public int? ContainerNumber { get; set; }
 
         public string Description { get; set; }
+
+        public decimal? Volume { get; set; }
+
+        public decimal? Weight { get; set; }
+
+        public string DisplayDimensions { get; set; }
     }
 }

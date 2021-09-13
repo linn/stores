@@ -21,7 +21,9 @@
                                                 {
                                                     ContainerNumber = i.ContainerNumber,
                                                     Description = i.Description,
-                                                    ItemNumber = i.ItemNumber
+                                                    ItemNumber = i.ItemNumber,
+                                                    Weight = $"{i.Weight} Kgs",
+                                                    DisplayDimensions = i.DisplayDimensions
                                                 }),
                            Pallets = model.Pallets?.OrderBy(o => o.PalletNumber)
                                .Select(p => new PackingListPalletResource
@@ -34,9 +36,15 @@
                                                         {
                                                             ContainerNumber = i.ContainerNumber,
                                                             Description = i.Description,
-                                                            ItemNumber = i.ItemNumber
-                                                        })
-                                                })
+                                                            ItemNumber = i.ItemNumber,
+                                                            Weight = $"{i.Weight} Kgs",
+                                                            DisplayDimensions = i.DisplayDimensions
+                                                    })
+                                                }),
+                           NumberOfItemsNotOnPallets = model.NumberOfItemsNotOnPallets,
+                           NumberOfPallets = model.NumberOfPallets,
+                           TotalGrossWeight = $"{model.TotalGrossWeight} Kgs",
+                           TotalVolume = $"{model.TotalVolume} m3"
                        };
         }
 

@@ -13,5 +13,7 @@
         public string DisplayDimensions { get; set; }
 
         public decimal? Volume { get; set; }
+
+        public decimal? Weight { get; set; }
     }
 }

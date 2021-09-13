@@ -16,5 +16,13 @@
         public IList<PackingListItem> Items { get; set; }
 
         public IList<PackingListPallet> Pallets { get; set; }
+
+        public int NumberOfPallets { get; set; }
+
+        public int NumberOfItemsNotOnPallets { get; set; }
+
+        public decimal TotalGrossWeight { get; set; }
+
+        public decimal TotalVolume { get; set; }
     }
 }
