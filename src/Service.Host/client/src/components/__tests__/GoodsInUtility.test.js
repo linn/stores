@@ -41,16 +41,16 @@ const defaultRender = props =>
 
 afterEach(() => cleanup());
 
-describe('On initial load', () => {
+describe('On initial load...', () => {
     beforeEach(() => {
         defaultRender();
     });
 
-    test('Component renders without crashing', () => {
+    test('component renders without crashing', () => {
         expect(screen.getByText('Goods In Utility')).toBeInTheDocument();
     });
 
-    test('Inputs should be disabled', () => {
+    test('inputs should be disabled', () => {
         expect(screen.getByRole('button', { name: 'Add Line' })).toHaveClass('Mui-disabled');
         expect(screen.getByRole('button', { name: 'Book In' })).toHaveClass('Mui-disabled');
         expect(screen.getByLabelText('S/Type')).toHaveClass('Mui-disabled');
@@ -58,12 +58,12 @@ describe('On initial load', () => {
     });
 });
 
-describe('When Order Number Entered', () => {
+describe('When order number entered...', () => {
     afterEach(() => {
         validatePurchaseOrder.mockClear();
     });
 
-    test('Should call validation function onBlur if orderNumber input', () => {
+    test('should call validation function onBlur if orderNumber input', () => {
         defaultRender();
         const orderNumberField = screen.getByLabelText('Order Number');
         orderNumberField.focus();
@@ -73,7 +73,7 @@ describe('When Order Number Entered', () => {
         expect(validatePurchaseOrder).toHaveBeenCalledWith(123456);
     });
 
-    test('Should not call validation function onBlur if orderNumber blank', () => {
+    test('should not call validation function onBlur if orderNumber blank', () => {
         defaultRender();
         const orderNumberField = screen.getByLabelText('Order Number');
         orderNumberField.focus();
@@ -83,29 +83,29 @@ describe('When Order Number Entered', () => {
         expect(validatePurchaseOrder).not.toHaveBeenCalled();
     });
 
-    describe('When validatePurchaseOrderResult loading', () => {
+    describe('When validatePurchaseOrderResult loading...', () => {
         beforeEach(() => {
             defaultRender({
                 validatePurchaseOrderResultLoading: true
             });
         });
 
-        test('Should Show loading text', () => {
+        test('should show loading text', () => {
             expect(screen.getByDisplayValue('loading')).toBeInTheDocument();
         });
 
-        test('Should disable orderNumber Order Input', () => {
+        test('should disable orderNumber input', () => {
             expect(screen.getByRole('spinbutton', { name: 'Order Number' })).toHaveClass(
                 'Mui-disabled'
             );
         });
 
-        test('Should disable Qty Input text', () => {
+        test('should disable qty input', () => {
             expect(screen.getByRole('spinbutton', { name: 'Qty' })).toHaveClass('Mui-disabled');
         });
     });
 
-    describe('When validatePurchaseOrderResult', () => {
+    describe('When validatePurchaseOrderResult...', () => {
         beforeEach(() => {
             defaultRender({
                 validatePurchaseOrderResult: {
@@ -117,11 +117,11 @@ describe('When Order Number Entered', () => {
             });
         });
 
-        test('Should Open Purchase Order Book In Section', () => {
+        test('should open purchase order book in section', () => {
             expect(screen.getByDisplayValue('A PART')).toBeInTheDocument();
         });
 
-        describe('When New Part', () => {
+        describe('When new part...', () => {
             beforeEach(() => {
                 defaultRender({
                     validatePurchaseOrderResult: {
@@ -133,13 +133,13 @@ describe('When Order Number Entered', () => {
                 });
             });
 
-            test('Should enable storageType Field', () => {
+            test('should enable storageType Field', () => {
                 expect(screen.getByLabelText('S/Type')).not.toHaveClass('Mui-disabled');
             });
         });
     });
 
-    describe('When Storage is BB', () => {
+    describe('When Storage is BB...', () => {
         beforeEach(() => {
             defaultRender({
                 validatePurchaseOrderResult: {
@@ -151,12 +151,12 @@ describe('When Order Number Entered', () => {
             });
         });
 
-        test('Should disable storageType Field', () => {
+        test('should disable storageType field', () => {
             expect(screen.getByLabelText('S/Type')).toHaveClass('Mui-disabled');
         });
     });
 
-    describe('When validatePurchaseOrderResult errors', () => {
+    describe('When validatePurchaseOrderResult error...', () => {
         beforeEach(() => {
             defaultRender({
                 validatePurchaseOrderResult: {
@@ -165,26 +165,26 @@ describe('When Order Number Entered', () => {
             });
         });
 
-        test('Should Show Message text', () => {
+        test('should show message text', () => {
             expect(screen.getByDisplayValue('Not found')).toBeInTheDocument();
         });
 
-        test('Should disable Add Line button', () => {
+        test('should disable add Line button', () => {
             expect(screen.getByRole('button', { name: 'Add Line' })).toBeInTheDocument();
         });
 
-        test('Should disable Book In button', () => {
+        test('should disable book in button', () => {
             expect(screen.getByRole('button', { name: 'Book In' })).toBeInTheDocument();
         });
     });
 });
 
-describe('When Storage Type Entered', () => {
+describe('When storage type entered', () => {
     afterEach(() => {
         validateStorageType.mockClear();
     });
 
-    test('Should call validation function onBlur if storageType input', async () => {
+    test('should call validation function onBlur if storageType input', async () => {
         defaultRender({
             validatePurchaseOrderResult: {
                 orderNumber: 123456,
@@ -200,7 +200,7 @@ describe('When Storage Type Entered', () => {
         expect(validateStorageType).toHaveBeenCalledWith('storageType', 'K1');
     });
 
-    test('Should not call validation function onBlur if storageType blank', async () => {
+    test('should not call validation function onBlur if storageType blank', async () => {
         defaultRender({
             validatePurchaseOrderResult: {
                 orderNumber: 123456,
@@ -216,32 +216,32 @@ describe('When Storage Type Entered', () => {
         expect(validateStorageType).not.toHaveBeenCalled();
     });
 
-    describe('When validateStorageTypeResult loading', () => {
+    describe('When validateStorageTypeResult loading...', () => {
         beforeEach(() => {
             defaultRender({
                 validateStorageTypeResultLoading: true
             });
         });
 
-        test('Should Show loading text', () => {
+        test('should show loading text', () => {
             expect(screen.getByDisplayValue('loading')).toBeInTheDocument();
         });
     });
 
-    describe('When validateStorageTypeResult returns', () => {
+    describe('When validateStorageTypeResult returns...', () => {
         beforeEach(() => {
             defaultRender({
                 validateStorageTypeResult: { message: 'Storage Type Valid' }
             });
         });
 
-        test('Should Show message text', () => {
+        test('should show message text', () => {
             expect(screen.getByDisplayValue('Storage Type Valid')).toBeInTheDocument();
         });
     });
 });
 
-describe('When Qty Entered', () => {
+describe('When qty Entered...', () => {
     afterEach(() => {
         validatePurchaseOrderBookInQty.mockClear();
     });
@@ -260,7 +260,7 @@ describe('When Qty Entered', () => {
         fireEvent.change(orderNumberField, { target: { value: 123456 } });
     });
 
-    test('Should call validation function onBlur if qty input', () => {
+    test('should call validation function onBlur if qty input', () => {
         const qtyField = screen.getByLabelText('Qty');
         qtyField.focus();
         fireEvent.change(qtyField, { target: { value: 1 } });
@@ -272,7 +272,7 @@ describe('When Qty Entered', () => {
         );
     });
 
-    test('Should not call validation function onBlur if qty blank', () => {
+    test('should not call validation function onBlur if qty blank', () => {
         const qtyField = screen.getByLabelText('Qty');
         qtyField.focus();
         fireEvent.change(qtyField, { target: { value: '' } });
@@ -281,7 +281,7 @@ describe('When Qty Entered', () => {
         expect(validatePurchaseOrderBookInQty).not.toHaveBeenCalled();
     });
 
-    test('Should not call validation function onBlur if qty 0', () => {
+    test('should not call validation function onBlur if qty 0', () => {
         const qtyField = screen.getByLabelText('Qty');
         qtyField.focus();
         fireEvent.change(qtyField, { target: { value: 0 } });
@@ -290,8 +290,8 @@ describe('When Qty Entered', () => {
         expect(validatePurchaseOrderBookInQty).not.toHaveBeenCalled();
     });
 
-    describe('When validatePurchaseOrderBookInQty loading', () => {
-        test('Should Show loading text', () => {
+    describe('When validatePurchaseOrderBookInQty loading...', () => {
+        test('should show loading text', () => {
             defaultRender({
                 validatePurchaseOrderBookInQtyResultLoading: true
             });
@@ -299,7 +299,7 @@ describe('When Qty Entered', () => {
         });
     });
 
-    describe('When validatePurchaseOrderBookInQty result has error message', () => {
+    describe('When validatePurchaseOrderBookInQty result has error message...', () => {
         beforeEach(() => {
             defaultRender({
                 validatePurchaseOrderResult: {
@@ -308,13 +308,13 @@ describe('When Qty Entered', () => {
             });
         });
 
-        test('Should Show Message text', () => {
+        test('should show message text', () => {
             expect(screen.getByDisplayValue('Order is overbooked')).toBeInTheDocument();
         });
     });
 });
 
-describe('when Book In button clicked', () => {
+describe('When book in button clicked', () => {
     beforeEach(async () => {
         defaultRender({
             validatePurchaseOrderResult: {
@@ -355,7 +355,7 @@ describe('when Book In button clicked', () => {
         );
     });
 
-    describe('when multipleBookIn checkbox selected', () => {
+    describe('When multipleBookIn checkbox selected...', () => {
         test('should call doBookIn with multipeBookIn flag', async () => {
             // click the checkbox
             const checkboxes = await screen.findAllByRole('checkbox');
@@ -375,15 +375,15 @@ describe('when Book In button clicked', () => {
         });
     });
 
-    describe('when bookInResultLoading', () => {
-        test('Should Show loading text', () => {
+    describe('When bookInResultLoading...', () => {
+        test('should show loading text', () => {
             defaultRender({ bookInResultLoading: true });
 
             expect(screen.getByDisplayValue('loading')).toBeInTheDocument();
         });
     });
 
-    describe('when bookInResult returns succesfully', () => {
+    describe('When bookInResult returns succesfully...', () => {
         beforeEach(() => {
             defaultRender({
                 bookInResult: {
@@ -399,26 +399,26 @@ describe('when Book In button clicked', () => {
             });
         });
 
-        test('Should show message', () => {
+        test('should show message', () => {
             expect(screen.getByDisplayValue('Book In Succesful!')).toBeInTheDocument();
         });
 
-        test('Should add lines to table', () => {
+        test('should add lines to table', () => {
             expect(screen.getByText('SOME-TRANS-TYPE')).toBeInTheDocument();
             expect(screen.getByText('OTHER-TRANS-TYPE')).toBeInTheDocument();
         });
 
-        test('Should open label print dialog', () => {
+        test('should open label print dialog', () => {
             expect(screen.getByText('Label Details')).toBeInTheDocument();
             expect(screen.getByDisplayValue('500123')).toBeInTheDocument();
         });
 
-        test('Should not open parcel dialog', () => {
+        test('should not open parcel dialog', () => {
             expect(screen.queryByText('Create Parcel')).not.toBeInTheDocument();
         });
     });
 
-    describe('when create parcel', () => {
+    describe('When create parcel...', () => {
         beforeAll(() => {
             defaultRender({
                 bookInResult: {
@@ -436,12 +436,12 @@ describe('when Book In button clicked', () => {
             });
         });
 
-        test('Should open parcel dialog', async () => {
+        test('should open parcel dialog', async () => {
             await waitFor(() => expect(screen.getByText('Create Parcel')).toBeInTheDocument());
         });
     });
 
-    describe('when not create parcel', () => {
+    describe('When not create parcel...', () => {
         beforeAll(() => {
             defaultRender({
                 bookInResult: {
@@ -459,13 +459,13 @@ describe('when Book In button clicked', () => {
             });
         });
 
-        test('Should not open parcel dialog', () => {
+        test('should not open parcel dialog', () => {
             expect(screen.queryByText('Create Parcel')).not.toBeInTheDocument();
         });
     });
 });
 
-describe('when adding multiple lines to a book in', () => {
+describe('When adding multiple lines to a book in...', () => {
     beforeAll(() =>
         defaultRender({
             validatePurchaseOrderResult: {
