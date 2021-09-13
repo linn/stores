@@ -262,7 +262,7 @@ function GoodsInUtility({
                                 kardexLocation={bookInResult?.kardexLocation}
                                 partNumber="PART"
                                 partDescription="DESCRIPTION"
-                                reqNumber={12345}
+                                reqNumber={bookInResult?.reqNumber}
                                 orderNumber={1}
                                 qcState="PASS"
                                 qcInfo="info"
