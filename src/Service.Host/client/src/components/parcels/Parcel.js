@@ -321,6 +321,7 @@ function Parcel({
                                 value={supplierCountryValue()}
                                 disabled
                                 fullwidth
+                                propertyName="country"
                             />
                         </Grid>
                         <Grid item xs={3} />
@@ -418,8 +419,9 @@ function Parcel({
                                     id: parseInt(e.id, 10)
                                 }))}
                                 propertyName="checkedById"
+                                allowNoValue
                                 fullWidth
-                                value={parcel.checkedById}
+                                value={parcel.checkedById || ''}
                                 label="Checked by"
                                 required
                                 onChange={handleFieldChange}

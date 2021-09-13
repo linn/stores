@@ -7,11 +7,16 @@ import { MemoryRouter } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
+import { apiMiddleware as api } from 'redux-api-middleware';
+import thunkMiddleware from 'redux-thunk';
+// eslint-disable-next-line no-underscore-dangle
+
+const middleware = [api, thunkMiddleware];
 
 // eslint-disable-next-line react/prop-types
 const Providers = ({ children }) => {
-    const mockStore = configureMockStore();
-    const store = mockStore({});
+    const mockStore = configureMockStore(middleware);
+    const store = mockStore({ oidc: { user: { profile: {} } }, historyStore: { push: jest.fn() } });
     return (
         <Provider store={store}>
             <MuiThemeProvider theme={createMuiTheme()}>

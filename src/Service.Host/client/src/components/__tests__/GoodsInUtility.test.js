@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { cleanup, fireEvent, screen } from '@testing-library/react';
+import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
 import render from '../../test-utils';
 import GoodsInUtility from '../goodsIn/GoodsInUtility';
 
@@ -21,6 +21,7 @@ const userNumber = 33087;
 const defaultRender = props =>
     render(
         <GoodsInUtility
+            history={{ push: jest.fn() }}
             validatePurchaseOrder={validatePurchaseOrder}
             searchDemLocations={searchDemLocations}
             demLocationsSearchResults={[]}
@@ -266,10 +267,9 @@ describe('when Book In button clicked', () => {
         });
     });
 
-    describe('when bookInResult returns succesfully', () => {
+    describe('when bookInResult returns succesfully and not createParcel', () => {
         beforeEach(() => {
             defaultRender({
-                openLabelPrinter: false,
                 bookInResult: {
                     success: true,
                     message: 'Book In Succesful!',
@@ -287,14 +287,41 @@ describe('when Book In button clicked', () => {
             expect(screen.getByDisplayValue('Book In Succesful!')).toBeInTheDocument();
         });
 
-        test('Should add lines to table', async () => {
+        test('Should add lines to table', () => {
             expect(screen.getByText('SOME-TRANS-TYPE')).toBeInTheDocument();
             expect(screen.getByText('OTHER-TRANS-TYPE')).toBeInTheDocument();
         });
 
-        test('Should open label print dialog', async () => {
+        test('Should open label print dialog', () => {
             expect(screen.getByText('Label Details')).toBeInTheDocument();
             expect(screen.getByDisplayValue('500123')).toBeInTheDocument();
         });
+
+        test('Should not open parcel dialog', () => {
+            expect(screen.queryByText('Create Parcel')).not.toBeInTheDocument();
+        });
+    });
+});
+
+describe('when bookInResult returns succesfully and create parcel', () => {
+    beforeAll(() => {
+        defaultRender({
+            bookInResult: {
+                success: true,
+                message: 'Book In Succesful!',
+                createParcel: true,
+                supplierId: 123,
+                parcelComments: 'I need a parcel',
+                reqNumber: 500123,
+                lines: [
+                    { id: 1, transactionType: 'SOME-TRANS-TYPE' },
+                    { id: 2, transactionType: 'OTHER-TRANS-TYPE' }
+                ]
+            }
+        });
+    });
+
+    test('Should open parcel dialog', async () => {
+        await waitFor(() => expect(screen.getByText('Create Parcel')).toBeInTheDocument());
     });
 });

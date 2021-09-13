@@ -47,7 +47,8 @@ function GoodsInUtility({
     validateStorageType,
     validateStorageTypeResult,
     validateStorageTypeResultLoading,
-    match
+    match,
+    history
 }) {
     const [formData, setFormData] = useState({
         orderNumber: null,
@@ -288,6 +289,7 @@ function GoodsInUtility({
                                 supplierId={bookInResult?.supplierId}
                                 match={match}
                                 inDialogBox
+                                history={history}
                             />
                         </div>
                     </div>
@@ -772,7 +774,8 @@ GoodsInUtility.propTypes = {
     validatePurchaseOrderBookInQty: PropTypes.func.isRequired,
     validatePurchaseOrderBookInQtyResultLoading: PropTypes.bool,
     userNumber: PropTypes.number.isRequired,
-    match: PropTypes.shape({}).isRequired
+    match: PropTypes.shape({}).isRequired,
+    history: PropTypes.shape({ push: jest.fn() }).isRequired
 };
 
 GoodsInUtility.defaultProps = {
