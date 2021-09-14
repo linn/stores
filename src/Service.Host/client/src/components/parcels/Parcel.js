@@ -12,7 +12,8 @@ import {
     SearchInputField,
     SnackbarMessage,
     Typeahead,
-    Dropdown
+    Dropdown,
+    LinkButton
 } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
 
@@ -143,11 +144,15 @@ function Parcel({
         return 'loading..';
     };
 
-    const useStyles = makeStyles(theme => ({
+    const useStyles = makeStyles(() => ({
         marginTop1: {
-            marginTop: theme.spacing(1),
+            marginTop: '10px',
             display: 'inline-block',
             width: '2em'
+        },
+        marginTopWiderLinkButton: {
+            marginTop: '-14px',
+            display: 'inline-block'
         },
         displayInline: {
             display: 'inline'
@@ -296,6 +301,7 @@ function Parcel({
                                     onSelect={handleSupplierChange}
                                     items={suppliersSearchResults}
                                     loading={suppliersSearchLoading}
+                                    propertyName="supplier"
                                     fetchItems={searchSuppliers}
                                     clearSearch={() => clearSuppliersSearch}
                                     value={`${parcel.supplierId} - ${supplierNameValue()}`}
@@ -320,6 +326,7 @@ function Parcel({
                                 value={supplierCountryValue()}
                                 disabled
                                 fullwidth
+                                propertyName="country"
                             />
                         </Grid>
                         <Grid item xs={3} />
@@ -340,6 +347,7 @@ function Parcel({
                                     history={history}
                                     debounce={1000}
                                     minimumSearchTermLength={2}
+                                    propertyName="carrier"
                                 />
                             </div>
                             <div className={classes.marginTop1}>
@@ -416,8 +424,9 @@ function Parcel({
                                     id: parseInt(e.id, 10)
                                 }))}
                                 propertyName="checkedById"
+                                allowNoValue
                                 fullWidth
-                                value={parcel.checkedById}
+                                value={parcel.checkedById || ''}
                                 label="Checked by"
                                 required
                                 onChange={handleFieldChange}
@@ -437,15 +446,40 @@ function Parcel({
                             />
                         </Grid>
 
-                        <Grid item xs={4}>
-                            <InputField
-                                fullWidth
-                                value={parcel.importBookNo}
-                                label="Import Book Number"
-                                maxLength={8}
-                                onChange={handleFieldChange}
-                                propertyName="importBookNo"
-                            />
+                        <Grid item xs={8}>
+                            {parcel.importBookNos ? (
+                                parcel.importBookNos.map(impNumber => {
+                                    return (
+                                        <>
+                                            <div className={classes.displayInline}>
+                                                <InputField
+                                                    value={impNumber}
+                                                    label="Import Book Number"
+                                                    maxLength={8}
+                                                    onChange={handleFieldChange}
+                                                    propertyName={`importBookNo${impNumber}`}
+                                                    disabled
+                                                />
+                                            </div>
+                                            <div className={classes.marginTopWiderLinkButton}>
+                                                <Tooltip title="Ctrl + click to open in new tab">
+                                                    <LinkButton
+                                                        text="View Impbook"
+                                                        to={`/logistics/import-books/${impNumber}`}
+                                                    />
+                                                </Tooltip>
+                                            </div>
+                                        </>
+                                    );
+                                })
+                            ) : (
+                                <InputField
+                                    fullWidth
+                                    value="No Impbooks for parcel"
+                                    propertyName="importBookNo"
+                                    disabled
+                                />
+                            )}
                         </Grid>
 
                         <Grid item xs={12}>

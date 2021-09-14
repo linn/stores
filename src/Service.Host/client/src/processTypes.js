@@ -89,3 +89,9 @@ export const printGoodsInLabels = new ItemType(
     'PRINT_GOODS_IN_LABELS',
     '/logistics/goods-in/print-labels'
 );
+
+export const printConsignmentDocuments = new ItemType(
+    'printConsignmentDocuments',
+    'PRINT_CONSIGNMENT_DOCUMENTS',
+    '/logistics/print-consignment-documents'
+);

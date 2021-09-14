@@ -43,8 +43,7 @@
                                 PalletCount = 2,
                                 CarrierId = 121,
                                 SupplierId = 77,
-                                SupplierInvoiceNo = "invoice no 33 & 1/3",
-                                ImportBookNo = 2222
+                                SupplierInvoiceNo = "invoice no 33 & 1/3"
                             };
 
             this.result = this.Sut.Add(this.resource);
@@ -77,7 +76,6 @@
             dataResult.CarrierId.Should().Be(121);
             dataResult.SupplierId.Should().Be(77);
             dataResult.SupplierInvoiceNo.Should().Be("invoice no 33 & 1/3");
-            dataResult.ImportBookNo.Should().Be(2222);
         }
     }
 }

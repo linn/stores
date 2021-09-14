@@ -19,7 +19,7 @@
         protected IConsignmentService Sut { get; private set; }
 
         protected IRepository<Consignment, int> ConsignmentRepository { get; private set; }
-        
+
         protected IRepository<ExportBook, int> ExportBookRepository { get; private set; }
 
         protected Consignment Consignment { get; set; }
@@ -55,18 +55,14 @@
                                    {
                                        ConsignmentId = this.ConsignmentId,
                                        Status = "L",
-                                       Address = new Address { Id = 1111, Country = new Country { CountryCode = "GB" } }
-                                   };
-            this.ConsignmentRepository.FindById(this.ConsignmentId).Returns(
-                new Consignment
-                    {
-                        ConsignmentId = this.ConsignmentId,
-                        Invoices = new List<Invoice>
-                                       {
-                                           new Invoice { DocumentNumber = 123, DocumentType = "I" },
-                                           new Invoice { DocumentNumber = 456, DocumentType = "I" }
-                                       }
-                    });
+                                       Address = new Address { Id = 1111, Country = new Country { CountryCode = "GB" } },
+                                       Invoices = new List<Invoice>
+                                                      {
+                                                          new Invoice { DocumentNumber = 123, DocumentType = "I" },
+                                                          new Invoice { DocumentNumber = 456, DocumentType = "I" }
+                                                      }
+            };
+            this.ConsignmentRepository.FindById(this.ConsignmentId).Returns(this.Consignment);
             this.PrinterMappingRepository.FindBy(Arg.Any<Expression<Func<PrinterMapping, bool>>>())
                 .Returns(new PrinterMapping { PrinterName = "Invoice" });
 

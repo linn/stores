@@ -43,5 +43,9 @@
         public IEnumerable<ConsignmentPalletResource> Pallets { get; set; }
 
         public IEnumerable<ConsignmentItemResource> Items { get; set; }
+
+        public IEnumerable<ExportBookResource> ExportBooks { get; set; }
+
+        public IEnumerable<InvoiceResource> Invoices { get; set; }
     }
 }

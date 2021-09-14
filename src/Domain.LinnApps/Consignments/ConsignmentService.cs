@@ -5,6 +5,7 @@
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExportBooks;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
+    using Linn.Stores.Domain.LinnApps.Models;
 
     public class ConsignmentService : IConsignmentService
     {
@@ -79,13 +80,33 @@
                 this.exportBookPack.MakeExportBookFromConsignment(consignment.ConsignmentId);
             }
 
-            var printer = this.GetPrinter(closedById);
-
-            this.PrintDocuments(consignment, printer);
+            this.PrintDocuments(consignment, closedById);
         }
 
-        private void PrintDocuments(Consignment consignment, string printerName)
+        public ProcessResult PrintConsignmentDocuments(int consignmentId, int userNumber)
         {
+            var printerName = this.GetPrinter(userNumber);
+            var consignment = this.consignmentRepository.FindById(consignmentId);
+
+            foreach (var consignmentInvoice in consignment.Invoices)
+            {
+                this.printInvoiceDispatcher.PrintInvoice(
+                    consignmentInvoice.DocumentNumber,
+                    consignmentInvoice.DocumentType,
+                    "CUSTOMER MASTER",
+                    "Y",
+                    printerName);
+            }
+
+            this.MaybePrintExportBook(consignment, printerName);
+
+            return new ProcessResult(true, $"Documents printed for consignment {consignmentId}");
+        }
+
+        private void PrintDocuments(Consignment consignment, int userNumber)
+        {
+            var printerName = this.GetPrinter(userNumber);
+
             var updatedConsignment = this.consignmentRepository.FindById(consignment.ConsignmentId);
             var numberOfCopies = consignment.Address.Country.NumberOfCopiesOfDispatchDocuments ?? 1;
 

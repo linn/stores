@@ -18,7 +18,6 @@ const clearCarriersSearch = jest.fn();
 const history = {
     push: jest.fn()
 };
-const applicationState = {};
 
 const item = {
     parcelNumber: 52828,
@@ -34,7 +33,7 @@ const item = {
     weight: 15,
     checkedById: '33067',
     comments: 'TVS + PACKING MATERIAL',
-    importBookNo: 136890,
+    importBookNos: [136890, 22222],
     links: { href: '/logistics/parcels/52828', rel: 'self' }
 };
 
@@ -64,7 +63,6 @@ test('On Create - page renders all fields without crashing...', () => {
     const { getByText, queryByText } = render(
         <Parcel
             editStatus="create"
-            applicationState={applicationState}
             searchCarriers={searchCarriers}
             searchSuppliers={searchSuppliers}
             clearCarriersSearch={clearCarriersSearch}
@@ -98,7 +96,6 @@ test('On View -  page renders populated fields', () => {
         <Parcel
             item={item}
             editStatus="view"
-            applicationState={applicationState}
             fetchItems={fetchItems}
             searchCarriers={searchCarriers}
             searchSuppliers={searchSuppliers}
@@ -150,6 +147,6 @@ test('On View -  page renders populated fields', () => {
     expect(getByText('Comments')).toBeInTheDocument();
     expect(getByDisplayValue(item.comments)).toBeInTheDocument();
 
-    expect(getByText('Import Book Number')).toBeInTheDocument();
-    expect(getByDisplayValue(item.importBookNo)).toBeInTheDocument();
+    expect(getByDisplayValue(item.importBookNos[0])).toBeInTheDocument();
+    expect(getByDisplayValue(item.importBookNos[1])).toBeInTheDocument();
 });

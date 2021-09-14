@@ -44,6 +44,7 @@
                 .Where(c => c.ConsignmentId == key)
                 .Include(c => c.Pallets)
                 .Include(c => c.Items)
+                .Include(e => e.ExportBooks)
                 .Include(c => c.Invoices)
                 .Include(c => c.ClosedBy)
                 .Include(a => a.Address)

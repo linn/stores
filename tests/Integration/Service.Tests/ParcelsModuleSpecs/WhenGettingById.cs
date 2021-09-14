@@ -1,11 +1,13 @@
 ﻿namespace Linn.Stores.Service.Tests.ParcelsModuleSpecs
 {
     using System;
+    using System.Collections.Generic;
 
     using FluentAssertions;
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Resources;
 
     using Nancy;
@@ -21,20 +23,25 @@
         public void SetUp()
         {
             var parcel = new Parcel
-                         {
-                             ParcelNumber = 1,
-                             SupplierId = 2,
-                             DateCreated = new DateTime(),
-                             CarrierId = 4,
-                             SupplierInvoiceNo = "Bond, James Bond",
-                             ConsignmentNo = "007",
-                             CartonCount = 0,
-                             PalletCount = 0,
-                             Weight = 00.70m,
-                             DateReceived = new DateTime(),
-                             CheckedById = 123456,
-                             Comments = "RSN 212, RSN 118"
-                         };
+                             {
+                                 ParcelNumber = 1,
+                                 SupplierId = 2,
+                                 DateCreated = new DateTime(),
+                                 CarrierId = 4,
+                                 SupplierInvoiceNo = "Bond, James Bond",
+                                 ConsignmentNo = "007",
+                                 CartonCount = 0,
+                                 PalletCount = 0,
+                                 Weight = 00.70m,
+                                 DateReceived = new DateTime(),
+                                 CheckedById = 123456,
+                                 Comments = "RSN 212, RSN 118",
+                                 Impbooks = new List<ImportBook>
+                                                {
+                                                    new ImportBook { Id = 11111, ParcelNumber = 1 },
+                                                    new ImportBook { Id = 22222, ParcelNumber = 1 }
+                                                }
+                             };
 
             this.ParcelsFacadeService.GetById(Arg.Any<int>()).Returns(new SuccessResult<Parcel>(parcel));
 
@@ -62,6 +69,8 @@
             resource.ParcelNumber.Should().Be(1);
             resource.SupplierId.Should().Be(2);
             resource.CarrierId.Should().Be(4);
+            resource.ImportBookNos.Should().Contain(11111);
+            resource.ImportBookNos.Should().Contain(22222);
         }
     }
 }

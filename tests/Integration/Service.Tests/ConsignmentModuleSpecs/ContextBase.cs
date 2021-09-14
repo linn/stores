@@ -31,7 +31,7 @@
 
         protected IFacadeService<CartonType, string, CartonTypeResource, CartonTypeResource> CartonTypeFacadeService { get; private set; }
 
-        protected ILogisticsLabelFacadeService LogisticsLabelFacade { get; private set; }
+        protected ILogisticsProcessesFacadeService LogisticsProcessesFacadeService { get; private set; }
 
         [SetUp]
         public void EstablishContext()
@@ -41,7 +41,7 @@
             this.CarrierFacadeService = Substitute.For<IFacadeService<Carrier, string, CarrierResource, CarrierResource>>();
             this.CartonTypeFacadeService = Substitute.For<IFacadeService<CartonType, string, CartonTypeResource, CartonTypeResource>>();
             this.ShippingTermFacadeService = Substitute.For<IFacadeService<ShippingTerm, int, ShippingTermResource, ShippingTermResource>>();
-            this.LogisticsLabelFacade = Substitute.For<ILogisticsLabelFacadeService>();
+            this.LogisticsProcessesFacadeService = Substitute.For<ILogisticsProcessesFacadeService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
@@ -51,7 +51,7 @@
                     with.Dependency(this.CarrierFacadeService);
                     with.Dependency(this.CartonTypeFacadeService);
                     with.Dependency(this.ShippingTermFacadeService);
-                    with.Dependency(this.LogisticsLabelFacade);
+                    with.Dependency(this.LogisticsProcessesFacadeService);
                     with.Dependency<IResourceBuilder<Consignment>>(new ConsignmentResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<Consignment>>>(new ConsignmentsResourceBuilder());
                     with.Dependency<IResourceBuilder<Hub>>(new HubResourceBuilder());
@@ -74,7 +74,7 @@
                     with.ResponseProcessor<CartonTypesResponseProcessor>();
                     with.ResponseProcessor<ShippingTermResponseProcessor>();
                     with.ResponseProcessor<ShippingTermsResponseProcessor>();
-                    with.ResponseProcessor<ProcessResultResponseProcessor>(); 
+                    with.ResponseProcessor<ProcessResultResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {

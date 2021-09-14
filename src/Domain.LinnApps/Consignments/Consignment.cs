@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
+    using Linn.Stores.Domain.LinnApps.ExportBooks;
 
     public class Consignment
     {
@@ -54,5 +55,7 @@
         public DateTime? CustomsEntryCodeDate { get; set; }
 
         public IList<ConsignmentPallet> Pallets { get; set; }
+
+        public IEnumerable<ExportBook> ExportBooks { get; set; }
     }
 }
