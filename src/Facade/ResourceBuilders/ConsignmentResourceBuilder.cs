@@ -66,6 +66,19 @@
                                                 ItemDescription = item.ItemDescription,
                                                 RsnNumber = item.RsnNumber
                                            }),
+                           Invoices = consignment.Invoices?.Select(
+                               inv => new InvoiceResource
+                                             {
+                                                 ConsignmentId = inv.ConsignmentId,
+                                                 DocumentType = inv.DocumentType,
+                                                 DocumentNumber = inv.DocumentNumber
+                                             }),
+                           ExportBooks = consignment.ExportBooks?.Select(
+                               exportBook => new ExportBookResource
+                                             {
+                                                 ConsignmentId = exportBook.ConsignmentId,
+                                                 ExportId = exportBook.ExportId
+                                             }),
                            Links = this.BuildLinks(consignment).ToArray()
                        };
         }

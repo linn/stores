@@ -23,6 +23,7 @@ import Page from '../../containers/Page';
 import consignmentReducer from './consignmentReducer';
 import DetailsTab from './DetailsTab';
 import ItemsTab from './ItemsTab';
+import InvoicesTab from './InvoicesTab';
 
 function Consignment({
     item,
@@ -56,7 +57,11 @@ function Consignment({
     printConsignmentLabel,
     printConsignmentLabelWorking,
     printConsignmentLabelResult,
-    clearConsignmentLabelData
+    clearConsignmentLabelData,
+    printDocuments,
+    printDocumentsWorking,
+    printDocumentsResult,
+    printDocumentsClearData
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
     const [editablePallets, setEditablePallets] = useState([]);
@@ -366,6 +371,11 @@ function Consignment({
         setEditableItems(items);
     };
 
+    const handlePrintDocuments = () => {
+        printDocumentsClearData();
+        printDocuments({ consignmentId: item.consignmentId, userNumber });
+    };
+
     return (
         <Page requestErrors={requestErrors} showRequestErrors>
             <Grid container spacing={3}>
@@ -413,6 +423,7 @@ function Consignment({
                         <Tab label="Select" />
                         <Tab label="Details" />
                         <Tab label="Consignment Items" />
+                        <Tab label="Documents" />
                     </Tabs>
                     {currentTab === 0 && (
                         <>
@@ -476,6 +487,15 @@ function Consignment({
                                     cartonTypes={cartonTypes}
                                     setEditStatus={setEditStatus}
                                     viewing={viewing()}
+                                />
+                            )}
+                            {currentTab === 3 && (
+                                <InvoicesTab
+                                    invoices={state.consignment.invoices}
+                                    exportBooks={state.consignment.exportBooks}
+                                    printDocuments={handlePrintDocuments}
+                                    printDocumentsWorking={printDocumentsWorking}
+                                    printDocumentsResult={printDocumentsResult}
                                 />
                             )}
                         </>
@@ -744,7 +764,14 @@ Consignment.propTypes = {
         success: PropTypes.bool,
         message: PropTypes.string
     }),
-    clearConsignmentLabelData: PropTypes.func.isRequired
+    clearConsignmentLabelData: PropTypes.func.isRequired,
+    printDocumentsWorking: PropTypes.bool,
+    printDocuments: PropTypes.func.isRequired,
+    printDocumentsResult: PropTypes.shape({
+        success: PropTypes.bool,
+        message: PropTypes.string
+    }),
+    printDocumentsClearData: PropTypes.func.isRequired
 };
 
 Consignment.defaultProps = {
@@ -767,7 +794,9 @@ Consignment.defaultProps = {
     itemError: null,
     cartonTypes: [],
     printConsignmentLabelWorking: false,
-    printConsignmentLabelResult: null
+    printConsignmentLabelResult: null,
+    printDocumentsWorking: false,
+    printDocumentsResult: null
 };
 
 export default Consignment;

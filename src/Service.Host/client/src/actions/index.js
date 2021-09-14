@@ -309,3 +309,7 @@ export const printGoodsInLabelsActionTypes = makeProcessActionTypes(
 export const validateStorageTypeActionTypes = makeActionTypes(
     itemTypes.validateStorageTypeResult.actionType
 );
+
+export const printConsignmentDocumentsActionTypes = makeProcessActionTypes(
+    processTypes.printConsignmentDocuments.actionType
+);
