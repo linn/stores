@@ -75,6 +75,7 @@ export default function ConsignmentShipfiles({
                             <Button
                                 style={{ marginTop: '22px' }}
                                 variant="contained"
+                                disabled={selectedRows?.length < 1}
                                 onClick={() => {
                                     clearErrors();
                                     selectedRows.forEach(r => {
@@ -97,6 +98,7 @@ export default function ConsignmentShipfiles({
                                 style={{ marginTop: '22px' }}
                                 variant="contained"
                                 color="secondary"
+                                disabled={selectedRows?.length < 1}
                                 onClick={() => {
                                     clearErrors();
                                     selectedRows.forEach(r => deleteShipfile(r.id, null));
@@ -106,20 +108,6 @@ export default function ConsignmentShipfiles({
                             </Button>
                         </Grid>
                         <Grid item xs={8} />
-                        <Grid item xs={12}>
-                            <div style={{ height: 500, width: '100%' }}>
-                                <DataGrid
-                                    rows={rows}
-                                    columns={columns}
-                                    density="standard"
-                                    rowHeight={34}
-                                    checkboxSelection
-                                    onSelectionChange={handleSelectRow}
-                                    loading={consignmentShipfilesLoading}
-                                    hideFooter
-                                />
-                            </div>
-                        </Grid>
                         <Grid item xs={4}>
                             <InputField
                                 label="Send Test Email to Address"
@@ -152,6 +140,21 @@ export default function ConsignmentShipfiles({
                                 Test Selected
                             </Button>
                         </Grid>
+                        <Grid item xs={12}>
+                            <div style={{ height: 500, width: '100%' }}>
+                                <DataGrid
+                                    rows={rows}
+                                    columns={columns}
+                                    density="standard"
+                                    rowHeight={34}
+                                    autoHeight
+                                    checkboxSelection
+                                    onSelectionChange={handleSelectRow}
+                                    loading={consignmentShipfilesLoading}
+                                    hideFooter
+                                />
+                            </div>
+                        </Grid>
                     </>
                 )}
             </Grid>
@@ -177,7 +180,7 @@ ConsignmentShipfiles.propTypes = {
 ConsignmentShipfiles.defaultProps = {
     consignmentShipfiles: [],
     processedShipfiles: null,
-    consignmentShipfilesLoading: true,
+    consignmentShipfilesLoading: false,
     itemError: null,
     whatToWandReport: null,
     deleteLoading: false

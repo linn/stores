@@ -56,6 +56,7 @@ function DebitNotes({
 
     const handleSelectRow = selected => {
         setSelectedRows(rows.filter(r => selected.rowIds.includes(r.id.toString())));
+        console.log(selectedRows);
     };
 
     const columns = [
@@ -240,7 +241,7 @@ function DebitNotes({
                                             density="standard"
                                             rowHeight={34}
                                             checkboxSelection
-                                            onSelectionChange={handleSelectRow}
+                                            onSelectionModelChange={handleSelectRow}
                                             loading={itemsLoading}
                                             hideFooter
                                             filterModel={{
