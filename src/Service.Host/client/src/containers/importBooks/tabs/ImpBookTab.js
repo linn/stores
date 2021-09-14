@@ -106,8 +106,8 @@ const mapDispatchToProps = {
     getSupplier: suppliersActions.fetchById,
     searchCarriers: suppliersApprovedCarrierActions.search,
     clearCarriersSearch: suppliersApprovedCarrierActions.clearSearch,
-    searchParcels: parcelsActions.fetchByQueryString //todo add query string to component,
-    clearParcelsSearch: parcelsActions.clearSearch
+    searchParcels: parcelsActions.fetchByQueryString
+    // clearParcelsSearch: parcelsActions.clear
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(ImpBookTab));

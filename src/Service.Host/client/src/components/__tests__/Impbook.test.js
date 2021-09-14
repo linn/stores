@@ -72,8 +72,21 @@ const employees = [
 const privileges = ['potato.admin', 'import-books.admin'];
 
 // inputfield getByLabelText
-
-
+const defaultRender = props =>
+    render(
+        <ImportBook
+            editStatus="edit"
+            applicationState={applicationState}
+            history={history}
+            addItem={addItem}
+            updateItem={updateItem}
+            setEditStatus={setEditStatus}
+            setSnackbarVisible={setSnackbarVisible}
+            privileges={privileges}
+            loading={false}
+        />
+    );
+    
 jest.mock('../importBooks/tabs/ImpBookTab', () => () => <p>Parcel Number</p>);
 
 describe('When loading', () => {
