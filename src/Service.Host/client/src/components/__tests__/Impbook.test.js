@@ -86,8 +86,8 @@ const defaultRender = props =>
             loading={false}
         />
     );
-    
-jest.mock('../importBooks/tabs/ImpBookTab', () => () => <p>Parcel Number</p>);
+
+// jest.mock('../importBooks/tabs/ImpBookTab', () => () => <p>Parcel Number</p>);
 
 describe('When loading', () => {
     test('On loading, loads spinner', () => {
@@ -109,8 +109,9 @@ describe('When loading', () => {
     });
 });
 
-test('On Create - page renders all fields and tab options without crashing...', () => {
-    const { getByText, queryByText } = render(
+describe('On Create', () => {
+    beforeEach(() => {
+    const { getByText, getByLabelText } = render(
         <ImportBook
             editStatus="create"
             applicationState={applicationState}
@@ -129,41 +130,48 @@ test('On Create - page renders all fields and tab options without crashing...', 
             // clearSuppliersSearch={clearSuppliersSearch}
         />
     );
+    });
 
-    expect(getByText('Import Book Id')).toBeInTheDocument();
-    // expect(getByText('Date Created')).toBeInTheDocument();
-    // expect(getByText('Created by')).toBeInTheDocument();
-    expect(getByText('Parcel Number')).toBeInTheDocument();
-    // expect(getByText('Supplier')).toBeInTheDocument();
-    // expect(getByText('Supplier Country')).toBeInTheDocument();
-    // expect(getByText('Foreign Currency')).toBeInTheDocument();
-    // expect(getByText('Currency')).toBeInTheDocument();
-    // expect(getByText('Total Import Value')).toBeInTheDocument();
-    // expect(getByText('Invoice Number')).toBeInTheDocument();
-    // expect(getByText('Invoice Value')).toBeInTheDocument();
-    // expect(getByText('Total Invoice Value')).toBeInTheDocument();
-    // expect(getByText('Carrier')).toBeInTheDocument();
-    // expect(getByText('Mode of Transport')).toBeInTheDocument();
-    // expect(getByText('Transport Bill Number')).toBeInTheDocument();
-    // expect(getByText('Transaction Code')).toBeInTheDocument();
-    // expect(getByText('Delivery Term Code')).toBeInTheDocument();
-    // expect(getByText('Arrival Port')).toBeInTheDocument();
-    // expect(getByText('Arrival Date')).toBeInTheDocument();
-    // expect(getByText('Number of cartons')).toBeInTheDocument();
-    // expect(getByText('Number of pallets')).toBeInTheDocument();
-    // expect(getByText('Weight')).toBeInTheDocument();
-    // expect(getByText('Prefix')).toBeInTheDocument();
-    // expect(getByText('Customs Entry Code')).toBeInTheDocument();
-    // expect(getByText('Customs Entry Date')).toBeInTheDocument();
-    // expect(getByText('Linn Duty')).toBeInTheDocument();
-    // expect(getByText('Linn Vat')).toBeInTheDocument();
 
-    // expect(getByText('Import Book')).toBeInTheDocument();
-    // expect(getByText('Order Details')).toBeInTheDocument();
-    // expect(getByText('Post Entries')).toBeInTheDocument();
-    // expect(getByText('Comments')).toBeInTheDocument();
+    test('page renders all fields and tab options without crashing...', () => {
+     
+
+        expect(screen.getByText('Import Book Id')).toBeInTheDocument();
+        expect(screen.getByText('Date Created')).toBeInTheDocument();
+        expect(screen.getByText('Created by')).toBeInTheDocument();
+        expect(screen.getByText('Parcel Number')).toBeInTheDocument();
+        expect(screen.getByText('Supplier')).toBeInTheDocument();
+        expect(screen.getByText('Supplier Country')).toBeInTheDocument();
+        expect(screen.getByText('Foreign Currency')).toBeInTheDocument();
+        expect(screen.getByText('Currency')).toBeInTheDocument();
+        expect(screen.getByText('Total Import Value')).toBeInTheDocument();
+        expect(screen.getByText('Invoice Number')).toBeInTheDocument();
+        expect(screen.getByText('Invoice Value')).toBeInTheDocument();
+        expect(screen.getByText('Total Invoice Value')).toBeInTheDocument();
+        expect(screen.getByText('Carrier')).toBeInTheDocument();
+        expect(screen.getByText('Mode of Transport')).toBeInTheDocument();
+        expect(screen.getByText('Transport Bill Number')).toBeInTheDocument();
+        expect(screen.getByText('Transaction Code')).toBeInTheDocument();
+        expect(screen.getByText('Delivery Term Code')).toBeInTheDocument();
+        expect(screen.getByText('Arrival Port')).toBeInTheDocument();
+        expect(screen.getByText('Arrival Date')).toBeInTheDocument();
+        expect(screen.getByLabelText('Number of Cartons')).toBeInTheDocument();
+        expect(screen.getByText('Number of Pallets')).toBeInTheDocument();
+        expect(screen.getByText('Weight')).toBeInTheDocument();
+        expect(screen.getByText('Prefix')).toBeInTheDocument();
+        expect(screen.getByText('Customs Entry Code')).toBeInTheDocument();
+        expect(screen.getByText('Customs Entry Date')).toBeInTheDocument();
+        expect(screen.getByText('Linn Duty')).toBeInTheDocument();
+        expect(screen.getByText('Linn Vat')).toBeInTheDocument();
+        expect(screen.getByText('Import Book')).toBeInTheDocument();
+        expect(screen.getByText('Order Details')).toBeInTheDocument();
+        expect(screen.getByText('Post Entries')).toBeInTheDocument();
+        expect(screen.getByText('Comments')).toBeInTheDocument();
+    });
 });
 
+
+// describe('On create', () => {
 // test('On View -  page renders populated fields', () => {
 //     const { getByText, getByDisplayValue } = render(
 //         <ImportBook

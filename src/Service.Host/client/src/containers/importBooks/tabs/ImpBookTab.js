@@ -19,7 +19,7 @@ import countriesActions from '../../../actions/countriesActions';
 import countriesSelectors from '../../../selectors/countriesSelectors';
 import currenciesActions from '../../../actions/currenciesActions';
 import currenciesSelectors from '../../../selectors/currenciesSelectors';
-import parcelsActions from '../../../actions/parcelsActions';
+import parcelsByNumberActions from '../../../actions/parcelsByNumberActions';
 import parcelsSelectors from '../../../selectors/parcelsSelectors';
 import config from '../../../config';
 
@@ -65,8 +65,8 @@ const mapStateToProps = state => ({
     })),
     parcelsSearchResults: parcelsSelectors.getSearchItems(state).map?.(p => ({
         ...p,
-        id: p.id,
-        name: p.id.toString()
+        id: p.parcelNumber,
+        name: p.parcelNumber.toString()
     })),
     parcelsSearchLoading: parcelsSelectors.getSearchLoading(state)
 });
@@ -106,8 +106,8 @@ const mapDispatchToProps = {
     getSupplier: suppliersActions.fetchById,
     searchCarriers: suppliersApprovedCarrierActions.search,
     clearCarriersSearch: suppliersApprovedCarrierActions.clearSearch,
-    searchParcels: parcelsActions.fetchByQueryString
-    // clearParcelsSearch: parcelsActions.clear
+    searchParcels: parcelsByNumberActions.search,
+    clearParcelsSearch: parcelsByNumberActions.clearSearch
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(ImpBookTab));

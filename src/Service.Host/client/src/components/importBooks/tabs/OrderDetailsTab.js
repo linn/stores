@@ -8,7 +8,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Dropdown, InputField, LinkButton } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
-import { ContactsOutlined } from '@material-ui/icons';
 
 function OrderDetailsTab({
     orderDetails,

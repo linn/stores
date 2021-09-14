@@ -9,6 +9,8 @@
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
 
+    using Org.BouncyCastle.Math.EC.Rfc7748;
+
     public class ParcelFacadeService : FacadeFilterService<Parcel, int, ParcelResource, ParcelResource, ParcelSearchRequestResource>
     {
         private readonly IDatabaseService databaseService;
@@ -63,9 +65,9 @@
                                        : DateTime.Parse(updateResource.DateCancelled);
         }
 
-        protected override Expression<Func<Parcel, bool>> SearchExpression(string searchTerms)
+        protected override Expression<Func<Parcel, bool>> SearchExpression(string searchTerm)
         {
-            throw new NotImplementedException();
+            return x => x.ParcelNumber.ToString().Equals(searchTerm) || x.ParcelNumber.ToString().Contains(searchTerm);
         }
 
         protected override Expression<Func<Parcel, bool>> FilterExpression(ParcelSearchRequestResource searchTerms)

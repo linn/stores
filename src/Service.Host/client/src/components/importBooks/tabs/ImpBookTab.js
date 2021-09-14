@@ -312,7 +312,7 @@ function ImpBookTab({
                         propertyName="Currency"
                         fullWidth
                         value={currency}
-                        label="currency"
+                        label="Currency"
                         onChange={handleFieldChange}
                         disabled={!allowedToEdit}
                     />

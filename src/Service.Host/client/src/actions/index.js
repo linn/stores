@@ -313,3 +313,5 @@ export const validateStorageTypeActionTypes = makeActionTypes(
 export const printConsignmentDocumentsActionTypes = makeProcessActionTypes(
     processTypes.printConsignmentDocuments.actionType
 );
+
+export const parcelsByNumberActionTypes = makeActionTypes(itemTypes.parcelsByNumber.actionType);
