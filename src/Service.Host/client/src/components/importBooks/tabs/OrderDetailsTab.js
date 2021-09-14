@@ -1,4 +1,5 @@
 import React from 'react';
+import { Decimal } from 'decimal.js';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -7,6 +8,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Dropdown, InputField, LinkButton } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
+import { ContactsOutlined } from '@material-ui/icons';
 
 function OrderDetailsTab({
     orderDetails,
@@ -62,39 +64,53 @@ function OrderDetailsTab({
     };
 
     const calcRemainingTotal = () => {
-        const orderDetailsTotal = orderDetails?.reduce((a, v) => a + v.orderValue, 0);
+        const orderDetailsTotal = orderDetails?.reduce(
+            (a, v) => new Decimal(a).plus(v.orderValue),
+            0
+        );
 
-        let remaining = `${totalInvoiceValue - orderDetailsTotal}`;
-
-        if (remaining) {
-            remaining = `${parseFloat(remaining).toFixed(2)}`;
+        if (!orderDetailsTotal) {
+            return totalInvoiceValue;
         }
 
-        return remaining || 0;
+        if (!totalInvoiceValue) {
+            return orderDetailsTotal.isZero() ? 0 : orderDetailsTotal.neg();
+        }
+
+        return new Decimal(totalInvoiceValue).minus(orderDetailsTotal).valueOf();
     };
 
     const calcRemainingDuty = () => {
-        const orderDetailsDutyTotal = orderDetails?.reduce((a, v) => a + v.dutyValue, 0);
-
-        let remaining = `${duty - orderDetailsDutyTotal}`;
-
-        if (remaining) {
-            remaining = `${parseFloat(remaining).toFixed(2)}`;
+        const orderDetailsDutyTotal = orderDetails?.reduce(
+            (a, v) => new Decimal(a).plus(v.dutyValue),
+            0
+        );
+        if (!orderDetailsDutyTotal) {
+            return duty;
         }
 
-        return remaining || 0;
+        if (!duty) {
+            return orderDetailsDutyTotal.isZero() ? 0 : orderDetailsDutyTotal.neg();
+        }
+
+        return new Decimal(duty).minus(orderDetailsDutyTotal).valueOf();
     };
 
     const calcRemainingWeight = () => {
-        const orderDetailsWeightTotal = orderDetails?.reduce((a, v) => a + v.weight, 0);
+        const orderDetailsWeightTotal = orderDetails?.reduce(
+            (a, v) => new Decimal(a).plus(v.weight),
+            0
+        );
 
-        let remaining = `${weight - orderDetailsWeightTotal}`;
-
-        if (remaining) {
-            remaining = `${parseFloat(remaining).toFixed(2)}`;
+        if (!orderDetailsWeightTotal) {
+            return duty;
         }
 
-        return remaining || 0;
+        if (!weight) {
+            return orderDetailsWeightTotal.isZero() ? 0 : orderDetailsWeightTotal.neg();
+        }
+
+        return new Decimal(weight).minus(orderDetailsWeightTotal).valueOf();
     };
 
     return (

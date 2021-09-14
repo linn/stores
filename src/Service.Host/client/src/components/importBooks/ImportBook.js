@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useReducer } from 'react';
+import { Decimal } from 'decimal.js';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Tabs from '@material-ui/core/Tabs';
@@ -16,7 +17,6 @@ import ImpBookTab from '../../containers/importBooks/tabs/ImpBookTab';
 import OrderDetailsTab from '../../containers/importBooks/tabs/OrderDetailsTab';
 import PostEntriesTab from './tabs/PostEntriesTab';
 import CommentsTab from '../../containers/importBooks/tabs/CommentsTab';
-
 import ImportBookReducer from './ImportBookReducer';
 
 function ImportBook({
@@ -197,7 +197,7 @@ function ImportBook({
 
     const totalInvoiceValue = () => {
         let total = `${state.impbook.importBookInvoiceDetails?.reduce(
-            (a, v) => a + v.invoiceValue,
+            (a, v) => new Decimal(a).plus(v.invoiceValue),
             0
         )}`;
         if (total) {

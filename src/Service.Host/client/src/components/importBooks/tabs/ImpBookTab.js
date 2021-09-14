@@ -56,7 +56,11 @@ function ImpBookTab({
     currencies,
     handleUpdateInvoiceDetails,
     invoiceDetails,
-    totalInvoiceValue
+    totalInvoiceValue,
+    searchParcels,
+    clearParcelsSearch,
+    parcelsSearchResults,
+    parcelsSearchLoading
 }) {
     const [localSuppliers, setLocalSuppliers] = useState([{}]);
 
@@ -141,6 +145,16 @@ function ImpBookTab({
         handleFieldChange('carrierId', carrierParam.id);
     };
 
+    const clearParcel = () => {
+        handleFieldChange('parcelNumber', '');
+    };
+
+    const handleParcelChange = parcel => {
+        handleFieldChange('parcelNumber', parcel.parcelNumber);
+        //todo autopopulate all parcel fields
+        //weight, etc
+    };
+
     const useStyles = makeStyles(theme => ({
         displayInline: {
             display: 'inline'
@@ -192,14 +206,36 @@ function ImpBookTab({
                 </Grid>
 
                 <Grid item xs={6}>
-                    <InputField
-                        label="Parcel Number"
-                        fullWidth
-                        onChange={handleFieldChange}
-                        propertyName="parcelNumber"
-                        value={parcelNumber}
-                        disabled={!allowedToEdit}
-                    />
+                    <div className={classes.displayInline}>
+                        <Typeahead
+                            label="Parcel Number"
+                            title="Search for a parcel"
+                            onSelect={handleParcelChange}
+                            items={parcelsSearchResults}
+                            loading={parcelsSearchLoading}
+                            fetchItems={searchParcels}
+                            clearSearch={() => clearParcelsSearch}
+                            value={parcelNumber}
+                            modal
+                            links={false}
+                            // history={history}
+                            debounce={1000}
+                            minimumSearchTermLength={2}
+                            required
+                            disabled={!allowedToEdit}
+                        />
+                    </div>
+                    <div className={classes.marginTop1}>
+                        <Tooltip title="Clear Parcel search">
+                            <Button
+                                variant="outlined"
+                                onClick={clearParcel}
+                                disabled={!allowedToEdit}
+                            >
+                                X
+                            </Button>
+                        </Tooltip>
+                    </div>
                 </Grid>
 
                 <Grid item xs={6}>
@@ -273,7 +309,7 @@ function ImpBookTab({
                 <Grid item xs={4}>
                     <Dropdown
                         items={currencies}
-                        propertyName="currency"
+                        propertyName="Currency"
                         fullWidth
                         value={currency}
                         label="currency"
@@ -619,7 +655,12 @@ ImpBookTab.propTypes = {
     invoiceDetails: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     currencies: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     handleUpdateInvoiceDetails: PropTypes.func.isRequired,
-    totalInvoiceValue: PropTypes.number
+    totalInvoiceValue: PropTypes.number,
+    searchParcels: PropTypes.func.isRequired,
+    clearParcelsSearch: PropTypes.func.isRequired,
+    parcelsSearchResults: PropTypes.shape({ id: PropTypes.number, name: PropTypes.string })
+        .isRequired,
+    parcelsSearchLoading: PropTypes.bool.isRequired
 };
 
 ImpBookTab.defaultProps = {

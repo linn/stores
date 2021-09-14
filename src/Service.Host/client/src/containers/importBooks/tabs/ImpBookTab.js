@@ -19,6 +19,8 @@ import countriesActions from '../../../actions/countriesActions';
 import countriesSelectors from '../../../selectors/countriesSelectors';
 import currenciesActions from '../../../actions/currenciesActions';
 import currenciesSelectors from '../../../selectors/currenciesSelectors';
+import parcelsActions from '../../../actions/parcelsActions';
+import parcelsSelectors from '../../../selectors/parcelsSelectors';
 import config from '../../../config';
 
 const mapStateToProps = state => ({
@@ -60,7 +62,13 @@ const mapStateToProps = state => ({
     currencies: currenciesSelectors.getItems(state)?.map(c => ({
         displayText: `${c.code} - ${c.name}`,
         id: c.code
-    }))
+    })),
+    parcelsSearchResults: parcelsSelectors.getSearchItems(state).map?.(p => ({
+        ...p,
+        id: p.id,
+        name: p.id.toString()
+    })),
+    parcelsSearchLoading: parcelsSelectors.getSearchLoading(state)
 });
 
 const initialise = props => dispatch => {
@@ -97,7 +105,9 @@ const mapDispatchToProps = {
     clearSuppliersSearch: suppliersActions.clearSearch,
     getSupplier: suppliersActions.fetchById,
     searchCarriers: suppliersApprovedCarrierActions.search,
-    clearCarriersSearch: suppliersApprovedCarrierActions.clearSearch
+    clearCarriersSearch: suppliersApprovedCarrierActions.clearSearch,
+    searchParcels: parcelsActions.fetchByQueryString //todo add query string to component,
+    clearParcelsSearch: parcelsActions.clearSearch
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(ImpBookTab));
