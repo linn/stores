@@ -360,9 +360,6 @@ describe('When book in button clicked', () => {
             // click the checkbox
             const checkboxes = await screen.findAllByRole('checkbox');
 
-            // doesn't work
-            //const checkboxes = screen.getAllByRole('checkbox');
-
             fireEvent.click(checkboxes[0]);
             const button = await screen.findByText('Book In');
             fireEvent.click(button);
