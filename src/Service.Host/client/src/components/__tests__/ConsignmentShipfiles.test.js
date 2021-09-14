@@ -1,6 +1,9 @@
+/**
+ * @jest-environment jest-environment-jsdom-sixteen
+ */
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, screen } from '@testing-library/react';
 import render from '../../test-utils';
 import ConsignmentShipfiles from '../ConsignmentShipfiles';
 
@@ -78,5 +81,74 @@ describe('When Shipfiles arrive...', () => {
     test('should show shipfiles in table', () => {
         expect(screen.getByText('08/06/2003')).toBeInTheDocument();
         expect(screen.getByText('08/09/2003')).toBeInTheDocument();
+    });
+});
+
+describe('When Sending Emails...', () => {
+    beforeEach(() => {
+        sendEmails.mockClear();
+        defaultRender({
+            consignmentShipfiles: [
+                {
+                    id: 1,
+                    consignmentId: 1,
+                    dateClosed: '08/06/2003',
+                    customerName: 'CUSTOMER ONE',
+                    invoiceNumbers: '123456',
+                    status: ''
+                },
+                {
+                    id: 2,
+                    consignmentId: 2,
+                    dateClosed: '08/09/2003',
+                    customerName: 'CUSTOMER TWO',
+                    invoiceNumbers: '567890',
+                    status: ''
+                }
+            ]
+        });
+
+        const checkboxes = screen.getAllByRole('checkbox');
+
+        checkboxes.forEach((c, i) => i > 0 && fireEvent.click(c));
+
+        const sendButton = screen.getByRole('button', { name: 'Send Selected' });
+
+        fireEvent.click(sendButton);
+    });
+
+    test('should clear errors', async () => {
+        expect(clearErrors).toHaveBeenCalled();
+    });
+
+    test('should call sendEmails', async () => {
+        expect(sendEmails).toHaveBeenCalledWith(
+            expect.objectContaining({
+                shipfiles: expect.arrayContaining([
+                    expect.objectContaining({
+                        id: 1,
+                        consignmentId: 1,
+                        dateClosed: '08/06/2003',
+                        customerName: 'CUSTOMER ONE',
+                        invoiceNumbers: '123456',
+                        status: ''
+                    })
+                ])
+            })
+        );
+        expect(sendEmails).toHaveBeenCalledWith(
+            expect.objectContaining({
+                shipfiles: expect.arrayContaining([
+                    expect.objectContaining({
+                        id: 2,
+                        consignmentId: 2,
+                        dateClosed: '08/09/2003',
+                        customerName: 'CUSTOMER TWO',
+                        invoiceNumbers: '567890',
+                        status: ''
+                    })
+                ])
+            })
+        );
     });
 });
