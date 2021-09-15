@@ -157,6 +157,7 @@ export default function StoragePlaceAuditReportOptions({
                                         fullWidth
                                         value={options.auditLocation}
                                         disabled
+                                        propertyName="locationRange"
                                     />
                                 </Grid>
                             </>

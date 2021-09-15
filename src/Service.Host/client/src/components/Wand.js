@@ -438,6 +438,7 @@ function Wand({
                         <InputField
                             value={consignmentId}
                             label="Manual Select"
+                            propertyName="manualSelect"
                             onChange={handleManualSelectChange}
                             textFieldProps={manualSelectProp}
                         />
@@ -471,6 +472,7 @@ function Wand({
                         <InputField
                             fullWidth
                             autoFocus
+                            propertyName="wandString"
                             value={wandString}
                             label="Wand String"
                             onChange={handleOnWandChange}
