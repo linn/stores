@@ -86,7 +86,7 @@ export default function StoragePlaceAuditReportOptions({
 
     return (
         <Page>
-            <Grid style={{ marginTop: 40 }} container spacing={3} justify="center">
+            <Grid style={{ marginTop: 40 }} container spacing={3} justifyContent="center">
                 <Grid item xs={12}>
                     <Title text="Storage Place Audit Report" />
                 </Grid>
@@ -157,6 +157,7 @@ export default function StoragePlaceAuditReportOptions({
                                         fullWidth
                                         value={options.auditLocation}
                                         disabled
+                                        propertyName="locationRange"
                                     />
                                 </Grid>
                             </>

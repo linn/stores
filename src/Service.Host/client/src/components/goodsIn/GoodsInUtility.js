@@ -11,7 +11,7 @@ import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import makeStyles from '@material-ui/styles/makeStyles';
-import { DataGrid } from '@material-ui/data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import {
     InputField,
     Typeahead,
@@ -47,7 +47,8 @@ function GoodsInUtility({
     validateStorageType,
     validateStorageTypeResult,
     validateStorageTypeResultLoading,
-    match
+    match,
+    history
 }) {
     const [formData, setFormData] = useState({
         orderNumber: null,
@@ -242,7 +243,7 @@ function GoodsInUtility({
     ];
 
     const handleSelectRow = selected => {
-        setSelectedRows(rows.filter(r => selected.rowIds.includes(r.id.toString())));
+        setSelectedRows(rows.filter(r => selected.includes(r.id)));
     };
 
     return (
@@ -262,7 +263,7 @@ function GoodsInUtility({
                                 kardexLocation={bookInResult?.kardexLocation}
                                 partNumber="PART"
                                 partDescription="DESCRIPTION"
-                                reqNumber={12345}
+                                reqNumber={bookInResult?.reqNumber}
                                 orderNumber={1}
                                 qcState="PASS"
                                 qcInfo="info"
@@ -288,6 +289,7 @@ function GoodsInUtility({
                                 supplierId={bookInResult?.supplierId}
                                 match={match}
                                 inDialogBox
+                                history={history}
                             />
                         </div>
                     </div>
@@ -325,8 +327,9 @@ function GoodsInUtility({
                 <Grid item xs={4}>
                     <InputField
                         fullWidth
+                        type="number"
                         value={formData.orderNumber}
-                        label="PO Number"
+                        label="Order Number"
                         disabled={validatePurchaseOrderResultLoading}
                         propertyName="orderNumber"
                         onChange={handleFieldChange}
@@ -398,6 +401,7 @@ function GoodsInUtility({
                         label="Article"
                         modal
                         items={salesArticlesSearchResults}
+                        propertyName="salesArticle"
                         value={formData?.salesArticle}
                         loading={salesArticlesSearchLoading}
                         fetchItems={searchSalesArticles}
@@ -412,6 +416,7 @@ function GoodsInUtility({
                             handleFieldChange('demLocation', newValue.name);
                         }}
                         label="Dem Location"
+                        propertyName="demLocation"
                         modal
                         items={demLocationsSearchResults}
                         value={formData?.demLocation}
@@ -435,6 +440,7 @@ function GoodsInUtility({
                         }
                         label="Onto Location"
                         modal
+                        propertyName="ontoLocation"
                         items={storagePlacesSearchResults}
                         value={formData?.ontoLocation}
                         loading={storagePlacesSearchLoading}
@@ -492,7 +498,8 @@ function GoodsInUtility({
                                         fullWidth
                                         value={validatePurchaseOrderResult?.orderNumber}
                                         label="Order No"
-                                        propertyName="orderNumber"
+                                        propertyName="purchaseOrderNumber"
+                                        disabled
                                         onChange={handleFieldChange}
                                     />
                                 </Grid>
@@ -518,7 +525,8 @@ function GoodsInUtility({
                                     <InputField
                                         fullWidth
                                         value={validatePurchaseOrderResult?.orderQty}
-                                        label="Qty"
+                                        label="Order Qty"
+                                        disabled={!validatePurchaseOrderResult}
                                         type="number"
                                         propertyName="orderQty"
                                         onChange={handleFieldChange}
@@ -662,7 +670,6 @@ function GoodsInUtility({
                                 storageType: formData.storageType,
                                 createdBy: userNumber
                             };
-                            //setRows(r => [...r, row]);
 
                             doBookIn({
                                 ...formData,
@@ -681,14 +688,15 @@ function GoodsInUtility({
                     </Button>
                 </Grid>
                 <Grid item xs={12}>
-                    <div style={{ height: 250, width: '100%', marginTop: '100px' }}>
+                    <div style={{ width: '100%', marginTop: '100px' }}>
                         <DataGrid
+                            autoHeight
                             rows={rows}
                             columns={tableColumns}
                             density="standard"
                             rowHeight={34}
                             checkboxSelection
-                            onSelectionChange={handleSelectRow}
+                            onSelectionModelChange={handleSelectRow}
                             hideFooter
                         />
                     </div>
@@ -767,12 +775,13 @@ GoodsInUtility.propTypes = {
     validatePurchaseOrderBookInQty: PropTypes.func.isRequired,
     validatePurchaseOrderBookInQtyResultLoading: PropTypes.bool,
     userNumber: PropTypes.number.isRequired,
-    match: PropTypes.shape({}).isRequired
+    match: PropTypes.shape({}).isRequired,
+    history: PropTypes.shape({ push: PropTypes.func }).isRequired
 };
 
 GoodsInUtility.defaultProps = {
     bookInResult: null,
-    bookInResultLoading: false.valueOf,
+    bookInResultLoading: false,
     validatePurchaseOrderResult: null,
     validatePurchaseOrderResultLoading: false,
     validateStorageTypeResult: null,

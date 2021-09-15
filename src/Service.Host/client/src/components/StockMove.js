@@ -9,7 +9,7 @@ import {
     Loading
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
-import { DataGrid } from '@material-ui/data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import moment from 'moment';
@@ -177,16 +177,16 @@ function StockMove({
         }
     };
 
-    const handleSelectRow = row => {
-        setSelectedRow(availableStock[row.rowIds[0]]);
+    const handleSelectRow = rows => {
+        setSelectedRow(availableStock[rows[0]]);
 
         if (!moveDetails.from) {
-            setFromDetailsFromAvailableStock(availableStock[row.rowIds[0]]);
+            setFromDetailsFromAvailableStock(availableStock[rows[0]]);
         }
     };
 
     const handleSelectPartStorageRow = selected => {
-        const row = partStorageTypes.find(p => p.id.toString() === selected.rowIds[0]);
+        const row = partStorageTypes.find(p => p.id === selected[0]);
         setSelectedPartStorageRow(row);
 
         if (!moveDetails.storageType) {
@@ -316,7 +316,7 @@ function StockMove({
                             rowHeight={34}
                             loading={availableStockLoading}
                             hideFooter
-                            onSelectionChange={handleSelectRow}
+                            onSelectionModelChange={handleSelectRow}
                         />
                     </div>
                 </Grid>
@@ -330,7 +330,7 @@ function StockMove({
                             rowHeight={34}
                             loading={partStorageTypesLoading}
                             hideFooter
-                            onSelectionChange={handleSelectPartStorageRow}
+                            onSelectionModelChange={handleSelectPartStorageRow}
                         />
                     </div>
                 </Grid>
