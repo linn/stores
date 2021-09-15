@@ -88,7 +88,7 @@ function DespatchPalletQueueReport({
     };
 
     return (
-        <Grid className={classes.grid} container justify="center">
+        <Grid className={classes.grid} container justifyContent="center">
             <Grid item xs={12}>
                 <Typography variant="h5" gutterBottom>
                     Despatch Pallet Queue With Warehouse Information
