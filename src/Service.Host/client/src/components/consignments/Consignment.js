@@ -106,7 +106,7 @@ function Consignment({
     useEffect(() => {
         const loadPackingList = () => {
             clearConsignmentPackingList();
-            if (item){
+            if (item) {
                 getConsignmentPackingList(item.consignmentId, 'packing-list');
             }
         };
