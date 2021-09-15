@@ -37,10 +37,10 @@ function ImportBook({
         id: null,
         dateCreated: new Date(),
         parcelNumber: null,
-        supplierId: null,
-        foreignCurrency: '',
-        currency: '',
-        carrierId: null,
+        supplierId: '',
+        foreignCurrency: 'N',
+        currency: 'GBP',
+        carrierId: '',
         OldArrivalPort: '',
         flightNumber: '',
         transportId: null,
@@ -188,6 +188,14 @@ function ImportBook({
         });
     };
 
+    const handleParcelChange = parcel => {
+        setEditStatus('edit');
+        dispatch({
+            type: 'parcelChange',
+            parcel
+        });
+    };
+
     const allowedToEdit = () => {
         if (!(privileges.length < 1)) {
             return privileges.some(priv => priv === 'import-books.admin');
@@ -248,7 +256,7 @@ function ImportBook({
                                     maxLength={8}
                                     helperText="This field cannot be changed"
                                     onChange={handleFieldChange}
-                                    propertyName="id"
+                                    propertyName="importBookId"
                                 />
                             </Grid>
                             <Grid item xs={1} />
@@ -314,6 +322,7 @@ function ImportBook({
                                     invoiceDetails={state.impbook.importBookInvoiceDetails}
                                     handleUpdateInvoiceDetails={handleUpdateInvoiceDetails}
                                     totalInvoiceValue={totalInvoiceValue()}
+                                    handleParcelChange={handleParcelChange}
                                 />
                             )}
 

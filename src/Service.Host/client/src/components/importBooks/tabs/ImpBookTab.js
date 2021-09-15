@@ -60,7 +60,8 @@ function ImpBookTab({
     searchParcels,
     clearParcelsSearch,
     parcelsSearchResults,
-    parcelsSearchLoading
+    parcelsSearchLoading,
+    handleParcelChange
 }) {
     const [localSuppliers, setLocalSuppliers] = useState([{}]);
 
@@ -149,12 +150,6 @@ function ImpBookTab({
         handleFieldChange('parcelNumber', '');
     };
 
-    const handleParcelChange = parcel => {
-        handleFieldChange('parcelNumber', parcel.parcelNumber);
-        //todo autopopulate all parcel fields
-        //weight, etc
-    };
-
     const useStyles = makeStyles(theme => ({
         displayInline: {
             display: 'inline'
@@ -186,6 +181,7 @@ function ImpBookTab({
                         value={dateCreated}
                         required
                         disabled={!allowedToEdit}
+                        data-testid="dateCreated"
                     />
                 </Grid>
 
@@ -202,6 +198,7 @@ function ImpBookTab({
                         onChange={handleFieldChange}
                         type="number"
                         disabled={!allowedToEdit}
+                        data-testid="createdBy"
                     />
                 </Grid>
 
@@ -209,6 +206,7 @@ function ImpBookTab({
                     <div className={classes.displayInline}>
                         <Typeahead
                             label="Parcel Number"
+                            propertyName="parcelNumber"
                             title="Search for a parcel"
                             onSelect={handleParcelChange}
                             items={parcelsSearchResults}
@@ -281,13 +279,20 @@ function ImpBookTab({
                 <Grid item xs={3}>
                     <InputField
                         label="Supplier Country"
+                        propertyName="supplierCountry"
                         value={supplierCountryValue()}
                         disabled
                         fullwidth
                     />
                 </Grid>
                 <Grid item xs={3}>
-                    <InputField label="EC (EU) member" value={countryIsInEU()} disabled fullwidth />
+                    <InputField
+                        label="EC (EU) Member"
+                        propertyName="euEcMember"
+                        value={countryIsInEU()}
+                        disabled
+                        fullwidth
+                    />
                 </Grid>
 
                 <Grid item xs={4}>
@@ -325,6 +330,7 @@ function ImpBookTab({
                         propertyName="totalImportValue"
                         fullwidth
                         disabled={!allowedToEdit}
+                        data-testid="totalImportValue"
                     />
                 </Grid>
                 <Grid item xs={2} />
@@ -357,7 +363,7 @@ function ImpBookTab({
                         label="Total Invoice Value"
                         value={totalInvoiceValue}
                         onChange={handleFieldChange}
-                        propertyName="totalImportValue"
+                        propertyName="totalInvoiceValue"
                         fullwidth
                         type="number"
                         maxLength={20}
@@ -658,9 +664,11 @@ ImpBookTab.propTypes = {
     totalInvoiceValue: PropTypes.number,
     searchParcels: PropTypes.func.isRequired,
     clearParcelsSearch: PropTypes.func.isRequired,
-    parcelsSearchResults: PropTypes.shape({ id: PropTypes.number, name: PropTypes.string })
-        .isRequired,
-    parcelsSearchLoading: PropTypes.bool.isRequired
+    parcelsSearchResults: PropTypes.arrayOf(
+        PropTypes.shape({ id: PropTypes.number, name: PropTypes.string })
+    ).isRequired,
+    parcelsSearchLoading: PropTypes.bool,
+    handleParcelChange: PropTypes.func.isRequired
 };
 
 ImpBookTab.defaultProps = {
@@ -681,7 +689,8 @@ ImpBookTab.defaultProps = {
     createdBy: null,
     customsEntryCodePrefix: '',
     countries: [{ id: '-1', countryCode: 'loading..' }],
-    totalInvoiceValue: 0
+    totalInvoiceValue: 0,
+    parcelsSearchLoading: false
 };
 
 export default ImpBookTab;

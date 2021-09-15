@@ -9,6 +9,21 @@ export default function importBookReducer(state = initialState, action) {
                 ...state,
                 impbook: { ...state.impbook, [action.fieldName]: action.payload }
             };
+        case 'parcelChange':
+            return {
+                ...state,
+                impbook: {
+                    ...state.impbook,
+                    parcelNumber: action.parcel.parcelNumber,
+                    weight: action.parcel.weight,
+                    numCartons: action.parcel.cartonCount,
+                    numPallets: action.parcel.palletCount,
+                    supplierId: action.parcel.supplierId,
+                    carrierId: action.parcel.carrierId,
+                    arrivalDate: action.parcel.dateReceived,
+                    transportBillNumber: action.parcel.consignmentNo
+                }
+            };
         case 'invoiceDetailsUpdate':
             return {
                 ...state,
