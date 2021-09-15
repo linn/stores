@@ -120,6 +120,7 @@ import exchangeRates from './exchangeRates';
 import printGoodsInLabels from './printGoodsInLabels';
 import validateStorageTypeResult from './validateStorageTypeResult';
 import printConsignmentDocuments from './printConsignmentDocuments';
+import consignmentPackingList from './consignmentPackingList';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -138,6 +139,7 @@ const rootReducer = history =>
         carriers,
         cartonTypes,
         consignment,
+        consignmentPackingList,
         consignments,
         consignmentShipfile,
         consignmentShipfiles,

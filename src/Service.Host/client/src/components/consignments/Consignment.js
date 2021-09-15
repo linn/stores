@@ -24,6 +24,7 @@ import consignmentReducer from './consignmentReducer';
 import DetailsTab from './DetailsTab';
 import ItemsTab from './ItemsTab';
 import InvoicesTab from './InvoicesTab';
+import PackingListTab from './PackingListTab';
 
 function Consignment({
     item,
@@ -61,7 +62,11 @@ function Consignment({
     printDocuments,
     printDocumentsWorking,
     printDocumentsResult,
-    printDocumentsClearData
+    printDocumentsClearData,
+    consignmentPackingList,
+    consignmentPackingListLoading,
+    getConsignmentPackingList,
+    clearConsignmentPackingList
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
     const [editablePallets, setEditablePallets] = useState([]);
@@ -99,6 +104,13 @@ function Consignment({
     };
 
     useEffect(() => {
+        const loadPackingList = () => {
+            clearConsignmentPackingList();
+            if (item){
+                getConsignmentPackingList(item.consignmentId, 'packing-list');
+            }
+        };
+
         dispatch({
             type: 'initialise',
             payload: item
@@ -123,7 +135,8 @@ function Consignment({
         );
 
         clearConsignmentErrors();
-    }, [item, clearConsignmentErrors]);
+        loadPackingList();
+    }, [item, clearConsignmentErrors, clearConsignmentPackingList, getConsignmentPackingList]);
 
     useEffect(() => {
         if (item) {
@@ -424,6 +437,7 @@ function Consignment({
                         <Tab label="Details" />
                         <Tab label="Consignment Items" />
                         <Tab label="Documents" />
+                        <Tab label="Packing List" />
                     </Tabs>
                     {currentTab === 0 && (
                         <>
@@ -496,6 +510,12 @@ function Consignment({
                                     printDocuments={handlePrintDocuments}
                                     printDocumentsWorking={printDocumentsWorking}
                                     printDocumentsResult={printDocumentsResult}
+                                />
+                            )}
+                            {currentTab === 4 && (
+                                <PackingListTab
+                                    consignmentPackingList={consignmentPackingList}
+                                    consignmentPackingListLoading={consignmentPackingListLoading}
                                 />
                             )}
                         </>
@@ -771,7 +791,11 @@ Consignment.propTypes = {
         success: PropTypes.bool,
         message: PropTypes.string
     }),
-    printDocumentsClearData: PropTypes.func.isRequired
+    printDocumentsClearData: PropTypes.func.isRequired,
+    consignmentPackingList: PropTypes.shape({}),
+    consignmentPackingListLoading: PropTypes.bool,
+    getConsignmentPackingList: PropTypes.func.isRequired,
+    clearConsignmentPackingList: PropTypes.func.isRequired
 };
 
 Consignment.defaultProps = {
@@ -796,7 +820,9 @@ Consignment.defaultProps = {
     printConsignmentLabelWorking: false,
     printConsignmentLabelResult: null,
     printDocumentsWorking: false,
-    printDocumentsResult: null
+    printDocumentsResult: null,
+    consignmentPackingList: null,
+    consignmentPackingListLoading: false
 };
 
 export default Consignment;
