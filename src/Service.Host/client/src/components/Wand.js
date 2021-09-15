@@ -6,7 +6,7 @@ import Dialog from '@material-ui/core/Dialog';
 import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import { DataGrid } from '@material-ui/data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -140,8 +140,8 @@ function Wand({
         loadConsignmentItems(newValue.target.value);
     };
 
-    const handleSelectRow = row => {
-        setSelectedRow(items[row.rowIds[0]]);
+    const handleSelectRow = rows => {
+        setSelectedRow(items[rows[0]]);
     };
 
     const handleArticleNumberDoubleClick = wandStringSuggestion => {
@@ -438,6 +438,7 @@ function Wand({
                         <InputField
                             value={consignmentId}
                             label="Manual Select"
+                            propertyName="manualSelect"
                             onChange={handleManualSelectChange}
                             textFieldProps={manualSelectProp}
                         />
@@ -471,6 +472,7 @@ function Wand({
                         <InputField
                             fullWidth
                             autoFocus
+                            propertyName="wandString"
                             value={wandString}
                             label="Wand String"
                             onChange={handleOnWandChange}
@@ -523,7 +525,7 @@ function Wand({
                                 rowHeight={34}
                                 loading={itemsLoading}
                                 hideFooter
-                                onSelectionChange={handleSelectRow}
+                                onSelectionModelChange={handleSelectRow}
                             />
                         </div>
                     </Grid>

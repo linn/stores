@@ -95,6 +95,7 @@ export default function WwdReportOptions({
                     <InputField
                         fullWidth
                         disabled
+                        propertyName="description"
                         value={reportOptions.partDescription}
                         label="Description"
                     />
