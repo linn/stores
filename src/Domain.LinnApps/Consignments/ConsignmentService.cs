@@ -166,7 +166,7 @@
                                  }).ToList()
                          }).ToList();
 
-            result.TotalVolume = (result.Pallets?.Sum(a => a.Volume) ?? 0) + (result.Items?.Sum(a => a.Volume) ?? 0);
+            result.TotalVolume = decimal.Round((result.Pallets?.Sum(a => a.Volume) ?? 0) + (result.Items?.Sum(a => a.Volume) ?? 0), 3);
             result.TotalGrossWeight = (result.Pallets?.Sum(p => p.Weight) ?? 0) + (result.Items?.Sum(i => i.Weight) ?? 0);
             return result;
         }
@@ -187,7 +187,7 @@
                 description += $"{qty} {item.ItemDescription}";
             }
 
-            return description;
+            return string.IsNullOrEmpty(description) ? selectedItem.ItemDescription : description;
         }
 
         private bool CanBePutOnPallet(ConsignmentItem consignmentItem)

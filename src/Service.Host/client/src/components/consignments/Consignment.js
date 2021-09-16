@@ -393,17 +393,19 @@ function Consignment({
         <Page requestErrors={requestErrors} showRequestErrors>
             <Grid container spacing={3}>
                 <Grid item xs={2}>
-                    <Typography variant="h6">Consignment</Typography>
+                    <Typography variant="h6" className="hide-when-printing">
+                        Consignment
+                    </Typography>
                 </Grid>
                 <Grid item xs={7}>
                     {state.consignment && (
-                        <Typography variant="h6">
+                        <Typography variant="h6" className="hide-when-printing">
                             {state.consignment.consignmentId} {state.consignment.customerName}
                         </Typography>
                     )}
                 </Grid>
                 <Grid item xs={3}>
-                    <Tooltip title="Close Consignment">
+                    <Tooltip className="hide-when-printing" title="Close Consignment">
                         <span>
                             <Button
                                 variant="outlined"
@@ -429,6 +431,7 @@ function Consignment({
                 )}
                 <>
                     <Tabs
+                        className="hide-when-printing"
                         value={currentTab}
                         onChange={handleTabChange}
                         style={{ paddingBottom: '20px' }}
@@ -568,7 +571,7 @@ function Consignment({
                         <Button
                             variant="outlined"
                             color="primary"
-                            className={classes.pullRight}
+                            className={`${classes.pullRight} hide-when-printing`}
                             onClick={startEdit}
                             disabled={!state.consignment || state.consignment.status === 'C'}
                         >
