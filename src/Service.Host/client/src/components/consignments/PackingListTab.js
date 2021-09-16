@@ -19,6 +19,9 @@ function PackingListTab({ consignmentPackingList, consignmentPackingListLoading 
         },
         table: {
             minWidth: 650
+        },
+        noWrap: {
+            whiteSpace: 'nowrap'
         }
     }));
     const classes = useStyles();
@@ -62,8 +65,12 @@ function PackingListTab({ consignmentPackingList, consignmentPackingListLoading 
                                     <TableRow key={row.id}>
                                         <TableCell align="right">{row.containerNumber}</TableCell>
                                         <TableCell>{row.description}</TableCell>
-                                        <TableCell>{row.weight}</TableCell>
-                                        <TableCell>{row.displayDimensions}</TableCell>
+                                        <TableCell className={classes.noWrap}>
+                                            {row.weight}
+                                        </TableCell>
+                                        <TableCell className={classes.noWrap}>
+                                            {row.displayDimensions}
+                                        </TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
@@ -85,7 +92,7 @@ function PackingListTab({ consignmentPackingList, consignmentPackingListLoading 
                 ) : (
                     <>
                         <Grid item xs={12}>
-                            <Typography variant="h6" align="center">
+                            <Typography variant="h5" align="left">
                                 {`Packing List - Consignment ${consignmentPackingList.consignmentId}`}
                             </Typography>
                         </Grid>

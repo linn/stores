@@ -390,7 +390,7 @@ function Consignment({
     };
 
     return (
-        <Page requestErrors={requestErrors} showRequestErrors>
+        <Page requestErrors={requestErrors} showRequestErrors width="xl">
             <Grid container spacing={3}>
                 <Grid item xs={2}>
                     <Typography variant="h6" className="hide-when-printing">

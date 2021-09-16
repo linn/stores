@@ -28,7 +28,9 @@ function InvoicesTab({
                     </>
                 ) : (
                     <>
-                        <Grid item xs={2} />
+                        <Grid item xs={2}>
+                            <Typography variant="subtitle2">Invoices</Typography>
+                        </Grid>
                         <Grid item xs={10}>
                             <Typography variant="subtitle2">No Invoices</Typography>
                         </Grid>
@@ -47,7 +49,9 @@ function InvoicesTab({
                     </>
                 ) : (
                     <>
-                        <Grid item xs={2} />
+                        <Grid item xs={2}>
+                            <Typography variant="subtitle2">Export Books</Typography>
+                        </Grid>
                         <Grid item xs={10}>
                             <Typography variant="subtitle2">No Export Books</Typography>
                         </Grid>
