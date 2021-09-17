@@ -85,7 +85,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = {
     initialise,
-    addItem: consignmentActions.add,
+    addConsignment: consignmentActions.add,
     updateItem: consignmentActions.update,
     createConsignment: consignmentActions.create,
     clearConsignmentErrors: consignmentActions.clearErrorsForItem,

@@ -38,7 +38,8 @@ describe('consignmentReducer tests', () => {
             consignment: {
                 despatchLocationCode: 'LINN',
                 pallets: [],
-                items: []
+                items: [],
+                shippingMethod: 'S'
             },
             originalConsignment: null
         });

@@ -3,7 +3,8 @@ const initialState = {};
 const defaultNewConsignment = {
     despatchLocationCode: 'LINN',
     pallets: [],
-    items: []
+    items: [],
+    shippingMethod: 'S'
 };
 
 const getItemType = itemTypeDisplay => {

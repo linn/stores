@@ -67,7 +67,8 @@ function Consignment({
     consignmentPackingListLoading,
     getConsignmentPackingList,
     clearConsignmentPackingList,
-    createConsignment
+    createConsignment,
+    addConsignment
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
     const [editablePallets, setEditablePallets] = useState([]);
@@ -229,6 +230,10 @@ function Consignment({
     const doSave = () => {
         if (editing()) {
             updateItem(item.consignmentId, state.consignment);
+        }
+
+        if (creating()) {
+            addConsignment(state.consignment);
         }
     };
 
@@ -843,7 +848,8 @@ Consignment.propTypes = {
     consignmentPackingListLoading: PropTypes.bool,
     getConsignmentPackingList: PropTypes.func.isRequired,
     clearConsignmentPackingList: PropTypes.func.isRequired,
-    createConsignment: PropTypes.func.isRequired
+    createConsignment: PropTypes.func.isRequired,
+    addConsignment: PropTypes.func.isRequired
 };
 
 Consignment.defaultProps = {
