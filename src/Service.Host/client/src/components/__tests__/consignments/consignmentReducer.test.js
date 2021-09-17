@@ -25,6 +25,25 @@ describe('consignmentReducer tests', () => {
         });
     });
 
+    it('should create empty consignment', () => {
+        expect(
+            consignmentReducer(
+                {},
+                {
+                    type: 'create',
+                    payload: null
+                }
+            )
+        ).toEqual({
+            consignment: {
+                despatchLocationCode: 'LINN',
+                pallets: [],
+                items: []
+            },
+            originalConsignment: null
+        });
+    });
+
     it('should reset', () => {
         const state = {
             consignment: { consignmentId: 123, hubId: 4 },

@@ -7,21 +7,16 @@
     using FluentAssertions.Extensions;
 
     using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Resources.Consignments;
 
-    using NSubstitute;
-
     using NUnit.Framework;
 
-    public class WhenUpdating : ContextBase
+    public class WhenCreating : ContextBase
     {
-        private ConsignmentUpdateResource updateResource;
+        private ConsignmentResource createResource;
 
         private IResult<Consignment> result;
-
-        private int consignmentId;
 
         private int? newHubId;
 
@@ -39,10 +34,13 @@
 
         private string newCustomsEntryCodeDate;
 
+        private int? salesAccountId;
+
+        private int? addressId;
+
         [SetUp]
         public void SetUp()
         {
-            this.consignmentId = 493574354;
             this.newCarrierCode = "Careful";
             this.newHubId = 2533;
             this.newShippingMethod = "Air";
@@ -51,42 +49,13 @@
             this.newCustomsEntryCodePrefix = "PP";
             this.newCustomsEntryCode = "ENTRY";
             this.newCustomsEntryCodeDate = 1.February(2030).ToString("o");
+            this.addressId = 1;
+            this.salesAccountId = 101;
 
-            var consignment = new Consignment
-                                  {
-                                      ConsignmentId = this.consignmentId,
-                                      HubId = 1,
-                                      Carrier = "Clumsy",
-                                      Address = new Address { Country = new Country { ECMember = "Y" } },
-                                      Terms = "R2D2",
-                                      ShippingMethod = "Throw",
-                                      DespatchLocationCode = "MoonBase Alpha",
-                                      Pallets = new List<ConsignmentPallet>
-                                                    {
-                                                        new ConsignmentPallet
-                                                            {
-                                                                PalletNumber = 1, Depth = 0, Height = 0, Weight = 0, Width = 0
-                                                            },
-                                                        new ConsignmentPallet
-                                                            {
-                                                                PalletNumber = 12, Depth = 0, Height = 0, Weight = 0, Width = 0
-                                                            },
-                                                    },
-                                      Items = new List<ConsignmentItem>
-                                                    {
-                                                        new ConsignmentItem
-                                                            {
-                                                                ItemNumber = 1, Depth = 0, Height = 0, Weight = 0, Width = 0
-                                                            },
-                                                        new ConsignmentItem
-                                                            {
-                                                                ItemNumber = 12, Depth = 0, Height = 0, Weight = 0, Width = 0
-                                                            },
-                                                    }
-            };
-
-            this.updateResource = new ConsignmentUpdateResource
+            this.createResource = new ConsignmentResource
                                       {
+                                          SalesAccountId = this.salesAccountId,
+                                          AddressId = this.addressId,
                                           HubId = this.newHubId,
                                           Carrier = this.newCarrierCode,
                                           ShippingMethod = this.newShippingMethod,
@@ -119,17 +88,16 @@
                                                         }
             };
                                           
-            this.ConsignmentRepository.FindById(this.consignmentId).Returns(consignment);
-
-            this.result = this.Sut.Update(this.consignmentId, this.updateResource);
+            this.result = this.Sut.Add(this.createResource);
         }
 
         [Test]
         public void ShouldReturnSuccess()
         {
-            this.result.Should().BeOfType<SuccessResult<Consignment>>();
-            var updatedConsignment = ((SuccessResult<Consignment>)this.result).Data;
-            updatedConsignment.ConsignmentId.Should().Be(this.consignmentId);
+            this.result.Should().BeOfType<CreatedResult<Consignment>>();
+            var updatedConsignment = ((CreatedResult<Consignment>)this.result).Data;
+            updatedConsignment.SalesAccountId.Should().Be(this.salesAccountId);
+            updatedConsignment.AddressId.Should().Be(this.addressId);
             updatedConsignment.Carrier.Should().Be(this.newCarrierCode);
             updatedConsignment.Terms.Should().Be(this.newTerms);
             updatedConsignment.HubId.Should().Be(this.newHubId);

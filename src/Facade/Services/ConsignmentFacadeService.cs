@@ -26,7 +26,29 @@
 
         protected override Consignment CreateFromResource(ConsignmentResource resource)
         {
-            throw new NotImplementedException();
+            var consignment = new Consignment
+                       {
+                           Carrier = resource.Carrier,
+                           Terms = resource.Terms,
+                           HubId = resource.HubId,
+                           ShippingMethod = resource.ShippingMethod,
+                           DespatchLocationCode = resource.DespatchLocationCode,
+                           CustomsEntryCodePrefix = resource.CustomsEntryCodePrefix,
+                           CustomsEntryCode = resource.CustomsEntryCode,
+                           CustomsEntryCodeDate = string.IsNullOrEmpty(resource.CustomsEntryCodeDate)
+                                                      ? (DateTime?)null
+                                                      : DateTime.Parse(resource.CustomsEntryCodeDate),
+                           AddressId = resource.AddressId,
+                           CustomerName = resource.CustomerName,
+                           DateOpened = DateTime.Now,
+                           SalesAccountId = resource.SalesAccountId,
+                           Pallets = new List<ConsignmentPallet>(),
+                           Items = new List<ConsignmentItem>()
+                       };
+            this.UpdatePallets(consignment, resource.Pallets.ToList());
+            this.UpdateItems(consignment, resource.Items.ToList());
+
+            return consignment;
         }
 
         protected override void UpdateFromResource(Consignment entity, ConsignmentUpdateResource updateResource)
@@ -53,7 +75,7 @@
             {
                 entity.Carrier = updateResource.Carrier;
                 entity.Terms = updateResource.Terms;
-                entity.HubId = updateResource.HubId;
+                entity.HubId = entity.Address?.Country?.ECMember == "Y" ? updateResource.HubId : null;
                 entity.ShippingMethod = updateResource.ShippingMethod;
                 entity.DespatchLocationCode = updateResource.DespatchLocationCode;
                 entity.CustomsEntryCodePrefix = updateResource.CustomsEntryCodePrefix;

@@ -87,6 +87,7 @@ const mapDispatchToProps = {
     initialise,
     addItem: consignmentActions.add,
     updateItem: consignmentActions.update,
+    createConsignment: consignmentActions.create,
     clearConsignmentErrors: consignmentActions.clearErrorsForItem,
     setEditStatus: consignmentActions.setEditStatus,
     setSnackbarVisible: consignmentActions.setSnackbarVisible,
