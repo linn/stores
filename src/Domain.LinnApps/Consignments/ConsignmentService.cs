@@ -1,6 +1,10 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Consignments
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.Consignments.Models;
     using Linn.Stores.Domain.LinnApps.Dispatchers;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExportBooks;
@@ -101,6 +105,100 @@
             this.MaybePrintExportBook(consignment, printerName);
 
             return new ProcessResult(true, $"Documents printed for consignment {consignmentId}");
+        }
+
+        public PackingList GetPackingList(int consignmentId)
+        {
+            var consignment = this.consignmentRepository.FindById(consignmentId);
+            if (consignment == null)
+            {
+                throw new NotFoundException($"Could not find consignment {consignmentId}");
+            }
+
+            var result = new PackingList
+                             {
+                                 SenderAddress = new Address
+                                                     {
+                                                         Addressee = "Linn Products Ltd",
+                                                         Line1 = "Glasgow Road",
+                                                         Line2 = "Eaglesham",
+                                                         Line3 = "Glasgow",
+                                                         CountryCode = "GB",
+                                                         PostCode = "G76 0EQ",
+                                                         Country = new Country { DisplayName = "United Kingdom", CountryCode = "GB" }
+                                                     },
+                                 DeliveryAddress = consignment.Address,
+                                 DespatchDate = consignment.DateClosed,
+                                 ConsignmentId = consignmentId,
+                                 NumberOfPallets = consignment.Pallets?.Count ?? 0
+                             };
+
+            var itemsNotOnPallets = consignment.Items?.Where(this.CanBePutOnPallet).ToList();
+            result.Items = itemsNotOnPallets?.Select(
+                i => new PackingListItem
+                         {
+                             ContainerNumber = i.ContainerNumber,
+                             ItemNumber = i.ItemNumber,
+                             Volume = i.Height / 100m * i.Width / 100m * i.Depth / 100m,
+                             Weight = i.Weight,
+                             DisplayDimensions = $"{i.Height} x {i.Width} x {i.Depth}cm",
+                             Description = this.PackingListDescription(i, consignment.Items)
+                         }).ToList();
+            result.NumberOfItemsNotOnPallets = itemsNotOnPallets?.Count ?? 0;
+
+            result.Pallets = consignment.Pallets?.Select(
+                p => new PackingListPallet
+                         {
+                             PalletNumber = p.PalletNumber,
+                             Weight = p.Weight,
+                             DisplayWeight = $"{p.Weight} Kgs",
+                             DisplayDimensions = $"{p.Height} x {p.Width} x {p.Depth}cm",
+                             Volume = p.Height / 100m * p.Width / 100m * p.Depth / 100m,
+                             Items = consignment.Items.Where(a => a.PalletNumber == p.PalletNumber)
+                                 .Select(b => new PackingListItem
+                                                  {
+                                                      ContainerNumber = b.ContainerNumber,
+                                                      ItemNumber = b.ItemNumber,
+                                                      Description = this.PackingListDescription(b, consignment.Items),
+                                                      Volume = b.Height / 100m * b.Width / 100m * b.Depth / 100m,
+                                                      Weight = b.Weight,
+                                                      DisplayDimensions = $"{b.Height} x {b.Width} x {b.Depth}cm"
+                                 }).ToList()
+                         }).ToList();
+
+            result.TotalVolume = decimal.Round((result.Pallets?.Sum(a => a.Volume) ?? 0) + (result.Items?.Sum(a => a.Volume) ?? 0), 3);
+            result.TotalGrossWeight = (result.Pallets?.Sum(p => p.Weight) ?? 0) + (result.Items?.Sum(i => i.Weight) ?? 0);
+            return result;
+        }
+
+        private string PackingListDescription(ConsignmentItem selectedItem, IEnumerable<ConsignmentItem> items)
+        {
+            if (selectedItem.ItemType == "I" && !selectedItem.ContainerNumber.HasValue)
+            {
+                return $"{selectedItem.Quantity} {selectedItem.ItemDescription}";
+            }
+
+            var description = string.Empty;
+            foreach (var item in items.Where(
+                a => (a.ItemType == "I" || a.ItemType == "S")
+                     && a.ContainerNumber == selectedItem.ContainerNumber))
+            {
+                var qty = item.MaybeHalfAPair == "Y" ? item.Quantity * 2 : item.Quantity;
+                description += $"{qty} {item.ItemDescription}";
+            }
+
+            return string.IsNullOrEmpty(description) ? selectedItem.ItemDescription : description;
+        }
+
+        private bool CanBePutOnPallet(ConsignmentItem consignmentItem)
+        {
+            if (consignmentItem.PalletNumber.HasValue)
+            {
+                return false;
+            }
+
+            return (consignmentItem.ItemType == "I" && consignmentItem.ContainerNumber is null)
+                   || consignmentItem.ItemType == "S" || consignmentItem.ItemType == "C";
         }
 
         private void PrintDocuments(Consignment consignment, int userNumber)

@@ -55,13 +55,84 @@
                                    {
                                        ConsignmentId = this.ConsignmentId,
                                        Status = "L",
-                                       Address = new Address { Id = 1111, Country = new Country { CountryCode = "GB" } },
+                                       Address = new Address { Id = 1111, Line1 = "Busy Street", Country = new Country { CountryCode = "GB" } },
                                        Invoices = new List<Invoice>
                                                       {
                                                           new Invoice { DocumentNumber = 123, DocumentType = "I" },
                                                           new Invoice { DocumentNumber = 456, DocumentType = "I" }
-                                                      }
-            };
+                                                      },
+                                       Items = new List<ConsignmentItem>
+                                                   {
+                                                       new ConsignmentItem
+                                                           {
+                                                               ItemNumber = 1,
+                                                               ItemType = "I",
+                                                               ItemDescription = "Single Thing",
+                                                               Quantity = 1,
+                                                               Weight = 2,
+                                                               Depth = 50,
+                                                               Width = 50,
+                                                               Height = 50
+                                                           },
+                                                       new ConsignmentItem
+                                                           {
+                                                               ItemNumber = 2,
+                                                               ItemType = "C",
+                                                               ItemDescription = "Carton",
+                                                               ContainerNumber = 1,
+                                                               Weight = 1.5m,
+                                                               Depth = 50,
+                                                               Width = 50,
+                                                               Height = 100
+                                                           },
+                                                       new ConsignmentItem
+                                                           {
+                                                               ItemNumber = 3,
+                                                               ItemType = "I",
+                                                               ItemDescription = "Boxed Thing",
+                                                               ContainerNumber = 1,
+                                                               Quantity = 1
+                                                           },
+                                                       new ConsignmentItem
+                                                           {
+                                                               ItemNumber = 4,
+                                                               ItemType = "S",
+                                                               ItemDescription = "Sealed Thing 1",
+                                                               ContainerNumber = 2,
+                                                               Quantity = 1,
+                                                               Weight = 2,
+                                                               Depth = 50,
+                                                               Width = 50,
+                                                               Height = 50
+                                                           },
+                                                       new ConsignmentItem
+                                                           {
+                                                               ItemNumber = 5,
+                                                               ItemType = "S",
+                                                               ItemDescription = "Sealed Thing 2",
+                                                               MaybeHalfAPair = "Y",
+                                                               ContainerNumber = 3,
+                                                               Quantity = 1,
+                                                               PalletNumber = 1,
+                                                               Weight = 2,
+                                                               Depth = 150,
+                                                               Width = 150,
+                                                               Height = 150
+                                                           }
+                                                   },
+                                       Pallets = new List<ConsignmentPallet>
+                                                     {
+                                                         new ConsignmentPallet
+                                                             {
+                                                                 ConsignmentId = this.ConsignmentId,
+                                                                 PalletNumber = 1,
+                                                                 Depth = 100,
+                                                                 Height = 120,
+                                                                 Weight = 14,
+                                                                 Width = 120
+                                                             }
+                                                     }
+                                   };
             this.ConsignmentRepository.FindById(this.ConsignmentId).Returns(this.Consignment);
             this.PrinterMappingRepository.FindBy(Arg.Any<Expression<Func<PrinterMapping, bool>>>())
                 .Returns(new PrinterMapping { PrinterName = "Invoice" });

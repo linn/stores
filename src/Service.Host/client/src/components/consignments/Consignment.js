@@ -24,6 +24,7 @@ import consignmentReducer from './consignmentReducer';
 import DetailsTab from './DetailsTab';
 import ItemsTab from './ItemsTab';
 import InvoicesTab from './InvoicesTab';
+import PackingListTab from './PackingListTab';
 
 function Consignment({
     item,
@@ -61,7 +62,11 @@ function Consignment({
     printDocuments,
     printDocumentsWorking,
     printDocumentsResult,
-    printDocumentsClearData
+    printDocumentsClearData,
+    consignmentPackingList,
+    consignmentPackingListLoading,
+    getConsignmentPackingList,
+    clearConsignmentPackingList
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
     const [editablePallets, setEditablePallets] = useState([]);
@@ -99,6 +104,13 @@ function Consignment({
     };
 
     useEffect(() => {
+        const loadPackingList = () => {
+            clearConsignmentPackingList();
+            if (item) {
+                getConsignmentPackingList(item.consignmentId, 'packing-list');
+            }
+        };
+
         dispatch({
             type: 'initialise',
             payload: item
@@ -123,7 +135,8 @@ function Consignment({
         );
 
         clearConsignmentErrors();
-    }, [item, clearConsignmentErrors]);
+        loadPackingList();
+    }, [item, clearConsignmentErrors, clearConsignmentPackingList, getConsignmentPackingList]);
 
     useEffect(() => {
         if (item) {
@@ -377,20 +390,22 @@ function Consignment({
     };
 
     return (
-        <Page requestErrors={requestErrors} showRequestErrors>
+        <Page requestErrors={requestErrors} showRequestErrors width="xl">
             <Grid container spacing={3}>
                 <Grid item xs={2}>
-                    <Typography variant="h6">Consignment</Typography>
+                    <Typography variant="h6" className="hide-when-printing">
+                        Consignment
+                    </Typography>
                 </Grid>
                 <Grid item xs={7}>
                     {state.consignment && (
-                        <Typography variant="h6">
+                        <Typography variant="h6" className="hide-when-printing">
                             {state.consignment.consignmentId} {state.consignment.customerName}
                         </Typography>
                     )}
                 </Grid>
                 <Grid item xs={3}>
-                    <Tooltip title="Close Consignment">
+                    <Tooltip className="hide-when-printing" title="Close Consignment">
                         <span>
                             <Button
                                 variant="outlined"
@@ -416,6 +431,7 @@ function Consignment({
                 )}
                 <>
                     <Tabs
+                        className="hide-when-printing"
                         value={currentTab}
                         onChange={handleTabChange}
                         style={{ paddingBottom: '20px' }}
@@ -424,6 +440,7 @@ function Consignment({
                         <Tab label="Details" />
                         <Tab label="Consignment Items" />
                         <Tab label="Documents" />
+                        <Tab label="Packing List" />
                     </Tabs>
                     {currentTab === 0 && (
                         <>
@@ -498,6 +515,12 @@ function Consignment({
                                     printDocumentsResult={printDocumentsResult}
                                 />
                             )}
+                            {currentTab === 4 && (
+                                <PackingListTab
+                                    consignmentPackingList={consignmentPackingList}
+                                    consignmentPackingListLoading={consignmentPackingListLoading}
+                                />
+                            )}
                         </>
                     )}
                 </>
@@ -548,7 +571,7 @@ function Consignment({
                         <Button
                             variant="outlined"
                             color="primary"
-                            className={classes.pullRight}
+                            className={`${classes.pullRight} hide-when-printing`}
                             onClick={startEdit}
                             disabled={!state.consignment || state.consignment.status === 'C'}
                         >
@@ -771,7 +794,11 @@ Consignment.propTypes = {
         success: PropTypes.bool,
         message: PropTypes.string
     }),
-    printDocumentsClearData: PropTypes.func.isRequired
+    printDocumentsClearData: PropTypes.func.isRequired,
+    consignmentPackingList: PropTypes.shape({}),
+    consignmentPackingListLoading: PropTypes.bool,
+    getConsignmentPackingList: PropTypes.func.isRequired,
+    clearConsignmentPackingList: PropTypes.func.isRequired
 };
 
 Consignment.defaultProps = {
@@ -796,7 +823,9 @@ Consignment.defaultProps = {
     printConsignmentLabelWorking: false,
     printConsignmentLabelResult: null,
     printDocumentsWorking: false,
-    printDocumentsResult: null
+    printDocumentsResult: null,
+    consignmentPackingList: null,
+    consignmentPackingListLoading: false
 };
 
 export default Consignment;

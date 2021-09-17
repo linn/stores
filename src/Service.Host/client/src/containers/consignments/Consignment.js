@@ -30,6 +30,8 @@ import printConsignmentLabelActions from '../../actions/printConsignmentLabelAct
 import printConsignmentLabelSelectors from '../../selectors/printConsignmentLabelSelectors';
 import printConsignmentDocumentsActions from '../../actions/printConsignmentDocumentsActions';
 import printConsignmentDocumentsSelectors from '../../selectors/printConsignmentDocumentsSelectors';
+import consignmentPackingListSelectors from '../../selectors/consignmentPackingListSelectors';
+import consignmentPackingListActions from '../../actions/consignmentPackingListActions';
 
 const getOptions = ownProps => {
     const options = queryString.parse(ownProps.location.search);
@@ -76,7 +78,9 @@ const mapStateToProps = (state, ownProps) => ({
     printConsignmentLabelWorking: printConsignmentLabelSelectors.getWorking(state),
     printConsignmentLabelResult: printConsignmentLabelSelectors.getData(state),
     printDocumentsWorking: printConsignmentDocumentsSelectors.getWorking(state),
-    printDocumentsResult: printConsignmentDocumentsSelectors.getData(state)
+    printDocumentsResult: printConsignmentDocumentsSelectors.getData(state),
+    consignmentPackingList: consignmentPackingListSelectors.getItem(state),
+    consignmentPackingListLoading: consignmentPackingListSelectors.getLoading(state)
 });
 
 const mapDispatchToProps = {
@@ -95,7 +99,9 @@ const mapDispatchToProps = {
     printConsignmentLabel: printConsignmentLabelActions.requestProcessStart,
     clearConsignmentLabelData: printConsignmentLabelActions.clearProcessData,
     printDocuments: printConsignmentDocumentsActions.requestProcessStart,
-    printDocumentsClearData: printConsignmentDocumentsActions.clearProcessData
+    printDocumentsClearData: printConsignmentDocumentsActions.clearProcessData,
+    getConsignmentPackingList: consignmentPackingListActions.fetchByPath,
+    clearConsignmentPackingList: consignmentPackingListActions.clearItem
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Consignment));
