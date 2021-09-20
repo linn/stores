@@ -117,13 +117,18 @@ describe('When Sending Emails...', () => {
         fireEvent.click(sendButton);
     });
 
-    test('should clear errors', async () => {
+    test('should clear errors', () => {
         expect(clearErrors).toHaveBeenCalled();
     });
 
-    test('should call sendEmails', async () => {
+    test('should say update startus to "Processing" for each shipfile', () => {
+        expect(screen.getAllByText('Processing').length).toBe(2);
+    });
+
+    test('should call sendEmails', () => {
         expect(sendEmails).toHaveBeenCalledWith(
             expect.objectContaining({
+                test: false,
                 shipfiles: expect.arrayContaining([
                     expect.objectContaining({
                         id: 1,
@@ -138,6 +143,7 @@ describe('When Sending Emails...', () => {
         );
         expect(sendEmails).toHaveBeenCalledWith(
             expect.objectContaining({
+                test: false,
                 shipfiles: expect.arrayContaining([
                     expect.objectContaining({
                         id: 2,
@@ -153,46 +159,90 @@ describe('When Sending Emails...', () => {
     });
 });
 
-// describe('When Sent Emails...', () => {
-//     beforeEach(() => {
-//         sendEmails.mockClear();
-//         defaultRender({
-//             consignmentShipfiles: [
-//                 {
-//                     id: 1,
-//                     consignmentId: 1,
-//                     dateClosed: '08/06/2003',
-//                     customerName: 'CUSTOMER ONE',
-//                     invoiceNumbers: '123456',
-//                     status: ''
-//                 },
-//                 {
-//                     id: 2,
-//                     consignmentId: 2,
-//                     dateClosed: '08/09/2003',
-//                     customerName: 'CUSTOMER TWO',
-//                     invoiceNumbers: '567890',
-//                     status: ''
-//                 }
-//             ],
-//             processedShipfiles: [
-//                 {
-//                     id: 1,
-//                     consignmentId: 1,
-//                     dateClosed: '08/06/2003',
-//                     customerName: 'CUSTOMER ONE',
-//                     invoiceNumbers: '123456',
-//                     status: 'Email Sent!'
-//                 },
-//                 {
-//                     id: 2,
-//                     consignmentId: 2,
-//                     dateClosed: '08/09/2003',
-//                     customerName: 'CUSTOMER TWO',
-//                     invoiceNumbers: '567890',
-//                     status: 'No Contact details found.'
-//                 }
-//             ]
-//         });
-//     });
-// });
+describe('When Sent Emails...', () => {
+    beforeEach(() => {
+        sendEmails.mockClear();
+        defaultRender({
+            consignmentShipfiles: [
+                {
+                    id: 1,
+                    consignmentId: 1,
+                    dateClosed: '08/06/2003',
+                    customerName: 'CUSTOMER ONE',
+                    invoiceNumbers: '123456',
+                    status: ''
+                },
+                {
+                    id: 2,
+                    consignmentId: 2,
+                    dateClosed: '08/09/2003',
+                    customerName: 'CUSTOMER TWO',
+                    invoiceNumbers: '567890',
+                    status: ''
+                }
+            ],
+            processedShipfiles: [
+                {
+                    id: 1,
+                    consignmentId: 1,
+                    dateClosed: '08/06/2003',
+                    customerName: 'CUSTOMER ONE',
+                    invoiceNumbers: '123456',
+                    status: 'Email Sent!'
+                },
+                {
+                    id: 2,
+                    consignmentId: 2,
+                    dateClosed: '08/09/2003',
+                    customerName: 'CUSTOMER TWO',
+                    invoiceNumbers: '567890',
+                    status: 'No Contact details found.'
+                }
+            ]
+        });
+    });
+
+    test('should update status of shipfiles', () => {
+        expect(screen.getByText('Email Sent!')).toBeInTheDocument();
+        expect(screen.getByText('No Contact details found.')).toBeInTheDocument();
+    });
+});
+
+describe('When deleting emails...', () => {
+    beforeEach(() => {
+        sendEmails.mockClear();
+        defaultRender({
+            consignmentShipfiles: [
+                {
+                    id: 1,
+                    consignmentId: 1,
+                    dateClosed: '08/06/2003',
+                    customerName: 'CUSTOMER ONE',
+                    invoiceNumbers: '123456',
+                    status: ''
+                },
+                {
+                    id: 2,
+                    consignmentId: 2,
+                    dateClosed: '08/09/2003',
+                    customerName: 'CUSTOMER TWO',
+                    invoiceNumbers: '567890',
+                    status: ''
+                }
+            ]
+        });
+
+        const checkboxes = screen.getAllByRole('checkbox');
+
+        checkboxes.forEach((c, i) => i > 0 && fireEvent.click(c));
+
+        const sendButton = screen.getByRole('button', { name: 'Delete Selected' });
+
+        fireEvent.click(sendButton);
+    });
+
+    test('should call deleteEmails', () => {
+        expect(deleteShipfile).toHaveBeenCalledWith(1, null);
+        expect(deleteShipfile).toHaveBeenCalledWith(2, null);
+    });
+});

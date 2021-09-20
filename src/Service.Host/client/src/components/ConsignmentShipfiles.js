@@ -86,7 +86,8 @@ export default function ConsignmentShipfiles({
                                         );
                                     });
                                     sendEmails({
-                                        shipfiles: selectedRows
+                                        shipfiles: selectedRows,
+                                        test: false
                                     });
                                 }}
                             >
@@ -108,8 +109,6 @@ export default function ConsignmentShipfiles({
                             </Button>
                         </Grid>
                         <Grid item xs={8} />
-<<<<<<< HEAD
-=======
                         <Grid item xs={12}>
                             <div style={{ height: 500, width: '100%' }}>
                                 <DataGrid
@@ -120,11 +119,11 @@ export default function ConsignmentShipfiles({
                                     checkboxSelection
                                     onSelectionModelChange={handleSelectRow}
                                     loading={consignmentShipfilesLoading}
+                                    columnBuffer={6}
                                     hideFooter
                                 />
                             </div>
                         </Grid>
->>>>>>> master
                         <Grid item xs={4}>
                             <InputField
                                 label="Send Test Email to Address"
@@ -156,21 +155,6 @@ export default function ConsignmentShipfiles({
                             >
                                 Test Selected
                             </Button>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <div style={{ height: 500, width: '100%' }}>
-                                <DataGrid
-                                    rows={rows}
-                                    columns={columns}
-                                    density="standard"
-                                    rowHeight={34}
-                                    autoHeight
-                                    checkboxSelection
-                                    onSelectionChange={handleSelectRow}
-                                    loading={consignmentShipfilesLoading}
-                                    hideFooter
-                                />
-                            </div>
                         </Grid>
                     </>
                 )}
