@@ -1,6 +1,3 @@
-/**
- * @jest-environment jest-environment-jsdom-sixteen
- */
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { cleanup, fireEvent, screen } from '@testing-library/react';
