@@ -24,6 +24,7 @@ import consignmentReducer from './consignmentReducer';
 import DetailsTab from './DetailsTab';
 import ItemsTab from './ItemsTab';
 import InvoicesTab from './InvoicesTab';
+import PackingListTab from './PackingListTab';
 
 function Consignment({
     item,
@@ -61,7 +62,11 @@ function Consignment({
     printDocuments,
     printDocumentsWorking,
     printDocumentsResult,
-    printDocumentsClearData
+    printDocumentsClearData,
+    consignmentPackingList,
+    consignmentPackingListLoading,
+    getConsignmentPackingList,
+    clearConsignmentPackingList
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
     const [editablePallets, setEditablePallets] = useState([]);
@@ -99,6 +104,13 @@ function Consignment({
     };
 
     useEffect(() => {
+        const loadPackingList = () => {
+            clearConsignmentPackingList();
+            if (item) {
+                getConsignmentPackingList(item.consignmentId, 'packing-list');
+            }
+        };
+
         dispatch({
             type: 'initialise',
             payload: item
@@ -123,7 +135,8 @@ function Consignment({
         );
 
         clearConsignmentErrors();
-    }, [item, clearConsignmentErrors]);
+        loadPackingList();
+    }, [item, clearConsignmentErrors, clearConsignmentPackingList, getConsignmentPackingList]);
 
     useEffect(() => {
         if (item) {
@@ -377,322 +390,344 @@ function Consignment({
     };
 
     return (
-        <Page requestErrors={requestErrors} showRequestErrors>
-            <Grid container spacing={3}>
-                <Grid item xs={2}>
-                    <Typography variant="h6">Consignment</Typography>
-                </Grid>
-                <Grid item xs={7}>
-                    {state.consignment && (
-                        <Typography variant="h6">
-                            {state.consignment.consignmentId} {state.consignment.customerName}
-                        </Typography>
-                    )}
-                </Grid>
-                <Grid item xs={3}>
-                    <Tooltip title="Close Consignment">
-                        <span>
-                            <Button
-                                variant="outlined"
-                                className={classes.pullRight}
-                                onClick={closeConsignment}
-                                disabled={
-                                    !viewing() ||
-                                    !state.consignment ||
-                                    state.consignment.status === 'C'
-                                }
-                            >
-                                Close Consignment
-                            </Button>
-                        </span>
-                    </Tooltip>
-                </Grid>
-                {itemError && (
-                    <Grid item xs={12}>
-                        <ErrorCard
-                            errorMessage={itemError?.details?.errors?.[0] || itemError.statusText}
-                        />
+        <div className="pageContainer">
+            <Page requestErrors={requestErrors} showRequestErrors width="xl">
+                <Grid container spacing={3}>
+                    <Grid item xs={2} className="hide-when-printing">
+                        <Typography variant="h6">Consignment</Typography>
                     </Grid>
-                )}
-                <>
-                    <Tabs
-                        value={currentTab}
-                        onChange={handleTabChange}
-                        style={{ paddingBottom: '20px' }}
-                    >
-                        <Tab label="Select" />
-                        <Tab label="Details" />
-                        <Tab label="Consignment Items" />
-                        <Tab label="Documents" />
-                    </Tabs>
-                    {currentTab === 0 && (
-                        <>
-                            <Grid item xs={12}>
-                                <Dropdown
-                                    label="Select open consignment"
-                                    propertyName="consignmentSelect"
-                                    items={openConsignments}
-                                    onChange={handleSelectConsignment}
-                                    optionsLoading={optionsLoading}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <InputField
-                                    label="Select Consignment By Id"
-                                    placeholder="Consignment Id"
-                                    propertyName="consignmentIdSelect"
-                                    value={consignmentIdSelect}
-                                    onChange={(_, val) => setConsignmentIdSelect(val)}
-                                />
+                    <Grid item xs={7} className="hide-when-printing">
+                        {state.consignment && (
+                            <Typography variant="h6">
+                                {state.consignment.consignmentId} {state.consignment.customerName}
+                            </Typography>
+                        )}
+                    </Grid>
+                    <Grid item xs={3} className="hide-when-printing">
+                        <Tooltip title="Close Consignment">
+                            <span>
                                 <Button
-                                    style={{ marginTop: '10px' }}
                                     variant="outlined"
-                                    color="primary"
-                                    onClick={() =>
-                                        handleSelectConsignment(null, consignmentIdSelect)
+                                    className={classes.pullRight}
+                                    onClick={closeConsignment}
+                                    disabled={
+                                        !viewing() ||
+                                        !state.consignment ||
+                                        state.consignment.status === 'C'
                                     }
                                 >
-                                    Show Consignment
+                                    Close Consignment
                                 </Button>
-                            </Grid>
-                        </>
+                            </span>
+                        </Tooltip>
+                    </Grid>
+                    {itemError && (
+                        <Grid item xs={12}>
+                            <ErrorCard
+                                errorMessage={
+                                    itemError?.details?.errors?.[0] || itemError.statusText
+                                }
+                            />
+                        </Grid>
                     )}
-                    {currentTab !== 0 && (loading || !state.consignment) ? (
-                        <Loading />
-                    ) : (
-                        <>
-                            {currentTab === 1 && (
-                                <DetailsTab
-                                    consignment={state.consignment}
-                                    hub={hub}
-                                    hubs={hubs}
-                                    updateField={updateField}
-                                    viewMode={viewMode()}
-                                    editStatus={editStatus}
-                                    hubsLoading={hubsLoading}
-                                    carrier={carrier}
-                                    carriers={carriers}
-                                    carriersLoading={carriersLoading}
-                                    shippingTerm={shippingTerm}
-                                    shippingTerms={shippingTerms}
-                                    shippingTermsLoading={shippingTermsLoading}
-                                />
-                            )}
-                            {currentTab === 2 && (
-                                <ItemsTab
-                                    editableItems={editableItems}
-                                    editablePallets={editablePallets}
-                                    dispatch={dispatch}
-                                    setSaveDisabled={setSaveDisabled}
-                                    cartonTypes={cartonTypes}
-                                    setEditStatus={setEditStatus}
-                                    viewing={viewing()}
-                                />
-                            )}
-                            {currentTab === 3 && (
-                                <InvoicesTab
-                                    invoices={state.consignment.invoices}
-                                    exportBooks={state.consignment.exportBooks}
-                                    printDocuments={handlePrintDocuments}
-                                    printDocumentsWorking={printDocumentsWorking}
-                                    printDocumentsResult={printDocumentsResult}
-                                />
-                            )}
-                        </>
-                    )}
-                </>
-                <Grid item xs={12} style={{ marginTop: '20px' }}>
-                    {currentTab === 2 && (
-                        <>
-                            <Button
-                                variant="outlined"
-                                color="primary"
-                                onClick={addPallet}
-                                disabled={viewing()}
-                            >
-                                Add Pallet
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                color="primary"
-                                onClick={addCarton}
-                                disabled={viewing()}
-                            >
-                                Add Carton
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                color="primary"
-                                onClick={addItem}
-                                disabled={viewing()}
-                            >
-                                Add Item
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                color="primary"
-                                onClick={showCartonLabelForm}
-                            >
-                                Carton Label
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                color="primary"
-                                onClick={showPalletLabelForm}
-                            >
-                                Pallet Label
-                            </Button>
-                        </>
-                    )}
-                    {editStatus === 'view' ? (
-                        <Button
-                            variant="outlined"
-                            color="primary"
-                            className={classes.pullRight}
-                            onClick={startEdit}
-                            disabled={!state.consignment || state.consignment.status === 'C'}
+                    <>
+                        <Tabs
+                            className="hide-when-printing"
+                            value={currentTab}
+                            onChange={handleTabChange}
+                            style={{ paddingBottom: '20px' }}
                         >
-                            Edit
-                        </Button>
-                    ) : (
-                        <SaveBackCancelButtons
-                            saveClick={doSave}
-                            backClick={() => {}}
-                            cancelClick={doCancel}
-                            saveDisabled={saveDisabled}
-                        />
-                    )}
+                            <Tab label="Select" />
+                            <Tab label="Details" />
+                            <Tab label="Consignment Items" />
+                            <Tab label="Documents" />
+                            <Tab label="Packing List" />
+                        </Tabs>
+                        {currentTab === 0 && (
+                            <>
+                                <Grid item xs={12}>
+                                    <Dropdown
+                                        label="Select open consignment"
+                                        propertyName="consignmentSelect"
+                                        items={openConsignments}
+                                        onChange={handleSelectConsignment}
+                                        optionsLoading={optionsLoading}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <InputField
+                                        label="Select Consignment By Id"
+                                        placeholder="Consignment Id"
+                                        propertyName="consignmentIdSelect"
+                                        value={consignmentIdSelect}
+                                        onChange={(_, val) => setConsignmentIdSelect(val)}
+                                    />
+                                    <Button
+                                        style={{ marginTop: '10px' }}
+                                        variant="outlined"
+                                        color="primary"
+                                        onClick={() =>
+                                            handleSelectConsignment(null, consignmentIdSelect)
+                                        }
+                                    >
+                                        Show Consignment
+                                    </Button>
+                                </Grid>
+                            </>
+                        )}
+                        {currentTab !== 0 && (loading || !state.consignment) ? (
+                            <Loading />
+                        ) : (
+                            <>
+                                {currentTab === 1 && (
+                                    <DetailsTab
+                                        consignment={state.consignment}
+                                        hub={hub}
+                                        hubs={hubs}
+                                        updateField={updateField}
+                                        viewMode={viewMode()}
+                                        editStatus={editStatus}
+                                        hubsLoading={hubsLoading}
+                                        carrier={carrier}
+                                        carriers={carriers}
+                                        carriersLoading={carriersLoading}
+                                        shippingTerm={shippingTerm}
+                                        shippingTerms={shippingTerms}
+                                        shippingTermsLoading={shippingTermsLoading}
+                                    />
+                                )}
+                                {currentTab === 2 && (
+                                    <ItemsTab
+                                        editableItems={editableItems}
+                                        editablePallets={editablePallets}
+                                        dispatch={dispatch}
+                                        setSaveDisabled={setSaveDisabled}
+                                        cartonTypes={cartonTypes}
+                                        setEditStatus={setEditStatus}
+                                        viewing={viewing()}
+                                    />
+                                )}
+                                {currentTab === 3 && (
+                                    <InvoicesTab
+                                        invoices={state.consignment.invoices}
+                                        exportBooks={state.consignment.exportBooks}
+                                        printDocuments={handlePrintDocuments}
+                                        printDocumentsWorking={printDocumentsWorking}
+                                        printDocumentsResult={printDocumentsResult}
+                                    />
+                                )}
+                                {currentTab === 4 && (
+                                    <PackingListTab
+                                        consignmentPackingList={consignmentPackingList}
+                                        consignmentPackingListLoading={
+                                            consignmentPackingListLoading
+                                        }
+                                    />
+                                )}
+                            </>
+                        )}
+                    </>
+                    <Grid item xs={12} style={{ marginTop: '20px' }}>
+                        {currentTab === 2 && (
+                            <>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={addPallet}
+                                    disabled={viewing()}
+                                >
+                                    Add Pallet
+                                </Button>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={addCarton}
+                                    disabled={viewing()}
+                                >
+                                    Add Carton
+                                </Button>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={addItem}
+                                    disabled={viewing()}
+                                >
+                                    Add Item
+                                </Button>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={showCartonLabelForm}
+                                >
+                                    Carton Label
+                                </Button>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    onClick={showPalletLabelForm}
+                                >
+                                    Pallet Label
+                                </Button>
+                            </>
+                        )}
+                        {editStatus === 'view' ? (
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                className={`${classes.pullRight} hide-when-printing`}
+                                onClick={startEdit}
+                                disabled={!state.consignment || state.consignment.status === 'C'}
+                            >
+                                Edit
+                            </Button>
+                        ) : (
+                            <SaveBackCancelButtons
+                                saveClick={doSave}
+                                backClick={() => {}}
+                                cancelClick={doCancel}
+                                saveDisabled={saveDisabled}
+                            />
+                        )}
+                    </Grid>
                 </Grid>
-            </Grid>
-            <Dialog
-                open={showCartonLabel}
-                onClose={() => setShowCartonLabel(false)}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                fullWidth
-                maxWidth="sm"
-            >
-                <DialogTitle id="alert-dialog-title">Print Carton Label</DialogTitle>
-                <DialogContent>
-                    <>
-                        <Grid container>
-                            <Grid item xs={6}>
-                                <InputField
-                                    label="First Carton"
-                                    placeholder="First Carton"
-                                    propertyName="firstItem"
-                                    value={cartonLabelOptions.firstItem}
-                                    onChange={updateCartonLabelOptions}
-                                    maxLength={3}
-                                />
-                                <InputField
-                                    label="Last Carton"
-                                    placeholder="Last Carton"
-                                    propertyName="lastItem"
-                                    value={cartonLabelOptions.lastItem}
-                                    onChange={updateCartonLabelOptions}
-                                    maxLength={3}
-                                />
-                                <InputField
-                                    label="Copies"
-                                    placeholder="Copies To Print"
-                                    propertyName="numberOfCopies"
-                                    value={cartonLabelOptions.numberOfCopies}
-                                    onChange={updateCartonLabelOptions}
-                                    maxLength={3}
-                                />
+                <Dialog
+                    open={showCartonLabel}
+                    onClose={() => setShowCartonLabel(false)}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                    fullWidth
+                    maxWidth="sm"
+                >
+                    <DialogTitle id="alert-dialog-title">Print Carton Label</DialogTitle>
+                    <DialogContent>
+                        <>
+                            <Grid container>
+                                <Grid item xs={6}>
+                                    <InputField
+                                        label="First Carton"
+                                        placeholder="First Carton"
+                                        propertyName="firstItem"
+                                        value={cartonLabelOptions.firstItem}
+                                        onChange={updateCartonLabelOptions}
+                                        maxLength={3}
+                                    />
+                                    <InputField
+                                        label="Last Carton"
+                                        placeholder="Last Carton"
+                                        propertyName="lastItem"
+                                        value={cartonLabelOptions.lastItem}
+                                        onChange={updateCartonLabelOptions}
+                                        maxLength={3}
+                                    />
+                                    <InputField
+                                        label="Copies"
+                                        placeholder="Copies To Print"
+                                        propertyName="numberOfCopies"
+                                        value={cartonLabelOptions.numberOfCopies}
+                                        onChange={updateCartonLabelOptions}
+                                        maxLength={3}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Button
+                                        style={{ marginTop: '30px', marginBottom: '40px' }}
+                                        onClick={doPrintCartonLabel}
+                                        variant="contained"
+                                        color="primary"
+                                    >
+                                        Print Carton Label
+                                    </Button>
+                                    {printConsignmentLabelWorking ? (
+                                        <Loading />
+                                    ) : (
+                                        <Typography variant="h6">
+                                            {printConsignmentLabelResult?.message}
+                                        </Typography>
+                                    )}
+                                </Grid>
                             </Grid>
-                            <Grid item xs={6}>
-                                <Button
-                                    style={{ marginTop: '30px', marginBottom: '40px' }}
-                                    onClick={doPrintCartonLabel}
-                                    variant="contained"
-                                    color="primary"
-                                >
-                                    Print Carton Label
-                                </Button>
-                                {printConsignmentLabelWorking ? (
-                                    <Loading />
-                                ) : (
-                                    <Typography variant="h6">
-                                        {printConsignmentLabelResult?.message}
-                                    </Typography>
-                                )}
+                        </>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={() => setShowCartonLabel(false)}
+                            variant="contained"
+                            autoFocus
+                        >
+                            Close
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={showPalletLabel}
+                    onClose={() => setShowPalletLabel(false)}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                    fullWidth
+                    maxWidth="sm"
+                >
+                    <DialogTitle id="alert-dialog-title">Print Pallet Label</DialogTitle>
+                    <DialogContent>
+                        <>
+                            <Grid container>
+                                <Grid item xs={6}>
+                                    <InputField
+                                        label="First Pallet"
+                                        placeholder="First Pallet"
+                                        propertyName="firstItem"
+                                        value={palletLabelOptions.firstItem}
+                                        onChange={updatePalletLabelOptions}
+                                        maxLength={3}
+                                    />
+                                    <InputField
+                                        label="Last Pallet"
+                                        placeholder="Last Pallet"
+                                        propertyName="lastItem"
+                                        value={palletLabelOptions.lastItem}
+                                        onChange={updatePalletLabelOptions}
+                                        maxLength={3}
+                                    />
+                                    <InputField
+                                        label="Copies"
+                                        placeholder="Copies To Print"
+                                        propertyName="numberOfCopies"
+                                        value={palletLabelOptions.numberOfCopies}
+                                        onChange={updatePalletLabelOptions}
+                                        maxLength={3}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Button
+                                        style={{ marginTop: '30px', marginBottom: '40px' }}
+                                        onClick={doPrintPalletLabel}
+                                        variant="contained"
+                                        color="primary"
+                                    >
+                                        Print Pallet Label
+                                    </Button>
+                                    {printConsignmentLabelWorking ? (
+                                        <Loading />
+                                    ) : (
+                                        <Typography variant="h6">
+                                            {printConsignmentLabelResult?.message}
+                                        </Typography>
+                                    )}
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setShowCartonLabel(false)} variant="contained" autoFocus>
-                        Close
-                    </Button>
-                </DialogActions>
-            </Dialog>
-            <Dialog
-                open={showPalletLabel}
-                onClose={() => setShowPalletLabel(false)}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                fullWidth
-                maxWidth="sm"
-            >
-                <DialogTitle id="alert-dialog-title">Print Pallet Label</DialogTitle>
-                <DialogContent>
-                    <>
-                        <Grid container>
-                            <Grid item xs={6}>
-                                <InputField
-                                    label="First Pallet"
-                                    placeholder="First Pallet"
-                                    propertyName="firstItem"
-                                    value={palletLabelOptions.firstItem}
-                                    onChange={updatePalletLabelOptions}
-                                    maxLength={3}
-                                />
-                                <InputField
-                                    label="Last Pallet"
-                                    placeholder="Last Pallet"
-                                    propertyName="lastItem"
-                                    value={palletLabelOptions.lastItem}
-                                    onChange={updatePalletLabelOptions}
-                                    maxLength={3}
-                                />
-                                <InputField
-                                    label="Copies"
-                                    placeholder="Copies To Print"
-                                    propertyName="numberOfCopies"
-                                    value={palletLabelOptions.numberOfCopies}
-                                    onChange={updatePalletLabelOptions}
-                                    maxLength={3}
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Button
-                                    style={{ marginTop: '30px', marginBottom: '40px' }}
-                                    onClick={doPrintPalletLabel}
-                                    variant="contained"
-                                    color="primary"
-                                >
-                                    Print Pallet Label
-                                </Button>
-                                {printConsignmentLabelWorking ? (
-                                    <Loading />
-                                ) : (
-                                    <Typography variant="h6">
-                                        {printConsignmentLabelResult?.message}
-                                    </Typography>
-                                )}
-                            </Grid>
-                        </Grid>
-                    </>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setShowPalletLabel(false)} variant="contained" autoFocus>
-                        Close
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </Page>
+                        </>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={() => setShowPalletLabel(false)}
+                            variant="contained"
+                            autoFocus
+                        >
+                            Close
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </Page>
+        </div>
     );
 }
 
@@ -771,7 +806,11 @@ Consignment.propTypes = {
         success: PropTypes.bool,
         message: PropTypes.string
     }),
-    printDocumentsClearData: PropTypes.func.isRequired
+    printDocumentsClearData: PropTypes.func.isRequired,
+    consignmentPackingList: PropTypes.shape({}),
+    consignmentPackingListLoading: PropTypes.bool,
+    getConsignmentPackingList: PropTypes.func.isRequired,
+    clearConsignmentPackingList: PropTypes.func.isRequired
 };
 
 Consignment.defaultProps = {
@@ -796,7 +835,9 @@ Consignment.defaultProps = {
     printConsignmentLabelWorking: false,
     printConsignmentLabelResult: null,
     printDocumentsWorking: false,
-    printDocumentsResult: null
+    printDocumentsResult: null,
+    consignmentPackingList: null,
+    consignmentPackingListLoading: false
 };
 
 export default Consignment;

@@ -10,6 +10,7 @@
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
     using Linn.Stores.Domain.LinnApps.Consignments;
+    using Linn.Stores.Domain.LinnApps.Consignments.Models;
     using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.GoodsIn;
@@ -228,6 +229,7 @@
                 .As<IResourceBuilder<IEnumerable<StockMove>>>();
             builder.RegisterType<ValidateStorageTypeResultResourceBuilder>()
                 .As<IResourceBuilder<ValidateStorageTypeResult>>();
+            builder.RegisterType<PackingListResourceBuilder>().As<IResourceBuilder<PackingList>>();
         }
     }
 }

@@ -65,7 +65,7 @@
             return new SuccessResult<ProcessResult>(labelServiceResult);
         }
 
-        public IResult<ProcessResult> PrintConsignmentDocuments(PrintConsignmentDocumentsRequestResource resource)
+        public IResult<ProcessResult> PrintConsignmentDocuments(ConsignmentRequestResource resource)
         {
             ProcessResult result;
 

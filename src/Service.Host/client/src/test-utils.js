@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import React from 'react';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import configureMockStore from 'redux-mock-store';
 import { MemoryRouter } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
@@ -18,7 +18,7 @@ const Providers = ({ children }) => {
     const store = mockStore({ oidc: { user: { profile: {} } }, historyStore: { push: jest.fn() } });
     return (
         <Provider store={store}>
-            <MuiThemeProvider theme={createMuiTheme()}>
+            <MuiThemeProvider theme={createTheme()}>
                 <SnackbarProvider dense maxSnack={5}>
                     <MemoryRouter>
                         <MuiPickersUtilsProvider utils={MomentUtils}>

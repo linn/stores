@@ -54,7 +54,7 @@ import DebitNotes from '../containers/purchasing/DebitNotes';
 
 const Root = ({ store }) => (
     <div>
-        <div style={{ paddingTop: '40px' }}>
+        <div className="padding-top-when-not-printing">
             <Provider store={store}>
                 <OidcProvider store={store} userManager={userManager}>
                     <MuiPickersUtilsProvider utils={MomentUtils}>

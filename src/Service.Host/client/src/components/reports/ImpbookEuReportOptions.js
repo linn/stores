@@ -28,7 +28,7 @@ function ImpbookEuReportOptions({ history, prevOptions }) {
     return (
         <Page>
             <Title text="EU Import Books" />
-            <Grid style={{ marginTop: 40 }} container spacing={3} justify="center">
+            <Grid style={{ marginTop: 40 }} container spacing={3} justifyContent="center">
                 <Grid item xs={12}>
                     <Typography variant="h6" gutterBottom>
                         Choose a date range:

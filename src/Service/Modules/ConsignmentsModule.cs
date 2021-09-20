@@ -28,22 +28,27 @@
 
         private readonly ILogisticsProcessesFacadeService logisticsProcessesFacadeService;
 
+        private readonly ILogisticsReportsFacadeService logisticsReportsFacadeService;
+
         public ConsignmentsModule(
             IFacadeService<Consignment, int, ConsignmentResource, ConsignmentUpdateResource> consignmentFacadeService,
             IFacadeService<Hub, int, HubResource, HubResource> hubFacadeService,
             IFacadeService<Carrier, string, CarrierResource, CarrierResource> carrierFacadeService,
             IFacadeService<ShippingTerm, int, ShippingTermResource, ShippingTermResource> shippingTermFacadeService,
             IFacadeService<CartonType, string, CartonTypeResource, CartonTypeResource> cartonTypeFacadeService,
-            ILogisticsProcessesFacadeService logisticsProcessesFacadeService)
+            ILogisticsProcessesFacadeService logisticsProcessesFacadeService,
+            ILogisticsReportsFacadeService logisticsReportsFacadeService)
         {
             this.cartonTypeFacadeService = cartonTypeFacadeService;
             this.logisticsProcessesFacadeService = logisticsProcessesFacadeService;
+            this.logisticsReportsFacadeService = logisticsReportsFacadeService;
             this.consignmentFacadeService = consignmentFacadeService;
             this.hubFacadeService = hubFacadeService;
             this.carrierFacadeService = carrierFacadeService;
             this.shippingTermFacadeService = shippingTermFacadeService;
             this.Get("/logistics/consignments", _ => this.GetConsignments());
             this.Get("/logistics/consignments/{id:int}", p => this.GetConsignment(p.id));
+            this.Get("/logistics/consignments/{id:int}/packing-list", p => this.GetPackingList(p.id));
             this.Get("/logistics/hubs", _ => this.GetHubs());
             this.Get("/logistics/hubs/{id:int}", p => this.GetHubById(p.id));
             this.Get("/logistics/carriers", _ => this.GetCarriers());
@@ -57,9 +62,14 @@
             this.Post("/logistics/print-consignment-documents", _ => this.PrintDocuments());
         }
 
+        private object GetPackingList(int id)
+        {
+            return this.Negotiate.WithModel(this.logisticsReportsFacadeService.GetPackingList(id));
+        }
+
         private object PrintDocuments()
         {
-            var resource = this.Bind<PrintConsignmentDocumentsRequestResource>();
+            var resource = this.Bind<ConsignmentRequestResource>();
             return this.Negotiate.WithModel(this.logisticsProcessesFacadeService.PrintConsignmentDocuments(resource));
         }
 
@@ -108,7 +118,6 @@
             }
 
             return this.Negotiate.WithModel(results);
-
         }
 
         private object UpdateConsignment(int id)
