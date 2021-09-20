@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import makeStyles from '@material-ui/styles/makeStyles';
-import { DataGrid } from '@material-ui/data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
@@ -55,8 +55,7 @@ function DebitNotes({
     }, [items]);
 
     const handleSelectRow = selected => {
-        setSelectedRows(rows.filter(r => selected.rowIds.includes(r.id.toString())));
-        console.log(selectedRows);
+        setSelectedRows(rows.filter(r => selected.includes(r.id)));
     };
 
     const columns = [

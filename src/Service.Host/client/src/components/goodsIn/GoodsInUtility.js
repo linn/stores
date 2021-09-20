@@ -11,7 +11,7 @@ import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import makeStyles from '@material-ui/styles/makeStyles';
-import { DataGrid } from '@material-ui/data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import {
     InputField,
     Typeahead,
@@ -243,8 +243,7 @@ function GoodsInUtility({
     ];
 
     const handleSelectRow = selected => {
-        console.log('I ran');
-        setSelectedRows(rows.filter(r => selected.rowIds.includes(r.id.toString())));
+        setSelectedRows(rows.filter(r => selected.includes(r.id)));
     };
 
     return (
@@ -697,7 +696,7 @@ function GoodsInUtility({
                             density="standard"
                             rowHeight={34}
                             checkboxSelection
-                            onSelectionChange={handleSelectRow}
+                            onSelectionModelChange={handleSelectRow}
                             hideFooter
                         />
                     </div>

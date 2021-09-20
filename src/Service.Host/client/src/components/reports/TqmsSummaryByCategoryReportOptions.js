@@ -48,7 +48,7 @@ export default function TqmsSummaryByCategoryReportOptions({ history, jobRefs, j
             {jobRefsLoading ? (
                 <Loading />
             ) : (
-                <Grid style={{ marginTop: 40 }} container spacing={3} justify="center">
+                <Grid style={{ marginTop: 40 }} container spacing={3} justifyContent="center">
                     <Grid item xs={12}>
                         <Dropdown
                             label="JobRef"

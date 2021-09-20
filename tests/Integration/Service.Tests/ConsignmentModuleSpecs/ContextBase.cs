@@ -5,6 +5,7 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Consignments;
+    using Linn.Stores.Domain.LinnApps.Consignments.Models;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
@@ -33,6 +34,8 @@
 
         protected ILogisticsProcessesFacadeService LogisticsProcessesFacadeService { get; private set; }
 
+        protected ILogisticsReportsFacadeService LogisticsReportsFacadeService { get; private set; }
+
         [SetUp]
         public void EstablishContext()
         {
@@ -42,6 +45,7 @@
             this.CartonTypeFacadeService = Substitute.For<IFacadeService<CartonType, string, CartonTypeResource, CartonTypeResource>>();
             this.ShippingTermFacadeService = Substitute.For<IFacadeService<ShippingTerm, int, ShippingTermResource, ShippingTermResource>>();
             this.LogisticsProcessesFacadeService = Substitute.For<ILogisticsProcessesFacadeService>();
+            this.LogisticsReportsFacadeService = Substitute.For<ILogisticsReportsFacadeService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
@@ -52,6 +56,7 @@
                     with.Dependency(this.CartonTypeFacadeService);
                     with.Dependency(this.ShippingTermFacadeService);
                     with.Dependency(this.LogisticsProcessesFacadeService);
+                    with.Dependency(this.LogisticsReportsFacadeService);
                     with.Dependency<IResourceBuilder<Consignment>>(new ConsignmentResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<Consignment>>>(new ConsignmentsResourceBuilder());
                     with.Dependency<IResourceBuilder<Hub>>(new HubResourceBuilder());
@@ -63,6 +68,7 @@
                     with.Dependency<IResourceBuilder<CartonType>>(new CartonTypeResourceBuilder());
                     with.Dependency<IResourceBuilder<ProcessResult>>(new ProcessResultResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<CartonType>>>(new CartonTypesResourceBuilder());
+                    with.Dependency<IResourceBuilder<PackingList>>(new PackingListResourceBuilder());
                     with.Module<ConsignmentsModule>();
                     with.ResponseProcessor<ConsignmentResponseProcessor>();
                     with.ResponseProcessor<ConsignmentsResponseProcessor>();
@@ -75,6 +81,7 @@
                     with.ResponseProcessor<ShippingTermResponseProcessor>();
                     with.ResponseProcessor<ShippingTermsResponseProcessor>();
                     with.ResponseProcessor<ProcessResultResponseProcessor>();
+                    with.ResponseProcessor<PackingListResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {

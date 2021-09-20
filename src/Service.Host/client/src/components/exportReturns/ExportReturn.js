@@ -315,6 +315,7 @@ export default function ExportReturn({
                                                 <Grid item xs={4}>
                                                     <InputField
                                                         disabled
+                                                        propertyName="documentNumber"
                                                         label="Document Number"
                                                         value={invoice.documentNumber}
                                                     />
