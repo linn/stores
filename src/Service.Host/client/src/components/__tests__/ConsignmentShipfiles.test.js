@@ -152,3 +152,47 @@ describe('When Sending Emails...', () => {
         );
     });
 });
+
+// describe('When Sent Emails...', () => {
+//     beforeEach(() => {
+//         sendEmails.mockClear();
+//         defaultRender({
+//             consignmentShipfiles: [
+//                 {
+//                     id: 1,
+//                     consignmentId: 1,
+//                     dateClosed: '08/06/2003',
+//                     customerName: 'CUSTOMER ONE',
+//                     invoiceNumbers: '123456',
+//                     status: ''
+//                 },
+//                 {
+//                     id: 2,
+//                     consignmentId: 2,
+//                     dateClosed: '08/09/2003',
+//                     customerName: 'CUSTOMER TWO',
+//                     invoiceNumbers: '567890',
+//                     status: ''
+//                 }
+//             ],
+//             processedShipfiles: [
+//                 {
+//                     id: 1,
+//                     consignmentId: 1,
+//                     dateClosed: '08/06/2003',
+//                     customerName: 'CUSTOMER ONE',
+//                     invoiceNumbers: '123456',
+//                     status: 'Email Sent!'
+//                 },
+//                 {
+//                     id: 2,
+//                     consignmentId: 2,
+//                     dateClosed: '08/09/2003',
+//                     customerName: 'CUSTOMER TWO',
+//                     invoiceNumbers: '567890',
+//                     status: 'No Contact details found.'
+//                 }
+//             ]
+//         });
+//     });
+// });
