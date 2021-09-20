@@ -95,23 +95,24 @@
         public void ShouldReturnSuccess()
         {
             this.result.Should().BeOfType<CreatedResult<Consignment>>();
-            var updatedConsignment = ((CreatedResult<Consignment>)this.result).Data;
-            updatedConsignment.SalesAccountId.Should().Be(this.salesAccountId);
-            updatedConsignment.AddressId.Should().Be(this.addressId);
-            updatedConsignment.Carrier.Should().Be(this.newCarrierCode);
-            updatedConsignment.Terms.Should().Be(this.newTerms);
-            updatedConsignment.HubId.Should().Be(this.newHubId);
-            updatedConsignment.ShippingMethod.Should().Be(this.newShippingMethod);
-            updatedConsignment.DespatchLocationCode.Should().Be(this.newDespatchLocationCode);
-            updatedConsignment.CustomsEntryCodePrefix.Should().Be(this.newCustomsEntryCodePrefix);
-            updatedConsignment.CustomsEntryCode.Should().Be(this.newCustomsEntryCode);
-            updatedConsignment.CustomsEntryCodeDate.Should().Be(DateTime.Parse(this.newCustomsEntryCodeDate));
-            updatedConsignment.Pallets.Should().Contain(p => p.PalletNumber == 1 && p.Depth == 11 && p.Height == 21 && p.Weight == 31 & p.Width == 41);
-            updatedConsignment.Pallets.Should().Contain(p => p.PalletNumber == 2 && p.Depth == 1 && p.Height == 2 && p.Weight == 3 & p.Width == 4);
-            updatedConsignment.Pallets.Should().NotContain(p => p.PalletNumber == 12);
-            updatedConsignment.Items.Should().Contain(p => p.ItemNumber == 1 && p.Depth == 11 && p.Height == 21 && p.Weight == 31 & p.Width == 41);
-            updatedConsignment.Items.Should().Contain(p => p.ItemNumber == 2 && p.Depth == 1 && p.Height == 2 && p.Weight == 3 & p.Width == 4);
-            updatedConsignment.Items.Should().NotContain(p => p.ItemNumber == 12);
+            var newConsignment = ((CreatedResult<Consignment>)this.result).Data;
+            newConsignment.SalesAccountId.Should().Be(this.salesAccountId);
+            newConsignment.AddressId.Should().Be(this.addressId);
+            newConsignment.Carrier.Should().Be(this.newCarrierCode);
+            newConsignment.Terms.Should().Be(this.newTerms);
+            newConsignment.HubId.Should().Be(this.newHubId);
+            newConsignment.ShippingMethod.Should().Be(this.newShippingMethod);
+            newConsignment.DespatchLocationCode.Should().Be(this.newDespatchLocationCode);
+            newConsignment.CustomsEntryCodePrefix.Should().Be(this.newCustomsEntryCodePrefix);
+            newConsignment.CustomsEntryCode.Should().Be(this.newCustomsEntryCode);
+            newConsignment.CustomsEntryCodeDate.Should().Be(DateTime.Parse(this.newCustomsEntryCodeDate));
+            newConsignment.Pallets.Should().Contain(p => p.PalletNumber == 1 && p.Depth == 11 && p.Height == 21 && p.Weight == 31 & p.Width == 41);
+            newConsignment.Pallets.Should().Contain(p => p.PalletNumber == 2 && p.Depth == 1 && p.Height == 2 && p.Weight == 3 & p.Width == 4);
+            newConsignment.Pallets.Should().NotContain(p => p.PalletNumber == 12);
+            newConsignment.Items.Should().Contain(p => p.ItemNumber == 1 && p.Depth == 11 && p.Height == 21 && p.Weight == 31 & p.Width == 41);
+            newConsignment.Items.Should().Contain(p => p.ItemNumber == 2 && p.Depth == 1 && p.Height == 2 && p.Weight == 3 & p.Width == 4);
+            newConsignment.Items.Should().NotContain(p => p.ItemNumber == 12);
+            newConsignment.ConsignmentId.Should().Be(10101);
         }
     }
 }

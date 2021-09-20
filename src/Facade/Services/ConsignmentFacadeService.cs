@@ -7,6 +7,7 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
+    using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Resources.Consignments;
@@ -15,13 +16,17 @@
     {
         private readonly IConsignmentService consignmentService;
 
+        private readonly IDatabaseService databaseService;
+
         public ConsignmentFacadeService(
             IRepository<Consignment, int> repository,
             ITransactionManager transactionManager,
-            IConsignmentService consignmentService)
+            IConsignmentService consignmentService,
+            IDatabaseService databaseService)
             : base(repository, transactionManager)
         {
             this.consignmentService = consignmentService;
+            this.databaseService = databaseService;
         }
 
         protected override Consignment CreateFromResource(ConsignmentResource resource)
@@ -43,7 +48,8 @@
                            DateOpened = DateTime.Now,
                            SalesAccountId = resource.SalesAccountId,
                            Pallets = new List<ConsignmentPallet>(),
-                           Items = new List<ConsignmentItem>()
+                           Items = new List<ConsignmentItem>(),
+                           ConsignmentId = this.databaseService.GetNextVal("CONS_SEQ")
                        };
             this.UpdatePallets(consignment, resource.Pallets.ToList());
             this.UpdateItems(consignment, resource.Items.ToList());
