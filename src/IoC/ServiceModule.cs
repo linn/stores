@@ -171,6 +171,7 @@
             builder.RegisterType<CartonTypeFacadeService>().As<IFacadeService<CartonType, string, CartonTypeResource, CartonTypeResource>>();
             builder.RegisterType<PortFacadeService>().As<IFacadeService<Port, string, PortResource, PortResource>>();
             builder.RegisterType<LogisticsProcessesFacadeService>().As<ILogisticsProcessesFacadeService>();
+            builder.RegisterType<LogisticsReportsFacadeService>().As<ILogisticsReportsFacadeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

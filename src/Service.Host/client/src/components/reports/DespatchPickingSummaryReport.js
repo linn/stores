@@ -30,7 +30,7 @@ function DespatchPickingSummaryReport({ reportData, loading, runOptions }) {
 
     return (
         <div className="print-landscape">
-            <Grid className={classes.grid} container justify="center">
+            <Grid className={classes.grid} container justifyContent="center">
                 <Grid item xs={12}>
                     <span className="date-for-printing">{date}</span>
                 </Grid>

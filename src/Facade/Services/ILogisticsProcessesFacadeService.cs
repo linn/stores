@@ -8,6 +8,6 @@
     {
         IResult<ProcessResult> PrintLabel(LogisticsLabelRequestResource resource);
 
-        IResult<ProcessResult> PrintConsignmentDocuments(PrintConsignmentDocumentsRequestResource resource);
+        IResult<ProcessResult> PrintConsignmentDocuments(ConsignmentRequestResource resource);
     }
 }

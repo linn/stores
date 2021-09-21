@@ -418,4 +418,10 @@ export const validateStorageTypeResult = new ItemType(
     '/logistics/goods-in/validate-storage-type'
 );
 
+export const consignmentPackingList = new ItemType(
+    'consignmentPackingList',
+    'CONSIGNMENT_PACKING_LIST',
+    '/logistics/consignments'
+);
+
 export const parcelsByNumber = new ItemType('parcels', 'PARCELS', '/logistics/parcels-by-number');

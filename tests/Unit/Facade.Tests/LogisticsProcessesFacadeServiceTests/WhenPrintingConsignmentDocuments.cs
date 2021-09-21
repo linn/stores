@@ -12,7 +12,7 @@
 
     public class WhenPrintingConsignmentDocuments : ContextBase
     {
-        private PrintConsignmentDocumentsRequestResource resource;
+        private ConsignmentRequestResource resource;
 
         private ProcessResult serviceResult;
 
@@ -21,7 +21,7 @@
         [SetUp]
         public void SetUp()
         {
-            this.resource = new PrintConsignmentDocumentsRequestResource
+            this.resource = new ConsignmentRequestResource
                                 {
                                     ConsignmentId = 880,
                                     UserNumber = 123

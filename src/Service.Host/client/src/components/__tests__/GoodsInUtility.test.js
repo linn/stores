@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, screen } from '@testing-library/react';
 import render from '../../test-utils';
 import GoodsInUtility from '../goodsIn/GoodsInUtility';
 
@@ -54,7 +54,7 @@ describe('On initial load...', () => {
         expect(screen.getByRole('button', { name: 'Add Line' })).toHaveClass('Mui-disabled');
         expect(screen.getByRole('button', { name: 'Book In' })).toHaveClass('Mui-disabled');
         expect(screen.getByLabelText('S/Type')).toHaveClass('Mui-disabled');
-        expect(screen.getByRole('spinbutton', { name: 'Qty' })).toHaveClass('Mui-disabled');
+        expect(screen.getByLabelText('Qty')).toHaveClass('Mui-disabled');
     });
 });
 
@@ -184,7 +184,7 @@ describe('When storage type entered', () => {
         validateStorageType.mockClear();
     });
 
-    test('should call validation function onBlur if storageType input', async () => {
+    test('should call validation function onBlur if storageType input', () => {
         defaultRender({
             validatePurchaseOrderResult: {
                 orderNumber: 123456,
@@ -200,7 +200,7 @@ describe('When storage type entered', () => {
         expect(validateStorageType).toHaveBeenCalledWith('storageType', 'K1');
     });
 
-    test('should not call validation function onBlur if storageType blank', async () => {
+    test('should not call validation function onBlur if storageType blank', () => {
         defaultRender({
             validatePurchaseOrderResult: {
                 orderNumber: 123456,
@@ -315,7 +315,7 @@ describe('When qty Entered...', () => {
 });
 
 describe('When book in button clicked', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
         defaultRender({
             validatePurchaseOrderResult: {
                 message: null,
@@ -337,12 +337,12 @@ describe('When book in button clicked', () => {
         fireEvent.click(locationField);
 
         // select a result to close the dialog
-        const searchResult = await screen.findByText('LOC');
+        const searchResult = screen.getByText('LOC');
         fireEvent.click(searchResult);
     });
 
-    test('should call doBookIn', async () => {
-        const button = await screen.findByText('Book In');
+    test('should call doBookIn', () => {
+        const button = screen.getByText('Book In');
         fireEvent.click(button);
 
         expect(doBookIn).toHaveBeenCalledWith(
@@ -359,6 +359,7 @@ describe('When book in button clicked', () => {
         test('should call doBookIn with multipeBookIn flag', async () => {
             // click the checkbox
             const checkboxes = await screen.findAllByRole('checkbox');
+
             fireEvent.click(checkboxes[0]);
             const button = await screen.findByText('Book In');
             fireEvent.click(button);
@@ -436,8 +437,8 @@ describe('When book in button clicked', () => {
             });
         });
 
-        test('should open parcel dialog', async () => {
-            await waitFor(() => expect(screen.getByText('Create Parcel')).toBeInTheDocument());
+        test('should open parcel dialog', () => {
+            expect(screen.getByText('Create Parcel')).toBeInTheDocument();
         });
     });
 
@@ -466,7 +467,7 @@ describe('When book in button clicked', () => {
 });
 
 describe('When adding multiple lines to a book in...', () => {
-    beforeAll(() =>
+    beforeEach(() => {
         defaultRender({
             validatePurchaseOrderResult: {
                 message: null,
@@ -474,10 +475,10 @@ describe('When adding multiple lines to a book in...', () => {
                 partNumber: 'A PART',
                 documentType: 'PO'
             }
-        })
-    );
+        });
+    });
 
-    test('should call doBookIn with lines', async () => {
+    test('should call doBookIn with lines', () => {
         const orderNumberField = screen.getByLabelText('Order Number');
         fireEvent.change(orderNumberField, { target: { value: 123456 } });
         const qtyField = screen.getByLabelText('Qty');
@@ -488,19 +489,17 @@ describe('When adding multiple lines to a book in...', () => {
         fireEvent.click(locationField);
 
         // select a result to close the dialog
-        const searchResult = await screen.findByText('LOC');
+        const searchResult = screen.getByText('LOC');
         fireEvent.click(searchResult);
-        const addLineButton = await screen.findByText('Add Line');
+        const addLineButton = screen.getByText('Add Line');
         fireEvent.click(addLineButton);
-        const doBookInButton = await screen.findByText('Book In');
+        const doBookInButton = screen.getByText('Book In');
         fireEvent.click(doBookInButton);
 
-        await waitFor(() =>
-            expect(doBookIn).toHaveBeenCalledWith(
-                expect.objectContaining({
-                    lines: expect.arrayContaining([expect.objectContaining({ quantity: 1 })])
-                })
-            )
+        expect(doBookIn).toHaveBeenCalledWith(
+            expect.objectContaining({
+                lines: expect.arrayContaining([expect.objectContaining({ quantity: 1 })])
+            })
         );
     });
 });

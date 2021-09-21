@@ -18,7 +18,7 @@ const handleBackClick = (history, options) => {
 
 const ImpbookIprReport = ({ reportData, loading, history, options, config }) => (
     <>
-        <Grid style={{ marginTop: 40 }} container spacing={3} justify="center">
+        <Grid style={{ marginTop: 40 }} container spacing={3} justifyContent="center">
             <Grid item xs={12}>
                 <BackButton backClick={() => handleBackClick(history, options)} />
 

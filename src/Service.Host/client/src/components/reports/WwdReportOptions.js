@@ -66,7 +66,7 @@ export default function WwdReportOptions({
         <Page>
             <Title text="What Will Decrement Report" />
 
-            <Grid style={{ marginTop: 40 }} container spacing={3} justify="center">
+            <Grid style={{ marginTop: 40 }} container spacing={3} justifyContent="center">
                 <Grid item xs={4}>
                     <InputField
                         disabled
@@ -95,6 +95,7 @@ export default function WwdReportOptions({
                     <InputField
                         fullWidth
                         disabled
+                        propertyName="description"
                         value={reportOptions.partDescription}
                         label="Description"
                     />

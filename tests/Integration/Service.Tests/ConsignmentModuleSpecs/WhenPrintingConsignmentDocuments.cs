@@ -15,18 +15,18 @@
 
     public class WhenPrintingConsignmentDocuments : ContextBase
     {
-        private PrintConsignmentDocumentsRequestResource requestResource;
+        private ConsignmentRequestResource requestResource;
 
         [SetUp]
         public void SetUp()
         {
-            this.requestResource = new PrintConsignmentDocumentsRequestResource
+            this.requestResource = new ConsignmentRequestResource
             {
                                            ConsignmentId = 1,
                                            UserNumber = 32198
                                        };
 
-            this.LogisticsProcessesFacadeService.PrintConsignmentDocuments(Arg.Any<PrintConsignmentDocumentsRequestResource>())
+            this.LogisticsProcessesFacadeService.PrintConsignmentDocuments(Arg.Any<ConsignmentRequestResource>())
                 .Returns(new SuccessResult<ProcessResult>(new ProcessResult(true, "ok")));
 
             this.Response = this.Browser.Post(
@@ -49,7 +49,7 @@
         public void ShouldCallService()
         {
             this.LogisticsProcessesFacadeService.Received().PrintConsignmentDocuments(
-                Arg.Is<PrintConsignmentDocumentsRequestResource>(
+                Arg.Is<ConsignmentRequestResource>(
                     r => r.ConsignmentId == this.requestResource.ConsignmentId
                          && r.UserNumber == this.requestResource.UserNumber));
         }

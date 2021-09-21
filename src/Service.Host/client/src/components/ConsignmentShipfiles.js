@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DataGrid } from '@material-ui/data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import Grid from '@material-ui/core/Grid';
 import { Title, ErrorCard, Loading, InputField } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
@@ -48,7 +48,7 @@ export default function ConsignmentShipfiles({
         { field: 'status', headerName: 'Status', width: 200 }
     ];
     const handleSelectRow = selected => {
-        setSelectedRows(rows.filter(r => selected.rowIds.includes(r.id.toString())));
+        setSelectedRows(rows.filter(r => selected.includes(r.id)));
     };
     return (
         <Page>
@@ -114,7 +114,7 @@ export default function ConsignmentShipfiles({
                                     density="standard"
                                     rowHeight={34}
                                     checkboxSelection
-                                    onSelectionChange={handleSelectRow}
+                                    onSelectionModelChange={handleSelectRow}
                                     loading={consignmentShipfilesLoading}
                                     hideFooter
                                 />

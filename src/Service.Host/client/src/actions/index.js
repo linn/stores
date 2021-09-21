@@ -314,4 +314,8 @@ export const printConsignmentDocumentsActionTypes = makeProcessActionTypes(
     processTypes.printConsignmentDocuments.actionType
 );
 
+export const consignmentPackingListActionTypes = makeActionTypes(
+    itemTypes.consignmentPackingList.actionType
+);
+
 export const parcelsByNumberActionTypes = makeActionTypes(itemTypes.parcelsByNumber.actionType);
