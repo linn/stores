@@ -1,9 +1,6 @@
-/**
- * @jest-environment jest-environment-jsdom-sixteen
- */
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, screen } from '@testing-library/react';
 import render from '../../../../test-utils';
 import MechPartSource from '../../../parts/mechPartSource/MechPartSource';
 
