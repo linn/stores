@@ -1,6 +1,9 @@
+/**
+ * @jest-environment jest-environment-jsdom-sixteen
+ */
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { cleanup, fireEvent, screen } from '@testing-library/react';
+import { cleanup, fireEvent, screen, waitFor } from '@testing-library/react';
 import render from '../../../../test-utils';
 import MechPartSource from '../../../parts/mechPartSource/MechPartSource';
 
@@ -36,50 +39,145 @@ describe('When creating...', () => {
     test('should have save button disabled before any data', () => {
         expect(screen.getByRole('button', { name: 'Save' })).toHaveClass('Mui-disabled');
     });
-});
 
-describe('when required fields populated...', () => {
-    beforeEach(() => {
-        defaultRender({ editStatus: 'create' });
-        const assemblyDropdown = screen.getByLabelText('Assembly Type*');
-        fireEvent.change(assemblyDropdown, { target: { value: 'TH' } });
+    describe('when required fields populated...', () => {
+        beforeEach(() => {
+            const assemblyDropdown = screen.getByLabelText('Assembly Type*');
+            fireEvent.change(assemblyDropdown, { target: { value: 'TH' } });
 
-        const mechElecDropdown = screen.getByLabelText('Mechanical Or Electrical*');
-        fireEvent.change(mechElecDropdown, { target: { value: 'M' } });
+            const mechElecDropdown = screen.getByLabelText('Mechanical Or Electrical*');
+            fireEvent.change(mechElecDropdown, { target: { value: 'M' } });
+        });
+
+        test('should enable save button', () => {
+            expect(screen.getByRole('button', { name: 'Save' })).not.toHaveClass('Mui-disabled');
+        });
+
+        test('should call addItem', () => {
+            const saveButton = screen.getByRole('button', { name: 'Save' });
+            fireEvent.click(saveButton);
+            expect(addItem).toHaveBeenCalledWith(
+                expect.objectContaining({ assemblyType: 'TH', mechanicalOrElectrical: 'M' })
+            );
+        });
     });
 
-    test('should enable save button', () => {
-        expect(screen.getByRole('button', { name: 'Save' })).not.toHaveClass('Mui-disabled');
+    describe('when not Electrical Part...', () => {
+        beforeEach(() => {
+            const mechElecDropdown = screen.getByLabelText('Mechanical Or Electrical*');
+            fireEvent.change(mechElecDropdown, { target: { value: 'M' } });
+        });
+
+        test('should hide part type dropdown', () => {
+            expect(screen.queryByLabelText('Part Type*')).not.toBeInTheDocument();
+        });
+
+        test('should disable Param Data and DataSheets tabs', () => {
+            const dataSheetsTab = screen.getByText('DataSheets');
+            fireEvent.click(dataSheetsTab);
+            expect(screen.queryByText('Path')).not.toBeInTheDocument();
+            const ParamDataTab = screen.getByText('Param Data');
+            fireEvent.click(ParamDataTab);
+            expect(screen.queryByText('No Part Type Selected.')).not.toBeInTheDocument();
+        });
     });
-});
 
-describe('when not Electrical Part...', () => {
-    beforeEach(() => {
-        defaultRender({ editStatus: 'create' });
+    describe('when Electrical Part...', () => {
+        beforeEach(() => {
+            const assemblyDropdown = screen.getByLabelText('Assembly Type*');
+            fireEvent.change(assemblyDropdown, { target: { value: 'TH' } });
+            const mechElecDropdown = screen.getByLabelText('Mechanical Or Electrical*');
+            fireEvent.change(mechElecDropdown, { target: { value: 'E' } });
+        });
 
-        const mechElecDropdown = screen.getByLabelText('Mechanical Or Electrical*');
-        fireEvent.change(mechElecDropdown, { target: { value: 'M' } });
-    });
+        test('should show part type dropdown', () => {
+            expect(screen.queryByLabelText('Part Type*')).toBeInTheDocument();
+        });
 
-    test('should hide part type dropdown', () => {
-        expect(screen.queryByLabelText('Part Type*')).not.toBeInTheDocument();
-    });
+        describe('when Part Type not entered...', () => {
+            test('should disable save button', () => {
+                expect(screen.getByRole('button', { name: 'Save' })).toHaveClass('Mui-disabled');
+            });
+        });
 
-    test('should disable Param Data and DataSheets tabs', () => {
-        const dataSheetsTab = screen.getByText('DataSheets');
-        fireEvent.click(dataSheetsTab);
-        expect(screen.queryByText('Path')).not.toBeInTheDocument();
-        const ParamDataTab = screen.getByText('Param Data');
-        fireEvent.click(ParamDataTab);
-        expect(screen.queryByText('No Part Type Selected.')).not.toBeInTheDocument();
+        describe('when Part Type entered...', () => {
+            test('should enable save button', () => {
+                const partTypeDropdown = screen.getByLabelText('Mechanical Or Electrical*');
+                fireEvent.change(partTypeDropdown, { target: { value: 'RES' } });
+                expect(screen.getByRole('button', { name: 'Save' })).not.toHaveClass(
+                    'Mui-disabled'
+                );
+            });
+        });
     });
 });
 
 describe('When viewing...', () => {
-    beforeEach(() => defaultRender({ item: {} }));
+    beforeEach(() => {
+        cleanup();
+        defaultRender({
+            item: {
+                id: 1,
+                partNumber: 'PART',
+                mechanicalOrElectrical: 'E',
+                partType: 'RES',
+                assemblyType: 'SM',
+                samplesRequired: 'N'
+            },
+            editStatus: 'view'
+        });
+    });
 
     test('should render viewing title', () => {
         expect(screen.getByText('Mech Part Source Details')).toBeInTheDocument();
+    });
+
+    test('save button should be disabled', () => {
+        expect(screen.getByRole('button', { name: 'Save' })).toHaveClass('Mui-disabled');
+    });
+
+    describe('When field changed...', () => {
+        beforeEach(() => {
+            setEditStatus.mockClear();
+            const samplesReqDropdown = screen.getByLabelText('Samples Required*');
+            fireEvent.change(samplesReqDropdown, { target: { value: 'Y' } });
+        });
+
+        test('should setEditStatus', () => expect(setEditStatus).toHaveBeenCalledWith('edit'));
+    });
+});
+
+describe('When editing...', () => {
+    beforeEach(() => {
+        cleanup();
+        defaultRender({
+            itemId: 1,
+            item: {
+                id: 1,
+                partNumber: 'PART',
+                mechanicalOrElectrical: 'E',
+                partType: 'RES',
+                assemblyType: 'SM',
+                samplesRequired: 'Y'
+            },
+            editStatus: 'edit'
+        });
+    });
+
+    test('should call updateItem when save clicked', () => {
+        const saveButton = screen.getByRole('button', { name: 'Save' });
+        fireEvent.click(saveButton);
+        expect(updateItem).toHaveBeenCalledWith(
+            1,
+            expect.objectContaining({
+                id: 1,
+                partNumber: 'PART',
+                mechanicalOrElectrical: 'E',
+                partType: 'RES',
+                assemblyType: 'SM',
+                samplesRequired: 'Y'
+            })
+        );
     });
 });
 

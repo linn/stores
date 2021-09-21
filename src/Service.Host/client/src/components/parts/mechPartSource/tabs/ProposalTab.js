@@ -199,12 +199,11 @@ function ProposalTab({
             <Grid item xs={10} />
             <Grid item xs={3}>
                 <Dropdown
-                    label="Samples Required"
+                    label="Samples Required*"
                     propertyName="samplesRequired"
                     items={['Y', 'N']}
                     fullWidth
                     allowNoValue={false}
-                    required
                     value={samplesRequired}
                     onChange={handleFieldChange}
                 />

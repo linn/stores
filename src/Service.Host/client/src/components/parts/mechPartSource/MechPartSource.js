@@ -200,7 +200,7 @@ function MechPartSource({
 
     const handleFieldChange = (propertyName, newValue) => {
         if (viewing()) {
-            setEditStatus('editing');
+            setEditStatus('edit');
         }
         setMechPartSource({ ...mechPartSource, [propertyName]: newValue });
     };
