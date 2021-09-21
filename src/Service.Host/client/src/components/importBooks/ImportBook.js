@@ -18,6 +18,7 @@ import OrderDetailsTab from '../../containers/importBooks/tabs/OrderDetailsTab';
 import PostEntriesTab from './tabs/PostEntriesTab';
 import CommentsTab from '../../containers/importBooks/tabs/CommentsTab';
 import ImportBookReducer from './ImportBookReducer';
+import ImpBookPrintOut from './ImpBookPrintOut';
 
 function ImportBook({
     editStatus,
@@ -35,7 +36,7 @@ function ImportBook({
 }) {
     const defaultImpBook = {
         id: null,
-        dateCreated: new Date(),
+        dateCreated: new Date().toString(),
         parcelNumber: null,
         supplierId: '',
         foreignCurrency: 'N',
@@ -52,7 +53,7 @@ function ImportBook({
         hwb: '',
         supplierCostCurrency: '',
         transNature: '',
-        arrivalDate: new Date(),
+        arrivalDate: new Date().toString(),
         freightCharges: null,
         handlingCharge: null,
         clearanceCharge: null,
@@ -66,7 +67,7 @@ function ImportBook({
         pieces: null,
         weight: null,
         customsEntryCode: '',
-        customsEntryCodeDate: new Date(),
+        customsEntryCodeDate: new Date().toString(),
         linnDuty: null,
         linnVat: null,
         iprCpcNumber: null,
@@ -75,7 +76,7 @@ function ImportBook({
         cancelledBy: null,
         cancelledReason: '',
         carrierInvNumber: '',
-        carrierInvDate: new Date(),
+        carrierInvDate: new Date().toString(),
         countryOfOrigin: '',
         fcName: '',
         vaxRef: '',
@@ -83,15 +84,15 @@ function ImportBook({
         numCartons: null,
         numPallets: null,
         comments: '',
-        exchangeRate: null,
         exchangeCurrency: '',
         baseCurrency: '',
         periodNumber: null,
         createdBy: null,
         portCode: '',
         customsEntryCodePrefix: '',
-        importBookOrderDetails: null,
-        importBookPostEntries: null
+        importBookInvoiceDetails: [],
+        importBookOrderDetails: [],
+        importBookPostEntries: []
     };
     const creating = () => editStatus === 'create';
 
@@ -211,11 +212,56 @@ function ImportBook({
         if (total) {
             total = `${parseFloat(total).toFixed(2)}`;
         }
-
         return total;
     };
 
-    return (
+    const currentlyPrinting = () => {
+        return false;
+    };
+
+    return currentlyPrinting() ? (
+        <div className="pageContainer">
+            <Page>
+                <ImpBookPrintOut
+                    ref={componentRef}
+                    impbookId={state.impbook.id}
+                    dateCreated={state.impbook.dateCreated}
+                    createdBy={state.impbook.createdBy}
+                    //todo make createdBy name not id
+                    supplierId={state.impbook.supplierId}
+                    supplierName={'todo'}
+                    supplierCountry={'todo'}
+                    eecMember={'todo'}
+                    currency={state.impbook.currency}
+                    parcelNumber={state.impbook.parcelNumber}
+                    totalImportValue={state.impbook.totalImportValue}
+                    invoiceDetails={state.impbook.importBookInvoiceDetails}
+                    carrierId={state.impbook.carrierId}
+                    carrierName={'todo'}
+                    transportCode={state.impbook.transportId}
+                    transportBillNumber={state.impbook.transportBillNumber}
+                    transactionCode={state.impbook.transactionId}
+                    numPallets={state.impbook.numPallets}
+                    numCartons={state.impbook.numCartons}
+                    weight={state.impbook.weight}
+                    deliveryTermCode
+                    customsEntryCodePrefix={state.impbook.customsEntryCodePrefix}
+                    customsEntryCode={state.impbook.customsEntryCode}
+                    customsEntryCodeDate={state.impbook.customsEntryCodeDate}
+                    linnDuty={state.impbook.linnDuty}
+                    linnVat={state.impbook.linnVat}
+                    arrivalDate={state.impbook.arrivalDate}
+                    remainingInvoiceValue='todo'
+                    remainingDutyValue='todo'
+                    remainingWeightValue='todo'
+                    orderDetails={state.impbook.importBookOrderDetails}
+                    comments={state.impbook.comments}
+                    arrivalPort={state.impbook.arrivalPort}
+               />
+                <Loading />
+            </Page>
+        </div>
+    ) : (
         <Page>
             <Grid container spacing={3}>
                 <Grid item xs={10}>
@@ -281,12 +327,9 @@ function ImportBook({
                                     editStatus={editStatus}
                                     handleFieldChange={handleFieldChange}
                                     parcelNumber={state.impbook.parcelNumber}
-                                    vaxRef={state.impbook.vaxRef}
                                     supplierId={state.impbook.supplierId}
                                     foreignCurrency={state.impbook.foreignCurrency}
-                                    eecgNumber={state.impbook.eecgNumber}
                                     currency={state.impbook.currency}
-                                    exchangeRate={state.impbook.exchangeRate}
                                     totalImportValue={state.impbook.totalImportValue}
                                     carrierId={state.impbook.carrierId}
                                     carrierInvDate={state.impbook.carrierInvDate}
@@ -296,20 +339,8 @@ function ImportBook({
                                     transactionId={state.impbook.transactionId}
                                     deliveryTermCode={state.impbook.deliveryTermCode}
                                     arrivalPort={state.impbook.arrivalPort}
-                                    flightNumber={state.impbook.flightNumber}
-                                    hwb={state.impbook.hwb}
                                     arrivalDate={state.impbook.arrivalDate}
                                     createdBy={state.impbook.createdBy}
-                                    freightCharges={state.impbook.freightCharges}
-                                    handlingCharge={state.impbook.handlingCharge}
-                                    clearanceCharge={state.impbook.clearanceCharge}
-                                    cartage={state.impbook.cartage}
-                                    storage={state.impbook.storage}
-                                    duty={state.impbook.duty}
-                                    vat={state.impbook.vat}
-                                    misc={state.impbook.misc}
-                                    carriersInvTotal={state.impbook.carriersInvTotal}
-                                    carriersVatTotal={state.impbook.carriersVatTotal}
                                     numPallets={state.impbook.numPallets}
                                     numCartons={state.impbook.numCartons}
                                     weight={state.impbook.weight}
@@ -334,9 +365,10 @@ function ImportBook({
                                     allowedToEdit={allowedToEdit()}
                                     addOrderDetailRow={handleAddOrderDetailRow}
                                     removeOrderDetailRow={handleRemoveOrderDetailRow}
-                                    totalInvoiceValue={totalInvoiceValue()}
+                                    totalImportValue={state.impbook.totalImportValue}
                                     duty={state.impbook.linnDuty}
                                     weight={state.impbook.weight}
+                                    //todo invoice date? Added here or pulled in? Might be on list from Rhona
                                 />
                             )}
                             {tab === 2 && (
@@ -379,10 +411,10 @@ ImportBook.propTypes = {
         id: PropTypes.number.isRequired,
         dateCreated: PropTypes.string.isRequired,
         parcelNumber: PropTypes.number,
-        supplierId: PropTypes.number.isRequired,
+        supplierId: PropTypes.string.isRequired,
         foreignCurrency: PropTypes.string.isRequired,
         currency: PropTypes.string,
-        carrierId: PropTypes.number.isRequired,
+        carrierId: PropTypes.string.isRequired,
         OldArrivalPort: PropTypes.string,
         flightNumber: PropTypes.string,
         transportId: PropTypes.number.isRequired,
@@ -404,7 +436,7 @@ ImportBook.propTypes = {
         misc: PropTypes.number,
         carriersInvTotal: PropTypes.number,
         carriersVatTotal: PropTypes.number,
-        totalImportValue: PropTypes.number.isRequired,
+        totalImportValue: PropTypes.number,
         pieces: PropTypes.number,
         weight: PropTypes.number,
         customsEntryCode: PropTypes.string,
@@ -425,7 +457,6 @@ ImportBook.propTypes = {
         numCartons: PropTypes.number,
         numPallets: PropTypes.number,
         comments: PropTypes.string,
-        exchangeRate: PropTypes.number,
         exchangeCurrency: PropTypes.string,
         baseCurrency: PropTypes.string,
         periodNumber: PropTypes.number,

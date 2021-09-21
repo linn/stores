@@ -213,7 +213,7 @@ function ImpBookTab({
                             loading={parcelsSearchLoading}
                             fetchItems={searchParcels}
                             clearSearch={() => clearParcelsSearch}
-                            value={parcelNumber}
+                            value={parcelNumber?.toString()}
                             modal
                             links={false}
                             // history={history}
@@ -605,7 +605,7 @@ ImpBookTab.propTypes = {
     suppliersSearchResults: PropTypes.arrayOf(
         PropTypes.shape({ id: PropTypes.number, name: PropTypes.string, country: PropTypes.string })
     ).isRequired,
-    suppliersSearchLoading: PropTypes.bool.isRequired,
+    suppliersSearchLoading: PropTypes.bool,
     searchSuppliers: PropTypes.func.isRequired,
     clearSuppliersSearch: PropTypes.func.isRequired,
     allSuppliers: PropTypes.arrayOf(
@@ -618,7 +618,7 @@ ImpBookTab.propTypes = {
     carriersSearchResults: PropTypes.arrayOf(
         PropTypes.shape({ id: PropTypes.number, name: PropTypes.string, country: PropTypes.string })
     ).isRequired,
-    carriersSearchLoading: PropTypes.bool.isRequired,
+    carriersSearchLoading: PropTypes.bool,
     searchCarriers: PropTypes.func.isRequired,
     clearCarriersSearch: PropTypes.func.isRequired,
     transportCodes: PropTypes.arrayOf(
@@ -636,17 +636,17 @@ ImpBookTab.propTypes = {
     handleFieldChange: PropTypes.func.isRequired,
     dateCreated: PropTypes.string.isRequired,
     parcelNumber: PropTypes.number,
-    supplierId: PropTypes.number.isRequired,
+    supplierId: PropTypes.string.isRequired,
     foreignCurrency: PropTypes.string.isRequired,
     currency: PropTypes.string,
-    carrierId: PropTypes.number.isRequired,
-    transportId: PropTypes.number.isRequired,
+    carrierId: PropTypes.string.isRequired,
+    transportId: PropTypes.number,
     transportBillNumber: PropTypes.string,
-    transactionId: PropTypes.number.isRequired,
+    transactionId: PropTypes.number,
     deliveryTermCode: PropTypes.string.isRequired,
     arrivalPort: PropTypes.string,
     arrivalDate: PropTypes.string,
-    totalImportValue: PropTypes.number.isRequired,
+    totalImportValue: PropTypes.number,
     weight: PropTypes.number,
     customsEntryCode: PropTypes.string,
     customsEntryCodeDate: PropTypes.string,
@@ -655,13 +655,13 @@ ImpBookTab.propTypes = {
     numCartons: PropTypes.number,
     numPallets: PropTypes.number,
     createdBy: PropTypes.number,
-    customsEntryCodePrefix: '',
+    customsEntryCodePrefix: PropTypes.string,
     allowedToEdit: PropTypes.bool.isRequired,
     countries: PropTypes.arrayOf(PropTypes.shape({})),
     invoiceDetails: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     currencies: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     handleUpdateInvoiceDetails: PropTypes.func.isRequired,
-    totalInvoiceValue: PropTypes.number,
+    totalInvoiceValue: PropTypes.string,
     searchParcels: PropTypes.func.isRequired,
     clearParcelsSearch: PropTypes.func.isRequired,
     parcelsSearchResults: PropTypes.arrayOf(
@@ -678,10 +678,10 @@ ImpBookTab.defaultProps = {
     currency: '',
     transportBillNumber: '',
     arrivalPort: '',
-    arrivalDate: new Date(),
+    arrivalDate: new Date().toString(),
     weight: null,
     customsEntryCode: '',
-    customsEntryCodeDate: new Date(),
+    customsEntryCodeDate: new Date().toString(),
     linnDuty: null,
     linnVat: null,
     numCartons: null,
@@ -690,7 +690,12 @@ ImpBookTab.defaultProps = {
     customsEntryCodePrefix: '',
     countries: [{ id: '-1', countryCode: 'loading..' }],
     totalInvoiceValue: 0,
-    parcelsSearchLoading: false
+    parcelsSearchLoading: false,
+    totalImportValue: 0,
+    suppliersSearchLoading: false,
+    carriersSearchLoading: false,
+    transportId: 0,
+    transactionId: 0
 };
 
 export default ImpBookTab;

@@ -18,7 +18,7 @@ function OrderDetailsTab({
     allowedToEdit,
     addOrderDetailRow,
     removeOrderDetailRow,
-    totalInvoiceValue,
+    totalImportValue,
     duty,
     weight
 }) {
@@ -64,24 +64,24 @@ function OrderDetailsTab({
 
     const calcRemainingTotal = () => {
         const orderDetailsTotal = orderDetails?.reduce(
-            (a, v) => new Decimal(a).plus(v.orderValue),
+            (a, v) => new Decimal(a).plus(v.orderValue ?? 0),
             0
         );
 
         if (!orderDetailsTotal) {
-            return totalInvoiceValue;
+            return totalImportValue;
         }
 
-        if (!totalInvoiceValue) {
+        if (!totalImportValue) {
             return orderDetailsTotal.isZero() ? 0 : orderDetailsTotal.neg();
         }
 
-        return new Decimal(totalInvoiceValue).minus(orderDetailsTotal).valueOf();
+        return new Decimal(totalImportValue).minus(orderDetailsTotal).valueOf();
     };
 
     const calcRemainingDuty = () => {
         const orderDetailsDutyTotal = orderDetails?.reduce(
-            (a, v) => new Decimal(a).plus(v.dutyValue),
+            (a, v) => new Decimal(a).plus(v.dutyValue ?? 0),
             0
         );
         if (!orderDetailsDutyTotal) {
@@ -97,7 +97,7 @@ function OrderDetailsTab({
 
     const calcRemainingWeight = () => {
         const orderDetailsWeightTotal = orderDetails?.reduce(
-            (a, v) => new Decimal(a).plus(v.weight),
+            (a, v) => new Decimal(a).plus(v.weight ?? 0),
             0
         );
 
@@ -132,7 +132,6 @@ function OrderDetailsTab({
                         propertyName="remainingDutyTotal"
                         type="number"
                         value={calcRemainingDuty()}
-                        required
                         disabled
                     />
                 </Grid>
@@ -451,10 +450,10 @@ function OrderDetailsTab({
 OrderDetailsTab.propTypes = {
     orderDetails: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     handleFieldChange: PropTypes.func.isRequired,
-    totalInvoiceValue: PropTypes.number.isRequired,
+    totalImportValue: PropTypes.string.isRequired,
     duty: PropTypes.number.isRequired,
     weight: PropTypes.number.isRequired,
-    invoiceDate: PropTypes.string.isRequired,
+    invoiceDate: PropTypes.string,
     handleOrderDetailChange: PropTypes.func.isRequired,
     cpcNumbers: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     allowedToEdit: PropTypes.bool.isRequired,
@@ -462,6 +461,8 @@ OrderDetailsTab.propTypes = {
     removeOrderDetailRow: PropTypes.func.isRequired
 };
 
-OrderDetailsTab.defaultProps = {};
+OrderDetailsTab.defaultProps = {
+    invoiceDate: ''
+};
 
 export default OrderDetailsTab;
