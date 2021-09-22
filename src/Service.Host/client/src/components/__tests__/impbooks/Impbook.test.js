@@ -1,8 +1,8 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { cleanup, screen, fireEvent } from '@testing-library/react';
-import render from '../../test-utils';
-import ImportBook from '../importBooks/ImportBook';
+import render from '../../../test-utils';
+import ImportBook from '../../importBooks/ImportBook';
 
 afterEach(cleanup);
 
@@ -59,9 +59,11 @@ const item = {
             orderValue: 998,
             vatValue: 294.99,
             weight: 5.5,
-            dutyValue: 10.9
+            dutyValue: 10.9,
+            lineNumber: 1
         },
         {
+            lineNumber: 3,
             lineType: 'PO',
             orderValue: 2,
             vatValue: 295.99,
@@ -180,12 +182,6 @@ describe('When dont have right privilege', () => {
                 setSnackbarVisible={setSnackbarVisible}
                 privileges={['not-right.priv']}
                 loading={false}
-
-                // userNumber={118}
-                // searchCarriers={searchCarriers}
-                // searchSuppliers={searchSuppliers}
-                // clearCarriersSearch={clearCarriersSearch}
-                // clearSuppliersSearch={clearSuppliersSearch}
             />
         );
     });
@@ -261,7 +257,6 @@ describe('When clicking through to second tab', () => {
 
     test('Remaining total (based on import value) is correct', () => {
         expect(screen.getByLabelText('Remaining Total')).toHaveDisplayValue('0');
-            // '299.04');
     });
 
     test('Remaining duty total is correct', () => {
@@ -273,19 +268,14 @@ describe('When clicking through to second tab', () => {
     });
 
     test('Deleting orderdetail order-value value doesnt break and displays correct new total', () => {
-        // const field = screen.getByDisplayValue('999');
-        expect(screen.getByDisplayValue('998')).toBeInTheDocument();
+        const field = screen.getByDisplayValue('998');
+        fireEvent.change(field, { target: { value: '' } });
+        expect(screen.getByLabelText('Remaining Total')).toHaveDisplayValue('998');
+    });
 
-        const field2 = screen.getByDisplayValue('998');
-
-        // field.focus();
-        // fireEvent.change(field, { target: { value: '' } });
-        fireEvent.change(field2, { target: { value: '100' } });
-
-        // field.blur();
-        //below field shouldn't update but also seems to be clearing
-        // expect(screen.getByDisplayValue('1')).toBeInTheDocument();
-        // expect(screen.getByDisplayValue('2')).toBeInTheDocument();
-        expect(screen.getByLabelText('Remaining Total')).toHaveDisplayValue('899');
+    test('Updating orderdetail order-value value doesnt break and displays correct new total', () => {
+        const field = screen.getByDisplayValue('998');
+        fireEvent.change(field, { target: { value: '100' } });
+        expect(screen.getByLabelText('Remaining Total')).toHaveDisplayValue('898');
     });
 });

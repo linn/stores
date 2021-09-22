@@ -54,11 +54,11 @@ export default function importBookReducer(state = initialState, action) {
                         ...state.impbook.importBookOrderDetails,
                         {
                             lineNumber:
-                                Math.max([
-                                    state.impbook.importBookOrderDetails?.map(x => {
+                                Math.max(
+                                    ...state.impbook.importBookOrderDetails?.map(x => {
                                         return x.lineNumber;
                                     })
-                                ]) + 1
+                                ) + 1
                         }
                     ]
                 }
