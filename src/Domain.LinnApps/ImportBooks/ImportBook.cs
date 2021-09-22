@@ -117,6 +117,8 @@
 
         public string CustomsEntryCodePrefix { get; set; }
 
+        public string Pva { get; set; }
+
         public IList<ImportBookInvoiceDetail> InvoiceDetails { get; set; }
 
         public IList<ImportBookOrderDetail> OrderDetails { get; set; }
