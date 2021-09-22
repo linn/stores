@@ -200,7 +200,7 @@ function MechPartSource({
 
     const handleFieldChange = (propertyName, newValue) => {
         if (viewing()) {
-            setEditStatus('editing');
+            setEditStatus('edit');
         }
         setMechPartSource({ ...mechPartSource, [propertyName]: newValue });
     };
@@ -397,7 +397,7 @@ function MechPartSource({
                                 <Tab label="Proposal" />
                                 <Tab
                                     label="DataSheets"
-                                    disabled={!mechPartSource.partType === 'E'}
+                                    disabled={mechPartSource.mechanicalOrElectrical !== 'E'}
                                 />
                                 <Tab label="Quality Requirements" />
                                 <Tab label="Suppliers" />
