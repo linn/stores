@@ -321,3 +321,26 @@ describe('When url specifies tab...', () => {
         expect(screen.getByText('Quality')).toBeInTheDocument();
     });
 });
+
+describe('When rkmCode...', () => {
+    beforeEach(() => {
+        cleanup();
+        defaultRender({
+            options: { tab: 'paramData' },
+            item: {
+                id: 1,
+                partNumber: 'PART',
+                mechanicalOrElectrical: 'E',
+                partType: 'RES',
+                assemblyType: 'SM',
+                samplesRequired: 'N',
+                rkmCode: '3M1'
+            },
+            editStatus: 'view'
+        });
+    });
+
+    test('should pass correct resistance units to Param Data tab', () => {
+        expect(screen.getByLabelText('units').value).toBe('MΩ');
+    });
+});
