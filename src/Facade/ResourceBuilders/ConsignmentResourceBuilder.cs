@@ -19,6 +19,7 @@
                        {
                            ConsignmentId = consignment.ConsignmentId,
                            SalesAccountId = consignment.SalesAccountId,
+                           AddressId = consignment.AddressId,
                            Address = consignment.Address == null ? null : addressBuilder.Build(consignment.Address),
                            Status = consignment.Status,
                            Carrier = consignment.Carrier,

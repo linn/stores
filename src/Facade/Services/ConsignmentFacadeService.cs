@@ -7,6 +7,7 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
+    using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Resources.Consignments;
@@ -15,18 +16,46 @@
     {
         private readonly IConsignmentService consignmentService;
 
+        private readonly IDatabaseService databaseService;
+
         public ConsignmentFacadeService(
             IRepository<Consignment, int> repository,
             ITransactionManager transactionManager,
-            IConsignmentService consignmentService)
+            IConsignmentService consignmentService,
+            IDatabaseService databaseService)
             : base(repository, transactionManager)
         {
             this.consignmentService = consignmentService;
+            this.databaseService = databaseService;
         }
 
         protected override Consignment CreateFromResource(ConsignmentResource resource)
         {
-            throw new NotImplementedException();
+            var consignment = new Consignment
+                       {
+                           Carrier = resource.Carrier,
+                           Terms = resource.Terms,
+                           HubId = resource.HubId,
+                           ShippingMethod = resource.ShippingMethod,
+                           DespatchLocationCode = resource.DespatchLocationCode,
+                           CustomsEntryCodePrefix = resource.CustomsEntryCodePrefix,
+                           CustomsEntryCode = resource.CustomsEntryCode,
+                           CustomsEntryCodeDate = string.IsNullOrEmpty(resource.CustomsEntryCodeDate)
+                                                      ? (DateTime?)null
+                                                      : DateTime.Parse(resource.CustomsEntryCodeDate),
+                           AddressId = resource.AddressId,
+                           CustomerName = resource.CustomerName,
+                           DateOpened = DateTime.Now,
+                           SalesAccountId = resource.SalesAccountId,
+                           Pallets = new List<ConsignmentPallet>(),
+                           Items = new List<ConsignmentItem>(),
+                           Status = resource.Status,
+                           ConsignmentId = this.databaseService.GetNextVal("CONS_SEQ")
+                       };
+            this.UpdatePallets(consignment, resource.Pallets.ToList());
+            this.UpdateItems(consignment, resource.Items.ToList());
+
+            return consignment;
         }
 
         protected override void UpdateFromResource(Consignment entity, ConsignmentUpdateResource updateResource)
@@ -53,7 +82,7 @@
             {
                 entity.Carrier = updateResource.Carrier;
                 entity.Terms = updateResource.Terms;
-                entity.HubId = updateResource.HubId;
+                entity.HubId = entity.Address?.Country?.ECMember == "Y" ? updateResource.HubId : null;
                 entity.ShippingMethod = updateResource.ShippingMethod;
                 entity.DespatchLocationCode = updateResource.DespatchLocationCode;
                 entity.CustomsEntryCodePrefix = updateResource.CustomsEntryCodePrefix;

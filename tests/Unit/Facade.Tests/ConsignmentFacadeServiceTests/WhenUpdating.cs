@@ -7,6 +7,7 @@
     using FluentAssertions.Extensions;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Resources.Consignments;
 
@@ -56,6 +57,7 @@
                                       ConsignmentId = this.consignmentId,
                                       HubId = 1,
                                       Carrier = "Clumsy",
+                                      Address = new Address { Country = new Country { ECMember = "Y" } },
                                       Terms = "R2D2",
                                       ShippingMethod = "Throw",
                                       DespatchLocationCode = "MoonBase Alpha",
