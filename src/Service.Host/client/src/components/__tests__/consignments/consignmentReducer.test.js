@@ -39,7 +39,9 @@ describe('consignmentReducer tests', () => {
                 despatchLocationCode: 'LINN',
                 pallets: [],
                 items: [],
-                shippingMethod: 'S'
+                shippingMethod: 'S',
+                carrier: 'TNT',
+                status: 'L'
             },
             originalConsignment: null
         });
