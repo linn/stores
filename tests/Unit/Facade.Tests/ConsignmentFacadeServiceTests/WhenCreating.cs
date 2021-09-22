@@ -64,6 +64,7 @@
                                           CustomsEntryCodePrefix = this.newCustomsEntryCodePrefix,
                                           CustomsEntryCode = this.newCustomsEntryCode,
                                           CustomsEntryCodeDate = this.newCustomsEntryCodeDate,
+                                          Status = "L",
                                           Pallets = new List<ConsignmentPalletResource>
                                                         {
                                                             new ConsignmentPalletResource
@@ -113,6 +114,7 @@
             newConsignment.Items.Should().Contain(p => p.ItemNumber == 2 && p.Depth == 1 && p.Height == 2 && p.Weight == 3 & p.Width == 4);
             newConsignment.Items.Should().NotContain(p => p.ItemNumber == 12);
             newConsignment.ConsignmentId.Should().Be(10101);
+            newConsignment.Status.Should().Be(this.createResource.Status);
         }
     }
 }

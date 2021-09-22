@@ -49,6 +49,7 @@
                            SalesAccountId = resource.SalesAccountId,
                            Pallets = new List<ConsignmentPallet>(),
                            Items = new List<ConsignmentItem>(),
+                           Status = resource.Status,
                            ConsignmentId = this.databaseService.GetNextVal("CONS_SEQ")
                        };
             this.UpdatePallets(consignment, resource.Pallets.ToList());

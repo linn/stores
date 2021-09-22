@@ -113,11 +113,17 @@ function Consignment({
             }
         };
 
-        dispatch({
-            type: 'initialise',
-            payload: item
-        });
-
+        if (editStatus === 'create') {
+            dispatch({
+                type: 'create',
+                payload: null
+            });
+        } else {
+            dispatch({
+                type: 'initialise',
+                payload: item
+            });
+        }
         setEditablePallets(
             item?.pallets
                 ? utilities
@@ -138,7 +144,13 @@ function Consignment({
 
         clearConsignmentErrors();
         loadPackingList();
-    }, [item, clearConsignmentErrors, clearConsignmentPackingList, getConsignmentPackingList]);
+    }, [
+        item,
+        clearConsignmentErrors,
+        clearConsignmentPackingList,
+        getConsignmentPackingList,
+        editStatus
+    ]);
 
     useEffect(() => {
         if (item) {
@@ -212,11 +224,6 @@ function Consignment({
     };
 
     const handleCreate = () => {
-        dispatch({
-            type: 'create',
-            payload: null
-        });
-
         createConsignment();
         setcurrentTab(1);
     };
