@@ -216,14 +216,14 @@ function ImportBook({
     };
 
     const currentlyPrinting = () => {
-        return false;
+        return true;
     };
 
     return currentlyPrinting() ? (
         <div className="pageContainer">
-            <Page>
+            <Page width="xl">
                 <ImpBookPrintOut
-                    ref={componentRef}
+                    // ref={componentRef}
                     impbookId={state.impbook.id}
                     dateCreated={state.impbook.dateCreated}
                     createdBy={state.impbook.createdBy}
@@ -251,14 +251,13 @@ function ImportBook({
                     linnDuty={state.impbook.linnDuty}
                     linnVat={state.impbook.linnVat}
                     arrivalDate={state.impbook.arrivalDate}
-                    remainingInvoiceValue='todo'
-                    remainingDutyValue='todo'
-                    remainingWeightValue='todo'
+                    remainingInvoiceValue="todo"
+                    remainingDutyValue="todo"
+                    remainingWeightValue="todo"
                     orderDetails={state.impbook.importBookOrderDetails}
                     comments={state.impbook.comments}
                     arrivalPort={state.impbook.arrivalPort}
-               />
-                <Loading />
+                />
             </Page>
         </div>
     ) : (

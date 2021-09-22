@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import { InputField, TableWithInlineEditing } from '@linn-it/linn-form-components-library';
+import { TableWithInlineEditing } from '@linn-it/linn-form-components-library';
 import Divider from '@material-ui/core/Divider';
 import { makeStyles } from '@material-ui/styles';
+import { Typography } from '@material-ui/core';
+import TextField from '@material-ui/core/TextField';
+import InputLabel from '@material-ui/core/InputLabel';
 
 function ImpBookPrintOut({
     impbookId,
@@ -40,19 +43,12 @@ function ImpBookPrintOut({
     arrivalPort
 }) {
     const useStyles = makeStyles(theme => ({
-        displayInline: {
-            display: 'inline'
-        },
-        marginTop1: {
-            marginTop: theme.spacing(1),
-            display: 'inline-block',
-            width: '2em'
-        },
         gapAbove: {
-            marginTop: theme.spacing(8)
+            marginTop: theme.spacing(4)
         },
-        negativeTopMargin: {
-            marginTop: theme.spacing(-4)
+        dividerMargins: {
+            marginTop: '10px',
+            marginBottom: '10px'
         }
     }));
     const classes = useStyles();
@@ -61,37 +57,40 @@ function ImpBookPrintOut({
         <>
             <Grid container spacing={1}>
                 <Grid item xs={4}>
-                    Impbook ID: <b>{{ impbookId }}</b>
+                    Impbook ID: <b>{impbookId}</b>
                 </Grid>
 
                 <Grid item xs={4}>
-                    Date Created: <b>{{ dateCreated }}</b>
+                    Date Created: <b>{dateCreated}</b>
                 </Grid>
                 <Grid item xs={4}>
-                    Created By: <b>{{ createdBy }}</b>
+                    Created By: <b>{createdBy}</b>
                 </Grid>
 
                 <Grid item xs={4}>
                     Supplier:
                     <b>
-                        {{ supplierId }} - {{ supplierName }}
+                        {supplierId} - {supplierName}
                     </b>
                 </Grid>
                 <Grid item xs={4}>
-                    Country: <b>{{ supplierCountry }}</b>
+                    Country: <b>{supplierCountry}</b>
                 </Grid>
                 <Grid item xs={4}>
-                    EEC Member: <b>{{ eecMember }}</b>
+                    EEC Member: <b>{eecMember}</b>
                 </Grid>
 
                 <Grid item xs={12}>
-                    Currency: <b>{{ currency }}</b>
+                    Currency: <b>{currency}</b>
                 </Grid>
                 <Grid item xs={12}>
-                    Parcel Number: <b>{{ parcelNumber }}</b>
+                    Parcel Number: <b>{parcelNumber}</b>
                 </Grid>
 
                 <Grid item xs={12} className={classes.gapAbove}>
+                    <Grid item xs={12}>
+                        <Typography variant="h6">Invoice Details</Typography>
+                    </Grid>
                     <TableWithInlineEditing
                         columnsInfo={[
                             {
@@ -114,76 +113,86 @@ function ImpBookPrintOut({
                     />
                 </Grid>
 
-                <Grid item xs={12}>
-                    Total Import Value (GBP): <b>{{ totalImportValue }}</b>
-                </Grid>
+                <Grid item xs={12} className={classes.gapAbove} />
 
-                <Grid item xs={12}>
+                <Grid item xs={4} />
+                <Grid item xs={4}>
+                    Total Import Value (GBP): <b>{totalImportValue}</b>
+                </Grid>
+                <Grid item xs={4} />
+
+                <Grid item xs={12} className={classes.gapAbove} />
+
+                <Grid item xs={9}>
                     Carrier:
                     <b>
-                        {{ carrierId }} - {{ carrierName }}
+                        {carrierId} - {carrierName}
                     </b>
                 </Grid>
+                <Grid item xs={3}>
+                    Num Cartons: <b>{numCartons}</b>
+                </Grid>
 
                 <Grid item xs={9}>
-                    Transport Code: <b>{{ transportCode }}</b>
+                    Transport Code: <b>{transportCode}</b>
                 </Grid>
                 <Grid item xs={3}>
-                    Num Cartons: <b>{{ numCartons }}</b>
+                    Num Pallets: <b>{numPallets}</b>
                 </Grid>
 
                 <Grid item xs={9}>
-                    Transport Bill Number: <b>{{ transportBillNumber }}</b>
+                    Transport Bill Number: <b>{transportBillNumber}</b>
                 </Grid>
                 <Grid item xs={3}>
-                    Num Pallets: <b>{{ numPallets }}</b>
+                    Weight: <b>{weight}</b>
                 </Grid>
 
                 <Grid item xs={9}>
-                    Transaction Code: <b>{{ transactionCode }}</b>
-                </Grid>
-                <Grid item xs={3}>
-                    Weight: <b>{{ weight }}</b>
-                </Grid>
-
-                <Grid item xs={9}>
-                    Delivery Term Code: <b>{{ deliveryTermCode }}</b>
+                    Transaction Code: <b>{transactionCode}</b>
                 </Grid>
                 <Grid item xs={3}>
                     Customs Entry Code:{' '}
                     <b>
-                        {{ customsEntryCodePrefix }} {{ customsEntryCode }}
+                        {customsEntryCodePrefix} {customsEntryCode}
                     </b>
                 </Grid>
 
                 <Grid item xs={9}>
-                    Arrival port: <b>{{ arrivalPort }}</b>
+                    Delivery Term Code: <b>{deliveryTermCode}</b>
                 </Grid>
                 <Grid item xs={3}>
-                    Customs Entry Date: <b>{{ customsEntryCodeDate }}</b>
+                    Customs Entry Date: <b>{customsEntryCodeDate}</b>
                 </Grid>
 
                 <Grid item xs={9}>
-                    Arrival Date: <b>{{ arrivalDate }}</b>
+                    Arrival port: <b>{arrivalPort}</b>
                 </Grid>
                 <Grid item xs={3}>
-                    Linn Duty: <b>{{ linnDuty }}</b>
+                    Linn Duty: <b>{linnDuty}</b>
                 </Grid>
 
-                <Grid item xs={9} />
+                <Grid item xs={9}>
+                    Arrival Date: <b>{arrivalDate}</b>
+                </Grid>
                 <Grid item xs={3}>
-                    Linn Vat: <b>{{ linnVat }}</b>
+                    Linn Vat: <b>{linnVat}</b>
+                </Grid>
+
+                <Grid item xs={12} className={classes.gapAbove} />
+
+                <Grid item xs={4}>
+                    Remaining Invoice Value: <b>{remainingInvoiceValue}</b>
                 </Grid>
 
                 <Grid item xs={4}>
-                    Remaining Invoice Value: <b>{{ remainingInvoiceValue }}</b>
+                    Remaining Duty: <b>{remainingDutyValue}</b>
+                </Grid>
+                <Grid item xs={4}>
+                    Remaining Weight: <b>{remainingWeightValue}</b>
                 </Grid>
 
-                <Grid item xs={4}>
-                    Remaining Duty: <b>{{ remainingDutyValue }}</b>
-                </Grid>
-                <Grid item xs={4}>
-                    Remaining Weight: <b>{{ remainingWeightValue }}</b>
+                <Grid item xs={12} className={classes.gapAbove}>
+                    <Typography variant="h6">Order Details</Typography>
                 </Grid>
 
                 {orderDetails
@@ -193,165 +202,90 @@ function ImpBookPrintOut({
                     .map(row => (
                         <>
                             <Grid item xs={1}>
-                                <InputField
-                                    label="Line Type"
-                                    fullWidth
-                                    propertyName="lineType"
-                                    value={row.lineType}
-                                    required
-                                />
+                                <InputLabel>Line Type</InputLabel>
+                                <TextField value={row.lineType} variant="standard" fullWidth />
                             </Grid>
 
                             {(row.lineType === 'PO' || row.lineType === 'RO') && (
                                 <Grid item xs={2}>
-                                    <InputField
-                                        label="Order Number"
-                                        fullWidth
-                                        propertyName="orderNumber"
-                                        type="number"
+                                    <InputLabel>Order Number</InputLabel>
+                                    <TextField
                                         value={row.orderNumber}
+                                        variant="standard"
+                                        fullWidth
                                     />
                                 </Grid>
                             )}
 
                             {row.lineType === 'RSN' && (
                                 <Grid item xs={2}>
-                                    <InputField
-                                        label="RSN Number"
-                                        fullWidth
-                                        propertyName="rsnNumber"
-                                        type="number"
-                                        value={row.rsnNumber}
-                                        maxLength={6}
-                                    />
+                                    <InputLabel>RSN Number</InputLabel>
+                                    <TextField value={row.rsnNumber} variant="standard" fullWidth />
                                 </Grid>
                             )}
 
                             {row.lineType === 'LOAN' && (
                                 <Grid item xs={2}>
-                                    <InputField
-                                        label="Loan Number"
-                                        fullWidth
-                                        propertyName="loanNumber"
-                                        type="number"
+                                    <InputLabel>Loan Number</InputLabel>
+                                    <TextField
                                         value={row.loanNumber}
-                                        maxLength={6}
+                                        variant="standard"
+                                        fullWidth
                                     />
                                 </Grid>
                             )}
 
                             {row.lineType === 'INS' && (
                                 <Grid item xs={2}>
-                                    <InputField
-                                        label="Ins Number"
-                                        fullWidth
-                                        propertyName="insNumber"
-                                        type="number"
-                                        value={row.insNumber}
-                                        maxLength={10}
-                                    />
+                                    <InputLabel>INS Number</InputLabel>
+                                    <TextField value={row.rsnNumber} variant="standard" fullWidth />
                                 </Grid>
                             )}
 
                             <Grid item xs={3}>
-                                <InputField
-                                    label="Order Description"
-                                    fullWidth
-                                    propertyName="orderDescription"
-                                    type="text"
+                                <InputLabel>Order Description</InputLabel>
+                                <TextField
                                     value={row.orderDescription}
-                                    required
-                                    maxLength={2000}
+                                    variant="standard"
+                                    fullWidth
                                 />
                             </Grid>
                             <Grid item xs={2}>
-                                <InputField
-                                    label="Tariff Code"
-                                    fullWidth
-                                    propertyName="tariffCode"
-                                    type="text"
-                                    value={row.tariffCode}
-                                    maxLength={12}
-                                />
+                                <InputLabel>Tariff Code</InputLabel>
+                                <TextField value={row.tariffCode} variant="standard" fullWidth />
                             </Grid>
                             <Grid item xs={1}>
-                                <InputField
-                                    label="Tariff Number"
-                                    fullWidth
-                                    propertyName="tariffNumber"
-                                    type="number"
-                                    value={row.tariffNumber}
-                                />
+                                <InputLabel>Tariff No</InputLabel>
+                                <TextField value={row.tariffNumber} variant="standard" fullWidth />
                             </Grid>
                             <Grid item xs={1}>
-                                <InputField
-                                    label="Qty"
-                                    fullWidth
-                                    propertyName="qty"
-                                    type="number"
-                                    value={row.qty}
-                                    required
-                                    maxLength={6}
-                                />
+                                <InputLabel>Qty</InputLabel>
+                                <TextField value={row.qty} variant="standard" fullWidth />
+                            </Grid>
+                            <Grid item xs={12} />
+                            <Grid item xs={2}>
+                                <InputLabel>Order Value</InputLabel>
+                                <TextField value={row.orderValue} variant="standard" fullWidth />
                             </Grid>
                             <Grid item xs={2}>
-                                <InputField
-                                    label="Order Value"
-                                    fullWidth
-                                    propertyName="orderValue"
-                                    type="number"
-                                    value={row.orderValue}
-                                    required
-                                    maxLength={14}
-                                    decimalPlaces={2}
-                                />
-                            </Grid>
-                            <Grid item xs={2}>
-                                <InputField
-                                    label="Duty Value"
-                                    fullWidth
-                                    propertyName="dutyValue"
-                                    type="number"
-                                    value={row.dutyValue}
-                                    required
-                                    maxLength={14}
-                                    decimalPlaces={2}
-                                />
+                                <InputLabel>Duty Value</InputLabel>
+                                <TextField value={row.dutyValue} variant="standard" fullWidth />
                             </Grid>
                             <Grid item xs={1}>
-                                <InputField
-                                    label="Vat Rate"
-                                    fullWidth
-                                    propertyName="vatRate"
-                                    type="number"
-                                    value={row.vatRate}
-                                />
+                                <InputLabel>Vat Rate</InputLabel>
+                                <TextField value={row.vatRate} variant="standard" fullWidth />
                             </Grid>
                             <Grid item xs={2}>
-                                <InputField
-                                    label="Vat Value"
-                                    fullWidth
-                                    propertyName="vatValue"
-                                    type="number"
-                                    value={row.vatValue}
-                                    required
-                                    maxLength={14}
-                                    decimalPlaces={2}
-                                />
+                                <InputLabel>Vat Value</InputLabel>
+                                <TextField value={row.vatValue} variant="standard" fullWidth />
                             </Grid>
                             <Grid item xs={1}>
-                                <InputField
-                                    label="Weight"
-                                    fullWidth
-                                    propertyName="weight"
-                                    type="number"
-                                    value={row.weight}
-                                    maxLength={10}
-                                    decimalPlaces={2}
-                                />
+                                <InputLabel>Weight</InputLabel>
+                                <TextField value={row.weight} variant="standard" fullWidth />
                             </Grid>
                             <Grid item xs={2}>
-                                <InputField propertyName="cpcNumber" value={row.cpcNumber} />
+                                <InputLabel>Cpc Number</InputLabel>
+                                <TextField value={row.cpcNumber} variant="standard" fullWidth />
                             </Grid>
 
                             <Grid item xs={12}>
@@ -361,7 +295,7 @@ function ImpBookPrintOut({
                     ))}
 
                 <Grid item xs={12}>
-                    {{ comments }}
+                    {comments}
                 </Grid>
             </Grid>
         </>
