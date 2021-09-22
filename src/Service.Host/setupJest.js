@@ -3,11 +3,12 @@ import 'regenerator-runtime/runtime';
 global.fetch = require('isomorphic-fetch');
 
 global.console = {
-    log: console.log, // console.log are ignored in tests
-
-    // Keep native behaviour for other methods, use those to print out things in your own tests, not `console.log`
-    error: jest.fn(),
+    // suppresses errors and warnings in tests
     warn: jest.fn(),
+    error: jest.fn(),
+
+    // Keep native behaviour for other console methods
+    log: console.log,
     info: console.info,
     debug: console.debug
 };
