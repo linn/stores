@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -19,7 +19,6 @@ function ImpBookTab({
     suppliersSearchLoading,
     searchSuppliers,
     clearSuppliersSearch,
-    allSuppliers,
     carriersSearchResults,
     carriersSearchLoading,
     searchCarriers,
@@ -52,7 +51,6 @@ function ImpBookTab({
     createdBy,
     customsEntryCodePrefix,
     allowedToEdit,
-    countries,
     currencies,
     handleUpdateInvoiceDetails,
     invoiceDetails,
@@ -61,75 +59,12 @@ function ImpBookTab({
     clearParcelsSearch,
     parcelsSearchResults,
     parcelsSearchLoading,
-    handleParcelChange
+    handleParcelChange,
+    supplierCountryValue,
+    supplierNameValue,
+    carrierNameValue,
+    countryIsInEU
 }) {
-    const [localSuppliers, setLocalSuppliers] = useState([{}]);
-
-    useEffect(() => {
-        if (allSuppliers) {
-            setLocalSuppliers([...allSuppliers]);
-        }
-    }, [allSuppliers]);
-
-    const supplierCountryValue = () => {
-        if (localSuppliers.length && supplierId) {
-            const tempSupplier = localSuppliers.find(x => x.id === supplierId);
-            if (!tempSupplier) {
-                return '-';
-            }
-            return tempSupplier.countryCode;
-        }
-        if (!supplierId) {
-            return '';
-        }
-
-        return 'loading..';
-    };
-
-    const supplierNameValue = () => {
-        if (localSuppliers.length && supplierId) {
-            const tempSupplier = localSuppliers.find(x => x.id === supplierId);
-            if (!tempSupplier) {
-                return 'undefined supplier';
-            }
-            return tempSupplier.name;
-        }
-        if (!supplierId) {
-            return '';
-        }
-        return 'loading..';
-    };
-
-    const carrierNameValue = () => {
-        if (localSuppliers.length && carrierId) {
-            const tempCarrier = localSuppliers.find(x => x.id === carrierId);
-            if (!tempCarrier) {
-                return 'undefined carrier';
-            }
-            return tempCarrier.name;
-        }
-        if (!carrierId) {
-            return '';
-        }
-
-        return 'loading..';
-    };
-
-    const countryIsInEU = () => {
-        if (localSuppliers.length && supplierId) {
-            const tempSupplier = localSuppliers.find(x => x.id === supplierId);
-            if (!tempSupplier) {
-                return '';
-            }
-            const country = countries.find(x => x.countryCode === tempSupplier.countryCode);
-            return country?.eCMember;
-        }
-        if (!supplierId) {
-            return '';
-        }
-        return 'loading..';
-    };
-
     const clearSupplier = () => {
         handleFieldChange('supplierId', '');
     };
@@ -608,13 +543,6 @@ ImpBookTab.propTypes = {
     suppliersSearchLoading: PropTypes.bool,
     searchSuppliers: PropTypes.func.isRequired,
     clearSuppliersSearch: PropTypes.func.isRequired,
-    allSuppliers: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.number,
-            name: PropTypes.string,
-            country: PropTypes.string
-        })
-    ),
     carriersSearchResults: PropTypes.arrayOf(
         PropTypes.shape({ id: PropTypes.number, name: PropTypes.string, country: PropTypes.string })
     ).isRequired,
@@ -657,7 +585,6 @@ ImpBookTab.propTypes = {
     createdBy: PropTypes.number,
     customsEntryCodePrefix: PropTypes.string,
     allowedToEdit: PropTypes.bool.isRequired,
-    countries: PropTypes.arrayOf(PropTypes.shape({})),
     invoiceDetails: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     currencies: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     handleUpdateInvoiceDetails: PropTypes.func.isRequired,
@@ -668,12 +595,15 @@ ImpBookTab.propTypes = {
         PropTypes.shape({ id: PropTypes.number, name: PropTypes.string })
     ).isRequired,
     parcelsSearchLoading: PropTypes.bool,
-    handleParcelChange: PropTypes.func.isRequired
+    handleParcelChange: PropTypes.func.isRequired,
+    supplierCountryValue: PropTypes.func.isRequired,
+    supplierNameValue: PropTypes.func.isRequired,
+    carrierNameValue: PropTypes.func.isRequired,
+    countryIsInEU: PropTypes.func.isRequired
 };
 
 ImpBookTab.defaultProps = {
     employees: [{ id: '-1', fullname: 'loading..' }],
-    allSuppliers: [{ id: 0, name: 'loading', country: 'loading' }],
     parcelNumber: null,
     currency: '',
     transportBillNumber: '',
@@ -688,7 +618,6 @@ ImpBookTab.defaultProps = {
     numPallets: null,
     createdBy: null,
     customsEntryCodePrefix: '',
-    countries: [{ id: '-1', countryCode: 'loading..' }],
     totalInvoiceValue: 0,
     parcelsSearchLoading: false,
     totalImportValue: 0,

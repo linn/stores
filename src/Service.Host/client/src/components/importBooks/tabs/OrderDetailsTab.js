@@ -1,5 +1,4 @@
 import React from 'react';
-import { Decimal } from 'decimal.js';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -18,9 +17,9 @@ function OrderDetailsTab({
     allowedToEdit,
     addOrderDetailRow,
     removeOrderDetailRow,
-    totalImportValue,
-    duty,
-    weight
+    remainingInvoiceValue,
+    remainingDutyValue,
+    remainingWeightValue
 }) {
     const updateRow = detail => {
         handleOrderDetailChange(detail.lineNumber, detail);
@@ -62,56 +61,6 @@ function OrderDetailsTab({
         updateRow({ ...row, [propertyName]: newValue });
     };
 
-    const calcRemainingTotal = () => {
-        const orderDetailsTotal = orderDetails?.reduce(
-            (a, v) => new Decimal(a).plus(v.orderValue ?? 0),
-            0
-        );
-
-        if (!orderDetailsTotal) {
-            return totalImportValue;
-        }
-
-        if (!totalImportValue) {
-            return orderDetailsTotal.isZero() ? 0 : orderDetailsTotal.neg();
-        }
-
-        return new Decimal(totalImportValue).minus(orderDetailsTotal).valueOf();
-    };
-
-    const calcRemainingDuty = () => {
-        const orderDetailsDutyTotal = orderDetails?.reduce(
-            (a, v) => new Decimal(a).plus(v.dutyValue ?? 0),
-            0
-        );
-        if (!orderDetailsDutyTotal) {
-            return duty;
-        }
-
-        if (!duty) {
-            return orderDetailsDutyTotal.isZero() ? 0 : orderDetailsDutyTotal.neg();
-        }
-
-        return new Decimal(duty).minus(orderDetailsDutyTotal).valueOf();
-    };
-
-    const calcRemainingWeight = () => {
-        const orderDetailsWeightTotal = orderDetails?.reduce(
-            (a, v) => new Decimal(a).plus(v.weight ?? 0),
-            0
-        );
-
-        if (!orderDetailsWeightTotal) {
-            return duty;
-        }
-
-        if (!weight) {
-            return orderDetailsWeightTotal.isZero() ? 0 : orderDetailsWeightTotal.neg();
-        }
-
-        return new Decimal(weight).minus(orderDetailsWeightTotal).valueOf();
-    };
-
     return (
         <>
             <Grid container spacing={1} item xs={7}>
@@ -121,7 +70,7 @@ function OrderDetailsTab({
                         fullWidth
                         propertyName="remainingTotal"
                         type="number"
-                        value={calcRemainingTotal()}
+                        value={remainingInvoiceValue}
                         disabled
                     />
                 </Grid>
@@ -131,7 +80,7 @@ function OrderDetailsTab({
                         fullWidth
                         propertyName="remainingDutyTotal"
                         type="number"
-                        value={calcRemainingDuty()}
+                        value={remainingDutyValue}
                         disabled
                     />
                 </Grid>
@@ -141,7 +90,7 @@ function OrderDetailsTab({
                         fullWidth
                         propertyName="remainingWeight"
                         type="number"
-                        value={calcRemainingWeight()}
+                        value={remainingWeightValue}
                         disabled
                     />
                 </Grid>
@@ -450,9 +399,9 @@ function OrderDetailsTab({
 OrderDetailsTab.propTypes = {
     orderDetails: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     handleFieldChange: PropTypes.func.isRequired,
-    totalImportValue: PropTypes.string.isRequired,
-    duty: PropTypes.number.isRequired,
-    weight: PropTypes.number.isRequired,
+    remainingInvoiceValue: PropTypes.string.isRequired,
+    remainingDutyValue: PropTypes.number.isRequired,
+    remainingWeightValue: PropTypes.number.isRequired,
     invoiceDate: PropTypes.string,
     handleOrderDetailChange: PropTypes.func.isRequired,
     cpcNumbers: PropTypes.arrayOf(PropTypes.shape({})).isRequired,

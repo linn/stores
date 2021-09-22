@@ -32,7 +32,10 @@ function ImportBook({
     updateItem,
     setEditStatus,
     setSnackbarVisible,
-    privileges
+    privileges,
+    allSuppliers,
+    countries,
+    employees
 }) {
     const defaultImpBook = {
         id: null,
@@ -215,8 +218,125 @@ function ImportBook({
         return total;
     };
 
+    const [localSuppliers, setLocalSuppliers] = useState([{}]);
+
+    useEffect(() => {
+        if (allSuppliers) {
+            setLocalSuppliers([...allSuppliers]);
+        }
+    }, [allSuppliers]);
+
+    const supplierCountryValue = () => {
+        if (localSuppliers.length && state.impbook.supplierId) {
+            const tempSupplier = localSuppliers.find(x => x.id === state.impbook.supplierId);
+            if (!tempSupplier) {
+                return '-';
+            }
+            return tempSupplier.countryCode;
+        }
+        if (!state.impbook.supplierId) {
+            return '';
+        }
+
+        return 'loading..';
+    };
+
+    const supplierNameValue = () => {
+        if (localSuppliers.length && state.impbook.supplierId) {
+            const tempSupplier = localSuppliers.find(x => x.id === state.impbook.supplierId);
+            if (!tempSupplier) {
+                return 'undefined supplier';
+            }
+            return tempSupplier.name;
+        }
+        if (!state.impbook.supplierId) {
+            return '';
+        }
+        return 'loading..';
+    };
+
+    const carrierNameValue = () => {
+        if (localSuppliers.length && state.impbook.carrierId) {
+            const tempCarrier = localSuppliers.find(x => x.id === state.impbook.carrierId);
+            if (!tempCarrier) {
+                return 'undefined carrier';
+            }
+            return tempCarrier.name;
+        }
+        if (!state.impbook.carrierId) {
+            return '';
+        }
+
+        return 'loading..';
+    };
+
+    const countryIsInEU = () => {
+        if (localSuppliers.length && state.impbook.supplierId) {
+            const tempSupplier = localSuppliers.find(x => x.id === state.impbook.supplierId);
+            if (!tempSupplier) {
+                return '';
+            }
+            const country = countries.find(x => x.countryCode === tempSupplier.countryCode);
+            return country?.eCMember;
+        }
+        if (!state.impbook.supplierId) {
+            return '';
+        }
+        return 'loading..';
+    };
+
+    const calcRemainingTotal = () => {
+        const orderDetailsTotal = state.impbook.importBookOrderDetails?.reduce(
+            (a, v) => new Decimal(a).plus(v.orderValue ?? 0),
+            0
+        );
+
+        if (!orderDetailsTotal) {
+            return state.impbook.totalImportValue;
+        }
+
+        if (!state.impbook.totalImportValue) {
+            return orderDetailsTotal.isZero() ? 0 : orderDetailsTotal.neg();
+        }
+
+        return new Decimal(state.impbook.totalImportValue).minus(orderDetailsTotal).valueOf();
+    };
+
+    const calcRemainingDuty = () => {
+        const orderDetailsDutyTotal = state.impbook.importBookOrderDetails?.reduce(
+            (a, v) => new Decimal(a).plus(v.dutyValue ?? 0),
+            0
+        );
+        if (!orderDetailsDutyTotal) {
+            return state.impbook.linnDuty;
+        }
+
+        if (!state.impbook.linnDuty) {
+            return orderDetailsDutyTotal.isZero() ? 0 : orderDetailsDutyTotal.neg();
+        }
+
+        return new Decimal(state.impbook.linnDuty).minus(orderDetailsDutyTotal).valueOf();
+    };
+
+    const calcRemainingWeight = () => {
+        const orderDetailsWeightTotal = state.impbook.importBookOrderDetails?.reduce(
+            (a, v) => new Decimal(a).plus(v.weight ?? 0),
+            0
+        );
+
+        if (!orderDetailsWeightTotal) {
+            return state.impbook.weight;
+        }
+
+        if (!state.impbook.weight) {
+            return orderDetailsWeightTotal.isZero() ? 0 : orderDetailsWeightTotal.neg();
+        }
+
+        return new Decimal(state.impbook.weight).minus(orderDetailsWeightTotal).valueOf();
+    };
+
     const currentlyPrinting = () => {
-        return true;
+        return false;
     };
 
     return currentlyPrinting() ? (
@@ -227,17 +347,18 @@ function ImportBook({
                     impbookId={state.impbook.id}
                     dateCreated={state.impbook.dateCreated}
                     createdBy={state.impbook.createdBy}
+                    //use employees list
                     //todo make createdBy name not id
                     supplierId={state.impbook.supplierId}
-                    supplierName={'todo'}
-                    supplierCountry={'todo'}
-                    eecMember={'todo'}
+                    supplierName={supplierNameValue()}
+                    supplierCountry={supplierCountryValue()}
+                    eecMember={countryIsInEU()}
                     currency={state.impbook.currency}
                     parcelNumber={state.impbook.parcelNumber}
                     totalImportValue={state.impbook.totalImportValue}
                     invoiceDetails={state.impbook.importBookInvoiceDetails}
                     carrierId={state.impbook.carrierId}
-                    carrierName={'todo'}
+                    carrierName={carrierNameValue}
                     transportCode={state.impbook.transportId}
                     transportBillNumber={state.impbook.transportBillNumber}
                     transactionCode={state.impbook.transactionId}
@@ -251,9 +372,9 @@ function ImportBook({
                     linnDuty={state.impbook.linnDuty}
                     linnVat={state.impbook.linnVat}
                     arrivalDate={state.impbook.arrivalDate}
-                    remainingInvoiceValue="todo"
-                    remainingDutyValue="todo"
-                    remainingWeightValue="todo"
+                    remainingInvoiceValue={calcRemainingTotal()}
+                    remainingDutyValue={calcRemainingDuty()}
+                    remainingWeightValue={calcRemainingWeight()}
                     orderDetails={state.impbook.importBookOrderDetails}
                     comments={state.impbook.comments}
                     arrivalPort={state.impbook.arrivalPort}
@@ -353,6 +474,11 @@ function ImportBook({
                                     handleUpdateInvoiceDetails={handleUpdateInvoiceDetails}
                                     totalInvoiceValue={totalInvoiceValue()}
                                     handleParcelChange={handleParcelChange}
+                                    supplierCountryValue={supplierCountryValue}
+                                    supplierNameValue={supplierNameValue}
+                                    carrierNameValue={carrierNameValue}
+                                    countryIsInEU={countryIsInEU}
+                                    employees={employees}
                                 />
                             )}
 
@@ -364,9 +490,9 @@ function ImportBook({
                                     allowedToEdit={allowedToEdit()}
                                     addOrderDetailRow={handleAddOrderDetailRow}
                                     removeOrderDetailRow={handleRemoveOrderDetailRow}
-                                    totalImportValue={state.impbook.totalImportValue}
-                                    duty={state.impbook.linnDuty}
-                                    weight={state.impbook.weight}
+                                    remainingInvoiceValue={calcRemainingTotal()}
+                                    remainingDutyValue={calcRemainingDuty()}
+                                    remainingWeightValue={calcRemainingWeight()}
                                     //todo invoice date? Added here or pulled in? Might be on list from Rhona
                                 />
                             )}
@@ -481,7 +607,15 @@ ImportBook.propTypes = {
     loading: PropTypes.bool,
     setEditStatus: PropTypes.func.isRequired,
     setSnackbarVisible: PropTypes.func.isRequired,
-    privileges: PropTypes.arrayOf(PropTypes.string).isRequired
+    privileges: PropTypes.arrayOf(PropTypes.string).isRequired,
+    countries: PropTypes.arrayOf(PropTypes.shape({})),
+    allSuppliers: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number,
+            name: PropTypes.string,
+            country: PropTypes.string
+        })
+    )
 };
 
 ImportBook.defaultProps = {
@@ -489,7 +623,9 @@ ImportBook.defaultProps = {
     snackbarVisible: false,
     loading: true,
     itemError: null,
-    itemId: null
+    itemId: null,
+    countries: [{ id: '-1', countryCode: 'loading..' }],
+    allSuppliers: [{ id: 0, name: 'loading', country: 'loading' }]
 };
 
 export default ImportBook;
