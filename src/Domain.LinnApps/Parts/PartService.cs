@@ -170,7 +170,7 @@
 
         public Part CreatePart(Part partToCreate, List<string> privileges)
         {
-            partToCreate.PartNumber = partToCreate.PartNumber?.ToUpper();
+            partToCreate.PartNumber = partToCreate.PartNumber?.ToUpper().Trim();
 
             if (!this.authService.HasPermissionFor(AuthorisedAction.PartAdmin, privileges))
             {
