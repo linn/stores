@@ -178,7 +178,7 @@ describe('When part type CAP...', () => {
             );
             render(component);
         });
-        test('should correctly render capacitacne value with units', () => {
+        test('should correctly render capacitance value with units', () => {
             expect(screen.getByLabelText('Capacitance').value).toBe('6');
             expect(screen.getByLabelText('units').value).toBe('uF');
         });
@@ -198,7 +198,7 @@ describe('When part type CAP...', () => {
             );
             render(component);
         });
-        test('should correctly render capacitacne value with units', () => {
+        test('should correctly render capacitance value with units', () => {
             expect(screen.getByLabelText('Capacitance').value).toBe('6.5');
             expect(screen.getByLabelText('units').value).toBe('uF');
         });
@@ -218,7 +218,7 @@ describe('When part type CAP...', () => {
             );
             render(component);
         });
-        test('should correctly render capacitacne value with units', () => {
+        test('should correctly render capacitance value with units', () => {
             expect(screen.getByLabelText('Capacitance').value).toBe('6');
             expect(screen.getByLabelText('units').value).toBe('nF');
         });
@@ -238,7 +238,7 @@ describe('When part type CAP...', () => {
             );
             render(component);
         });
-        test('should correctly render capacitacne value with units', () => {
+        test('should correctly render capacitance value with units', () => {
             expect(screen.getByLabelText('Capacitance').value).toBe('6.5');
             expect(screen.getByLabelText('units').value).toBe('nF');
         });
@@ -258,7 +258,7 @@ describe('When part type CAP...', () => {
             );
             render(component);
         });
-        test('should correctly render capacitacne value with units', () => {
+        test('should correctly render capacitance value with units', () => {
             expect(screen.getByLabelText('Capacitance').value).toBe('6');
             expect(screen.getByLabelText('units').value).toBe('pF');
         });
@@ -278,7 +278,7 @@ describe('When part type CAP...', () => {
             );
             render(component);
         });
-        test('should correctly render capacitacne value with units', () => {
+        test('should correctly render capacitance value with units', () => {
             expect(screen.getByLabelText('Capacitance').value).toBe('6.5');
             expect(screen.getByLabelText('units').value).toBe('pF');
         });
