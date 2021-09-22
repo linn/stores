@@ -11,6 +11,7 @@ export const sernosSequences = new ItemType(
 );
 
 export const suppliers = new ItemType('suppliers', 'SUPPLIERS', '/inventory/suppliers');
+
 export const suppliersApprovedCarrier = new ItemType(
     'suppliersApprovedCarrier',
     'SUPPLIERS_APPROVED_CARRER',
@@ -114,7 +115,7 @@ export const sosAllocDetails = new ItemType(
 export const storagePlace = new ItemType(
     'storagePlace',
     'STORAGE_PLACE',
-    'inventory/storage-places'
+    '/inventory/storage-place'
 );
 
 export const storagePlaces = new ItemType(
@@ -297,3 +298,128 @@ export const consignmentShipfiles = new ItemType(
 export const parcel = new ItemType('parcel', 'PARCEL', '/logistics/parcels');
 
 export const parcels = new ItemType('parcels', 'PARCELS', '/logistics/parcels');
+
+export const consignment = new ItemType('consignment', 'CONSIGNMENT', '/logistics/consignments');
+export const consignments = new ItemType('consignments', 'CONSIGNMENTS', '/logistics/consignments');
+
+export const hub = new ItemType('hub', 'HUB', '/logistics/hubs');
+export const hubs = new ItemType('hubs', 'HUBS', '/logistics/hubs');
+
+export const carrier = new ItemType('carrier', 'CARRIER', '/logistics/carriers');
+export const carriers = new ItemType('carriers', 'CARRIERS', '/logistics/carriers');
+
+export const shippingTerm = new ItemType(
+    'shippingTerm',
+    'SHIPPING_TERM',
+    '/logistics/shipping-terms'
+);
+
+export const shippingTerms = new ItemType(
+    'shippingTerms',
+    'SHIPPING_TERMS',
+    '/logistics/shipping-terms'
+);
+
+export const demLocations = new ItemType(
+    'demLocations',
+    'DEM_LOCATIONS',
+    '/logistics/goods-in/dem-locations'
+);
+
+export const loanDetails = new ItemType('loanDetails', '/logistics/loan-details', 'LOAN_DETAILS');
+
+export const validatePurchaseOrderResult = new ItemType(
+    'validatePurchaseOrderResult',
+    'VALIDATE_PURCHASE_ORDER_RESULT',
+    '/logistics/purchase-orders/validate'
+);
+
+export const salesArticles = new ItemType(
+    'salesArticles',
+    'SALES_ARTICLES',
+    '/inventory/sales-articles'
+);
+
+export const importBook = new ItemType('importBook', 'IMPORT_BOOK', '/logistics/import-books');
+
+export const importBooks = new ItemType('importBooks', 'IMPORT_BOOKS', '/logistics/import-books');
+
+export const impbookExchangeRates = new ItemType(
+    'impbookExchangeRates',
+    'IMPORT_BOOK_EXCHANGE_RATES',
+    '/logistics/import-books/exchange-rates'
+);
+
+export const impbookTransportCodes = new ItemType(
+    'impbookTransportCodes',
+    'IMPORT_BOOK_TRANSPORT_CODES',
+    '/logistics/import-books/transport-codes'
+);
+
+export const impbookTransactionCodes = new ItemType(
+    'impbookTransactionCodes',
+    'IMPORT_BOOK_TRANSACTION_CODES',
+    '/logistics/import-books/transaction-codes'
+);
+
+export const impbookCpcNumbers = new ItemType(
+    'impbookCpcNumbers',
+    'IMPORT_BOOK_CPC_NUMBERS',
+    '/logistics/import-books/cpc-numbers'
+);
+
+export const impbookDeliveryTerms = new ItemType(
+    'impbookDeliveryTerms',
+    'IMPORT_BOOK_DELIVERY_TERMS',
+    '/logistics/import-books/delivery-terms'
+);
+
+export const ports = new ItemType('ports', 'PORTS', '/logistics/import-books/ports');
+
+export const cartonTypes = new ItemType('cartonTypes', 'CARTON_TYPES', '/logistics/carton-types');
+
+export const validatePurchaseOrderBookInQtyResult = new ItemType(
+    'validatePurchaseOrderBookInQtyResult',
+    'VALIDATE_PURCHASE_ORDER_BOOKIN_QTY_RESULT',
+    '/logistics/purchase-orders/validate-qty'
+);
+
+export const req = new ItemType('req', 'REQ', '/logistics/requisitions');
+
+export const debitNote = new ItemType(
+    'debitNote',
+    'DEBIT_NOTE',
+    '/inventory/purchasing/debit-notes'
+);
+
+export const debitNotes = new ItemType(
+    'debitNotes',
+    'DEBIT_NOTES',
+    '/inventory/purchasing/debit-notes'
+);
+
+export const stockMoves = new ItemType(
+    'stockMoves',
+    'STOCK-MOVES',
+    '/inventory/stock-locators/stock-moves'
+);
+
+export const currencies = new ItemType('currencies', 'CURRENCIES', '/logistics/currencies');
+
+export const exchangeRates = new ItemType(
+    'exchangeRates',
+    'EXCHANGE_RATES',
+    '/logistics/import-books/exchange-rates'
+);
+
+export const validateStorageTypeResult = new ItemType(
+    'validateStorageTypeResult',
+    'VALIDATE_STORAGE_TYPE_RESULT',
+    '/logistics/goods-in/validate-storage-type'
+);
+
+export const consignmentPackingList = new ItemType(
+    'consignmentPackingList',
+    'CONSIGNMENT_PACKING_LIST',
+    '/logistics/consignments'
+);

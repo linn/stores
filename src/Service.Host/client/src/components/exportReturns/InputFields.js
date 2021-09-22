@@ -26,7 +26,6 @@ export default function InputFields({ exportReturn, handleFieldChange, calculate
                     propertyName="carrierRef"
                     onChange={handleFieldChange}
                     margin="dense"
-                    disabled={!!exportReturn.dateProcessed}
                 />
             </Grid>
             <Grid item xs={6}>

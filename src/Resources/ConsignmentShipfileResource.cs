@@ -1,7 +1,5 @@
 ﻿namespace Linn.Stores.Resources
 {
-    using System.Collections.Generic;
-
     public class ConsignmentShipfileResource
     {
         public int Id { get; set; }

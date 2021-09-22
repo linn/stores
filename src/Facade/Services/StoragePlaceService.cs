@@ -29,7 +29,10 @@
         public IResult<IEnumerable<StoragePlace>> GetStoragePlaces(string searchTerm)
         {
             return new SuccessResult<IEnumerable<StoragePlace>>(
-                this.storagePlaceRepository.FilterBy(s => s.Name.Contains(searchTerm.ToUpper())));
+                this.storagePlaceRepository
+                    .FilterBy(s => s.Name.Contains(searchTerm.ToUpper()))
+                    .ToList()
+                    .Take(50));
         }
 
         public void CreateAuditReqs(CreateAuditReqsResource resource)

@@ -1,34 +1,59 @@
 ﻿namespace Linn.Stores.Proxy
 {
     using System.IO;
+    using System.Net.Http;
+    using System.Text;
     using System.Threading.Tasks;
 
     using Linn.Stores.Domain.LinnApps;
 
-    using PuppeteerSharp;
-
     public class PdfService : IPdfService
     {
-        private readonly Browser browser;
+        private readonly string htmlToPdfConverterServiceUrl;
 
-        public PdfService(Browser browser)
+        public PdfService(string htmlToPdfConverterServiceUrl)
         {
-            this.browser = browser;
+            this.htmlToPdfConverterServiceUrl = htmlToPdfConverterServiceUrl;
         }
 
         public async Task<Stream> ConvertHtmlToPdf(string html, bool landscape)
         {
-            var page = await this.browser.NewPageAsync();
+            using (var client = new HttpClient())
+            {
+                using (var multiPartStream = new MultipartFormDataContent())
+                {
+                    var landscapeString = landscape ? "true" : "false";
+                    var bytes = Encoding.UTF8.GetBytes(html);
+                    
+                    multiPartStream.Add(
+                        new ByteArrayContent(bytes, 0, bytes.Length), 
+                        "files", 
+                        "index.html");
+                    
+                    multiPartStream.Add(new StringContent(landscapeString), "landscape");
+                    
+                    var request =
+                        new HttpRequestMessage(HttpMethod.Post, this.htmlToPdfConverterServiceUrl + "/convert/html")
+                            {
+                                Content = multiPartStream
+                            };
 
-            await page.SetContentAsync(html);
+                    var response = await client.SendAsync(
+                                       request, 
+                                       HttpCompletionOption.ResponseContentRead);
 
-            var pdfOptions = new PdfOptions { Landscape = landscape };
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new PdfServiceException(
+                            "Pdf generation failed in API call: " 
+                            + response.StatusCode + " - " 
+                            + response.ReasonPhrase);
+                    }
 
-            var pdfStream = page.PdfStreamAsync(pdfOptions).Result;
-
-            await page.CloseAsync();
-
-            return pdfStream;
+                    var res = await response.Content.ReadAsStreamAsync();
+                    return res;
+                }
+            }
         }
     }
 }

@@ -9,11 +9,15 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
+    using Linn.Stores.Domain.LinnApps.Consignments;
+    using Linn.Stores.Domain.LinnApps.Consignments.Models;
     using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
     using Linn.Stores.Domain.LinnApps.Exceptions;
+    using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Purchasing;
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Requisitions.Models;
     using Linn.Stores.Domain.LinnApps.StockLocators;
@@ -23,8 +27,8 @@
     using Linn.Stores.Domain.LinnApps.Tqms;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
-    using Linn.Stores.Facade;
     using Linn.Stores.Facade.ResourceBuilders;
+    using Linn.Stores.Facade.ResourceBuilders.Purchasing;
 
     public class ResponsesModule : Module
     {
@@ -116,10 +120,25 @@
             builder.RegisterType<ErrorResourceBuilder>().As<IResourceBuilder<Error>>();
             builder.RegisterType<ImportBookResourceBuilder>().As<IResourceBuilder<ImportBook>>();
             builder.RegisterType<ImportBooksResourceBuilder>().As<IResourceBuilder<IEnumerable<ImportBook>>>();
+            builder.RegisterType<ImportBookDeliveryTermResourceBuilder>().As<IResourceBuilder<ImportBookDeliveryTerm>>();
+            builder.RegisterType<ImportBookDeliveryTermsResourceBuilder>().As<IResourceBuilder<IEnumerable<ImportBookDeliveryTerm>>>();
+            builder.RegisterType<ImportBookExchangeRateResourceBuilder>().As<IResourceBuilder<ImportBookExchangeRate>>();
+            builder.RegisterType<ImportBookExchangeRatesResourceBuilder>().As<IResourceBuilder<IEnumerable<ImportBookExchangeRate>>>();
             builder.RegisterType<ImportBookInvoiceDetailResourceBuilder>()
                 .As<IResourceBuilder<ImportBookInvoiceDetail>>();
+            builder.RegisterType<ImportBookTransportCodeResourceBuilder>()
+                .As<IResourceBuilder<ImportBookTransportCode>>();
+            builder.RegisterType<ImportBookTransportCodesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<ImportBookTransportCode>>>();
+            builder.RegisterType<ImportBookTransactionCodeResourceBuilder>()
+                .As<IResourceBuilder<ImportBookTransactionCode>>();
+            builder.RegisterType<ImportBookTransactionCodesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<ImportBookTransactionCode>>>();
             builder.RegisterType<ImportBookOrderDetailResourceBuilder>().As<IResourceBuilder<ImportBookOrderDetail>>();
             builder.RegisterType<ImportBookPostEntryResourceBuilder>().As<IResourceBuilder<ImportBookPostEntry>>();
+            builder.RegisterType<ImportBookCpcNumberResourceBuilder>().As<IResourceBuilder<ImportBookCpcNumber>>();
+            builder.RegisterType<ImportBookCpcNumbersResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<ImportBookCpcNumber>>>();
             builder.RegisterType<TqmsCategoryResourceBuilder>()
                 .As<IResourceBuilder<TqmsCategory>>();
             builder.RegisterType<TqmsCategoriesResourceBuilder>()
@@ -177,6 +196,40 @@
             builder.RegisterType<ConsignmentShipfileResourceBuilder>().As<IResourceBuilder<ConsignmentShipfile>>();
             builder.RegisterType<ConsignmentShipfilesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<ConsignmentShipfile>>>();
+            builder.RegisterType<ConsignmentResourceBuilder>().As<IResourceBuilder<Consignment>>();
+            builder.RegisterType<ConsignmentsResourceBuilder>().As<IResourceBuilder<IEnumerable<Consignment>>>();
+            builder.RegisterType<CurrencyResourceBuilder>().As<IResourceBuilder<Currency>>();
+            builder.RegisterType<CurrenciesResourceBuilder>().As<IResourceBuilder<IEnumerable<Currency>>>();
+            builder.RegisterType<HubResourceBuilder>().As<IResourceBuilder<Hub>>();
+            builder.RegisterType<HubsResourceBuilder>().As<IResourceBuilder<IEnumerable<Hub>>>();
+            builder.RegisterType<CarrierResourceBuilder>().As<IResourceBuilder<Carrier>>();
+            builder.RegisterType<CarriersResourceBuilder>().As<IResourceBuilder<IEnumerable<Carrier>>>();
+            builder.RegisterType<ShippingTermResourceBuilder>().As<IResourceBuilder<ShippingTerm>>();
+            builder.RegisterType<ShippingTermsResourceBuilder>().As<IResourceBuilder<IEnumerable<ShippingTerm>>>();
+            builder.RegisterType<LoanDetailResourceBuilder>().As<IResourceBuilder<LoanDetail>>();
+            builder.RegisterType<LoanDetailsResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<LoanDetail>>>();
+            builder.RegisterType<SalesArticleResourceBuilder>().As<IResourceBuilder<SalesArticle>>();
+            builder.RegisterType<SalesArticlesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<SalesArticle>>>();
+            builder.RegisterType<ProcessResultResourceBuilder>().As<IResourceBuilder<ProcessResult>>();
+            builder.RegisterType<ValidatePurchaseOrderResultResourceBuilder>()
+                .As<IResourceBuilder<ValidatePurchaseOrderResult>>();
+            builder.RegisterType<CartonTypeResourceBuilder>().As<IResourceBuilder<CartonType>>();
+            builder.RegisterType<CartonTypesResourceBuilder>().As<IResourceBuilder<IEnumerable<CartonType>>>();
+            builder.RegisterType<PortResourceBuilder>().As<IResourceBuilder<Port>>();
+            builder.RegisterType<PortsResourceBuilder>().As<IResourceBuilder<IEnumerable<Port>>>();
+            builder.RegisterType<BookInResultResourceBuilder>().As<IResourceBuilder<BookInResult>>();
+            builder.RegisterType<PlCreditDebitNoteResourceBuilder>()
+                .As<IResourceBuilder<PlCreditDebitNote>>();
+            builder.RegisterType<PlCreditDebitNotesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<PlCreditDebitNote>>>();
+            builder.RegisterType<StockMoveResourceBuilder>().As<IResourceBuilder<StockMove>>();
+            builder.RegisterType<StockMovesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<StockMove>>>();
+            builder.RegisterType<ValidateStorageTypeResultResourceBuilder>()
+                .As<IResourceBuilder<ValidateStorageTypeResult>>();
+            builder.RegisterType<PackingListResourceBuilder>().As<IResourceBuilder<PackingList>>();
         }
     }
 }

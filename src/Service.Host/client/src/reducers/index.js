@@ -85,6 +85,42 @@ import parcels from './parcels/parcels';
 import parcel from './parcels/parcel';
 import suppliersApprovedCarrier from './suppliersApprovedCarrier';
 import shipfilesSendEmails from './shipfilesSendEmails';
+import consignment from './consignment';
+import consignments from './consignments';
+import hub from './hub';
+import hubs from './hubs';
+import carrier from './carrier';
+import carriers from './carriers';
+import shippingTerm from './shippingTerm';
+import shippingTerms from './shippingTerms';
+import demLocations from './demLocations';
+import loanDetails from './loanDetails';
+import validatePurchaseOrderResult from './validatePurchaseOrderResult';
+import salesArticles from './salesArticles';
+import doBookIn from './doBookIn';
+import importBook from './importBooks/importBook';
+import importBooks from './importBooks/importBooks';
+import impbookExchangeRates from './importBooks/impbookExchangeRates';
+import impbookTransactionCodes from './importBooks/impbookTransactionCodes';
+import impbookTransportCodes from './importBooks/impbookTransportCodes';
+import impbookCpcNumbers from './importBooks/impbookCpcNumbers';
+import impbookIprReport from './impbookIprReport';
+import impbookEuReport from './impbookEuReport';
+import impbookDeliveryTerms from './importBooks/impbookDeliveryTerms';
+import ports from './importBooks/ports';
+import cartonTypes from './cartonTypes';
+import validatePurchaseOrderBookInQtyResult from './validatePurchaseOrderBookInQtyResult';
+import req from './req';
+import debitNote from './purchasing/debitNote';
+import debitNotes from './purchasing/debitNotes';
+import stockMoves from './stockLocators/stockMoves';
+import printConsignmentLabel from './printConsignmentLabel';
+import currencies from './currencies';
+import exchangeRates from './exchangeRates';
+import printGoodsInLabels from './printGoodsInLabels';
+import validateStorageTypeResult from './validateStorageTypeResult';
+import printConsignmentDocuments from './printConsignmentDocuments';
+import consignmentPackingList from './consignmentPackingList';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -99,24 +135,48 @@ const rootReducer = history =>
         auditLocation,
         auditLocations,
         availableStock,
+        carrier,
+        carriers,
+        cartonTypes,
+        consignment,
+        consignmentPackingList,
+        consignments,
         consignmentShipfile,
         consignmentShipfiles,
         countries,
         createAuditReqs,
+        currencies,
+        debitNote,
+        debitNotes,
+        demLocations,
         departments,
         decrementRules,
         deptStockParts,
         despatchLocations,
         despatchPalletQueueReport,
         despatchPickingSummaryReport,
+        doBookIn,
         doStockMove,
         doWandItem,
         employees,
+        exchangeRates,
         exportReturn,
         exportRsns,
         finishAllocation,
+        hub,
+        hubs,
+        impbookCpcNumbers,
+        impbookDeliveryTerms,
+        impbookExchangeRates,
+        impbookEuReport,
+        impbookIprReport,
+        impbookTransactionCodes,
+        impbookTransportCodes,
+        importBook,
+        importBooks,
         inspectedStates,
         interCompanyInvoices,
+        loanDetails,
         makeIntercompanyInvoices,
         manufacturers,
         mechPartSource,
@@ -134,13 +194,21 @@ const rootReducer = history =>
         partStorageTypes,
         partTemplates,
         pickItemsAllocation,
+        ports,
+        printConsignmentDocuments,
+        printConsignmentLabel,
+        printGoodsInLabels,
         productAnalysisCodes,
+        req,
         reqMoves,
         rootProducts,
         salesAccounts,
+        salesArticles,
         salesOutlets,
         sernosSequences,
         shipfilesSendEmails,
+        shippingTerm,
+        shippingTerms,
         sosAllocDetails,
         sosAllocHeads,
         stockLocator,
@@ -148,6 +216,7 @@ const rootReducer = history =>
         stockLocatorLocations,
         stockLocatorPrices,
         stockLocators,
+        stockMoves,
         stockPools,
         stockQuantities,
         storageLocations,
@@ -165,6 +234,9 @@ const rootReducer = history =>
         unallocateConsignmentLine,
         unitsOfMeasure,
         unpickItemsAllocation,
+        validatePurchaseOrderBookInQtyResult,
+        validatePurchaseOrderResult,
+        validateStorageTypeResult,
         wandConsignments,
         wandItems,
         workstationTopUpStatus,

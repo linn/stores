@@ -42,10 +42,19 @@ import StockLocatorPricesView from '../containers/stockLocatorUtility/StockLocat
 import TqmsSummaryByCategoryReportOptions from '../containers/reports/TqmsSummaryByCategoryReportOptions';
 import TqmsSummaryByCategoryReport from '../containers/reports/TqmsSummaryByCategoryReport';
 import ConsignmentShipfiles from '../containers/ConsignmentShipfiles';
+import Consignment from '../containers/consignments/Consignment';
+import GoodsInUtility from '../containers/goodsIn/GoodsInUtility';
+import ImportBook from '../containers/importBooks/ImportBook';
+import ImportBooks from '../containers/importBooks/ImportBooks';
+import ImportBooksIprReportOptions from '../containers/reports/ImpbookIprReportOptions';
+import ImportBooksIprReport from '../containers/reports/ImpbookIprReport';
+import ImportBooksEuReportOptions from '../containers/reports/ImpbookEuReportOptions';
+import ImportBooksEuReport from '../containers/reports/ImpbookEuReport';
+import DebitNotes from '../containers/purchasing/DebitNotes';
 
 const Root = ({ store }) => (
     <div>
-        <div style={{ paddingTop: '40px' }}>
+        <div className="padding-top-when-not-printing">
             <Provider store={store}>
                 <OidcProvider store={store} userManager={userManager}>
                     <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -226,6 +235,52 @@ const Root = ({ store }) => (
                                         exact
                                         path="/logistics/shipfiles"
                                         component={ConsignmentShipfiles}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/consignments"
+                                        component={Consignment}
+                                    />
+
+                                    <Route
+                                        exact
+                                        path="/logistics/goods-in-utility"
+                                        component={GoodsInUtility}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/import-books/ipr"
+                                        component={ImportBooksIprReportOptions}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/import-books/ipr/report"
+                                        component={ImportBooksIprReport}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/import-books/eu"
+                                        component={ImportBooksEuReportOptions}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/import-books/eu/report"
+                                        component={ImportBooksEuReport}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/import-books/:id"
+                                        component={ImportBook}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/import-books"
+                                        component={ImportBooks}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/purchasing/debit-notes"
+                                        component={DebitNotes}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>

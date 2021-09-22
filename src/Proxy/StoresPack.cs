@@ -137,7 +137,7 @@
                             CommandType = CommandType.StoredProcedure
                         };
 
-                var result = new OracleParameter("G_ERR", OracleDbType.Int32)
+                var result = new OracleParameter("G_ERR", OracleDbType.Varchar2)
                                  {
                                      Direction = ParameterDirection.ReturnValue, Size = 50
                                  };
@@ -370,6 +370,101 @@
                 Message = messageParameter.Value.ToString(),
                 Success = int.Parse(successParameter.Value.ToString()) == 1
             };
+        }
+
+        public int GetQuantityBookedIn(int purchaseOrderNumber, int line)
+        {
+            using (var connection = this.databaseService.GetConnection())
+            {
+                connection.Open();
+                var cmd = new OracleCommand("stores_oo.qty_booked_in", connection)
+                              {
+                                  CommandType = CommandType.StoredProcedure
+                              };
+
+                var arg1 = new OracleParameter("p_order_number", OracleDbType.Int32)
+                               {
+                                   Direction = ParameterDirection.Input,
+                                   Value = purchaseOrderNumber
+                               };
+                cmd.Parameters.Add(arg1);
+
+                var arg2 = new OracleParameter("p_order_line", OracleDbType.Int32)
+                               {
+                                   Direction = ParameterDirection.Input,
+                                   Value = line
+                               };
+                cmd.Parameters.Add(arg2);
+
+                var result = new OracleParameter("result", OracleDbType.Int32)
+                                 {
+                                     Direction = ParameterDirection.ReturnValue,
+                                 };
+                cmd.Parameters.Add(result);
+
+                cmd.ExecuteNonQuery();
+                connection.Close();
+                int.TryParse(result.Value.ToString(), out var res);
+                return res;
+            }
+        }
+
+        public bool ValidOrderQty(int orderNumber, int orderLine, int qty, out int qtyRec, out int ourQty)
+        {
+            using (var connection = this.databaseService.GetConnection())
+            {
+                connection.Open();
+                var cmd = new OracleCommand("stores_oo.valid_order_qty_wrapper", connection)
+                              {
+                                  CommandType = CommandType.StoredProcedure
+                              };
+
+                var result = new OracleParameter("result", OracleDbType.Int32)
+                                 {
+                                     Direction = ParameterDirection.ReturnValue,
+                                 };
+                cmd.Parameters.Add(result);
+
+                var arg1 = new OracleParameter("p_order_number", OracleDbType.Int32)
+                               {
+                                   Direction = ParameterDirection.Input,
+                                   Value = orderNumber
+                               };
+                cmd.Parameters.Add(arg1);
+
+                var arg2 = new OracleParameter("p_order_line", OracleDbType.Int32)
+                               {
+                                   Direction = ParameterDirection.Input,
+                                   Value = orderLine
+                               };
+                cmd.Parameters.Add(arg2);
+
+                var arg3 = new OracleParameter("p_qty", OracleDbType.Int32)
+                               {
+                                   Direction = ParameterDirection.Input,
+                                   Value = qty
+                               };
+                cmd.Parameters.Add(arg3);
+
+                var arg4 = new OracleParameter("p_qty_rec", OracleDbType.Int32)
+                               {
+                                   Direction = ParameterDirection.InputOutput,
+                               };
+                cmd.Parameters.Add(arg4);
+
+                var arg5 = new OracleParameter("p_our_rec", OracleDbType.Int32)
+                               {
+                                   Direction = ParameterDirection.InputOutput,
+                               };
+                cmd.Parameters.Add(arg5);
+
+                cmd.ExecuteNonQuery();
+                connection.Close();
+
+                int.TryParse(arg4.Value.ToString(), out qtyRec);
+                int.TryParse(arg5.Value.ToString(), out ourQty);
+                return int.Parse(result.Value.ToString()) == 0;
+            }
         }
     }
 }

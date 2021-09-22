@@ -3,7 +3,9 @@
     using System;
     using System.Collections.Generic;
 
+    using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps.Purchasing;
 
     public class Supplier
     {
@@ -22,5 +24,9 @@
         public IEnumerable<MechPartPurchasingQuote> PurchasingQuotesSupplierOn { get; set; }
 
         public string ApprovedCarrier { get; set; }
+
+        public IEnumerable<PlCreditDebitNote> PlCreditDebitNotes { get; set; }
+
+        public IEnumerable<PurchaseOrder> PurchaseOrders { get; set; }
     }
 }

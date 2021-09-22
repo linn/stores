@@ -12,7 +12,8 @@ import employeesActions from '../../actions/employeesActions';
 import { getPrivileges, getUserNumber } from '../../selectors/userSelectors';
 import * as itemTypes from '../../itemTypes';
 
-const creating = match => match?.url?.endsWith('/create');
+const creating = match =>
+    match?.url?.endsWith('/create') || match?.url?.endsWith('/goods-in-utility');
 
 const mapStateToProps = (state, { match }) => ({
     item: creating(match) ? null : parcelSelectors.getItem(state),

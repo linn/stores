@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { DataGrid } from '@material-ui/data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import { useReactToPrint } from 'react-to-print';
 import Grid from '@material-ui/core/Grid';
 import { Title, ErrorCard, Loading } from '@linn-it/linn-form-components-library';
@@ -87,7 +87,7 @@ export default function Tpk({
         { field: 'locationCode', headerName: 'Location', width: 140, hide: true }
     ];
     const handleSelectRow = selected => {
-        setSelectedRows(rows.filter(r => selected.rowIds.includes(r.id)));
+        setSelectedRows(rows.filter(r => selected.includes(r.id)));
     };
     if (whatToWandReport) {
         return (
@@ -137,11 +137,12 @@ export default function Tpk({
                             <div style={{ height: 500, width: '100%' }}>
                                 <DataGrid
                                     rows={rows}
+                                    columnBuffer={9}
                                     columns={columns}
                                     density="standard"
                                     rowHeight={34}
                                     checkboxSelection
-                                    onSelectionChange={handleSelectRow}
+                                    onSelectionModelChange={handleSelectRow}
                                     loading={transferableStockLoading}
                                     hideFooter
                                 />

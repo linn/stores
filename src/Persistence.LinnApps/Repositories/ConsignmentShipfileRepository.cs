@@ -5,7 +5,6 @@
     using System.Linq.Expressions;
 
     using Linn.Common.Persistence;
-    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
 
     using Microsoft.EntityFrameworkCore;

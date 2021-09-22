@@ -23,7 +23,7 @@
 
         public IQueryable<ImportBookTransportCode> FindAll()
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.ImportBookTransportCodes;
         }
 
         public void Add(ImportBookTransportCode entity)

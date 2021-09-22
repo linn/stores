@@ -6,7 +6,7 @@ import Dialog from '@material-ui/core/Dialog';
 import TextField from '@material-ui/core/TextField';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import { DataGrid } from '@material-ui/data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -18,7 +18,8 @@ import {
     Dropdown,
     Loading,
     InputField,
-    SnackbarMessage
+    SnackbarMessage,
+    LinkButton
 } from '@linn-it/linn-form-components-library';
 
 import Page from '../containers/Page';
@@ -54,6 +55,7 @@ function Wand({
     const [printLabels, setPrintLabels] = useState('Y');
 
     const wandStringInput = useRef(null);
+    const manualSelectInput = useRef(null);
 
     useEffect(() => {
         setWandString(null);
@@ -90,17 +92,6 @@ function Wand({
             wandResult.wandLog.id &&
             lastWandLogId !== wandResult.wandLog.id
         ) {
-            // data that will be needed to print address label
-            // const consignmentDetails = wandConsignments.find(
-            //     a => a.consignmentId === consignmentId
-            // );
-            // const wandedItem = items.find(
-            //     a =>
-            //         a.orderNumber === wandResult.wandLog.orderNumber &&
-            //         a.orderLine === wandResult.wandLog.orderLine
-            // );
-
-            // we now have enough information to optionally print a label here
             setLastWandLogId(wandResult.wandLog.id);
         }
     }, [wandResult, consignmentId, wandConsignments, lastWandLogId, items]);
@@ -132,10 +123,9 @@ function Wand({
 
     const classes = useStyles();
 
-    const handleConsignmentChange = newValue => {
-        setConsignmentId(newValue.target.value ? parseInt(newValue.target.value, 10) : null);
-        if (newValue.target.value) {
-            getItems(newValue.target.value);
+    const loadConsignmentItems = id => {
+        if (id) {
+            getItems(id);
         } else {
             clearItems();
         }
@@ -145,8 +135,13 @@ function Wand({
         wandStringInput.current.focus();
     };
 
-    const handleSelectRow = row => {
-        setSelectedRow(items[row.rowIds[0]]);
+    const handleConsignmentChange = newValue => {
+        setConsignmentId(newValue.target.value ? parseInt(newValue.target.value, 10) : null);
+        loadConsignmentItems(newValue.target.value);
+    };
+
+    const handleSelectRow = rows => {
+        setSelectedRow(items[rows[0]]);
     };
 
     const handleArticleNumberDoubleClick = wandStringSuggestion => {
@@ -187,6 +182,10 @@ function Wand({
         setWandString(newValue);
     };
 
+    const handleManualSelectChange = (_propertyName, newValue) => {
+        setConsignmentId(newValue);
+    };
+
     const handleWand = () => {
         if (wandString && consignmentId) {
             doWandItem({ consignmentId, userNumber, wandAction, wandString, printLabels });
@@ -198,6 +197,12 @@ function Wand({
     const handleOnKeyPress = data => {
         if (data.keyCode === 13 || data.keyCode === 9) {
             handleWand();
+        }
+    };
+
+    const handleManualSelectOnKeyPress = data => {
+        if (data.keyCode === 13 || data.keyCode === 9) {
+            loadConsignmentItems(consignmentId);
         }
     };
 
@@ -225,6 +230,18 @@ function Wand({
         return classes.noMessage;
     };
 
+    const getQtyClass = (functionCode, allWanded) => {
+        if (functionCode === 'INVOICE' && allWanded) {
+            return classes.ok;
+        }
+
+        if (functionCode === 'ALLOC') {
+            return classes.notOk;
+        }
+
+        return classes.noMessage;
+    };
+
     const columns = [
         {
             field: 'partNumber',
@@ -246,7 +263,7 @@ function Wand({
             headerName: 'Scanned',
             width: 120,
             cellClassName: params => {
-                return params.row.allWanded ? classes.ok : classes.noMessage;
+                return getQtyClass(params.row.functionCode, params.row.allWanded);
             }
         },
         { field: 'partDescription', headerName: 'Description', width: 230 },
@@ -295,6 +312,10 @@ function Wand({
         { field: 'requisitionLine', headerName: 'Req Line', width: 110, hide: true }
     ];
     const focusProp = { inputRef: wandStringInput, onKeyDown: handleOnKeyPress };
+    const manualSelectProp = {
+        inputRef: manualSelectInput,
+        onKeyDown: handleManualSelectOnKeyPress
+    };
 
     const getResultClass = style => {
         switch (style) {
@@ -376,7 +397,7 @@ function Wand({
                 <Loading />
             ) : (
                 <Grid container spacing={3}>
-                    <Grid item xs={10}>
+                    <Grid item xs={8}>
                         <InputLabel
                             classes={{ root: classes.label, asterisk: classes.labelAsterisk }}
                         >
@@ -414,6 +435,15 @@ function Wand({
                         </TextField>
                     </Grid>
                     <Grid item xs={2}>
+                        <InputField
+                            value={consignmentId}
+                            label="Manual Select"
+                            propertyName="manualSelect"
+                            onChange={handleManualSelectChange}
+                            textFieldProps={manualSelectProp}
+                        />
+                    </Grid>
+                    <Grid item xs={2}>
                         <Dropdown
                             label="Labels"
                             propertyName="printLabels"
@@ -438,10 +468,11 @@ function Wand({
                             onChange={handleWandActionChange}
                         />
                     </Grid>
-                    <Grid item xs={8}>
+                    <Grid item xs={6}>
                         <InputField
                             fullWidth
                             autoFocus
+                            propertyName="wandString"
                             value={wandString}
                             label="Wand String"
                             onChange={handleOnWandChange}
@@ -457,6 +488,16 @@ function Wand({
                         >
                             {wandAction === 'W' ? 'Wand' : 'Unwand'}
                         </Button>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <LinkButton
+                            style={{ marginTop: '22px' }}
+                            className="hide-when-printing"
+                            tooltip="Go to consignment"
+                            disabled={!consignmentId}
+                            text="Consignment"
+                            to={`/logistics/consignments?consignmentId=${consignmentId}`}
+                        />
                     </Grid>
                     <Grid item xs={12}>
                         {doWandItemWorking || unallocateConsignmentLineWorking ? (
@@ -484,7 +525,7 @@ function Wand({
                                 rowHeight={34}
                                 loading={itemsLoading}
                                 hideFooter
-                                onSelectionChange={handleSelectRow}
+                                onSelectionModelChange={handleSelectRow}
                             />
                         </div>
                     </Grid>

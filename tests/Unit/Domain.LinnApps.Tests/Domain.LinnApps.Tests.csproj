@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AssemblyName>Linn.Stores.Domain.LinnApps.Tests</AssemblyName>
     <RootNamespace>Linn.Stores.Domain.LinnApps.Tests</RootNamespace>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

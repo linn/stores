@@ -3,49 +3,49 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-
     using FluentAssertions;
 
+    using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
-
     using NSubstitute;
-
     using NUnit.Framework;
 
     public class WhenSendingEmailToAnIndividualAndContactDetailsMissing : ContextBase
     {
-        private ConsignmentShipfile toSend;
+        private IEnumerable<ConsignmentShipfile> toSend;
 
-        private ConsignmentShipfile result;
+        private IEnumerable<ConsignmentShipfile> result;
 
-        private ConsignmentShipfile shipfileData; 
+        private ConsignmentShipfile shipfileData;
 
         [SetUp]
         public void SetUp()
         {
             this.shipfileData = new ConsignmentShipfile
-                                {
-                                    Id = 1,
-                                    Consignment = new Consignment
-                                                      {
-                                                          SalesAccount =
+            {
+                Id = 1,
+                Consignment = new Consignment
+                {
+                    SalesAccount =
                                                               new SalesAccount
-                                                                  {
-                                                                      OrgId = null,
-                                                                      ContactDetails = new Contact()
-                                                                  }
-                                                      }
-                                };
-            this.toSend = new ConsignmentShipfile
+                                                              {
+                                                                  OrgId = null,
+                                                                  ContactDetails = new Contact()
+                                                              }
+                }
+            };
+            this.toSend = new List<ConsignmentShipfile>
+                              {
+                                  new ConsignmentShipfile
                                       {
                                           Id = 1,
-                                      };
+                                      }
+                              };
 
             this.ShipfileRepository.FindById(1).Returns(this.shipfileData);
 
             this.result = this.Sut.SendEmails(this.toSend);
         }
-
         [Test]
         public void ShouldNotSendEmail()
         {
@@ -58,13 +58,13 @@
                 Arg.Any<string>(),
                 Arg.Any<string>(),
                 Arg.Any<string>(),
-                Arg.Any<Stream>());
+                Arg.Any<Stream>(),
+                Arg.Any<string>());
         }
-
         [Test]
         public void ShouldUpdateStatusMessage()
         {
-            this.result.Message.Should().Be(ShipfileStatusMessages.NoContactDetails);
+            this.result.First().Message.Should().Be(ShipfileStatusMessages.NoContactDetails);
         }
     }
 }

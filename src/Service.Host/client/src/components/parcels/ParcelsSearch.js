@@ -242,7 +242,7 @@ function ParcelsSearch({
 
     return (
         <Page>
-            <Grid spacing={3} container justify="center">
+            <Grid spacing={3} container justifyContent="center">
                 <Grid item xs={11} />
                 <Grid item xs={1}>
                     {(allowedToCreate || true) && (

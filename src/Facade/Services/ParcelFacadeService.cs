@@ -11,8 +11,6 @@
 
     public class ParcelFacadeService : FacadeFilterService<Parcel, int, ParcelResource, ParcelResource, ParcelSearchRequestResource>
     {
-        private readonly IRepository<Parcel, int> parcelRepository;
-
         private readonly IDatabaseService databaseService;
 
         public ParcelFacadeService(
@@ -21,7 +19,6 @@
             IDatabaseService databaseService)
             : base(parcelRepository, transactionManager)
         {
-            this.parcelRepository = parcelRepository;
             this.databaseService = databaseService;
         }
 
@@ -40,8 +37,7 @@
                 PalletCount = resource.PalletCount,
                 SupplierId = resource.SupplierId,
                 SupplierInvoiceNo = resource.SupplierInvoiceNo,
-                Weight = resource.Weight,
-                ImportBookNo = resource.ImportBookNo
+                Weight = resource.Weight
             };
 
             return parcel;
@@ -65,7 +61,6 @@
             entity.DateCancelled = string.IsNullOrWhiteSpace(updateResource.DateCancelled)
                                        ? (DateTime?)null
                                        : DateTime.Parse(updateResource.DateCancelled);
-            entity.ImportBookNo = updateResource.ImportBookNo;
         }
 
         protected override Expression<Func<Parcel, bool>> SearchExpression(string searchTerms)

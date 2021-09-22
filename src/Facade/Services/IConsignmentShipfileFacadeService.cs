@@ -10,7 +10,7 @@
     {
         IResult<IEnumerable<ConsignmentShipfile>> GetShipfiles();
 
-        IResult<ConsignmentShipfile> SendEmails(ConsignmentShipfileSendEmailsRequestResource toSend);
+        IResult<IEnumerable<ConsignmentShipfile>> SendEmails(ConsignmentShipfilesSendEmailsRequestResource toSend);
 
         IResult<ConsignmentShipfile> DeleteShipfile(int id);
     }

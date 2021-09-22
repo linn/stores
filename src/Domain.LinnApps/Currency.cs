@@ -4,10 +4,10 @@
 
     public class Currency
     {
-        public string CurrencyCode { get; set; }
+        public string Code { get; set; }
 
-        public string CurrencyName { get; set; }
-
-        public List<InterCompanyInvoice> InterCompanies { get; set; }
+        public string Name { get; set; }
+		
+        public List<InterCompanyInvoice> InterCompanies { get; set; }		
     }
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DataGrid } from '@material-ui/data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import Grid from '@material-ui/core/Grid';
 import { Title, ErrorCard, Loading, InputField } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
@@ -10,7 +10,7 @@ export default function ConsignmentShipfiles({
     consignmentShipfiles,
     consignmentShipfilesLoading,
     sendEmails,
-    processedShipfile,
+    processedShipfiles,
     itemError,
     clearErrors,
     deleteShipfile,
@@ -30,25 +30,25 @@ export default function ConsignmentShipfiles({
     }, [consignmentShipfiles]);
 
     useEffect(() => {
-        if (processedShipfile) {
-            setRows(r =>
-                r.map(row =>
-                    row.id === processedShipfile.id ? { ...processedShipfile, id: row.id } : row
+        if (processedShipfiles?.length) {
+            processedShipfiles.forEach(processed =>
+                setRows(r =>
+                    r.map(row => (row.id === processed.id ? { ...processed, id: row.id } : row))
                 )
             );
         }
-    }, [processedShipfile]);
+    }, [processedShipfiles]);
 
     const columns = [
         { field: 'id', headerName: 'Id', width: 0, hide: true },
         { field: 'consignmentId', headerName: 'Consignment', width: 140 },
-        { field: 'dateClosed', headerName: 'DispatchedOn', width: 100 },
-        { field: 'customerName', headerName: 'Customer', width: 150 },
-        { field: 'invoiceNumbers', headerName: 'Invoices', width: 400 },
+        { field: 'dateClosed', headerName: 'DispatchedOn', width: 200 },
+        { field: 'customerName', headerName: 'Customer', width: 300 },
+        { field: 'invoiceNumbers', headerName: 'Invoices', width: 300 },
         { field: 'status', headerName: 'Status', width: 200 }
     ];
     const handleSelectRow = selected => {
-        setSelectedRows(rows.filter(r => selected.rowIds.includes(r.id.toString())));
+        setSelectedRows(rows.filter(r => selected.includes(r.id)));
     };
     return (
         <Page>
@@ -75,6 +75,7 @@ export default function ConsignmentShipfiles({
                             <Button
                                 style={{ marginTop: '22px' }}
                                 variant="contained"
+                                disabled={selectedRows?.length < 1}
                                 onClick={() => {
                                     clearErrors();
                                     selectedRows.forEach(r => {
@@ -83,7 +84,10 @@ export default function ConsignmentShipfiles({
                                                 s.id === r.id ? { ...r, status: 'Processing' } : s
                                             )
                                         );
-                                        sendEmails({ shipfile: r });
+                                    });
+                                    sendEmails({
+                                        shipfiles: selectedRows,
+                                        test: false
                                     });
                                 }}
                             >
@@ -95,6 +99,7 @@ export default function ConsignmentShipfiles({
                                 style={{ marginTop: '22px' }}
                                 variant="contained"
                                 color="secondary"
+                                disabled={selectedRows?.length < 1}
                                 onClick={() => {
                                     clearErrors();
                                     selectedRows.forEach(r => deleteShipfile(r.id, null));
@@ -112,8 +117,9 @@ export default function ConsignmentShipfiles({
                                     density="standard"
                                     rowHeight={34}
                                     checkboxSelection
-                                    onSelectionChange={handleSelectRow}
+                                    onSelectionModelChange={handleSelectRow}
                                     loading={consignmentShipfilesLoading}
+                                    columnBuffer={6}
                                     hideFooter
                                 />
                             </div>
@@ -139,7 +145,11 @@ export default function ConsignmentShipfiles({
                                                 s.id === r.id ? { ...r, status: 'Processing' } : s
                                             )
                                         );
-                                        sendEmails({ shipfile: r, test: true, testEmailAddress });
+                                    });
+                                    sendEmails({
+                                        shipfiles: selectedRows,
+                                        test: true,
+                                        testEmailAddress
                                     });
                                 }}
                             >
@@ -155,7 +165,7 @@ export default function ConsignmentShipfiles({
 
 ConsignmentShipfiles.propTypes = {
     consignmentShipfiles: PropTypes.arrayOf(PropTypes.shape({})),
-    processedShipfile: PropTypes.shape({ id: PropTypes.number }),
+    processedShipfiles: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.number })),
     consignmentShipfilesLoading: PropTypes.bool,
     sendEmails: PropTypes.func.isRequired,
     deleteShipfile: PropTypes.func.isRequired,
@@ -170,8 +180,8 @@ ConsignmentShipfiles.propTypes = {
 
 ConsignmentShipfiles.defaultProps = {
     consignmentShipfiles: [],
-    processedShipfile: null,
-    consignmentShipfilesLoading: true,
+    processedShipfiles: null,
+    consignmentShipfilesLoading: false,
     itemError: null,
     whatToWandReport: null,
     deleteLoading: false

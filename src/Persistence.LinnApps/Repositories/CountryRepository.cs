@@ -46,7 +46,7 @@
 
         public IQueryable<Country> FilterBy(Expression<Func<Country, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.Countries.Where(expression);
         }
     }
 }

@@ -18,6 +18,13 @@
 
         public IResult<IEnumerable<StockQuantities>> GetStockQuantities(string partNumber)
         {
+            if (!partNumber.Contains("*"))
+            {
+                var res = this.repository
+                    .FilterBy(x => x.PartNumber == partNumber.ToUpper());
+                return new SuccessResult<IEnumerable<StockQuantities>>(res);
+            }
+
             var partNumberPattern = Regex.Escape(partNumber.Trim(' ')).Replace("\\*", ".*?");
             var r = new Regex(partNumberPattern, RegexOptions.IgnoreCase);
 

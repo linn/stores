@@ -2,75 +2,88 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+
     using Linn.Common.Facade;
     using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
-    using Linn.Stores.Resources.Parts;
+    using Linn.Stores.Resources.ImportBooks;
 
     public class ImportBookResourceBuilder : IResourceBuilder<ImportBook>
     {
+        private readonly ImportBookPostEntriesResourceBuilder postEntriesResourceBuilder =
+            new ImportBookPostEntriesResourceBuilder();
+
+        private readonly ImportBookOrderDetailsResourceBuilder orderDetailsResourceBuilder =
+            new ImportBookOrderDetailsResourceBuilder();
+
+        private readonly ImportBookInvoiceDetailsResourceBuilder invoiceDetailsResourceBuilder =
+            new ImportBookInvoiceDetailsResourceBuilder();
+
         public ImportBookResource Build(ImportBook model)
         {
             return new ImportBookResource
-            {
-                Id = model.Id,
-                DateCreated = model.DateCreated.ToString("o"),
-                ParcelNumber = model.ParcelNumber,
-                SupplierId = model.SupplierId,
-                ForeignCurrency = model.ForeignCurrency,
-                Currency = model.Currency,
-                CarrierId = model.CarrierId,
-                OldArrivalPort = model.OldArrivalPort,
-                FlightNumber = model.FlightNumber,
-                TransportId = model.TransportId,
-                TransportBillNumber = model.TransportBillNumber,
-                TransactionId = model.TransactionId,
-                DeliveryTermCode = model.DeliveryTermCode,
-                ArrivalPort = model.ArrivalPort,
-                LineVatTotal = model.LineVatTotal,
-                Hwb = model.Hwb,
-                SupplierCostCurrency = model.SupplierCostCurrency,
-                TransNature = model.TransNature,
-                ArrivalDate = model.ArrivalDate?.ToString("o"),
-                FreightCharges = model.FreightCharges,
-                HandlingCharge = model.HandlingCharge,
-                ClearanceCharge = model.ClearanceCharge,
-                Cartage = model.Cartage,
-                Duty = model.Duty,
-                Vat = model.Vat,
-                Misc = model.Misc,
-                CarriersInvTotal = model.CarriersInvTotal,
-                CarriersVatTotal = model.CarriersVatTotal,
-                TotalImportValue = model.TotalImportValue,
-                Pieces = model.Pieces,
-                Weight = model.Weight,
-                CustomsEntryCode = model.CustomsEntryCode,
-                CustomsEntryCodeDate = model.CustomsEntryCodeDate?.ToString("o"),
-                LinnDuty = model.LinnDuty,
-                LinnVat = model.LinnVat,
-                IprCpcNumber = model.IprCpcNumber,
-                EecgNumber = model.EecgNumber,
-                DateCancelled = model.DateCancelled?.ToString("o"),
-                CancelledBy = model.CancelledBy,
-                CancelledReason = model.CancelledReason,
-                CarrierInvNumber = model.CarrierInvNumber,
-                CarrierInvDate = model.CarrierInvDate?.ToString("o"),
-                CountryOfOrigin = model.CountryOfOrigin,
-                FcName = model.FcName,
-                VaxRef = model.VaxRef,
-                Storage = model.Storage,
-                NumCartons = model.NumCartons,
-                NumPallets = model.NumPallets,
-                Comments = model.Comments,
-                ExchangeRate = model.ExchangeRate,
-                ExchangeCurrency = model.ExchangeCurrency,
-                BaseCurrency = model.BaseCurrency,
-                PeriodNumber = model.PeriodNumber,
-                CreatedBy = model.CreatedBy,
-                PortCode = model.PortCode,
-                CustomsEntryCodePrefix = model.CustomsEntryCodePrefix,
-                Links = this.BuildLinks(model).ToArray()
-            };
+                       {
+                           Id = model.Id,
+                           DateCreated = model.DateCreated.ToString("o"),
+                           ParcelNumber = model.ParcelNumber,
+                           SupplierId = model.SupplierId,
+                           ForeignCurrency = model.ForeignCurrency,
+                           Currency = model.Currency,
+                           CarrierId = model.CarrierId,
+                           OldArrivalPort = model.OldArrivalPort,
+                           FlightNumber = model.FlightNumber,
+                           TransportId = model.TransportId,
+                           TransportBillNumber = model.TransportBillNumber,
+                           TransactionId = model.TransactionId,
+                           DeliveryTermCode = model.DeliveryTermCode,
+                           ArrivalPort = model.ArrivalPort,
+                           LineVatTotal = model.LineVatTotal,
+                           Hwb = model.Hwb,
+                           SupplierCostCurrency = model.SupplierCostCurrency,
+                           TransNature = model.TransNature,
+                           ArrivalDate = model.ArrivalDate?.ToString("o"),
+                           FreightCharges = model.FreightCharges,
+                           HandlingCharge = model.HandlingCharge,
+                           ClearanceCharge = model.ClearanceCharge,
+                           Cartage = model.Cartage,
+                           Duty = model.Duty,
+                           Vat = model.Vat,
+                           Misc = model.Misc,
+                           CarriersInvTotal = model.CarriersInvTotal,
+                           CarriersVatTotal = model.CarriersVatTotal,
+                           TotalImportValue = model.TotalImportValue,
+                           Pieces = model.Pieces,
+                           Weight = model.Weight,
+                           CustomsEntryCode = model.CustomsEntryCode,
+                           CustomsEntryCodeDate = model.CustomsEntryCodeDate?.ToString("o"),
+                           LinnDuty = model.LinnDuty,
+                           LinnVat = model.LinnVat,
+                           IprCpcNumber = model.IprCpcNumber,
+                           EecgNumber = model.EecgNumber,
+                           DateCancelled = model.DateCancelled?.ToString("o"),
+                           CancelledBy = model.CancelledBy,
+                           CancelledReason = model.CancelledReason,
+                           CarrierInvNumber = model.CarrierInvNumber,
+                           CarrierInvDate = model.CarrierInvDate?.ToString("o"),
+                           CountryOfOrigin = model.CountryOfOrigin,
+                           FcName = model.FcName,
+                           VaxRef = model.VaxRef,
+                           Storage = model.Storage,
+                           NumCartons = model.NumCartons,
+                           NumPallets = model.NumPallets,
+                           Comments = model.Comments,
+                           ExchangeRate = model.ExchangeRate,
+                           ExchangeCurrency = model.ExchangeCurrency,
+                           BaseCurrency = model.BaseCurrency,
+                           PeriodNumber = model.PeriodNumber,
+                           CreatedBy = model.CreatedBy,
+                           PortCode = model.PortCode,
+                           CustomsEntryCodePrefix = model.CustomsEntryCodePrefix,
+                           ImportBookPostEntries = model.PostEntries != null ? this.postEntriesResourceBuilder.Build(model.PostEntries) : new List<ImportBookPostEntryResource>(),
+                           ImportBookOrderDetails = model.OrderDetails != null ? this.orderDetailsResourceBuilder.Build(model.OrderDetails) : new List<ImportBookOrderDetailResource>(),
+                           ImportBookInvoiceDetails = model.InvoiceDetails != null ? this.invoiceDetailsResourceBuilder.Build(model.InvoiceDetails) : new List<ImportBookInvoiceDetailResource>(),
+                           Links = this.BuildLinks(model).ToArray()
+                       };
         }
 
         public string GetLocation(ImportBook model)

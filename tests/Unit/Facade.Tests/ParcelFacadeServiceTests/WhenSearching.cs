@@ -36,8 +36,7 @@
                                           PalletCount = 2,
                                           CarrierId = 121,
                                           SupplierId = 77,
-                                          SupplierInvoiceNo = "invoice no 33 & 1/3 potato",
-                                          ImportBookNo = 2222
+                                          SupplierInvoiceNo = "invoice no 33 & 1/3 potato"
                                       },
                                   new Parcel
                                       {
@@ -51,8 +50,7 @@
                                           PalletCount = 1,
                                           CarrierId = 111,
                                           SupplierId = 2222,
-                                          SupplierInvoiceNo = "invoice no potato",
-                                          ImportBookNo = 2232
+                                          SupplierInvoiceNo = "invoice no potato"
                                       }
                               }.AsQueryable();
 

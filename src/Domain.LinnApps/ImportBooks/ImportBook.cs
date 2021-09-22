@@ -122,5 +122,9 @@
         public IList<ImportBookOrderDetail> OrderDetails { get; set; }
 
         public IList<ImportBookPostEntry> PostEntries { get; set; }
+
+        public Supplier Supplier { get; set; }
+
+        public Supplier Carrier { get; set; }
     }
 }

@@ -2,16 +2,25 @@
 {
     using System.Collections.Generic;
     using System.IO;
+    using System.Threading.Tasks;
 
-    using Linn.Common.Configuration;
+    using Amazon.SimpleEmail;
+    using Amazon.SimpleEmail.Model;
+
     using Linn.Stores.Domain.LinnApps;
 
-    using MailKit.Net.Smtp;
 
     using MimeKit;
 
     public class EmailService : IEmailService
     {
+        private readonly IAmazonSimpleEmailService emailService;
+
+        public EmailService(IAmazonSimpleEmailService emailService)
+        {
+            this.emailService = emailService;
+        }
+
         public void SendEmail(
             string toAddress,
             string toName,
@@ -21,9 +30,9 @@
             string fromName,
             string subject,
             string body,
-            Stream pdfAttachment)
+            Stream pdfAttachment,
+            string attachmentName)
         {
-            var smtpHost = ConfigurationManager.Configuration["SMTP_HOSTNAME"];
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(fromName, fromAddress));
             message.To.Add(new MailboxAddress(toName, toAddress));
@@ -46,35 +55,51 @@
 
             message.Subject = subject;
 
-            var emailBody = new TextPart("plain")
-                               {
-                                   Text = body
-                               };
+            var emailBody = new TextPart("plain") { Text = body };
 
             using (var stream = pdfAttachment)
             {
-                byte[] buffer = new byte[stream.Length];
-                stream.Seek(0, SeekOrigin.Begin);
-                stream.Flush();
-                stream.Read(buffer, 0, (int)stream.Length);
-                var content = new MimeContent(stream);
-                var a = new MimePart("application", "pdf")
-                                        {
-                                            Content = content,
-                                            FileName = "Shipfile.pdf"
-                                        };
+                Multipart multipart;
 
-                var multipart = new Multipart("mixed") { emailBody, a };
+                if (stream != null)
+                {
+                    var buffer = new byte[stream.Length];
+                    stream.Seek(0, SeekOrigin.Begin);
+                    stream.Flush();
+                    stream.Read(buffer, 0, (int)stream.Length);
+                    var content = new MimeContent(stream);
+                    var a = new MimePart("application", "pdf")
+                                {
+                                    Content = content,
+                                    FileName = $"{attachmentName}.pdf",
+                                    ContentDisposition = new ContentDisposition("attachment"),
+                                    ContentTransferEncoding = ContentEncoding.Base64
+                                };
+
+
+                    multipart = new Multipart("mixed") { emailBody, a };
+                }
+                else
+                {
+                    multipart = new Multipart("mixed") { emailBody };
+                }
+
 
                 message.Body = multipart;
 
-                using (var client = new SmtpClient())
-                {
-                    client.Connect(smtpHost, 25, false);
-                    client.Send(message);
-                    client.Disconnect(true);
-                }
+                var response = this.emailService.SendRawEmailAsync(new SendRawEmailRequest
+                                                        {
+                                                            RawMessage = new RawMessage(GetMessageStream(message))
+                                                        });
+                Task.WaitAll(response);
             }
+        }
+
+        private static MemoryStream GetMessageStream(MimeMessage message)
+        {
+            var stream = new MemoryStream();
+            message.WriteTo(stream);
+            return stream;
         }
     }
 }

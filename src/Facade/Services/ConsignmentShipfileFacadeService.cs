@@ -5,8 +5,8 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
-    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
+    using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
 
     public class ConsignmentShipfileFacadeService : IConsignmentShipfileFacadeService
@@ -32,22 +32,28 @@
             return new SuccessResult<IEnumerable<ConsignmentShipfile>>(this.repository.FindAll());
         }
 
-        public IResult<ConsignmentShipfile> SendEmails(ConsignmentShipfileSendEmailsRequestResource toSend)
+        public IResult<IEnumerable<ConsignmentShipfile>> SendEmails(
+           ConsignmentShipfilesSendEmailsRequestResource toSend)
         {
-            var result = this.domainService.SendEmails(
-                 new ConsignmentShipfile
-                             {
-                                 Id = toSend.Shipfile.Id, ConsignmentId = toSend.Shipfile.ConsignmentId
-                             }, 
-                toSend.Test,
-                toSend.TestEmailAddress);
-
-            if (!toSend.Test)
+            try
             {
-                this.transactionManager.Commit();
-            }
+                var result = this.domainService.SendEmails(
+                    toSend.Shipfiles.Select(
+                        s => new ConsignmentShipfile { Id = s.Id, ConsignmentId = s.ConsignmentId }),
+                    toSend.Test,
+                    toSend.TestEmailAddress);
 
-            return new SuccessResult<ConsignmentShipfile>(result);
+                if (!toSend.Test)
+                {
+                    this.transactionManager.Commit();
+                }
+
+                return new SuccessResult<IEnumerable<ConsignmentShipfile>>(result);
+            }
+            catch (PdfServiceException exception)
+            {
+                return new ServerFailureResult<IEnumerable<ConsignmentShipfile>>(exception.Message);
+            }
         }
 
         public IResult<ConsignmentShipfile> DeleteShipfile(int id)

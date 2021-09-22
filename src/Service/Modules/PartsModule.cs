@@ -7,6 +7,7 @@
     using Linn.Common.Authorisation;
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
@@ -169,14 +170,23 @@
             resource.DateCreated = DateTime.Today.ToString("o");
             var userId = this.Context.CurrentUser.GetEmployeeUri().Split("/").Last();
             resource.CreatedBy = int.Parse(userId);
-            var result = this.partsFacadeService.Add(resource);
-            if (!string.IsNullOrEmpty(resource.QcOnReceipt))
+            try
             {
-                this.partDomainService.AddQcControl(resource.PartNumber, resource.CreatedBy, resource.QcInformation);
-            }
+                var result = this.partsFacadeService.Add(resource);
+                if (!string.IsNullOrEmpty(resource.QcOnReceipt))
+                {
+                    this.partDomainService.AddQcControl(resource.PartNumber, resource.CreatedBy, resource.QcInformation);
+                }
 
-            return this.Negotiate.WithModel(result)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+                return this.Negotiate.WithModel(result)
+                    .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+            }
+            catch (CreatePartException e)
+            {
+                var res = new BadRequestResult<Part>(e.Message);
+                return this.Negotiate.WithModel(res)
+                    .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+            }
         }
 
         private object UpdatePart(int id)

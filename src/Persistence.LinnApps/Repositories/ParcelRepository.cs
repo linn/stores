@@ -6,6 +6,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class ParcelRepository : IRepository<Parcel, int>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -17,7 +19,7 @@
 
         public Parcel FindById(int key)
         {
-            return this.serviceDbContext.Parcels.Where(p => p.ParcelNumber == key)
+            return this.serviceDbContext.Parcels.Where(p => p.ParcelNumber == key).Include(p=>p.Impbooks)
                 .ToList().FirstOrDefault();
         }
 

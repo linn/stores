@@ -26,7 +26,7 @@
             get; private set;
         }
 
-        protected IFacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource>
+        protected IFacadeFilterService<StorageLocation, int, StorageLocationResource, StorageLocationResource, StorageLocationResource>
             StorageLocationService
         {
             get;
@@ -53,7 +53,7 @@
             this.QuantitiesService = Substitute.For<IStockQuantitiesService>();
 
             this.StorageLocationService = Substitute
-                .For<IFacadeService<StorageLocation, int, StorageLocationResource, StorageLocationResource>>();
+                .For<IFacadeFilterService<StorageLocation, int, StorageLocationResource, StorageLocationResource, StorageLocationResource>>();
 
             this.StateService = Substitute
                 .For<IFacadeService<InspectedState, string, InspectedStateResource, InspectedStateResource>>();
@@ -74,6 +74,8 @@
                     with.Dependency<IResourceBuilder<IEnumerable<InspectedState>>>(new InspectedStatesResourceBuilder());
                     with.Dependency<IResourceBuilder<StockLocator>>(new StockLocatorResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<StockLocator>>>(new StockLocatorsResourceBuilder());
+                    with.Dependency<IResourceBuilder<StockMove>>(new StockMoveResourceBuilder());
+                    with.Dependency<IResourceBuilder<IEnumerable<StockMove>>>(new StockMovesResourceBuilder());
                     with.Dependency<IResourceBuilder<StorageLocation>>(new StorageLocationResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<StorageLocation>>>(new StorageLocationsResourceBuilder());
                     with.Dependency<IResourceBuilder<StockLocatorWithStoragePlaceInfo>>(
@@ -90,6 +92,7 @@
                     with.ResponseProcessor<StorageLocationsResponseProcessor>();
                     with.ResponseProcessor<InspectedStatesResponseProcessor>();
                     with.ResponseProcessor<StockLocatorPricesResponseProcessor>();
+                    with.ResponseProcessor<StockMovesResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {

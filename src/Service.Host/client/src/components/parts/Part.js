@@ -21,6 +21,7 @@ import LifeCycleTab from './tabs/LifeCycleTab';
 import partReducer from './partReducer';
 
 function Part({
+    copy,
     editStatus,
     itemError,
     history,
@@ -46,10 +47,10 @@ function Part({
         partNumber: '',
         description: '',
         accountingCompany: 'LINN',
-        psuPart: false,
-        stockControlled: true,
-        cccCriticalPart: false,
-        safetyCriticalPart: false,
+        psuPart: 'N',
+        stockControlled: 'N',
+        cccCriticalPart: 'N',
+        safetyCriticalPart: 'N',
         paretoCode: 'U',
         createdBy: userNumber,
         createdByName: userName,
@@ -58,8 +59,8 @@ function Part({
         preferredSupplier: 4415,
         preferredSupplierName: 'Linn Products Ltd',
         qcInformation: '',
-        qcOnReceipt: false,
-        orderHold: false
+        qcOnReceipt: 'N',
+        orderHold: 'N'
     };
     const creating = () => editStatus === 'create';
 
@@ -67,6 +68,43 @@ function Part({
         part: creating() ? defaultPart : { partNumber: '' },
         prevPart: { partNumber: '' }
     });
+
+    useEffect(() => {
+        if (copy) {
+            dispatch({
+                type: 'fieldChange',
+                fieldName: 'currencyUnitPrice',
+                payload: null
+            });
+            dispatch({
+                type: 'fieldChange',
+                fieldName: 'baseUnitPrice',
+                payload: null
+            });
+            dispatch({
+                type: 'fieldChange',
+                fieldName: 'materialPrice',
+                payload: null
+            });
+            dispatch({
+                type: 'fieldChange',
+                fieldName: 'labourPrice',
+                payload: null
+            });
+            dispatch({
+                type: 'fieldChange',
+                fieldName: 'costingPrice',
+                payload: null
+            });
+            if (state.part?.linnProduced === 'N') {
+                dispatch({
+                    type: 'fieldChange',
+                    fieldName: 'preferredSupplier',
+                    payload: { name: null, description: null }
+                });
+            }
+        }
+    }, [copy, state.part.linnProduced]);
 
     // checking whether partNumber already exists when partNumber is entered
     useEffect(() => {
@@ -234,7 +272,7 @@ function Part({
                     <Grid item xs={2} />
                 ) : (
                     <Grid item xs={2}>
-                        <LinkButton to="/inventory/parts/create" text="Copy" />
+                        <LinkButton to="/inventory/parts/create?copy=true" text="Copy" />
                     </Grid>
                 )}
                 {itemError && (
@@ -445,6 +483,7 @@ function Part({
 }
 
 Part.propTypes = {
+    copy: PropTypes.bool,
     item: PropTypes.shape({
         part: PropTypes.string,
         description: PropTypes.string,
@@ -484,6 +523,7 @@ Part.propTypes = {
 };
 
 Part.defaultProps = {
+    copy: false,
     item: null,
     snackbarVisible: false,
     loading: true,

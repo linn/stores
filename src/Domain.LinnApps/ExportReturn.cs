@@ -35,7 +35,7 @@
         
         public double? GrossDimsM3 { get; set; }
 
-        public string MadeIntercompanyInvoices { get; set; }
+        public string MadeInterCompanyInvoices { get; set; }
 
         public DateTime? DateProcessed { get; set; }
 

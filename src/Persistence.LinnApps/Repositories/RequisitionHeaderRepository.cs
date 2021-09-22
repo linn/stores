@@ -29,6 +29,7 @@
                 .ThenInclude(b => b.Moves)
                 .ThenInclude(c => c.StockLocator)
                 .ThenInclude(d => d.StorageLocation)
+                .Include(a => a.Lines).ThenInclude(l => l.TransactionDefinition)
                 .ToList().FirstOrDefault();
         }
 

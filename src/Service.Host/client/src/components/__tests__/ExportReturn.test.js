@@ -145,8 +145,6 @@ describe('<ExportReturn />', () => {
                 />
             );
 
-            // console.log(debug(undefined, 300000));
-
             expect(getByText('PACK 1060/P')).toBeInTheDocument();
         });
 

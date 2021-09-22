@@ -156,8 +156,8 @@
             entity.GrossDimsM3 = updateResource.GrossDimsM3;
             entity.ReturnForCredit = updateResource.ReturnForCredit;
             entity.ExportCustomsEntryCode = updateResource.ExportCustomsEntryCode;
-            entity.ExportCustomsCodeDate = updateResource.ExportCustomsCodeDate != null
-                                               ? DateTime.Parse(updateResource.ExportCustomsCodeDate)
+            entity.ExportCustomsCodeDate = updateResource.ExportCustomsEntryDate != null
+                                               ? DateTime.Parse(updateResource.ExportCustomsEntryDate)
                                                : (DateTime?)null;
         }
 

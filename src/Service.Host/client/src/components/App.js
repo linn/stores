@@ -34,6 +34,9 @@ function App() {
                 <ListItem component={Link} to="/logistics/parcels" button>
                     <Typography color="primary">Parcel Utility</Typography>
                 </ListItem>
+                <ListItem component={Link} to="/logistics/consignments" button>
+                    <Typography color="primary">Consignment Utility</Typography>
+                </ListItem>
             </List>
             <Typography variant="h6">Reports</Typography>
             <List>
@@ -55,6 +58,12 @@ function App() {
                 </ListItem>
                 <ListItem component={Link} to="/inventory/tqms-category-summary" button>
                     <Typography color="primary">TQMS Summary Report</Typography>
+                </ListItem>
+                <ListItem component={Link} to="/logistics/import-books/ipr" button>
+                    <Typography color="primary">IPR Import Books Report</Typography>
+                </ListItem>
+                <ListItem component={Link} to="/logistics/import-books/eu" button>
+                    <Typography color="primary">EU Import Books Report</Typography>
                 </ListItem>
             </List>
         </Page>

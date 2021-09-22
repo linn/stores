@@ -75,3 +75,23 @@ export const shipfilesSendEmails = new ItemType(
     'SHIPFILES_SEND_EMAILS',
     '/logistics/shipfiles/send-emails'
 );
+
+export const doBookIn = new ItemType('doBookIn', 'DO_BOOK_IN', '/logistics/book-in');
+
+export const printConsignmentLabel = new ItemType(
+    'printConsignmentLabel',
+    'PRINT_CONSIGNMENT_LABEL',
+    '/logistics/labels'
+);
+
+export const printGoodsInLabels = new ItemType(
+    'printGoodsInLabels',
+    'PRINT_GOODS_IN_LABELS',
+    '/logistics/goods-in/print-labels'
+);
+
+export const printConsignmentDocuments = new ItemType(
+    'printConsignmentDocuments',
+    'PRINT_CONSIGNMENT_DOCUMENTS',
+    '/logistics/print-consignment-documents'
+);

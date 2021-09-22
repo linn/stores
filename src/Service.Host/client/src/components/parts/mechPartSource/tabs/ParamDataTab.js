@@ -220,7 +220,11 @@ function ParamDataTab({
                 <Grid container spacing={3}>
                     <Grid item xs={3}>
                         <InputField
-                            value={divide(capacitance, faradUnitMultipliers[capacitanceUnits])}
+                            value={
+                                capacitance === 0
+                                    ? 0.0
+                                    : divide(capacitance, faradUnitMultipliers[capacitanceUnits])
+                            }
                             propertyName="capacitance"
                             label="Capacitance"
                             onChange={(propertyName, newValue) => {

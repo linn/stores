@@ -31,7 +31,7 @@
 
         private readonly IRepository<Part, int> partRepository;
 
-        private readonly IQueryRepository<ReqMove> reqMoveRepository;
+        private readonly IRepository<ReqMove, ReqMoveKey> reqMoveRepository;
 
         public StockLocatorService(
             IRepository<StockLocator, int> stockLocatorRepository,
@@ -43,7 +43,7 @@
             IStockLocatorLocationsViewService locationsViewService,
             IQueryRepository<StockLocatorPrices> stockLocatorView,
             IRepository<Part, int> partRepository,
-            IQueryRepository<ReqMove> reqMoveRepository)
+            IRepository<ReqMove, ReqMoveKey> reqMoveRepository)
         {
             this.stockLocatorRepository = stockLocatorRepository;
             this.palletRepository = palletRepository;
@@ -128,9 +128,13 @@
                 throw new StockLocatorException("You are not authorised to delete.");
             }
 
-            if (this.reqMoveRepository.FindBy(m => m.StockLocatorId == toDelete.Id) != null)
+            foreach (var dependentReqMove 
+                in this.reqMoveRepository.FilterBy(m => m.StockLocatorId == toDelete.Id))
             {
-                throw new StockLocatorException("Cannot Delete Stock Locators When Dependent Req Move exists");
+                dependentReqMove.Remarks =
+                    $"Referenced stock locator for departmental stock {toDelete.PartNumber} from Pallet {toDelete.PalletNumber} deleted on {DateTime.Today.ToShortDateString()}";
+                dependentReqMove.StockLocatorId = null;
+                dependentReqMove.StockLocator = null;
             }
 
             this.stockLocatorRepository.Remove(toDelete);
@@ -287,6 +291,35 @@
                      && (string.IsNullOrEmpty(batchRef) || x.BatchRef == batchRef)
                      && (batchDate == null || x.BatchDate.Value.Date.Equals(batchDate.Value.Date))
                      && (string.IsNullOrEmpty(state) || x.State == state));
+        }
+
+        public IEnumerable<StockMove> GetMoves(string partNumber, int? palletNumber, int? locationId)
+        {
+            IEnumerable<int> locators;
+
+            if (palletNumber != null)
+            {
+                locators = this.stockLocatorRepository.FilterBy(l =>
+                        l.PartNumber == partNumber
+                        && (l.PalletNumber == palletNumber)
+                        && l.QuantityAllocated > 0)
+                    .Select(l => l.Id).ToList();
+            }
+            else
+            {
+                locators = this.stockLocatorRepository.FilterBy(l =>
+                        l.PartNumber == partNumber
+                        && l.LocationId == locationId
+                        && l.QuantityAllocated > 0)
+                    .Select(l => l.Id).ToList();
+            }
+            
+            return this.reqMoveRepository.FilterBy(m 
+                => m.StockLocatorId.HasValue 
+                   && locators.Contains((int)m.StockLocatorId)
+                   && m.DateBooked == null
+                   && m.DateCancelled == null)
+                .Select(m => new StockMove(m)).ToList();
         }
     }
 }

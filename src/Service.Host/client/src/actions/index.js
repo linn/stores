@@ -220,3 +220,100 @@ export const parcelsActionTypes = makeActionTypes(itemTypes.parcels.actionType, 
 export const shipfilesSendEmailsActionTypes = makeProcessActionTypes(
     processTypes.shipfilesSendEmails.actionType
 );
+
+export const consignmentActionTypes = makeActionTypes(itemTypes.consignment.actionType);
+export const consignmentsActionTypes = makeActionTypes(itemTypes.consignments.actionType, false);
+
+export const hubActionTypes = makeActionTypes(itemTypes.hub.actionType);
+export const hubsActionTypes = makeActionTypes(itemTypes.hubs.actionType, false);
+
+export const carrierActionTypes = makeActionTypes(itemTypes.carrier.actionType);
+export const carriersActionTypes = makeActionTypes(itemTypes.carriers.actionType, false);
+
+export const shippingTermActionTypes = makeActionTypes(itemTypes.shippingTerm.actionType);
+export const shippingTermsActionTypes = makeActionTypes(itemTypes.shippingTerms.actionType, false);
+
+export const demLocationsActionTypes = makeActionTypes(itemTypes.demLocations.actionType, false);
+
+export const loanDetailsActionTypes = makeActionTypes(itemTypes.loanDetails.actionType, false);
+
+export const validatePurchaseOrderActionTypes = makeActionTypes(
+    itemTypes.validatePurchaseOrderResult.actionType
+);
+
+export const salesArticlesActionTypes = makeActionTypes(itemTypes.salesArticles.actionType);
+
+export const doBookInActionTypes = makeProcessActionTypes(processTypes.doBookIn.actionType);
+
+export const importBookActionTypes = makeActionTypes(itemTypes.importBook.actionType);
+export const importBooksActionTypes = makeActionTypes(itemTypes.importBooks.actionType, false);
+
+export const impbookExchangeRatesActionTypes = makeActionTypes(
+    itemTypes.impbookExchangeRates.actionType,
+    false
+);
+export const impbookTransactionCodesActionTypes = makeActionTypes(
+    itemTypes.impbookTransactionCodes.actionType,
+    false
+);
+export const impbookTransportCodesActionTypes = makeActionTypes(
+    itemTypes.impbookTransportCodes.actionType,
+    false
+);
+export const impbookCpcNumbersActionTypes = makeActionTypes(
+    itemTypes.impbookCpcNumbers.actionType,
+    false
+);
+
+export const impbookIprReportActionTypes = makeReportActionTypes(
+    reportTypes.impbookIprReport.actionType
+);
+
+export const impbookEuReportActionTypes = makeReportActionTypes(
+    reportTypes.impbookEuReport.actionType
+);
+
+export const impbookDeliveryTermsActionTypes = makeReportActionTypes(
+    itemTypes.impbookDeliveryTerms.actionType,
+    false
+);
+
+export const portsActionTypes = makeActionTypes(itemTypes.ports.actionType, false);
+
+export const cartonTypesActionTypes = makeActionTypes(itemTypes.cartonTypes.actionType, false);
+
+export const validatePurchaseOrderBookInQtyResultActionTypes = makeActionTypes(
+    itemTypes.validatePurchaseOrderBookInQtyResult.actionType
+);
+
+export const reqActionTypes = makeActionTypes(itemTypes.req.actionType);
+
+export const debitNoteActionTypes = makeActionTypes(itemTypes.debitNote.actionType);
+
+export const debitNotesActionTypes = makeActionTypes(itemTypes.debitNotes.actionType);
+
+export const stockMovesActionTypes = makeActionTypes(itemTypes.stockMoves.actionType);
+
+export const printConsignmentLabelActionTypes = makeProcessActionTypes(
+    processTypes.printConsignmentLabel.actionType
+);
+
+export const currenciesActionTypes = makeActionTypes(itemTypes.currencies.actionType);
+
+export const exchangeRatesActionTypes = makeActionTypes(itemTypes.exchangeRates.actionType);
+
+export const printGoodsInLabelsActionTypes = makeProcessActionTypes(
+    processTypes.printGoodsInLabels.actionType
+);
+
+export const validateStorageTypeActionTypes = makeActionTypes(
+    itemTypes.validateStorageTypeResult.actionType
+);
+
+export const printConsignmentDocumentsActionTypes = makeProcessActionTypes(
+    processTypes.printConsignmentDocuments.actionType
+);
+
+export const consignmentPackingListActionTypes = makeActionTypes(
+    itemTypes.consignmentPackingList.actionType
+);

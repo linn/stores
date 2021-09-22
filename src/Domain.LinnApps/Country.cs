@@ -17,6 +17,8 @@
 
         public DateTime? DateInvalid { get; set; }
 
+        public int? NumberOfCopiesOfDispatchDocuments { get; set; }
+
         public IEnumerable<Address> Addresses { get; set; }
     }
 }
