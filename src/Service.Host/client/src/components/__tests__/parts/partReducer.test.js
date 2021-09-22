@@ -77,6 +77,12 @@ describe('partReducer tests', () => {
         ).toEqual({ part: { partNumber: 'PART' } });
     });
 
+    it('should trim leading/trailing spaces from partNumber', () => {
+        expect(
+            partReducer({}, { type: 'fieldChange', fieldName: 'partNumber', payload: ' PART ' })
+        ).toEqual({ part: { partNumber: 'PART' } });
+    });
+
     it('should handle rawOrFinished change', () => {
         expect(
             partReducer({}, { type: 'fieldChange', fieldName: 'rawOrFinished', payload: 'F' })

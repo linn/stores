@@ -5,6 +5,15 @@ export default function partReducer(state = initialState, action) {
         case 'initialise':
             return { ...state, part: action.payload, prevPart: action.payload };
         case 'fieldChange':
+            if (action.fieldName === 'partNumber') {
+                return {
+                    ...state,
+                    part: {
+                        ...state.part,
+                        partNumber: action.payload.trim()
+                    }
+                };
+            }
             if (action.fieldName === 'rawOrFinished') {
                 if (action.payload === 'F') {
                     return {
