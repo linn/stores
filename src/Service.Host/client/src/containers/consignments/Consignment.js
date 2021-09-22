@@ -35,6 +35,11 @@ import consignmentPackingListActions from '../../actions/consignmentPackingListA
 
 const getOptions = ownProps => {
     const options = queryString.parse(ownProps.location.search);
+    const { match } = ownProps;
+    if (match?.params?.consignmentId) {
+        return match.params;
+    }
+
     return options;
 };
 

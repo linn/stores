@@ -238,10 +238,14 @@ const Root = ({ store }) => (
                                     />
                                     <Route
                                         exact
+                                        path="/logistics/consignments/:consignmentId"
+                                        component={Consignment}
+                                    />
+                                    <Route
+                                        exact
                                         path="/logistics/consignments"
                                         component={Consignment}
                                     />
-
                                     <Route
                                         exact
                                         path="/logistics/goods-in-utility"
