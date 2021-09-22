@@ -84,7 +84,7 @@ function ProposalTab({
             </Grid>
             <Grid item xs={3}>
                 <Dropdown
-                    label="Mechanical Or Electrical"
+                    label="Mechanical Or Electrical*"
                     propertyName="mechanicalOrElectrical"
                     items={['M', 'E']}
                     fullWidth
@@ -95,7 +95,7 @@ function ProposalTab({
             {mechanicalOrElectrical === 'E' ? (
                 <Grid item xs={3}>
                     <Dropdown
-                        label="Part Type"
+                        label="Part Type*"
                         propertyName="partType"
                         items={partTypes}
                         fullWidth
@@ -199,12 +199,11 @@ function ProposalTab({
             <Grid item xs={10} />
             <Grid item xs={3}>
                 <Dropdown
-                    label="Samples Required"
+                    label="Samples Required*"
                     propertyName="samplesRequired"
                     items={['Y', 'N']}
                     fullWidth
                     allowNoValue={false}
-                    required
                     value={samplesRequired}
                     onChange={handleFieldChange}
                 />
@@ -269,10 +268,9 @@ function ProposalTab({
             </Grid>
             <Grid item xs={3}>
                 <Dropdown
-                    label="Assembly Type"
+                    label="Assembly Type*"
                     propertyName="assemblyType"
                     items={['SM', 'TH']}
-                    required
                     fullWidth
                     allowNoValue
                     value={assemblyType}
