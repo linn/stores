@@ -308,7 +308,8 @@
 
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)
         {
-            return part => part.PartNumber.ToUpper().Contains(searchTerm.ToUpper()) 
+            return part => part.PartNumber.ToUpper().Contains(searchTerm.ToUpper())
+                           || part.Description.ToUpper().Contains(searchTerm.ToUpper())
                            || part.MechPartSource.MechPartManufacturerAlts
                                .Any(m => m.PartNumber == searchTerm.ToUpper());
         }
