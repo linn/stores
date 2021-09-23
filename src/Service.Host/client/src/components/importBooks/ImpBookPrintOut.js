@@ -7,11 +7,13 @@ import { makeStyles } from '@material-ui/styles';
 import { Typography } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
+import moment from 'moment';
 
 function ImpBookPrintOut({
     impbookId,
     dateCreated,
     createdBy,
+    createdByName,
     supplierId,
     supplierName,
     supplierCountry,
@@ -53,6 +55,10 @@ function ImpBookPrintOut({
     }));
     const classes = useStyles();
 
+    const getNicerDate = date => {
+        return date ? moment(date).format('DD-MMM-YYYY') : '-';
+    };
+
     return (
         <>
             <Grid container spacing={1}>
@@ -61,10 +67,13 @@ function ImpBookPrintOut({
                 </Grid>
 
                 <Grid item xs={4}>
-                    Date Created: <b>{dateCreated}</b>
+                    Date Created: <b>{getNicerDate(dateCreated)}</b>
                 </Grid>
                 <Grid item xs={4}>
-                    Created By: <b>{createdBy}</b>
+                    Created By:{' '}
+                    <b>
+                        {createdBy} {createdByName}
+                    </b>
                 </Grid>
 
                 <Grid item xs={4}>
@@ -161,7 +170,7 @@ function ImpBookPrintOut({
                     Delivery Term Code: <b>{deliveryTermCode}</b>
                 </Grid>
                 <Grid item xs={3}>
-                    Customs Entry Date: <b>{customsEntryCodeDate}</b>
+                    Customs Entry Date: <b>{getNicerDate(customsEntryCodeDate)}</b>
                 </Grid>
 
                 <Grid item xs={9}>
@@ -172,7 +181,7 @@ function ImpBookPrintOut({
                 </Grid>
 
                 <Grid item xs={9}>
-                    Arrival Date: <b>{arrivalDate}</b>
+                    Arrival Date: <b>{getNicerDate(arrivalDate)}</b>
                 </Grid>
                 <Grid item xs={3}>
                     Linn Vat: <b>{linnVat}</b>
@@ -303,42 +312,75 @@ function ImpBookPrintOut({
 }
 
 ImpBookPrintOut.propTypes = {
-    impbookId: PropTypes.number.isRequired,
-    dateCreated: PropTypes.string.isRequired,
-    parcelNumber: PropTypes.number.isRequired,
-    supplierId: PropTypes.string.isRequired,
-    currency: PropTypes.string.isRequired,
-    carrierId: PropTypes.string.isRequired,
-    transportCode: PropTypes.number.isRequired,
-    transportBillNumber: PropTypes.string.isRequired,
-    transactionCode: PropTypes.number.isRequired,
-    deliveryTermCode: PropTypes.string.isRequired,
-    arrivalPort: PropTypes.string.isRequired,
-    arrivalDate: PropTypes.string.isRequired,
-    totalImportValue: PropTypes.number.isRequired,
-    weight: PropTypes.number.isRequired,
-    customsEntryCodePrefix: PropTypes.string.isRequired,
-    customsEntryCode: PropTypes.string.isRequired,
-    customsEntryCodeDate: PropTypes.string.isRequired,
-    linnDuty: PropTypes.number.isRequired,
-    linnVat: PropTypes.number.isRequired,
-    numCartons: PropTypes.number.isRequired,
-    numPallets: PropTypes.number.isRequired,
-    createdBy: PropTypes.number.isRequired,
-    invoiceDetails: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    orderDetails: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    impbookId: PropTypes.number,
+    dateCreated: PropTypes.string,
+    parcelNumber: PropTypes.number,
+    supplierId: PropTypes.number,
+    currency: PropTypes.string,
+    carrierId: PropTypes.number,
+    transportCode: PropTypes.number,
+    transportBillNumber: PropTypes.string,
+    transactionCode: PropTypes.number,
+    deliveryTermCode: PropTypes.string,
+    arrivalPort: PropTypes.string,
+    arrivalDate: PropTypes.string,
+    totalImportValue: PropTypes.number,
+    weight: PropTypes.number,
+    customsEntryCodePrefix: PropTypes.string,
+    customsEntryCode: PropTypes.string,
+    customsEntryCodeDate: PropTypes.string,
+    linnDuty: PropTypes.number,
+    linnVat: PropTypes.number,
+    numCartons: PropTypes.number,
+    numPallets: PropTypes.number,
+    createdBy: PropTypes.number,
+    createdByName: PropTypes.string,
+    invoiceDetails: PropTypes.arrayOf(PropTypes.shape({})),
+    orderDetails: PropTypes.arrayOf(PropTypes.shape({})),
     comments: PropTypes.string,
-    supplierName: PropTypes.string.isRequired,
-    supplierCountry: PropTypes.string.isRequired,
-    eecMember: PropTypes.string.isRequired,
-    carrierName: PropTypes.string.isRequired,
-    remainingInvoiceValue: PropTypes.string.isRequired,
-    remainingDutyValue: PropTypes.string.isRequired,
-    remainingWeightValue: PropTypes.string.isRequired
+    supplierName: PropTypes.string,
+    supplierCountry: PropTypes.string,
+    eecMember: PropTypes.string,
+    carrierName: PropTypes.string,
+    remainingInvoiceValue: PropTypes.number,
+    remainingDutyValue: PropTypes.number,
+    remainingWeightValue: PropTypes.number
 };
 
 ImpBookPrintOut.defaultProps = {
-    comments: ''
+    comments: '',
+    impbookId: null,
+    dateCreated: null,
+    parcelNumber: null,
+    supplierId: null,
+    currency: null,
+    carrierId: null,
+    transportCode: null,
+    transportBillNumber: null,
+    transactionCode: null,
+    deliveryTermCode: null,
+    arrivalPort: null,
+    arrivalDate: null,
+    totalImportValue: null,
+    weight: null,
+    customsEntryCodePrefix: null,
+    customsEntryCode: null,
+    customsEntryCodeDate: null,
+    linnDuty: null,
+    linnVat: null,
+    numCartons: null,
+    numPallets: null,
+    createdBy: null,
+    createdByName: null,
+    invoiceDetails: [],
+    orderDetails: [],
+    supplierName: null,
+    supplierCountry: null,
+    eecMember: null,
+    carrierName: null,
+    remainingInvoiceValue: null,
+    remainingDutyValue: null,
+    remainingWeightValue: null
 };
 
 export default ImpBookPrintOut;

@@ -354,6 +354,7 @@ function OrderDetailsTab({
                                     propertyName="cpcNumber"
                                     value={row.cpcNumber}
                                     disabled={!allowedToEdit}
+                                    type="number"
                                 />
                             </Grid>
                             <Grid item xs={2}>

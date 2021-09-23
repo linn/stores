@@ -46,7 +46,7 @@
             this.Get("/logistics/import-books/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/logistics/import-books/{id}", parameters => this.GetImportBook(parameters.id));
             this.Put("/logistics/import-books/{id}", parameters => this.UpdateImportBook(parameters.id));
-            this.Post("/logistics/import-books", _ => this.CreateImportBook());
+            this.Post("/logistics/import-books", parameters => this.CreateImportBook());
             this.Get("/logistics/import-books", parameters => this.GetImportBooks());
             this.Get("/logistics/import-books/exchange-rates", parameters => this.GetExchangeRates());
             this.Get("/logistics/import-books/transport-codes", parameters => this.GetTransportCodes());

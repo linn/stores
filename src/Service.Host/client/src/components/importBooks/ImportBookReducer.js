@@ -29,7 +29,20 @@ export default function importBookReducer(state = initialState, action) {
                 ...state,
                 impbook: {
                     ...state.impbook,
-                    importBookInvoiceDetails: action.details
+                    importBookInvoiceDetails: action.details.map(x => {
+                        if (x.lineNumber !== null) {
+                            return x;
+                        }
+                        return {
+                            lineNumber: state.impbook.importBookInvoiceDetails.length
+                                ? Math.max(
+                                      ...state.impbook.importBookInvoiceDetails.map(z => {
+                                          return z.lineNumber ?? 0;
+                                      })
+                                  ) + 1
+                                : 1
+                        };
+                    })
                 }
             };
         case 'orderDetailFieldChange':
@@ -80,7 +93,20 @@ export default function importBookReducer(state = initialState, action) {
                 ...state,
                 impbook: {
                     ...state.impbook,
-                    importBookPostEntries: action.entries
+                    importBookPostEntries: action.entries.map(x => {
+                        if (x.lineNumber !== null) {
+                            return x;
+                        }
+                        return {
+                            lineNumber: state.impbook.importBookPostEntries.length
+                                ? Math.max(
+                                      ...state.impbook.importBookPostEntries.map(z => {
+                                          return z.lineNumber ?? 0;
+                                      })
+                                  ) + 1
+                                : 1
+                        };
+                    })
                 }
             };
         default:

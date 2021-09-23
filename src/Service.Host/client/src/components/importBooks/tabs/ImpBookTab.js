@@ -264,6 +264,7 @@ function ImpBookTab({
                         onChange={handleFieldChange}
                         propertyName="totalImportValue"
                         fullwidth
+                        type="number"
                         disabled={!allowedToEdit}
                         data-testid="totalImportValue"
                     />
@@ -273,6 +274,12 @@ function ImpBookTab({
                 <Grid item xs={12} className={classes.gapAbove}>
                     <TableWithInlineEditing
                         columnsInfo={[
+                            {
+                                title: 'Line Number',
+                                key: 'lineNumber',
+                                type: 'number',
+                                notEditable: true
+                            },
                             {
                                 title: 'Invoice Number',
                                 key: 'invoiceNumber',
@@ -346,6 +353,8 @@ function ImpBookTab({
                         label="Mode of Transport"
                         onChange={handleFieldChange}
                         disabled={!allowedToEdit}
+                        type="number"
+                        required
                     />
                 </Grid>
 
@@ -369,6 +378,8 @@ function ImpBookTab({
                         label="Transaction Code"
                         onChange={handleFieldChange}
                         disabled={!allowedToEdit}
+                        type="number"
+                        required
                     />
                 </Grid>
 
@@ -536,7 +547,9 @@ function ImpBookTab({
 }
 
 ImpBookTab.propTypes = {
-    employees: PropTypes.arrayOf(PropTypes.shape({})),
+    employees: PropTypes.arrayOf(
+        PropTypes.shape({ id: PropTypes.number, fullName: PropTypes.string })
+    ),
     suppliersSearchResults: PropTypes.arrayOf(
         PropTypes.shape({ id: PropTypes.number, name: PropTypes.string, country: PropTypes.string })
     ).isRequired,
@@ -564,10 +577,10 @@ ImpBookTab.propTypes = {
     handleFieldChange: PropTypes.func.isRequired,
     dateCreated: PropTypes.string.isRequired,
     parcelNumber: PropTypes.number,
-    supplierId: PropTypes.string.isRequired,
+    supplierId: PropTypes.number.isRequired,
     foreignCurrency: PropTypes.string.isRequired,
     currency: PropTypes.string,
-    carrierId: PropTypes.string.isRequired,
+    carrierId: PropTypes.number.isRequired,
     transportId: PropTypes.number,
     transportBillNumber: PropTypes.string,
     transactionId: PropTypes.number,
@@ -603,7 +616,7 @@ ImpBookTab.propTypes = {
 };
 
 ImpBookTab.defaultProps = {
-    employees: [{ id: '-1', fullname: 'loading..' }],
+    employees: [{ id: -1, fullname: 'loading..' }],
     parcelNumber: null,
     currency: '',
     transportBillNumber: '',
