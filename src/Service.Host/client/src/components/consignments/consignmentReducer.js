@@ -1,5 +1,14 @@
 const initialState = {};
 
+const defaultNewConsignment = {
+    despatchLocationCode: 'LINN',
+    pallets: [],
+    items: [],
+    shippingMethod: 'S',
+    carrier: 'TNT',
+    status: 'L'
+};
+
 const getItemType = itemTypeDisplay => {
     switch (itemTypeDisplay) {
         case 'Loose Item':
@@ -15,6 +24,12 @@ const getItemType = itemTypeDisplay => {
 
 export default function consignmentReducer(state = initialState, action) {
     switch (action.type) {
+        case 'create': {
+            return {
+                consignment: defaultNewConsignment,
+                originalConsignment: null
+            };
+        }
         case 'initialise': {
             return {
                 consignment: action.payload,
