@@ -226,3 +226,51 @@ describe('should render documents of closed consignment', () => {
         expect(screen.getByText('888999')).toBeInTheDocument();
     });
 });
+
+describe('should change status when clicking edit', () => {
+    beforeEach(() => {
+        defaultRender({
+            item
+        });
+
+        const editButton = screen.getByRole('button', { name: 'Edit' });
+        fireEvent.click(editButton);
+    });
+
+    test('should set status to edit', () => {
+        expect(setEditStatus).toHaveBeenCalledWith('edit');
+    });
+});
+
+describe('should update and save consignment status', () => {
+    beforeEach(() => {
+        defaultRender({
+            item,
+            hubs: [
+                { hubId: 1, description: 'hub1' },
+                { hubId: 2, description: 'hub2' }
+            ],
+            hub: { hubId: 1, description: 'hub1' },
+            editStatus: 'edit'
+        });
+
+        const details = screen.getByText('Details');
+        fireEvent.click(details);
+
+        const a = screen.getByDisplayValue('1 - hub1');
+        fireEvent.change(a, { target: { value: 2 } });
+
+        const saveButton = screen.getByRole('button', { name: 'Save' });
+        fireEvent.click(saveButton);
+    });
+
+    test('should set status to edit', () => {
+        expect(updateItem).toHaveBeenCalledWith(
+            101101,
+            expect.objectContaining({
+                consignmentId: 101101,
+                hubId: '2'
+            })
+        );
+    });
+});
