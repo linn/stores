@@ -154,7 +154,7 @@ function DetailsTab({
                         <TableRow key="Account">
                             <TablePromptItem text="Account" />
                             <TableCell className={classes.tableCell}>
-                                {viewMode ? (
+                                {editStatus !== 'create' ? (
                                     `${showText(consignment.salesAccountId)} ${showText(
                                         consignment.customerName
                                     )}`
@@ -180,7 +180,7 @@ function DetailsTab({
                         <TableRow key="Address">
                             <TablePromptItem text="Address" />
                             <TableCell className={classes.tableCell}>
-                                {viewMode ? (
+                                {editStatus !== 'create' ? (
                                     consignment.address && consignment.address.displayAddress
                                 ) : (
                                     <>
