@@ -264,12 +264,41 @@ describe('should update and save consignment status', () => {
         fireEvent.click(saveButton);
     });
 
-    test('should set status to edit', () => {
+    afterEach(() => {
+        updateItem.mockClear();
+    });
+
+    test('should call update with new values', () => {
         expect(updateItem).toHaveBeenCalledWith(
             101101,
             expect.objectContaining({
                 consignmentId: 101101,
                 hubId: '2'
+            })
+        );
+    });
+});
+
+describe('should close consignment', () => {
+    beforeEach(() => {
+        defaultRender({
+            item
+        });
+
+        const closeButton = screen.getByRole('button', { name: 'Close Consignment' });
+        fireEvent.click(closeButton);
+    });
+
+    afterEach(() => {
+        updateItem.mockClear();
+    });
+
+    test('should call update with close details', () => {
+        expect(updateItem).toHaveBeenCalledWith(
+            101101,
+            expect.objectContaining({
+                status: 'C',
+                closedById: userNumber
             })
         );
     });
