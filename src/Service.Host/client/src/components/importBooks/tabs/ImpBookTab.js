@@ -275,12 +275,6 @@ function ImpBookTab({
                     <TableWithInlineEditing
                         columnsInfo={[
                             {
-                                title: 'Line Number',
-                                key: 'lineNumber',
-                                type: 'number',
-                                notEditable: true
-                            },
-                            {
                                 title: 'Invoice Number',
                                 key: 'invoiceNumber',
                                 type: 'text'
@@ -392,6 +386,7 @@ function ImpBookTab({
                         label="Delivery Term Code"
                         onChange={handleFieldChange}
                         disabled={!allowedToEdit}
+                        required
                     />
                 </Grid>
 

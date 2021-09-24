@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq.Expressions;
 
+    using Linn.Common.Proxy.LinnApps;
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
@@ -12,68 +13,72 @@
     public class ImportBookFacadeService : FacadeService<ImportBook, int, ImportBookResource, ImportBookResource>
     {
         private readonly IImportBookService importBookService;
+        private readonly IDatabaseService databaseService;
 
         public ImportBookFacadeService(
             IRepository<ImportBook, int> repository,
             ITransactionManager transactionManager,
-            IImportBookService importBookService)
+            IImportBookService importBookService,
+            IDatabaseService databaseService)
             : base(repository, transactionManager)
         {
             this.importBookService = importBookService;
+            this.databaseService = databaseService;
         }
 
         protected override ImportBook CreateFromResource(ImportBookResource resource)
         {
             var newImportBook = new ImportBook
-            {
-                DateCreated = DateTime.Parse(resource.DateCreated),
-                ParcelNumber = resource.ParcelNumber,
-                SupplierId = resource.SupplierId,
-                ForeignCurrency = resource.ForeignCurrency,
-                Currency = resource.Currency,
-                CarrierId = resource.CarrierId,
-                TransportId = resource.TransportId,
-                TransportBillNumber = resource.TransportBillNumber,
-                TransactionId = resource.TransactionId,
-                DeliveryTermCode = resource.DeliveryTermCode,
-                ArrivalPort = resource.ArrivalPort,
-                ArrivalDate =
-                                           string.IsNullOrWhiteSpace(resource.ArrivalDate)
-                                               ? (DateTime?)null
-                                               : DateTime.Parse(resource.ArrivalDate),
-                TotalImportValue = resource.TotalImportValue,
-                Weight = resource.Weight,
-                CustomsEntryCode = resource.CustomsEntryCode,
-                CustomsEntryCodeDate =
-                                           string.IsNullOrWhiteSpace(resource.CustomsEntryCodeDate)
-                                               ? (DateTime?)null
-                                               : DateTime.Parse(resource.CustomsEntryCodeDate),
-                LinnDuty = resource.LinnDuty,
-                LinnVat = resource.LinnVat,
-                DateCancelled =
-                                           string.IsNullOrWhiteSpace(resource.DateCancelled)
-                                               ? (DateTime?)null
-                                               : DateTime.Parse(resource.DateCancelled),
-                CancelledBy = resource.CancelledBy,
-                CancelledReason = resource.CancelledReason,
-                NumCartons = resource.NumCartons,
-                NumPallets = resource.NumPallets,
-                Comments = resource.Comments,
-                CreatedBy = resource.CreatedBy,
-                CustomsEntryCodePrefix = resource.CustomsEntryCodePrefix
-            };
+                                    {
+                                        Id = this.databaseService.GetNextVal("IMPBOOK_SEQ"),
+                                        DateCreated = DateTime.Parse(resource.DateCreated),
+                                        ParcelNumber = resource.ParcelNumber,
+                                        SupplierId = resource.SupplierId,
+                                        ForeignCurrency = resource.ForeignCurrency,
+                                        Currency = resource.Currency,
+                                        CarrierId = resource.CarrierId,
+                                        TransportId = resource.TransportId,
+                                        TransportBillNumber = resource.TransportBillNumber,
+                                        TransactionId = resource.TransactionId,
+                                        DeliveryTermCode = resource.DeliveryTermCode,
+                                        ArrivalPort = resource.ArrivalPort,
+                                        ArrivalDate =
+                                            string.IsNullOrWhiteSpace(resource.ArrivalDate)
+                                                ? (DateTime?)null
+                                                : DateTime.Parse(resource.ArrivalDate),
+                                        TotalImportValue = resource.TotalImportValue,
+                                        Weight = resource.Weight,
+                                        CustomsEntryCode = resource.CustomsEntryCode,
+                                        CustomsEntryCodeDate =
+                                            string.IsNullOrWhiteSpace(resource.CustomsEntryCodeDate)
+                                                ? (DateTime?)null
+                                                : DateTime.Parse(resource.CustomsEntryCodeDate),
+                                        LinnDuty = resource.LinnDuty,
+                                        LinnVat = resource.LinnVat,
+                                        DateCancelled =
+                                            string.IsNullOrWhiteSpace(resource.DateCancelled)
+                                                ? (DateTime?)null
+                                                : DateTime.Parse(resource.DateCancelled),
+                                        CancelledBy = resource.CancelledBy,
+                                        CancelledReason = resource.CancelledReason,
+                                        NumCartons = resource.NumCartons,
+                                        NumPallets = resource.NumPallets,
+                                        Comments = resource.Comments,
+                                        CreatedBy = resource.CreatedBy,
+                                        CustomsEntryCodePrefix = resource.CustomsEntryCodePrefix
+                                    };
 
             var invoiceDetails = new List<ImportBookInvoiceDetail>();
             foreach (var detail in resource.ImportBookInvoiceDetails)
             {
                 invoiceDetails.Add(
                     new ImportBookInvoiceDetail
-                    {
-                        ImportBookId = resource.Id,
-                        LineNumber = detail.LineNumber,
-                        InvoiceNumber = detail.InvoiceNumber,
-                        InvoiceValue = detail.InvoiceValue
-                    });
+                        {
+                            ImportBookId = resource.Id,
+                            LineNumber = detail.LineNumber,
+                            InvoiceNumber = detail.InvoiceNumber,
+                            InvoiceValue = detail.InvoiceValue
+                        });
             }
 
             newImportBook.InvoiceDetails = invoiceDetails;
@@ -83,25 +88,25 @@
             {
                 orderDetails.Add(
                     new ImportBookOrderDetail
-                    {
-                        ImportBookId = resource.Id,
-                        LineNumber = detail.LineNumber,
-                        OrderNumber = detail.OrderNumber,
-                        RsnNumber = detail.RsnNumber,
-                        OrderDescription = detail.OrderDescription,
-                        Qty = detail.Qty,
-                        DutyValue = detail.DutyValue,
-                        FreightValue = detail.FreightValue,
-                        VatValue = detail.VatValue,
-                        OrderValue = detail.OrderValue,
-                        Weight = detail.Weight,
-                        LoanNumber = detail.LoanNumber,
-                        LineType = detail.LineType,
-                        CpcNumber = detail.CpcNumber,
-                        TariffCode = detail.TariffCode,
-                        InsNumber = detail.InsNumber,
-                        VatRate = detail.VatRate
-                    });
+                        {
+                            ImportBookId = resource.Id,
+                            LineNumber = detail.LineNumber,
+                            OrderNumber = detail.OrderNumber,
+                            RsnNumber = detail.RsnNumber,
+                            OrderDescription = detail.OrderDescription,
+                            Qty = detail.Qty,
+                            DutyValue = detail.DutyValue,
+                            FreightValue = detail.FreightValue,
+                            VatValue = detail.VatValue,
+                            OrderValue = detail.OrderValue,
+                            Weight = detail.Weight,
+                            LoanNumber = detail.LoanNumber,
+                            LineType = detail.LineType,
+                            CpcNumber = detail.CpcNumber,
+                            TariffCode = detail.TariffCode,
+                            InsNumber = detail.InsNumber,
+                            VatRate = detail.VatRate
+                        });
             }
 
             newImportBook.OrderDetails = orderDetails;
@@ -111,19 +116,20 @@
             {
                 postEntries.Add(
                     new ImportBookPostEntry
-                    {
-                        ImportBookId = resource.Id,
-                        LineNumber = entry.LineNumber,
-                        EntryCodePrefix = entry.EntryCodePrefix,
-                        EntryCode = entry.EntryCode,
-                        EntryDate = string.IsNullOrWhiteSpace(entry.EntryDate)
+                        {
+                            ImportBookId = resource.Id,
+                            LineNumber = entry.LineNumber,
+                            EntryCodePrefix = entry.EntryCodePrefix,
+                            EntryCode = entry.EntryCode,
+                            EntryDate = string.IsNullOrWhiteSpace(entry.EntryDate)
                                             ? (DateTime?)null
                                             : DateTime.Parse(entry.EntryDate),
-                        Reference = entry.Reference,
-                        Duty = entry.Duty,
-                        Vat = entry.Vat
-                    });
+                            Reference = entry.Reference,
+                            Duty = entry.Duty,
+                            Vat = entry.Vat
+                        });
             }
+
             newImportBook.PostEntries = postEntries;
 
             return newImportBook;

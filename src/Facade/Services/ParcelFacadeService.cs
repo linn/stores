@@ -9,8 +9,6 @@
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
 
-    using Org.BouncyCastle.Math.EC.Rfc7748;
-
     public class ParcelFacadeService : FacadeFilterService<Parcel, int, ParcelResource, ParcelResource, ParcelSearchRequestResource>
     {
         private readonly IDatabaseService databaseService;

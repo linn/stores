@@ -30,7 +30,7 @@ export default function importBookReducer(state = initialState, action) {
                 impbook: {
                     ...state.impbook,
                     importBookInvoiceDetails: action.details.map(x => {
-                        if (x.lineNumber !== null) {
+                        if (x.lineNumber !== null && typeof x.lineNumber !== 'undefined') {
                             return x;
                         }
                         return {
@@ -40,7 +40,8 @@ export default function importBookReducer(state = initialState, action) {
                                           return z.lineNumber ?? 0;
                                       })
                                   ) + 1
-                                : 1
+                                : 1,
+                            importBookId: state.impbook.id
                         };
                     })
                 }
@@ -66,12 +67,14 @@ export default function importBookReducer(state = initialState, action) {
                     importBookOrderDetails: [
                         ...state.impbook.importBookOrderDetails,
                         {
-                            lineNumber:
-                                Math.max(
-                                    ...state.impbook.importBookOrderDetails?.map(x => {
-                                        return x.lineNumber;
-                                    })
-                                ) + 1
+                            lineNumber: state.impbook.importBookOrderDetails.length
+                                ? Math.max(
+                                      ...state.impbook.importBookOrderDetails.map(z => {
+                                          return z.lineNumber ?? 0;
+                                      })
+                                  ) + 1
+                                : 1,
+                            importBookId: state.impbook.id
                         }
                     ]
                 }
@@ -94,7 +97,7 @@ export default function importBookReducer(state = initialState, action) {
                 impbook: {
                     ...state.impbook,
                     importBookPostEntries: action.entries.map(x => {
-                        if (x.lineNumber !== null) {
+                        if (x.lineNumber !== null && typeof x.lineNumber !== 'undefined') {
                             return x;
                         }
                         return {
@@ -104,7 +107,8 @@ export default function importBookReducer(state = initialState, action) {
                                           return z.lineNumber ?? 0;
                                       })
                                   ) + 1
-                                : 1
+                                : 1,
+                            importBookId: state.impbook.id
                         };
                     })
                 }

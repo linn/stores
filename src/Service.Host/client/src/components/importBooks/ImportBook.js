@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Button from '@material-ui/core/Button';
+
 import {
     SaveBackCancelButtons,
     InputField,
@@ -318,15 +320,26 @@ function ImportBook({
             !state.impbook.transportId ||
             !state.impbook.transactionId ||
             !state.impbook.totalImportValue ||
+            !state.impbook.deliveryTermCode ||
             `${calcRemainingTotal()}` !== '0' ||
             `${calcRemainingDuty()}` !== '0' ||
             `${calcRemainingWeight()}` !== '0'
         );
     };
 
+    const print = () => {
+        window.print();
+    };
+
+    useEffect(() => {
+        if (snackbarVisible) {
+            print();
+        }
+    }, [snackbarVisible]);
+
     return (
         <>
-            {!loading && false && (
+            {snackbarVisible && (
                 <div className="pageContainer show-only-when-printing">
                     <Page width="xl">
                         <ImpBookPrintOut
@@ -508,7 +521,18 @@ function ImportBook({
                                         />
                                     )}
 
-                                    <Grid item xs={12}>
+                                    <Grid item xs={2}>
+                                        <Button
+                                            style={{ marginTop: '40px' }}
+                                            onClick={print}
+                                            variant="outlined"
+                                            color="primary"
+                                            disabled={impbookInvalid()}
+                                        >
+                                            Reprint
+                                        </Button>
+                                    </Grid>
+                                    <Grid item xs={10}>
                                         <SaveBackCancelButtons
                                             saveDisabled={
                                                 viewing() || !allowedToEdit() || impbookInvalid()
