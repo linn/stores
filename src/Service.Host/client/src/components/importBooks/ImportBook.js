@@ -327,7 +327,10 @@ function ImportBook({
         );
     };
 
+    const [renderPrintOut, setRenderPrintOut] = useState(false);
+
     const print = () => {
+        setRenderPrintOut(true);
         window.print();
     };
 
@@ -339,11 +342,10 @@ function ImportBook({
 
     return (
         <>
-            {snackbarVisible && (
+            {renderPrintOut && (
                 <div className="pageContainer show-only-when-printing">
                     <Page width="xl">
                         <ImpBookPrintOut
-                            // ref={componentRef}
                             impbookId={state.impbook.id}
                             dateCreated={state.impbook.dateCreated}
                             createdBy={state.impbook.createdBy}
