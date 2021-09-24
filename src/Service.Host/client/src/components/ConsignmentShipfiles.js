@@ -75,6 +75,7 @@ export default function ConsignmentShipfiles({
                             <Button
                                 style={{ marginTop: '22px' }}
                                 variant="contained"
+                                disabled={selectedRows?.length < 1}
                                 onClick={() => {
                                     clearErrors();
                                     selectedRows.forEach(r => {
@@ -85,7 +86,8 @@ export default function ConsignmentShipfiles({
                                         );
                                     });
                                     sendEmails({
-                                        shipfiles: selectedRows
+                                        shipfiles: selectedRows,
+                                        test: false
                                     });
                                 }}
                             >
@@ -97,6 +99,7 @@ export default function ConsignmentShipfiles({
                                 style={{ marginTop: '22px' }}
                                 variant="contained"
                                 color="secondary"
+                                disabled={selectedRows?.length < 1}
                                 onClick={() => {
                                     clearErrors();
                                     selectedRows.forEach(r => deleteShipfile(r.id, null));
@@ -116,6 +119,7 @@ export default function ConsignmentShipfiles({
                                     checkboxSelection
                                     onSelectionModelChange={handleSelectRow}
                                     loading={consignmentShipfilesLoading}
+                                    columnBuffer={6}
                                     hideFooter
                                 />
                             </div>
@@ -177,7 +181,7 @@ ConsignmentShipfiles.propTypes = {
 ConsignmentShipfiles.defaultProps = {
     consignmentShipfiles: [],
     processedShipfiles: null,
-    consignmentShipfilesLoading: true,
+    consignmentShipfilesLoading: false,
     itemError: null,
     whatToWandReport: null,
     deleteLoading: false

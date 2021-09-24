@@ -66,7 +66,9 @@ function Consignment({
     consignmentPackingList,
     consignmentPackingListLoading,
     getConsignmentPackingList,
-    clearConsignmentPackingList
+    clearConsignmentPackingList,
+    createConsignment,
+    addConsignment
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
     const [editablePallets, setEditablePallets] = useState([]);
@@ -111,11 +113,17 @@ function Consignment({
             }
         };
 
-        dispatch({
-            type: 'initialise',
-            payload: item
-        });
-
+        if (editStatus === 'create') {
+            dispatch({
+                type: 'create',
+                payload: null
+            });
+        } else {
+            dispatch({
+                type: 'initialise',
+                payload: item
+            });
+        }
         setEditablePallets(
             item?.pallets
                 ? utilities
@@ -136,7 +144,13 @@ function Consignment({
 
         clearConsignmentErrors();
         loadPackingList();
-    }, [item, clearConsignmentErrors, clearConsignmentPackingList, getConsignmentPackingList]);
+    }, [
+        item,
+        clearConsignmentErrors,
+        clearConsignmentPackingList,
+        getConsignmentPackingList,
+        editStatus
+    ]);
 
     useEffect(() => {
         if (item) {
@@ -176,6 +190,10 @@ function Consignment({
         return editStatus === 'edit';
     };
 
+    const creating = () => {
+        return editStatus === 'create';
+    };
+
     const viewMode = (createOnly = false) => {
         if (viewing() || (editing() && createOnly)) {
             return true;
@@ -205,6 +223,11 @@ function Consignment({
         setEditStatus('edit');
     };
 
+    const handleCreate = () => {
+        createConsignment();
+        setcurrentTab(1);
+    };
+
     const closeConsignment = () => {
         if (viewing()) {
             updateItem(item.consignmentId, { status: 'C', closedById: userNumber });
@@ -214,6 +237,10 @@ function Consignment({
     const doSave = () => {
         if (editing()) {
             updateItem(item.consignmentId, state.consignment);
+        }
+
+        if (creating()) {
+            addConsignment(state.consignment);
         }
     };
 
@@ -341,7 +368,7 @@ function Consignment({
             palletNumber: maxPallet + 1,
             id: maxPallet + 1,
             weight: 18,
-            consignmentId: item.consignmentId,
+            consignmentId: state.consignment.consignmentId,
             height: 10,
             width: 120,
             depth: 100
@@ -359,7 +386,7 @@ function Consignment({
             containerNumber: maxCarton + 1,
             id: maxItem + 1,
             itemNumber: maxItem + 1,
-            consignmentId: item.consignmentId,
+            consignmentId: state.consignment.consignmentId,
             itemTypeDisplay: getItemTypeDisplay('C'),
             itemType: 'C',
             itemDescription: 'SUNDRIES',
@@ -376,7 +403,7 @@ function Consignment({
         items.push({
             id: maxItem + 1,
             itemNumber: maxItem + 1,
-            consignmentId: item.consignmentId,
+            consignmentId: state.consignment.consignmentId,
             itemTypeDisplay: getItemTypeDisplay('I'),
             itemType: 'I'
         });
@@ -445,7 +472,7 @@ function Consignment({
                         </Tabs>
                         {currentTab === 0 && (
                             <>
-                                <Grid item xs={12}>
+                                <Grid item xs={10}>
                                     <Dropdown
                                         label="Select open consignment"
                                         propertyName="consignmentSelect"
@@ -453,6 +480,21 @@ function Consignment({
                                         onChange={handleSelectConsignment}
                                         optionsLoading={optionsLoading}
                                     />
+                                </Grid>
+                                <Grid>
+                                    <Tooltip title="Create Consignment">
+                                        <span>
+                                            <Button
+                                                variant="outlined"
+                                                color="primary"
+                                                className={classes.pullRight}
+                                                onClick={handleCreate}
+                                                disabled={creating() || editing()}
+                                            >
+                                                Create Consignment
+                                            </Button>
+                                        </span>
+                                    </Tooltip>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <InputField
@@ -558,6 +600,7 @@ function Consignment({
                                     variant="outlined"
                                     color="primary"
                                     onClick={showCartonLabelForm}
+                                    disabled={!viewMode()}
                                 >
                                     Carton Label
                                 </Button>
@@ -565,6 +608,7 @@ function Consignment({
                                     variant="outlined"
                                     color="primary"
                                     onClick={showPalletLabelForm}
+                                    disabled={!viewMode()}
                                 >
                                     Pallet Label
                                 </Button>
@@ -810,7 +854,9 @@ Consignment.propTypes = {
     consignmentPackingList: PropTypes.shape({}),
     consignmentPackingListLoading: PropTypes.bool,
     getConsignmentPackingList: PropTypes.func.isRequired,
-    clearConsignmentPackingList: PropTypes.func.isRequired
+    clearConsignmentPackingList: PropTypes.func.isRequired,
+    createConsignment: PropTypes.func.isRequired,
+    addConsignment: PropTypes.func.isRequired
 };
 
 Consignment.defaultProps = {

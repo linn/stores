@@ -137,6 +137,7 @@ export default function Tpk({
                             <div style={{ height: 500, width: '100%' }}>
                                 <DataGrid
                                     rows={rows}
+                                    columnBuffer={9}
                                     columns={columns}
                                     density="standard"
                                     rowHeight={34}

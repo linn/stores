@@ -46,6 +46,7 @@
             this.hubFacadeService = hubFacadeService;
             this.carrierFacadeService = carrierFacadeService;
             this.shippingTermFacadeService = shippingTermFacadeService;
+            this.Post("/logistics/consignments", _ => this.AddConsignment());
             this.Get("/logistics/consignments", _ => this.GetConsignments());
             this.Get("/logistics/consignments/{id:int}", p => this.GetConsignment(p.id));
             this.Get("/logistics/consignments/{id:int}/packing-list", p => this.GetPackingList(p.id));
@@ -60,6 +61,17 @@
             this.Get("/logistics/carton-types/{id*}", p => this.GetCartonTypeById(p.id));
             this.Post("/logistics/labels", _ => this.PrintLabels());
             this.Post("/logistics/print-consignment-documents", _ => this.PrintDocuments());
+        }
+
+        private object AddConsignment()
+        {
+            this.RequiresAuthentication();
+            var resource = this.Bind<ConsignmentResource>();
+            var result = this.consignmentFacadeService.Add(resource);
+            return this.Negotiate.WithStatusCode(HttpStatusCode.Created)
+                .WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
 
         private object GetPackingList(int id)

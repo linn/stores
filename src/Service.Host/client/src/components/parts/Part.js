@@ -435,7 +435,7 @@ function Part({
                                     ourInspectionWeeks={state.part.ourInspectionWeeks}
                                     safetyWeeks={state.part.safetyWeeks}
                                     railMethod={state.part.railMethod}
-                                    minStockrail={state.part.minStockrail}
+                                    minStockRail={state.part.minStockRail}
                                     maxStockRail={state.part.maxStockRail}
                                     secondStageBoard={state.part.secondStageBoard}
                                     secondStageDescription={state.part.secondStageDescription}

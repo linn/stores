@@ -14,6 +14,8 @@
 
         public string CustomerName { get; set; }
 
+        public int? AddressId { get; set; }
+
         public AddressResource Address { get; set; }
 
         public string Carrier { get; set; }

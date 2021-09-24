@@ -133,21 +133,66 @@ function DetailsTab({
         }
     };
 
+    const showStatus = statusCode => {
+        switch (statusCode) {
+            case 'L':
+                return 'Open';
+            case 'H':
+                return 'Hold';
+            case 'C':
+                return 'Closed';
+            default:
+                return 'Unknown';
+        }
+    };
+
     return (
         <>
             <Grid item xs={12}>
                 <Table size="small" style={{ paddingTop: '30px' }}>
                     <TableBody>
                         <TableRow key="Account">
-                            <TablePromptItem text="Account" width={160} />
-                            <TableCell className={classes.tableCell} style={{ width: 350 }}>
-                                {consignment.salesAccountId} {consignment.customerName}
+                            <TablePromptItem text="Account" />
+                            <TableCell className={classes.tableCell}>
+                                {editStatus !== 'create' ? (
+                                    `${showText(consignment.salesAccountId)} ${showText(
+                                        consignment.customerName
+                                    )}`
+                                ) : (
+                                    <>
+                                        <InputField
+                                            placeholder="Account Id"
+                                            propertyName="salesAccountId"
+                                            value={consignment.salesAccountId}
+                                            onChange={updateField}
+                                            maxLength={10}
+                                        />
+                                        <InputField
+                                            placeholder="Customer Name"
+                                            propertyName="customerName"
+                                            value={consignment.customerName}
+                                            onChange={updateField}
+                                        />
+                                    </>
+                                )}
                             </TableCell>
                         </TableRow>
                         <TableRow key="Address">
                             <TablePromptItem text="Address" />
                             <TableCell className={classes.tableCell}>
-                                {consignment.address && consignment.address.displayAddress}
+                                {editStatus !== 'create' ? (
+                                    consignment.address && consignment.address.displayAddress
+                                ) : (
+                                    <>
+                                        <InputField
+                                            placeholder="AddressId"
+                                            propertyName="addressId"
+                                            value={consignment.addressId}
+                                            onChange={updateField}
+                                            maxLength={10}
+                                        />
+                                    </>
+                                )}
                             </TableCell>
                         </TableRow>
                         <TableRow key="Despatch Location">
@@ -277,6 +322,12 @@ function DetailsTab({
                                 )}
                             </TableCell>
                         </TableRow>
+                        <TableRow key="Status">
+                            <TablePromptItem text="Status" />
+                            <TableCell className={classes.tableCell}>
+                                {showStatus(consignment?.status)}
+                            </TableCell>
+                        </TableRow>
                         <TableRow key="DateOpened">
                             <TablePromptItem text="Date Opened" />
                             <TableCell className={classes.tableCell}>
@@ -307,10 +358,12 @@ DetailsTab.propTypes = {
         customerName: PropTypes.string,
         salesAccountId: PropTypes.number,
         shippingMethod: PropTypes.string,
+        addressId: PropTypes.number,
         dateOpened: PropTypes.string,
         dateClosed: PropTypes.string,
         carrier: PropTypes.string,
         terms: PropTypes.string,
+        status: PropTypes.string,
         hubId: PropTypes.number,
         customsEntryCodePrefix: PropTypes.string,
         customsEntryCode: PropTypes.string,
