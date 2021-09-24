@@ -54,6 +54,7 @@ function ItemsTab({
 
     const [addToPalletNumber, setAddToPalletNumber] = useState(0);
     const [palletDialogPalletNumber, setPalletDialogPalletNumber] = useState(0);
+    const [cartonDialogContainerNumber, setCartonDialogContainerNumber] = useState(0);
     const [addToCartonNumber, setAddToCartonNumber] = useState(0);
     const [firstItem, setFirstItem] = useState(1);
     const [lastItem, setLastItem] = useState(1);
@@ -61,6 +62,7 @@ function ItemsTab({
     const [lastCarton, setLastCarton] = useState(1);
     const [selectedPalletItems, setSelectedPalletItems] = useState([]);
     const [selectedLooseItems, setSelectedLooseItems] = useState([]);
+    const [selectedCartonItems, setSelectedCartonItems] = useState([]);
 
     const checkRow = row => {
         if (palletData.filter(pallet => pallet.palletNumber === row.palletNumber).length > 1) {
@@ -288,6 +290,15 @@ function ItemsTab({
         }
     };
 
+    const removeItemFromCarton = (containerNumber, itemNumber) => {
+        const selectedItem = itemsData.find(a => a.itemNumber === itemNumber);
+
+        if (selectedItem.containerNumber === containerNumber) {
+            selectedItem.containerNumber = null;
+            setItemRowToBeSaved(selectedItem.itemNumber, true);
+        }
+    };
+
     const addItemsToCarton = (containerNumber, first, last) => {
         const selectedCarton = itemsData.find(a => a.containerNumber === containerNumber);
         if (selectedCarton) {
@@ -318,7 +329,11 @@ function ItemsTab({
         setSelectedPalletItems(itemsData.filter(i => row.includes(i.id)));
     };
 
-    const handlePalletDialogSelectItemRow = row => {
+    const handleCartonDialogSelectCartonRow = row => {
+        setSelectedCartonItems(itemsData.filter(i => row.includes(i.id)));
+    };
+
+    const handleDialogSelectItemRow = row => {
         setSelectedLooseItems(itemsData.filter(i => row.includes(i.id)));
     };
 
@@ -330,7 +345,7 @@ function ItemsTab({
         recalculatePallet(palletDialogPalletNumber);
     };
 
-    const addSelectedLooseItems = () => {
+    const addSelectedLooseItemsToPallet = () => {
         selectedLooseItems.forEach(item => {
             addItemToPallet(palletDialogPalletNumber, item.itemNumber);
         });
@@ -352,6 +367,38 @@ function ItemsTab({
         setSelectedLooseItems([]);
         setSelectedPalletItems([]);
         setPalletDialogPalletNumber(palletNumber);
+    };
+
+    const openCartonDialog = palletNumber => {
+        setSelectedLooseItems([]);
+        setSelectedCartonItems([]);
+        setCartonDialogContainerNumber(palletNumber);
+    };
+
+    const removeAllCartonItems = () => {
+        itemsData
+            .filter(a => a.containerNumber === cartonDialogContainerNumber && a.itemType !== 'C')
+            .forEach(item => {
+                removeItemFromCarton(cartonDialogContainerNumber, item.itemNumber);
+            });
+
+        recalculateCarton(cartonDialogContainerNumber);
+    };
+
+    const removeSelectedCartonItems = () => {
+        selectedCartonItems.forEach(item => {
+            removeItemFromCarton(cartonDialogContainerNumber, item.itemNumber);
+        });
+
+        recalculateCarton(cartonDialogContainerNumber);
+    };
+
+    const addSelectedLooseItemsToCarton = () => {
+        selectedLooseItems.forEach(item => {
+            addItemToCarton(cartonDialogContainerNumber, item.itemNumber);
+        });
+
+        recalculateCarton(cartonDialogContainerNumber);
     };
 
     const palletColumns = [
@@ -544,6 +591,16 @@ function ItemsTab({
         { field: 'itemNumber', headerName: 'Item', minWidth: 80, disableColumnMenu: true },
         { field: 'containerNumber', headerName: 'Box', minWidth: 80, disableColumnMenu: true },
         { field: 'itemTypeDisplay', headerName: 'Type', minWidth: 100, disableColumnMenu: true },
+        {
+            field: 'itemDescription',
+            headerName: 'Description',
+            minWidth: 150,
+            disableColumnMenu: true
+        }
+    ];
+
+    const cartonDialogColumns = [
+        { field: 'itemNumber', headerName: 'Item', minWidth: 80, disableColumnMenu: true },
         {
             field: 'itemDescription',
             headerName: 'Description',
@@ -795,6 +852,7 @@ function ItemsTab({
                                     &gt;&gt;
                                 </Button>
                                 <Button
+                                    style={{ marginTop: '20px', marginBottom: '20px' }}
                                     onClick={() => removeSelectedPalletItems()}
                                     variant="contained"
                                     autoFocus
@@ -803,7 +861,7 @@ function ItemsTab({
                                     -&gt;
                                 </Button>
                                 <Button
-                                    onClick={() => addSelectedLooseItems()}
+                                    onClick={() => addSelectedLooseItemsToPallet()}
                                     variant="contained"
                                     autoFocus
                                     fullWidth
@@ -820,7 +878,7 @@ function ItemsTab({
                                         rowHeight={34}
                                         checkboxSelection
                                         hideFooter
-                                        onSelectionModelChange={handlePalletDialogSelectItemRow}
+                                        onSelectionModelChange={handleDialogSelectItemRow}
                                     />
                                 </div>
                             </Grid>
@@ -872,7 +930,17 @@ function ItemsTab({
                                     Recalculate
                                 </Button>
                             </Grid>
-                            <Grid item xs={5} />
+                            <Grid item xs={3}>
+                                <Button
+                                    style={{ marginTop: '23px', marginBottom: '40px' }}
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={() => openCartonDialog(addToCartonNumber)}
+                                >
+                                    Add/Remove
+                                </Button>
+                            </Grid>
+                            <Grid item xs={2} />
                             <Grid item xs={3}>
                                 <InputField
                                     label="First Item"
@@ -911,6 +979,89 @@ function ItemsTab({
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setAddToCartonNumber(0)} variant="contained" autoFocus>
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={cartonDialogContainerNumber > 0}
+                onClose={() => setCartonDialogContainerNumber(0)}
+                fullWidth
+                maxWidth="xl"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    Add/Remove items on carton {cartonDialogContainerNumber}
+                </DialogTitle>
+                <DialogContent>
+                    <>
+                        <Grid container justifyContent="center">
+                            <Grid item xs={5}>
+                                <div style={{ height: 500, width: '100%' }}>
+                                    <DataGrid
+                                        rows={itemsData.filter(
+                                            a =>
+                                                a.containerNumber === cartonDialogContainerNumber &&
+                                                a.itemType === 'I'
+                                        )}
+                                        columns={cartonDialogColumns}
+                                        density="compact"
+                                        rowHeight={34}
+                                        checkboxSelection
+                                        hideFooter
+                                        onSelectionModelChange={handleCartonDialogSelectCartonRow}
+                                    />
+                                </div>
+                            </Grid>
+                            <Grid item xs={1}>
+                                <Button
+                                    onClick={() => removeAllCartonItems()}
+                                    variant="contained"
+                                    autoFocus
+                                    fullWidth
+                                >
+                                    &gt;&gt;
+                                </Button>
+                                <Button
+                                    style={{ marginTop: '20px', marginBottom: '20px' }}
+                                    onClick={() => removeSelectedCartonItems()}
+                                    variant="contained"
+                                    autoFocus
+                                    fullWidth
+                                >
+                                    -&gt;
+                                </Button>
+                                <Button
+                                    onClick={() => addSelectedLooseItemsToCarton()}
+                                    variant="contained"
+                                    autoFocus
+                                    fullWidth
+                                >
+                                    &lt;-
+                                </Button>
+                            </Grid>
+                            <Grid item xs={5}>
+                                <div style={{ height: 500, width: '100%' }}>
+                                    <DataGrid
+                                        rows={itemsData.filter(a => okToCartonise(a))}
+                                        columns={cartonDialogColumns}
+                                        density="compact"
+                                        rowHeight={34}
+                                        checkboxSelection
+                                        hideFooter
+                                        onSelectionModelChange={handleDialogSelectItemRow}
+                                    />
+                                </div>
+                            </Grid>
+                            <Grid item xs={1} />
+                        </Grid>
+                    </>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={() => setCartonDialogContainerNumber(0)}
+                        variant="contained"
+                        autoFocus
+                    >
                         Close
                     </Button>
                 </DialogActions>
