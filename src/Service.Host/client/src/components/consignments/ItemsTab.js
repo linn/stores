@@ -120,6 +120,19 @@ function ItemsTab({
         }
     };
 
+    const addRemoveToFromPallet = palletNumber => {
+        if (!palletNumber) {
+            const selectedPallet = palletData.find(a => a.editing);
+            if (selectedPallet) {
+                setPalletDialogPalletNumber(selectedPallet.palletNumber);
+            } else {
+                setPalletDialogPalletNumber(1);
+            }
+        } else {
+            setPalletDialogPalletNumber(palletNumber);
+        }
+    };
+
     const addToCarton = containerNumber => {
         if (!containerNumber) {
             const selectedCarton = itemsData.find(a => a.editing);
@@ -130,6 +143,19 @@ function ItemsTab({
             }
         } else {
             setAddToCartonNumber(containerNumber);
+        }
+    };
+
+    const addRemoveToFromCarton = containerNumber => {
+        if (!containerNumber) {
+            const selectedCarton = itemsData.find(a => a.editing);
+            if (selectedCarton) {
+                setCartonDialogContainerNumber(selectedCarton.containerNumber);
+            } else {
+                setCartonDialogContainerNumber(1);
+            }
+        } else {
+            setCartonDialogContainerNumber(containerNumber);
         }
     };
 
@@ -377,7 +403,7 @@ function ItemsTab({
 
     const removeAllCartonItems = () => {
         itemsData
-            .filter(a => a.containerNumber === cartonDialogContainerNumber && a.itemType !== 'C')
+            .filter(a => a.containerNumber === cartonDialogContainerNumber && a.itemType === 'I')
             .forEach(item => {
                 removeItemFromCarton(cartonDialogContainerNumber, item.itemNumber);
             });
@@ -639,30 +665,50 @@ function ItemsTab({
                 </Grid>
                 <Grid item xs={2}>
                     {palletData.length > 0 ? (
-                        <Button
-                            style={{ marginTop: '40px' }}
-                            onClick={() => addToPallet()}
-                            variant="outlined"
-                            color="primary"
-                            disabled={viewing}
-                        >
-                            Add To Pallet
-                        </Button>
+                        <>
+                            <Button
+                                onClick={() => addRemoveToFromPallet()}
+                                variant="outlined"
+                                color="primary"
+                                disabled={viewing}
+                            >
+                                Pallet Add/Remove
+                            </Button>
+                            <Button
+                                style={{ marginTop: '10px' }}
+                                onClick={() => addToPallet()}
+                                variant="outlined"
+                                color="primary"
+                                disabled={viewing}
+                            >
+                                Add Items To Pallet
+                            </Button>
+                        </>
                     ) : (
                         ''
                     )}
                 </Grid>
                 <Grid item xs={2}>
                     {itemsData.length > 0 && itemsData.find(a => a.containerNumber) ? (
-                        <Button
-                            style={{ marginTop: '40px' }}
-                            onClick={() => addToCarton()}
-                            variant="outlined"
-                            color="primary"
-                            disabled={viewing}
-                        >
-                            Add To Carton
-                        </Button>
+                        <>
+                            <Button
+                                onClick={() => addRemoveToFromCarton()}
+                                variant="outlined"
+                                color="primary"
+                                disabled={viewing}
+                            >
+                                Carton Add/Remove
+                            </Button>
+                            <Button
+                                style={{ marginTop: '10px' }}
+                                onClick={() => addToCarton()}
+                                variant="outlined"
+                                color="primary"
+                                disabled={viewing}
+                            >
+                                Add Items To Carton
+                            </Button>
+                        </>
                     ) : (
                         ''
                     )}
