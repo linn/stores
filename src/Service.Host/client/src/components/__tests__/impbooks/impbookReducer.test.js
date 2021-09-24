@@ -127,7 +127,15 @@ describe('impbook reducer tests', () => {
     it('should handle orderDetail add', () => {
         expect(
             importBookReducer(
-                { impbook: { importBookOrderDetails: [{ lineNumber: 1 }, { lineNumber: 2 }] } },
+                {
+                    impbook: {
+                        id: 51,
+                        importBookOrderDetails: [
+                            { importBookId: 51, lineNumber: 1 },
+                            { importBookId: 51, lineNumber: 2 }
+                        ]
+                    }
+                },
                 {
                     type: 'orderDetailAdd',
                     payload: {}
@@ -135,16 +143,11 @@ describe('impbook reducer tests', () => {
             )
         ).toEqual({
             impbook: {
+                id: 51,
                 importBookOrderDetails: [
-                    {
-                        lineNumber: 1
-                    },
-                    {
-                        lineNumber: 2
-                    },
-                    {
-                        lineNumber: 3
-                    }
+                    { importBookId: 51, lineNumber: 1 },
+                    { importBookId: 51, lineNumber: 2 },
+                    { importBookId: 51, lineNumber: 3 }
                 ]
             }
         });
@@ -155,32 +158,27 @@ describe('impbook reducer tests', () => {
             importBookReducer(
                 {
                     impbook: {
+                        id: 99,
                         importBookOrderDetails: [
-                            { lineNumber: 1 },
-                            { lineNumber: 2 },
-                            { lineNumber: 3 }
+                            { importBookId: 99, lineNumber: 1 },
+                            { importBookId: 99, lineNumber: 2 },
+                            { importBookId: 99, lineNumber: 3 }
                         ]
                     }
                 },
                 {
                     type: 'orderDetailFieldChange',
-                    payload: { lineNumber: 1, potato: 'blah' },
+                    payload: { importBookId: 99, lineNumber: 1, potato: 'blah' },
                     lineNumber: 1
                 }
             )
         ).toEqual({
             impbook: {
+                id: 99,
                 importBookOrderDetails: [
-                    {
-                        lineNumber: 2
-                    },
-                    {
-                        lineNumber: 3
-                    },
-                    {
-                        lineNumber: 1,
-                        potato: 'blah'
-                    }
+                    { importBookId: 99, lineNumber: 2 },
+                    { importBookId: 99, lineNumber: 3 },
+                    { importBookId: 99, lineNumber: 1, potato: 'blah' }
                 ]
             }
         });
@@ -191,10 +189,11 @@ describe('impbook reducer tests', () => {
             importBookReducer(
                 {
                     impbook: {
+                        id: 99,
                         importBookOrderDetails: [
-                            { lineNumber: 1 },
-                            { lineNumber: 2 },
-                            { lineNumber: 3 }
+                            { importBookId: 99, lineNumber: 1 },
+                            { importBookId: 99, lineNumber: 2 },
+                            { importBookId: 99, lineNumber: 3 }
                         ]
                     }
                 },
@@ -205,13 +204,10 @@ describe('impbook reducer tests', () => {
             )
         ).toEqual({
             impbook: {
+                id: 99,
                 importBookOrderDetails: [
-                    {
-                        lineNumber: 1
-                    },
-                    {
-                        lineNumber: 3
-                    }
+                    { importBookId: 99, lineNumber: 1 },
+                    { importBookId: 99, lineNumber: 3 }
                 ]
             }
         });
@@ -222,21 +218,33 @@ describe('impbook reducer tests', () => {
             importBookReducer(
                 {
                     impbook: {
+                        id: 99,
                         importBookInvoiceDetails: [
-                            { lineNumber: 1 },
-                            { lineNumber: 2 },
-                            { lineNumber: 3 }
+                            { importBookId: 99, lineNumber: 1, field: '1' },
+                            { importBookId: 99, lineNumber: 2, field: '2' },
+                            { importBookId: 99, lineNumber: 3, field: '3' }
                         ]
                     }
                 },
                 {
                     type: 'invoiceDetailsUpdate',
-                    details: [{ lineNumber: 5 }, { lineNumber: 6 }, { lineNumber: 7 }]
+                    details: [
+                        { importBookId: 99, lineNumber: 1, field: '1 updated' },
+                        { importBookId: 99, lineNumber: 2, field: '2' },
+                        { importBookId: 99, lineNumber: 3, field: '3' },
+                        {}
+                    ]
                 }
             )
         ).toEqual({
             impbook: {
-                importBookInvoiceDetails: [{ lineNumber: 5 }, { lineNumber: 6 }, { lineNumber: 7 }]
+                id: 99,
+                importBookInvoiceDetails: [
+                    { importBookId: 99, lineNumber: 1, field: '1 updated' },
+                    { importBookId: 99, lineNumber: 2, field: '2' },
+                    { importBookId: 99, lineNumber: 3, field: '3' },
+                    { importBookId: 99, lineNumber: 4 }
+                ]
             }
         });
     });
@@ -246,21 +254,33 @@ describe('impbook reducer tests', () => {
             importBookReducer(
                 {
                     impbook: {
+                        id: 99,
                         importBookPostEntries: [
-                            { lineNumber: 1 },
-                            { lineNumber: 2 },
-                            { lineNumber: 3 }
+                            { importBookId: 99, lineNumber: 1 },
+                            { importBookId: 99, lineNumber: 2 },
+                            { importBookId: 99, lineNumber: 3 }
                         ]
                     }
                 },
                 {
                     type: 'postEntriesUpdate',
-                    entries: [{ lineNumber: 5 }, { lineNumber: 6 }, { lineNumber: 7 }]
+                    entries: [
+                        { importBookId: 99, lineNumber: 1 },
+                        { importBookId: 99, lineNumber: 2 },
+                        { importBookId: 99, lineNumber: 3 },
+                        {}
+                    ]
                 }
             )
         ).toEqual({
             impbook: {
-                importBookPostEntries: [{ lineNumber: 5 }, { lineNumber: 6 }, { lineNumber: 7 }]
+                id: 99,
+                importBookPostEntries: [
+                    { importBookId: 99, lineNumber: 1 },
+                    { importBookId: 99, lineNumber: 2 },
+                    { importBookId: 99, lineNumber: 3 },
+                    { importBookId: 99, lineNumber: 4 }
+                ]
             }
         });
     });
