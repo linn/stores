@@ -220,8 +220,6 @@ describe('When editing', () => {
     });
 
     test('parcel no is displayed', () => {
-        expect(screen.getByLabelText('Parcel Number')).toBeInTheDocument();
-        expect(screen.getByDisplayValue('52828')).toBeInTheDocument();
         expect(screen.getByLabelText('Parcel Number')).toHaveDisplayValue(52828);
     });
 
