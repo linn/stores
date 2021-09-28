@@ -13,6 +13,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
+import { DataGrid } from '@mui/x-data-grid';
 
 function ItemsTab({
     editableItems,
@@ -52,11 +53,16 @@ function ItemsTab({
     });
 
     const [addToPalletNumber, setAddToPalletNumber] = useState(0);
+    const [palletDialogPalletNumber, setPalletDialogPalletNumber] = useState(0);
+    const [cartonDialogContainerNumber, setCartonDialogContainerNumber] = useState(0);
     const [addToCartonNumber, setAddToCartonNumber] = useState(0);
     const [firstItem, setFirstItem] = useState(1);
     const [lastItem, setLastItem] = useState(1);
     const [firstCarton, setFirstCarton] = useState(1);
     const [lastCarton, setLastCarton] = useState(1);
+    const [selectedPalletItems, setSelectedPalletItems] = useState([]);
+    const [selectedLooseItems, setSelectedLooseItems] = useState([]);
+    const [selectedCartonItems, setSelectedCartonItems] = useState([]);
 
     const checkRow = row => {
         if (palletData.filter(pallet => pallet.palletNumber === row.palletNumber).length > 1) {
@@ -114,6 +120,19 @@ function ItemsTab({
         }
     };
 
+    const addRemoveToFromPallet = palletNumber => {
+        if (!palletNumber) {
+            const selectedPallet = palletData.find(a => a.editing);
+            if (selectedPallet) {
+                setPalletDialogPalletNumber(selectedPallet.palletNumber);
+            } else {
+                setPalletDialogPalletNumber(1);
+            }
+        } else {
+            setPalletDialogPalletNumber(palletNumber);
+        }
+    };
+
     const addToCarton = containerNumber => {
         if (!containerNumber) {
             const selectedCarton = itemsData.find(a => a.editing);
@@ -124,6 +143,19 @@ function ItemsTab({
             }
         } else {
             setAddToCartonNumber(containerNumber);
+        }
+    };
+
+    const addRemoveToFromCarton = containerNumber => {
+        if (!containerNumber) {
+            const selectedCarton = itemsData.find(a => a.editing);
+            if (selectedCarton) {
+                setCartonDialogContainerNumber(selectedCarton.containerNumber);
+            } else {
+                setCartonDialogContainerNumber(1);
+            }
+        } else {
+            setCartonDialogContainerNumber(containerNumber);
         }
     };
 
@@ -193,6 +225,15 @@ function ItemsTab({
 
         if (selectedPallet && okToPalletise(currentItem)) {
             currentItem.palletNumber = palletNumber;
+            setItemRowToBeSaved(currentItem.itemNumber, true);
+        }
+    };
+
+    const removeItemFromPallet = (palletNumber, itemNumber) => {
+        const currentItem = itemsData.find(a => a.itemNumber === itemNumber);
+
+        if (currentItem.palletNumber === palletNumber) {
+            currentItem.palletNumber = null;
             setItemRowToBeSaved(currentItem.itemNumber, true);
         }
     };
@@ -275,6 +316,15 @@ function ItemsTab({
         }
     };
 
+    const removeItemFromCarton = (containerNumber, itemNumber) => {
+        const selectedItem = itemsData.find(a => a.itemNumber === itemNumber);
+
+        if (selectedItem.containerNumber === containerNumber) {
+            selectedItem.containerNumber = null;
+            setItemRowToBeSaved(selectedItem.itemNumber, true);
+        }
+    };
+
     const addItemsToCarton = (containerNumber, first, last) => {
         const selectedCarton = itemsData.find(a => a.containerNumber === containerNumber);
         if (selectedCarton) {
@@ -299,6 +349,82 @@ function ItemsTab({
 
     const handleAddCartonsToPallet = () => {
         addCartonsToPallet(addToPalletNumber, firstCarton, lastCarton);
+    };
+
+    const handlePalletDialogSelectPalletRow = row => {
+        setSelectedPalletItems(itemsData.filter(i => row.includes(i.id)));
+    };
+
+    const handleCartonDialogSelectCartonRow = row => {
+        setSelectedCartonItems(itemsData.filter(i => row.includes(i.id)));
+    };
+
+    const handleDialogSelectItemRow = row => {
+        setSelectedLooseItems(itemsData.filter(i => row.includes(i.id)));
+    };
+
+    const removeSelectedPalletItems = () => {
+        selectedPalletItems.forEach(item => {
+            removeItemFromPallet(palletDialogPalletNumber, item.itemNumber);
+        });
+
+        recalculatePallet(palletDialogPalletNumber);
+    };
+
+    const addSelectedLooseItemsToPallet = () => {
+        selectedLooseItems.forEach(item => {
+            addItemToPallet(palletDialogPalletNumber, item.itemNumber);
+        });
+
+        recalculatePallet(palletDialogPalletNumber);
+    };
+
+    const removeAllPalletItems = () => {
+        itemsData
+            .filter(a => a.palletNumber === palletDialogPalletNumber)
+            .forEach(item => {
+                removeItemFromPallet(palletDialogPalletNumber, item.itemNumber);
+            });
+
+        recalculatePallet(palletDialogPalletNumber);
+    };
+
+    const openPalletDialog = palletNumber => {
+        setSelectedLooseItems([]);
+        setSelectedPalletItems([]);
+        setPalletDialogPalletNumber(palletNumber);
+    };
+
+    const openCartonDialog = palletNumber => {
+        setSelectedLooseItems([]);
+        setSelectedCartonItems([]);
+        setCartonDialogContainerNumber(palletNumber);
+    };
+
+    const removeAllCartonItems = () => {
+        itemsData
+            .filter(a => a.containerNumber === cartonDialogContainerNumber && a.itemType === 'I')
+            .forEach(item => {
+                removeItemFromCarton(cartonDialogContainerNumber, item.itemNumber);
+            });
+
+        recalculateCarton(cartonDialogContainerNumber);
+    };
+
+    const removeSelectedCartonItems = () => {
+        selectedCartonItems.forEach(item => {
+            removeItemFromCarton(cartonDialogContainerNumber, item.itemNumber);
+        });
+
+        recalculateCarton(cartonDialogContainerNumber);
+    };
+
+    const addSelectedLooseItemsToCarton = () => {
+        selectedLooseItems.forEach(item => {
+            addItemToCarton(cartonDialogContainerNumber, item.itemNumber);
+        });
+
+        recalculateCarton(cartonDialogContainerNumber);
     };
 
     const palletColumns = [
@@ -487,6 +613,28 @@ function ItemsTab({
         }
     ];
 
+    const palletDialogColumns = [
+        { field: 'itemNumber', headerName: 'Item', minWidth: 80, disableColumnMenu: true },
+        { field: 'containerNumber', headerName: 'Box', minWidth: 80, disableColumnMenu: true },
+        { field: 'itemTypeDisplay', headerName: 'Type', minWidth: 100, disableColumnMenu: true },
+        {
+            field: 'itemDescription',
+            headerName: 'Description',
+            minWidth: 150,
+            disableColumnMenu: true
+        }
+    ];
+
+    const cartonDialogColumns = [
+        { field: 'itemNumber', headerName: 'Item', minWidth: 80, disableColumnMenu: true },
+        {
+            field: 'itemDescription',
+            headerName: 'Description',
+            minWidth: 150,
+            disableColumnMenu: true
+        }
+    ];
+
     return (
         <>
             <Grid container spacing={3} style={{ paddingTop: '30px' }}>
@@ -517,30 +665,50 @@ function ItemsTab({
                 </Grid>
                 <Grid item xs={2}>
                     {palletData.length > 0 ? (
-                        <Button
-                            style={{ marginTop: '40px' }}
-                            onClick={() => addToPallet()}
-                            variant="outlined"
-                            color="primary"
-                            disabled={viewing}
-                        >
-                            Add To Pallet
-                        </Button>
+                        <>
+                            <Button
+                                onClick={() => addRemoveToFromPallet()}
+                                variant="outlined"
+                                color="primary"
+                                disabled={viewing}
+                            >
+                                Pallet Add/Remove
+                            </Button>
+                            <Button
+                                style={{ marginTop: '10px' }}
+                                onClick={() => addToPallet()}
+                                variant="outlined"
+                                color="primary"
+                                disabled={viewing}
+                            >
+                                Add Items To Pallet
+                            </Button>
+                        </>
                     ) : (
                         ''
                     )}
                 </Grid>
                 <Grid item xs={2}>
                     {itemsData.length > 0 && itemsData.find(a => a.containerNumber) ? (
-                        <Button
-                            style={{ marginTop: '40px' }}
-                            onClick={() => addToCarton()}
-                            variant="outlined"
-                            color="primary"
-                            disabled={viewing}
-                        >
-                            Add To Carton
-                        </Button>
+                        <>
+                            <Button
+                                onClick={() => addRemoveToFromCarton()}
+                                variant="outlined"
+                                color="primary"
+                                disabled={viewing}
+                            >
+                                Carton Add/Remove
+                            </Button>
+                            <Button
+                                style={{ marginTop: '10px' }}
+                                onClick={() => addToCarton()}
+                                variant="outlined"
+                                color="primary"
+                                disabled={viewing}
+                            >
+                                Add Items To Carton
+                            </Button>
+                        </>
                     ) : (
                         ''
                     )}
@@ -607,7 +775,17 @@ function ItemsTab({
                                     Recalculate
                                 </Button>
                             </Grid>
-                            <Grid item xs={5} />
+                            <Grid item xs={3}>
+                                <Button
+                                    style={{ marginTop: '23px', marginBottom: '40px' }}
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={() => openPalletDialog(addToPalletNumber)}
+                                >
+                                    Add/Remove
+                                </Button>
+                            </Grid>
+                            <Grid item xs={2} />
                             <Grid item xs={3}>
                                 <InputField
                                     label="First Item"
@@ -684,6 +862,87 @@ function ItemsTab({
                 </DialogActions>
             </Dialog>
             <Dialog
+                open={palletDialogPalletNumber > 0}
+                onClose={() => setPalletDialogPalletNumber(0)}
+                fullWidth
+                maxWidth="xl"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    Add/Remove items on pallet {palletDialogPalletNumber}
+                </DialogTitle>
+                <DialogContent>
+                    <>
+                        <Grid container justifyContent="center">
+                            <Grid item xs={5}>
+                                <div style={{ height: 500, width: '100%' }}>
+                                    <DataGrid
+                                        rows={itemsData.filter(
+                                            a => a.palletNumber === palletDialogPalletNumber
+                                        )}
+                                        columns={palletDialogColumns}
+                                        density="compact"
+                                        rowHeight={34}
+                                        checkboxSelection
+                                        hideFooter
+                                        onSelectionModelChange={handlePalletDialogSelectPalletRow}
+                                    />
+                                </div>
+                            </Grid>
+                            <Grid item xs={1}>
+                                <Button
+                                    onClick={() => removeAllPalletItems()}
+                                    variant="contained"
+                                    autoFocus
+                                    fullWidth
+                                >
+                                    &gt;&gt;
+                                </Button>
+                                <Button
+                                    style={{ marginTop: '20px', marginBottom: '20px' }}
+                                    onClick={() => removeSelectedPalletItems()}
+                                    variant="contained"
+                                    autoFocus
+                                    fullWidth
+                                >
+                                    -&gt;
+                                </Button>
+                                <Button
+                                    onClick={() => addSelectedLooseItemsToPallet()}
+                                    variant="contained"
+                                    autoFocus
+                                    fullWidth
+                                >
+                                    &lt;-
+                                </Button>
+                            </Grid>
+                            <Grid item xs={5}>
+                                <div style={{ height: 500, width: '100%' }}>
+                                    <DataGrid
+                                        rows={itemsData.filter(a => okToPalletise(a))}
+                                        columns={palletDialogColumns}
+                                        density="compact"
+                                        rowHeight={34}
+                                        checkboxSelection
+                                        hideFooter
+                                        onSelectionModelChange={handleDialogSelectItemRow}
+                                    />
+                                </div>
+                            </Grid>
+                            <Grid item xs={1} />
+                        </Grid>
+                    </>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={() => setPalletDialogPalletNumber(0)}
+                        variant="contained"
+                        autoFocus
+                    >
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
                 open={addToCartonNumber > 0}
                 onClose={() => setAddToCartonNumber(0)}
                 aria-labelledby="alert-dialog-title"
@@ -717,7 +976,17 @@ function ItemsTab({
                                     Recalculate
                                 </Button>
                             </Grid>
-                            <Grid item xs={5} />
+                            <Grid item xs={3}>
+                                <Button
+                                    style={{ marginTop: '23px', marginBottom: '40px' }}
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={() => openCartonDialog(addToCartonNumber)}
+                                >
+                                    Add/Remove
+                                </Button>
+                            </Grid>
+                            <Grid item xs={2} />
                             <Grid item xs={3}>
                                 <InputField
                                     label="First Item"
@@ -756,6 +1025,89 @@ function ItemsTab({
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setAddToCartonNumber(0)} variant="contained" autoFocus>
+                        Close
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={cartonDialogContainerNumber > 0}
+                onClose={() => setCartonDialogContainerNumber(0)}
+                fullWidth
+                maxWidth="xl"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    Add/Remove items on carton {cartonDialogContainerNumber}
+                </DialogTitle>
+                <DialogContent>
+                    <>
+                        <Grid container justifyContent="center">
+                            <Grid item xs={5}>
+                                <div style={{ height: 500, width: '100%' }}>
+                                    <DataGrid
+                                        rows={itemsData.filter(
+                                            a =>
+                                                a.containerNumber === cartonDialogContainerNumber &&
+                                                a.itemType === 'I'
+                                        )}
+                                        columns={cartonDialogColumns}
+                                        density="compact"
+                                        rowHeight={34}
+                                        checkboxSelection
+                                        hideFooter
+                                        onSelectionModelChange={handleCartonDialogSelectCartonRow}
+                                    />
+                                </div>
+                            </Grid>
+                            <Grid item xs={1}>
+                                <Button
+                                    onClick={() => removeAllCartonItems()}
+                                    variant="contained"
+                                    autoFocus
+                                    fullWidth
+                                >
+                                    &gt;&gt;
+                                </Button>
+                                <Button
+                                    style={{ marginTop: '20px', marginBottom: '20px' }}
+                                    onClick={() => removeSelectedCartonItems()}
+                                    variant="contained"
+                                    autoFocus
+                                    fullWidth
+                                >
+                                    -&gt;
+                                </Button>
+                                <Button
+                                    onClick={() => addSelectedLooseItemsToCarton()}
+                                    variant="contained"
+                                    autoFocus
+                                    fullWidth
+                                >
+                                    &lt;-
+                                </Button>
+                            </Grid>
+                            <Grid item xs={5}>
+                                <div style={{ height: 500, width: '100%' }}>
+                                    <DataGrid
+                                        rows={itemsData.filter(a => okToCartonise(a))}
+                                        columns={cartonDialogColumns}
+                                        density="compact"
+                                        rowHeight={34}
+                                        checkboxSelection
+                                        hideFooter
+                                        onSelectionModelChange={handleDialogSelectItemRow}
+                                    />
+                                </div>
+                            </Grid>
+                            <Grid item xs={1} />
+                        </Grid>
+                    </>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        onClick={() => setCartonDialogContainerNumber(0)}
+                        variant="contained"
+                        autoFocus
+                    >
                         Close
                     </Button>
                 </DialogActions>
