@@ -172,7 +172,7 @@ function ImportBook({
     };
 
     const allowedToEdit = () => {
-        return privileges.includes(priv => priv === 'import-books.admin');
+        return privileges?.some(priv => priv === 'import-books.admin');
     };
 
     const totalInvoiceValue = () => {
