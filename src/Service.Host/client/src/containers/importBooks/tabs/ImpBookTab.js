@@ -66,14 +66,10 @@ const mapStateToProps = state => ({
 
 const initialise = props => dispatch => {
     if (
-       !props.transportCodes ||
-        props.transportCodes.length === 0 ||
-        !props.transactionCodes ||
-        props.transactionCodes.length === 0 ||
-        !props.deliveryTerms ||
-        props.deliveryTerms.length === 0 ||
-        !props.ports ||
-        props.ports.length === 0
+        !props.transportCodes?.length ||
+        !props.transactionCodes?.length ||
+        !props.deliveryTerms?.length ||
+        !props.ports?.length
     ) {
         dispatch(transportCodesActions.fetch());
         dispatch(transactionCodesActions.fetch());
