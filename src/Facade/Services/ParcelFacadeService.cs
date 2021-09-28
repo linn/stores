@@ -63,9 +63,9 @@
                                        : DateTime.Parse(updateResource.DateCancelled);
         }
 
-        protected override Expression<Func<Parcel, bool>> SearchExpression(string searchTerms)
+        protected override Expression<Func<Parcel, bool>> SearchExpression(string searchTerm)
         {
-            throw new NotImplementedException();
+            return x => x.ParcelNumber.ToString().Equals(searchTerm) || x.ParcelNumber.ToString().Contains(searchTerm);
         }
 
         protected override Expression<Func<Parcel, bool>> FilterExpression(ParcelSearchRequestResource searchTerms)

@@ -4,6 +4,7 @@
   "description": "stores",
   "main": "index.js",
   "scripts": {
+    "noEmitOnError": true,
     "prettier:format": "prettier --write \"{,client/src/**/}*.{md,json,js,jsx,css,scss}\"",
     "start": "node ./webpack/server.js",
     "build": "webpack --config ./webpack/webpack.prod.config.js",

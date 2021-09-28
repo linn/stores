@@ -423,3 +423,5 @@ export const consignmentPackingList = new ItemType(
     'CONSIGNMENT_PACKING_LIST',
     '/logistics/consignments'
 );
+
+export const parcelsByNumber = new ItemType('parcels', 'PARCELS', '/logistics/parcels-by-number');
