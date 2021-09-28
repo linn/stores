@@ -17,9 +17,9 @@ function OrderDetailsTab({
     allowedToEdit,
     addOrderDetailRow,
     removeOrderDetailRow,
-    totalInvoiceValue,
-    duty,
-    weight
+    remainingInvoiceValue,
+    remainingDutyValue,
+    remainingWeightValue
 }) {
     const updateRow = detail => {
         handleOrderDetailChange(detail.lineNumber, detail);
@@ -61,42 +61,6 @@ function OrderDetailsTab({
         updateRow({ ...row, [propertyName]: newValue });
     };
 
-    const calcRemainingTotal = () => {
-        const orderDetailsTotal = orderDetails?.reduce((a, v) => a + v.orderValue, 0);
-
-        let remaining = `${totalInvoiceValue - orderDetailsTotal}`;
-
-        if (remaining) {
-            remaining = `${parseFloat(remaining).toFixed(2)}`;
-        }
-
-        return remaining || 0;
-    };
-
-    const calcRemainingDuty = () => {
-        const orderDetailsDutyTotal = orderDetails?.reduce((a, v) => a + v.dutyValue, 0);
-
-        let remaining = `${duty - orderDetailsDutyTotal}`;
-
-        if (remaining) {
-            remaining = `${parseFloat(remaining).toFixed(2)}`;
-        }
-
-        return remaining || 0;
-    };
-
-    const calcRemainingWeight = () => {
-        const orderDetailsWeightTotal = orderDetails?.reduce((a, v) => a + v.weight, 0);
-
-        let remaining = `${weight - orderDetailsWeightTotal}`;
-
-        if (remaining) {
-            remaining = `${parseFloat(remaining).toFixed(2)}`;
-        }
-
-        return remaining || 0;
-    };
-
     return (
         <>
             <Grid container spacing={1} item xs={7}>
@@ -106,7 +70,7 @@ function OrderDetailsTab({
                         fullWidth
                         propertyName="remainingTotal"
                         type="number"
-                        value={calcRemainingTotal()}
+                        value={remainingInvoiceValue}
                         disabled
                     />
                 </Grid>
@@ -116,8 +80,7 @@ function OrderDetailsTab({
                         fullWidth
                         propertyName="remainingDutyTotal"
                         type="number"
-                        value={calcRemainingDuty()}
-                        required
+                        value={remainingDutyValue}
                         disabled
                     />
                 </Grid>
@@ -127,7 +90,7 @@ function OrderDetailsTab({
                         fullWidth
                         propertyName="remainingWeight"
                         type="number"
-                        value={calcRemainingWeight()}
+                        value={remainingWeightValue}
                         disabled
                     />
                 </Grid>
@@ -391,6 +354,7 @@ function OrderDetailsTab({
                                     propertyName="cpcNumber"
                                     value={row.cpcNumber}
                                     disabled={!allowedToEdit}
+                                    type="number"
                                 />
                             </Grid>
                             <Grid item xs={2}>
@@ -436,10 +400,10 @@ function OrderDetailsTab({
 OrderDetailsTab.propTypes = {
     orderDetails: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     handleFieldChange: PropTypes.func.isRequired,
-    totalInvoiceValue: PropTypes.number.isRequired,
-    duty: PropTypes.number.isRequired,
-    weight: PropTypes.number.isRequired,
-    invoiceDate: PropTypes.string.isRequired,
+    remainingInvoiceValue: PropTypes.string.isRequired,
+    remainingDutyValue: PropTypes.number.isRequired,
+    remainingWeightValue: PropTypes.number.isRequired,
+    invoiceDate: PropTypes.string,
     handleOrderDetailChange: PropTypes.func.isRequired,
     cpcNumbers: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     allowedToEdit: PropTypes.bool.isRequired,
@@ -447,6 +411,8 @@ OrderDetailsTab.propTypes = {
     removeOrderDetailRow: PropTypes.func.isRequired
 };
 
-OrderDetailsTab.defaultProps = {};
+OrderDetailsTab.defaultProps = {
+    invoiceDate: ''
+};
 
 export default OrderDetailsTab;

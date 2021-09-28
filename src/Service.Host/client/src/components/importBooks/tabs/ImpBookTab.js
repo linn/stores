@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -19,7 +19,6 @@ function ImpBookTab({
     suppliersSearchLoading,
     searchSuppliers,
     clearSuppliersSearch,
-    allSuppliers,
     carriersSearchResults,
     carriersSearchLoading,
     searchCarriers,
@@ -52,79 +51,20 @@ function ImpBookTab({
     createdBy,
     customsEntryCodePrefix,
     allowedToEdit,
-    countries,
     currencies,
     handleUpdateInvoiceDetails,
     invoiceDetails,
-    totalInvoiceValue
+    totalInvoiceValue,
+    searchParcels,
+    clearParcelsSearch,
+    parcelsSearchResults,
+    parcelsSearchLoading,
+    handleParcelChange,
+    supplierCountryValue,
+    supplierNameValue,
+    carrierNameValue,
+    countryIsInEU
 }) {
-    const [localSuppliers, setLocalSuppliers] = useState([{}]);
-
-    useEffect(() => {
-        if (allSuppliers) {
-            setLocalSuppliers([...allSuppliers]);
-        }
-    }, [allSuppliers]);
-
-    const supplierCountryValue = () => {
-        if (localSuppliers.length && supplierId) {
-            const tempSupplier = localSuppliers.find(x => x.id === supplierId);
-            if (!tempSupplier) {
-                return '-';
-            }
-            return tempSupplier.countryCode;
-        }
-        if (!supplierId) {
-            return '';
-        }
-
-        return 'loading..';
-    };
-
-    const supplierNameValue = () => {
-        if (localSuppliers.length && supplierId) {
-            const tempSupplier = localSuppliers.find(x => x.id === supplierId);
-            if (!tempSupplier) {
-                return 'undefined supplier';
-            }
-            return tempSupplier.name;
-        }
-        if (!supplierId) {
-            return '';
-        }
-        return 'loading..';
-    };
-
-    const carrierNameValue = () => {
-        if (localSuppliers.length && carrierId) {
-            const tempCarrier = localSuppliers.find(x => x.id === carrierId);
-            if (!tempCarrier) {
-                return 'undefined carrier';
-            }
-            return tempCarrier.name;
-        }
-        if (!carrierId) {
-            return '';
-        }
-
-        return 'loading..';
-    };
-
-    const countryIsInEU = () => {
-        if (localSuppliers.length && supplierId) {
-            const tempSupplier = localSuppliers.find(x => x.id === supplierId);
-            if (!tempSupplier) {
-                return '';
-            }
-            const country = countries.find(x => x.countryCode === tempSupplier.countryCode);
-            return country?.eCMember;
-        }
-        if (!supplierId) {
-            return '';
-        }
-        return 'loading..';
-    };
-
     const clearSupplier = () => {
         handleFieldChange('supplierId', '');
     };
@@ -139,6 +79,10 @@ function ImpBookTab({
 
     const handleCarrierChange = carrierParam => {
         handleFieldChange('carrierId', carrierParam.id);
+    };
+
+    const clearParcel = () => {
+        handleFieldChange('parcelNumber', '');
     };
 
     const useStyles = makeStyles(theme => ({
@@ -172,6 +116,7 @@ function ImpBookTab({
                         value={dateCreated}
                         required
                         disabled={!allowedToEdit}
+                        data-testid="dateCreated"
                     />
                 </Grid>
 
@@ -188,18 +133,41 @@ function ImpBookTab({
                         onChange={handleFieldChange}
                         type="number"
                         disabled={!allowedToEdit}
+                        data-testid="createdBy"
                     />
                 </Grid>
 
                 <Grid item xs={6}>
-                    <InputField
-                        label="Parcel Number"
-                        fullWidth
-                        onChange={handleFieldChange}
-                        propertyName="parcelNumber"
-                        value={parcelNumber}
-                        disabled={!allowedToEdit}
-                    />
+                    <div className={classes.displayInline}>
+                        <Typeahead
+                            label="Parcel Number"
+                            propertyName="parcelNumber"
+                            title="Search for a parcel"
+                            onSelect={handleParcelChange}
+                            items={parcelsSearchResults}
+                            loading={parcelsSearchLoading}
+                            fetchItems={searchParcels}
+                            clearSearch={() => clearParcelsSearch}
+                            value={parcelNumber?.toString()}
+                            modal
+                            links={false}
+                            debounce={1000}
+                            minimumSearchTermLength={2}
+                            required
+                            disabled={!allowedToEdit}
+                        />
+                    </div>
+                    <div className={classes.marginTop1}>
+                        <Tooltip title="Clear Parcel search">
+                            <Button
+                                variant="outlined"
+                                onClick={clearParcel}
+                                disabled={!allowedToEdit}
+                            >
+                                X
+                            </Button>
+                        </Tooltip>
+                    </div>
                 </Grid>
 
                 <Grid item xs={6}>
@@ -245,13 +213,20 @@ function ImpBookTab({
                 <Grid item xs={3}>
                     <InputField
                         label="Supplier Country"
+                        propertyName="supplierCountry"
                         value={supplierCountryValue()}
                         disabled
                         fullwidth
                     />
                 </Grid>
                 <Grid item xs={3}>
-                    <InputField label="EC (EU) member" value={countryIsInEU()} disabled fullwidth />
+                    <InputField
+                        label="EC (EU) Member"
+                        propertyName="euEcMember"
+                        value={countryIsInEU()}
+                        disabled
+                        fullwidth
+                    />
                 </Grid>
 
                 <Grid item xs={4}>
@@ -273,10 +248,10 @@ function ImpBookTab({
                 <Grid item xs={4}>
                     <Dropdown
                         items={currencies}
-                        propertyName="currency"
+                        propertyName="Currency"
                         fullWidth
                         value={currency}
-                        label="currency"
+                        label="Currency"
                         onChange={handleFieldChange}
                         disabled={!allowedToEdit}
                     />
@@ -288,7 +263,9 @@ function ImpBookTab({
                         onChange={handleFieldChange}
                         propertyName="totalImportValue"
                         fullwidth
+                        type="number"
                         disabled={!allowedToEdit}
+                        data-testid="totalImportValue"
                     />
                 </Grid>
                 <Grid item xs={2} />
@@ -321,7 +298,7 @@ function ImpBookTab({
                         label="Total Invoice Value"
                         value={totalInvoiceValue}
                         onChange={handleFieldChange}
-                        propertyName="totalImportValue"
+                        propertyName="totalInvoiceValue"
                         fullwidth
                         type="number"
                         maxLength={20}
@@ -369,6 +346,8 @@ function ImpBookTab({
                         label="Mode of Transport"
                         onChange={handleFieldChange}
                         disabled={!allowedToEdit}
+                        type="number"
+                        required
                     />
                 </Grid>
 
@@ -392,6 +371,8 @@ function ImpBookTab({
                         label="Transaction Code"
                         onChange={handleFieldChange}
                         disabled={!allowedToEdit}
+                        type="number"
+                        required
                     />
                 </Grid>
 
@@ -404,6 +385,7 @@ function ImpBookTab({
                         label="Delivery Term Code"
                         onChange={handleFieldChange}
                         disabled={!allowedToEdit}
+                        required
                     />
                 </Grid>
 
@@ -559,24 +541,19 @@ function ImpBookTab({
 }
 
 ImpBookTab.propTypes = {
-    employees: PropTypes.arrayOf(PropTypes.shape({})),
+    employees: PropTypes.arrayOf(
+        PropTypes.shape({ id: PropTypes.number, fullName: PropTypes.string })
+    ),
     suppliersSearchResults: PropTypes.arrayOf(
         PropTypes.shape({ id: PropTypes.number, name: PropTypes.string, country: PropTypes.string })
     ).isRequired,
-    suppliersSearchLoading: PropTypes.bool.isRequired,
+    suppliersSearchLoading: PropTypes.bool,
     searchSuppliers: PropTypes.func.isRequired,
     clearSuppliersSearch: PropTypes.func.isRequired,
-    allSuppliers: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.number,
-            name: PropTypes.string,
-            country: PropTypes.string
-        })
-    ),
     carriersSearchResults: PropTypes.arrayOf(
         PropTypes.shape({ id: PropTypes.number, name: PropTypes.string, country: PropTypes.string })
     ).isRequired,
-    carriersSearchLoading: PropTypes.bool.isRequired,
+    carriersSearchLoading: PropTypes.bool,
     searchCarriers: PropTypes.func.isRequired,
     clearCarriersSearch: PropTypes.func.isRequired,
     transportCodes: PropTypes.arrayOf(
@@ -598,13 +575,13 @@ ImpBookTab.propTypes = {
     foreignCurrency: PropTypes.string.isRequired,
     currency: PropTypes.string,
     carrierId: PropTypes.number.isRequired,
-    transportId: PropTypes.number.isRequired,
+    transportId: PropTypes.number,
     transportBillNumber: PropTypes.string,
-    transactionId: PropTypes.number.isRequired,
+    transactionId: PropTypes.number,
     deliveryTermCode: PropTypes.string.isRequired,
     arrivalPort: PropTypes.string,
     arrivalDate: PropTypes.string,
-    totalImportValue: PropTypes.number.isRequired,
+    totalImportValue: PropTypes.number,
     weight: PropTypes.number,
     customsEntryCode: PropTypes.string,
     customsEntryCodeDate: PropTypes.string,
@@ -613,34 +590,48 @@ ImpBookTab.propTypes = {
     numCartons: PropTypes.number,
     numPallets: PropTypes.number,
     createdBy: PropTypes.number,
-    customsEntryCodePrefix: '',
+    customsEntryCodePrefix: PropTypes.string,
     allowedToEdit: PropTypes.bool.isRequired,
-    countries: PropTypes.arrayOf(PropTypes.shape({})),
     invoiceDetails: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     currencies: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     handleUpdateInvoiceDetails: PropTypes.func.isRequired,
-    totalInvoiceValue: PropTypes.number
+    totalInvoiceValue: PropTypes.string,
+    searchParcels: PropTypes.func.isRequired,
+    clearParcelsSearch: PropTypes.func.isRequired,
+    parcelsSearchResults: PropTypes.arrayOf(
+        PropTypes.shape({ id: PropTypes.number, name: PropTypes.string })
+    ).isRequired,
+    parcelsSearchLoading: PropTypes.bool,
+    handleParcelChange: PropTypes.func.isRequired,
+    supplierCountryValue: PropTypes.func.isRequired,
+    supplierNameValue: PropTypes.func.isRequired,
+    carrierNameValue: PropTypes.func.isRequired,
+    countryIsInEU: PropTypes.func.isRequired
 };
 
 ImpBookTab.defaultProps = {
-    employees: [{ id: '-1', fullname: 'loading..' }],
-    allSuppliers: [{ id: 0, name: 'loading', country: 'loading' }],
+    employees: [{ id: -1, fullname: 'loading..' }],
     parcelNumber: null,
     currency: '',
     transportBillNumber: '',
     arrivalPort: '',
-    arrivalDate: new Date(),
+    arrivalDate: new Date().toString(),
     weight: null,
     customsEntryCode: '',
-    customsEntryCodeDate: new Date(),
+    customsEntryCodeDate: new Date().toString(),
     linnDuty: null,
     linnVat: null,
     numCartons: null,
     numPallets: null,
     createdBy: null,
     customsEntryCodePrefix: '',
-    countries: [{ id: '-1', countryCode: 'loading..' }],
-    totalInvoiceValue: 0
+    totalInvoiceValue: 0,
+    parcelsSearchLoading: false,
+    totalImportValue: 0,
+    suppliersSearchLoading: false,
+    carriersSearchLoading: false,
+    transportId: 0,
+    transactionId: 0
 };
 
 export default ImpBookTab;

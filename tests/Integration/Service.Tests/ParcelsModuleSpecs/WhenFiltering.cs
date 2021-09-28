@@ -9,6 +9,7 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.RequestResources;
 
     using Nancy;
     using Nancy.Testing;
@@ -17,7 +18,7 @@
 
     using NUnit.Framework;
 
-    public class WhenSearching : ContextBase
+    public class WhenFiltering: ContextBase
     {
         [SetUp]
         public void SetUp()
@@ -56,15 +57,17 @@
                               }
                           };
 
-            this.ParcelsFacadeService.Search(Arg.Any<string>())
+            this.ParcelsFacadeService.FilterBy(Arg.Any<ParcelSearchRequestResource>())
              .Returns(new SuccessResult<IEnumerable<Parcel>>(parcels));
 
             this.Response = this.Browser.Get(
-                "/logistics/parcels-by-number",
+                "/logistics/parcels",
                 with =>
                 {
                     with.Header("Accept", "application/json");
                     with.Query("searchTerm", "22");
+                    with.Query("supplierIdSearchTerm", "22");
+                    with.Query("carrierIdSearchTerm", "22");
                 }).Result;
         }
 
@@ -77,7 +80,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ParcelsFacadeService.Received().Search(Arg.Any<string>());
+            this.ParcelsFacadeService.Received().FilterBy(Arg.Any<ParcelSearchRequestResource>());
         }
 
         [Test]

@@ -35,54 +35,25 @@
                                     ForeignCurrency = "YN",
                                     Currency = "GBD",
                                     CarrierId = 678,
-                                    OldArrivalPort = "Glesga",
-                                    FlightNumber = "sk123",
                                     TransportId = 2,
                                     TransportBillNumber = "1212",
                                     TransactionId = 45,
                                     DeliveryTermCode = "dli",
                                     ArrivalPort = "LAZ",
-                                    LineVatTotal = 12,
-                                    Hwb = "hwbbb",
-                                    SupplierCostCurrency = "egg",
-                                    TransNature = "sea",
                                     ArrivalDate = this.now.AddDays(3).ToString("o"),
-                                    FreightCharges = 11.1m,
-                                    HandlingCharge = 11.1m,
-                                    ClearanceCharge = 11.1m,
-                                    Cartage = 11.1m,
-                                    Duty = 11.1m,
-                                    Vat = 11.1m,
-                                    Misc = 11.1m,
-                                    CarriersInvTotal = 11.1m,
-                                    CarriersVatTotal = 11.1m,
                                     TotalImportValue = 133.4m,
-                                    Pieces = 1,
                                     Weight = 11.1m,
                                     CustomsEntryCode = "code green",
                                     CustomsEntryCodeDate = this.now.AddDays(2).ToString("o"),
                                     LinnDuty = 12,
                                     LinnVat = 11.1m,
-                                    IprCpcNumber = 1,
-                                    EecgNumber = 1,
                                     DateCancelled = this.now.AddDays(5).ToString("o"),
                                     CancelledBy = 33105,
                                     CancelledReason = "cancel",
-                                    CarrierInvNumber = "inv123",
-                                    CarrierInvDate = this.now.AddDays(3).ToString("o"),
-                                    CountryOfOrigin = "DE",
-                                    FcName = "FC1",
-                                    VaxRef = "VAX123",
-                                    Storage = 11.1m,
                                     NumCartons = 1,
                                     NumPallets = 1,
                                     Comments = "now closed",
-                                    ExchangeRate = 11.1m,
-                                    ExchangeCurrency = "BB",
-                                    BaseCurrency = "AA",
-                                    PeriodNumber = 47,
                                     CreatedBy = 33105,
-                                    PortCode = "g74",
                                     CustomsEntryCodePrefix = "AA",
                                     ImportBookInvoiceDetails =
                                         new List<ImportBookInvoiceDetailResource>
@@ -193,57 +164,27 @@
             dataResult.ForeignCurrency.Should().Be(this.resource.ForeignCurrency);
             dataResult.Currency.Should().Be(this.resource.Currency);
             dataResult.CarrierId.Should().Be(this.resource.CarrierId);
-            dataResult.OldArrivalPort.Should().Be(this.resource.OldArrivalPort);
-            dataResult.FlightNumber.Should().Be(this.resource.FlightNumber);
             dataResult.TransportId.Should().Be(this.resource.TransportId);
             dataResult.TransportBillNumber.Should().Be(this.resource.TransportBillNumber);
             dataResult.TransactionId.Should().Be(this.resource.TransactionId);
             dataResult.DeliveryTermCode.Should().Be(this.resource.DeliveryTermCode);
             dataResult.ArrivalPort.Should().Be("LAZ");
-            dataResult.LineVatTotal.Should().Be(12);
             dataResult.DeliveryTermCode.Should().Be(this.resource.DeliveryTermCode);
             dataResult.ArrivalPort.Should().Be(this.resource.ArrivalPort);
-            dataResult.LineVatTotal.Should().Be(this.resource.LineVatTotal);
-            dataResult.Hwb.Should().Be(this.resource.Hwb);
-            dataResult.SupplierCostCurrency.Should().Be(this.resource.SupplierCostCurrency);
-            dataResult.TransNature.Should().Be(this.resource.TransNature);
             dataResult.ArrivalDate.Should().Be(this.now.AddDays(3));
-            dataResult.FreightCharges.Should().Be(this.resource.FreightCharges);
-            dataResult.HandlingCharge.Should().Be(this.resource.HandlingCharge);
-            dataResult.ClearanceCharge.Should().Be(this.resource.ClearanceCharge);
-            dataResult.Cartage.Should().Be(this.resource.Cartage);
-            dataResult.Duty.Should().Be(this.resource.Duty);
-            dataResult.Vat.Should().Be(this.resource.Vat);
-            dataResult.Misc.Should().Be(this.resource.Misc);
-            dataResult.CarriersInvTotal.Should().Be(this.resource.CarriersInvTotal);
-            dataResult.CarriersVatTotal.Should().Be(this.resource.CarriersVatTotal);
             dataResult.TotalImportValue.Should().Be(this.resource.TotalImportValue);
-            dataResult.Pieces.Should().Be(this.resource.Pieces);
             dataResult.Weight.Should().Be(this.resource.Weight);
             dataResult.CustomsEntryCode.Should().Be(this.resource.CustomsEntryCode);
             dataResult.CustomsEntryCodeDate.Should().Be(this.now.AddDays(2));
             dataResult.LinnDuty.Should().Be(this.resource.LinnDuty);
             dataResult.LinnVat.Should().Be(this.resource.LinnVat);
-            dataResult.IprCpcNumber.Should().Be(this.resource.IprCpcNumber);
-            dataResult.EecgNumber.Should().Be(this.resource.EecgNumber);
             dataResult.DateCancelled.Should().Be(this.now.AddDays(5));
             dataResult.CancelledBy.Should().Be(33105);
             dataResult.CancelledReason.Should().Be("cancel");
-            dataResult.CarrierInvNumber.Should().Be("inv123");
-            dataResult.CarrierInvDate.Should().Be(this.now.AddDays(3));
-            dataResult.CountryOfOrigin.Should().Be(this.resource.CountryOfOrigin);
-            dataResult.FcName.Should().Be(this.resource.FcName);
-            dataResult.VaxRef.Should().Be(this.resource.VaxRef);
-            dataResult.Storage.Should().Be(this.resource.Storage);
             dataResult.NumCartons.Should().Be(this.resource.NumCartons);
             dataResult.NumPallets.Should().Be(this.resource.NumPallets);
             dataResult.Comments.Should().Be(this.resource.Comments);
-            dataResult.ExchangeRate.Should().Be(this.resource.ExchangeRate);
-            dataResult.ExchangeCurrency.Should().Be(this.resource.ExchangeCurrency);
-            dataResult.BaseCurrency.Should().Be(this.resource.BaseCurrency);
-            dataResult.PeriodNumber.Should().Be(this.resource.PeriodNumber);
             dataResult.CreatedBy.Should().Be(this.resource.CreatedBy);
-            dataResult.PortCode.Should().Be(this.resource.PortCode);
             dataResult.CustomsEntryCodePrefix.Should().Be(this.resource.CustomsEntryCodePrefix);
 
             var firstResourceInvDetail = this.resource.ImportBookInvoiceDetails.FirstOrDefault(x => x.LineNumber == 1);

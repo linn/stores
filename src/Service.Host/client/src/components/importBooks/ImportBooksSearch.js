@@ -15,10 +15,7 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
     };
 
     const canCreate = () => {
-        if (!(privileges.length < 1)) {
-            return privileges.some(priv => priv === 'import-books.admin');
-        }
-        return false;
+        return privileges?.some(priv => priv === 'import-books.admin');
     };
 
     return (

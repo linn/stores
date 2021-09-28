@@ -38,54 +38,25 @@
                                 ForeignCurrency = string.Empty,
                                 Currency = "GBP",
                                 CarrierId = 678,
-                                OldArrivalPort = "Glasscow",
-                                FlightNumber = string.Empty,
                                 TransportId = 1,
                                 TransportBillNumber = string.Empty,
                                 TransactionId = 44,
                                 DeliveryTermCode = string.Empty,
                                 ArrivalPort = "LAX",
-                                LineVatTotal = null,
-                                Hwb = "what is hwb",
-                                SupplierCostCurrency = "bacon",
-                                TransNature = "air",
                                 ArrivalDate = null,
-                                FreightCharges = null,
-                                HandlingCharge = null,
-                                ClearanceCharge = null,
-                                Cartage = null,
-                                Duty = null,
-                                Vat = null,
-                                Misc = null,
-                                CarriersInvTotal = null,
-                                CarriersVatTotal = null,
                                 TotalImportValue = 123.4m,
-                                Pieces = null,
                                 Weight = null,
                                 CustomsEntryCode = "code RED",
                                 CustomsEntryCodeDate = null,
                                 LinnDuty = null,
                                 LinnVat = null,
-                                IprCpcNumber = null,
-                                EecgNumber = null,
                                 DateCancelled = null,
                                 CancelledBy = null,
                                 CancelledReason = null,
-                                CarrierInvNumber = null,
-                                CarrierInvDate = null,
-                                CountryOfOrigin = string.Empty,
-                                FcName = string.Empty,
-                                VaxRef = string.Empty,
-                                Storage = null,
                                 NumCartons = null,
                                 NumPallets = null,
                                 Comments = string.Empty,
-                                ExchangeRate = null,
-                                ExchangeCurrency = string.Empty,
-                                BaseCurrency = string.Empty,
-                                PeriodNumber = null,
                                 CreatedBy = null,
-                                PortCode = string.Empty,
                                 CustomsEntryCodePrefix = "AA",
                                 InvoiceDetails = new List<ImportBookInvoiceDetail>(),
                                 OrderDetails = new List<ImportBookOrderDetail>(),
@@ -101,54 +72,25 @@
                                     ForeignCurrency = "YN",
                                     Currency = "GBD",
                                     CarrierId = 678,
-                                    OldArrivalPort = "Glesga",
-                                    FlightNumber = "sk123",
                                     TransportId = 2,
                                     TransportBillNumber = "1212",
                                     TransactionId = 45,
                                     DeliveryTermCode = "dli",
                                     ArrivalPort = "LAZ",
-                                    LineVatTotal = 12,
-                                    Hwb = "hwbbb",
-                                    SupplierCostCurrency = "egg",
-                                    TransNature = "sea",
                                     ArrivalDate = this.now.AddDays(3).ToString("o"),
-                                    FreightCharges = 11.1m,
-                                    HandlingCharge = 11.1m,
-                                    ClearanceCharge = 11.1m,
-                                    Cartage = 11.1m,
-                                    Duty = 11.1m,
-                                    Vat = 11.1m,
-                                    Misc = 11.1m,
-                                    CarriersInvTotal = 11.1m,
-                                    CarriersVatTotal = 11.1m,
                                     TotalImportValue = 133.4m,
-                                    Pieces = 1,
                                     Weight = 11.1m,
                                     CustomsEntryCode = "code green",
                                     CustomsEntryCodeDate = this.now.AddDays(2).ToString("o"),
                                     LinnDuty = 12,
                                     LinnVat = 11.1m,
-                                    IprCpcNumber = 1,
-                                    EecgNumber = 1,
                                     DateCancelled = this.now.AddDays(5).ToString("o"),
                                     CancelledBy = 33105,
                                     CancelledReason = "cancel",
-                                    CarrierInvNumber = "inv123",
-                                    CarrierInvDate = this.now.AddDays(3).ToString("o"),
-                                    CountryOfOrigin = "DE",
-                                    FcName = "FC1",
-                                    VaxRef = "VAX123",
-                                    Storage = 11.1m,
                                     NumCartons = 1,
                                     NumPallets = 1,
                                     Comments = "now closed",
-                                    ExchangeRate = 11.1m,
-                                    ExchangeCurrency = "BB",
-                                    BaseCurrency = "AA",
-                                    PeriodNumber = 47,
                                     CreatedBy = 33105,
-                                    PortCode = "g74",
                                     CustomsEntryCodePrefix = "AA",
                                     ImportBookInvoiceDetails =
                                         new List<ImportBookInvoiceDetailResource>
@@ -261,70 +203,32 @@
                                                                       == this.resource.ForeignCurrency
                                                                       && x.Currency == this.resource.Currency
                                                                       && x.CarrierId == this.resource.CarrierId
-                                                                      && x.OldArrivalPort
-                                                                      == this.resource.OldArrivalPort
-                                                                      && x.FlightNumber == this.resource.FlightNumber
                                                                       && x.TransportId == this.resource.TransportId
                                                                       && x.TransportBillNumber
                                                                       == this.resource.TransportBillNumber
                                                                       && x.TransactionId == this.resource.TransactionId
                                                                       && x.DeliveryTermCode
                                                                       == this.resource.DeliveryTermCode
-                                                                      && x.ArrivalPort == "LAZ" && x.LineVatTotal == 12
+                                                                      && x.ArrivalPort == "LAZ"
                                                                       && x.DeliveryTermCode
                                                                       == this.resource.DeliveryTermCode
                                                                       && x.ArrivalPort == this.resource.ArrivalPort
-                                                                      && x.LineVatTotal == this.resource.LineVatTotal
-                                                                      && x.Hwb == this.resource.Hwb
-                                                                      && x.SupplierCostCurrency
-                                                                      == this.resource.SupplierCostCurrency
-                                                                      && x.TransNature == this.resource.TransNature
                                                                       && x.ArrivalDate == this.now.AddDays(3)
-                                                                      && x.FreightCharges
-                                                                      == this.resource.FreightCharges
-                                                                      && x.HandlingCharge
-                                                                      == this.resource.HandlingCharge
-                                                                      && x.ClearanceCharge
-                                                                      == this.resource.ClearanceCharge
-                                                                      && x.Cartage == this.resource.Cartage
-                                                                      && x.Duty == this.resource.Duty
-                                                                      && x.Vat == this.resource.Vat
-                                                                      && x.Misc == this.resource.Misc
-                                                                      && x.CarriersInvTotal
-                                                                      == this.resource.CarriersInvTotal
-                                                                      && x.CarriersVatTotal
-                                                                      == this.resource.CarriersVatTotal
                                                                       && x.TotalImportValue
                                                                       == this.resource.TotalImportValue
-                                                                      && x.Pieces == this.resource.Pieces
                                                                       && x.Weight == this.resource.Weight
                                                                       && x.CustomsEntryCode
                                                                       == this.resource.CustomsEntryCode
                                                                       && x.CustomsEntryCodeDate == this.now.AddDays(2)
                                                                       && x.LinnDuty == this.resource.LinnDuty
                                                                       && x.LinnVat == this.resource.LinnVat
-                                                                      && x.IprCpcNumber == this.resource.IprCpcNumber
-                                                                      && x.EecgNumber == this.resource.EecgNumber
                                                                       && x.DateCancelled == this.now.AddDays(5)
                                                                       && x.CancelledBy == 33105
                                                                       && x.CancelledReason == "cancel"
-                                                                      && x.CarrierInvNumber == "inv123"
-                                                                      && x.CarrierInvDate == this.now.AddDays(3)
-                                                                      && x.CountryOfOrigin
-                                                                      == this.resource.CountryOfOrigin
-                                                                      && x.FcName == this.resource.FcName
-                                                                      && x.VaxRef == this.resource.VaxRef
-                                                                      && x.Storage == this.resource.Storage
                                                                       && x.NumCartons == this.resource.NumCartons
                                                                       && x.NumPallets == this.resource.NumPallets
                                                                       && x.Comments == this.resource.Comments
-                                                                      && x.ExchangeRate == this.resource.ExchangeRate
-                                                                      && x.ExchangeCurrency
-                                                                      == this.resource.ExchangeCurrency
-                                                                      && x.BaseCurrency == this.resource.BaseCurrency
-                                                                      && x.PeriodNumber == this.resource.PeriodNumber
                                                                       && x.CreatedBy == this.resource.CreatedBy
-                                                                      && x.PortCode == this.resource.PortCode
                                                                       && x.CustomsEntryCodePrefix
                                                                       == this.resource.CustomsEntryCodePrefix));
         }

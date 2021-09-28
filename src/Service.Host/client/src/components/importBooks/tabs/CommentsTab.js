@@ -69,17 +69,23 @@ function CommentsTab({
 }
 
 CommentsTab.propTypes = {
-    comments: PropTypes.string.isRequired,
+    comments: PropTypes.string,
     handleFieldChange: PropTypes.func.isRequired,
-    dateCancelled: PropTypes.string.isRequired,
-    cancelledBy: PropTypes.number.isRequired,
-    cancelledReason: PropTypes.string.isRequired,
+    dateCancelled: PropTypes.string,
+    cancelledBy: PropTypes.number,
+    cancelledReason: PropTypes.string,
     employees: PropTypes.arrayOf(
-        PropTypes.shape({ id: PropTypes.string, fullName: PropTypes.string })
-    ).isRequired,
+        PropTypes.shape({ id: PropTypes.number, fullName: PropTypes.string })
+    ),
     allowedToEdit: PropTypes.func.isRequired
 };
 
-CommentsTab.defaultProps = {};
+CommentsTab.defaultProps = {
+    employees: [{ id: -1, fullname: 'loading..' }],
+    comments: '',
+    dateCancelled: '',
+    cancelledBy: '',
+    cancelledReason: ''
+};
 
 export default CommentsTab;
