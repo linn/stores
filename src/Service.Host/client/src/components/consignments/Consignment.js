@@ -76,6 +76,7 @@ function Consignment({
     const [editableItems, setEditableItems] = useState([]);
     const [saveDisabled, setSaveDisabled] = useState(false);
     const [showCartonLabel, setShowCartonLabel] = useState(false);
+    const [showNewCartonDialog, setShowNewCartonDialog] = useState(false);
     const [cartonLabelOptions, setCartonLabelOptions] = useState({
         numberOfCopies: 1,
         firstItem: 1,
@@ -91,6 +92,7 @@ function Consignment({
         consignment: null,
         originalConsignment: null
     });
+    const [newCarton, setNewCarton] = useState({});
 
     const getItemTypeDisplay = itemType => {
         switch (itemType) {
@@ -377,6 +379,36 @@ function Consignment({
         setEditablePallets(pallets);
     };
 
+    const showAddNewCarton = () => {
+        const maxCarton = getMaxCarton();
+        const maxItem = getMaxItemNumber();
+
+        setNewCarton({
+            itemDescription: 'SUNDRIES',
+            itemType: 'C',
+            itemTypeDisplay: 'Open Carton',
+            quantity: 1,
+            itemNumber: maxItem ? maxItem + 1 : 1,
+            containerNumber: maxCarton ? maxCarton + 1 : 1
+        });
+
+        setShowNewCartonDialog(true);
+    };
+
+    const addNewCarton = () => {
+        const items = editableItems.slice();
+
+        items.push(newCarton);
+
+        setEditableItems(items);
+
+        setShowNewCartonDialog(false);
+    };
+
+    const updateNewCartonField = (a, b) => {
+        setNewCarton({ ...newCarton, [a]: b });
+    };
+
     const addCarton = () => {
         const maxCarton = getMaxCarton();
         const maxItem = getMaxItemNumber();
@@ -583,7 +615,7 @@ function Consignment({
                                 <Button
                                     variant="outlined"
                                     color="primary"
-                                    onClick={addCarton}
+                                    onClick={showAddNewCarton}
                                     disabled={viewing()}
                                 >
                                     Add Carton
@@ -763,6 +795,143 @@ function Consignment({
                     <DialogActions>
                         <Button
                             onClick={() => setShowPalletLabel(false)}
+                            variant="contained"
+                            autoFocus
+                        >
+                            Close
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={showNewCartonDialog}
+                    onClose={() => setShowNewCartonDialog(false)}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                    fullWidth
+                    maxWidth="sm"
+                >
+                    <DialogTitle id="alert-dialog-title">Add New Carton</DialogTitle>
+                    <DialogContent>
+                        <>
+                            <Grid container>
+                                <Grid item xs={6}>
+                                    <Dropdown
+                                        label="Item Type"
+                                        propertyName="itemTypeDisplay"
+                                        value={newCarton.itemTypeDisplay}
+                                        items={[
+                                            { id: 'Loose Item', displayText: 'Loose Item' },
+                                            { id: 'Open Carton', displayText: 'Open Carton' },
+                                            { id: 'Sealed Box', displayText: 'Sealed Box' }
+                                        ]}
+                                        onChange={updateNewCartonField}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <InputField
+                                        label="Carton Number"
+                                        placeholder="Carton Number"
+                                        propertyName="containerNumber"
+                                        value={newCarton.containerNumber}
+                                        onChange={updateNewCartonField}
+                                        maxLength={2}
+                                    />
+                                </Grid>
+                                <Grid item xs={8}>
+                                    <InputField
+                                        label="Carton Type"
+                                        placeholder="Carton Type"
+                                        fullWidth
+                                        propertyName="containerType"
+                                        value={newCarton.containerType}
+                                        onChange={updateNewCartonField}
+                                    />
+                                </Grid>
+                                <Grid item xs={4} />
+                                <Grid item xs={8}>
+                                    <InputField
+                                        label="Description"
+                                        placeholder="Description"
+                                        fullWidth
+                                        propertyName="itemDescription"
+                                        value={newCarton.itemDescription}
+                                        onChange={updateNewCartonField}
+                                    />
+                                </Grid>
+                                <Grid item xs={4} />
+                                <Grid item xs={6}>
+                                    <InputField
+                                        label="Carton Type"
+                                        placeholder="Carton Type"
+                                        propertyName="cartonType"
+                                        value={newCarton.cartonType}
+                                        onChange={updateNewCartonField}
+                                    />
+                                </Grid>
+                                <Grid item xs={6} />
+                                <Grid item xs={6}>
+                                    <InputField
+                                        label="Quantity"
+                                        placeholder="Quantity"
+                                        propertyName="quantity"
+                                        value={newCarton.quantity}
+                                        onChange={updateNewCartonField}
+                                        maxLength={4}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <InputField
+                                        label="Weight"
+                                        placeholder="Weight"
+                                        propertyName="weight"
+                                        value={newCarton.weight}
+                                        onChange={updateNewCartonField}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <InputField
+                                        label="Height"
+                                        placeholder="Height"
+                                        propertyName="height"
+                                        value={newCarton.height}
+                                        onChange={updateNewCartonField}
+                                        maxLength={4}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <InputField
+                                        label="Depth"
+                                        placeholder="Depth"
+                                        propertyName="depth"
+                                        value={newCarton.depth}
+                                        onChange={updateNewCartonField}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <InputField
+                                        label="Width"
+                                        placeholder="Width"
+                                        propertyName="width"
+                                        value={newCarton.width}
+                                        onChange={updateNewCartonField}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button
+                                        style={{ marginTop: '30px', marginBottom: '40px' }}
+                                        onClick={addNewCarton}
+                                        variant="contained"
+                                        color="primary"
+                                    >
+                                        Add Carton
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={() => setShowNewCartonDialog(false)}
                             variant="contained"
                             autoFocus
                         >

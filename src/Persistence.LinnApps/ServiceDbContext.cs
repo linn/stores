@@ -1873,6 +1873,9 @@
             table.HasKey(a => a.CartonTypeName);
             table.Property(a => a.CartonTypeName).HasColumnName("CARTON_TYPE").HasMaxLength(10);
             table.Property(a => a.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
+            table.Property(a => a.Height).HasColumnName("HEIGHT");
+            table.Property(a => a.Width).HasColumnName("WIDTH");
+            table.Property(a => a.Depth).HasColumnName("DEPTH");
         }
 
         private void BuildGoodsInLog(ModelBuilder builder)
