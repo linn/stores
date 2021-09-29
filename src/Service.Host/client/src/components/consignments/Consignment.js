@@ -6,7 +6,8 @@ import {
     SaveBackCancelButtons,
     utilities,
     ErrorCard,
-    InputField
+    InputField,
+    Typeahead
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
@@ -68,7 +69,11 @@ function Consignment({
     getConsignmentPackingList,
     clearConsignmentPackingList,
     createConsignment,
-    addConsignment
+    addConsignment,
+    searchCartonTypes,
+    clearCartonTypesSearch,
+    cartonTypesSearchResults,
+    cartonTypesSearchLoading
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
     const [editablePallets, setEditablePallets] = useState([]);
@@ -405,27 +410,23 @@ function Consignment({
         setShowNewCartonDialog(false);
     };
 
-    const updateNewCartonField = (a, b) => {
-        setNewCarton({ ...newCarton, [a]: b });
-    };
+    const updateNewCartonField = (propertyName, newValue) => {
+        setNewCarton({ ...newCarton, [propertyName]: newValue });
 
-    const addCarton = () => {
-        const maxCarton = getMaxCarton();
-        const maxItem = getMaxItemNumber();
-        const items = editableItems.slice();
-
-        items.push({
-            containerNumber: maxCarton + 1,
-            id: maxItem + 1,
-            itemNumber: maxItem + 1,
-            consignmentId: state.consignment.consignmentId,
-            itemTypeDisplay: getItemTypeDisplay('C'),
-            itemType: 'C',
-            itemDescription: 'SUNDRIES',
-            quantity: 1
-        });
-
-        setEditableItems(items);
+        if (propertyName === 'containerType') {
+            const selectedCarton = cartonTypes.find(
+                a => a.cartonTypeName === newValue.toUpperCase()
+            );
+            if (selectedCarton) {
+                setNewCarton({
+                    ...newCarton,
+                    containerType: selectedCarton.cartonTypeName,
+                    height: selectedCarton.height,
+                    width: selectedCarton.width,
+                    depth: selectedCarton.depth
+                });
+            }
+        }
     };
 
     const addItem = () => {
@@ -446,6 +447,19 @@ function Consignment({
     const handlePrintDocuments = () => {
         printDocumentsClearData();
         printDocuments({ consignmentId: item.consignmentId, userNumber });
+    };
+
+    const cartonTypesResult = () => {
+        return cartonTypesSearchResults?.map(cartonType => ({
+            ...cartonType,
+            name: cartonType.cartonTypeName,
+            description: cartonType.description,
+            id: cartonType.cartonTypeName
+        }));
+    };
+
+    const handleOnSelect = selectedCartonType => {
+        updateNewCartonField('containerType', selectedCartonType.cartonTypeName);
     };
 
     return (
@@ -841,10 +855,21 @@ function Consignment({
                                     <InputField
                                         label="Carton Type"
                                         placeholder="Carton Type"
-                                        fullWidth
                                         propertyName="containerType"
                                         value={newCarton.containerType}
                                         onChange={updateNewCartonField}
+                                    />
+                                    <Typeahead
+                                        items={cartonTypesResult()}
+                                        fetchItems={searchCartonTypes}
+                                        clearSearch={clearCartonTypesSearch}
+                                        loading={cartonTypesSearchLoading}
+                                        debounce={1000}
+                                        links={false}
+                                        modal
+                                        searchButtonOnly
+                                        onSelect={p => handleOnSelect(p)}
+                                        label="Search For Carton Type"
                                     />
                                 </Grid>
                                 <Grid item xs={4} />
@@ -859,16 +884,6 @@ function Consignment({
                                     />
                                 </Grid>
                                 <Grid item xs={4} />
-                                <Grid item xs={6}>
-                                    <InputField
-                                        label="Carton Type"
-                                        placeholder="Carton Type"
-                                        propertyName="cartonType"
-                                        value={newCarton.cartonType}
-                                        onChange={updateNewCartonField}
-                                    />
-                                </Grid>
-                                <Grid item xs={6} />
                                 <Grid item xs={6}>
                                     <InputField
                                         label="Quantity"
@@ -1025,7 +1040,11 @@ Consignment.propTypes = {
     getConsignmentPackingList: PropTypes.func.isRequired,
     clearConsignmentPackingList: PropTypes.func.isRequired,
     createConsignment: PropTypes.func.isRequired,
-    addConsignment: PropTypes.func.isRequired
+    addConsignment: PropTypes.func.isRequired,
+    searchCartonTypes: PropTypes.func.isRequired,
+    clearCartonTypesSearch: PropTypes.func.isRequired,
+    cartonTypesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
+    cartonTypesSearchLoading: PropTypes.bool
 };
 
 Consignment.defaultProps = {
@@ -1052,7 +1071,9 @@ Consignment.defaultProps = {
     printDocumentsWorking: false,
     printDocumentsResult: null,
     consignmentPackingList: null,
-    consignmentPackingListLoading: false
+    consignmentPackingListLoading: false,
+    cartonTypesSearchResults: [],
+    cartonTypesSearchLoading: false
 };
 
 export default Consignment;
