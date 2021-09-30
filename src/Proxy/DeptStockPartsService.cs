@@ -18,9 +18,10 @@
 
         public IEnumerable<Part> GetDeptStockPalletParts()
         {
-            var query = 
+            var query =
                 @"SELECT PART.PART_NUMBER PART_NUMBER,
-                     PART.DESCRIPTION DESCRIPTION
+                    PART.DESCRIPTION DESCRIPTION,
+                    PART.BRIDGE_ID BRIDGE_ID
                     FROM PARTS PART 
                     WHERE PART.PART_NUMBER IN
                         (SELECT P.PART_NUMBER 
@@ -42,7 +43,8 @@
                 result.Add(new Part
                                {
                                    PartNumber = row.ItemArray[0].ToString(),
-                                   Description = row.ItemArray[1].ToString()
+                                   Description = row.ItemArray[1].ToString(),
+                                   Id = int.Parse(row.ItemArray[2].ToString())
                                });
             }
 
