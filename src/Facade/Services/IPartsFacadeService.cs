@@ -14,7 +14,5 @@
         void CreatePartFromSource(int sourceId, int proposedById, IEnumerable<PartDataSheetResource> dataSheets);
 
         IResult<IEnumerable<Part>> GetPartByPartNumber(string partNumber);
-
-        IResult<IEnumerable<Part>> Search(string searchTerm, Func<Part, int> sortExpression);
     }
 }
