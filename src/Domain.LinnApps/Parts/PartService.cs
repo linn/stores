@@ -32,6 +32,8 @@
 
         private readonly IRepository<PartDataSheet, PartDataSheetKey> dataSheetRepository;
 
+        private readonly IDeptStockPartsService deptStockPartsService;
+
         public PartService(
             IAuthorisationService authService,
             IRepository<QcControl, int> qcControlRepository,
@@ -41,7 +43,8 @@
             IRepository<MechPartSource, int> sourceRepository,
             IRepository<StockLocator, int> stockLocatorRepository,
             IRepository<PartDataSheet, PartDataSheetKey> dataSheetRepository,
-            IPartPack partPack)
+            IPartPack partPack,
+            IDeptStockPartsService deptStockPartsService)
         {
             this.authService = authService;
             this.supplierRepository = supplierRepository;
@@ -52,6 +55,7 @@
             this.templateRepository = templateRepository;
             this.stockLocatorRepository = stockLocatorRepository;
             this.dataSheetRepository = dataSheetRepository;
+            this.deptStockPartsService = deptStockPartsService;
         }
 
         public void UpdatePart(Part from, Part to, List<string> privileges, IEnumerable<MechPartManufacturerAlt> manufacturers)
@@ -269,16 +273,7 @@
 
         public IEnumerable<Part> GetDeptStockPalletParts()
         {
-            return from p in this.partRepository.FindAll()
-                   where (from s in this.stockLocatorRepository.FindAll()
-                           where (s.PartNumber == p.PartNumber && s.StockPoolCode.Equals("LINN DEPT"))
-                           select s.PartNumber)
-                        .Contains(p.PartNumber)
-                        ||
-                        (p.StockControlled.Equals("N") 
-                          && (p.BaseUnitPrice == 0 || p.BaseUnitPrice == null)
-                          && (p.LinnProduced.Equals("N") || p.LinnProduced == null))
-                   select p;
+            return this.deptStockPartsService.GetDeptStockPalletParts();
         }
 
         private static void Validate(Part to)

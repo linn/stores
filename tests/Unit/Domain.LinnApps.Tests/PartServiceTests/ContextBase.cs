@@ -34,6 +34,8 @@
 
         protected IRepository<PartDataSheet, PartDataSheetKey> DataSheetRepository { get; private set; }
 
+        protected IDeptStockPartsService DeptStockPartsService { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -46,6 +48,8 @@
             this.TransactionManager = Substitute.For<ITransactionManager>();
             this.StockLocatorRepository = Substitute.For<IRepository<StockLocator, int>>();
             this.PartPack = Substitute.For<IPartPack>();
+            this.DataSheetRepository = Substitute.For<IRepository<PartDataSheet, PartDataSheetKey>>();
+            this.DeptStockPartsService = Substitute.For<IDeptStockPartsService>();
             this.Sut = new PartService(
                 this.AuthService,
                 this.QcControlRepo,
@@ -55,7 +59,8 @@
                 this.SourceRepository,
                 this.StockLocatorRepository,
                 this.DataSheetRepository,
-                this.PartPack);
+                this.PartPack,
+                this.DeptStockPartsService);
         }
     }
 }
