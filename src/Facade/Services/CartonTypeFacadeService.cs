@@ -27,7 +27,8 @@
 
         protected override Expression<Func<CartonType, bool>> SearchExpression(string searchTerm)
         {
-            throw new NotImplementedException();
+            return cartonType => cartonType.CartonTypeName.ToUpper().Contains(searchTerm.ToUpper())
+                                 || cartonType.Description.ToUpper().Contains(searchTerm.ToUpper());
         }
     }
 }

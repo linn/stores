@@ -11,7 +11,10 @@
             return new CartonTypeResource
             {
                 CartonTypeName = cartonType.CartonTypeName,
-                Description = cartonType.Description
+                Description = cartonType.Description,
+                Height = cartonType.Height,
+                Width = cartonType.Width,
+                Depth = cartonType.Depth
             };
         }
 

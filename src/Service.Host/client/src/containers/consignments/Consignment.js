@@ -85,7 +85,9 @@ const mapStateToProps = (state, ownProps) => ({
     printDocumentsWorking: printConsignmentDocumentsSelectors.getWorking(state),
     printDocumentsResult: printConsignmentDocumentsSelectors.getData(state),
     consignmentPackingList: consignmentPackingListSelectors.getItem(state),
-    consignmentPackingListLoading: consignmentPackingListSelectors.getLoading(state)
+    consignmentPackingListLoading: consignmentPackingListSelectors.getLoading(state),
+    cartonTypesSearchResults: cartonTypesSelectors.getSearchItems(state),
+    cartonTypesSearchLoading: cartonTypesSelectors.getSearchLoading(state)
 });
 
 const mapDispatchToProps = {
@@ -107,7 +109,9 @@ const mapDispatchToProps = {
     printDocuments: printConsignmentDocumentsActions.requestProcessStart,
     printDocumentsClearData: printConsignmentDocumentsActions.clearProcessData,
     getConsignmentPackingList: consignmentPackingListActions.fetchByPath,
-    clearConsignmentPackingList: consignmentPackingListActions.clearItem
+    clearConsignmentPackingList: consignmentPackingListActions.clearItem,
+    searchCartonTypes: cartonTypesActions.search,
+    clearCartonTypesSearch: cartonTypesActions.clearSearch
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Consignment));
