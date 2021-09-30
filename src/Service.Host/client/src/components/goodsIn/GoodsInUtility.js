@@ -93,7 +93,7 @@ function GoodsInUtility({
     };
     const [bookInPoExpanded, setBookInPoExpanded] = useState(false);
 
-    const [printDialogOpen, setPrintDialogOpen] = useState(true);
+    const [printDialogOpen, setPrintDialogOpen] = useState(false);
 
     const [parcelDialogOpen, setParcelDialogOpen] = useState(false);
 
