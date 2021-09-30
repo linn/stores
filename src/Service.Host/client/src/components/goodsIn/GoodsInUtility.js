@@ -261,7 +261,7 @@ function GoodsInUtility({
                         <div className={classes.dialog}>
                             <QcLabelPrintScreen
                                 kardexLocation={bookInResult?.kardexLocation}
-                                partNumber="not test"//{validatePurchaseOrderResult?.partNumber}
+                                partNumber={validatePurchaseOrderResult?.partNumber}
                                 partDescription={validatePurchaseOrderResult?.partNumber}
                                 reqNumber={bookInResult?.reqNumber}
                                 orderNumber={validatePurchaseOrderResult?.orderNumber}
