@@ -51,6 +51,7 @@ import ImportBooksIprReport from '../containers/reports/ImpbookIprReport';
 import ImportBooksEuReportOptions from '../containers/reports/ImpbookEuReportOptions';
 import ImportBooksEuReport from '../containers/reports/ImpbookEuReport';
 import DebitNotes from '../containers/purchasing/DebitNotes';
+import QcLabelPrintScreen from '../containers/goodsIn/QcLabelPrintScreen'
 
 const Root = ({ store }) => (
     <div>
@@ -250,6 +251,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/logistics/goods-in-utility"
                                         component={GoodsInUtility}
+                                    />
+                                     <Route
+                                        exact
+                                        path="/logistics/goods-in-utility/test-labels"
+                                        component={QcLabelPrintScreen}
                                     />
                                     <Route
                                         exact

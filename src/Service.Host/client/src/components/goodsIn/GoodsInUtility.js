@@ -93,7 +93,7 @@ function GoodsInUtility({
     };
     const [bookInPoExpanded, setBookInPoExpanded] = useState(false);
 
-    const [printDialogOpen, setPrintDialogOpen] = useState(false);
+    const [printDialogOpen, setPrintDialogOpen] = useState(true);
 
     const [parcelDialogOpen, setParcelDialogOpen] = useState(false);
 
@@ -261,15 +261,15 @@ function GoodsInUtility({
                         <div className={classes.dialog}>
                             <QcLabelPrintScreen
                                 kardexLocation={bookInResult?.kardexLocation}
-                                partNumber="PART"
-                                partDescription="DESCRIPTION"
+                                partNumber="not test"//{validatePurchaseOrderResult?.partNumber}
+                                partDescription={validatePurchaseOrderResult?.partNumber}
                                 reqNumber={bookInResult?.reqNumber}
-                                orderNumber={1}
-                                qcState="PASS"
-                                qcInfo="info"
-                                docType="PO"
-                                unitOfMeasure="ONES"
-                                qtyReceived={1}
+                                orderNumber={validatePurchaseOrderResult?.orderNumber}
+                                qcState={bookInResult?.qcState}
+                                qcInfo={bookInResult?.qcInfo}
+                                docType={bookInResult?.docType}
+                                unitOfMeasure={bookInResult?.unitOfMeasure}
+                                qtyReceived={bookInResult?.qtyReceived}
                             />
                         </div>
                     </div>
