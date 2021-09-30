@@ -90,6 +90,13 @@
             return new SuccessResult<IEnumerable<Part>>(new List<Part> { this.partRepository.FindBy(a => a.PartNumber == partNumber.ToUpper()) });
         }
 
+        public IResult<IEnumerable<Part>> Search(string searchTerm, Func<Part, int> sortExpression)
+        {
+            var result = this.partRepository.FilterBy(x => x.PartNumber.Contains(searchTerm.ToUpper()));
+
+            return new SuccessResult<IEnumerable<Part>>(result.OrderBy(x => sortExpression(x)));
+        }
+
         protected override Part CreateFromResource(PartResource resource)
         {
             var partToAdd = new Part

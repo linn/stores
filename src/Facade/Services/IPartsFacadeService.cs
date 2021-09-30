@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
+    using System;
     using System.Collections.Generic;
 
     using Linn.Common.Facade;
@@ -13,5 +14,7 @@
         void CreatePartFromSource(int sourceId, int proposedById, IEnumerable<PartDataSheetResource> dataSheets);
 
         IResult<IEnumerable<Part>> GetPartByPartNumber(string partNumber);
+
+        IResult<IEnumerable<Part>> Search(string searchTerm, Func<Part, int> sortExpression);
     }
 }
