@@ -66,52 +66,19 @@
                 "PO",
                 "PART",
                 "DELIVERY-REF",
+                9,
                 1,
                 1,
-                1,
-                1,
-                1,
+                3,
                 "PASS",
                 1,
-                new List<GoodsInLabelLine>
-                    {
-                        new GoodsInLabelLine
-                            {
-                                LineNumber = 1,
-                                Qty = 1
-                            },
-                        new GoodsInLabelLine
-                            {
-                                LineNumber = 2,
-                                Qty = 2
-                            },
-                        new GoodsInLabelLine
-                            {
-                                LineNumber = 3,
-                                Qty = 3
-                            }
-                    },
                 null);
         }
 
         [Test]
         public void ShouldCallBartenderForEachLineWithCorrectParameters()
         {
-            this.Bartender.Received(1).PrintLabels(
-                "QC 1",
-                "Printer",
-                1,
-                "template.ext",
-                $"1\",\"PART\",\"1\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"{Environment.NewLine}",
-                ref Arg.Any<string>());
-            this.Bartender.Received(1).PrintLabels(
-                "QC 1",
-                "Printer",
-                1,
-                "template.ext",
-                $"1\",\"PART\",\"2\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"{Environment.NewLine}",
-                ref Arg.Any<string>());
-            this.Bartender.Received(1).PrintLabels(
+            this.Bartender.Received(3).PrintLabels(
                 "QC 1",
                 "Printer",
                 1,

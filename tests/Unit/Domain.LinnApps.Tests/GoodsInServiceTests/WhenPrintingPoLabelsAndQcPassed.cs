@@ -71,17 +71,8 @@
                 1,
                 1,
                 1,
-                1,
                 "PASS",
                 1,
-                new List<GoodsInLabelLine>
-                    {
-                        new GoodsInLabelLine
-                            {
-                                      LineNumber = 1,
-                                      Qty = 1
-                                  }
-                    },
                 null);
         }
 

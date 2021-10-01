@@ -43,11 +43,9 @@
             int qty,
             int userNumber,
             int orderNumber,
-            int numberOfLabels,
             int numberOfLines,
             string qcState,
             int reqNumber,
-            IEnumerable<GoodsInLabelLine> lines,
             string kardexLocation);
 
         ValidateStorageTypeResult ValidateStorageType(

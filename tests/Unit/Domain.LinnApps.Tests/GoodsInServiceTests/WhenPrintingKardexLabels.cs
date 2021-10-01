@@ -69,10 +69,8 @@
                 1,
                 1,
                 1,
-                1,
                 "PASS",
                 1,
-                null,
                 "kardex-location");
         }
 
