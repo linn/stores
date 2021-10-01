@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace Linn.Stores.Domain.LinnApps
+﻿namespace Linn.Stores.Domain.LinnApps.InterCompanyInvoices
 {
     using System;
 

@@ -4,7 +4,7 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
-    using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.InterCompanyInvoices;
 
     public class InterCompanyInvoiceService : IInterCompanyInvoiceService
     {

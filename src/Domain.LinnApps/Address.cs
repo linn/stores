@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using Linn.Stores.Domain.LinnApps.Consignments;
+    using Linn.Stores.Domain.LinnApps.InterCompanyInvoices;
 
     public class Address
     {
