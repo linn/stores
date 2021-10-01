@@ -83,7 +83,7 @@
             using (var connection = this.databaseService.GetConnection())
             {
                 connection.Open();
-                var cmd = new OracleCommand("stores_oo.do_tpk", connection)
+                var cmd = new OracleCommand("stores_oo.do_tpk_wrapper", connection)
                               {
                                   CommandType = CommandType.StoredProcedure
                               };
@@ -111,15 +111,16 @@
                                };
                 cmd.Parameters.Add(arg3);
 
-                var arg4 = new OracleParameter("p_success", OracleDbType.Boolean)
+                var arg4 = new OracleParameter("p_success", OracleDbType.Int32)
                                {
                                    Direction = ParameterDirection.InputOutput,
-                                   Value = success
                                };
 
                 cmd.Parameters.Add(arg4);
-                success = ((OracleBoolean)cmd.Parameters[1].Value).IsTrue;
                 cmd.ExecuteNonQuery();
+
+                success = int.Parse(arg4.Value.ToString()) == 1;
+
                 connection.Close();
             }
         }
