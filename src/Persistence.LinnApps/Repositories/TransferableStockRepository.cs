@@ -28,7 +28,7 @@
 
         public IQueryable<TransferableStock> FindAll()
         {
-            return this.serviceDbContext.TransferableStock;
+            return this.serviceDbContext.TransferableStock.OrderBy(t => t.FromLocation);
         }
     }
 }
