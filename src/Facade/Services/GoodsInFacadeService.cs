@@ -108,15 +108,9 @@
                     requestResource.Qty, 
                     requestResource.UserNumber,
                     requestResource.OrderNumber,
-                    requestResource.NumberOfLabels,
                     requestResource.NumberOfLines,
                     requestResource.QcState,
                     requestResource.ReqNumber,
-                    requestResource.Lines.Select(x => new GoodsInLabelLine
-                                                          {
-                                                              LineNumber = x.LineNumber,
-                                                              Qty = x.Qty
-                                                          }),
                     requestResource.KardexLocation));
         }
 

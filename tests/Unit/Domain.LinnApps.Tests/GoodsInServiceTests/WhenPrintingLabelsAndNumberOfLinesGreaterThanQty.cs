@@ -14,8 +14,10 @@
 
     using NUnit.Framework;
 
-    public class WhenPrintingLabelsAndNumberOfLinesDifferentToQty : ContextBase
+    public class WhenPrintingLabelsAndNumberOfLinesGreaterThanQty : ContextBase
     {
+        private readonly string dateString = DateTime.Today.ToString("MMMddyyyy").ToUpper();
+
         private ProcessResult result;
 
         [SetUp]
@@ -24,7 +26,7 @@
             this.LabelTypeRepository.FindBy(Arg.Any<Expression<Func<StoresLabelType, bool>>>())
                 .Returns(new StoresLabelType
                 {
-                    Code = "QUARANTINE",
+                    Code = "PASS",
                     FileName = "template.ext",
                     DefaultPrinter = "Printer"
                 });
@@ -38,18 +40,13 @@
             this.PurchaseOrderRepository.FindById(1).Returns(new PurchaseOrder
             {
                 OrderNumber = 1,
-                Supplier = new Supplier
-                {
-                    Id = 1,
-                    Name = "SUPPLIER"
-                },
                 Details = new List<PurchaseOrderDetail>
-                              {
-                                  new PurchaseOrderDetail
-                                      {
-                                          RohsCompliant = "Y"
-                                      }
-                              }
+                                                                                   {
+                                                                                       new PurchaseOrderDetail
+                                                                                           {
+                                                                                               RohsCompliant = "Y"
+                                                                                           }
+                                                                                   }
             });
             this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>())
                 .Returns(new Part
@@ -57,34 +54,43 @@
                     PartNumber = "PART"
                 });
 
+            this.Bartender.PrintLabels(
+                "QC 1",
+                "Printer",
+                Arg.Any<int>(),
+                "template.ext",
+                Arg.Any<string>(),
+                ref Arg.Any<string>()).Returns(true);
+
             this.result = this.Sut.PrintLabels(
                 "PO",
                 "PART",
                 "DELIVERY-REF",
-                1,
-                1,
-                1,
-                1,
                 2,
-                "QUARANTINE",
                 1,
-                new List<GoodsInLabelLine>
-                    {
-                        new GoodsInLabelLine
-                            {
-                                LineNumber = 1,
-                                Qty = 1
-                            }
-                    },
+                1,
+                8,
+                "PASS",
+                1,
                 null);
         }
 
         [Test]
-        public void ShouldReturnFail()
+        public void ShouldSplitQtyIntoFractionsAcrossContainers()
         {
-            this.result.Success.Should().BeFalse();
-            this.result.Message.Should().Be(
-                "Quantity Received was 1. Quantity Entered is 2.");
+            this.Bartender.Received(8).PrintLabels(
+                "QC 1",
+                "Printer",
+                1,
+                "template.ext",
+                $"1\",\"PART\",\"0.25\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"{Environment.NewLine}",
+                ref Arg.Any<string>());
+        }
+
+        [Test]
+        public void ShouldReturnSuccess()
+        {
+            this.result.Success.Should().BeTrue();
         }
     }
 }
