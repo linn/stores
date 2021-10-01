@@ -83,7 +83,7 @@
                 "Printer",
                 1,
                 "template.ext",
-                $"1\",\"PART\",\"0.25\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"{Environment.NewLine}",
+                $"\"1\",\"PART\",\"0.25\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"{Environment.NewLine}",
                 ref Arg.Any<string>());
         }
 
