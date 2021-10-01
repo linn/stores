@@ -425,6 +425,7 @@
                         var partMessage = purchaseOrder.Details.FirstOrDefault()?.RohsCompliant == "Y"
                                               ? "**ROHS Compliant**"
                                               : null;
+                        printString += "\"";
                         printString += orderNumber;
                         printString += "\",\"";
                         printString += partNumber;
