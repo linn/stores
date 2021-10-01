@@ -14,7 +14,7 @@ const mapStateToProps = (state, { match, location }) =>
               reqNumber: 456789,
               partNumber: 'TEST PART',
               partDescription: 'A TEST LABEL',
-              qtyReceived: 1,
+              qtyReceived: queryString.parse(location?.search)?.qtyReceived,
               unitOfMeasure: 'ONES',
               qcInfo: 'QC INFO GOES HERE',
               kardexLocation: queryString.parse(location?.search)?.kardexLocation,
