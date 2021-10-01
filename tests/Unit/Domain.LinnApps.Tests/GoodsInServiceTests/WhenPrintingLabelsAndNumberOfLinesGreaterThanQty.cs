@@ -83,7 +83,11 @@
                 "Printer",
                 1,
                 "template.ext",
+<<<<<<< HEAD:tests/Unit/Domain.LinnApps.Tests/GoodsInServiceTests/WhenPrintingLabelsAndNumberOfLinesGreaterThanQty.cs
                 $"\"1\",\"PART\",\"0.25\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"{Environment.NewLine}",
+=======
+                $"1\",\"PART\",\"0.25\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"{Environment.NewLine}",
+>>>>>>> master:tests/Unit/Domain.LinnApps.Tests/GoodsInServiceTests/WhenPrintingLabelsAndNumberOfLinesGreaterThanQty.cs
                 ref Arg.Any<string>());
         }
 

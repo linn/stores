@@ -202,6 +202,7 @@
             builder.RegisterType<PlCreditDebitNoteService>()
                 .As<IFacadeFilterService<PlCreditDebitNote, int, PlCreditDebitNoteResource, PlCreditDebitNoteResource, PlCreditDebitNoteResource>>();
             builder.RegisterType<LogisticsLabelService>().As<ILogisticsLabelService>();
+            builder.RegisterType<DeptStockPartsService>().As<IDeptStockPartsService>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();
