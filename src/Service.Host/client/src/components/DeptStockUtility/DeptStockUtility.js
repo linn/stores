@@ -225,9 +225,6 @@ function DeptStockUtility({
                         )}
                     </Grid>
                 )}
-                <Grid item xs={12}>
-                    <BackButton backClick={() => history.push('/inventory/dept-stock-parts')} />
-                </Grid>
             </Grid>
         </Page>
     );
