@@ -100,7 +100,7 @@
 
                  var arg2 = new OracleParameter("p_success", OracleDbType.Int32)
                                 {
-                                    Direction = ParameterDirection.InputOutput,
+                                    Direction = ParameterDirection.InputOutput
                                 };
 
                 cmd.Parameters.Add(arg2);
