@@ -82,7 +82,6 @@
 
         public void UpdateQuantityPrinted(string fromLocation, out bool success)
         {
-            success = false;
             using (var connection = this.databaseService.GetConnection())
             {
                 connection.Open();
@@ -101,9 +100,9 @@
 
                  var arg2 = new OracleParameter("p_success", OracleDbType.Int32)
                                 {
-                                    Direction = ParameterDirection.InputOutput,
-                                    Value = success ? 1 : 0
+                                    Direction = ParameterDirection.InputOutput
                                 };
+
                 cmd.Parameters.Add(arg2);
                  
                 cmd.ExecuteNonQuery();
