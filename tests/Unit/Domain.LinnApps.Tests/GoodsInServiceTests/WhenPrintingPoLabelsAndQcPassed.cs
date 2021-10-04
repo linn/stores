@@ -60,7 +60,7 @@
                 "Printer",
                 1,
                 "template.ext",
-                $"1\",\"PART\",\"1\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"{Environment.NewLine}",
+                $"\"1\",\"PART\",\"1\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"{Environment.NewLine}",
                 ref Arg.Any<string>()).Returns(true);
 
             this.result = this.Sut.PrintLabels(
@@ -71,17 +71,8 @@
                 1,
                 1,
                 1,
-                1,
                 "PASS",
                 1,
-                new List<GoodsInLabelLine>
-                    {
-                        new GoodsInLabelLine
-                            {
-                                      LineNumber = 1,
-                                      Qty = 1
-                                  }
-                    },
                 null);
         }
 
@@ -93,7 +84,7 @@
                 "Printer",
                 1,
                 "template.ext",
-                $"1\",\"PART\",\"1\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"{Environment.NewLine}",
+                $"\"1\",\"PART\",\"1\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"{Environment.NewLine}",
                 ref Arg.Any<string>());
         }
 

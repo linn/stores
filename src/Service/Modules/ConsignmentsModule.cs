@@ -102,6 +102,13 @@
 
         private object GetCartonTypes()
         {
+            var resource = this.Bind<SearchRequestResource>();
+
+            if (!string.IsNullOrEmpty(resource.SearchTerm))
+            {
+                return this.Negotiate.WithModel(this.cartonTypeFacadeService.Search(resource.SearchTerm));
+            }
+
             return this.Negotiate.WithModel(this.cartonTypeFacadeService.GetAll());
         }
 

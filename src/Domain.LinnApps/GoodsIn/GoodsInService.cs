@@ -342,11 +342,9 @@
             int qty,
             int userNumber,
             int orderNumber,
-            int numberOfLabels,
             int numberOfLines,
             string qcState,
             int reqNumber,
-            IEnumerable<GoodsInLabelLine> lines,
             string kardexLocation)
         {
             var message = string.Empty;
@@ -378,14 +376,7 @@
                 throw new NotImplementedException("Printing for this document type not yet implemented.");
             }
 
-            if (numberOfLines != qty)
-            {
-                return new ProcessResult(
-                    false,
-                    $"Quantity Received was {qty}. Quantity Entered is {numberOfLines}.");
-            }
-
-            foreach (var line in lines)
+            for (var i = 0; i < numberOfLines; i++)
             {
                 var printString = string.Empty;
 
@@ -416,11 +407,11 @@
                         printString += "\",\"";
                         printString += qty;
                         printString += "\",\"";
-                        printString += numberOfLabels;
+                        printString += numberOfLines;
                         printString += "\",\"";
-                        printString += line.Qty;
+                        printString += (decimal)qty / numberOfLines;
                         printString += "\",\"";
-                        printString += line.LineNumber;
+                        printString += i + 1;
                         printString += "\",\"";
                         printString += qcState;
                         printString += "\",\"";
@@ -434,11 +425,12 @@
                         var partMessage = purchaseOrder.Details.FirstOrDefault()?.RohsCompliant == "Y"
                                               ? "**ROHS Compliant**"
                                               : null;
+                        printString += "\"";
                         printString += orderNumber;
                         printString += "\",\"";
                         printString += partNumber;
                         printString += "\",\"";
-                        printString += line.Qty;
+                        printString += (decimal)qty / numberOfLines;
                         printString += "\",\"";
                         printString += user.Initials;
                         printString += "\",\"";

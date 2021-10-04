@@ -125,6 +125,16 @@ function QcLabelPrintScreen({
                 />
             </Grid>
             <Grid item xs={6} />
+            <Grid item xs={3}>
+                <InputField
+                    fullWidth
+                    disabled
+                    value={kardexLocation}
+                    label="Kardex Location"
+                    propertyName="kardexLocation"
+                />
+            </Grid>
+            <Grid item xs={9} />
             <Grid item xs={2}>
                 <InputField
                     fullWidth

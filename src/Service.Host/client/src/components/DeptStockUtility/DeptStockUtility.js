@@ -182,6 +182,9 @@ function DeptStockUtility({
                         />
                     </Grid>
                 )}
+                <Grid item xs={12}>
+                    <BackButton backClick={() => history.push('/inventory/dept-stock-parts')} />
+                </Grid>
                 {itemsLoading || stockLocatorLoading ? (
                     <Grid item xs={12}>
                         <Loading />
@@ -222,9 +225,6 @@ function DeptStockUtility({
                         )}
                     </Grid>
                 )}
-                <Grid item xs={12}>
-                    <BackButton backClick={() => history.push('/inventory/dept-stock-parts')} />
-                </Grid>
             </Grid>
         </Page>
     );
