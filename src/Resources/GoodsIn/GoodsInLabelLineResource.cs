@@ -1,6 +1,6 @@
-﻿namespace Linn.Stores.Domain.LinnApps.GoodsIn
+﻿namespace Linn.Stores.Resources.GoodsIn
 {
-    public class GoodsInLabelLine
+    public class GoodsInLabelLineResource
     {
         public int Id { get; set; }
 

@@ -14,7 +14,7 @@
 
     using NUnit.Framework;
 
-    public class WhenPrintingLabelsAndQcQuarantined : ContextBase
+    public class WhenPrintingLabelsAndQcQuarantinedAndMultipleLines : ContextBase
     {
         private readonly string dateString = DateTime.Today.ToString("MMMddyyyy").ToUpper();
 
@@ -41,10 +41,10 @@
             {
                 OrderNumber = 1,
                 Supplier = new Supplier
-                               {
-                                   Id = 1,
-                                   Name = "SUPPLIER"
-                               },
+                {
+                    Id = 1,
+                    Name = "SUPPLIER"
+                },
                 Details = new List<PurchaseOrderDetail>
                               {
                                   new PurchaseOrderDetail
@@ -65,21 +65,42 @@
                 "Printer",
                 1,
                 "template.ext",
-                $"\"PO1\",\"PART\",\"DESCRIPTION\",\"DELIVERY-REF\",\"{this.dateString}\",\"\",\"SU\",\"{this.dateString}\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"1\",\"1\",\"1\",\"1\",\"QUARANTINE\",\"DATE TESTED\",\"1\"{Environment.NewLine}",
+                $"\"PO1\",\"PART\",\"DESCRIPTION\",\"DELIVERY-REF\",\"{this.dateString}\",\"\",\"SU\",\"{this.dateString}\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"9\",\"1\",\"3\",\"1\",\"QUARANTINE\",\"DATE TESTED\",\"1\"{Environment.NewLine}",
+                ref Arg.Any<string>()).Returns(true);
+
+            this.Bartender.PrintLabels(
+                "QC 1",
+                "Printer",
+                1,
+                "template.ext",
+                $"\"PO1\",\"PART\",\"DESCRIPTION\",\"DELIVERY-REF\",\"{this.dateString}\",\"\",\"SU\",\"{this.dateString}\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"9\",\"1\",\"3\",\"2\",\"QUARANTINE\",\"DATE TESTED\",\"1\"{Environment.NewLine}",
+                ref Arg.Any<string>()).Returns(true);
+
+            this.Bartender.PrintLabels(
+                "QC 1",
+                "Printer",
+                1,
+                "template.ext",
+                $"\"PO1\",\"PART\",\"DESCRIPTION\",\"DELIVERY-REF\",\"{this.dateString}\",\"\",\"SU\",\"{this.dateString}\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"9\",\"1\",\"3\",\"3\",\"QUARANTINE\",\"DATE TESTED\",\"1\"{Environment.NewLine}",
                 ref Arg.Any<string>()).Returns(true);
 
             this.result = this.Sut.PrintLabels(
                 "PO",
                 "PART",
                 "DELIVERY-REF",
-                1,
+                9,
                 1,
                 1,
                 1,
                 "QUARANTINE",
                 1,
                 null,
-                new List<GoodsInLabelLine> { new GoodsInLabelLine { Id = 0, Qty = 1m } });
+                new List<GoodsInLabelLine>
+                    {
+                        new GoodsInLabelLine { Id = 0, Qty = 3m },
+                        new GoodsInLabelLine { Id = 1, Qty = 3m },
+                        new GoodsInLabelLine { Id = 2, Qty = 3m }
+                    });
         }
 
         [Test]
@@ -90,7 +111,21 @@
                 "Printer",
                 1,
                 "template.ext",
-                $"\"PO1\",\"PART\",\"DESCRIPTION\",\"DELIVERY-REF\",\"{this.dateString}\",\"\",\"SU\",\"{this.dateString}\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"1\",\"1\",\"1\",\"1\",\"QUARANTINE\",\"DATE TESTED\",\"1\"{Environment.NewLine}",
+                $"\"PO1\",\"PART\",\"DESCRIPTION\",\"DELIVERY-REF\",\"{this.dateString}\",\"\",\"SU\",\"{this.dateString}\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"9\",\"1\",\"3\",\"1\",\"QUARANTINE\",\"DATE TESTED\",\"1\"{Environment.NewLine}",
+                ref Arg.Any<string>());
+            this.Bartender.Received(1).PrintLabels(
+                "QC 1",
+                "Printer",
+                1,
+                "template.ext",
+                $"\"PO1\",\"PART\",\"DESCRIPTION\",\"DELIVERY-REF\",\"{this.dateString}\",\"\",\"SU\",\"{this.dateString}\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"9\",\"1\",\"3\",\"2\",\"QUARANTINE\",\"DATE TESTED\",\"1\"{Environment.NewLine}",
+                ref Arg.Any<string>());
+            this.Bartender.Received(1).PrintLabels(
+                "QC 1",
+                "Printer",
+                1,
+                "template.ext",
+                $"\"PO1\",\"PART\",\"DESCRIPTION\",\"DELIVERY-REF\",\"{this.dateString}\",\"\",\"SU\",\"{this.dateString}\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"9\",\"1\",\"3\",\"3\",\"QUARANTINE\",\"DATE TESTED\",\"1\"{Environment.NewLine}",
                 ref Arg.Any<string>());
         }
 
