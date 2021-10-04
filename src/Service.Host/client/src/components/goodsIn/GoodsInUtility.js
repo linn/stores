@@ -740,7 +740,10 @@ GoodsInUtility.propTypes = {
         message: PropTypes.string
     }),
     validateStorageType: PropTypes.func.isRequired,
-    validateStorageTypeResult: PropTypes.shape({ message: PropTypes.string }),
+    validateStorageTypeResult: PropTypes.shape({
+        message: PropTypes.string,
+        locationCode: PropTypes.string
+    }),
     validateStorageTypeResultLoading: PropTypes.bool,
     validatePurchaseOrderResultLoading: PropTypes.bool,
     searchDemLocations: PropTypes.func.isRequired,
