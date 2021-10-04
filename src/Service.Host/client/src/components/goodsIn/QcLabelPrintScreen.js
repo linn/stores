@@ -31,12 +31,12 @@ function QcLabelPrintScreen({
 
     useEffect(() => {
         const lines = [];
-        for (let index = 0; index < qtyReceived; index += 1) {
+        for (let index = 0; index < numContainers; index += 1) {
             lines.push({ id: index.toString(), qty: 1 });
         }
 
         setLabelLines(lines);
-    }, [qtyReceived]);
+    }, [numContainers]);
 
     const handleLabelLineQtyChange = (propertyName, newValue) => {
         const index = propertyName.replace('line ', '');
@@ -165,6 +165,7 @@ function QcLabelPrintScreen({
                     value={numContainers}
                     onChange={(_, newValue) => setNumContainers(newValue)}
                     label="# Containers"
+                    type="number"
                     propertyName="numberOfContainers"
                 />
             </Grid>
@@ -199,7 +200,11 @@ function QcLabelPrintScreen({
             <Grid item xs={10} />
 
             <Grid item xs={12}>
-                <Accordion expanded={labelLinesExpanded} disabled={!!kardexLocation}>
+                <Accordion
+                    expanded={labelLinesExpanded}
+                    disabled={!!kardexLocation}
+                    data-testid="quantitiesExpansionPanel"
+                >
                     <AccordionSummary
                         onClick={() => setLabelLinesExpanded(!labelLinesExpanded)}
                         expandIcon={<ExpandMoreIcon />}
