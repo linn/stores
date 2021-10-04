@@ -8,5 +8,6 @@
     public interface IInterCompanyInvoiceService
     {
         IResult<IEnumerable<InterCompanyInvoice>> SearchInterCompanyInvoices(string searchTerm);
+        IResult<InterCompanyInvoice> GetByDocumentNumber(int id);
     }
 }

@@ -9,9 +9,10 @@
         public IntercompanyInvoiceResource Build(InterCompanyInvoice invoice)
         {
             return new IntercompanyInvoiceResource
-                       {
-                           DocumentNumber = invoice.DocumentNumber
-                       };
+            {
+                DocumentNumber = invoice.DocumentNumber,
+                ExportReturnId = invoice.ExportReturnId
+            };
         }
 
         public string GetLocation(InterCompanyInvoice model)

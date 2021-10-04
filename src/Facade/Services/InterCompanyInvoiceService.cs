@@ -15,6 +15,17 @@
             this.repository = repository;
         }
 
+        public IResult<InterCompanyInvoice> GetByDocumentNumber(int id)
+        {
+            var invoice = this.repository.FindBy(i => i.DocumentNumber == id);
+            if (invoice == null)
+            {
+                return new NotFoundResult<InterCompanyInvoice>("Document Not Found");
+            }
+
+            return new SuccessResult<InterCompanyInvoice>(invoice);
+        }
+
         public IResult<IEnumerable<InterCompanyInvoice>> SearchInterCompanyInvoices(string searchTerm)
         {
             return new SuccessResult<IEnumerable<InterCompanyInvoice>>(

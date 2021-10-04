@@ -18,7 +18,7 @@
 
         public InterCompanyInvoice FindBy(Expression<Func<InterCompanyInvoice, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.IntercompanyInvoices.Where(expression).ToList().FirstOrDefault();
         }
 
         public IQueryable<InterCompanyInvoice> FilterBy(Expression<Func<InterCompanyInvoice, bool>> expression)
