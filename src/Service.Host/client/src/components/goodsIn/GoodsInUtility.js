@@ -134,8 +134,7 @@ function GoodsInUtility({
         if (validateStorageTypeResult?.message) {
             setMessage({ error: true, text: validateStorageTypeResult?.message });
         } else {
-            setFormData(f => ({ ...f, ontoLocation: validateStorageTypeResult?.locationCode }));
-            setMessage({ error: false });
+            setFormData(d => ({ ...d, ontoLocation: validateStorageTypeResult?.locationCode }));
         }
     }, [validateStorageTypeResult]);
 
@@ -741,10 +740,7 @@ GoodsInUtility.propTypes = {
         message: PropTypes.string
     }),
     validateStorageType: PropTypes.func.isRequired,
-    validateStorageTypeResult: PropTypes.shape({
-        message: PropTypes.string,
-        locationCode: PropTypes.string
-    }),
+    validateStorageTypeResult: PropTypes.shape({ message: PropTypes.string }),
     validateStorageTypeResultLoading: PropTypes.bool,
     validatePurchaseOrderResultLoading: PropTypes.bool,
     searchDemLocations: PropTypes.func.isRequired,
