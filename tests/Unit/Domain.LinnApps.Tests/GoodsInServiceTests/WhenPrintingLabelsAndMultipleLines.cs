@@ -72,7 +72,13 @@
                 3,
                 "PASS",
                 1,
-                null);
+                null,
+                new List<GoodsInLabelLine>
+                    {
+                        new GoodsInLabelLine { Id = 0, Qty = 3m },
+                        new GoodsInLabelLine { Id = 1, Qty = 3m },
+                        new GoodsInLabelLine { Id = 2, Qty = 3m }
+                    });
         }
 
         [Test]

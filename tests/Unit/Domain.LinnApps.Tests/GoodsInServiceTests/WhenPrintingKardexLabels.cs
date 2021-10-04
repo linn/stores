@@ -71,7 +71,8 @@
                 1,
                 "PASS",
                 1,
-                "kardex-location");
+                "kardex-location",
+                new List<GoodsInLabelLine> { new GoodsInLabelLine { Id = 1, Qty = 1m } });
         }
 
         [Test]
