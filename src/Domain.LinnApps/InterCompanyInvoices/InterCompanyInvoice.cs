@@ -14,7 +14,7 @@
 
         public int InvoiceAddressId { get; set; }
 
-        public int SalesAccount { get; set; }
+        public int SalesAccountId { get; set; }
 
         public Address InvoiceAddress { get; set; }
 
@@ -29,8 +29,6 @@
         public decimal DocumentTotal { get; set; }
 
         public string CurrencyCode { get; set; }
-
-        public Currency Currency { get; set; }
 
         public decimal GrossWeightKG { get; set; }
 

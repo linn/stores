@@ -323,7 +323,6 @@
             this.BuildSalesArticles(builder);
             this.QuerySalesOrders(builder);
             this.QuerySalesOrderDetails(builder);
-            this.QueryCurrencies(builder);
             this.BuildIntercompanyInvoices(builder);
             this.QueryTqmsSummaryByCategories(builder);
             this.BuildTqmsMaster(builder);
@@ -1660,19 +1659,12 @@
                 .HasForeignKey<ExportReturnDetail>(z=>z.ReturnId);
         }
 
-        private void QueryCurrencies(ModelBuilder builder)
-        {
-            var q = builder.Query<Currency>().ToView("CURRENCIES");
-            q.Property(e => e.Code).HasColumnName("CODE").HasMaxLength(4);
-            q.Property(e => e.Name).HasColumnName("NAME").HasMaxLength(50);
-        }
-
-
         private void BuildIntercompanyInvoices(ModelBuilder builder)
         {
             var q = builder.Entity<InterCompanyInvoice>().ToTable("INTER_COMPANY_INVOICES");
             q.HasKey(e => new { e.DocumentNumber, e.DocumentType });
             q.Property(e => e.DocumentNumber).HasColumnName("DOCUMENT_NUMBER");
+            q.Property(e => e.DocumentDate).HasColumnName("DOCUMENT_DATE");
             q.Property(e => e.DocumentType).HasColumnName("DOCUMENT_TYPE").HasMaxLength(1);
             q.Property(e => e.ExportReturnId).HasColumnName("EXPORT_RETURN_ID");
             q.Property(e => e.DeliveryAddressId).HasColumnName("DELIVERY_ADDRESS");
@@ -1683,8 +1675,11 @@
             q.Property(e => e.DocumentTotal).HasColumnName("DOCUMENT_TOTAL");
             q.Property(e => e.NetTotal).HasColumnName("GROSS_WEIGHT_KG");
             q.Property(e => e.VATTotal).HasColumnName("GROSS_DIMS_M3");
-            q.Property(e => e.DocumentTotal).HasColumnName("TERMS").HasMaxLength(30);
+            q.Property(e => e.Terms).HasColumnName("TERMS").HasMaxLength(30);
             q.Property(e => e.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            q.Property(e => e.SalesAccountId).HasColumnName("ACCOUNT_ID");
+            q.Property(e => e.GrossWeightKG).HasColumnName("GROSS_WEIGHT_KG");
+            q.Property(e => e.GrossDimsM3).HasColumnName("GROSS_DIMS_M3");
             q.HasOne(e => e.DeliveryAddress).WithMany(a => a.DeliveryInterCompanies).HasForeignKey(e => e.DeliveryAddressId);
             q.HasOne(e => e.InvoiceAddress).WithMany(a => a.InvoiceInterCompanies).HasForeignKey(e => e.InvoiceAddressId);
           //  q.HasOne(e => e.Currency).WithMany(a => a.InterCompanies).HasForeignKey(e => e.CurrencyCode);

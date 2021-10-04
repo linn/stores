@@ -6,7 +6,7 @@
     using FluentAssertions;
 
     using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.InterCompanyInvoices;
     using Linn.Stores.Resources;
 
     using Nancy;
