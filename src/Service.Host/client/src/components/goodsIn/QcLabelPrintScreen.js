@@ -206,7 +206,7 @@ function QcLabelPrintScreen({
                         aria-controls="panel1a-content"
                         id="panel1a-header"
                     >
-                        <Typography>Set Qty Split Across Lables</Typography>
+                        <Typography>Set Qty Split Across Labels</Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                         <Grid container spacing={3}>
