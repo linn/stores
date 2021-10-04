@@ -38,15 +38,6 @@ function QcLabelPrintScreen({
         setLabelLines(lines);
     }, [qtyReceived]);
 
-    useEffect(() => {
-        const lines = [];
-        for (let index = 0; index < numContainers; index += 1) {
-            lines.push({ id: index.toString(), qty: 1 });
-        }
-
-        setLabelLines(lines);
-    }, [numContainers]);
-
     const handleLabelLineQtyChange = (propertyName, newValue) => {
         const index = propertyName.replace('line ', '');
         setLabelLines(lines =>
