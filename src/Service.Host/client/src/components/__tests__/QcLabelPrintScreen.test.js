@@ -1,5 +1,6 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
+import Decimal from 'decimal.js';
 import { cleanup, fireEvent, screen } from '@testing-library/react';
 import render from '../../test-utils';
 import QcLabelPrintScreen from '../goodsIn/QcLabelPrintScreen';
@@ -95,7 +96,9 @@ describe('When printLabels button clicked', () => {
                 deliveryRef: '',
                 documentType: 'PO',
                 kardexLocation: null,
-                lines: expect.arrayContaining([expect.objectContaining({ id: '0', qty: 1 })]),
+                lines: expect.arrayContaining([
+                    expect.objectContaining({ id: '0', qty: new Decimal(1) })
+                ]),
                 numberOfLabels: 1,
                 numberOfLines: 1,
                 orderNumber: '123456',
@@ -136,5 +139,22 @@ describe('When printLabelsResult error', () => {
 
     test('should display error message', () => {
         expect(screen.getByText('ERROR')).toBeInTheDocument();
+    });
+});
+
+describe('When qties do not add up', () => {
+    beforeEach(() => {
+        cleanup();
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        render(<QcLabelPrintScreen {...props} />);
+        const expansionPanel = screen.getByTestId('quantitiesExpansionPanel');
+        fireEvent.click(expansionPanel);
+        const input = screen.getByLabelText('1');
+        fireEvent.change(input, { target: { value: 5 } });
+    });
+
+    test('should disable button', () => {
+        const button = screen.getByRole('button', { name: 'Print' });
+        expect(button).toBeDisabled();
     });
 });
