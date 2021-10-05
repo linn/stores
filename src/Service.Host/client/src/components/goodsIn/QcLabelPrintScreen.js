@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
+import { Decimal } from 'decimal.js';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -29,14 +30,16 @@ function QcLabelPrintScreen({
     const [labelLines, setLabelLines] = useState([]);
     const [labelLinesExpanded, setLabelLinesExpanded] = useState(false);
 
+    const divide = (a, b) => (!a || !b ? null : new Decimal(a).dividedBy(new Decimal(b)));
+
     useEffect(() => {
         const lines = [];
         for (let index = 0; index < numContainers; index += 1) {
-            lines.push({ id: index.toString(), qty: 1 });
+            lines.push({ id: index.toString(), qty: divide(qtyReceived, numContainers)  });
         }
 
         setLabelLines(lines);
-    }, [numContainers]);
+    }, [numContainers, qtyReceived]);
 
     const handleLabelLineQtyChange = (propertyName, newValue) => {
         const index = propertyName.replace('line ', '');
