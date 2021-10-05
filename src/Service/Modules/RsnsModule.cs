@@ -1,32 +1,29 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
-    using Common.Facade;
-    using Domain.LinnApps;
-    using Models;
+    using Linn.Stores.Facade.Services;
+    using Linn.Stores.Resources.RequestResources;
+    using Linn.Stores.Service.Models;
+
     using Nancy;
     using Nancy.ModelBinding;
-    using Resources;
-    using Resources.RequestResources;
 
     public sealed class RsnsModule : NancyModule
     {
-        private readonly IFacadeService<Rsn, string, RsnResource, RsnResource> rsnsService;
+        private readonly IRsnService rsnsService;
 
-        public RsnsModule(IFacadeService<Rsn, string, RsnResource, RsnResource> rsnsService)
+        public RsnsModule(IRsnService rsnsService)
         {
             this.rsnsService = rsnsService;
-            Get("logistics/rsns", _ => GetRsns());
+            this.Get("logistics/rsns", _ => this.GetRsns());
         }
 
         private object GetRsns()
         {
             var resource = this.Bind<SearchRequestResource>();
 
-            var results = rsnsService.Search(resource.SearchTerm);
+            var results = this.rsnsService.Search(resource.SearchTerm);
 
-            return Negotiate
-                .WithModel(results)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+            return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");
         }
     }

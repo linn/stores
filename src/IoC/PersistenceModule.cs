@@ -141,6 +141,7 @@
             builder.RegisterType<StoresLabelTypeRepository>().As<IQueryRepository<StoresLabelType>>();
             builder.RegisterType<PurchaseOrderRepository>().As<IRepository<PurchaseOrder, int>>();
             builder.RegisterType<AuthUserRepository>().As<IQueryRepository<AuthUser>>();
+            builder.RegisterType<RsnRepository>().As<IQueryRepository<Rsn>>();
         }
     }
 }
