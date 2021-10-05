@@ -236,7 +236,8 @@
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
 
         public DbQuery<AuthUser> AuthUsers { get; set; }
-        public DbQuery<Rsn> Rsns { get; set; }
+
+        public DbSet<Rsn> Rsns { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

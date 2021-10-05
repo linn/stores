@@ -121,6 +121,7 @@ import printGoodsInLabels from './printGoodsInLabels';
 import validateStorageTypeResult from './validateStorageTypeResult';
 import printConsignmentDocuments from './printConsignmentDocuments';
 import consignmentPackingList from './consignmentPackingList';
+import rsns from './rsns';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -202,6 +203,7 @@ const rootReducer = history =>
         req,
         reqMoves,
         rootProducts,
+        rsns,
         salesAccounts,
         salesArticles,
         salesOutlets,

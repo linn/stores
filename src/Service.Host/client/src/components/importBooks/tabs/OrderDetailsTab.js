@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { Dropdown, InputField, LinkButton } from '@linn-it/linn-form-components-library';
+import { Dropdown, InputField, LinkButton, Typeahead } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
 
 function OrderDetailsTab({
@@ -19,7 +19,11 @@ function OrderDetailsTab({
     removeOrderDetailRow,
     remainingInvoiceValue,
     remainingDutyValue,
-    remainingWeightValue
+    remainingWeightValue,
+    rsnsSearchResults,
+    rsnsSearchLoading,
+    searchRsns,
+    clearRsnsSearch
 }) {
     const updateRow = detail => {
         handleOrderDetailChange(detail.lineNumber, detail);
@@ -59,6 +63,14 @@ function OrderDetailsTab({
 
     const editRow = (row, propertyName, newValue) => {
         updateRow({ ...row, [propertyName]: newValue });
+    };
+
+    const handleRsnUpdate = (row, rsn) => {
+        editRow(row, 'rsnNumber', rsn.rsnNumber);
+        editRow(row, 'rsnNumber', rsn.description);
+        editRow(row, 'quantity', rsn.quantity);
+        editRow(row, 'tariffCode', rsn.tariffCode);
+        editRow(row, 'weight', rsn.weight);
     };
 
     return (
@@ -160,7 +172,39 @@ function OrderDetailsTab({
 
                             {row.lineType === 'RSN' && (
                                 <Grid item xs={2}>
-                                    <InputField
+                                    <div className={classes.displayInline}>
+                                        <Typeahead
+                                            label="RSN Number"
+                                            propertyName="rsnNumber"
+                                            title="Search for an rsn"
+                                            onSelect={newRsn => handleRsnUpdate(row, newRsn)}
+                                            items={rsnsSearchResults}
+                                            loading={rsnsSearchLoading}
+                                            fetchItems={searchRsns}
+                                            clearSearch={() => clearRsnsSearch}
+                                            value={row.rsnNumber}
+                                            modal
+                                            links={false}
+                                            debounce={1000}
+                                            minimumSearchTermLength={2}
+                                            required
+                                            disabled={!allowedToEdit}
+                                            maxLength={6}
+                                        />
+                                    </div>
+                                    <div className={classes.marginTop1}>
+                                        <Tooltip title="Clear Rsn search">
+                                            <Button
+                                                variant="outlined"
+                                                onClick={() => editRow(row, 'rsnNumber', '')}
+                                                disabled={!allowedToEdit}
+                                            >
+                                                X
+                                            </Button>
+                                        </Tooltip>
+                                    </div>
+
+                                    {/* <InputField
                                         label="RSN Number"
                                         fullWidth
                                         onChange={(propertyName, newValue) =>
@@ -171,7 +215,7 @@ function OrderDetailsTab({
                                         value={row.rsnNumber}
                                         disabled={!allowedToEdit}
                                         maxLength={6}
-                                    />
+                                    /> */}
                                 </Grid>
                             )}
 
@@ -408,11 +452,25 @@ OrderDetailsTab.propTypes = {
     cpcNumbers: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     allowedToEdit: PropTypes.bool.isRequired,
     addOrderDetailRow: PropTypes.func.isRequired,
-    removeOrderDetailRow: PropTypes.func.isRequired
+    removeOrderDetailRow: PropTypes.func.isRequired,
+    rsnsSearchResults: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number,
+            name: PropTypes.number,
+            description: PropTypes.string,
+            quantity: PropTypes.number,
+            tariffCode: PropTypes.string,
+            weight: PropTypes.number
+        })
+    ),
+    rsnsSearchLoading: PropTypes.bool.isRequired,
+    searchRsns: PropTypes.func.isRequired,
+    clearRsnsSearch: PropTypes.func.isRequired
 };
 
 OrderDetailsTab.defaultProps = {
-    invoiceDate: ''
+    invoiceDate: '',
+    rsnsSearchResults: null
 };
 
 export default OrderDetailsTab;
