@@ -326,7 +326,7 @@ export const demLocations = new ItemType(
     '/logistics/goods-in/dem-locations'
 );
 
-export const loanDetails = new ItemType('loanDetails', '/logistics/loan-details', 'LOAN_DETAILS');
+export const loanDetails = new ItemType('loanDetails', 'LOAN_DETAILS', '/logistics/loan-details');
 
 export const validatePurchaseOrderResult = new ItemType(
     'validatePurchaseOrderResult',

@@ -48,7 +48,10 @@ function GoodsInUtility({
     validateStorageTypeResult,
     validateStorageTypeResultLoading,
     match,
-    history
+    history,
+    loanDetails,
+    getLoanDetails,
+    loanDetailsLoading
 }) {
     const [formData, setFormData] = useState({
         orderNumber: null,
@@ -93,9 +96,13 @@ function GoodsInUtility({
     };
     const [bookInPoExpanded, setBookInPoExpanded] = useState(false);
 
+    const [loanExpanded, setLoanExpanded] = useState(false);
+
     const [printDialogOpen, setPrintDialogOpen] = useState(false);
 
     const [parcelDialogOpen, setParcelDialogOpen] = useState(false);
+
+    const [loanDetailsDialogOpen, setLoanDetailsDialogOpen] = useState(false);
 
     useEffect(() => {
         setRows([...logEntries, ...lines]);
@@ -117,6 +124,12 @@ function GoodsInUtility({
             });
         }
     }, [validatePurchaseOrderResult]);
+
+    useEffect(() => {
+        if (loanDetails?.length > 0) {
+            setLoanDetailsDialogOpen(true);
+        }
+    }, [loanDetails]);
 
     useEffect(() => {
         if (validatePurchaseOrderBookInQtyResult) {
@@ -613,6 +626,41 @@ function GoodsInUtility({
                     </Accordion>
                 </Grid>
                 <Grid item xs={12}>
+                    <Accordion expanded={loanExpanded}>
+                        <AccordionSummary
+                            onClick={() => setLoanExpanded(!loanExpanded)}
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                        >
+                            <Typography>Book In Loan</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Grid container spacing={3}>
+                                <Grid item xs={2}>
+                                    <InputField
+                                        fullWidth
+                                        value={formData?.loanNumber}
+                                        label="Loan Number"
+                                        propertyName="loanNumber"
+                                        onChange={handleFieldChange}
+                                        textFieldProps={{
+                                            onBlur: () =>
+                                                formData.loanNumber
+                                                    ? getLoanDetails(
+                                                          'loanNumber',
+                                                          formData.loanNumber
+                                                      )
+                                                    : {}
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs={10} />
+                            </Grid>
+                        </AccordionDetails>
+                    </Accordion>
+                </Grid>
+                <Grid item xs={12}>
                     <CheckboxWithLabel
                         label="Multiple Book In?"
                         checked={multipleBookIn}
@@ -781,7 +829,10 @@ GoodsInUtility.propTypes = {
     validatePurchaseOrderBookInQtyResultLoading: PropTypes.bool,
     userNumber: PropTypes.number.isRequired,
     match: PropTypes.shape({}).isRequired,
-    history: PropTypes.shape({ push: PropTypes.func }).isRequired
+    history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+    loanDetails: PropTypes.arrayOf(PropTypes.shape({})),
+    getLoanDetails: PropTypes.func.isRequired,
+    loanDetailsLoading: PropTypes.bool
 };
 
 GoodsInUtility.defaultProps = {
@@ -798,7 +849,9 @@ GoodsInUtility.defaultProps = {
     storagePlacesSearchResults: [],
     storagePlacesSearchLoading: false,
     validatePurchaseOrderBookInQtyResult: null,
-    validatePurchaseOrderBookInQtyResultLoading: false
+    validatePurchaseOrderBookInQtyResultLoading: false,
+    loanDetails: [],
+    loanDetailsLoading: false
 };
 
 export default GoodsInUtility;
