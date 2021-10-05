@@ -61,7 +61,7 @@
                 });
 
             this.Bartender.PrintLabels(
-                "QC 1",
+                "QC 1-0",
                 "Printer",
                 1,
                 "template.ext",
@@ -69,7 +69,7 @@
                 ref Arg.Any<string>()).Returns(true);
 
             this.Bartender.PrintLabels(
-                "QC 1",
+                "QC 1-1",
                 "Printer",
                 1,
                 "template.ext",
@@ -77,7 +77,7 @@
                 ref Arg.Any<string>()).Returns(true);
 
             this.Bartender.PrintLabels(
-                "QC 1",
+                "QC 1-2",
                 "Printer",
                 1,
                 "template.ext",
@@ -107,21 +107,21 @@
         public void ShouldCallBartenderWithCorrectParameters()
         {
             this.Bartender.Received(1).PrintLabels(
-                "QC 1",
+                "QC 1-0",
                 "Printer",
                 1,
                 "template.ext",
                 $"\"PO1\",\"PART\",\"DESCRIPTION\",\"DELIVERY-REF\",\"{this.dateString}\",\"\",\"SU\",\"{this.dateString}\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"9\",\"1\",\"3\",\"1\",\"QUARANTINE\",\"DATE TESTED\",\"1\"{Environment.NewLine}",
                 ref Arg.Any<string>());
             this.Bartender.Received(1).PrintLabels(
-                "QC 1",
+                "QC 1-1",
                 "Printer",
                 1,
                 "template.ext",
                 $"\"PO1\",\"PART\",\"DESCRIPTION\",\"DELIVERY-REF\",\"{this.dateString}\",\"\",\"SU\",\"{this.dateString}\",\"NO QC INFO\",\"0\",\"SUPPLIER\",\"9\",\"1\",\"3\",\"2\",\"QUARANTINE\",\"DATE TESTED\",\"1\"{Environment.NewLine}",
                 ref Arg.Any<string>());
             this.Bartender.Received(1).PrintLabels(
-                "QC 1",
+                "QC 1-2",
                 "Printer",
                 1,
                 "template.ext",

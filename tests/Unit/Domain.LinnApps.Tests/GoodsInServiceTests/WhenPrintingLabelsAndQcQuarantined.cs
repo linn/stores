@@ -61,7 +61,7 @@
                 });
 
             this.Bartender.PrintLabels(
-                "QC 1",
+                "QC 1-0",
                 "Printer",
                 1,
                 "template.ext",
@@ -86,7 +86,7 @@
         public void ShouldCallBartenderWithCorrectParameters()
         {
             this.Bartender.Received(1).PrintLabels(
-                "QC 1",
+                "QC 1-0",
                 "Printer",
                 1,
                 "template.ext",
