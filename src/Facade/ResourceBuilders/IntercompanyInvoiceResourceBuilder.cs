@@ -8,10 +8,24 @@
     {
         public IntercompanyInvoiceResource Build(InterCompanyInvoice invoice)
         {
+            var addressBuilder = new AddressResourceBuilder();
             return new IntercompanyInvoiceResource
             {
+                DeliveryAddress = invoice.DeliveryAddress == null ? null : addressBuilder.Build(invoice.DeliveryAddress),
+                DocumentType = invoice.DocumentType,
                 DocumentNumber = invoice.DocumentNumber,
-                ExportReturnId = invoice.ExportReturnId
+                DocumentDate = invoice.DocumentDate.ToString("o"),
+                ExportReturnId = invoice.ExportReturnId,
+                AccountId = invoice.SalesAccountId,
+                NetTotal = invoice.NetTotal,
+                VATTotal = invoice.VATTotal,
+                DocumentTotal = invoice.DocumentTotal,
+                Currency = invoice.CurrencyCode,
+                GrossWeightKg = invoice.GrossWeightKG,
+                GrossDimsM3 = invoice.GrossDimsM3,
+                Terms = invoice.Terms,
+                ConsignmentId = invoice.ConsignmentId,
+                InvoiceAddress = invoice.InvoiceAddress == null ? null : addressBuilder.Build(invoice.InvoiceAddress),
             };
         }
 

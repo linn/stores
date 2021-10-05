@@ -31,7 +31,10 @@
                         with.Dependency(this.InterCompanyInvoiceService);
                         with.Dependency<IResourceBuilder<IEnumerable<InterCompanyInvoice>>>(
                             new InterCompanyInvoicesResourceBuilder());
+                        with.Dependency<IResourceBuilder<InterCompanyInvoice>>(
+                            new InterCompanyInvoiceResourceBuilder());
                         with.Module<InterCompanyInvoiceModule>();
+                        with.ResponseProcessor<InterCompanyInvoiceResponseProcessor>();
                         with.ResponseProcessor<InterCompanyInvoicesResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
