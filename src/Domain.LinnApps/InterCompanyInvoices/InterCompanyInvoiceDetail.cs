@@ -31,5 +31,7 @@
         public int TariffId { get; set; }
 
         public string LineComment { get; set; }
+
+        public InterCompanyInvoice InterCompanyInvoice { get; set; }
     }
 }
