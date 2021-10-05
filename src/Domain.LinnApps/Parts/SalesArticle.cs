@@ -11,5 +11,12 @@
         public DateTime? PhaseOutDate { get; set; }
 
         public Part Part { get; set; }
+
+        public int TariffId { get; set; }
+
+        public Tariff Tariff { get; set; }
+
+        public decimal? Weight { get; set; }
+        
     }
 }

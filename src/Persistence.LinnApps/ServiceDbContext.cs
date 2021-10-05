@@ -155,7 +155,7 @@
 
         public DbQuery<WandItem> WandItems { get; set; }
 
-        public DbQuery<ExportRsn> Rsns { get; set; }
+        public DbQuery<ExportRsn> ExportRsns { get; set; }
 
         public DbSet<SalesAccount> SalesAccounts { get; set; }
 
@@ -236,6 +236,7 @@
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
 
         public DbQuery<AuthUser> AuthUsers { get; set; }
+        public DbQuery<Rsn> Rsns { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -347,6 +348,7 @@
             this.QueryStoresLabelTypes(builder);
             this.BuildPurchaseOrders(builder);
             this.QueryAuthUsers(builder);
+            this.QueryRsns(builder);
             base.OnModelCreating(builder);
             this.BuildPurchaseOrderDetails(builder);
         }
@@ -1502,6 +1504,9 @@
             e.Property(a => a.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
             e.Property(a => a.PhaseOutDate).HasColumnName("PHASE_OUT_DATE");
             e.Property(a => a.Description).HasColumnName("INVOICE_DESCRIPTION");
+            e.Property(a => a.TariffId).HasColumnName("TARIFF_ID").HasMaxLength(3);
+            e.Property(a => a.Weight).HasColumnName("WEIGHT").HasMaxLength(10);
+            e.HasOne(a => a.Tariff).WithOne().HasForeignKey<SalesArticle>(x=>x.TariffId);
         }
 
         private void QueryTpkView(ModelBuilder builder)
@@ -1953,6 +1958,16 @@
             query.Property(t => t.UserNumber).HasColumnName("USER_NUMBER");
             query.Property(t => t.Initials).HasColumnName("INITIALS");
             query.Property(t => t.Name).HasColumnName("USER_NAME");
+        }
+
+        private void QueryRsns(ModelBuilder builder)
+        {
+            var q = builder.Entity<Rsn>().ToTable("RSNS");
+            q.HasKey(e => e.RsnNumber);
+            q.Property(e => e.RsnNumber).HasColumnName("RSN_NUMBER");
+            q.Property(e => e.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
+            q.Property(e => e.Quantity).HasColumnName("QUANTITY").HasMaxLength(5);
+            q.HasOne(a => a.SalesArticle).WithOne().HasForeignKey<Rsn>(z => z.ArticleNumber);
         }
     }
 }
