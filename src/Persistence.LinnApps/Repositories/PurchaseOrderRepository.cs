@@ -18,27 +18,18 @@
             this.serviceDbContext = serviceDbContext;
         }
 
-        public PurchaseOrder FindById(int key)
-        {
-            return this.serviceDbContext
-                .PurchaseOrders.Where(x => x.OrderNumber == key)
-                .Include(o => o.Supplier)
-                .Include(o => o.Details)
-                .AsNoTracking()
-                .ToList().FirstOrDefault();
-        }
-
-        public IQueryable<PurchaseOrder> FindAll()
-        {
-            throw new NotImplementedException();
-        }
-
         public void Add(PurchaseOrder entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(PurchaseOrder entity)
+        public IQueryable<PurchaseOrder> FilterBy(Expression<Func<PurchaseOrder, bool>> expression)
+        {
+            return this.serviceDbContext.PurchaseOrders.Where(expression).Include(o => o.Details)
+                .ThenInclude(z => z.SalesArticle).ThenInclude(a => a.Tariff).AsNoTracking().AsQueryable();
+        }
+
+        public IQueryable<PurchaseOrder> FindAll()
         {
             throw new NotImplementedException();
         }
@@ -48,7 +39,13 @@
             throw new NotImplementedException();
         }
 
-        public IQueryable<PurchaseOrder> FilterBy(Expression<Func<PurchaseOrder, bool>> expression)
+        public PurchaseOrder FindById(int key)
+        {
+            return this.serviceDbContext.PurchaseOrders.Where(x => x.OrderNumber == key).Include(o => o.Supplier)
+                .Include(o => o.Details).AsNoTracking().ToList().FirstOrDefault();
+        }
+
+        public void Remove(PurchaseOrder entity)
         {
             throw new NotImplementedException();
         }

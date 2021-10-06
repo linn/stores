@@ -329,7 +329,6 @@
             this.QuerySalesOrders(builder);
             this.QuerySalesOrderDetails(builder);
             this.BuildIntercompanyInvoices(builder);
-            this.BuildIntercompanyInvoiceDetails(builder);
             this.QueryTqmsSummaryByCategories(builder);
             this.BuildTqmsMaster(builder);
             this.BuildTqmsJobRefs(builder);
@@ -1016,7 +1015,6 @@
             q.Property(e => e.Comments).HasColumnName("COMMENTS").HasMaxLength(2000);
             q.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
             q.Property(e => e.CustomsEntryCodePrefix).HasColumnName("CUSTOMS_ENTRY_CODE_PREFIX").HasMaxLength(3);
-            q.Property(e => e.Pva).HasColumnName("PVA").HasMaxLength(1);
             q.HasMany(t => t.InvoiceDetails).WithOne()
                 .HasForeignKey(detail => detail.ImportBookId);
             q.HasMany(t => t.OrderDetails).WithOne()
@@ -1516,6 +1514,7 @@
             e.Property(a => a.Weight).HasColumnName("WEIGHT").HasMaxLength(10);
             e.HasOne(a => a.Tariff).WithOne().HasForeignKey<SalesArticle>(x=>x.TariffId);
             e.HasMany(a => a.Rsns).WithOne(x=>x.SalesArticle).HasForeignKey(x => x.ArticleNumber);
+            e.HasMany(a => a.PurchaseOrderDetails).WithOne(x => x.SalesArticle).HasForeignKey(x => x.PartNumber);
         }
 
         private void QueryTpkView(ModelBuilder builder)
@@ -1645,47 +1644,10 @@
         private void BuildIntercompanyInvoices(ModelBuilder builder)
         {
             var q = builder.Entity<InterCompanyInvoice>().ToTable("INTER_COMPANY_INVOICES");
-            q.HasKey(e => new { e.DocumentType, e.DocumentNumber });
+            q.HasKey(e => new { e.DocumentNumber, e.DocumentType });
             q.Property(e => e.DocumentNumber).HasColumnName("DOCUMENT_NUMBER");
-            q.Property(e => e.DocumentDate).HasColumnName("DOCUMENT_DATE");
             q.Property(e => e.DocumentType).HasColumnName("DOCUMENT_TYPE").HasMaxLength(1);
             q.Property(e => e.ExportReturnId).HasColumnName("EXPORT_RETURN_ID");
-            q.Property(e => e.DeliveryAddressId).HasColumnName("DELIVERY_ADDRESS");
-            q.Property(e => e.InvoiceAddressId).HasColumnName("INVOICE_ADDRESS");
-            q.Property(e => e.CurrencyCode).HasColumnName("CURRENCY").HasMaxLength(4); 
-            q.Property(e => e.NetTotal).HasColumnName("NET_TOTAL");
-            q.Property(e => e.VATTotal).HasColumnName("VAT_TOTAL");
-            q.Property(e => e.DocumentTotal).HasColumnName("DOCUMENT_TOTAL");
-            q.Property(e => e.Terms).HasColumnName("TERMS").HasMaxLength(30);
-            q.Property(e => e.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
-            q.Property(e => e.SalesAccountId).HasColumnName("ACCOUNT_ID");
-            q.Property(e => e.GrossWeightKG).HasColumnName("GROSS_WEIGHT_KG");
-            q.Property(e => e.GrossDimsM3).HasColumnName("GROSS_DIMS_M3");
-            q.HasOne(e => e.DeliveryAddress).WithMany(a => a.DeliveryInterCompanies).HasForeignKey(e => e.DeliveryAddressId);
-            q.HasOne(e => e.InvoiceAddress).WithMany(a => a.InvoiceInterCompanies).HasForeignKey(e => e.InvoiceAddressId);
-            q.HasMany(c => c.Details).WithOne().HasForeignKey(ic => new {ic.DocumentType, ic.DocumentNumber});
-        }
-
-        private void BuildIntercompanyInvoiceDetails(ModelBuilder builder)
-        {
-            var q = builder.Entity<InterCompanyInvoiceDetail>().ToTable("INTER_COMP_INV_DETAILS");
-            q.HasKey(e => new { e.DocumentType, e.DocumentNumber, e.LineNumber });
-            q.Property(e => e.DocumentType).HasColumnName("DOCUMENT_TYPE").HasMaxLength(1);
-            q.Property(e => e.DocumentNumber).HasColumnName("DOCUMENT_NUMBER");
-            q.Property(e => e.LineNumber).HasColumnName("LINE_NO");
-            q.Property(e => e.CustomerOrderNos).HasColumnName("CUSTOMER_ORDER_NOS").HasMaxLength(2000);
-            q.Property(e => e.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
-            q.Property(e => e.Description).HasColumnName("DESCRIPTION").HasMaxLength(200);
-            q.Property(e => e.LineComment).HasColumnName("LINE_COMMENT").HasMaxLength(2500);
-            q.Property(e => e.Quantity).HasColumnName("QTY");
-            q.Property(e => e.UnitPrice).HasColumnName("UNIT_PRICE");
-            q.Property(e => e.VatRate).HasColumnName("VAT_RATE");
-            q.Property(e => e.VatTotal).HasColumnName("VAT_TOTAL");
-            q.Property(e => e.Total).HasColumnName("TOTAL");
-            q.Property(e => e.VatCode).HasColumnName("VAT_CODE").HasMaxLength(1);
-            q.Property(e => e.CountryOfOrigin).HasColumnName("COUNTRY_OF_ORIGIN").HasMaxLength(1);
-            q.Property(e => e.TariffId).HasColumnName("TARIFF_ID");
-            q.HasOne(i => i.InterCompanyInvoice).WithMany(i => i.Details).HasForeignKey(ic => new { ic.DocumentType, ic.DocumentNumber});
         }
 
         private void QueryTqmsSummaryByCategories(ModelBuilder builder)
@@ -1984,16 +1946,20 @@
             entity.Property(o => o.SupplierId).HasColumnName("SUPP_SUPPLIER_ID");
             entity.HasOne(o => o.Supplier).WithMany(s => s.PurchaseOrders).HasForeignKey(o => o.SupplierId);
             entity.Property(o => o.DocumentType).HasColumnName("DOCUMENT_TYPE");
+
         }
 
         private void BuildPurchaseOrderDetails(ModelBuilder builder)
         {
             var entity = builder.Entity<PurchaseOrderDetail>().ToTable("PL_ORDER_DETAILS");
-            entity.HasKey(a => new { a.OrderNumber, a.Line}); 
+            entity.HasKey(a => new { a.OrderNumber, a.Line }); 
             entity.Property(o => o.OrderNumber).HasColumnName("ORDER_NUMBER");
             entity.Property(o => o.Line).HasColumnName("ORDER_LINE");
             entity.Property(o => o.RohsCompliant).HasColumnName("ROHS_COMPLIANT");
             entity.Property(o => o.OurQty).HasColumnName("OUR_QTY");
+            entity.Property(o => o.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            entity.Property(o => o.SuppliersDesignation).HasColumnName("SUPPLIERS_DESIGNATION").HasMaxLength(2000);
+            entity.HasOne(a => a.SalesArticle).WithMany(x => x.PurchaseOrderDetails).HasForeignKey(z => z.PartNumber);
             entity.HasOne(d => d.PurchaseOrder).WithMany(o => o.Details)
                 .HasForeignKey(d => d.OrderNumber);
         }
