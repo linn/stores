@@ -228,15 +228,27 @@ describe('When storage type entered', () => {
         });
     });
 
-    describe('When validateStorageTypeResult returns...', () => {
+    describe('When validateStorageTypeResult returns error message...', () => {
         beforeEach(() => {
             defaultRender({
-                validateStorageTypeResult: { message: 'Storage Type Valid' }
+                validateStorageTypeResult: { message: 'Storage Type Invalid' }
             });
         });
 
         test('should show message text', () => {
-            expect(screen.getByDisplayValue('Storage Type Valid')).toBeInTheDocument();
+            expect(screen.getByDisplayValue('Storage Type Invalid')).toBeInTheDocument();
+        });
+    });
+
+    describe('When validateStorageTypeResult returns locationCode...', () => {
+        beforeEach(() => {
+            defaultRender({
+                validateStorageTypeResult: { locationCode: 'LOC-A' }
+            });
+        });
+
+        test('should set ontoLocation for book in', () => {
+            expect(screen.getByLabelText('Onto Location').value).toBe('LOC-A');
         });
     });
 });

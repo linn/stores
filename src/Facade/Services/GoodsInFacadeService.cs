@@ -111,7 +111,14 @@
                     requestResource.NumberOfLines,
                     requestResource.QcState,
                     requestResource.ReqNumber,
-                    requestResource.KardexLocation));
+                    requestResource.KardexLocation,
+                    requestResource.Lines.Select(
+                        x => 
+                        new GoodsInLabelLine
+                            {
+                                Id = x.Id,
+                                Qty = x.Qty
+                            })));
         }
 
         public IResult<ValidateStorageTypeResult> ValidateStorageType(ValidateStorageTypeRequestResource requestResource)

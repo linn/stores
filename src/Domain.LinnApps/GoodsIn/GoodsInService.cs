@@ -345,7 +345,8 @@
             int numberOfLines,
             string qcState,
             int reqNumber,
-            string kardexLocation)
+            string kardexLocation,
+            IEnumerable<GoodsInLabelLine> lines)
         {
             var message = string.Empty;
             var success = false;
@@ -376,7 +377,7 @@
                 throw new NotImplementedException("Printing for this document type not yet implemented.");
             }
 
-            for (var i = 0; i < numberOfLines; i++)
+            foreach (var line in lines)
             {
                 var printString = string.Empty;
 
@@ -409,9 +410,9 @@
                         printString += "\",\"";
                         printString += numberOfLines;
                         printString += "\",\"";
-                        printString += (decimal)qty / numberOfLines;
+                        printString += line.Qty;
                         printString += "\",\"";
-                        printString += i + 1;
+                        printString += line.Id + 1;
                         printString += "\",\"";
                         printString += qcState;
                         printString += "\",\"";
@@ -430,7 +431,7 @@
                         printString += "\",\"";
                         printString += partNumber;
                         printString += "\",\"";
-                        printString += (decimal)qty / numberOfLines;
+                        printString += line.Qty;
                         printString += "\",\"";
                         printString += user.Initials;
                         printString += "\",\"";
@@ -448,7 +449,7 @@
 
                 message = string.Empty;
                 success = this.bartender.PrintLabels(
-                    $"QC {orderNumber}", 
+                    $"QC {orderNumber}-{line.Id}", 
                     labelType.DefaultPrinter, 
                     1, 
                     labelType.FileName, 
