@@ -23,6 +23,7 @@ import {
 import QcLabelPrintScreen from '../../containers/goodsIn/QcLabelPrintScreen';
 import Page from '../../containers/Page';
 import Parcel from '../../containers/parcels/Parcel';
+import LoanDetails from './LoanDetails';
 
 function GoodsInUtility({
     validatePurchaseOrder,
@@ -83,7 +84,7 @@ function GoodsInUtility({
     const useStyles = makeStyles(theme => ({
         dialog: {
             margin: theme.spacing(6),
-            minWidth: theme.spacing(62)
+            minWidth: theme.spacing(70)
         },
         notchedOutline: {
             borderWidth: '3px',
@@ -103,6 +104,11 @@ function GoodsInUtility({
     const [parcelDialogOpen, setParcelDialogOpen] = useState(false);
 
     const [loanDetailsDialogOpen, setLoanDetailsDialogOpen] = useState(false);
+
+    const handleSelectLoanDetails = details => {
+        setLoanDetailsDialogOpen(false);
+        console.log(details);
+    };
 
     useEffect(() => {
         setRows([...logEntries, ...lines]);
@@ -309,6 +315,26 @@ function GoodsInUtility({
                         </div>
                     </div>
                 </Dialog>
+                <Dialog open={loanDetailsDialogOpen} fullWidth maxWidth="md">
+                    <div>
+                        <IconButton
+                            className={classes.pullRight}
+                            aria-label="Close"
+                            onClick={() => setLoanDetailsDialogOpen(false)}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <div className={classes.dialog}>
+                            <LoanDetails
+                                loanDetails={loanDetails?.map(d => ({
+                                    ...d,
+                                    id: d.line
+                                }))}
+                                onConfirm={handleSelectLoanDetails}
+                            />
+                        </div>
+                    </div>
+                </Dialog>
                 <Grid item xs={12}>
                     <Title text="Goods In Utility" />
                 </Grid>
@@ -329,7 +355,8 @@ function GoodsInUtility({
                             validatePurchaseOrderResultLoading ||
                             validatePurchaseOrderBookInQtyResultLoading ||
                             bookInResultLoading ||
-                            validateStorageTypeResultLoading
+                            validateStorageTypeResultLoading ||
+                            loanDetailsLoading
                                 ? 'loading'
                                 : message.text
                         }
