@@ -23,7 +23,7 @@ function LoanDetails({ loanDetails, onConfirm }) {
     };
 
     // rows is what the table displays, but selectedRows is ultimately what gets passed up to the parent onConfirm(...)
-    // so update selectedRows when the user edits a cell with this callBack
+    // so update selectedRows when the user edits a cell with this callBack to 'save' the change to selectedRows
     const handleEditRowsModelChange = useCallback(
         model => {
             const key = Object.keys(model)[0];
@@ -36,8 +36,8 @@ function LoanDetails({ loanDetails, onConfirm }) {
         [selectedRows]
     );
 
-    // and update the corresponding row when selectedRows changes with this effect, so that change is visible in the table
-    // as well as being 'saved' in the selectedRows array
+    // we need to update the corresponding row when selectedRows changes with this effect, so that the change is visible in the table
+    // as well as being 'saved' for submission above
     useEffect(() => {
         setRows(r =>
             r.map(row => {
