@@ -4,8 +4,8 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
 
-    public interface IRsnService
+    public interface ISuppliersService
     {
-        IResult<IEnumerable<Rsn>> Search(string searchTerm);
+        IResult<IEnumerable<Supplier>> GetSuppliers(string searchTerm = null, bool returnClosed = false, bool returnOnlyApprovedCarriers = false);
     }
 }
