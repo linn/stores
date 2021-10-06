@@ -230,6 +230,8 @@
             builder.RegisterType<ValidateStorageTypeResultResourceBuilder>()
                 .As<IResourceBuilder<ValidateStorageTypeResult>>();
             builder.RegisterType<PackingListResourceBuilder>().As<IResourceBuilder<PackingList>>();
+            builder.RegisterType<RsnResourceBuilder>().As<IResourceBuilder<Rsn>>();
+            builder.RegisterType<RsnsResourceBuilder>().As<IResourceBuilder<IEnumerable<Rsn>>>();
         }
     }
 }

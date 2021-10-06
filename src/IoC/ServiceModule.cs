@@ -172,6 +172,7 @@
             builder.RegisterType<PortFacadeService>().As<IFacadeService<Port, string, PortResource, PortResource>>();
             builder.RegisterType<LogisticsProcessesFacadeService>().As<ILogisticsProcessesFacadeService>();
             builder.RegisterType<LogisticsReportsFacadeService>().As<ILogisticsReportsFacadeService>();
+            builder.RegisterType<RsnService>().As<IRsnService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
