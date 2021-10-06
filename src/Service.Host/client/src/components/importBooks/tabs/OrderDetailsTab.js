@@ -206,19 +206,6 @@ function OrderDetailsTab({
                                             </Button>
                                         </Tooltip>
                                     </div>
-
-                                    {/* <InputField
-                                        label="RSN Number"
-                                        fullWidth
-                                        onChange={(propertyName, newValue) =>
-                                            editRow(row, propertyName, newValue)
-                                        }
-                                        propertyName="rsnNumber"
-                                        type="number"
-                                        value={row.rsnNumber}
-                                        disabled={!allowedToEdit}
-                                        maxLength={6}
-                                    /> */}
                                 </Grid>
                             )}
 
