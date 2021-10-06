@@ -16,7 +16,7 @@ const mapStateToProps = state => ({
     rsnsSearchResults: rsnsSelectors.getSearchItems(state).map?.(r => ({
         id: r.rsnNumber,
         name: r.rsnNumber.toString(),
-        description: r.InvoiceDescription,
+        description: r.invoiceDescription,
         quantity: r.quantity,
         tariffCode: r.tariffCode,
         weight: r.weight

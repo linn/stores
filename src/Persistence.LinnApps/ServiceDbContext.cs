@@ -239,6 +239,9 @@
 
         public DbSet<Rsn> Rsns { get; set; }
 
+        public DbSet<Tariff> Tariffs { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -350,6 +353,7 @@
             this.BuildPurchaseOrders(builder);
             this.QueryAuthUsers(builder);
             this.QueryRsns(builder);
+            this.QueryTariffs(builder);
             base.OnModelCreating(builder);
             this.BuildPurchaseOrderDetails(builder);
         }
@@ -1508,6 +1512,7 @@
             e.Property(a => a.TariffId).HasColumnName("TARIFF_ID").HasMaxLength(3);
             e.Property(a => a.Weight).HasColumnName("WEIGHT").HasMaxLength(10);
             e.HasOne(a => a.Tariff).WithOne().HasForeignKey<SalesArticle>(x=>x.TariffId);
+            e.HasMany(a => a.Rsns).WithOne(x=>x.SalesArticle).HasForeignKey(x => x.ArticleNumber);
         }
 
         private void QueryTpkView(ModelBuilder builder)
@@ -1968,7 +1973,15 @@
             q.Property(e => e.RsnNumber).HasColumnName("RSN_NUMBER");
             q.Property(e => e.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
             q.Property(e => e.Quantity).HasColumnName("QUANTITY").HasMaxLength(5);
-            q.HasOne(a => a.SalesArticle).WithOne().HasForeignKey<Rsn>(z => z.ArticleNumber);
+            q.HasOne(a => a.SalesArticle).WithMany(x=>x.Rsns).HasForeignKey(z => z.ArticleNumber);
+        }
+
+        private void QueryTariffs(ModelBuilder builder)
+        {
+            var q = builder.Entity<Tariff>().ToTable("TARIFFS");
+            q.HasKey(e => e.TariffId);
+            q.Property(e => e.TariffId).HasColumnName("TARIFF_ID").HasMaxLength(3);
+            q.Property(e => e.TariffCode).HasColumnName("TARIFF_CODE").HasMaxLength(14);
         }
     }
 }

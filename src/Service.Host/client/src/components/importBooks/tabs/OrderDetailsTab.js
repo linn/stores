@@ -66,11 +66,14 @@ function OrderDetailsTab({
     };
 
     const handleRsnUpdate = (row, rsn) => {
-        editRow(row, 'rsnNumber', rsn.rsnNumber);
-        editRow(row, 'rsnNumber', rsn.description);
-        editRow(row, 'quantity', rsn.quantity);
-        editRow(row, 'tariffCode', rsn.tariffCode);
-        editRow(row, 'weight', rsn.weight);
+        updateRow({
+            ...row,
+            rsnNumber: rsn.id,
+            orderDescription: rsn.description,
+            qty: rsn.quantity,
+            tariffCode: rsn.tariffCode,
+            weight: rsn.weight
+        });
     };
 
     return (
@@ -456,7 +459,7 @@ OrderDetailsTab.propTypes = {
     rsnsSearchResults: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.number,
-            name: PropTypes.number,
+            name: PropTypes.string,
             description: PropTypes.string,
             quantity: PropTypes.number,
             tariffCode: PropTypes.string,

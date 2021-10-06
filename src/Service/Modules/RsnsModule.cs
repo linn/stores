@@ -23,8 +23,7 @@
 
             var results = this.rsnsService.Search(resource.SearchTerm);
 
-            return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get)
-                .WithView("Index");
+            return this.Negotiate.WithModel(results).WithMediaRangeModel("text/json", ApplicationSettings.Get);
         }
     }
 }
