@@ -114,8 +114,8 @@ function GoodsInUtility({
                 articleNumber: detail.articleNumber,
                 transactionType: 'L',
                 dateCreated: new Date().toISOString(),
-                //storagePlace: formData.ontoLocation, todo - what happens here?
-                //locationId: formData.ontoLocationId,
+                storagePlace: formData?.ontoLocation,
+                locationId: formData?.ontoLocationId,
                 quantity: detail.return,
                 loanNumber: detail.loanNumber,
                 line: detail.line,
