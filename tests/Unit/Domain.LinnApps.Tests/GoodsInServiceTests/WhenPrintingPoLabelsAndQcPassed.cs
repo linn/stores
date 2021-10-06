@@ -56,7 +56,7 @@
                              });
 
             this.Bartender.PrintLabels(
-                "QC 1",
+                "QC 1-0",
                 "Printer",
                 1,
                 "template.ext",
@@ -74,14 +74,14 @@
                 "PASS",
                 1,
                 null,
-                new List<GoodsInLabelLine> { new GoodsInLabelLine { Id = 1, Qty = 1m } });
+                new List<GoodsInLabelLine> { new GoodsInLabelLine { Id = 0, Qty = 1m } });
         }
 
         [Test]
         public void ShouldCallBartenderWithCorrectParameters()
         {
             this.Bartender.Received(1).PrintLabels(
-                "QC 1",
+                "QC 1-0",
                 "Printer",
                 1,
                 "template.ext",
