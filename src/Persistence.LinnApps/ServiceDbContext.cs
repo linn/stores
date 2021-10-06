@@ -1973,7 +1973,7 @@
             q.Property(e => e.RsnNumber).HasColumnName("RSN_NUMBER");
             q.Property(e => e.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
             q.Property(e => e.Quantity).HasColumnName("QUANTITY").HasMaxLength(5);
-            q.HasOne(a => a.SalesArticle).WithMany(x=>x.Rsns).HasForeignKey(z => z.ArticleNumber);
+            q.HasOne(a => a.SalesArticle).WithMany(x => x.Rsns).HasForeignKey(z => z.ArticleNumber);
         }
 
         private void QueryTariffs(ModelBuilder builder)

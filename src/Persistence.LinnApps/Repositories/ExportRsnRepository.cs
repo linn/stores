@@ -3,8 +3,10 @@
     using System;
     using System.Linq;
     using System.Linq.Expressions;
-    using Common.Persistence;
-    using Domain.LinnApps;
+
+    using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps;
+
     using Microsoft.EntityFrameworkCore;
 
     public class ExportRsnRepository : IQueryRepository<ExportRsn>
@@ -16,17 +18,17 @@
             this.serviceDbContext = serviceDbContext;
         }
 
-        public ExportRsn FindBy(Expression<Func<ExportRsn, bool>> expression)
+        public IQueryable<ExportRsn> FilterBy(Expression<Func<ExportRsn, bool>> expression)
+        {
+            return this.serviceDbContext.ExportRsns.Where(expression).AsNoTracking();
+        }
+
+        public IQueryable<ExportRsn> FindAll()
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<ExportRsn> FilterBy(Expression<Func<ExportRsn, bool>> expression)
-        {
-            return serviceDbContext.ExportRsns.Where(expression).AsNoTracking();
-        }
-
-        public IQueryable<ExportRsn> FindAll()
+        public ExportRsn FindBy(Expression<Func<ExportRsn, bool>> expression)
         {
             throw new NotImplementedException();
         }
