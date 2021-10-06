@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
+    using Linn.Stores.Domain.LinnApps.InterCompanyInvoices;
     using System;
 
     public class ExportReturnDetail

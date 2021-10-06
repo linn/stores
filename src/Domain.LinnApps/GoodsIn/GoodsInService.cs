@@ -449,7 +449,7 @@
 
                 message = string.Empty;
                 success = this.bartender.PrintLabels(
-                    $"QC {orderNumber}", 
+                    $"QC {orderNumber}-{line.Id}", 
                     labelType.DefaultPrinter, 
                     1, 
                     labelType.FileName, 

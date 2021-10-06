@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
+import { Decimal } from 'decimal.js';
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
@@ -8,6 +9,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { ErrorCard, InputField, Loading } from '@linn-it/linn-form-components-library';
+import Tooltip from '@material-ui/core/Tooltip';
 
 function QcLabelPrintScreen({
     docType,
@@ -29,14 +31,19 @@ function QcLabelPrintScreen({
     const [labelLines, setLabelLines] = useState([]);
     const [labelLinesExpanded, setLabelLinesExpanded] = useState(false);
 
+    const divide = (a, b) => (!a || !b ? null : new Decimal(a).dividedBy(new Decimal(b)));
+
+    const qtiesInvalid = () =>
+        Number(qtyReceived) !== labelLines.reduce((a, b) => Number(a) + Number(b.qty), 0);
+
     useEffect(() => {
         const lines = [];
         for (let index = 0; index < numContainers; index += 1) {
-            lines.push({ id: index.toString(), qty: 1 });
+            lines.push({ id: index.toString(), qty: divide(qtyReceived, numContainers) });
         }
 
         setLabelLines(lines);
-    }, [numContainers]);
+    }, [numContainers, qtyReceived]);
 
     const handleLabelLineQtyChange = (propertyName, newValue) => {
         const index = propertyName.replace('line ', '');
@@ -46,6 +53,33 @@ function QcLabelPrintScreen({
             })
         );
     };
+
+    const printButton = () => (
+        <Button
+            variant="contained"
+            color="primary"
+            disabled={qtiesInvalid()}
+            onClick={() =>
+                printLabels({
+                    documentType: docType,
+                    kardexLocation,
+                    partNumber,
+                    partDescription,
+                    deliveryRef,
+                    qcInformation: qcInfo,
+                    qty: qtyReceived,
+                    orderNumber,
+                    numberOfLabels: numContainers,
+                    numberOfLines: numContainers,
+                    qcState,
+                    reqNumber,
+                    lines: labelLines
+                })
+            }
+        >
+            Print
+        </Button>
+    );
 
     return (
         <Grid container spacing={3}>
@@ -172,29 +206,13 @@ function QcLabelPrintScreen({
             <Grid item xs={10} />
 
             <Grid item xs={2}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() =>
-                        printLabels({
-                            documentType: docType,
-                            kardexLocation,
-                            partNumber,
-                            partDescription,
-                            deliveryRef,
-                            qcInformation: qcInfo,
-                            qty: qtyReceived,
-                            orderNumber,
-                            numberOfLabels: numContainers,
-                            numberOfLines: numContainers,
-                            qcState,
-                            reqNumber,
-                            lines: labelLines
-                        })
-                    }
-                >
-                    Print
-                </Button>
+                {qtiesInvalid() ? (
+                    <Tooltip title="Values entered don't add up to Qty Received">
+                        <span>{printButton()} </span>
+                    </Tooltip>
+                ) : (
+                    printButton()
+                )}
             </Grid>
 
             <Grid item xs={10} />

@@ -55,7 +55,7 @@
                 });
 
             this.Bartender.PrintLabels(
-                "QC 1",
+                Arg.Any<string>(),
                 "Printer",
                 Arg.Any<int>(),
                 "template.ext",
@@ -84,8 +84,22 @@
         [Test]
         public void ShouldCallBartenderForEachLineWithCorrectParameters()
         {
-            this.Bartender.Received(3).PrintLabels(
-                "QC 1",
+            this.Bartender.Received().PrintLabels(
+                "QC 1-0",
+                "Printer",
+                1,
+                "template.ext",
+                $"\"1\",\"PART\",\"3\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"{Environment.NewLine}",
+                ref Arg.Any<string>());
+            this.Bartender.Received().PrintLabels(
+                "QC 1-1",
+                "Printer",
+                1,
+                "template.ext",
+                $"\"1\",\"PART\",\"3\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"{Environment.NewLine}",
+                ref Arg.Any<string>());
+            this.Bartender.Received().PrintLabels(
+                "QC 1-2",
                 "Printer",
                 1,
                 "template.ext",

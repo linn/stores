@@ -319,3 +319,5 @@ export const consignmentPackingListActionTypes = makeActionTypes(
 );
 
 export const parcelsByNumberActionTypes = makeActionTypes(itemTypes.parcelsByNumber.actionType);
+
+export const rsnsActionTypes = makeActionTypes(itemTypes.rsns.actionType);

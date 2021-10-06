@@ -11,6 +11,7 @@
     using Linn.Stores.Domain.LinnApps.ExportBooks;
     using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
+    using Linn.Stores.Domain.LinnApps.InterCompanyInvoices;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Purchasing;
@@ -141,6 +142,7 @@
             builder.RegisterType<StoresLabelTypeRepository>().As<IQueryRepository<StoresLabelType>>();
             builder.RegisterType<PurchaseOrderRepository>().As<IRepository<PurchaseOrder, int>>();
             builder.RegisterType<AuthUserRepository>().As<IQueryRepository<AuthUser>>();
+            builder.RegisterType<RsnRepository>().As<IQueryRepository<Rsn>>();
         }
     }
 }
