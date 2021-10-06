@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -16,21 +16,36 @@ function LoanDetails({ loanDetails, onConfirm }) {
         { field: 'itemNumber', headerName: 'Item', width: 100 }
     ];
     const [rows, setRows] = useState(loanDetails);
+    const [selectedRows, setSelectedRows] = useState([]);
 
-    const [editRowsModel, setEditRowsModel] = React.useState({});
+    const handleSelectRow = selected => {
+        setSelectedRows(rows.filter(r => selected.includes(r.id)));
+    };
 
-    const handleEditRowsModelChange = React.useCallback(
+    // rows is what the table displays, but selectedRows is ultimately what gets passed up to the parent onConfirm(...)
+    // so update selectedRows when the user edits a cell with this callBack
+    const handleEditRowsModelChange = useCallback(
         model => {
             const key = Object.keys(model)[0];
-            setRows(
-                rows.map(r => {
+            setSelectedRows(
+                selectedRows.map(r => {
                     return r.id === Number(key) ? { ...r, return: model[key].return.value } : r;
                 })
             );
-            setEditRowsModel(model);
         },
-        [rows]
+        [selectedRows]
     );
+
+    // and update the corresponding row when selectedRows changes with this effect, so that change is visible in the table
+    // as well as being 'saved' in the selectedRows array
+    useEffect(() => {
+        setRows(r =>
+            r.map(row => {
+                const match = selectedRows.find(s => s.id === row.id);
+                return match || row;
+            })
+        );
+    }, [selectedRows]);
 
     return (
         <Grid container spacing={3}>
@@ -42,7 +57,6 @@ function LoanDetails({ loanDetails, onConfirm }) {
                     <DataGrid
                         rows={loanDetails}
                         columns={columns}
-                        editRowsModel={editRowsModel}
                         editMode="row"
                         onEditRowsModelChange={handleEditRowsModelChange}
                         columnBuffer={9}
@@ -50,19 +64,20 @@ function LoanDetails({ loanDetails, onConfirm }) {
                         rowHeight={34}
                         loading={false}
                         hideFooter
-                        // editRowsModel={editRowsModel}
-
-                        // handleEditRowsModelChange={handleEditRowsModelChange}
+                        disableSelectionOnClick
+                        onSelectionModelChange={handleSelectRow}
+                        checkboxSelection
+                        isCellEditable={params => selectedRows.some(x => params.row.id === x.id)} // only selected rows are editable
                     />
                 </div>
             </Grid>
             <Grid item xs={10} />
             <Grid item xs={2}>
                 <Button
-                    //disabled={!selectedRows.length}
+                    disabled={!selectedRows.length}
                     style={{ marginTop: '22px' }}
                     variant="contained"
-                    onClick={() => onConfirm(rows)}
+                    onClick={() => onConfirm(selectedRows)}
                 >
                     Confirm
                 </Button>

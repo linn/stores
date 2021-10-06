@@ -106,8 +106,23 @@ function GoodsInUtility({
     const [loanDetailsDialogOpen, setLoanDetailsDialogOpen] = useState(false);
 
     const handleSelectLoanDetails = details => {
-        setLoanDetailsDialogOpen(false);
         console.log(details);
+        setLoanDetailsDialogOpen(false);
+        setLines(l => [
+            ...l,
+            ...details.map(detail => ({
+                id: l.length + 1,
+                articleNumber: detail.articleNumber,
+                transactionType: 'L',
+                dateCreated: new Date().toISOString(),
+                //storagePlace: formData.ontoLocation, todo - what happens here?
+                //locationId: formData.ontoLocationId,
+                quantity: detail.return,
+                loanNumber: detail.loanNumber,
+                line: detail.line,
+                createdBy: userNumber
+            }))
+        ]);
     };
 
     useEffect(() => {
@@ -328,7 +343,8 @@ function GoodsInUtility({
                             <LoanDetails
                                 loanDetails={loanDetails?.map(d => ({
                                     ...d,
-                                    id: d.line
+                                    id: d.line,
+                                    return: d.qtyOnLoan
                                 }))}
                                 onConfirm={handleSelectLoanDetails}
                             />
