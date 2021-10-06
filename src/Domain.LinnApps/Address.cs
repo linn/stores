@@ -4,6 +4,7 @@
     using System.Collections.Generic;
 
     using Linn.Stores.Domain.LinnApps.Consignments;
+    using Linn.Stores.Domain.LinnApps.InterCompanyInvoices;
 
     public class Address
     {
@@ -30,5 +31,9 @@
         public DateTime? DateInvalid { get; set; }
 
         public List<Consignment> Consignments { get; set; }
+
+        public List<InterCompanyInvoice> InvoiceInterCompanies { get; set; }
+
+        public List<InterCompanyInvoice> DeliveryInterCompanies { get; set; }
     }
 }

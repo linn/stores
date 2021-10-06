@@ -3,10 +3,11 @@
     using System.Collections.Generic;
 
     using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.InterCompanyInvoices;
 
     public interface IInterCompanyInvoiceService
     {
         IResult<IEnumerable<InterCompanyInvoice>> SearchInterCompanyInvoices(string searchTerm);
+        IResult<InterCompanyInvoice> GetByDocumentNumber(int id);
     }
 }

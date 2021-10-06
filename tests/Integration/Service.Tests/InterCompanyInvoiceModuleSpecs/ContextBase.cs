@@ -4,7 +4,7 @@
     using System.Security.Claims;
 
     using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.InterCompanyInvoices;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Service.Modules;
@@ -31,7 +31,10 @@
                         with.Dependency(this.InterCompanyInvoiceService);
                         with.Dependency<IResourceBuilder<IEnumerable<InterCompanyInvoice>>>(
                             new InterCompanyInvoicesResourceBuilder());
+                        with.Dependency<IResourceBuilder<InterCompanyInvoice>>(
+                            new InterCompanyInvoiceResourceBuilder());
                         with.Module<InterCompanyInvoiceModule>();
+                        with.ResponseProcessor<InterCompanyInvoiceResponseProcessor>();
                         with.ResponseProcessor<InterCompanyInvoicesResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
