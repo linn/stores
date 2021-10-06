@@ -16,23 +16,21 @@
 
     using NUnit.Framework;
 
-    public class WhenSearchingInterCompanyInvoices : ContextBase
+    public class WhenSearchingByDocumentNumber : ContextBase
     {
         [SetUp]
         public void SetUp()
         {
-            var inv1 = new InterCompanyInvoice { ExportReturnId = 123, DocumentNumber = 321 };
-            var inv2 = new InterCompanyInvoice { ExportReturnId = 123, DocumentNumber = 111 };
+            var inv1 = new InterCompanyInvoice {DocumentNumber = 123 };
 
-            this.InterCompanyInvoiceService.SearchInterCompanyInvoices("123").Returns(
-                new SuccessResult<IEnumerable<InterCompanyInvoice>>(new List<InterCompanyInvoice> { inv1, inv2 }));
+            this.InterCompanyInvoiceService.GetByDocumentNumber(123).Returns(
+            new SuccessResult<InterCompanyInvoice>(inv1));
 
             this.Response = this.Browser.Get(
-                "/inventory/exports/inter-company-invoices",
+                "/inventory/exports/inter-company-invoices/123",
                 with =>
                     {
                         with.Header("Accept", "application/json");
-                        with.Query("searchTerm", "123");
                     }).Result;
         }
 
@@ -42,17 +40,18 @@
             this.Response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
+
         [Test]
         public void ShouldCallService()
         {
-            this.InterCompanyInvoiceService.Received().SearchInterCompanyInvoices("123");
+            this.InterCompanyInvoiceService.Received().GetByDocumentNumber(123);
         }
-
+       
         [Test]
         public void ShouldReturnResource()
         {
-            var resource = this.Response.Body.DeserializeJson<IEnumerable<IntercompanyInvoiceResource>>().ToList();
-            resource.Should().HaveCount(2);
+            var resource = this.Response.Body.DeserializeJson<IntercompanyInvoiceResource>();
+            resource.DocumentNumber.Should().Be(123);
         }
     }
 }

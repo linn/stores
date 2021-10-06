@@ -15,6 +15,7 @@
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
+    using Linn.Stores.Domain.LinnApps.InterCompanyInvoices;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Purchasing;
@@ -230,6 +231,8 @@
             builder.RegisterType<ValidateStorageTypeResultResourceBuilder>()
                 .As<IResourceBuilder<ValidateStorageTypeResult>>();
             builder.RegisterType<PackingListResourceBuilder>().As<IResourceBuilder<PackingList>>();
+            builder.RegisterType<RsnResourceBuilder>().As<IResourceBuilder<Rsn>>();
+            builder.RegisterType<RsnsResourceBuilder>().As<IResourceBuilder<IEnumerable<Rsn>>>();
         }
     }
 }
