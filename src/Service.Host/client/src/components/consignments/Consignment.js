@@ -23,6 +23,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Page from '../../containers/Page';
 import consignmentReducer from './consignmentReducer';
 import DetailsTab from './DetailsTab';
+import DetailsItemsTab from './DetailsItemsTab';
 import ItemsTab from './ItemsTab';
 import InvoicesTab from './InvoicesTab';
 import PackingListTab from './PackingListTab';
@@ -223,7 +224,7 @@ function Consignment({
 
     const handleSelectConsignment = (_property, newValue) => {
         getConsignment(newValue);
-        setcurrentTab(1);
+        setcurrentTab(3);
     };
 
     const handleTabChange = (_event, newValue) => {
@@ -521,7 +522,8 @@ function Consignment({
                         >
                             <Tab label="Select" />
                             <Tab label="Details" />
-                            <Tab label="Consignment Items" />
+                            <Tab label="Items" />
+                            <Tab label="Details And Items" />
                             <Tab label="Documents" />
                             <Tab label="Packing List" />
                         </Tabs>
@@ -605,6 +607,30 @@ function Consignment({
                                     />
                                 )}
                                 {currentTab === 3 && (
+                                    <DetailsItemsTab
+                                        consignment={state.consignment}
+                                        hub={hub}
+                                        hubs={hubs}
+                                        updateField={updateField}
+                                        viewMode={viewMode()}
+                                        editStatus={editStatus}
+                                        hubsLoading={hubsLoading}
+                                        carrier={carrier}
+                                        carriers={carriers}
+                                        carriersLoading={carriersLoading}
+                                        shippingTerm={shippingTerm}
+                                        shippingTerms={shippingTerms}
+                                        shippingTermsLoading={shippingTermsLoading}
+                                        editableItems={editableItems}
+                                        editablePallets={editablePallets}
+                                        dispatch={dispatch}
+                                        setSaveDisabled={setSaveDisabled}
+                                        cartonTypes={cartonTypes}
+                                        setEditStatus={setEditStatus}
+                                        viewing={viewing()}
+                                    />
+                                )}
+                                {currentTab === 4 && (
                                     <InvoicesTab
                                         invoices={state.consignment.invoices}
                                         exportBooks={state.consignment.exportBooks}
@@ -616,7 +642,7 @@ function Consignment({
                                         saveDocumentsResult={saveDocumentsResult}
                                     />
                                 )}
-                                {currentTab === 4 && (
+                                {currentTab === 5 && (
                                     <PackingListTab
                                         consignmentPackingList={consignmentPackingList}
                                         consignmentPackingListLoading={
