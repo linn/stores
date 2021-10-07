@@ -13,13 +13,15 @@ function LoanDetails({ loanDetails, onConfirm }) {
         { field: 'qtyOnLoan', headerName: 'Qty', width: 100 },
         { field: 'serialNumber', headerName: 'Serial', width: 150 },
         { field: 'serialNumber2', headerName: 'Serial 2', width: 150 },
-        { field: 'itemNumber', headerName: 'Item', width: 100 }
+        { field: 'itemNumber', headerName: 'Item', width: 100 },
+        { field: 'selected', headerName: 'Selected', width: 100, hide: true }
     ];
     const [rows, setRows] = useState(loanDetails);
-    const [selectedRows, setSelectedRows] = useState([]);
+    // const [selectedRows, setSelectedRows] = useState([]);
 
     const handleSelectRow = selected => {
-        setSelectedRows(rows.filter(r => selected.includes(r.id)));
+        console.log(selected);
+        setRows(rows.map(r => (selected.includes(r.id) ? { ...r, selected: true } : r)));
     };
 
     // rows is what the table displays, but selectedRows is ultimately what gets passed up to the parent onConfirm(...)
@@ -27,25 +29,25 @@ function LoanDetails({ loanDetails, onConfirm }) {
     const handleEditRowsModelChange = useCallback(
         model => {
             const key = Object.keys(model)[0];
-            setSelectedRows(
-                selectedRows.map(r => {
+            setRows(
+                rows.map(r => {
                     return r.id === Number(key) ? { ...r, return: model[key].return.value } : r;
                 })
             );
         },
-        [selectedRows]
+        [rows]
     );
 
     // we need to update the corresponding row when selectedRows changes with this effect, so that the change is visible in the table
     // as well as being 'saved' for submission above
-    useEffect(() => {
-        setRows(r =>
-            r.map(row => {
-                const match = selectedRows.find(s => s.id === row.id);
-                return match || row;
-            })
-        );
-    }, [selectedRows]);
+    // useEffect(() => {
+    //     setRows(r =>
+    //         r.map(row => {
+    //             const match = selectedRows.find(s => s.id === row.id);
+    //             return match || row;
+    //         })
+    //     );
+    // }, [selectedRows]);
 
     return (
         <Grid container spacing={3}>
@@ -67,17 +69,20 @@ function LoanDetails({ loanDetails, onConfirm }) {
                         disableSelectionOnClick
                         onSelectionModelChange={handleSelectRow}
                         checkboxSelection
-                        isCellEditable={params => selectedRows.some(x => params.row.id === x.id)} // only selected rows are editable
+                        isCellEditable={params => {
+                            console.log(params);
+                            return params.row.selected;
+                        }} // only selected rows are editable
                     />
                 </div>
             </Grid>
             <Grid item xs={10} />
             <Grid item xs={2}>
                 <Button
-                    disabled={!selectedRows.length}
+                    disabled={!rows.some(r => r.selected)}
                     style={{ marginTop: '22px' }}
                     variant="contained"
-                    onClick={() => onConfirm(selectedRows)}
+                    onClick={() => onConfirm(rows.filter(r => r.selected))}
                 >
                     Confirm
                 </Button>
