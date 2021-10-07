@@ -25,7 +25,7 @@ import consignmentReducer from './consignmentReducer';
 import DetailsTab from './DetailsTab';
 import DetailsItemsTab from './DetailsItemsTab';
 import ItemsTab from './ItemsTab';
-import InvoicesTab from './InvoicesTab';
+import DocumentsTab from './DocumentsTab';
 import PackingListTab from './PackingListTab';
 
 function Consignment({
@@ -631,7 +631,7 @@ function Consignment({
                                     />
                                 )}
                                 {currentTab === 4 && (
-                                    <InvoicesTab
+                                    <DocumentsTab
                                         invoices={state.consignment.invoices}
                                         exportBooks={state.consignment.exportBooks}
                                         printDocuments={handlePrintDocuments}

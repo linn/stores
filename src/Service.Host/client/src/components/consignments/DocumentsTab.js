@@ -82,7 +82,7 @@ function InvoicesTab({
                         )}
                     </Grid>
                     <Grid item xs={2} />
-                    <Grid item xs={10}>
+                    <Grid item xs={4}>
                         <Button
                             style={{ marginTop: '40px' }}
                             onClick={saveDocuments}
@@ -100,6 +100,11 @@ function InvoicesTab({
                         ) : (
                             <Typography variant="h6"> {saveDocumentsResult?.message}</Typography>
                         )}
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Typography variant="subtitle1" style={{ marginTop: '40px' }}>
+                            The pdf documents will be saved in W:\system\
+                        </Typography>
                     </Grid>
                 </>
             </Grid>
