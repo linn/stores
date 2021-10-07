@@ -654,7 +654,7 @@ function Consignment({
                         )}
                     </>
                     <Grid item xs={12} style={{ marginTop: '20px' }}>
-                        {currentTab === 2 && (
+                        {(currentTab === 2 || currentTab === 3) && (
                             <>
                                 <Button
                                     variant="outlined"
