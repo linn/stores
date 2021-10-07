@@ -171,6 +171,27 @@
             return result;
         }
 
+        public ProcessResult SaveConsignmentDocuments(int consignmentId)
+        {
+            var consignment = this.consignmentRepository.FindById(consignmentId);
+
+            foreach (var consignmentInvoice in consignment.Invoices)
+            {
+                this.printInvoiceDispatcher.SaveInvoice(
+                    consignmentInvoice.DocumentNumber,
+                    consignmentInvoice.DocumentType,
+                    "CUSTOMER MASTER",
+                    "Y",
+                    $"Invoice {consignmentInvoice.DocumentNumber}.pdf");
+            }
+
+            this.printConsignmentNoteDispatcher.SaveConsignmentNote(
+                consignment.ConsignmentId,
+                $"Packing List {consignment.ConsignmentId}.pdf");
+
+            return new ProcessResult(true, $"Documents saved for consignment {consignmentId}");
+        }
+
         private string PackingListDescription(ConsignmentItem selectedItem, IEnumerable<ConsignmentItem> items)
         {
             if (selectedItem.ItemType == "I" && !selectedItem.ContainerNumber.HasValue)

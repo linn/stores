@@ -10,5 +10,7 @@
         ProcessResult PrintConsignmentDocuments(int consignmentId, int userNumber);
 
         PackingList GetPackingList(int consignmentId);
+
+        ProcessResult SaveConsignmentDocuments(int resourceConsignmentId);
     }
 }
