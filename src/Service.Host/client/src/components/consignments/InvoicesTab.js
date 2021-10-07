@@ -10,7 +10,10 @@ function InvoicesTab({
     exportBooks,
     printDocuments,
     printDocumentsWorking,
-    printDocumentsResult
+    printDocumentsResult,
+    saveDocuments,
+    saveDocumentsWorking,
+    saveDocumentsResult
 }) {
     return (
         <>
@@ -78,6 +81,26 @@ function InvoicesTab({
                             <Typography variant="h6"> {printDocumentsResult?.message}</Typography>
                         )}
                     </Grid>
+                    <Grid item xs={2} />
+                    <Grid item xs={10}>
+                        <Button
+                            style={{ marginTop: '40px' }}
+                            onClick={saveDocuments}
+                            variant="outlined"
+                            color="primary"
+                            disabled={
+                                (!invoices || invoices.length === 0) &&
+                                (!exportBooks || exportBooks.length === 0)
+                            }
+                        >
+                            Save Documents
+                        </Button>
+                        {saveDocumentsWorking ? (
+                            <Loading />
+                        ) : (
+                            <Typography variant="h6"> {saveDocumentsResult?.message}</Typography>
+                        )}
+                    </Grid>
                 </>
             </Grid>
         </>
@@ -92,6 +115,12 @@ InvoicesTab.propTypes = {
     printDocumentsResult: PropTypes.shape({
         success: PropTypes.bool,
         message: PropTypes.string
+    }),
+    saveDocuments: PropTypes.func.isRequired,
+    saveDocumentsWorking: PropTypes.bool,
+    saveDocumentsResult: PropTypes.shape({
+        success: PropTypes.bool,
+        message: PropTypes.string
     })
 };
 
@@ -99,7 +128,9 @@ InvoicesTab.defaultProps = {
     invoices: [],
     exportBooks: [],
     printDocumentsWorking: false,
-    printDocumentsResult: null
+    printDocumentsResult: null,
+    saveDocumentsWorking: false,
+    saveDocumentsResult: null
 };
 
 export default InvoicesTab;

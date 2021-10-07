@@ -73,7 +73,11 @@ function Consignment({
     searchCartonTypes,
     clearCartonTypesSearch,
     cartonTypesSearchResults,
-    cartonTypesSearchLoading
+    cartonTypesSearchLoading,
+    saveDocuments,
+    saveDocumentsWorking,
+    saveDocumentsResult,
+    saveDocumentsClearData
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
     const [editablePallets, setEditablePallets] = useState([]);
@@ -449,6 +453,11 @@ function Consignment({
         printDocuments({ consignmentId: item.consignmentId, userNumber });
     };
 
+    const handleSaveDocuments = () => {
+        saveDocumentsClearData();
+        saveDocuments({ consignmentId: item.consignmentId, userNumber });
+    };
+
     const cartonTypesResult = () => {
         return cartonTypesSearchResults?.map(cartonType => ({
             ...cartonType,
@@ -602,6 +611,9 @@ function Consignment({
                                         printDocuments={handlePrintDocuments}
                                         printDocumentsWorking={printDocumentsWorking}
                                         printDocumentsResult={printDocumentsResult}
+                                        saveDocuments={handleSaveDocuments}
+                                        saveDocumentsWorking={saveDocumentsWorking}
+                                        saveDocumentsResult={saveDocumentsResult}
                                     />
                                 )}
                                 {currentTab === 4 && (
@@ -1044,7 +1056,14 @@ Consignment.propTypes = {
     searchCartonTypes: PropTypes.func.isRequired,
     clearCartonTypesSearch: PropTypes.func.isRequired,
     cartonTypesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
-    cartonTypesSearchLoading: PropTypes.bool
+    cartonTypesSearchLoading: PropTypes.bool,
+    saveDocumentsWorking: PropTypes.bool,
+    saveDocuments: PropTypes.func.isRequired,
+    saveDocumentsResult: PropTypes.shape({
+        success: PropTypes.bool,
+        message: PropTypes.string
+    }),
+    saveDocumentsClearData: PropTypes.func.isRequired
 };
 
 Consignment.defaultProps = {
@@ -1073,7 +1092,9 @@ Consignment.defaultProps = {
     consignmentPackingList: null,
     consignmentPackingListLoading: false,
     cartonTypesSearchResults: [],
-    cartonTypesSearchLoading: false
+    cartonTypesSearchLoading: false,
+    saveDocumentsWorking: false,
+    saveDocumentsResult: null
 };
 
 export default Consignment;
