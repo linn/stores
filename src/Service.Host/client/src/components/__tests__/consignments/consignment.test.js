@@ -165,7 +165,7 @@ describe('should render items and pallets of selected consignment', () => {
             item
         });
 
-        const tab = screen.getByText('Consignment Items');
+        const tab = screen.getByText('Items');
         fireEvent.click(tab);
     });
 
