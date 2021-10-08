@@ -41,5 +41,25 @@
 
             this.messageDispatcher.Dispatch(this.routingKey, body, this.contentType);
         }
+
+        public void SaveConsignmentNote(int consignmentId, string fileName)
+        {
+            var resource = new PrintConsignmentNoteMessageResource
+                               {
+                                   ConsignmentId = consignmentId,
+                                   FileName = fileName
+                               };
+
+            var json = JsonConvert.SerializeObject(
+                resource,
+                new JsonSerializerSettings
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    });
+
+            var body = Encoding.UTF8.GetBytes(json);
+
+            this.messageDispatcher.Dispatch(this.routingKey, body, this.contentType);
+        }
     }
 }

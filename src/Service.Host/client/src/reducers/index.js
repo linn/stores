@@ -120,6 +120,7 @@ import exchangeRates from './exchangeRates';
 import printGoodsInLabels from './printGoodsInLabels';
 import validateStorageTypeResult from './validateStorageTypeResult';
 import printConsignmentDocuments from './printConsignmentDocuments';
+import saveConsignmentDocuments from './saveConsignmentDocuments';
 import consignmentPackingList from './consignmentPackingList';
 import rsns from './rsns';
 import loanHeaders from './loanHeaders';
@@ -211,6 +212,7 @@ const rootReducer = history =>
         salesAccounts,
         salesArticles,
         salesOutlets,
+        saveConsignmentDocuments,
         sernosSequences,
         shipfilesSendEmails,
         shippingTerm,
