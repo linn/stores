@@ -122,6 +122,8 @@ import validateStorageTypeResult from './validateStorageTypeResult';
 import printConsignmentDocuments from './printConsignmentDocuments';
 import consignmentPackingList from './consignmentPackingList';
 import rsns from './rsns';
+import loanHeaders from './loanHeaders';
+import purchaseOrders from './purchaseOrders';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -178,6 +180,7 @@ const rootReducer = history =>
         inspectedStates,
         interCompanyInvoices,
         loanDetails,
+        loanHeaders,
         makeIntercompanyInvoices,
         manufacturers,
         mechPartSource,
@@ -200,6 +203,7 @@ const rootReducer = history =>
         printConsignmentLabel,
         printGoodsInLabels,
         productAnalysisCodes,
+        purchaseOrders,
         req,
         reqMoves,
         rootProducts,

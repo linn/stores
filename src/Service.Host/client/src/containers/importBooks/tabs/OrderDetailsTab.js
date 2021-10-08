@@ -5,6 +5,10 @@ import cpcNumbersActions from '../../../actions/impbookCpcNumbersActions';
 import cpcNumbersSelectors from '../../../selectors/impbookCpcNumbersSelectors';
 import rsnsActions from '../../../actions/rsnsActions';
 import rsnsSelectors from '../../../selectors/rsnsSelectors';
+import loanHeadersActions from '../../../actions/loanHeadersActions';
+import loanHeadersSelectors from '../../../selectors/loanHeadersSelectors';
+import purchaseOrdersActions from '../../../actions/purchaseOrdersActions';
+import purchaseOrdersSelectors from '../../../selectors/purchaseOrdersSelectors';
 
 const mapStateToProps = state => ({
     cpcNumbers: cpcNumbersSelectors.getItems(state)?.map(x => ({
@@ -21,7 +25,22 @@ const mapStateToProps = state => ({
         tariffCode: r.tariffCode,
         weight: r.weight
     })),
-    rsnsSearchLoading: rsnsSelectors.getSearchLoading(state)
+    rsnsSearchLoading: rsnsSelectors.getSearchLoading(state),
+    purchaseOrdersSearchResults: purchaseOrdersSelectors.getSearchItems(state).map?.(p => ({
+        id: p.orderNumber,
+        name: p.orderNumber.toString(),
+        description: p.suppliersDesignation,
+        supplierId: p.supplierId,
+        tariffCode: p.tariffCode,
+        lineNumber: p.lineNumber
+    })),
+    purchaseOrdersSearchLoading: purchaseOrdersSelectors.getSearchLoading(state),
+    loanHeadersSearchResults: loanHeadersSelectors.getSearchItems(state).map?.(l => ({
+        id: l.loanNumber,
+        name: l.loanNumber.toString(),
+        description: l.loanNumber
+    })),
+    loanHeadersSearchLoading: loanHeadersSelectors.getSearchLoading(state)
 });
 
 const initialise = () => dispatch => {
@@ -31,7 +50,11 @@ const initialise = () => dispatch => {
 const mapDispatchToProps = {
     initialise,
     searchRsns: rsnsActions.search,
-    clearRsnsSearch: rsnsActions.clearSearch
+    clearRsnsSearch: rsnsActions.clearSearch,
+    searchLoanHeaders: loanHeadersActions.search,
+    clearLoanHeadersSearch: loanHeadersActions.clearSearch,
+    searchPurchaseOrders: purchaseOrdersActions.search,
+    clearPurchaseOrdersSearch: purchaseOrdersActions.clearSearch
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(OrderDetailsTab));

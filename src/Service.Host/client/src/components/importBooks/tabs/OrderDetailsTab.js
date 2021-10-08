@@ -23,7 +23,16 @@ function OrderDetailsTab({
     rsnsSearchResults,
     rsnsSearchLoading,
     searchRsns,
-    clearRsnsSearch
+    clearRsnsSearch,
+    purchaseOrdersSearchResults,
+    purchaseOrdersSearchLoading,
+    loanHeadersSearchResults,
+    loanHeadersSearchLoading,
+    searchLoanHeaders,
+    clearLoanHeadersSearch,
+    searchPurchaseOrders,
+    clearPurchaseOrdersSearch,
+    supplierId
 }) {
     const updateRow = detail => {
         handleOrderDetailChange(detail.lineNumber, detail);
@@ -73,6 +82,21 @@ function OrderDetailsTab({
             qty: rsn.quantity,
             tariffCode: rsn.tariffCode,
             weight: rsn.weight
+        });
+    };
+
+    const handleOrderNoUpdate = (row, order) => {
+        // if (order.supplierId !== supplierId) {
+            // eslint-disable-next-line no-alert
+            alert(
+                `this purchase order uses supplier ${order.supplierId}, while the supplier on this impbook is set to supplier ${supplierId}. Is this right?`
+            );
+        // }
+        updateRow({
+            ...row,
+            orderNumber: order.id,
+            orderDescription: order.description,
+            tariffCode: order.tariffCode
         });
     };
 
@@ -159,7 +183,41 @@ function OrderDetailsTab({
 
                             {(row.lineType === 'PO' || row.lineType === 'RO') && (
                                 <Grid item xs={2}>
-                                    <InputField
+                                    <div className={classes.displayInline}>
+                                        <Typeahead
+                                            label="Order Number"
+                                            propertyName="orderNumber"
+                                            title="Search for an Order Number"
+                                            onSelect={newOrder =>
+                                                handleOrderNoUpdate(row, newOrder)
+                                            }
+                                            items={purchaseOrdersSearchResults}
+                                            loading={purchaseOrdersSearchLoading}
+                                            fetchItems={searchPurchaseOrders}
+                                            clearSearch={() => clearPurchaseOrdersSearch}
+                                            value={row.orderNumber}
+                                            modal
+                                            links={false}
+                                            debounce={1000}
+                                            minimumSearchTermLength={2}
+                                            required
+                                            disabled={!allowedToEdit}
+                                            maxLength={6}
+                                        />
+                                    </div>
+                                    <div className={classes.marginTop1}>
+                                        <Tooltip title="Clear Order No search">
+                                            <Button
+                                                variant="outlined"
+                                                onClick={() => editRow(row, 'orderNumber', '')}
+                                                disabled={!allowedToEdit}
+                                            >
+                                                X
+                                            </Button>
+                                        </Tooltip>
+                                    </div>
+
+                                    {/* <InputField
                                         label="Order Number"
                                         fullWidth
                                         onChange={(propertyName, newValue) =>
@@ -169,7 +227,7 @@ function OrderDetailsTab({
                                         type="number"
                                         value={row.orderNumber}
                                         disabled={!allowedToEdit}
-                                    />
+                                    /> */}
                                 </Grid>
                             )}
 
@@ -211,7 +269,41 @@ function OrderDetailsTab({
 
                             {row.lineType === 'LOAN' && (
                                 <Grid item xs={2}>
-                                    <InputField
+                                    <div className={classes.displayInline}>
+                                        <Typeahead
+                                            label="Loan Number"
+                                            propertyName="loanNumber"
+                                            title="Search for a Loan Number"
+                                            onSelect={(propertyName, newValue) =>
+                                                editRow(row, propertyName, newValue)
+                                            }
+                                            items={loanHeadersSearchResults}
+                                            loading={loanHeadersSearchLoading}
+                                            fetchItems={searchLoanHeaders}
+                                            clearSearch={() => clearLoanHeadersSearch}
+                                            value={row.loanNumber}
+                                            modal
+                                            links={false}
+                                            debounce={1000}
+                                            minimumSearchTermLength={2}
+                                            required
+                                            disabled={!allowedToEdit}
+                                            maxLength={6}
+                                        />
+                                    </div>
+                                    <div className={classes.marginTop1}>
+                                        <Tooltip title="Clear Loan Number search">
+                                            <Button
+                                                variant="outlined"
+                                                onClick={() => editRow(row, 'loanNumber', '')}
+                                                disabled={!allowedToEdit}
+                                            >
+                                                X
+                                            </Button>
+                                        </Tooltip>
+                                    </div>
+
+                                    {/* <InputField
                                         label="Loan Number"
                                         fullWidth
                                         onChange={(propertyName, newValue) =>
@@ -222,7 +314,7 @@ function OrderDetailsTab({
                                         value={row.loanNumber}
                                         disabled={!allowedToEdit}
                                         maxLength={6}
-                                    />
+                                    /> */}
                                 </Grid>
                             )}
 
@@ -455,12 +547,37 @@ OrderDetailsTab.propTypes = {
     ),
     rsnsSearchLoading: PropTypes.bool.isRequired,
     searchRsns: PropTypes.func.isRequired,
-    clearRsnsSearch: PropTypes.func.isRequired
+    clearRsnsSearch: PropTypes.func.isRequired,
+    purchaseOrdersSearchResults: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number,
+            name: PropTypes.string,
+            description: PropTypes.string,
+            supplierId: PropTypes.number,
+            tariffCode: PropTypes.string,
+            lineNumber: PropTypes.number
+        })
+    ),
+    purchaseOrdersSearchLoading: PropTypes.bool.isRequired,
+    loanHeadersSearchResults: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number,
+            name: PropTypes.string,
+            description: PropTypes.string
+        })
+    ),
+    loanHeadersSearchLoading: PropTypes.bool.isRequired,
+    searchLoanHeaders: PropTypes.func.isRequired,
+    clearLoanHeadersSearch: PropTypes.func.isRequired,
+    searchPurchaseOrders: PropTypes.func.isRequired,
+    clearPurchaseOrdersSearch: PropTypes.func.isRequired
 };
 
 OrderDetailsTab.defaultProps = {
     invoiceDate: '',
-    rsnsSearchResults: null
+    rsnsSearchResults: null,
+    purchaseOrdersSearchResults: null,
+    loanHeadersSearchResults: null
 };
 
 export default OrderDetailsTab;
