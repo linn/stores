@@ -257,7 +257,9 @@ function StockLocator({
                                                         onClick={() => {
                                                             fetchMoves(
                                                                 i.partNumber,
-                                                                `&palletNumber=${i.palletNumber}&locationId=${i.locationId}`
+                                                                `&palletNumber=${i.palletNumber ||
+                                                                    ''}&locationId=${i.locationId ||
+                                                                    ''} `
                                                             );
                                                             setDialogOpen(true);
                                                         }}
