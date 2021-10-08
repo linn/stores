@@ -6,6 +6,7 @@
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.GoodsIn;
+    using Linn.Stores.Resources;
 
     public class PurchaseOrderFacadeService : FacadeService<PurchaseOrder, int, PurchaseOrderResource, PurchaseOrderResource>
     {
@@ -23,7 +24,7 @@
 
         protected override Expression<Func<PurchaseOrder, bool>> SearchExpression(string searchTerm)
         {
-            throw new NotImplementedException();
+            return x => x.OrderNumber.ToString().Contains(searchTerm) || x.OrderNumber.ToString().Equals(searchTerm);
         }
 
         protected override void UpdateFromResource(PurchaseOrder entity, PurchaseOrderResource updateResource)

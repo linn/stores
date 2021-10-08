@@ -1056,6 +1056,7 @@
             q.Property(e => e.TariffCode).HasColumnName("TARIFF_CODE").HasMaxLength(12);
             q.Property(e => e.InsNumber).HasColumnName("INS_NUMBER");
             q.Property(e => e.VatRate).HasColumnName("VAT_RATE");
+            q.Property(e => e.POLineNumber).HasColumnName("PO_LINE_NUMBER").HasMaxLength(2);
         }
 
         private void BuildImportBookDeliveryTerms(ModelBuilder builder)

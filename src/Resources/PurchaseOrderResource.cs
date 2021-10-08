@@ -4,6 +4,8 @@
 
     public class PurchaseOrderResource : HypermediaResource
     {
+        public int LineNumber { get; set; }
+
         public int OrderNumber { get; set; }
 
         public int SupplierId { get; set; }

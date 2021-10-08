@@ -106,6 +106,9 @@
 
                 if (currentDetail == null)
                 {
+                    //below hard coded line number as one may change eventually
+                    //if more than one purchase order detail is implemented for a purchase order
+                    newdetail.POLineNumber = 1;
                     from.Add(newdetail);
                 }
                 else
