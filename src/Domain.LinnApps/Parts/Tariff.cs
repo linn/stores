@@ -1,9 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Parts
 {
-    public class Tariff
+    public class LoanHeader
     {
-        public int TariffId { get; set; }
-
-        public string TariffCode { get; set; }
+        public int LoanNumber { get; set; }
     }
 }

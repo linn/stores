@@ -174,6 +174,7 @@
             builder.RegisterType<LogisticsReportsFacadeService>().As<ILogisticsReportsFacadeService>();
             builder.RegisterType<RsnService>().As<IRsnService>();
             builder.RegisterType<PurchaseOrderFacadeService>().As<IFacadeService<PurchaseOrder, int, PurchaseOrderResource, PurchaseOrderResource>>();
+            builder.RegisterType<LoanHeaderService>().As<ILoanHeaderService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

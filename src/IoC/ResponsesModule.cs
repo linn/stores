@@ -235,6 +235,8 @@
             builder.RegisterType<RsnsResourceBuilder>().As<IResourceBuilder<IEnumerable<Rsn>>>();
             builder.RegisterType<PurchaseOrderResourceBuilder>().As<IResourceBuilder<PurchaseOrder>>();
             builder.RegisterType<PurchaseOrdersResourceBuilder>().As<IResourceBuilder<IEnumerable<PurchaseOrder>>>();
+            builder.RegisterType<LoanHeaderResourceBuilder>().As<IResourceBuilder<LoanHeader>>();
+            builder.RegisterType<LoanHeadersResourceBuilder>().As<IResourceBuilder<IEnumerable<LoanHeader>>>();
         }
     }
 }
