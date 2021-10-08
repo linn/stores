@@ -13,7 +13,7 @@
 
         public string GetLocation(Loan loan)
         {
-            return $"/logistics/loan-headers/{loan.LoanNumber}";
+            return $"/logistics/loans/{loan.LoanNumber}";
         }
 
         object IResourceBuilder<Loan>.Build(Loan loan)
