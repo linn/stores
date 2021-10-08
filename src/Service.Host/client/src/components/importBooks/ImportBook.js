@@ -499,7 +499,6 @@ function ImportBook({
                                             remainingDutyValue={calcRemainingDuty()}
                                             remainingWeightValue={calcRemainingWeight()}
                                             supplierId={state.impbook.supplierId}
-                                            //todo invoice date? Added here or pulled in? Might be on list from Rhona
                                         />
                                     )}
                                     {tab === 2 && (
