@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Facade.Tests.RsnsServiceTest
+﻿namespace Linn.Stores.Facade.Tests.RsnsServiceTests
 {
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;

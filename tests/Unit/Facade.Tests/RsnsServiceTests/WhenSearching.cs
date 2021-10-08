@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Facade.Tests.RsnsServiceTest
+﻿namespace Linn.Stores.Facade.Tests.RsnsServiceTests
 {
     using System;
     using System.Collections.Generic;
@@ -66,7 +66,7 @@
         }
 
         [Test]
-        public void ShouldReturnOnlyValidByDefault()
+        public void ShouldReturnSuccess()
         {
             var result = this.Sut.Search("111");
             result.Should().BeOfType<SuccessResult<IEnumerable<Rsn>>>();
@@ -75,13 +75,6 @@
                 .NotBeNull();
             dataResult.FirstOrDefault(x => x.RsnNumber == 111111 && x.ArticleNumber == "trente deux").Should()
                 .NotBeNull();
-        }
-
-        [Test]
-        public void ShouldReturnSuccess()
-        {
-            var result = this.Sut.Search("111");
-            result.Should().BeOfType<SuccessResult<IEnumerable<Rsn>>>();
         }
     }
 }

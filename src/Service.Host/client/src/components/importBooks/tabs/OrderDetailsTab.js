@@ -23,7 +23,16 @@ function OrderDetailsTab({
     rsnsSearchResults,
     rsnsSearchLoading,
     searchRsns,
-    clearRsnsSearch
+    clearRsnsSearch,
+    purchaseOrdersSearchResults,
+    purchaseOrdersSearchLoading,
+    loansSearchResults,
+    loansSearchLoading,
+    searchLoans,
+    clearLoansSearch,
+    searchPurchaseOrders,
+    clearPurchaseOrdersSearch,
+    supplierId
 }) {
     const updateRow = detail => {
         handleOrderDetailChange(detail.lineNumber, detail);
@@ -73,6 +82,21 @@ function OrderDetailsTab({
             qty: rsn.quantity,
             tariffCode: rsn.tariffCode,
             weight: rsn.weight
+        });
+    };
+
+    const handleOrderNoUpdate = (row, order) => {
+        if (order.supplierId !== supplierId) {
+            //eslint-disable-next-line no-alert
+            alert(
+                `This PO has supplier ${order.supplierId}, while the supplier on this impbook is set to supplier ${supplierId}. Is this right?`
+            );
+        }
+        updateRow({
+            ...row,
+            orderNumber: order.id,
+            orderDescription: order.description,
+            tariffCode: order.tariffCode
         });
     };
 
@@ -159,17 +183,39 @@ function OrderDetailsTab({
 
                             {(row.lineType === 'PO' || row.lineType === 'RO') && (
                                 <Grid item xs={2}>
-                                    <InputField
-                                        label="Order Number"
-                                        fullWidth
-                                        onChange={(propertyName, newValue) =>
-                                            editRow(row, propertyName, newValue)
-                                        }
-                                        propertyName="orderNumber"
-                                        type="number"
-                                        value={row.orderNumber}
-                                        disabled={!allowedToEdit}
-                                    />
+                                    <div className={classes.displayInline}>
+                                        <Typeahead
+                                            label="Order Number"
+                                            propertyName="orderNumber"
+                                            title="Search for an Order Number"
+                                            onSelect={newOrder =>
+                                                handleOrderNoUpdate(row, newOrder)
+                                            }
+                                            items={purchaseOrdersSearchResults}
+                                            loading={purchaseOrdersSearchLoading}
+                                            fetchItems={searchPurchaseOrders}
+                                            clearSearch={() => clearPurchaseOrdersSearch}
+                                            value={row.orderNumber}
+                                            modal
+                                            links={false}
+                                            debounce={1000}
+                                            minimumSearchTermLength={2}
+                                            required
+                                            disabled={!allowedToEdit}
+                                            maxLength={6}
+                                        />
+                                    </div>
+                                    <div className={classes.marginTop1}>
+                                        <Tooltip title="Clear Order No search">
+                                            <Button
+                                                variant="outlined"
+                                                onClick={() => editRow(row, 'orderNumber', '')}
+                                                disabled={!allowedToEdit}
+                                            >
+                                                X
+                                            </Button>
+                                        </Tooltip>
+                                    </div>
                                 </Grid>
                             )}
 
@@ -211,18 +257,39 @@ function OrderDetailsTab({
 
                             {row.lineType === 'LOAN' && (
                                 <Grid item xs={2}>
-                                    <InputField
-                                        label="Loan Number"
-                                        fullWidth
-                                        onChange={(propertyName, newValue) =>
-                                            editRow(row, propertyName, newValue)
-                                        }
-                                        propertyName="loanNumber"
-                                        type="number"
-                                        value={row.loanNumber}
-                                        disabled={!allowedToEdit}
-                                        maxLength={6}
-                                    />
+                                    <div className={classes.displayInline}>
+                                        <Typeahead
+                                            label="Loan Number"
+                                            propertyName="loanNumber"
+                                            title="Search for a Loan Number"
+                                            onSelect={newValue =>
+                                                editRow(row, 'loanNumber', newValue.id)
+                                            }
+                                            items={loansSearchResults}
+                                            loading={loansSearchLoading}
+                                            fetchItems={searchLoans}
+                                            clearSearch={() => clearLoansSearch}
+                                            value={row.loanNumber}
+                                            modal
+                                            links={false}
+                                            debounce={1000}
+                                            minimumSearchTermLength={2}
+                                            required
+                                            disabled={!allowedToEdit}
+                                            maxLength={6}
+                                        />
+                                    </div>
+                                    <div className={classes.marginTop1}>
+                                        <Tooltip title="Clear Loan Number search">
+                                            <Button
+                                                variant="outlined"
+                                                onClick={() => editRow(row, 'loanNumber', '')}
+                                                disabled={!allowedToEdit}
+                                            >
+                                                X
+                                            </Button>
+                                        </Tooltip>
+                                    </div>
                                 </Grid>
                             )}
 
@@ -455,12 +522,39 @@ OrderDetailsTab.propTypes = {
     ),
     rsnsSearchLoading: PropTypes.bool.isRequired,
     searchRsns: PropTypes.func.isRequired,
-    clearRsnsSearch: PropTypes.func.isRequired
+    clearRsnsSearch: PropTypes.func.isRequired,
+    purchaseOrdersSearchResults: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number,
+            name: PropTypes.string,
+            description: PropTypes.string,
+            supplierId: PropTypes.number,
+            tariffCode: PropTypes.string,
+            lineNumber: PropTypes.number
+        })
+    ),
+    purchaseOrdersSearchLoading: PropTypes.bool.isRequired,
+    loansSearchResults: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number,
+            name: PropTypes.string,
+            description: PropTypes.string
+        })
+    ),
+    loansSearchLoading: PropTypes.bool.isRequired,
+    searchLoans: PropTypes.func.isRequired,
+    clearLoansSearch: PropTypes.func.isRequired,
+    searchPurchaseOrders: PropTypes.func.isRequired,
+    clearPurchaseOrdersSearch: PropTypes.func.isRequired,
+    supplierId: PropTypes.number
 };
 
 OrderDetailsTab.defaultProps = {
     invoiceDate: '',
-    rsnsSearchResults: null
+    rsnsSearchResults: null,
+    purchaseOrdersSearchResults: null,
+    loansSearchResults: null,
+    supplierId: -1
 };
 
 export default OrderDetailsTab;
