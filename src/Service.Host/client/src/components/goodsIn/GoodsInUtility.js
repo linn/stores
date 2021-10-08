@@ -117,8 +117,10 @@ function GoodsInUtility({
                 storagePlace: formData?.ontoLocation,
                 locationId: formData?.ontoLocationId,
                 quantity: detail.return,
+                serialNumber: detail.serialNumber,
+                serialNumber2: details.serialNumber2,
                 loanNumber: detail.loanNumber,
-                line: detail.line,
+                loanLine: detail.line,
                 createdBy: userNumber
             }))
         ]);
@@ -241,6 +243,12 @@ function GoodsInUtility({
             headerName: 'Serial',
             field: 'serialNumber',
             width: 200,
+            hide: false
+        },
+        {
+            headerName: 'Serial 2',
+            field: 'serialNumber2',
+            width: 200,
             hide: true
         },
         {
@@ -262,6 +270,16 @@ function GoodsInUtility({
         {
             headerName: 'Manuf Part',
             field: 'manufacturersPartNumber',
+            width: 200
+        },
+        {
+            headerName: 'Loan',
+            field: 'loanNumber',
+            width: 200
+        },
+        {
+            headerName: 'Line',
+            field: 'loanLine',
             width: 200
         },
         {
@@ -686,6 +704,7 @@ function GoodsInUtility({
                                         value={formData?.loanNumber}
                                         label="Loan Number"
                                         propertyName="loanNumber"
+                                        disabled={!formData?.ontoLocation}
                                         onChange={handleFieldChange}
                                         textFieldProps={{
                                             onBlur: () =>
