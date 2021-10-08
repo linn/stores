@@ -10,15 +10,15 @@
 
     public class ContextBase
     {
-        protected IQueryRepository<Loan> LoanHeaderRepository { get; private set; }
+        protected IQueryRepository<Loan> LoanRepository { get; private set; }
 
         protected LoanService Sut { get; private set; }
 
         [SetUp]
         public void SetUpContext()
         {
-            this.LoanHeaderRepository = Substitute.For<IQueryRepository<Loan>>();
-            this.Sut = new LoanService(this.LoanHeaderRepository);
+            this.LoanRepository = Substitute.For<IQueryRepository<Loan>>();
+            this.Sut = new LoanService(this.LoanRepository);
         }
     }
 }

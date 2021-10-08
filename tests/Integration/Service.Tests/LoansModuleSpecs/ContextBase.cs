@@ -21,20 +21,20 @@
     {
         protected ILoanService LoanFacadeService { get; private set; }
 
-        protected IQueryRepository<Loan> LoanHeaderRepository { get; private set; }
+        protected IQueryRepository<Loan> LoanRepository { get; private set; }
 
         [SetUp]
         public void EstablishContext()
         {
             this.LoanFacadeService = Substitute.For<ILoanService>();
 
-            this.LoanHeaderRepository = Substitute.For<IQueryRepository<Loan>>();
+            this.LoanRepository = Substitute.For<IQueryRepository<Loan>>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
                         with.Dependency(this.LoanFacadeService);
-                        with.Dependency(this.LoanHeaderRepository);
+                        with.Dependency(this.LoanRepository);
                         with.Dependency<IResourceBuilder<Loan>>(new LoanResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Loan>>>(new LoansResourceBuilder());
                         with.Module<LoansModule>();

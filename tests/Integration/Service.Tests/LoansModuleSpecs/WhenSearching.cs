@@ -21,13 +21,9 @@
         [SetUp]
         public void SetUp()
         {
-            var loanHeaders = new List<Loan>
-                                  {
-                                      new Loan {LoanNumber = 12345}, new Loan {LoanNumber = 72345}
-                                  };
+            var loans = new List<Loan> { new Loan { LoanNumber = 12345 }, new Loan { LoanNumber = 72345 } };
 
-            this.LoanFacadeService.Search(Arg.Any<string>())
-                .Returns(new SuccessResult<IEnumerable<Loan>>(loanHeaders));
+            this.LoanFacadeService.Search(Arg.Any<string>()).Returns(new SuccessResult<IEnumerable<Loan>>(loans));
 
             this.Response = this.Browser.Get(
                 "/logistics/loans",

@@ -18,7 +18,7 @@
 
         public IQueryable<Loan> FilterBy(Expression<Func<Loan, bool>> expression)
         {
-            return this.serviceDbContext.LoanHeaders.Where(expression);
+            return this.serviceDbContext.Loans.Where(expression);
         }
 
         public IQueryable<Loan> FindAll()

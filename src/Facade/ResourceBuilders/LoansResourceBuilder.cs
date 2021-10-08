@@ -12,19 +12,19 @@
     {
         private readonly LoanResourceBuilder loanResourceBuilder = new LoanResourceBuilder();
 
-        public IEnumerable<LoanResource> Build(IEnumerable<Loan> loanHeaders)
+        public IEnumerable<LoanResource> Build(IEnumerable<Loan> loans)
         {
-            return loanHeaders.Select(a => this.loanResourceBuilder.Build(a));
+            return loans.Select(a => this.loanResourceBuilder.Build(a));
         }
 
-        public string GetLocation(IEnumerable<Loan> loanHeaders)
+        public string GetLocation(IEnumerable<Loan> loans)
         {
             throw new NotImplementedException();
         }
 
-        object IResourceBuilder<IEnumerable<Loan>>.Build(IEnumerable<Loan> loanHeaders)
+        object IResourceBuilder<IEnumerable<Loan>>.Build(IEnumerable<Loan> loans)
         {
-            return this.Build(loanHeaders);
+            return this.Build(loans);
         }
     }
 }

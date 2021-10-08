@@ -242,7 +242,7 @@
 
         public DbSet<Tariff> Tariffs { get; set; }
 
-        public DbSet<Loan> LoanHeaders { get; set; }
+        public DbSet<Loan> Loans { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

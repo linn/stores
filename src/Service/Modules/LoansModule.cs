@@ -14,10 +14,10 @@
         public LoansModule(ILoanService loanService)
         {
             this.loanService = loanService;
-            this.Get("logistics/loans", _ => this.GetLoanHeaders());
+            this.Get("logistics/loans", _ => this.GetLoans());
         }
 
-        private object GetLoanHeaders()
+        private object GetLoans()
         {
             var resource = this.Bind<SearchRequestResource>();
 

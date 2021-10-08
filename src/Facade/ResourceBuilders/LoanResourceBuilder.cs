@@ -6,19 +6,19 @@
 
     public class LoanResourceBuilder : IResourceBuilder<Loan>
     {
-        public LoanResource Build(Loan loanHeader)
+        public LoanResource Build(Loan loan)
         {
-            return new LoanResource {LoanNumber = loanHeader.LoanNumber};
+            return new LoanResource { LoanNumber = loan.LoanNumber };
         }
 
-        public string GetLocation(Loan loanHeader)
+        public string GetLocation(Loan loan)
         {
-            return $"/logistics/loan-headers/{loanHeader.LoanNumber}";
+            return $"/logistics/loan-headers/{loan.LoanNumber}";
         }
 
-        object IResourceBuilder<Loan>.Build(Loan loanHeader)
+        object IResourceBuilder<Loan>.Build(Loan loan)
         {
-            return this.Build(loanHeader);
+            return this.Build(loan);
         }
     }
 }

@@ -19,19 +19,15 @@
         [SetUp]
         public void SetUp()
         {
-            var loanHeaders = new List<Loan>
-                                  {
-                                      new Loan {LoanNumber = 12345}, new Loan {LoanNumber = 72345}
-                                  };
-            this.LoanHeaderRepository.FilterBy(Arg.Any<Expression<Func<Loan, bool>>>())
-                .Returns(loanHeaders.AsQueryable());
+            var loans = new List<Loan> { new Loan { LoanNumber = 12345 }, new Loan { LoanNumber = 72345 } };
+            this.LoanRepository.FilterBy(Arg.Any<Expression<Func<Loan, bool>>>()).Returns(loans.AsQueryable());
         }
 
         [Test]
         public void ShouldCallSearch()
         {
             this.Sut.Search("2345");
-            this.LoanHeaderRepository.Received().FilterBy(Arg.Any<Expression<Func<Loan, bool>>>());
+            this.LoanRepository.Received().FilterBy(Arg.Any<Expression<Func<Loan, bool>>>());
         }
 
         [Test]
