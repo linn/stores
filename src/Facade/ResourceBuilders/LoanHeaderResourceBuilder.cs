@@ -1,7 +1,7 @@
 ﻿namespace Linn.Stores.Facade.ResourceBuilders
 {
     using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
 
     public class LoanHeaderResourceBuilder : IResourceBuilder<LoanHeader>

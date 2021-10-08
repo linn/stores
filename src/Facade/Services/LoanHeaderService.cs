@@ -4,7 +4,7 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
-    using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Domain.LinnApps;
 
     public class LoanHeaderService : ILoanHeaderService
     {
