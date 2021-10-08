@@ -1,5 +1,5 @@
 import { collectionStoreFactory } from '@linn-it/linn-form-components-library';
-import { loanHeadersActionTypes as actionTypes } from '../actions';
+import { loansActionTypes as actionTypes } from '../actions';
 import * as itemTypes from '../itemTypes';
 
 const defaultState = {
@@ -7,4 +7,4 @@ const defaultState = {
     items: []
 };
 
-export default collectionStoreFactory(itemTypes.loanHeaders.actionType, actionTypes, defaultState);
+export default collectionStoreFactory(itemTypes.loans.actionType, actionTypes, defaultState);
