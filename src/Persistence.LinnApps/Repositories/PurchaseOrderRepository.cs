@@ -26,7 +26,7 @@
         public IQueryable<PurchaseOrder> FilterBy(Expression<Func<PurchaseOrder, bool>> expression)
         {
             return this.serviceDbContext.PurchaseOrders.Where(expression)
-                .Include(o => o.Details.Where(x => x.Line == 1)).ThenInclude(z => z.SalesArticle)
+                .Include(o => o.Details).ThenInclude(z => z.SalesArticle)
                 .ThenInclude(a => a.Tariff).AsNoTracking().AsQueryable();
         }
 

@@ -12,12 +12,13 @@
     {
         public PurchaseOrderResource Build(PurchaseOrder purchaseOrder)
         {
+            var detail = purchaseOrder.Details.First(x => x.Line == 1);
             return new PurchaseOrderResource
                        {
                            OrderNumber = purchaseOrder.OrderNumber,
                            SupplierId = purchaseOrder.SupplierId,
-                           SuppliersDesignation = purchaseOrder.Details.First().SuppliersDesignation,
-                           TariffCode = purchaseOrder.Details.First().SalesArticle.Tariff.TariffCode,
+                           SuppliersDesignation = detail.SuppliersDesignation,
+                           TariffCode = detail.SalesArticle?.Tariff?.TariffCode,
                            LineNumber = 1,
                            Links = this.BuildLinks(purchaseOrder).ToArray()
                        };
@@ -35,7 +36,7 @@
 
         private IEnumerable<LinkResource> BuildLinks(PurchaseOrder purchaseOrder)
         {
-            yield return new LinkResource { Rel = "self", Href = this.GetLocation(purchaseOrder) };
+            yield return new LinkResource {Rel = "self", Href = this.GetLocation(purchaseOrder)};
         }
     }
 }

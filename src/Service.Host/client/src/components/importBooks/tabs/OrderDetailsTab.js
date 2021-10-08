@@ -86,12 +86,12 @@ function OrderDetailsTab({
     };
 
     const handleOrderNoUpdate = (row, order) => {
-        // if (order.supplierId !== supplierId) {
-            // eslint-disable-next-line no-alert
+        if (order.supplierId !== supplierId) {
+            //eslint-disable-next-line no-alert
             alert(
-                `this purchase order uses supplier ${order.supplierId}, while the supplier on this impbook is set to supplier ${supplierId}. Is this right?`
+                `This PO has supplier ${order.supplierId}, while the supplier on this impbook is set to supplier ${supplierId}. Is this right?`
             );
-        // }
+        }
         updateRow({
             ...row,
             orderNumber: order.id,
@@ -216,18 +216,6 @@ function OrderDetailsTab({
                                             </Button>
                                         </Tooltip>
                                     </div>
-
-                                    {/* <InputField
-                                        label="Order Number"
-                                        fullWidth
-                                        onChange={(propertyName, newValue) =>
-                                            editRow(row, propertyName, newValue)
-                                        }
-                                        propertyName="orderNumber"
-                                        type="number"
-                                        value={row.orderNumber}
-                                        disabled={!allowedToEdit}
-                                    /> */}
                                 </Grid>
                             )}
 
@@ -274,8 +262,8 @@ function OrderDetailsTab({
                                             label="Loan Number"
                                             propertyName="loanNumber"
                                             title="Search for a Loan Number"
-                                            onSelect={(propertyName, newValue) =>
-                                                editRow(row, propertyName, newValue)
+                                            onSelect={newValue =>
+                                                editRow(row, 'loanNumber', newValue.id)
                                             }
                                             items={loanHeadersSearchResults}
                                             loading={loanHeadersSearchLoading}
