@@ -84,11 +84,6 @@
             bool? multipleBookIn,
             IEnumerable<GoodsInLogEntry> lines)
         {
-            if (!orderNumber.HasValue || transactionType != "O")
-            {
-                throw new NotImplementedException("Booking in this document type is not supported yet.");
-            }
-
             if (string.IsNullOrEmpty(ontoLocation))
             {
                 if ((string.IsNullOrEmpty(storageType) && transactionType == "O") 
@@ -120,6 +115,7 @@
             {
                 goodsInLogEntry.Id = this.goodsInPack.GetNextLogId();
                 goodsInLogEntry.BookInRef = bookinRef;
+                goodsInLogEntry.StoragePlace = ontoLocation;
                 this.goodsInLog.Add(goodsInLogEntry);
             }
 

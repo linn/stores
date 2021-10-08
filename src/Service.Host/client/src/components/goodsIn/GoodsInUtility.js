@@ -763,22 +763,24 @@ function GoodsInUtility({
                     <Button
                         variant="contained"
                         disabled={
-                            !validatePurchaseOrderResult ||
+                            (!validatePurchaseOrderResult && !lines.length) ||
                             !!validatePurchaseOrderResult?.message ||
                             !formData.ontoLocation ||
-                            !formData.qty
+                            (!formData.qty && !lines.length)
                         }
                         onClick={() => {
                             const row = {
-                                articleNumber: validatePurchaseOrderResult.partNumber,
-                                transactionType: validatePurchaseOrderResult.transactionType,
+                                articleNumber: validatePurchaseOrderResult?.partNumber,
+                                transactionType: formData.loanNumber
+                                    ? 'L'
+                                    : validatePurchaseOrderResult.transactionType,
                                 dateCreated: new Date().toISOString(),
                                 location: formData.ontoLocation,
                                 locationId: formData.ontoLocationId,
                                 quantity: formData.qty,
-                                orderNumber: validatePurchaseOrderResult.orderNumber,
-                                state: validatePurchaseOrderResult.state,
-                                orderLine: validatePurchaseOrderResult.orderLine,
+                                orderNumber: validatePurchaseOrderResult?.orderNumber,
+                                state: validatePurchaseOrderResult?.state,
+                                orderLine: validatePurchaseOrderResult?.orderLine,
                                 storageType: formData.storageType,
                                 createdBy: userNumber
                             };
@@ -788,11 +790,13 @@ function GoodsInUtility({
                                 multipleBookIn,
                                 lines: lines.length > 0 ? lines : [row],
                                 createdBy: userNumber,
-                                transactionType: validatePurchaseOrderResult.transactionType,
-                                partNumber: validatePurchaseOrderResult.partNumber,
+                                transactionType: formData.loanNumber
+                                    ? 'L'
+                                    : validatePurchaseOrderResult.transactionType,
+                                partNumber: validatePurchaseOrderResult?.partNumber,
                                 manufacturersPartNumber:
-                                    validatePurchaseOrderResult.manufacturersPartNumber,
-                                state: validatePurchaseOrderResult.state
+                                    validatePurchaseOrderResult?.manufacturersPartNumber,
+                                state: validatePurchaseOrderResult?.state
                             });
                         }}
                     >
@@ -819,9 +823,14 @@ function GoodsInUtility({
                         variant="contained"
                         color="secondary"
                         disabled={selectedRows.length < 1}
-                        onClick={() =>
-                            setRows(rows.filter(r => !selectedRows.map(x => x.id).includes(r.id)))
-                        }
+                        onClick={() => {
+                            setLines(
+                                lines.filter(r => !selectedRows.map(x => x.id).includes(r.id))
+                            );
+                            setLogEntries(
+                                logEntries.filter(r => !selectedRows.map(x => x.id).includes(r.id))
+                            );
+                        }}
                     >
                         Clear Selected
                     </Button>
