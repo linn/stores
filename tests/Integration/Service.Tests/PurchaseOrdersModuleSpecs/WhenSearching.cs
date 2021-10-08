@@ -55,7 +55,7 @@
                                              },
                                          new PurchaseOrder
                                              {
-                                                 OrderNumber = 22222,
+                                                 OrderNumber = 11111,
                                                  SupplierId = 22345,
                                                  DocumentType = "no idea 2",
                                                  Details = new List<PurchaseOrderDetail>

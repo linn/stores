@@ -14,7 +14,7 @@
         private readonly IFacadeService<PurchaseOrder, int, PurchaseOrderResource, PurchaseOrderResource> purchaseOrderFacadeService;
 
         public PurchaseOrdersModule(
-            FacadeService<PurchaseOrder, int, PurchaseOrderResource, PurchaseOrderResource> purchaseOrderFacadeService)
+            IFacadeService<PurchaseOrder, int, PurchaseOrderResource, PurchaseOrderResource> purchaseOrderFacadeService)
         {
             this.purchaseOrderFacadeService = purchaseOrderFacadeService;
             this.Get("logistics/purchase-orders", _ => this.GetPurchaseOrders());
