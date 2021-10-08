@@ -6,18 +6,18 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
 
-    public class LoanHeaderService : ILoanHeaderService
+    public class LoanService : ILoanService
     {
-        private readonly IQueryRepository<LoanHeader> repository;
+        private readonly IQueryRepository<Loan> repository;
 
-        public LoanHeaderService(IQueryRepository<LoanHeader> repository)
+        public LoanService(IQueryRepository<Loan> repository)
         {
             this.repository = repository;
         }
 
-        public IResult<IEnumerable<LoanHeader>> Search(string searchTerm)
+        public IResult<IEnumerable<Loan>> Search(string searchTerm)
         {
-            return new SuccessResult<IEnumerable<LoanHeader>>(
+            return new SuccessResult<IEnumerable<Loan>>(
                 this.repository.FilterBy(
                     x => x.LoanNumber.ToString().Contains(searchTerm) || x.LoanNumber.ToString().Equals(searchTerm)));
         }

@@ -1,6 +1,6 @@
 ﻿namespace Linn.Stores.Resources
 {
-    public class LoanHeaderResource
+    public class LoanResource
     {
         public int LoanNumber { get; set; }
     }

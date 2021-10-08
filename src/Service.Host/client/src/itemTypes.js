@@ -428,7 +428,7 @@ export const parcelsByNumber = new ItemType('parcels', 'PARCELS', '/logistics/pa
 
 export const rsns = new ItemType('rsns', 'RSNS', '/logistics/rsns');
 
-export const loanHeaders = new ItemType('loanHeaders', 'LOAN_HEADERS', '/logistics/loan-headers');
+export const loans = new ItemType('loans', 'LOANS', '/logistics/loans');
 
 export const purchaseOrders = new ItemType(
     'purchaseOrders',

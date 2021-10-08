@@ -242,7 +242,7 @@
 
         public DbSet<Tariff> Tariffs { get; set; }
 
-        public DbSet<LoanHeader> LoanHeaders { get; set; }
+        public DbSet<Loan> LoanHeaders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -357,7 +357,7 @@
             this.QueryAuthUsers(builder);
             this.QueryRsns(builder);
             this.QueryTariffs(builder);
-            this.QueryLoanHeaders(builder);
+            this.QueryLoans(builder);
             base.OnModelCreating(builder);
             this.BuildPurchaseOrderDetails(builder);
         }
@@ -2032,9 +2032,9 @@
             q.Property(e => e.TariffCode).HasColumnName("TARIFF_CODE").HasMaxLength(14);
         }
 
-        private void QueryLoanHeaders(ModelBuilder builder)
+        private void QueryLoans(ModelBuilder builder)
         {
-            var q = builder.Entity<LoanHeader>().ToTable("LOAN_HEADERS");
+            var q = builder.Entity<Loan>().ToTable("LOAN_HEADERS");
             q.HasKey(e => e.LoanNumber);
             q.Property(e => e.LoanNumber).HasColumnName("LOAN_NUMBER").HasMaxLength(6);
         }

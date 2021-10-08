@@ -1,6 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
-    public class LoanHeader
+    public class Loan
     {
         public int LoanNumber { get; set; }
     }

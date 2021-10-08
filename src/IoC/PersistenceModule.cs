@@ -143,7 +143,7 @@
             builder.RegisterType<PurchaseOrderRepository>().As<IRepository<PurchaseOrder, int>>();
             builder.RegisterType<AuthUserRepository>().As<IQueryRepository<AuthUser>>();
             builder.RegisterType<RsnRepository>().As<IQueryRepository<Rsn>>();
-            builder.RegisterType<LoanHeaderRepository>().As<IQueryRepository<LoanHeader>>();
+            builder.RegisterType<LoanRepository>().As<IQueryRepository<Loan>>();
         }
     }
 }

@@ -7,26 +7,26 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
 
-    public class LoanHeaderRepository : IQueryRepository<LoanHeader>
+    public class LoanRepository : IQueryRepository<Loan>
     {
         private readonly ServiceDbContext serviceDbContext;
 
-        public LoanHeaderRepository(ServiceDbContext serviceDbContext)
+        public LoanRepository(ServiceDbContext serviceDbContext)
         {
             this.serviceDbContext = serviceDbContext;
         }
 
-        public IQueryable<LoanHeader> FilterBy(Expression<Func<LoanHeader, bool>> expression)
+        public IQueryable<Loan> FilterBy(Expression<Func<Loan, bool>> expression)
         {
             return this.serviceDbContext.LoanHeaders.Where(expression);
         }
 
-        public IQueryable<LoanHeader> FindAll()
+        public IQueryable<Loan> FindAll()
         {
             throw new NotImplementedException();
         }
 
-        public LoanHeader FindBy(Expression<Func<LoanHeader, bool>> expression)
+        public Loan FindBy(Expression<Func<Loan, bool>> expression)
         {
             throw new NotImplementedException();
         }

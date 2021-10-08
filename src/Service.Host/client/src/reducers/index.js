@@ -123,7 +123,7 @@ import printConsignmentDocuments from './printConsignmentDocuments';
 import saveConsignmentDocuments from './saveConsignmentDocuments';
 import consignmentPackingList from './consignmentPackingList';
 import rsns from './rsns';
-import loanHeaders from './loanHeaders';
+import loans from './loans';
 import purchaseOrders from './purchaseOrders';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
@@ -181,7 +181,7 @@ const rootReducer = history =>
         inspectedStates,
         interCompanyInvoices,
         loanDetails,
-        loanHeaders,
+        loans,
         makeIntercompanyInvoices,
         manufacturers,
         mechPartSource,

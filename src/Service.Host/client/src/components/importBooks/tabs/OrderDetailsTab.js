@@ -26,10 +26,10 @@ function OrderDetailsTab({
     clearRsnsSearch,
     purchaseOrdersSearchResults,
     purchaseOrdersSearchLoading,
-    loanHeadersSearchResults,
-    loanHeadersSearchLoading,
-    searchLoanHeaders,
-    clearLoanHeadersSearch,
+    loansSearchResults,
+    loansSearchLoading,
+    searchLoans,
+    clearLoansSearch,
     searchPurchaseOrders,
     clearPurchaseOrdersSearch,
     supplierId
@@ -265,10 +265,10 @@ function OrderDetailsTab({
                                             onSelect={newValue =>
                                                 editRow(row, 'loanNumber', newValue.id)
                                             }
-                                            items={loanHeadersSearchResults}
-                                            loading={loanHeadersSearchLoading}
-                                            fetchItems={searchLoanHeaders}
-                                            clearSearch={() => clearLoanHeadersSearch}
+                                            items={loansSearchResults}
+                                            loading={loansSearchLoading}
+                                            fetchItems={searchLoans}
+                                            clearSearch={() => clearLoansSearch}
                                             value={row.loanNumber}
                                             modal
                                             links={false}
@@ -290,19 +290,6 @@ function OrderDetailsTab({
                                             </Button>
                                         </Tooltip>
                                     </div>
-
-                                    {/* <InputField
-                                        label="Loan Number"
-                                        fullWidth
-                                        onChange={(propertyName, newValue) =>
-                                            editRow(row, propertyName, newValue)
-                                        }
-                                        propertyName="loanNumber"
-                                        type="number"
-                                        value={row.loanNumber}
-                                        disabled={!allowedToEdit}
-                                        maxLength={6}
-                                    /> */}
                                 </Grid>
                             )}
 
@@ -547,25 +534,27 @@ OrderDetailsTab.propTypes = {
         })
     ),
     purchaseOrdersSearchLoading: PropTypes.bool.isRequired,
-    loanHeadersSearchResults: PropTypes.arrayOf(
+    loansSearchResults: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.number,
             name: PropTypes.string,
             description: PropTypes.string
         })
     ),
-    loanHeadersSearchLoading: PropTypes.bool.isRequired,
-    searchLoanHeaders: PropTypes.func.isRequired,
-    clearLoanHeadersSearch: PropTypes.func.isRequired,
+    loansSearchLoading: PropTypes.bool.isRequired,
+    searchLoans: PropTypes.func.isRequired,
+    clearLoansSearch: PropTypes.func.isRequired,
     searchPurchaseOrders: PropTypes.func.isRequired,
-    clearPurchaseOrdersSearch: PropTypes.func.isRequired
+    clearPurchaseOrdersSearch: PropTypes.func.isRequired,
+    supplierId: PropTypes.number
 };
 
 OrderDetailsTab.defaultProps = {
     invoiceDate: '',
     rsnsSearchResults: null,
     purchaseOrdersSearchResults: null,
-    loanHeadersSearchResults: null
+    loansSearchResults: null,
+    supplierId: -1
 };
 
 export default OrderDetailsTab;

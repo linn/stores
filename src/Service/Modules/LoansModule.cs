@@ -7,21 +7,21 @@
     using Nancy;
     using Nancy.ModelBinding;
 
-    public sealed class LoanHeadersModule : NancyModule
+    public sealed class LoansModule : NancyModule
     {
-        private readonly ILoanHeaderService loanHeadersService;
+        private readonly ILoanService loanService;
 
-        public LoanHeadersModule(ILoanHeaderService loanHeadersService)
+        public LoansModule(ILoanService loanService)
         {
-            this.loanHeadersService = loanHeadersService;
-            this.Get("logistics/loan-headers", _ => this.GetLoanHeaders());
+            this.loanService = loanService;
+            this.Get("logistics/loans", _ => this.GetLoanHeaders());
         }
 
         private object GetLoanHeaders()
         {
             var resource = this.Bind<SearchRequestResource>();
 
-            var results = this.loanHeadersService.Search(resource.SearchTerm);
+            var results = this.loanService.Search(resource.SearchTerm);
 
             return this.Negotiate.WithModel(results).WithMediaRangeModel("text/json", ApplicationSettings.Get);
         }

@@ -5,8 +5,8 @@ import cpcNumbersActions from '../../../actions/impbookCpcNumbersActions';
 import cpcNumbersSelectors from '../../../selectors/impbookCpcNumbersSelectors';
 import rsnsActions from '../../../actions/rsnsActions';
 import rsnsSelectors from '../../../selectors/rsnsSelectors';
-import loanHeadersActions from '../../../actions/loanHeadersActions';
-import loanHeadersSelectors from '../../../selectors/loanHeadersSelectors';
+import loansActions from '../../../actions/loansActions';
+import loansSelectors from '../../../selectors/loansSelectors';
 import purchaseOrdersActions from '../../../actions/purchaseOrdersActions';
 import purchaseOrdersSelectors from '../../../selectors/purchaseOrdersSelectors';
 
@@ -35,12 +35,12 @@ const mapStateToProps = state => ({
         lineNumber: p.lineNumber
     })),
     purchaseOrdersSearchLoading: purchaseOrdersSelectors.getSearchLoading(state),
-    loanHeadersSearchResults: loanHeadersSelectors.getSearchItems(state).map?.(l => ({
+    loansSearchResults: loansSelectors.getSearchItems(state).map?.(l => ({
         id: l.loanNumber,
         name: l.loanNumber.toString(),
         description: l.loanNumber
     })),
-    loanHeadersSearchLoading: loanHeadersSelectors.getSearchLoading(state)
+    loansSearchLoading: loansSelectors.getSearchLoading(state)
 });
 
 const initialise = () => dispatch => {
@@ -51,8 +51,8 @@ const mapDispatchToProps = {
     initialise,
     searchRsns: rsnsActions.search,
     clearRsnsSearch: rsnsActions.clearSearch,
-    searchLoanHeaders: loanHeadersActions.search,
-    clearLoanHeadersSearch: loanHeadersActions.clearSearch,
+    searchLoans: loansActions.search,
+    clearLoansSearch: loansActions.clearSearch,
     searchPurchaseOrders: purchaseOrdersActions.search,
     clearPurchaseOrdersSearch: purchaseOrdersActions.clearSearch
 };

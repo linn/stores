@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Service.Tests.LoanHeadersModuleSpecs
+﻿namespace Linn.Stores.Service.Tests.LoansModuleSpecs
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -7,7 +7,6 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
-    using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources;
 
     using Nancy;
@@ -22,22 +21,16 @@
         [SetUp]
         public void SetUp()
         {
-            var loanHeaders = new List<LoanHeader>
-                           {
-                               new LoanHeader
-                                   {
-                                       LoanNumber = 12345
-                                   },
-                               new LoanHeader
-                                   {
-                                      LoanNumber = 72345
-                                   }
-                           };
+            var loanHeaders = new List<Loan>
+                                  {
+                                      new Loan {LoanNumber = 12345}, new Loan {LoanNumber = 72345}
+                                  };
 
-            this.LoanHeaderFacadeService.Search(Arg.Any<string>()).Returns(new SuccessResult<IEnumerable<LoanHeader>>(loanHeaders));
+            this.LoanFacadeService.Search(Arg.Any<string>())
+                .Returns(new SuccessResult<IEnumerable<Loan>>(loanHeaders));
 
             this.Response = this.Browser.Get(
-                "/logistics/loan-headers",
+                "/logistics/loans",
                 with =>
                     {
                         with.Header("Accept", "application/json");
@@ -48,7 +41,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.LoanHeaderFacadeService.Received().Search(Arg.Any<string>());
+            this.LoanFacadeService.Received().Search(Arg.Any<string>());
         }
 
         [Test]
@@ -60,7 +53,7 @@
         [Test]
         public void ShouldReturnResources()
         {
-            var resources = this.Response.Body.DeserializeJson<IEnumerable<LoanHeaderResource>>();
+            var resources = this.Response.Body.DeserializeJson<IEnumerable<LoanResource>>();
             resources.Count().Should().Be(2);
         }
     }

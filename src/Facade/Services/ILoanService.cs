@@ -5,8 +5,8 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
 
-    public interface ILoanHeaderService
+    public interface ILoanService
     {
-        IResult<IEnumerable<LoanHeader>> Search(string searchTerm);
+        IResult<IEnumerable<Loan>> Search(string searchTerm);
     }
 }
