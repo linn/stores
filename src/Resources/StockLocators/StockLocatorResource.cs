@@ -47,5 +47,9 @@
         public string State { get; set; }
 
         public string Category { get; set; }
+
+        public decimal? MaxCapacity { get; set; }
+
+        public decimal? TriggerLevel { get; set; }
     }
 }

@@ -66,6 +66,12 @@ function StockLocator({
             editable: false
         },
         {
+            title: 'Desc',
+            id: 'partDescription',
+            type: 'text',
+            editable: false
+        },
+        {
             title: 'UOM',
             id: 'partUnitOfMeasure',
             type: 'text',
@@ -110,6 +116,18 @@ function StockLocator({
         {
             title: 'Location Code',
             id: 'locationName',
+            type: 'text',
+            editable: false
+        },
+        {
+            title: 'Trigger Lvl',
+            id: 'triggerLevel',
+            type: 'text',
+            editable: false
+        },
+        {
+            title: 'Max Cap',
+            id: 'maxCapacity',
             type: 'text',
             editable: false
         }
