@@ -294,8 +294,7 @@ function StockLocator({
                                 />
                             </Grid>
                         )}
-                        {quantitiesLoading && <Loading />}
-                        {quantities?.length && selectedQuantities && !quantitiesLoading && (
+                        <Grid item xs={12}>
                             <Accordion>
                                 <AccordionSummary
                                     expandIcon={<ExpandMoreIcon />}
@@ -306,89 +305,110 @@ function StockLocator({
                                 </AccordionSummary>
                                 <AccordionDetails>
                                     <Grid container spacing={3}>
-                                        <Grid item xs={3}>
-                                            <Dropdown
-                                                items={quantities?.map(v => ({
-                                                    id: v.partNumber,
-                                                    displayText: v.partNumber
-                                                }))}
-                                                value={selectedQuantities.partNumber}
-                                                label="Show Summaries For Part"
-                                                propertyName="part"
-                                                onChange={(_propertyName, newValue) =>
-                                                    setSelectQuantities(
-                                                        quantities.find(
-                                                            x => x.partNumber === newValue
-                                                        )
-                                                    )
-                                                }
-                                                allowNoValue={false}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={9} />
-                                        <Grid item xs={1}>
-                                            <Typography variant="subtitle1" align="right">
-                                                Main
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <InputField
-                                                label="Good (Allocated)"
-                                                propertyName="goodStock"
-                                                value={`${selectedQuantities.goodStock} (${selectedQuantities.goodStockAllocated})`}
-                                                disabled
-                                            />
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <InputField
-                                                label="Uninspected (Allocated)"
-                                                propertyName="uninspectedStock"
-                                                value={`${selectedQuantities.uninspectedStock} (${selectedQuantities.uninspectedStockAllocated})`}
-                                                disabled
-                                            />
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <InputField
-                                                label="Faulty (Allocated)"
-                                                propertyName="uninspectedStockAllocated"
-                                                value={`${selectedQuantities.faultyStock} (${selectedQuantities.faultyStockAllocated})`}
-                                                disabled
-                                            />
-                                        </Grid>
-                                        <Grid item xs={2} />
-
-                                        <Grid item xs={1}>
-                                            <Typography variant="subtitle1" align="right">
-                                                Distributor
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <InputField
-                                                label="Good (Allocated)"
-                                                propertyName="distributorStock"
-                                                value={`${selectedQuantities.distributorStock} (${selectedQuantities.distributorStockAllocated})`}
-                                                disabled
-                                            />
-                                        </Grid>
-                                        <Grid item xs={8} />
-                                        <Grid item xs={1}>
-                                            <Typography variant="subtitle1" align="right">
-                                                Other
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <InputField
-                                                label="Good (Allocated)"
-                                                propertyName="otherStock"
-                                                value={`${selectedQuantities.otherStock} (${selectedQuantities.otherStockAllocated})`}
-                                                disabled
-                                            />
-                                        </Grid>
+                                        {quantitiesLoading && (
+                                            <Grid item xs={12}>
+                                                <Loading />
+                                            </Grid>
+                                        )}
+                                        {quantities?.length &&
+                                            selectedQuantities &&
+                                            !quantitiesLoading && (
+                                                <>
+                                                    <Grid item xs={3}>
+                                                        <Dropdown
+                                                            items={quantities?.map(v => ({
+                                                                id: v.partNumber,
+                                                                displayText: v.partNumber
+                                                            }))}
+                                                            value={selectedQuantities.partNumber}
+                                                            label="Show Summaries For Part"
+                                                            propertyName="part"
+                                                            onChange={(_propertyName, newValue) =>
+                                                                setSelectQuantities(
+                                                                    quantities.find(
+                                                                        x =>
+                                                                            x.partNumber ===
+                                                                            newValue
+                                                                    )
+                                                                )
+                                                            }
+                                                            allowNoValue={false}
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={9} />
+                                                    <Grid item xs={1}>
+                                                        <Typography
+                                                            variant="subtitle1"
+                                                            align="right"
+                                                        >
+                                                            Main
+                                                        </Typography>
+                                                    </Grid>
+                                                    <Grid item xs={3}>
+                                                        <InputField
+                                                            label="Good (Allocated)"
+                                                            propertyName="goodStock"
+                                                            value={`${selectedQuantities.goodStock} (${selectedQuantities.goodStockAllocated})`}
+                                                            disabled
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={3}>
+                                                        <InputField
+                                                            label="Uninspected (Allocated)"
+                                                            propertyName="uninspectedStock"
+                                                            value={`${selectedQuantities.uninspectedStock} (${selectedQuantities.uninspectedStockAllocated})`}
+                                                            disabled
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={3}>
+                                                        <InputField
+                                                            label="Faulty (Allocated)"
+                                                            propertyName="uninspectedStockAllocated"
+                                                            value={`${selectedQuantities.faultyStock} (${selectedQuantities.faultyStockAllocated})`}
+                                                            disabled
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={2} />
+                                                    <Grid item xs={1}>
+                                                        <Typography
+                                                            variant="subtitle1"
+                                                            align="right"
+                                                        >
+                                                            Distributor
+                                                        </Typography>
+                                                    </Grid>
+                                                    <Grid item xs={3}>
+                                                        <InputField
+                                                            label="Good (Allocated)"
+                                                            propertyName="distributorStock"
+                                                            value={`${selectedQuantities.distributorStock} (${selectedQuantities.distributorStockAllocated})`}
+                                                            disabled
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={8} />
+                                                    <Grid item xs={1}>
+                                                        <Typography
+                                                            variant="subtitle1"
+                                                            align="right"
+                                                        >
+                                                            Other
+                                                        </Typography>
+                                                    </Grid>
+                                                    <Grid item xs={3}>
+                                                        <InputField
+                                                            label="Good (Allocated)"
+                                                            propertyName="otherStock"
+                                                            value={`${selectedQuantities.otherStock} (${selectedQuantities.otherStockAllocated})`}
+                                                            disabled
+                                                        />
+                                                    </Grid>{' '}
+                                                </>
+                                            )}
                                         <Grid item xs={8} />
                                     </Grid>
                                 </AccordionDetails>
-                            </Accordion>
-                        )}
+                            </Accordion>{' '}
+                        </Grid>
                     </>
                 )}
             </Grid>
