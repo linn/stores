@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
 
+    using Linn.Stores.Domain.LinnApps.GoodsIn;
+
     public class SalesArticle
     {
         public string ArticleNumber { get; set; }
@@ -12,6 +14,8 @@
         public Part Part { get; set; }
 
         public DateTime? PhaseOutDate { get; set; }
+
+        public IEnumerable<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
 
         public IEnumerable<Rsn> Rsns { get; set; }
 

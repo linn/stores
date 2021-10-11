@@ -23,8 +23,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Page from '../../containers/Page';
 import consignmentReducer from './consignmentReducer';
 import DetailsTab from './DetailsTab';
+import DetailsItemsTab from './DetailsItemsTab';
 import ItemsTab from './ItemsTab';
-import InvoicesTab from './InvoicesTab';
+import DocumentsTab from './DocumentsTab';
 import PackingListTab from './PackingListTab';
 
 function Consignment({
@@ -73,7 +74,11 @@ function Consignment({
     searchCartonTypes,
     clearCartonTypesSearch,
     cartonTypesSearchResults,
-    cartonTypesSearchLoading
+    cartonTypesSearchLoading,
+    saveDocuments,
+    saveDocumentsWorking,
+    saveDocumentsResult,
+    saveDocumentsClearData
 }) {
     const [currentTab, setcurrentTab] = useState(startingTab);
     const [editablePallets, setEditablePallets] = useState([]);
@@ -219,7 +224,7 @@ function Consignment({
 
     const handleSelectConsignment = (_property, newValue) => {
         getConsignment(newValue);
-        setcurrentTab(1);
+        setcurrentTab(3);
     };
 
     const handleTabChange = (_event, newValue) => {
@@ -449,6 +454,11 @@ function Consignment({
         printDocuments({ consignmentId: item.consignmentId, userNumber });
     };
 
+    const handleSaveDocuments = () => {
+        saveDocumentsClearData();
+        saveDocuments({ consignmentId: item.consignmentId, userNumber });
+    };
+
     const cartonTypesResult = () => {
         return cartonTypesSearchResults?.map(cartonType => ({
             ...cartonType,
@@ -512,7 +522,8 @@ function Consignment({
                         >
                             <Tab label="Select" />
                             <Tab label="Details" />
-                            <Tab label="Consignment Items" />
+                            <Tab label="Items" />
+                            <Tab label="Details And Items" />
                             <Tab label="Documents" />
                             <Tab label="Packing List" />
                         </Tabs>
@@ -596,15 +607,42 @@ function Consignment({
                                     />
                                 )}
                                 {currentTab === 3 && (
-                                    <InvoicesTab
+                                    <DetailsItemsTab
+                                        consignment={state.consignment}
+                                        hub={hub}
+                                        hubs={hubs}
+                                        updateField={updateField}
+                                        viewMode={viewMode()}
+                                        editStatus={editStatus}
+                                        hubsLoading={hubsLoading}
+                                        carrier={carrier}
+                                        carriers={carriers}
+                                        carriersLoading={carriersLoading}
+                                        shippingTerm={shippingTerm}
+                                        shippingTerms={shippingTerms}
+                                        shippingTermsLoading={shippingTermsLoading}
+                                        editableItems={editableItems}
+                                        editablePallets={editablePallets}
+                                        dispatch={dispatch}
+                                        setSaveDisabled={setSaveDisabled}
+                                        cartonTypes={cartonTypes}
+                                        setEditStatus={setEditStatus}
+                                        viewing={viewing()}
+                                    />
+                                )}
+                                {currentTab === 4 && (
+                                    <DocumentsTab
                                         invoices={state.consignment.invoices}
                                         exportBooks={state.consignment.exportBooks}
                                         printDocuments={handlePrintDocuments}
                                         printDocumentsWorking={printDocumentsWorking}
                                         printDocumentsResult={printDocumentsResult}
+                                        saveDocuments={handleSaveDocuments}
+                                        saveDocumentsWorking={saveDocumentsWorking}
+                                        saveDocumentsResult={saveDocumentsResult}
                                     />
                                 )}
-                                {currentTab === 4 && (
+                                {currentTab === 5 && (
                                     <PackingListTab
                                         consignmentPackingList={consignmentPackingList}
                                         consignmentPackingListLoading={
@@ -616,7 +654,7 @@ function Consignment({
                         )}
                     </>
                     <Grid item xs={12} style={{ marginTop: '20px' }}>
-                        {currentTab === 2 && (
+                        {(currentTab === 2 || currentTab === 3) && (
                             <>
                                 <Button
                                     variant="outlined"
@@ -1044,7 +1082,14 @@ Consignment.propTypes = {
     searchCartonTypes: PropTypes.func.isRequired,
     clearCartonTypesSearch: PropTypes.func.isRequired,
     cartonTypesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
-    cartonTypesSearchLoading: PropTypes.bool
+    cartonTypesSearchLoading: PropTypes.bool,
+    saveDocumentsWorking: PropTypes.bool,
+    saveDocuments: PropTypes.func.isRequired,
+    saveDocumentsResult: PropTypes.shape({
+        success: PropTypes.bool,
+        message: PropTypes.string
+    }),
+    saveDocumentsClearData: PropTypes.func.isRequired
 };
 
 Consignment.defaultProps = {
@@ -1073,7 +1118,9 @@ Consignment.defaultProps = {
     consignmentPackingList: null,
     consignmentPackingListLoading: false,
     cartonTypesSearchResults: [],
-    cartonTypesSearchLoading: false
+    cartonTypesSearchLoading: false,
+    saveDocumentsWorking: false,
+    saveDocumentsResult: null
 };
 
 export default Consignment;
