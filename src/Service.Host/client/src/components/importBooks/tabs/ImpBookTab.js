@@ -448,6 +448,8 @@ function ImpBookTab({
                         propertyName="weight"
                         fullwidth
                         type="number"
+                        maxLength={10}
+                        decimalPlaces={2}
                         disabled={!allowedToEdit}
                     />
                 </Grid>

@@ -41,7 +41,7 @@ const mapStateToProps = state => ({
         id: parseInt(e.transportId, 10)
     })),
     transactionCodes: transactionCodesSelectors.getItems(state)?.map(e => ({
-        displayText: `${e.transactionId}`,
+        displayText: `${e.description}`,
         id: parseInt(e.transactionId, 10)
     })),
     deliveryTerms: impbookDeliveryTermsSelectors.getItems(state)?.map(e => ({
