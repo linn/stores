@@ -59,7 +59,7 @@ function PartsSearch({
                                 .filter(p => p.allowPartCreation === 'Y')
                                 .map(t => ({
                                     id: t.partRoot,
-                                    displayText: t.description
+                                    displayText: `${t.partRoot} - ${t.description}`
                                 }))}
                             fullWidth
                             allowNoValue
