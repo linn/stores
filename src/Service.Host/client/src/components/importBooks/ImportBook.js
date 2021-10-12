@@ -499,6 +499,7 @@ function ImportBook({
                                             remainingDutyValue={calcRemainingDuty()}
                                             remainingWeightValue={calcRemainingWeight()}
                                             supplierId={state.impbook.supplierId}
+                                            impbookWeight={state.impbook.weight}
                                         />
                                     )}
                                     {tab === 2 && (

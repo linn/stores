@@ -7,6 +7,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Dropdown, InputField, LinkButton, Typeahead } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
+import { Decimal } from 'decimal.js';
 
 function OrderDetailsTab({
     orderDetails,
@@ -32,7 +33,8 @@ function OrderDetailsTab({
     clearLoansSearch,
     searchPurchaseOrders,
     clearPurchaseOrdersSearch,
-    supplierId
+    supplierId,
+    impbookWeight
 }) {
     const updateRow = detail => {
         handleOrderDetailChange(detail.lineNumber, detail);
@@ -47,6 +49,9 @@ function OrderDetailsTab({
             display: 'inline-block',
             width: '2em'
         },
+        buttonMarginTop: {
+            marginTop: '22px'
+        },
         gapAbove: {
             marginTop: theme.spacing(2)
         },
@@ -56,6 +61,9 @@ function OrderDetailsTab({
         },
         dividerMarginBottomOnly: {
             marginBottom: '10px'
+        },
+        pullRight: {
+            float: 'right'
         }
     }));
     const classes = useStyles();
@@ -100,10 +108,41 @@ function OrderDetailsTab({
         });
     };
 
+    const calculateWeights = () => {
+        if (!impbookWeight || !orderDetails.length) {
+            return;
+        }
+
+        const totalQty = orderDetails?.reduce((a, v) => new Decimal(a).plus(v.qty ?? 0), 0);
+        const avgWeight = Decimal.div(impbookWeight, totalQty);
+
+        const arrayLen = orderDetails.length;
+
+        orderDetails.forEach((row, i) => {
+            if (arrayLen === i + 1) {
+                updateRow({
+                    ...row,
+                    weight: Decimal.mul(avgWeight, row.qty).toDecimalPlaces(
+                        2,
+                        Decimal.ROUND_HALF_UP
+                    )
+                });
+            } else {
+                updateRow({
+                    ...row,
+                    weight: Decimal.mul(avgWeight, row.qty).toDecimalPlaces(
+                        2,
+                        Decimal.ROUND_HALF_DOWN
+                    )
+                });
+            }
+        });
+    };
+
     return (
         <>
-            <Grid container spacing={1} item xs={7}>
-                <Grid item xs={3}>
+            <Grid container spacing={1} item xs={12}>
+                <Grid item xs={2}>
                     <InputField
                         label="Remaining Total"
                         fullWidth
@@ -113,7 +152,7 @@ function OrderDetailsTab({
                         disabled
                     />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={2}>
                     <InputField
                         label="Remaining Duty Total"
                         fullWidth
@@ -123,7 +162,7 @@ function OrderDetailsTab({
                         disabled
                     />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={2}>
                     <InputField
                         label="Remaining Weight"
                         fullWidth
@@ -134,7 +173,7 @@ function OrderDetailsTab({
                     />
                 </Grid>
 
-                <Grid item xs={3}>
+                <Grid item xs={2}>
                     <InputField
                         label="Invoice Date"
                         fullWidth
@@ -145,6 +184,17 @@ function OrderDetailsTab({
                         disabled={!allowedToEdit}
                     />
                 </Grid>
+                <Grid item xs={1} />
+                <Grid item xs={3}>
+                    <Button
+                        onClick={calculateWeights}
+                        variant="contained"
+                        className={classes.pullRight}
+                    >
+                        Calculate Weights
+                    </Button>
+                </Grid>
+
                 <Grid item xs={3}>
                     <LinkButton
                         text="Post Duty"
@@ -182,7 +232,7 @@ function OrderDetailsTab({
                             </Grid>
 
                             {(row.lineType === 'PO' || row.lineType === 'RO') && (
-                                <Grid item xs={2}>
+                                <Grid item xs={3}>
                                     <div className={classes.displayInline}>
                                         <Typeahead
                                             label="Order Number"
@@ -220,7 +270,7 @@ function OrderDetailsTab({
                             )}
 
                             {row.lineType === 'RSN' && (
-                                <Grid item xs={2}>
+                                <Grid item xs={3}>
                                     <div className={classes.displayInline}>
                                         <Typeahead
                                             label="RSN Number"
@@ -256,7 +306,7 @@ function OrderDetailsTab({
                             )}
 
                             {row.lineType === 'LOAN' && (
-                                <Grid item xs={2}>
+                                <Grid item xs={3}>
                                     <div className={classes.displayInline}>
                                         <Typeahead
                                             label="Loan Number"
@@ -310,7 +360,7 @@ function OrderDetailsTab({
                                 </Grid>
                             )}
 
-                            <Grid item xs={3}>
+                            <Grid item xs={4}>
                                 <InputField
                                     label="Order Description"
                                     fullWidth
@@ -341,19 +391,6 @@ function OrderDetailsTab({
                             </Grid>
                             <Grid item xs={1}>
                                 <InputField
-                                    label="Tariff Number"
-                                    fullWidth
-                                    onChange={(propertyName, newValue) =>
-                                        editRow(row, propertyName, newValue)
-                                    }
-                                    propertyName="tariffNumber"
-                                    type="number"
-                                    value={row.tariffNumber}
-                                    disabled={!allowedToEdit}
-                                />
-                            </Grid>
-                            <Grid item xs={1}>
-                                <InputField
                                     label="Qty"
                                     fullWidth
                                     onChange={(propertyName, newValue) =>
@@ -367,6 +404,9 @@ function OrderDetailsTab({
                                     maxLength={6}
                                 />
                             </Grid>
+
+                            <Grid item xs={12} />
+
                             <Grid item xs={2}>
                                 <InputField
                                     label="Order Value"
@@ -486,7 +526,7 @@ function OrderDetailsTab({
                     ))}
 
                 <Button
-                    style={{ marginTop: '22px' }}
+                    className={classes.buttonMarginTop}
                     variant="contained"
                     onClick={addOrderDetailRow}
                     disabled={!allowedToEdit}
@@ -546,7 +586,8 @@ OrderDetailsTab.propTypes = {
     clearLoansSearch: PropTypes.func.isRequired,
     searchPurchaseOrders: PropTypes.func.isRequired,
     clearPurchaseOrdersSearch: PropTypes.func.isRequired,
-    supplierId: PropTypes.number
+    supplierId: PropTypes.number,
+    impbookWeight: PropTypes.number.isRequired
 };
 
 OrderDetailsTab.defaultProps = {
