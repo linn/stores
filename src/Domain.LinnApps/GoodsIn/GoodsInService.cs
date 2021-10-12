@@ -86,15 +86,10 @@
         {
             if (string.IsNullOrEmpty(ontoLocation))
             {
-                if ((string.IsNullOrEmpty(storageType) && transactionType == "O") 
-                    || transactionType == "L" || transactionType == "D")
-                {
-                    return new BookInResult(false, "Onto location/pallet must be entered");
-                }
+                return new BookInResult(false, "Onto location/pallet must be entered");
             }
 
-            if (ontoLocation != null 
-                && ontoLocation.StartsWith("P") 
+            if (ontoLocation.StartsWith("P") 
                 && !string.IsNullOrEmpty(partNumber))
             {
                 if (!this.palletAnalysisPack.CanPutPartOnPallet(partNumber, ontoLocation.TrimStart('P')))
@@ -187,8 +182,14 @@
                     out _);
                 result.UnitOfMeasure = uom;
                 result.DocType = this.purchaseOrderPack.GetDocumentType(orderNumber.Value);
+                result.PrintLabels = true;
             }
-            
+
+            if (transactionType.Equals("L"))
+            {
+                result.DocType = "L";
+            }
+
             result.QtyReceived = qty;
             result.PartNumber = partNumber;
             result.PartDescription = part.Description;
@@ -214,17 +215,7 @@
             {
                 result.ParcelComments = $"{result.DocType}{orderNumber}";
             }
-            else if (rsnNumber.HasValue)
-            {
-                // todo
-                throw new NotImplementedException("Booking in this document type is not supported yet.");
-            }
-            else if (loanNumber.HasValue)
-            {
-                // todo
-                throw new NotImplementedException("Booking in this document type is not supported yet.");
-            }
-
+            
             result.SupplierId = supplierId;
             result.CreatedBy = createdBy;
             return result;
