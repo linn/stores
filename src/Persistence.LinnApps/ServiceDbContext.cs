@@ -244,6 +244,8 @@
 
         public DbSet<Loan> Loans { get; set; }
 
+        public DbQuery<StockTriggerLevel> StockTriggerLevels { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -360,6 +362,7 @@
             this.QueryLoans(builder);
             base.OnModelCreating(builder);
             this.BuildPurchaseOrderDetails(builder);
+            this.BuildStockTriggerLevels(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -881,6 +884,7 @@
             q.Property(e => e.BatchRef).HasColumnName("BATCH_REF");
             q.Property(e => e.State).HasColumnName("STATE").HasMaxLength(6).IsRequired();
             q.Property(e => e.Category).HasColumnName("CATEGORY").HasMaxLength(6).IsRequired();
+            q.Ignore(e => e.TriggerLevel);
         }
 
         private void QueryStoragePlaces(ModelBuilder builder)
@@ -2037,6 +2041,15 @@
             var q = builder.Entity<Loan>().ToTable("LOAN_HEADERS");
             q.HasKey(e => e.LoanNumber);
             q.Property(e => e.LoanNumber).HasColumnName("LOAN_NUMBER").HasMaxLength(6);
+        }
+
+        private void BuildStockTriggerLevels(ModelBuilder builder)
+        {
+            var e = builder.Query<StockTriggerLevel>().ToView("STOCK_TRIGGER_LEVELS");
+            e.Property(l => l.LocationId).HasColumnName("LOCATION_ID");
+            e.Property(l => l.PartNumber).HasColumnName("PART_NUMBER");
+            e.Property(l => l.MaxCapacity).HasColumnName("MAXIMUM_CAPACITY");
+            e.Property(l => l.TriggerLevel).HasColumnName("TRIGGER_LEVEL");
         }
     }
 }
