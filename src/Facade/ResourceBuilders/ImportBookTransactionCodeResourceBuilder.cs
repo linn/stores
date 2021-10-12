@@ -13,7 +13,7 @@
             return new ImportBookTransactionCodeResource
                        {
                            TransactionId = model.TransactionId,
-                           Description = this.GetDescription(model.TransactionId, model.Description)
+                           Description = model.Description
                        };
         }
 
@@ -25,21 +25,6 @@
         object IResourceBuilder<ImportBookTransactionCode>.Build(ImportBookTransactionCode model)
         {
             return this.Build(model);
-        }
-
-        private string GetDescription(int code, string dbDescription)
-        {
-            if (code == 10)
-            {
-                return "10 - Raw materials";
-            }
-
-            if (code == 20)
-            {
-                return "20 - Returned Goods";
-            }
-
-            return dbDescription;
         }
     }
 }
