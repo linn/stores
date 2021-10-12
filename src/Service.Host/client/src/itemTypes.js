@@ -435,3 +435,5 @@ export const purchaseOrders = new ItemType(
     'PURCHASE_ORDERS',
     '/logistics/purchase-orders'
 );
+
+export const postDuty = new ItemType('postDuty', 'POST_DUTY', '/logistics/import-books/post-duty');

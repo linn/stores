@@ -329,3 +329,5 @@ export const rsnsActionTypes = makeActionTypes(itemTypes.rsns.actionType);
 export const loansActionTypes = makeActionTypes(itemTypes.loans.actionType);
 
 export const purchaseOrdersActionTypes = makeActionTypes(itemTypes.purchaseOrders.actionType);
+
+export const postDutyActionTypes = makeActionTypes(itemTypes.postDuty.actionType);

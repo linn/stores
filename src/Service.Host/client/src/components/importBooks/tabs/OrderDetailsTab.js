@@ -4,8 +4,15 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Tooltip from '@material-ui/core/Tooltip';
+import Checkbox from '@material-ui/core/Checkbox';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { Dropdown, InputField, LinkButton, Typeahead } from '@linn-it/linn-form-components-library';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import {
+    Dropdown,
+    InputField,
+    SnackbarMessage,
+    Typeahead
+} from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
 import { Decimal } from 'decimal.js';
 
@@ -34,7 +41,11 @@ function OrderDetailsTab({
     searchPurchaseOrders,
     clearPurchaseOrdersSearch,
     supplierId,
-    impbookWeight
+    impbookWeight,
+    postDuty,
+    postDutyItemError,
+    snackbarVisible,
+    setSnackbarVisible
 }) {
     const updateRow = detail => {
         handleOrderDetailChange(detail.lineNumber, detail);
@@ -79,6 +90,7 @@ function OrderDetailsTab({
     ];
 
     const editRow = (row, propertyName, newValue) => {
+        console.info(newValue);
         updateRow({ ...row, [propertyName]: newValue });
     };
 
@@ -139,8 +151,16 @@ function OrderDetailsTab({
         });
     };
 
+    const handlePostDutyClick = () => {};
+
     return (
         <>
+            <SnackbarMessage
+                visible={snackbarVisible}
+                onClose={() => setSnackbarVisible(false)}
+                message="Successfully posted Duty to purchase ledger"
+            />
+
             <Grid container spacing={1} item xs={12}>
                 <Grid item xs={2}>
                     <InputField
@@ -196,12 +216,15 @@ function OrderDetailsTab({
                 </Grid>
 
                 <Grid item xs={3}>
-                    <LinkButton
-                        text="Post Duty"
-                        //todo to={`/logistics/`}
-                        disabled
-                        external
-                    />
+                    <Tooltip title="Post Duty to purchase ledger for ticked details">
+                        <Button
+                            className={classes.marginTop1}
+                            onClick={handlePostDutyClick}
+                            disabled={!allowedToEdit}
+                        >
+                            Post Duty
+                        </Button>
+                    </Tooltip>
                 </Grid>
             </Grid>
 
@@ -499,11 +522,19 @@ function OrderDetailsTab({
                                 />
                             </Grid>
                             <Grid item xs={2}>
-                                <LinkButton
-                                    text="Post Duty"
-                                    //todo to={`/logistics/`}
-                                    disabled
-                                    external
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            onChange={(propertyName, newValue) =>
+                                                editRow(row, propertyName, newValue)
+                                            }
+                                            checked={row.postDuty}
+                                            disabled={!allowedToEdit}
+                                            color="primary"
+                                        />
+                                    }
+                                    label="Post Duty"
+                                    labelPlacement="top"
                                 />
                             </Grid>
 
@@ -587,7 +618,18 @@ OrderDetailsTab.propTypes = {
     searchPurchaseOrders: PropTypes.func.isRequired,
     clearPurchaseOrdersSearch: PropTypes.func.isRequired,
     supplierId: PropTypes.number,
-    impbookWeight: PropTypes.number.isRequired
+    impbookWeight: PropTypes.number.isRequired,
+    postDuty: PropTypes.func.isRequired,
+    postDutyItemError: PropTypes.shape({
+        status: PropTypes.number,
+        statusText: PropTypes.string,
+        item: PropTypes.string,
+        details: PropTypes.shape({
+            errors: PropTypes.arrayOf(PropTypes.shape({}))
+        })
+    }),
+    snackbarVisible: PropTypes.bool,
+    setSnackbarVisible: PropTypes.func.isRequired
 };
 
 OrderDetailsTab.defaultProps = {
@@ -595,7 +637,9 @@ OrderDetailsTab.defaultProps = {
     rsnsSearchResults: null,
     purchaseOrdersSearchResults: null,
     loansSearchResults: null,
-    supplierId: -1
+    supplierId: -1,
+    postDutyItemError: null,
+    snackbarVisible: false
 };
 
 export default OrderDetailsTab;
