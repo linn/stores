@@ -14,6 +14,8 @@
 
         public Part Part { get; set; }
 
+        public string PartDescription { get; set; }
+
         public int? PalletNumber { get; set; }
 
         public string LocationType { get; set; }

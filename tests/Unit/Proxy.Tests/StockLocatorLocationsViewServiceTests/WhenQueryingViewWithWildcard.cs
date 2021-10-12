@@ -11,7 +11,7 @@
 
     public class WhenQueryingViewWithWildcard : ContextBase
     {
-        private readonly string correctQuery = "SELECT * FROM STOCK_LOCATOR_LOC_VIEW WHERE PART_NUMBER LIKE 'PART%' AND LOCATION_ID = 1 AND PALLET_NUMBER = 1 AND STOCK_POOL_CODE = 'POOL' AND STATE = 'STATE' AND CATEGORY = 'CAT'";
+        private readonly string correctQuery = "SELECT * FROM STOCK_LOCATOR_PARTS_VIEW WHERE PART_NUMBER LIKE 'PART%' AND LOCATION_ID = 1 AND PALLET_NUMBER = 1 AND STOCK_POOL_CODE = 'POOL' AND STATE = 'STATE' AND CATEGORY = 'CAT'";
 
         private IEnumerable<StockLocatorLocation> result;
 

@@ -13,7 +13,7 @@
     {
         private IEnumerable<StockLocatorLocation> result;
 
-        private string correctQuery = "SELECT * FROM STOCK_LOCATOR_LOC_VIEW WHERE PART_NUMBER = 'PART' AND LOCATION_ID = 1 AND PALLET_NUMBER = 1 AND STOCK_POOL_CODE = 'POOL' AND STATE = 'STATE' AND CATEGORY = 'CAT'";
+        private string correctQuery = "SELECT * FROM STOCK_LOCATOR_PARTS_VIEW WHERE PART_NUMBER = 'PART' AND LOCATION_ID = 1 AND PALLET_NUMBER = 1 AND STOCK_POOL_CODE = 'POOL' AND STATE = 'STATE' AND CATEGORY = 'CAT'";
 
         [SetUp]
         public void SetUp()

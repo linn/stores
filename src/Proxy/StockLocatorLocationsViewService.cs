@@ -73,7 +73,7 @@
                 }
             }
 
-            var sql = $@"SELECT * FROM STOCK_LOCATOR_LOC_VIEW {whereClause}";
+            var sql = $@"SELECT * FROM STOCK_LOCATOR_PARTS_VIEW {whereClause}";
 
             var res = this.databaseService.ExecuteQuery(sql);
 
@@ -91,13 +91,14 @@
                                                              Description = values[3].ToString()
                                                          },
                                    PartNumber = values[4].ToString(),
-                                   PalletNumber = values[5] == DBNull.Value ? (int?)null : Convert.ToInt32(values[5]),
-                                   LocationType = values[6].ToString(),
-                                   State = values[7].ToString(),
-                                   Category = values[8].ToString(),
-                                   StockPoolCode = values[9].ToString(),
-                                   OurUnitOfMeasure = values[10].ToString(),
-                                   QuantityAllocated = values[11] == DBNull.Value ? (int?)null : Convert.ToInt32(values[11]),
+                                   PartDescription = values[5].ToString(),
+                                   PalletNumber = values[6] == DBNull.Value ? (int?)null : Convert.ToInt32(values[6]),
+                                   LocationType = values[7].ToString(),
+                                   State = values[8].ToString(),
+                                   Category = values[9].ToString(),
+                                   StockPoolCode = values[10].ToString(),
+                                   OurUnitOfMeasure = values[11].ToString(),
+                                   QuantityAllocated = values[12] == DBNull.Value ? (int?)null : Convert.ToInt32(values[12]),
                                }).ToList();
         }
     }

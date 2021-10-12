@@ -26,7 +26,9 @@
                            LocationDescription = stockLocator.StorageLocation?.Description,
                            State = stockLocator.State,
                            PartId = stockLocator.Part?.Id,
-                           Category = stockLocator.Category
+                           Category = stockLocator.Category,
+                           TriggerLevel = stockLocator.TriggerLevel?.TriggerLevel,
+                           MaxCapacity = stockLocator.TriggerLevel?.MaxCapacity
                        };
         }
 
