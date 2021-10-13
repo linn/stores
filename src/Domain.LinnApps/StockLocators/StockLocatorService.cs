@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
     using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
@@ -325,6 +326,16 @@
                    && m.DateBooked == null
                    && m.DateCancelled == null)
                 .Select(m => new StockMove(m)).ToList();
+        }
+
+        public IEnumerable<StockLocator> GetBatchesInRotationOrderByPart(string partSearch)
+        {
+            var partNumberPattern = Regex.Escape(partSearch.Trim(' ')).Replace("\\*", ".*?");
+            var r = new Regex(partNumberPattern, RegexOptions.IgnoreCase);
+
+            var stockLocators = this.stockLocatorRepository.FilterBy(x => r.IsMatch(x.PartNumber));
+
+            return stockLocators;
         }
     }
 }

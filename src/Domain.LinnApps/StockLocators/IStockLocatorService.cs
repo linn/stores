@@ -3,8 +3,6 @@
     using System;
     using System.Collections.Generic;
 
-    using Linn.Stores.Domain.LinnApps.Requisitions;
-
     public interface IStockLocatorService
     {
         void UpdateStockLocator(StockLocator from, StockLocator to, IEnumerable<string> privileges);
@@ -48,5 +46,7 @@
             DateTime? batchDate);
 
         IEnumerable<StockMove> GetMoves(string partNumber, int? palletNumber, int? locationId);
+
+        IEnumerable<StockLocator> GetBatchesInRotationOrderByPart(string partSearch);
     }
 }
