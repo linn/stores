@@ -13,7 +13,7 @@
 
     public class StockLocatorService : IStockLocatorService
     {
-        private readonly IStockLocatorRepository stockLocatorRepository;
+        private readonly IFilterByWildcardRepository<StockLocator, int> filterByWildcardRepository;
 
         private readonly IStoresPalletRepository palletRepository;
 
@@ -36,7 +36,7 @@
         private readonly IQueryRepository<StockTriggerLevel> triggerLevelRepository;
 
         public StockLocatorService(
-            IStockLocatorRepository stockLocatorRepository,
+            IFilterByWildcardRepository<StockLocator, int> filterByWildcardRepository,
             IStoresPalletRepository palletRepository,
             IQueryRepository<StoragePlace> storagePlaceRepository,
             IRepository<StorageLocation, int> storageLocationRepository,
@@ -48,7 +48,7 @@
             IRepository<ReqMove, ReqMoveKey> reqMoveRepository,
             IQueryRepository<StockTriggerLevel> triggerLevelRepository)
         {
-            this.stockLocatorRepository = stockLocatorRepository;
+            this.filterByWildcardRepository = filterByWildcardRepository;
             this.palletRepository = palletRepository;
             this.storagePlaceRepository = storagePlaceRepository;
             this.storageLocationRepository = storageLocationRepository;
@@ -141,11 +141,11 @@
                 dependentReqMove.StockLocator = null;
             }
 
-            this.stockLocatorRepository.Remove(toDelete);
+            this.filterByWildcardRepository.Remove(toDelete);
 
             toDelete.Part = this.partRepository.FindBy(p => p.PartNumber == toDelete.PartNumber);
 
-            if (!this.stockLocatorRepository.FilterBy(l => l.PalletNumber == toDelete.PalletNumber && l.Quantity > 0)
+            if (!this.filterByWildcardRepository.FilterBy(l => l.PalletNumber == toDelete.PalletNumber && l.Quantity > 0)
                     .Any())
             {
                 foreach (var storesPallet in this.palletRepository.FilterBy(
@@ -158,7 +158,7 @@
 
         public IEnumerable<StockLocatorWithStoragePlaceInfo> GetStockLocatorsWithStoragePlaceInfoForPart(int partId)
         {
-            var stockLocators = this.stockLocatorRepository.FilterBy(s => s.Part.Id == partId);
+            var stockLocators = this.filterByWildcardRepository.FilterBy(s => s.Part.Id == partId);
 
             string auditDept = string.Empty;
 
@@ -195,7 +195,7 @@
         {
             var result =
                 (from stockLocator in
-                     this.stockLocatorRepository.FilterBy(l => l.BatchRef.ToUpper().Equals(batchRef.ToUpper()))
+                     this.filterByWildcardRepository.FilterBy(l => l.BatchRef.ToUpper().Equals(batchRef.ToUpper()))
                  join storageLocation in this.storageLocationRepository.FindAll() on stockLocator.LocationId equals
                      storageLocation.LocationId into gj
                  from storageLocation in gj.DefaultIfEmpty()
@@ -304,7 +304,7 @@
 
             if (palletNumber != null)
             {
-                locators = this.stockLocatorRepository.FilterBy(l =>
+                locators = this.filterByWildcardRepository.FilterBy(l =>
                         l.PartNumber == partNumber
                         && (l.PalletNumber == palletNumber)
                         && l.QuantityAllocated > 0)
@@ -312,7 +312,7 @@
             }
             else
             {
-                locators = this.stockLocatorRepository.FilterBy(l =>
+                locators = this.filterByWildcardRepository.FilterBy(l =>
                         l.PartNumber == partNumber
                         && l.LocationId == locationId
                         && l.QuantityAllocated > 0)
@@ -329,7 +329,7 @@
 
         public IEnumerable<StockLocator> GetBatchesInRotationOrderByPart(string partSearch)
         {
-            var stockLocators = this.stockLocatorRepository.FilterByWildcard(partSearch.Replace("*", "%"));
+            var stockLocators = this.filterByWildcardRepository.FilterByWildcard(partSearch.Replace("*", "%"));
 
             return stockLocators;
         }

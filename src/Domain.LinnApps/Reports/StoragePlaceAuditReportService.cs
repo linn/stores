@@ -15,19 +15,19 @@
 
         private readonly IRepository<Part, int> partsRepository;
 
-        private readonly IStockLocatorRepository stockLocatorRepository;
+        private readonly IFilterByWildcardRepository<StockLocator, int> filterByWildcardRepository;
 
         private readonly IQueryRepository<StoragePlace> storagePlaceRepository;
 
         public StoragePlaceAuditReportService(
             IReportingHelper reportingHelper,
             IRepository<Part, int> partsRepository,
-            IStockLocatorRepository stockLocatorRepository,
+            IFilterByWildcardRepository<StockLocator, int> filterByWildcardRepository,
             IQueryRepository<StoragePlace> storagePlaceRepository)
         {
             this.reportingHelper = reportingHelper;
             this.partsRepository = partsRepository;
-            this.stockLocatorRepository = stockLocatorRepository;
+            this.filterByWildcardRepository = filterByWildcardRepository;
             this.storagePlaceRepository = storagePlaceRepository;
         }
 
@@ -46,7 +46,7 @@
                     .OrderBy(s => s.Name).ToList();
             }
 
-            var stockLocators = this.stockLocatorRepository
+            var stockLocators = this.filterByWildcardRepository
                 .FilterBy(
                     s => s.Quantity > 0 && storagePlaces.Any(
                              sp => sp.LocationId == s.LocationId && sp.PalletNumber == s.PalletNumber)).Select(

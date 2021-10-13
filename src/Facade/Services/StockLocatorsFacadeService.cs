@@ -18,12 +18,12 @@
     {
         private readonly IStockLocatorService domainService;
 
-        private readonly IStockLocatorRepository repository;
+        private readonly IFilterByWildcardRepository<StockLocator, int> repository;
 
         private readonly IDatabaseService databaseService;
 
         public StockLocatorsFacadeService(
-            IStockLocatorRepository repository, 
+            IFilterByWildcardRepository<StockLocator, int> repository, 
             ITransactionManager transactionManager,
             IStockLocatorService domainService,
             IDatabaseService databaseService)

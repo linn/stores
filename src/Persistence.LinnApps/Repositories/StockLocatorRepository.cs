@@ -9,7 +9,7 @@
 
     using Microsoft.EntityFrameworkCore;
 
-    public class StockLocatorRepository : IStockLocatorRepository
+    public class StockLocatorRepository : IFilterByWildcardRepository<StockLocator, int>
     {
         private readonly ServiceDbContext serviceDbContext;
 
@@ -35,9 +35,10 @@
                 .Include(l => l.Part);
         }
 
-        public IQueryable<StockLocator> FilterByPartWildcard(string search)
+        public IQueryable<StockLocator> FilterByWildcard(string search)
         {
-            return this.serviceDbContext.StockLocators.Where(x => EF.Functions.Like(x.PartNumber, search)).Include(l => l.StorageLocation)
+            return this.serviceDbContext.StockLocators
+                .Where(x => EF.Functions.Like(x.PartNumber, search)).Include(l => l.StorageLocation)
                 .Include(l => l.Part);
         }
 
@@ -49,7 +50,7 @@
 
         public IQueryable<StockLocator> FindAll()
         {
-            return this.serviceDbContext.StockLocators.AsNoTracking().Include(s => s.StorageLocation); // is anyone updating these from a findAll()?
+            return this.serviceDbContext.StockLocators.AsNoTracking().Include(s => s.StorageLocation);
         }
 
         public void Add(StockLocator entity)

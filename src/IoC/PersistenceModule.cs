@@ -68,7 +68,7 @@
             builder.RegisterType<MechPartSourceRepository>().As<IRepository<MechPartSource, int>>();
             builder.RegisterType<ParcelRepository>().As<IRepository<Parcel, int>>();
             builder.RegisterType<PartDataSheetValuesRepository>().As<IQueryRepository<PartDataSheetValues>>();
-            builder.RegisterType<StockLocatorRepository>().As<IStockLocatorRepository>();
+            builder.RegisterType<StockLocatorRepository>().As<IFilterByWildcardRepository<StockLocator, int>>();
             builder.RegisterType<StoragePlaceRepository>().As<IQueryRepository<StoragePlace>>();
             builder.RegisterType<StoresBudgetRepository>().As<IQueryRepository<StoresBudget>>();
             builder.RegisterType<AuditLocationRepository>().As<IQueryRepository<AuditLocation>>();
@@ -106,7 +106,7 @@
             builder.RegisterType<ExportRsnRepository>().As<IQueryRepository<ExportRsn>>();
             builder.RegisterType<SalesAccountRepository>().As<IQueryRepository<SalesAccount>>();
             builder.RegisterType<SalesOutletRepository>().As<IQueryRepository<SalesOutlet>>();
-            builder.RegisterType<StockQuantitiesRepository>().As<IQueryRepository<StockQuantities>>();
+            builder.RegisterType<StockQuantitiesRepository>().As<IFilterByWildcardQueryRepository<StockQuantities>>();
             builder.RegisterType<RequisitionHeaderRepository>().As<IRepository<RequisitionHeader, int>>();
             builder.RegisterType<TransferableStockRepository>().As<IQueryRepository<TransferableStock>>();
             builder.RegisterType<ConsignmentRepository>().As<IRepository<Consignment, int>>();
