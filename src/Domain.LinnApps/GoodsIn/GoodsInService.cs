@@ -213,7 +213,12 @@
             {
                 result.ParcelComments = $"{result.DocType}{orderNumber}";
             }
-            
+            else if (rsnNumber.HasValue)
+            {
+                // todo
+                throw new NotImplementedException("Booking in this document type is not supported yet.");
+            }
+
             result.SupplierId = supplierId;
             result.CreatedBy = createdBy;
             return result;
