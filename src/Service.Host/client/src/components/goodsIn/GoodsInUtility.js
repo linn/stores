@@ -177,7 +177,7 @@ function GoodsInUtility({
         if (bookInResult?.message) {
             setMessage({ error: !bookInResult.success, text: bookInResult.message });
         }
-        if (bookInResult?.success) {
+        if (bookInResult?.success && bookInResult.printLabels) {
             setPrintDialogOpen(true);
             setLines([]);
             setLogEntries(r => [...r, ...bookInResult.lines]);
@@ -888,7 +888,8 @@ GoodsInUtility.propTypes = {
         parcelComments: PropTypes.string,
         supplierId: PropTypes.number,
         createParcel: PropTypes.bool,
-        lines: PropTypes.arrayOf(PropTypes.shape({}))
+        lines: PropTypes.arrayOf(PropTypes.shape({})),
+        printLabels: PropTypes.bool
     }),
     bookInResultLoading: PropTypes.bool,
     doBookIn: PropTypes.func.isRequired,
