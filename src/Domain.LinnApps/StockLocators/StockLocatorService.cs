@@ -33,6 +33,8 @@
 
         private readonly IRepository<ReqMove, ReqMoveKey> reqMoveRepository;
 
+        private readonly IQueryRepository<StockTriggerLevel> triggerLevelRepository;
+
         public StockLocatorService(
             IRepository<StockLocator, int> stockLocatorRepository,
             IStoresPalletRepository palletRepository,
@@ -43,7 +45,8 @@
             IStockLocatorLocationsViewService locationsViewService,
             IQueryRepository<StockLocatorPrices> stockLocatorView,
             IRepository<Part, int> partRepository,
-            IRepository<ReqMove, ReqMoveKey> reqMoveRepository)
+            IRepository<ReqMove, ReqMoveKey> reqMoveRepository,
+            IQueryRepository<StockTriggerLevel> triggerLevelRepository)
         {
             this.stockLocatorRepository = stockLocatorRepository;
             this.palletRepository = palletRepository;
@@ -55,6 +58,7 @@
             this.stockLocatorView = stockLocatorView;
             this.partRepository = partRepository;
             this.reqMoveRepository = reqMoveRepository;
+            this.triggerLevelRepository = triggerLevelRepository;
         }
 
         public void UpdateStockLocator(StockLocator from, StockLocator to, IEnumerable<string> privileges)
@@ -234,7 +238,8 @@
                                  State = x.State,
                                  QuantityAllocated = x.QuantityAllocated,
                                  StockPoolCode = x.StockPoolCode,
-                                 Part = new Part { PartNumber = x.PartNumber, OurUnitOfMeasure = x.OurUnitOfMeasure }
+                                 Part = new Part { PartNumber = x.PartNumber, OurUnitOfMeasure = x.OurUnitOfMeasure, Description = x.PartDescription },
+                                 TriggerLevel = this.triggerLevelRepository.FindBy(l => l.PartNumber.Equals(x.PartNumber) && l.LocationId.Equals(x.StorageLocationId))
                              });
         }
 

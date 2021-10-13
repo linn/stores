@@ -70,7 +70,8 @@ const mapDispatchToProps = dispatch => {
         updateItem: (itemId, item) => dispatch(partActions.update(itemId, item)),
         setEditStatus: status => dispatch(partActions.setEditStatus(status)),
         setSnackbarVisible: () => dispatch(partActions.setSnackbarVisible()),
-        fetchLiveTest: itemId => dispatch(partLiveTestActions.fetch(itemId))
+        fetchLiveTest: itemId => dispatch(partLiveTestActions.fetch(itemId)),
+        clearErrors: () => dispatch(partActions.clearErrorsForItem())
     };
 };
 

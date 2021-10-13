@@ -242,6 +242,9 @@
 
         public DbSet<Tariff> Tariffs { get; set; }
 
+        public DbSet<Loan> Loans { get; set; }
+
+        public DbQuery<StockTriggerLevel> StockTriggerLevels { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -356,8 +359,10 @@
             this.QueryAuthUsers(builder);
             this.QueryRsns(builder);
             this.QueryTariffs(builder);
+            this.QueryLoans(builder);
             base.OnModelCreating(builder);
             this.BuildPurchaseOrderDetails(builder);
+            this.BuildStockTriggerLevels(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -879,6 +884,7 @@
             q.Property(e => e.BatchRef).HasColumnName("BATCH_REF");
             q.Property(e => e.State).HasColumnName("STATE").HasMaxLength(6).IsRequired();
             q.Property(e => e.Category).HasColumnName("CATEGORY").HasMaxLength(6).IsRequired();
+            q.Ignore(e => e.TriggerLevel);
         }
 
         private void QueryStoragePlaces(ModelBuilder builder)
@@ -1058,6 +1064,7 @@
             q.Property(e => e.TariffCode).HasColumnName("TARIFF_CODE").HasMaxLength(12);
             q.Property(e => e.InsNumber).HasColumnName("INS_NUMBER");
             q.Property(e => e.VatRate).HasColumnName("VAT_RATE");
+            q.Property(e => e.POLineNumber).HasColumnName("PO_LINE_NUMBER").HasMaxLength(2);
         }
 
         private void BuildImportBookDeliveryTerms(ModelBuilder builder)
@@ -1516,6 +1523,7 @@
             e.Property(a => a.Weight).HasColumnName("WEIGHT").HasMaxLength(10);
             e.HasOne(a => a.Tariff).WithOne().HasForeignKey<SalesArticle>(x=>x.TariffId);
             e.HasMany(a => a.Rsns).WithOne(x=>x.SalesArticle).HasForeignKey(x => x.ArticleNumber);
+            e.HasMany(a => a.PurchaseOrderDetails).WithOne(x => x.SalesArticle).HasForeignKey(x => x.PartNumber);
         }
 
         private void QueryTpkView(ModelBuilder builder)
@@ -1652,7 +1660,7 @@
             q.Property(e => e.ExportReturnId).HasColumnName("EXPORT_RETURN_ID");
             q.Property(e => e.DeliveryAddressId).HasColumnName("DELIVERY_ADDRESS");
             q.Property(e => e.InvoiceAddressId).HasColumnName("INVOICE_ADDRESS");
-            q.Property(e => e.CurrencyCode).HasColumnName("CURRENCY").HasMaxLength(4); 
+            q.Property(e => e.CurrencyCode).HasColumnName("CURRENCY").HasMaxLength(4);
             q.Property(e => e.NetTotal).HasColumnName("NET_TOTAL");
             q.Property(e => e.VATTotal).HasColumnName("VAT_TOTAL");
             q.Property(e => e.DocumentTotal).HasColumnName("DOCUMENT_TOTAL");
@@ -1663,7 +1671,7 @@
             q.Property(e => e.GrossDimsM3).HasColumnName("GROSS_DIMS_M3");
             q.HasOne(e => e.DeliveryAddress).WithMany(a => a.DeliveryInterCompanies).HasForeignKey(e => e.DeliveryAddressId);
             q.HasOne(e => e.InvoiceAddress).WithMany(a => a.InvoiceInterCompanies).HasForeignKey(e => e.InvoiceAddressId);
-            q.HasMany(c => c.Details).WithOne().HasForeignKey(ic => new {ic.DocumentType, ic.DocumentNumber});
+            q.HasMany(c => c.Details).WithOne().HasForeignKey(ic => new { ic.DocumentType, ic.DocumentNumber });
         }
 
         private void BuildIntercompanyInvoiceDetails(ModelBuilder builder)
@@ -1685,7 +1693,7 @@
             q.Property(e => e.VatCode).HasColumnName("VAT_CODE").HasMaxLength(1);
             q.Property(e => e.CountryOfOrigin).HasColumnName("COUNTRY_OF_ORIGIN").HasMaxLength(1);
             q.Property(e => e.TariffId).HasColumnName("TARIFF_ID");
-            q.HasOne(i => i.InterCompanyInvoice).WithMany(i => i.Details).HasForeignKey(ic => new { ic.DocumentType, ic.DocumentNumber});
+            q.HasOne(i => i.InterCompanyInvoice).WithMany(i => i.Details).HasForeignKey(ic => new { ic.DocumentType, ic.DocumentNumber });
         }
 
         private void QueryTqmsSummaryByCategories(ModelBuilder builder)
@@ -1984,16 +1992,20 @@
             entity.Property(o => o.SupplierId).HasColumnName("SUPP_SUPPLIER_ID");
             entity.HasOne(o => o.Supplier).WithMany(s => s.PurchaseOrders).HasForeignKey(o => o.SupplierId);
             entity.Property(o => o.DocumentType).HasColumnName("DOCUMENT_TYPE");
+
         }
 
         private void BuildPurchaseOrderDetails(ModelBuilder builder)
         {
             var entity = builder.Entity<PurchaseOrderDetail>().ToTable("PL_ORDER_DETAILS");
-            entity.HasKey(a => new { a.OrderNumber, a.Line}); 
+            entity.HasKey(a => new { a.OrderNumber, a.Line }); 
             entity.Property(o => o.OrderNumber).HasColumnName("ORDER_NUMBER");
             entity.Property(o => o.Line).HasColumnName("ORDER_LINE");
             entity.Property(o => o.RohsCompliant).HasColumnName("ROHS_COMPLIANT");
             entity.Property(o => o.OurQty).HasColumnName("OUR_QTY");
+            entity.Property(o => o.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            entity.Property(o => o.SuppliersDesignation).HasColumnName("SUPPLIERS_DESIGNATION").HasMaxLength(2000);
+            entity.HasOne(a => a.SalesArticle).WithMany(x => x.PurchaseOrderDetails).HasForeignKey(z => z.PartNumber);
             entity.HasOne(d => d.PurchaseOrder).WithMany(o => o.Details)
                 .HasForeignKey(d => d.OrderNumber);
         }
@@ -2022,6 +2034,22 @@
             q.HasKey(e => e.TariffId);
             q.Property(e => e.TariffId).HasColumnName("TARIFF_ID").HasMaxLength(3);
             q.Property(e => e.TariffCode).HasColumnName("TARIFF_CODE").HasMaxLength(14);
+        }
+
+        private void QueryLoans(ModelBuilder builder)
+        {
+            var q = builder.Entity<Loan>().ToTable("LOAN_HEADERS");
+            q.HasKey(e => e.LoanNumber);
+            q.Property(e => e.LoanNumber).HasColumnName("LOAN_NUMBER").HasMaxLength(6);
+        }
+
+        private void BuildStockTriggerLevels(ModelBuilder builder)
+        {
+            var e = builder.Query<StockTriggerLevel>().ToView("STOCK_TRIGGER_LEVELS");
+            e.Property(l => l.LocationId).HasColumnName("LOCATION_ID");
+            e.Property(l => l.PartNumber).HasColumnName("PART_NUMBER");
+            e.Property(l => l.MaxCapacity).HasColumnName("MAXIMUM_CAPACITY");
+            e.Property(l => l.TriggerLevel).HasColumnName("TRIGGER_LEVEL");
         }
     }
 }

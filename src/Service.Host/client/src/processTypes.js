@@ -95,3 +95,9 @@ export const printConsignmentDocuments = new ItemType(
     'PRINT_CONSIGNMENT_DOCUMENTS',
     '/logistics/print-consignment-documents'
 );
+
+export const saveConsignmentDocuments = new ItemType(
+    'saveConsignmentDocuments',
+    'SAVE_CONSIGNMENT_DOCUMENTS',
+    '/logistics/save-consignment-documents'
+);

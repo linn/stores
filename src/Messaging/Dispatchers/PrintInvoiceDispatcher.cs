@@ -49,5 +49,28 @@
 
             this.messageDispatcher.Dispatch(this.routingKey, body, this.contentType);
         }
+
+        public void SaveInvoice(int documentNumber, string documentType, string copyType, string showPrices, string fileName)
+        {
+            var resource = new PrintInvoiceMessageResource
+                               {
+                                   DocumentNumber = documentNumber,
+                                   DocumentType = documentType,
+                                   CopyType = copyType,
+                                   ShowPrices = showPrices,
+                                   FileName = fileName
+                               };
+
+            var json = JsonConvert.SerializeObject(
+                resource,
+                new JsonSerializerSettings
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    });
+
+            var body = Encoding.UTF8.GetBytes(json);
+
+            this.messageDispatcher.Dispatch(this.routingKey, body, this.contentType);
+        }
     }
 }

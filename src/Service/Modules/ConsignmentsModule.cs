@@ -61,6 +61,7 @@
             this.Get("/logistics/carton-types/{id*}", p => this.GetCartonTypeById(p.id));
             this.Post("/logistics/labels", _ => this.PrintLabels());
             this.Post("/logistics/print-consignment-documents", _ => this.PrintDocuments());
+            this.Post("/logistics/save-consignment-documents", _ => this.SaveDocuments());
         }
 
         private object AddConsignment()
@@ -83,6 +84,12 @@
         {
             var resource = this.Bind<ConsignmentRequestResource>();
             return this.Negotiate.WithModel(this.logisticsProcessesFacadeService.PrintConsignmentDocuments(resource));
+        }
+
+        private object SaveDocuments()
+        {
+            var resource = this.Bind<ConsignmentRequestResource>();
+            return this.Negotiate.WithModel(this.logisticsProcessesFacadeService.SaveConsignmentDocuments(resource));
         }
 
         private object PrintLabels()

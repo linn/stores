@@ -498,7 +498,8 @@ function ImportBook({
                                             remainingInvoiceValue={calcRemainingTotal()}
                                             remainingDutyValue={calcRemainingDuty()}
                                             remainingWeightValue={calcRemainingWeight()}
-                                            //todo invoice date? Added here or pulled in? Might be on list from Rhona
+                                            supplierId={state.impbook.supplierId}
+                                            impbookWeight={state.impbook.weight}
                                         />
                                     )}
                                     {tab === 2 && (

@@ -32,6 +32,8 @@ import printConsignmentDocumentsActions from '../../actions/printConsignmentDocu
 import printConsignmentDocumentsSelectors from '../../selectors/printConsignmentDocumentsSelectors';
 import consignmentPackingListSelectors from '../../selectors/consignmentPackingListSelectors';
 import consignmentPackingListActions from '../../actions/consignmentPackingListActions';
+import saveConsignmentDocumentsActions from '../../actions/saveConsignmentDocumentsActions';
+import saveConsignmentDocumentsSelectors from '../../selectors/saveConsignmentDocumentsSelectors';
 
 const getOptions = ownProps => {
     const options = queryString.parse(ownProps.location.search);
@@ -68,7 +70,7 @@ const mapStateToProps = (state, ownProps) => ({
     })),
     optionsLoading: consignmentsSelectors.getLoading(state),
     options: getOptions(ownProps),
-    startingTab: getOptions(ownProps).consignmentId ? 2 : 0,
+    startingTab: getOptions(ownProps).consignmentId ? 3 : 0,
     editStatus: consignmentSelectors.getEditStatus(state),
     hub: hubSelectors.getItem(state),
     hubs: hubsSelectors.getItems(state),
@@ -87,7 +89,9 @@ const mapStateToProps = (state, ownProps) => ({
     consignmentPackingList: consignmentPackingListSelectors.getItem(state),
     consignmentPackingListLoading: consignmentPackingListSelectors.getLoading(state),
     cartonTypesSearchResults: cartonTypesSelectors.getSearchItems(state),
-    cartonTypesSearchLoading: cartonTypesSelectors.getSearchLoading(state)
+    cartonTypesSearchLoading: cartonTypesSelectors.getSearchLoading(state),
+    saveDocumentsWorking: saveConsignmentDocumentsSelectors.getWorking(state),
+    saveDocumentsResult: saveConsignmentDocumentsSelectors.getData(state)
 });
 
 const mapDispatchToProps = {
@@ -111,7 +115,9 @@ const mapDispatchToProps = {
     getConsignmentPackingList: consignmentPackingListActions.fetchByPath,
     clearConsignmentPackingList: consignmentPackingListActions.clearItem,
     searchCartonTypes: cartonTypesActions.search,
-    clearCartonTypesSearch: cartonTypesActions.clearSearch
+    clearCartonTypesSearch: cartonTypesActions.clearSearch,
+    saveDocuments: saveConsignmentDocumentsActions.requestProcessStart,
+    saveDocumentsClearData: saveConsignmentDocumentsActions.clearProcessData
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Consignment));

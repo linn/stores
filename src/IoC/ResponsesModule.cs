@@ -233,6 +233,10 @@
             builder.RegisterType<PackingListResourceBuilder>().As<IResourceBuilder<PackingList>>();
             builder.RegisterType<RsnResourceBuilder>().As<IResourceBuilder<Rsn>>();
             builder.RegisterType<RsnsResourceBuilder>().As<IResourceBuilder<IEnumerable<Rsn>>>();
+            builder.RegisterType<PurchaseOrderResourceBuilder>().As<IResourceBuilder<PurchaseOrder>>();
+            builder.RegisterType<PurchaseOrdersResourceBuilder>().As<IResourceBuilder<IEnumerable<PurchaseOrder>>>();
+            builder.RegisterType<LoanResourceBuilder>().As<IResourceBuilder<Loan>>();
+            builder.RegisterType<LoansResourceBuilder>().As<IResourceBuilder<IEnumerable<Loan>>>();
         }
     }
 }

@@ -7,6 +7,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Dropdown, InputField, LinkButton, Typeahead } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
+import { Decimal } from 'decimal.js';
 
 function OrderDetailsTab({
     orderDetails,
@@ -23,7 +24,17 @@ function OrderDetailsTab({
     rsnsSearchResults,
     rsnsSearchLoading,
     searchRsns,
-    clearRsnsSearch
+    clearRsnsSearch,
+    purchaseOrdersSearchResults,
+    purchaseOrdersSearchLoading,
+    loansSearchResults,
+    loansSearchLoading,
+    searchLoans,
+    clearLoansSearch,
+    searchPurchaseOrders,
+    clearPurchaseOrdersSearch,
+    supplierId,
+    impbookWeight
 }) {
     const updateRow = detail => {
         handleOrderDetailChange(detail.lineNumber, detail);
@@ -38,6 +49,9 @@ function OrderDetailsTab({
             display: 'inline-block',
             width: '2em'
         },
+        buttonMarginTop: {
+            marginTop: '22px'
+        },
         gapAbove: {
             marginTop: theme.spacing(2)
         },
@@ -47,6 +61,9 @@ function OrderDetailsTab({
         },
         dividerMarginBottomOnly: {
             marginBottom: '10px'
+        },
+        pullRight: {
+            float: 'right'
         }
     }));
     const classes = useStyles();
@@ -76,10 +93,56 @@ function OrderDetailsTab({
         });
     };
 
+    const handleOrderNoUpdate = (row, order) => {
+        if (order.supplierId !== supplierId) {
+            //eslint-disable-next-line no-alert
+            alert(
+                `This PO has supplier ${order.supplierId}, while the supplier on this impbook is set to supplier ${supplierId}. Is this right?`
+            );
+        }
+        updateRow({
+            ...row,
+            orderNumber: order.id,
+            orderDescription: order.description,
+            tariffCode: order.tariffCode
+        });
+    };
+
+    const calculateWeights = () => {
+        if (!impbookWeight || !orderDetails.length) {
+            return;
+        }
+
+        const totalQty = orderDetails?.reduce((a, v) => new Decimal(a).plus(v.qty ?? 0), 0);
+        const avgWeight = Decimal.div(impbookWeight, totalQty);
+
+        const arrayLen = orderDetails.length;
+
+        orderDetails.forEach((row, i) => {
+            if (arrayLen === i + 1) {
+                updateRow({
+                    ...row,
+                    weight: Decimal.mul(avgWeight, row.qty).toDecimalPlaces(
+                        2,
+                        Decimal.ROUND_HALF_UP
+                    )
+                });
+            } else {
+                updateRow({
+                    ...row,
+                    weight: Decimal.mul(avgWeight, row.qty).toDecimalPlaces(
+                        2,
+                        Decimal.ROUND_HALF_DOWN
+                    )
+                });
+            }
+        });
+    };
+
     return (
         <>
-            <Grid container spacing={1} item xs={7}>
-                <Grid item xs={3}>
+            <Grid container spacing={1} item xs={12}>
+                <Grid item xs={2}>
                     <InputField
                         label="Remaining Total"
                         fullWidth
@@ -89,7 +152,7 @@ function OrderDetailsTab({
                         disabled
                     />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={2}>
                     <InputField
                         label="Remaining Duty Total"
                         fullWidth
@@ -99,7 +162,7 @@ function OrderDetailsTab({
                         disabled
                     />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={2}>
                     <InputField
                         label="Remaining Weight"
                         fullWidth
@@ -110,7 +173,7 @@ function OrderDetailsTab({
                     />
                 </Grid>
 
-                <Grid item xs={3}>
+                <Grid item xs={2}>
                     <InputField
                         label="Invoice Date"
                         fullWidth
@@ -121,6 +184,17 @@ function OrderDetailsTab({
                         disabled={!allowedToEdit}
                     />
                 </Grid>
+                <Grid item xs={1} />
+                <Grid item xs={3}>
+                    <Button
+                        onClick={calculateWeights}
+                        variant="contained"
+                        className={classes.pullRight}
+                    >
+                        Calculate Weights
+                    </Button>
+                </Grid>
+
                 <Grid item xs={3}>
                     <LinkButton
                         text="Post Duty"
@@ -158,23 +232,45 @@ function OrderDetailsTab({
                             </Grid>
 
                             {(row.lineType === 'PO' || row.lineType === 'RO') && (
-                                <Grid item xs={2}>
-                                    <InputField
-                                        label="Order Number"
-                                        fullWidth
-                                        onChange={(propertyName, newValue) =>
-                                            editRow(row, propertyName, newValue)
-                                        }
-                                        propertyName="orderNumber"
-                                        type="number"
-                                        value={row.orderNumber}
-                                        disabled={!allowedToEdit}
-                                    />
+                                <Grid item xs={3}>
+                                    <div className={classes.displayInline}>
+                                        <Typeahead
+                                            label="Order Number"
+                                            propertyName="orderNumber"
+                                            title="Search for an Order Number"
+                                            onSelect={newOrder =>
+                                                handleOrderNoUpdate(row, newOrder)
+                                            }
+                                            items={purchaseOrdersSearchResults}
+                                            loading={purchaseOrdersSearchLoading}
+                                            fetchItems={searchPurchaseOrders}
+                                            clearSearch={() => clearPurchaseOrdersSearch}
+                                            value={row.orderNumber}
+                                            modal
+                                            links={false}
+                                            debounce={1000}
+                                            minimumSearchTermLength={2}
+                                            required
+                                            disabled={!allowedToEdit}
+                                            maxLength={6}
+                                        />
+                                    </div>
+                                    <div className={classes.marginTop1}>
+                                        <Tooltip title="Clear Order No search">
+                                            <Button
+                                                variant="outlined"
+                                                onClick={() => editRow(row, 'orderNumber', '')}
+                                                disabled={!allowedToEdit}
+                                            >
+                                                X
+                                            </Button>
+                                        </Tooltip>
+                                    </div>
                                 </Grid>
                             )}
 
                             {row.lineType === 'RSN' && (
-                                <Grid item xs={2}>
+                                <Grid item xs={3}>
                                     <div className={classes.displayInline}>
                                         <Typeahead
                                             label="RSN Number"
@@ -210,19 +306,40 @@ function OrderDetailsTab({
                             )}
 
                             {row.lineType === 'LOAN' && (
-                                <Grid item xs={2}>
-                                    <InputField
-                                        label="Loan Number"
-                                        fullWidth
-                                        onChange={(propertyName, newValue) =>
-                                            editRow(row, propertyName, newValue)
-                                        }
-                                        propertyName="loanNumber"
-                                        type="number"
-                                        value={row.loanNumber}
-                                        disabled={!allowedToEdit}
-                                        maxLength={6}
-                                    />
+                                <Grid item xs={3}>
+                                    <div className={classes.displayInline}>
+                                        <Typeahead
+                                            label="Loan Number"
+                                            propertyName="loanNumber"
+                                            title="Search for a Loan Number"
+                                            onSelect={newValue =>
+                                                editRow(row, 'loanNumber', newValue.id)
+                                            }
+                                            items={loansSearchResults}
+                                            loading={loansSearchLoading}
+                                            fetchItems={searchLoans}
+                                            clearSearch={() => clearLoansSearch}
+                                            value={row.loanNumber}
+                                            modal
+                                            links={false}
+                                            debounce={1000}
+                                            minimumSearchTermLength={2}
+                                            required
+                                            disabled={!allowedToEdit}
+                                            maxLength={6}
+                                        />
+                                    </div>
+                                    <div className={classes.marginTop1}>
+                                        <Tooltip title="Clear Loan Number search">
+                                            <Button
+                                                variant="outlined"
+                                                onClick={() => editRow(row, 'loanNumber', '')}
+                                                disabled={!allowedToEdit}
+                                            >
+                                                X
+                                            </Button>
+                                        </Tooltip>
+                                    </div>
                                 </Grid>
                             )}
 
@@ -243,7 +360,7 @@ function OrderDetailsTab({
                                 </Grid>
                             )}
 
-                            <Grid item xs={3}>
+                            <Grid item xs={4}>
                                 <InputField
                                     label="Order Description"
                                     fullWidth
@@ -274,19 +391,6 @@ function OrderDetailsTab({
                             </Grid>
                             <Grid item xs={1}>
                                 <InputField
-                                    label="Tariff Number"
-                                    fullWidth
-                                    onChange={(propertyName, newValue) =>
-                                        editRow(row, propertyName, newValue)
-                                    }
-                                    propertyName="tariffNumber"
-                                    type="number"
-                                    value={row.tariffNumber}
-                                    disabled={!allowedToEdit}
-                                />
-                            </Grid>
-                            <Grid item xs={1}>
-                                <InputField
                                     label="Qty"
                                     fullWidth
                                     onChange={(propertyName, newValue) =>
@@ -300,6 +404,9 @@ function OrderDetailsTab({
                                     maxLength={6}
                                 />
                             </Grid>
+
+                            <Grid item xs={12} />
+
                             <Grid item xs={2}>
                                 <InputField
                                     label="Order Value"
@@ -419,7 +526,7 @@ function OrderDetailsTab({
                     ))}
 
                 <Button
-                    style={{ marginTop: '22px' }}
+                    className={classes.buttonMarginTop}
                     variant="contained"
                     onClick={addOrderDetailRow}
                     disabled={!allowedToEdit}
@@ -455,12 +562,40 @@ OrderDetailsTab.propTypes = {
     ),
     rsnsSearchLoading: PropTypes.bool.isRequired,
     searchRsns: PropTypes.func.isRequired,
-    clearRsnsSearch: PropTypes.func.isRequired
+    clearRsnsSearch: PropTypes.func.isRequired,
+    purchaseOrdersSearchResults: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number,
+            name: PropTypes.string,
+            description: PropTypes.string,
+            supplierId: PropTypes.number,
+            tariffCode: PropTypes.string,
+            lineNumber: PropTypes.number
+        })
+    ),
+    purchaseOrdersSearchLoading: PropTypes.bool.isRequired,
+    loansSearchResults: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number,
+            name: PropTypes.string,
+            description: PropTypes.string
+        })
+    ),
+    loansSearchLoading: PropTypes.bool.isRequired,
+    searchLoans: PropTypes.func.isRequired,
+    clearLoansSearch: PropTypes.func.isRequired,
+    searchPurchaseOrders: PropTypes.func.isRequired,
+    clearPurchaseOrdersSearch: PropTypes.func.isRequired,
+    supplierId: PropTypes.number,
+    impbookWeight: PropTypes.number.isRequired
 };
 
 OrderDetailsTab.defaultProps = {
     invoiceDate: '',
-    rsnsSearchResults: null
+    rsnsSearchResults: null,
+    purchaseOrdersSearchResults: null,
+    loansSearchResults: null,
+    supplierId: -1
 };
 
 export default OrderDetailsTab;

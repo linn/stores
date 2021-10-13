@@ -314,6 +314,10 @@ export const printConsignmentDocumentsActionTypes = makeProcessActionTypes(
     processTypes.printConsignmentDocuments.actionType
 );
 
+export const saveConsignmentDocumentsActionTypes = makeProcessActionTypes(
+    processTypes.saveConsignmentDocuments.actionType
+);
+
 export const consignmentPackingListActionTypes = makeActionTypes(
     itemTypes.consignmentPackingList.actionType
 );
@@ -321,3 +325,7 @@ export const consignmentPackingListActionTypes = makeActionTypes(
 export const parcelsByNumberActionTypes = makeActionTypes(itemTypes.parcelsByNumber.actionType);
 
 export const rsnsActionTypes = makeActionTypes(itemTypes.rsns.actionType);
+
+export const loansActionTypes = makeActionTypes(itemTypes.loans.actionType);
+
+export const purchaseOrdersActionTypes = makeActionTypes(itemTypes.purchaseOrders.actionType);

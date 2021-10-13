@@ -427,3 +427,11 @@ export const consignmentPackingList = new ItemType(
 export const parcelsByNumber = new ItemType('parcels', 'PARCELS', '/logistics/parcels-by-number');
 
 export const rsns = new ItemType('rsns', 'RSNS', '/logistics/rsns');
+
+export const loans = new ItemType('loans', 'LOANS', '/logistics/loans');
+
+export const purchaseOrders = new ItemType(
+    'purchaseOrders',
+    'PURCHASE_ORDERS',
+    '/logistics/purchase-orders'
+);

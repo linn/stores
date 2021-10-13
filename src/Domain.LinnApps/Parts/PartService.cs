@@ -195,7 +195,7 @@
                     throw new CreatePartException("The system no longer allows creation of " + partRoot + " parts.");
                 }
 
-                var newestPartOfThisType = this.partRepository.FilterBy(p => p.PartNumber.StartsWith(partRoot))
+                var newestPartOfThisType = this.partRepository.FilterBy(p => p.PartNumber.StartsWith(partRoot) && p.DateCreated.HasValue)
                     .OrderByDescending(p => p.DateCreated).ToList().FirstOrDefault()
                     ?.PartNumber;
                 var realNextNumber = FindRealNextNumber(newestPartOfThisType);

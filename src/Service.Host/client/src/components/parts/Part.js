@@ -41,7 +41,8 @@ function Part({
     liveTest,
     fetchLiveTest,
     fetchParts,
-    partsSearchResults
+    partsSearchResults,
+    clearErrors
 }) {
     const defaultPart = {
         partNumber: '',
@@ -146,7 +147,10 @@ function Part({
                     bomType: template.bomType,
                     linnProduced: template.linnProduced,
                     paretoCode: template.paretoCode,
-                    stockControlled: template.stockControlled
+                    stockControlled: template.stockControlled,
+                    cccCriticalPart: 'N',
+                    safetyCriticalPart: 'N',
+                    psuPart: 'N'
                 }
             });
         }
@@ -209,6 +213,7 @@ function Part({
     };
 
     const handleSaveClick = () => {
+        clearErrors();
         if (creating()) {
             addItem(state.part);
         } else {
@@ -519,7 +524,8 @@ Part.propTypes = {
     partTemplates: PropTypes.arrayOf(PropTypes.shape({ partRoot: PropTypes.string })),
     liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
     fetchLiveTest: PropTypes.func.isRequired,
-    fetchParts: PropTypes.func.isRequired
+    fetchParts: PropTypes.func.isRequired,
+    clearErrors: PropTypes.func.isRequired
 };
 
 Part.defaultProps = {
