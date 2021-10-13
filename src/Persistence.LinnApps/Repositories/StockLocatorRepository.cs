@@ -35,7 +35,7 @@
                 .Include(l => l.Part);
         }
 
-        public IQueryable<StockLocator> FilterByWildcard(string search)
+        public IQueryable<StockLocator> FilterByPartWildcard(string search)
         {
             return this.serviceDbContext.StockLocators.Where(x => EF.Functions.Like(x.PartNumber, search)).Include(l => l.StorageLocation)
                 .Include(l => l.Part);
