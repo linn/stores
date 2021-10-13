@@ -463,7 +463,6 @@ describe('When book in button clicked', () => {
                     message: 'Book In Succesful!',
                     createParcel: false,
                     supplierId: 123,
-                    parcelComments: 'I need a parcel',
                     reqNumber: 500123,
                     lines: [
                         { id: 1, transactionType: 'SOME-TRANS-TYPE' },
@@ -476,6 +475,29 @@ describe('When book in button clicked', () => {
         test('should not open parcel dialog', () => {
             expect(screen.queryByText('Create Parcel')).not.toBeInTheDocument();
         });
+    });
+});
+
+describe('When not printLabels...', () => {
+    beforeAll(() => {
+        defaultRender({
+            bookInResult: {
+                success: true,
+                message: 'Book In Succesful!',
+                createParcel: false,
+                supplierId: 123,
+                printLabels: false,
+                reqNumber: 500123,
+                lines: [
+                    { id: 1, transactionType: 'SOME-TRANS-TYPE' },
+                    { id: 2, transactionType: 'OTHER-TRANS-TYPE' }
+                ]
+            }
+        });
+    });
+
+    test('should not open label print dialog', () => {
+        expect(screen.queryByText('Label Details')).not.toBeInTheDocument();
     });
 });
 
