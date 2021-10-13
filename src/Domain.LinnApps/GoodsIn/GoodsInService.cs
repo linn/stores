@@ -114,7 +114,7 @@
                 this.goodsInLog.Add(goodsInLogEntry);
             }
 
-            this.goodsInPack.DoBookIn(
+            var message = this.goodsInPack.DoBookIn(
                 bookinRef,
                 transactionType,
                 createdBy,
@@ -135,9 +135,7 @@
                 out var reqNumberResult,
                 out var success);
 
-            var result = new BookInResult(
-                success,
-                success ? "Book In Successful!" : this.goodsInPack.GetErrorMessage());
+            var result = new BookInResult(success, success ? "Book In Successful!" : message);
 
             if (success)
             {

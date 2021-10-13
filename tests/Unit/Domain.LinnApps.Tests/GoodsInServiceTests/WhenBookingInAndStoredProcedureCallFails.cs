@@ -22,7 +22,6 @@
         [SetUp]
         public void SetUp()
         {
-            this.GoodsInPack.GetErrorMessage().Returns("Something went wrong...");
             this.PurchaseOrderPack.GetDocumentType(1).Returns("PO");
             this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1234").Returns(true);
             this.GoodsInPack.GetNextBookInRef().ReturnsForAnyArgs(1);
@@ -48,7 +47,7 @@
                 out var _))
                 .Do(x => x[4] = "ONES");
 
-            this.GoodsInPack.When(x => x.DoBookIn(
+            this.GoodsInPack.DoBookIn(
                 1,
                 "O",
                 1,
@@ -67,11 +66,12 @@
                 null,
                 null,
                 out var reqNumber,
-                out var success))
-                .Do(x =>
+                out var success)
+                .Returns(x =>
                 {
                     x[17] = null;
                     x[18] = false;
+                    return "Something went wrong...";
                 });
 
             this.result = this.Sut.DoBookIn(
