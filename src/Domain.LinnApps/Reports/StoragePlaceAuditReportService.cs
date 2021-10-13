@@ -5,6 +5,7 @@
 
     using Linn.Common.Persistence;
     using Linn.Common.Reporting.Models;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
@@ -14,24 +15,20 @@
 
         private readonly IRepository<Part, int> partsRepository;
 
-        private readonly IRepository<StockLocator, int> stockLocatorRepository;
+        private readonly IStockLocatorRepository stockLocatorRepository;
 
         private readonly IQueryRepository<StoragePlace> storagePlaceRepository;
-
-        private readonly IQueryRepository<StoresBudget> storesBudgetsRepository;
 
         public StoragePlaceAuditReportService(
             IReportingHelper reportingHelper,
             IRepository<Part, int> partsRepository,
-            IRepository<StockLocator, int> stockLocatorRepository,
-            IQueryRepository<StoragePlace> storagePlaceRepository,
-            IQueryRepository<StoresBudget> storesBudgetsRepository)
+            IStockLocatorRepository stockLocatorRepository,
+            IQueryRepository<StoragePlace> storagePlaceRepository)
         {
             this.reportingHelper = reportingHelper;
             this.partsRepository = partsRepository;
             this.stockLocatorRepository = stockLocatorRepository;
             this.storagePlaceRepository = storagePlaceRepository;
-            this.storesBudgetsRepository = storesBudgetsRepository;
         }
 
         public ResultsModel StoragePlaceAuditReport(IEnumerable<string> locationList, string locationRange)

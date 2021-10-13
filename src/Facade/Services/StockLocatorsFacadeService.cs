@@ -7,6 +7,7 @@
     using Linn.Common.Persistence;
     using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps.Exceptions;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Resources.StockLocators;
@@ -17,12 +18,12 @@
     {
         private readonly IStockLocatorService domainService;
 
-        private readonly IRepository<StockLocator, int> repository;
+        private readonly IStockLocatorRepository repository;
 
         private readonly IDatabaseService databaseService;
 
         public StockLocatorsFacadeService(
-            IRepository<StockLocator, int> repository, 
+            IStockLocatorRepository repository, 
             ITransactionManager transactionManager,
             IStockLocatorService domainService,
             IDatabaseService databaseService)
@@ -87,6 +88,12 @@
         {
             return new SuccessResult<IEnumerable<StockMove>>(
                 this.domainService.GetMoves(partNumber, palletNumber, locationId));
+        }
+
+        public IResult<IEnumerable<StockLocator>> GetBatchesInRotationOrderByPart(string partSearch)
+        {
+            return new SuccessResult<IEnumerable<StockLocator>>(
+                this.domainService.GetBatchesInRotationOrderByPart(partSearch));
         }
 
         public IResult<IEnumerable<StockLocator>> FilterBy(StockLocatorResource searchResource)

@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text.RegularExpressions;
 
     using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
@@ -14,7 +13,7 @@
 
     public class StockLocatorService : IStockLocatorService
     {
-        private readonly IRepository<StockLocator, int> stockLocatorRepository;
+        private readonly IStockLocatorRepository stockLocatorRepository;
 
         private readonly IStoresPalletRepository palletRepository;
 
@@ -37,7 +36,7 @@
         private readonly IQueryRepository<StockTriggerLevel> triggerLevelRepository;
 
         public StockLocatorService(
-            IRepository<StockLocator, int> stockLocatorRepository,
+            IStockLocatorRepository stockLocatorRepository,
             IStoresPalletRepository palletRepository,
             IQueryRepository<StoragePlace> storagePlaceRepository,
             IRepository<StorageLocation, int> storageLocationRepository,
@@ -330,10 +329,7 @@
 
         public IEnumerable<StockLocator> GetBatchesInRotationOrderByPart(string partSearch)
         {
-            var partNumberPattern = Regex.Escape(partSearch.Trim(' ')).Replace("\\*", ".*?");
-            var r = new Regex(partNumberPattern, RegexOptions.IgnoreCase);
-
-            var stockLocators = this.stockLocatorRepository.FilterBy(x => r.IsMatch(x.PartNumber));
+            var stockLocators = this.stockLocatorRepository.FilterByWildcard(partSearch.Replace("*", "%"));
 
             return stockLocators;
         }

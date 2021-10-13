@@ -51,6 +51,7 @@
             this.Get("/inventory/stock-quantities/", _ => this.GetStockQuantities());
             this.Get("/inventory/stock-locators/prices", _ => this.GetPrices());
             this.Get("/inventory/stock-locators/stock-moves", _ => this.GetMoves());
+            this.Get("/inventory/stock-locators/rotations", _ => this.GetBatchesInRotationOrderByPart());
         }
 
         private object GetStockLocators()
@@ -142,6 +143,16 @@
         {
             var resource = this.Bind<StockMovesRequestResource>();
             var result = this.service.GetMoves(resource.SearchTerm, resource.PalletNumber, resource.LocationId);
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
+        }
+
+        private object GetBatchesInRotationOrderByPart()
+        {
+            var resource = this.Bind<StockLocatorQueryResource>();
+
+            var result = this.service.GetBatchesInRotationOrderByPart(resource.PartNumber);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");
