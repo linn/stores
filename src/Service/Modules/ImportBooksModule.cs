@@ -54,6 +54,8 @@
             this.Get("/logistics/import-books/cpc-numbers", parameters => this.GetCpcNumbers());
             this.Get("/logistics/import-books/ports", parameters => this.GetPorts());
             this.Get("/logistics/import-books/delivery-terms", parameters => this.GetDeliveryTerms());
+            this.Post("/logistics/import-books/post-duty", parameters => this.PostDuty());
+
         }
 
         private object GetImportBook(int id)
@@ -89,6 +91,15 @@
         }
 
         private object CreateImportBook()
+        {
+            var resource = this.Bind<ImportBookResource>();
+
+            var result = this.importBookFacadeService.Add(resource);
+
+            return this.Negotiate.WithModel(result).WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object PostDuty()
         {
             var resource = this.Bind<ImportBookResource>();
 

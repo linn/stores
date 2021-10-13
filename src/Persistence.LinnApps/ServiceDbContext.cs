@@ -424,6 +424,7 @@
             q.Property(e => e.CountryCode).HasColumnName("COUNTRY");
             q.Property(e => e.DateClosed).HasColumnName("DATE_CLOSED");
             q.Property(s => s.ApprovedCarrier).HasColumnName("APPROVED_CARRIER");
+            q.Property(s => s.AccountingCompany).HasColumnName("ACCOUNTING_COMPANY").HasMaxLength(10);
         }
 
         private void BuildParts(ModelBuilder builder)

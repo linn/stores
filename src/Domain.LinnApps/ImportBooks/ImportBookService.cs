@@ -9,6 +9,7 @@
     {
         private readonly IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey> exchangeRateRepository;
         private readonly IRepository<LedgerPeriod, int> ledgerPeriodRepository;
+        private readonly IRepository<Supplier, int> supplierRepository;
 
         public ImportBookService(
             IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey> exchangeRateRepository,
@@ -39,6 +40,11 @@
             var exchangeRates = this.exchangeRateRepository.FilterBy(x => x.PeriodNumber == ledgerPeriod.PeriodNumber);
 
             return exchangeRates;
+        }
+
+        private void Post(int supplierId)
+        {
+            supplierRepository.FindById(supplierId);
         }
 
         private void UpdateTopLevelProperties(ImportBook entity, ImportBook to)
