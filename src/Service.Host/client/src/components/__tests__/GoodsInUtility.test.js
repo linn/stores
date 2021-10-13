@@ -404,6 +404,7 @@ describe('When book in button clicked', () => {
                     message: 'Book In Succesful!',
                     createParcel: false,
                     reqNumber: 500123,
+                    printLabels: true,
                     lines: [
                         { id: 1, transactionType: 'SOME-TRANS-TYPE' },
                         { id: 2, transactionType: 'OTHER-TRANS-TYPE' }
