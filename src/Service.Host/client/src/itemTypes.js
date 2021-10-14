@@ -435,3 +435,9 @@ export const purchaseOrders = new ItemType(
     'PURCHASE_ORDERS',
     '/logistics/purchase-orders'
 );
+
+export const stockBatchesInRotationOrder = new ItemType(
+    'stockBatchesInRotationOrder',
+    'STOCK_BATCHES_IN_ROTATION_ORDER',
+    '/inventory/stock-locators/rotations'
+);
