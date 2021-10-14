@@ -1,13 +1,13 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import { Loading } from '@linn-it/linn-form-components-library';
+import { ErrorCard, Loading } from '@linn-it/linn-form-components-library';
 import Typography from '@material-ui/core/Typography';
 import { DataGrid } from '@mui/x-data-grid';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import Page from '../../containers/Page';
 
-function StockBatchesInRotationOrder({ items, loading }) {
+function StockBatchesInRotationOrder({ items, loading, error }) {
     const parts = [...new Set(items.map(x => x.partNumber))].sort().map(p => ({
         partNumber: p,
         description: items.find(x => x.partNumber === p).partDescription
@@ -23,6 +23,19 @@ function StockBatchesInRotationOrder({ items, loading }) {
         { field: 'batchRef', headerName: 'Batch', width: 200 },
         { field: 'stockRotationDate', headerName: 'Date', width: 200 }
     ];
+
+    if (error) {
+        return (
+            <Page>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <ErrorCard errorMessage={error?.details?.errors?.[0] || error.statusText} />
+                    </Grid>
+                </Grid>
+            </Page>
+        );
+    }
+
     return (
         <Page>
             <Grid container spacing={3}>
@@ -72,12 +85,21 @@ function StockBatchesInRotationOrder({ items, loading }) {
 
 StockBatchesInRotationOrder.propTypes = {
     items: PropTypes.arrayOf(PropTypes.shape({})),
-    loading: PropTypes.bool
+    loading: PropTypes.bool,
+    error: PropTypes.shape({
+        status: PropTypes.number,
+        statusText: PropTypes.string,
+        item: PropTypes.string,
+        details: PropTypes.shape({
+            errors: PropTypes.arrayOf(PropTypes.shape({}))
+        })
+    })
 };
 
 StockBatchesInRotationOrder.defaultProps = {
     items: null,
-    loading: true
+    loading: false,
+    error: null
 };
 
 export default StockBatchesInRotationOrder;

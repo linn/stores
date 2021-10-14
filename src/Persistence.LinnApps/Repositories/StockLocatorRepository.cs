@@ -38,7 +38,8 @@
         public IQueryable<StockLocator> FilterByWildcard(string search)
         {
             return this.serviceDbContext.StockLocators
-                .Where(x => EF.Functions.Like(x.PartNumber, search)).Include(l => l.StorageLocation)
+                .Where(x => EF.Functions.Like(x.PartNumber, search))
+                .Include(l => l.StorageLocation)
                 .AsNoTracking()
                 .Include(l => l.Part);
         }

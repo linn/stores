@@ -92,8 +92,15 @@
 
         public IResult<IEnumerable<StockLocator>> GetBatchesInRotationOrderByPart(string partSearch)
         {
-            return new SuccessResult<IEnumerable<StockLocator>>(
-                this.domainService.GetBatchesInRotationOrderByPart(partSearch));
+            try
+            {
+                return new SuccessResult<IEnumerable<StockLocator>>(
+                    this.domainService.GetBatchesInRotationOrderByPart(partSearch));
+            }
+            catch (StockLocatorException e)
+            {
+                return new BadRequestResult<IEnumerable<StockLocator>>(e.Message);
+            }
         }
 
         public IResult<IEnumerable<StockLocator>> FilterBy(StockLocatorResource searchResource)

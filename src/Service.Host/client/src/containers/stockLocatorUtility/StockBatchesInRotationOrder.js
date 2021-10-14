@@ -8,18 +8,16 @@ import stockBatchesInRotationOrderActions from '../../actions/stockBatchesInRota
 import * as itemTypes from '../../itemTypes';
 
 const mapStateToProps = (state, { location }) => ({
-    items: stockBatchesInRotationOrderSelectors.getSearchItems(state),
+    items: stockBatchesInRotationOrderSelectors.getItems(state),
     options: queryString.parse(location?.search),
-    loading: stockBatchesInRotationOrderSelectors.getSearchLoading(state),
-    itemError: getItemError(state, itemTypes.stockLocatorPrices.item)
+    loading: stockBatchesInRotationOrderSelectors.getLoading(state),
+    error: getItemError(state, itemTypes.stockBatchesInRotationOrder.item)
 });
 
 const initialise = ({ options }) => dispatch => {
+    dispatch(stockBatchesInRotationOrderActions.clearErrorsForItem());
     dispatch(
-        stockBatchesInRotationOrderActions.searchWithOptions(
-            null,
-            `&${queryString.stringify(options)}`
-        )
+        stockBatchesInRotationOrderActions.fetchByQueryString('partNumber', options.partNumber)
     );
 };
 

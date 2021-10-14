@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Cryptography.X509Certificates;
 
     using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
@@ -331,6 +332,13 @@
         {
             var stockLocators = this.stockLocatorRepository.FilterByWildcard(partSearch.Replace("*", "%"))
                 .Where(l => l.Quantity > 0);
+
+            var parts = stockLocators.Select(s => s.PartNumber).Distinct();
+
+            if (parts.Count() > 100)
+            {
+                throw new StockLocatorException("Too many results for the report to handle. Please refine your Part Number search");
+            }
 
             return stockLocators.GroupBy(
                 x => new
