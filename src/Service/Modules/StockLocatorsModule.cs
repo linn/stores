@@ -152,7 +152,7 @@
         {
             var resource = this.Bind<StockLocatorQueryResource>();
 
-            var result = this.service.GetBatchesInRotationOrderByPart(resource.PartNumber);
+            var result = this.service.GetBatchesInRotationOrderByPart(resource.PartNumber.ToUpper());
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");
