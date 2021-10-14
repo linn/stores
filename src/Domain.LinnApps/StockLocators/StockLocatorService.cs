@@ -329,30 +329,41 @@
 
         public IEnumerable<StockLocator> GetBatchesInRotationOrderByPart(string partSearch)
         {
-            var stockLocators = this.stockLocatorRepository.FilterByWildcard(partSearch.Replace("*", "%"));
+            var stockLocators = this.stockLocatorRepository.FilterByWildcard(partSearch.Replace("*", "%"))
+                .Where(l => l.Quantity > 0);
 
-
-            return stockLocators.GroupBy(x => new
-                                                  {
-                                                      x.Id, 
-                                                      x.PartNumber, 
-                                                      x.BatchRef, 
-                                                      x.StockRotationDate, 
-                                                      x.StockPoolCode, 
-                                                      x.State, 
-                                                      x.StorageLocation.LocationId
-                                                  })
-                .Select(g => new StockLocator
-                                 {
-                                    Id = g.Key.Id,
-                                    PartNumber = g.Key.PartNumber,
-                                    Quantity = g.Sum(e => e.Quantity),
-                                    QuantityAllocated = g.Sum(e => e.QuantityAllocated),
-                                    BatchRef = g.Key.BatchRef,
-                                    StockRotationDate = g.Key.StockRotationDate,
-                                    StockPoolCode = g.Key.StockPoolCode,
-                                    State = g.Key.State
-                                 });
+            return stockLocators.GroupBy(
+                x => new
+                         {
+                             x.Id,
+                             x.PartNumber,
+                             x.BatchRef,
+                             x.StockRotationDate,
+                             x.StockPoolCode,
+                             x.State,
+                             IsPallet = x.PalletNumber.HasValue,
+                             Loc = x.PalletNumber ?? x.StorageLocation.LocationId
+                         }).Select(
+                g => new StockLocator
+                         {
+                             Id = g.Key.Id,
+                             PartNumber = g.Key.PartNumber,
+                             Quantity = g.Sum(e => e.Quantity ?? 0),
+                             QuantityAllocated = g.Sum(e => e.QuantityAllocated ?? 0),
+                             BatchRef = g.Key.BatchRef,
+                             StockRotationDate = g.Key.StockRotationDate,
+                             StockPoolCode = g.Key.StockPoolCode,
+                             State = g.Key.State,
+                             PalletNumber = g.Key.IsPallet ? g.Key.Loc : (int?)null,
+                             StorageLocation = !g.Key.IsPallet
+                                                   ? stockLocators.SingleOrDefault(l => l.Id == g.Key.Loc)
+                                                       .StorageLocation
+                                                   : null
+                         })
+                .OrderBy(s => s.StockPoolCode)
+                .ThenBy(s => s.State)
+                .ThenBy(s => s.StockRotationDate)
+                .ThenBy(s => s.Id);
         }
     }
 }

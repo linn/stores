@@ -39,6 +39,7 @@
         {
             return this.serviceDbContext.StockLocators
                 .Where(x => EF.Functions.Like(x.PartNumber, search)).Include(l => l.StorageLocation)
+                .AsNoTracking()
                 .Include(l => l.Part);
         }
 
