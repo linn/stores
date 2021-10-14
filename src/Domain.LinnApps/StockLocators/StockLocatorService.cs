@@ -13,7 +13,7 @@
 
     public class StockLocatorService : IStockLocatorService
     {
-        private readonly IFilterByWildcardRepository<StockLocator, int> filterByWildcardRepository;
+        private readonly IFilterByWildcardRepository<StockLocator, int> stockLocatorRepository;
 
         private readonly IStoresPalletRepository palletRepository;
 
@@ -36,7 +36,7 @@
         private readonly IQueryRepository<StockTriggerLevel> triggerLevelRepository;
 
         public StockLocatorService(
-            IFilterByWildcardRepository<StockLocator, int> filterByWildcardRepository,
+            IFilterByWildcardRepository<StockLocator, int> stockLocatorRepository,
             IStoresPalletRepository palletRepository,
             IQueryRepository<StoragePlace> storagePlaceRepository,
             IRepository<StorageLocation, int> storageLocationRepository,
@@ -48,7 +48,7 @@
             IRepository<ReqMove, ReqMoveKey> reqMoveRepository,
             IQueryRepository<StockTriggerLevel> triggerLevelRepository)
         {
-            this.filterByWildcardRepository = filterByWildcardRepository;
+            this.stockLocatorRepository = stockLocatorRepository;
             this.palletRepository = palletRepository;
             this.storagePlaceRepository = storagePlaceRepository;
             this.storageLocationRepository = storageLocationRepository;
@@ -141,11 +141,11 @@
                 dependentReqMove.StockLocator = null;
             }
 
-            this.filterByWildcardRepository.Remove(toDelete);
+            this.stockLocatorRepository.Remove(toDelete);
 
             toDelete.Part = this.partRepository.FindBy(p => p.PartNumber == toDelete.PartNumber);
 
-            if (!this.filterByWildcardRepository.FilterBy(l => l.PalletNumber == toDelete.PalletNumber && l.Quantity > 0)
+            if (!this.stockLocatorRepository.FilterBy(l => l.PalletNumber == toDelete.PalletNumber && l.Quantity > 0)
                     .Any())
             {
                 foreach (var storesPallet in this.palletRepository.FilterBy(
@@ -158,7 +158,7 @@
 
         public IEnumerable<StockLocatorWithStoragePlaceInfo> GetStockLocatorsWithStoragePlaceInfoForPart(int partId)
         {
-            var stockLocators = this.filterByWildcardRepository.FilterBy(s => s.Part.Id == partId);
+            var stockLocators = this.stockLocatorRepository.FilterBy(s => s.Part.Id == partId);
 
             string auditDept = string.Empty;
 
@@ -195,7 +195,7 @@
         {
             var result =
                 (from stockLocator in
-                     this.filterByWildcardRepository.FilterBy(l => l.BatchRef.ToUpper().Equals(batchRef.ToUpper()))
+                     this.stockLocatorRepository.FilterBy(l => l.BatchRef.ToUpper().Equals(batchRef.ToUpper()))
                  join storageLocation in this.storageLocationRepository.FindAll() on stockLocator.LocationId equals
                      storageLocation.LocationId into gj
                  from storageLocation in gj.DefaultIfEmpty()
@@ -304,7 +304,7 @@
 
             if (palletNumber != null)
             {
-                locators = this.filterByWildcardRepository.FilterBy(l =>
+                locators = this.stockLocatorRepository.FilterBy(l =>
                         l.PartNumber == partNumber
                         && (l.PalletNumber == palletNumber)
                         && l.QuantityAllocated > 0)
@@ -312,7 +312,7 @@
             }
             else
             {
-                locators = this.filterByWildcardRepository.FilterBy(l =>
+                locators = this.stockLocatorRepository.FilterBy(l =>
                         l.PartNumber == partNumber
                         && l.LocationId == locationId
                         && l.QuantityAllocated > 0)
@@ -329,9 +329,30 @@
 
         public IEnumerable<StockLocator> GetBatchesInRotationOrderByPart(string partSearch)
         {
-            var stockLocators = this.filterByWildcardRepository.FilterByWildcard(partSearch.Replace("*", "%"));
+            var stockLocators = this.stockLocatorRepository.FilterByWildcard(partSearch.Replace("*", "%"));
 
-            return stockLocators;
+
+            return stockLocators.GroupBy(x => new
+                                                  {
+                                                      x.Id, 
+                                                      x.PartNumber, 
+                                                      x.BatchRef, 
+                                                      x.StockRotationDate, 
+                                                      x.StockPoolCode, 
+                                                      x.State, 
+                                                      x.StorageLocation.LocationId
+                                                  })
+                .Select(g => new StockLocator
+                                 {
+                                    Id = g.Key.Id,
+                                    PartNumber = g.Key.PartNumber,
+                                    Quantity = g.Sum(e => e.Quantity),
+                                    QuantityAllocated = g.Sum(e => e.QuantityAllocated),
+                                    BatchRef = g.Key.BatchRef,
+                                    StockRotationDate = g.Key.StockRotationDate,
+                                    StockPoolCode = g.Key.StockPoolCode,
+                                    State = g.Key.State
+                                 });
         }
     }
 }
