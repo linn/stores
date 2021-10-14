@@ -357,7 +357,7 @@
                              State = g.Key.State,
                              PalletNumber = g.Key.IsPallet ? g.Key.Loc : (int?)null,
                              StorageLocation = !g.Key.IsPallet
-                                                   ? stockLocators.SingleOrDefault(l => l.Id == g.Key.Loc)
+                                                   ? stockLocators.SingleOrDefault(l => l.Id == g.Key.Id)
                                                        .StorageLocation
                                                    : null
                          })
