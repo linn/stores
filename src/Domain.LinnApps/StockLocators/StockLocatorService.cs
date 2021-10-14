@@ -348,6 +348,7 @@
                          {
                              Id = g.Key.Id,
                              PartNumber = g.Key.PartNumber,
+                             Part = stockLocators.SingleOrDefault(x => x.Id == g.Key.Id).Part,
                              Quantity = g.Sum(e => e.Quantity ?? 0),
                              QuantityAllocated = g.Sum(e => e.QuantityAllocated ?? 0),
                              BatchRef = g.Key.BatchRef,
