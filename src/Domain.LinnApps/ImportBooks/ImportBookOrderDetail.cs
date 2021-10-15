@@ -37,5 +37,7 @@
         public decimal VatValue { get; set; }
 
         public decimal Weight { get; set; }
+
+        public bool PostDuty { get; set; }
     }
 }

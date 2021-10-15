@@ -4,19 +4,28 @@
     using System.Collections.Generic;
     using System.Linq;
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
 
     public class ImportBookService : IImportBookService
     {
         private readonly IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey> exchangeRateRepository;
         private readonly IRepository<LedgerPeriod, int> ledgerPeriodRepository;
         private readonly IRepository<Supplier, int> supplierRepository;
+        private readonly IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey> orderDetailRepository;
+        private readonly ITransactionManager transactionManager;
 
         public ImportBookService(
             IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey> exchangeRateRepository,
-            IRepository<LedgerPeriod, int> ledgerPeriodRepository)
+            IRepository<LedgerPeriod, int> ledgerPeriodRepository,
+            IRepository<Supplier, int> supplierRepository,
+        IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey> orderDetailRepository,
+            ITransactionManager transactionManager)
         {
             this.exchangeRateRepository = exchangeRateRepository;
             this.ledgerPeriodRepository = ledgerPeriodRepository;
+            this.supplierRepository = supplierRepository;
+            this.orderDetailRepository = orderDetailRepository;
+            this.transactionManager = transactionManager;
         }
 
         public void Update(ImportBook from, ImportBook to)
@@ -42,9 +51,108 @@
             return exchangeRates;
         }
 
-        private void Post(int supplierId)
+        public void PostDutyForOrderDetails(IEnumerable<ImportBookOrderDetail> orderDetails, int supplierId)
         {
-            supplierRepository.FindById(supplierId);
+            foreach (var detail in orderDetails)
+            {
+                var dbDetail = this.orderDetailRepository
+                    .FindById(new ImportBookOrderDetailKey(detail.ImportBookId, detail.LineNumber));
+
+                if (!dbDetail.PostDuty && detail.PostDuty)
+                {
+                    try
+                    {
+                        PostDuty(detail, supplierId);
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+
+                    dbDetail.PostDuty = true;
+                    this.transactionManager.Commit();
+                }
+
+              
+            }
+
+            this.tr
+        }
+
+        private void PostDuty(ImportBookOrderDetail detail, int supplierId)
+        {
+            var accountingCompany = supplierRepository.FindById(supplierId).AccountingCompany;
+            var supplierIdToInsert = 7371;
+            var departmentToInsert = "0000002302";
+
+            if (accountingCompany != "LINN")
+            {
+                throw new PostDutyException("supplier is not set up for records duty yet, accounting company is not LINN");
+            }
+
+           
+
+            //add post duty flag to order details
+
+            //		INSERT INTO PURCHASE_LEDGER(PL_TREF,
+            //														   SUPPLIER_ID,
+            //														   ORDER_LINE,
+            //														   ORDER_NUMBER,
+            //														   DATE_POSTED,
+            //														   PL_STATE,
+            //														   PL_QTY,
+            //														   PL_NET_TOTAL,
+            //														   PL_VAT,
+            //														   PL_TOTAL,
+            //														   BASE_NET_TOTAL,
+            //														   BASE_VAT_TOTAL,
+            //														   BASE_TOTAL,
+            //														   INVOICE_DATE,
+            //														   PL_INVOICE_REF,
+            //														   PL_DELIVERY_REF,
+            //														   COMPANY_REF,
+            //														   CURRENCY,
+            //														   LEDGER_PERIOD,
+            //														   POSTED_BY,
+            //														   DEBIT_NOMACC,
+            //														   CREDIT_NOMACC,
+            //														   PL_TRANS_TYPE,
+            //														   BASE_CURRENCY,
+            //														   CARRIAGE,
+            //														   UNDER_OVER,
+            //														   EXCHANGE_RATE,
+            //														   LEDGER_STREAM)
+            //		VALUES(cg_code_controls_next_val('PL_LEDGER_SEQ', 1), --PL_TREF,
+            //																v_supplier, --SUPPLIER_ID,
+            //																1, --ORDER_LINE,
+            //																:IMPBOOK_ORDER_DETAIL.ORDER_NUMBER, --ORDER_NUMBER
+            //																SYSDATE, --DATE_POSTED,
+            //																'U', --PL_STATE,
+            //																0, --PL_QTY,
+            //																:IMPBOOK_ORDER_DETAIL.DUTY_VALUE, --PL_NET_TOTAL
+            //																0, --PL_VAT
+            //																:IMPBOOK_ORDER_DETAIL.DUTY_VALUE, --PL_TOTAL
+            //																:IMPBOOK_ORDER_DETAIL.DUTY_VALUE, --BASE_NET_TOTAL
+            //																0, --BASE_VAT_TOTAL
+            //																:IMPBOOK_ORDER_DETAIL.DUTY_VALUE, --BASE_TOTAL
+            //																:IMPBOOK_ORDER_DETAIL.POST_INVOICE_DATE, --INVOICE_DATE,
+            //																'IMP' ||    :IMPBOOK.IMPBOOK_ID, --PL_INVOICE_REF
+            //																'DUTY' || to_char(:IMPBOOK_ORDER_DETAIL.POST_INVOICE_DATE, 'DDMONYYYY'), --PL_DELIVERY_REF,
+            //																'DUTY', --COMPANY_REF
+            //																'GBP', --CURRENCY
+            //																pl_pack.get_pl_ledger_period, --LEDGER_PERIOD
+            //																USER_PACK.CURRENT_USER_NUMBER, --POSTED_BY,
+            //																pl_pack.get_nomacc(v_department, '0000012926'), --1006, --DEBIT_NOMACC
+            //																1005, --CREDIT_NOMACC,
+            //																'INV', --PL_TRANS_TYPE
+            //																'GBP', --BASE_CURRENCY
+            //																0, --CARRIAGE
+            //																0, --UNDER_OVER
+            //																1, --EXCHANGE_RATE,
+            //																1-- LEDGER_STREAM
+            //																);
+
+            return;
         }
 
         private void UpdateTopLevelProperties(ImportBook entity, ImportBook to)
