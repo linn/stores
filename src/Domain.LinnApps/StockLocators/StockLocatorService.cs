@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Security.Cryptography.X509Certificates;
 
     using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
@@ -350,7 +349,7 @@
                              x.StockPoolCode,
                              x.State,
                              IsPallet = x.PalletNumber.HasValue,
-                             Loc = x.PalletNumber ?? x.StorageLocation.LocationId
+                             Loc = x.PalletNumber ?? x.LocationId
                          }).Select(
                 g => new StockLocator
                          {
