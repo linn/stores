@@ -64,6 +64,9 @@ function OrderDetailsTab({
         },
         pullRight: {
             float: 'right'
+        },
+        displayContents: {
+            display: 'contents'
         }
     }));
     const classes = useStyles();
@@ -215,7 +218,10 @@ function OrderDetailsTab({
                         return a.lineNumber - b.lineNumber;
                     })
                     .map(row => (
-                        <div data-testid={`row-${row.lineNumber}`}>
+                        <div
+                            data-testid={`row-${row.lineNumber}`}
+                            className={classes.displayContents}
+                        >
                             <Grid item xs={1}>
                                 <Dropdown
                                     items={lineTypes}
