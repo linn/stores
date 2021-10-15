@@ -1,13 +1,13 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import { ErrorCard, Loading } from '@linn-it/linn-form-components-library';
+import { BackButton, ErrorCard, Loading } from '@linn-it/linn-form-components-library';
 import Typography from '@material-ui/core/Typography';
 import { DataGrid } from '@mui/x-data-grid';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import Page from '../../containers/Page';
 
-function StockBatchesInRotationOrder({ items, loading, error }) {
+function StockBatchesInRotationOrder({ items, loading, error, history }) {
     const parts = [...new Set(items.map(x => x.partNumber))].sort().map(p => ({
         partNumber: p,
         description: items.find(x => x.partNumber === p).partDescription
@@ -31,6 +31,10 @@ function StockBatchesInRotationOrder({ items, loading, error }) {
                     <Grid item xs={12}>
                         <ErrorCard errorMessage={error?.details?.errors?.[0] || error.statusText} />
                     </Grid>
+                    <Grid item xs={2}>
+                        <BackButton backClick={() => history.push('/inventory/stock-locator')} />
+                    </Grid>
+                    <Grid item xs={10} />
                 </Grid>
             </Page>
         );
@@ -39,6 +43,10 @@ function StockBatchesInRotationOrder({ items, loading, error }) {
     return (
         <Page>
             <Grid container spacing={3}>
+                <Grid item xs={2}>
+                    <BackButton backClick={() => history.push('/inventory/stock-locator')} />
+                </Grid>
+                <Grid item xs={10} />
                 {loading ? (
                     <Grid item xs={12}>
                         <Loading />
@@ -84,6 +92,7 @@ function StockBatchesInRotationOrder({ items, loading, error }) {
 }
 
 StockBatchesInRotationOrder.propTypes = {
+    history: PropTypes.shape({ push: PropTypes.func }).isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({})),
     loading: PropTypes.bool,
     error: PropTypes.shape({
