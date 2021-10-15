@@ -28,8 +28,6 @@
 
         private readonly IRepository<MechPartSource, int> sourceRepository;
 
-        private readonly IRepository<StockLocator, int> stockLocatorRepository;
-
         private readonly IRepository<PartDataSheet, PartDataSheetKey> dataSheetRepository;
 
         private readonly IDeptStockPartsService deptStockPartsService;
@@ -41,7 +39,6 @@
             IRepository<Part, int> partRepository,
             IRepository<PartTemplate, string> templateRepository,
             IRepository<MechPartSource, int> sourceRepository,
-            IRepository<StockLocator, int> stockLocatorRepository,
             IRepository<PartDataSheet, PartDataSheetKey> dataSheetRepository,
             IPartPack partPack,
             IDeptStockPartsService deptStockPartsService)
@@ -53,7 +50,6 @@
             this.partPack = partPack;
             this.sourceRepository = sourceRepository;
             this.templateRepository = templateRepository;
-            this.stockLocatorRepository = stockLocatorRepository;
             this.dataSheetRepository = dataSheetRepository;
             this.deptStockPartsService = deptStockPartsService;
         }

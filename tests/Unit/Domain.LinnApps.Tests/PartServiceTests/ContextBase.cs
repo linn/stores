@@ -30,7 +30,7 @@
 
         protected IPartPack PartPack { get; private set; }
 
-        protected IRepository<StockLocator, int> StockLocatorRepository { get; private set; }
+        protected IFilterByWildcardRepository<StockLocator, int> StockLocatorRepository { get; private set; }
 
         protected IRepository<PartDataSheet, PartDataSheetKey> DataSheetRepository { get; private set; }
 
@@ -46,7 +46,7 @@
             this.TemplateRepository = Substitute.For<IRepository<PartTemplate, string>>();
             this.SourceRepository = Substitute.For<IRepository<MechPartSource, int>>();
             this.TransactionManager = Substitute.For<ITransactionManager>();
-            this.StockLocatorRepository = Substitute.For<IRepository<StockLocator, int>>();
+            this.StockLocatorRepository = Substitute.For<IFilterByWildcardRepository<StockLocator, int>>();
             this.PartPack = Substitute.For<IPartPack>();
             this.DataSheetRepository = Substitute.For<IRepository<PartDataSheet, PartDataSheetKey>>();
             this.DeptStockPartsService = Substitute.For<IDeptStockPartsService>();
@@ -57,7 +57,6 @@
                 this.PartRepository,
                 this.TemplateRepository,
                 this.SourceRepository,
-                this.StockLocatorRepository,
                 this.DataSheetRepository,
                 this.PartPack,
                 this.DeptStockPartsService);

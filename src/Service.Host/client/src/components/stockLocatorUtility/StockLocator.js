@@ -316,10 +316,16 @@ function StockLocator({
                                                 <>
                                                     <Grid item xs={3}>
                                                         <Dropdown
-                                                            items={quantities?.map(v => ({
-                                                                id: v.partNumber,
-                                                                displayText: v.partNumber
-                                                            }))}
+                                                            items={quantities
+                                                                ?.filter(x =>
+                                                                    items
+                                                                        .map(i => i.partNumber)
+                                                                        .includes(x.partNumber)
+                                                                )
+                                                                .map(v => ({
+                                                                    id: v.partNumber,
+                                                                    displayText: v.partNumber
+                                                                }))}
                                                             value={selectedQuantities.partNumber}
                                                             label="Show Summaries For Part"
                                                             propertyName="part"

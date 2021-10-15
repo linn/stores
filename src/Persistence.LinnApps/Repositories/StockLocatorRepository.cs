@@ -4,12 +4,12 @@
     using System.Linq;
     using System.Linq.Expressions;
 
-    using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
     using Microsoft.EntityFrameworkCore;
 
-    public class StockLocatorRepository : IRepository<StockLocator, int>
+    public class StockLocatorRepository : IFilterByWildcardRepository<StockLocator, int>
     {
         private readonly ServiceDbContext serviceDbContext;
 
@@ -35,6 +35,15 @@
                 .Include(l => l.Part);
         }
 
+        public IQueryable<StockLocator> FilterByWildcard(string search)
+        {
+            return this.serviceDbContext.StockLocators
+                .Where(x => EF.Functions.Like(x.PartNumber, search))
+                .Include(l => l.StorageLocation)
+                .AsNoTracking()
+                .Include(l => l.Part);
+        }
+
         public StockLocator FindById(int key)
         {
             return this.serviceDbContext.StockLocators
@@ -43,7 +52,7 @@
 
         public IQueryable<StockLocator> FindAll()
         {
-            return this.serviceDbContext.StockLocators.AsNoTracking().Include(s => s.StorageLocation); // is anyone updating these from a findAll()?
+            return this.serviceDbContext.StockLocators.AsNoTracking().Include(s => s.StorageLocation);
         }
 
         public void Add(StockLocator entity)
