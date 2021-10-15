@@ -215,7 +215,7 @@ function OrderDetailsTab({
                         return a.lineNumber - b.lineNumber;
                     })
                     .map(row => (
-                        <>
+                        <div data-testid={`row-${row.lineNumber}`}>
                             <Grid item xs={1}>
                                 <Dropdown
                                     items={lineTypes}
@@ -230,7 +230,6 @@ function OrderDetailsTab({
                                     required
                                 />
                             </Grid>
-
                             {(row.lineType === 'PO' || row.lineType === 'RO') && (
                                 <Grid item xs={3}>
                                     <div className={classes.displayInline}>
@@ -268,7 +267,6 @@ function OrderDetailsTab({
                                     </div>
                                 </Grid>
                             )}
-
                             {row.lineType === 'RSN' && (
                                 <Grid item xs={3}>
                                     <div className={classes.displayInline}>
@@ -304,7 +302,6 @@ function OrderDetailsTab({
                                     </div>
                                 </Grid>
                             )}
-
                             {row.lineType === 'LOAN' && (
                                 <Grid item xs={3}>
                                     <div className={classes.displayInline}>
@@ -342,7 +339,6 @@ function OrderDetailsTab({
                                     </div>
                                 </Grid>
                             )}
-
                             {row.lineType === 'INS' && (
                                 <Grid item xs={2}>
                                     <InputField
@@ -359,7 +355,6 @@ function OrderDetailsTab({
                                     />
                                 </Grid>
                             )}
-
                             <Grid item xs={4}>
                                 <InputField
                                     label="Order Description"
@@ -404,9 +399,7 @@ function OrderDetailsTab({
                                     maxLength={6}
                                 />
                             </Grid>
-
                             <Grid item xs={12} />
-
                             <Grid item xs={2}>
                                 <InputField
                                     label="Order Value"
@@ -506,7 +499,6 @@ function OrderDetailsTab({
                                     external
                                 />
                             </Grid>
-
                             <Grid item xs={2}>
                                 <Tooltip title="Remove order detail" aria-label="add">
                                     <Button
@@ -518,11 +510,10 @@ function OrderDetailsTab({
                                     </Button>
                                 </Tooltip>
                             </Grid>
-
                             <Grid item xs={12}>
                                 <Divider className={classes.dividerMargins} />
                             </Grid>
-                        </>
+                        </div>
                     ))}
 
                 <Button

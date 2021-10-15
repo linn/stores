@@ -201,7 +201,7 @@ function ImpBookPrintOut({
                 </Grid>
 
                 <Grid item xs={12} className={classes.gapAbove}>
-                    <Typography variant="h6">Order&numsp;Details</Typography>
+                    <Typography variant="h6">Order Details</Typography>
                 </Grid>
 
                 {orderDetails
