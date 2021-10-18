@@ -67,27 +67,7 @@ function StockViewerOptions({
                         value={options.partNumber}
                     />
                 </Grid>
-                <Grid item xs={3}>
-                    <LinkButton
-                        text="VIEW STOCK LOCATORS"
-                        disabled={
-                            !options.stockPoolCode &&
-                            !options.batchRef &&
-                            !options.partNumber &&
-                            !(options.storageLocation || options.palletNumber)
-                        }
-                        to={`/inventory/stock-locator/locators?${queryString.stringify(options)}`}
-                    />
-                </Grid>
-                <Grid item xs={3}>
-                    <LinkButton
-                        text="VIEW STOCK ROTATIONS"
-                        disabled={!options.partNumber}
-                        to={`/inventory/stock-locator/rotations?${queryString.stringify(options)}`}
-                    />
-                </Grid>
-                <Grid item xs={3} />
-
+                <Grid item xs={9} />
                 <Grid item xs={3}>
                     <InputField
                         label="Pallet Number"
@@ -99,9 +79,7 @@ function StockViewerOptions({
                         value={options.palletNumber}
                     />
                 </Grid>
-                <Grid item xs={1}>
-                    Or
-                </Grid>
+
                 <Grid item xs={3}>
                     <Typeahead
                         items={storageLocations}
@@ -125,7 +103,7 @@ function StockViewerOptions({
                         minimumSearchTermLength={2}
                     />
                 </Grid>
-                <Grid item xs={5} />
+                <Grid item xs={6} />
                 <Grid item xs={3}>
                     <Typeahead
                         items={stockPools}
@@ -145,8 +123,7 @@ function StockViewerOptions({
                         minimumSearchTermLength={2}
                     />
                 </Grid>
-                <Grid item xs={9} />
-                <Grid item xs={12}>
+                <Grid item xs={3}>
                     <TypeaheadTable
                         table={table}
                         columnNames={['Name', 'Part', 'Pallet', 'Location', 'Date']}
@@ -166,6 +143,7 @@ function StockViewerOptions({
                         minimumSearchTermLength={2}
                     />
                 </Grid>
+                <Grid item xs={6} />
                 <Grid item xs={3}>
                     <Dropdown
                         items={inspectedStates?.map(v => ({
@@ -175,7 +153,6 @@ function StockViewerOptions({
                         value={options.state}
                         label="State"
                         propertyName="state"
-                        fullWidth
                         onChange={(_propertyName, newValue) =>
                             setOptions({ ...options, state: newValue })
                         }
@@ -183,6 +160,26 @@ function StockViewerOptions({
                     />
                 </Grid>
                 <Grid item xs={9} />
+
+                <Grid item xs={12}>
+                    <LinkButton
+                        text="VIEW STOCK LOCATORS"
+                        disabled={
+                            !options.stockPoolCode &&
+                            !options.batchRef &&
+                            !options.partNumber &&
+                            !(options.storageLocation || options.palletNumber)
+                        }
+                        to={`/inventory/stock-locator/locators?${queryString.stringify(options)}`}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <LinkButton
+                        text="VIEW STOCK ROTATIONS"
+                        disabled={!options.partNumber}
+                        to={`/inventory/stock-locator/rotations?${queryString.stringify(options)}`}
+                    />
+                </Grid>
             </Grid>
         </Page>
     );
