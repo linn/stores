@@ -60,12 +60,6 @@ function StockLocator({
     }, [quantities]);
 
     const columns = [
-        // {
-        //     title: 'Part',
-        //     id: 'partNumber',
-        //     type: 'text',
-        //     editable: false
-        // },
         {
             title: 'Part',
             id: 'partLinkComponent',
