@@ -10,6 +10,7 @@ import {
     Title,
     ErrorCard,
     SnackbarMessage,
+    //smartGoBack,
     LinkButton
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
@@ -42,7 +43,8 @@ function Part({
     fetchLiveTest,
     fetchParts,
     partsSearchResults,
-    clearErrors
+    clearErrors,
+    previousPaths
 }) {
     const defaultPart = {
         partNumber: '',
@@ -69,6 +71,19 @@ function Part({
         part: creating() ? defaultPart : { partNumber: '' },
         prevPart: { partNumber: '' }
     });
+
+    const handleBackClick = () => {
+        const prevPath =
+            previousPaths?.[previousPaths.length - 1]?.path +
+            previousPaths?.[previousPaths.length - 1]?.search;
+        if (prevPath.includes('signin-oidc')) {
+            global.window.history.go(-3);
+        } else if (previousPaths?.length) {
+            history.goBack();
+        } else {
+            global.window.history.back();
+        }
+    };
 
     useEffect(() => {
         if (copy) {
@@ -229,10 +244,6 @@ function Part({
             dispatch({ type: 'initialise', payload: item });
         }
         setEditStatus('view');
-    };
-
-    const handleBackClick = () => {
-        history.push('/inventory/parts');
     };
 
     const handleFieldChange = (propertyName, newValue) => {
@@ -499,7 +510,7 @@ Part.propTypes = {
         links: PropTypes.arrayOf(PropTypes.shape({ href: PropTypes.string, rel: PropTypes.string }))
     }),
     partsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
-    history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+    history: PropTypes.shape({ push: PropTypes.func, goBack: PropTypes.func }).isRequired,
     editStatus: PropTypes.string.isRequired,
     itemError: PropTypes.shape({
         status: PropTypes.number,
@@ -525,7 +536,8 @@ Part.propTypes = {
     liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
     fetchLiveTest: PropTypes.func.isRequired,
     fetchParts: PropTypes.func.isRequired,
-    clearErrors: PropTypes.func.isRequired
+    clearErrors: PropTypes.func.isRequired,
+    previousPaths: PropTypes.arrayOf(PropTypes.string)
 };
 
 Part.defaultProps = {
@@ -541,6 +553,7 @@ Part.defaultProps = {
     userNumber: null,
     templateName: null,
     partTemplates: [],
+    previousPaths: [],
     liveTest: null,
     partsSearchResults: []
 };

@@ -5,6 +5,7 @@
 
     using FluentAssertions;
 
+    using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
     using NSubstitute;
@@ -20,20 +21,23 @@
                         {
                             StockPoolCode = "LINN",
                             State = "FREE",
-                            PartNumber = "PART A"
+                            PartNumber = "PART A",
+                            Part = new Part { Id = 1 }
                         },
                     new StockLocatorLocation
                         {
                             StockPoolCode = "LINN",
                             State = "FREE",
-                            PartNumber = "PART B"
+                            PartNumber = "PART B",
+                            Part = new Part { Id = 2}
                         },
                     new StockLocatorLocation
                         {
                             StockPoolCode = "LINN",
                             State = "FREE",
-                            PartNumber = "PART C"
-                        },
+                            PartNumber = "PART C",
+                            Part = new Part { Id = 3 }
+                        }
                 }.AsQueryable();
 
         private IEnumerable<StockLocator> testResult;
