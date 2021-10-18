@@ -5,7 +5,6 @@ import {
     Dropdown,
     InputField,
     LinkButton,
-    Loading,
     Title,
     Typeahead,
     TypeaheadTable
@@ -27,7 +26,6 @@ function StockViewerOptions({
     searchStockLocatorBatches,
     clearStockLocatorBatchesSearch,
     inspectedStates,
-    inspectedStatesLoading,
     history
 }) {
     const [options, setOptions] = useState({
@@ -169,24 +167,20 @@ function StockViewerOptions({
                     />
                 </Grid>
                 <Grid item xs={3}>
-                    {inspectedStatesLoading ? (
-                        <Loading />
-                    ) : (
-                        <Dropdown
-                            items={inspectedStates?.map(v => ({
-                                id: v.state,
-                                displayText: v.description
-                            }))}
-                            value={options.state}
-                            label="State"
-                            propertyName="state"
-                            fullWidth
-                            onChange={(_propertyName, newValue) =>
-                                setOptions({ ...options, state: newValue })
-                            }
-                            allowNoValue
-                        />
-                    )}
+                    <Dropdown
+                        items={inspectedStates?.map(v => ({
+                            id: v.state,
+                            displayText: v.description
+                        }))}
+                        value={options.state}
+                        label="State"
+                        propertyName="state"
+                        fullWidth
+                        onChange={(_propertyName, newValue) =>
+                            setOptions({ ...options, state: newValue })
+                        }
+                        allowNoValue
+                    />
                 </Grid>
                 <Grid item xs={9} />
             </Grid>
@@ -232,15 +226,13 @@ StockViewerOptions.propTypes = {
             name: PropTypes.string,
             description: PropTypes.string
         })
-    ),
-    inspectedStatesLoading: PropTypes.bool
+    )
 };
 
 StockViewerOptions.defaultProps = {
     storageLocations: [],
     storageLocationsLoading: false,
     inspectedStates: [],
-    inspectedStatesLoading: false,
     stockPools: [],
     stockPoolsLoading: false,
     stockLocatorBatches: [],
