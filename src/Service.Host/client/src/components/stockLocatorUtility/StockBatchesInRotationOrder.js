@@ -53,6 +53,11 @@ function StockBatchesInRotationOrder({ items, loading, error, history }) {
                     </Grid>
                 ) : (
                     <>
+                        {items && items.length < 1 && (
+                            <Grid item xs={12}>
+                                <Typography variant="h6">No Items to display.</Typography>
+                            </Grid>
+                        )}
                         {parts.map(p => (
                             <>
                                 <Grid item xs={12}>
