@@ -270,7 +270,7 @@ function ImpBookTab({
                 </Grid>
                 <Grid item xs={2} />
 
-                <Grid item xs={12} className={classes.gapAbove}>
+                <Grid item xs={12} className={classes.gapAbove} data-testid="invoiceDetailsTable">
                     <TableWithInlineEditing
                         columnsInfo={[
                             {

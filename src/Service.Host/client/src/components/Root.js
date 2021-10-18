@@ -52,6 +52,7 @@ import ImportBooksEuReportOptions from '../containers/reports/ImpbookEuReportOpt
 import ImportBooksEuReport from '../containers/reports/ImpbookEuReport';
 import DebitNotes from '../containers/purchasing/DebitNotes';
 import QcLabelPrintScreen from '../containers/goodsIn/QcLabelPrintScreen';
+import StockBatchesInRotationOrder from '../containers/stockLocatorUtility/StockBatchesInRotationOrder';
 
 const Root = ({ store }) => (
     <div>
@@ -192,6 +193,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/stock-locator/locators/batches/details"
                                         component={StockLocatorPricesView}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/stock-locator/rotations"
+                                        component={StockBatchesInRotationOrder}
                                     />
                                     <Route
                                         exact

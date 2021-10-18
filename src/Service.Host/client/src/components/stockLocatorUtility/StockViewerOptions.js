@@ -69,8 +69,7 @@ function StockViewerOptions({
                         value={options.partNumber}
                     />
                 </Grid>
-                <Grid item xs={2} />
-                <Grid item xs={5}>
+                <Grid item xs={3}>
                     <LinkButton
                         text="VIEW STOCK LOCATORS"
                         disabled={
@@ -82,7 +81,15 @@ function StockViewerOptions({
                         to={`/inventory/stock-locator/locators?${queryString.stringify(options)}`}
                     />
                 </Grid>
-                <Grid item xs={2} />
+                <Grid item xs={3}>
+                    <LinkButton
+                        text="VIEW STOCK ROTATIONS"
+                        disabled={!options.partNumber}
+                        to={`/inventory/stock-locator/rotations?${queryString.stringify(options)}`}
+                    />
+                </Grid>
+                <Grid item xs={3} />
+
                 <Grid item xs={3}>
                     <InputField
                         label="Pallet Number"

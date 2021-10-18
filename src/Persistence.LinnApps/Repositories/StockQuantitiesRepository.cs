@@ -4,10 +4,12 @@
     using System.Linq;
     using System.Linq.Expressions;
 
-    using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
-    public class StockQuantitiesRepository : IQueryRepository<StockQuantities>
+    using Microsoft.EntityFrameworkCore;
+
+    public class StockQuantitiesRepository : IFilterByWildcardQueryRepository<StockQuantities>
     {
         private readonly ServiceDbContext serviceDbContext;
 
@@ -34,6 +36,12 @@
         public IQueryable<StockQuantities> FindAll()
         {
             throw new NotImplementedException();
+        }
+
+        public IQueryable<StockQuantities> FilterByWildcard(string search)
+        {
+            return this.serviceDbContext.StockQuantitiesForMrView
+                .Where(x => EF.Functions.Like(x.PartNumber, search));
         }
     }
 }
