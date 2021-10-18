@@ -84,6 +84,21 @@ function PartsSearch({
                         items={searchItems()}
                         fetchItems={fetchItems}
                         clearSearch={clearSearch}
+                        resultLimit={100}
+                        priorityFunction={(item, searchTerm) => {
+                            let count = 0;
+                            for (let i = 0; i < searchTerm.length; i += 1) {
+                                if (i === item.partNumber.length) {
+                                    break;
+                                }
+                                if (
+                                    item.partNumber.toUpperCase()[i] === searchTerm.toUpperCase()[i]
+                                ) {
+                                    count += 1;
+                                }
+                            }
+                            return count;
+                        }}
                         loading={loading}
                         title="Part"
                         history={history}
