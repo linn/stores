@@ -58,6 +58,7 @@
                                 Comments = string.Empty,
                                 CreatedBy = null,
                                 CustomsEntryCodePrefix = "AA",
+                                Pva = "N",
                                 InvoiceDetails = new List<ImportBookInvoiceDetail>(),
                                 OrderDetails = new List<ImportBookOrderDetail>(),
                                 PostEntries = new List<ImportBookPostEntry>()
@@ -92,6 +93,7 @@
                                     Comments = "now closed",
                                     CreatedBy = 33105,
                                     CustomsEntryCodePrefix = "AA",
+                                    Pva = "Y",
                                     ImportBookInvoiceDetails =
                                         new List<ImportBookInvoiceDetailResource>
                                             {
@@ -230,7 +232,8 @@
                                                                       && x.Comments == this.resource.Comments
                                                                       && x.CreatedBy == this.resource.CreatedBy
                                                                       && x.CustomsEntryCodePrefix
-                                                                      == this.resource.CustomsEntryCodePrefix));
+                                                                      == this.resource.CustomsEntryCodePrefix
+                                                                      && x.Pva == "Y"));
         }
 
         [Test]

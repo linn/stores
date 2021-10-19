@@ -63,7 +63,8 @@ function ImpBookTab({
     supplierCountryValue,
     supplierNameValue,
     carrierNameValue,
-    countryIsInEU
+    countryIsInEU,
+    pva
 }) {
     const clearSupplier = () => {
         handleFieldChange('supplierId', '');
@@ -237,6 +238,22 @@ function ImpBookTab({
                             { id: 'Y', displayText: 'Yes' },
                             { id: 'N', displayText: 'No' }
                         ]}
+                        propertyName="pva"
+                        fullWidth
+                        value={pva}
+                        label="PVA"
+                        onChange={handleFieldChange}
+                        required
+                        disabled={!allowedToEdit}
+                    />
+                </Grid>
+
+                <Grid item xs={4}>
+                    <Dropdown
+                        items={[
+                            { id: 'Y', displayText: 'Yes' },
+                            { id: 'N', displayText: 'No' }
+                        ]}
                         propertyName="foreignCurrency"
                         fullWidth
                         value={foreignCurrency}
@@ -328,7 +345,7 @@ function ImpBookTab({
                         />
                     </div>
                     <div className={classes.marginTop1}>
-                        <Tooltip title="Clear Supplier search">
+                        <Tooltip title="Clear Carrier search">
                             <Button
                                 variant="outlined"
                                 onClick={clearCarrier}
@@ -610,7 +627,8 @@ ImpBookTab.propTypes = {
     supplierCountryValue: PropTypes.func.isRequired,
     supplierNameValue: PropTypes.func.isRequired,
     carrierNameValue: PropTypes.func.isRequired,
-    countryIsInEU: PropTypes.func.isRequired
+    countryIsInEU: PropTypes.func.isRequired,
+    pva: PropTypes.string
 };
 
 ImpBookTab.defaultProps = {
@@ -635,7 +653,8 @@ ImpBookTab.defaultProps = {
     suppliersSearchLoading: false,
     carriersSearchLoading: false,
     transportId: 0,
-    transactionId: 0
+    transactionId: 0,
+    pva: ''
 };
 
 export default ImpBookTab;

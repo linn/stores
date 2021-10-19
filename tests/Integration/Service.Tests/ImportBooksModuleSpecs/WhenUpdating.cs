@@ -30,7 +30,8 @@
                                          DateCreated = new DateTime().ToString("o"),
                                          CarrierId = 4,
                                          Weight = 00.70m,
-                                         Comments = "Rsn 1234 raised as BRG, but Customs charged duty incorrectly."
+                                         Comments = "Rsn 1234 raised as BRG, but Customs charged duty incorrectly.",
+                                         Pva = "Y"
                                      };
 
             this.ImportBooksFacadeService.Update(Arg.Any<int>(), Arg.Any<ImportBookResource>())
