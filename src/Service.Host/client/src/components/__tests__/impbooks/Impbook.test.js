@@ -50,6 +50,7 @@ const item = {
     baseCurrency: 'GBP',
     periodNumber: null,
     invoiceDate: '11/12/13',
+    pva: 'Y',
     importBookInvoiceDetails: [
         { invoiceNumber: 123, invoiceValue: 1400 },
         { invoiceNumber: 124, invoiceValue: 99.01 }
@@ -150,6 +151,7 @@ describe('On Create', () => {
         expect(screen.getByText('Linn Vat')).toBeInTheDocument();
         expect(screen.getByText('Import Book')).toBeInTheDocument();
         expect(screen.getAllByText('Order Details')[1]).toBeInTheDocument();
+        expect(screen.getAllByText('Pva')[1]).toBeInTheDocument();
         expect(screen.getByText('Post Entries')).toBeInTheDocument();
         expect(screen.getByText('Comments')).toBeInTheDocument();
     });

@@ -350,7 +350,8 @@ ImpBookPrintOut.propTypes = {
     carrierName: PropTypes.string,
     remainingInvoiceValue: PropTypes.number,
     remainingDutyValue: PropTypes.number,
-    remainingWeightValue: PropTypes.number
+    remainingWeightValue: PropTypes.number,
+    pva: PropTypes.string
 };
 
 ImpBookPrintOut.defaultProps = {
@@ -386,7 +387,8 @@ ImpBookPrintOut.defaultProps = {
     carrierName: null,
     remainingInvoiceValue: null,
     remainingDutyValue: null,
-    remainingWeightValue: null
+    remainingWeightValue: null,
+    pva: ''
 };
 
 export default ImpBookPrintOut;
