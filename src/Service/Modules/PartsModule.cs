@@ -18,6 +18,7 @@
 
     using Nancy;
     using Nancy.ModelBinding;
+    using Nancy.Responses;
     using Nancy.Security;
 
     public sealed class PartsModule : NancyModule
@@ -84,6 +85,9 @@
             this.Get("/parts", _ => this.GetParts());
             this.Post("/parts", _ => this.AddPart());
             this.Get("/parts/dept-stock-parts", _ => this.GetDeptStockParts());
+
+            this.Get("/inventory/parts", _ => new RedirectResponse("/parts"));
+            this.Get("/inventory/parts/sources", _ => new RedirectResponse("/parts/sources"));
 
             this.unitsOfMeasureService = unitsOfMeasureService;
             this.Get("inventory/units-of-measure", _ => this.GetUnitsOfMeasure());
