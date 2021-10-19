@@ -52,7 +52,7 @@
             this.MechPartSourceService.Update(1, Arg.Any<MechPartSourceResource>()).Returns(new SuccessResult<MechPartSource>(p));
             this.AuthService.HasPermissionFor(Arg.Any<string>(), Arg.Any<IEnumerable<string>>()).Returns(true);
             this.Response = this.Browser.Put(
-                "inventory/parts/sources/1",
+                "/parts/sources/1",
                 with =>
                 {
                     with.Header("Accept", "application/json");

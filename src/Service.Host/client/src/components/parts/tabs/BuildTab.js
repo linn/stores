@@ -87,7 +87,7 @@ function BuildTab({
             </Grid>
             <Grid item xs={1}>
                 <LinkButton
-                    to="/inventory/parts/decrement-rules/create"
+                    to="/parts/decrement-rules/create"
                     text="Change"
                     tooltip="Coming soon - still on Oracle Forms"
                     disabled
@@ -136,7 +136,7 @@ function BuildTab({
             </Grid>
             <Grid item xs={2}>
                 <LinkButton
-                    to="/inventory/parts/change-bom-type"
+                    to="/parts/change-bom-type"
                     text="Change Bom Type"
                     tooltip="Coming soon - still on Oracle Forms"
                     disabled

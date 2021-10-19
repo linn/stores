@@ -74,7 +74,7 @@ function PurchTab({
             </Grid>
             <Grid item xs={3}>
                 <LinkButton
-                    to="/inventory/parts/suppliers"
+                    to="/parts/suppliers"
                     text="Part Suppliers"
                     tooltip="Coming soon - still on Oracle Forms"
                     disabled
@@ -179,7 +179,7 @@ function PurchTab({
             </Grid>
             <Grid item xs={4}>
                 <LinkButton
-                    to="/inventory/parts/change-labour"
+                    to="/parts/change-labour"
                     text="Change Labour"
                     tooltip="Coming soon - still on Oracle Forms"
                     disabled

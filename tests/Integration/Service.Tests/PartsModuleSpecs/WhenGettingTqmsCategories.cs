@@ -35,7 +35,7 @@
                     new List<TqmsCategory> { a, b }));
 
             this.Response = this.Browser.Get(
-                "/inventory/parts/tqms-categories",
+                "/parts/tqms-categories",
                 with =>
                     {
                         with.Header("Accept", "application/json");
