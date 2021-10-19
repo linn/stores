@@ -17,7 +17,7 @@
 
     public class ContextBase
     {
-        protected IRepository<StockLocator, int> StockLocatorRepository { get; private set; }
+        protected IFilterByWildcardRepository<StockLocator, int> StockLocatorRepository { get; private set; }
 
         protected IStoresPalletRepository StoresPalletRepository { get; private set; }
 
@@ -47,7 +47,7 @@
         [SetUp]
         public void SetUpContext()
         {
-            this.StockLocatorRepository = Substitute.For<IRepository<StockLocator, int>>();
+            this.StockLocatorRepository = Substitute.For<IFilterByWildcardRepository<StockLocator, int>>();
             this.StoresPalletRepository = Substitute.For<IStoresPalletRepository>();
             this.StoragePlaceRepository = Substitute.For<IQueryRepository<StoragePlace>>();
             this.StorageLocationRepository = Substitute.For<IRepository<StorageLocation, int>>();

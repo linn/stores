@@ -330,4 +330,8 @@ export const loansActionTypes = makeActionTypes(itemTypes.loans.actionType);
 
 export const purchaseOrdersActionTypes = makeActionTypes(itemTypes.purchaseOrders.actionType);
 
+export const stockBatchesInRotationOrderActionTypes = makeActionTypes(
+    itemTypes.stockBatchesInRotationOrder.actionType
+);
+
 export const postDutyActionTypes = makeActionTypes(itemTypes.postDuty.actionType);

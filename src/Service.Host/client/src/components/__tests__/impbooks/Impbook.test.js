@@ -3,6 +3,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { cleanup, screen, fireEvent } from '@testing-library/react';
 import render from '../../../test-utils';
 import ImportBook from '../../importBooks/ImportBook';
+import { within } from '@testing-library/dom';
 
 afterEach(cleanup);
 
@@ -128,7 +129,8 @@ describe('On Create', () => {
         expect(screen.getByText('Foreign Currency')).toBeInTheDocument();
         expect(screen.getByText('Currency')).toBeInTheDocument();
         expect(screen.getByText('Total Import Value')).toBeInTheDocument();
-        expect(screen.getByText('Invoice Number')).toBeInTheDocument();
+        const invoiceDetailsTable = screen.getByTestId('invoiceDetailsTable');
+        expect(within(invoiceDetailsTable).getByText('Invoice Number')).toBeInTheDocument();
         expect(screen.getByText('Invoice Value')).toBeInTheDocument();
         expect(screen.getByText('Total Invoice Value')).toBeInTheDocument();
         expect(screen.getByText('Carrier')).toBeInTheDocument();
@@ -140,14 +142,14 @@ describe('On Create', () => {
         expect(screen.getByText('Arrival Date')).toBeInTheDocument();
         expect(screen.getByLabelText('Number of Cartons')).toBeInTheDocument();
         expect(screen.getByText('Number of Pallets')).toBeInTheDocument();
-        expect(screen.getByText('Weight')).toBeInTheDocument();
+        expect(screen.getAllByText('Weight')[1]).toBeInTheDocument();
         expect(screen.getByText('Prefix')).toBeInTheDocument();
         expect(screen.getByText('Customs Entry Code')).toBeInTheDocument();
         expect(screen.getByText('Customs Entry Date')).toBeInTheDocument();
         expect(screen.getByText('Linn Duty')).toBeInTheDocument();
         expect(screen.getByText('Linn Vat')).toBeInTheDocument();
         expect(screen.getByText('Import Book')).toBeInTheDocument();
-        expect(screen.getByText('Order Details')).toBeInTheDocument();
+        expect(screen.getAllByText('Order Details')[1]).toBeInTheDocument();
         expect(screen.getByText('Post Entries')).toBeInTheDocument();
         expect(screen.getByText('Comments')).toBeInTheDocument();
     });
@@ -215,8 +217,9 @@ describe('When editing', () => {
     });
 
     test('invoice values are shown', () => {
-        expect(screen.getByText('99.01')).toBeInTheDocument();
-        expect(screen.getByText('1400')).toBeInTheDocument();
+        const table = screen.getByTestId('invoiceDetailsTable');
+        expect(within(table).getByText('99.01')).toBeInTheDocument();
+        expect(within(table).getByText('1400')).toBeInTheDocument();
     });
 
     test('parcel no is displayed', () => {
@@ -249,7 +252,7 @@ describe('When clicking through to second tab', () => {
             />
         );
 
-        const orderDetailsTabButton = screen.getByText('Order Details');
+        const orderDetailsTabButton = screen.getAllByText('Order Details')[1];
         fireEvent.click(orderDetailsTabButton);
     });
 
@@ -266,13 +269,15 @@ describe('When clicking through to second tab', () => {
     });
 
     test('Deleting orderdetail order-value value doesnt break and displays correct new total', () => {
-        const field = screen.getByDisplayValue('998');
+        const div = screen.getByTestId('row-1');
+        const field = within(div).getByDisplayValue('998');
         fireEvent.change(field, { target: { value: '' } });
         expect(screen.getByLabelText('Remaining Total')).toHaveDisplayValue('998');
     });
 
     test('Updating orderdetail order-value value doesnt break and displays correct new total', () => {
-        const field = screen.getByDisplayValue('998');
+        const div = screen.getByTestId('row-1');
+        const field = within(div).getByDisplayValue('998');
         fireEvent.change(field, { target: { value: '100' } });
         expect(screen.getByLabelText('Remaining Total')).toHaveDisplayValue('898');
     });

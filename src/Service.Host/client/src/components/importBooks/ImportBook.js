@@ -67,7 +67,7 @@ function ImportBook({
         createdBy: 32607,
         customsEntryCodePrefix: '',
         importBookInvoiceDetails: [],
-        importBookOrderDetails: [],
+        importBookOrderDetails: [{ lineNumber: 1 }],
         importBookPostEntries: []
     };
     const creating = () => editStatus === 'create';
@@ -323,10 +323,7 @@ function ImportBook({
         );
     };
 
-    const [renderPrintOut, setRenderPrintOut] = useState(false);
-
     const print = () => {
-        setRenderPrintOut(true);
         window.print();
     };
 
@@ -338,47 +335,45 @@ function ImportBook({
 
     return (
         <>
-            {renderPrintOut && (
-                <div className="pageContainer show-only-when-printing">
-                    <Page width="xl">
-                        <ImpBookPrintOut
-                            impbookId={state.impbook.id}
-                            dateCreated={state.impbook.dateCreated}
-                            createdBy={state.impbook.createdBy}
-                            createdByName={getEmployeeNameById(state.impbook.createdBy)}
-                            supplierId={state.impbook.supplierId}
-                            supplierName={supplierNameValue()}
-                            supplierCountry={supplierCountryValue()}
-                            eecMember={countryIsInEU()}
-                            currency={state.impbook.currency}
-                            parcelNumber={state.impbook.parcelNumber}
-                            totalImportValue={state.impbook.totalImportValue}
-                            invoiceDetails={state.impbook.importBookInvoiceDetails}
-                            carrierId={state.impbook.carrierId}
-                            carrierName={carrierNameValue()}
-                            transportCode={state.impbook.transportId}
-                            transportBillNumber={state.impbook.transportBillNumber}
-                            transactionCode={state.impbook.transactionId}
-                            numPallets={state.impbook.numPallets}
-                            numCartons={state.impbook.numCartons}
-                            weight={state.impbook.weight}
-                            deliveryTermCode={state.impbook.deliveryTermCode}
-                            customsEntryCodePrefix={state.impbook.customsEntryCodePrefix}
-                            customsEntryCode={state.impbook.customsEntryCode}
-                            customsEntryCodeDate={state.impbook.customsEntryCodeDate}
-                            linnDuty={state.impbook.linnDuty}
-                            linnVat={state.impbook.linnVat}
-                            arrivalDate={state.impbook.arrivalDate}
-                            remainingInvoiceValue={calcRemainingTotal()}
-                            remainingDutyValue={calcRemainingDuty()}
-                            remainingWeightValue={calcRemainingWeight()}
-                            orderDetails={state.impbook.importBookOrderDetails}
-                            comments={state.impbook.comments}
-                            arrivalPort={state.impbook.arrivalPort}
-                        />
-                    </Page>
-                </div>
-            )}
+            <div className="pageContainer show-only-when-printing">
+                <Page width="xl">
+                    <ImpBookPrintOut
+                        impbookId={state.impbook.id}
+                        dateCreated={state.impbook.dateCreated}
+                        createdBy={state.impbook.createdBy}
+                        createdByName={getEmployeeNameById(state.impbook.createdBy)}
+                        supplierId={state.impbook.supplierId}
+                        supplierName={supplierNameValue()}
+                        supplierCountry={supplierCountryValue()}
+                        eecMember={countryIsInEU()}
+                        currency={state.impbook.currency}
+                        parcelNumber={state.impbook.parcelNumber}
+                        totalImportValue={state.impbook.totalImportValue}
+                        invoiceDetails={state.impbook.importBookInvoiceDetails}
+                        carrierId={state.impbook.carrierId}
+                        carrierName={carrierNameValue()}
+                        transportCode={state.impbook.transportId}
+                        transportBillNumber={state.impbook.transportBillNumber}
+                        transactionCode={state.impbook.transactionId}
+                        numPallets={state.impbook.numPallets}
+                        numCartons={state.impbook.numCartons}
+                        weight={state.impbook.weight}
+                        deliveryTermCode={state.impbook.deliveryTermCode}
+                        customsEntryCodePrefix={state.impbook.customsEntryCodePrefix}
+                        customsEntryCode={state.impbook.customsEntryCode}
+                        customsEntryCodeDate={state.impbook.customsEntryCodeDate}
+                        linnDuty={state.impbook.linnDuty}
+                        linnVat={state.impbook.linnVat}
+                        arrivalDate={state.impbook.arrivalDate}
+                        remainingInvoiceValue={calcRemainingTotal()}
+                        remainingDutyValue={calcRemainingDuty()}
+                        remainingWeightValue={calcRemainingWeight()}
+                        orderDetails={state.impbook.importBookOrderDetails}
+                        comments={state.impbook.comments}
+                        arrivalPort={state.impbook.arrivalPort}
+                    />
+                </Page>
+            </div>
 
             <div className="hide-when-printing">
                 <Page>

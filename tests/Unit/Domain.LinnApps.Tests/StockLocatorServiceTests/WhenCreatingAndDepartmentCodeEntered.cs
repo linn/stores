@@ -46,6 +46,7 @@
                 .Returns(true);
             this.StoresPalletRepository.FilterBy(Arg.Any<Expression<Func<StoresPallet, bool>>>())
                 .Returns(this.pallets.AsQueryable());
+            
             this.result = this.Sut
                 .CreateStockLocator(this.toCreate, this.auditDepartmentCode, this.privileges);
         }

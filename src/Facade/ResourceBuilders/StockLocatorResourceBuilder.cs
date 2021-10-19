@@ -1,6 +1,10 @@
 ﻿namespace Linn.Stores.Facade.ResourceBuilders
 {
+    using System.Collections.Generic;
+    using System.Linq;
+
     using Linn.Common.Facade;
+    using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Resources.StockLocators;
 
@@ -28,7 +32,8 @@
                            PartId = stockLocator.Part?.Id,
                            Category = stockLocator.Category,
                            TriggerLevel = stockLocator.TriggerLevel?.TriggerLevel,
-                           MaxCapacity = stockLocator.TriggerLevel?.MaxCapacity
+                           MaxCapacity = stockLocator.TriggerLevel?.MaxCapacity,
+                           Links = this.BuildLinks(stockLocator).ToArray(),
                        };
         }
 
@@ -38,5 +43,13 @@
         }
 
         object IResourceBuilder<StockLocator>.Build(StockLocator stockLocator) => this.Build(stockLocator);
+
+        private IEnumerable<LinkResource> BuildLinks(StockLocator stockLocator)
+        {
+            if (stockLocator.Part != null)
+            {
+                yield return new LinkResource { Rel = "part", Href = $"/inventory/parts/{stockLocator.Part.Id}" };
+            }
+        }
     }
 }
