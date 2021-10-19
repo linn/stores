@@ -86,13 +86,13 @@
             this.Get("/parts/dept-stock-parts", _ => this.GetDeptStockParts());
 
             this.unitsOfMeasureService = unitsOfMeasureService;
-            this.Get("/units-of-measure", _ => this.GetUnitsOfMeasure());
+            this.Get("inventory/units-of-measure", _ => this.GetUnitsOfMeasure());
 
             this.partCategoryService = partCategoryService;
-            this.Get("/part-categories", _ => this.GetPartCategories());
+            this.Get("/inventory/part-categories", _ => this.GetPartCategories());
 
             this.partTemplateService = partTemplateService;
-            this.Get("/part-templates", _ => this.GetPartTemplates());
+            this.Get("/inventory/part-templates", _ => this.GetPartTemplates());
 
             this.productAnalysisCodeService = productAnalysisCodeService;
             this.Get("/product-analysis-codes", _ => this.GetProductAnalysisCodes());
@@ -102,7 +102,7 @@
             this.Get("/assembly-technologies", _ => this.GetAssemblyTechnologies());
 
             this.decrementRuleService = decrementRuleService;
-            this.Get("inventory/decrement-rules", _ => this.GetDecrementRules());
+            this.Get("/inventory/decrement-rules", _ => this.GetDecrementRules());
 
             this.partLiveService = partLiveService;
             this.Get("/parts/can-be-made-live/{id}", parameters => this.CheckCanBeMadeLive(parameters.id));
@@ -113,7 +113,7 @@
             this.Post("/parts/sources", _ => this.AddMechPartSource());
 
             this.manufacturerService = manufacturerService;
-            this.Get("/manufacturers", _ => this.GetManufacturers());
+            this.Get("/inventory/manufacturers", _ => this.GetManufacturers());
             
             this.dataSheetsValuesService = dataSheetsValuesService;
             this.Get("/parts/data-sheet-values", _ => this.GetPartDataSheetValues());
