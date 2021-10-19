@@ -146,7 +146,7 @@
             builder.RegisterType<RsnRepository>().As<IQueryRepository<Rsn>>();
             builder.RegisterType<LoanRepository>().As<IQueryRepository<Loan>>();
             builder.RegisterType<StockTriggerLevelsRepository>().As<IQueryRepository<StockTriggerLevel>>();
-            builder.RegisterType<PurchaseLedger>().As<IRepository<PurchaseLedger, int>>();
+            builder.RegisterType<PurchaseLedgerRepository>().As<IRepository<PurchaseLedger, int>>();
         }
     }
 }
