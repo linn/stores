@@ -5,6 +5,7 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
+    using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources.ImportBooks;
@@ -19,7 +20,7 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource> ImportBooksFacadeService { get; private set; }
+        protected IImportBookFacadeService ImportBooksFacadeService { get; private set; }
 
         protected IImportBookExchangeRateService ImportBookExchangeRateService { get; private set; }
 
@@ -37,7 +38,7 @@
         public void EstablishContext()
         {
             this.ImportBooksFacadeService =
-                Substitute.For<IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource>>();
+                Substitute.For<IImportBookFacadeService>();
             this.ImportBookExchangeRateService = Substitute.For<IImportBookExchangeRateService>();
             this.ImportBookTransactionCodeFacadeService = Substitute
                 .For<IFacadeService<ImportBookTransactionCode, int, ImportBookTransactionCodeResource, ImportBookTransactionCodeResource>>();
@@ -115,7 +116,9 @@
                 with.ResponseProcessor<ImportBookCpcNumbersResponseProcessor>();
                 with.ResponseProcessor<PortsResponseProcessor>();
                 with.ResponseProcessor<ImportBookDeliveryTermsResponseProcessor>();
-                
+
+                with.Dependency<IResourceBuilder<ProcessResult>>(new ProcessResultResourceBuilder());
+                with.ResponseProcessor<ProcessResultResponseProcessor>();
 
                 with.RequestStartup(
                     (container, pipelines, context) =>
