@@ -16,7 +16,9 @@
 
         protected IPurchaseLedgerPack PurchaseLedgerPack;
 
-        protected IRepository<Supplier, int> SupplierRepository;
+        protected IRepository<PurchaseLedger, int> PurchaseLedgerRepository;
+
+        protected IQueryRepository<Supplier> SupplierRepository;
 
         protected IRepository<ImportBookInvoiceDetail, ImportBookInvoiceDetailKey> InvoiceDetailRepository
         {
@@ -43,9 +45,11 @@
                 Substitute.For<IRepository<ImportBookInvoiceDetail, ImportBookInvoiceDetailKey>>();
             this.OrderDetailRepository = Substitute.For<IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey>>();
             this.PostEntryRepository = Substitute.For<IRepository<ImportBookPostEntry, ImportBookPostEntryKey>>();
-            this.ExchangeRateRepository = Substitute.For<IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey>>();
-            this.SupplierRepository = Substitute.For<IRepository<Supplier, int>>();
+            this.ExchangeRateRepository =
+                Substitute.For<IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey>>();
+            this.SupplierRepository = Substitute.For<IQueryRepository<Supplier>>();
             this.LedgerPeriodRepository = Substitute.For<IRepository<LedgerPeriod, int>>();
+            this.PurchaseLedgerRepository = Substitute.For<IRepository<PurchaseLedger, int>>();
             this.PurchaseLedgerPack = Substitute.For<IPurchaseLedgerPack>();
             this.TransactionManager = Substitute.For<ITransactionManager>();
 
@@ -54,6 +58,7 @@
                 this.LedgerPeriodRepository,
                 this.SupplierRepository,
                 this.OrderDetailRepository,
+                this.PurchaseLedgerRepository,
                 this.TransactionManager,
                 this.PurchaseLedgerPack);
         }

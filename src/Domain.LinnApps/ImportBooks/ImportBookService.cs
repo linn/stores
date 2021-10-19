@@ -17,17 +17,21 @@
 
         private readonly IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey> orderDetailRepository;
 
+        private readonly IRepository<PurchaseLedger, int> purchaseLedgerRepository;
+
+
         private readonly IPurchaseLedgerPack purchaseLedgerPack;
 
-        private readonly IRepository<Supplier, int> supplierRepository;
+        private readonly IQueryRepository<Supplier> supplierRepository;
 
         private readonly ITransactionManager transactionManager;
 
         public ImportBookService(
             IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey> exchangeRateRepository,
             IRepository<LedgerPeriod, int> ledgerPeriodRepository,
-            IRepository<Supplier, int> supplierRepository,
+            IQueryRepository<Supplier> supplierRepository,
             IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey> orderDetailRepository,
+            IRepository<PurchaseLedger, int> purchaseLedgerRepository,
             ITransactionManager transactionManager,
             IPurchaseLedgerPack purchaseLedgerPack)
         {
@@ -37,6 +41,7 @@
             this.orderDetailRepository = orderDetailRepository;
             this.transactionManager = transactionManager;
             this.purchaseLedgerPack = purchaseLedgerPack;
+            this.purchaseLedgerRepository = purchaseLedgerRepository;
         }
 
         public IEnumerable<ImportBookExchangeRate> GetExchangeRates(string date)
@@ -87,7 +92,7 @@
 
         private void PostDuty(ImportBookOrderDetail detail, int supplierId, int employeeId, DateTime postDutyDate)
         {
-            var accountingCompany = this.supplierRepository.FindById(supplierId).AccountingCompany;
+            var accountingCompany = this.supplierRepository.FindBy(x => x.Id == supplierId).AccountingCompany;
 
             if (accountingCompany != "LINN")
             {
@@ -130,6 +135,8 @@
                                                  ExchangeRate = 1,
                                                  LedgerStream = 1
                                              };
+
+            this.purchaseLedgerRepository.Add(newPurchaseLedgerEntry);
         }
 
         private void UpdateInvoiceDetails(IList<ImportBookInvoiceDetail> from, IList<ImportBookInvoiceDetail> to)

@@ -2,6 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq.Expressions;
+
+    using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 
     using FluentAssertions;
 
@@ -69,7 +72,7 @@
                                              PostDuty = false
                                          };
             
-            this.SupplierRepository.FindById(Arg.Any<int>()).Returns(new Supplier { AccountingCompany = "LINN" });
+            this.SupplierRepository.FindBy(Arg.Any<Expression<Func<Supplier, bool>>>()).Returns(new Supplier { AccountingCompany = "LINN" });
 
             this.OrderDetailRepository.FindById(Arg.Any<ImportBookOrderDetailKey>())
                 .Returns(this.firstOrderDetail, this.secondOrderDetail);
