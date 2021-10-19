@@ -78,7 +78,7 @@
             this.partDomainService = partDomainService;
             this.authService = authService;
             this.Get("/parts/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
-            this.Get("/inventory/parts/sources/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
+            this.Get("/parts/sources/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/parts/{id}", parameters => this.GetPart(parameters.id));
             this.Put("/parts/{id}", parameters => this.UpdatePart(parameters.id));
             this.Get("/parts", _ => this.GetParts());
@@ -116,10 +116,10 @@
             this.Get("/inventory/manufacturers", _ => this.GetManufacturers());
             
             this.dataSheetsValuesService = dataSheetsValuesService;
-            this.Get("/inventory/parts/data-sheet-values", _ => this.GetPartDataSheetValues());
+            this.Get("/parts/data-sheet-values", _ => this.GetPartDataSheetValues());
 
             this.tqmsCategoriesService = tqmsCategoriesService;
-            this.Get("/inventory/parts/tqms-categories", _ => this.GetTqmsCategories());
+            this.Get("/parts/tqms-categories", _ => this.GetTqmsCategories());
         }
 
         private object GetPart(int id)

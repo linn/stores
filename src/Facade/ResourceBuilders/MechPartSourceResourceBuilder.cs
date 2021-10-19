@@ -153,7 +153,7 @@
 
         public string GetLocation(MechPartSource model)
         {
-            return $"/inventory/parts/sources/{model.Id}";
+            return $"/parts/sources/{model.Id}";
         }
 
         object IResourceBuilder<MechPartSource>.Build(MechPartSource source) => this.Build(source);
