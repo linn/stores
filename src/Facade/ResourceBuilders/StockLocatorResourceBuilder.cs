@@ -44,7 +44,6 @@
 
         object IResourceBuilder<StockLocator>.Build(StockLocator stockLocator) => this.Build(stockLocator);
 
-
         private IEnumerable<LinkResource> BuildLinks(StockLocator stockLocator)
         {
             if (stockLocator.Part != null)
