@@ -57,13 +57,13 @@
                         });
             }
 
-            this.importBookService.PostDutyForOrderDetails(
+            var result = this.importBookService.PostDutyForOrderDetails(
                 orderDetails,
                 resource.SupplierId,
                 resource.CurrentUserNumber,
                 DateTime.Parse(resource.DatePosted));
 
-            return new SuccessResult<ProcessResult>(new ProcessResult(true, "successfully posted duty"));
+            return new SuccessResult<ProcessResult>(result);
         }
 
         protected override ImportBook CreateFromResource(ImportBookResource resource)

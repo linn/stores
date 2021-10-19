@@ -7,6 +7,7 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
+    using Linn.Stores.Domain.LinnApps.Models;
 
     public class ImportBookService : IImportBookService
     {
@@ -50,7 +51,7 @@
             return exchangeRates;
         }
 
-        public void PostDutyForOrderDetails(
+        public ProcessResult PostDutyForOrderDetails(
             IEnumerable<ImportBookOrderDetail> orderDetails,
             int supplierId,
             int employeeId,
@@ -69,6 +70,8 @@
                     this.transactionManager.Commit();
                 }
             }
+
+            return new ProcessResult(true, "Successfully posted duty");
         }
 
         public void Update(ImportBook from, ImportBook to)

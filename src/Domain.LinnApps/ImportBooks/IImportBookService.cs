@@ -3,13 +3,15 @@
     using System;
     using System.Collections.Generic;
 
+    using Linn.Stores.Domain.LinnApps.Models;
+
     public interface IImportBookService
     {
         void Update(ImportBook from, ImportBook to);
 
         IEnumerable<ImportBookExchangeRate> GetExchangeRates(string date);
 
-        void PostDutyForOrderDetails(
+        ProcessResult PostDutyForOrderDetails(
             IEnumerable<ImportBookOrderDetail> orderDetails,
             int supplierId,
             int employeeId,
