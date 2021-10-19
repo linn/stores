@@ -95,11 +95,10 @@
             this.Get("/inventory/part-templates", _ => this.GetPartTemplates());
 
             this.productAnalysisCodeService = productAnalysisCodeService;
-            this.Get("/product-analysis-codes", _ => this.GetProductAnalysisCodes());
-            this.Get("/product-analysis-codes", _ => this.GetProductAnalysisCodes());
+            this.Get("inventory/product-analysis-codes", _ => this.GetProductAnalysisCodes());
 
             this.assemblyTechnologyService = assemblyTechnologyService;
-            this.Get("/assembly-technologies", _ => this.GetAssemblyTechnologies());
+            this.Get("inventory/assembly-technologies", _ => this.GetAssemblyTechnologies());
 
             this.decrementRuleService = decrementRuleService;
             this.Get("/inventory/decrement-rules", _ => this.GetDecrementRules());
