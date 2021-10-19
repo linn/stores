@@ -4,16 +4,19 @@
     using System.Collections.Generic;
     using System.Linq.Expressions;
 
-    using Linn.Common.Proxy.LinnApps;
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
+    using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
+    using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Resources.ImportBooks;
 
-    public class ImportBookFacadeService : FacadeService<ImportBook, int, ImportBookResource, ImportBookResource>
+    public class ImportBookFacadeService : FacadeService<ImportBook, int, ImportBookResource, ImportBookResource>,
+                                           IImportBookFacadeService
     {
-        private readonly IImportBookService importBookService;
         private readonly IDatabaseService databaseService;
+
+        private readonly IImportBookService importBookService;
 
         public ImportBookFacadeService(
             IRepository<ImportBook, int> repository,
@@ -24,6 +27,43 @@
         {
             this.importBookService = importBookService;
             this.databaseService = databaseService;
+        }
+
+        public IResult<ProcessResult> PostDuty(PostDutyResource resource)
+        {
+            var orderDetails = new List<ImportBookOrderDetail>();
+            foreach (var detail in resource.OrderDetails)
+            {
+                orderDetails.Add(
+                    new ImportBookOrderDetail
+                        {
+                            ImportBookId = resource.ImpbookId,
+                            LineNumber = detail.LineNumber,
+                            OrderNumber = detail.OrderNumber,
+                            RsnNumber = detail.RsnNumber,
+                            OrderDescription = detail.OrderDescription,
+                            Qty = detail.Qty,
+                            DutyValue = detail.DutyValue,
+                            FreightValue = detail.FreightValue,
+                            VatValue = detail.VatValue,
+                            OrderValue = detail.OrderValue,
+                            Weight = detail.Weight,
+                            LoanNumber = detail.LoanNumber,
+                            LineType = detail.LineType,
+                            CpcNumber = detail.CpcNumber,
+                            TariffCode = detail.TariffCode,
+                            InsNumber = detail.InsNumber,
+                            VatRate = detail.VatRate
+                        });
+            }
+
+            this.importBookService.PostDutyForOrderDetails(
+                orderDetails,
+                resource.SupplierId,
+                resource.CurrentUserNumber,
+                DateTime.Parse(resource.DatePosted));
+
+            return new SuccessResult<ProcessResult>(new ProcessResult(true, "successfully posted duty"));
         }
 
         protected override ImportBook CreateFromResource(ImportBookResource resource)
@@ -44,20 +84,20 @@
                                         ArrivalPort = resource.ArrivalPort,
                                         ArrivalDate =
                                             string.IsNullOrWhiteSpace(resource.ArrivalDate)
-                                                ? (DateTime?)null
+                                                ? (DateTime?) null
                                                 : DateTime.Parse(resource.ArrivalDate),
                                         TotalImportValue = resource.TotalImportValue,
                                         Weight = resource.Weight,
                                         CustomsEntryCode = resource.CustomsEntryCode,
                                         CustomsEntryCodeDate =
                                             string.IsNullOrWhiteSpace(resource.CustomsEntryCodeDate)
-                                                ? (DateTime?)null
+                                                ? (DateTime?) null
                                                 : DateTime.Parse(resource.CustomsEntryCodeDate),
                                         LinnDuty = resource.LinnDuty,
                                         LinnVat = resource.LinnVat,
                                         DateCancelled =
                                             string.IsNullOrWhiteSpace(resource.DateCancelled)
-                                                ? (DateTime?)null
+                                                ? (DateTime?) null
                                                 : DateTime.Parse(resource.DateCancelled),
                                         CancelledBy = resource.CancelledBy,
                                         CancelledReason = resource.CancelledReason,
@@ -122,7 +162,7 @@
                             EntryCodePrefix = entry.EntryCodePrefix,
                             EntryCode = entry.EntryCode,
                             EntryDate = string.IsNullOrWhiteSpace(entry.EntryDate)
-                                            ? (DateTime?)null
+                                            ? (DateTime?) null
                                             : DateTime.Parse(entry.EntryDate),
                             Reference = entry.Reference,
                             Duty = entry.Duty,
@@ -133,6 +173,11 @@
             newImportBook.PostEntries = postEntries;
 
             return newImportBook;
+        }
+
+        protected override Expression<Func<ImportBook, bool>> SearchExpression(string searchTerm)
+        {
+            return imps => imps.Id.ToString().Contains(searchTerm);
         }
 
         protected override void UpdateFromResource(ImportBook entity, ImportBookResource updateResource)
@@ -151,20 +196,20 @@
                                         ArrivalPort = updateResource.ArrivalPort,
                                         ArrivalDate =
                                             string.IsNullOrWhiteSpace(updateResource.ArrivalDate)
-                                                ? (DateTime?)null
+                                                ? (DateTime?) null
                                                 : DateTime.Parse(updateResource.ArrivalDate),
                                         TotalImportValue = updateResource.TotalImportValue,
                                         Weight = updateResource.Weight,
                                         CustomsEntryCode = updateResource.CustomsEntryCode,
                                         CustomsEntryCodeDate =
                                             string.IsNullOrWhiteSpace(updateResource.CustomsEntryCodeDate)
-                                                ? (DateTime?)null
+                                                ? (DateTime?) null
                                                 : DateTime.Parse(updateResource.CustomsEntryCodeDate),
                                         LinnDuty = updateResource.LinnDuty,
                                         LinnVat = updateResource.LinnVat,
                                         DateCancelled =
                                             string.IsNullOrWhiteSpace(updateResource.DateCancelled)
-                                                ? (DateTime?)null
+                                                ? (DateTime?) null
                                                 : DateTime.Parse(updateResource.DateCancelled),
                                         CancelledBy = updateResource.CancelledBy,
                                         CancelledReason = updateResource.CancelledReason,
@@ -229,7 +274,7 @@
                             EntryCodePrefix = entry.EntryCodePrefix,
                             EntryCode = entry.EntryCode,
                             EntryDate = string.IsNullOrWhiteSpace(entry.EntryDate)
-                                            ? (DateTime?)null
+                                            ? (DateTime?) null
                                             : DateTime.Parse(entry.EntryDate),
                             Reference = entry.Reference,
                             Duty = entry.Duty,
@@ -239,12 +284,7 @@
 
             newImportBook.PostEntries = postEntries;
 
-            this.importBookService.Update(from: entity, to: newImportBook);
-        }
-
-        protected override Expression<Func<ImportBook, bool>> SearchExpression(string searchTerm)
-        {
-            return imps => imps.Id.ToString().Contains(searchTerm);
+            this.importBookService.Update(entity, newImportBook);
         }
     }
 }

@@ -11,7 +11,8 @@ import {
     Dropdown,
     InputField,
     SnackbarMessage,
-    Typeahead
+    Typeahead,
+    ErrorCard
 } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
 import { Decimal } from 'decimal.js';
@@ -45,7 +46,9 @@ function OrderDetailsTab({
     postDuty,
     postDutyItemError,
     snackbarVisible,
-    setSnackbarVisible
+    setSnackbarVisible,
+    currentUserNumber,
+    impbookId
 }) {
     const updateRow = detail => {
         handleOrderDetailChange(detail.lineNumber, detail);
@@ -93,7 +96,6 @@ function OrderDetailsTab({
     ];
 
     const editRow = (row, propertyName, newValue) => {
-        console.info(newValue);
         updateRow({ ...row, [propertyName]: newValue });
     };
 
@@ -154,15 +156,33 @@ function OrderDetailsTab({
         });
     };
 
-    const handlePostDutyClick = () => {};
+    const handlePostDutyClick = () => {
+        postDuty({
+            orderDetails,
+            datePosted: invoiceDate,
+            currentUserNumber,
+            supplierId,
+            impbookId
+        });
+    };
 
     return (
         <>
             <SnackbarMessage
                 visible={snackbarVisible}
                 onClose={() => setSnackbarVisible(false)}
-                message="Successfully posted Duty to purchase ledger"
+                message="Successfully posted duty to purchase ledger"
             />
+
+            {postDutyItemError && (
+                <Grid item xs={12}>
+                    <ErrorCard
+                        errorMessage={
+                            postDutyItemError?.details?.errors?.[0] || postDutyItemError.statusText
+                        }
+                    />
+                </Grid>
+            )}
 
             <Grid container spacing={1} item xs={12}>
                 <Grid item xs={2}>
@@ -626,7 +646,9 @@ OrderDetailsTab.propTypes = {
         })
     }),
     snackbarVisible: PropTypes.bool,
-    setSnackbarVisible: PropTypes.func.isRequired
+    setSnackbarVisible: PropTypes.func.isRequired,
+    currentUserNumber: PropTypes.number.isRequired,
+    impbookId: PropTypes.number
 };
 
 OrderDetailsTab.defaultProps = {
@@ -636,7 +658,8 @@ OrderDetailsTab.defaultProps = {
     loansSearchResults: null,
     supplierId: -1,
     postDutyItemError: null,
-    snackbarVisible: false
+    snackbarVisible: false,
+    impbookId: null
 };
 
 export default OrderDetailsTab;

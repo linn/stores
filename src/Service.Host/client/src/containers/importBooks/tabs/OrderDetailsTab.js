@@ -45,7 +45,7 @@ const mapStateToProps = state => ({
     })),
     loansSearchLoading: loansSelectors.getSearchLoading(state),
     postDutyItemError: getItemError(state, itemTypes.postDuty.item),
-    snackbarVisible: postDutySelectors.getSnackbarVisible(state),
+    snackbarVisible: postDutySelectors.getSnackbarVisible(state)
 });
 
 const initialise = () => dispatch => {

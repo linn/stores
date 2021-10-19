@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.ImportBookServiceTests
 {
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
 
     using NSubstitute;
@@ -9,7 +10,13 @@
 
     public abstract class ContextBase
     {
-        protected IImportBookService Sut { get; private set; }
+        protected IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey> ExchangeRateRepository;
+
+        protected IRepository<LedgerPeriod, int> LedgerPeriodRepository;
+
+        protected IPurchaseLedgerPack PurchaseLedgerPack;
+
+        protected IRepository<Supplier, int> SupplierRepository;
 
         protected IRepository<ImportBookInvoiceDetail, ImportBookInvoiceDetailKey> InvoiceDetailRepository
         {
@@ -25,9 +32,9 @@
 
         protected IRepository<ImportBookPostEntry, ImportBookPostEntryKey> PostEntryRepository { get; private set; }
 
-        protected IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey> ExchangeRateRepository;
+        protected IImportBookService Sut { get; private set; }
 
-        protected IRepository<LedgerPeriod, int> LedgerPeriodRepository;
+        protected ITransactionManager TransactionManager { get; private set; }
 
         [SetUp]
         public void SetUpContext()
@@ -36,10 +43,19 @@
                 Substitute.For<IRepository<ImportBookInvoiceDetail, ImportBookInvoiceDetailKey>>();
             this.OrderDetailRepository = Substitute.For<IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey>>();
             this.PostEntryRepository = Substitute.For<IRepository<ImportBookPostEntry, ImportBookPostEntryKey>>();
-            this.ExchangeRateRepository =
-                Substitute.For<IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey>>();
+            this.ExchangeRateRepository = Substitute.For<IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey>>();
+            this.SupplierRepository = Substitute.For<IRepository<Supplier, int>>();
             this.LedgerPeriodRepository = Substitute.For<IRepository<LedgerPeriod, int>>();
-            this.Sut = new ImportBookService(this.ExchangeRateRepository, this.LedgerPeriodRepository);
+            this.PurchaseLedgerPack = Substitute.For<IPurchaseLedgerPack>();
+            this.TransactionManager = Substitute.For<ITransactionManager>();
+
+            this.Sut = new ImportBookService(
+                this.ExchangeRateRepository,
+                this.LedgerPeriodRepository,
+                this.SupplierRepository,
+                this.OrderDetailRepository,
+                this.TransactionManager,
+                this.PurchaseLedgerPack);
         }
     }
 }

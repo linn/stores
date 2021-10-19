@@ -12,7 +12,7 @@
 
     public sealed class ImportBooksModule : NancyModule
     {
-        private readonly IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource> importBookFacadeService;
+        private readonly IImportBookFacadeService importBookFacadeService;
 
         private readonly IImportBookExchangeRateService importBookExchangeRateService;
 
@@ -27,7 +27,7 @@
         private readonly IFacadeService<Port, string, PortResource, PortResource> portFacadeService;
 
         public ImportBooksModule(
-            IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource> importBookFacadeService,
+            IImportBookFacadeService importBookFacadeService,
             IImportBookExchangeRateService importBookExchangeRateService,
             IFacadeService<ImportBookTransportCode, int, ImportBookTransportCodeResource, ImportBookTransportCodeResource> importBookTransportCodeService,
             IFacadeService<ImportBookTransactionCode, int, ImportBookTransactionCodeResource, ImportBookTransactionCodeResource> importBookTransactionCodeFacadeService,
@@ -54,8 +54,7 @@
             this.Get("/logistics/import-books/cpc-numbers", parameters => this.GetCpcNumbers());
             this.Get("/logistics/import-books/ports", parameters => this.GetPorts());
             this.Get("/logistics/import-books/delivery-terms", parameters => this.GetDeliveryTerms());
-            this.Post("/logistics/import-books/post-duty", parameters => this.PostDuty());
-
+            this.Post("/logistics/import-books/post-duty", _ => this.PostDuty());
         }
 
         private object GetImportBook(int id)
@@ -101,9 +100,9 @@
 
         private object PostDuty()
         {
-            var resource = this.Bind<ImportBookResource>();
+            var resource = this.Bind<PostDutyResource>();
 
-            var result = this.importBookFacadeService.Add(resource);
+            var result = this.importBookFacadeService.PostDuty(resource);
 
             return this.Negotiate.WithModel(result).WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
@@ -151,5 +150,6 @@
 
             return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
+
     }
 }
