@@ -33,7 +33,7 @@
             this.MechPartSourceService.GetById(1).Returns(new SuccessResult<MechPartSource>(p));
 
             this.Response = this.Browser.Get(
-                "inventory/parts/sources/1",
+                "/parts/sources/1",
                 with => { with.Header("Accept", "application/json"); }).Result;
         }
 
