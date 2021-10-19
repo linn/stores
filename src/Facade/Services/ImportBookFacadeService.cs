@@ -53,7 +53,8 @@
                             CpcNumber = detail.CpcNumber,
                             TariffCode = detail.TariffCode,
                             InsNumber = detail.InsNumber,
-                            VatRate = detail.VatRate
+                            VatRate = detail.VatRate,
+                            PostDuty = detail.PostDuty
                         });
             }
 
