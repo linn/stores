@@ -151,7 +151,6 @@ describe('On Create', () => {
         expect(screen.getByText('Linn Vat')).toBeInTheDocument();
         expect(screen.getByText('Import Book')).toBeInTheDocument();
         expect(screen.getAllByText('Order Details')[1]).toBeInTheDocument();
-        expect(screen.getAllByText('Pva')[1]).toBeInTheDocument();
         expect(screen.getByText('Post Entries')).toBeInTheDocument();
         expect(screen.getByText('Comments')).toBeInTheDocument();
     });
