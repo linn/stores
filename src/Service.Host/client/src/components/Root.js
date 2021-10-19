@@ -71,6 +71,16 @@ const Root = ({ store }) => (
                                     path="/inventory/reports"
                                     render={() => <Redirect to="/inventory" />}
                                 />
+                                <Route
+                                    exact
+                                    path="/inventory/parts"
+                                    render={() => <Redirect to="/parts" />}
+                                />    
+                                <Route
+                                    exact
+                                    path="/inventory/parts/sources"
+                                    render={() => <Redirect to="/parts/sources" />}
+                                /> 
 
                                 <Route
                                     path="/"

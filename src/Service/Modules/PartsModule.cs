@@ -78,6 +78,8 @@
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
             this.authService = authService;
+            this.Get("/parts/sources", _ => this.GetApp());
+
             this.Get("/parts/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/parts/sources/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/parts/{id}", parameters => this.GetPart(parameters.id));
@@ -123,6 +125,11 @@
 
             this.tqmsCategoriesService = tqmsCategoriesService;
             this.Get("/parts/tqms-categories", _ => this.GetTqmsCategories());
+        }
+
+        public object GetApp()
+        {
+            return this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index");
         }
 
         private object GetPart(int id)
