@@ -51,7 +51,7 @@ function Part({
         description: '',
         accountingCompany: 'LINN',
         psuPart: 'N',
-        stockControlled: 'N',
+        stockControlled: 'Y',
         cccCriticalPart: 'N',
         safetyCriticalPart: 'N',
         paretoCode: 'U',
