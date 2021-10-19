@@ -7,6 +7,7 @@
 
     using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
+    using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
     public class StockLocatorLocationsViewService : IStockLocatorLocationsViewService
@@ -92,6 +93,7 @@
                                                          },
                                    PartNumber = values[4].ToString(),
                                    PartDescription = values[5].ToString(),
+                                   Part = new Part { Id = Convert.ToInt32(values[13]) },
                                    PalletNumber = values[6] == DBNull.Value ? (int?)null : Convert.ToInt32(values[6]),
                                    LocationType = values[7].ToString(),
                                    State = values[8].ToString(),

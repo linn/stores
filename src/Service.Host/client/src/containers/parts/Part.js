@@ -1,5 +1,9 @@
 import { connect } from 'react-redux';
-import { getItemError, initialiseOnMount } from '@linn-it/linn-form-components-library';
+import {
+    getItemError,
+    initialiseOnMount,
+    getPreviousPaths
+} from '@linn-it/linn-form-components-library';
 import queryString from 'query-string';
 import Part from '../../components/parts/Part';
 import partActions from '../../actions/partActions';
@@ -47,7 +51,8 @@ const mapStateToProps = (state, { match, location }) => ({
     templateName: queryString.parse(location?.search)?.template,
     partTemplates: partTemplateSelectors.getItems(state),
     liveTest: creating(match) ? null : partLiveTestSelectors.getItem(state),
-    partsSearchResults: partsSelectors.getSearchItems(state)
+    partsSearchResults: partsSelectors.getSearchItems(state),
+    previousPaths: getPreviousPaths(state)
 });
 
 const mapDispatchToProps = dispatch => {

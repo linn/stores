@@ -238,7 +238,7 @@
                                  State = x.State,
                                  QuantityAllocated = x.QuantityAllocated,
                                  StockPoolCode = x.StockPoolCode,
-                                 Part = new Part { PartNumber = x.PartNumber, OurUnitOfMeasure = x.OurUnitOfMeasure, Description = x.PartDescription },
+                                 Part = new Part { PartNumber = x.PartNumber, OurUnitOfMeasure = x.OurUnitOfMeasure, Description = x.PartDescription, Id = x.Part.Id },
                                  TriggerLevel = this.triggerLevelRepository.FindBy(l => l.PartNumber.Equals(x.PartNumber) && l.LocationId.Equals(x.StorageLocationId))
                              });
         }

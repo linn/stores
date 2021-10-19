@@ -2,7 +2,9 @@
 {
     using System.Collections.Generic;
 
-    public class StockLocatorResource
+    using Linn.Common.Resources;
+
+    public class StockLocatorResource : HypermediaResource
     {
         public int Id { get; set; }
 
