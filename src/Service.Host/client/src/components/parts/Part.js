@@ -10,7 +10,6 @@ import {
     Title,
     ErrorCard,
     SnackbarMessage,
-    //smartGoBack,
     LinkButton
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
@@ -20,6 +19,7 @@ import PurchTab from '../../containers/parts/tabs/PurchTab';
 import StoresTab from '../../containers/parts/tabs/StoresTab';
 import LifeCycleTab from './tabs/LifeCycleTab';
 import partReducer from './partReducer';
+import handleBackClick from '../../helpers/handleBackClick';
 
 function Part({
     copy,
@@ -71,19 +71,6 @@ function Part({
         part: creating() ? defaultPart : { partNumber: '' },
         prevPart: { partNumber: '' }
     });
-
-    const handleBackClick = () => {
-        const prevPath =
-            previousPaths?.[previousPaths.length - 1]?.path +
-            previousPaths?.[previousPaths.length - 1]?.search;
-        if (prevPath.includes('signin-oidc')) {
-            global.window.history.go(-3);
-        } else if (previousPaths?.length) {
-            history.goBack();
-        } else {
-            global.window.history.back();
-        }
-    };
 
     useEffect(() => {
         if (copy) {
@@ -487,7 +474,7 @@ function Part({
                                     saveDisabled={viewing() || partInvalid()}
                                     saveClick={handleSaveClick}
                                     cancelClick={handleCancelClick}
-                                    backClick={handleBackClick}
+                                    backClick={() => handleBackClick(previousPaths, history.goBack)}
                                 />
                             </Grid>
                         </>
