@@ -250,34 +250,5 @@
                 }
             }
         }
-
-        private void UpdateTopLevelProperties(ImportBook entity, ImportBook to)
-        {
-            entity.ParcelNumber = to.ParcelNumber;
-            entity.SupplierId = to.SupplierId;
-            entity.ForeignCurrency = to.ForeignCurrency;
-            entity.Currency = to.Currency;
-            entity.CarrierId = to.CarrierId;
-            entity.TransportId = to.TransportId;
-            entity.TransportBillNumber = to.TransportBillNumber;
-            entity.TransactionId = to.TransactionId;
-            entity.DeliveryTermCode = to.DeliveryTermCode;
-            entity.ArrivalPort = to.ArrivalPort;
-            entity.ArrivalDate = to.ArrivalDate;
-            entity.TotalImportValue = to.TotalImportValue;
-            entity.Weight = to.Weight;
-            entity.CustomsEntryCode = to.CustomsEntryCode;
-            entity.CustomsEntryCodeDate = to.CustomsEntryCodeDate;
-            entity.LinnDuty = to.LinnDuty;
-            entity.LinnVat = to.LinnVat;
-            entity.DateCancelled = to.DateCancelled;
-            entity.CancelledBy = to.CancelledBy;
-            entity.CancelledReason = to.CancelledReason;
-            entity.NumCartons = to.NumCartons;
-            entity.NumPallets = to.NumPallets;
-            entity.Comments = to.Comments;
-            entity.CreatedBy = to.CreatedBy;
-            entity.CustomsEntryCodePrefix = to.CustomsEntryCodePrefix;
-        }
     }
 }
