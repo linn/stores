@@ -65,7 +65,8 @@
                                         NumPallets = resource.NumPallets,
                                         Comments = resource.Comments,
                                         CreatedBy = resource.CreatedBy,
-                                        CustomsEntryCodePrefix = resource.CustomsEntryCodePrefix
+                                        CustomsEntryCodePrefix = resource.CustomsEntryCodePrefix,
+                                        Pva = resource.Pva
                                     };
 
             var invoiceDetails = new List<ImportBookInvoiceDetail>();
@@ -172,7 +173,8 @@
                                         NumPallets = updateResource.NumPallets,
                                         Comments = updateResource.Comments,
                                         CreatedBy = updateResource.CreatedBy,
-                                        CustomsEntryCodePrefix = updateResource.CustomsEntryCodePrefix
+                                        CustomsEntryCodePrefix = updateResource.CustomsEntryCodePrefix,
+                                        Pva = updateResource.Pva
                                     };
 
             var invoiceDetails = new List<ImportBookInvoiceDetail>();

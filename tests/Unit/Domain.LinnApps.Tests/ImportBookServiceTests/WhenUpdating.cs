@@ -51,6 +51,7 @@
                                Comments = string.Empty,
                                CreatedBy = null,
                                CustomsEntryCodePrefix = "AA",
+                               Pva = "Y",
                                InvoiceDetails = new List<ImportBookInvoiceDetail>(),
                                OrderDetails = new List<ImportBookOrderDetail>(),
                                PostEntries = new List<ImportBookPostEntry>()
@@ -85,6 +86,7 @@
                                   Comments = "now closed",
                                   CreatedBy = 33105,
                                   CustomsEntryCodePrefix = "AA",
+                                  Pva = "N",
                                   InvoiceDetails = new List<ImportBookInvoiceDetail>(),
                                   OrderDetails = new List<ImportBookOrderDetail>(),
                                   PostEntries = new List<ImportBookPostEntry>()
@@ -96,34 +98,35 @@
         [Test]
         public void ShouldHaveUpdatedAllFieldsOnOriginalImportBook()
         {
-            this.impbook.Id.Equals(this.impbookId).Should().Be(true);
-            this.impbook.ParcelNumber.Equals(this.newImpBook.ParcelNumber).Should().Be(true);
-            this.impbook.DateCreated.Equals(this.newImpBook.DateCreated).Should().Be(false);
-            this.impbook.DateCreated.Equals(this.impbook.DateCreated).Should().Be(true);
-            this.impbook.SupplierId.Equals(this.newImpBook.SupplierId).Should().Be(true);
-            this.impbook.ForeignCurrency.Equals(this.newImpBook.ForeignCurrency).Should().Be(true);
-            this.impbook.Currency.Equals(this.newImpBook.Currency).Should().Be(true);
-            this.impbook.CarrierId.Equals(this.newImpBook.CarrierId).Should().Be(true);
-            this.impbook.TransportId.Equals(this.newImpBook.TransportId).Should().Be(true);
-            this.impbook.TransportBillNumber.Equals(this.newImpBook.TransportBillNumber).Should().Be(true);
-            this.impbook.TransactionId.Equals(this.newImpBook.TransactionId).Should().Be(true);
-            this.impbook.DeliveryTermCode.Equals(this.newImpBook.DeliveryTermCode).Should().Be(true);
-            this.impbook.ArrivalPort.Equals(this.newImpBook.ArrivalPort).Should().Be(true);
-            this.impbook.ArrivalDate.Equals(this.newImpBook.ArrivalDate).Should().Be(true);
-            this.impbook.TotalImportValue.Equals(this.newImpBook.TotalImportValue).Should().Be(true);
-            this.impbook.Weight.Equals(this.newImpBook.Weight).Should().Be(true);
-            this.impbook.CustomsEntryCode.Equals(this.newImpBook.CustomsEntryCode).Should().Be(true);
-            this.impbook.CustomsEntryCodeDate.Equals(this.newImpBook.CustomsEntryCodeDate).Should().Be(true);
-            this.impbook.LinnDuty.Equals(this.newImpBook.LinnDuty).Should().Be(true);
-            this.impbook.LinnVat.Equals(this.newImpBook.LinnVat).Should().Be(true);
-            this.impbook.DateCancelled.Equals(this.newImpBook.DateCancelled).Should().Be(true);
-            this.impbook.CancelledBy.Equals(this.newImpBook.CancelledBy).Should().Be(true);
-            this.impbook.CancelledReason.Equals(this.newImpBook.CancelledReason).Should().Be(true);
-            this.impbook.NumCartons.Equals(this.newImpBook.NumCartons).Should().Be(true);
-            this.impbook.NumPallets.Equals(this.newImpBook.NumPallets).Should().Be(true);
-            this.impbook.Comments.Equals(this.newImpBook.Comments).Should().Be(true);
-            this.impbook.CreatedBy.Equals(this.newImpBook.CreatedBy).Should().Be(true);
-            this.impbook.CustomsEntryCodePrefix.Equals(this.newImpBook.CustomsEntryCodePrefix).Should().Be(true);
+            this.impbook.Id.Equals(this.impbookId).Should().BeTrue();
+            this.impbook.ParcelNumber.Equals(this.newImpBook.ParcelNumber).Should().BeTrue();
+            this.impbook.DateCreated.Equals(this.newImpBook.DateCreated).Should().BeFalse();
+            this.impbook.DateCreated.Equals(this.impbook.DateCreated).Should().BeTrue();
+            this.impbook.SupplierId.Equals(this.newImpBook.SupplierId).Should().BeTrue();
+            this.impbook.ForeignCurrency.Equals(this.newImpBook.ForeignCurrency).Should().BeTrue();
+            this.impbook.Currency.Equals(this.newImpBook.Currency).Should().BeTrue();
+            this.impbook.CarrierId.Equals(this.newImpBook.CarrierId).Should().BeTrue();
+            this.impbook.TransportId.Equals(this.newImpBook.TransportId).Should().BeTrue();
+            this.impbook.TransportBillNumber.Equals(this.newImpBook.TransportBillNumber).Should().BeTrue();
+            this.impbook.TransactionId.Equals(this.newImpBook.TransactionId).Should().BeTrue();
+            this.impbook.DeliveryTermCode.Equals(this.newImpBook.DeliveryTermCode).Should().BeTrue();
+            this.impbook.ArrivalPort.Equals(this.newImpBook.ArrivalPort).Should().BeTrue();
+            this.impbook.ArrivalDate.Equals(this.newImpBook.ArrivalDate).Should().BeTrue();
+            this.impbook.TotalImportValue.Equals(this.newImpBook.TotalImportValue).Should().BeTrue();
+            this.impbook.Weight.Equals(this.newImpBook.Weight).Should().BeTrue();
+            this.impbook.CustomsEntryCode.Equals(this.newImpBook.CustomsEntryCode).Should().BeTrue();
+            this.impbook.CustomsEntryCodeDate.Equals(this.newImpBook.CustomsEntryCodeDate).Should().BeTrue();
+            this.impbook.LinnDuty.Equals(this.newImpBook.LinnDuty).Should().BeTrue();
+            this.impbook.LinnVat.Equals(this.newImpBook.LinnVat).Should().BeTrue();
+            this.impbook.DateCancelled.Equals(this.newImpBook.DateCancelled).Should().BeTrue();
+            this.impbook.CancelledBy.Equals(this.newImpBook.CancelledBy).Should().BeTrue();
+            this.impbook.CancelledReason.Equals(this.newImpBook.CancelledReason).Should().BeTrue();
+            this.impbook.NumCartons.Equals(this.newImpBook.NumCartons).Should().BeTrue();
+            this.impbook.NumPallets.Equals(this.newImpBook.NumPallets).Should().BeTrue();
+            this.impbook.Comments.Equals(this.newImpBook.Comments).Should().BeTrue();
+            this.impbook.CreatedBy.Equals(this.newImpBook.CreatedBy).Should().BeTrue();
+            this.impbook.CustomsEntryCodePrefix.Equals(this.newImpBook.CustomsEntryCodePrefix).Should().BeTrue();
+            this.impbook.Pva.Equals("N").Should().BeTrue();
         }
     }
 }
