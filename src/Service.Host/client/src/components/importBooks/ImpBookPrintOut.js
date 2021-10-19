@@ -42,7 +42,8 @@ function ImpBookPrintOut({
     remainingWeightValue,
     orderDetails,
     comments,
-    arrivalPort
+    arrivalPort,
+    pva
 }) {
     const useStyles = makeStyles(theme => ({
         gapAbove: {
@@ -89,9 +90,14 @@ function ImpBookPrintOut({
                     EEC Member: <b>{eecMember}</b>
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item xs={8}>
                     Currency: <b>{currency}</b>
                 </Grid>
+
+                <Grid item xs={4}>
+                    PVA: <b>{pva}</b>
+                </Grid>
+
                 <Grid item xs={12}>
                     Parcel Number: <b>{parcelNumber}</b>
                 </Grid>
@@ -344,7 +350,8 @@ ImpBookPrintOut.propTypes = {
     carrierName: PropTypes.string,
     remainingInvoiceValue: PropTypes.number,
     remainingDutyValue: PropTypes.number,
-    remainingWeightValue: PropTypes.number
+    remainingWeightValue: PropTypes.number,
+    pva: PropTypes.string
 };
 
 ImpBookPrintOut.defaultProps = {
@@ -380,7 +387,8 @@ ImpBookPrintOut.defaultProps = {
     carrierName: null,
     remainingInvoiceValue: null,
     remainingDutyValue: null,
-    remainingWeightValue: null
+    remainingWeightValue: null,
+    pva: ''
 };
 
 export default ImpBookPrintOut;

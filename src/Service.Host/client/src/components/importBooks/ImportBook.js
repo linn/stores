@@ -318,6 +318,8 @@ function ImportBook({
             !state.impbook.transactionId ||
             !state.impbook.totalImportValue ||
             !state.impbook.deliveryTermCode ||
+            !state.impbook.pva ||
+            !state.impbook.foreignCurrency ||
             `${calcRemainingTotal()}` !== '0' ||
             `${calcRemainingDuty()}` !== '0' ||
             `${calcRemainingWeight()}` !== '0'
@@ -372,6 +374,7 @@ function ImportBook({
                         orderDetails={state.impbook.importBookOrderDetails}
                         comments={state.impbook.comments}
                         arrivalPort={state.impbook.arrivalPort}
+                        pva={state.impbook.pva}
                     />
                 </Page>
             </div>
@@ -479,6 +482,7 @@ function ImportBook({
                                             carrierNameValue={carrierNameValue}
                                             countryIsInEU={countryIsInEU}
                                             employees={employees}
+                                            pva={state.impbook.pva}
                                         />
                                     )}
 
