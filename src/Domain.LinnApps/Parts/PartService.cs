@@ -195,14 +195,17 @@
                     .OrderByDescending(p => p.DateCreated).ToList().FirstOrDefault()
                     ?.PartNumber;
                 var realNextNumber = FindRealNextNumber(newestPartOfThisType);
-                if (this.partRepository.FindBy(p => p.PartNumber == partToCreate.PartNumber) != null)
+
+                if (this.partRepository.FilterBy(p => p.PartNumber == partToCreate.PartNumber).ToList()
+                        .FirstOrDefault() != null)
                 {
                     throw new CreatePartException("A Part with that Part Number already exists. Why not try " + realNextNumber);
                 }
 
                 this.templateRepository.FindById(partRoot).NextNumber = realNextNumber + 1;
             }
-            else if (this.partRepository.FindBy(p => p.PartNumber == partToCreate.PartNumber) != null)
+            else if (this.partRepository.FilterBy(p => p.PartNumber == partToCreate.PartNumber).ToList()
+                         .FirstOrDefault() != null)
             {
                 throw new CreatePartException("A Part with that Part Number already exists.");
             }

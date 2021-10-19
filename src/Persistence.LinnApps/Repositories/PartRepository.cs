@@ -100,8 +100,9 @@
 
         public IQueryable<Part> FilterBy(Expression<Func<Part, bool>> expression)
         {
-            return this.serviceDbContext.Parts.Where(expression)
+            return this.serviceDbContext.Parts
                 .AsNoTracking()
+                .Where(expression)
                 .Include(p => p.MechPartSource);
         }
     }

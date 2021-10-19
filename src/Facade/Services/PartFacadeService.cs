@@ -90,6 +90,18 @@
             return new SuccessResult<IEnumerable<Part>>(new List<Part> { this.partRepository.FindBy(a => a.PartNumber == partNumber.ToUpper()) });
         }
 
+        public IResult<Part> GetByIdNoTracking(int id)
+        {
+            var res = this.partRepository.FilterBy(x => x.Id == id).ToList().FirstOrDefault();
+
+            if (res == null)
+            {
+                return new NotFoundResult<Part>("Not Found");
+            }
+
+            return new SuccessResult<Part>(res);
+        }
+
         protected override Part CreateFromResource(PartResource resource)
         {
             var partToAdd = new Part
