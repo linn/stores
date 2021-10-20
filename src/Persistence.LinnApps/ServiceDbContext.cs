@@ -359,7 +359,7 @@
             this.QueryStoresLabelTypes(builder);
             this.BuildPurchaseOrders(builder);
             this.QueryAuthUsers(builder);
-            this.QueryRsns(builder);
+            this.BuildRsns(builder);
             this.QueryTariffs(builder);
             this.QueryLoans(builder);
             base.OnModelCreating(builder);
@@ -2023,9 +2023,8 @@
             query.Property(t => t.Name).HasColumnName("USER_NAME");
         }
 
-        private void QueryRsns(ModelBuilder builder)
+        private void BuildRsns(ModelBuilder builder)
         {
-            //todo make all query or build
             var q = builder.Entity<Rsn>().ToTable("RSNS");
             q.HasKey(e => e.RsnNumber);
             q.Property(e => e.RsnNumber).HasColumnName("RSN_NUMBER");
@@ -2045,7 +2044,6 @@
         private void QueryLoans(ModelBuilder builder)
         {
             var q = builder.Query<Loan>().ToView("LOAN_HEADERS");
-            //q.HasKey(e => e.LoanNumber);
             q.Property(e => e.LoanNumber).HasColumnName("LOAN_NUMBER").HasMaxLength(6);
         }
 

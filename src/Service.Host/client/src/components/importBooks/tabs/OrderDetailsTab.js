@@ -564,21 +564,6 @@ function OrderDetailsTab({
                                     labelPlacement="top"
                                 />
                             </Grid>
-
-                            {/* <Grid item xs={1}>
-                                <Dropdown
-                                    items={[{ id: 'Y', displayText: 'Yes' }]}
-                                    propertyName="postDuty"
-                                    fullWidth
-                                    value={row.postDuty}
-                                    label="Post Duty"
-                                    onChange={(propertyName, newValue) =>
-                                        editRow(row, propertyName, newValue)
-                                    }
-                                    required
-                                    disabled={!allowedToEdit}
-                                />
-                            </Grid> */}
                             <Grid item xs={1}>
                                 <Tooltip title="Remove order detail" aria-label="add">
                                     <Button

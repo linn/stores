@@ -172,13 +172,12 @@ function ImpBookTab({
                 </Grid>
 
                 <Grid item xs={6}>
-                    <Tooltip title="Right click to open in new tab">
-                        <LinkButton
-                            text="View Parcel"
-                            to={`/logistics/parcels/${parcelNumber}`}
-                            external
-                        />
-                    </Tooltip>
+                    <LinkButton
+                        text="View Parcel"
+                        to={`/logistics/parcels/${parcelNumber}`}
+                        tooltip="Right click to open in new tab"
+                        external
+                    />
                 </Grid>
 
                 <Grid item xs={6}>

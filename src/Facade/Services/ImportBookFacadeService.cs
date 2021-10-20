@@ -97,7 +97,7 @@
                                         ArrivalPort = resource.ArrivalPort,
                                         ArrivalDate =
                                             string.IsNullOrWhiteSpace(resource.ArrivalDate)
-                                                ? (DateTime?) null
+                                                ? (DateTime?)null
                                                 : DateTime.Parse(resource.ArrivalDate),
                                         TotalImportValue = resource.TotalImportValue,
                                         Weight = resource.Weight,
@@ -176,7 +176,7 @@
                             EntryCodePrefix = entry.EntryCodePrefix,
                             EntryCode = entry.EntryCode,
                             EntryDate = string.IsNullOrWhiteSpace(entry.EntryDate)
-                                            ? (DateTime?) null
+                                            ? (DateTime?)null
                                             : DateTime.Parse(entry.EntryDate),
                             Reference = entry.Reference,
                             Duty = entry.Duty,
@@ -210,20 +210,20 @@
                                         ArrivalPort = updateResource.ArrivalPort,
                                         ArrivalDate =
                                             string.IsNullOrWhiteSpace(updateResource.ArrivalDate)
-                                                ? (DateTime?) null
+                                                ? (DateTime?)null
                                                 : DateTime.Parse(updateResource.ArrivalDate),
                                         TotalImportValue = updateResource.TotalImportValue,
                                         Weight = updateResource.Weight,
                                         CustomsEntryCode = updateResource.CustomsEntryCode,
                                         CustomsEntryCodeDate =
                                             string.IsNullOrWhiteSpace(updateResource.CustomsEntryCodeDate)
-                                                ? (DateTime?) null
+                                                ? (DateTime?)null
                                                 : DateTime.Parse(updateResource.CustomsEntryCodeDate),
                                         LinnDuty = updateResource.LinnDuty,
                                         LinnVat = updateResource.LinnVat,
                                         DateCancelled =
                                             string.IsNullOrWhiteSpace(updateResource.DateCancelled)
-                                                ? (DateTime?) null
+                                                ? (DateTime?)null
                                                 : DateTime.Parse(updateResource.DateCancelled),
                                         CancelledBy = updateResource.CancelledBy,
                                         CancelledReason = updateResource.CancelledReason,
@@ -289,7 +289,7 @@
                             EntryCodePrefix = entry.EntryCodePrefix,
                             EntryCode = entry.EntryCode,
                             EntryDate = string.IsNullOrWhiteSpace(entry.EntryDate)
-                                            ? (DateTime?) null
+                                            ? (DateTime?)null
                                             : DateTime.Parse(entry.EntryDate),
                             Reference = entry.Reference,
                             Duty = entry.Duty,
