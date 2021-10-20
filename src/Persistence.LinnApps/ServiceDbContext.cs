@@ -1069,6 +1069,7 @@
             q.Property(e => e.InsNumber).HasColumnName("INS_NUMBER");
             q.Property(e => e.VatRate).HasColumnName("VAT_RATE");
             q.Property(e => e.POLineNumber).HasColumnName("PO_LINE_NUMBER").HasMaxLength(2);
+            q.Property(e => e.PostDuty).HasColumnName("POST_DUTY").HasMaxLength(1);
         }
 
         private void BuildImportBookDeliveryTerms(ModelBuilder builder)
@@ -2024,6 +2025,7 @@
 
         private void QueryRsns(ModelBuilder builder)
         {
+            //todo make all query or build
             var q = builder.Entity<Rsn>().ToTable("RSNS");
             q.HasKey(e => e.RsnNumber);
             q.Property(e => e.RsnNumber).HasColumnName("RSN_NUMBER");
@@ -2042,8 +2044,8 @@
 
         private void QueryLoans(ModelBuilder builder)
         {
-            var q = builder.Entity<Loan>().ToTable("LOAN_HEADERS");
-            q.HasKey(e => e.LoanNumber);
+            var q = builder.Query<Loan>().ToView("LOAN_HEADERS");
+            //q.HasKey(e => e.LoanNumber);
             q.Property(e => e.LoanNumber).HasColumnName("LOAN_NUMBER").HasMaxLength(6);
         }
 
@@ -2079,7 +2081,7 @@
             e.Property(p => p.CompanyRef).HasColumnName("COMPANY_REF").HasMaxLength(8);
             e.Property(p => p.Currency).HasColumnName("CURRENCY").HasMaxLength(4);
             e.Property(p => p.LedgerPeriod).HasColumnName("LEDGER_PERIOD");
-            e.Property(p => p.LedgerPeriod).HasColumnName("POSTED_BY").HasMaxLength(6);
+            e.Property(p => p.PostedBy).HasColumnName("POSTED_BY").HasMaxLength(6);
             e.Property(p => p.DebitNomacc).HasColumnName("DEBIT_NOMACC").HasMaxLength(6);
             e.Property(p => p.CreditNomacc).HasColumnName("CREDIT_NOMACC").HasMaxLength(6);
             e.Property(p => p.PlTransType).HasColumnName("PL_TRANS_TYPE").HasMaxLength(12);

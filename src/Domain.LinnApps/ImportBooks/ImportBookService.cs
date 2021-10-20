@@ -66,12 +66,16 @@
             {
                 var oldDetail = this.orderDetailRepository.FindById(
                     new ImportBookOrderDetailKey(detail.ImportBookId, detail.LineNumber));
+                if (oldDetail == null)
+                {
+                    throw new PostDutyException("Cannot post duty without saving all order details first");
+                }
 
-                if (!oldDetail.PostDuty && detail.PostDuty)
+                if (string.IsNullOrEmpty(oldDetail.PostDuty) && !string.IsNullOrEmpty(detail.PostDuty) && detail.PostDuty.Equals("Y"))
                 {
                     this.PostDuty(detail, supplierId, employeeId, postDutyDate);
 
-                    oldDetail.PostDuty = true;
+                    oldDetail.PostDuty = "Y";
                     this.transactionManager.Commit();
                 }
             }
@@ -97,7 +101,7 @@
             if (accountingCompany != "LINN")
             {
                 throw new PostDutyException(
-                    "supplier is not set up for records duty yet, accounting company is not LINN");
+                    $"supplier {supplierId} on detail is not set up for records duty yet, accounting company is not LINN");
             }
 
             var pltref = this.purchaseLedgerPack.GetNextLedgerSeq();

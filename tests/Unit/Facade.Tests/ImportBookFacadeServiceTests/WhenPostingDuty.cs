@@ -59,7 +59,7 @@
                                                                    TariffCode = "121213",
                                                                    InsNumber = null,
                                                                    VatRate = null,
-                                                                   PostDuty = true
+                                                                   PostDuty = "Y"
                                                                },
                                                            new ImportBookOrderDetailResource
                                                                {
@@ -80,7 +80,7 @@
                                                                    TariffCode = "121213",
                                                                    InsNumber = 92,
                                                                    VatRate = 93,
-                                                                   PostDuty = false
+                                                                   PostDuty = null
                                                                }
                                                        }
                                 };
@@ -100,7 +100,7 @@
             this.DomainService.Received().PostDutyForOrderDetails(
                 Arg.Is<IEnumerable<ImportBookOrderDetail>>(
                     x => x.Any(
-                        y => y.PostDuty && y.ImportBookId == this.impbookId && y.LineNumber == 2
+                        y => !string.IsNullOrEmpty(y.PostDuty) && y.ImportBookId == this.impbookId && y.LineNumber == 2
                              && y.OrderNumber == 13)),
                 this.supplierId,
                 this.empNo,
@@ -109,7 +109,7 @@
             this.DomainService.Received().PostDutyForOrderDetails(
                 Arg.Is<IEnumerable<ImportBookOrderDetail>>(
                     x => x.Any(
-                        y => !y.PostDuty && y.ImportBookId == this.impbookId && y.LineNumber == 1
+                        y => string.IsNullOrEmpty(y.PostDuty) && y.ImportBookId == this.impbookId && y.LineNumber == 1
                              && y.OrderNumber == 111)),
                 this.supplierId,
                 this.empNo,

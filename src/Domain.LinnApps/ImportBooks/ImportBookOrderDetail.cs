@@ -38,6 +38,6 @@
 
         public decimal Weight { get; set; }
 
-        public bool PostDuty { get; set; }
+        public string PostDuty { get; set; }
     }
 }

@@ -17,7 +17,8 @@
 
         public ImportBookOrderDetail FindById(ImportBookOrderDetailKey key)
         {
-            return this.serviceDbContext.ImportBookOrderDetails.Find(key.ImportBookId, key.LineNumber);
+            return this.serviceDbContext.ImportBookOrderDetails
+                .Where(e => e.ImportBookId == key.ImportBookId && e.LineNumber == key.LineNumber).ToList().FirstOrDefault();
         }
 
         public IQueryable<ImportBookOrderDetail> FindAll()

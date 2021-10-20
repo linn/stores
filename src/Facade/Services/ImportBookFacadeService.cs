@@ -7,6 +7,7 @@
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Common.Proxy.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Resources.ImportBooks;
@@ -58,13 +59,24 @@
                         });
             }
 
-            var result = this.importBookService.PostDutyForOrderDetails(
-                orderDetails,
-                resource.SupplierId,
-                resource.CurrentUserNumber,
-                DateTime.Parse(resource.DatePosted));
+            try
+            {
+                var result = this.importBookService.PostDutyForOrderDetails(
+                    orderDetails,
+                    resource.SupplierId,
+                    resource.CurrentUserNumber,
+                    DateTime.Parse(resource.DatePosted));
 
-            return new SuccessResult<ProcessResult>(result);
+                return new SuccessResult<ProcessResult>(result);
+            }
+            catch (PostDutyException e)
+            {
+                return new BadRequestResult<ProcessResult>(e.Message);
+            }
+            catch (Exception e)
+            {
+                return new BadRequestResult<ProcessResult>(e.InnerException != null ? e.InnerException.Message : e.Message);
+            }
         }
 
         protected override ImportBook CreateFromResource(ImportBookResource resource)
@@ -92,7 +104,7 @@
                                         CustomsEntryCode = resource.CustomsEntryCode,
                                         CustomsEntryCodeDate =
                                             string.IsNullOrWhiteSpace(resource.CustomsEntryCodeDate)
-                                                ? (DateTime?) null
+                                                ? (DateTime?)null
                                                 : DateTime.Parse(resource.CustomsEntryCodeDate),
                                         LinnDuty = resource.LinnDuty,
                                         LinnVat = resource.LinnVat,

@@ -99,6 +99,14 @@ function OrderDetailsTab({
         updateRow({ ...row, [propertyName]: newValue });
     };
 
+    const handlePostDutyTick = row => {
+        if (row.postDuty) {
+            updateRow({ ...row, postDuty: null });
+        } else {
+            updateRow({ ...row, postDuty: 'Y' });
+        }
+    };
+
     const handleRsnUpdate = (row, rsn) => {
         updateRow({
             ...row,
@@ -178,7 +186,9 @@ function OrderDetailsTab({
                 <Grid item xs={12}>
                     <ErrorCard
                         errorMessage={
-                            postDutyItemError?.details?.errors?.[0] || postDutyItemError.statusText
+                            postDutyItemError?.details?.errors?.[0] ||
+                            postDutyItemError?.details?.message ||
+                            postDutyItemError.statusText
                         }
                     />
                 </Grid>
@@ -243,7 +253,7 @@ function OrderDetailsTab({
                         <Button
                             className={classes.marginTop1}
                             onClick={handlePostDutyClick}
-                            disabled={!allowedToEdit}
+                            disabled={!allowedToEdit || !invoiceDate}
                         >
                             Post Duty
                         </Button>
@@ -540,14 +550,12 @@ function OrderDetailsTab({
                                     type="number"
                                 />
                             </Grid>
-                            <Grid item xs={2}>
+                            <Grid item xs={1}>
                                 <FormControlLabel
                                     control={
                                         <Checkbox
-                                            onChange={(propertyName, newValue) =>
-                                                editRow(row, propertyName, newValue)
-                                            }
-                                            checked={row.postDuty}
+                                            onChange={() => handlePostDutyTick(row)}
+                                            checked={row.postDuty === 'Y'}
                                             disabled={!allowedToEdit}
                                             color="primary"
                                         />
@@ -556,7 +564,22 @@ function OrderDetailsTab({
                                     labelPlacement="top"
                                 />
                             </Grid>
-                            <Grid item xs={2}>
+
+                            {/* <Grid item xs={1}>
+                                <Dropdown
+                                    items={[{ id: 'Y', displayText: 'Yes' }]}
+                                    propertyName="postDuty"
+                                    fullWidth
+                                    value={row.postDuty}
+                                    label="Post Duty"
+                                    onChange={(propertyName, newValue) =>
+                                        editRow(row, propertyName, newValue)
+                                    }
+                                    required
+                                    disabled={!allowedToEdit}
+                                />
+                            </Grid> */}
+                            <Grid item xs={1}>
                                 <Tooltip title="Remove order detail" aria-label="add">
                                     <Button
                                         className={classes.marginTop1}
@@ -642,7 +665,8 @@ OrderDetailsTab.propTypes = {
         statusText: PropTypes.string,
         item: PropTypes.string,
         details: PropTypes.shape({
-            errors: PropTypes.arrayOf(PropTypes.shape({}))
+            errors: PropTypes.arrayOf(PropTypes.shape({})),
+            message: PropTypes.string
         })
     }),
     snackbarVisible: PropTypes.bool,

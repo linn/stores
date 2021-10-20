@@ -47,7 +47,7 @@
                                             TariffCode = "121213",
                                             InsNumber = null,
                                             VatRate = null,
-                                            PostDuty = false
+                                            PostDuty = null
                                         };
 
             this.secondOrderDetail = new ImportBookOrderDetail
@@ -69,8 +69,8 @@
                                              TariffCode = "121213",
                                              InsNumber = null,
                                              VatRate = null,
-                                             PostDuty = false
-                                         };
+                                             PostDuty = null
+            };
             
             this.SupplierRepository.FindBy(Arg.Any<Expression<Func<Supplier, bool>>>()).Returns(new Supplier { AccountingCompany = "LINN" });
 
@@ -81,7 +81,7 @@
             this.PurchaseLedgerPack.GetLedgerPeriod().Returns(17);
             this.PurchaseLedgerPack.GetNomacc(Arg.Any<string>(), Arg.Any<string>()).Returns(2233);
 
-            var orderDetails = new List<ImportBookOrderDetail> { new ImportBookOrderDetail { PostDuty = true }, new ImportBookOrderDetail { PostDuty = true } };
+            var orderDetails = new List<ImportBookOrderDetail> { new ImportBookOrderDetail { PostDuty = "Y" }, new ImportBookOrderDetail { PostDuty = "Y" } };
 
             this.result = this.Sut.PostDutyForOrderDetails(orderDetails, 1234, 56789, DateTime.Now);
         }
@@ -95,8 +95,8 @@
         [Test]
         public void ShouldHaveUpdatedPostDutyFlagOnBothOrderDetails()
         {
-            this.firstOrderDetail.PostDuty.Should().BeTrue();
-            this.secondOrderDetail.PostDuty.Should().BeTrue();
+            this.firstOrderDetail.PostDuty.Should().Be("Y");
+            this.secondOrderDetail.PostDuty.Should().Be("Y");
         }
     }
 }
