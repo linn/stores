@@ -168,7 +168,7 @@
             from.PurchasingPhaseOutType = to.PurchasingPhaseOutType;
         }
 
-        public Part CreatePart(Part partToCreate, List<string> privileges)
+        public Part CreatePart(Part partToCreate, List<string> privileges, bool fromTemplate)
         {
             partToCreate.PartNumber = partToCreate.PartNumber?.ToUpper().Trim();
 
@@ -184,9 +184,12 @@
 
             var partRoot = this.partPack.PartRoot(partToCreate.PartNumber);
 
-            if (partRoot != null && this.templateRepository.FindById(partRoot) != null)
+
+            if (partRoot != null && fromTemplate)
             {
-                if (this.templateRepository.FindById(partRoot).AllowPartCreation == "N")
+                var template = this.templateRepository.FindById(partRoot);
+
+                if (template.AllowPartCreation == "N")
                 {
                     throw new CreatePartException("The system no longer allows creation of " + partRoot + " parts.");
                 }
@@ -194,7 +197,8 @@
                 var newestPartOfThisType = this.partRepository.FilterBy(p => p.PartNumber.StartsWith(partRoot) && p.DateCreated.HasValue)
                     .OrderByDescending(p => p.DateCreated).ToList().FirstOrDefault()
                     ?.PartNumber;
-                var realNextNumber = FindRealNextNumber(newestPartOfThisType);
+
+                var realNextNumber = FindRealNextNumber(newestPartOfThisType, template);
 
                 if (this.partRepository.FilterBy(p => p.PartNumber == partToCreate.PartNumber).ToList()
                         .FirstOrDefault() != null)
@@ -296,10 +300,20 @@
             }
         }
 
-        private static int FindRealNextNumber(string newestPartOfThisType)
+        private static int? FindRealNextNumber(string newestPartOfThisType, PartTemplate template)
         {
             var highestNumber = newestPartOfThisType?.Split(" ").Last().Split("/")[0];
-            return int.Parse(highestNumber ?? throw new InvalidOperationException()) + 1;
+            if (int.TryParse(highestNumber, out var res))
+            {
+                return res + 1;
+            }
+
+            if (template.HasNumberSequence != "Y")
+            {
+                throw new CreatePartException("Template has no number sequence");
+            }
+
+            return template.NextNumber;
         }
     }
 }

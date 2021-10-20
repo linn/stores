@@ -71,6 +71,16 @@ const Root = ({ store }) => (
                                     path="/inventory/reports"
                                     render={() => <Redirect to="/inventory" />}
                                 />
+                                <Route
+                                    exact
+                                    path="/inventory/parts"
+                                    render={() => <Redirect to="/parts" />}
+                                />    
+                                <Route
+                                    exact
+                                    path="/inventory/parts/sources"
+                                    render={() => <Redirect to="/parts/sources" />}
+                                /> 
 
                                 <Route
                                     path="/"
@@ -89,20 +99,20 @@ const Root = ({ store }) => (
                                     />
                                     <Route
                                         exact
-                                        path="/inventory/parts/sources"
+                                        path="/parts/sources"
                                         component={Parts}
                                     />
-                                    <Route exact path="/inventory/parts" component={Parts} />
-                                    <Route exact path="/inventory/parts/create" component={Part} />
-                                    <Route exact path="/inventory/parts/:id" component={Part} />
+                                    <Route exact path="/parts" component={Parts} />
+                                    <Route exact path="/parts/create" component={Part} />
+                                    <Route exact path="/parts/:id" component={Part} />
                                     <Route
                                         exact
-                                        path="/inventory/parts/sources/create"
+                                        path="/parts/sources/create"
                                         component={MechPartSource}
                                     />
                                     <Route
                                         exact
-                                        path="/inventory/parts/sources/:id"
+                                        path="/parts/sources/:id"
                                         component={MechPartSource}
                                     />
                                     <Route

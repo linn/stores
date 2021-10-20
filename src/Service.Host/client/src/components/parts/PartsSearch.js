@@ -18,11 +18,9 @@ function PartsSearch({
 
     const createUrl = () => {
         if (linkToSources) {
-            return '/inventory/parts/sources/create';
+            return '/parts/sources/create';
         }
-        return template
-            ? `/inventory/parts/create?template=${template}`
-            : '/inventory/parts/create';
+        return template ? `/parts/create?template=${template}` : '/parts/create';
     };
     const searchItems = () => {
         const result = linkToSources

@@ -217,7 +217,7 @@ function Part({
     const handleSaveClick = () => {
         clearErrors();
         if (creating()) {
-            addItem(state.part);
+            addItem({ ...state.part, fromTemplate: !!templateName });
         } else {
             updateItem(itemId, state.part);
         }
@@ -275,7 +275,7 @@ function Part({
                     <Grid item xs={2} />
                 ) : (
                     <Grid item xs={2}>
-                        <LinkButton to="/inventory/parts/create?copy=true" text="Copy" />
+                        <LinkButton to="/parts/create?copy=true" text="Copy" />
                     </Grid>
                 )}
                 {itemError && (

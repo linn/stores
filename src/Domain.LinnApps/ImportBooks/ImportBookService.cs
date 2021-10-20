@@ -68,6 +68,7 @@
             entity.Comments = to.Comments;
             entity.CreatedBy = to.CreatedBy;
             entity.CustomsEntryCodePrefix = to.CustomsEntryCodePrefix;
+            entity.Pva = to.Pva;
         }
 
         private void UpdateInvoiceDetails(IList<ImportBookInvoiceDetail> from, IList<ImportBookInvoiceDetail> to)

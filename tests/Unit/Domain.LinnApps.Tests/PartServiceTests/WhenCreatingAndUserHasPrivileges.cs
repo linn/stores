@@ -42,7 +42,7 @@
                                 }.AsQueryable());
             this.TemplateRepository.FindById(Arg.Any<string>()).Returns(new PartTemplate { NextNumber = 1 });
             this.PartPack.PartRoot(Arg.Any<string>()).Returns("CAP");
-            this.result = this.Sut.CreatePart(this.part, this.privileges);
+            this.result = this.Sut.CreatePart(this.part, this.privileges, false);
         }
 
         [Test]
@@ -58,9 +58,9 @@
         }
 
         [Test]
-        public void ShouldUpdatePartTemplateRepository()
+        public void ShouldNotUpdatePartTemplateRepository()
         {
-            this.TemplateRepository.Received().FindById("CAP");
+            this.TemplateRepository.DidNotReceive().FindById("CAP");
         }
 
         [Test]

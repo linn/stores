@@ -59,6 +59,8 @@
         
         public string CustomsEntryCodePrefix { get; set; }
 
+        public string Pva { get; set; }
+
         public IEnumerable<ImportBookOrderDetailResource> ImportBookOrderDetails { get; set; }
 
         public IEnumerable<ImportBookPostEntryResource> ImportBookPostEntries { get; set; }
