@@ -58,9 +58,9 @@
         }
 
         [Test]
-        public void ShouldUpdatePartTemplateRepository()
+        public void ShouldNotUpdatePartTemplateRepository()
         {
-            this.TemplateRepository.Received().FindById("CAP");
+            this.TemplateRepository.DidNotReceive().FindById("CAP");
         }
 
         [Test]

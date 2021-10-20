@@ -184,10 +184,11 @@
 
             var partRoot = this.partPack.PartRoot(partToCreate.PartNumber);
 
-            var template = this.templateRepository.FindById(partRoot);
 
-            if (partRoot != null && template != null)
+            if (partRoot != null && fromTemplate)
             {
+                var template = this.templateRepository.FindById(partRoot);
+
                 if (template.AllowPartCreation == "N")
                 {
                     throw new CreatePartException("The system no longer allows creation of " + partRoot + " parts.");
