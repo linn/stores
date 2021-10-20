@@ -14,7 +14,7 @@
 
     using NUnit.Framework;
 
-    public class WhenCreatingFromTemplateAndPartNumberAlreadyInUse : ContextBase
+    public class WhenCreatingAndHighestPartNumberOfThatRootDoesNotEndInNumber : ContextBase
     {
         private Part part;
 
@@ -34,12 +34,17 @@
                              {
                                  new Part
                                      {
-                                         PartNumber = "CAP 431"
+                                         PartNumber = "CAB 034 PBL/1"
                                      }
                              }.AsQueryable());
             this.PartRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>()).Returns(new Part());
-            this.TemplateRepository.FindById(Arg.Any<string>()).Returns(new PartTemplate());
-            this.PartPack.PartRoot(Arg.Any<string>()).Returns("ROOT");
+            this.TemplateRepository.FindById(Arg.Any<string>()).Returns(new PartTemplate
+                                                                            {
+                                                                                PartRoot = "CAB",
+                                                                                HasNumberSequence = "Y",
+                                                                                NextNumber = 35
+                                                                            });
+            this.PartPack.PartRoot(Arg.Any<string>()).Returns("CAB");
             this.result = Assert.Throws<CreatePartException>(() => this.Sut.CreatePart(this.part, this.privileges));
         }
 
@@ -53,7 +58,7 @@
         public void ShouldSuggestValidNextNumber()
         {
             this.result.Message.Should()
-                .Be("A Part with that Part Number already exists. Why not try 432");
+                .Be("A Part with that Part Number already exists. Why not try 35");
         }
     }
 }

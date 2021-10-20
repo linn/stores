@@ -184,9 +184,11 @@
 
             var partRoot = this.partPack.PartRoot(partToCreate.PartNumber);
 
-            if (partRoot != null && this.templateRepository.FindById(partRoot) != null)
+            var template = this.templateRepository.FindById(partRoot);
+
+            if (partRoot != null && template != null)
             {
-                if (this.templateRepository.FindById(partRoot).AllowPartCreation == "N")
+                if (template.AllowPartCreation == "N")
                 {
                     throw new CreatePartException("The system no longer allows creation of " + partRoot + " parts.");
                 }
@@ -194,7 +196,9 @@
                 var newestPartOfThisType = this.partRepository.FilterBy(p => p.PartNumber.StartsWith(partRoot) && p.DateCreated.HasValue)
                     .OrderByDescending(p => p.DateCreated).ToList().FirstOrDefault()
                     ?.PartNumber;
-                var realNextNumber = FindRealNextNumber(newestPartOfThisType);
+
+                var realNextNumber = FindRealNextNumber(newestPartOfThisType, template);
+
                 if (this.partRepository.FindBy(p => p.PartNumber == partToCreate.PartNumber) != null)
                 {
                     throw new CreatePartException("A Part with that Part Number already exists. Why not try " + realNextNumber);
@@ -293,10 +297,20 @@
             }
         }
 
-        private static int FindRealNextNumber(string newestPartOfThisType)
+        private static int? FindRealNextNumber(string newestPartOfThisType, PartTemplate template)
         {
             var highestNumber = newestPartOfThisType?.Split(" ").Last().Split("/")[0];
-            return int.Parse(highestNumber ?? throw new InvalidOperationException()) + 1;
+            if (int.TryParse(highestNumber, out var res))
+            {
+                return res + 1;
+            }
+
+            if (template.HasNumberSequence != "Y")
+            {
+                throw new CreatePartException("Template has no number sequence");
+            }
+
+            return template.NextNumber;
         }
     }
 }
