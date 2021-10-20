@@ -183,7 +183,7 @@
             try
             {
                 var result = this.partsFacadeService.Add(resource);
-                if (!string.IsNullOrEmpty(resource.QcOnReceipt))
+                if (!string.IsNullOrEmpty(resource.QcOnReceipt) && resource.QcOnReceipt.Equals("Y"))
                 {
                     this.partDomainService.AddQcControl(resource.PartNumber, resource.CreatedBy, resource.QcInformation);
                 }
