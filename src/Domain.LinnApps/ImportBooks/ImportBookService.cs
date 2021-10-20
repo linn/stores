@@ -23,22 +23,18 @@
 
         private readonly IQueryRepository<Supplier> supplierRepository;
 
-        private readonly ITransactionManager transactionManager;
-
         public ImportBookService(
             IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey> exchangeRateRepository,
             IRepository<LedgerPeriod, int> ledgerPeriodRepository,
             IQueryRepository<Supplier> supplierRepository,
             IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey> orderDetailRepository,
             IRepository<PurchaseLedger, int> purchaseLedgerRepository,
-            ITransactionManager transactionManager,
             IPurchaseLedgerPack purchaseLedgerPack)
         {
             this.exchangeRateRepository = exchangeRateRepository;
             this.ledgerPeriodRepository = ledgerPeriodRepository;
             this.supplierRepository = supplierRepository;
             this.orderDetailRepository = orderDetailRepository;
-            this.transactionManager = transactionManager;
             this.purchaseLedgerPack = purchaseLedgerPack;
             this.purchaseLedgerRepository = purchaseLedgerRepository;
         }
@@ -75,7 +71,6 @@
                     this.PostDuty(detail, supplierId, employeeId, postDutyDate);
 
                     oldDetail.PostDuty = "Y";
-                    this.transactionManager.Commit();
                 }
             }
 

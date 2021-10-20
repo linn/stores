@@ -19,6 +19,9 @@
 
         private readonly IImportBookService importBookService;
 
+        private readonly ITransactionManager transactionManager;
+
+
         public ImportBookFacadeService(
             IRepository<ImportBook, int> repository,
             ITransactionManager transactionManager,
@@ -28,6 +31,7 @@
         {
             this.importBookService = importBookService;
             this.databaseService = databaseService;
+            this.transactionManager = transactionManager;
         }
 
         public IResult<ProcessResult> PostDuty(PostDutyResource resource)
@@ -66,6 +70,9 @@
                     resource.SupplierId,
                     resource.CurrentUserNumber,
                     DateTime.Parse(resource.DatePosted));
+
+
+                this.transactionManager.Commit();
 
                 return new SuccessResult<ProcessResult>(result);
             }

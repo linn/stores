@@ -51,7 +51,6 @@
             this.LedgerPeriodRepository = Substitute.For<IRepository<LedgerPeriod, int>>();
             this.PurchaseLedgerRepository = Substitute.For<IRepository<PurchaseLedger, int>>();
             this.PurchaseLedgerPack = Substitute.For<IPurchaseLedgerPack>();
-            this.TransactionManager = Substitute.For<ITransactionManager>();
 
             this.Sut = new ImportBookService(
                 this.ExchangeRateRepository,
@@ -59,7 +58,6 @@
                 this.SupplierRepository,
                 this.OrderDetailRepository,
                 this.PurchaseLedgerRepository,
-                this.TransactionManager,
                 this.PurchaseLedgerPack);
         }
     }
