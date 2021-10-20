@@ -23,7 +23,7 @@
         {
             this.part = new Part
                             {
-                                PartNumber = "CAp 431",
+                                PartNumber = "CAP 431",
                                 StockControlled = "N"
                             };
             this.privileges = new List<string> { "part.admin" };
