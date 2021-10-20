@@ -110,7 +110,7 @@
                                         LinnVat = resource.LinnVat,
                                         DateCancelled =
                                             string.IsNullOrWhiteSpace(resource.DateCancelled)
-                                                ? (DateTime?) null
+                                                ? (DateTime?)null
                                                 : DateTime.Parse(resource.DateCancelled),
                                         CancelledBy = resource.CancelledBy,
                                         CancelledReason = resource.CancelledReason,
