@@ -33,7 +33,7 @@
                                        };
 
             this.ImportBooksFacadeService.PostDuty(Arg.Any<PostDutyResource>()).Returns(
-                new CreatedResult<ProcessResult>(new ProcessResult(true, "posted duty")));
+                new SuccessResult<ProcessResult>(new ProcessResult(true, "posted duty")));
 
             this.Response = this.Browser.Post(
                 "/logistics/import-books/post-duty",
@@ -54,7 +54,7 @@
         [Test]
         public void ShouldReturnOk()
         {
-            this.Response.StatusCode.Should().Be(HttpStatusCode.Created);
+            this.Response.StatusCode.Should().Be(HttpStatusCode.OK);
         }
 
         [Test]
