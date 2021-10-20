@@ -21,7 +21,6 @@
 
         private readonly ITransactionManager transactionManager;
 
-
         public ImportBookFacadeService(
             IRepository<ImportBook, int> repository,
             ITransactionManager transactionManager,

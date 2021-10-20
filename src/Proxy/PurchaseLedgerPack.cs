@@ -40,37 +40,7 @@
 
         public int GetNextLedgerSeq()
         {
-            using (var connection = this.databaseService.GetConnection())
-            {
-                connection.Open();
-                var cmd = new OracleCommand("cg_code_controls_next_val", connection)
-                              {
-                                  CommandType = CommandType.StoredProcedure
-                              };
-
-                var result = new OracleParameter(null, OracleDbType.Int32)
-                                 {
-                                     Direction = ParameterDirection.ReturnValue, Size = 50
-                                 };
-                cmd.Parameters.Add(result);
-
-                var parameter = new OracleParameter("p_cc_domain", OracleDbType.Varchar2)
-                                    {
-                                        Direction = ParameterDirection.Input, Value = "PL_LEDGER_SEQ"
-                                    };
-                cmd.Parameters.Add(parameter);
-
-                var num = new OracleParameter("p_increment", OracleDbType.Int32)
-                              {
-                                  Direction = ParameterDirection.Input, Value = 1
-                              };
-                cmd.Parameters.Add(num);
-
-                cmd.ExecuteNonQuery();
-                connection.Close();
-                var res = result.Value.ToString();
-                return int.Parse(res);
-            }
+            return this.databaseService.GetNextVal("PL_LEDGER_SEQ");
         }
 
         public int GetNomacc(string department, string nom)

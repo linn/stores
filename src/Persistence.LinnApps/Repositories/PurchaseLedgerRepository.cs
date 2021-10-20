@@ -12,7 +12,6 @@
         private readonly ServiceDbContext serviceDbContext;
         private readonly IPurchaseLedgerPack purchaseLedgerPack;
 
-
         public PurchaseLedgerRepository(ServiceDbContext serviceDbContext, IPurchaseLedgerPack purchaseLedgerPack)
         {
             this.serviceDbContext = serviceDbContext;
