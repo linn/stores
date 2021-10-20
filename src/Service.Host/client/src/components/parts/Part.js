@@ -217,7 +217,7 @@ function Part({
     const handleSaveClick = () => {
         clearErrors();
         if (creating()) {
-            addItem(state.part);
+            addItem({ ...state.part, fromTemplate: !!templateName });
         } else {
             updateItem(itemId, state.part);
         }

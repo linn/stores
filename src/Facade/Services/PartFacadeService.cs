@@ -189,7 +189,7 @@
                                                         : DateTime.Parse(resource.DatePhasedOut),
                                     ReasonPhasedOut = resource.ReasonPhasedOut
                                 };
-            return this.partService.CreatePart(partToAdd, resource.UserPrivileges.ToList());
+            return this.partService.CreatePart(partToAdd, resource.UserPrivileges.ToList(), resource.FromTemplate);
         }
 
         protected override void UpdateFromResource(Part entity, PartResource resource)

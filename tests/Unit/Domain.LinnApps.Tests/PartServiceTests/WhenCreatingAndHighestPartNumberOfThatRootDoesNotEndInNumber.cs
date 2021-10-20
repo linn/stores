@@ -45,7 +45,7 @@
                                                                                 NextNumber = 35
                                                                             });
             this.PartPack.PartRoot(Arg.Any<string>()).Returns("CAB");
-            this.result = Assert.Throws<CreatePartException>(() => this.Sut.CreatePart(this.part, this.privileges));
+            this.result = Assert.Throws<CreatePartException>(() => this.Sut.CreatePart(this.part, this.privileges, true));
         }
 
         [Test]

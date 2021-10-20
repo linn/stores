@@ -168,7 +168,7 @@
             from.PurchasingPhaseOutType = to.PurchasingPhaseOutType;
         }
 
-        public Part CreatePart(Part partToCreate, List<string> privileges)
+        public Part CreatePart(Part partToCreate, List<string> privileges, bool fromTemplate)
         {
             partToCreate.PartNumber = partToCreate.PartNumber?.ToUpper().Trim();
 

@@ -36,7 +36,7 @@
             this.PartPack.PartRoot(Arg.Any<string>()).Returns("ROOT");
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
             this.SupplierRepo.FindBy(Arg.Any<Expression<Func<Supplier, bool>>>()).Returns(new Supplier { Id = 4415 });
-            this.Sut.CreatePart(this.partToCreate, this.privileges);
+            this.Sut.CreatePart(this.partToCreate, this.privileges, false);
         }
 
         [Test]
