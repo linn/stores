@@ -19,7 +19,6 @@
 
         private readonly IRepository<PurchaseLedger, int> purchaseLedgerRepository;
 
-
         private readonly IPurchaseLedgerPack purchaseLedgerPack;
 
         private readonly IQueryRepository<Supplier> supplierRepository;
@@ -104,13 +103,11 @@
                     $"supplier {supplierId} on detail is not set up for records duty yet, accounting company is not LINN");
             }
 
-            var pltref = this.purchaseLedgerPack.GetNextLedgerSeq();
             var ledgerPeriod = this.purchaseLedgerPack.GetLedgerPeriod();
             var debitNomacc = this.purchaseLedgerPack.GetNomacc("0000002302", "0000012926");
 
             var newPurchaseLedgerEntry = new PurchaseLedger
                                              {
-                                                 Pltref = pltref,
                                                  SupplierId = 7371,
                                                  OrderLine = 1,
                                                  OrderNumber = detail.OrderNumber,

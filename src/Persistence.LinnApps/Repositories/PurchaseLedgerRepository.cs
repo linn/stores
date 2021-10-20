@@ -5,14 +5,18 @@
     using System.Linq.Expressions;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
 
     public class PurchaseLedgerRepository : IRepository<PurchaseLedger, int>
     {
         private readonly ServiceDbContext serviceDbContext;
+        private readonly IPurchaseLedgerPack purchaseLedgerPack;
 
-        public PurchaseLedgerRepository(ServiceDbContext serviceDbContext)
+
+        public PurchaseLedgerRepository(ServiceDbContext serviceDbContext, IPurchaseLedgerPack purchaseLedgerPack)
         {
             this.serviceDbContext = serviceDbContext;
+            this.purchaseLedgerPack = purchaseLedgerPack;
         }
 
         public PurchaseLedger FindById(int key)
@@ -27,6 +31,9 @@
 
         public void Add(PurchaseLedger entity)
         {
+            var pltref = this.purchaseLedgerPack.GetNextLedgerSeq();
+            entity.Pltref = pltref;
+
             this.serviceDbContext.PurchaseLedgers.Add(entity);
         }
 
