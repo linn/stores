@@ -5,7 +5,6 @@
     using System.Linq;
     using System.Linq.Expressions;
 
-
     using Linn.Stores.Domain.LinnApps.Parts;
 
     using NSubstitute;
