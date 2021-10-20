@@ -35,7 +35,6 @@
                                  new Part
                                      {
                                          PartNumber = "CAP 431"
-                                         
                                      }
                              }.AsQueryable());
             this.PartRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>()).Returns(new Part());
