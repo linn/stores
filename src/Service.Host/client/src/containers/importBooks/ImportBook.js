@@ -28,25 +28,25 @@ const mapStateToProps = (state, { match }) => ({
     allSuppliers: suppliersSelectors.getItems(state),
     countries: countriesSelectors.getItems(state),
     employees: employeesSelectors.getItems(state),
-    exchangeRates: exchangeRatesSelectors.getItems(state)
+    exchangeRates: exchangeRatesSelectors.getSearchItems(state)
 });
 
-const mapDispatchToProps = dispatch => {
-    return {
-        initialise: ({ itemId }) => {
-            if (itemId) {
-                dispatch(importBookActions.fetch(itemId));
-            }
-            dispatch(suppliersActions.fetch());
-            dispatch(countriesActions.fetch());
-            dispatch(employeesActions.fetch());
-        },
-        addItem: item => dispatch(importBookActions.add(item)),
-        updateItem: (itemId, item) => dispatch(importBookActions.update(itemId, item)),
-        setEditStatus: status => dispatch(importBookActions.setEditStatus(status)),
-        setSnackbarVisible: () => dispatch(importBookActions.setSnackbarVisible()),
-        exchangeRatesActions: () => dispatch(exchangeRatesActions.search)
-    };
+const initialise = ({ itemId }) => dispatch => {
+    if (itemId) {
+        dispatch(importBookActions.fetch(itemId));
+    }
+    dispatch(suppliersActions.fetch());
+    dispatch(countriesActions.fetch());
+    dispatch(employeesActions.fetch());
+};
+
+const mapDispatchToProps = {
+    initialise,
+    addItem: item => importBookActions.add(item),
+    updateItem: (itemId, item) => importBookActions.update(itemId, item),
+    setEditStatus: status => importBookActions.setEditStatus(status),
+    setSnackbarVisible: () => importBookActions.setSnackbarVisible(),
+    getExchangeRatesForDate: exchangeRatesActions.search
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(ImportBook));

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect, useReducer, useCallback } from 'react';
 import { Decimal } from 'decimal.js';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
@@ -126,10 +126,13 @@ function ImportBook({
         history.push('/logistics/import-books');
     };
 
-    const handleFieldChange = (propertyName, newValue) => {
-        setEditStatus('edit');
-        dispatch({ type: 'fieldChange', fieldName: propertyName, payload: newValue });
-    };
+    const handleFieldChange = useCallback(
+        (propertyName, newValue) => {
+            setEditStatus('edit');
+            dispatch({ type: 'fieldChange', fieldName: propertyName, payload: newValue });
+        },
+        [setEditStatus]
+    );
 
     const handleOrderDetailChange = (lineNumber, newValue) => {
         setEditStatus('edit');
@@ -183,7 +186,7 @@ function ImportBook({
         return privileges?.some(priv => priv === 'import-books.admin');
     };
 
-    const totalInvoiceValue = () => {
+    const totalInvoiceValue = useCallback(() => {
         let total = `${state.impbook.importBookInvoiceDetails?.reduce(
             (a, v) => new Decimal(a).plus(v.invoiceValue ? v.invoiceValue : 0),
             0
@@ -192,7 +195,7 @@ function ImportBook({
             total = `${parseFloat(total).toFixed(2)}`;
         }
         return total;
-    };
+    }, [state.impbook.importBookInvoiceDetails]);
 
     const [localSuppliers, setLocalSuppliers] = useState([{}]);
 
@@ -317,16 +320,31 @@ function ImportBook({
         return '';
     };
 
-    const currentExchangeRate = () => {
+    const currentExchangeRate = useCallback(() => {
         if (exchangeRates.length) {
             if (state.impbook?.currency) {
                 return exchangeRates.find(
-                    x => x.baseCurrency === state.impbook.currency && x.exchangeCurrency === 'GBP'
+                    x => x.exchangeCurrency === state.impbook.currency && x.baseCurrency === 'GBP'
                 )?.exchangeRate;
+                // return rate ?? '';
             }
         }
         return '';
-    };
+    }, [exchangeRates, state.impbook.currency]);
+
+    useEffect(() => {
+        const exchangeRate = currentExchangeRate();
+        const invoiceValue = totalInvoiceValue();
+        if (exchangeRate && invoiceValue && invoiceValue > 0) {
+            const convertedValue = new Decimal(invoiceValue)
+                .div(exchangeRate)
+                .toDecimalPlaces(2, Decimal.ROUND_HALF_DOWN)
+                .valueOf();
+            console.log(convertedValue);
+
+            handleFieldChange('totalImportValue', convertedValue);
+        }
+    }, [totalInvoiceValue, currentExchangeRate, handleFieldChange]);
 
     const impbookInvalid = () => {
         return (
@@ -522,6 +540,7 @@ function ImportBook({
                                             impbookWeight={state.impbook.weight}
                                             currentUserNumber={userNumber}
                                             impbookId={state.impbook.id}
+                                            exchangeRate={currentExchangeRate()}
                                         />
                                     )}
                                     {tab === 2 && (

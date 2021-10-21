@@ -16,6 +16,7 @@ import {
 } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
 import { Decimal } from 'decimal.js';
+import DialogInput from './DialogInput';
 
 function OrderDetailsTab({
     orderDetails,
@@ -48,7 +49,8 @@ function OrderDetailsTab({
     snackbarVisible,
     setSnackbarVisible,
     currentUserNumber,
-    impbookId
+    impbookId,
+    exchangeRate
 }) {
     const updateRow = detail => {
         handleOrderDetailChange(detail.lineNumber, detail);
@@ -172,6 +174,21 @@ function OrderDetailsTab({
             supplierId,
             impbookId
         });
+    };
+
+    const handleValueEntryAndConvert = (row, propertyName, newValue) => {
+        if (exchangeRate && newValue && newValue > 0) {
+            const convertedValue = new Decimal(newValue)
+                .div(exchangeRate)
+                .toDecimalPlaces(2, Decimal.ROUND_HALF_DOWN)
+                .valueOf();
+
+            console.log(convertedValue);
+
+            updateRow({ ...row, [propertyName]: convertedValue });
+        } else {
+            updateRow({ ...row, [propertyName]: newValue });
+        }
     };
 
     return (
@@ -459,17 +476,23 @@ function OrderDetailsTab({
                                 />
                             </Grid>
                             <Grid item xs={12} />
+                            <DialogInput
+                                name='Order Value'
+                                onChange={handleValueEntryAndConvert}
+                                propertyName='orderValue'
+                                row={row}
+                            />
                             <Grid item xs={2}>
                                 <InputField
                                     label="Order Value"
                                     fullWidth
                                     onChange={(propertyName, newValue) =>
-                                        editRow(row, propertyName, newValue)
+                                        handleValueEntryAndConvert(row, propertyName, newValue)
                                     }
                                     propertyName="orderValue"
                                     type="number"
                                     value={row.orderValue}
-                                    disabled={!allowedToEdit}
+                                    disabled
                                     required
                                     maxLength={14}
                                     decimalPlaces={2}
@@ -480,7 +503,7 @@ function OrderDetailsTab({
                                     label="Duty Value"
                                     fullWidth
                                     onChange={(propertyName, newValue) =>
-                                        editRow(row, propertyName, newValue)
+                                        handleValueEntryAndConvert(row, propertyName, newValue)
                                     }
                                     propertyName="dutyValue"
                                     type="number"
@@ -489,6 +512,7 @@ function OrderDetailsTab({
                                     required
                                     maxLength={14}
                                     decimalPlaces={2}
+                                    debounce={1000}
                                 />
                             </Grid>
                             <Grid item xs={1}>
@@ -509,7 +533,7 @@ function OrderDetailsTab({
                                     label="Vat Value"
                                     fullWidth
                                     onChange={(propertyName, newValue) =>
-                                        editRow(row, propertyName, newValue)
+                                        handleValueEntryAndConvert(row, propertyName, newValue)
                                     }
                                     propertyName="vatValue"
                                     type="number"
@@ -518,6 +542,7 @@ function OrderDetailsTab({
                                     required
                                     maxLength={14}
                                     decimalPlaces={2}
+                                    debounce={1000}
                                 />
                             </Grid>
                             <Grid item xs={1}>

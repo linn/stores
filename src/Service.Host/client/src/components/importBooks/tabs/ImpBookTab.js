@@ -64,7 +64,8 @@ function ImpBookTab({
     supplierNameValue,
     carrierNameValue,
     countryIsInEU,
-    pva
+    pva,
+    exchangeRate
 }) {
     const clearSupplier = () => {
         handleFieldChange('supplierId', '');
@@ -266,7 +267,7 @@ function ImpBookTab({
                 <Grid item xs={4}>
                     <Dropdown
                         items={currencies}
-                        propertyName="Currency"
+                        propertyName="currency"
                         fullWidth
                         value={currency}
                         label="Currency"
@@ -286,7 +287,19 @@ function ImpBookTab({
                         data-testid="totalImportValue"
                     />
                 </Grid>
-                <Grid item xs={2} />
+                <Grid item xs={1} />
+
+                <Grid item xs={5}>
+                    <InputField
+                        label="Exchange Rate for date created"
+                        value={exchangeRate}
+                        onChange={handleFieldChange}
+                        propertyName="exchangeRate"
+                        fullwidth
+                        type="number"
+                        disabled
+                    />
+                </Grid>
 
                 <Grid item xs={12} className={classes.gapAbove} data-testid="invoiceDetailsTable">
                     <TableWithInlineEditing
@@ -627,7 +640,8 @@ ImpBookTab.propTypes = {
     supplierNameValue: PropTypes.func.isRequired,
     carrierNameValue: PropTypes.func.isRequired,
     countryIsInEU: PropTypes.func.isRequired,
-    pva: PropTypes.string
+    pva: PropTypes.string,
+    exchangeRate: PropTypes.number.isRequired
 };
 
 ImpBookTab.defaultProps = {
