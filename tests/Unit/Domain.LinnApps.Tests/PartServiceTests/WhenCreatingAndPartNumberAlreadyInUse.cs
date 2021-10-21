@@ -41,7 +41,7 @@
             this.PartRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>()).Returns(new Part());
             this.TemplateRepository.FindById(Arg.Any<string>()).ReturnsNull();
             this.PartPack.PartRoot(Arg.Any<string>()).Returns("PART");
-            this.result = Assert.Throws<CreatePartException>(() => this.Sut.CreatePart(this.part, this.privileges));
+            this.result = Assert.Throws<CreatePartException>(() => this.Sut.CreatePart(this.part, this.privileges, false));
         }
 
         [Test]

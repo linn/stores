@@ -5,25 +5,29 @@
     using System.Linq;
     using System.Linq.Expressions;
 
-    using FluentAssertions;
-
     using Linn.Stores.Domain.LinnApps.Parts;
 
     using NSubstitute;
 
     using NUnit.Framework;
 
-    public class WhenCreatingLinnProducedPartAndPreferredSupplierNotSpecified : ContextBase
+    public class WhenCreatingFromTemplate : ContextBase
     {
-        private Part partToCreate;
+        private Part part;
 
         private List<string> privileges;
 
         [SetUp]
         public void SetUp()
         {
-            this.partToCreate = new Part { LinnProduced = "Y", StockControlled = "N" };
+            this.part = new Part
+                            {
+                                PartNumber = "CAP 431",
+                                StockControlled = "N"
+                            };
             this.privileges = new List<string> { "part.admin" };
+
+            this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
             this.PartRepository.FilterBy(Arg.Any<Expression<Func<Part, bool>>>())
                 .Returns(new List<Part>
                              {
@@ -32,17 +36,15 @@
                                          PartNumber = "CAP 431"
                                      }
                              }.AsQueryable());
-            this.TemplateRepository.FindById(Arg.Any<string>()).Returns(new PartTemplate());
-            this.PartPack.PartRoot(Arg.Any<string>()).Returns("ROOT");
-            this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
-            this.SupplierRepo.FindBy(Arg.Any<Expression<Func<Supplier, bool>>>()).Returns(new Supplier { Id = 4415 });
-            this.Sut.CreatePart(this.partToCreate, this.privileges, false);
+            this.TemplateRepository.FindById(Arg.Any<string>()).Returns(new PartTemplate { NextNumber = 1 });
+            this.PartPack.PartRoot(Arg.Any<string>()).Returns("CAP");
+            this.Sut.CreatePart(this.part, this.privileges, true);
         }
 
         [Test]
-        public void ShouldDefaultLinn()
+        public void ShouldUpdatePartTemplateRepository()
         {
-            this.partToCreate.PreferredSupplier.Id.Should().Be(4415);
+            this.TemplateRepository.Received().FindById("CAP");
         }
     }
 }
