@@ -17,7 +17,7 @@
 
         public ImportBookInvoiceDetail FindById(ImportBookInvoiceDetailKey key)
         {
-            return this.serviceDbContext.ImportBookInvoiceDetails.Find(key.ImportBookId, key.LineNumber);
+            throw new NotImplementedException();
         }
 
         public IQueryable<ImportBookInvoiceDetail> FindAll()

@@ -126,6 +126,7 @@ import rsns from './rsns';
 import loans from './loans';
 import purchaseOrders from './purchaseOrders';
 import stockBatchesInRotationOrder from './stockBatchesInRotationOrder';
+import postDuty from './postDuty';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -201,6 +202,7 @@ const rootReducer = history =>
         partTemplates,
         pickItemsAllocation,
         ports,
+        postDuty,
         printConsignmentDocuments,
         printConsignmentLabel,
         printGoodsInLabels,

@@ -29,7 +29,7 @@
         [Test]
         public void ShouldThrowException()
         {
-            var ex = Assert.Throws<CreatePartException>(() => this.Sut.CreatePart(this.part, this.privileges));
+            var ex = Assert.Throws<CreatePartException>(() => this.Sut.CreatePart(this.part, this.privileges, false));
             ex.Message.Should().Be("You are not authorised to create parts.");
         }
     }

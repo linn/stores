@@ -13,7 +13,7 @@
 
     using NUnit.Framework;
 
-    public class WhenCreatingStockConrolledPartAndRailMethodNotSpecified : ContextBase
+    public class WhenCreatingStockControlledPartAndRailMethodNotSpecified : ContextBase
     {
         private Part partToCreate;
 
@@ -36,7 +36,7 @@
             this.PartPack.PartRoot(Arg.Any<string>()).Returns("ROOT");
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
 
-            this.Sut.CreatePart(this.partToCreate, this.privileges);
+            this.Sut.CreatePart(this.partToCreate, this.privileges, false);
         }
 
         [Test]

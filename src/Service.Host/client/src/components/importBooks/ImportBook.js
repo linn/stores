@@ -5,7 +5,6 @@ import Grid from '@material-ui/core/Grid';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Button from '@material-ui/core/Button';
-
 import {
     SaveBackCancelButtons,
     InputField,
@@ -37,7 +36,8 @@ function ImportBook({
     privileges,
     allSuppliers,
     countries,
-    employees
+    employees,
+    userNumber
 }) {
     const defaultImpBook = {
         id: -1,
@@ -65,7 +65,7 @@ function ImportBook({
         numCartons: null,
         numPallets: null,
         comments: '',
-        createdBy: 32607,
+        createdBy: userNumber,
         customsEntryCodePrefix: '',
         importBookInvoiceDetails: [],
         importBookOrderDetails: [{ lineNumber: 1 }],
@@ -490,6 +490,7 @@ function ImportBook({
                                         <OrderDetailsTab
                                             orderDetails={state.impbook.importBookOrderDetails}
                                             handleFieldChange={handleFieldChange}
+                                            invoiceDate={state.impbook.invoiceDate}
                                             handleOrderDetailChange={handleOrderDetailChange}
                                             allowedToEdit={allowedToEdit()}
                                             addOrderDetailRow={handleAddOrderDetailRow}
@@ -499,6 +500,8 @@ function ImportBook({
                                             remainingWeightValue={calcRemainingWeight()}
                                             supplierId={state.impbook.supplierId}
                                             impbookWeight={state.impbook.weight}
+                                            currentUserNumber={userNumber}
+                                            impbookId={state.impbook.id}
                                         />
                                     )}
                                     {tab === 2 && (
@@ -610,7 +613,8 @@ ImportBook.propTypes = {
     ),
     employees: PropTypes.arrayOf(
         PropTypes.shape({ id: PropTypes.number, fullName: PropTypes.string })
-    )
+    ),
+    userNumber: PropTypes.number.isRequired
 };
 
 ImportBook.defaultProps = {

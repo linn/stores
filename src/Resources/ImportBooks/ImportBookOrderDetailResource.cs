@@ -37,5 +37,7 @@
         public int? InsNumber { get; set; }
 
         public int? VatRate { get; set; }
+
+        public string PostDuty { get; set; }
     }
 }

@@ -26,7 +26,8 @@
                            CpcNumber = model.CpcNumber,
                            TariffCode = model.TariffCode,
                            InsNumber = model.InsNumber,
-                           VatRate = model.VatRate
+                           VatRate = model.VatRate,
+                           PostDuty = model.PostDuty
                        };
         }
 

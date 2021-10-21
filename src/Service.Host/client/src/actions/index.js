@@ -333,3 +333,5 @@ export const purchaseOrdersActionTypes = makeActionTypes(itemTypes.purchaseOrder
 export const stockBatchesInRotationOrderActionTypes = makeActionTypes(
     itemTypes.stockBatchesInRotationOrder.actionType
 );
+
+export const postDutyActionTypes = makeActionTypes(itemTypes.postDuty.actionType);

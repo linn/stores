@@ -4,7 +4,7 @@ import ImportBook from '../../components/importBooks/ImportBook';
 import importBookActions from '../../actions/importBookActions';
 import importBooksActions from '../../actions/importBooksActions';
 import importBookSelectors from '../../selectors/importBookSelectors';
-import { getPrivileges, getUserName, getUserNumber } from '../../selectors/userSelectors';
+import { getPrivileges, getUserNumber } from '../../selectors/userSelectors';
 import * as itemTypes from '../../itemTypes';
 import suppliersActions from '../../actions/suppliersActions';
 import suppliersSelectors from '../../selectors/suppliersSelectors';
@@ -23,7 +23,6 @@ const mapStateToProps = (state, { match }) => ({
     snackbarVisible: importBookSelectors.getSnackbarVisible(state),
     itemError: getItemError(state, itemTypes.part.item),
     privileges: getPrivileges(state),
-    userName: getUserName(state),
     userNumber: getUserNumber(state),
     allSuppliers: suppliersSelectors.getItems(state),
     countries: countriesSelectors.getItems(state),
