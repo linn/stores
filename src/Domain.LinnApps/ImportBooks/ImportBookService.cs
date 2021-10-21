@@ -42,7 +42,7 @@
         public IEnumerable<ImportBookExchangeRate> GetExchangeRates(string date)
         {
             var unformattedDate = DateTime.Parse(date);
-            var formattedDate = unformattedDate.ToString("MMMYYYY");
+            var formattedDate = unformattedDate.ToString("MMMyyyy").ToUpper();
 
             var ledgerPeriod = this.ledgerPeriodRepository.FindBy(x => x.MonthName == formattedDate);
 
@@ -117,7 +117,7 @@
                                                  BaseTotal = detail.DutyValue,
                                                  InvoiceDate = postDutyDate,
                                                  PlInvoiceRef = $"IMP{detail.ImportBookId}",
-                                                 PlDeliveryRef = $"DUTY{postDutyDate.ToString("ddMMMyyyy")}",
+                                                 PlDeliveryRef = $"DUTY{postDutyDate.ToString("ddMMMyyyy").ToUpper()}",
                                                  CompanyRef = "DUTY",
                                                  Currency = "GBP",
                                                  LedgerPeriod = ledgerPeriod,
