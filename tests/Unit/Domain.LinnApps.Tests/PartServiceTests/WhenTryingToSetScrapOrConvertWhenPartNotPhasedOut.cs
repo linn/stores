@@ -28,7 +28,7 @@
         [Test]
         public void ShouldThrowException()
         {
-            var ex = Assert.Throws<UpdatePartException>(() => this.Sut.UpdatePart(this.from, this.to, this.privileges, null));
+            var ex = Assert.Throws<UpdatePartException>(() => this.Sut.UpdatePart(this.from, this.to, this.privileges));
             ex.Message.Should().Be("A part must be obsolete to be convertible or to be scrapped.");
         }
     }

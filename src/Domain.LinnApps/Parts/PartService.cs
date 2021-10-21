@@ -10,7 +10,6 @@
 
     using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
-    using Linn.Stores.Domain.LinnApps.StockLocators;
 
     public class PartService : IPartService
     {
@@ -54,7 +53,7 @@
             this.deptStockPartsService = deptStockPartsService;
         }
 
-        public void UpdatePart(Part from, Part to, List<string> privileges, IEnumerable<MechPartManufacturerAlt> manufacturers)
+        public void UpdatePart(Part from, Part to, List<string> privileges)
         {
             to.PartNumber = to.PartNumber?.ToUpper();
             if (from.DatePhasedOut == null && to.DatePhasedOut != null)
@@ -73,7 +72,7 @@
             }
 
             if (from.SalesArticle != null
-                && !from.ProductAnalysisCode.ProductCode.Equals(to.ProductAnalysisCode.ProductCode))
+                && !from.ProductAnalysisCode.ProductCode.Equals(to.ProductAnalysisCode?.ProductCode))
             {
                 throw new UpdatePartException("Cannot change product analysis code if part has a sales article.");
             }
@@ -92,20 +91,6 @@
 
                 from.DateLive = to.DateLive;
                 from.MadeLiveBy = to.MadeLiveBy;
-            }
-
-            if (manufacturers != null)
-            {
-                var source = this.sourceRepository.FindById(from.MechPartSource.Id);
-                source.MechPartManufacturerAlts = manufacturers.Select(
-                    m =>
-                        {
-                            var manufacturer =
-                                from.MechPartSource.MechPartManufacturerAlts.First(
-                                    i => i.ManufacturerCode == m.ManufacturerCode);
-                            manufacturer.PartNumber = m.PartNumber;
-                            return manufacturer;
-                        }).ToList();
             }
 
             Validate(to);

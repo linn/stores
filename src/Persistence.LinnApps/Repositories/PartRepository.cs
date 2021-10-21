@@ -34,17 +34,11 @@
                 .Include(p => p.NominalAccount).ThenInclude(a => a.Department)
                 .Include(p => p.NominalAccount).ThenInclude(a => a.Nominal)
                 .Include(p => p.DataSheets)
+                .Include(p => p.SalesArticle)
                 .Include(p => p.MechPartSource)
                 .ThenInclude(m => m.MechPartManufacturerAlts)
                 .ToList().FirstOrDefault();
-            
-            if (result != null)
-            {
-                result.SalesArticle =
-                    this.serviceDbContext.SalesArticles.Where(a => a.ArticleNumber == result.PartNumber)
-                        .ToList().FirstOrDefault();
-            }
-            
+
             return result;
         }
 
@@ -95,12 +89,27 @@
                 .Include(p => p.NominalAccount).ThenInclude(a => a.Nominal)
                 .Include(p => p.DataSheets)
                 .Include(p => p.MechPartSource)
+                .AsNoTracking()
                 .ToList().FirstOrDefault();
         }
 
         public IQueryable<Part> FilterBy(Expression<Func<Part, bool>> expression)
         {
             return this.serviceDbContext.Parts
+                .Include(p => p.AccountingCompany).AsNoTracking()
+                .Include(p => p.ParetoClass)
+                .Include(p => p.ProductAnalysisCode)
+                .Include(p => p.DecrementRule)
+                .Include(p => p.AssemblyTechnology)
+                .Include(p => p.CreatedBy)
+                .Include(p => p.MadeLiveBy)
+                .Include(p => p.PhasedOutBy)
+                .Include(p => p.SernosSequence)
+                .Include(p => p.PreferredSupplier)
+                .Include(p => p.NominalAccount).ThenInclude(a => a.Department)
+                .Include(p => p.NominalAccount).ThenInclude(a => a.Nominal)
+                .Include(p => p.DataSheets)
+                .Include(p => p.MechPartSource)
                 .AsNoTracking()
                 .Where(expression)
                 .Include(p => p.MechPartSource);

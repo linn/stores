@@ -29,13 +29,15 @@
 
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
             this.PartRepository.FilterBy(Arg.Any<Expression<Func<Part, bool>>>())
-                .Returns(new List<Part>
+                .Returns(
+                    new List<Part>
                              {
                                  new Part
                                      {
                                          PartNumber = "CAP 431"
                                      }
-                             }.AsQueryable());
+                             }.AsQueryable(), 
+                    new List<Part>().AsQueryable());
             this.TemplateRepository.FindById(Arg.Any<string>()).Returns(new PartTemplate { NextNumber = 1 });
             this.PartPack.PartRoot(Arg.Any<string>()).Returns("CAP");
             this.Sut.CreatePart(this.part, this.privileges, true);

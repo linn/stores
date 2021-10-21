@@ -7,6 +7,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class ParetoClassRepository : IRepository<ParetoClass, string>
     {
         private readonly ServiceDbContext serviceDbContext;

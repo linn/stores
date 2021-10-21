@@ -4,7 +4,7 @@
 
     public interface IPartService
     {
-        void UpdatePart(Part from, Part to, List<string> privileges, IEnumerable<MechPartManufacturerAlt> manufacturers);
+        void UpdatePart(Part from, Part to, List<string> privileges);
 
         Part CreatePart(Part partToCreate, List<string> privileges, bool fromTemplate);
 
