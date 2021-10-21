@@ -18,7 +18,8 @@ import {
     Dropdown,
     DatePicker,
     Title,
-    CheckboxWithLabel
+    CheckboxWithLabel,
+    Loading
 } from '@linn-it/linn-form-components-library';
 import QcLabelPrintScreen from '../../containers/goodsIn/QcLabelPrintScreen';
 import Page from '../../containers/Page';
@@ -298,6 +299,18 @@ function GoodsInUtility({
     const handleSelectRow = selected => {
         setSelectedRows(rows.filter(r => selected.includes(r.id)));
     };
+
+    if (bookInResultLoading) {
+        return (
+            <Page>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <Loading />
+                    </Grid>
+                </Grid>
+            </Page>
+        );
+    }
 
     return (
         <Page>
