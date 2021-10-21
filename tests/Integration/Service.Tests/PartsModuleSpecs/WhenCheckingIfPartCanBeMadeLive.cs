@@ -25,7 +25,7 @@
                                                                  Message = "Do it"
                                                              }));
             this.Response = this.Browser.Get(
-                "/inventory/parts/can-be-made-live/1",
+                "/parts/can-be-made-live/1",
                 with =>
                     {
                         with.Header("Accept", "application/json");

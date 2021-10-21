@@ -53,7 +53,7 @@
                 .Returns(new SuccessResult<MechPartSource>(p));
             this.AuthService.HasPermissionFor(Arg.Any<string>(), Arg.Any<IEnumerable<string>>()).Returns(false);
             this.Response = this.Browser.Put(
-                "inventory/parts/sources/1",
+                "/parts/sources/1",
                 with =>
                 {
                     with.Header("Accept", "application/json");

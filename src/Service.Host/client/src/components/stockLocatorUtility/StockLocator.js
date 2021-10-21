@@ -17,6 +17,7 @@ import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import makeStyles from '@material-ui/styles/makeStyles';
 import queryString from 'query-string';
 import Page from '../../containers/Page';
@@ -61,8 +62,8 @@ function StockLocator({
     const columns = [
         {
             title: 'Part',
-            id: 'partNumber',
-            type: 'text',
+            id: 'partLinkComponent',
+            type: 'component',
             editable: false
         },
         {
@@ -246,6 +247,11 @@ function StockLocator({
                                     rows={items.map((i, index) => ({
                                         ...i,
                                         id: index,
+                                        partLinkComponent: (
+                                            <Link to={i.links.find(l => l.rel === 'part')?.href}>
+                                                {i.partNumber}
+                                            </Link>
+                                        ),
                                         drillDownButtonComponent: (
                                             <button
                                                 type="button"
@@ -316,10 +322,16 @@ function StockLocator({
                                                 <>
                                                     <Grid item xs={3}>
                                                         <Dropdown
-                                                            items={quantities?.map(v => ({
-                                                                id: v.partNumber,
-                                                                displayText: v.partNumber
-                                                            }))}
+                                                            items={quantities
+                                                                ?.filter(x =>
+                                                                    items
+                                                                        .map(i => i.partNumber)
+                                                                        .includes(x.partNumber)
+                                                                )
+                                                                .map(v => ({
+                                                                    id: v.partNumber,
+                                                                    displayText: v.partNumber
+                                                                }))}
                                                             value={selectedQuantities.partNumber}
                                                             label="Show Summaries For Part"
                                                             propertyName="part"

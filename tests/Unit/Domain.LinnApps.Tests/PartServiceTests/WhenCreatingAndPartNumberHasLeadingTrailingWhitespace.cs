@@ -32,7 +32,7 @@
             this.privileges = new List<string> { "part.admin" };
 
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
-            this.result = this.Sut.CreatePart(this.part, this.privileges);
+            this.result = this.Sut.CreatePart(this.part, this.privileges, false);
         }
 
         [Test]

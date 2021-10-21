@@ -18,6 +18,7 @@
 
     using Nancy;
     using Nancy.ModelBinding;
+    using Nancy.Responses;
     using Nancy.Security;
 
     public sealed class PartsModule : NancyModule
@@ -77,49 +78,58 @@
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
             this.authService = authService;
+            this.Get("/parts/sources", _ => this.GetApp());
+
             this.Get("/parts/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
-            this.Get("/inventory/parts/sources/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
+            this.Get("/parts/sources/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/parts/{id}", parameters => this.GetPart(parameters.id));
             this.Put("/parts/{id}", parameters => this.UpdatePart(parameters.id));
             this.Get("/parts", _ => this.GetParts());
             this.Post("/parts", _ => this.AddPart());
             this.Get("/parts/dept-stock-parts", _ => this.GetDeptStockParts());
 
+            this.Get("/inventory/parts", _ => new RedirectResponse("/parts"));
+            this.Get("/inventory/parts/sources", _ => new RedirectResponse("/parts/sources"));
+
             this.unitsOfMeasureService = unitsOfMeasureService;
             this.Get("inventory/units-of-measure", _ => this.GetUnitsOfMeasure());
 
             this.partCategoryService = partCategoryService;
-            this.Get("inventory/part-categories", _ => this.GetPartCategories());
+            this.Get("/inventory/part-categories", _ => this.GetPartCategories());
 
             this.partTemplateService = partTemplateService;
-            this.Get("inventory/part-templates", _ => this.GetPartTemplates());
+            this.Get("/inventory/part-templates", _ => this.GetPartTemplates());
 
             this.productAnalysisCodeService = productAnalysisCodeService;
-            this.Get("inventory/product-analysis-codes", _ => this.GetProductAnalysisCodes());
             this.Get("inventory/product-analysis-codes", _ => this.GetProductAnalysisCodes());
 
             this.assemblyTechnologyService = assemblyTechnologyService;
             this.Get("inventory/assembly-technologies", _ => this.GetAssemblyTechnologies());
 
             this.decrementRuleService = decrementRuleService;
-            this.Get("inventory/decrement-rules", _ => this.GetDecrementRules());
+            this.Get("/inventory/decrement-rules", _ => this.GetDecrementRules());
 
             this.partLiveService = partLiveService;
-            this.Get("inventory/parts/can-be-made-live/{id}", parameters => this.CheckCanBeMadeLive(parameters.id));
+            this.Get("/parts/can-be-made-live/{id}", parameters => this.CheckCanBeMadeLive(parameters.id));
 
             this.mechPartSourceService = mechPartSourceService;
-            this.Get("inventory/parts/sources/{id}", parameters => this.GetMechPartSource(parameters.id));
-            this.Put("inventory/parts/sources/{id}", parameters => this.UpdateMechPartSource(parameters.id));
-            this.Post("inventory/parts/sources", _ => this.AddMechPartSource());
+            this.Get("/parts/sources/{id}", parameters => this.GetMechPartSource(parameters.id));
+            this.Put("/parts/sources/{id}", parameters => this.UpdateMechPartSource(parameters.id));
+            this.Post("/parts/sources", _ => this.AddMechPartSource());
 
             this.manufacturerService = manufacturerService;
             this.Get("/inventory/manufacturers", _ => this.GetManufacturers());
             
             this.dataSheetsValuesService = dataSheetsValuesService;
-            this.Get("/inventory/parts/data-sheet-values", _ => this.GetPartDataSheetValues());
+            this.Get("/parts/data-sheet-values", _ => this.GetPartDataSheetValues());
 
             this.tqmsCategoriesService = tqmsCategoriesService;
-            this.Get("/inventory/parts/tqms-categories", _ => this.GetTqmsCategories());
+            this.Get("/parts/tqms-categories", _ => this.GetTqmsCategories());
+        }
+
+        public object GetApp()
+        {
+            return this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index");
         }
 
         private object GetPart(int id)
@@ -173,7 +183,7 @@
             try
             {
                 var result = this.partsFacadeService.Add(resource);
-                if (!string.IsNullOrEmpty(resource.QcOnReceipt))
+                if (!string.IsNullOrEmpty(resource.QcOnReceipt) && resource.QcOnReceipt.Equals("Y"))
                 {
                     this.partDomainService.AddQcControl(resource.PartNumber, resource.CreatedBy, resource.QcInformation);
                 }

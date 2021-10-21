@@ -4,16 +4,22 @@
     using System.Collections.Generic;
     using System.Linq.Expressions;
 
-    using Linn.Common.Proxy.LinnApps;
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
+    using Linn.Common.Proxy.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
+    using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Resources.ImportBooks;
 
-    public class ImportBookFacadeService : FacadeService<ImportBook, int, ImportBookResource, ImportBookResource>
+    public class ImportBookFacadeService : FacadeService<ImportBook, int, ImportBookResource, ImportBookResource>,
+                                           IImportBookFacadeService
     {
-        private readonly IImportBookService importBookService;
         private readonly IDatabaseService databaseService;
+
+        private readonly IImportBookService importBookService;
+
+        private readonly ITransactionManager transactionManager;
 
         public ImportBookFacadeService(
             IRepository<ImportBook, int> repository,
@@ -24,6 +30,59 @@
         {
             this.importBookService = importBookService;
             this.databaseService = databaseService;
+            this.transactionManager = transactionManager;
+        }
+
+        public IResult<ProcessResult> PostDuty(PostDutyResource resource)
+        {
+            var orderDetails = new List<ImportBookOrderDetail>();
+            foreach (var detail in resource.OrderDetails)
+            {
+                orderDetails.Add(
+                    new ImportBookOrderDetail
+                        {
+                            ImportBookId = resource.ImpbookId,
+                            LineNumber = detail.LineNumber,
+                            OrderNumber = detail.OrderNumber,
+                            RsnNumber = detail.RsnNumber,
+                            OrderDescription = detail.OrderDescription,
+                            Qty = detail.Qty,
+                            DutyValue = detail.DutyValue,
+                            FreightValue = detail.FreightValue,
+                            VatValue = detail.VatValue,
+                            OrderValue = detail.OrderValue,
+                            Weight = detail.Weight,
+                            LoanNumber = detail.LoanNumber,
+                            LineType = detail.LineType,
+                            CpcNumber = detail.CpcNumber,
+                            TariffCode = detail.TariffCode,
+                            InsNumber = detail.InsNumber,
+                            VatRate = detail.VatRate,
+                            PostDuty = detail.PostDuty
+                        });
+            }
+
+            try
+            {
+                var result = this.importBookService.PostDutyForOrderDetails(
+                    orderDetails,
+                    resource.SupplierId,
+                    resource.CurrentUserNumber,
+                    DateTime.Parse(resource.DatePosted));
+
+
+                this.transactionManager.Commit();
+
+                return new SuccessResult<ProcessResult>(result);
+            }
+            catch (PostDutyException e)
+            {
+                return new BadRequestResult<ProcessResult>(e.Message);
+            }
+            catch (Exception e)
+            {
+                return new BadRequestResult<ProcessResult>(e.InnerException != null ? e.InnerException.Message : e.Message);
+            }
         }
 
         protected override ImportBook CreateFromResource(ImportBookResource resource)
@@ -65,7 +124,8 @@
                                         NumPallets = resource.NumPallets,
                                         Comments = resource.Comments,
                                         CreatedBy = resource.CreatedBy,
-                                        CustomsEntryCodePrefix = resource.CustomsEntryCodePrefix
+                                        CustomsEntryCodePrefix = resource.CustomsEntryCodePrefix,
+                                        Pva = resource.Pva
                                     };
 
             var invoiceDetails = new List<ImportBookInvoiceDetail>();
@@ -135,6 +195,11 @@
             return newImportBook;
         }
 
+        protected override Expression<Func<ImportBook, bool>> SearchExpression(string searchTerm)
+        {
+            return imps => imps.Id.ToString().Contains(searchTerm);
+        }
+
         protected override void UpdateFromResource(ImportBook entity, ImportBookResource updateResource)
         {
             var newImportBook = new ImportBook
@@ -172,7 +237,8 @@
                                         NumPallets = updateResource.NumPallets,
                                         Comments = updateResource.Comments,
                                         CreatedBy = updateResource.CreatedBy,
-                                        CustomsEntryCodePrefix = updateResource.CustomsEntryCodePrefix
+                                        CustomsEntryCodePrefix = updateResource.CustomsEntryCodePrefix,
+                                        Pva = updateResource.Pva
                                     };
 
             var invoiceDetails = new List<ImportBookInvoiceDetail>();
@@ -239,12 +305,7 @@
 
             newImportBook.PostEntries = postEntries;
 
-            this.importBookService.Update(from: entity, to: newImportBook);
-        }
-
-        protected override Expression<Func<ImportBook, bool>> SearchExpression(string searchTerm)
-        {
-            return imps => imps.Id.ToString().Contains(searchTerm);
+            this.importBookService.Update(entity, newImportBook);
         }
     }
 }

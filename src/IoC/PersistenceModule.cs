@@ -9,6 +9,7 @@
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
     using Linn.Stores.Domain.LinnApps.ExportBooks;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.InterCompanyInvoices;
@@ -67,7 +68,7 @@
             builder.RegisterType<MechPartSourceRepository>().As<IRepository<MechPartSource, int>>();
             builder.RegisterType<ParcelRepository>().As<IRepository<Parcel, int>>();
             builder.RegisterType<PartDataSheetValuesRepository>().As<IQueryRepository<PartDataSheetValues>>();
-            builder.RegisterType<StockLocatorRepository>().As<IRepository<StockLocator, int>>();
+            builder.RegisterType<StockLocatorRepository>().As<IFilterByWildcardRepository<StockLocator, int>>();
             builder.RegisterType<StoragePlaceRepository>().As<IQueryRepository<StoragePlace>>();
             builder.RegisterType<StoresBudgetRepository>().As<IQueryRepository<StoresBudget>>();
             builder.RegisterType<AuditLocationRepository>().As<IQueryRepository<AuditLocation>>();
@@ -105,7 +106,7 @@
             builder.RegisterType<ExportRsnRepository>().As<IQueryRepository<ExportRsn>>();
             builder.RegisterType<SalesAccountRepository>().As<IQueryRepository<SalesAccount>>();
             builder.RegisterType<SalesOutletRepository>().As<IQueryRepository<SalesOutlet>>();
-            builder.RegisterType<StockQuantitiesRepository>().As<IQueryRepository<StockQuantities>>();
+            builder.RegisterType<StockQuantitiesRepository>().As<IFilterByWildcardQueryRepository<StockQuantities>>();
             builder.RegisterType<RequisitionHeaderRepository>().As<IRepository<RequisitionHeader, int>>();
             builder.RegisterType<TransferableStockRepository>().As<IQueryRepository<TransferableStock>>();
             builder.RegisterType<ConsignmentRepository>().As<IRepository<Consignment, int>>();
@@ -145,6 +146,7 @@
             builder.RegisterType<RsnRepository>().As<IQueryRepository<Rsn>>();
             builder.RegisterType<LoanRepository>().As<IQueryRepository<Loan>>();
             builder.RegisterType<StockTriggerLevelsRepository>().As<IQueryRepository<StockTriggerLevel>>();
+            builder.RegisterType<PurchaseLedgerRepository>().As<IRepository<PurchaseLedger, int>>();
         }
     }
 }

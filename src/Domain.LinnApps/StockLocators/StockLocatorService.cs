@@ -13,7 +13,7 @@
 
     public class StockLocatorService : IStockLocatorService
     {
-        private readonly IRepository<StockLocator, int> stockLocatorRepository;
+        private readonly IFilterByWildcardRepository<StockLocator, int> stockLocatorRepository;
 
         private readonly IStoresPalletRepository palletRepository;
 
@@ -36,7 +36,7 @@
         private readonly IQueryRepository<StockTriggerLevel> triggerLevelRepository;
 
         public StockLocatorService(
-            IRepository<StockLocator, int> stockLocatorRepository,
+            IFilterByWildcardRepository<StockLocator, int> stockLocatorRepository,
             IStoresPalletRepository palletRepository,
             IQueryRepository<StoragePlace> storagePlaceRepository,
             IRepository<StorageLocation, int> storageLocationRepository,
@@ -238,7 +238,7 @@
                                  State = x.State,
                                  QuantityAllocated = x.QuantityAllocated,
                                  StockPoolCode = x.StockPoolCode,
-                                 Part = new Part { PartNumber = x.PartNumber, OurUnitOfMeasure = x.OurUnitOfMeasure, Description = x.PartDescription },
+                                 Part = new Part { PartNumber = x.PartNumber, OurUnitOfMeasure = x.OurUnitOfMeasure, Description = x.PartDescription, Id = x.Part.Id },
                                  TriggerLevel = this.triggerLevelRepository.FindBy(l => l.PartNumber.Equals(x.PartNumber) && l.LocationId.Equals(x.StorageLocationId))
                              });
         }
@@ -325,6 +325,53 @@
                    && m.DateBooked == null
                    && m.DateCancelled == null)
                 .Select(m => new StockMove(m)).ToList();
+        }
+
+        public IEnumerable<StockLocator> GetBatchesInRotationOrderByPart(string partSearch)
+        {
+            var stockLocators = this.stockLocatorRepository.FilterByWildcard(partSearch.Replace("*", "%"))
+                .Where(l => l.Quantity > 0);
+
+            var parts = stockLocators.Select(s => s.PartNumber).Distinct();
+
+            if (parts.Count() > 100)
+            {
+                throw new StockLocatorException("Too many results for the report to handle. Please refine your Part Number search");
+            }
+
+            return stockLocators.GroupBy(
+                x => new
+                         {
+                             x.Id,
+                             x.PartNumber,
+                             x.BatchRef,
+                             x.StockRotationDate,
+                             x.StockPoolCode,
+                             x.State,
+                             IsPallet = x.PalletNumber.HasValue,
+                             Loc = x.PalletNumber ?? x.LocationId
+                         }).Select(
+                g => new StockLocator
+                         {
+                             Id = g.Key.Id,
+                             PartNumber = g.Key.PartNumber,
+                             Part = stockLocators.SingleOrDefault(x => x.Id == g.Key.Id).Part,
+                             Quantity = g.Sum(e => e.Quantity ?? 0),
+                             QuantityAllocated = g.Sum(e => e.QuantityAllocated ?? 0),
+                             BatchRef = g.Key.BatchRef,
+                             StockRotationDate = g.Key.StockRotationDate,
+                             StockPoolCode = g.Key.StockPoolCode,
+                             State = g.Key.State,
+                             PalletNumber = g.Key.IsPallet ? g.Key.Loc : (int?)null,
+                             StorageLocation = !g.Key.IsPallet
+                                                   ? stockLocators.SingleOrDefault(l => l.Id == g.Key.Id)
+                                                       .StorageLocation
+                                                   : null
+                         })
+                .OrderBy(s => s.StockPoolCode)
+                .ThenBy(s => s.State)
+                .ThenBy(s => s.StockRotationDate)
+                .ThenBy(s => s.Id);
         }
     }
 }

@@ -10,7 +10,6 @@ import {
     Title,
     ErrorCard,
     SnackbarMessage,
-    smartGoBack,
     useGroupEditTable
 } from '@linn-it/linn-form-components-library';
 import Page from '../../../containers/Page';
@@ -24,6 +23,7 @@ import CadDataTab from './tabs/CadDataTab';
 import UsagesTab from '../../../containers/parts/mechPartSource/tabs/UsagesTab';
 import VerificationTab from './tabs/VerificationTab';
 import PurchasingQuotesTab from '../../../containers/parts/mechPartSource/tabs/PurchasingQuotesTab';
+import handleBackClick from '../../../helpers/handleBackClick';
 
 function MechPartSource({
     editStatus,
@@ -635,9 +635,7 @@ function MechPartSource({
                                     saveDisabled={viewing() || mechPartSourceInvalid()}
                                     saveClick={handleSaveClick}
                                     cancelClick={handleCancelClick}
-                                    backClick={() => {
-                                        smartGoBack(previousPaths, history.goBack);
-                                    }}
+                                    backClick={() => handleBackClick(previousPaths, history.goBack)}
                                 />
                             </Grid>
                         </>

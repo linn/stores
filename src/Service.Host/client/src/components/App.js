@@ -19,10 +19,10 @@ function App() {
                 <ListItem component={Link} to="/logistics/wand" button>
                     <Typography color="primary">Wand</Typography>
                 </ListItem>
-                <ListItem component={Link} to="/inventory/parts" button>
+                <ListItem component={Link} to="/parts" button>
                     <Typography color="primary">Parts Utility</Typography>
                 </ListItem>
-                <ListItem component={Link} to="/inventory/parts/sources" button>
+                <ListItem component={Link} to="/parts/sources" button>
                     <Typography color="primary">Mech Part Sources Utility</Typography>
                 </ListItem>
                 <ListItem component={Link} to="/inventory/move-stock" button>
@@ -33,6 +33,9 @@ function App() {
                 </ListItem>
                 <ListItem component={Link} to="/logistics/parcels" button>
                     <Typography color="primary">Parcel Utility</Typography>
+                </ListItem>
+                <ListItem component={Link} to="/logistics/import-books" button>
+                    <Typography color="primary">Impbook Utility</Typography>
                 </ListItem>
                 <ListItem component={Link} to="/logistics/consignments" button>
                     <Typography color="primary">Consignment Utility</Typography>

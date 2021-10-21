@@ -5,7 +5,6 @@ import {
     Dropdown,
     InputField,
     LinkButton,
-    Loading,
     Title,
     Typeahead,
     TypeaheadTable
@@ -27,7 +26,6 @@ function StockViewerOptions({
     searchStockLocatorBatches,
     clearStockLocatorBatchesSearch,
     inspectedStates,
-    inspectedStatesLoading,
     history
 }) {
     const [options, setOptions] = useState({
@@ -69,20 +67,7 @@ function StockViewerOptions({
                         value={options.partNumber}
                     />
                 </Grid>
-                <Grid item xs={2} />
-                <Grid item xs={5}>
-                    <LinkButton
-                        text="VIEW STOCK LOCATORS"
-                        disabled={
-                            !options.stockPoolCode &&
-                            !options.batchRef &&
-                            !options.partNumber &&
-                            !(options.storageLocation || options.palletNumber)
-                        }
-                        to={`/inventory/stock-locator/locators?${queryString.stringify(options)}`}
-                    />
-                </Grid>
-                <Grid item xs={2} />
+                <Grid item xs={9} />
                 <Grid item xs={3}>
                     <InputField
                         label="Pallet Number"
@@ -94,9 +79,7 @@ function StockViewerOptions({
                         value={options.palletNumber}
                     />
                 </Grid>
-                <Grid item xs={1}>
-                    Or
-                </Grid>
+
                 <Grid item xs={3}>
                     <Typeahead
                         items={storageLocations}
@@ -120,7 +103,7 @@ function StockViewerOptions({
                         minimumSearchTermLength={2}
                     />
                 </Grid>
-                <Grid item xs={5} />
+                <Grid item xs={6} />
                 <Grid item xs={3}>
                     <Typeahead
                         items={stockPools}
@@ -140,8 +123,7 @@ function StockViewerOptions({
                         minimumSearchTermLength={2}
                     />
                 </Grid>
-                <Grid item xs={9} />
-                <Grid item xs={12}>
+                <Grid item xs={3}>
                     <TypeaheadTable
                         table={table}
                         columnNames={['Name', 'Part', 'Pallet', 'Location', 'Date']}
@@ -161,27 +143,43 @@ function StockViewerOptions({
                         minimumSearchTermLength={2}
                     />
                 </Grid>
+                <Grid item xs={6} />
                 <Grid item xs={3}>
-                    {inspectedStatesLoading ? (
-                        <Loading />
-                    ) : (
-                        <Dropdown
-                            items={inspectedStates?.map(v => ({
-                                id: v.state,
-                                displayText: v.description
-                            }))}
-                            value={options.state}
-                            label="State"
-                            propertyName="state"
-                            fullWidth
-                            onChange={(_propertyName, newValue) =>
-                                setOptions({ ...options, state: newValue })
-                            }
-                            allowNoValue
-                        />
-                    )}
+                    <Dropdown
+                        items={inspectedStates?.map(v => ({
+                            id: v.state,
+                            displayText: v.description
+                        }))}
+                        value={options.state}
+                        label="State"
+                        propertyName="state"
+                        onChange={(_propertyName, newValue) =>
+                            setOptions({ ...options, state: newValue })
+                        }
+                        allowNoValue
+                    />
                 </Grid>
                 <Grid item xs={9} />
+
+                <Grid item xs={12}>
+                    <LinkButton
+                        text="VIEW STOCK LOCATORS"
+                        disabled={
+                            !options.stockPoolCode &&
+                            !options.batchRef &&
+                            !options.partNumber &&
+                            !(options.storageLocation || options.palletNumber)
+                        }
+                        to={`/inventory/stock-locator/locators?${queryString.stringify(options)}`}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <LinkButton
+                        text="VIEW STOCK ROTATIONS"
+                        disabled={!options.partNumber}
+                        to={`/inventory/stock-locator/rotations?${queryString.stringify(options)}`}
+                    />
+                </Grid>
             </Grid>
         </Page>
     );
@@ -225,15 +223,13 @@ StockViewerOptions.propTypes = {
             name: PropTypes.string,
             description: PropTypes.string
         })
-    ),
-    inspectedStatesLoading: PropTypes.bool
+    )
 };
 
 StockViewerOptions.defaultProps = {
     storageLocations: [],
     storageLocationsLoading: false,
     inspectedStates: [],
-    inspectedStatesLoading: false,
     stockPools: [],
     stockPoolsLoading: false,
     stockLocatorBatches: [],
