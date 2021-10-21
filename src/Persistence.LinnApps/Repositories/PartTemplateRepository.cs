@@ -7,6 +7,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Parts;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class PartTemplateRepository : IRepository<PartTemplate, string>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -20,6 +22,7 @@
         {
             return this.serviceDbContext
                 .PartTemplates
+                .AsNoTracking()
                 .Where(p => p.PartRoot == key)
                 .ToList()
                 .FirstOrDefault();

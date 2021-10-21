@@ -28,7 +28,7 @@
 
         public IQueryable<NominalAccount> FilterBy(Expression<Func<NominalAccount, bool>> expression)
         {
-            return this.serviceDbContext.NominalAccounts
+            return this.serviceDbContext.NominalAccounts.AsNoTracking()
                 .Where(expression).Include(a => a.Nominal).Include(a => a.Department);
         }
 

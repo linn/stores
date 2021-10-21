@@ -20,9 +20,7 @@ function PartsSearch({
         if (linkToSources) {
             return '/parts/sources/create';
         }
-        return template
-            ? `/parts/create?template=${template}`
-            : '/parts/create';
+        return template ? `/parts/create?template=${template}` : '/parts/create';
     };
     const searchItems = () => {
         const result = linkToSources

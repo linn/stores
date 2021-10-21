@@ -22,6 +22,7 @@
         {
             return this.serviceDbContext
                 .ProductAnalysisCodes
+                .AsNoTracking()
                 .Where(expression)
                 .ToList().FirstOrDefault();
         }

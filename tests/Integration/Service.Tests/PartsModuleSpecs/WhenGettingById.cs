@@ -20,7 +20,7 @@
         public void SetUp()
         {
             var p = new Part { Id = 1, StockControlled = "Y", CreatedBy = new Employee { Id = 1 } };
-            this.PartsFacadeService.GetById(1).Returns(new SuccessResult<Part>(p));
+            this.PartsFacadeService.GetByIdNoTracking(1).Returns(new SuccessResult<Part>(p));
 
             this.Response = this.Browser.Get(
                 "/parts/1",
@@ -36,7 +36,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.PartsFacadeService.Received().GetById(1);
+            this.PartsFacadeService.Received().GetByIdNoTracking(1);
         }
 
         [Test]
