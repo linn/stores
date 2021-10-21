@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import { getItemError, initialiseOnMount } from '@linn-it/linn-form-components-library';
 import ImportBook from '../../components/importBooks/ImportBook';
 import importBookActions from '../../actions/importBookActions';
-import importBooksActions from '../../actions/importBooksActions';
 import importBookSelectors from '../../selectors/importBookSelectors';
 import { getPrivileges, getUserNumber } from '../../selectors/userSelectors';
 import * as itemTypes from '../../itemTypes';
@@ -12,6 +11,8 @@ import countriesActions from '../../actions/countriesActions';
 import countriesSelectors from '../../selectors/countriesSelectors';
 import employeesActions from '../../actions/employeesActions';
 import employeesSelectors from '../../selectors/employeesSelectors';
+import exchangeRatesActions from '../../actions/exchangeRatesActions';
+import exchangeRatesSelectors from '../../selectors/exchangeRatesSelectors';
 
 const creating = match => match?.url?.endsWith('/create');
 
@@ -26,7 +27,8 @@ const mapStateToProps = (state, { match }) => ({
     userNumber: getUserNumber(state),
     allSuppliers: suppliersSelectors.getItems(state),
     countries: countriesSelectors.getItems(state),
-    employees: employeesSelectors.getItems(state)
+    employees: employeesSelectors.getItems(state),
+    exchangeRates: exchangeRatesSelectors.getItems(state)
 });
 
 const mapDispatchToProps = dispatch => {
@@ -39,11 +41,11 @@ const mapDispatchToProps = dispatch => {
             dispatch(countriesActions.fetch());
             dispatch(employeesActions.fetch());
         },
-        fetchParts: searchTerm => dispatch(importBooksActions.search(searchTerm)),
         addItem: item => dispatch(importBookActions.add(item)),
         updateItem: (itemId, item) => dispatch(importBookActions.update(itemId, item)),
         setEditStatus: status => dispatch(importBookActions.setEditStatus(status)),
-        setSnackbarVisible: () => dispatch(importBookActions.setSnackbarVisible())
+        setSnackbarVisible: () => dispatch(importBookActions.setSnackbarVisible()),
+        exchangeRatesActions: () => dispatch(exchangeRatesActions.search)
     };
 };
 

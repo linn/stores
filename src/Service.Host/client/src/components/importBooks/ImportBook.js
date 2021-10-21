@@ -37,7 +37,9 @@ function ImportBook({
     allSuppliers,
     countries,
     employees,
-    userNumber
+    userNumber,
+    getExchangeRatesForDate,
+    exchangeRates
 }) {
     const defaultImpBook = {
         id: -1,
@@ -87,6 +89,12 @@ function ImportBook({
             }
         }
     }, [item, state.prevImpBook, editStatus, defaultImpBook]);
+
+    useEffect(() => {
+        if (state.impbook?.dateCreated) {
+            getExchangeRatesForDate(state.impbook.dateCreated);
+        }
+    }, [state.impbook.dateCreated, getExchangeRatesForDate]);
 
     const viewing = () => editStatus === 'view';
 
@@ -309,6 +317,17 @@ function ImportBook({
         return '';
     };
 
+    const currentExchangeRate = () => {
+        if (exchangeRates.length) {
+            if (state.impbook?.currency) {
+                return exchangeRates.find(
+                    x => x.baseCurrency === state.impbook.currency && x.exchangeCurrency === 'GBP'
+                )?.exchangeRate;
+            }
+        }
+        return '';
+    };
+
     const impbookInvalid = () => {
         return (
             !state.impbook.supplierId ||
@@ -483,6 +502,7 @@ function ImportBook({
                                             countryIsInEU={countryIsInEU}
                                             employees={employees}
                                             pva={state.impbook.pva}
+                                            exchangeRate={currentExchangeRate}
                                         />
                                     )}
 
@@ -614,7 +634,9 @@ ImportBook.propTypes = {
     employees: PropTypes.arrayOf(
         PropTypes.shape({ id: PropTypes.number, fullName: PropTypes.string })
     ),
-    userNumber: PropTypes.number.isRequired
+    userNumber: PropTypes.number.isRequired,
+    getExchangeRatesForDate: PropTypes.func.isRequired,
+    exchangeRates: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 ImportBook.defaultProps = {
@@ -625,7 +647,15 @@ ImportBook.defaultProps = {
     itemId: null,
     countries: [{ id: '-1', countryCode: 'loading..' }],
     allSuppliers: [{ id: 0, name: 'loading', country: 'loading' }],
-    employees: [{ id: '-1', fullname: 'loading..' }]
+    employees: [{ id: '-1', fullname: 'loading..' }],
+    exchangeRates: [
+        {
+            periodNumber: PropTypes.number,
+            baseCurrency: PropTypes.string,
+            exchangeCurrency: PropTypes.string,
+            exchangeRate: PropTypes.number
+        }
+    ]
 };
 
 export default ImportBook;
