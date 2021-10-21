@@ -389,10 +389,10 @@ describe('When book in button clicked', () => {
     });
 
     describe('When bookInResultLoading...', () => {
-        test('should show loading text', () => {
+        test('should show loading spinner', () => {
             defaultRender({ bookInResultLoading: true });
 
-            expect(screen.getByDisplayValue('loading')).toBeInTheDocument();
+            expect(screen.getByRole('progressbar')).toBeInTheDocument();
         });
     });
 
