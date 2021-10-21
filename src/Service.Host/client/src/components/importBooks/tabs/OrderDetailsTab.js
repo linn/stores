@@ -4,8 +4,16 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Tooltip from '@material-ui/core/Tooltip';
+import Checkbox from '@material-ui/core/Checkbox';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { Dropdown, InputField, LinkButton, Typeahead } from '@linn-it/linn-form-components-library';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import {
+    Dropdown,
+    InputField,
+    SnackbarMessage,
+    Typeahead,
+    ErrorCard
+} from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
 import { Decimal } from 'decimal.js';
 
@@ -34,7 +42,13 @@ function OrderDetailsTab({
     searchPurchaseOrders,
     clearPurchaseOrdersSearch,
     supplierId,
-    impbookWeight
+    impbookWeight,
+    postDuty,
+    postDutyItemError,
+    snackbarVisible,
+    setSnackbarVisible,
+    currentUserNumber,
+    impbookId
 }) {
     const updateRow = detail => {
         handleOrderDetailChange(detail.lineNumber, detail);
@@ -83,6 +97,14 @@ function OrderDetailsTab({
 
     const editRow = (row, propertyName, newValue) => {
         updateRow({ ...row, [propertyName]: newValue });
+    };
+
+    const handlePostDutyTick = row => {
+        if (row.postDuty) {
+            updateRow({ ...row, postDuty: null });
+        } else {
+            updateRow({ ...row, postDuty: 'Y' });
+        }
     };
 
     const handleRsnUpdate = (row, rsn) => {
@@ -142,8 +164,36 @@ function OrderDetailsTab({
         });
     };
 
+    const handlePostDutyClick = () => {
+        postDuty({
+            orderDetails,
+            datePosted: invoiceDate,
+            currentUserNumber,
+            supplierId,
+            impbookId
+        });
+    };
+
     return (
         <>
+            <SnackbarMessage
+                visible={snackbarVisible}
+                onClose={() => setSnackbarVisible(false)}
+                message="Successfully posted duty to purchase ledger"
+            />
+
+            {postDutyItemError && (
+                <Grid item xs={12}>
+                    <ErrorCard
+                        errorMessage={
+                            postDutyItemError?.details?.errors?.[0] ||
+                            postDutyItemError?.details?.message ||
+                            postDutyItemError.statusText
+                        }
+                    />
+                </Grid>
+            )}
+
             <Grid container spacing={1} item xs={12}>
                 <Grid item xs={2}>
                     <InputField
@@ -199,12 +249,15 @@ function OrderDetailsTab({
                 </Grid>
 
                 <Grid item xs={3}>
-                    <LinkButton
-                        text="Post Duty"
-                        //todo to={`/logistics/`}
-                        disabled
-                        external
-                    />
+                    <Tooltip title="Post Duty to purchase ledger for ticked details">
+                        <Button
+                            className={classes.marginTop1}
+                            onClick={handlePostDutyClick}
+                            disabled={!allowedToEdit || !invoiceDate}
+                        >
+                            Post Duty
+                        </Button>
+                    </Tooltip>
                 </Grid>
             </Grid>
 
@@ -497,15 +550,21 @@ function OrderDetailsTab({
                                     type="number"
                                 />
                             </Grid>
-                            <Grid item xs={2}>
-                                <LinkButton
-                                    text="Post Duty"
-                                    //todo to={`/logistics/`}
-                                    disabled
-                                    external
+                            <Grid item xs={1}>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            onChange={() => handlePostDutyTick(row)}
+                                            checked={row.postDuty === 'Y'}
+                                            disabled={!allowedToEdit}
+                                            color="primary"
+                                        />
+                                    }
+                                    label="Post Duty"
+                                    labelPlacement="top"
                                 />
                             </Grid>
-                            <Grid item xs={2}>
+                            <Grid item xs={1}>
                                 <Tooltip title="Remove order detail" aria-label="add">
                                     <Button
                                         className={classes.marginTop1}
@@ -584,7 +643,21 @@ OrderDetailsTab.propTypes = {
     searchPurchaseOrders: PropTypes.func.isRequired,
     clearPurchaseOrdersSearch: PropTypes.func.isRequired,
     supplierId: PropTypes.number,
-    impbookWeight: PropTypes.number.isRequired
+    impbookWeight: PropTypes.number.isRequired,
+    postDuty: PropTypes.func.isRequired,
+    postDutyItemError: PropTypes.shape({
+        status: PropTypes.number,
+        statusText: PropTypes.string,
+        item: PropTypes.string,
+        details: PropTypes.shape({
+            errors: PropTypes.arrayOf(PropTypes.shape({})),
+            message: PropTypes.string
+        })
+    }),
+    snackbarVisible: PropTypes.bool,
+    setSnackbarVisible: PropTypes.func.isRequired,
+    currentUserNumber: PropTypes.number.isRequired,
+    impbookId: PropTypes.number
 };
 
 OrderDetailsTab.defaultProps = {
@@ -592,7 +665,10 @@ OrderDetailsTab.defaultProps = {
     rsnsSearchResults: null,
     purchaseOrdersSearchResults: null,
     loansSearchResults: null,
-    supplierId: -1
+    supplierId: -1,
+    postDutyItemError: null,
+    snackbarVisible: false,
+    impbookId: null
 };
 
 export default OrderDetailsTab;

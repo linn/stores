@@ -9,24 +9,26 @@
 
     public class Supplier
     {
-        public int Id { get; set; }
+        public string AccountingCompany { get; set; }
 
-        public string Name { get; set; }
-
-        public IEnumerable<Part> PartsPreferredSupplierOf { get; set; }
+        public string ApprovedCarrier { get; set; }
 
         public string CountryCode { get; set; }
 
         public DateTime? DateClosed { get; set; }
 
+        public int Id { get; set; }
+
         public IEnumerable<MechPartAlt> MechPartAlts { get; set; }
 
-        public IEnumerable<MechPartPurchasingQuote> PurchasingQuotesSupplierOn { get; set; }
+        public string Name { get; set; }
 
-        public string ApprovedCarrier { get; set; }
+        public IEnumerable<Part> PartsPreferredSupplierOf { get; set; }
 
         public IEnumerable<PlCreditDebitNote> PlCreditDebitNotes { get; set; }
 
         public IEnumerable<PurchaseOrder> PurchaseOrders { get; set; }
+
+        public IEnumerable<MechPartPurchasingQuote> PurchasingQuotesSupplierOn { get; set; }
     }
 }

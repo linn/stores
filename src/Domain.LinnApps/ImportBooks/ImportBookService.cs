@@ -3,19 +3,78 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
+    using Linn.Stores.Domain.LinnApps.Models;
 
     public class ImportBookService : IImportBookService
     {
         private readonly IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey> exchangeRateRepository;
+
         private readonly IRepository<LedgerPeriod, int> ledgerPeriodRepository;
+
+        private readonly IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey> orderDetailRepository;
+
+        private readonly IRepository<PurchaseLedger, int> purchaseLedgerRepository;
+
+        private readonly IPurchaseLedgerPack purchaseLedgerPack;
+
+        private readonly IQueryRepository<Supplier> supplierRepository;
 
         public ImportBookService(
             IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey> exchangeRateRepository,
-            IRepository<LedgerPeriod, int> ledgerPeriodRepository)
+            IRepository<LedgerPeriod, int> ledgerPeriodRepository,
+            IQueryRepository<Supplier> supplierRepository,
+            IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey> orderDetailRepository,
+            IRepository<PurchaseLedger, int> purchaseLedgerRepository,
+            IPurchaseLedgerPack purchaseLedgerPack)
         {
             this.exchangeRateRepository = exchangeRateRepository;
             this.ledgerPeriodRepository = ledgerPeriodRepository;
+            this.supplierRepository = supplierRepository;
+            this.orderDetailRepository = orderDetailRepository;
+            this.purchaseLedgerPack = purchaseLedgerPack;
+            this.purchaseLedgerRepository = purchaseLedgerRepository;
+        }
+
+        public IEnumerable<ImportBookExchangeRate> GetExchangeRates(string date)
+        {
+            var unformattedDate = DateTime.Parse(date);
+            var formattedDate = unformattedDate.ToString("MMMYYYY");
+
+            var ledgerPeriod = this.ledgerPeriodRepository.FindBy(x => x.MonthName == formattedDate);
+
+            var exchangeRates = this.exchangeRateRepository.FilterBy(x => x.PeriodNumber == ledgerPeriod.PeriodNumber);
+
+            return exchangeRates;
+        }
+
+        public ProcessResult PostDutyForOrderDetails(
+            IEnumerable<ImportBookOrderDetail> orderDetails,
+            int supplierId,
+            int employeeId,
+            DateTime postDutyDate)
+        {
+            foreach (var detail in orderDetails)
+            {
+                var oldDetail = this.orderDetailRepository.FindById(
+                    new ImportBookOrderDetailKey(detail.ImportBookId, detail.LineNumber));
+                if (oldDetail == null)
+                {
+                    throw new PostDutyException("Cannot post duty without saving all order details first");
+                }
+
+                if (string.IsNullOrEmpty(oldDetail.PostDuty) && !string.IsNullOrEmpty(detail.PostDuty) && detail.PostDuty.Equals("Y"))
+                {
+                    this.PostDuty(detail, supplierId, employeeId, postDutyDate);
+
+                    oldDetail.PostDuty = "Y";
+                }
+            }
+
+            return new ProcessResult(true, "Successfully posted duty");
         }
 
         public void Update(ImportBook from, ImportBook to)
@@ -29,46 +88,51 @@
             this.UpdatePostEntries(from.PostEntries, to.PostEntries);
         }
 
-        public IEnumerable<ImportBookExchangeRate> GetExchangeRates(string date)
+        private void PostDuty(ImportBookOrderDetail detail, int supplierId, int employeeId, DateTime postDutyDate)
         {
-            var unformattedDate = DateTime.Parse(date);
-            var formattedDate = unformattedDate.ToString("MMMYYYY");
+            var accountingCompany = this.supplierRepository.FindBy(x => x.Id == supplierId).AccountingCompany;
 
-            var ledgerPeriod = this.ledgerPeriodRepository.FindBy(x => x.MonthName == formattedDate);
-            
-            var exchangeRates = this.exchangeRateRepository.FilterBy(x => x.PeriodNumber == ledgerPeriod.PeriodNumber);
+            if (accountingCompany != "LINN")
+            {
+                throw new PostDutyException(
+                    $"supplier {supplierId} on detail is not set up for records duty yet, accounting company is not LINN");
+            }
 
-            return exchangeRates;
-        }
+            var ledgerPeriod = this.purchaseLedgerPack.GetLedgerPeriod();
+            var debitNomacc = this.purchaseLedgerPack.GetNomacc("0000002302", "0000012926");
 
-        private void UpdateTopLevelProperties(ImportBook entity, ImportBook to)
-        {
-            entity.ParcelNumber = to.ParcelNumber;
-            entity.SupplierId = to.SupplierId;
-            entity.ForeignCurrency = to.ForeignCurrency;
-            entity.Currency = to.Currency;
-            entity.CarrierId = to.CarrierId;
-            entity.TransportId = to.TransportId;
-            entity.TransportBillNumber = to.TransportBillNumber;
-            entity.TransactionId = to.TransactionId;
-            entity.DeliveryTermCode = to.DeliveryTermCode;
-            entity.ArrivalPort = to.ArrivalPort;
-            entity.ArrivalDate = to.ArrivalDate;
-            entity.TotalImportValue = to.TotalImportValue;
-            entity.Weight = to.Weight;
-            entity.CustomsEntryCode = to.CustomsEntryCode;
-            entity.CustomsEntryCodeDate = to.CustomsEntryCodeDate;
-            entity.LinnDuty = to.LinnDuty;
-            entity.LinnVat = to.LinnVat;
-            entity.DateCancelled = to.DateCancelled;
-            entity.CancelledBy = to.CancelledBy;
-            entity.CancelledReason = to.CancelledReason;
-            entity.NumCartons = to.NumCartons;
-            entity.NumPallets = to.NumPallets;
-            entity.Comments = to.Comments;
-            entity.CreatedBy = to.CreatedBy;
-            entity.CustomsEntryCodePrefix = to.CustomsEntryCodePrefix;
-            entity.Pva = to.Pva;
+            var newPurchaseLedgerEntry = new PurchaseLedger
+                                             {
+                                                 SupplierId = 7371,
+                                                 OrderLine = 1,
+                                                 OrderNumber = detail.OrderNumber,
+                                                 DatePosted = DateTime.Now,
+                                                 PlState = "U",
+                                                 PlQuantity = 0,
+                                                 PlNetTotal = detail.DutyValue,
+                                                 PlVat = 0,
+                                                 PlTotal = detail.DutyValue,
+                                                 BaseNetTotal = detail.DutyValue,
+                                                 BaseVatTotal = 0,
+                                                 BaseTotal = detail.DutyValue,
+                                                 InvoiceDate = postDutyDate,
+                                                 PlInvoiceRef = $"IMP{detail.ImportBookId}",
+                                                 PlDeliveryRef = $"DUTY{postDutyDate.ToString("ddMMMyyyy")}",
+                                                 CompanyRef = "DUTY",
+                                                 Currency = "GBP",
+                                                 LedgerPeriod = ledgerPeriod,
+                                                 PostedBy = employeeId,
+                                                 DebitNomacc = debitNomacc,
+                                                 CreditNomacc = 1005,
+                                                 PlTransType = "INV",
+                                                 BaseCurrency = "GBP",
+                                                 Carriage = 0,
+                                                 UnderOver = 0,
+                                                 ExchangeRate = 1,
+                                                 LedgerStream = 1
+                                             };
+
+            this.purchaseLedgerRepository.Add(newPurchaseLedgerEntry);
         }
 
         private void UpdateInvoiceDetails(IList<ImportBookInvoiceDetail> from, IList<ImportBookInvoiceDetail> to)
@@ -107,8 +171,8 @@
 
                 if (currentDetail == null)
                 {
-                    //below hard coded line number as one may change eventually
-                    //if more than one purchase order detail is implemented for a purchase order
+                    // below hard coded line number as one may change eventually
+                    // if more than one purchase order detail is implemented for a purchase order
                     newdetail.POLineNumber = 1;
                     from.Add(newdetail);
                 }
@@ -158,6 +222,36 @@
                     currentEntry.Vat = newEntry.Vat;
                 }
             }
+        }
+
+        private void UpdateTopLevelProperties(ImportBook entity, ImportBook to)
+        {
+            entity.ParcelNumber = to.ParcelNumber;
+            entity.SupplierId = to.SupplierId;
+            entity.ForeignCurrency = to.ForeignCurrency;
+            entity.Currency = to.Currency;
+            entity.CarrierId = to.CarrierId;
+            entity.TransportId = to.TransportId;
+            entity.TransportBillNumber = to.TransportBillNumber;
+            entity.TransactionId = to.TransactionId;
+            entity.DeliveryTermCode = to.DeliveryTermCode;
+            entity.ArrivalPort = to.ArrivalPort;
+            entity.ArrivalDate = to.ArrivalDate;
+            entity.TotalImportValue = to.TotalImportValue;
+            entity.Weight = to.Weight;
+            entity.CustomsEntryCode = to.CustomsEntryCode;
+            entity.CustomsEntryCodeDate = to.CustomsEntryCodeDate;
+            entity.LinnDuty = to.LinnDuty;
+            entity.LinnVat = to.LinnVat;
+            entity.DateCancelled = to.DateCancelled;
+            entity.CancelledBy = to.CancelledBy;
+            entity.CancelledReason = to.CancelledReason;
+            entity.NumCartons = to.NumCartons;
+            entity.NumPallets = to.NumPallets;
+            entity.Comments = to.Comments;
+            entity.CreatedBy = to.CreatedBy;
+            entity.CustomsEntryCodePrefix = to.CustomsEntryCodePrefix;
+            entity.Pva = to.Pva;
         }
     }
 }

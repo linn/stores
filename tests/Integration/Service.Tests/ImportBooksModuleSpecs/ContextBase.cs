@@ -5,6 +5,7 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
+    using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources.ImportBooks;
@@ -19,7 +20,7 @@
 
     public class ContextBase : NancyContextBase
     {
-        protected IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource> ImportBooksFacadeService { get; private set; }
+        protected IImportBookFacadeService ImportBooksFacadeService { get; private set; }
 
         protected IImportBookExchangeRateService ImportBookExchangeRateService { get; private set; }
 
@@ -37,7 +38,7 @@
         public void EstablishContext()
         {
             this.ImportBooksFacadeService =
-                Substitute.For<IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource>>();
+                Substitute.For<IImportBookFacadeService>();
             this.ImportBookExchangeRateService = Substitute.For<IImportBookExchangeRateService>();
             this.ImportBookTransactionCodeFacadeService = Substitute
                 .For<IFacadeService<ImportBookTransactionCode, int, ImportBookTransactionCodeResource, ImportBookTransactionCodeResource>>();
@@ -62,41 +63,23 @@
                 with.Dependency<IResourceBuilder<ImportBook>>(new ImportBookResourceBuilder());
                 with.Dependency<IResourceBuilder<IEnumerable<ImportBook>>>(new ImportBooksResourceBuilder());
                 with.Dependency<IResourceBuilder<ImportBookExchangeRate>>(new ImportBookExchangeRateResourceBuilder());
-                with.Dependency<IResourceBuilder<IEnumerable<ImportBookExchangeRate>>>(
-                    new ImportBookExchangeRatesResourceBuilder());
-
+                with.Dependency<IResourceBuilder<IEnumerable<ImportBookExchangeRate>>>(new ImportBookExchangeRatesResourceBuilder());
                 with.Dependency<IResourceBuilder<ImportBookTransportCode>>(new ImportBookTransportCodeResourceBuilder());
-                with.Dependency<IResourceBuilder<ImportBookTransactionCode>>(
-                    new ImportBookTransactionCodeResourceBuilder());
-
-                with.Dependency<IResourceBuilder<IEnumerable<ImportBookTransportCode>>>(
-                    new ImportBookTransportCodesResourceBuilder());
-
-                with.Dependency<IResourceBuilder<IEnumerable<ImportBookTransactionCode>>>(
-                    new ImportBookTransactionCodesResourceBuilder());
-
+                with.Dependency<IResourceBuilder<ImportBookTransactionCode>>(new ImportBookTransactionCodeResourceBuilder());
+                with.Dependency<IResourceBuilder<IEnumerable<ImportBookTransportCode>>>(new ImportBookTransportCodesResourceBuilder());
+                with.Dependency<IResourceBuilder<IEnumerable<ImportBookTransactionCode>>>(new ImportBookTransactionCodesResourceBuilder());
                 with.Dependency<IResourceBuilder<ImportBookCpcNumber>>(new ImportBookCpcNumberResourceBuilder());
-
-                with.Dependency<IResourceBuilder<IEnumerable<ImportBookCpcNumber>>>(
-                    new ImportBookCpcNumbersResourceBuilder());
-
-                with.Dependency<IResourceBuilder<IEnumerable<Port>>>(
-                    new PortsResourceBuilder());
-
-                with.Dependency<IResourceBuilder<ImportBookDeliveryTerm>>(
-                    new ImportBookDeliveryTermResourceBuilder());
-
-                with.Dependency<IResourceBuilder<IEnumerable<ImportBookDeliveryTerm>>>(
-                    new ImportBookDeliveryTermsResourceBuilder());
-
+                with.Dependency<IResourceBuilder<IEnumerable<ImportBookCpcNumber>>>(new ImportBookCpcNumbersResourceBuilder());
+                with.Dependency<IResourceBuilder<IEnumerable<Port>>>(new PortsResourceBuilder());
+                with.Dependency<IResourceBuilder<ImportBookDeliveryTerm>>(new ImportBookDeliveryTermResourceBuilder());
+                with.Dependency<IResourceBuilder<IEnumerable<ImportBookDeliveryTerm>>>(new ImportBookDeliveryTermsResourceBuilder());
                 with.Dependency<IResourceBuilder<IEnumerable<ImportBookOrderDetail>>>(new ImportBookOrderDetailsResourceBuilder());
                 with.Dependency<IResourceBuilder<ImportBookOrderDetail>>(new ImportBookOrderDetailResourceBuilder());
-
                 with.Dependency<IResourceBuilder<IEnumerable<ImportBookPostEntry>>>(new ImportBookPostEntriesResourceBuilder());
                 with.Dependency<IResourceBuilder<ImportBookPostEntry>>(new ImportBookPostEntryResourceBuilder());
-
                 with.Dependency<IResourceBuilder<IEnumerable<ImportBookInvoiceDetail>>>(new ImportBookInvoiceDetailsResourceBuilder());
                 with.Dependency<IResourceBuilder<ImportBookInvoiceDetail>>(new ImportBookInvoiceDetailResourceBuilder());
+                with.Dependency<IResourceBuilder<ProcessResult>>(new ProcessResultResourceBuilder());
 
                 with.Module<ImportBooksModule>();
 
@@ -115,7 +98,8 @@
                 with.ResponseProcessor<ImportBookCpcNumbersResponseProcessor>();
                 with.ResponseProcessor<PortsResponseProcessor>();
                 with.ResponseProcessor<ImportBookDeliveryTermsResponseProcessor>();
-                
+
+                with.ResponseProcessor<ProcessResultResponseProcessor>();
 
                 with.RequestStartup(
                     (container, pipelines, context) =>

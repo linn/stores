@@ -119,7 +119,7 @@
                 .As<IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>>();
             builder.RegisterType<EmployeesService>().As<IEmployeeService>();
             builder.RegisterType<ImportBookFacadeService>()
-                .As<IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource>>();
+                .As<IImportBookFacadeService>();
             builder.RegisterType<ImportBookReportFacadeService>()
                 .As<IImportBookReportFacadeService>();
             builder.RegisterType<ImportBookDeliveryTermFacadeService>().As<IFacadeService<ImportBookDeliveryTerm, string, ImportBookDeliveryTermResource, ImportBookDeliveryTermResource>>();
@@ -206,6 +206,8 @@
                 .As<IFacadeFilterService<PlCreditDebitNote, int, PlCreditDebitNoteResource, PlCreditDebitNoteResource, PlCreditDebitNoteResource>>();
             builder.RegisterType<LogisticsLabelService>().As<ILogisticsLabelService>();
             builder.RegisterType<DeptStockPartsService>().As<IDeptStockPartsService>();
+            builder.RegisterType<PurchaseLedgerPack>().As<IPurchaseLedgerPack>();
+
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();
