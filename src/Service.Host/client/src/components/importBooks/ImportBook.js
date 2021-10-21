@@ -502,7 +502,7 @@ function ImportBook({
                                             countryIsInEU={countryIsInEU}
                                             employees={employees}
                                             pva={state.impbook.pva}
-                                            exchangeRate={currentExchangeRate}
+                                            exchangeRate={currentExchangeRate()}
                                         />
                                     )}
 
