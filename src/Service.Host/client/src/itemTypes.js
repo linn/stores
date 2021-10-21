@@ -441,3 +441,5 @@ export const stockBatchesInRotationOrder = new ItemType(
     'STOCK_BATCHES_IN_ROTATION_ORDER',
     '/inventory/stock-locators/rotations'
 );
+
+export const postDuty = new ItemType('postDuty', 'POST_DUTY', '/logistics/import-books/post-duty');

@@ -175,6 +175,7 @@ function ImpBookTab({
                     <LinkButton
                         text="View Parcel"
                         to={`/logistics/parcels/${parcelNumber}`}
+                        tooltip="Right click to open in new tab"
                         external
                     />
                 </Grid>

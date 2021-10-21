@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { initialiseOnMount } from '@linn-it/linn-form-components-library';
+import { getItemError, initialiseOnMount } from '@linn-it/linn-form-components-library';
 import OrderDetailsTab from '../../../components/importBooks/tabs/OrderDetailsTab';
 import cpcNumbersActions from '../../../actions/impbookCpcNumbersActions';
 import cpcNumbersSelectors from '../../../selectors/impbookCpcNumbersSelectors';
@@ -9,6 +9,9 @@ import loansActions from '../../../actions/loansActions';
 import loansSelectors from '../../../selectors/loansSelectors';
 import purchaseOrdersActions from '../../../actions/purchaseOrdersActions';
 import purchaseOrdersSelectors from '../../../selectors/purchaseOrdersSelectors';
+import postDutyActions from '../../../actions/postDutyActions';
+import postDutySelectors from '../../../selectors/postDutySelectors';
+import * as itemTypes from '../../../itemTypes';
 
 const mapStateToProps = state => ({
     cpcNumbers: cpcNumbersSelectors.getItems(state)?.map(x => ({
@@ -40,7 +43,9 @@ const mapStateToProps = state => ({
         name: l.loanNumber.toString(),
         description: l.loanNumber
     })),
-    loansSearchLoading: loansSelectors.getSearchLoading(state)
+    loansSearchLoading: loansSelectors.getSearchLoading(state),
+    postDutyItemError: getItemError(state, itemTypes.postDuty.item),
+    snackbarVisible: postDutySelectors.getSnackbarVisible(state)
 });
 
 const initialise = () => dispatch => {
@@ -54,7 +59,9 @@ const mapDispatchToProps = {
     searchLoans: loansActions.search,
     clearLoansSearch: loansActions.clearSearch,
     searchPurchaseOrders: purchaseOrdersActions.search,
-    clearPurchaseOrdersSearch: purchaseOrdersActions.clearSearch
+    clearPurchaseOrdersSearch: purchaseOrdersActions.clearSearch,
+    postDuty: postDutyActions.add,
+    setSnackbarVisible: postDutyActions.setSnackbarVisible
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(OrderDetailsTab));
