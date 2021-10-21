@@ -111,7 +111,7 @@
 
         public string GetLocation(Part part)
         {
-            return $"/inventory/parts/{part.Id}";
+            return $"/parts/{part.Id}";
         }
 
         object IResourceBuilder<Part>.Build(Part part) => this.Build(part);
@@ -124,7 +124,7 @@
                 yield return new LinkResource
                 {
                     Rel = "mechanical-sourcing-sheet",
-                    Href = $"/inventory/parts/sources/{part.MechPartSource.Id}"
+                    Href = $"/parts/sources/{part.MechPartSource.Id}"
                 };
             }
 

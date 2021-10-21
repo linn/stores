@@ -50,6 +50,7 @@ const item = {
     baseCurrency: 'GBP',
     periodNumber: null,
     invoiceDate: '11/12/13',
+    pva: 'Y',
     importBookInvoiceDetails: [
         { invoiceNumber: 123, invoiceValue: 1400 },
         { invoiceNumber: 124, invoiceValue: 99.01 }

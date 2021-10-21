@@ -93,7 +93,7 @@ export const countries = new ItemType('countries', 'COUNTRIES', '/logistics/coun
 export const partLiveTest = new ItemType(
     'partLiveTest',
     'PART_LIVE_TEST',
-    '/inventory/parts/can-be-made-live'
+    '/parts/can-be-made-live'
 );
 
 export const sosAllocHeads = new ItemType(
@@ -139,7 +139,7 @@ export const auditLocations = new ItemType(
 export const mechPartSource = new ItemType(
     'mechPartSource',
     'MECH_PART_SOURCE',
-    '/inventory/parts/sources'
+    '/parts/sources'
 );
 
 export const manufacturers = new ItemType(
@@ -153,13 +153,13 @@ export const employees = new ItemType('employees', 'EMPLOYEES', '/inventory/empl
 export const partDataSheetValues = new ItemType(
     'partDataSheetValues',
     'PART_DATA_SHEET_VALUES',
-    '/inventory/parts/data-sheet-values'
+    '/parts/data-sheet-values'
 );
 
 export const tqmsCategories = new ItemType(
     'tqmsCategories',
     'TQMS_CATEGORIES',
-    '/inventory/parts/tqms-categories'
+    '/parts/tqms-categories'
 );
 
 export const workstationTopUpStatus = new ItemType(

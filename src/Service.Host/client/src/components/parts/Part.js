@@ -19,6 +19,7 @@ import PurchTab from '../../containers/parts/tabs/PurchTab';
 import StoresTab from '../../containers/parts/tabs/StoresTab';
 import LifeCycleTab from './tabs/LifeCycleTab';
 import partReducer from './partReducer';
+import handleBackClick from '../../helpers/handleBackClick';
 
 function Part({
     copy,
@@ -42,14 +43,15 @@ function Part({
     fetchLiveTest,
     fetchParts,
     partsSearchResults,
-    clearErrors
+    clearErrors,
+    previousPaths
 }) {
     const defaultPart = {
         partNumber: '',
         description: '',
         accountingCompany: 'LINN',
         psuPart: 'N',
-        stockControlled: 'N',
+        stockControlled: 'Y',
         cccCriticalPart: 'N',
         safetyCriticalPart: 'N',
         paretoCode: 'U',
@@ -231,10 +233,6 @@ function Part({
         setEditStatus('view');
     };
 
-    const handleBackClick = () => {
-        history.push('/inventory/parts');
-    };
-
     const handleFieldChange = (propertyName, newValue) => {
         setEditStatus('edit');
         dispatch({ type: 'fieldChange', fieldName: propertyName, payload: newValue });
@@ -277,7 +275,7 @@ function Part({
                     <Grid item xs={2} />
                 ) : (
                     <Grid item xs={2}>
-                        <LinkButton to="/inventory/parts/create?copy=true" text="Copy" />
+                        <LinkButton to="/parts/create?copy=true" text="Copy" />
                     </Grid>
                 )}
                 {itemError && (
@@ -476,7 +474,7 @@ function Part({
                                     saveDisabled={viewing() || partInvalid()}
                                     saveClick={handleSaveClick}
                                     cancelClick={handleCancelClick}
-                                    backClick={handleBackClick}
+                                    backClick={() => handleBackClick(previousPaths, history.goBack)}
                                 />
                             </Grid>
                         </>
@@ -499,7 +497,7 @@ Part.propTypes = {
         links: PropTypes.arrayOf(PropTypes.shape({ href: PropTypes.string, rel: PropTypes.string }))
     }),
     partsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
-    history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+    history: PropTypes.shape({ push: PropTypes.func, goBack: PropTypes.func }).isRequired,
     editStatus: PropTypes.string.isRequired,
     itemError: PropTypes.shape({
         status: PropTypes.number,
@@ -525,7 +523,8 @@ Part.propTypes = {
     liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
     fetchLiveTest: PropTypes.func.isRequired,
     fetchParts: PropTypes.func.isRequired,
-    clearErrors: PropTypes.func.isRequired
+    clearErrors: PropTypes.func.isRequired,
+    previousPaths: PropTypes.arrayOf(PropTypes.string)
 };
 
 Part.defaultProps = {
@@ -541,6 +540,7 @@ Part.defaultProps = {
     userNumber: null,
     templateName: null,
     partTemplates: [],
+    previousPaths: [],
     liveTest: null,
     partsSearchResults: []
 };

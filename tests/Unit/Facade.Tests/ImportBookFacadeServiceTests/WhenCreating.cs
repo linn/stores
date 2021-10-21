@@ -55,6 +55,7 @@
                                     Comments = "now closed",
                                     CreatedBy = 33105,
                                     CustomsEntryCodePrefix = "AA",
+                                    Pva = "Y",
                                     ImportBookInvoiceDetails =
                                         new List<ImportBookInvoiceDetailResource>
                                             {
@@ -186,6 +187,7 @@
             dataResult.Comments.Should().Be(this.resource.Comments);
             dataResult.CreatedBy.Should().Be(this.resource.CreatedBy);
             dataResult.CustomsEntryCodePrefix.Should().Be(this.resource.CustomsEntryCodePrefix);
+            dataResult.Pva.Should().Be("Y");
 
             var firstResourceInvDetail = this.resource.ImportBookInvoiceDetails.FirstOrDefault(x => x.LineNumber == 1);
             var secondResourceInvDetail = this.resource.ImportBookInvoiceDetails.FirstOrDefault(x => x.LineNumber == 2);
