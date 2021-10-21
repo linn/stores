@@ -131,8 +131,8 @@ describe('impbook reducer tests', () => {
                     impbook: {
                         id: 51,
                         importBookOrderDetails: [
-                            { importBookId: 51, lineNumber: 1 },
-                            { importBookId: 51, lineNumber: 2 }
+                            { importBookId: 51, lineNumber: 1, postDuty: null },
+                            { importBookId: 51, lineNumber: 2, postDuty: 'Y' }
                         ]
                     }
                 },
@@ -145,9 +145,9 @@ describe('impbook reducer tests', () => {
             impbook: {
                 id: 51,
                 importBookOrderDetails: [
-                    { importBookId: 51, lineNumber: 1 },
-                    { importBookId: 51, lineNumber: 2 },
-                    { importBookId: 51, lineNumber: 3 }
+                    { importBookId: 51, lineNumber: 1, postDuty: null },
+                    { importBookId: 51, lineNumber: 2, postDuty: 'Y' },
+                    { importBookId: 51, lineNumber: 3, postDuty: null }
                 ]
             }
         });
