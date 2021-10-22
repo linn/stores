@@ -90,6 +90,18 @@
             return new SuccessResult<IEnumerable<Part>>(new List<Part> { this.partRepository.FindBy(a => a.PartNumber == partNumber.ToUpper()) });
         }
 
+        public IResult<Part> GetByIdNoTracking(int id)
+        {
+            var res = this.partRepository.FilterBy(x => x.Id == id).ToList().FirstOrDefault();
+
+            if (res == null)
+            {
+                return new NotFoundResult<Part>("Not Found");
+            }
+
+            return new SuccessResult<Part>(res);
+        }
+
         protected override Part CreateFromResource(PartResource resource)
         {
             var partToAdd = new Part
@@ -197,7 +209,7 @@
             var updatedPart = new Part
                                   {
                                       Description = resource.Description,
-                                      AccountingCompany =
+                                      AccountingCompany = 
                                           this.accountingCompanyRepository.FindBy(
                                               c => c.Name == resource.AccountingCompany),
                                       CccCriticalPart = resource.CccCriticalPart,
@@ -297,13 +309,8 @@
                                               ? this.employeeRepository.FindById((int)resource.MadeLiveBy)
                                               : null
                                   };
-            var manufacturers = resource
-                .Manufacturers
-                ?.Select(m => new MechPartManufacturerAlt
-                                  {
-                                      ManufacturerCode = m.ManufacturerCode, PartNumber = m.PartNumber
-                                  });
-            this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList(), manufacturers);
+          
+            this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList());
         }
 
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)

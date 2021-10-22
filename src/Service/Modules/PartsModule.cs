@@ -134,7 +134,7 @@
 
         private object GetPart(int id)
         {
-            var results = this.partsFacadeService.GetById(id);
+            var results = this.partsFacadeService.GetByIdNoTracking(id);
             return this.Negotiate
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)

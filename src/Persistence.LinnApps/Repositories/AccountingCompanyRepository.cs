@@ -7,6 +7,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class AccountingCompanyRepository : IQueryRepository<AccountingCompany>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -23,7 +25,7 @@
 
         public IQueryable<AccountingCompany> FilterBy(Expression<Func<AccountingCompany, bool>> expression)
         {
-            return this.serviceDbContext.AccountingCompanies.Where(expression);
+            return this.serviceDbContext.AccountingCompanies.AsNoTracking().Where(expression);
         }
 
         public IQueryable<AccountingCompany> FindAll()

@@ -32,7 +32,7 @@
             this.privileges = new List<string> { "part.admin" };
             this.PartPack.PartLiveTest(Arg.Any<string>(), out _).Returns(true);
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
-            this.Sut.UpdatePart(this.from, this.to, this.privileges, null);
+            this.Sut.UpdatePart(this.from, this.to, this.privileges);
         }
 
         [Test]

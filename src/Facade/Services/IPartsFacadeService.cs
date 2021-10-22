@@ -13,5 +13,7 @@
         void CreatePartFromSource(int sourceId, int proposedById, IEnumerable<PartDataSheetResource> dataSheets);
 
         IResult<IEnumerable<Part>> GetPartByPartNumber(string partNumber);
+
+        IResult<Part> GetByIdNoTracking(int id);
     }
 }
