@@ -20,6 +20,7 @@ import PostEntriesTab from './tabs/PostEntriesTab';
 import CommentsTab from '../../containers/importBooks/tabs/CommentsTab';
 import ImportBookReducer from './ImportBookReducer';
 import ImpBookPrintOut from './ImpBookPrintOut';
+import currencyConvert from '../../helpers/currencyConvert';
 
 function ImportBook({
     editStatus,
@@ -335,10 +336,7 @@ function ImportBook({
         const exchangeRate = currentExchangeRate();
         const invoiceValue = totalInvoiceValue();
         if (exchangeRate && invoiceValue && invoiceValue > 0) {
-            const convertedValue = new Decimal(invoiceValue)
-                .div(exchangeRate)
-                .toDecimalPlaces(2, Decimal.ROUND_HALF_DOWN)
-                .valueOf();
+            const convertedValue = currencyConvert(invoiceValue, exchangeRate);
 
             handleFieldChange('totalImportValue', convertedValue);
         }

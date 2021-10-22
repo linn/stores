@@ -17,6 +17,7 @@ import {
 import { makeStyles } from '@material-ui/styles';
 import { Decimal } from 'decimal.js';
 import DialogInput from './DialogInput';
+import currencyConvert from '../../../helpers/currencyConvert';
 
 function OrderDetailsTab({
     orderDetails,
@@ -181,10 +182,7 @@ function OrderDetailsTab({
 
     const handleValueEntryAndConvert = (row, propertyName, newValue) => {
         if (exchangeRate && newValue && newValue > 0) {
-            const convertedValue = new Decimal(newValue)
-                .div(exchangeRate)
-                .toDecimalPlaces(2, Decimal.ROUND_HALF_DOWN)
-                .valueOf();
+            const convertedValue = currencyConvert(newValue, exchangeRate);
 
             updateRow({ ...row, [propertyName]: convertedValue });
         } else {
