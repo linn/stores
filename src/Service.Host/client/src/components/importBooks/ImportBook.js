@@ -326,7 +326,6 @@ function ImportBook({
                 return exchangeRates.find(
                     x => x.exchangeCurrency === state.impbook.currency && x.baseCurrency === 'GBP'
                 )?.exchangeRate;
-                // return rate ?? '';
             }
         }
         return '';
@@ -340,7 +339,6 @@ function ImportBook({
                 .div(exchangeRate)
                 .toDecimalPlaces(2, Decimal.ROUND_HALF_DOWN)
                 .valueOf();
-            console.log(convertedValue);
 
             handleFieldChange('totalImportValue', convertedValue);
         }
