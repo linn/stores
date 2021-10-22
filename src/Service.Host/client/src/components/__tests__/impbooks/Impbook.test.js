@@ -11,6 +11,8 @@ const addItem = jest.fn();
 const updateItem = jest.fn();
 const setEditStatus = jest.fn();
 const setSnackbarVisible = jest.fn();
+const getExchangeRatesForDate = jest.fn();
+
 const history = {
     push: jest.fn()
 };
@@ -90,6 +92,7 @@ describe('When loading', () => {
                 updateItem={updateItem}
                 setEditStatus={setEditStatus}
                 setSnackbarVisible={setSnackbarVisible}
+                getExchangeRatesForDate={getExchangeRatesForDate}
                 privileges={privileges}
                 loading
             />
@@ -110,6 +113,7 @@ describe('On Create', () => {
                 updateItem={updateItem}
                 setEditStatus={setEditStatus}
                 setSnackbarVisible={setSnackbarVisible}
+                getExchangeRatesForDate={getExchangeRatesForDate}
                 privileges={privileges}
                 loading={false}
             />
@@ -183,6 +187,7 @@ describe('When dont have right privilege', () => {
                 updateItem={updateItem}
                 setEditStatus={setEditStatus}
                 setSnackbarVisible={setSnackbarVisible}
+                getExchangeRatesForDate={getExchangeRatesForDate}
                 privileges={['not-right.priv']}
                 loading={false}
             />
@@ -210,6 +215,7 @@ describe('When editing', () => {
                 updateItem={updateItem}
                 setEditStatus={setEditStatus}
                 setSnackbarVisible={setSnackbarVisible}
+                getExchangeRatesForDate={getExchangeRatesForDate}
                 privileges={privileges}
                 loading={false}
                 item={item}
@@ -247,6 +253,7 @@ describe('When clicking through to second tab', () => {
                 updateItem={updateItem}
                 setEditStatus={setEditStatus}
                 setSnackbarVisible={setSnackbarVisible}
+                getExchangeRatesForDate={getExchangeRatesForDate}
                 privileges={privileges}
                 loading={false}
                 item={item}
