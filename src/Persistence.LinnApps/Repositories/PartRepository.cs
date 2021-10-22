@@ -125,7 +125,7 @@
 
             if (resultLimit.HasValue)
             {
-                result = result.ToList().Take((int)resultLimit).AsQueryable();
+                result = result.Take((int)resultLimit);
             }
 
             return result;

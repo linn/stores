@@ -95,7 +95,7 @@
 
         public IResult<Part> GetByIdNoTracking(int id)
         {
-            var res = this.partRepository.FilterBy(x => x.Id == id).ToList().FirstOrDefault();
+            var res = this.partRepository.FilterBy(x => x.Id == id).FirstOrDefault();
 
             if (res == null)
             {
