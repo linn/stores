@@ -490,20 +490,18 @@ function OrderDetailsTab({
                                 </div>
                             </Grid>
                             <Grid item xs={2}>
-                                <InputField
-                                    label="Duty Value"
-                                    fullWidth
-                                    onChange={(propertyName, newValue) =>
-                                        editRow(row, propertyName, newValue)
-                                    }
-                                    propertyName="dutyValue"
-                                    type="number"
-                                    value={row.dutyValue}
-                                    disabled={!allowedToEdit}
-                                    required
-                                    maxLength={14}
-                                    decimalPlaces={2}
-                                />
+                                <div className={classes.marginTop1NoWidthSet}>
+                                    <DialogInput
+                                        name="Duty Value"
+                                        onChange={handleValueEntryAndConvert}
+                                        propertyName="dutyValue"
+                                        row={row}
+                                        maxLength={14}
+                                        decimalPlaces={2}
+                                        innerInputValue={row.dutyValue}
+                                        disabled={!allowedToEdit}
+                                    />
+                                </div>
                             </Grid>
                             <Grid item xs={1}>
                                 <InputField
@@ -519,20 +517,18 @@ function OrderDetailsTab({
                                 />
                             </Grid>
                             <Grid item xs={2}>
-                                <InputField
-                                    label="Vat Value"
-                                    fullWidth
-                                    onChange={(propertyName, newValue) =>
-                                        editRow(row, propertyName, newValue)
-                                    }
-                                    propertyName="vatValue"
-                                    type="number"
-                                    value={row.vatValue}
-                                    disabled={!allowedToEdit}
-                                    required
-                                    maxLength={14}
-                                    decimalPlaces={2}
-                                />
+                                <div className={classes.marginTop1NoWidthSet}>
+                                    <DialogInput
+                                        name="Vat Value"
+                                        onChange={handleValueEntryAndConvert}
+                                        propertyName="vatValue"
+                                        row={row}
+                                        maxLength={14}
+                                        decimalPlaces={2}
+                                        innerInputValue={row.vatValue}
+                                        disabled={!allowedToEdit}
+                                    />
+                                </div>
                             </Grid>
                             <Grid item xs={1}>
                                 <InputField

@@ -19,7 +19,7 @@
 
         private readonly IPalletAnalysisPack palletAnalysisPack;
 
-        private readonly IRepository<Part, int> partsRepository;
+        private readonly IPartRepository partsRepository;
 
         private readonly IRepository<GoodsInLogEntry, int> goodsInLog;
 
@@ -39,7 +39,7 @@
             IGoodsInPack goodsInPack,
             IStoresPack storesPack,
             IPalletAnalysisPack palletAnalysisPack,
-            IRepository<Part, int> partsRepository,
+            IPartRepository partsRepository,
             IRepository<GoodsInLogEntry, int> goodsInLog,
             IRepository<RequisitionHeader, int> reqRepository,
             IPurchaseOrderPack purchaseOrderPack,

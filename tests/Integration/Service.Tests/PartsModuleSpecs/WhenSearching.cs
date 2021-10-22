@@ -37,7 +37,7 @@
                                 CreatedBy = new Employee { Id = 1 }
                             };
 
-            this.PartsFacadeService.Search("P")
+            this.PartsFacadeService.SearchParts("P", Arg.Any<int>())
                 .Returns(new SuccessResult<IEnumerable<Part>>(new List<Part> { partA, partB }));
 
             this.Response = this.Browser.Get(
@@ -58,7 +58,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.PartsFacadeService.Received().Search("P");
+            this.PartsFacadeService.SearchParts("P", Arg.Any<int>());
         }
 
         [Test]

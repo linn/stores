@@ -15,5 +15,7 @@
         IResult<IEnumerable<Part>> GetPartByPartNumber(string partNumber);
 
         IResult<Part> GetByIdNoTracking(int id);
+
+        IResult<IEnumerable<Part>> SearchParts(string searchTerm, int? resultLimit);
     }
 }

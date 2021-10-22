@@ -3,6 +3,7 @@
     using Linn.Common.Persistence;
     using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;
 
@@ -16,7 +17,7 @@
 
         protected IMechPartSourceService DomainService { get; private set; }
 
-        protected IRepository<Part, int> PartRepository { get; private set; }
+        protected IPartRepository PartRepository { get; private set; }
 
         protected IRepository<Employee, int> EmployeeRepository { get; private set; }
 
@@ -36,7 +37,7 @@
         public void SetUpContext()
         {
             this.DomainService = Substitute.For<IMechPartSourceService>();
-            this.PartRepository = Substitute.For<IRepository<Part, int>>();
+            this.PartRepository = Substitute.For<IPartRepository>();
             this.EmployeeRepository = Substitute.For<IRepository<Employee, int>>();
             this.MechPartSourceRepository = Substitute.For<IRepository<MechPartSource, int>>();
             this.DatabaseService = Substitute.For<IDatabaseService>();
