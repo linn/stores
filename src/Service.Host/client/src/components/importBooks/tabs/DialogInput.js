@@ -41,7 +41,7 @@ function DialogInput({
     };
 
     return (
-        <div>
+        <>
             <Button onClick={handleClickOpen} type="text">
                 <InputField
                     label={name}
@@ -83,7 +83,7 @@ function DialogInput({
                     <Button onClick={handleAccept}>Accept</Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </>
     );
 }
 DialogInput.propTypes = {
