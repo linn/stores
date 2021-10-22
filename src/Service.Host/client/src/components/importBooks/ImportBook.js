@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect, useReducer, useCallback } from 'react';
 import { Decimal } from 'decimal.js';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
@@ -20,6 +20,7 @@ import PostEntriesTab from './tabs/PostEntriesTab';
 import CommentsTab from '../../containers/importBooks/tabs/CommentsTab';
 import ImportBookReducer from './ImportBookReducer';
 import ImpBookPrintOut from './ImpBookPrintOut';
+import currencyConvert from '../../helpers/currencyConvert';
 
 function ImportBook({
     editStatus,
@@ -37,7 +38,9 @@ function ImportBook({
     allSuppliers,
     countries,
     employees,
-    userNumber
+    userNumber,
+    getExchangeRatesForDate,
+    exchangeRates
 }) {
     const defaultImpBook = {
         id: -1,
@@ -88,6 +91,12 @@ function ImportBook({
         }
     }, [item, state.prevImpBook, editStatus, defaultImpBook]);
 
+    useEffect(() => {
+        if (state.impbook?.dateCreated) {
+            getExchangeRatesForDate(state.impbook.dateCreated);
+        }
+    }, [state.impbook.dateCreated, getExchangeRatesForDate]);
+
     const viewing = () => editStatus === 'view';
 
     const [tab, setTab] = useState(0);
@@ -118,10 +127,13 @@ function ImportBook({
         history.push('/logistics/import-books');
     };
 
-    const handleFieldChange = (propertyName, newValue) => {
-        setEditStatus('edit');
-        dispatch({ type: 'fieldChange', fieldName: propertyName, payload: newValue });
-    };
+    const handleFieldChange = useCallback(
+        (propertyName, newValue) => {
+            setEditStatus('edit');
+            dispatch({ type: 'fieldChange', fieldName: propertyName, payload: newValue });
+        },
+        [setEditStatus]
+    );
 
     const handleOrderDetailChange = (lineNumber, newValue) => {
         setEditStatus('edit');
@@ -175,7 +187,7 @@ function ImportBook({
         return privileges?.some(priv => priv === 'import-books.admin');
     };
 
-    const totalInvoiceValue = () => {
+    const totalInvoiceValue = useCallback(() => {
         let total = `${state.impbook.importBookInvoiceDetails?.reduce(
             (a, v) => new Decimal(a).plus(v.invoiceValue ? v.invoiceValue : 0),
             0
@@ -184,7 +196,7 @@ function ImportBook({
             total = `${parseFloat(total).toFixed(2)}`;
         }
         return total;
-    };
+    }, [state.impbook.importBookInvoiceDetails]);
 
     const [localSuppliers, setLocalSuppliers] = useState([{}]);
 
@@ -308,6 +320,27 @@ function ImportBook({
         }
         return '';
     };
+
+    const currentExchangeRate = useCallback(() => {
+        if (exchangeRates.length) {
+            if (state.impbook?.currency) {
+                return exchangeRates.find(
+                    x => x.exchangeCurrency === state.impbook.currency && x.baseCurrency === 'GBP'
+                )?.exchangeRate;
+            }
+        }
+        return '';
+    }, [exchangeRates, state.impbook.currency]);
+
+    useEffect(() => {
+        const exchangeRate = currentExchangeRate();
+        const invoiceValue = totalInvoiceValue();
+        if (exchangeRate && invoiceValue && invoiceValue > 0) {
+            const convertedValue = currencyConvert(invoiceValue, exchangeRate);
+
+            handleFieldChange('totalImportValue', convertedValue);
+        }
+    }, [totalInvoiceValue, currentExchangeRate, handleFieldChange]);
 
     const impbookInvalid = () => {
         return (
@@ -483,6 +516,7 @@ function ImportBook({
                                             countryIsInEU={countryIsInEU}
                                             employees={employees}
                                             pva={state.impbook.pva}
+                                            exchangeRate={currentExchangeRate()}
                                         />
                                     )}
 
@@ -502,6 +536,7 @@ function ImportBook({
                                             impbookWeight={state.impbook.weight}
                                             currentUserNumber={userNumber}
                                             impbookId={state.impbook.id}
+                                            exchangeRate={currentExchangeRate()}
                                         />
                                     )}
                                     {tab === 2 && (
@@ -614,7 +649,9 @@ ImportBook.propTypes = {
     employees: PropTypes.arrayOf(
         PropTypes.shape({ id: PropTypes.number, fullName: PropTypes.string })
     ),
-    userNumber: PropTypes.number.isRequired
+    userNumber: PropTypes.number.isRequired,
+    getExchangeRatesForDate: PropTypes.func.isRequired,
+    exchangeRates: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 ImportBook.defaultProps = {
@@ -625,7 +662,15 @@ ImportBook.defaultProps = {
     itemId: null,
     countries: [{ id: '-1', countryCode: 'loading..' }],
     allSuppliers: [{ id: 0, name: 'loading', country: 'loading' }],
-    employees: [{ id: '-1', fullname: 'loading..' }]
+    employees: [{ id: '-1', fullname: 'loading..' }],
+    exchangeRates: [
+        {
+            periodNumber: PropTypes.number,
+            baseCurrency: PropTypes.string,
+            exchangeCurrency: PropTypes.string,
+            exchangeRate: PropTypes.number
+        }
+    ]
 };
 
 export default ImportBook;

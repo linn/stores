@@ -38,7 +38,7 @@
 
         public LedgerPeriod FindBy(Expression<Func<LedgerPeriod, bool>> expression)
         {
-            return this.serviceDbContext.LedgerPeriods.Find(expression);
+            return this.serviceDbContext.LedgerPeriods.Where(expression).ToList().FirstOrDefault();
         }
 
         public IQueryable<LedgerPeriod> FilterBy(Expression<Func<LedgerPeriod, bool>> expression)
