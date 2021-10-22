@@ -1,15 +1,16 @@
 ﻿namespace Linn.Stores.Persistence.LinnApps.Repositories
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
 
-    using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
 
     using Microsoft.EntityFrameworkCore;
 
-    public class PartRepository : IRepository<Part, int>
+    public class PartRepository : IPartRepository
     {
         private readonly ServiceDbContext serviceDbContext;
 
@@ -113,6 +114,20 @@
                 .AsNoTracking()
                 .Where(expression)
                 .Include(p => p.MechPartSource);
+        }
+
+        public IEnumerable<Part> SearchParts(string searchTerm, int? resultLimit)
+        {
+            var result = this.serviceDbContext.Parts
+                .Where(x => EF.Functions.Like(x.PartNumber, $"%{searchTerm}%") || EF.Functions.Like(x.Description, $"%{searchTerm}%"))
+                .Include(p => p.MechPartSource).AsNoTracking();
+
+            if (resultLimit.HasValue)
+            {
+                result = result.ToList().Take((int)resultLimit).AsQueryable();
+            }
+
+            return result;
         }
     }
 }

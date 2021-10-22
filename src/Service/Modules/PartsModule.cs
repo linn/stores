@@ -150,7 +150,7 @@
             {
                 results = resource.ExactOnly
                               ? this.partsFacadeService.GetPartByPartNumber(resource.SearchTerm)
-                              : this.partsFacadeService.Search(resource.SearchTerm);
+                              : this.partsFacadeService.SearchParts(resource.SearchTerm, 100);
             }
             else
             {

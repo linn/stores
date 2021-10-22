@@ -29,7 +29,7 @@
 
         private readonly IStockLocatorLocationsViewService locationsViewService;
 
-        private readonly IRepository<Part, int> partRepository;
+        private readonly IPartRepository partRepository;
 
         private readonly IRepository<ReqMove, ReqMoveKey> reqMoveRepository;
 
@@ -44,7 +44,7 @@
             IAuthorisationService authService,
             IStockLocatorLocationsViewService locationsViewService,
             IQueryRepository<StockLocatorPrices> stockLocatorView,
-            IRepository<Part, int> partRepository,
+            IPartRepository partRepository,
             IRepository<ReqMove, ReqMoveKey> reqMoveRepository,
             IQueryRepository<StockTriggerLevel> triggerLevelRepository)
         {
