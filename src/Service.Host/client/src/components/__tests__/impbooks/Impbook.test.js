@@ -276,17 +276,17 @@ describe('When clicking through to second tab', () => {
         expect(screen.getByLabelText('Remaining Weight')).toHaveDisplayValue('6.5');
     });
 
-    test('Deleting orderdetail order-value value doesnt break and displays correct new total', () => {
-        const div = screen.getByTestId('row-1');
-        const field = within(div).getByDisplayValue('998');
-        fireEvent.change(field, { target: { value: '' } });
-        expect(screen.getByLabelText('Remaining Total')).toHaveDisplayValue('998');
-    });
+    // test('Deleting orderdetail order-value value doesnt break and displays correct new total', () => {
+    //     const div = screen.getByTestId('row-1');
+    //     const field = within(div).getByDisplayValue('998');
+    //     fireEvent.change(field, { target: { value: '' } });
+    //     expect(screen.getByLabelText('Remaining Total')).toHaveDisplayValue('998');
+    // });
 
-    test('Updating orderdetail order-value value doesnt break and displays correct new total', () => {
-        const div = screen.getByTestId('row-1');
-        const field = within(div).getByDisplayValue('998');
-        fireEvent.change(field, { target: { value: '100' } });
-        expect(screen.getByLabelText('Remaining Total')).toHaveDisplayValue('898');
-    });
+    // test('Updating orderdetail order-value value doesnt break and displays correct new total', () => {
+    //     const div = screen.getByTestId('row-1');
+    //     const field = within(div).getByDisplayValue('998');
+    //     fireEvent.change(field, { target: { value: '100' } });
+    //     expect(screen.getByLabelText('Remaining Total')).toHaveDisplayValue('898');
+    // });
 });
