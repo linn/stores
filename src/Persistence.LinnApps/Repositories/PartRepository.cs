@@ -1,15 +1,16 @@
 ﻿namespace Linn.Stores.Persistence.LinnApps.Repositories
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
 
-    using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
 
     using Microsoft.EntityFrameworkCore;
 
-    public class PartRepository : IRepository<Part, int>
+    public class PartRepository : IPartRepository
     {
         private readonly ServiceDbContext serviceDbContext;
 
@@ -20,24 +21,7 @@
 
         public Part FindById(int key)
         {
-            var result = this.serviceDbContext.Parts.Where(p => p.Id == key)
-                .Include(p => p.AccountingCompany)
-                .Include(p => p.ParetoClass)
-                .Include(p => p.ProductAnalysisCode)
-                .Include(p => p.DecrementRule)
-                .Include(p => p.AssemblyTechnology)
-                .Include(p => p.CreatedBy)
-                .Include(p => p.MadeLiveBy)
-                .Include(p => p.PhasedOutBy)
-                .Include(p => p.SernosSequence)
-                .Include(p => p.PreferredSupplier)
-                .Include(p => p.NominalAccount).ThenInclude(a => a.Department)
-                .Include(p => p.NominalAccount).ThenInclude(a => a.Nominal)
-                .Include(p => p.DataSheets)
-                .Include(p => p.SalesArticle)
-                .Include(p => p.MechPartSource)
-                .ThenInclude(m => m.MechPartManufacturerAlts)
-                .ToList().FirstOrDefault();
+            var result = this.serviceDbContext.Parts.SingleOrDefault(p => p.Id == key);
 
             return result;
         }
@@ -113,6 +97,21 @@
                 .AsNoTracking()
                 .Where(expression)
                 .Include(p => p.MechPartSource);
+        }
+
+        public IEnumerable<Part> SearchParts(string searchTerm, int? resultLimit)
+        {
+            var result = this.serviceDbContext.Parts
+                .Where(x => EF.Functions.Like(x.PartNumber, $"%{searchTerm}%") 
+                            || EF.Functions.Like(x.Description, $"%{searchTerm}%"))
+                .Include(p => p.MechPartSource).AsNoTracking();
+
+            if (resultLimit.HasValue)
+            {
+                result = result.Take((int)resultLimit);
+            }
+
+            return result;
         }
     }
 }

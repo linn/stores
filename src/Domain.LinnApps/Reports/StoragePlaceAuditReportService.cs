@@ -13,7 +13,7 @@
     {
         private readonly IReportingHelper reportingHelper;
 
-        private readonly IRepository<Part, int> partsRepository;
+        private readonly IPartRepository partsRepository;
 
         private readonly IFilterByWildcardRepository<StockLocator, int> filterByWildcardRepository;
 
@@ -21,7 +21,7 @@
 
         public StoragePlaceAuditReportService(
             IReportingHelper reportingHelper,
-            IRepository<Part, int> partsRepository,
+            IPartRepository partsRepository,
             IFilterByWildcardRepository<StockLocator, int> filterByWildcardRepository,
             IQueryRepository<StoragePlace> storagePlaceRepository)
         {

@@ -12,6 +12,7 @@
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
+    using Linn.Stores.Persistence.LinnApps.Repositories;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Parts;
     using Linn.Stores.Service.Modules;
@@ -48,7 +49,7 @@
 
         protected IProductAnalysisCodeService ProductAnalysisCodeService { get; set; }
 
-        protected IRepository<Part, int> PartRepository { get; private set; }
+        protected IPartRepository PartRepository { get; private set; }
 
         protected IRepository<ParetoClass, string> ParetoClassRepository { get; private set; }
 
@@ -104,7 +105,7 @@
             this.PartCategoriesService = Substitute.For<IPartCategoryService>();
             this.UnitsOfMeasureService = Substitute.For<IUnitsOfMeasureService>();
             this.ProductAnalysisCodeService = Substitute.For<IProductAnalysisCodeService>();
-            this.PartRepository = Substitute.For<IRepository<Part, int>>();
+            this.PartRepository = Substitute.For<IPartRepository>();
             this.MechPartSourceRepository = Substitute.For<IRepository<MechPartSource, int>>();
             this.ParetoClassRepository = Substitute.For<IRepository<ParetoClass, string>>();
             this.QcControlRepository = Substitute.For<IRepository<QcControl, int>>();

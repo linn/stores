@@ -8,6 +8,7 @@
     using Linn.Common.Persistence;
     using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources.Parts;
 
@@ -15,7 +16,7 @@
     {
         private readonly IRepository<Employee, int> employeeRepository;
 
-        private readonly IRepository<Part, int> partRepository;
+        private readonly IPartRepository partRepository;
 
         private readonly IQueryRepository<RootProduct> rootProductRepository;
 
@@ -31,7 +32,7 @@
             IRepository<MechPartSource, int> repository, 
             ITransactionManager transactionManager,
             IMechPartSourceService domainService,
-            IRepository<Part, int> partRepository,
+            IPartRepository partRepository,
             IDatabaseService databaseService,
             IQueryRepository<Supplier> supplierRepository,
             IQueryRepository<RootProduct> rootProductRepository,

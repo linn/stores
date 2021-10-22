@@ -8,12 +8,14 @@
     using Linn.Common.Persistence;
     using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Persistence.LinnApps.Repositories;
     using Linn.Stores.Resources.Parts;
 
     public class PartFacadeService : FacadeService<Part, int, PartResource, PartResource>, IPartsFacadeService
     {
-        private readonly IRepository<Part, int> partRepository;
+        private readonly IPartRepository partRepository;
 
         private readonly IRepository<ParetoClass, string> paretoClassRepository;
 
@@ -38,7 +40,7 @@
         private readonly IPartService partService;
 
         public PartFacadeService(
-            IRepository<Part, int> partRepository,
+            IPartRepository partRepository,
             IRepository<ParetoClass, string> paretoClassRepository,
             IQueryRepository<ProductAnalysisCode> productAnalysisCodeRepository,
             IQueryRepository<AccountingCompany> accountingCompanyRepository,
@@ -54,6 +56,7 @@
             : base(partRepository, transactionManager)
         {
             this.partRepository = partRepository;
+            
             this.paretoClassRepository = paretoClassRepository;
             this.productAnalysisCodeRepository = productAnalysisCodeRepository;
             this.accountingCompanyRepository = accountingCompanyRepository;
@@ -92,7 +95,7 @@
 
         public IResult<Part> GetByIdNoTracking(int id)
         {
-            var res = this.partRepository.FilterBy(x => x.Id == id).ToList().FirstOrDefault();
+            var res = this.partRepository.FilterBy(x => x.Id == id).FirstOrDefault();
 
             if (res == null)
             {
@@ -100,6 +103,12 @@
             }
 
             return new SuccessResult<Part>(res);
+        }
+
+        public IResult<IEnumerable<Part>> SearchParts(string searchTerm, int? resultLimit)
+        {
+            return new SuccessResult<IEnumerable<Part>>(
+                this.partRepository.SearchParts(searchTerm.Trim().ToUpper(), resultLimit));
         }
 
         protected override Part CreateFromResource(PartResource resource)

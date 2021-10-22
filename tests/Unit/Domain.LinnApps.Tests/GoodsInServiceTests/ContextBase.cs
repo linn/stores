@@ -4,7 +4,6 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.GoodsIn;
-    using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Requisitions;
 
     using NSubstitute;
@@ -21,7 +20,7 @@
 
         protected IPalletAnalysisPack PalletAnalysisPack { get; private set; }
 
-        protected IRepository<Part, int> PartsRepository { get; private set; }
+        protected IPartRepository PartsRepository { get; private set; }
 
         protected IRepository<GoodsInLogEntry, int> GoodsInLog { get; private set; }
 
@@ -43,7 +42,7 @@
             this.GoodsInPack = Substitute.For<IGoodsInPack>();
             this.StoresPack = Substitute.For<IStoresPack>();
             this.PalletAnalysisPack = Substitute.For<IPalletAnalysisPack>();
-            this.PartsRepository = Substitute.For<IRepository<Part, int>>();
+            this.PartsRepository = Substitute.For<IPartRepository>();
             this.GoodsInLog = Substitute.For<IRepository<GoodsInLogEntry, int>>();
             this.ReqRepository = Substitute.For<IRepository<RequisitionHeader, int>>();
             this.PurchaseOrderPack = Substitute.For<IPurchaseOrderPack>();

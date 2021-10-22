@@ -29,7 +29,7 @@
 
         protected IQueryRepository<StockLocatorBatch> StockLocatorBatchesView { get; private set; }
 
-        protected IRepository<Part, int> PartRepository { get; private set; }
+        protected IPartRepository PartRepository { get; private set; }
 
         protected IStockLocatorService Sut { get; private set; }
 
@@ -53,7 +53,7 @@
             this.StorageLocationRepository = Substitute.For<IRepository<StorageLocation, int>>();
             this.StockLocatorLocationsView = Substitute.For<IQueryRepository<StockLocatorLocation>>();
             this.StockLocatorBatchesView = Substitute.For<IQueryRepository<StockLocatorBatch>>();
-            this.PartRepository = Substitute.For<IRepository<Part, int>>();
+            this.PartRepository = Substitute.For<IPartRepository>();
             this.AuthService = Substitute.For<IAuthorisationService>();
             this.LocationsViewService = Substitute.For<IStockLocatorLocationsViewService>();
             this.StockLocatorView = Substitute.For<IQueryRepository<StockLocatorPrices>>();
