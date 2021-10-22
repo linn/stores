@@ -7,6 +7,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Parts;
 
+    using Microsoft.EntityFrameworkCore;
+
     public class DecrementRuleRepository : IRepository<DecrementRule, string>
     {
         private readonly ServiceDbContext serviceDbContext;
@@ -23,7 +25,7 @@
 
         public IQueryable<DecrementRule> FindAll()
         {
-            return this.serviceDbContext.DecrementRules;
+            return this.serviceDbContext.DecrementRules.AsNoTracking();
         }
 
         public void Add(DecrementRule entity)
@@ -38,7 +40,8 @@
 
         public DecrementRule FindBy(Expression<Func<DecrementRule, bool>> expression)
         {
-            return this.serviceDbContext.DecrementRules.Where(expression).ToList().FirstOrDefault();
+            return this.serviceDbContext.DecrementRules
+                .Where(expression).ToList().FirstOrDefault();
         }
 
         public IQueryable<DecrementRule> FilterBy(Expression<Func<DecrementRule, bool>> expression)

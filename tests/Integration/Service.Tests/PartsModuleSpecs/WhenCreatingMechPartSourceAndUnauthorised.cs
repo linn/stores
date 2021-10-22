@@ -44,7 +44,7 @@
             this.AuthService.HasPermissionFor(Arg.Any<string>(), Arg.Any<IEnumerable<string>>()).Returns(false);
 
             this.Response = this.Browser.Post(
-                "/inventory/parts/sources",
+                "/parts/sources",
                 with =>
                 {
                     with.Header("Accept", "application/json");

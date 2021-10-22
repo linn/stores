@@ -179,5 +179,7 @@
         public IEnumerable<MechPartManufacturerAltResource> Manufacturers { get; set; }
 
         public string SalesArticleNumber { get; set; }
+
+        public bool FromTemplate { get; set; }
     }
 }

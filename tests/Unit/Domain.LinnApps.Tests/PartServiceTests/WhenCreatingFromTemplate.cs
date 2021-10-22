@@ -5,19 +5,15 @@
     using System.Linq;
     using System.Linq.Expressions;
 
-    using FluentAssertions;
-
     using Linn.Stores.Domain.LinnApps.Parts;
 
     using NSubstitute;
 
     using NUnit.Framework;
 
-    public class WhenCreatingAndUserHasPrivileges : ContextBase
+    public class WhenCreatingFromTemplate : ContextBase
     {
         private Part part;
-
-        private Part result;
 
         private List<string> privileges;
 
@@ -26,39 +22,33 @@
         {
             this.part = new Part
                             {
-                                PartNumber = "CAp 431",
+                                PartNumber = "CAP 431",
                                 StockControlled = "N"
-            };
+                            };
             this.privileges = new List<string> { "part.admin" };
 
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
+            this.PartRepository.FilterBy(Arg.Any<Expression<Func<Part, bool>>>())
+                .Returns(
+                    new List<Part>
+
+                             {
+                                 new Part
+                                     {
+                                         PartNumber = "CAP 431"
+                                     }
+                             }.AsQueryable(), 
+                    new List<Part>().AsQueryable());
+
             this.TemplateRepository.FindById(Arg.Any<string>()).Returns(new PartTemplate { NextNumber = 1 });
             this.PartPack.PartRoot(Arg.Any<string>()).Returns("CAP");
-            this.result = this.Sut.CreatePart(this.part, this.privileges, false);
+            this.Sut.CreatePart(this.part, this.privileges, true);
         }
 
         [Test]
-        public void ShouldReturnNewPart()
+        public void ShouldUpdatePartTemplateRepository()
         {
-            this.result.Should().BeOfType<Part>();
-        }
-
-        [Test]
-        public void ShouldConvertPartNumberToUpper()
-        {
-            this.result.PartNumber.Should().Be("CAP 431");
-        }
-
-        [Test]
-        public void ShouldNotUpdatePartTemplateRepository()
-        {
-            this.TemplateRepository.DidNotReceive().FindById("CAP");
-        }
-
-        [Test]
-        public void ShouldSetOrderHold()
-        {
-            this.result.OrderHold.Should().Be("N");
+            this.TemplateRepository.Received().FindById("CAP");
         }
     }
 }

@@ -75,7 +75,7 @@ export default function importBookReducer(state = initialState, action) {
                                   ) + 1
                                 : 1,
                             importBookId: state.impbook.id,
-                            postDuty: false
+                            postDuty: null
                         }
                     ]
                 }

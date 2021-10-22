@@ -10,7 +10,6 @@
 
     using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
-    using Linn.Stores.Domain.LinnApps.StockLocators;
 
     public class PartService : IPartService
     {
@@ -54,7 +53,7 @@
             this.deptStockPartsService = deptStockPartsService;
         }
 
-        public void UpdatePart(Part from, Part to, List<string> privileges, IEnumerable<MechPartManufacturerAlt> manufacturers)
+        public void UpdatePart(Part from, Part to, List<string> privileges)
         {
             to.PartNumber = to.PartNumber?.ToUpper();
             if (from.DatePhasedOut == null && to.DatePhasedOut != null)
@@ -73,7 +72,7 @@
             }
 
             if (from.SalesArticle != null
-                && !from.ProductAnalysisCode.ProductCode.Equals(to.ProductAnalysisCode.ProductCode))
+                && !from.ProductAnalysisCode.ProductCode.Equals(to.ProductAnalysisCode?.ProductCode))
             {
                 throw new UpdatePartException("Cannot change product analysis code if part has a sales article.");
             }
@@ -92,20 +91,6 @@
 
                 from.DateLive = to.DateLive;
                 from.MadeLiveBy = to.MadeLiveBy;
-            }
-
-            if (manufacturers != null)
-            {
-                var source = this.sourceRepository.FindById(from.MechPartSource.Id);
-                source.MechPartManufacturerAlts = manufacturers.Select(
-                    m =>
-                        {
-                            var manufacturer =
-                                from.MechPartSource.MechPartManufacturerAlts.First(
-                                    i => i.ManufacturerCode == m.ManufacturerCode);
-                            manufacturer.PartNumber = m.PartNumber;
-                            return manufacturer;
-                        }).ToList();
             }
 
             Validate(to);
@@ -168,7 +153,7 @@
             from.PurchasingPhaseOutType = to.PurchasingPhaseOutType;
         }
 
-        public Part CreatePart(Part partToCreate, List<string> privileges)
+        public Part CreatePart(Part partToCreate, List<string> privileges, bool fromTemplate)
         {
             partToCreate.PartNumber = partToCreate.PartNumber?.ToUpper().Trim();
 
@@ -184,9 +169,12 @@
 
             var partRoot = this.partPack.PartRoot(partToCreate.PartNumber);
 
-            if (partRoot != null && this.templateRepository.FindById(partRoot) != null)
+
+            if (partRoot != null && fromTemplate)
             {
-                if (this.templateRepository.FindById(partRoot).AllowPartCreation == "N")
+                var template = this.templateRepository.FindById(partRoot);
+
+                if (template.AllowPartCreation == "N")
                 {
                     throw new CreatePartException("The system no longer allows creation of " + partRoot + " parts.");
                 }
@@ -194,15 +182,19 @@
                 var newestPartOfThisType = this.partRepository.FilterBy(p => p.PartNumber.StartsWith(partRoot) && p.DateCreated.HasValue)
                     .OrderByDescending(p => p.DateCreated).ToList().FirstOrDefault()
                     ?.PartNumber;
-                var realNextNumber = FindRealNextNumber(newestPartOfThisType);
-                if (this.partRepository.FindBy(p => p.PartNumber == partToCreate.PartNumber) != null)
+
+                var realNextNumber = FindRealNextNumber(newestPartOfThisType, template);
+
+                if (this.partRepository.FilterBy(p => p.PartNumber == partToCreate.PartNumber).ToList()
+                        .FirstOrDefault() != null)
                 {
                     throw new CreatePartException("A Part with that Part Number already exists. Why not try " + realNextNumber);
                 }
 
                 this.templateRepository.FindById(partRoot).NextNumber = realNextNumber + 1;
             }
-            else if (this.partRepository.FindBy(p => p.PartNumber == partToCreate.PartNumber) != null)
+            else if (this.partRepository.FilterBy(p => p.PartNumber == partToCreate.PartNumber).ToList()
+                         .FirstOrDefault() != null)
             {
                 throw new CreatePartException("A Part with that Part Number already exists.");
             }
@@ -293,10 +285,20 @@
             }
         }
 
-        private static int FindRealNextNumber(string newestPartOfThisType)
+        private static int? FindRealNextNumber(string newestPartOfThisType, PartTemplate template)
         {
             var highestNumber = newestPartOfThisType?.Split(" ").Last().Split("/")[0];
-            return int.Parse(highestNumber ?? throw new InvalidOperationException()) + 1;
+            if (int.TryParse(highestNumber, out var res))
+            {
+                return res + 1;
+            }
+
+            if (template.HasNumberSequence != "Y")
+            {
+                throw new CreatePartException("Template has no number sequence");
+            }
+
+            return template.NextNumber;
         }
     }
 }

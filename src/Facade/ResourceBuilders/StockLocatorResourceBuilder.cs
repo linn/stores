@@ -48,7 +48,7 @@
         {
             if (stockLocator.Part != null)
             {
-                yield return new LinkResource { Rel = "part", Href = $"/inventory/parts/{stockLocator.Part.Id}" };
+                yield return new LinkResource { Rel = "part", Href = $"/parts/{stockLocator.Part.Id}" };
             }
         }
     }

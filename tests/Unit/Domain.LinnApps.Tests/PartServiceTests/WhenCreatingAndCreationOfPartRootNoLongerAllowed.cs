@@ -30,7 +30,7 @@
         [Test]
         public void ShouldThrowException()
         {
-            var ex = Assert.Throws<CreatePartException>(() => this.Sut.CreatePart(this.part, this.privileges));
+            var ex = Assert.Throws<CreatePartException>(() => this.Sut.CreatePart(this.part, this.privileges, true));
             ex.Message.Should().Be("The system no longer allows creation of CAP parts.");
         }
     }

@@ -29,14 +29,6 @@
                               StockControlled = "N"
                           };
             this.privileges = new List<string> { "part.admin" };
-            this.PartRepository.FilterBy(Arg.Any<Expression<Func<Part, bool>>>())
-                .Returns(new List<Part>
-                             {
-                                 new Part
-                                     {
-                                         PartNumber = "CAP 431"
-                                     }
-                             }.AsQueryable());
             this.TemplateRepository.FindById(Arg.Any<string>()).Returns(new PartTemplate());
             this.PartPack.PartRoot(Arg.Any<string>()).Returns("ROOT");
             this.AuthService.HasPermissionFor(Arg.Any<string>(), this.privileges).Returns(true);
@@ -45,7 +37,7 @@
         [Test]
         public void ShouldThrowException()
         {
-            var ex = Assert.Throws<UpdatePartException>(() => this.Sut.CreatePart(this.to, this.privileges));
+            var ex = Assert.Throws<UpdatePartException>(() => this.Sut.CreatePart(this.to, this.privileges, false));
             ex.Message.Should()
                 .Be("You must enter a reason and/or reference or project code when setting an override");
         }
