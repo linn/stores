@@ -21,24 +21,7 @@
 
         public Part FindById(int key)
         {
-            var result = this.serviceDbContext.Parts.Where(p => p.Id == key)
-                .Include(p => p.AccountingCompany)
-                .Include(p => p.ParetoClass)
-                .Include(p => p.ProductAnalysisCode)
-                .Include(p => p.DecrementRule)
-                .Include(p => p.AssemblyTechnology)
-                .Include(p => p.CreatedBy)
-                .Include(p => p.MadeLiveBy)
-                .Include(p => p.PhasedOutBy)
-                .Include(p => p.SernosSequence)
-                .Include(p => p.PreferredSupplier)
-                .Include(p => p.NominalAccount).ThenInclude(a => a.Department)
-                .Include(p => p.NominalAccount).ThenInclude(a => a.Nominal)
-                .Include(p => p.DataSheets)
-                .Include(p => p.SalesArticle)
-                .Include(p => p.MechPartSource)
-                .ThenInclude(m => m.MechPartManufacturerAlts)
-                .ToList().FirstOrDefault();
+            var result = this.serviceDbContext.Parts.SingleOrDefault(p => p.Id == key);
 
             return result;
         }
