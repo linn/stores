@@ -136,11 +136,7 @@ export const auditLocations = new ItemType(
     '/inventory/audit-locations'
 );
 
-export const mechPartSource = new ItemType(
-    'mechPartSource',
-    'MECH_PART_SOURCE',
-    '/parts/sources'
-);
+export const mechPartSource = new ItemType('mechPartSource', 'MECH_PART_SOURCE', '/parts/sources');
 
 export const manufacturers = new ItemType(
     'manufacturers',
@@ -443,3 +439,15 @@ export const stockBatchesInRotationOrder = new ItemType(
 );
 
 export const postDuty = new ItemType('postDuty', 'POST_DUTY', '/logistics/import-books/post-duty');
+
+export const rsnAccessories = new ItemType(
+    'rsnAccessories',
+    'RSN_ACCESSORIES',
+    '/logistics/goods-in/rsn-accessories'
+);
+
+export const rsnConditions = new ItemType(
+    'rsnConditions',
+    'RSN_CONDITIONS',
+    '/logistics/goods-in/rsn-conditions'
+);

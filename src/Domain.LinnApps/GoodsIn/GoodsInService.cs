@@ -477,9 +477,15 @@
         {
             var labelType = this.labelTypeRepository.FindBy(x => x.Code.Equals("RSN_LABEL"));
             var labelName = $"RSN {rsnNumber}";
-            var printString = "";
             string message = null;
-            
+
+            var printString = $"\"{rsnNumber}";
+            printString += "\",\"";
+            printString += partNumber;
+            printString += "\",\"";
+            printString += serialNumber;
+            printString += "\"";
+
             var success = this.bartender.PrintLabels(
                 labelName,
                 labelType.DefaultPrinter,

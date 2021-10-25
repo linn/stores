@@ -127,6 +127,8 @@ import loans from './loans';
 import purchaseOrders from './purchaseOrders';
 import stockBatchesInRotationOrder from './stockBatchesInRotationOrder';
 import postDuty from './postDuty';
+import rsnAccessories from './rsnAccessories';
+import rsnConditions from './rsnConditions';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -212,6 +214,8 @@ const rootReducer = history =>
         reqMoves,
         rootProducts,
         rsns,
+        rsnAccessories,
+        rsnConditions,
         salesAccounts,
         salesArticles,
         salesOutlets,
