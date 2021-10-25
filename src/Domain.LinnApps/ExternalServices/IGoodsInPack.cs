@@ -2,7 +2,7 @@
 {
     public interface IGoodsInPack
     {
-        void DoBookIn(
+        string DoBookIn(
             int bookInRef,
             string transactionType,
             int createdBy,

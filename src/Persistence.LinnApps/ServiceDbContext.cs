@@ -378,7 +378,9 @@
             var dataSource =
                 $"(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST={host})(PORT=1521))(CONNECT_DATA=(SERVICE_NAME={serviceId})(SERVER=dedicated)))";
 
-            optionsBuilder.UseOracle($"Data Source={dataSource};User Id={userId};Password={password};");
+           var connectionString = $"Data Source={dataSource};User Id={userId};Password={password};";
+
+           optionsBuilder.UseOracle(connectionString, options => options.UseOracleSQLCompatibility("11"));
             optionsBuilder.UseLoggerFactory(MyLoggerFactory);
             optionsBuilder.EnableSensitiveDataLogging(true);
             base.OnConfiguring(optionsBuilder);

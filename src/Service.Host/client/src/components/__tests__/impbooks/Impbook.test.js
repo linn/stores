@@ -11,6 +11,8 @@ const addItem = jest.fn();
 const updateItem = jest.fn();
 const setEditStatus = jest.fn();
 const setSnackbarVisible = jest.fn();
+const getExchangeRatesForDate = jest.fn();
+
 const history = {
     push: jest.fn()
 };
@@ -90,6 +92,7 @@ describe('When loading', () => {
                 updateItem={updateItem}
                 setEditStatus={setEditStatus}
                 setSnackbarVisible={setSnackbarVisible}
+                getExchangeRatesForDate={getExchangeRatesForDate}
                 privileges={privileges}
                 loading
             />
@@ -110,6 +113,7 @@ describe('On Create', () => {
                 updateItem={updateItem}
                 setEditStatus={setEditStatus}
                 setSnackbarVisible={setSnackbarVisible}
+                getExchangeRatesForDate={getExchangeRatesForDate}
                 privileges={privileges}
                 loading={false}
             />
@@ -183,6 +187,7 @@ describe('When dont have right privilege', () => {
                 updateItem={updateItem}
                 setEditStatus={setEditStatus}
                 setSnackbarVisible={setSnackbarVisible}
+                getExchangeRatesForDate={getExchangeRatesForDate}
                 privileges={['not-right.priv']}
                 loading={false}
             />
@@ -210,6 +215,7 @@ describe('When editing', () => {
                 updateItem={updateItem}
                 setEditStatus={setEditStatus}
                 setSnackbarVisible={setSnackbarVisible}
+                getExchangeRatesForDate={getExchangeRatesForDate}
                 privileges={privileges}
                 loading={false}
                 item={item}
@@ -247,6 +253,7 @@ describe('When clicking through to second tab', () => {
                 updateItem={updateItem}
                 setEditStatus={setEditStatus}
                 setSnackbarVisible={setSnackbarVisible}
+                getExchangeRatesForDate={getExchangeRatesForDate}
                 privileges={privileges}
                 loading={false}
                 item={item}
@@ -267,19 +274,5 @@ describe('When clicking through to second tab', () => {
 
     test('Remaining weight is correct', () => {
         expect(screen.getByLabelText('Remaining Weight')).toHaveDisplayValue('6.5');
-    });
-
-    test('Deleting orderdetail order-value value doesnt break and displays correct new total', () => {
-        const div = screen.getByTestId('row-1');
-        const field = within(div).getByDisplayValue('998');
-        fireEvent.change(field, { target: { value: '' } });
-        expect(screen.getByLabelText('Remaining Total')).toHaveDisplayValue('998');
-    });
-
-    test('Updating orderdetail order-value value doesnt break and displays correct new total', () => {
-        const div = screen.getByTestId('row-1');
-        const field = within(div).getByDisplayValue('998');
-        fireEvent.change(field, { target: { value: '100' } });
-        expect(screen.getByLabelText('Remaining Total')).toHaveDisplayValue('898');
     });
 });

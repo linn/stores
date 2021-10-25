@@ -39,5 +39,7 @@
         public int? CreatedBy { get; set; }
 
         public IEnumerable<GoodsInLogEntry> Lines { get; set; }
+
+        public bool PrintLabels { get; set; } = false;
     }
 }

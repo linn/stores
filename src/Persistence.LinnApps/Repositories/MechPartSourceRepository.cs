@@ -29,7 +29,7 @@
                 .Include(s => s.CancelledBy).Include(s => s.MechPartAlts).ThenInclude(a => a.Supplier)
                 .Include(s => s.PurchasingQuotes).ThenInclude(q => q.Supplier)
                 .Include(s => s.PurchasingQuotes).ThenInclude(q => q.Manufacturer)
-                .Where(s => s.Id == key).ToList().FirstOrDefault();
+                .Where(s => s.Id == key).FirstOrDefault();
         }
 
         public IQueryable<MechPartSource> FindAll()

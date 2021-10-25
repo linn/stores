@@ -17,7 +17,7 @@
             this.databaseService = databaseService;
         }
 
-        public void DoBookIn(
+        public string DoBookIn(
             int bookInRef,
             string transactionType,
             int createdBy,
@@ -186,10 +186,17 @@
                                              Value = 1
                                          };
                 cmd.Parameters.Add(successParam);
-               
+
+                var msgParam = new OracleParameter("p_message", OracleDbType.Varchar2)
+                                       {
+                                           Direction = ParameterDirection.Output,
+                                           Size = 100
+                                       };
+                cmd.Parameters.Add(msgParam);
+
                 cmd.ExecuteNonQuery();
                 var successInt = int.Parse(successParam.Value.ToString());
-
+                var message = msgParam.Value.ToString();
                 success = successInt == 0;
                 if (int.TryParse(reqNumberParam.Value.ToString(), out var reqNumberResult))
                 {
@@ -201,6 +208,8 @@
                 }
 
                 connection.Close();
+
+                return message;
             }
         }
 

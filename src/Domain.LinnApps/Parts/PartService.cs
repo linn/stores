@@ -19,7 +19,7 @@
 
         private readonly IRepository<QcControl, int> qcControlRepository;
 
-        private readonly IRepository<Part, int> partRepository;
+        private readonly IPartRepository partRepository;
 
         private readonly IRepository<PartTemplate, string> templateRepository;
 
@@ -35,7 +35,7 @@
             IAuthorisationService authService,
             IRepository<QcControl, int> qcControlRepository,
             IQueryRepository<Supplier> supplierRepository,
-            IRepository<Part, int> partRepository,
+            IPartRepository partRepository,
             IRepository<PartTemplate, string> templateRepository,
             IRepository<MechPartSource, int> sourceRepository,
             IRepository<PartDataSheet, PartDataSheetKey> dataSheetRepository,

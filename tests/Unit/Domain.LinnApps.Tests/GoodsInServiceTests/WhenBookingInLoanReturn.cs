@@ -15,7 +15,7 @@
 
     using NUnit.Framework;
 
-    public class WhenBookingIn : ContextBase
+    public class WhenBookingInLoanReturn : ContextBase
     {
         private BookInResult result;
 
@@ -25,15 +25,15 @@
             this.PurchaseOrderPack.GetDocumentType(1).Returns("PO");
             this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1234").Returns(true);
             this.GoodsInPack.GetNextBookInRef().ReturnsForAnyArgs(1);
-            this.ReqRepository.FindById(1).Returns(new RequisitionHeader { ReqNumber = 1,  });
+            this.ReqRepository.FindById(1).Returns(new RequisitionHeader { ReqNumber = 1, });
             this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>())
                 .Returns(new Part
-                    {
-                        PartNumber = "PART",
-                        Description = "A PART",
-                        QcInformation = "Some Info"
-                    });
-            
+                {
+                    PartNumber = "PART",
+                    Description = "A PART",
+                    QcInformation = "Some Info"
+                });
+
             this.GoodsInPack.When(x => x.GetPurchaseOrderDetails(
                 1,
                 1,
@@ -49,14 +49,14 @@
 
             this.GoodsInPack.When(x => x.DoBookIn(
                 1,
-                "O",
+                "L",
                 1,
                 "PART",
                 1,
-                1,
-                1,
                 null,
                 null,
+                1,
+                1,
                 null,
                 "P1234",
                 null,
@@ -65,26 +65,26 @@
                 null,
                 null,
                 null,
-                out var reqNumber, 
+                out var reqNumber,
                 out var success))
                 .Do(x =>
-                    {
-                        x[17] = 1;
-                        x[18] = true;
-                    });
+                {
+                    x[17] = 1;
+                    x[18] = true;
+                });
 
             this.GoodsInPack.GetNextLogId().Returns(1111);
-            
+
             this.result = this.Sut.DoBookIn(
-                "O",
+                "L",
                 1,
                 "PART",
                 null,
                 1,
-                1,
-                1,
                 null,
                 null,
+                1,
+                1,
                 null,
                 null,
                 null,
@@ -102,8 +102,8 @@
                             {
                                 ArticleNumber = "PART",
                                 DateCreated = DateTime.UnixEpoch,
-                                OrderLine = 1,
-                                OrderNumber = 1
+                                LoanLine = 1,
+                                LoanNumber = 1
                             }
                     });
         }
@@ -113,14 +113,14 @@
         {
             this.GoodsInPack.Received().DoBookIn(
                 1,
-                "O",
+                "L",
                 1,
                 "PART",
                 1,
-                1,
-                1,
                 null,
                 null,
+                1,
+                1,
                 null,
                 "P1234",
                 null,
@@ -137,13 +137,19 @@
         public void ShouldReturnSuccessResult()
         {
             this.result.Success.Should().BeTrue();
-            this.result.DocType.Should().Be("PO");
+            this.result.DocType.Should().Be("L");
             this.result.PartNumber.Should().Be("PART");
             this.result.QcState.Should().Be("PASS");
             this.result.QcInfo.Should().Be("Some Info");
-            this.result.UnitOfMeasure.Should().Be("ONES");
             this.result.Lines.Count().Should().Be(1);
             this.result.Lines.First().Id.Should().Be(1111);
+        }
+
+
+        [Test]
+        public void ShouldSetPrintLabelsTrue()
+        {
+            this.result.PrintLabels.Should().BeFalse();
         }
     }
 }

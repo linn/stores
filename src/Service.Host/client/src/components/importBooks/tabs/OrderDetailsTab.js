@@ -16,6 +16,8 @@ import {
 } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
 import { Decimal } from 'decimal.js';
+import DialogInput from './DialogInput';
+import currencyConvert from '../../../helpers/currencyConvert';
 
 function OrderDetailsTab({
     orderDetails,
@@ -48,7 +50,8 @@ function OrderDetailsTab({
     snackbarVisible,
     setSnackbarVisible,
     currentUserNumber,
-    impbookId
+    impbookId,
+    exchangeRate
 }) {
     const updateRow = detail => {
         handleOrderDetailChange(detail.lineNumber, detail);
@@ -81,6 +84,9 @@ function OrderDetailsTab({
         },
         displayContents: {
             display: 'contents'
+        },
+        marginTop1NoWidthSet: {
+            marginTop: theme.spacing(1)
         }
     }));
     const classes = useStyles();
@@ -172,6 +178,16 @@ function OrderDetailsTab({
             supplierId,
             impbookId
         });
+    };
+
+    const handleValueEntryAndConvert = (row, propertyName, newValue) => {
+        if (exchangeRate && newValue && newValue > 0) {
+            const convertedValue = currencyConvert(newValue, exchangeRate);
+
+            updateRow({ ...row, [propertyName]: convertedValue });
+        } else {
+            updateRow({ ...row, [propertyName]: newValue });
+        }
     };
 
     return (
@@ -460,36 +476,32 @@ function OrderDetailsTab({
                             </Grid>
                             <Grid item xs={12} />
                             <Grid item xs={2}>
-                                <InputField
-                                    label="Order Value"
-                                    fullWidth
-                                    onChange={(propertyName, newValue) =>
-                                        editRow(row, propertyName, newValue)
-                                    }
-                                    propertyName="orderValue"
-                                    type="number"
-                                    value={row.orderValue}
-                                    disabled={!allowedToEdit}
-                                    required
-                                    maxLength={14}
-                                    decimalPlaces={2}
-                                />
+                                <div className={classes.marginTop1NoWidthSet}>
+                                    <DialogInput
+                                        name="Order Value"
+                                        onChange={handleValueEntryAndConvert}
+                                        propertyName="orderValue"
+                                        row={row}
+                                        maxLength={14}
+                                        decimalPlaces={2}
+                                        innerInputValue={row.orderValue}
+                                        disabled={!allowedToEdit}
+                                    />
+                                </div>
                             </Grid>
                             <Grid item xs={2}>
-                                <InputField
-                                    label="Duty Value"
-                                    fullWidth
-                                    onChange={(propertyName, newValue) =>
-                                        editRow(row, propertyName, newValue)
-                                    }
-                                    propertyName="dutyValue"
-                                    type="number"
-                                    value={row.dutyValue}
-                                    disabled={!allowedToEdit}
-                                    required
-                                    maxLength={14}
-                                    decimalPlaces={2}
-                                />
+                                <div className={classes.marginTop1NoWidthSet}>
+                                    <DialogInput
+                                        name="Duty Value"
+                                        onChange={handleValueEntryAndConvert}
+                                        propertyName="dutyValue"
+                                        row={row}
+                                        maxLength={14}
+                                        decimalPlaces={2}
+                                        innerInputValue={row.dutyValue}
+                                        disabled={!allowedToEdit}
+                                    />
+                                </div>
                             </Grid>
                             <Grid item xs={1}>
                                 <InputField
@@ -505,20 +517,18 @@ function OrderDetailsTab({
                                 />
                             </Grid>
                             <Grid item xs={2}>
-                                <InputField
-                                    label="Vat Value"
-                                    fullWidth
-                                    onChange={(propertyName, newValue) =>
-                                        editRow(row, propertyName, newValue)
-                                    }
-                                    propertyName="vatValue"
-                                    type="number"
-                                    value={row.vatValue}
-                                    disabled={!allowedToEdit}
-                                    required
-                                    maxLength={14}
-                                    decimalPlaces={2}
-                                />
+                                <div className={classes.marginTop1NoWidthSet}>
+                                    <DialogInput
+                                        name="Vat Value"
+                                        onChange={handleValueEntryAndConvert}
+                                        propertyName="vatValue"
+                                        row={row}
+                                        maxLength={14}
+                                        decimalPlaces={2}
+                                        innerInputValue={row.vatValue}
+                                        disabled={!allowedToEdit}
+                                    />
+                                </div>
                             </Grid>
                             <Grid item xs={1}>
                                 <InputField
@@ -657,7 +667,8 @@ OrderDetailsTab.propTypes = {
     snackbarVisible: PropTypes.bool,
     setSnackbarVisible: PropTypes.func.isRequired,
     currentUserNumber: PropTypes.number.isRequired,
-    impbookId: PropTypes.number
+    impbookId: PropTypes.number,
+    exchangeRate: PropTypes.number
 };
 
 OrderDetailsTab.defaultProps = {
@@ -668,7 +679,8 @@ OrderDetailsTab.defaultProps = {
     supplierId: -1,
     postDutyItemError: null,
     snackbarVisible: false,
-    impbookId: null
+    impbookId: null,
+    exchangeRate: null
 };
 
 export default OrderDetailsTab;

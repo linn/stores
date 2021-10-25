@@ -11,9 +11,9 @@
     {
         private readonly IPartPack partPack;
 
-        private readonly IRepository<Part, int> partRepository;
+        private readonly IPartRepository partRepository;
 
-        public PartLiveService(IPartPack partPack, IRepository<Part, int> partRepository)
+        public PartLiveService(IPartPack partPack, IPartRepository partRepository)
         {
             this.partPack = partPack;
             this.partRepository = partRepository;

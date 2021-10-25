@@ -15,6 +15,8 @@ import validatePurchaseOrderBookInQtyResultSelectors from '../../selectors/valid
 import validateStorageTypeActions from '../../actions/validateStorageTypeActions';
 import validateStorageTypeResultSelectors from '../../selectors/validateStorageTypeResultSelectors';
 import { getUserNumber } from '../../selectors/userSelectors';
+import loanDetailsActions from '../../actions/loanDetailsActions';
+import loanDetailsSelectors from '../../selectors/loanDetailsSelectors';
 
 const mapStateToProps = (state, { match }) => ({
     validatePurchaseOrderResult: validatePurchaseOrderResultSelectors.getItem(state),
@@ -42,7 +44,9 @@ const mapStateToProps = (state, { match }) => ({
     userNumber: getUserNumber(state),
     validateStorageTypeResult: validateStorageTypeResultSelectors.getItem(state),
     validateStorageTypeResultLoading: validateStorageTypeResultSelectors.getLoading(state),
-    match
+    match,
+    loanDetails: loanDetailsSelectors.getItems(state),
+    loanDetailsLoading: loanDetailsSelectors.getLoading(state)
 });
 
 const mapDispatchToProps = {
@@ -52,7 +56,8 @@ const mapDispatchToProps = {
     searchSalesArticles: salesArticlesActions.search,
     doBookIn: doBookInActions.requestProcessStart,
     validatePurchaseOrderBookInQty: validatePurchaseOrderBookInQtyResultActions.fetchByQueryString,
-    validateStorageType: validateStorageTypeActions.fetchByQueryString
+    validateStorageType: validateStorageTypeActions.fetchByQueryString,
+    getLoanDetails: loanDetailsActions.fetchByQueryString
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GoodsInUtility);

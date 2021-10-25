@@ -19,7 +19,7 @@
 
         private readonly IPalletAnalysisPack palletAnalysisPack;
 
-        private readonly IRepository<Part, int> partsRepository;
+        private readonly IPartRepository partsRepository;
 
         private readonly IRepository<GoodsInLogEntry, int> goodsInLog;
 
@@ -39,7 +39,7 @@
             IGoodsInPack goodsInPack,
             IStoresPack storesPack,
             IPalletAnalysisPack palletAnalysisPack,
-            IRepository<Part, int> partsRepository,
+            IPartRepository partsRepository,
             IRepository<GoodsInLogEntry, int> goodsInLog,
             IRepository<RequisitionHeader, int> reqRepository,
             IPurchaseOrderPack purchaseOrderPack,
@@ -84,22 +84,12 @@
             bool? multipleBookIn,
             IEnumerable<GoodsInLogEntry> lines)
         {
-            if (!orderNumber.HasValue || transactionType != "O")
-            {
-                throw new NotImplementedException("Booking in this document type is not supported yet.");
-            }
-
             if (string.IsNullOrEmpty(ontoLocation))
             {
-                if ((string.IsNullOrEmpty(storageType) && transactionType == "O") 
-                    || transactionType == "L" || transactionType == "D")
-                {
-                    return new BookInResult(false, "Onto location/pallet must be entered");
-                }
+                return new BookInResult(false, "Onto location/pallet must be entered");
             }
 
-            if (ontoLocation != null 
-                && ontoLocation.StartsWith("P") 
+            if (ontoLocation.StartsWith("P") 
                 && !string.IsNullOrEmpty(partNumber))
             {
                 if (!this.palletAnalysisPack.CanPutPartOnPallet(partNumber, ontoLocation.TrimStart('P')))
@@ -120,10 +110,11 @@
             {
                 goodsInLogEntry.Id = this.goodsInPack.GetNextLogId();
                 goodsInLogEntry.BookInRef = bookinRef;
+                goodsInLogEntry.StoragePlace = ontoLocation;
                 this.goodsInLog.Add(goodsInLogEntry);
             }
 
-            this.goodsInPack.DoBookIn(
+            var message = this.goodsInPack.DoBookIn(
                 bookinRef,
                 transactionType,
                 createdBy,
@@ -144,9 +135,7 @@
                 out var reqNumberResult,
                 out var success);
 
-            var result = new BookInResult(
-                success,
-                success ? "Book In Successful!" : this.goodsInPack.GetErrorMessage());
+            var result = new BookInResult(success, success ? "Book In Successful!" : message);
 
             if (success)
             {
@@ -191,8 +180,14 @@
                     out _);
                 result.UnitOfMeasure = uom;
                 result.DocType = this.purchaseOrderPack.GetDocumentType(orderNumber.Value);
+                result.PrintLabels = true;
             }
-            
+
+            if (transactionType.Equals("L"))
+            {
+                result.DocType = "L";
+            }
+
             result.QtyReceived = qty;
             result.PartNumber = partNumber;
             result.PartDescription = part.Description;
@@ -219,11 +214,6 @@
                 result.ParcelComments = $"{result.DocType}{orderNumber}";
             }
             else if (rsnNumber.HasValue)
-            {
-                // todo
-                throw new NotImplementedException("Booking in this document type is not supported yet.");
-            }
-            else if (loanNumber.HasValue)
             {
                 // todo
                 throw new NotImplementedException("Booking in this document type is not supported yet.");
