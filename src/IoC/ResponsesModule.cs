@@ -237,6 +237,10 @@
             builder.RegisterType<PurchaseOrdersResourceBuilder>().As<IResourceBuilder<IEnumerable<PurchaseOrder>>>();
             builder.RegisterType<LoanResourceBuilder>().As<IResourceBuilder<Loan>>();
             builder.RegisterType<LoansResourceBuilder>().As<IResourceBuilder<IEnumerable<Loan>>>();
+            builder.RegisterType<RsnConditionResourceBuilder>().As<IResourceBuilder<RsnCondition>>();
+            builder.RegisterType<RsnConditionsResourceBuilder>().As<IResourceBuilder<IEnumerable<RsnCondition>>>();
+            builder.RegisterType<RsnAccessoryResourceBuilder>().As<IResourceBuilder<RsnAccessory>>();
+            builder.RegisterType<RsnAccessoriesResourceBuilder>().As<IResourceBuilder<IEnumerable<RsnAccessory>>>();
         }
     }
 }
