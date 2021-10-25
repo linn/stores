@@ -18,11 +18,13 @@ import {
     Dropdown,
     DatePicker,
     Title,
-    CheckboxWithLabel
+    CheckboxWithLabel,
+    Loading
 } from '@linn-it/linn-form-components-library';
 import QcLabelPrintScreen from '../../containers/goodsIn/QcLabelPrintScreen';
 import Page from '../../containers/Page';
 import Parcel from '../../containers/parcels/Parcel';
+import LoanDetails from './LoanDetails';
 
 function GoodsInUtility({
     validatePurchaseOrder,
@@ -48,7 +50,10 @@ function GoodsInUtility({
     validateStorageTypeResult,
     validateStorageTypeResultLoading,
     match,
-    history
+    history,
+    loanDetails,
+    getLoanDetails,
+    loanDetailsLoading
 }) {
     const [formData, setFormData] = useState({
         orderNumber: null,
@@ -80,7 +85,7 @@ function GoodsInUtility({
     const useStyles = makeStyles(theme => ({
         dialog: {
             margin: theme.spacing(6),
-            minWidth: theme.spacing(62)
+            minWidth: theme.spacing(70)
         },
         notchedOutline: {
             borderWidth: '3px',
@@ -93,9 +98,34 @@ function GoodsInUtility({
     };
     const [bookInPoExpanded, setBookInPoExpanded] = useState(false);
 
+    const [loanExpanded, setLoanExpanded] = useState(false);
+
     const [printDialogOpen, setPrintDialogOpen] = useState(false);
 
     const [parcelDialogOpen, setParcelDialogOpen] = useState(false);
+
+    const [loanDetailsDialogOpen, setLoanDetailsDialogOpen] = useState(false);
+
+    const handleSelectLoanDetails = details => {
+        setLoanDetailsDialogOpen(false);
+        setLines(l => [
+            ...l,
+            ...details.map((detail, i) => ({
+                id: l.length + i,
+                articleNumber: detail.articleNumber,
+                transactionType: 'L',
+                dateCreated: new Date().toISOString(),
+                storagePlace: formData?.ontoLocation,
+                locationId: formData?.ontoLocationId,
+                quantity: detail.return,
+                serialNumber: detail.serialNumber,
+                serialNumber2: details.serialNumber2,
+                loanNumber: detail.loanNumber,
+                loanLine: detail.line,
+                createdBy: userNumber
+            }))
+        ]);
+    };
 
     useEffect(() => {
         setRows([...logEntries, ...lines]);
@@ -117,6 +147,12 @@ function GoodsInUtility({
             });
         }
     }, [validatePurchaseOrderResult]);
+
+    useEffect(() => {
+        if (loanDetails?.length > 0) {
+            setLoanDetailsDialogOpen(true);
+        }
+    }, [loanDetails]);
 
     useEffect(() => {
         if (validatePurchaseOrderBookInQtyResult) {
@@ -142,7 +178,7 @@ function GoodsInUtility({
         if (bookInResult?.message) {
             setMessage({ error: !bookInResult.success, text: bookInResult.message });
         }
-        if (bookInResult?.success) {
+        if (bookInResult?.success && bookInResult.printLabels) {
             setPrintDialogOpen(true);
             setLines([]);
             setLogEntries(r => [...r, ...bookInResult.lines]);
@@ -208,6 +244,12 @@ function GoodsInUtility({
             headerName: 'Serial',
             field: 'serialNumber',
             width: 200,
+            hide: false
+        },
+        {
+            headerName: 'Serial 2',
+            field: 'serialNumber2',
+            width: 200,
             hide: true
         },
         {
@@ -232,6 +274,16 @@ function GoodsInUtility({
             width: 200
         },
         {
+            headerName: 'Loan',
+            field: 'loanNumber',
+            width: 200
+        },
+        {
+            headerName: 'Line',
+            field: 'loanLine',
+            width: 200
+        },
+        {
             headerName: 'State',
             field: 'state',
             width: 200
@@ -247,6 +299,18 @@ function GoodsInUtility({
     const handleSelectRow = selected => {
         setSelectedRows(rows.filter(r => selected.includes(r.id)));
     };
+
+    if (bookInResultLoading) {
+        return (
+            <Page>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <Loading />
+                    </Grid>
+                </Grid>
+            </Page>
+        );
+    }
 
     return (
         <Page>
@@ -296,6 +360,28 @@ function GoodsInUtility({
                         </div>
                     </div>
                 </Dialog>
+                <Dialog open={loanDetailsDialogOpen} fullWidth maxWidth="md">
+                    <div>
+                        <IconButton
+                            className={classes.pullRight}
+                            aria-label="Close"
+                            onClick={() => setLoanDetailsDialogOpen(false)}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <div className={classes.dialog}>
+                            <LoanDetails
+                                loanDetails={loanDetails?.map(d => ({
+                                    ...d,
+                                    id: d.line,
+                                    return: d.qtyOnLoan,
+                                    selected: false
+                                }))}
+                                onConfirm={handleSelectLoanDetails}
+                            />
+                        </div>
+                    </div>
+                </Dialog>
                 <Grid item xs={12}>
                     <Title text="Goods In Utility" />
                 </Grid>
@@ -316,7 +402,8 @@ function GoodsInUtility({
                             validatePurchaseOrderResultLoading ||
                             validatePurchaseOrderBookInQtyResultLoading ||
                             bookInResultLoading ||
-                            validateStorageTypeResultLoading
+                            validateStorageTypeResultLoading ||
+                            loanDetailsLoading
                                 ? 'loading'
                                 : message.text
                         }
@@ -613,6 +700,42 @@ function GoodsInUtility({
                     </Accordion>
                 </Grid>
                 <Grid item xs={12}>
+                    <Accordion expanded={loanExpanded}>
+                        <AccordionSummary
+                            onClick={() => setLoanExpanded(!loanExpanded)}
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                        >
+                            <Typography>Book In Loan</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Grid container spacing={3}>
+                                <Grid item xs={2}>
+                                    <InputField
+                                        fullWidth
+                                        value={formData?.loanNumber}
+                                        label="Loan Number"
+                                        propertyName="loanNumber"
+                                        disabled={!formData?.ontoLocation}
+                                        onChange={handleFieldChange}
+                                        textFieldProps={{
+                                            onBlur: () =>
+                                                formData.loanNumber
+                                                    ? getLoanDetails(
+                                                          'loanNumber',
+                                                          formData.loanNumber
+                                                      )
+                                                    : {}
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs={10} />
+                            </Grid>
+                        </AccordionDetails>
+                    </Accordion>
+                </Grid>
+                <Grid item xs={12}>
                     <CheckboxWithLabel
                         label="Multiple Book In?"
                         checked={multipleBookIn}
@@ -653,22 +776,24 @@ function GoodsInUtility({
                     <Button
                         variant="contained"
                         disabled={
-                            !validatePurchaseOrderResult ||
+                            (!validatePurchaseOrderResult && !lines.length) ||
                             !!validatePurchaseOrderResult?.message ||
                             !formData.ontoLocation ||
-                            !formData.qty
+                            (!formData.qty && !lines.length)
                         }
                         onClick={() => {
                             const row = {
-                                articleNumber: validatePurchaseOrderResult.partNumber,
-                                transactionType: validatePurchaseOrderResult.transactionType,
+                                articleNumber: validatePurchaseOrderResult?.partNumber,
+                                transactionType: formData.loanNumber
+                                    ? 'L'
+                                    : validatePurchaseOrderResult.transactionType,
                                 dateCreated: new Date().toISOString(),
                                 location: formData.ontoLocation,
                                 locationId: formData.ontoLocationId,
                                 quantity: formData.qty,
-                                orderNumber: validatePurchaseOrderResult.orderNumber,
-                                state: validatePurchaseOrderResult.state,
-                                orderLine: validatePurchaseOrderResult.orderLine,
+                                orderNumber: validatePurchaseOrderResult?.orderNumber,
+                                state: validatePurchaseOrderResult?.state,
+                                orderLine: validatePurchaseOrderResult?.orderLine,
                                 storageType: formData.storageType,
                                 createdBy: userNumber
                             };
@@ -678,11 +803,13 @@ function GoodsInUtility({
                                 multipleBookIn,
                                 lines: lines.length > 0 ? lines : [row],
                                 createdBy: userNumber,
-                                transactionType: validatePurchaseOrderResult.transactionType,
-                                partNumber: validatePurchaseOrderResult.partNumber,
+                                transactionType: formData.loanNumber
+                                    ? 'L'
+                                    : validatePurchaseOrderResult.transactionType,
+                                partNumber: validatePurchaseOrderResult?.partNumber,
                                 manufacturersPartNumber:
-                                    validatePurchaseOrderResult.manufacturersPartNumber,
-                                state: validatePurchaseOrderResult.state
+                                    validatePurchaseOrderResult?.manufacturersPartNumber,
+                                state: validatePurchaseOrderResult?.state
                             });
                         }}
                     >
@@ -709,9 +836,14 @@ function GoodsInUtility({
                         variant="contained"
                         color="secondary"
                         disabled={selectedRows.length < 1}
-                        onClick={() =>
-                            setRows(rows.filter(r => !selectedRows.map(x => x.id).includes(r.id)))
-                        }
+                        onClick={() => {
+                            setLines(
+                                lines.filter(r => !selectedRows.map(x => x.id).includes(r.id))
+                            );
+                            setLogEntries(
+                                logEntries.filter(r => !selectedRows.map(x => x.id).includes(r.id))
+                            );
+                        }}
                     >
                         Clear Selected
                     </Button>
@@ -769,7 +901,8 @@ GoodsInUtility.propTypes = {
         parcelComments: PropTypes.string,
         supplierId: PropTypes.number,
         createParcel: PropTypes.bool,
-        lines: PropTypes.arrayOf(PropTypes.shape({}))
+        lines: PropTypes.arrayOf(PropTypes.shape({})),
+        printLabels: PropTypes.bool
     }),
     bookInResultLoading: PropTypes.bool,
     doBookIn: PropTypes.func.isRequired,
@@ -781,7 +914,10 @@ GoodsInUtility.propTypes = {
     validatePurchaseOrderBookInQtyResultLoading: PropTypes.bool,
     userNumber: PropTypes.number.isRequired,
     match: PropTypes.shape({}).isRequired,
-    history: PropTypes.shape({ push: PropTypes.func }).isRequired
+    history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+    loanDetails: PropTypes.arrayOf(PropTypes.shape({})),
+    getLoanDetails: PropTypes.func.isRequired,
+    loanDetailsLoading: PropTypes.bool
 };
 
 GoodsInUtility.defaultProps = {
@@ -798,7 +934,9 @@ GoodsInUtility.defaultProps = {
     storagePlacesSearchResults: [],
     storagePlacesSearchLoading: false,
     validatePurchaseOrderBookInQtyResult: null,
-    validatePurchaseOrderBookInQtyResultLoading: false
+    validatePurchaseOrderBookInQtyResultLoading: false,
+    loanDetails: [],
+    loanDetailsLoading: false
 };
 
 export default GoodsInUtility;

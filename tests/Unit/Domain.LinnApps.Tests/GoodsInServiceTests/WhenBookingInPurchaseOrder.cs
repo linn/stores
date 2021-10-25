@@ -15,7 +15,7 @@
 
     using NUnit.Framework;
 
-    public class WhenBookingInAndStoredProcedureCallFails : ContextBase
+    public class WhenBookingInPurchaseOrder : ContextBase
     {
         private BookInResult result;
 
@@ -25,15 +25,15 @@
             this.PurchaseOrderPack.GetDocumentType(1).Returns("PO");
             this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1234").Returns(true);
             this.GoodsInPack.GetNextBookInRef().ReturnsForAnyArgs(1);
-            this.ReqRepository.FindById(1).Returns(new RequisitionHeader { ReqNumber = 1, });
+            this.ReqRepository.FindById(1).Returns(new RequisitionHeader { ReqNumber = 1,  });
             this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>())
                 .Returns(new Part
-                {
-                    PartNumber = "PART",
-                    Description = "A PART",
-                    QcInformation = "Some Info"
-                });
-
+                    {
+                        PartNumber = "PART",
+                        Description = "A PART",
+                        QcInformation = "Some Info"
+                    });
+            
             this.GoodsInPack.When(x => x.GetPurchaseOrderDetails(
                 1,
                 1,
@@ -47,7 +47,7 @@
                 out var _))
                 .Do(x => x[4] = "ONES");
 
-            this.GoodsInPack.DoBookIn(
+            this.GoodsInPack.When(x => x.DoBookIn(
                 1,
                 "O",
                 1,
@@ -65,15 +65,16 @@
                 null,
                 null,
                 null,
-                out var reqNumber,
-                out var success)
-                .Returns(x =>
-                {
-                    x[17] = null;
-                    x[18] = false;
-                    return "Something went wrong...";
-                });
+                out var reqNumber, 
+                out var success))
+                .Do(x =>
+                    {
+                        x[17] = 1;
+                        x[18] = true;
+                    });
 
+            this.GoodsInPack.GetNextLogId().Returns(1111);
+            
             this.result = this.Sut.DoBookIn(
                 "O",
                 1,
@@ -133,11 +134,23 @@
         }
 
         [Test]
-        public void ShouldReturnFailResult()
+        public void ShouldReturnSuccessResult()
         {
-            this.result.Success.Should().BeFalse();
-            this.result.Message.Should().Be("Something went wrong...");
-            this.result.Lines.Should().BeNullOrEmpty();
+            this.result.Success.Should().BeTrue();
+            this.result.DocType.Should().Be("PO");
+            this.result.PartNumber.Should().Be("PART");
+            this.result.QcState.Should().Be("PASS");
+            this.result.QcInfo.Should().Be("Some Info");
+            this.result.UnitOfMeasure.Should().Be("ONES");
+            this.result.Lines.Count().Should().Be(1);
+            this.result.Lines.First().Id.Should().Be(1111);
+        }
+
+
+        [Test]
+        public void ShouldSetPrintLabelsTrue()
+        {
+            this.result.PrintLabels.Should().BeTrue();
         }
     }
 }
