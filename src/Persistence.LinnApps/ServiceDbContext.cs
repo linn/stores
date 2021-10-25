@@ -248,6 +248,11 @@
 
         public DbSet<PurchaseLedger> PurchaseLedgers { get; set; }
 
+        public DbQuery<RsnAccessory> RsnAccessories { get; set; }
+
+        public DbQuery<RsnCondition> RsnConditions{ get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -366,6 +371,8 @@
             this.BuildPurchaseOrderDetails(builder);
             this.BuildStockTriggerLevels(builder);
             this.BuildPurchaseLedger(builder);
+            this.QueryRsnAccessories(builder);
+            this.QueryRsnConditions(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -2090,6 +2097,22 @@
             e.Property(p => p.UnderOver).HasColumnName("UNDER_OVER").HasMaxLength(14);
             e.Property(p => p.ExchangeRate).HasColumnName("EXCHANGE_RATE").HasMaxLength(19);
             e.Property(p => p.LedgerStream).HasColumnName("LEDGER_STREAM").HasMaxLength(8);
+        }
+
+        private void QueryRsnAccessories(ModelBuilder builder)
+        {
+            var q = builder.Query<RsnAccessory>().ToView("RSN_ACCESSORIES");
+            q.Property(a => a.Code).HasColumnName("ACC_CODE");
+            q.Property(a => a.Description).HasColumnName("DESCRIPTION");
+            q.Property(a => a.ExtraInfoRequired).HasColumnName("EXTRA_INFO_REQD");
+        }
+
+        private void QueryRsnConditions(ModelBuilder builder)
+        {
+            var q = builder.Query<RsnCondition>().ToView("RSN_CONDITIONS");
+            q.Property(a => a.Code).HasColumnName("COND_CODE");
+            q.Property(a => a.Description).HasColumnName("DESCRIPTION");
+            q.Property(a => a.ExtraInfoRequired).HasColumnName("EXTRA_INFO_REQD");
         }
     }
 }
