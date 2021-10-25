@@ -8,7 +8,6 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models;
-    using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Requisitions;
 
     public class GoodsInService : IGoodsInService
@@ -472,6 +471,24 @@
                            LocationId = locationId,
                            Message = this.goodsInPack.GetErrorMessage()
                        };
+        }
+
+        public ProcessResult PrintRsnLabels(int rsnNumber, string partNumber, int? serialNumber, string printer, int qty = 1)
+        {
+            var labelType = this.labelTypeRepository.FindBy(x => x.Code.Equals("RSN_LABEL"));
+            var labelName = $"RSN {rsnNumber}";
+            var printString = "";
+            string message = null;
+            
+            var success = this.bartender.PrintLabels(
+                labelName,
+                labelType.DefaultPrinter,
+                qty,
+                labelType.FileName,
+                printString,
+                ref message);
+
+            return new ProcessResult(success, message);
         }
     }
 }
