@@ -153,8 +153,7 @@
                     resource.PartNumberSearchTerm,
                     resource.DescriptionSearchTerm);
             }
-            
-            if (!string.IsNullOrEmpty(resource.SearchTerm))
+            else if (!string.IsNullOrEmpty(resource.SearchTerm))
             {
                 results = resource.ExactOnly
                               ? this.partsFacadeService.GetPartByPartNumber(resource.SearchTerm)
