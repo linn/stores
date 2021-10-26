@@ -75,12 +75,12 @@ const Root = ({ store }) => (
                                     exact
                                     path="/inventory/parts"
                                     render={() => <Redirect to="/parts" />}
-                                />    
+                                />
                                 <Route
                                     exact
                                     path="/inventory/parts/sources"
                                     render={() => <Redirect to="/parts/sources" />}
-                                /> 
+                                />
 
                                 <Route
                                     path="/"
@@ -97,11 +97,7 @@ const Root = ({ store }) => (
                                         path="/inventory/signin-oidc-client"
                                         component={Callback}
                                     />
-                                    <Route
-                                        exact
-                                        path="/parts/sources"
-                                        component={Parts}
-                                    />
+                                    <Route exact path="/parts/sources" component={Parts} />
                                     <Route exact path="/parts" component={Parts} />
                                     <Route exact path="/parts/create" component={Part} />
                                     <Route exact path="/parts/:id" component={Part} />
