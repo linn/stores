@@ -1,8 +1,25 @@
 import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
-import { Typeahead, LinkButton, Dropdown } from '@linn-it/linn-form-components-library';
+import { Typeahead, LinkButton, Dropdown, InputField } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
+import Accordion from '@material-ui/core/Accordion';
+import Button from '@material-ui/core/Button';
+import makeStyles from '@material-ui/styles/makeStyles';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Typography from '@material-ui/core/Typography';
 import Page from '../../containers/Page';
+
+const useStyles = makeStyles(theme => ({
+    button: {
+        marginLeft: theme.spacing(1),
+        marginTop: theme.spacing(3)
+    },
+    a: {
+        textDecoration: 'none'
+    }
+}));
 
 function PartsSearch({
     items,
@@ -14,7 +31,16 @@ function PartsSearch({
     partTemplates,
     linkToSources
 }) {
+    const classes = useStyles();
+
     const [template, setTemplate] = useState();
+
+    const [expanded, setExpanded] = useState(false);
+
+    const [options, setOptions] = useState({ partNumber: '', description: '' });
+
+    const handleOptionsChange = (propertyName, newValue) =>
+        setOptions({ ...options, [propertyName]: newValue });
 
     const createUrl = () => {
         if (linkToSources) {
@@ -47,7 +73,9 @@ function PartsSearch({
     return (
         <Page>
             <Grid container spacing={3}>
-                <Grid item xs={7} />
+                <Grid item xs={7}>
+                    <Typography variant="h3">Parts Utility</Typography>
+                </Grid>
                 <Grid item xs={3}>
                     {!linkToSources && (
                         <Dropdown
@@ -77,12 +105,64 @@ function PartsSearch({
                     />
                 </Grid>
                 <Grid item xs={1} />
+                {!linkToSources && (
+                    <Grid item xs={12}>
+                        <Accordion expanded={expanded}>
+                            <AccordionSummary
+                                onClick={() => setExpanded(!expanded)}
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                            >
+                                <Typography>Advanced Search options</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={5}>
+                                        <InputField
+                                            fullWidth
+                                            value={options.partNumber}
+                                            label="Part Number"
+                                            propertyName="partNumber"
+                                            onChange={handleOptionsChange}
+                                            helperText="* can be used as a wildcard on both fields"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={5}>
+                                        <InputField
+                                            fullWidth
+                                            value={options.description}
+                                            label="Description"
+                                            propertyName="description"
+                                            onChange={handleOptionsChange}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <Button
+                                            variant="outlined"
+                                            color="primary"
+                                            className={classes.button}
+                                            onClick={() =>
+                                                fetchItems(
+                                                    '',
+                                                    `&partNumberSearchTerm=${options.partNumber}&descriptionSearchTerm=${options.description}`
+                                                )
+                                            }
+                                        >
+                                            Go
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </AccordionDetails>
+                        </Accordion>
+                    </Grid>
+                )}
                 <Grid item xs={12}>
                     <Typeahead
                         items={searchItems()}
-                        fetchItems={fetchItems}
+                        fetchItems={searchTerm => fetchItems(searchTerm, '')}
                         clearSearch={clearSearch}
-                        resultLimit={100}
+                        resultLimit={500}
                         priorityFunction={(item, searchTerm) => {
                             let count = 0;
                             for (let i = 0; i < searchTerm.length; i += 1) {
@@ -98,7 +178,6 @@ function PartsSearch({
                             return count;
                         }}
                         loading={loading}
-                        title="Part"
                         history={history}
                         debounce={1000}
                     />

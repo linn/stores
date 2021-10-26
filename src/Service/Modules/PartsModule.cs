@@ -143,10 +143,17 @@
 
         private object GetParts()
         {
-            var resource = this.Bind<SearchRequestResource>();
-            
+            var resource = this.Bind<PartsSearchRequestResource>();
             IResult<IEnumerable<Part>> results;
-            if (!string.IsNullOrEmpty(resource.SearchTerm))
+
+            if (!string.IsNullOrEmpty(resource.PartNumberSearchTerm)
+                || !string.IsNullOrEmpty(resource.DescriptionSearchTerm))
+            {
+                results = this.partsFacadeService.SearchPartsWithWildcard(
+                    resource.PartNumberSearchTerm,
+                    resource.DescriptionSearchTerm);
+            }
+            else if (!string.IsNullOrEmpty(resource.SearchTerm))
             {
                 results = resource.ExactOnly
                               ? this.partsFacadeService.GetPartByPartNumber(resource.SearchTerm)
