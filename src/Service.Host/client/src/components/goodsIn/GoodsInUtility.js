@@ -138,25 +138,10 @@ function GoodsInUtility({
         ]);
     };
 
-    const handleSelectRsnDetails = details => {
-        setLoanDetailsDialogOpen(false);
-        setLines(l => [
-            ...l,
-            ...details.map((detail, i) => ({
-                id: l.length + i,
-                articleNumber: detail.articleNumber,
-                transactionType: 'L',
-                dateCreated: new Date().toISOString(),
-                storagePlace: formData?.ontoLocation,
-                locationId: formData?.ontoLocationId,
-                quantity: detail.return,
-                serialNumber: detail.serialNumber,
-                serialNumber2: details.serialNumber2,
-                loanNumber: detail.loanNumber,
-                loanLine: detail.line,
-                createdBy: userNumber
-            }))
-        ]);
+    const handleSelectRsnDetails = (accessories, conditions) => {
+        setRsnDetailsDialogOpen(false);
+        console.log(accessories);
+        console.log(conditions);
     };
 
     useEffect(() => {
@@ -792,7 +777,10 @@ function GoodsInUtility({
                                         }}
                                     />
                                 </Grid>
-                                <Grid item xs={10} />
+                                <Grid item xs={2}>
+                                    {loanDetailsLoading && <Loading />}
+                                </Grid>
+                                <Grid item xs={8} />
                             </Grid>
                         </AccordionDetails>
                     </Accordion>
@@ -825,7 +813,10 @@ function GoodsInUtility({
                                         }}
                                     />
                                 </Grid>
-                                <Grid item xs={10} />
+                                <Grid item xs={2}>
+                                    {(rsnAccessoriesLoading || rsnConditionsLoading) && <Loading />}
+                                </Grid>
+                                <Grid item xs={8} />
                             </Grid>
                         </AccordionDetails>
                     </Accordion>

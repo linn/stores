@@ -24,7 +24,7 @@ function RsnDetails({ rsnAccessories, rsnConditions, onConfirm }) {
             const key = Object.keys(model)[0];
             setAccessoriesRows(
                 accessoriesRows.map(r => {
-                    return r.id === key ? { ...r, return: model[key].extraInfo.value } : r;
+                    return r.id === key ? { ...r, extraInfo: model[key].extraInfo.value } : r;
                 })
             );
         },
@@ -42,9 +42,9 @@ function RsnDetails({ rsnAccessories, rsnConditions, onConfirm }) {
     const handleEditConditionsRowsModelChange = useCallback(
         model => {
             const key = Object.keys(model)[0];
-            setAccessoriesRows(
+            setConditionsRows(
                 conditionsRows.map(r => {
-                    return r.id === key ? { ...r, return: model[key].extraInfo.value } : r;
+                    return r.id === key ? { ...r, extraInfo: model[key].extraInfo.value } : r;
                 })
             );
         },
@@ -57,13 +57,14 @@ function RsnDetails({ rsnAccessories, rsnConditions, onConfirm }) {
                 <Typography variant="h4">RSN ACCESSORIES</Typography>
             </Grid>
             <Grid item xs={12}>
-                <div style={{ height: 500, width: '100%' }}>
+                <div style={{ width: '100%' }}>
                     <DataGrid
                         rows={accessoriesRows}
                         columns={columns}
                         editMode="row"
-                        onEditAccessoriesRowsModelChange={handleEditAccessoriesRowsModelChange}
-                        columnBuffer={9}
+                        onEditRowsModelChange={handleEditAccessoriesRowsModelChange}
+                        columnBuffer={3}
+                        autoHeight
                         density="standard"
                         rowHeight={34}
                         loading={false}
@@ -79,13 +80,14 @@ function RsnDetails({ rsnAccessories, rsnConditions, onConfirm }) {
                 <Typography variant="h4">RSN CONDITION</Typography>
             </Grid>
             <Grid item xs={12}>
-                <div style={{ height: 500, width: '100%' }}>
+                <div style={{ width: '100%' }}>
                     <DataGrid
                         rows={conditionsRows}
                         columns={columns}
                         editMode="row"
-                        onEditAccessoriesRowsModelChange={handleEditConditionsRowsModelChange}
-                        columnBuffer={9}
+                        onEditRowsModelChange={handleEditConditionsRowsModelChange}
+                        columnBuffer={3}
+                        autoHeight
                         density="standard"
                         rowHeight={34}
                         loading={false}
@@ -103,7 +105,12 @@ function RsnDetails({ rsnAccessories, rsnConditions, onConfirm }) {
                     disabled={!conditionsRows.concat(accessoriesRows).some(r => r.selected)}
                     style={{ marginTop: '22px' }}
                     variant="contained"
-                    onClick={() => onConfirm()}
+                    onClick={() =>
+                        onConfirm(
+                            accessoriesRows.filter(x => x.selected),
+                            conditionsRows.filter(x => x.selected)
+                        )
+                    }
                 >
                     Confirm
                 </Button>
