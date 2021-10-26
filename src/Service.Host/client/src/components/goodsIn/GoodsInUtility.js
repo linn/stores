@@ -117,6 +117,10 @@ function GoodsInUtility({
 
     const [rsnDetailsDialogOpen, setRsnDetailsDialogOpen] = useState(false);
 
+    const [rsnConditionsString, setRsnConditionsString] = useState('');
+
+    const [rsnAccessoriesString, setRsnAccessoriesString] = useState('');
+
     const handleSelectLoanDetails = details => {
         setLoanDetailsDialogOpen(false);
         setLines(l => [
@@ -140,8 +144,8 @@ function GoodsInUtility({
 
     const handleSelectRsnDetails = (accessories, conditions) => {
         setRsnDetailsDialogOpen(false);
-        console.log(accessories);
-        console.log(conditions);
+        setRsnAccessoriesString(accessories.map(a => `${a.description}-${a.extraInfo}`).join(','));
+        setRsnConditionsString(conditions.map(a => `${a.description}-${a.extraInfo}`).join(','));
     };
 
     useEffect(() => {
@@ -817,6 +821,24 @@ function GoodsInUtility({
                                     {(rsnAccessoriesLoading || rsnConditionsLoading) && <Loading />}
                                 </Grid>
                                 <Grid item xs={8} />
+                                <Grid item xs={6}>
+                                    <InputField
+                                        fullWidth
+                                        value={rsnAccessoriesString}
+                                        label="Accessories"
+                                        propertyName="rsnAccessoriesString"
+                                        onChange={() => {}}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <InputField
+                                        fullWidth
+                                        value={rsnConditionsString}
+                                        label="Conditions"
+                                        propertyName="rsnConditionsString"
+                                        onChange={() => {}}
+                                    />
+                                </Grid>
                             </Grid>
                         </AccordionDetails>
                     </Accordion>
