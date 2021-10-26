@@ -103,56 +103,58 @@ function PartsSearch({
                     />
                 </Grid>
                 <Grid item xs={1} />
-                <Grid item xs={12}>
-                    <Accordion expanded={expanded}>
-                        <AccordionSummary
-                            onClick={() => setExpanded(!expanded)}
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                        >
-                            <Typography>Advanced Search options</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Grid container spacing={3}>
-                                <Grid item xs={5}>
-                                    <InputField
-                                        fullWidth
-                                        value={options.partNumber}
-                                        label="Part Number"
-                                        propertyName="partNumber"
-                                        onChange={handleOptionsChange}
-                                        helperText="* can be used as a wildcard on both fields"
-                                    />
+                {!linkToSources && (
+                    <Grid item xs={12}>
+                        <Accordion expanded={expanded}>
+                            <AccordionSummary
+                                onClick={() => setExpanded(!expanded)}
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1a-content"
+                                id="panel1a-header"
+                            >
+                                <Typography>Advanced Search options</Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={5}>
+                                        <InputField
+                                            fullWidth
+                                            value={options.partNumber}
+                                            label="Part Number"
+                                            propertyName="partNumber"
+                                            onChange={handleOptionsChange}
+                                            helperText="* can be used as a wildcard on both fields"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={5}>
+                                        <InputField
+                                            fullWidth
+                                            value={options.description}
+                                            label="Description"
+                                            propertyName="description"
+                                            onChange={handleOptionsChange}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <Button
+                                            variant="outlined"
+                                            color="primary"
+                                            className={classes.button}
+                                            onClick={() =>
+                                                fetchItems(
+                                                    '',
+                                                    `&partNumberSearchTerm=${options.partNumber}&descriptionSearchTerm=${options.description}`
+                                                )
+                                            }
+                                        >
+                                            Go
+                                        </Button>
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={5}>
-                                    <InputField
-                                        fullWidth
-                                        value={options.description}
-                                        label="Description"
-                                        propertyName="description"
-                                        onChange={handleOptionsChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <Button
-                                        variant="outlined"
-                                        color="primary"
-                                        className={classes.button}
-                                        onClick={() =>
-                                            fetchItems(
-                                                '',
-                                                `&partNumberSearchTerm=${options.partNumber}&descriptionSearchTerm=${options.description}`
-                                            )
-                                        }
-                                    >
-                                        Go
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </AccordionDetails>
-                    </Accordion>
-                </Grid>
+                            </AccordionDetails>
+                        </Accordion>
+                    </Grid>
+                )}
                 <Grid item xs={12}>
                     <Typeahead
                         items={searchItems()}
