@@ -136,11 +136,7 @@ export const auditLocations = new ItemType(
     '/inventory/audit-locations'
 );
 
-export const mechPartSource = new ItemType(
-    'mechPartSource',
-    'MECH_PART_SOURCE',
-    '/parts/sources'
-);
+export const mechPartSource = new ItemType('mechPartSource', 'MECH_PART_SOURCE', '/parts/sources');
 
 export const manufacturers = new ItemType(
     'manufacturers',
