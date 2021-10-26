@@ -73,7 +73,9 @@ function PartsSearch({
     return (
         <Page>
             <Grid container spacing={3}>
-                <Grid item xs={7} />
+                <Grid item xs={7}>
+                    <Typography variant="h3">Parts Utility</Typography>
+                </Grid>
                 <Grid item xs={3}>
                     {!linkToSources && (
                         <Dropdown
