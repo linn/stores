@@ -73,7 +73,6 @@
                 .Include(p => p.NominalAccount).ThenInclude(a => a.Nominal)
                 .Include(p => p.DataSheets)
                 .Include(p => p.MechPartSource)
-                .AsNoTracking()
                 .ToList().FirstOrDefault();
         }
 
