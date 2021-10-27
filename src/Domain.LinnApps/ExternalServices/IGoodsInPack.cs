@@ -57,5 +57,13 @@
             int? rsnNumber, 
             int? loanNumber, 
             out int? supplierId);
+
+        bool GetRsnDetails(
+            int rsnNumber,
+            out string state,
+            out string articleNumber,
+            out string description,
+            out int? quantity,
+            out int? serial);
     }
 }

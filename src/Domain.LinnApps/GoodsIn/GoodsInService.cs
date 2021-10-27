@@ -496,5 +496,26 @@
 
             return new ProcessResult(success, message);
         }
+
+        public ValidateRsnResult ValidateRsn(int rsnNumber)
+        {
+            var success = this.goodsInPack.GetRsnDetails(
+                rsnNumber,
+                out var state,
+                out var articleNumber,
+                out var description,
+                out var quantity,
+                out var serial);
+
+            return new ValidateRsnResult
+                       {
+                           Success = success,
+                           State = state,
+                           ArticleNumber = articleNumber,
+                           Description = description,
+                           Quantity = quantity,
+                           SerialNumber = serial
+                       };
+        }
     }
 }
