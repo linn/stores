@@ -113,5 +113,18 @@
 
             return result;
         }
+
+        public IEnumerable<Part> SearchPartsWithWildcard(string partNumberSearchTerm, string descriptionSearchTerm)
+        {
+            var result = this.serviceDbContext.Parts.AsNoTracking().Where(
+                x => (string.IsNullOrEmpty(partNumberSearchTerm) || EF.Functions.Like(
+                          x.PartNumber,
+                          $"{partNumberSearchTerm.Replace("*", "%")}"))
+                     && (string.IsNullOrEmpty(descriptionSearchTerm) || EF.Functions.Like(
+                             x.Description,
+                             $"{descriptionSearchTerm.Replace("*", "%")}")));
+
+            return result;
+        }
     }
 }

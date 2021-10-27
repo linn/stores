@@ -21,7 +21,7 @@ const initialise = () => dispatch => {
 
 const mapDispatchToProps = {
     initialise,
-    fetchItems: partsActions.search,
+    fetchItems: partsActions.searchWithOptions,
     clearSearch: partsActions.clearSearch,
     classes: {}
 };
