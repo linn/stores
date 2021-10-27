@@ -55,5 +55,12 @@
             string partNumber,
             string storageType,
             int? qty);
+
+        ProcessResult PrintRsnLabels(
+            int rsnNumber, 
+            string partNumber, 
+            int? serialNumber, 
+            string printer, 
+            int qty = 1);
     }
 }

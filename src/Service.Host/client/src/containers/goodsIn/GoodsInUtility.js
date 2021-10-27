@@ -17,6 +17,10 @@ import validateStorageTypeResultSelectors from '../../selectors/validateStorageT
 import { getUserNumber } from '../../selectors/userSelectors';
 import loanDetailsActions from '../../actions/loanDetailsActions';
 import loanDetailsSelectors from '../../selectors/loanDetailsSelectors';
+import rsnAccessoriesActions from '../../actions/rsnAccessoriesActions';
+import rsnAccessoriesSelectors from '../../selectors/rsnAccessoriesSelectors';
+import rsnConditionsActions from '../../actions/rsnConditionsActions';
+import rsnConditionsSelectors from '../../selectors/rsnConditionsSelectors';
 
 const mapStateToProps = (state, { match }) => ({
     validatePurchaseOrderResult: validatePurchaseOrderResultSelectors.getItem(state),
@@ -46,7 +50,11 @@ const mapStateToProps = (state, { match }) => ({
     validateStorageTypeResultLoading: validateStorageTypeResultSelectors.getLoading(state),
     match,
     loanDetails: loanDetailsSelectors.getItems(state),
-    loanDetailsLoading: loanDetailsSelectors.getLoading(state)
+    loanDetailsLoading: loanDetailsSelectors.getLoading(state),
+    rsnConditions: rsnConditionsSelectors.getItems(state),
+    rsnAccessories: rsnAccessoriesSelectors.getItems(state),
+    rsnConditionsLoading: rsnConditionsSelectors.getLoading(state),
+    rsnAccessoriesLoading: rsnAccessoriesSelectors.getLoading(state)
 });
 
 const mapDispatchToProps = {
@@ -57,7 +65,9 @@ const mapDispatchToProps = {
     doBookIn: doBookInActions.requestProcessStart,
     validatePurchaseOrderBookInQty: validatePurchaseOrderBookInQtyResultActions.fetchByQueryString,
     validateStorageType: validateStorageTypeActions.fetchByQueryString,
-    getLoanDetails: loanDetailsActions.fetchByQueryString
+    getLoanDetails: loanDetailsActions.fetchByQueryString,
+    getRsnConditions: rsnConditionsActions.fetch,
+    getRsnAccessories: rsnAccessoriesActions.fetch
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GoodsInUtility);

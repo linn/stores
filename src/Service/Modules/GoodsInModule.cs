@@ -23,10 +23,16 @@
 
         private readonly ISalesArticleService salesArticleService;
 
+        private readonly IRsnConditionsService rsnConditionsService;
+
+        private readonly IRsnAccessoriesService rsnAccessoriesService;
+
         public GoodsInModule(
             IGoodsInFacadeService service,
             IFacadeFilterService<StorageLocation, int, StorageLocationResource, StorageLocationResource, StorageLocationResource> storageLocationService,
-            ISalesArticleService salesArticleService)
+            ISalesArticleService salesArticleService,
+            IRsnConditionsService rsnConditionsService,
+            IRsnAccessoriesService rsnAccessoriesService)
         {
             this.service = service;
             this.storageLocationService = storageLocationService;
@@ -39,6 +45,11 @@
             this.Get("/logistics/purchase-orders/validate-qty", _ => this.ValidatePurchaseOrderBookInQty());
             this.Post("/logistics/goods-in/print-labels", _ => this.PrintLabels());
             this.Get("/logistics/goods-in/validate-storage-type", _ => this.ValidateStorageType());
+
+            this.rsnAccessoriesService = rsnAccessoriesService;
+            this.rsnConditionsService = rsnConditionsService;
+            this.Get("/logistics/goods-in/rsn-conditions", _ => this.GetRsnConditions());
+            this.Get("/logistics/goods-in/rsn-accessories", _ => this.GetRsnAccessories());
         }
 
         private object DoBookIn()
@@ -100,6 +111,16 @@
             var closedByUri = this.Context.CurrentUser.GetEmployeeUri();
             resource.UserNumber = int.Parse(closedByUri.Split("/").Last());
             return this.Negotiate.WithModel(this.service.PrintGoodsInLabels(resource));
+        }
+
+        private object GetRsnAccessories()
+        {
+            return this.Negotiate.WithModel(this.rsnAccessoriesService.GetRsnAccessories());
+        }
+
+        private object GetRsnConditions()
+        {
+            return this.Negotiate.WithModel(this.rsnConditionsService.GetRsnConditions());
         }
     }
 }

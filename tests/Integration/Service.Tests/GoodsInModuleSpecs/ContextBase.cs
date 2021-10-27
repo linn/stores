@@ -33,6 +33,10 @@
 
         protected ISalesArticleService SalesArticleService { get; private set; }
 
+        protected IRsnConditionsService RsnConditionsService { get; private set; }
+
+        protected IRsnAccessoriesService RsnAccessoriesService { get; private set; }
+
         [SetUp]
         public void EstablishContext()
         {
@@ -40,6 +44,8 @@
             this.StorageLocationService = Substitute
                 .For<IFacadeFilterService<StorageLocation, int, StorageLocationResource, StorageLocationResource, StorageLocationResource>>();
             this.SalesArticleService = Substitute.For<ISalesArticleService>();
+            this.RsnConditionsService = Substitute.For<IRsnConditionsService>();
+            this.RsnAccessoriesService = Substitute.For<IRsnAccessoriesService>();
 
 
             var bootstrapper = new ConfigurableBootstrapper(
@@ -50,6 +56,8 @@
                         with.Dependency(this.Service);
                         with.Dependency(this.StorageLocationService);
                         with.Dependency(this.SalesArticleService);
+                        with.Dependency(this.RsnAccessoriesService);
+                        with.Dependency(this.RsnConditionsService);
 
                         with.Dependency<IResourceBuilder<StorageLocation>>(new StorageLocationResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<StorageLocation>>>(
@@ -73,6 +81,14 @@
                         with.Dependency<IResourceBuilder<ValidateStorageTypeResult>>(
                             new ValidateStorageTypeResultResourceBuilder());
 
+                        with.Dependency<IResourceBuilder<RsnCondition>>(new RsnConditionResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<RsnCondition>>>(
+                            new RsnConditionsResourceBuilder());
+
+                        with.Dependency<IResourceBuilder<RsnAccessory>>(new RsnAccessoryResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<RsnAccessory>>>(
+                            new RsnAccessoriesResourceBuilder());
+
                         with.ResponseProcessor<BookInResultResponseProcessor>();
                         with.ResponseProcessor<SalesArticlesResponseProcessor>();
                         with.ResponseProcessor<StorageLocationsResponseProcessor>();
@@ -80,6 +96,8 @@
                         with.ResponseProcessor<ProcessResultResponseProcessor>();
                         with.ResponseProcessor<ValidatePurchaseOrderResultResponseProcessor>();
                         with.ResponseProcessor<ValidateStorageTypeResultResponseProcessor>();
+                        with.ResponseProcessor<RsnConditionsResponseProcessor>();
+                        with.ResponseProcessor<RsnAccessoriesResponseProcessor>();
 
                         with.RequestStartup(
                             (container, pipelines, context) =>
