@@ -34,6 +34,8 @@ import consignmentPackingListSelectors from '../../selectors/consignmentPackingL
 import consignmentPackingListActions from '../../actions/consignmentPackingListActions';
 import saveConsignmentDocumentsActions from '../../actions/saveConsignmentDocumentsActions';
 import saveConsignmentDocumentsSelectors from '../../selectors/saveConsignmentDocumentsSelectors';
+import salesOutletsSelectors from '../../selectors/salesOutletsSelectors';
+import salesOutletsActions from '../../actions/salesOutletsActions';
 
 const getOptions = ownProps => {
     const options = queryString.parse(ownProps.location.search);
@@ -91,7 +93,9 @@ const mapStateToProps = (state, ownProps) => ({
     cartonTypesSearchResults: cartonTypesSelectors.getSearchItems(state),
     cartonTypesSearchLoading: cartonTypesSelectors.getSearchLoading(state),
     saveDocumentsWorking: saveConsignmentDocumentsSelectors.getWorking(state),
-    saveDocumentsResult: saveConsignmentDocumentsSelectors.getData(state)
+    saveDocumentsResult: saveConsignmentDocumentsSelectors.getData(state),
+    salesOutlets: salesOutletsSelectors.getSearchItems(state),
+    salesOutletsLoading: salesOutletsSelectors.getLoading(state)
 });
 
 const mapDispatchToProps = {
@@ -117,7 +121,8 @@ const mapDispatchToProps = {
     searchCartonTypes: cartonTypesActions.search,
     clearCartonTypesSearch: cartonTypesActions.clearSearch,
     saveDocuments: saveConsignmentDocumentsActions.requestProcessStart,
-    saveDocumentsClearData: saveConsignmentDocumentsActions.clearProcessData
+    saveDocumentsClearData: saveConsignmentDocumentsActions.clearProcessData,
+    getSalesOutlets: salesOutletsActions.searchWithOptions
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Consignment));

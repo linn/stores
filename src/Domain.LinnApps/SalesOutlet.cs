@@ -44,5 +44,7 @@
         public Contact OrderContact { get; set; }
          
         public IEnumerable<SalesOrder> SalesOrders { get; set; }
+
+        public string DispatchTerms { get; set; }
     }
 }

@@ -68,6 +68,12 @@ const Root = ({ store }) => (
                                 <Route exact path="/" render={() => <Redirect to="/inventory" />} />
                                 <Route
                                     exact
+                                    path="/logistics"
+                                    render={() => <Redirect to="/inventory" />}
+                                />
+
+                                <Route
+                                    exact
                                     path="/inventory/reports"
                                     render={() => <Redirect to="/inventory" />}
                                 />

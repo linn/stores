@@ -8,5 +8,7 @@
     public interface ISalesOutletService
     {
         IResult<IEnumerable<SalesOutlet>> SearchSalesOutlets(string searchTerm);
+
+        IResult<IEnumerable<SalesOutlet>> GetByOrders(IEnumerable<int> orderNumbers);
     }
 }

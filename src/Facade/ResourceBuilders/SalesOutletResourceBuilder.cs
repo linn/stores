@@ -16,7 +16,8 @@
                            SalesCustomerId = salesOutlet.SalesCustomerId,
                            CountryName = salesOutlet.CountryName,
                            CountryCode = salesOutlet.CountryCode,
-                           DateInvalid = salesOutlet.DateInvalid?.ToString("o")
+                           DateInvalid = salesOutlet.DateInvalid?.ToString("o"),
+                           DispatchTerms = salesOutlet.DispatchTerms
                        };
         }
 
