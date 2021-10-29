@@ -170,12 +170,11 @@ function Consignment({
     ]);
 
     useEffect(() => {
-        const items = state.consignment?.items;
-        if (items?.length > 0) {
-            getSalesOutlets(
-                '',
-                `&orderNumbers=${items.filter(i => !!i.orderNumber).map(i => i.orderNumber)}`
-            );
+        const orderNumbers = state.consignment?.items
+            ?.filter(i => !!i.orderNumber)
+            .map(i => i.orderNumber);
+        if (orderNumbers?.length > 0) {
+            getSalesOutlets('', `&orderNumbers=${orderNumbers}`);
         }
     }, [state.consignment, getSalesOutlets]);
 
