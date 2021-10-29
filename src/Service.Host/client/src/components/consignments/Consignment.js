@@ -514,7 +514,7 @@ function Consignment({
                                 <Grid item xs={12}>
                                     <Typography variant="h6">
                                         Some outlets do not match chosen shipping terms:{' '}
-                                        <b>{state.consignment?.terms}</b>
+                                        {state.consignment?.terms}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12}>
