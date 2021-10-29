@@ -513,7 +513,7 @@ function Consignment({
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Typography variant="h6">
-                                        Some outlets do not match chosen shipping terms:
+                                        Some outlets do not match chosen shipping terms:{' '}
                                         <b>{state.consignment?.terms}</b>
                                     </Typography>
                                 </Grid>
@@ -522,6 +522,8 @@ function Consignment({
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Button
+                                        variant="outlined"
+                                        color="secondary"
                                         onClick={() => {
                                             doSave();
                                             setDialogOpen(false);
@@ -530,6 +532,8 @@ function Consignment({
                                         Save Anyway
                                     </Button>
                                     <Button
+                                        variant="outlined"
+                                        color="primary"
                                         onClick={() => {
                                             setDialogOpen(false);
                                         }}
