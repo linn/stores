@@ -323,9 +323,6 @@ describe('When terms different to that of outlets on consignment', () => {
         const details = screen.getByText('Details');
         fireEvent.click(details);
 
-        // const a = screen.getByDisplayValue('1 - hub1');
-        // fireEvent.change(a, { target: { value: 2 } });
-
         const saveButton = screen.getByRole('button', { name: 'Save' });
         fireEvent.click(saveButton);
     });
