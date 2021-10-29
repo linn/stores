@@ -25,6 +25,7 @@ import QcLabelPrintScreen from '../../containers/goodsIn/QcLabelPrintScreen';
 import Page from '../../containers/Page';
 import Parcel from '../../containers/parcels/Parcel';
 import LoanDetails from './LoanDetails';
+import RsnDetails from './RsnDetails';
 
 function GoodsInUtility({
     validatePurchaseOrder,
@@ -53,7 +54,13 @@ function GoodsInUtility({
     history,
     loanDetails,
     getLoanDetails,
-    loanDetailsLoading
+    loanDetailsLoading,
+    rsnConditions,
+    rsnConditionsLoading,
+    getRsnConditions,
+    rsnAccessories,
+    rsnAccessoriesLoading,
+    getRsnAccessories
 }) {
     const [formData, setFormData] = useState({
         orderNumber: null,
@@ -100,11 +107,19 @@ function GoodsInUtility({
 
     const [loanExpanded, setLoanExpanded] = useState(false);
 
+    const [bookInRsnExpanded, setBookInRsnExpanded] = useState(false);
+
     const [printDialogOpen, setPrintDialogOpen] = useState(false);
 
     const [parcelDialogOpen, setParcelDialogOpen] = useState(false);
 
     const [loanDetailsDialogOpen, setLoanDetailsDialogOpen] = useState(false);
+
+    const [rsnDetailsDialogOpen, setRsnDetailsDialogOpen] = useState(false);
+
+    const [rsnConditionsString, setRsnConditionsString] = useState('');
+
+    const [rsnAccessoriesString, setRsnAccessoriesString] = useState('');
 
     const handleSelectLoanDetails = details => {
         setLoanDetailsDialogOpen(false);
@@ -125,6 +140,12 @@ function GoodsInUtility({
                 createdBy: userNumber
             }))
         ]);
+    };
+
+    const handleSelectRsnDetails = (accessories, conditions) => {
+        setRsnDetailsDialogOpen(false);
+        setRsnAccessoriesString(accessories.map(a => `${a.description}-${a.extraInfo}`).join(','));
+        setRsnConditionsString(conditions.map(a => `${a.description}-${a.extraInfo}`).join(','));
     };
 
     useEffect(() => {
@@ -153,6 +174,12 @@ function GoodsInUtility({
             setLoanDetailsDialogOpen(true);
         }
     }, [loanDetails]);
+
+    useEffect(() => {
+        if (rsnConditions?.length > 0 && rsnAccessories?.length > 0) {
+            setRsnDetailsDialogOpen(true);
+        }
+    }, [rsnConditions, rsnAccessories]);
 
     useEffect(() => {
         if (validatePurchaseOrderBookInQtyResult) {
@@ -378,6 +405,30 @@ function GoodsInUtility({
                                     selected: false
                                 }))}
                                 onConfirm={handleSelectLoanDetails}
+                            />
+                        </div>
+                    </div>
+                </Dialog>
+                <Dialog open={rsnDetailsDialogOpen} fullWidth maxWidth="md">
+                    <div>
+                        <IconButton
+                            className={classes.pullRight}
+                            aria-label="Close"
+                            onClick={() => setRsnDetailsDialogOpen(false)}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <div className={classes.dialog}>
+                            <RsnDetails
+                                rsnAccessories={rsnAccessories?.map(d => ({
+                                    ...d,
+                                    id: d.code
+                                }))}
+                                rsnConditions={rsnConditions?.map(d => ({
+                                    ...d,
+                                    id: d.code
+                                }))}
+                                onConfirm={handleSelectRsnDetails}
                             />
                         </div>
                     </div>
@@ -730,7 +781,64 @@ function GoodsInUtility({
                                         }}
                                     />
                                 </Grid>
-                                <Grid item xs={10} />
+                                <Grid item xs={2}>
+                                    {loanDetailsLoading && <Loading />}
+                                </Grid>
+                                <Grid item xs={8} />
+                            </Grid>
+                        </AccordionDetails>
+                    </Accordion>
+                </Grid>
+                <Grid item xs={12}>
+                    <Accordion expanded={bookInRsnExpanded}>
+                        <AccordionSummary
+                            onClick={() => setBookInRsnExpanded(!bookInRsnExpanded)}
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                        >
+                            <Typography>Book In RSN</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Grid container spacing={3}>
+                                <Grid item xs={2}>
+                                    <InputField
+                                        fullWidth
+                                        value={formData?.rsnNumber}
+                                        label="RSN Number"
+                                        propertyName="rsnNumber"
+                                        disabled={!formData?.ontoLocation}
+                                        onChange={handleFieldChange}
+                                        textFieldProps={{
+                                            onBlur: () => {
+                                                getRsnAccessories();
+                                                getRsnConditions();
+                                            }
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs={2}>
+                                    {(rsnAccessoriesLoading || rsnConditionsLoading) && <Loading />}
+                                </Grid>
+                                <Grid item xs={8} />
+                                <Grid item xs={6}>
+                                    <InputField
+                                        fullWidth
+                                        value={rsnAccessoriesString}
+                                        label="Accessories"
+                                        propertyName="rsnAccessoriesString"
+                                        onChange={() => {}}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <InputField
+                                        fullWidth
+                                        value={rsnConditionsString}
+                                        label="Conditions"
+                                        propertyName="rsnConditionsString"
+                                        onChange={() => {}}
+                                    />
+                                </Grid>
                             </Grid>
                         </AccordionDetails>
                     </Accordion>
@@ -917,7 +1025,13 @@ GoodsInUtility.propTypes = {
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,
     loanDetails: PropTypes.arrayOf(PropTypes.shape({})),
     getLoanDetails: PropTypes.func.isRequired,
-    loanDetailsLoading: PropTypes.bool
+    loanDetailsLoading: PropTypes.bool,
+    rsnConditions: PropTypes.arrayOf(PropTypes.shape({})),
+    rsnConditionsLoading: PropTypes.bool,
+    getRsnConditions: PropTypes.func.isRequired,
+    rsnAccessories: PropTypes.arrayOf(PropTypes.shape({})),
+    rsnAccessoriesLoading: PropTypes.bool,
+    getRsnAccessories: PropTypes.func.isRequired
 };
 
 GoodsInUtility.defaultProps = {
@@ -936,7 +1050,11 @@ GoodsInUtility.defaultProps = {
     validatePurchaseOrderBookInQtyResult: null,
     validatePurchaseOrderBookInQtyResultLoading: false,
     loanDetails: [],
-    loanDetailsLoading: false
+    loanDetailsLoading: false.partNumber,
+    rsnConditions: [],
+    rsnConditionsLoading: false,
+    rsnAccessories: [],
+    rsnAccessoriesLoading: false
 };
 
 export default GoodsInUtility;
