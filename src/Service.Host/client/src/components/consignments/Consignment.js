@@ -78,8 +78,13 @@ function Consignment({
     saveDocuments,
     saveDocumentsWorking,
     saveDocumentsResult,
-    saveDocumentsClearData
+    saveDocumentsClearData,
+    salesOutlets,
+    salesOutletsLoading,
+    getSalesOutlets
 }) {
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [termsMessage, setTermsMessage] = useState(false);
     const [currentTab, setcurrentTab] = useState(startingTab);
     const [editablePallets, setEditablePallets] = useState([]);
     const [consignmentIdSelect, setConsignmentIdSelect] = useState(null);
@@ -165,6 +170,26 @@ function Consignment({
     ]);
 
     useEffect(() => {
+        const items = state.consignment?.items;
+        if (items?.length > 0) {
+            getSalesOutlets(
+                '',
+                `&orderNumbers=${items.filter(i => !!i.orderNumber).map(i => i.orderNumber)}`
+            );
+        }
+    }, [state.consignment, getSalesOutlets]);
+
+    useEffect(() => {
+        const terms = state?.consignment?.terms;
+        const discrepancies = salesOutlets.filter(o => o.dispatchTerms !== terms);
+        if (discrepancies.length) {
+            setTermsMessage(discrepancies.map(o => `${o.name} - ${o.dispatchTerms}, `).join());
+        } else {
+            setTermsMessage('');
+        }
+    }, [salesOutlets, state.consignment]);
+
+    useEffect(() => {
         if (item) {
             const hubHref = utilities.getHref(item, 'hub');
             if (hubHref) {
@@ -187,9 +212,13 @@ function Consignment({
         }
     }, [item, getHub, getCarrier, getShippingTerm, clearHub, clearShippingTerm]);
 
-    const useStyles = makeStyles(() => ({
+    const useStyles = makeStyles(theme => ({
         pullRight: {
             float: 'right'
+        },
+        dialog: {
+            margin: theme.spacing(6),
+            minWidth: theme.spacing(70)
         }
     }));
     const classes = useStyles();
@@ -247,11 +276,11 @@ function Consignment({
     };
 
     const doSave = () => {
-        if (editing()) {
+        if (termsMessage && !dialogOpen) {
+            setDialogOpen(true);
+        } else if (editing()) {
             updateItem(item.consignmentId, state.consignment);
-        }
-
-        if (creating()) {
+        } else if (creating()) {
             addConsignment(state.consignment);
         }
     };
@@ -476,6 +505,41 @@ function Consignment({
         <div className="pageContainer">
             <Page requestErrors={requestErrors} showRequestErrors width="xl">
                 <Grid container spacing={3}>
+                    <Dialog open={dialogOpen} fullWidth maxWidth="md">
+                        <>
+                            <div className={classes.dialog}>
+                                <Grid item xs={12}>
+                                    <Typography variant="h5">Warning</Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Typography variant="h6">
+                                        Some outlets do not match chosen shipping terms:
+                                        <b>{state.consignment?.terms}</b>
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Typography variant="h6"> {termsMessage} </Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button
+                                        onClick={() => {
+                                            doSave();
+                                            setDialogOpen(false);
+                                        }}
+                                    >
+                                        Save Anyway
+                                    </Button>
+                                    <Button
+                                        onClick={() => {
+                                            setDialogOpen(false);
+                                        }}
+                                    >
+                                        Go Back
+                                    </Button>
+                                </Grid>
+                            </div>
+                        </>
+                    </Dialog>
                     <Grid item xs={2} className="hide-when-printing">
                         <Typography variant="h6">Consignment</Typography>
                     </Grid>
@@ -713,7 +777,7 @@ function Consignment({
                                 saveClick={doSave}
                                 backClick={() => {}}
                                 cancelClick={doCancel}
-                                saveDisabled={saveDisabled}
+                                saveDisabled={saveDisabled || salesOutletsLoading}
                             />
                         )}
                     </Grid>
@@ -1089,7 +1153,10 @@ Consignment.propTypes = {
         success: PropTypes.bool,
         message: PropTypes.string
     }),
-    saveDocumentsClearData: PropTypes.func.isRequired
+    saveDocumentsClearData: PropTypes.func.isRequired,
+    salesOutlets: PropTypes.arrayOf(PropTypes.shape({})),
+    salesOutletsLoading: PropTypes.bool,
+    getSalesOutlets: PropTypes.func.isRequired
 };
 
 Consignment.defaultProps = {
@@ -1120,7 +1187,9 @@ Consignment.defaultProps = {
     cartonTypesSearchResults: [],
     cartonTypesSearchLoading: false,
     saveDocumentsWorking: false,
-    saveDocumentsResult: null
+    saveDocumentsResult: null,
+    salesOutlets: [],
+    salesOutletsLoading: false
 };
 
 export default Consignment;
