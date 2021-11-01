@@ -173,16 +173,25 @@ function GoodsInUtility({
     }, [validatePurchaseOrderResult]);
 
     useEffect(() => {
+        if (validateRsnResult) {
+            setMessage({
+                error: !!validateRsnResult.message,
+                text: validateRsnResult.message
+            });
+        }
+    }, [validateRsnResult]);
+
+    useEffect(() => {
         if (loanDetails?.length > 0) {
             setLoanDetailsDialogOpen(true);
         }
     }, [loanDetails]);
 
     useEffect(() => {
-        if (rsnConditions?.length > 0 && rsnAccessories?.length > 0) {
+        if (rsnConditions?.length > 0 && rsnAccessories?.length > 0 && validateRsnResult?.success) {
             setRsnDetailsDialogOpen(true);
         }
-    }, [rsnConditions, rsnAccessories]);
+    }, [rsnConditions, rsnAccessories, validateRsnResult]);
 
     useEffect(() => {
         if (validatePurchaseOrderBookInQtyResult) {
@@ -822,7 +831,9 @@ function GoodsInUtility({
                                     />
                                 </Grid>
                                 <Grid item xs={2}>
-                                    {(rsnAccessoriesLoading || rsnConditionsLoading) && <Loading />}
+                                    {(rsnAccessoriesLoading ||
+                                        rsnConditionsLoading ||
+                                        validateRsnResultLoading) && <Loading />}
                                 </Grid>
                                 <Grid item xs={8} />
                                 <Grid item xs={6}>
@@ -1037,7 +1048,7 @@ GoodsInUtility.propTypes = {
     rsnAccessoriesLoading: PropTypes.bool,
     getRsnAccessories: PropTypes.func.isRequired,
     validateRsn: PropTypes.func.isRequired,
-    validateRsnResult: PropTypes.shape({}),
+    validateRsnResult: PropTypes.shape({ message: PropTypes.string, success: PropTypes.bool }),
     validateRsnResultLoading: PropTypes.bool
 };
 

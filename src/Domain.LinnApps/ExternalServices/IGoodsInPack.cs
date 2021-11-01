@@ -64,6 +64,7 @@
             out string articleNumber,
             out string description,
             out int? quantity,
-            out int? serial);
+            out int? serial,
+            out string message);
     }
 }

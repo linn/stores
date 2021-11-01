@@ -505,16 +505,18 @@
                 out var articleNumber,
                 out var description,
                 out var quantity,
-                out var serial);
+                out var serial,
+                out var message);
 
             return new ValidateRsnResult
                        {
-                           Success = success,
+                           Success = string.IsNullOrEmpty(message),
                            State = state,
                            ArticleNumber = articleNumber,
                            Description = description,
                            Quantity = quantity,
-                           SerialNumber = serial
+                           SerialNumber = serial,
+                           Message = message
                        };
         }
     }

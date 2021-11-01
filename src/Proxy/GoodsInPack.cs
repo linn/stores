@@ -578,7 +578,8 @@
             out string articleNumber,
             out string description,
             out int? quantity,
-            out int? serial)
+            out int? serial,
+            out string message)
         {
             using (var connection = this.databaseService.GetConnection())
             {
@@ -634,6 +635,13 @@
                 };
                 cmd.Parameters.Add(arg5);
 
+                var arg6 = new OracleParameter("p_serial_no", OracleDbType.Varchar2)
+                               {
+                                   Direction = ParameterDirection.Output,
+                                   Size = 500
+                               };
+                cmd.Parameters.Add(arg6);
+
                 cmd.ExecuteNonQuery();
                 connection.Close();
 
@@ -658,6 +666,8 @@
                 {
                     serial = null;
                 }
+
+                message = arg6.Value.ToString().Equals("null") ? null : arg6.Value.ToString();
 
                 return int.Parse(result.Value.ToString()) == 0;
             }
