@@ -7,7 +7,7 @@
     public class ValidateRsnResultResponseProcessor : JsonResponseProcessor<ValidateRsnResult>
     {
         public ValidateRsnResultResponseProcessor(IResourceBuilder<ValidateRsnResult> resourceBuilder)
-            : base(resourceBuilder, "validate-purchase-order-result", 1)
+            : base(resourceBuilder, "validate-rsn-result", 1)
         {
         }
     }
