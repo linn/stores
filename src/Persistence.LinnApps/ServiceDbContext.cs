@@ -979,6 +979,7 @@
             table.Property(s => s.OutletAddressId).HasColumnName("OUTLET_ADDRESS");
             table.Property(s => s.OrderContactId).HasColumnName("ORDER_CONTACT_ID");
             table.HasMany(o => o.SalesOrders).WithOne(r => r.SalesOutlet).HasForeignKey(o => new { o.AccountId, o.OutletNumber });
+            table.Property(s => s.DispatchTerms).HasColumnName("DISPATCH_TERMS");
         }
 
         private void BuildParcels(ModelBuilder builder)

@@ -29,11 +29,13 @@ const openConsignments = [
     { id: 1, displayText: 'c1' },
     { id: 2, displayText: 'c2' }
 ];
+const getSalesOutlets = jest.fn();
 
 const item = {
     salesAccountId: 21,
     consignmentId: 101101,
     status: 'L',
+    terms: 'DDP',
     shippingMethod: 'S',
     carrier: 'Bus',
     customerName: 'Fred',
@@ -97,6 +99,7 @@ const defaultRender = props =>
             createConsignment={createConsignment}
             addConsignment={addConsignment}
             openConsignments={openConsignments}
+            getSalesOutlets={getSalesOutlets}
             //eslint-disable-next-line react/jsx-props-no-spreading
             {...props}
         />
@@ -301,5 +304,38 @@ describe('should close consignment', () => {
                 closedById: userNumber
             })
         );
+    });
+});
+
+describe('When terms different to that of outlets on consignment', () => {
+    beforeEach(() => {
+        defaultRender({
+            item,
+            hubs: [
+                { hubId: 1, description: 'hub1' },
+                { hubId: 2, description: 'hub2' }
+            ],
+            hub: { hubId: 1, description: 'hub1' },
+            editStatus: 'edit',
+            salesOutlets: [{ dispatchTerms: 'DIFFERENT TERMS', name: 'TEST OUTLET' }]
+        });
+
+        const details = screen.getByText('Details');
+        fireEvent.click(details);
+
+        const saveButton = screen.getByRole('button', { name: 'Save' });
+        fireEvent.click(saveButton);
+    });
+
+    test('should not call update ', () => {
+        expect(updateItem).not.toHaveBeenCalled();
+    });
+
+    test('should show warning with details', () => {
+        expect(screen.getByText('Warning')).toBeInTheDocument();
+        expect(
+            screen.getByText('Some outlets do not match chosen shipping terms: DDP')
+        ).toBeInTheDocument();
+        expect(screen.getByText('TEST OUTLET - DIFFERENT TERMS,')).toBeInTheDocument();
     });
 });

@@ -15,5 +15,7 @@
         public string CountryName { get; set; }
 
         public string DateInvalid { get; set; }
+
+        public string DispatchTerms { get; set; }
     }
 }

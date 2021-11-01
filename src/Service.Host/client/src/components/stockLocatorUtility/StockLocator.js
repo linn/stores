@@ -179,252 +179,263 @@ function StockLocator({
         }
     ];
     return (
-        <Page>
-            <Grid container spacing={3}>
-                <Dialog open={dialogOpen} fullWidth maxWidth="lg">
-                    <div>
-                        <IconButton
-                            className={classes.pullRight}
-                            aria-label="Close"
-                            onClick={() => {
-                                clearMoves();
-                                setDialogOpen(false);
-                            }}
-                        >
-                            <CloseIcon />
-                        </IconButton>
-                        <div className={classes.dialog}>
-                            <Grid container spacing={3}>
-                                <Grid item xs={12}>
-                                    <Typography variant="h5" gutterBottom>
-                                        Stock Moves
-                                    </Typography>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    {movesLoading && <Loading />}
-                                </Grid>
-                                <Grid item xs={12}>
-                                    {moves?.length ? (
-                                        <SingleEditTable
-                                            editable={false}
-                                            allowNewRowCreation={false}
-                                            newRowPosition="top"
-                                            columns={moveColumns}
-                                            rows={moves.map((i, index) => ({
-                                                ...i,
-                                                id: index
-                                            }))}
-                                        />
-                                    ) : (
-                                        <> </>
-                                    )}
-                                </Grid>
-                            </Grid>
-                        </div>
-                    </div>
-                </Dialog>
-                <Grid item xs={12}>
-                    <Title text="Stock Locations" />
-                </Grid>
-                <Grid item xs={3}>
-                    <BackButton
-                        backClick={() => history.push('/inventory/stock-locator')}
-                        text="back to search"
-                    />
-                </Grid>
-                <Grid item xs={9} />
-                {itemsLoading ? (
-                    <Grid item xs={12}>
-                        <Loading />
-                    </Grid>
-                ) : (
-                    <>
-                        {items && (
-                            <Grid item xs={12}>
-                                <SingleEditTable
-                                    newRowPosition="top"
-                                    columns={columns}
-                                    rows={items.map((i, index) => ({
-                                        ...i,
-                                        id: index,
-                                        partLinkComponent: (
-                                            <Link to={i.links.find(l => l.rel === 'part')?.href}>
-                                                {i.partNumber}
-                                            </Link>
-                                        ),
-                                        drillDownButtonComponent: (
-                                            <button
-                                                type="button"
-                                                onClick={() => {
-                                                    history.push(
-                                                        `/inventory/stock-locator/locators/batches?${queryString.stringify(
-                                                            {
-                                                                partNumber: i.partNumber,
-                                                                locationId: i.locationId,
-                                                                palletNumber: i.palletNumber?.toString(),
-                                                                state: i.state,
-                                                                category: i.category?.toString(),
-                                                                queryBatchView: true
-                                                            }
-                                                        )}`
-                                                    );
-                                                }}
-                                            >
-                                                +
-                                            </button>
-                                        ),
-                                        qtyAllocatedComponent: (
-                                            <>
-                                                {i.quantityAllocated && (
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => {
-                                                            fetchMoves(
-                                                                i.partNumber,
-                                                                `&palletNumber=${i.palletNumber ||
-                                                                    ''}&locationId=${i.locationId ||
-                                                                    ''} `
-                                                            );
-                                                            setDialogOpen(true);
-                                                        }}
-                                                    >
-                                                        {i.quantityAllocated}
-                                                    </button>
-                                                )}
-                                            </>
-                                        )
-                                    }))}
-                                    allowNewRowCreation={false}
-                                    editable={false}
-                                    allowNewRowCreations
-                                />
-                            </Grid>
-                        )}
-                        <Grid item xs={12}>
-                            <Accordion>
-                                <AccordionSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel1a-content"
-                                    id="panel1a-header"
-                                >
-                                    <Typography>Click here to show quantities</Typography>
-                                </AccordionSummary>
-                                <AccordionDetails>
-                                    <Grid container spacing={3}>
-                                        {quantitiesLoading && (
-                                            <Grid item xs={12}>
-                                                <Loading />
-                                            </Grid>
-                                        )}
-                                        {quantities?.length &&
-                                            selectedQuantities &&
-                                            !quantitiesLoading && (
-                                                <>
-                                                    <Grid item xs={3}>
-                                                        <Dropdown
-                                                            items={quantities
-                                                                ?.filter(x =>
-                                                                    items
-                                                                        .map(i => i.partNumber)
-                                                                        .includes(x.partNumber)
-                                                                )
-                                                                .map(v => ({
-                                                                    id: v.partNumber,
-                                                                    displayText: v.partNumber
-                                                                }))}
-                                                            value={selectedQuantities.partNumber}
-                                                            label="Show Summaries For Part"
-                                                            propertyName="part"
-                                                            onChange={(_propertyName, newValue) =>
-                                                                setSelectQuantities(
-                                                                    quantities.find(
-                                                                        x =>
-                                                                            x.partNumber ===
-                                                                            newValue
-                                                                    )
-                                                                )
-                                                            }
-                                                            allowNoValue={false}
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={9} />
-                                                    <Grid item xs={1}>
-                                                        <Typography
-                                                            variant="subtitle1"
-                                                            align="right"
-                                                        >
-                                                            Main
-                                                        </Typography>
-                                                    </Grid>
-                                                    <Grid item xs={3}>
-                                                        <InputField
-                                                            label="Good (Allocated)"
-                                                            propertyName="goodStock"
-                                                            value={`${selectedQuantities.goodStock} (${selectedQuantities.goodStockAllocated})`}
-                                                            disabled
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={3}>
-                                                        <InputField
-                                                            label="Uninspected (Allocated)"
-                                                            propertyName="uninspectedStock"
-                                                            value={`${selectedQuantities.uninspectedStock} (${selectedQuantities.uninspectedStockAllocated})`}
-                                                            disabled
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={3}>
-                                                        <InputField
-                                                            label="Faulty (Allocated)"
-                                                            propertyName="uninspectedStockAllocated"
-                                                            value={`${selectedQuantities.faultyStock} (${selectedQuantities.faultyStockAllocated})`}
-                                                            disabled
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={2} />
-                                                    <Grid item xs={1}>
-                                                        <Typography
-                                                            variant="subtitle1"
-                                                            align="right"
-                                                        >
-                                                            Distributor
-                                                        </Typography>
-                                                    </Grid>
-                                                    <Grid item xs={3}>
-                                                        <InputField
-                                                            label="Good (Allocated)"
-                                                            propertyName="distributorStock"
-                                                            value={`${selectedQuantities.distributorStock} (${selectedQuantities.distributorStockAllocated})`}
-                                                            disabled
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={8} />
-                                                    <Grid item xs={1}>
-                                                        <Typography
-                                                            variant="subtitle1"
-                                                            align="right"
-                                                        >
-                                                            Other
-                                                        </Typography>
-                                                    </Grid>
-                                                    <Grid item xs={3}>
-                                                        <InputField
-                                                            label="Good (Allocated)"
-                                                            propertyName="otherStock"
-                                                            value={`${selectedQuantities.otherStock} (${selectedQuantities.otherStockAllocated})`}
-                                                            disabled
-                                                        />
-                                                    </Grid>{' '}
-                                                </>
-                                            )}
-                                        <Grid item xs={8} />
+        <div className="print-landscape">
+            <Page>
+                <Grid container spacing={3}>
+                    <Dialog open={dialogOpen} fullWidth maxWidth="lg">
+                        <div>
+                            <IconButton
+                                className={classes.pullRight}
+                                aria-label="Close"
+                                onClick={() => {
+                                    clearMoves();
+                                    setDialogOpen(false);
+                                }}
+                            >
+                                <CloseIcon />
+                            </IconButton>
+                            <div className={classes.dialog}>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={12}>
+                                        <Typography variant="h5" gutterBottom>
+                                            Stock Moves
+                                        </Typography>
                                     </Grid>
-                                </AccordionDetails>
-                            </Accordion>{' '}
+                                    <Grid item xs={12}>
+                                        {movesLoading && <Loading />}
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        {moves?.length ? (
+                                            <SingleEditTable
+                                                editable={false}
+                                                allowNewRowCreation={false}
+                                                newRowPosition="top"
+                                                columns={moveColumns}
+                                                rows={moves.map((i, index) => ({
+                                                    ...i,
+                                                    id: index
+                                                }))}
+                                            />
+                                        ) : (
+                                            <> </>
+                                        )}
+                                    </Grid>
+                                </Grid>
+                            </div>
+                        </div>
+                    </Dialog>
+                    <Grid item xs={12}>
+                        <Title text="Stock Locations" />
+                    </Grid>
+                    <Grid item xs={3} className="hide-when-printing">
+                        <BackButton
+                            backClick={() => history.push('/inventory/stock-locator')}
+                            text="back to search"
+                        />
+                    </Grid>
+                    <Grid item xs={9} />
+                    {itemsLoading ? (
+                        <Grid item xs={12}>
+                            <Loading />
                         </Grid>
-                    </>
-                )}
-            </Grid>
-        </Page>
+                    ) : (
+                        <>
+                            {items && (
+                                <Grid item xs={12}>
+                                    <SingleEditTable
+                                        newRowPosition="top"
+                                        columns={columns}
+                                        rows={items.map((i, index) => ({
+                                            ...i,
+                                            id: index,
+                                            partLinkComponent: (
+                                                <Link
+                                                    to={i.links.find(l => l.rel === 'part')?.href}
+                                                >
+                                                    {i.partNumber}
+                                                </Link>
+                                            ),
+                                            drillDownButtonComponent: (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        history.push(
+                                                            `/inventory/stock-locator/locators/batches?${queryString.stringify(
+                                                                {
+                                                                    partNumber: i.partNumber,
+                                                                    locationId: i.locationId,
+                                                                    palletNumber: i.palletNumber?.toString(),
+                                                                    state: i.state,
+                                                                    category: i.category?.toString(),
+                                                                    queryBatchView: true
+                                                                }
+                                                            )}`
+                                                        );
+                                                    }}
+                                                >
+                                                    +
+                                                </button>
+                                            ),
+                                            qtyAllocatedComponent: (
+                                                <>
+                                                    {i.quantityAllocated && (
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                fetchMoves(
+                                                                    i.partNumber,
+                                                                    `&palletNumber=${i.palletNumber ||
+                                                                        ''}&locationId=${i.locationId ||
+                                                                        ''} `
+                                                                );
+                                                                setDialogOpen(true);
+                                                            }}
+                                                        >
+                                                            {i.quantityAllocated}
+                                                        </button>
+                                                    )}
+                                                </>
+                                            )
+                                        }))}
+                                        allowNewRowCreation={false}
+                                        editable={false}
+                                        allowNewRowCreations
+                                    />
+                                </Grid>
+                            )}
+                            <Grid item xs={12}>
+                                <Accordion>
+                                    <AccordionSummary
+                                        expandIcon={<ExpandMoreIcon />}
+                                        aria-controls="panel1a-content"
+                                        id="panel1a-header"
+                                    >
+                                        <Typography className="hide-when-printing">
+                                            Click here to show quantities
+                                        </Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails>
+                                        <Grid container spacing={3}>
+                                            {quantitiesLoading && (
+                                                <Grid item xs={12}>
+                                                    <Loading />
+                                                </Grid>
+                                            )}
+                                            {quantities?.length &&
+                                                selectedQuantities &&
+                                                !quantitiesLoading && (
+                                                    <>
+                                                        <Grid item xs={3}>
+                                                            <Dropdown
+                                                                items={quantities
+                                                                    ?.filter(x =>
+                                                                        items
+                                                                            .map(i => i.partNumber)
+                                                                            .includes(x.partNumber)
+                                                                    )
+                                                                    .map(v => ({
+                                                                        id: v.partNumber,
+                                                                        displayText: v.partNumber
+                                                                    }))}
+                                                                value={
+                                                                    selectedQuantities.partNumber
+                                                                }
+                                                                label="Show Summaries For Part"
+                                                                propertyName="part"
+                                                                onChange={(
+                                                                    _propertyName,
+                                                                    newValue
+                                                                ) =>
+                                                                    setSelectQuantities(
+                                                                        quantities.find(
+                                                                            x =>
+                                                                                x.partNumber ===
+                                                                                newValue
+                                                                        )
+                                                                    )
+                                                                }
+                                                                allowNoValue={false}
+                                                            />
+                                                        </Grid>
+                                                        <Grid item xs={9} />
+                                                        <Grid item xs={1}>
+                                                            <Typography
+                                                                variant="subtitle1"
+                                                                align="right"
+                                                            >
+                                                                Main
+                                                            </Typography>
+                                                        </Grid>
+                                                        <Grid item xs={3}>
+                                                            <InputField
+                                                                label="Good (Allocated)"
+                                                                propertyName="goodStock"
+                                                                value={`${selectedQuantities.goodStock} (${selectedQuantities.goodStockAllocated})`}
+                                                                disabled
+                                                            />
+                                                        </Grid>
+                                                        <Grid item xs={3}>
+                                                            <InputField
+                                                                label="Uninspected (Allocated)"
+                                                                propertyName="uninspectedStock"
+                                                                value={`${selectedQuantities.uninspectedStock} (${selectedQuantities.uninspectedStockAllocated})`}
+                                                                disabled
+                                                            />
+                                                        </Grid>
+                                                        <Grid item xs={3}>
+                                                            <InputField
+                                                                label="Faulty (Allocated)"
+                                                                propertyName="uninspectedStockAllocated"
+                                                                value={`${selectedQuantities.faultyStock} (${selectedQuantities.faultyStockAllocated})`}
+                                                                disabled
+                                                            />
+                                                        </Grid>
+                                                        <Grid item xs={2} />
+                                                        <Grid item xs={1}>
+                                                            <Typography
+                                                                variant="subtitle1"
+                                                                align="right"
+                                                            >
+                                                                Distributor
+                                                            </Typography>
+                                                        </Grid>
+                                                        <Grid item xs={3}>
+                                                            <InputField
+                                                                label="Good (Allocated)"
+                                                                propertyName="distributorStock"
+                                                                value={`${selectedQuantities.distributorStock} (${selectedQuantities.distributorStockAllocated})`}
+                                                                disabled
+                                                            />
+                                                        </Grid>
+                                                        <Grid item xs={8} />
+                                                        <Grid item xs={1}>
+                                                            <Typography
+                                                                variant="subtitle1"
+                                                                align="right"
+                                                            >
+                                                                Other
+                                                            </Typography>
+                                                        </Grid>
+                                                        <Grid item xs={3}>
+                                                            <InputField
+                                                                label="Good (Allocated)"
+                                                                propertyName="otherStock"
+                                                                value={`${selectedQuantities.otherStock} (${selectedQuantities.otherStockAllocated})`}
+                                                                disabled
+                                                            />
+                                                        </Grid>{' '}
+                                                    </>
+                                                )}
+                                            <Grid item xs={8} />
+                                        </Grid>
+                                    </AccordionDetails>
+                                </Accordion>{' '}
+                            </Grid>
+                        </>
+                    )}
+                </Grid>
+            </Page>
+        </div>
     );
 }
 
