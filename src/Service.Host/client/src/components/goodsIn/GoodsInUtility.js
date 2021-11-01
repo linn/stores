@@ -879,10 +879,10 @@ function GoodsInUtility({
                                         disabled
                                         fullWidth
                                         value={validateRsnResult?.quantity}
-                                        label="Qty"
+                                        label="Quantity"
                                         propertyName="rsnQty"
                                         onChange={() => {}}
-                                    />{' '}
+                                    />
                                 </Grid>
                                 <Grid item xs={4}>
                                     <InputField
