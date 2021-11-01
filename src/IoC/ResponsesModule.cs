@@ -241,6 +241,7 @@
             builder.RegisterType<RsnConditionsResourceBuilder>().As<IResourceBuilder<IEnumerable<RsnCondition>>>();
             builder.RegisterType<RsnAccessoryResourceBuilder>().As<IResourceBuilder<RsnAccessory>>();
             builder.RegisterType<RsnAccessoriesResourceBuilder>().As<IResourceBuilder<IEnumerable<RsnAccessory>>>();
+            builder.RegisterType<ValidateRsnResultResourceBuilder>().As<IResourceBuilder<ValidateRsnResult>>();
         }
     }
 }

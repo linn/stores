@@ -649,6 +649,7 @@
                 {
                     quantity = null;
                 }
+
                 if (int.TryParse(arg5.Value.ToString(), out var serialResult))
                 {
                     serial = serialResult;

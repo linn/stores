@@ -42,6 +42,8 @@
             this.Get("/logistics/goods-in/dem-locations", _ => this.GetDemLocations());
             this.Get("/inventory/sales-articles", _ => this.SearchSalesArticles());
             this.Get("/logistics/purchase-orders/validate/{id}", parameters => this.ValidatePurchaseOrder(parameters.id));
+            this.Get("/logistics/rsn/validate/{id}", parameters => this.ValidateRsn(parameters.id));
+
             this.Get("/logistics/purchase-orders/validate-qty", _ => this.ValidatePurchaseOrderBookInQty());
             this.Post("/logistics/goods-in/print-labels", _ => this.PrintLabels());
             this.Get("/logistics/goods-in/validate-storage-type", _ => this.ValidateStorageType());
@@ -121,6 +123,11 @@
         private object GetRsnConditions()
         {
             return this.Negotiate.WithModel(this.rsnConditionsService.GetRsnConditions());
+        }
+
+        private object ValidateRsn(int rsnNumber)
+        {
+            return this.Negotiate.WithModel(this.service.ValidateRsn(rsnNumber));
         }
     }
 }

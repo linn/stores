@@ -129,6 +129,7 @@ import stockBatchesInRotationOrder from './stockBatchesInRotationOrder';
 import postDuty from './postDuty';
 import rsnAccessories from './rsnAccessories';
 import rsnConditions from './rsnConditions';
+import validateRsnResult from './validateRsnResult';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -252,6 +253,7 @@ const rootReducer = history =>
         unpickItemsAllocation,
         validatePurchaseOrderBookInQtyResult,
         validatePurchaseOrderResult,
+        validateRsnResult,
         validateStorageTypeResult,
         wandConsignments,
         wandItems,

@@ -130,5 +130,10 @@
                 requestResource.StorageType,
                 null));
         }
+
+        public IResult<ValidateRsnResult> ValidateRsn(int rsnNumber)
+        {
+            return new SuccessResult<ValidateRsnResult>(this.domainService.ValidateRsn(rsnNumber));
+        }
     }
 }

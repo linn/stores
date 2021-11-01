@@ -1,8 +1,6 @@
-﻿namespace Linn.Stores.Domain.LinnApps.GoodsIn
+﻿namespace Linn.Stores.Resources.GoodsIn
 {
-    using Linn.Stores.Domain.LinnApps.Models;
-
-    public class ValidateRsnResult : ProcessResult
+    public class ValidateRsnResultResource : ProcessResultResource
     {
         public string State { get; set; }
 

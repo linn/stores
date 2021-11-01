@@ -22,5 +22,7 @@
 
         IResult<ValidateStorageTypeResult> 
             ValidateStorageType(ValidateStorageTypeRequestResource requestResource);
+
+        IResult<ValidateRsnResult> ValidateRsn(int rsnNumber);
     }
 }

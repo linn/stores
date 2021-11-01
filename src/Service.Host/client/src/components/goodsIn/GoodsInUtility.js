@@ -60,7 +60,10 @@ function GoodsInUtility({
     getRsnConditions,
     rsnAccessories,
     rsnAccessoriesLoading,
-    getRsnAccessories
+    getRsnAccessories,
+    validateRsn,
+    validateRsnResult,
+    validateRsnResultLoading
 }) {
     const [formData, setFormData] = useState({
         orderNumber: null,
@@ -811,6 +814,7 @@ function GoodsInUtility({
                                         onChange={handleFieldChange}
                                         textFieldProps={{
                                             onBlur: () => {
+                                                validateRsn(formData?.rsnNumber);
                                                 getRsnAccessories();
                                                 getRsnConditions();
                                             }
@@ -1031,7 +1035,10 @@ GoodsInUtility.propTypes = {
     getRsnConditions: PropTypes.func.isRequired,
     rsnAccessories: PropTypes.arrayOf(PropTypes.shape({})),
     rsnAccessoriesLoading: PropTypes.bool,
-    getRsnAccessories: PropTypes.func.isRequired
+    getRsnAccessories: PropTypes.func.isRequired,
+    validateRsn: PropTypes.func.isRequired,
+    validateRsnResult: PropTypes.shape({}),
+    validateRsnResultLoading: PropTypes.bool
 };
 
 GoodsInUtility.defaultProps = {
@@ -1054,7 +1061,9 @@ GoodsInUtility.defaultProps = {
     rsnConditions: [],
     rsnConditionsLoading: false,
     rsnAccessories: [],
-    rsnAccessoriesLoading: false
+    rsnAccessoriesLoading: false,
+    validateRsnResult: null,
+    validateRsnResultLoading: false
 };
 
 export default GoodsInUtility;
