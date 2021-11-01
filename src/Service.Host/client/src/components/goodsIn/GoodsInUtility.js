@@ -854,6 +854,57 @@ function GoodsInUtility({
                                         onChange={() => {}}
                                     />
                                 </Grid>
+                                <Grid item xs={4}>
+                                    <InputField
+                                        disabled
+                                        fullWidth
+                                        value={validateRsnResult?.articleNumber}
+                                        label="Article"
+                                        propertyName="rsnArticleNumber"
+                                        onChange={() => {}}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <InputField
+                                        disabled
+                                        fullWidth
+                                        value={validateRsnResult?.description}
+                                        label="Desc"
+                                        propertyName="rsnArticleDesc"
+                                        onChange={() => {}}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <InputField
+                                        disabled
+                                        fullWidth
+                                        value={validateRsnResult?.quantity}
+                                        label="Qty"
+                                        propertyName="rsnQty"
+                                        onChange={() => {}}
+                                    />{' '}
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <InputField
+                                        disabled
+                                        fullWidth
+                                        value={validateRsnResult?.state}
+                                        label="State"
+                                        propertyName="rsnState"
+                                        onChange={() => {}}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <InputField
+                                        disabled
+                                        fullWidth
+                                        value={validateRsnResult?.serialNumber}
+                                        label="Serial"
+                                        propertyName="rsnSerialNumber"
+                                        onChange={() => {}}
+                                    />
+                                </Grid>
+                                <Grid item xs={4} />
                             </Grid>
                         </AccordionDetails>
                     </Accordion>
@@ -1048,7 +1099,15 @@ GoodsInUtility.propTypes = {
     rsnAccessoriesLoading: PropTypes.bool,
     getRsnAccessories: PropTypes.func.isRequired,
     validateRsn: PropTypes.func.isRequired,
-    validateRsnResult: PropTypes.shape({ message: PropTypes.string, success: PropTypes.bool }),
+    validateRsnResult: PropTypes.shape({
+        message: PropTypes.string,
+        success: PropTypes.bool,
+        articleNumber: PropTypes.string,
+        description: PropTypes.string,
+        state: PropTypes.string,
+        quantity: PropTypes.number,
+        serialNumber: PropTypes.number
+    }),
     validateRsnResultLoading: PropTypes.bool
 };
 
