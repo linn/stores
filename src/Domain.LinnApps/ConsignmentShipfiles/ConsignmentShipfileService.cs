@@ -163,7 +163,7 @@
 
                 var outlets = orders.ToList()
                     .Select(o => o.SalesOutlet)
-                    .GroupBy(elem => $"{elem.OutletNumber}-{elem.OrderContact.EmailAddress}")
+                    .GroupBy(elem => $"{elem.OutletNumber}-{elem.OrderContact?.EmailAddress}")
                     .Select(group => group.First()).ToList();
 
                 // if email address missing for one of the outlets
