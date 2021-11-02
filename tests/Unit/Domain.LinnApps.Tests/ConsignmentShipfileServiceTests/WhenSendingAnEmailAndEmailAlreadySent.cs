@@ -29,6 +29,7 @@
                 new ConsignmentShipfile { ShipfileSent = "Y", Message = ShipfileStatusMessages.EmailSent });
             this.result = this.Sut.SendEmails(this.toSend);
         }
+
         [Test]
         public void ShouldNotSendEmail()
         {
