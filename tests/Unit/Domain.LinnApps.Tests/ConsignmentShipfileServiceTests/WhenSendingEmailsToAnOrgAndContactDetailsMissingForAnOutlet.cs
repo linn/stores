@@ -37,10 +37,7 @@
                                                             {
                                                                 AccountId = 1,
                                                                 OutletNumber = 1,
-                                                                OrderContact = new Contact
-                                                                                   {
-                                                                                       EmailAddress = null
-                                                                                   }
+                                                                OrderContact = null
                                                             }
                                       },
                                   new SalesOrder
