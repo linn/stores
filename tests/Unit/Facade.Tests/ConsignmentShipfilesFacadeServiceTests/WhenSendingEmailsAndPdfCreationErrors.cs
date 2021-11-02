@@ -1,7 +1,6 @@
 ﻿namespace Linn.Stores.Facade.Tests.ConsignmentShipfilesFacadeServiceTests
 {
     using System.Collections.Generic;
-    using System.Linq;
 
     using FluentAssertions;
 
@@ -14,7 +13,7 @@
 
     using NUnit.Framework;
 
-    public class WhenSendingEmailsAndAnEmailErrors : ContextBase
+    public class WhenSendingEmailsAndPdfCreationErrors : ContextBase
     {
         private IResult<IEnumerable<ConsignmentShipfile>> result;
 
@@ -59,7 +58,7 @@
         {
             this.result.Should().BeOfType<ServerFailureResult<IEnumerable<ConsignmentShipfile>>>();
             var dataResult = (ServerFailureResult<IEnumerable<ConsignmentShipfile>>)this.result;
-            dataResult.Message.Should().Be("Something broke");
+            dataResult.Message.Should().Be("Error building pdf for consignment 3: Something broke");
         }
     }
 }

@@ -52,7 +52,13 @@
                     }
                     catch (PdfServiceException exception)
                     {
-                        return new ServerFailureResult<IEnumerable<ConsignmentShipfile>>(exception.Message);
+                        return new ServerFailureResult<IEnumerable<ConsignmentShipfile>>(
+                            $"Error building pdf for consignment {resource.ConsignmentId}: {exception.Message}");
+                    }
+                    catch (Exception exception)
+                    {
+                        return new ServerFailureResult<IEnumerable<ConsignmentShipfile>>(
+                            $"Unexpected error creating email for consignment {resource.ConsignmentId}: {exception.Message}");
                     }
                 }
                 

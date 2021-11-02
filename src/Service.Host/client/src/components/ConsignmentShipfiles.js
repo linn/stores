@@ -73,7 +73,9 @@ export default function ConsignmentShipfiles({
                             <Grid item xs={12}>
                                 <ErrorCard
                                     errorMessage={
-                                        itemError?.details?.errors?.[0] || itemError.statusText
+                                        itemError?.details?.errors?.[0] ||
+                                        itemError?.details?.message ||
+                                        itemError.statusText
                                     }
                                 />
                             </Grid>
@@ -180,7 +182,10 @@ ConsignmentShipfiles.propTypes = {
     clearErrors: PropTypes.func.isRequired,
     itemError: PropTypes.shape({
         statusText: PropTypes.string,
-        details: PropTypes.shape({ errors: PropTypes.arrayOf(PropTypes.string) })
+        details: PropTypes.shape({
+            message: PropTypes.string,
+            errors: PropTypes.arrayOf(PropTypes.string)
+        })
     }),
     fetchShipfiles: PropTypes.func.isRequired
 };
