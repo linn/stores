@@ -43,9 +43,9 @@
                     try
                     {
                         var sent = this.domainService.SendEmails(
-                        new ConsignmentShipfile { Id = resource.Id, ConsignmentId = resource.ConsignmentId },
-                        toSend.Test,
-                        toSend.TestEmailAddress);
+                            new ConsignmentShipfile { Id = resource.Id, ConsignmentId = resource.ConsignmentId },
+                            toSend.Test,
+                            toSend.TestEmailAddress);
                         result.Add(sent);
 
                         this.transactionManager.Commit();
