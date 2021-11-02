@@ -54,7 +54,6 @@
             this.TransactionManager.Received(2).Commit();
         }
 
-
         [Test]
         public void ShouldReturnServerFailure()
         {

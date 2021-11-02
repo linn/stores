@@ -52,7 +52,6 @@
             this.TransactionManager.Received(3).Commit();
         }
 
-
         [Test]
         public void ShouldReturnSuccess()
         {
