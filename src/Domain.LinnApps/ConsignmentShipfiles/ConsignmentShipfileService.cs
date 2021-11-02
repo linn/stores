@@ -50,40 +50,36 @@
             this.packingListService = packingListService;
         }
 
-        public IEnumerable<ConsignmentShipfile> SendEmails(
-            IEnumerable<ConsignmentShipfile> toSend,
+        public ConsignmentShipfile SendEmails(
+            ConsignmentShipfile toSend,
             bool test = false,
             string testEmailAddress = null)
         {
-            var withDetails = new List<ConsignmentShipfile>();
-            foreach (var shipfile in toSend)
+            var data = this.shipfileRepository.FindById(toSend.Id);
+
+            if (data.ShipfileSent == "Y")
             {
-                var data = this.shipfileRepository.FindById(shipfile.Id);
+                data.Message = ShipfileStatusMessages.EmailAlreadySent;
+                return data;
+            }
 
-                if (data.ShipfileSent == "Y")
+            var models = this.BuildEmailModels(data);
+
+            // A message implies there is some problem with generating the email
+            if (data.Message == null)
+            {
+                // potentially an email to send to each outlet in this consignment?
+                foreach (var model in models)
                 {
-                    data.Message = ShipfileStatusMessages.EmailAlreadySent;
-                    withDetails.Add(data);
-                    continue;
-                }
+                    model.Subject = test ? model.ToEmailAddress : "Shipping Details";
 
-                var models = this.BuildEmailModels(data);
-
-                // A message implies there is some problem with generating the email
-                if (data.Message == null)
-                {
-                    // potentially an email to send to each outlet in this consignment?
-                    foreach (var model in models)
-                    {
-                        model.Subject = test ? model.ToEmailAddress : "Shipping Details";
-
-                        var render = this.templateEngine.Render(
+                    var render = this.templateEngine.Render(
                             model.PdfAttachment,
                             ConfigurationManager.Configuration["SHIPFILE_TEMPLATE_PATH"]);
 
-                        var pdf = this.pdfService.ConvertHtmlToPdf(render.Result, landscape: true);
+                    var pdf = this.pdfService.ConvertHtmlToPdf(render.Result, landscape: true);
 
-                        this.emailService.SendEmail(
+                    this.emailService.SendEmail(
                             test ? testEmailAddress : model.ToEmailAddress,
                             model.ToCustomerName,
                             null,
@@ -94,32 +90,29 @@
                             model.Body,
                             pdf.Result,
                             "Shipfile");
-                    }
-
-                    if (test)
-                    {
-                        data.Message = ShipfileStatusMessages.TestEmailSent;
-                    }
-                    else
-                    {
-                        data.Message = ShipfileStatusMessages.EmailSent;
-                        data.ShipfileSent = "Y";
-                    }
                 }
 
-                withDetails.Add(new ConsignmentShipfile
+                if (test)
+                {
+                    data.Message = ShipfileStatusMessages.TestEmailSent;
+                }
+                else
+                {
+                    data.Message = ShipfileStatusMessages.EmailSent;
+                    data.ShipfileSent = "Y";
+                }
+            }
+
+            return new ConsignmentShipfile
                                     {
                                         ConsignmentId = data.ConsignmentId,
                                         Id = data.Id,
                                         Consignment = data.Consignment,
                                         Message = data.Message,
                                         ShipfileSent = data.ShipfileSent
-                                    });
-            }
-
-            return withDetails;
+                                    };
         }
-
+        
         private IEnumerable<ConsignmentShipfileEmailModel> BuildEmailModels(ConsignmentShipfile shipfile)
         {
             var toSend = new List<ConsignmentShipfileEmailModel>();
@@ -163,7 +156,7 @@
 
                 var outlets = orders.ToList()
                     .Select(o => o.SalesOutlet)
-                    .GroupBy(elem => $"{elem.OutletNumber}-{elem.OrderContact.EmailAddress}")
+                    .GroupBy(elem => $"{elem.OutletNumber}-{elem.OrderContact?.EmailAddress}")
                     .Select(group => group.First()).ToList();
 
                 // if email address missing for one of the outlets
