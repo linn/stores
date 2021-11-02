@@ -15,17 +15,14 @@
         [SetUp]
         public void SetUp()
         {
-            this.GoodsInPack.When(x => x.GetRsnDetails(
-                1,
-                out _,
-                out _,
-                out _,
-                out _,
-                out _,
-                out _)).Do(x =>
+            this.GoodsInPack.When(x => x.GetRsnDetails(1, out _, out _, out _, out _, out _, out _))
+                .Do(x =>
                 {
                     x[6] = "Can't book in";
                 });
+
+            this.GoodsInPack.GetRsnDetails(1, out _, out _, out _, out _, out _, out _)
+                .Returns(false);
 
             this.result = this.Sut.ValidateRsn(1);
         }

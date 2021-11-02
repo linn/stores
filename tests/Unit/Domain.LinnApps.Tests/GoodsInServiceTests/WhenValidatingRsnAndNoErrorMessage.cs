@@ -31,7 +31,8 @@
                     x[5] = 123456;
                     x[6] = null;
                 });
-
+            this.GoodsInPack.GetRsnDetails(1, out _, out _, out _, out _, out _, out _)
+                .Returns(true);
             this.result = this.Sut.ValidateRsn(1);
         }
 

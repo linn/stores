@@ -212,12 +212,15 @@
             {
                 result.ParcelComments = $"{result.DocType}{orderNumber}";
             }
-            else if (rsnNumber.HasValue)
-            {
-                // todo
-                throw new NotImplementedException("Booking in this document type is not supported yet.");
-            }
 
+            if (rsnNumber.HasValue)
+            {
+                if (this.goodsInPack.GetRsnDetails((int)rsnNumber, out _, out _, out _, out _, out _, out var msg))
+                {
+                    return new BookInResult(false, msg);
+                }
+            }
+            
             result.SupplierId = supplierId;
             result.CreatedBy = createdBy;
             return result;
@@ -510,7 +513,7 @@
 
             return new ValidateRsnResult
                        {
-                           Success = string.IsNullOrEmpty(message),
+                           Success = success,
                            State = state,
                            ArticleNumber = articleNumber,
                            Description = description,
