@@ -211,7 +211,7 @@
 
                 return message;
             }
-        }
+         }
 
         public string GetErrorMessage()
         {
@@ -669,7 +669,7 @@
 
                 message = arg6.Value.ToString().Equals("null") ? null : arg6.Value.ToString();
 
-                return int.Parse(result.Value.ToString()) == 0;
+                return int.Parse(result.Value.ToString()) == 1;
             }
         }
     }

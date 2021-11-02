@@ -147,8 +147,32 @@ function GoodsInUtility({
 
     const handleSelectRsnDetails = (accessories, conditions) => {
         setRsnDetailsDialogOpen(false);
-        setRsnAccessoriesString(accessories.map(a => `${a.description}-${a.extraInfo}`).join(','));
-        setRsnConditionsString(conditions.map(a => `${a.description}-${a.extraInfo}`).join(','));
+        setRsnAccessoriesString(
+            accessories?.length
+                ? accessories.map(a => `${a.description}-${a.extraInfo}`).join(',')
+                : 'No accessories'
+        );
+        setRsnConditionsString(
+            conditions?.length
+                ? conditions.map(a => `${a.description}-${a.extraInfo}`).join(',')
+                : 'Good condition'
+        );
+        setLines(l => [
+            ...l,
+            {
+                id: l.length + 1,
+                articleNumber: validateRsnResult?.articleNumber,
+                transactionType: 'R',
+                dateCreated: new Date().toISOString(),
+                storagePlace: formData?.ontoLocation,
+                locationId: formData?.ontoLocationId,
+                quantity: validateRsnResult?.quantity,
+                serialNumber: validateRsnResult?.serialNumber,
+                createdBy: userNumber,
+                rsnNumber: formData?.rsnNumber,
+                state: validateRsnResult?.state
+            }
+        ]);
     };
 
     useEffect(() => {
@@ -228,6 +252,16 @@ function GoodsInUtility({
     }, [bookInResult]);
 
     const classes = useStyles();
+
+    const getTransactionType = () => {
+        if (formData.loanNumber) {
+            return 'L';
+        }
+        if (formData.rsnNumber) {
+            return 'R';
+        }
+        return validatePurchaseOrderResult.transactionType;
+    };
 
     const tableColumns = [
         {
@@ -320,6 +354,11 @@ function GoodsInUtility({
         {
             headerName: 'Line',
             field: 'loanLine',
+            width: 200
+        },
+        {
+            headerName: 'Rsn',
+            field: 'rsnNumber',
             width: 200
         },
         {
@@ -958,9 +997,7 @@ function GoodsInUtility({
                         onClick={() => {
                             const row = {
                                 articleNumber: validatePurchaseOrderResult?.partNumber,
-                                transactionType: formData.loanNumber
-                                    ? 'L'
-                                    : validatePurchaseOrderResult.transactionType,
+                                transactionType: getTransactionType(),
                                 dateCreated: new Date().toISOString(),
                                 location: formData.ontoLocation,
                                 locationId: formData.ontoLocationId,
@@ -977,13 +1014,15 @@ function GoodsInUtility({
                                 multipleBookIn,
                                 lines: lines.length > 0 ? lines : [row],
                                 createdBy: userNumber,
-                                transactionType: formData.loanNumber
-                                    ? 'L'
-                                    : validatePurchaseOrderResult.transactionType,
-                                partNumber: validatePurchaseOrderResult?.partNumber,
+                                transactionType: getTransactionType(),
+                                partNumber:
+                                    validatePurchaseOrderResult?.partNumber ||
+                                    validateRsnResult?.articleNumber,
                                 manufacturersPartNumber:
                                     validatePurchaseOrderResult?.manufacturersPartNumber,
-                                state: validatePurchaseOrderResult?.state
+                                state: validatePurchaseOrderResult?.state,
+                                rsnAccessories: rsnAccessoriesString,
+                                condition: rsnConditionsString
                             });
                         }}
                     >

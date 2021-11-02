@@ -102,7 +102,6 @@ function RsnDetails({ rsnAccessories, rsnConditions, onConfirm }) {
             <Grid item xs={10} />
             <Grid item xs={2}>
                 <Button
-                    disabled={!conditionsRows.concat(accessoriesRows).some(r => r.selected)}
                     style={{ marginTop: '22px' }}
                     variant="contained"
                     onClick={() =>
