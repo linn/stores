@@ -14,7 +14,8 @@ export default function ConsignmentShipfiles({
     itemError,
     clearErrors,
     deleteShipfile,
-    deleteLoading
+    deleteLoading,
+    fetchShipfiles
 }) {
     const [selectedRows, setSelectedRows] = useState([]);
     const [rows, setRows] = useState([]);
@@ -38,6 +39,12 @@ export default function ConsignmentShipfiles({
             );
         }
     }, [processedShipfiles]);
+
+    useEffect(() => {
+        if (itemError) {
+            fetchShipfiles();
+        }
+    }, [itemError, fetchShipfiles]);
 
     const columns = [
         { field: 'id', headerName: 'Id', width: 0, hide: true },
@@ -175,7 +182,7 @@ ConsignmentShipfiles.propTypes = {
         statusText: PropTypes.string,
         details: PropTypes.shape({ errors: PropTypes.arrayOf(PropTypes.string) })
     }),
-    whatToWandReport: PropTypes.shape({})
+    fetchShipfiles: PropTypes.func.isRequired
 };
 
 ConsignmentShipfiles.defaultProps = {
@@ -183,6 +190,5 @@ ConsignmentShipfiles.defaultProps = {
     processedShipfiles: null,
     consignmentShipfilesLoading: false,
     itemError: null,
-    whatToWandReport: null,
     deleteLoading: false
 };
