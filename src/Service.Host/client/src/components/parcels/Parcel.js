@@ -16,7 +16,7 @@ import {
     LinkButton
 } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
-
+import handleBackClick from '../../helpers/handleBackClick';
 import Page from '../../containers/Page';
 
 function Parcel({
@@ -44,7 +44,8 @@ function Parcel({
     userNumber,
     supplierId,
     comments,
-    inDialogBox
+    inDialogBox,
+    previousPaths
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -199,10 +200,6 @@ function Parcel({
             setParcel(item);
             setEditStatus('view');
         }
-    };
-
-    const handleBackClick = () => {
-        history.push('/logistics/parcels');
     };
 
     const handleFieldChange = (propertyName, newValue) => {
@@ -487,7 +484,8 @@ function Parcel({
                                 saveDisabled={viewing() || saveEnabled()}
                                 saveClick={handleSaveClick}
                                 cancelClick={handleCancelClick}
-                                backClick={handleBackClick}
+                                backClick={() => handleBackClick(previousPaths, history.goBack)}
+
                             />
                         </Grid>
                     </>
@@ -559,7 +557,8 @@ Parcel.propTypes = {
     ),
     supplierId: PropTypes.number,
     comments: PropTypes.string,
-    inDialogBox: PropTypes.bool
+    inDialogBox: PropTypes.bool,
+    previousPaths: PropTypes.string
 };
 
 Parcel.defaultProps = {
@@ -592,7 +591,8 @@ Parcel.defaultProps = {
     suppliersSearchLoading: false,
     supplierId: '',
     comments: '',
-    inDialogBox: false
+    inDialogBox: false,
+    previousPaths: ''
 };
 
 export default Parcel;
