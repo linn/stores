@@ -17,6 +17,7 @@ import {
 } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
 import handleBackClick from '../../helpers/handleBackClick';
+import { Decimal } from 'decimal.js';
 import Page from '../../containers/Page';
 
 function Parcel({
@@ -46,6 +47,7 @@ function Parcel({
     comments,
     inDialogBox,
     previousPaths
+    privileges
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -81,7 +83,8 @@ function Parcel({
                   dateReceived: new Date().toISOString(),
                   checkedById: userNumber,
                   comments: '',
-                  importBookNo: null
+                  importBookNo: null,
+                  dateCancelled: null
               }
             : null
     );
@@ -175,21 +178,13 @@ function Parcel({
     };
 
     const saveEnabled = () => {
-        if (creating()) {
-            return (
-                !parcel.dateCreated ||
-                !parcel.dateReceived ||
-                !parcel.consignmentNo ||
-                !parcel.checkedById ||
-                (!parcel.weight && parcel.weight !== 0)
-            );
-        }
         return (
             !parcel.dateCreated ||
             !parcel.dateReceived ||
             !parcel.consignmentNo ||
             !parcel.checkedById ||
-            (!parcel.weight && parcel.weight !== 0)
+            !parcel.weight ||
+            new Decimal(parcel.weight).lessThanOrEqualTo(0)
         );
     };
 
@@ -224,6 +219,14 @@ function Parcel({
 
     const clearCarrier = () => {
         handleFieldChange('carrierId', '');
+    };
+
+    const allowedToKill = () => {
+        return privileges?.some(priv => priv === 'parcel-kill.admin');
+    };
+
+    const allowedToEdit = () => {
+        return privileges?.some(priv => priv === 'parcel.admin');
     };
 
     const content = () => (
@@ -273,6 +276,7 @@ function Parcel({
                                 type="date"
                                 value={parcel.dateCreated}
                                 required
+                                disabled={!allowedToEdit()}
                             />
                         </Grid>
                         <Grid item xs={1} />
@@ -286,6 +290,7 @@ function Parcel({
                                 type="date"
                                 value={parcel.dateReceived}
                                 required
+                                disabled={!allowedToEdit()}
                             />
                         </Grid>
                         <Grid item xs={1} />
@@ -307,11 +312,16 @@ function Parcel({
                                     history={history}
                                     debounce={1000}
                                     minimumSearchTermLength={2}
+                                    disabled={!allowedToEdit()}
                                 />
                             </div>
                             <div className={classes.marginTop1}>
                                 <Tooltip title="Clear Supplier search">
-                                    <Button variant="outlined" onClick={clearSupplier}>
+                                    <Button
+                                        variant="outlined"
+                                        onClick={clearSupplier}
+                                        disabled={!allowedToEdit()}
+                                    >
                                         X
                                     </Button>
                                 </Tooltip>
@@ -345,11 +355,16 @@ function Parcel({
                                     debounce={1000}
                                     minimumSearchTermLength={2}
                                     propertyName="carrier"
+                                    disabled={!allowedToEdit()}
                                 />
                             </div>
                             <div className={classes.marginTop1}>
                                 <Tooltip title="Clear Carrier search">
-                                    <Button variant="outlined" onClick={clearCarrier}>
+                                    <Button
+                                        variant="outlined"
+                                        onClick={clearCarrier}
+                                        disabled={!allowedToEdit()}
+                                    >
                                         X
                                     </Button>
                                 </Tooltip>
@@ -364,6 +379,7 @@ function Parcel({
                                 maxLength={500}
                                 onChange={handleFieldChange}
                                 propertyName="supplierInvoiceNo"
+                                disabled={!allowedToEdit()}
                             />
                         </Grid>
 
@@ -376,6 +392,7 @@ function Parcel({
                                 required
                                 onChange={handleFieldChange}
                                 propertyName="consignmentNo"
+                                disabled={!allowedToEdit()}
                             />
                         </Grid>
 
@@ -387,6 +404,7 @@ function Parcel({
                                 maxLength={6}
                                 onChange={handleFieldChange}
                                 propertyName="cartonCount"
+                                disabled={!allowedToEdit()}
                             />
                         </Grid>
                         <Grid item xs={4}>
@@ -397,6 +415,7 @@ function Parcel({
                                 maxLength={6}
                                 onChange={handleFieldChange}
                                 propertyName="palletCount"
+                                disabled={!allowedToEdit()}
                             />
                         </Grid>
 
@@ -411,6 +430,7 @@ function Parcel({
                                 type="number"
                                 decimalPlaces={2}
                                 required
+                                disabled={!allowedToEdit()}
                             />
                         </Grid>
 
@@ -428,6 +448,7 @@ function Parcel({
                                 required
                                 onChange={handleFieldChange}
                                 type="number"
+                                disabled={!allowedToEdit()}
                             />
                         </Grid>
 
@@ -440,6 +461,7 @@ function Parcel({
                                 onChange={handleFieldChange}
                                 propertyName="comments"
                                 rows={3}
+                                disabled={!allowedToEdit()}
                             />
                         </Grid>
 
@@ -477,6 +499,47 @@ function Parcel({
                                     disabled
                                 />
                             )}
+                        </Grid>
+
+                        <Grid item xs={5}>
+                            <SearchInputField
+                                label="Date Cancelled"
+                                fullWidth
+                                onChange={handleFieldChange}
+                                propertyName="dateCancelled"
+                                type="date"
+                                value={parcel.dateCancelled}
+                                disabled={!allowedToKill()}
+                            />
+                        </Grid>
+                        <Grid item xs={7}>
+                            <Dropdown
+                                items={employees.map(e => ({
+                                    displayText: `${e.fullName} (${e.id})`,
+                                    id: parseInt(e.id, 10)
+                                }))}
+                                propertyName="cancelledBy"
+                                allowNoValue
+                                fullWidth
+                                value={parcel.cancelledBy || ''}
+                                label="Cancelled by"
+                                onChange={handleFieldChange}
+                                type="number"
+                                disabled={!allowedToKill()}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12}>
+                            <InputField
+                                fullWidth
+                                value={parcel.cancellationReason}
+                                label="Cancellation Reason"
+                                maxLength={2000}
+                                onChange={handleFieldChange}
+                                propertyName="cancellationReason"
+                                rows={3}
+                                disabled={!allowedToKill()}
+                            />
                         </Grid>
 
                         <Grid item xs={12}>
@@ -558,6 +621,7 @@ Parcel.propTypes = {
     comments: PropTypes.string,
     inDialogBox: PropTypes.bool,
     previousPaths: PropTypes.string
+    privileges: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
 Parcel.defaultProps = {

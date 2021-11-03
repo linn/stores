@@ -1,6 +1,6 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { cleanup } from '@testing-library/react';
+import { cleanup, screen } from '@testing-library/react';
 import render from '../../test-utils';
 import Parcel from '../parcels/Parcel';
 
@@ -149,4 +149,121 @@ test('On View -  page renders populated fields', () => {
 
     expect(getByDisplayValue(item.importBookNos[0])).toBeInTheDocument();
     expect(getByDisplayValue(item.importBookNos[1])).toBeInTheDocument();
+});
+
+describe('When have no permissions/privileges', () => {
+    beforeEach(() => {
+        render(
+            <Parcel
+                item={item}
+                editStatus="view"
+                fetchItems={fetchItems}
+                searchCarriers={searchCarriers}
+                searchSuppliers={searchSuppliers}
+                clearCarriersSearch={clearCarriersSearch}
+                clearSuppliersSearch={clearSuppliersSearch}
+                history={history}
+                suppliers={suppliers}
+                employees={employees}
+                addItem={addItem}
+                updateItem={updateItem}
+                setEditStatus={setEditStatus}
+                setSnackbarVisible={setSnackbarVisible}
+                userNumber={118}
+                privileges={[]}
+            />
+        );
+    });
+
+    test('cannot edit fields', () => {
+        expect(screen.getByLabelText('Supplier')).toBeDisabled();
+        expect(screen.getByLabelText('Carrier')).toBeDisabled();
+
+        expect(screen.getByLabelText('Supplier Invoice Number(s)')).toBeDisabled();
+
+        expect(screen.getByLabelText('Number of cartons')).toBeDisabled();
+        expect(screen.getByLabelText('Number of pallets')).toBeDisabled();
+
+        expect(screen.getByLabelText('Comments')).toBeDisabled();
+
+        expect(screen.getByLabelText('Cancellation Reason')).toBeDisabled();
+    });
+});
+
+describe('When have admin permission', () => {
+    beforeEach(() => {
+        render(
+            <Parcel
+                item={item}
+                editStatus="view"
+                fetchItems={fetchItems}
+                searchCarriers={searchCarriers}
+                searchSuppliers={searchSuppliers}
+                clearCarriersSearch={clearCarriersSearch}
+                clearSuppliersSearch={clearSuppliersSearch}
+                history={history}
+                suppliers={suppliers}
+                employees={employees}
+                addItem={addItem}
+                updateItem={updateItem}
+                setEditStatus={setEditStatus}
+                setSnackbarVisible={setSnackbarVisible}
+                userNumber={118}
+                privileges={['parcel.admin']}
+            />
+        );
+    });
+
+    test('can edit fields but not kill', () => {
+        expect(screen.getByLabelText('Supplier')).not.toBeDisabled();
+        expect(screen.getByLabelText('Carrier')).not.toBeDisabled();
+
+        expect(screen.getByLabelText('Supplier Invoice Number(s)')).not.toBeDisabled();
+
+        expect(screen.getByLabelText('Number of cartons')).not.toBeDisabled();
+        expect(screen.getByLabelText('Number of pallets')).not.toBeDisabled();
+
+        expect(screen.getByLabelText('Comments')).not.toBeDisabled();
+
+        expect(screen.getByLabelText('Cancellation Reason')).toBeDisabled();
+    });
+});
+
+describe('When have admin permission and kill permission', () => {
+    beforeEach(() => {
+        render(
+            <Parcel
+                item={item}
+                editStatus="view"
+                fetchItems={fetchItems}
+                searchCarriers={searchCarriers}
+                searchSuppliers={searchSuppliers}
+                clearCarriersSearch={clearCarriersSearch}
+                clearSuppliersSearch={clearSuppliersSearch}
+                history={history}
+                suppliers={suppliers}
+                employees={employees}
+                addItem={addItem}
+                updateItem={updateItem}
+                setEditStatus={setEditStatus}
+                setSnackbarVisible={setSnackbarVisible}
+                userNumber={118}
+                privileges={['parcel.admin', 'parcel-kill.admin']}
+            />
+        );
+    });
+
+    test('can edit fields and edit kill fields', () => {
+        expect(screen.getByLabelText('Supplier')).not.toBeDisabled();
+        expect(screen.getByLabelText('Carrier')).not.toBeDisabled();
+
+        expect(screen.getByLabelText('Supplier Invoice Number(s)')).not.toBeDisabled();
+
+        expect(screen.getByLabelText('Number of cartons')).not.toBeDisabled();
+        expect(screen.getByLabelText('Number of pallets')).not.toBeDisabled();
+
+        expect(screen.getByLabelText('Comments')).not.toBeDisabled();
+
+        expect(screen.getByLabelText('Cancellation Reason')).not.toBeDisabled();
+    });
 });
