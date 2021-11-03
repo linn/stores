@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import Grid from '@material-ui/core/Grid';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -247,6 +248,18 @@ function Part({
         });
     };
 
+    const handlePhaseInClick = () => {
+        updateItem(itemId, {
+            ...state.part,
+            datePhasedOut: null,
+            phasedOutBy: null,
+            phasedOutByName: null,
+            reasonPhasedOut: `PHASED BACK IN BY ${userName?.toUpperCase()} on ${moment(
+                new Date()
+            ).format('DD MMM YYYY')}`
+        });
+    };
+
     const handleChangeLiveness = () => {
         if (!item.dateLive) {
             updateItem(itemId, {
@@ -450,6 +463,7 @@ function Part({
                                 <LifeCycleTab
                                     handleFieldChange={handleFieldChange}
                                     handlePhaseOutClick={handlePhaseOutClick}
+                                    handlePhaseInClick={handlePhaseInClick}
                                     editStatus={editStatus}
                                     canPhaseOut={canPhaseOut()}
                                     dateCreated={state.part.dateCreated}

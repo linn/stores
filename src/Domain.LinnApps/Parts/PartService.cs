@@ -266,9 +266,9 @@
 
         private static void Validate(Part to)
         {
-            if (!string.IsNullOrEmpty(to.ScrapOrConvert)  && to.DatePhasedOut == null)
+            if (!string.IsNullOrEmpty(to.ScrapOrConvert)  && to.PhasedOutBy == null)
             {
-                throw new UpdatePartException("A part must be obsolete to be convertible or to be scrapped.");
+                to.ScrapOrConvert = null;
             }
 
             if (to.RailMethod == "SMM"
