@@ -249,6 +249,11 @@ function GoodsInUtility({
         if (bookInResult?.createParcel) {
             setParcelDialogOpen(true);
         }
+
+        if (['L', 'R'].includes(bookInResult?.transactionCode)) {
+            setLines([]);
+            setLogEntries([]);
+        }
     }, [bookInResult]);
 
     const classes = useStyles();
@@ -430,7 +435,7 @@ function GoodsInUtility({
                         <div className={classes.dialog}>
                             <Parcel
                                 comments={bookInResult?.parcelComments}
-                                supplierId={bookInResult?.supplierId}
+                                supplierId={bookInResult?.supplierId || ''}
                                 match={match}
                                 inDialogBox
                                 history={history}
@@ -473,11 +478,13 @@ function GoodsInUtility({
                             <RsnDetails
                                 rsnAccessories={rsnAccessories?.map(d => ({
                                     ...d,
-                                    id: d.code
+                                    id: d.code,
+                                    extraInfo: ''
                                 }))}
                                 rsnConditions={rsnConditions?.map(d => ({
                                     ...d,
-                                    id: d.code
+                                    id: d.code,
+                                    extraInfo: ''
                                 }))}
                                 onConfirm={handleSelectRsnDetails}
                             />
@@ -521,7 +528,11 @@ function GoodsInUtility({
                         type="number"
                         value={formData.orderNumber}
                         label="Order Number"
-                        disabled={validatePurchaseOrderResultLoading}
+                        disabled={
+                            validatePurchaseOrderResultLoading ||
+                            formData?.rsnNumber ||
+                            formData?.loanNumber
+                        }
                         propertyName="orderNumber"
                         onChange={handleFieldChange}
                         textFieldProps={{
@@ -819,7 +830,7 @@ function GoodsInUtility({
                                         value={formData?.loanNumber}
                                         label="Loan Number"
                                         propertyName="loanNumber"
-                                        disabled={!formData?.ontoLocation}
+                                        disabled={formData?.orderNumber || formData?.rsnNumber}
                                         onChange={handleFieldChange}
                                         textFieldProps={{
                                             onBlur: () =>
@@ -858,7 +869,7 @@ function GoodsInUtility({
                                         value={formData?.rsnNumber}
                                         label="RSN Number"
                                         propertyName="rsnNumber"
-                                        disabled={!formData?.ontoLocation}
+                                        disabled={formData?.orderNumber || formData?.loanNumber}
                                         onChange={handleFieldChange}
                                         textFieldProps={{
                                             onBlur: () => {
@@ -1115,7 +1126,8 @@ GoodsInUtility.propTypes = {
         supplierId: PropTypes.number,
         createParcel: PropTypes.bool,
         lines: PropTypes.arrayOf(PropTypes.shape({})),
-        printLabels: PropTypes.bool
+        printLabels: PropTypes.bool,
+        transactionCode: PropTypes.string
     }),
     bookInResultLoading: PropTypes.bool,
     doBookIn: PropTypes.func.isRequired,
