@@ -53,7 +53,7 @@
         }
 
         [Test]
-        public void ShouldReturnSuccess()
+        public void ShouldReturnFailResult()
         {
             this.result.Should().BeOfType<BadRequestResult<ProcessResult>>();
             var dataResult = (BadRequestResult<ProcessResult>)this.result;

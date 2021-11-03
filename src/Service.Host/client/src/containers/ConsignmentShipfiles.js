@@ -25,6 +25,7 @@ const initialise = () => dispatch => {
 
 const mapDispatchToProps = {
     initialise,
+    fetchShipfiles: consignmentShipfilesActions.fetch,
     sendEmails: shipfilesSendEmailsActions.requestProcessStart,
     clearErrors: shipfilesSendEmailsActions.clearErrorsForItem,
     clearData: shipfilesSendEmailsActions.clearProcessData,

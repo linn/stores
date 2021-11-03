@@ -12,25 +12,24 @@
 
     public class WhenSendingAnEmailAndEmailAlreadySent : ContextBase
     {
-        private IEnumerable<ConsignmentShipfile> toSend;
+        private ConsignmentShipfile toSend;
 
-        private IEnumerable<ConsignmentShipfile> result;
+        private ConsignmentShipfile result;
 
         [SetUp]
         public void SetUp()
         {
-            this.toSend = new List<ConsignmentShipfile>
-                              {
-                                  new ConsignmentShipfile
+            this.toSend = new ConsignmentShipfile
                                       {
-                                          Id = 1
-                                      }
-                              };
+                                          Id = 1,
+                                          ConsignmentId = 1
+                                      };
 
             this.ShipfileRepository.FindById(1).Returns(
                 new ConsignmentShipfile { ShipfileSent = "Y", Message = ShipfileStatusMessages.EmailSent });
             this.result = this.Sut.SendEmails(this.toSend);
         }
+
         [Test]
         public void ShouldNotSendEmail()
         {
@@ -49,7 +48,7 @@
         [Test]
         public void ShouldUpdateStatusMessage()
         {
-            this.result.First().Message.Should().Be(ShipfileStatusMessages.EmailAlreadySent);
+            this.result.Message.Should().Be(ShipfileStatusMessages.EmailAlreadySent);
         }
     }
 }

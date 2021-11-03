@@ -14,7 +14,8 @@ export default function ConsignmentShipfiles({
     itemError,
     clearErrors,
     deleteShipfile,
-    deleteLoading
+    deleteLoading,
+    fetchShipfiles
 }) {
     const [selectedRows, setSelectedRows] = useState([]);
     const [rows, setRows] = useState([]);
@@ -38,6 +39,12 @@ export default function ConsignmentShipfiles({
             );
         }
     }, [processedShipfiles]);
+
+    useEffect(() => {
+        if (itemError) {
+            fetchShipfiles();
+        }
+    }, [itemError, fetchShipfiles]);
 
     const columns = [
         { field: 'id', headerName: 'Id', width: 0, hide: true },
@@ -66,7 +73,9 @@ export default function ConsignmentShipfiles({
                             <Grid item xs={12}>
                                 <ErrorCard
                                     errorMessage={
-                                        itemError?.details?.errors?.[0] || itemError.statusText
+                                        itemError?.details?.errors?.[0] ||
+                                        itemError?.details?.message ||
+                                        itemError.statusText
                                     }
                                 />
                             </Grid>
@@ -173,9 +182,12 @@ ConsignmentShipfiles.propTypes = {
     clearErrors: PropTypes.func.isRequired,
     itemError: PropTypes.shape({
         statusText: PropTypes.string,
-        details: PropTypes.shape({ errors: PropTypes.arrayOf(PropTypes.string) })
+        details: PropTypes.shape({
+            message: PropTypes.string,
+            errors: PropTypes.arrayOf(PropTypes.string)
+        })
     }),
-    whatToWandReport: PropTypes.shape({})
+    fetchShipfiles: PropTypes.func.isRequired
 };
 
 ConsignmentShipfiles.defaultProps = {
@@ -183,6 +195,5 @@ ConsignmentShipfiles.defaultProps = {
     processedShipfiles: null,
     consignmentShipfilesLoading: false,
     itemError: null,
-    whatToWandReport: null,
     deleteLoading: false
 };
