@@ -71,6 +71,14 @@
                 from.ScrapOrConvert = to.ScrapOrConvert ?? "CONVERT";
             }
 
+            if (from.DatePhasedOut != null && to.DatePhasedOut == null)
+            {
+                if (!this.authService.HasPermissionFor(AuthorisedAction.PartAdmin, privileges))
+                {
+                    throw new UpdatePartException("You are not authorised to phase in parts.");
+                }
+            }
+
             if (from.SalesArticle != null
                 && !from.ProductAnalysisCode.ProductCode.Equals(to.ProductAnalysisCode?.ProductCode))
             {
