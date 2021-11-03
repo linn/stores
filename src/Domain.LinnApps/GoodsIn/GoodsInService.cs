@@ -207,7 +207,7 @@
             if (transactionType.Equals("L"))
             {
                 result.DocType = "L";
-
+                result.TransactionCode = "L";
                 result.QtyReceived = qty;
                 result.PartNumber = partNumber;
                 result.PartDescription = part.Description;
@@ -222,7 +222,7 @@
                     partNumber, 
                     serialNumber, 
                     rsnQuantity ?? 1);
-                
+            result.TransactionCode = "R";    
             return result;
         }
 
