@@ -60,7 +60,10 @@ function GoodsInUtility({
     getRsnConditions,
     rsnAccessories,
     rsnAccessoriesLoading,
-    getRsnAccessories
+    getRsnAccessories,
+    validateRsn,
+    validateRsnResult,
+    validateRsnResultLoading
 }) {
     const [formData, setFormData] = useState({
         orderNumber: null,
@@ -144,8 +147,32 @@ function GoodsInUtility({
 
     const handleSelectRsnDetails = (accessories, conditions) => {
         setRsnDetailsDialogOpen(false);
-        setRsnAccessoriesString(accessories.map(a => `${a.description}-${a.extraInfo}`).join(','));
-        setRsnConditionsString(conditions.map(a => `${a.description}-${a.extraInfo}`).join(','));
+        setRsnAccessoriesString(
+            accessories?.length
+                ? accessories.map(a => `${a.description}-${a.extraInfo}`).join(',')
+                : 'No accessories'
+        );
+        setRsnConditionsString(
+            conditions?.length
+                ? conditions.map(a => `${a.description}-${a.extraInfo}`).join(',')
+                : 'Good condition'
+        );
+        setLines(l => [
+            ...l,
+            {
+                id: l.length + 1,
+                articleNumber: validateRsnResult?.articleNumber,
+                transactionType: 'R',
+                dateCreated: new Date().toISOString(),
+                storagePlace: formData?.ontoLocation,
+                locationId: formData?.ontoLocationId,
+                quantity: validateRsnResult?.quantity,
+                serialNumber: validateRsnResult?.serialNumber,
+                createdBy: userNumber,
+                rsnNumber: formData?.rsnNumber,
+                state: validateRsnResult?.state
+            }
+        ]);
     };
 
     useEffect(() => {
@@ -170,16 +197,25 @@ function GoodsInUtility({
     }, [validatePurchaseOrderResult]);
 
     useEffect(() => {
+        if (validateRsnResult) {
+            setMessage({
+                error: !!validateRsnResult.message,
+                text: validateRsnResult.message
+            });
+        }
+    }, [validateRsnResult]);
+
+    useEffect(() => {
         if (loanDetails?.length > 0) {
             setLoanDetailsDialogOpen(true);
         }
     }, [loanDetails]);
 
     useEffect(() => {
-        if (rsnConditions?.length > 0 && rsnAccessories?.length > 0) {
+        if (rsnConditions?.length > 0 && rsnAccessories?.length > 0 && validateRsnResult?.success) {
             setRsnDetailsDialogOpen(true);
         }
-    }, [rsnConditions, rsnAccessories]);
+    }, [rsnConditions, rsnAccessories, validateRsnResult]);
 
     useEffect(() => {
         if (validatePurchaseOrderBookInQtyResult) {
@@ -213,9 +249,24 @@ function GoodsInUtility({
         if (bookInResult?.createParcel) {
             setParcelDialogOpen(true);
         }
+
+        if (['L', 'R'].includes(bookInResult?.transactionCode)) {
+            setLines([]);
+            setLogEntries([]);
+        }
     }, [bookInResult]);
 
     const classes = useStyles();
+
+    const getTransactionType = () => {
+        if (formData.loanNumber) {
+            return 'L';
+        }
+        if (formData.rsnNumber) {
+            return 'R';
+        }
+        return validatePurchaseOrderResult.transactionType;
+    };
 
     const tableColumns = [
         {
@@ -311,6 +362,11 @@ function GoodsInUtility({
             width: 200
         },
         {
+            headerName: 'Rsn',
+            field: 'rsnNumber',
+            width: 200
+        },
+        {
             headerName: 'State',
             field: 'state',
             width: 200
@@ -379,7 +435,7 @@ function GoodsInUtility({
                         <div className={classes.dialog}>
                             <Parcel
                                 comments={bookInResult?.parcelComments}
-                                supplierId={bookInResult?.supplierId}
+                                supplierId={bookInResult?.supplierId || ''}
                                 match={match}
                                 inDialogBox
                                 history={history}
@@ -422,11 +478,13 @@ function GoodsInUtility({
                             <RsnDetails
                                 rsnAccessories={rsnAccessories?.map(d => ({
                                     ...d,
-                                    id: d.code
+                                    id: d.code,
+                                    extraInfo: ''
                                 }))}
                                 rsnConditions={rsnConditions?.map(d => ({
                                     ...d,
-                                    id: d.code
+                                    id: d.code,
+                                    extraInfo: ''
                                 }))}
                                 onConfirm={handleSelectRsnDetails}
                             />
@@ -470,7 +528,11 @@ function GoodsInUtility({
                         type="number"
                         value={formData.orderNumber}
                         label="Order Number"
-                        disabled={validatePurchaseOrderResultLoading}
+                        disabled={
+                            validatePurchaseOrderResultLoading ||
+                            formData?.rsnNumber ||
+                            formData?.loanNumber
+                        }
                         propertyName="orderNumber"
                         onChange={handleFieldChange}
                         textFieldProps={{
@@ -768,7 +830,7 @@ function GoodsInUtility({
                                         value={formData?.loanNumber}
                                         label="Loan Number"
                                         propertyName="loanNumber"
-                                        disabled={!formData?.ontoLocation}
+                                        disabled={formData?.orderNumber || formData?.rsnNumber}
                                         onChange={handleFieldChange}
                                         textFieldProps={{
                                             onBlur: () =>
@@ -807,10 +869,11 @@ function GoodsInUtility({
                                         value={formData?.rsnNumber}
                                         label="RSN Number"
                                         propertyName="rsnNumber"
-                                        disabled={!formData?.ontoLocation}
+                                        disabled={formData?.orderNumber || formData?.loanNumber}
                                         onChange={handleFieldChange}
                                         textFieldProps={{
                                             onBlur: () => {
+                                                validateRsn(formData?.rsnNumber);
                                                 getRsnAccessories();
                                                 getRsnConditions();
                                             }
@@ -818,7 +881,9 @@ function GoodsInUtility({
                                     />
                                 </Grid>
                                 <Grid item xs={2}>
-                                    {(rsnAccessoriesLoading || rsnConditionsLoading) && <Loading />}
+                                    {(rsnAccessoriesLoading ||
+                                        rsnConditionsLoading ||
+                                        validateRsnResultLoading) && <Loading />}
                                 </Grid>
                                 <Grid item xs={8} />
                                 <Grid item xs={6}>
@@ -839,6 +904,57 @@ function GoodsInUtility({
                                         onChange={() => {}}
                                     />
                                 </Grid>
+                                <Grid item xs={4}>
+                                    <InputField
+                                        disabled
+                                        fullWidth
+                                        value={validateRsnResult?.articleNumber}
+                                        label="Article"
+                                        propertyName="rsnArticleNumber"
+                                        onChange={() => {}}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <InputField
+                                        disabled
+                                        fullWidth
+                                        value={validateRsnResult?.description}
+                                        label="Desc"
+                                        propertyName="rsnArticleDesc"
+                                        onChange={() => {}}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <InputField
+                                        disabled
+                                        fullWidth
+                                        value={validateRsnResult?.quantity}
+                                        label="Quantity"
+                                        propertyName="rsnQty"
+                                        onChange={() => {}}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <InputField
+                                        disabled
+                                        fullWidth
+                                        value={validateRsnResult?.state}
+                                        label="State"
+                                        propertyName="rsnState"
+                                        onChange={() => {}}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <InputField
+                                        disabled
+                                        fullWidth
+                                        value={validateRsnResult?.serialNumber}
+                                        label="Serial"
+                                        propertyName="rsnSerialNumber"
+                                        onChange={() => {}}
+                                    />
+                                </Grid>
+                                <Grid item xs={4} />
                             </Grid>
                         </AccordionDetails>
                     </Accordion>
@@ -892,9 +1008,7 @@ function GoodsInUtility({
                         onClick={() => {
                             const row = {
                                 articleNumber: validatePurchaseOrderResult?.partNumber,
-                                transactionType: formData.loanNumber
-                                    ? 'L'
-                                    : validatePurchaseOrderResult.transactionType,
+                                transactionType: getTransactionType(),
                                 dateCreated: new Date().toISOString(),
                                 location: formData.ontoLocation,
                                 locationId: formData.ontoLocationId,
@@ -911,13 +1025,15 @@ function GoodsInUtility({
                                 multipleBookIn,
                                 lines: lines.length > 0 ? lines : [row],
                                 createdBy: userNumber,
-                                transactionType: formData.loanNumber
-                                    ? 'L'
-                                    : validatePurchaseOrderResult.transactionType,
-                                partNumber: validatePurchaseOrderResult?.partNumber,
+                                transactionType: getTransactionType(),
+                                partNumber:
+                                    validatePurchaseOrderResult?.partNumber ||
+                                    validateRsnResult?.articleNumber,
                                 manufacturersPartNumber:
                                     validatePurchaseOrderResult?.manufacturersPartNumber,
-                                state: validatePurchaseOrderResult?.state
+                                state: validatePurchaseOrderResult?.state,
+                                rsnAccessories: rsnAccessoriesString,
+                                condition: rsnConditionsString
                             });
                         }}
                     >
@@ -1010,7 +1126,8 @@ GoodsInUtility.propTypes = {
         supplierId: PropTypes.number,
         createParcel: PropTypes.bool,
         lines: PropTypes.arrayOf(PropTypes.shape({})),
-        printLabels: PropTypes.bool
+        printLabels: PropTypes.bool,
+        transactionCode: PropTypes.string
     }),
     bookInResultLoading: PropTypes.bool,
     doBookIn: PropTypes.func.isRequired,
@@ -1031,7 +1148,18 @@ GoodsInUtility.propTypes = {
     getRsnConditions: PropTypes.func.isRequired,
     rsnAccessories: PropTypes.arrayOf(PropTypes.shape({})),
     rsnAccessoriesLoading: PropTypes.bool,
-    getRsnAccessories: PropTypes.func.isRequired
+    getRsnAccessories: PropTypes.func.isRequired,
+    validateRsn: PropTypes.func.isRequired,
+    validateRsnResult: PropTypes.shape({
+        message: PropTypes.string,
+        success: PropTypes.bool,
+        articleNumber: PropTypes.string,
+        description: PropTypes.string,
+        state: PropTypes.string,
+        quantity: PropTypes.number,
+        serialNumber: PropTypes.number
+    }),
+    validateRsnResultLoading: PropTypes.bool
 };
 
 GoodsInUtility.defaultProps = {
@@ -1054,7 +1182,9 @@ GoodsInUtility.defaultProps = {
     rsnConditions: [],
     rsnConditionsLoading: false,
     rsnAccessories: [],
-    rsnAccessoriesLoading: false
+    rsnAccessoriesLoading: false,
+    validateRsnResult: null,
+    validateRsnResultLoading: false
 };
 
 export default GoodsInUtility;

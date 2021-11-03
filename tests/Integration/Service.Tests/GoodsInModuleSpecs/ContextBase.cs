@@ -89,6 +89,9 @@
                         with.Dependency<IResourceBuilder<IEnumerable<RsnAccessory>>>(
                             new RsnAccessoriesResourceBuilder());
 
+                        with.Dependency<IResourceBuilder<ValidateRsnResult>>(new ValidateRsnResultResourceBuilder());
+
+                        with.ResponseProcessor<ValidateRsnResultResponseProcessor>();
                         with.ResponseProcessor<BookInResultResponseProcessor>();
                         with.ResponseProcessor<SalesArticlesResponseProcessor>();
                         with.ResponseProcessor<StorageLocationsResponseProcessor>();

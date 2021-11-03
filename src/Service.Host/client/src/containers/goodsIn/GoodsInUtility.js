@@ -21,6 +21,8 @@ import rsnAccessoriesActions from '../../actions/rsnAccessoriesActions';
 import rsnAccessoriesSelectors from '../../selectors/rsnAccessoriesSelectors';
 import rsnConditionsActions from '../../actions/rsnConditionsActions';
 import rsnConditionsSelectors from '../../selectors/rsnConditionsSelectors';
+import ValidateRsnActions from '../../actions/ValidateRsnActions';
+import validateRsnResultSelectors from '../../selectors/validateRsnResultSelectors';
 
 const mapStateToProps = (state, { match }) => ({
     validatePurchaseOrderResult: validatePurchaseOrderResultSelectors.getItem(state),
@@ -54,7 +56,9 @@ const mapStateToProps = (state, { match }) => ({
     rsnConditions: rsnConditionsSelectors.getItems(state),
     rsnAccessories: rsnAccessoriesSelectors.getItems(state),
     rsnConditionsLoading: rsnConditionsSelectors.getLoading(state),
-    rsnAccessoriesLoading: rsnAccessoriesSelectors.getLoading(state)
+    rsnAccessoriesLoading: rsnAccessoriesSelectors.getLoading(state),
+    validateRsnResult: validateRsnResultSelectors.getItem(state),
+    validateRsnResultLoading: validateRsnResultSelectors.getLoading(state)
 });
 
 const mapDispatchToProps = {
@@ -67,7 +71,8 @@ const mapDispatchToProps = {
     validateStorageType: validateStorageTypeActions.fetchByQueryString,
     getLoanDetails: loanDetailsActions.fetchByQueryString,
     getRsnConditions: rsnConditionsActions.fetch,
-    getRsnAccessories: rsnAccessoriesActions.fetch
+    getRsnAccessories: rsnAccessoriesActions.fetch,
+    validateRsn: ValidateRsnActions.fetchById
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GoodsInUtility);

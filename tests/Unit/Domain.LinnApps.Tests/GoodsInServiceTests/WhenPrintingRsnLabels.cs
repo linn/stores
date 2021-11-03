@@ -38,8 +38,7 @@
             this.result = this.Sut.PrintRsnLabels(
                 123,
                 "PART",
-                5678,
-                "Printer");
+                5678);
         }
 
         [Test]

@@ -64,6 +64,7 @@ describe('When order number entered...', () => {
     });
 
     test('should call validation function onBlur if orderNumber input', () => {
+        cleanup();
         defaultRender();
         const orderNumberField = screen.getByLabelText('Order Number');
         orderNumberField.focus();

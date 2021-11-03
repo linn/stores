@@ -451,3 +451,9 @@ export const rsnConditions = new ItemType(
     'RSN_CONDITIONS',
     '/logistics/goods-in/rsn-conditions'
 );
+
+export const validateRsnResult = new ItemType(
+    'validateRsnResult',
+    'VALIDATE_RSN_RESULT',
+    '/logistics/rsn/validate'
+);

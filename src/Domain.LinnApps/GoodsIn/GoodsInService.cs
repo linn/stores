@@ -113,6 +113,15 @@
                 this.goodsInLog.Add(goodsInLogEntry);
             }
 
+            int? rsnQuantity = null;
+            int? serialNumber = null;
+
+            if (transactionType == "R" 
+                && !this.goodsInPack.GetRsnDetails((int)rsnNumber, out _, out _, out _, out rsnQuantity, out serialNumber, out var msg))
+            {
+                return new BookInResult(false, msg);
+            }
+            
             var message = this.goodsInPack.DoBookIn(
                 bookinRef,
                 transactionType,
@@ -136,35 +145,27 @@
 
             var result = new BookInResult(success, success ? "Book In Successful!" : message);
 
-            if (success)
-            {
-                result.Lines = goodsInLogEntries;
-            }
-
-            if (!reqNumberResult.HasValue)
+            if (!success)
             {
                 return result;
             }
 
-            var req = this.reqRepository.FindById((int)reqNumberResult);
-            result.ReqNumber = req.ReqNumber;
-            var reqLine = req.Lines?.FirstOrDefault();
-            result.DocType = reqLine?.TransactionDefinition?.DocType;
+            result.CreateParcel = this.goodsInPack.ParcelRequired(
+                                      orderNumber,
+                                      rsnNumber,
+                                      loanNumber,
+                                      out var supplierId) && (multipleBookIn == null || !multipleBookIn.Value);
+
+            var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
+
+            result.Lines = goodsInLogEntries;
+
+            result.CreatedBy = createdBy;
 
             result.QcState = !string.IsNullOrEmpty(state) && state.Equals("QC") ? "QUARANTINE" : "PASS";
-            
-            result.TransactionCode = reqLine?.TransactionCode;
-            
-            var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
-            
             result.QcInfo = part?.QcInformation;
-            
-            if (!string.IsNullOrEmpty(storageType))
-            {
-                result.KardexLocation = ontoLocation;
-            }
-            
-            if (orderNumber.HasValue)
+
+            if (transactionType == "O")
             {
                 this.goodsInPack.GetPurchaseOrderDetails(
                     orderNumber.Value,
@@ -180,46 +181,48 @@
                 result.UnitOfMeasure = uom;
                 result.DocType = this.purchaseOrderPack.GetDocumentType(orderNumber.Value);
                 result.PrintLabels = true;
+                result.PartNumber = partNumber;
+
+                result.SupplierId = supplierId;
+                result.ParcelComments = $"{result.DocType}{orderNumber}";
+
+                if (!string.IsNullOrEmpty(storageType))
+                {
+                    result.KardexLocation = ontoLocation;
+                }
+
+                if (reqNumberResult.HasValue)
+                {
+                    var req = this.reqRepository.FindById((int)reqNumberResult);
+                    result.ReqNumber = req.ReqNumber;
+                    var reqLine = req.Lines?.FirstOrDefault();
+                    result.DocType = reqLine?.TransactionDefinition?.DocType;
+
+                    result.TransactionCode = reqLine?.TransactionCode;
+                }
+
+                return result;
             }
 
             if (transactionType.Equals("L"))
             {
                 result.DocType = "L";
-            }
+                result.TransactionCode = "L";
+                result.QtyReceived = qty;
+                result.PartNumber = partNumber;
+                result.PartDescription = part.Description;
 
-            result.QtyReceived = qty;
-            result.PartNumber = partNumber;
-            result.PartDescription = part.Description;
-            
-            if ((multipleBookIn != null && multipleBookIn.Value) 
-                || !new[] { "L", "O", "R" }.Contains(transactionType) 
-                || !this.goodsInPack.ParcelRequired(
-                    orderNumber,
-                    rsnNumber,
-                    loanNumber,
-                    out _))
-            {
+                result.SupplierId = supplierId;
+
                 return result;
             }
-            
-            result.CreateParcel = this.goodsInPack.ParcelRequired(
-                orderNumber,
-                rsnNumber,
-                loanNumber,
-                out var supplierId);
-            
-            if (orderNumber.HasValue)
-            {
-                result.ParcelComments = $"{result.DocType}{orderNumber}";
-            }
-            else if (rsnNumber.HasValue)
-            {
-                // todo
-                throw new NotImplementedException("Booking in this document type is not supported yet.");
-            }
 
-            result.SupplierId = supplierId;
-            result.CreatedBy = createdBy;
+            this.PrintRsnLabels(
+                    (int)rsnNumber, 
+                    partNumber, 
+                    serialNumber, 
+                    rsnQuantity ?? 1);
+            result.TransactionCode = "R";    
             return result;
         }
 
@@ -361,11 +364,6 @@
             var purchaseOrder = this.purchaseOrderRepository.FindById(orderNumber);
             var part = this.partsRepository.FindBy(x => x.PartNumber == partNumber.ToUpper());
 
-            if (docType != "PO")
-            {
-                throw new NotImplementedException("Printing for this document type not yet implemented.");
-            }
-
             foreach (var line in lines)
             {
                 var printString = string.Empty;
@@ -473,7 +471,7 @@
                        };
         }
 
-        public ProcessResult PrintRsnLabels(int rsnNumber, string partNumber, int? serialNumber, string printer, int qty = 1)
+        public ProcessResult PrintRsnLabels(int rsnNumber, string partNumber, int? serialNumber, int qty = 1)
         {
             var labelType = this.labelTypeRepository.FindBy(x => x.Code.Equals("RSN_LABEL"));
             var labelName = $"RSN {rsnNumber}";
@@ -493,8 +491,31 @@
                 labelType.FileName,
                 printString,
                 ref message);
-
+ 
             return new ProcessResult(success, message);
+        }
+
+        public ValidateRsnResult ValidateRsn(int rsnNumber)
+        {
+            var success = this.goodsInPack.GetRsnDetails(
+                rsnNumber,
+                out var state,
+                out var articleNumber,
+                out var description,
+                out var quantity,
+                out var serial,
+                out var message);
+
+            return new ValidateRsnResult
+                       {
+                           Success = success,
+                           State = state,
+                           ArticleNumber = articleNumber,
+                           Description = description,
+                           Quantity = quantity,
+                           SerialNumber = serial,
+                           Message = message
+                       };
         }
     }
 }

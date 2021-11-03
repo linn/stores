@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Linq.Expressions;
 
     using FluentAssertions;
@@ -15,7 +14,7 @@
 
     using NUnit.Framework;
 
-    public class WhenBookingInLoanReturn : ContextBase
+    public class WhenBookingInRsn : ContextBase
     {
         private BookInResult result;
 
@@ -25,6 +24,13 @@
             this.PurchaseOrderPack.GetDocumentType(1).Returns("PO");
             this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1234").Returns(true);
             this.GoodsInPack.GetNextBookInRef().ReturnsForAnyArgs(1);
+            this.GoodsInPack.GetRsnDetails(1, out _, out _, out _, out _, out _, out _).Returns(x =>
+                {
+                    x[4] = 1;
+                    x[5] = 123456;
+                    return true;
+                });
+
             this.ReqRepository.FindById(1).Returns(new RequisitionHeader { ReqNumber = 1, });
             this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>())
                 .Returns(new Part
@@ -34,30 +40,17 @@
                     QcInformation = "Some Info"
                 });
 
-            this.GoodsInPack.When(x => x.GetPurchaseOrderDetails(
-                1,
-                1,
-                out var _,
-                out var _,
-                out var uom,
-                out var _,
-                out var _,
-                out var _,
-                out var _,
-                out var _))
-                .Do(x => x[4] = "ONES");
-
             this.GoodsInPack.When(x => x.DoBookIn(
                 1,
-                "L",
+                "R",
                 1,
                 "PART",
                 1,
                 null,
                 null,
-                1,
-                1,
                 null,
+                null,
+                1,
                 "P1234",
                 null,
                 null,
@@ -65,8 +58,8 @@
                 null,
                 null,
                 null,
-                out var reqNumber,
-                out var success))
+                out _,
+                out _))
                 .Do(x =>
                 {
                     x[17] = 1;
@@ -75,17 +68,20 @@
 
             this.GoodsInPack.GetNextLogId().Returns(1111);
 
+            this.LabelTypeRepository.FindBy(Arg.Any<Expression<Func<StoresLabelType, bool>>>())
+                .Returns(new StoresLabelType { DefaultPrinter = "PRINTER", FileName = "rsn_lab" }); 
+
             this.result = this.Sut.DoBookIn(
-                "L",
+                "R",
                 1,
                 "PART",
                 null,
                 1,
                 null,
                 null,
-                1,
-                1,
                 null,
+                null,
+                1,
                 null,
                 null,
                 "P1234",
@@ -113,15 +109,15 @@
         {
             this.GoodsInPack.Received().DoBookIn(
                 1,
-                "L",
+                "R",
                 1,
                 "PART",
                 1,
                 null,
                 null,
-                1,
-                1,
                 null,
+                null,
+                1,
                 "P1234",
                 null,
                 null,
@@ -137,12 +133,13 @@
         public void ShouldReturnSuccessResult()
         {
             this.result.Success.Should().BeTrue();
-            this.result.DocType.Should().Be("L");
-            this.result.PartNumber.Should().Be("PART");
-            this.result.QcState.Should().Be("PASS");
-            this.result.QcInfo.Should().Be("Some Info");
-            this.result.Lines.Count().Should().Be(1);
-            this.result.Lines.First().Id.Should().Be(1111);
+            this.result.Message.Should().Be("Book In Successful!");
+        }
+
+        [Test]
+        public void ShouldPrintRsnLabels()
+        {
+            this.Bartender.Received().PrintLabels("RSN 1", "PRINTER", 1, "rsn_lab", "\"1\",\"PART\",\"123456\"", ref Arg.Any<string>());
         }
 
         [Test]

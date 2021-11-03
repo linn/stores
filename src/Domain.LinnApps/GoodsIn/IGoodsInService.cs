@@ -60,7 +60,8 @@
             int rsnNumber, 
             string partNumber, 
             int? serialNumber, 
-            string printer, 
             int qty = 1);
+
+        ValidateRsnResult ValidateRsn(int rsnNumber);
     }
 }

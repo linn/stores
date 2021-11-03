@@ -211,7 +211,7 @@
 
                 return message;
             }
-        }
+         }
 
         public string GetErrorMessage()
         {
@@ -569,6 +569,107 @@
                 }
 
                 return int.Parse(result.Value.ToString()) == 0;
+            }
+        }
+
+        public bool GetRsnDetails(
+            int rsnNumber,
+            out string state,
+            out string articleNumber,
+            out string description,
+            out int? quantity,
+            out int? serial,
+            out string message)
+        {
+            using (var connection = this.databaseService.GetConnection())
+            {
+                connection.Open();
+                var cmd = new OracleCommand("goods_in_pack.get_rsn_details_wrapper", connection)
+                {
+                    CommandType = CommandType.StoredProcedure
+                };
+
+                var result = new OracleParameter("result", OracleDbType.Int32)
+                                 {
+                                     Direction = ParameterDirection.ReturnValue
+                                 };
+                cmd.Parameters.Add(result);
+
+                var arg0 = new OracleParameter("p_rsn_number", OracleDbType.Int32)
+                               {
+                                   Direction = ParameterDirection.Input,
+                                   Value = rsnNumber
+                               };
+                cmd.Parameters.Add(arg0);
+
+                var arg1 = new OracleParameter("p_state", OracleDbType.Varchar2)
+                {
+                    Direction = ParameterDirection.Output,
+                    Size = 50,
+                };
+                cmd.Parameters.Add(arg1);
+
+                var arg2 = new OracleParameter("p_article_number", OracleDbType.Varchar2)
+                {
+                    Direction = ParameterDirection.Output,
+                    Size = 50,
+                };
+                cmd.Parameters.Add(arg2);
+
+                var arg3 = new OracleParameter("p_description", OracleDbType.Varchar2)
+                {
+                    Direction = ParameterDirection.Output,
+                    Size = 50
+                };
+                cmd.Parameters.Add(arg3);
+
+                var arg4 = new OracleParameter("p_qty", OracleDbType.Int32)
+                {
+                    Direction = ParameterDirection.Output
+                };
+                cmd.Parameters.Add(arg4);
+
+                var arg5 = new OracleParameter("p_serial_no", OracleDbType.Int32)
+                {
+                    Direction = ParameterDirection.Output
+                };
+                cmd.Parameters.Add(arg5);
+
+                var arg6 = new OracleParameter("p_serial_no", OracleDbType.Varchar2)
+                               {
+                                   Direction = ParameterDirection.Output,
+                                   Size = 500
+                               };
+                cmd.Parameters.Add(arg6);
+
+                cmd.ExecuteNonQuery();
+                connection.Close();
+
+                state = arg1.Value.ToString().Equals("null") ? null : arg1.Value.ToString();
+
+                articleNumber = arg2.Value.ToString().Equals("null") ? null : arg2.Value.ToString();
+                description = arg3.Value.ToString().Equals("null") ? null : arg3.Value.ToString();
+                if (int.TryParse(arg4.Value.ToString(), out var qtyResult))
+                {
+                    quantity = qtyResult;
+                }
+                else
+                {
+                    quantity = null;
+                }
+
+                if (int.TryParse(arg5.Value.ToString(), out var serialResult))
+                {
+                    serial = serialResult;
+                }
+                else
+                {
+                    serial = null;
+                }
+
+                message = arg6.Value.ToString().Equals("null") ? null : arg6.Value.ToString();
+
+                return int.Parse(result.Value.ToString()) == 1;
             }
         }
     }

@@ -1,5 +1,9 @@
 import { connect } from 'react-redux';
-import { getItemError, initialiseOnMount } from '@linn-it/linn-form-components-library';
+import {
+    getItemError,
+    initialiseOnMount,
+    getPreviousPaths
+} from '@linn-it/linn-form-components-library';
 import Parcel from '../../components/parcels/Parcel';
 import parcelSelectors from '../../selectors/parcelSelectors';
 import parcelActions from '../../actions/parcelActions';
@@ -36,7 +40,8 @@ const mapStateToProps = (state, { match }) => ({
     employees: employeesSelectors.getItems(state),
     privileges: getPrivileges(state),
     suppliers: suppliersSelectors.getItems(state),
-    userNumber: getUserNumber(state)
+    userNumber: getUserNumber(state),
+    previousPaths: getPreviousPaths(state)
 });
 
 const initialise = item => dispatch => {

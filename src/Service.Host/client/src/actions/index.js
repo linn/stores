@@ -339,3 +339,5 @@ export const postDutyActionTypes = makeActionTypes(itemTypes.postDuty.actionType
 export const rsnConditionsActionTypes = makeActionTypes(itemTypes.rsnConditions.actionType);
 
 export const rsnAccessoriesActionTypes = makeActionTypes(itemTypes.rsnAccessories.actionType);
+
+export const validateRsnActionTypes = makeActionTypes(itemTypes.validateRsnResult.actionType);
