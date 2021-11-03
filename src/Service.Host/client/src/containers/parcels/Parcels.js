@@ -22,7 +22,6 @@ const mapStateToProps = state => ({
         .getSearchItems(state)
         .map(c => ({ id: c.id, name: c.id.toString(), description: c.name })),
     carriersSearchLoading: suppliersApprovedCarrierSelectors.getSearchLoading(state)
-    // editStatus: parcelSelectors.getEditStatus(state)
 });
 
 const initialise = () => dispatch => {

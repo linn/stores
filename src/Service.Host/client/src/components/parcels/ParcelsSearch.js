@@ -41,10 +41,7 @@ function ParcelsSearch({
     const [rowsToDisplay, setRowsToDisplay] = useState([]);
 
     const allowedToCreate = () => {
-        if (!(privileges.length < 1)) {
-            return privileges.some(priv => priv === 'parcel.admin');
-        }
-        return false;
+        return privileges?.some(priv => priv === 'parcel.admin');
     };
 
     const useStyles = makeStyles(theme => ({
@@ -245,9 +242,11 @@ function ParcelsSearch({
             <Grid spacing={3} container justifyContent="center">
                 <Grid item xs={11} />
                 <Grid item xs={1}>
-                    {(allowedToCreate || true) && (
-                        <LinkButton text="Create" to="/logistics/parcels/create" />
-                    )}
+                    <LinkButton
+                        text="Create"
+                        to="/logistics/parcels/create"
+                        disabled={!allowedToCreate()}
+                    />
                 </Grid>
                 <Grid item xs={3}>
                     <SearchInputField
@@ -399,7 +398,7 @@ ParcelsSearch.propTypes = {
     loading: PropTypes.bool,
     fetchItems: PropTypes.func.isRequired,
     history: PropTypes.shape({ push: PropTypes.func }).isRequired,
-    privileges: PropTypes.arrayOf(PropTypes.string),
+    privileges: PropTypes.arrayOf(PropTypes.string).isRequired,
     suppliersSearchResults: PropTypes.arrayOf(
         PropTypes.shape({
             id: PropTypes.number,
@@ -427,7 +426,6 @@ ParcelsSearch.defaultProps = {
     carriersSearchResults: [],
     suppliersSearchResults: [],
     suppliers: [],
-    privileges: null,
     carriersSearchLoading: false,
     suppliersSearchLoading: false
 };
