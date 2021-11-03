@@ -46,7 +46,7 @@ function Parcel({
     supplierId,
     comments,
     inDialogBox,
-    previousPaths
+    previousPaths,
     privileges
 }) {
     const creating = () => editStatus === 'create';
