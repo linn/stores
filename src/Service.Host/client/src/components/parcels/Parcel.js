@@ -485,7 +485,6 @@ function Parcel({
                                 saveClick={handleSaveClick}
                                 cancelClick={handleCancelClick}
                                 backClick={() => handleBackClick(previousPaths, history.goBack)}
-
                             />
                         </Grid>
                     </>
@@ -511,7 +510,7 @@ Parcel.propTypes = {
     item: PropTypes.shape({
         parcelNumber: PropTypes.number
     }),
-    history: PropTypes.shape({ push: PropTypes.func }).isRequired,
+    history: PropTypes.shape({ goBack: PropTypes.func }).isRequired,
     editStatus: PropTypes.string.isRequired,
     itemError: PropTypes.shape({
         status: PropTypes.number,
