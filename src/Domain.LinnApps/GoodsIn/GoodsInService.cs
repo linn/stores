@@ -156,7 +156,6 @@
                                       loanNumber,
                                       out var supplierId) && (multipleBookIn == null || !multipleBookIn.Value);
 
-            // always need a part number
             var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
 
             result.Lines = goodsInLogEntries;
