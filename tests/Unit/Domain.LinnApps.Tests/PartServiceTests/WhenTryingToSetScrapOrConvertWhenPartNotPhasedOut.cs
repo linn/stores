@@ -22,14 +22,14 @@
         {
             this.from = new Part { DatePhasedOut = null };
             this.to = new Part { DatePhasedOut = null, ScrapOrConvert = "CONVERT" };
-            this.privileges = new List<string> { };
+            this.privileges = new List<string>();
         }
 
         [Test]
-        public void ShouldThrowException()
+        public void ShouldSetScrapOrConvertNull()
         {
-            var ex = Assert.Throws<UpdatePartException>(() => this.Sut.UpdatePart(this.from, this.to, this.privileges));
-            ex.Message.Should().Be("A part must be obsolete to be convertible or to be scrapped.");
+            this.Sut.UpdatePart(this.from, this.to, this.privileges);
+            this.to.ScrapOrConvert.Should().BeNull();
         }
     }
 }

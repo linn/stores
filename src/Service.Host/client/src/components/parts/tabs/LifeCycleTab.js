@@ -27,6 +27,7 @@ function LifeCycleTab({
     dateDesignObsolete,
     canPhaseOut,
     handlePhaseOutClick,
+    handlePhaseInClick,
     handleChangeLiveness,
     liveTest
 }) {
@@ -123,15 +124,29 @@ function LifeCycleTab({
                 />
             </Grid>
             <Grid item xs={3}>
-                {canPhaseOut && !datePhasedOut && (
+                {canPhaseOut && !datePhasedOut ? (
                     <Button
                         className={classes.button}
-                        disabled={editStatus === 'create' || !reasonPhasedOut}
+                        disabled={
+                            editStatus === 'create' ||
+                            !reasonPhasedOut ||
+                            reasonPhasedOut.startsWith('PHASED BACK IN BY')
+                        }
                         variant="outlined"
                         color="secondary"
                         onClick={handlePhaseOutClick}
                     >
                         PHASE OUT
+                    </Button>
+                ) : (
+                    <Button
+                        className={classes.button}
+                        disabled={editStatus === 'create'}
+                        variant="outlined"
+                        color="secondary"
+                        onClick={handlePhaseInClick}
+                    >
+                        PHASE IN
                     </Button>
                 )}
             </Grid>
@@ -198,7 +213,8 @@ LifeCycleTab.propTypes = {
     canPhaseOut: PropTypes.bool,
     editStatus: PropTypes.string.isRequired,
     liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
-    handleChangeLiveness: PropTypes.func.isRequired
+    handleChangeLiveness: PropTypes.func.isRequired,
+    handlePhaseInClick: PropTypes.func.isRequired
 };
 
 LifeCycleTab.defaultProps = {

@@ -71,6 +71,14 @@
                 from.ScrapOrConvert = to.ScrapOrConvert ?? "CONVERT";
             }
 
+            if (from.DatePhasedOut != null && to.DatePhasedOut == null)
+            {
+                if (!this.authService.HasPermissionFor(AuthorisedAction.PartAdmin, privileges))
+                {
+                    throw new UpdatePartException("You are not authorised to phase in parts.");
+                }
+            }
+
             if (from.SalesArticle != null
                 && !from.ProductAnalysisCode.ProductCode.Equals(to.ProductAnalysisCode?.ProductCode))
             {
@@ -266,9 +274,9 @@
 
         private static void Validate(Part to)
         {
-            if (!string.IsNullOrEmpty(to.ScrapOrConvert)  && to.DatePhasedOut == null)
+            if (!string.IsNullOrEmpty(to.ScrapOrConvert)  && to.PhasedOutBy == null)
             {
-                throw new UpdatePartException("A part must be obsolete to be convertible or to be scrapped.");
+                to.ScrapOrConvert = null;
             }
 
             if (to.RailMethod == "SMM"
