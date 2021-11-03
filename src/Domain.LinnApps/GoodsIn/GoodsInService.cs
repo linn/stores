@@ -136,48 +136,61 @@
 
             var result = new BookInResult(success, success ? "Book In Successful!" : message);
 
-            var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
-
-            if (success)
+            if (!success)
             {
-                result.Lines = goodsInLogEntries;
+                return result;
             }
 
-            if (reqNumberResult.HasValue)
+            result.CreateParcel = this.goodsInPack.ParcelRequired(
+                                      orderNumber,
+                                      rsnNumber,
+                                      loanNumber,
+                                      out var supplierId) && (multipleBookIn == null || !multipleBookIn.Value);
+
+            // always need a part number
+            var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
+
+            result.Lines = goodsInLogEntries;
+
+            result.CreatedBy = createdBy;
+
+            result.QcState = !string.IsNullOrEmpty(state) && state.Equals("QC") ? "QUARANTINE" : "PASS";
+            result.QcInfo = part?.QcInformation;
+
+            if (transactionType == "O")
             {
-                var req = this.reqRepository.FindById((int)reqNumberResult);
-                result.ReqNumber = req.ReqNumber;
-                var reqLine = req.Lines?.FirstOrDefault();
-                result.DocType = reqLine?.TransactionDefinition?.DocType;
+                this.goodsInPack.GetPurchaseOrderDetails(
+                    orderNumber.Value,
+                    orderLine.Value,
+                    out _,
+                    out _,
+                    out var uom,
+                    out _,
+                    out _,
+                    out _,
+                    out _,
+                    out _);
+                result.UnitOfMeasure = uom;
+                result.DocType = this.purchaseOrderPack.GetDocumentType(orderNumber.Value);
+                result.PrintLabels = true;
+                result.PartNumber = partNumber;
 
-                result.QcState = !string.IsNullOrEmpty(state) && state.Equals("QC") ? "QUARANTINE" : "PASS";
-
-                result.TransactionCode = reqLine?.TransactionCode;
-
-                result.QcInfo = part?.QcInformation;
+                result.SupplierId = supplierId;
+                result.ParcelComments = $"{result.DocType}{orderNumber}";
 
                 if (!string.IsNullOrEmpty(storageType))
                 {
                     result.KardexLocation = ontoLocation;
                 }
 
-                if (orderNumber.HasValue)
+                if (reqNumberResult.HasValue)
                 {
-                    this.goodsInPack.GetPurchaseOrderDetails(
-                        orderNumber.Value,
-                        orderLine.Value,
-                        out _,
-                        out _,
-                        out var uom,
-                        out _,
-                        out _,
-                        out _,
-                        out _,
-                        out _);
-                    result.UnitOfMeasure = uom;
-                    result.DocType = this.purchaseOrderPack.GetDocumentType(orderNumber.Value);
-                    result.PrintLabels = true;
-                    result.PartNumber = partNumber;
+                    var req = this.reqRepository.FindById((int)reqNumberResult);
+                    result.ReqNumber = req.ReqNumber;
+                    var reqLine = req.Lines?.FirstOrDefault();
+                    result.DocType = reqLine?.TransactionDefinition?.DocType;
+
+                    result.TransactionCode = reqLine?.TransactionCode;
                 }
             }
 
@@ -190,51 +203,16 @@
                 result.PartNumber = partNumber;
                 result.PartDescription = part.Description;
 
-                if ((multipleBookIn != null && multipleBookIn.Value)
-                    || !new[] { "L", "O", "R" }.Contains(transactionType)
-                    || !this.goodsInPack.ParcelRequired(orderNumber, rsnNumber, loanNumber, out _))
-                {
-                    return result;
-                }
-
-                result.CreateParcel = this.goodsInPack.ParcelRequired(
-                    orderNumber,
-                    rsnNumber,
-                    loanNumber,
-                    out var supplierId);
                 result.SupplierId = supplierId;
             }
 
-            if (orderNumber.HasValue)
-            {
-                if ((multipleBookIn != null && multipleBookIn.Value)
-                    || !new[] { "L", "O", "R" }.Contains(transactionType)
-                    || !this.goodsInPack.ParcelRequired(orderNumber, rsnNumber, loanNumber, out _))
-                {
-                    return result;
-                }
-
-                result.CreateParcel = this.goodsInPack.ParcelRequired(
-                    orderNumber,
-                    rsnNumber,
-                    loanNumber,
-                    out var supplierId);
-                result.SupplierId = supplierId;
-                result.ParcelComments = $"{result.DocType}{orderNumber}";
-            }
-
-            if (rsnNumber.HasValue)
+            if (transactionType == "R")
             {
                 if (!this.goodsInPack.GetRsnDetails((int)rsnNumber, out _, out _, out _, out var rsnQuantity, out var serialNumber, out var msg))
                 {
                     return new BookInResult(false, msg);
                 }
 
-                result.CreateParcel = this.goodsInPack.ParcelRequired(
-                    orderNumber,
-                    rsnNumber,
-                    loanNumber,
-                    out _);
                 this.PrintRsnLabels(
                     (int)rsnNumber, 
                     partNumber, 
@@ -242,7 +220,6 @@
                     rsnQuantity ?? 1);
             }
             
-            result.CreatedBy = createdBy;
             return result;
         }
 
@@ -383,11 +360,6 @@
             var user = this.authUserRepository.FindBy(x => x.UserNumber == userNumber);
             var purchaseOrder = this.purchaseOrderRepository.FindById(orderNumber);
             var part = this.partsRepository.FindBy(x => x.PartNumber == partNumber.ToUpper());
-
-            if (docType != "PO")
-            {
-                throw new NotImplementedException("Printing for this document type not yet implemented.");
-            }
 
             foreach (var line in lines)
             {

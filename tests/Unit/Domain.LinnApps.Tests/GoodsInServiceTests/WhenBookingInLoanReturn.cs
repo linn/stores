@@ -145,9 +145,8 @@
             this.result.Lines.First().Id.Should().Be(1111);
         }
 
-
         [Test]
-        public void ShouldSetPrintLabelsTrue()
+        public void ShouldSetPrintLabelsFalse()
         {
             this.result.PrintLabels.Should().BeFalse();
         }

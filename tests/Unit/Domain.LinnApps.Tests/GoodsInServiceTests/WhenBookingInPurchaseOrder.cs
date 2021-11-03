@@ -25,7 +25,20 @@
             this.PurchaseOrderPack.GetDocumentType(1).Returns("PO");
             this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1234").Returns(true);
             this.GoodsInPack.GetNextBookInRef().ReturnsForAnyArgs(1);
-            this.ReqRepository.FindById(1).Returns(new RequisitionHeader { ReqNumber = 1,  });
+            this.ReqRepository.FindById(1).Returns(new RequisitionHeader
+                                                       {
+                                                           ReqNumber = 1,
+                                                           Lines  = new List<RequisitionLine>
+                                                                        {
+                                                                            new RequisitionLine
+                                                                                {
+                                                                                    TransactionDefinition = new StoresTransactionDefinition
+                                                                                                                {
+                                                                                                                    DocType = "PO"
+                                                                                                                }
+                                                                                }
+                                                                        }
+                                                       });
             this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>())
                 .Returns(new Part
                     {
@@ -69,7 +82,6 @@
                 out var success))
                 .Do(x =>
                     {
-                        x[17] = 1;
                         x[18] = true;
                     });
 
