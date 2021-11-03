@@ -8,13 +8,12 @@
 
     using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.Parts;
-    using Linn.Stores.Domain.LinnApps.Requisitions;
 
     using NSubstitute;
 
     using NUnit.Framework;
 
-    public class WhenBookingInRsn : ContextBase
+    public class WhenBookingInRsnAndRsnCannotBeBookedIn : ContextBase
     {
         private BookInResult result;
 
@@ -23,15 +22,12 @@
         {
             this.PurchaseOrderPack.GetDocumentType(1).Returns("PO");
             this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1234").Returns(true);
-            this.GoodsInPack.GetNextBookInRef().ReturnsForAnyArgs(1);
             this.GoodsInPack.GetRsnDetails(1, out _, out _, out _, out _, out _, out _).Returns(x =>
-                {
-                    x[4] = 1;
-                    x[5] = 123456;
-                    return true;
-                });
+            {
+                x[6] = "Cannot book in rsn";
+                return false;
+            });
 
-            this.ReqRepository.FindById(1).Returns(new RequisitionHeader { ReqNumber = 1, });
             this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>())
                 .Returns(new Part
                 {
@@ -69,7 +65,7 @@
             this.GoodsInPack.GetNextLogId().Returns(1111);
 
             this.LabelTypeRepository.FindBy(Arg.Any<Expression<Func<StoresLabelType, bool>>>())
-                .Returns(new StoresLabelType { DefaultPrinter = "PRINTER", FileName = "rsn_lab" }); 
+                .Returns(new StoresLabelType { DefaultPrinter = "PRINTER", FileName = "rsn_lab" });
 
             this.result = this.Sut.DoBookIn(
                 "R",
@@ -105,47 +101,42 @@
         }
 
         [Test]
-        public void ShouldCallStoredProcedure()
+        public void ShouldNotCallStoredProcedure()
         {
-            this.GoodsInPack.Received().DoBookIn(
-                1,
-                "R",
-                1,
-                "PART",
-                1,
-                null,
-                null,
-                null,
-                null,
-                1,
-                "P1234",
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                out var reqNumber,
-                out var success);
+            this.GoodsInPack.DidNotReceiveWithAnyArgs().DoBookIn(
+                Arg.Any<int>(),
+                Arg.Any<string>(),
+                Arg.Any<int>(),
+                Arg.Any<string>(),
+                Arg.Any<int>(),
+                Arg.Any<int>(),
+                Arg.Any<int>(),
+                Arg.Any<int>(),
+                Arg.Any<int>(),
+                Arg.Any<int>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                Arg.Any<string>(),
+                out Arg.Any<int?>(),
+                out Arg.Any<bool>());
         }
 
         [Test]
         public void ShouldReturnSuccessResult()
         {
-            this.result.Success.Should().BeTrue();
-            this.result.Message.Should().Be("Book In Successful!");
+            this.result.Success.Should().BeFalse();
+            this.result.Message.Should().Be("Cannot book in rsn");
         }
 
         [Test]
-        public void ShouldPrintRsnLabels()
+        public void ShouldNotPrintRsnLabels()
         {
-            this.Bartender.Received().PrintLabels("RSN 1", "PRINTER", 1, "rsn_lab", "\"1\",\"PART\",\"123456\"", ref Arg.Any<string>());
-        }
-
-        [Test]
-        public void ShouldSetPrintLabelsFalse()
-        {
-            this.result.PrintLabels.Should().BeFalse();
+            this.Bartender.DidNotReceiveWithAnyArgs().PrintLabels(
+                Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int>(), Arg.Any<string>(), Arg.Any<string>(), ref Arg.Any<string>());
         }
     }
 }

@@ -113,6 +113,15 @@
                 this.goodsInLog.Add(goodsInLogEntry);
             }
 
+            int? rsnQuantity = null;
+            int? serialNumber = null;
+
+            if (transactionType == "R" 
+                && !this.goodsInPack.GetRsnDetails((int)rsnNumber, out _, out _, out _, out rsnQuantity, out serialNumber, out var msg))
+            {
+                return new BookInResult(false, msg);
+            }
+            
             var message = this.goodsInPack.DoBookIn(
                 bookinRef,
                 transactionType,
@@ -192,34 +201,29 @@
 
                     result.TransactionCode = reqLine?.TransactionCode;
                 }
+
+                return result;
             }
 
             if (transactionType.Equals("L"))
             {
                 result.DocType = "L";
 
-
                 result.QtyReceived = qty;
                 result.PartNumber = partNumber;
                 result.PartDescription = part.Description;
 
                 result.SupplierId = supplierId;
+
+                return result;
             }
 
-            if (transactionType == "R")
-            {
-                if (!this.goodsInPack.GetRsnDetails((int)rsnNumber, out _, out _, out _, out var rsnQuantity, out var serialNumber, out var msg))
-                {
-                    return new BookInResult(false, msg);
-                }
-
-                this.PrintRsnLabels(
+            this.PrintRsnLabels(
                     (int)rsnNumber, 
                     partNumber, 
                     serialNumber, 
                     rsnQuantity ?? 1);
-            }
-            
+                
             return result;
         }
 
@@ -488,7 +492,7 @@
                 labelType.FileName,
                 printString,
                 ref message);
-
+ 
             return new ProcessResult(success, message);
         }
 
