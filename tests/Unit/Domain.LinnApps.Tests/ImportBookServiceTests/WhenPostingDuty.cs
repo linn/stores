@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq.Expressions;
-    
+
     using FluentAssertions;
 
     using Linn.Stores.Domain.LinnApps.ImportBooks;
@@ -18,7 +18,7 @@
         private readonly int impbookId = 12007;
 
         private ImportBookOrderDetail firstOrderDetail;
-        
+
         private ProcessResult result;
 
         private ImportBookOrderDetail secondOrderDetail;
@@ -68,9 +68,10 @@
                                              InsNumber = null,
                                              VatRate = null,
                                              PostDuty = null
-            };
-            
-            this.SupplierRepository.FindBy(Arg.Any<Expression<Func<Supplier, bool>>>()).Returns(new Supplier { AccountingCompany = "LINN" });
+                                         };
+
+            this.SupplierRepository.FindBy(Arg.Any<Expression<Func<Supplier, bool>>>())
+                .Returns(new Supplier { AccountingCompany = "LINN" });
 
             this.OrderDetailRepository.FindById(Arg.Any<ImportBookOrderDetailKey>())
                 .Returns(this.firstOrderDetail, this.secondOrderDetail);
@@ -79,15 +80,13 @@
             this.PurchaseLedgerPack.GetLedgerPeriod().Returns(17);
             this.PurchaseLedgerPack.GetNomacc(Arg.Any<string>(), Arg.Any<string>()).Returns(2233);
 
-            var orderDetails = new List<ImportBookOrderDetail> { new ImportBookOrderDetail { PostDuty = "Y" }, new ImportBookOrderDetail { PostDuty = "Y" } };
+            var orderDetails = new List<ImportBookOrderDetail> { new() { PostDuty = "Y" }, new() { PostDuty = "Y" } };
 
-            this.result = this.Sut.PostDutyForOrderDetails(orderDetails, 1234, 56789, DateTime.Now);
-        }
+            var privileges = new List<string> { "import-books.admin" };
 
-        [Test]
-        public void ShouldReturnSuccesfulProcessResult()
-        {
-            this.result.Success.Should().BeTrue();
+            this.AuthorisationService.HasPermissionFor("import-books.admin", privileges).Returns(true);
+
+            this.result = this.Sut.PostDutyForOrderDetails(orderDetails, 1234, 56789, DateTime.Now, privileges);
         }
 
         [Test]
@@ -95,6 +94,12 @@
         {
             this.firstOrderDetail.PostDuty.Should().Be("Y");
             this.secondOrderDetail.PostDuty.Should().Be("Y");
+        }
+
+        [Test]
+        public void ShouldReturnSuccesfulProcessResult()
+        {
+            this.result.Success.Should().BeTrue();
         }
     }
 }

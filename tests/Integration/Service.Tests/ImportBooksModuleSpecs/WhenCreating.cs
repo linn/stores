@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Service.Tests.ImportBooksModuleSpecs
 {
     using System;
+    using System.Collections.Generic;
 
     using FluentAssertions;
 
@@ -33,6 +34,10 @@
                                      };
 
             var importBook = new ImportBook { Id = 12345 };
+
+            var privileges = new List<string> { "import-books.admin" };
+
+            this.AuthorisationService.HasPermissionFor("import-books.admin", Arg.Any<IEnumerable<string>>()).Returns(true);
 
             this.ImportBooksFacadeService.Add(Arg.Any<ImportBookResource>())
                 .Returns(new CreatedResult<ImportBook>(importBook));

@@ -33,7 +33,7 @@
             this.transactionManager = transactionManager;
         }
 
-        public IResult<ProcessResult> PostDuty(PostDutyResource resource)
+        public IResult<ProcessResult> PostDuty(PostDutyResource resource, IEnumerable<string> privileges)
         {
             var orderDetails = new List<ImportBookOrderDetail>();
             foreach (var detail in resource.OrderDetails)
@@ -68,7 +68,8 @@
                     orderDetails,
                     resource.SupplierId,
                     resource.CurrentUserNumber,
-                    DateTime.Parse(resource.DatePosted));
+                    DateTime.Parse(resource.DatePosted),
+                    privileges);
 
 
                 this.transactionManager.Commit();

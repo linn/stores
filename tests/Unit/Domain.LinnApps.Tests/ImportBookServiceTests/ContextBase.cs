@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.ImportBookServiceTests
 {
+    using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
@@ -38,6 +39,8 @@
 
         protected ITransactionManager TransactionManager { get; private set; }
 
+        protected IAuthorisationService AuthorisationService { get; set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -51,6 +54,7 @@
             this.LedgerPeriodRepository = Substitute.For<IRepository<LedgerPeriod, int>>();
             this.PurchaseLedgerRepository = Substitute.For<IRepository<PurchaseLedger, int>>();
             this.PurchaseLedgerPack = Substitute.For<IPurchaseLedgerPack>();
+            this.AuthorisationService = Substitute.For<IAuthorisationService>();
 
             this.Sut = new ImportBookService(
                 this.ExchangeRateRepository,
@@ -58,7 +62,8 @@
                 this.SupplierRepository,
                 this.OrderDetailRepository,
                 this.PurchaseLedgerRepository,
-                this.PurchaseLedgerPack);
+                this.PurchaseLedgerPack,
+                this.AuthorisationService);
         }
     }
 }

@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Security.Claims;
 
+    using Linn.Common.Authorisation;
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Models;
@@ -34,6 +35,8 @@
 
         protected IFacadeService<Port, string, PortResource, PortResource> PortFacadeService { get; private set; }
 
+        protected IAuthorisationService AuthorisationService { get; set; }
+
         [SetUp]
         public void EstablishContext()
         {
@@ -49,6 +52,7 @@
             this.ImportBookDeliveryTermFacadeService = Substitute
                 .For<IFacadeService<ImportBookDeliveryTerm, string, ImportBookDeliveryTermResource, ImportBookDeliveryTermResource>>();
             this.PortFacadeService = Substitute.For<IFacadeService<Port, string, PortResource, PortResource>>();
+            this.AuthorisationService = Substitute.For<IAuthorisationService>();
 
             var bootstrapper = new ConfigurableBootstrapper(with =>
             {
@@ -59,6 +63,7 @@
                 with.Dependency(this.ImportBookCpcNumberFacadeService);
                 with.Dependency(this.ImportBookDeliveryTermFacadeService);
                 with.Dependency(this.PortFacadeService);
+                with.Dependency(this.AuthorisationService);
 
                 with.Dependency<IResourceBuilder<ImportBook>>(new ImportBookResourceBuilder());
                 with.Dependency<IResourceBuilder<IEnumerable<ImportBook>>>(new ImportBooksResourceBuilder());

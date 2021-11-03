@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Service.Tests.ImportBooksModuleSpecs
 {
     using System;
+    using System.Collections.Generic;
 
     using FluentAssertions;
 
@@ -33,6 +34,8 @@
                                          Comments = "Rsn 1234 raised as BRG, but Customs charged duty incorrectly.",
                                          Pva = "Y"
                                      };
+            
+            this.AuthorisationService.HasPermissionFor("import-books.admin", Arg.Any<IEnumerable<string>>()).Returns(true);
 
             this.ImportBooksFacadeService.Update(Arg.Any<int>(), Arg.Any<ImportBookResource>())
                 .Returns(new SuccessResult<ImportBook>(importBook));

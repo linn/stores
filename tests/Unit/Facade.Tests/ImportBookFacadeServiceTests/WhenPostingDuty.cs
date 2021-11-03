@@ -29,9 +29,13 @@
 
         private IResult<ProcessResult> result;
 
+        private IEnumerable<string> privileges;
+
         [SetUp]
         public void SetUp()
         {
+            this.privileges = new List<string> { "import-book.admin" };
+
             this.resource = new PostDutyResource
                                 {
                                     ImpbookId = this.impbookId,
@@ -89,9 +93,10 @@
                 Arg.Any<IEnumerable<ImportBookOrderDetail>>(),
                 Arg.Any<int>(),
                 Arg.Any<int>(),
-                Arg.Any<DateTime>()).Returns(new ProcessResult(true, "wurkd"));
+                Arg.Any<DateTime>(),
+                Arg.Any<IEnumerable<string>>()).Returns(new ProcessResult(true, "wurkd"));
 
-            this.result = this.Sut.PostDuty(this.resource);
+            this.result = this.Sut.PostDuty(this.resource, this.privileges);
         }
 
         [Test]
@@ -104,7 +109,8 @@
                              && y.OrderNumber == 13)),
                 this.supplierId,
                 this.empNo,
-                this.now);
+                this.now,
+                this.privileges);
 
             this.DomainService.Received().PostDutyForOrderDetails(
                 Arg.Is<IEnumerable<ImportBookOrderDetail>>(
@@ -113,7 +119,8 @@
                              && y.OrderNumber == 111)),
                 this.supplierId,
                 this.empNo,
-                this.now);
+                this.now,
+                this.privileges);
         }
 
         [Test]

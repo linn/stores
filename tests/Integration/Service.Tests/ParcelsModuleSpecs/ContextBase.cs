@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Security.Claims;
+
+    using Linn.Common.Authorisation;
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
@@ -19,6 +21,8 @@
         protected IFacadeFilterService<Parcel, int, ParcelResource, ParcelResource, ParcelSearchRequestResource> ParcelsFacadeService { get; private set; }
 
         protected IRepository<Parcel, int> ParcelRepository { get; private set; }
+        protected IAuthorisationService AuthorisationService { get; set; }
+
 
         [SetUp]
         public void EstablishContext()
@@ -27,11 +31,14 @@
 
             this.ParcelRepository = Substitute.For<IRepository<Parcel, int>>();
 
+            this.AuthorisationService = Substitute.For<IAuthorisationService>();
+
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                 {
                     with.Dependency(this.ParcelsFacadeService);
                     with.Dependency(this.ParcelRepository);
+                    with.Dependency(this.AuthorisationService);
                     with.Dependency<IResourceBuilder<Parcel>>(new ParcelResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<Parcel>>>(new ParcelsResourceBuilder());
                     with.Module<ParcelsModule>();

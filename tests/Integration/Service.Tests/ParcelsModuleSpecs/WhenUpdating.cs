@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Service.Tests.ParcelsModuleSpecs
 {
     using System;
+    using System.Collections.Generic;
 
     using FluentAssertions;
 
@@ -51,6 +52,8 @@
                                      CheckedById = 123456,
                                      Comments = "RSN 212, RSN 118"
                                  };
+
+            this.AuthorisationService.HasPermissionFor("parcel.admin", Arg.Any<IEnumerable<string>>()).Returns(true);
 
             this.ParcelsFacadeService.Update(Arg.Any<int>(), Arg.Any<ParcelResource>())
                 .Returns(new SuccessResult<Parcel>(parcel));

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
@@ -23,13 +24,17 @@
 
         private readonly IQueryRepository<Supplier> supplierRepository;
 
+        private readonly IAuthorisationService authorisationService;
+
+
         public ImportBookService(
             IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey> exchangeRateRepository,
             IRepository<LedgerPeriod, int> ledgerPeriodRepository,
             IQueryRepository<Supplier> supplierRepository,
             IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey> orderDetailRepository,
             IRepository<PurchaseLedger, int> purchaseLedgerRepository,
-            IPurchaseLedgerPack purchaseLedgerPack)
+            IPurchaseLedgerPack purchaseLedgerPack,
+            IAuthorisationService authorisationService)
         {
             this.exchangeRateRepository = exchangeRateRepository;
             this.ledgerPeriodRepository = ledgerPeriodRepository;
@@ -37,6 +42,7 @@
             this.orderDetailRepository = orderDetailRepository;
             this.purchaseLedgerPack = purchaseLedgerPack;
             this.purchaseLedgerRepository = purchaseLedgerRepository;
+            this.authorisationService = authorisationService;
         }
 
         public IEnumerable<ImportBookExchangeRate> GetExchangeRates(string date)
@@ -55,8 +61,13 @@
             IEnumerable<ImportBookOrderDetail> orderDetails,
             int supplierId,
             int employeeId,
-            DateTime postDutyDate)
+            DateTime postDutyDate,
+            IEnumerable<string> privileges)
         {
+            if (!this.authorisationService.HasPermissionFor(AuthorisedAction.ImpbookAdmin, privileges))
+            {
+                throw new PostDutyException("You are not authorised to post duty");
+            }
             foreach (var detail in orderDetails)
             {
                 var oldDetail = this.orderDetailRepository.FindById(

@@ -1,10 +1,13 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using Linn.Common.Authorisation;
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources.ImportBooks;
     using Linn.Stores.Resources.RequestResources;
+    using Linn.Stores.Service.Extensions;
     using Linn.Stores.Service.Models;
 
     using Nancy;
@@ -26,6 +29,8 @@
 
         private readonly IFacadeService<Port, string, PortResource, PortResource> portFacadeService;
 
+        private readonly IAuthorisationService authorisationService;
+
         public ImportBooksModule(
             IImportBookFacadeService importBookFacadeService,
             IImportBookExchangeRateService importBookExchangeRateService,
@@ -33,7 +38,8 @@
             IFacadeService<ImportBookTransactionCode, int, ImportBookTransactionCodeResource, ImportBookTransactionCodeResource> importBookTransactionCodeFacadeService,
             IFacadeService<ImportBookCpcNumber, int, ImportBookCpcNumberResource, ImportBookCpcNumberResource> importBookCpcNumberFacadeService,
             IFacadeService<ImportBookDeliveryTerm, string, ImportBookDeliveryTermResource, ImportBookDeliveryTermResource> importBookDeliveryTermFacadeService,
-            IFacadeService<Port, string, PortResource, PortResource> portFacadeService)
+            IFacadeService<Port, string, PortResource, PortResource> portFacadeService,
+            IAuthorisationService authorisationService)
         {
             this.importBookFacadeService = importBookFacadeService;
             this.importBookExchangeRateService = importBookExchangeRateService;
@@ -42,6 +48,7 @@
             this.importBookCpcNumberFacadeService = importBookCpcNumberFacadeService;
             this.importBookDeliveryTermFacadeService = importBookDeliveryTermFacadeService;
             this.portFacadeService = portFacadeService;
+            this.authorisationService = authorisationService;
 
             this.Get("/logistics/import-books/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/logistics/import-books/{id}", parameters => this.GetImportBook(parameters.id));
@@ -82,8 +89,15 @@
 
         private object UpdateImportBook(int id)
         {
-            var resource = this.Bind<ImportBookResource>();
+            if (!this.authorisationService
+                    .HasPermissionFor(
+                        AuthorisedAction.ImpbookAdmin,
+                        this.Context.CurrentUser.GetPrivileges()))
+            {
+                return new UnauthorisedResult<ImportBook>("You are not authorised to update impbooks");
+            }
 
+            var resource = this.Bind<ImportBookResource>();
             var result = this.importBookFacadeService.Update(id, resource);
 
             return this.Negotiate.WithModel(result).WithMediaRangeModel("text/html", ApplicationSettings.Get);
@@ -91,8 +105,15 @@
 
         private object CreateImportBook()
         {
-            var resource = this.Bind<ImportBookResource>();
+            if (!this.authorisationService
+                    .HasPermissionFor(
+                        AuthorisedAction.ImpbookAdmin,
+                        this.Context.CurrentUser.GetPrivileges()))
+            {
+                return new UnauthorisedResult<ImportBook>("You are not authorised to create impbooks");
+            }
 
+            var resource = this.Bind<ImportBookResource>();
             var result = this.importBookFacadeService.Add(resource);
 
             return this.Negotiate.WithModel(result).WithMediaRangeModel("text/html", ApplicationSettings.Get);
@@ -102,7 +123,7 @@
         {
             var resource = this.Bind<PostDutyResource>();
 
-            var result = this.importBookFacadeService.PostDuty(resource);
+            var result = this.importBookFacadeService.PostDuty(resource, this.Context.CurrentUser.GetPrivileges());
 
             return this.Negotiate.WithModel(result).WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

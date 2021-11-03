@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
+    using System.Collections.Generic;
+
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Models;
@@ -7,6 +9,6 @@
 
     public interface IImportBookFacadeService : IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource>
     {
-        IResult<ProcessResult> PostDuty(PostDutyResource resource);
+        IResult<ProcessResult> PostDuty(PostDutyResource resource, IEnumerable<string> privileges);
     }
 }
