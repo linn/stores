@@ -16,8 +16,8 @@ import {
     LinkButton
 } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
-import handleBackClick from '../../helpers/handleBackClick';
 import { Decimal } from 'decimal.js';
+import handleBackClick from '../../helpers/handleBackClick';
 import Page from '../../containers/Page';
 
 function Parcel({
@@ -620,7 +620,7 @@ Parcel.propTypes = {
     supplierId: PropTypes.number,
     comments: PropTypes.string,
     inDialogBox: PropTypes.bool,
-    previousPaths: PropTypes.string
+    previousPaths: PropTypes.string,
     privileges: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
