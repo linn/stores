@@ -208,12 +208,16 @@ function GoodsInUtility({
     useEffect(() => {
         if (loanDetails?.length > 0) {
             setLoanDetailsDialogOpen(true);
+        } else {
+            setLoanDetailsDialogOpen(false);
         }
     }, [loanDetails]);
 
     useEffect(() => {
         if (rsnConditions?.length > 0 && rsnAccessories?.length > 0 && validateRsnResult?.success) {
             setRsnDetailsDialogOpen(true);
+        } else {
+            setRsnDetailsDialogOpen(false);
         }
     }, [rsnConditions, rsnAccessories, validateRsnResult]);
 
@@ -240,6 +244,8 @@ function GoodsInUtility({
     useEffect(() => {
         if (bookInResult?.message) {
             setMessage({ error: !bookInResult.success, text: bookInResult.message });
+        } else {
+            setMessage({ error: false, text: '' });
         }
         if (bookInResult?.success && bookInResult.printLabels) {
             setPrintDialogOpen(true);
@@ -248,6 +254,8 @@ function GoodsInUtility({
         }
         if (bookInResult?.createParcel) {
             setParcelDialogOpen(true);
+        } else {
+            setParcelDialogOpen(false);
         }
 
         if (['L', 'R'].includes(bookInResult?.transactionCode)) {
