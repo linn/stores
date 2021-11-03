@@ -7,15 +7,17 @@ import { DataGrid } from '@mui/x-data-grid';
 
 function RsnDetails({ rsnAccessories, rsnConditions, onConfirm }) {
     const columns = [
-        { field: 'code', headerName: 'Return', width: 150, hide: true },
-        { field: 'description', headerName: '#', width: 100 },
-        { field: 'extraInfo', headerName: 'Extra Info', width: 500, editable: true }
+        { field: 'code', headerName: 'Code', width: 150, hide: true },
+        { field: 'description', headerName: 'Description', width: 300 },
+        { field: 'extraInfo', headerName: 'Extra Info', width: 300, editable: true }
     ];
     const [accessoriesRows, setAccessoriesRows] = useState(rsnAccessories);
 
     const handleSelectAccessoriesRows = selected => {
         setAccessoriesRows(
-            accessoriesRows.map(r => (selected.includes(r.id) ? { ...r, selected: true } : r))
+            accessoriesRows.map(r =>
+                selected.includes(r.id) ? { ...r, selected: true } : { ...r, selected: false }
+            )
         );
     };
 
@@ -35,7 +37,9 @@ function RsnDetails({ rsnAccessories, rsnConditions, onConfirm }) {
 
     const handleSelectConditionsRows = selected => {
         setConditionsRows(
-            conditionsRows.map(r => (selected.includes(r.id) ? { ...r, selected: true } : r))
+            conditionsRows.map(r =>
+                selected.includes(r.id) ? { ...r, selected: true } : { ...r, selected: false }
+            )
         );
     };
 
