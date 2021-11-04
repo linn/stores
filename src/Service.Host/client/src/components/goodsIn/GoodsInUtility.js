@@ -82,6 +82,22 @@ function GoodsInUtility({
     const [rows, setRows] = useState([...logEntries, ...lines]);
     const [selectedRows, setSelectedRows] = useState([]);
 
+    useEffect(() => {
+        if (
+            !validatePurchaseOrderResult &&
+            !validateRsnResult &&
+            !validatePurchaseOrderBookInQtyResult &&
+            !validateStorageTypeResult
+        ) {
+            setMessage({ text: '', error: false });
+        }
+    }, [
+        validatePurchaseOrderResult,
+        validateRsnResult,
+        validatePurchaseOrderBookInQtyResult,
+        validateStorageTypeResult
+    ]);
+
     const getMessageColour = () => {
         if (bookInResult?.success) {
             return 'limegreen';
@@ -444,6 +460,7 @@ function GoodsInUtility({
                                 supplierId={bookInResult?.supplierId || ''}
                                 match={match}
                                 inDialogBox
+                                closeDialog={() => setParcelDialogOpen(false)}
                                 history={history}
                             />
                         </div>
