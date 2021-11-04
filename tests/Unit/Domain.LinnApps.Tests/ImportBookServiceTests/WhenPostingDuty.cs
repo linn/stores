@@ -80,7 +80,11 @@
             this.PurchaseLedgerPack.GetLedgerPeriod().Returns(17);
             this.PurchaseLedgerPack.GetNomacc(Arg.Any<string>(), Arg.Any<string>()).Returns(2233);
 
-            var orderDetails = new List<ImportBookOrderDetail> { new() { PostDuty = "Y" }, new() { PostDuty = "Y" } };
+            var orderDetails = new List<ImportBookOrderDetail>
+                                   {
+                                       new ImportBookOrderDetail { PostDuty = "Y" },
+                                       new ImportBookOrderDetail { PostDuty = "Y" }
+                                   };
 
             var privileges = new List<string> { "import-books.admin" };
 
