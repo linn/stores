@@ -67,6 +67,7 @@ const initialise = () => dispatch => {
     dispatch(rsnConditionsActions.clearItems());
     dispatch(doBookInActions.clearProcessData());
     dispatch(loanDetailsActions.clearItem());
+    dispatch(ValidateRsnActions.clearItems());
 };
 
 const mapDispatchToProps = {
