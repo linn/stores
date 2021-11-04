@@ -35,8 +35,6 @@
 
             var importBook = new ImportBook { Id = 12345 };
 
-            var privileges = new List<string> { "import-books.admin" };
-
             this.AuthorisationService.HasPermissionFor("import-books.admin", Arg.Any<IEnumerable<string>>()).Returns(true);
 
             this.ImportBooksFacadeService.Add(Arg.Any<ImportBookResource>())

@@ -41,7 +41,7 @@
                     AuthorisedAction.ParcelAdmin,
                     this.Context.CurrentUser.GetPrivileges()))
             {
-                return new UnauthorisedResult<ImportBook>("You are not authorised to create parcels");
+                return new UnauthorisedResult<Parcel>("You are not authorised to create parcels");
             }
 
             var resource = this.Bind<ParcelResource>();
@@ -85,7 +85,7 @@
                     AuthorisedAction.ParcelAdmin,
                     this.Context.CurrentUser.GetPrivileges()))
             {
-                return new UnauthorisedResult<ImportBook>("You are not authorised to update parcels");
+                return new UnauthorisedResult<Parcel>("You are not authorised to update parcels");
             }
 
             var resource = this.Bind<ParcelResource>();
@@ -94,7 +94,7 @@
                     AuthorisedAction.ParcelKillAdmin,
                     this.Context.CurrentUser.GetPrivileges()))
             {
-                return new UnauthorisedResult<ImportBook>("You are not authorised to kill parcels");
+                return new UnauthorisedResult<Parcel>("You are not authorised to kill parcels");
             }
 
             var result = this.parcelsFacadeService.Update(id, resource);
