@@ -315,7 +315,7 @@ describe('When qty Entered...', () => {
     describe('When validatePurchaseOrderBookInQty result has error message...', () => {
         beforeEach(() => {
             defaultRender({
-                validatePurchaseOrderResult: {
+                validatePurchaseOrderBookInQtyResult: {
                     message: 'Order is overbooked'
                 }
             });

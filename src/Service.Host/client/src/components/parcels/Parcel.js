@@ -47,7 +47,8 @@ function Parcel({
     comments,
     inDialogBox,
     previousPaths,
-    privileges
+    privileges,
+    closeDialog
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -547,7 +548,11 @@ function Parcel({
                                 saveDisabled={viewing() || saveEnabled()}
                                 saveClick={handleSaveClick}
                                 cancelClick={handleCancelClick}
-                                backClick={() => handleBackClick(previousPaths, history.goBack)}
+                                backClick={() =>
+                                    inDialogBox
+                                        ? closeDialog()
+                                        : handleBackClick(previousPaths, history.goBack)
+                                }
                             />
                         </Grid>
                     </>
@@ -621,7 +626,8 @@ Parcel.propTypes = {
     comments: PropTypes.string,
     inDialogBox: PropTypes.bool,
     previousPaths: PropTypes.string,
-    privileges: PropTypes.arrayOf(PropTypes.string).isRequired
+    privileges: PropTypes.arrayOf(PropTypes.string).isRequired,
+    closeDialog: PropTypes.func
 };
 
 Parcel.defaultProps = {
@@ -655,7 +661,8 @@ Parcel.defaultProps = {
     supplierId: '',
     comments: '',
     inDialogBox: false,
-    previousPaths: ''
+    previousPaths: '',
+    closeDialog: null
 };
 
 export default Parcel;

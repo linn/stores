@@ -82,6 +82,22 @@ function GoodsInUtility({
     const [rows, setRows] = useState([...logEntries, ...lines]);
     const [selectedRows, setSelectedRows] = useState([]);
 
+    useEffect(() => {
+        if (
+            !validatePurchaseOrderResult &&
+            !validateRsnResult &&
+            !validatePurchaseOrderBookInQtyResult &&
+            !validateStorageTypeResult
+        ) {
+            setMessage({ text: '', error: false });
+        }
+    }, [
+        validatePurchaseOrderResult,
+        validateRsnResult,
+        validatePurchaseOrderBookInQtyResult,
+        validateStorageTypeResult
+    ]);
+
     const getMessageColour = () => {
         if (bookInResult?.success) {
             return 'limegreen';
@@ -208,12 +224,16 @@ function GoodsInUtility({
     useEffect(() => {
         if (loanDetails?.length > 0) {
             setLoanDetailsDialogOpen(true);
+        } else {
+            setLoanDetailsDialogOpen(false);
         }
     }, [loanDetails]);
 
     useEffect(() => {
         if (rsnConditions?.length > 0 && rsnAccessories?.length > 0 && validateRsnResult?.success) {
             setRsnDetailsDialogOpen(true);
+        } else {
+            setRsnDetailsDialogOpen(false);
         }
     }, [rsnConditions, rsnAccessories, validateRsnResult]);
 
@@ -248,6 +268,8 @@ function GoodsInUtility({
         }
         if (bookInResult?.createParcel) {
             setParcelDialogOpen(true);
+        } else {
+            setParcelDialogOpen(false);
         }
 
         if (['L', 'R'].includes(bookInResult?.transactionCode)) {
@@ -438,6 +460,7 @@ function GoodsInUtility({
                                 supplierId={bookInResult?.supplierId || ''}
                                 match={match}
                                 inDialogBox
+                                closeDialog={() => setParcelDialogOpen(false)}
                                 history={history}
                             />
                         </div>

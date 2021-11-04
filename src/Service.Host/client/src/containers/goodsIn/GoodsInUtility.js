@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { initialiseOnMount } from '@linn-it/linn-form-components-library';
 import demLocationsActions from '../../actions/demLocationsActions';
 import validatePurchaseOrderActions from '../../actions/validatePurchaseOrderActions';
 import GoodsInUtility from '../../components/goodsIn/GoodsInUtility';
@@ -61,7 +62,16 @@ const mapStateToProps = (state, { match }) => ({
     validateRsnResultLoading: validateRsnResultSelectors.getLoading(state)
 });
 
+const initialise = () => dispatch => {
+    dispatch(rsnAccessoriesActions.clearItems());
+    dispatch(rsnConditionsActions.clearItems());
+    dispatch(doBookInActions.clearProcessData());
+    dispatch(loanDetailsActions.clearItem());
+    dispatch(ValidateRsnActions.clearItems());
+};
+
 const mapDispatchToProps = {
+    initialise,
     validatePurchaseOrder: validatePurchaseOrderActions.fetchById,
     searchDemLocations: demLocationsActions.search,
     searchStoragePlaces: storagePlacesActions.search,
@@ -75,4 +85,4 @@ const mapDispatchToProps = {
     validateRsn: ValidateRsnActions.fetchById
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(GoodsInUtility);
+export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(GoodsInUtility));
