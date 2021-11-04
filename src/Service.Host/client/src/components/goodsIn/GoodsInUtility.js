@@ -244,8 +244,6 @@ function GoodsInUtility({
     useEffect(() => {
         if (bookInResult?.message) {
             setMessage({ error: !bookInResult.success, text: bookInResult.message });
-        } else {
-            setMessage({ error: false, text: '' });
         }
         if (bookInResult?.success && bookInResult.printLabels) {
             setPrintDialogOpen(true);
