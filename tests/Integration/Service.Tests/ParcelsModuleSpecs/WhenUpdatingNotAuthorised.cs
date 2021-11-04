@@ -4,8 +4,7 @@
     using System.Collections.Generic;
 
     using FluentAssertions;
-
-    using Linn.Common.Facade;
+    
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
 
@@ -16,7 +15,7 @@
 
     using NUnit.Framework;
 
-    public class WhenUpdating : ContextBase
+    public class WhenUpdatingNotAuthorised : ContextBase
     {
         [SetUp]
         public void SetUp()
@@ -53,10 +52,7 @@
                                      Comments = "RSN 212, RSN 118"
                                  };
 
-            this.AuthorisationService.HasPermissionFor("parcel.admin", Arg.Any<IEnumerable<string>>()).Returns(true);
-
-            this.ParcelsFacadeService.Update(Arg.Any<int>(), Arg.Any<ParcelResource>())
-                .Returns(new SuccessResult<Parcel>(parcel));
+            this.AuthorisationService.HasPermissionFor("parcel.admin", Arg.Any<IEnumerable<string>>()).Returns(false);
 
             this.Response = this.Browser.Put(
                 "/logistics/parcels/4",
@@ -68,24 +64,9 @@
         }
 
         [Test]
-        public void ShouldReturnOk()
+        public void ShouldReturnBadRequest()
         {
-            this.Response.StatusCode.Should().Be(HttpStatusCode.OK);
-        }
-
-        [Test]
-        public void ShouldCallService()
-        {
-            this.ParcelsFacadeService.Received().Update(4, Arg.Any<ParcelResource>());
-        }
-
-        [Test]
-        public void ShouldReturnResource()
-        {
-            var resource = this.Response.Body.DeserializeJson<ParcelResource>();
-            resource.ParcelNumber.Should().Be(4);
-            resource.SupplierId.Should().Be(2);
-            resource.CarrierId.Should().Be(4);
+            this.Response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
     }
 }

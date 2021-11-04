@@ -32,7 +32,11 @@
                                            ImpbookId = 12357
                                        };
 
-            this.ImportBooksFacadeService.PostDuty(Arg.Any<PostDutyResource>()).Returns(
+            var privileges = new List<string> { "import-books.admin" };
+
+            this.AuthorisationService.HasPermissionFor("import-books.admin", privileges).Returns(true);
+
+            this.ImportBooksFacadeService.PostDuty(Arg.Any<PostDutyResource>(), Arg.Any<IEnumerable<string>>()).Returns(
                 new SuccessResult<ProcessResult>(new ProcessResult(true, "posted duty")));
 
             this.Response = this.Browser.Post(
@@ -48,7 +52,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ImportBooksFacadeService.Received().PostDuty(Arg.Any<PostDutyResource>());
+            this.ImportBooksFacadeService.Received().PostDuty(Arg.Any<PostDutyResource>(), Arg.Any<IEnumerable<string>>());
         }
 
         [Test]

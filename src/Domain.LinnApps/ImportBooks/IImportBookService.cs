@@ -15,6 +15,7 @@
             IEnumerable<ImportBookOrderDetail> orderDetails,
             int supplierId,
             int employeeId,
-            DateTime postDutyDate);
+            DateTime postDutyDate,
+            IEnumerable<string> privileges);
     }
 }

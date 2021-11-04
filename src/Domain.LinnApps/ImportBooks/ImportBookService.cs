@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Linn.Common.Authorisation;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
@@ -11,15 +12,17 @@
 
     public class ImportBookService : IImportBookService
     {
+        private readonly IAuthorisationService authorisationService;
+
         private readonly IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey> exchangeRateRepository;
 
         private readonly IRepository<LedgerPeriod, int> ledgerPeriodRepository;
 
         private readonly IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey> orderDetailRepository;
 
-        private readonly IRepository<PurchaseLedger, int> purchaseLedgerRepository;
-
         private readonly IPurchaseLedgerPack purchaseLedgerPack;
+
+        private readonly IRepository<PurchaseLedger, int> purchaseLedgerRepository;
 
         private readonly IQueryRepository<Supplier> supplierRepository;
 
@@ -29,7 +32,8 @@
             IQueryRepository<Supplier> supplierRepository,
             IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey> orderDetailRepository,
             IRepository<PurchaseLedger, int> purchaseLedgerRepository,
-            IPurchaseLedgerPack purchaseLedgerPack)
+            IPurchaseLedgerPack purchaseLedgerPack,
+            IAuthorisationService authorisationService)
         {
             this.exchangeRateRepository = exchangeRateRepository;
             this.ledgerPeriodRepository = ledgerPeriodRepository;
@@ -37,6 +41,7 @@
             this.orderDetailRepository = orderDetailRepository;
             this.purchaseLedgerPack = purchaseLedgerPack;
             this.purchaseLedgerRepository = purchaseLedgerRepository;
+            this.authorisationService = authorisationService;
         }
 
         public IEnumerable<ImportBookExchangeRate> GetExchangeRates(string date)
@@ -55,8 +60,14 @@
             IEnumerable<ImportBookOrderDetail> orderDetails,
             int supplierId,
             int employeeId,
-            DateTime postDutyDate)
+            DateTime postDutyDate,
+            IEnumerable<string> privileges)
         {
+            if (!this.authorisationService.HasPermissionFor(AuthorisedAction.ImpbookAdmin, privileges))
+            {
+                throw new PostDutyException("You are not authorised to post duty");
+            }
+
             foreach (var detail in orderDetails)
             {
                 var oldDetail = this.orderDetailRepository.FindById(
@@ -66,7 +77,8 @@
                     throw new PostDutyException("Cannot post duty without saving all order details first");
                 }
 
-                if (string.IsNullOrEmpty(oldDetail.PostDuty) && !string.IsNullOrEmpty(detail.PostDuty) && detail.PostDuty.Equals("Y"))
+                if (string.IsNullOrEmpty(oldDetail.PostDuty) && !string.IsNullOrEmpty(detail.PostDuty)
+                                                             && detail.PostDuty.Equals("Y"))
                 {
                     this.PostDuty(detail, supplierId, employeeId, postDutyDate);
 
