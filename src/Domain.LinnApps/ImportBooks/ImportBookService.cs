@@ -12,20 +12,19 @@
 
     public class ImportBookService : IImportBookService
     {
+        private readonly IAuthorisationService authorisationService;
+
         private readonly IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey> exchangeRateRepository;
 
         private readonly IRepository<LedgerPeriod, int> ledgerPeriodRepository;
 
         private readonly IRepository<ImportBookOrderDetail, ImportBookOrderDetailKey> orderDetailRepository;
 
-        private readonly IRepository<PurchaseLedger, int> purchaseLedgerRepository;
-
         private readonly IPurchaseLedgerPack purchaseLedgerPack;
 
+        private readonly IRepository<PurchaseLedger, int> purchaseLedgerRepository;
+
         private readonly IQueryRepository<Supplier> supplierRepository;
-
-        private readonly IAuthorisationService authorisationService;
-
 
         public ImportBookService(
             IRepository<ImportBookExchangeRate, ImportBookExchangeRateKey> exchangeRateRepository,
@@ -68,6 +67,7 @@
             {
                 throw new PostDutyException("You are not authorised to post duty");
             }
+
             foreach (var detail in orderDetails)
             {
                 var oldDetail = this.orderDetailRepository.FindById(
@@ -77,7 +77,8 @@
                     throw new PostDutyException("Cannot post duty without saving all order details first");
                 }
 
-                if (string.IsNullOrEmpty(oldDetail.PostDuty) && !string.IsNullOrEmpty(detail.PostDuty) && detail.PostDuty.Equals("Y"))
+                if (string.IsNullOrEmpty(oldDetail.PostDuty) && !string.IsNullOrEmpty(detail.PostDuty)
+                                                             && detail.PostDuty.Equals("Y"))
                 {
                     this.PostDuty(detail, supplierId, employeeId, postDutyDate);
 
