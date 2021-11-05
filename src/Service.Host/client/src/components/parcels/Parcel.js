@@ -17,7 +17,6 @@ import {
 } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
 import { Decimal } from 'decimal.js';
-import handleBackClick from '../../helpers/handleBackClick';
 import Page from '../../containers/Page';
 
 function Parcel({
@@ -549,9 +548,7 @@ function Parcel({
                                 saveClick={handleSaveClick}
                                 cancelClick={handleCancelClick}
                                 backClick={() =>
-                                    inDialogBox
-                                        ? closeDialog()
-                                        : handleBackClick(previousPaths, history.goBack)
+                                    inDialogBox ? closeDialog() : history.push('/logistics/parcels')
                                 }
                             />
                         </Grid>
@@ -578,7 +575,7 @@ Parcel.propTypes = {
     item: PropTypes.shape({
         parcelNumber: PropTypes.number
     }),
-    history: PropTypes.shape({ goBack: PropTypes.func }).isRequired,
+    history: PropTypes.shape({ push: PropTypes.func }).isRequired,
     editStatus: PropTypes.string.isRequired,
     itemError: PropTypes.shape({
         status: PropTypes.number,
