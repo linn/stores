@@ -143,7 +143,7 @@ describe('should render detail of selected consignment', () => {
             hub: { description: 'Dieppe' }
         });
 
-        const details = screen.getByText('Details');
+        const details = screen.getByText('Details And Items');
         fireEvent.click(details);
     });
 
@@ -168,7 +168,7 @@ describe('should render items and pallets of selected consignment', () => {
             item
         });
 
-        const tab = screen.getByText('Items');
+        const tab = screen.getByText('Details And Items');
         fireEvent.click(tab);
     });
 
@@ -257,7 +257,7 @@ describe('should update and save consignment status', () => {
             editStatus: 'edit'
         });
 
-        const details = screen.getByText('Details');
+        const details = screen.getByText('Details And Items');
         fireEvent.click(details);
 
         const a = screen.getByDisplayValue('1 - hub1');
@@ -320,7 +320,7 @@ describe('When terms different to that of outlets on consignment', () => {
             salesOutlets: [{ dispatchTerms: 'DIFFERENT TERMS', name: 'TEST OUTLET' }]
         });
 
-        const details = screen.getByText('Details');
+        const details = screen.getByText('Details And Items');
         fireEvent.click(details);
 
         const saveButton = screen.getByRole('button', { name: 'Save' });
