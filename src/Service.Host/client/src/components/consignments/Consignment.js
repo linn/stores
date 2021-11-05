@@ -22,9 +22,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { makeStyles } from '@material-ui/core/styles';
 import Page from '../../containers/Page';
 import consignmentReducer from './consignmentReducer';
-import DetailsTab from './DetailsTab';
 import DetailsItemsTab from './DetailsItemsTab';
-import ItemsTab from './ItemsTab';
 import DocumentsTab from './DocumentsTab';
 import PackingListTab from './PackingListTab';
 
@@ -252,7 +250,7 @@ function Consignment({
 
     const handleSelectConsignment = (_property, newValue) => {
         getConsignment(newValue);
-        setcurrentTab(3);
+        setcurrentTab(1);
     };
 
     const handleTabChange = (_event, newValue) => {
@@ -588,8 +586,6 @@ function Consignment({
                             style={{ paddingBottom: '20px' }}
                         >
                             <Tab label="Select" />
-                            <Tab label="Details" />
-                            <Tab label="Items" />
                             <Tab label="Details And Items" />
                             <Tab label="Documents" />
                             <Tab label="Packing List" />
@@ -646,34 +642,6 @@ function Consignment({
                         ) : (
                             <>
                                 {currentTab === 1 && (
-                                    <DetailsTab
-                                        consignment={state.consignment}
-                                        hub={hub}
-                                        hubs={hubs}
-                                        updateField={updateField}
-                                        viewMode={viewMode()}
-                                        editStatus={editStatus}
-                                        hubsLoading={hubsLoading}
-                                        carrier={carrier}
-                                        carriers={carriers}
-                                        carriersLoading={carriersLoading}
-                                        shippingTerm={shippingTerm}
-                                        shippingTerms={shippingTerms}
-                                        shippingTermsLoading={shippingTermsLoading}
-                                    />
-                                )}
-                                {currentTab === 2 && (
-                                    <ItemsTab
-                                        editableItems={editableItems}
-                                        editablePallets={editablePallets}
-                                        dispatch={dispatch}
-                                        setSaveDisabled={setSaveDisabled}
-                                        cartonTypes={cartonTypes}
-                                        setEditStatus={setEditStatus}
-                                        viewing={viewing()}
-                                    />
-                                )}
-                                {currentTab === 3 && (
                                     <DetailsItemsTab
                                         consignment={state.consignment}
                                         hub={hub}
@@ -697,7 +665,7 @@ function Consignment({
                                         viewing={viewing()}
                                     />
                                 )}
-                                {currentTab === 4 && (
+                                {currentTab === 2 && (
                                     <DocumentsTab
                                         invoices={state.consignment.invoices}
                                         exportBooks={state.consignment.exportBooks}
@@ -709,7 +677,7 @@ function Consignment({
                                         saveDocumentsResult={saveDocumentsResult}
                                     />
                                 )}
-                                {currentTab === 5 && (
+                                {currentTab === 3 && (
                                     <PackingListTab
                                         consignmentPackingList={consignmentPackingList}
                                         consignmentPackingListLoading={
@@ -721,7 +689,7 @@ function Consignment({
                         )}
                     </>
                     <Grid item xs={12} style={{ marginTop: '20px' }}>
-                        {(currentTab === 2 || currentTab === 3) && (
+                        {currentTab === 1 && (
                             <>
                                 <Button
                                     variant="outlined"
