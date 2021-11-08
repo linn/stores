@@ -270,6 +270,11 @@ function GoodsInUtility({
         }
     }, [bookInResult]);
 
+    useEffect(() => {
+        const total = lines.reduce((a, b) => a + (b.quantity || 0), 0);
+        setFormData(d => ({ ...d, thisBookIn: total }));
+    }, [lines]);
+
     const classes = useStyles();
 
     const getTransactionType = () => {
