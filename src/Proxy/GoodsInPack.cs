@@ -211,7 +211,7 @@
 
                 return message;
             }
-         }
+        }
 
         public string GetErrorMessage()
         {

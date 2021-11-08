@@ -97,7 +97,8 @@
                 }
             }
 
-            var goodsInLogEntries = lines as GoodsInLogEntry[] ?? lines.ToArray();
+            var inLines = lines as GoodsInLogEntry[] ?? lines.ToArray();
+            var goodsInLogEntries = lines as GoodsInLogEntry[] ?? inLines.ToArray();
             var bookinRef = this.goodsInPack.GetNextBookInRef();
 
             if (!goodsInLogEntries.Any())
@@ -121,7 +122,15 @@
             {
                 return new BookInResult(false, msg);
             }
-            
+
+            var total = inLines.Sum(x => x.Quantity);
+
+            if (transactionType.Equals("O") && !this.storesPack.ValidOrderQty((int)orderNumber, (int)orderLine, (int)total, out var qtyRec, out _))
+            {
+                var res = this.ValidatePurchaseOrder((int)orderNumber, (int)orderLine);
+                return new BookInResult(false, $"Overbook: PO was for {res.OrderQty} but you have tried to book in {total}");
+            }
+
             var message = this.goodsInPack.DoBookIn(
                 bookinRef,
                 transactionType,

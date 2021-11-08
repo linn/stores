@@ -132,7 +132,7 @@
                 connection.Open();
                 var cmd =
                     new OracleCommand(
-                        "stores_oo.STORES_ERR_MESSAGE",
+                        "stores_oo.STORES_ERR_MESS",
                         connection)
                         {
                             CommandType = CommandType.StoredProcedure
