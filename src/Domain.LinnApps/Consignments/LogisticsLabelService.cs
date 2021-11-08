@@ -135,7 +135,8 @@
 
         private string GetLabelInformation(Consignment consignment, int cartonNumber)
         {
-            var item = consignment.Items.FirstOrDefault(a => a.ContainerNumber == cartonNumber);
+            var item = consignment.Items.FirstOrDefault(a =>
+                a.ContainerNumber == cartonNumber && (a.ItemType == "C" || a.ItemType == "S"));
 
             if (item == null)
             {

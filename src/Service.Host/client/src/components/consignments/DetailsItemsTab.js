@@ -84,6 +84,7 @@ function DetailsItemsTab({
     const [selectedPalletItems, setSelectedPalletItems] = useState([]);
     const [selectedLooseItems, setSelectedLooseItems] = useState([]);
     const [selectedCartonItems, setSelectedCartonItems] = useState([]);
+    const [showOptionalColumns, setShowOptionalColumns] = useState(false);
 
     const useStyles = makeStyles(() => ({
         tableCell: {
@@ -625,7 +626,7 @@ function DetailsItemsTab({
 
     const itemColumns = [
         {
-            title: 'Item No',
+            title: 'Item',
             id: 'itemNumber',
             type: 'number',
             editable: true,
@@ -728,7 +729,10 @@ function DetailsItemsTab({
             id: 'orderNumber',
             type: 'number',
             editable: true
-        },
+        }
+    ];
+
+    const optionalItemColumns = [
         {
             title: 'Line',
             id: 'orderLine',
@@ -755,6 +759,18 @@ function DetailsItemsTab({
             }
         }
     ];
+
+    const displayedColumns = () => {
+        if (showOptionalColumns) {
+            return itemColumns.concat(optionalItemColumns);
+        }
+
+        return itemColumns;
+    };
+
+    const toggleColumns = () => {
+        setShowOptionalColumns(!showOptionalColumns);
+    };
 
     const palletDialogColumns = [
         { field: 'itemNumber', headerName: 'Item', minWidth: 80, disableColumnMenu: true },
@@ -1060,11 +1076,19 @@ function DetailsItemsTab({
             <Grid container spacing={3} style={{ paddingTop: '50px' }}>
                 <Grid item xs={1}>
                     <Typography variant="subtitle2">Items</Typography>
+                    <Button
+                        style={{ marginTop: '10px' }}
+                        onClick={() => toggleColumns()}
+                        variant="outlined"
+                        color="primary"
+                    >
+                        {showOptionalColumns ? 'Hide Cols' : 'Expand'}
+                    </Button>
                 </Grid>
                 <Grid item xs={11}>
                     {itemsData && (
                         <GroupEditTable
-                            columns={itemColumns}
+                            columns={displayedColumns()}
                             rows={itemsData}
                             updateRow={updateItem}
                             addRow={addItem}
