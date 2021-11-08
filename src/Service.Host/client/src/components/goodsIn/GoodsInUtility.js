@@ -31,15 +31,9 @@ function GoodsInUtility({
     validatePurchaseOrder,
     validatePurchaseOrderResult,
     validatePurchaseOrderResultLoading,
-    searchDemLocations,
-    demLocationsSearchLoading,
-    demLocationsSearchResults,
     searchStoragePlaces,
     storagePlacesSearchResults,
     storagePlacesSearchLoading,
-    searchSalesArticles,
-    salesArticlesSearchResults,
-    salesArticlesSearchLoading,
     bookInResult,
     bookInResultLoading,
     doBookIn,
@@ -615,41 +609,7 @@ function GoodsInUtility({
                         onChange={handleFieldChange}
                     />
                 </Grid>
-                <Grid item xs={3}>
-                    <Typeahead
-                        onSelect={newValue => {
-                            handleFieldChange('salesArticle', newValue.name);
-                        }}
-                        label="Article"
-                        modal
-                        items={salesArticlesSearchResults}
-                        propertyName="salesArticle"
-                        value={formData?.salesArticle}
-                        loading={salesArticlesSearchLoading}
-                        fetchItems={searchSalesArticles}
-                        links={false}
-                        clearSearch={() => {}}
-                        placeholder="Search Articles"
-                    />
-                </Grid>
-                <Grid item xs={3}>
-                    <Typeahead
-                        onSelect={newValue => {
-                            handleFieldChange('demLocation', newValue.name);
-                        }}
-                        label="Dem Location"
-                        propertyName="demLocation"
-                        modal
-                        items={demLocationsSearchResults}
-                        value={formData?.demLocation}
-                        loading={demLocationsSearchLoading}
-                        fetchItems={searchDemLocations}
-                        links={false}
-                        clearSearch={() => {}}
-                        placeholder="Search Locations"
-                    />
-                </Grid>
-                <Grid item xs={3} />
+                <Grid item xs={6} />
                 <Grid item xs={3}>
                     <Typeahead
                         onSelect={newValue =>
@@ -1119,13 +1079,7 @@ GoodsInUtility.propTypes = {
     }),
     validateStorageTypeResultLoading: PropTypes.bool,
     validatePurchaseOrderResultLoading: PropTypes.bool,
-    searchDemLocations: PropTypes.func.isRequired,
     validatePurchaseOrder: PropTypes.func.isRequired,
-    demLocationsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
-    demLocationsSearchLoading: PropTypes.bool,
-    searchSalesArticles: PropTypes.func.isRequired,
-    salesArticlesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
-    salesArticlesSearchLoading: PropTypes.bool,
     searchStoragePlaces: PropTypes.func.isRequired,
     storagePlacesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     storagePlacesSearchLoading: PropTypes.bool,
@@ -1186,10 +1140,6 @@ GoodsInUtility.defaultProps = {
     validatePurchaseOrderResultLoading: false,
     validateStorageTypeResult: null,
     validateStorageTypeResultLoading: false,
-    demLocationsSearchResults: [],
-    demLocationsSearchLoading: false,
-    salesArticlesSearchResults: [],
-    salesArticlesSearchLoading: false,
     storagePlacesSearchResults: [],
     storagePlacesSearchLoading: false,
     validatePurchaseOrderBookInQtyResult: null,
