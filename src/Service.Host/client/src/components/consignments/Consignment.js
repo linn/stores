@@ -92,6 +92,7 @@ function Consignment({
     const [saveDisabled, setSaveDisabled] = useState(false);
     const [showCartonLabel, setShowCartonLabel] = useState(false);
     const [showNewCartonDialog, setShowNewCartonDialog] = useState(false);
+    const [showNewRSNDialog, setShowNewRSNDialog] = useState(false);    
     const [cartonLabelOptions, setCartonLabelOptions] = useState({
         numberOfCopies: 1,
         firstItem: 1,
@@ -477,6 +478,18 @@ function Consignment({
         setEditableItems(items);
     };
 
+    const addRSN = () => {
+        const maxCarton = getMaxCarton();
+        const maxItem = getMaxItemNumber();
+
+        setNewCarton({
+            itemNumber: maxItem ? maxItem + 1 : 1,
+            containerNumber: maxCarton ? maxCarton + 1 : 1
+        });
+
+        setShowNewRSNDialog(true);
+    };    
+
     const handlePrintDocuments = () => {
         printDocumentsClearData();
         printDocuments({ consignmentId: item.consignmentId, userNumber });
@@ -742,11 +755,19 @@ function Consignment({
                                 <Button
                                     variant="outlined"
                                     color="primary"
+                                    onClick={addRSN}
+                                    disabled={viewing()}
+                                >
+                                    Add RSN
+                                </Button>                                   
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
                                     onClick={addItem}
                                     disabled={viewing()}
                                 >
                                     Add Item
-                                </Button>
+                                </Button>                             
                                 <Button
                                     variant="outlined"
                                     color="primary"
@@ -1059,6 +1080,145 @@ function Consignment({
                         </Button>
                     </DialogActions>
                 </Dialog>
+                <Dialog
+                    open={showNewRSNDialog}
+                    onClose={() => setShowNewRSNDialog(false)}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                    fullWidth
+                    maxWidth="sm"
+                >
+                    <DialogTitle id="alert-dialog-title">Add New RSN</DialogTitle>
+                    <DialogContent>
+                        <>
+                            <Grid container>
+                                <Grid item xs={6}>
+                                    <Dropdown
+                                        label="Item Type"
+                                        propertyName="itemTypeDisplay"
+                                        value={newCarton.itemTypeDisplay}
+                                        items={[
+                                            { id: 'Loose Item', displayText: 'Loose Item' },
+                                            { id: 'Open Carton', displayText: 'Open Carton' },
+                                            { id: 'Sealed Box', displayText: 'Sealed Box' }
+                                        ]}
+                                        onChange={updateNewCartonField}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <InputField
+                                        label="Carton Number"
+                                        placeholder="Carton Number"
+                                        propertyName="containerNumber"
+                                        value={newCarton.containerNumber}
+                                        onChange={updateNewCartonField}
+                                        maxLength={2}
+                                    />
+                                </Grid>
+                                <Grid item xs={8}>
+                                    <InputField
+                                        label="Carton Type"
+                                        placeholder="Carton Type"
+                                        propertyName="containerType"
+                                        value={newCarton.containerType}
+                                        onChange={updateNewCartonField}
+                                    />
+                                    <Typeahead
+                                        items={cartonTypesResult()}
+                                        fetchItems={searchCartonTypes}
+                                        clearSearch={clearCartonTypesSearch}
+                                        loading={cartonTypesSearchLoading}
+                                        debounce={1000}
+                                        links={false}
+                                        modal
+                                        searchButtonOnly
+                                        onSelect={p => handleOnSelect(p)}
+                                        label="Search For Carton Type"
+                                    />
+                                </Grid>
+                                <Grid item xs={4} />
+                                <Grid item xs={8}>
+                                    <InputField
+                                        label="Description"
+                                        placeholder="Description"
+                                        fullWidth
+                                        propertyName="itemDescription"
+                                        value={newCarton.itemDescription}
+                                        onChange={updateNewCartonField}
+                                    />
+                                </Grid>
+                                <Grid item xs={4} />
+                                <Grid item xs={6}>
+                                    <InputField
+                                        label="Quantity"
+                                        placeholder="Quantity"
+                                        propertyName="quantity"
+                                        value={newCarton.quantity}
+                                        onChange={updateNewCartonField}
+                                        maxLength={4}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <InputField
+                                        label="Weight"
+                                        placeholder="Weight"
+                                        propertyName="weight"
+                                        value={newCarton.weight}
+                                        onChange={updateNewCartonField}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <InputField
+                                        label="Height"
+                                        placeholder="Height"
+                                        propertyName="height"
+                                        value={newCarton.height}
+                                        onChange={updateNewCartonField}
+                                        maxLength={4}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <InputField
+                                        label="Depth"
+                                        placeholder="Depth"
+                                        propertyName="depth"
+                                        value={newCarton.depth}
+                                        onChange={updateNewCartonField}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <InputField
+                                        label="Width"
+                                        placeholder="Width"
+                                        propertyName="width"
+                                        value={newCarton.width}
+                                        onChange={updateNewCartonField}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button
+                                        style={{ marginTop: '30px', marginBottom: '40px' }}
+                                        onClick={addNewCarton}
+                                        variant="contained"
+                                        color="primary"
+                                    >
+                                        Add RSN
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button
+                            onClick={() => setShowNewRSNDialog(false)}
+                            variant="contained"
+                            autoFocus
+                        >
+                            Close
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
             </Page>
         </div>
     );
