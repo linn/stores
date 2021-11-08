@@ -143,7 +143,7 @@ describe('should render detail of selected consignment', () => {
             hub: { description: 'Dieppe' }
         });
 
-        const details = screen.getByText('Details');
+        const details = screen.getByText('Details And Items');
         fireEvent.click(details);
     });
 
@@ -168,18 +168,18 @@ describe('should render items and pallets of selected consignment', () => {
             item
         });
 
-        const tab = screen.getByText('Items');
+        const tab = screen.getByText('Details And Items');
         fireEvent.click(tab);
     });
 
     test('should show item', () => {
         expect(screen.getByText('Sealed Box')).toBeInTheDocument();
         expect(screen.getByText('MAJIK 140/WH')).toBeInTheDocument();
-        expect(screen.getByText('MAJIK140')).toBeInTheDocument();
+        expect(screen.queryByText('MAJIK140')).not.toBeInTheDocument();
         const lineNumberAndBoxNumber = screen.getAllByText('1');
         expect(lineNumberAndBoxNumber[0]).toBeInTheDocument();
         expect(lineNumberAndBoxNumber[1]).toBeInTheDocument();
-        expect(screen.getByText('1234')).toBeInTheDocument();
+        expect(screen.queryByText('1234')).not.toBeInTheDocument();
         expect(screen.getByText('607355')).toBeInTheDocument();
         expect(screen.getByText('0.5')).toBeInTheDocument();
         expect(screen.getByText('40')).toBeInTheDocument();
@@ -257,7 +257,7 @@ describe('should update and save consignment status', () => {
             editStatus: 'edit'
         });
 
-        const details = screen.getByText('Details');
+        const details = screen.getByText('Details And Items');
         fireEvent.click(details);
 
         const a = screen.getByDisplayValue('1 - hub1');
@@ -320,7 +320,7 @@ describe('When terms different to that of outlets on consignment', () => {
             salesOutlets: [{ dispatchTerms: 'DIFFERENT TERMS', name: 'TEST OUTLET' }]
         });
 
-        const details = screen.getByText('Details');
+        const details = screen.getByText('Details And Items');
         fireEvent.click(details);
 
         const saveButton = screen.getByRole('button', { name: 'Save' });

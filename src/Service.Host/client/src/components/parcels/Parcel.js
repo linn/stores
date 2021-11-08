@@ -45,7 +45,6 @@ function Parcel({
     supplierId,
     comments,
     inDialogBox,
-    previousPaths,
     privileges,
     closeDialog
 }) {
@@ -622,7 +621,6 @@ Parcel.propTypes = {
     supplierId: PropTypes.number,
     comments: PropTypes.string,
     inDialogBox: PropTypes.bool,
-    previousPaths: PropTypes.string,
     privileges: PropTypes.arrayOf(PropTypes.string).isRequired,
     closeDialog: PropTypes.func
 };
@@ -658,7 +656,6 @@ Parcel.defaultProps = {
     supplierId: '',
     comments: '',
     inDialogBox: false,
-    previousPaths: '',
     closeDialog: null
 };
 
