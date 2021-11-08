@@ -67,6 +67,7 @@ function GoodsInUtility({
 }) {
     const [formData, setFormData] = useState({
         orderNumber: null,
+        thisBookIn: 0,
         dateReceived: new Date(),
         lines: []
     });
@@ -75,11 +76,8 @@ function GoodsInUtility({
 
     const [multipleBookIn, setMultipleBookIn] = useState(false);
 
-    const [logEntries, setLogEntries] = useState([]);
-
     const [lines, setLines] = useState([]);
 
-    const [rows, setRows] = useState([...logEntries, ...lines]);
     const [selectedRows, setSelectedRows] = useState([]);
 
     useEffect(() => {
@@ -192,10 +190,6 @@ function GoodsInUtility({
     };
 
     useEffect(() => {
-        setRows([...logEntries, ...lines]);
-    }, [logEntries, lines]);
-
-    useEffect(() => {
         if (validatePurchaseOrderResult?.documentType === 'PO') {
             setBookInPoExpanded(true);
         } else {
@@ -264,7 +258,6 @@ function GoodsInUtility({
         if (bookInResult?.success && bookInResult.printLabels) {
             setPrintDialogOpen(true);
             setLines([]);
-            setLogEntries(r => [...r, ...bookInResult.lines]);
         }
         if (bookInResult?.createParcel) {
             setParcelDialogOpen(true);
@@ -274,7 +267,6 @@ function GoodsInUtility({
 
         if (['L', 'R'].includes(bookInResult?.transactionCode)) {
             setLines([]);
-            setLogEntries([]);
         }
     }, [bookInResult]);
 
@@ -402,7 +394,7 @@ function GoodsInUtility({
     ];
 
     const handleSelectRow = selected => {
-        setSelectedRows(rows.filter(r => selected.includes(r.id)));
+        setSelectedRows(lines.filter(r => selected.includes(r.id)));
     };
 
     if (bookInResultLoading) {
@@ -998,7 +990,7 @@ function GoodsInUtility({
                             !formData.ontoLocation ||
                             !formData.qty
                         }
-                        onClick={() =>
+                        onClick={() => {
                             setLines(l => [
                                 ...l,
                                 {
@@ -1015,8 +1007,8 @@ function GoodsInUtility({
                                     storageType: formData.storageType,
                                     createdBy: userNumber
                                 }
-                            ])
-                        }
+                            ]);
+                        }}
                     >
                         Add Line
                     </Button>
@@ -1067,7 +1059,7 @@ function GoodsInUtility({
                     <div style={{ width: '100%', marginTop: '100px', height: '300px' }}>
                         <DataGrid
                             autoHeight
-                            rows={rows}
+                            rows={lines}
                             columns={tableColumns}
                             density="standard"
                             rowHeight={34}
@@ -1086,9 +1078,6 @@ function GoodsInUtility({
                         onClick={() => {
                             setLines(
                                 lines.filter(r => !selectedRows.map(x => x.id).includes(r.id))
-                            );
-                            setLogEntries(
-                                logEntries.filter(r => !selectedRows.map(x => x.id).includes(r.id))
                             );
                         }}
                     >
