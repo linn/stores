@@ -25,6 +25,8 @@
             this.PurchaseOrderPack.GetDocumentType(1).Returns("PO");
             this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1234").Returns(true);
             this.GoodsInPack.GetNextBookInRef().ReturnsForAnyArgs(1);
+            this.StoresPack.ValidOrderQty(1, 1, 1, out Arg.Any<int>(), out Arg.Any<int>()).Returns(true);
+
             this.ReqRepository.FindById(1).Returns(new RequisitionHeader
                                                        {
                                                            ReqNumber = 1,
@@ -115,7 +117,8 @@
                                 ArticleNumber = "PART",
                                 DateCreated = DateTime.UnixEpoch,
                                 OrderLine = 1,
-                                OrderNumber = 1
+                                OrderNumber = 1,
+                                Quantity = 1
                             }
                     });
         }

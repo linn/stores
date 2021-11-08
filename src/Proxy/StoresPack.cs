@@ -454,7 +454,7 @@
                                };
                 cmd.Parameters.Add(arg4);
 
-                var arg5 = new OracleParameter("p_our_rec", OracleDbType.Int32)
+                var arg5 = new OracleParameter("p_our_qty", OracleDbType.Int32)
                                {
                                    Direction = ParameterDirection.InputOutput,
                                };
