@@ -378,10 +378,17 @@
             using (var connection = this.databaseService.GetConnection())
             {
                 connection.Open();
+
                 var cmd = new OracleCommand("stores_oo.qty_booked_in", connection)
                               {
                                   CommandType = CommandType.StoredProcedure
                               };
+
+                var result = new OracleParameter("result", OracleDbType.Int32)
+                                 {
+                                     Direction = ParameterDirection.ReturnValue,
+                                 };
+                cmd.Parameters.Add(result);
 
                 var arg1 = new OracleParameter("p_order_number", OracleDbType.Int32)
                                {
@@ -396,12 +403,6 @@
                                    Value = line
                                };
                 cmd.Parameters.Add(arg2);
-
-                var result = new OracleParameter("result", OracleDbType.Int32)
-                                 {
-                                     Direction = ParameterDirection.ReturnValue,
-                                 };
-                cmd.Parameters.Add(result);
 
                 cmd.ExecuteNonQuery();
                 connection.Close();
