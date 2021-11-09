@@ -182,14 +182,6 @@ function GoodsInUtility({
         setTab(value);
     };
 
-    // useEffect(() => {
-    //     if (validatePurchaseOrderResult?.documentType === 'PO') {
-    //         setBookInPoExpanded(true);
-    //     } else {
-    //         setBookInPoExpanded(false);
-    //     }
-    // }, [validatePurchaseOrderResult]);
-
     useEffect(() => {
         if (validatePurchaseOrderResult) {
             setMessage({
@@ -662,7 +654,13 @@ function GoodsInUtility({
                                     onChange={handleFieldChange}
                                 />
                             </Grid>
-                            <Grid item xs={3} />
+                            <Grid item xs={1}>
+                                {validatePurchaseOrderResultLoading && <Loading />}
+                            </Grid>
+                            <Grid item xs={1}>
+                                {validatePurchaseOrderBookInQtyResultLoading && <Loading />}
+                            </Grid>
+                            <Grid item xs={1} />
 
                             <Grid item xs={1}>
                                 <InputField
