@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import makeStyles from '@material-ui/styles/makeStyles';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import { DataGrid } from '@mui/x-data-grid';
 import {
     InputField,
@@ -57,7 +54,8 @@ function GoodsInUtility({
     getRsnAccessories,
     validateRsn,
     validateRsnResult,
-    validateRsnResultLoading
+    validateRsnResultLoading,
+    clearPo
 }) {
     const [formData, setFormData] = useState({
         orderNumber: null,
@@ -114,11 +112,6 @@ function GoodsInUtility({
     const handleFieldChange = (propertyName, newValue) => {
         setFormData({ ...formData, [propertyName]: newValue });
     };
-    const [bookInPoExpanded, setBookInPoExpanded] = useState(false);
-
-    const [loanExpanded, setLoanExpanded] = useState(false);
-
-    const [bookInRsnExpanded, setBookInRsnExpanded] = useState(false);
 
     const [printDialogOpen, setPrintDialogOpen] = useState(false);
 
@@ -183,13 +176,19 @@ function GoodsInUtility({
         ]);
     };
 
-    useEffect(() => {
-        if (validatePurchaseOrderResult?.documentType === 'PO') {
-            setBookInPoExpanded(true);
-        } else {
-            setBookInPoExpanded(false);
-        }
-    }, [validatePurchaseOrderResult]);
+    const [tab, setTab] = useState(0);
+
+    const handleTabChange = (event, value) => {
+        setTab(value);
+    };
+
+    // useEffect(() => {
+    //     if (validatePurchaseOrderResult?.documentType === 'PO') {
+    //         setBookInPoExpanded(true);
+    //     } else {
+    //         setBookInPoExpanded(false);
+    //     }
+    // }, [validatePurchaseOrderResult]);
 
     useEffect(() => {
         if (validatePurchaseOrderResult) {
@@ -334,8 +333,8 @@ function GoodsInUtility({
         {
             headerName: 'Serial',
             field: 'serialNumber',
-            width: 200,
-            hide: false
+            hide: true,
+            width: 200
         },
         {
             headerName: 'Serial 2',
@@ -367,21 +366,25 @@ function GoodsInUtility({
         {
             headerName: 'Loan',
             field: 'loanNumber',
+            hide: true,
             width: 200
         },
         {
             headerName: 'Line',
+            hide: true,
             field: 'loanLine',
             width: 200
         },
         {
             headerName: 'Rsn',
+            hide: true,
             field: 'rsnNumber',
             width: 200
         },
         {
             headerName: 'State',
             field: 'state',
+            hide: true,
             width: 200
         },
         {
@@ -508,75 +511,13 @@ function GoodsInUtility({
                 <Grid item xs={12}>
                     <Title text="Goods In Utility" />
                 </Grid>
-                <Grid item xs={6}>
-                    <InputField
-                        fullWidth
-                        disabled
-                        textFieldProps={{
-                            InputProps: {
-                                classes: {
-                                    notchedOutline: classes.notchedOutline
-                                }
-                            }
+                <Grid item xs={3}>
+                    <DatePicker
+                        label="Date Received"
+                        value={formData?.dateReceived}
+                        onChange={value => {
+                            handleFieldChange('dateReceived', value);
                         }}
-                        error={message.error}
-                        rows={3}
-                        value={
-                            validatePurchaseOrderResultLoading ||
-                            validatePurchaseOrderBookInQtyResultLoading ||
-                            bookInResultLoading ||
-                            validateStorageTypeResultLoading ||
-                            loanDetailsLoading
-                                ? 'loading'
-                                : message.text
-                        }
-                        label="Message"
-                        propertyName="message"
-                    />
-                </Grid>
-                <Grid item xs={6} />
-
-                <Grid item xs={4}>
-                    <InputField
-                        fullWidth
-                        type="number"
-                        value={formData.orderNumber}
-                        label="Order Number"
-                        disabled={
-                            validatePurchaseOrderResultLoading ||
-                            formData?.rsnNumber ||
-                            formData?.loanNumber
-                        }
-                        propertyName="orderNumber"
-                        onChange={handleFieldChange}
-                        textFieldProps={{
-                            onBlur: () =>
-                                formData.orderNumber
-                                    ? validatePurchaseOrder(formData.orderNumber)
-                                    : {}
-                        }}
-                    />
-                </Grid>
-
-                <Grid item xs={1}>
-                    <InputField
-                        fullWidth
-                        value={formData.qty}
-                        label="Qty"
-                        propertyName="qty"
-                        type="number"
-                        disabled={
-                            !validatePurchaseOrderResult || !!validatePurchaseOrderResult?.message
-                        }
-                        textFieldProps={{
-                            onBlur: () =>
-                                formData.qty &&
-                                validatePurchaseOrderBookInQty(
-                                    `qty=${formData.qty}&orderLine=${1}&orderNumber`,
-                                    formData.orderNumber
-                                )
-                        }}
-                        onChange={handleFieldChange}
                     />
                 </Grid>
                 <Grid item xs={2}>
@@ -585,10 +526,9 @@ function GoodsInUtility({
                         value={formData.storageType}
                         label="S/Type"
                         disabled={
-                            !validatePurchaseOrderResult ||
-                            (validatePurchaseOrderResult.message !==
+                            validatePurchaseOrderResult?.message !==
                                 'New part - enter storage type or location' &&
-                                validatePurchaseOrderResult.storage === 'BB')
+                            validatePurchaseOrderResult?.storage === 'BB'
                         }
                         propertyName="storageType"
                         onChange={handleFieldChange}
@@ -599,17 +539,6 @@ function GoodsInUtility({
                         }}
                     />
                 </Grid>
-                <Grid item xs={5} />
-                <Grid item xs={3}>
-                    <InputField
-                        fullWidth
-                        value={formData.serialNumber}
-                        label="Serial"
-                        propertyName="serialNumber"
-                        onChange={handleFieldChange}
-                    />
-                </Grid>
-                <Grid item xs={6} />
                 <Grid item xs={3}>
                     <Typeahead
                         onSelect={newValue =>
@@ -637,319 +566,350 @@ function GoodsInUtility({
                         minimumSearchTermLength={3}
                     />
                 </Grid>
-                <Grid item xs={3}>
-                    <Dropdown
-                        items={['STORES', 'QC', 'FAIL']}
-                        propertyName="state"
-                        fullWidth
-                        allowNoValue
-                        value={validatePurchaseOrderResult?.state || ''}
-                        label="State"
-                        onChange={handleFieldChange}
-                        type="state"
-                    />
+                <Grid item xs={4} />
+                <Grid item xs={12}>
+                    <Tabs
+                        value={tab}
+                        onChange={handleTabChange}
+                        indicatorColor="primary"
+                        textColor="primary"
+                        style={{ paddingBottom: '40px' }}
+                    >
+                        <Tab label="PO" />
+                        <Tab label="LOAN" />
+                        <Tab label="RSN" />
+                    </Tabs>
                 </Grid>
                 <Grid item xs={6}>
                     <InputField
                         fullWidth
-                        value={formData.comments}
-                        label="Comments"
-                        propertyName="comments"
-                        onChange={handleFieldChange}
-                    />
-                </Grid>
-                <Grid item xs={3}>
-                    <DatePicker
-                        label="Date Received"
-                        value={formData?.dateReceived}
-                        onChange={value => {
-                            handleFieldChange('dateReceived', value);
+                        disabled
+                        textFieldProps={{
+                            InputProps: {
+                                classes: {
+                                    notchedOutline: classes.notchedOutline
+                                }
+                            }
                         }}
+                        error={message.error}
+                        rows={2}
+                        value={
+                            validatePurchaseOrderResultLoading ||
+                            validatePurchaseOrderBookInQtyResultLoading ||
+                            bookInResultLoading ||
+                            validateStorageTypeResultLoading ||
+                            loanDetailsLoading
+                                ? 'loading'
+                                : message.text
+                        }
+                        label="Message"
+                        propertyName="message"
                     />
                 </Grid>
-                <Grid item xs={12}>
-                    <Accordion expanded={bookInPoExpanded}>
-                        <AccordionSummary
-                            onClick={() => setBookInPoExpanded(!bookInPoExpanded)}
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                        >
-                            <Typography>Book In PO</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Grid container spacing={3}>
-                                <Grid item xs={2}>
-                                    <InputField
-                                        fullWidth
-                                        value={validatePurchaseOrderResult?.orderNumber}
-                                        label="Order No"
-                                        propertyName="purchaseOrderNumber"
-                                        disabled
-                                        onChange={handleFieldChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={1}>
-                                    <InputField
-                                        fullWidth
-                                        value={validatePurchaseOrderResult?.orderLine}
-                                        label="Line"
-                                        propertyName="orderLine"
-                                        onChange={handleFieldChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={1}>
-                                    <InputField
-                                        fullWidth
-                                        value={validatePurchaseOrderResult?.documentType}
-                                        label="Type"
-                                        propertyName="documentType"
-                                        onChange={handleFieldChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <InputField
-                                        fullWidth
-                                        value={validatePurchaseOrderResult?.orderQty}
-                                        label="Order Qty"
-                                        disabled={!validatePurchaseOrderResult}
-                                        type="number"
-                                        propertyName="orderQty"
-                                        onChange={handleFieldChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <InputField
-                                        fullWidth
-                                        value={validatePurchaseOrderResult?.qtyBookedIn}
-                                        label="Booked In"
-                                        type="number"
-                                        propertyName="qtyBookedIn"
-                                        onChange={handleFieldChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <InputField
-                                        fullWidth
-                                        value={formData?.thisBookIn}
-                                        label="This Bookin"
-                                        type="number"
-                                        propertyName="thisBookIn"
-                                        onChange={handleFieldChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={1}>
-                                    <InputField
-                                        fullWidth
-                                        value={validatePurchaseOrderResult?.storage}
-                                        label="Storage"
-                                        propertyName="storage"
-                                        onChange={handleFieldChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={1}>
-                                    <InputField
-                                        fullWidth
-                                        value={validatePurchaseOrderResult?.qcPart}
-                                        label="QC"
-                                        propertyName="qcPart"
-                                        onChange={handleFieldChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={3}>
-                                    <InputField
-                                        fullWidth
-                                        value={validatePurchaseOrderResult?.partNumber}
-                                        label="Part"
-                                        propertyName="partNumber"
-                                        onChange={handleFieldChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={5}>
-                                    <InputField
-                                        fullWidth
-                                        value={validatePurchaseOrderResult?.partDescription}
-                                        label="Description"
-                                        propertyName="partDescription"
-                                        onChange={handleFieldChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <InputField
-                                        fullWidth
-                                        value={validatePurchaseOrderResult?.orderUnitOfMeasure}
-                                        label="UOM"
-                                        propertyName="orderUnitOfMeasure"
-                                        onChange={handleFieldChange}
-                                    />
-                                </Grid>
-                                <Grid item xs={2}>
-                                    <InputField
-                                        fullWidth
-                                        value={validatePurchaseOrderResult?.manufacturersPartNumber}
-                                        label="MFPN"
-                                        propertyName="manufacturersPartNumber"
-                                        onChange={handleFieldChange}
-                                    />
-                                </Grid>
+                <Grid item xs={6} />
+                {tab === 0 && (
+                    <Grid item xs={12}>
+                        <Grid container spacing={3}>
+                            <Grid item xs={4}>
+                                <InputField
+                                    fullWidth
+                                    type="number"
+                                    value={formData.orderNumber}
+                                    label="Order Number"
+                                    disabled={
+                                        validatePurchaseOrderResultLoading ||
+                                        formData?.rsnNumber ||
+                                        formData?.loanNumber
+                                    }
+                                    propertyName="orderNumber"
+                                    onChange={handleFieldChange}
+                                    textFieldProps={{
+                                        onBlur: () =>
+                                            formData.orderNumber
+                                                ? validatePurchaseOrder(formData.orderNumber)
+                                                : {}
+                                    }}
+                                />
                             </Grid>
-                        </AccordionDetails>
-                    </Accordion>
-                </Grid>
-                <Grid item xs={12}>
-                    <Accordion expanded={loanExpanded}>
-                        <AccordionSummary
-                            onClick={() => setLoanExpanded(!loanExpanded)}
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                        >
-                            <Typography>Book In Loan</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Grid container spacing={3}>
-                                <Grid item xs={2}>
-                                    <InputField
-                                        fullWidth
-                                        value={formData?.loanNumber}
-                                        label="Loan Number"
-                                        propertyName="loanNumber"
-                                        disabled={formData?.orderNumber || formData?.rsnNumber}
-                                        onChange={handleFieldChange}
-                                        textFieldProps={{
-                                            onBlur: () =>
-                                                formData.loanNumber
-                                                    ? getLoanDetails(
-                                                          'loanNumber',
-                                                          formData.loanNumber
-                                                      )
-                                                    : {}
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item xs={2}>
-                                    {loanDetailsLoading && <Loading />}
-                                </Grid>
-                                <Grid item xs={8} />
+                            <Grid item xs={1}>
+                                <InputField
+                                    fullWidth
+                                    value={validatePurchaseOrderResult?.orderLine}
+                                    label="Line"
+                                    propertyName="orderLine"
+                                    onChange={handleFieldChange}
+                                />
                             </Grid>
-                        </AccordionDetails>
-                    </Accordion>
-                </Grid>
-                <Grid item xs={12}>
-                    <Accordion expanded={bookInRsnExpanded}>
-                        <AccordionSummary
-                            onClick={() => setBookInRsnExpanded(!bookInRsnExpanded)}
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls="panel1a-content"
-                            id="panel1a-header"
-                        >
-                            <Typography>Book In RSN</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Grid container spacing={3}>
-                                <Grid item xs={2}>
-                                    <InputField
-                                        fullWidth
-                                        value={formData?.rsnNumber}
-                                        label="RSN Number"
-                                        propertyName="rsnNumber"
-                                        disabled={formData?.orderNumber || formData?.loanNumber}
-                                        onChange={handleFieldChange}
-                                        textFieldProps={{
-                                            onBlur: () => {
-                                                validateRsn(formData?.rsnNumber);
-                                                getRsnAccessories();
-                                                getRsnConditions();
-                                            }
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item xs={2}>
-                                    {(rsnAccessoriesLoading ||
-                                        rsnConditionsLoading ||
-                                        validateRsnResultLoading) && <Loading />}
-                                </Grid>
-                                <Grid item xs={8} />
-                                <Grid item xs={6}>
-                                    <InputField
-                                        fullWidth
-                                        value={rsnAccessoriesString}
-                                        label="Accessories"
-                                        propertyName="rsnAccessoriesString"
-                                        onChange={() => {}}
-                                    />
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <InputField
-                                        fullWidth
-                                        value={rsnConditionsString}
-                                        label="Conditions"
-                                        propertyName="rsnConditionsString"
-                                        onChange={() => {}}
-                                    />
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <InputField
-                                        disabled
-                                        fullWidth
-                                        value={validateRsnResult?.articleNumber}
-                                        label="Article"
-                                        propertyName="rsnArticleNumber"
-                                        onChange={() => {}}
-                                    />
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <InputField
-                                        disabled
-                                        fullWidth
-                                        value={validateRsnResult?.description}
-                                        label="Desc"
-                                        propertyName="rsnArticleDesc"
-                                        onChange={() => {}}
-                                    />
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <InputField
-                                        disabled
-                                        fullWidth
-                                        value={validateRsnResult?.quantity}
-                                        label="Quantity"
-                                        propertyName="rsnQty"
-                                        onChange={() => {}}
-                                    />
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <InputField
-                                        disabled
-                                        fullWidth
-                                        value={validateRsnResult?.state}
-                                        label="State"
-                                        propertyName="rsnState"
-                                        onChange={() => {}}
-                                    />
-                                </Grid>
-                                <Grid item xs={4}>
-                                    <InputField
-                                        disabled
-                                        fullWidth
-                                        value={validateRsnResult?.serialNumber}
-                                        label="Serial"
-                                        propertyName="rsnSerialNumber"
-                                        onChange={() => {}}
-                                    />
-                                </Grid>
-                                <Grid item xs={4} />
+                            <Grid item xs={4}>
+                                <InputField
+                                    fullWidth
+                                    value={formData.qty}
+                                    label="Qty"
+                                    propertyName="qty"
+                                    type="number"
+                                    disabled={
+                                        !validatePurchaseOrderResult ||
+                                        !!validatePurchaseOrderResult?.message
+                                    }
+                                    textFieldProps={{
+                                        onBlur: () =>
+                                            formData.qty &&
+                                            validatePurchaseOrderBookInQty(
+                                                `qty=${formData.qty}&orderLine=${1}&orderNumber`,
+                                                formData.orderNumber
+                                            )
+                                    }}
+                                    onChange={handleFieldChange}
+                                />
                             </Grid>
-                        </AccordionDetails>
-                    </Accordion>
-                </Grid>
-                <Grid item xs={12}>
-                    <CheckboxWithLabel
-                        label="Multiple Book In?"
-                        checked={multipleBookIn}
-                        onChange={() => setMultipleBookIn(m => !m)}
-                    />
-                </Grid>
+                            <Grid item xs={3} />
+
+                            <Grid item xs={1}>
+                                <InputField
+                                    fullWidth
+                                    value={validatePurchaseOrderResult?.documentType}
+                                    label="Type"
+                                    propertyName="documentType"
+                                    onChange={handleFieldChange}
+                                />
+                            </Grid>
+                            <Grid item xs={2}>
+                                <InputField
+                                    fullWidth
+                                    value={validatePurchaseOrderResult?.orderQty}
+                                    label="Order Qty"
+                                    disabled={!validatePurchaseOrderResult}
+                                    type="number"
+                                    propertyName="orderQty"
+                                    onChange={handleFieldChange}
+                                />
+                            </Grid>
+                            <Grid item xs={2}>
+                                <InputField
+                                    fullWidth
+                                    value={validatePurchaseOrderResult?.qtyBookedIn}
+                                    label="Booked In"
+                                    type="number"
+                                    propertyName="qtyBookedIn"
+                                    onChange={handleFieldChange}
+                                />
+                            </Grid>
+                            <Grid item xs={2}>
+                                <InputField
+                                    fullWidth
+                                    value={formData?.thisBookIn}
+                                    label="This Bookin"
+                                    type="number"
+                                    propertyName="thisBookIn"
+                                    onChange={handleFieldChange}
+                                />
+                            </Grid>
+                            <Grid item xs={1}>
+                                <InputField
+                                    fullWidth
+                                    value={validatePurchaseOrderResult?.storage}
+                                    label="Storage"
+                                    propertyName="storage"
+                                    onChange={handleFieldChange}
+                                />
+                            </Grid>
+                            <Grid item xs={1}>
+                                <InputField
+                                    fullWidth
+                                    value={validatePurchaseOrderResult?.qcPart}
+                                    label="QC"
+                                    propertyName="qcPart"
+                                    onChange={handleFieldChange}
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <InputField
+                                    fullWidth
+                                    value={validatePurchaseOrderResult?.partNumber}
+                                    label="Part"
+                                    propertyName="partNumber"
+                                    onChange={handleFieldChange}
+                                />
+                            </Grid>
+                            <Grid item xs={5}>
+                                <InputField
+                                    fullWidth
+                                    value={validatePurchaseOrderResult?.partDescription}
+                                    label="Description"
+                                    propertyName="partDescription"
+                                    onChange={handleFieldChange}
+                                />
+                            </Grid>
+                            <Grid item xs={2}>
+                                <InputField
+                                    fullWidth
+                                    value={validatePurchaseOrderResult?.orderUnitOfMeasure}
+                                    label="UOM"
+                                    propertyName="orderUnitOfMeasure"
+                                    onChange={handleFieldChange}
+                                />
+                            </Grid>
+                            <Grid item xs={2}>
+                                <InputField
+                                    fullWidth
+                                    value={validatePurchaseOrderResult?.manufacturersPartNumber}
+                                    label="MFPN"
+                                    propertyName="manufacturersPartNumber"
+                                    onChange={handleFieldChange}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <CheckboxWithLabel
+                                    label="Multiple Book In?"
+                                    checked={multipleBookIn}
+                                    onChange={() => setMultipleBookIn(m => !m)}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <div
+                                    style={{
+                                        width: '100%'
+                                    }}
+                                >
+                                    <DataGrid
+                                        autoHeight
+                                        rows={lines}
+                                        columns={tableColumns}
+                                        density="standard"
+                                        rowHeight={34}
+                                        checkboxSelection
+                                        onSelectionModelChange={handleSelectRow}
+                                        hideFooter
+                                    />
+                                </div>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                )}
+                {tab === 1 && (
+                    <Grid item xs={12}>
+                        <Grid container spacing={3}>
+                            <Grid item xs={2}>
+                                <InputField
+                                    fullWidth
+                                    value={formData?.loanNumber}
+                                    label="Loan Number"
+                                    propertyName="loanNumber"
+                                    disabled={formData?.orderNumber || formData?.rsnNumber}
+                                    onChange={handleFieldChange}
+                                    textFieldProps={{
+                                        onBlur: () =>
+                                            formData.loanNumber
+                                                ? getLoanDetails('loanNumber', formData.loanNumber)
+                                                : {}
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={2}>
+                                {loanDetailsLoading && <Loading />}
+                            </Grid>
+                            <Grid item xs={8} />
+                        </Grid>
+                    </Grid>
+                )}
+                {tab === 2 && (
+                    <Grid item xs={12}>
+                        <Grid container spacing={3}>
+                            <Grid item xs={2}>
+                                <InputField
+                                    fullWidth
+                                    value={formData?.rsnNumber}
+                                    label="RSN Number"
+                                    propertyName="rsnNumber"
+                                    disabled={formData?.orderNumber || formData?.loanNumber}
+                                    onChange={handleFieldChange}
+                                    textFieldProps={{
+                                        onBlur: () => {
+                                            validateRsn(formData?.rsnNumber);
+                                            getRsnAccessories();
+                                            getRsnConditions();
+                                        }
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={2}>
+                                {(rsnAccessoriesLoading ||
+                                    rsnConditionsLoading ||
+                                    validateRsnResultLoading) && <Loading />}
+                            </Grid>
+                            <Grid item xs={8} />
+                            <Grid item xs={6}>
+                                <InputField
+                                    fullWidth
+                                    value={rsnAccessoriesString}
+                                    label="Accessories"
+                                    propertyName="rsnAccessoriesString"
+                                    onChange={() => {}}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <InputField
+                                    fullWidth
+                                    value={rsnConditionsString}
+                                    label="Conditions"
+                                    propertyName="rsnConditionsString"
+                                    onChange={() => {}}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <InputField
+                                    disabled
+                                    fullWidth
+                                    value={validateRsnResult?.articleNumber}
+                                    label="Article"
+                                    propertyName="rsnArticleNumber"
+                                    onChange={() => {}}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <InputField
+                                    disabled
+                                    fullWidth
+                                    value={validateRsnResult?.description}
+                                    label="Desc"
+                                    propertyName="rsnArticleDesc"
+                                    onChange={() => {}}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <InputField
+                                    disabled
+                                    fullWidth
+                                    value={validateRsnResult?.quantity}
+                                    label="Quantity"
+                                    propertyName="rsnQty"
+                                    onChange={() => {}}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <InputField
+                                    disabled
+                                    fullWidth
+                                    value={validateRsnResult?.state}
+                                    label="State"
+                                    propertyName="rsnState"
+                                    onChange={() => {}}
+                                />
+                            </Grid>
+                            <Grid item xs={4}>
+                                <InputField
+                                    disabled
+                                    fullWidth
+                                    value={validateRsnResult?.serialNumber}
+                                    label="Serial"
+                                    propertyName="rsnSerialNumber"
+                                    onChange={() => {}}
+                                />
+                            </Grid>
+                            <Grid item xs={4} />
+                        </Grid>
+                    </Grid>
+                )}
                 <Grid item xs={12}>
                     <Button
                         variant="contained"
@@ -967,7 +927,7 @@ function GoodsInUtility({
                                     articleNumber: validatePurchaseOrderResult.partNumber,
                                     transactionType: validatePurchaseOrderResult.transactionType,
                                     dateCreated: new Date().toISOString(),
-                                    storagePlace: formData.ontoLocation,
+                                    storagePlace: formData.ontoLocation.toUpperCase(),
                                     locationId: formData.ontoLocationId,
                                     quantity: formData.qty,
                                     orderNumber: validatePurchaseOrderResult.orderNumber,
@@ -1020,40 +980,60 @@ function GoodsInUtility({
                                 condition: rsnConditionsString
                             });
                             setLines([]);
-                            setFormData({ thisBookIn: 0, dateReceived: new Date(), lines: [] });
+                            setFormData({
+                                thisBookIn: 0,
+                                dateReceived: new Date(),
+                                lines: []
+                            });
+                            clearPo();
                         }}
                     >
                         Book In
                     </Button>
+                    {tab === 0 && (
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            disabled={selectedRows.length < 1}
+                            onClick={() => {
+                                setLines(
+                                    lines.filter(r => !selectedRows.map(x => x.id).includes(r.id))
+                                );
+                            }}
+                        >
+                            Clear Selected
+                        </Button>
+                    )}
                 </Grid>
-                <Grid item xs={12}>
-                    <div style={{ width: '100%', marginTop: '100px', height: '300px' }}>
-                        <DataGrid
-                            autoHeight
-                            rows={lines}
-                            columns={tableColumns}
-                            density="standard"
-                            rowHeight={34}
-                            checkboxSelection
-                            onSelectionModelChange={handleSelectRow}
-                            hideFooter
-                        />
-                    </div>
+                <Grid item xs={3}>
+                    <InputField
+                        fullWidth
+                        value={formData.serialNumber}
+                        label="Serial"
+                        propertyName="serialNumber"
+                        onChange={handleFieldChange}
+                    />
                 </Grid>
-                <Grid item xs={2}>
-                    <Button
-                        style={{ marginTop: '22px' }}
-                        variant="contained"
-                        color="secondary"
-                        disabled={selectedRows.length < 1}
-                        onClick={() => {
-                            setLines(
-                                lines.filter(r => !selectedRows.map(x => x.id).includes(r.id))
-                            );
-                        }}
-                    >
-                        Clear Selected
-                    </Button>
+                <Grid item xs={3}>
+                    <Dropdown
+                        items={['STORES', 'QC', 'FAIL']}
+                        propertyName="state"
+                        fullWidth
+                        allowNoValue
+                        value={validatePurchaseOrderResult?.state || ''}
+                        label="State"
+                        onChange={handleFieldChange}
+                        type="state"
+                    />
+                </Grid>
+                <Grid item xs={6}>
+                    <InputField
+                        fullWidth
+                        value={formData.comments}
+                        label="Comments"
+                        propertyName="comments"
+                        onChange={handleFieldChange}
+                    />
                 </Grid>
             </Grid>
         </Page>
@@ -1136,7 +1116,8 @@ GoodsInUtility.propTypes = {
         quantity: PropTypes.number,
         serialNumber: PropTypes.number
     }),
-    validateRsnResultLoading: PropTypes.bool
+    validateRsnResultLoading: PropTypes.bool,
+    clearPo: PropTypes.func.isRequired
 };
 
 GoodsInUtility.defaultProps = {

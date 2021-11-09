@@ -68,7 +68,8 @@ const mapDispatchToProps = {
     getLoanDetails: loanDetailsActions.fetchByQueryString,
     getRsnConditions: rsnConditionsActions.fetch,
     getRsnAccessories: rsnAccessoriesActions.fetch,
-    validateRsn: ValidateRsnActions.fetchById
+    validateRsn: ValidateRsnActions.fetchById,
+    clearPo: validatePurchaseOrderActions.clearItems
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(GoodsInUtility));
