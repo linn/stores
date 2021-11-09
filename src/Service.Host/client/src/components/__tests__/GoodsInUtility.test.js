@@ -55,7 +55,6 @@ describe('On initial load...', () => {
     test('inputs should be disabled', () => {
         expect(screen.getByRole('button', { name: 'Add Line' })).toHaveClass('Mui-disabled');
         expect(screen.getByRole('button', { name: 'Book In' })).toHaveClass('Mui-disabled');
-        expect(screen.getByLabelText('S/Type')).toHaveClass('Mui-disabled');
         expect(screen.getByLabelText('Qty')).toHaveClass('Mui-disabled');
     });
 });
