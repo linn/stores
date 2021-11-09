@@ -32,6 +32,8 @@
 
         public int? CreatedBy { get; set; }
 
+        public bool PrintLabels { get; set; }
+
         public IEnumerable<GoodsInLogEntryResource> Lines { get; set; }
     }
 }

@@ -30,6 +30,7 @@
                            ParcelComments = model.ParcelComments,
                            SupplierId = model.SupplierId,
                            CreatedBy = model.CreatedBy,
+                           PrintLabels = model.PrintLabels,
                            Lines = model.Lines?.Select(
                                l => new GoodsInLogEntryResource
                                         {

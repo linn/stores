@@ -132,7 +132,7 @@
                                             {
                                                 Direction = ParameterDirection.Input,
                                                 Size = 50,
-                                                Value = storageType.ToUpper()
+                                                Value = storageType?.ToUpper()
                                             };
                 cmd.Parameters.Add(storageTypeParam);
 

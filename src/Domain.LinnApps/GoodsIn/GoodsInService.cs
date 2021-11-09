@@ -123,7 +123,7 @@
                 return new BookInResult(false, msg);
             }
 
-            var total = inLines.Sum(x => x.Quantity);
+            var total = inLines.Sum(x => x.Quantity).Value;
 
             if (transactionType.Equals("O") && !this.storesPack.ValidOrderQty((int)orderNumber, (int)orderLine, (int)total, out var qtyRec, out _))
             {
@@ -174,6 +174,7 @@
             result.QcState = !string.IsNullOrEmpty(state) && state.Equals("QC") ? "QUARANTINE" : "PASS";
             result.QcInfo = part?.QcInformation;
 
+
             if (transactionType == "O")
             {
                 this.goodsInPack.GetPurchaseOrderDetails(
@@ -191,9 +192,10 @@
                 result.DocType = this.purchaseOrderPack.GetDocumentType(orderNumber.Value);
                 result.PrintLabels = true;
                 result.PartNumber = partNumber;
-
                 result.SupplierId = supplierId;
                 result.ParcelComments = $"{result.DocType}{orderNumber}";
+
+                result.QtyReceived = total;
 
                 if (!string.IsNullOrEmpty(storageType))
                 {
@@ -476,7 +478,7 @@
                        {
                            LocationCode = locationCode,
                            LocationId = locationId,
-                           Message = this.goodsInPack.GetErrorMessage()
+                           Message = string.IsNullOrEmpty(locationCode) ? this.goodsInPack.GetErrorMessage() : null
                        };
         }
 
