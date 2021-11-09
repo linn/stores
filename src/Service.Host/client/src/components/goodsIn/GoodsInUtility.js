@@ -622,6 +622,10 @@ function GoodsInUtility({
                         }
                         label="Onto Location"
                         modal
+                        openModalOnClick={false}
+                        handleFieldChange={(_, newValue) => {
+                            setFormData(d => ({ ...d, ontoLocation: newValue }));
+                        }}
                         propertyName="ontoLocation"
                         items={storagePlacesSearchResults}
                         value={formData?.ontoLocation}
@@ -1015,6 +1019,8 @@ function GoodsInUtility({
                                 rsnAccessories: rsnAccessoriesString,
                                 condition: rsnConditionsString
                             });
+                            setLines([]);
+                            setFormData({ thisBookIn: 0, dateReceived: new Date(), lines: [] });
                         }}
                     >
                         Book In
