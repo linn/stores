@@ -9,11 +9,12 @@ import makeStyles from '@material-ui/styles/makeStyles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { DataGrid } from '@mui/x-data-grid';
+import Typography from '@material-ui/core/Typography';
+
 import {
     InputField,
     Typeahead,
     Dropdown,
-    DatePicker,
     Title,
     CheckboxWithLabel,
     Loading
@@ -107,6 +108,9 @@ function GoodsInUtility({
         notchedOutline: {
             borderWidth: '3px',
             borderColor: `${getMessageColour()} !important`
+        },
+        padBottom: {
+            paddingBottom: theme.spacing(6)
         }
     }));
 
@@ -501,16 +505,65 @@ function GoodsInUtility({
                         </div>
                     </div>
                 </Dialog>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <Title text="Goods In Utility" />
                 </Grid>
-                <Grid item xs={3}>
-                    <DatePicker
-                        label="Date Received"
-                        value={formData?.dateReceived}
-                        onChange={value => {
-                            handleFieldChange('dateReceived', value);
+                <Grid item xs={6}>
+                    <InputField
+                        fullWidth
+                        disabled
+                        textFieldProps={{
+                            InputProps: {
+                                classes: {
+                                    notchedOutline: classes.notchedOutline
+                                }
+                            }
                         }}
+                        error={message.error}
+                        value={
+                            validatePurchaseOrderResultLoading ||
+                            validatePurchaseOrderBookInQtyResultLoading ||
+                            bookInResultLoading ||
+                            validateStorageTypeResultLoading ||
+                            loanDetailsLoading
+                                ? 'loading'
+                                : message.text
+                        }
+                        label="Message"
+                        propertyName="message"
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography variant="h6">
+                        Enter a location or storage type (e.g. K106) to start
+                    </Typography>
+                </Grid>
+                <Grid item xs={3}>
+                    <Typeahead
+                        onSelect={newValue =>
+                            setFormData(d => ({
+                                ...d,
+                                ontoLocation: newValue.name,
+                                ontoLocationId: newValue.locationId,
+                                palletNumber: newValue.palletNumber
+                            }))
+                        }
+                        label="Location (you can click the button to search)"
+                        modal
+                        openModalOnClick={false}
+                        handleFieldChange={(_, newValue) => {
+                            setFormData(d => ({ ...d, ontoLocation: newValue }));
+                        }}
+                        propertyName="ontoLocation"
+                        items={storagePlacesSearchResults}
+                        value={formData?.ontoLocation}
+                        loading={storagePlacesSearchLoading}
+                        fetchItems={searchStoragePlaces}
+                        links={false}
+                        text
+                        clearSearch={() => {}}
+                        placeholder="Search Locations"
+                        minimumSearchTermLength={3}
                     />
                 </Grid>
                 <Grid item xs={2}>
@@ -526,40 +579,22 @@ function GoodsInUtility({
                         propertyName="storageType"
                         onChange={handleFieldChange}
                         textFieldProps={{
+                            className: classes.padBottom,
                             onBlur: () =>
                                 formData.storageType &&
                                 validateStorageType(`storageType`, formData.storageType)
                         }}
                     />
                 </Grid>
-                <Grid item xs={3}>
-                    <Typeahead
-                        onSelect={newValue =>
-                            setFormData(d => ({
-                                ...d,
-                                ontoLocation: newValue.name,
-                                ontoLocationId: newValue.locationId,
-                                palletNumber: newValue.palletNumber
-                            }))
-                        }
-                        label="Onto Location"
-                        modal
-                        openModalOnClick={false}
-                        handleFieldChange={(_, newValue) => {
-                            setFormData(d => ({ ...d, ontoLocation: newValue }));
-                        }}
-                        propertyName="ontoLocation"
-                        items={storagePlacesSearchResults}
-                        value={formData?.ontoLocation}
-                        loading={storagePlacesSearchLoading}
-                        fetchItems={searchStoragePlaces}
-                        links={false}
-                        clearSearch={() => {}}
-                        placeholder="Search Locations"
-                        minimumSearchTermLength={3}
-                    />
+                <Grid item xs={1}>
+                    {validateStorageTypeResultLoading && <Loading />}
                 </Grid>
-                <Grid item xs={4} />
+                <Grid item xs={6} />
+                <Grid item xs={12}>
+                    <Typography variant="h6">
+                        Select the type of book in from the tabs below
+                    </Typography>
+                </Grid>
                 <Grid item xs={12}>
                     <Tabs
                         value={tab}
@@ -573,33 +608,7 @@ function GoodsInUtility({
                         <Tab label="RSN" />
                     </Tabs>
                 </Grid>
-                <Grid item xs={6}>
-                    <InputField
-                        fullWidth
-                        disabled
-                        textFieldProps={{
-                            InputProps: {
-                                classes: {
-                                    notchedOutline: classes.notchedOutline
-                                }
-                            }
-                        }}
-                        error={message.error}
-                        rows={2}
-                        value={
-                            validatePurchaseOrderResultLoading ||
-                            validatePurchaseOrderBookInQtyResultLoading ||
-                            bookInResultLoading ||
-                            validateStorageTypeResultLoading ||
-                            loanDetailsLoading
-                                ? 'loading'
-                                : message.text
-                        }
-                        label="Message"
-                        propertyName="message"
-                    />
-                </Grid>
-                <Grid item xs={6} />
+
                 {tab === 0 && (
                     <Grid item xs={12}>
                         <Grid container spacing={3}>
@@ -936,6 +945,11 @@ function GoodsInUtility({
                                     createdBy: userNumber
                                 }
                             ]);
+                            setFormData({
+                                thisBookIn: 0,
+                                dateReceived: new Date(),
+                                lines: []
+                            });
                         }}
                     >
                         Add Line
