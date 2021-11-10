@@ -531,11 +531,6 @@ function GoodsInUtility({
                         propertyName="message"
                     />
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography variant="h6">
-                        Enter a location or storage type (e.g. K106) to start
-                    </Typography>
-                </Grid>
                 <Grid item xs={3}>
                     <Typeahead
                         onSelect={newValue =>
@@ -577,7 +572,6 @@ function GoodsInUtility({
                         propertyName="storageType"
                         onChange={handleFieldChange}
                         textFieldProps={{
-                            className: classes.padBottom,
                             onBlur: () =>
                                 formData.storageType &&
                                 validateStorageType(`storageType`, formData.storageType)
@@ -588,25 +582,18 @@ function GoodsInUtility({
                     {validateStorageTypeResultLoading && <Loading />}
                 </Grid>
                 <Grid item xs={6} />
-                <Grid item xs={12}>
-                    <Typography variant="h6">
-                        Select the type of book in from the tabs below
-                    </Typography>
-                </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <Tabs
                         value={tab}
                         onChange={handleTabChange}
                         indicatorColor="primary"
                         textColor="primary"
-                        style={{ paddingBottom: '40px' }}
                     >
                         <Tab label="PO" />
                         <Tab label="LOAN" />
                         <Tab label="RSN" />
                     </Tabs>
                 </Grid>
-
                 {tab === 0 && (
                     <Grid item xs={12}>
                         <Grid container spacing={3}>
@@ -636,6 +623,7 @@ function GoodsInUtility({
                                     fullWidth
                                     value={validatePurchaseOrderResult?.orderLine}
                                     label="Line"
+                                    disabled
                                     propertyName="orderLine"
                                     onChange={handleFieldChange}
                                 />
@@ -675,6 +663,7 @@ function GoodsInUtility({
                                     fullWidth
                                     value={validatePurchaseOrderResult?.documentType}
                                     label="Type"
+                                    disabled
                                     propertyName="documentType"
                                     onChange={handleFieldChange}
                                 />
@@ -684,7 +673,7 @@ function GoodsInUtility({
                                     fullWidth
                                     value={validatePurchaseOrderResult?.orderQty}
                                     label="Order Qty"
-                                    disabled={!validatePurchaseOrderResult}
+                                    disabled
                                     type="number"
                                     propertyName="orderQty"
                                     onChange={handleFieldChange}
@@ -696,6 +685,7 @@ function GoodsInUtility({
                                     value={validatePurchaseOrderResult?.qtyBookedIn}
                                     label="Booked In"
                                     type="number"
+                                    disabled
                                     propertyName="qtyBookedIn"
                                     onChange={handleFieldChange}
                                 />
@@ -705,9 +695,9 @@ function GoodsInUtility({
                                     fullWidth
                                     value={formData?.thisBookIn}
                                     label="This Bookin"
+                                    disabled
                                     type="number"
                                     propertyName="thisBookIn"
-                                    onChange={handleFieldChange}
                                 />
                             </Grid>
                             <Grid item xs={1}>
@@ -715,6 +705,7 @@ function GoodsInUtility({
                                     fullWidth
                                     value={validatePurchaseOrderResult?.storage}
                                     label="Storage"
+                                    disabled
                                     propertyName="storage"
                                     onChange={handleFieldChange}
                                 />
@@ -724,8 +715,21 @@ function GoodsInUtility({
                                     fullWidth
                                     value={validatePurchaseOrderResult?.qcPart}
                                     label="QC"
+                                    disabled
                                     propertyName="qcPart"
                                     onChange={handleFieldChange}
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Dropdown
+                                    items={['STORES', 'QC', 'FAIL']}
+                                    propertyName="state"
+                                    fullWidth
+                                    allowNoValue
+                                    disabled
+                                    label="State"
+                                    onChange={handleFieldChange}
+                                    type="state"
                                 />
                             </Grid>
                             <Grid item xs={3}>
@@ -733,6 +737,7 @@ function GoodsInUtility({
                                     fullWidth
                                     value={validatePurchaseOrderResult?.partNumber}
                                     label="Part"
+                                    disabled
                                     propertyName="partNumber"
                                     onChange={handleFieldChange}
                                 />
@@ -742,6 +747,7 @@ function GoodsInUtility({
                                     fullWidth
                                     value={validatePurchaseOrderResult?.partDescription}
                                     label="Description"
+                                    disabled
                                     propertyName="partDescription"
                                     onChange={handleFieldChange}
                                 />
@@ -751,6 +757,7 @@ function GoodsInUtility({
                                     fullWidth
                                     value={validatePurchaseOrderResult?.orderUnitOfMeasure}
                                     label="UOM"
+                                    disabled
                                     propertyName="orderUnitOfMeasure"
                                     onChange={handleFieldChange}
                                 />
@@ -760,6 +767,7 @@ function GoodsInUtility({
                                     fullWidth
                                     value={validatePurchaseOrderResult?.manufacturersPartNumber}
                                     label="MFPN"
+                                    disabled
                                     propertyName="manufacturersPartNumber"
                                     onChange={handleFieldChange}
                                 />
@@ -830,6 +838,7 @@ function GoodsInUtility({
                                 <InputField
                                     fullWidth
                                     disabled={
+                                        !formData?.rsnNumber ||
                                         rsnAccessoriesLoading ||
                                         rsnConditionsLoading ||
                                         validateRsnResultLoading
@@ -848,6 +857,7 @@ function GoodsInUtility({
                                     fullWidth
                                     value={rsnConditionsString}
                                     disabled={
+                                        !formData?.rsnNumber ||
                                         rsnAccessoriesLoading ||
                                         rsnConditionsLoading ||
                                         validateRsnResultLoading
@@ -1046,18 +1056,6 @@ function GoodsInUtility({
                         label="Serial"
                         propertyName="serialNumber"
                         onChange={handleFieldChange}
-                    />
-                </Grid>
-                <Grid item xs={3}>
-                    <Dropdown
-                        items={['STORES', 'QC', 'FAIL']}
-                        propertyName="state"
-                        fullWidth
-                        allowNoValue
-                        value={validatePurchaseOrderResult?.state || ''}
-                        label="State"
-                        onChange={handleFieldChange}
-                        type="state"
                     />
                 </Grid>
                 <Grid item xs={6}>
