@@ -10,12 +10,11 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { DataGrid } from '@mui/x-data-grid';
 import Typography from '@material-ui/core/Typography';
-
+import LinearProgress from '@material-ui/core/LinearProgress';
 import {
     InputField,
     Typeahead,
     Dropdown,
-    Title,
     CheckboxWithLabel,
     Loading
 } from '@linn-it/linn-form-components-library';
@@ -139,7 +138,7 @@ function GoodsInUtility({
                 articleNumber: detail.articleNumber,
                 transactionType: 'L',
                 dateCreated: new Date().toISOString(),
-                storagePlace: formData?.ontoLocation,
+                location: formData?.ontoLocation,
                 locationId: formData?.ontoLocationId,
                 quantity: detail.return,
                 serialNumber: detail.serialNumber,
@@ -170,7 +169,7 @@ function GoodsInUtility({
                 articleNumber: validateRsnResult?.articleNumber,
                 transactionType: 'R',
                 dateCreated: new Date().toISOString(),
-                storagePlace: formData?.ontoLocation,
+                location: formData?.ontoLocation,
                 locationId: formData?.ontoLocationId,
                 quantity: validateRsnResult?.quantity,
                 serialNumber: validateRsnResult?.serialNumber,
@@ -506,7 +505,7 @@ function GoodsInUtility({
                     </div>
                 </Dialog>
                 <Grid item xs={6}>
-                    <Title text="Goods In Utility" />
+                    <Typography variant="h3"> Goods In Utility </Typography>
                 </Grid>
                 <Grid item xs={6}>
                     <InputField
@@ -548,7 +547,7 @@ function GoodsInUtility({
                                 palletNumber: newValue.palletNumber
                             }))
                         }
-                        label="Location (you can click the button to search)"
+                        label="Onto Location"
                         modal
                         openModalOnClick={false}
                         handleFieldChange={(_, newValue) => {
@@ -665,10 +664,10 @@ function GoodsInUtility({
                                 />
                             </Grid>
                             <Grid item xs={1}>
-                                {validatePurchaseOrderResultLoading && <Loading />}
+                                {validatePurchaseOrderResultLoading && <LinearProgress />}
                             </Grid>
                             <Grid item xs={1}>
-                                {validatePurchaseOrderBookInQtyResultLoading && <Loading />}
+                                {validatePurchaseOrderBookInQtyResultLoading && <LinearProgress />}
                             </Grid>
                             <Grid item xs={1} />
 
@@ -935,21 +934,17 @@ function GoodsInUtility({
                                     articleNumber: validatePurchaseOrderResult.partNumber,
                                     transactionType: validatePurchaseOrderResult.transactionType,
                                     dateCreated: new Date().toISOString(),
-                                    storagePlace: formData.ontoLocation.toUpperCase(),
                                     locationId: formData.ontoLocationId,
                                     quantity: formData.qty,
                                     orderNumber: validatePurchaseOrderResult.orderNumber,
                                     state: validatePurchaseOrderResult.state,
                                     orderLine: validatePurchaseOrderResult.orderLine,
                                     storageType: formData.storageType,
-                                    createdBy: userNumber
+                                    createdBy: userNumber,
+                                    location: formData.ontoLocation.toUpperCase()
                                 }
                             ]);
-                            setFormData({
-                                thisBookIn: 0,
-                                dateReceived: new Date(),
-                                lines: []
-                            });
+                            setFormData(d => ({ ...d, qty: 0, ontoLocation: '' }));
                         }}
                     >
                         Add Line
@@ -964,7 +959,9 @@ function GoodsInUtility({
                         }
                         onClick={() => {
                             const row = {
-                                articleNumber: validatePurchaseOrderResult?.partNumber,
+                                articleNumber:
+                                    validatePurchaseOrderResult?.partNumber ||
+                                    validateRsnResult?.articleNumber,
                                 transactionType: getTransactionType(),
                                 dateCreated: new Date().toISOString(),
                                 location: formData.ontoLocation,
@@ -974,14 +971,15 @@ function GoodsInUtility({
                                 state: validatePurchaseOrderResult?.state,
                                 orderLine: validatePurchaseOrderResult?.orderLine,
                                 storageType: formData.storageType,
-                                createdBy: userNumber
+                                createdBy: userNumber,
+                                location: formData.ontoLocation
                             };
 
                             doBookIn({
                                 ...formData,
                                 multipleBookIn,
                                 printRsnLabels,
-                                lines: lines.length > 0 ? lines : [row],
+                                lines: [...lines, row],
                                 createdBy: userNumber,
                                 transactionType: getTransactionType(),
                                 partNumber:

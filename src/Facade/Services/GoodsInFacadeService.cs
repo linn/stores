@@ -26,6 +26,7 @@
 
         public IResult<BookInResult> DoBookIn(BookInRequestResource requestResource)
         {
+            requestResource.OntoLocation = requestResource.OntoLocation.ToUpper();
             var lines = requestResource.Lines?.Select(
                 l => new GoodsInLogEntry
                          {

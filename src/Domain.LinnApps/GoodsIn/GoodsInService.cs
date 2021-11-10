@@ -111,7 +111,6 @@
             {
                 goodsInLogEntry.Id = this.goodsInPack.GetNextLogId();
                 goodsInLogEntry.BookInRef = bookinRef;
-                goodsInLogEntry.StoragePlace = ontoLocation;
                 this.goodsInLog.Add(goodsInLogEntry);
             }
 
