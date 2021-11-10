@@ -103,7 +103,8 @@
                                 DateCreated = DateTime.UnixEpoch,
                                 OrderLine = 1,
                                 OrderNumber = 1,
-                                Quantity = 1
+                                Quantity = 1,
+                                StoragePlace = "P1234"
                             }
                     });
         }

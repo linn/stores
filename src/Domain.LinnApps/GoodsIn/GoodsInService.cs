@@ -89,17 +89,21 @@
                 return new BookInResult(false, "Onto location/pallet must be entered");
             }
 
+            var linesArray = lines as GoodsInLogEntry[] ?? lines.ToArray();
             if (ontoLocation.StartsWith("P") 
                 && !string.IsNullOrEmpty(partNumber))
             {
-                if (!this.palletAnalysisPack.CanPutPartOnPallet(partNumber, ontoLocation.TrimStart('P')))
+                foreach (var entry in linesArray)
                 {
-                    return new BookInResult(false, this.palletAnalysisPack.Message());
+                    if (!this.palletAnalysisPack.CanPutPartOnPallet(partNumber, entry.StoragePlace.TrimStart('P')))
+                    {
+                        return new BookInResult(false, $"Can't put {partNumber} on {entry.StoragePlace}");
+                    }
                 }
+                
             }
 
-            var inLines = lines as GoodsInLogEntry[] ?? lines.ToArray();
-            var goodsInLogEntries = lines as GoodsInLogEntry[] ?? inLines.ToArray();
+            var goodsInLogEntries = lines as GoodsInLogEntry[] ?? linesArray.ToArray();
             var bookinRef = this.goodsInPack.GetNextBookInRef();
 
             if (!goodsInLogEntries.Any())
@@ -123,7 +127,7 @@
                 return new BookInResult(false, msg);
             }
 
-            var total = inLines.Sum(x => x.Quantity).Value;
+            var total = linesArray.Sum(x => x.Quantity).Value;
 
             if (transactionType.Equals("O") && !this.storesPack.ValidOrderQty((int)orderNumber, (int)orderLine, (int)total, out var qtyRec, out _))
             {

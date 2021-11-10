@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.GoodsInServiceTests
 {
+    using System.Collections.Generic;
+
     using FluentAssertions;
 
     using Linn.Stores.Domain.LinnApps.GoodsIn;
@@ -40,14 +42,17 @@
                 1,
                 false,
                 false,
-                new GoodsInLogEntry[0]);
+                new List<GoodsInLogEntry>
+                    {
+                        new GoodsInLogEntry { StoragePlace = "P1234" }
+                    });
         }
 
         [Test]
         public void ShouldFailWithMessage()
         {
             this.processResult.Success.Should().BeFalse();
-            this.processResult.Message.Should().Be("Cannot put a PART part on a PALLET pallet");
+            this.processResult.Message.Should().Be("Can't put PART on P1234");
         }
     }
 }
