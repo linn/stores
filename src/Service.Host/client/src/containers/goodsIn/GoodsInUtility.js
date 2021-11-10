@@ -69,7 +69,8 @@ const mapDispatchToProps = {
     getRsnConditions: rsnConditionsActions.fetch,
     getRsnAccessories: rsnAccessoriesActions.fetch,
     validateRsn: ValidateRsnActions.fetchById,
-    clearPo: validatePurchaseOrderActions.clearItems
+    clearPo: validatePurchaseOrderActions.clearItems,
+    clearRsn: ValidateRsnActions.clearItems
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(GoodsInUtility));

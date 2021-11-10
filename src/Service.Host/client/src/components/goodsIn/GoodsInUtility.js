@@ -55,7 +55,8 @@ function GoodsInUtility({
     validateRsn,
     validateRsnResult,
     validateRsnResultLoading,
-    clearPo
+    clearPo,
+    clearRsn
 }) {
     const [formData, setFormData] = useState({
         orderNumber: null,
@@ -213,12 +214,10 @@ function GoodsInUtility({
     }, [loanDetails]);
 
     useEffect(() => {
-        if (rsnConditions?.length > 0 && rsnAccessories?.length > 0 && validateRsnResult?.success) {
-            setRsnDetailsDialogOpen(true);
-        } else {
+        if (!validateRsnResult?.success) {
             setRsnDetailsDialogOpen(false);
         }
-    }, [rsnConditions, rsnAccessories, validateRsnResult]);
+    }, [validateRsnResult]);
 
     useEffect(() => {
         if (validatePurchaseOrderBookInQtyResult) {
@@ -772,24 +771,6 @@ function GoodsInUtility({
                                     onChange={() => setMultipleBookIn(m => !m)}
                                 />
                             </Grid>
-                            <Grid item xs={12}>
-                                <div
-                                    style={{
-                                        width: '100%'
-                                    }}
-                                >
-                                    <DataGrid
-                                        autoHeight
-                                        rows={lines}
-                                        columns={tableColumns}
-                                        density="standard"
-                                        rowHeight={34}
-                                        checkboxSelection
-                                        onSelectionModelChange={handleSelectRow}
-                                        hideFooter
-                                    />
-                                </div>
-                            </Grid>
                         </Grid>
                     </Grid>
                 )}
@@ -848,6 +829,14 @@ function GoodsInUtility({
                             <Grid item xs={6}>
                                 <InputField
                                     fullWidth
+                                    disabled={
+                                        rsnAccessoriesLoading ||
+                                        rsnConditionsLoading ||
+                                        validateRsnResultLoading
+                                    }
+                                    textFieldProps={{
+                                        onClick: () => setRsnDetailsDialogOpen(true)
+                                    }}
                                     value={rsnAccessoriesString}
                                     label="Accessories"
                                     propertyName="rsnAccessoriesString"
@@ -858,6 +847,14 @@ function GoodsInUtility({
                                 <InputField
                                     fullWidth
                                     value={rsnConditionsString}
+                                    disabled={
+                                        rsnAccessoriesLoading ||
+                                        rsnConditionsLoading ||
+                                        validateRsnResultLoading
+                                    }
+                                    textFieldProps={{
+                                        onClick: () => setRsnDetailsDialogOpen(true)
+                                    }}
                                     label="Conditions"
                                     propertyName="rsnConditionsString"
                                     onChange={() => {}}
@@ -917,6 +914,24 @@ function GoodsInUtility({
                         </Grid>
                     </Grid>
                 )}
+                <Grid item xs={12}>
+                    <div
+                        style={{
+                            width: '100%'
+                        }}
+                    >
+                        <DataGrid
+                            autoHeight
+                            rows={lines}
+                            columns={tableColumns}
+                            density="standard"
+                            rowHeight={34}
+                            checkboxSelection
+                            onSelectionModelChange={handleSelectRow}
+                            hideFooter
+                        />
+                    </div>
+                </Grid>
                 <Grid item xs={12}>
                     <Button
                         variant="contained"
@@ -997,6 +1012,7 @@ function GoodsInUtility({
                                 lines: []
                             });
                             clearPo();
+                            clearRsn();
                         }}
                     >
                         Book In
@@ -1135,7 +1151,8 @@ GoodsInUtility.propTypes = {
         serialNumber: PropTypes.number
     }),
     validateRsnResultLoading: PropTypes.bool,
-    clearPo: PropTypes.func.isRequired
+    clearPo: PropTypes.func.isRequired,
+    clearRsn: PropTypes.func.isRequired
 };
 
 GoodsInUtility.defaultProps = {
