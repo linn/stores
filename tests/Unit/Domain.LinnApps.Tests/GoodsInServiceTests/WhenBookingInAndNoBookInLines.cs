@@ -36,6 +36,7 @@
                 null,
                 1,
                 false,
+                false,
                 new GoodsInLogEntry[0]);
         }
 

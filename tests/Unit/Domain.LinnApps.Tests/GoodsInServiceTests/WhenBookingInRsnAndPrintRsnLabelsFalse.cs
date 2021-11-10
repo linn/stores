@@ -14,7 +14,7 @@
 
     using NUnit.Framework;
 
-    public class WhenBookingInRsn : ContextBase
+    public class WhenBookingInRsnAndPrintRsnLabelsFalse : ContextBase
     {
         private BookInResult result;
 
@@ -25,11 +25,11 @@
             this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1234").Returns(true);
             this.GoodsInPack.GetNextBookInRef().ReturnsForAnyArgs(1);
             this.GoodsInPack.GetRsnDetails(1, out _, out _, out _, out _, out _, out _).Returns(x =>
-                {
-                    x[4] = 1;
-                    x[5] = 123456;
-                    return true;
-                });
+            {
+                x[4] = 1;
+                x[5] = 123456;
+                return true;
+            });
 
             this.ReqRepository.FindById(1).Returns(new RequisitionHeader { ReqNumber = 1, });
             this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>())
@@ -69,7 +69,7 @@
             this.GoodsInPack.GetNextLogId().Returns(1111);
 
             this.LabelTypeRepository.FindBy(Arg.Any<Expression<Func<StoresLabelType, bool>>>())
-                .Returns(new StoresLabelType { DefaultPrinter = "PRINTER", FileName = "rsn_lab" }); 
+                .Returns(new StoresLabelType { DefaultPrinter = "PRINTER", FileName = "rsn_lab" });
 
             this.result = this.Sut.DoBookIn(
                 "R",
@@ -91,6 +91,7 @@
                 null,
                 null,
                 1,
+                false,
                 false,
                 new List<GoodsInLogEntry>
                     {
@@ -137,9 +138,10 @@
         }
 
         [Test]
-        public void ShouldPrintRsnLabels()
+        public void ShouldNotPrintRsnLabels()
         {
-            this.Bartender.Received().PrintLabels("RSN 1", "PRINTER", 1, "rsn_lab", "\"1\",\"PART\",\"123456\"", ref Arg.Any<string>());
+            this.Bartender.DidNotReceiveWithAnyArgs()
+                .PrintLabels("RSN 1", "PRINTER", 1, "rsn_lab", "\"1\",\"PART\",\"123456\"", ref Arg.Any<string>());
         }
 
         [Test]

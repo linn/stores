@@ -67,6 +67,7 @@ function GoodsInUtility({
     const [message, setMessage] = useState({ error: false, text: '' });
 
     const [multipleBookIn, setMultipleBookIn] = useState(false);
+    const [printRsnLabels, setPrintRsnLabels] = useState(false);
 
     const [lines, setLines] = useState([]);
 
@@ -965,6 +966,7 @@ function GoodsInUtility({
                             doBookIn({
                                 ...formData,
                                 multipleBookIn,
+                                printRsnLabels,
                                 lines: lines.length > 0 ? lines : [row],
                                 createdBy: userNumber,
                                 transactionType: getTransactionType(),
@@ -988,6 +990,13 @@ function GoodsInUtility({
                     >
                         Book In
                     </Button>
+                    {tab === 2 && (
+                        <CheckboxWithLabel
+                            label="Print Rsn Label?"
+                            checked={printRsnLabels}
+                            onChange={() => setPrintRsnLabels(m => !m)}
+                        />
+                    )}
                     {tab === 0 && (
                         <Button
                             variant="contained"

@@ -47,5 +47,7 @@
         public IEnumerable<BookInLineResource> Lines { get; set; }
 
         public bool? MultipleBookIn { get; set; }
+
+        public bool? PrintRsnLabels { get; set; }
     }
 }

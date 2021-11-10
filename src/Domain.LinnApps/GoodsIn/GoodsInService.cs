@@ -81,6 +81,7 @@
             int? reqNumber,
             int? numberOfLines,
             bool? multipleBookIn,
+            bool printRsnLabels,
             IEnumerable<GoodsInLogEntry> lines)
         {
             if (string.IsNullOrEmpty(ontoLocation))
@@ -228,12 +229,16 @@
                 return result;
             }
 
-            this.PrintRsnLabels(
-                    (int)rsnNumber, 
-                    partNumber, 
-                    serialNumber, 
+            if (printRsnLabels)
+            {
+                this.PrintRsnLabels(
+                    (int)rsnNumber,
+                    partNumber,
+                    serialNumber,
                     rsnQuantity ?? 1);
-            result.TransactionCode = "R";    
+                result.TransactionCode = "R";
+            }
+           
             return result;
         }
 

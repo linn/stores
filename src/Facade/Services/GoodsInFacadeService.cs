@@ -72,6 +72,7 @@
                 requestResource.ReqNumber,
                 requestResource.NumberOfLines,
                 requestResource.MultipleBookIn,
+                requestResource.PrintRsnLabels ?? false,
                 lines);
 
             return new SuccessResult<BookInResult>(result);
