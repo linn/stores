@@ -50,7 +50,6 @@
                         new GoodsInLogEntry { StoragePlace = "P1234" },
                         new GoodsInLogEntry { StoragePlace = "P1235" },
                         new GoodsInLogEntry { StoragePlace = "P1236" }
-
                     });
         }
 
