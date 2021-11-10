@@ -971,8 +971,7 @@ function GoodsInUtility({
                                 state: validatePurchaseOrderResult?.state,
                                 orderLine: validatePurchaseOrderResult?.orderLine,
                                 storageType: formData.storageType,
-                                createdBy: userNumber,
-                                location: formData.ontoLocation
+                                createdBy: userNumber
                             };
 
                             doBookIn({
