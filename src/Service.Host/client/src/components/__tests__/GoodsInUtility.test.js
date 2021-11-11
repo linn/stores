@@ -11,6 +11,7 @@ const validatePurchaseOrder = jest.fn();
 const searchDemLocations = jest.fn();
 const searchStoragePlaces = jest.fn();
 const clearPo = jest.fn();
+const clearRsn = jest.fn();
 const storagePlacesSearchResults = [{ name: 'LOC', id: 1 }];
 const searchSalesArticles = jest.fn();
 const doBookIn = jest.fn();
@@ -32,6 +33,7 @@ const defaultRender = props =>
             salesArticlesSearchResults={[]}
             doBookIn={doBookIn}
             clearPo={clearPo}
+            clearRsn={clearRsn}
             validatePurchaseOrderBookInQty={validatePurchaseOrderBookInQty}
             userNumber={userNumber}
             validateStorageType={validateStorageType}
