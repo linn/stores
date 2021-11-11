@@ -113,7 +113,6 @@ function MechPartSource({
         removeRow: removeManufacturersRow,
         setEditing: setManufacturersEditing,
         setData: setManufacturersData,
-        //setTableValid,
         setRowToBeDeleted: setManufacturersRowToBeDeleted,
         setRowToBeSaved: setManufacturersRowToBeSaved
     } = useGroupEditTable({
@@ -128,7 +127,6 @@ function MechPartSource({
         removeRow: removeQuotesRow,
         setEditing: setQuotesEditing,
         setData: setQuotesData,
-        //setTableValid,
         setRowToBeDeleted: setQuotesRowToBeDeleted,
         setRowToBeSaved: setQuotesRowToBeSaved
     } = useGroupEditTable({
@@ -143,7 +141,6 @@ function MechPartSource({
         removeRow: removeUsagesRow,
         setEditing: setUsagesEditing,
         setData: setUsagesData,
-        //setTableValid,
         setRowToBeDeleted: setUsagesRowToBeDeleted,
         setRowToBeSaved: setUsagesRowToBeSaved
     } = useGroupEditTable({
@@ -326,9 +323,9 @@ function MechPartSource({
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     {creating() ? (
-                        <Title text="Create Mech Part Source" />
+                        <Title text="Create Part Source Sheet" />
                     ) : (
-                        <Title text="Mech Part Source Details" />
+                        <Title text="Part Source Sheet Details" />
                     )}
                 </Grid>
                 {itemError && (
