@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import {
     GroupEditTable,
-    useGroupEditTable,
     utilities,
     InputField,
     Dropdown,
-    DatePicker
+    DatePicker,
+    useGroupEditTable
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
@@ -53,7 +53,8 @@ function DetailsItemsTab({
         removeRow: removeItem,
         setEditing: setItemsEditing,
         setRowToBeDeleted: setItemRowToBeDeleted,
-        setRowToBeSaved: setItemRowToBeSaved
+        setRowToBeSaved: setItemRowToBeSaved,
+        replaceRow: replaceItem
     } = useGroupEditTable({
         rows: editableItems,
         setEditStatus
@@ -772,6 +773,24 @@ function DetailsItemsTab({
         setShowOptionalColumns(!showOptionalColumns);
     };
 
+    const updateItemRow = (item, _setItem, propertyName, newValue) => {
+        if (
+            item.itemType === 'S' &&
+            newValue === 'Loose Item' &&
+            propertyName === 'itemTypeDisplay'
+        ) {
+            const newItem = {
+                ...item,
+                itemTypeDisplay: 'Loose Item',
+                itemType: 'I',
+                containerNumber: null
+            };
+            replaceItem(item, newItem);
+        } else {
+            updateItem(item, _setItem, propertyName, newValue);
+        }
+    };
+
     const palletDialogColumns = [
         { field: 'itemNumber', headerName: 'Item', minWidth: 80, disableColumnMenu: true },
         { field: 'containerNumber', headerName: 'Box', minWidth: 80, disableColumnMenu: true },
@@ -1090,7 +1109,7 @@ function DetailsItemsTab({
                         <GroupEditTable
                             columns={displayedColumns()}
                             rows={itemsData}
-                            updateRow={updateItem}
+                            updateRow={updateItemRow}
                             addRow={addItem}
                             removeRow={removeItem}
                             resetRow={resetItemRow}
