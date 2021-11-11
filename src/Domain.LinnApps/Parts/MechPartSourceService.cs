@@ -15,19 +15,6 @@
             this.authService = authService;
         }
 
-        public IEnumerable<PartDataSheet> GetUpdatedDataSheets(IEnumerable<PartDataSheet> from, IEnumerable<PartDataSheet> to)
-        {
-            var updated = to.ToList();
-            var old = from.ToList();
-
-            foreach (var partDataSheet in updated.Where(n => old.All(o => o.Sequence != n.Sequence)))
-            {
-                partDataSheet.Sequence = updated.Max(s => s.Sequence) + 1;
-            }
-
-            return updated;
-        }
-
         public string GetRkmCode(string unit, decimal value)
         {
             var units = new Dictionary<string, decimal>
@@ -99,6 +86,12 @@
                 throw new UpdatePartException("You are not authorised to update.");
             }
 
+            if (updated.Part != null)
+            {
+                current.Part.DataSheets =
+                    this.GetUpdatedDataSheets(current.Part.DataSheets, updated.Part.DataSheets);
+            }
+
             current.AssemblyType = updated.AssemblyType;
             current.DateSamplesRequired = updated.DateSamplesRequired;
             current.EmcCritical = updated.EmcCritical;
@@ -128,7 +121,7 @@
             current.DrawingFile = updated.DrawingFile;
             current.DrawingsPackage = updated.DrawingsPackage;
             current.DrawingsPackageAvailable = updated.DrawingsPackageAvailable;
-            current.DrawingsPackageDate = updated.DrawingsPackageDate ;
+            current.DrawingsPackageDate = updated.DrawingsPackageDate;
             current.PackingAvailable = updated.PackingAvailable;
             current.PackingDate = updated.PackingDate;
             current.PackingRequired = updated.PackingRequired;
@@ -175,7 +168,7 @@
             current.RkmCode = updated.RkmCode;
             current.ApplyTCodeBy = updated.ApplyTCodeBy;
             current.ApplyTCodeDate = updated.ApplyTCodeDate;
-            current.CancelledBy = updated.CancelledBy ;
+            current.CancelledBy = updated.CancelledBy;
             current.DateCancelled = updated.DateCancelled;
             current.McitVerifiedBy = updated.McitVerifiedBy;
             current.McitVerifiedDate = updated.McitVerifiedDate;
@@ -189,6 +182,19 @@
             current.Usages = updated.Usages;
             current.LifeExpectancyPart = updated.LifeExpectancyPart;
             current.Configuration = updated.Configuration;
+        }
+
+        private IEnumerable<PartDataSheet> GetUpdatedDataSheets(IEnumerable<PartDataSheet> from, IEnumerable<PartDataSheet> to)
+        {
+            var updated = to.ToList();
+            var old = from.ToList();
+
+            foreach (var partDataSheet in updated.Where(n => old.All(o => o.Sequence != n.Sequence)))
+            {
+                partDataSheet.Sequence = updated.Max(s => s.Sequence) + 1;
+            }
+
+            return updated;
         }
     }
 }

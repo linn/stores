@@ -8,7 +8,6 @@
     using Linn.Common.Persistence;
     using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps;
-    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources.Parts;
@@ -70,21 +69,15 @@
         protected override void UpdateFromResource(MechPartSource entity, MechPartSourceResource resource)
         {
             var candidate = this.BuildEntityFromResource(resource);
+            candidate.Part = entity.Part;
 
-            var currentDataSheets = candidate.Part?.DataSheets;
-
-            var newDataSheets = resource.Part?.DataSheets.Select(s => new PartDataSheet
+            candidate.Part.DataSheets = resource.Part?.DataSheets.Select(s => new PartDataSheet
                                                                         {
                                                                             Part = candidate.Part,
                                                                             Sequence = s.Sequence,
                                                                             PdfFilePath = s.PdfFilePath
                                                                         });
-            if (candidate.Part != null)
-            {
-                candidate.Part.DataSheets = 
-                    this.domainService.GetUpdatedDataSheets(currentDataSheets, newDataSheets);
-            }
-
+            
             this.domainService.Update(candidate, entity, resource.UserPrivileges);
         }
 
