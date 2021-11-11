@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import {
     SaveBackCancelButtons,
@@ -148,11 +147,6 @@ function Parcel({
     };
 
     const useStyles = makeStyles(() => ({
-        marginTop1: {
-            marginTop: '10px',
-            display: 'inline-block',
-            width: '2em'
-        },
         marginTopWiderLinkButton: {
             marginTop: '-14px',
             display: 'inline-block'
@@ -295,36 +289,25 @@ function Parcel({
                         <Grid item xs={1} />
 
                         <Grid item xs={6}>
-                            <div className={classes.displayInline}>
-                                <Typeahead
-                                    label="Supplier"
-                                    title="Search for a supplier"
-                                    onSelect={handleSupplierChange}
-                                    items={suppliersSearchResults}
-                                    loading={suppliersSearchLoading}
-                                    propertyName="supplier"
-                                    fetchItems={searchSuppliers}
-                                    clearSearch={() => clearSuppliersSearch}
-                                    value={`${parcel.supplierId} - ${supplierNameValue()}`}
-                                    modal
-                                    links={false}
-                                    history={history}
-                                    debounce={1000}
-                                    minimumSearchTermLength={2}
-                                    disabled={!allowedToEdit()}
-                                />
-                            </div>
-                            <div className={classes.marginTop1}>
-                                <Tooltip title="Clear Supplier search">
-                                    <Button
-                                        variant="outlined"
-                                        onClick={clearSupplier}
-                                        disabled={!allowedToEdit()}
-                                    >
-                                        X
-                                    </Button>
-                                </Tooltip>
-                            </div>
+                            <Typeahead
+                                label="Supplier"
+                                title="Search for a supplier"
+                                onSelect={handleSupplierChange}
+                                items={suppliersSearchResults}
+                                loading={suppliersSearchLoading}
+                                propertyName="supplier"
+                                fetchItems={searchSuppliers}
+                                clearSearch={() => clearSuppliersSearch}
+                                value={`${parcel.supplierId} - ${supplierNameValue()}`}
+                                modal
+                                links={false}
+                                debounce={1000}
+                                minimumSearchTermLength={2}
+                                disabled={!allowedToEdit()}
+                                clearable
+                                clearTooltipText="Clear Supplier number"
+                                onClear={clearSupplier}
+                            />
                         </Grid>
                         <Grid item xs={3}>
                             <InputField
@@ -338,36 +321,25 @@ function Parcel({
                         <Grid item xs={3} />
 
                         <Grid item xs={6}>
-                            <div className={classes.displayInline}>
-                                <Typeahead
-                                    label="Carrier"
-                                    title="Search for a Carrier"
-                                    onSelect={handleCarrierChange}
-                                    items={carriersSearchResults}
-                                    loading={carriersSearchLoading}
-                                    fetchItems={searchCarriers}
-                                    clearSearch={() => clearCarriersSearch}
-                                    value={`${parcel.carrierId} - ${carrierNameValue()}`}
-                                    modal
-                                    links={false}
-                                    history={history}
-                                    debounce={1000}
-                                    minimumSearchTermLength={2}
-                                    propertyName="carrier"
-                                    disabled={!allowedToEdit()}
-                                />
-                            </div>
-                            <div className={classes.marginTop1}>
-                                <Tooltip title="Clear Carrier search">
-                                    <Button
-                                        variant="outlined"
-                                        onClick={clearCarrier}
-                                        disabled={!allowedToEdit()}
-                                    >
-                                        X
-                                    </Button>
-                                </Tooltip>
-                            </div>
+                            <Typeahead
+                                label="Carrier"
+                                title="Search for a Carrier"
+                                onSelect={handleCarrierChange}
+                                items={carriersSearchResults}
+                                loading={carriersSearchLoading}
+                                fetchItems={searchCarriers}
+                                clearSearch={() => clearCarriersSearch}
+                                value={`${parcel.carrierId} - ${carrierNameValue()}`}
+                                propertyName="carrier"
+                                modal
+                                links={false}
+                                debounce={1000}
+                                minimumSearchTermLength={2}
+                                disabled={!allowedToEdit()}
+                                clearable
+                                clearTooltipText="Clear Carrier number"
+                                onClear={clearCarrier}
+                            />
                         </Grid>
                         <Grid item xs={6} />
                         <Grid item xs={6}>
