@@ -783,8 +783,7 @@ function DetailsItemsTab({
                 ...item,
                 itemTypeDisplay: 'Loose Item',
                 itemType: 'I',
-                containerNumber: null,
-                editing: true
+                containerNumber: null
             };
             replaceItem(item, newItem);
         } else {
