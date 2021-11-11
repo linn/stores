@@ -4,6 +4,6 @@
     {
         public string PdfFilePath { get; set; }
 
-        public int Sequence { get; set; }
+        public int? Sequence { get; set; }
     }
 }

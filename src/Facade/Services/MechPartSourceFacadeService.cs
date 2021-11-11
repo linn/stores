@@ -69,12 +69,12 @@
         protected override void UpdateFromResource(MechPartSource entity, MechPartSourceResource resource)
         {
             var candidate = this.BuildEntityFromResource(resource);
-            candidate.Part = entity.Part;
+            candidate.Part = new Part();
 
             candidate.Part.DataSheets = resource.Part?.DataSheets.Select(s => new PartDataSheet
                                                                         {
                                                                             Part = candidate.Part,
-                                                                            Sequence = s.Sequence,
+                                                                            Sequence = s.Sequence ?? -1,
                                                                             PdfFilePath = s.PdfFilePath
                                                                         });
             
