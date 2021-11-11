@@ -10,6 +10,8 @@
 
         string GetCapacitanceLetterAndNumeralCode(string unit, decimal value);
 
-        MechPartSource Create(MechPartSource candidate, IEnumerable<PartDataSheet> dataSheets);
+        MechPartSource Create(MechPartSource candidate, IEnumerable<string> userPrivileges);
+
+        void Update(MechPartSource updated, MechPartSource current, IEnumerable<string> userPrivileges);
     }
 }

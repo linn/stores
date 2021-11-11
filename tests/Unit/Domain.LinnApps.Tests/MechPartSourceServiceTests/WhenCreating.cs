@@ -6,6 +6,8 @@
 
     using Linn.Stores.Domain.LinnApps.Parts;
 
+    using NSubstitute;
+
     using NUnit.Framework;
 
     public class WhenCreating : ContextBase
@@ -25,7 +27,10 @@
                                      MechanicalOrElectrical = "M",
                                  };
 
-            this.result = this.Sut.Create(this.candidate, new List<PartDataSheet>());
+            var userPrivileges = new List<string>();
+
+            this.AuthorisationService.HasPermissionFor(Arg.Any<string>(), Arg.Any<IEnumerable<string>>()).Returns(true);
+            this.result = this.Sut.Create(this.candidate, userPrivileges);
         }
 
         [Test]

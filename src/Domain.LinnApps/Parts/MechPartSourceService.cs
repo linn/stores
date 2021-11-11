@@ -3,10 +3,18 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Linn.Common.Authorisation;
     using Linn.Stores.Domain.LinnApps.Exceptions;
 
     public class MechPartSourceService : IMechPartSourceService
     {
+        private readonly IAuthorisationService authService;
+
+        public MechPartSourceService(IAuthorisationService authService)
+        {
+            this.authService = authService;
+        }
+
         public IEnumerable<PartDataSheet> GetUpdatedDataSheets(IEnumerable<PartDataSheet> from, IEnumerable<PartDataSheet> to)
         {
             var updated = to.ToList();
@@ -63,14 +71,35 @@
             return result + unit + "F";
         }
 
-        public MechPartSource Create(MechPartSource candidate, IEnumerable<PartDataSheet> dataSheets)
+        public MechPartSource Create(MechPartSource candidate, IEnumerable<string> userPrivileges)
         {
+            if (!this.authService
+                    .HasPermissionFor(
+                        AuthorisedAction.PartAdmin,
+                        userPrivileges))
+            {
+                throw new UpdatePartException("You are not authorised to update.");
+            }
+
             if (candidate.SafetyCritical == "Y" && string.IsNullOrEmpty(candidate.SafetyDataDirectory))
             {
                 throw new CreatePartException("You must enter a EMC/safety data directory for EMC or safety critical parts");
             }
 
             return candidate;
+        }
+
+        public void Update(MechPartSource updated, MechPartSource current, IEnumerable<string> userPrivileges)
+        {
+            if (!this.authService
+                    .HasPermissionFor(
+                        AuthorisedAction.PartAdmin,
+                        userPrivileges))
+            {
+                throw new UpdatePartException("You are not authorised to update.");
+            }
+
+            throw new System.NotImplementedException();
         }
     }
 }
