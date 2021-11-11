@@ -221,5 +221,7 @@
         public string LifeExpectancyPart { get; set; }
 
         public string Configuration { get; set; }
+
+        public IEnumerable<string> UserPrivileges { get; set; }
     }
 }

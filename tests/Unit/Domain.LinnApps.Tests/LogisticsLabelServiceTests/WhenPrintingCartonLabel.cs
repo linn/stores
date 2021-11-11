@@ -43,7 +43,7 @@
                 "DispatchLabels1",
                 1,
                 "dispatchaddress.btw",
-                Arg.Any<string>(),
+                Arg.Is<string>(a => a.Contains("Open Box Carton")),
                 ref Arg.Any<string>());
         }
 

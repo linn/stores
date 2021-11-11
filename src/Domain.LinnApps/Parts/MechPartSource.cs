@@ -98,7 +98,7 @@
 
         public ICollection<MechPartAlt> MechPartAlts { get; set; }
 
-        public ICollection<MechPartManufacturerAlt> MechPartManufacturerAlts { get; set; }
+        public IEnumerable<MechPartManufacturerAlt> MechPartManufacturerAlts { get; set; }
 
         public int? CapacitorRippleCurrent { get; set; } 
 
