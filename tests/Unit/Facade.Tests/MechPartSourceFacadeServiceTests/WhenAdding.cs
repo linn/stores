@@ -68,7 +68,7 @@
                 CreatePart = false,
                 MechPartManufacturerAlts = mechPartManufacturerAlts
             };
-            this.DomainService.Create(Arg.Any<MechPartSource>(), Arg.Any<IEnumerable<PartDataSheet>>())
+            this.DomainService.Create(Arg.Any<MechPartSource>(), Arg.Any<IEnumerable<string>>())
                 .Returns(new MechPartSource { Id = 1 });
             this.DatabaseService.GetIdSequence("MECH_SOURCE_SEQ").Returns(1);
             this.PartRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>()).Returns(part);

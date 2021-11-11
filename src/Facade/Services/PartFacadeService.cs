@@ -84,7 +84,7 @@
                 new PartDataSheet
                     {
                         PdfFilePath = s.PdfFilePath,
-                        Sequence = s.Sequence
+                        Sequence = s.Sequence ?? -1
                     }));
         }
 

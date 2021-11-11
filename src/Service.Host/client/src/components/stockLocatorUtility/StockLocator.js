@@ -121,6 +121,12 @@ function StockLocator({
             editable: false
         },
         {
+            title: 'Desc',
+            id: 'locationDescription',
+            type: 'text',
+            editable: false
+        },
+        {
             title: 'Trigger Lvl',
             id: 'triggerLevel',
             type: 'text',
@@ -180,7 +186,7 @@ function StockLocator({
     ];
     return (
         <div className="print-landscape">
-            <Page>
+            <Page width="xl">
                 <Grid container spacing={3}>
                     <Dialog open={dialogOpen} fullWidth maxWidth="lg">
                         <div>

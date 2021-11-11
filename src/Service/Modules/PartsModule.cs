@@ -33,8 +33,6 @@
 
         private readonly IProductAnalysisCodeService productAnalysisCodeService;
 
-        private readonly IAuthorisationService authService;
-
         private readonly
             IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource>
             assemblyTechnologyService;
@@ -72,12 +70,10 @@
             IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> mechPartSourceService,
             IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> manufacturerService,
             IPartDataSheetValuesService dataSheetsValuesService,
-            IAuthorisationService authService,
             IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource> tqmsCategoriesService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
-            this.authService = authService;
             this.Get("/parts/sources", _ => this.GetApp());
 
             this.Get("/parts/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
@@ -277,48 +273,45 @@
 
         private object UpdateMechPartSource(int id)
         {
-            if (!this.authService
-                    .HasPermissionFor(
-                        AuthorisedAction.PartAdmin,
-                        this.Context.CurrentUser.GetPrivileges()))
-            {
-                return new UnauthorisedResult<MechPartSource>("You are not authorised to update.");
-            }
-
             var resource = this.Bind<MechPartSourceResource>();
-            var result = this.mechPartSourceService.Update(id, resource);
-            return this.Negotiate.WithModel(result)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+            resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
+            try
+            {
+                var result = this.mechPartSourceService.Update(id, resource);
+                return this.Negotiate.WithModel(result).WithMediaRangeModel("text/html", ApplicationSettings.Get);
+            }
+            catch (UpdatePartException ex)
+            {
+                return new BadRequestResult<MechPartSource>(ex.Message);
+            }
         }
 
         private object AddMechPartSource()
         {
             this.RequiresAuthentication();
 
-            if (!this.authService
-                    .HasPermissionFor(
-                        AuthorisedAction.PartAdmin, 
-                        this.Context.CurrentUser.GetPrivileges()))
-            {
-                return new UnauthorisedResult<MechPartSource>("You are not authorised to create.");
-            }
-            
             var resource = this.Bind<MechPartSourceResource>();
-            
-            var result = this.mechPartSourceService.Add(resource);
-
-            if (result.GetType() != typeof(CreatedResult<MechPartSource>) || !resource.CreatePart)
+            resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
+            try
             {
-                return this.Negotiate
+                var result = this.mechPartSourceService.Add(resource);
+                if (result.GetType() != typeof(CreatedResult<MechPartSource>) || !resource.CreatePart)
+                {
+                    return this.Negotiate
                     .WithModel(result).WithMediaRangeModel("text/html", ApplicationSettings.Get);
+                }
+
+                var created = ((CreatedResult<MechPartSource>)result).Data;
+           
+                this.partsFacadeService.CreatePartFromSource(created.Id, created.ProposedBy.Id, resource.Part?.DataSheets);
+
+                return this.Negotiate.WithModel(this.mechPartSourceService.GetById(created.Id))
+                    .WithMediaRangeModel("text/html", ApplicationSettings.Get);
             }
-
-            var created = ((CreatedResult<MechPartSource>)result).Data;
-
-            this.partsFacadeService.CreatePartFromSource(created.Id, created.ProposedBy.Id, resource.Part?.DataSheets);
-
-            return this.Negotiate.WithModel(this.mechPartSourceService.GetById(created.Id))
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+            catch (CreatePartException ex)
+            {
+                return new BadRequestResult<MechPartSource>(ex.Message);
+            }
         }
 
         private object GetManufacturers()
