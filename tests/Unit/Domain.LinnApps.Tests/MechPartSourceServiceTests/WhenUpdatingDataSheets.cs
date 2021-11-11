@@ -17,8 +17,6 @@
 
         private MechPartSource to;
 
-        private MechPartSource result;
-
        [SetUp]
         public void SetUp()
         {
