@@ -119,7 +119,7 @@
                                  MechPartManufacturerAlts = resource.MechPartManufacturerAlts?.Select(
                                      a => new MechPartManufacturerAlt
                                               {
-                                                  Sequence = a.Sequence,
+                                                  Sequence = a.Sequence.HasValue ? (int)a.Sequence : -1,
                                                   PartNumber = a.PartNumber,
                                                   DateApproved = a.DateApproved != null
                                                                      ? DateTime.Parse(a.DateApproved) : (DateTime?)null,

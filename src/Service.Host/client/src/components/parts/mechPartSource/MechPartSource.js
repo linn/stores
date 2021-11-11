@@ -130,7 +130,7 @@ function MechPartSource({
         setRowToBeDeleted: setQuotesRowToBeDeleted,
         setRowToBeSaved: setQuotesRowToBeSaved
     } = useGroupEditTable({
-        rows: mechPartSource?.mechPartManufacturerAlts,
+        rows: mechPartSource?.purchasingQuotes,
         setEditStatus
     });
 
@@ -154,7 +154,6 @@ function MechPartSource({
         updateRow: updateSuppliersRow,
         removeRow: removeSuppliersRow,
         setEditing: setSuppliersEditing,
-        //setTableValid,
         setData: setSuppliersData,
         setRowToBeDeleted: setSuppliersRowToBeDeleted,
         setRowToBeSaved: setSuppliersRowToBeSaved

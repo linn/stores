@@ -110,7 +110,7 @@
             current.PartToBeReplaced = updated.PartToBeReplaced;
             current.ProductionDate = updated.ProductionDate;
             current.SafetyDataDirectory = updated.SafetyDataDirectory;
-            current.MechPartManufacturerAlts = updated.MechPartManufacturerAlts;
+            current.MechPartManufacturerAlts = this.GetUpdatedManufacturers(current.MechPartManufacturerAlts, updated.MechPartManufacturerAlts);
             current.MechPartAlts = updated.MechPartAlts;
             current.ApprovedReferenceStandards = updated.ApprovedReferenceStandards;
             current.ApprovedReferencesAvailable = updated.ApprovedReferencesAvailable;
@@ -192,6 +192,24 @@
             foreach (var partDataSheet in updated.Where(n => old.All(o => o.Sequence != n.Sequence)))
             {
                 partDataSheet.Sequence = updated.Max(s => s.Sequence) + 1;
+            }
+
+            return updated;
+        }
+
+        private IEnumerable<MechPartManufacturerAlt> GetUpdatedManufacturers(IEnumerable<MechPartManufacturerAlt> from, IEnumerable<MechPartManufacturerAlt> to)
+         {
+            if (to == null)
+            {
+                return from;
+            }
+
+            var updated = to.ToList();
+            var old = from.ToList();
+
+            foreach (var alt in updated.Where(n => old.All(o => o.Sequence != n.Sequence)))
+            {
+                alt.Sequence = updated.Max(s => s.Sequence) + 1;
             }
 
             return updated;

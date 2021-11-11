@@ -60,7 +60,7 @@
                                             }
                             };
             this.AuthorisationService.HasPermissionFor(Arg.Any<string>(), Arg.Any<IEnumerable<string>>()).Returns(true);
-             this.Sut.Update(this.to, this.from, new List<string>());
+            this.Sut.Update(this.to, this.from, new List<string>());
         }
 
         [Test]
