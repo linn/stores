@@ -20,8 +20,10 @@ import partCategoriesSelectors from '../../selectors/partCategoriesSelectors';
 import sernosSequencesSelectors from '../../selectors/sernosSequencesSelectors';
 import suppliersSelectors from '../../selectors/suppliersSelectors';
 import unitsOfMeasureSelectors from '../../selectors/unitsOfMeasureSelectors';
+import partTemplateActions from '../../actions/partTemplateActions';
 import partTemplatesActions from '../../actions/partTemplatesActions';
 import partTemplateSelectors from '../../selectors/partTemplatesSelectors';
+import partTemplatesSelectors from '../../selectors/partTemplatesSelectors';
 import { getPrivileges, getUserName, getUserNumber } from '../../selectors/userSelectors';
 import * as itemTypes from '../../itemTypes';
 import partLiveTestSelectors from '../../selectors/partLiveTestSelectors';
@@ -49,7 +51,7 @@ const mapStateToProps = (state, { match, location }) => ({
     userName: getUserName(state),
     userNumber: getUserNumber(state),
     templateName: queryString.parse(location?.search)?.template,
-    partTemplates: partTemplateSelectors.getItems(state),
+    partTemplates: partTemplatesSelectors.getItems(state),
     liveTest: creating(match) ? null : partLiveTestSelectors.getItem(state),
     partsSearchResults: partsSelectors.getSearchItems(state),
     previousPaths: getPreviousPaths(state)

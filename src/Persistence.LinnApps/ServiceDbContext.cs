@@ -686,11 +686,14 @@
             e.Property(p => p.StockControlled).HasColumnName("STOCK_CONTROLLED").HasMaxLength(1);
             e.Property(p => p.LinnProduced).HasColumnName("LINN_PRODUCED").HasMaxLength(1);
             e.Property(p => p.BomType).HasColumnName("BOM_TYPE").HasMaxLength(1);
+            e.Property(p => p.RmFg).HasColumnName("RM_FG").HasMaxLength(1);
             e.Property(p => p.ParetoCode).HasColumnName("PARETO_CODE").HasMaxLength(2);
             e.Property(p => p.AssemblyTechnology).HasColumnName("ASSEMBLY_TECHNOLOGY");
             e.Property(p => p.HasDataSheet).HasColumnName("HAS_DATASHEET").HasMaxLength(1);
             e.Property(p => p.HasNumberSequence).HasColumnName("NUMBER_SEQUENCE").HasMaxLength(1);
             e.Property(p => p.NextNumber).HasColumnName("NEXT_NUMBER");
+            e.Property(p => p.AllowVariants).HasColumnName("ALLOW_VARIANTS").HasMaxLength(1);
+            e.Property(p => p.Variants).HasColumnName("VARIANTS").HasMaxLength(255);
             e.Property(p => p.ProductCode).HasColumnName("PRODUCT_CODE").HasMaxLength(10);
             e.Property(p => p.AllowPartCreation).HasColumnName("ALLOW_PART_CREATION").HasMaxLength(1);
             e.Property(p => p.AccountingCompany).HasColumnName("ACCOUNTING_COMPANY");

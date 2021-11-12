@@ -35,7 +35,7 @@
 
         public void Add(PartTemplate entity)
         {
-            throw new NotImplementedException();
+            this.serviceDbContext.PartTemplates.Add(entity);
         }
 
         public void Remove(PartTemplate entity)

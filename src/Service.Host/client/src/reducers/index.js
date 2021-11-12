@@ -12,6 +12,7 @@ import accountingCompanies from './accountingCompanies';
 import nominal from './nominal';
 import parts from './parts/parts';
 import part from './parts/part';
+import partTemplate from './parts/partTemplate';
 import partTemplates from './parts/partTemplates';
 import partLiveTest from './parts/partLiveTest';
 import partCategories from './partCategories';
@@ -202,6 +203,7 @@ const rootReducer = history =>
         partLiveTest,
         parts,
         partStorageTypes,
+        partTemplate,
         partTemplates,
         pickItemsAllocation,
         ports,

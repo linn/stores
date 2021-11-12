@@ -24,6 +24,12 @@ export const partCategories = new ItemType(
     '/inventory/part-categories'
 );
 
+export const partTemplate = new ItemType(
+    'partTemplate',
+    'PART_TEMPLATE',
+    '/inventory/part-templates'
+);
+
 export const partTemplates = new ItemType(
     'partTemplates',
     'PART_TEMPLATES',
