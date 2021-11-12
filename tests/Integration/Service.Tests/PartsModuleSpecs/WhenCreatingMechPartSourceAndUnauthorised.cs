@@ -6,6 +6,7 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources.Parts;
 
@@ -13,6 +14,7 @@
     using Nancy.Testing;
 
     using NSubstitute;
+    using NSubstitute.ExceptionExtensions;
 
     using NUnit.Framework;
 
@@ -40,8 +42,7 @@
             };
 
             this.MechPartSourceService.Add(Arg.Any<MechPartSourceResource>())
-                .Returns(new CreatedResult<MechPartSource>(source));
-            this.AuthService.HasPermissionFor(Arg.Any<string>(), Arg.Any<IEnumerable<string>>()).Returns(false);
+                .Throws(new CreatePartException("You are not authorised"));
 
             this.Response = this.Browser.Post(
                 "/parts/sources",

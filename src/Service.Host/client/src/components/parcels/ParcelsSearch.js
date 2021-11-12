@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useReducer, useCallback } from 'react';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import Tooltip from '@material-ui/core/Tooltip';
 import {
     SearchInputField,
     LinkButton,
@@ -11,7 +9,6 @@ import {
     Typeahead
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/styles';
 import queryString from 'query-string';
 import Page from '../../containers/Page';
 
@@ -43,18 +40,6 @@ function ParcelsSearch({
     const allowedToCreate = () => {
         return privileges?.some(priv => priv === 'parcel.admin');
     };
-
-    const useStyles = makeStyles(theme => ({
-        marginTop1: {
-            marginTop: theme.spacing(1),
-            display: 'inline-block',
-            width: '2em'
-        },
-        displayInline: {
-            display: 'inline'
-        }
-    }));
-    const classes = useStyles();
 
     function parcelReducer(state, action) {
         switch (action.type) {
@@ -261,57 +246,43 @@ function ParcelsSearch({
                 </Grid>
 
                 <Grid item xs={3}>
-                    <div className={classes.displayInline}>
-                        <Typeahead
-                            label="Supplier"
-                            title="Search for a supplier"
-                            onSelect={handleSupplierChange}
-                            items={suppliersSearchResults}
-                            loading={suppliersSearchLoading}
-                            fetchItems={searchSuppliers}
-                            clearSearch={() => clearSuppliersSearch}
-                            value={state.supplierDisplayName}
-                            modal
-                            links={false}
-                            history={history}
-                            debounce={1000}
-                            minimumSearchTermLength={2}
-                        />
-                    </div>
-                    <div className={classes.marginTop1}>
-                        <Tooltip title="Clear Supplier search">
-                            <Button variant="outlined" onClick={resetSuppliersSearchTerms}>
-                                X
-                            </Button>
-                        </Tooltip>
-                    </div>
+                    <Typeahead
+                        label="Supplier"
+                        title="Search for a supplier"
+                        onSelect={handleSupplierChange}
+                        items={suppliersSearchResults}
+                        loading={suppliersSearchLoading}
+                        fetchItems={searchSuppliers}
+                        clearSearch={() => clearSuppliersSearch}
+                        value={state.supplierDisplayName}
+                        modal
+                        links={false}
+                        debounce={1000}
+                        minimumSearchTermLength={2}
+                        clearable
+                        clearTooltipText="Clear Supplier search"
+                        onClear={resetSuppliersSearchTerms}
+                    />
                 </Grid>
 
                 <Grid item xs={3}>
-                    <div className={classes.displayInline}>
-                        <Typeahead
-                            label="Carrier"
-                            title="Search for a Carrier"
-                            onSelect={handleCarrierChange}
-                            items={carriersSearchResults}
-                            loading={carriersSearchLoading}
-                            fetchItems={searchCarriers}
-                            clearSearch={() => clearCarriersSearch}
-                            value={state.carrierDisplayName}
-                            modal
-                            links={false}
-                            history={history}
-                            debounce={1000}
-                            minimumSearchTermLength={2}
-                        />
-                    </div>
-                    <div className={classes.marginTop1}>
-                        <Tooltip title="Clear Carrier search">
-                            <Button variant="outlined" onClick={resetCarriersSearchTerms}>
-                                X
-                            </Button>
-                        </Tooltip>
-                    </div>
+                    <Typeahead
+                        label="Carrier"
+                        title="Search for a Carrier"
+                        onSelect={handleCarrierChange}
+                        items={carriersSearchResults}
+                        loading={carriersSearchLoading}
+                        fetchItems={searchCarriers}
+                        clearSearch={() => clearCarriersSearch}
+                        value={state.carrierDisplayName}
+                        modal
+                        links={false}
+                        debounce={1000}
+                        minimumSearchTermLength={2}
+                        clearable
+                        clearTooltipText="Clear Carrier search"
+                        onClear={resetCarriersSearchTerms}
+                    />
                 </Grid>
 
                 <Grid item xs={3}>

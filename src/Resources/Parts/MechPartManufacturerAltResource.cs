@@ -2,7 +2,7 @@
 {
     public class MechPartManufacturerAltResource
     {
-        public int Sequence { get; set; }
+        public int? Sequence { get; set; }
 
         public string ManufacturerCode { get; set; }
 

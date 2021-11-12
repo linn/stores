@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import Tooltip from '@material-ui/core/Tooltip';
 import Grid from '@material-ui/core/Grid';
 import {
     InputField,
@@ -140,36 +138,26 @@ function ImpBookTab({
                 </Grid>
 
                 <Grid item xs={6}>
-                    <div className={classes.displayInline}>
-                        <Typeahead
-                            label="Parcel Number"
-                            propertyName="parcelNumber"
-                            title="Search for a parcel"
-                            onSelect={handleParcelChange}
-                            items={parcelsSearchResults}
-                            loading={parcelsSearchLoading}
-                            fetchItems={searchParcels}
-                            clearSearch={() => clearParcelsSearch}
-                            value={parcelNumber?.toString()}
-                            modal
-                            links={false}
-                            debounce={1000}
-                            minimumSearchTermLength={2}
-                            required
-                            disabled={!allowedToEdit}
-                        />
-                    </div>
-                    <div className={classes.marginTop1}>
-                        <Tooltip title="Clear Parcel search">
-                            <Button
-                                variant="outlined"
-                                onClick={clearParcel}
-                                disabled={!allowedToEdit}
-                            >
-                                X
-                            </Button>
-                        </Tooltip>
-                    </div>
+                    <Typeahead
+                        label="Parcel Number"
+                        propertyName="parcelNumber"
+                        title="Search for a parcel"
+                        onSelect={handleParcelChange}
+                        items={parcelsSearchResults}
+                        loading={parcelsSearchLoading}
+                        fetchItems={searchParcels}
+                        clearSearch={() => clearParcelsSearch}
+                        value={parcelNumber?.toString()}
+                        modal
+                        links={false}
+                        debounce={1000}
+                        minimumSearchTermLength={2}
+                        required
+                        disabled={!allowedToEdit}
+                        clearable
+                        clearTooltipText="Clear Parcel Number"
+                        onClear={clearParcel}
+                    />
                 </Grid>
 
                 <Grid item xs={6}>
@@ -182,36 +170,25 @@ function ImpBookTab({
                 </Grid>
 
                 <Grid item xs={6}>
-                    <div className={classes.displayInline}>
-                        <Typeahead
-                            label="Supplier"
-                            title="Search for a supplier"
-                            onSelect={handleSupplierChange}
-                            items={suppliersSearchResults}
-                            loading={suppliersSearchLoading}
-                            fetchItems={searchSuppliers}
-                            clearSearch={() => clearSuppliersSearch}
-                            value={`${supplierId} - ${supplierNameValue()}`}
-                            modal
-                            links={false}
-                            // history={history}
-                            debounce={1000}
-                            minimumSearchTermLength={2}
-                            required
-                            disabled={!allowedToEdit}
-                        />
-                    </div>
-                    <div className={classes.marginTop1}>
-                        <Tooltip title="Clear Supplier search">
-                            <Button
-                                variant="outlined"
-                                onClick={clearSupplier}
-                                disabled={!allowedToEdit}
-                            >
-                                X
-                            </Button>
-                        </Tooltip>
-                    </div>
+                    <Typeahead
+                        label="Supplier"
+                        title="Search for a supplier"
+                        onSelect={handleSupplierChange}
+                        items={suppliersSearchResults}
+                        loading={suppliersSearchLoading}
+                        fetchItems={searchSuppliers}
+                        clearSearch={() => clearSuppliersSearch}
+                        value={`${supplierId} - ${supplierNameValue()}`}
+                        modal
+                        links={false}
+                        debounce={1000}
+                        minimumSearchTermLength={2}
+                        required
+                        disabled={!allowedToEdit}
+                        clearable
+                        clearTooltipText="Clear Supplier Number"
+                        onClear={clearSupplier}
+                    />
                 </Grid>
                 <Grid item xs={3}>
                     <InputField
@@ -338,35 +315,25 @@ function ImpBookTab({
                     />
                 </Grid>
                 <Grid item xs={12} className={classes.gapAbove}>
-                    <div className={classes.displayInline}>
-                        <Typeahead
-                            label="Carrier"
-                            title="Search for a carrier"
-                            onSelect={handleCarrierChange}
-                            items={carriersSearchResults}
-                            loading={carriersSearchLoading}
-                            fetchItems={searchCarriers}
-                            clearSearch={() => clearCarriersSearch}
-                            value={`${carrierId} - ${carrierNameValue()}`}
-                            modal
-                            links={false}
-                            debounce={1000}
-                            minimumSearchTermLength={2}
-                            required
-                            disabled={!allowedToEdit}
-                        />
-                    </div>
-                    <div className={classes.marginTop1}>
-                        <Tooltip title="Clear Carrier search">
-                            <Button
-                                variant="outlined"
-                                onClick={clearCarrier}
-                                disabled={!allowedToEdit}
-                            >
-                                X
-                            </Button>
-                        </Tooltip>
-                    </div>
+                    <Typeahead
+                        label="Carrier"
+                        title="Search for a carrier"
+                        onSelect={handleCarrierChange}
+                        items={carriersSearchResults}
+                        loading={carriersSearchLoading}
+                        fetchItems={searchCarriers}
+                        clearSearch={() => clearCarriersSearch}
+                        value={`${carrierId} - ${carrierNameValue()}`}
+                        modal
+                        links={false}
+                        debounce={1000}
+                        minimumSearchTermLength={2}
+                        required
+                        disabled={!allowedToEdit}
+                        clearable
+                        clearTooltipText="Clear Carrier Number"
+                        onClear={clearCarrier}
+                    />
                 </Grid>
                 <Grid item xs={6}>
                     <Dropdown

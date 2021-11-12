@@ -66,11 +66,24 @@
                                                        new ConsignmentItem
                                                            {
                                                                ContainerNumber = 2,
-                                                               ItemDescription = "DSM PLAYER",
+                                                               ItemDescription = "Loose Item",
                                                                ConsignmentId = this.ConsignmentId,
                                                                SerialNumber = 123456,
                                                                OrderNumber = 300000,
-                                                               OrderLine = 1
+                                                               OrderLine = 1,
+                                                               ItemType = "I",
+                                                               ItemNumber = 1
+                                                           },
+                                                       new ConsignmentItem
+                                                           {
+                                                               ContainerNumber = 2,
+                                                               ItemDescription = "Open Box Carton",
+                                                               ConsignmentId = this.ConsignmentId,
+                                                               SerialNumber = 123456,
+                                                               OrderNumber = 300000,
+                                                               OrderLine = 1,
+                                                               ItemType = "C",
+                                                               ItemNumber = 2
                                                            },
                                                        new ConsignmentItem
                                                            {
@@ -79,7 +92,9 @@
                                                                ConsignmentId = this.ConsignmentId,
                                                                SerialNumber = 536456,
                                                                OrderNumber = 343242,
-                                                               OrderLine = 145
+                                                               OrderLine = 145,
+                                                               ItemNumber = 3,
+                                                               ItemType = "S"
                                                            }
                                                    }
                                    };

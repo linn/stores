@@ -51,10 +51,7 @@
                 .Returns(new CreatedResult<MechPartSource>(source));
             this.PartsDomainService.CreateFromSource(1, 33087, new List<PartDataSheet>()).Returns(part);
             this.MechPartSourceService.GetById(1).Returns(new SuccessResult<MechPartSource>(source));
-            this.AuthService.HasPermissionFor(
-                Arg.Any<string>(),
-                Arg.Any<IEnumerable<string>>()).Returns(true);
-
+            
             this.Response = this.Browser.Post(
                 "/parts/sources",
                 with =>
