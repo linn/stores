@@ -978,7 +978,7 @@ function GoodsInUtility({
                         variant="contained"
                         disabled={
                             (!validatePurchaseOrderResult && !lines.length) ||
-                            !!validatePurchaseOrderResult?.message ||
+                            //!!validatePurchaseOrderResult?.message ||
                             !formData.ontoLocation ||
                             (!formData.qty && !lines.length)
                         }
