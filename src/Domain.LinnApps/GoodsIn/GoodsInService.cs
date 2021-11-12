@@ -232,16 +232,24 @@
                 return result;
             }
 
-            if (printRsnLabels)
+            if (transactionType.Equals("R"))
             {
-                this.PrintRsnLabels(
-                    (int)rsnNumber,
-                    partNumber,
-                    serialNumber,
-                    rsnQuantity ?? 1);
-                result.TransactionCode = "R";
+                if (result.CreateParcel)
+                {
+                    result.ParcelComments = $"RSN{rsnNumber}";
+                }
+
+                if (printRsnLabels)
+                {
+                    this.PrintRsnLabels(
+                        (int)rsnNumber,
+                        partNumber,
+                        serialNumber,
+                        rsnQuantity ?? 1);
+                    result.TransactionCode = "R";
+                }
             }
-           
+
             return result;
         }
 

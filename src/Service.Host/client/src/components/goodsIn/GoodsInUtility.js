@@ -1034,7 +1034,7 @@ function GoodsInUtility({
                             onChange={() => setPrintRsnLabels(m => !m)}
                         />
                     )}
-                    {tab === 0 && (
+                    {(tab === 0 || tab === 2) && (
                         <Button
                             variant="contained"
                             color="secondary"
