@@ -163,6 +163,10 @@
                 return result;
             }
 
+            result.OrderNumber = orderNumber;
+
+            result.UserNumber = createdBy;
+
             result.CreateParcel = this.goodsInPack.ParcelRequired(
                                       orderNumber,
                                       rsnNumber,
@@ -196,6 +200,7 @@
                 result.DocType = this.purchaseOrderPack.GetDocumentType(orderNumber.Value);
                 result.PrintLabels = true;
                 result.PartNumber = partNumber;
+                result.PartDescription = part.Description;
                 result.SupplierId = supplierId;
                 result.ParcelComments = $"{result.DocType}{orderNumber}";
 

@@ -316,7 +316,7 @@ function GoodsInUtility({
         },
         {
             headerName: 'Loc',
-            field: 'storagePlace',
+            field: 'location',
             width: 200
         },
         {
@@ -420,10 +420,10 @@ function GoodsInUtility({
                         <div className={classes.dialog}>
                             <QcLabelPrintScreen
                                 kardexLocation={bookInResult?.kardexLocation}
-                                partNumber={validatePurchaseOrderResult?.partNumber}
-                                partDescription={validatePurchaseOrderResult?.partNumber}
+                                partNumber={bookInResult?.partNumber}
+                                partDescription={bookInResult?.description}
                                 reqNumber={bookInResult?.reqNumber}
-                                orderNumber={validatePurchaseOrderResult?.orderNumber}
+                                orderNumber={bookInResult?.orderNumber}
                                 qcState={bookInResult?.qcState}
                                 qcInfo={bookInResult?.qcInfo}
                                 docType={bookInResult?.docType}
@@ -1114,7 +1114,10 @@ GoodsInUtility.propTypes = {
         createParcel: PropTypes.bool,
         lines: PropTypes.arrayOf(PropTypes.shape({})),
         printLabels: PropTypes.bool,
-        transactionCode: PropTypes.string
+        transactionCode: PropTypes.string,
+        partNumber: PropTypes.string,
+        description: PropTypes.string,
+        orderNumber: PropTypes.number
     }),
     bookInResultLoading: PropTypes.bool,
     doBookIn: PropTypes.func.isRequired,

@@ -14,6 +14,8 @@
         {
             return new BookInResultResource
                        {
+                           OrderNumber = model.OrderNumber,
+                           UserNumber = model.UserNumber,
                            Success = model.Success,
                            Message = model.Message,
                            TransactionCode = model.TransactionCode,

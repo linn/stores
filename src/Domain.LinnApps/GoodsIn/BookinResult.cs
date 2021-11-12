@@ -10,6 +10,10 @@
         {
         }
 
+        public int? OrderNumber { get; set; }
+
+        public int UserNumber { get; set; }
+
         public int? ReqNumber { get; set; }
 
         public string QcState { get; set; }
