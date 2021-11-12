@@ -96,6 +96,7 @@
                 null,
                 1,
                 false,
+                false,
                 new List<GoodsInLogEntry>
                     {
                         new GoodsInLogEntry
@@ -103,7 +104,8 @@
                                 ArticleNumber = "PART",
                                 DateCreated = DateTime.UnixEpoch,
                                 LoanLine = 1,
-                                LoanNumber = 1
+                                LoanNumber = 1,
+                                StoragePlace = "P1234"
                             }
                     });
         }

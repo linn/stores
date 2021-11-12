@@ -4,6 +4,10 @@
 
     public class BookInResultResource : ProcessResultResource
     {
+        public int? OrderNumber { get; set; }
+
+        public int UserNumber { get; set; }
+
         public int? ReqNumber { get; set; }
 
         public string QcState { get; set; }
@@ -31,6 +35,8 @@
         public int? SupplierId { get; set; }
 
         public int? CreatedBy { get; set; }
+
+        public bool PrintLabels { get; set; }
 
         public IEnumerable<GoodsInLogEntryResource> Lines { get; set; }
     }

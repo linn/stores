@@ -14,7 +14,7 @@
 
     using NUnit.Framework;
 
-    public class WhenBookingInAndPartHasStorageType : ContextBase
+    public class WhenBookingInRsnAndParcelRequired : ContextBase
     {
         private BookInResult result;
 
@@ -24,7 +24,14 @@
             this.PurchaseOrderPack.GetDocumentType(1).Returns("PO");
             this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1234").Returns(true);
             this.GoodsInPack.GetNextBookInRef().ReturnsForAnyArgs(1);
-            this.StoresPack.ValidOrderQty(1, 1, 1, out Arg.Any<int>(), out Arg.Any<int>()).Returns(true);
+            this.GoodsInPack.ParcelRequired(null, 123456, null, out _).Returns(true);
+            this.GoodsInPack.GetRsnDetails(123456, out _, out _, out _, out _, out _, out _).Returns(x =>
+            {
+                x[4] = 1;
+                x[5] = 00654323;
+                return true;
+            });
+
             this.ReqRepository.FindById(1).Returns(new RequisitionHeader { ReqNumber = 1, });
             this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>())
                 .Returns(new Part
@@ -34,59 +41,51 @@
                     QcInformation = "Some Info"
                 });
 
-            this.GoodsInPack.When(x => x.GetPurchaseOrderDetails(
-                1,
-                1,
-                out var _,
-                out var _,
-                out var uom,
-                out var _,
-                out var _,
-                out var _,
-                out var _,
-                out var _))
-                .Do(x => x[4] = "ONES");
-
             this.GoodsInPack.When(x => x.DoBookIn(
                 1,
-                "O",
+                "R",
                 1,
                 "PART",
                 1,
-                1,
-                1,
-                null,
-                null,
-                null,
-                "E-K1-SOMETHING",
-                "K1",
                 null,
                 null,
                 null,
                 null,
+                123456,
+                "P1234",
                 null,
-                out var reqNumber,
-                out var success))
+                null,
+                null,
+                null,
+                null,
+                null,
+                out _,
+                out _))
                 .Do(x =>
                 {
                     x[17] = 1;
                     x[18] = true;
                 });
 
+            this.GoodsInPack.GetNextLogId().Returns(1111);
+
+            this.LabelTypeRepository.FindBy(Arg.Any<Expression<Func<StoresLabelType, bool>>>())
+                .Returns(new StoresLabelType { DefaultPrinter = "PRINTER", FileName = "rsn_lab" });
+
             this.result = this.Sut.DoBookIn(
-                "O",
+                "R",
                 1,
                 "PART",
                 null,
                 1,
-                1,
-                1,
                 null,
                 null,
                 null,
-                "K1",
                 null,
-                "E-K1-SOMETHING",
+                123456,
+                null,
+                null,
+                "P1234",
                 null,
                 null,
                 null,
@@ -101,17 +100,49 @@
                             {
                                 ArticleNumber = "PART",
                                 DateCreated = DateTime.UnixEpoch,
-                                OrderLine = 1,
-                                OrderNumber = 1,
-                                Quantity = 1
+                                LoanLine = 1,
+                                LoanNumber = 1,
+                                StoragePlace = "P1234"
                             }
                     });
         }
 
         [Test]
-        public void ShouldSetKardexLocation()
+        public void ShouldCallStoredProcedure()
         {
-            this.result.KardexLocation.Should().Be("E-K1-SOMETHING");
+            this.GoodsInPack.Received().DoBookIn(
+                1,
+                "R",
+                1,
+                "PART",
+                1,
+                null,
+                null,
+                null,
+                null,
+                123456,
+                "P1234",
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                out var reqNumber,
+                out var success);
+        }
+
+        [Test]
+        public void ShouldReturnSuccessResult()
+        {
+            this.result.Success.Should().BeTrue();
+            this.result.Message.Should().Be("Book In Successful!");
+        }
+
+        [Test]
+        public void ShouldSetParcelComment()
+        {
+            this.result.ParcelComments.Should().Be("RSN123456");
         }
     }
 }

@@ -14,7 +14,7 @@
 
     using NUnit.Framework;
 
-    public class WhenBookingInRsn : ContextBase
+    public class WhenBookingInRsnAndPrintRsnLabelsTrue : ContextBase
     {
         private BookInResult result;
 
@@ -92,6 +92,7 @@
                 null,
                 1,
                 false,
+                true,
                 new List<GoodsInLogEntry>
                     {
                         new GoodsInLogEntry
@@ -99,7 +100,8 @@
                                 ArticleNumber = "PART",
                                 DateCreated = DateTime.UnixEpoch,
                                 LoanLine = 1,
-                                LoanNumber = 1
+                                LoanNumber = 1,
+                                StoragePlace = "P1234"
                             }
                     });
         }

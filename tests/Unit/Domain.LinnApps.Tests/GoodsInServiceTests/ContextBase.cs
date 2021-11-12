@@ -1,5 +1,8 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.GoodsInServiceTests
 {
+    using System;
+    using System.Linq.Expressions;
+
     using Linn.Common.Domain.LinnApps.RemoteServices;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
@@ -36,6 +39,9 @@
 
         protected IQueryRepository<AuthUser> AuthUserRepository { get; private set; }
 
+        protected IQueryRepository<StoragePlace> StoragePlaceRepository { get; private set; }
+
+
         [SetUp]
         public void SetUpContext()
         {
@@ -50,6 +56,11 @@
             this.Bartender = Substitute.For<IBartenderLabelPack>();
             this.PurchaseOrderRepository = Substitute.For<IRepository<PurchaseOrder, int>>();
             this.AuthUserRepository = Substitute.For<IQueryRepository<AuthUser>>();
+            this.StoragePlaceRepository = Substitute.For<IQueryRepository<StoragePlace>>();
+
+            this.StoragePlaceRepository.FindBy(Arg.Any<Expression<Func<StoragePlace, bool>>>())
+                .Returns(new StoragePlace());
+
             this.Sut = new GoodsInService(
                 this.GoodsInPack, 
                 this.StoresPack, 
@@ -61,7 +72,8 @@
                 this.LabelTypeRepository,
                 this.Bartender,
                 this.PurchaseOrderRepository,
-                this.AuthUserRepository);
+                this.AuthUserRepository,
+                this.StoragePlaceRepository);
         }
     }
 }

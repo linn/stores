@@ -14,6 +14,8 @@
         {
             return new BookInResultResource
                        {
+                           OrderNumber = model.OrderNumber,
+                           UserNumber = model.UserNumber,
                            Success = model.Success,
                            Message = model.Message,
                            TransactionCode = model.TransactionCode,
@@ -30,6 +32,7 @@
                            ParcelComments = model.ParcelComments,
                            SupplierId = model.SupplierId,
                            CreatedBy = model.CreatedBy,
+                           PrintLabels = model.PrintLabels,
                            Lines = model.Lines?.Select(
                                l => new GoodsInLogEntryResource
                                         {

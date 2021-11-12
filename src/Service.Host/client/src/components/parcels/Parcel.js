@@ -116,6 +116,14 @@ function Parcel({
         return 'loading..';
     };
 
+    const handleBackClick = () => {
+        if (previousPaths?.some(p => p.path?.includes('/logistics/goods-in-utility'))) {
+            history.push('/logistics/goods-in-utility');
+        } else {
+            history.push('/logistics/parcels');
+        }
+    };
+
     const supplierNameValue = () => {
         if (localSuppliers.length && parcel.supplierId) {
             const supplier = localSuppliers.find(x => x.id === parcel.supplierId);
@@ -518,9 +526,7 @@ function Parcel({
                                 saveDisabled={viewing() || saveEnabled()}
                                 saveClick={handleSaveClick}
                                 cancelClick={handleCancelClick}
-                                backClick={() =>
-                                    inDialogBox ? closeDialog() : history.push('/logistics/parcels')
-                                }
+                                backClick={() => (inDialogBox ? closeDialog() : handleBackClick())}
                             />
                         </Grid>
                     </>

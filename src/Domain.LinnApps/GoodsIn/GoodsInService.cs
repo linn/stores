@@ -34,6 +34,8 @@
 
         private readonly IQueryRepository<AuthUser> authUserRepository;
 
+        private readonly IQueryRepository<StoragePlace> storagePlaceRepository;
+
         public GoodsInService(
             IGoodsInPack goodsInPack,
             IStoresPack storesPack,
@@ -45,7 +47,8 @@
             IQueryRepository<StoresLabelType> labelTypeRepository,
             IBartenderLabelPack bartender,
             IRepository<PurchaseOrder, int> purchaseOrderRepository,
-            IQueryRepository<AuthUser> authUserRepository)
+            IQueryRepository<AuthUser> authUserRepository,
+            IQueryRepository<StoragePlace> storagePlaceRepository)
         {
             this.storesPack = storesPack;
             this.goodsInPack = goodsInPack;
@@ -58,6 +61,7 @@
             this.purchaseOrderRepository = purchaseOrderRepository;
             this.bartender = bartender;
             this.authUserRepository = authUserRepository;
+            this.storagePlaceRepository = storagePlaceRepository;
         }
 
         public BookInResult DoBookIn(
@@ -81,6 +85,7 @@
             int? reqNumber,
             int? numberOfLines,
             bool? multipleBookIn,
+            bool printRsnLabels,
             IEnumerable<GoodsInLogEntry> lines)
         {
             if (string.IsNullOrEmpty(ontoLocation))
@@ -88,16 +93,27 @@
                 return new BookInResult(false, "Onto location/pallet must be entered");
             }
 
+            var linesArray = lines as GoodsInLogEntry[] ?? lines.ToArray();
+
+            if (linesArray.Any(l => this.storagePlaceRepository.FindBy(x => l.StoragePlace == x.Name) == null))
+            {
+                return new BookInResult(false, "Invalid location entered");
+            }
+
             if (ontoLocation.StartsWith("P") 
                 && !string.IsNullOrEmpty(partNumber))
             {
-                if (!this.palletAnalysisPack.CanPutPartOnPallet(partNumber, ontoLocation.TrimStart('P')))
+                foreach (var entry in linesArray)
                 {
-                    return new BookInResult(false, this.palletAnalysisPack.Message());
+                    if (!this.palletAnalysisPack.CanPutPartOnPallet(partNumber, entry.StoragePlace.ToUpper().TrimStart('P')))
+                    {
+                        return new BookInResult(false, $"Can't put {partNumber} on {entry.StoragePlace}");
+                    }
                 }
+                
             }
 
-            var goodsInLogEntries = lines as GoodsInLogEntry[] ?? lines.ToArray();
+            var goodsInLogEntries = lines as GoodsInLogEntry[] ?? linesArray.ToArray();
             var bookinRef = this.goodsInPack.GetNextBookInRef();
 
             if (!goodsInLogEntries.Any())
@@ -109,7 +125,6 @@
             {
                 goodsInLogEntry.Id = this.goodsInPack.GetNextLogId();
                 goodsInLogEntry.BookInRef = bookinRef;
-                goodsInLogEntry.StoragePlace = ontoLocation;
                 this.goodsInLog.Add(goodsInLogEntry);
             }
 
@@ -121,7 +136,15 @@
             {
                 return new BookInResult(false, msg);
             }
-            
+
+            var total = linesArray.Sum(x => x.Quantity).Value;
+
+            if (transactionType.Equals("O") && !this.storesPack.ValidOrderQty((int)orderNumber, (int)orderLine, (int)total, out var qtyRec, out _))
+            {
+                var res = this.ValidatePurchaseOrder((int)orderNumber, (int)orderLine);
+                return new BookInResult(false, $"Overbook: PO was for {res.OrderQty} but you have tried to book in {total}");
+            }
+
             var message = this.goodsInPack.DoBookIn(
                 bookinRef,
                 transactionType,
@@ -150,6 +173,10 @@
                 return result;
             }
 
+            result.OrderNumber = orderNumber;
+
+            result.UserNumber = createdBy;
+
             result.CreateParcel = this.goodsInPack.ParcelRequired(
                                       orderNumber,
                                       rsnNumber,
@@ -164,6 +191,7 @@
 
             result.QcState = !string.IsNullOrEmpty(state) && state.Equals("QC") ? "QUARANTINE" : "PASS";
             result.QcInfo = part?.QcInformation;
+
 
             if (transactionType == "O")
             {
@@ -182,9 +210,11 @@
                 result.DocType = this.purchaseOrderPack.GetDocumentType(orderNumber.Value);
                 result.PrintLabels = true;
                 result.PartNumber = partNumber;
-
+                result.PartDescription = part.Description;
                 result.SupplierId = supplierId;
                 result.ParcelComments = $"{result.DocType}{orderNumber}";
+
+                result.QtyReceived = total;
 
                 if (!string.IsNullOrEmpty(storageType))
                 {
@@ -217,12 +247,24 @@
                 return result;
             }
 
-            this.PrintRsnLabels(
-                    (int)rsnNumber, 
-                    partNumber, 
-                    serialNumber, 
-                    rsnQuantity ?? 1);
-            result.TransactionCode = "R";    
+            if (transactionType.Equals("R"))
+            {
+                if (result.CreateParcel)
+                {
+                    result.ParcelComments = $"RSN{rsnNumber}";
+                }
+
+                if (printRsnLabels)
+                {
+                    this.PrintRsnLabels(
+                        (int)rsnNumber,
+                        partNumber,
+                        serialNumber,
+                        rsnQuantity ?? 1);
+                    result.TransactionCode = "R";
+                }
+            }
+
             return result;
         }
 
@@ -467,7 +509,7 @@
                        {
                            LocationCode = locationCode,
                            LocationId = locationId,
-                           Message = this.goodsInPack.GetErrorMessage()
+                           Message = string.IsNullOrEmpty(locationCode) ? this.goodsInPack.GetErrorMessage() : null
                        };
         }
 
