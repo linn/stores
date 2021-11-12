@@ -95,7 +95,7 @@
             {
                 foreach (var entry in linesArray)
                 {
-                    if (!this.palletAnalysisPack.CanPutPartOnPallet(partNumber, entry.StoragePlace.TrimStart('P')))
+                    if (!this.palletAnalysisPack.CanPutPartOnPallet(partNumber, entry.StoragePlace.ToUpper().TrimStart('P')))
                     {
                         return new BookInResult(false, $"Can't put {partNumber} on {entry.StoragePlace}");
                     }
