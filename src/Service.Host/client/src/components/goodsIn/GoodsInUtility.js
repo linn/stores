@@ -164,7 +164,6 @@ function GoodsInUtility({
                 : 'Good condition'
         );
         setLines(l => [
-            ...l,
             {
                 id: l.length + 1,
                 articleNumber: validateRsnResult?.articleNumber,
@@ -978,7 +977,6 @@ function GoodsInUtility({
                         variant="contained"
                         disabled={
                             (!validatePurchaseOrderResult && !lines.length) ||
-                            //!!validatePurchaseOrderResult?.message ||
                             !formData.ontoLocation ||
                             (!formData.qty && !lines.length)
                         }
