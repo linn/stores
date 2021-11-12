@@ -34,6 +34,8 @@
 
         private readonly IQueryRepository<AuthUser> authUserRepository;
 
+        private readonly IQueryRepository<StoragePlace> storagePlaceRepository;
+
         public GoodsInService(
             IGoodsInPack goodsInPack,
             IStoresPack storesPack,
@@ -45,7 +47,8 @@
             IQueryRepository<StoresLabelType> labelTypeRepository,
             IBartenderLabelPack bartender,
             IRepository<PurchaseOrder, int> purchaseOrderRepository,
-            IQueryRepository<AuthUser> authUserRepository)
+            IQueryRepository<AuthUser> authUserRepository,
+            IQueryRepository<StoragePlace> storagePlaceRepository)
         {
             this.storesPack = storesPack;
             this.goodsInPack = goodsInPack;
@@ -58,6 +61,7 @@
             this.purchaseOrderRepository = purchaseOrderRepository;
             this.bartender = bartender;
             this.authUserRepository = authUserRepository;
+            this.storagePlaceRepository = storagePlaceRepository;
         }
 
         public BookInResult DoBookIn(
@@ -90,6 +94,12 @@
             }
 
             var linesArray = lines as GoodsInLogEntry[] ?? lines.ToArray();
+
+            if (linesArray.Any(l => this.storagePlaceRepository.FindBy(x => l.StoragePlace == x.Name) == null))
+            {
+                return new BookInResult(false, "Invalid location entered");
+            }
+
             if (ontoLocation.StartsWith("P") 
                 && !string.IsNullOrEmpty(partNumber))
             {

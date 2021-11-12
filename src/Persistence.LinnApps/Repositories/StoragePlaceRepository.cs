@@ -19,7 +19,7 @@
         public StoragePlace FindBy(Expression<Func<StoragePlace, bool>> expression)
         {
             return this.serviceDbContext.StoragePlaces
-                .Where(expression).ToList().FirstOrDefault();
+                .Where(expression).SingleOrDefault();
         }
 
         public IQueryable<StoragePlace> FilterBy(Expression<Func<StoragePlace, bool>> expression)
