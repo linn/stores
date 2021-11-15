@@ -22,7 +22,6 @@
         {
             return this.serviceDbContext
                 .PartTemplates
-                .AsNoTracking()
                 .Where(p => p.PartRoot == key)
                 .ToList()
                 .FirstOrDefault();

@@ -8,7 +8,7 @@
     public class PartTemplateResponseProcessor : JsonResponseProcessor<PartTemplate>
     {
         public PartTemplateResponseProcessor(IResourceBuilder<PartTemplate> resourceBuilder)
-            : base(resourceBuilder, "linnapps-part-templates", 1)
+            : base(resourceBuilder, "linnapps-part-template", 1)
         {
         }
     }

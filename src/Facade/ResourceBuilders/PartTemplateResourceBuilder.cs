@@ -1,6 +1,8 @@
 ﻿namespace Linn.Stores.Facade.ResourceBuilders
 {
+    using System.Collections.Generic;
     using Linn.Common.Facade;
+    using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources.Parts;
 
@@ -33,7 +35,12 @@
 
         public string GetLocation(PartTemplate model)
         {
-            throw new System.NotImplementedException();
+            return $"/inventory/part-templates/{model.PartRoot}";
+        }
+
+        private IEnumerable<LinkResource> BuildLinks(PartTemplate model)
+        {
+            yield return new LinkResource { Rel = "self", Href = this.GetLocation(model) };
         }
     }
 }

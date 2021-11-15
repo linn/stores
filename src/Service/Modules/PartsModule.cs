@@ -238,10 +238,7 @@
             this.RequiresAuthentication();
             var resource = this.Bind<PartTemplateResource>();
             var result = this.partTemplateService.Add(resource);
-            return this.Negotiate.WithStatusCode(HttpStatusCode.Created)
-                .WithModel(result)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
-                .WithView("Index");
+            return this.Negotiate.WithStatusCode(HttpStatusCode.Created).WithModel(result);
         }
 
         private object GetPartTemplate(string id)
@@ -256,8 +253,7 @@
             this.RequiresAuthentication();
             var resource = this.Bind<PartTemplateResource>();
             var result = this.partTemplateService.Update(id, resource);
-            return this.Negotiate.WithModel(result)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+            return this.Negotiate.WithModel(result);
         }
 
         private object GetPartTemplates()

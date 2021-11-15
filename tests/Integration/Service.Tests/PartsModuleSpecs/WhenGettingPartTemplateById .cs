@@ -1,8 +1,5 @@
 ﻿namespace Linn.Stores.Service.Tests.PartsModuleSpecs
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
     using FluentAssertions;
 
     using Linn.Common.Facade;
@@ -18,23 +15,18 @@
 
     public class WhenGettingPartTemplatesById : ContextBase
     {
+        private readonly string partRootString = "PARTTEMP";
+
         [SetUp]
         public void SetUp()
         {
-            var a = new PartTemplate
-                        {
-                            PartRoot = "PARTTEMP"
-                        };
+            var partTemp = new PartTemplate { PartRoot = this.partRootString };
 
-            this.PartTemplateService.GetById(a.PartRoot)
-                .Returns(new SuccessResult<PartTemplate>(a));
+            this.PartTemplateService.GetById(partTemp.PartRoot).Returns(new SuccessResult<PartTemplate>(partTemp));
 
             this.Response = this.Browser.Get(
                 "/inventory/part-templates/PARTTEMP",
-                with =>
-                    {
-                        with.Header("Accept", "application/json");
-                    }).Result;
+                with => { with.Header("Accept", "application/json"); }).Result;
         }
 
         [Test]
@@ -46,14 +38,14 @@
         [Test]
         public void ShouldCallService()
         {
-            this.PartTemplateService.Received().GetById("PARTTEMP");
+            this.PartTemplateService.Received().GetById(this.partRootString);
         }
 
         [Test]
         public void ShouldReturnResource()
         {
             var resource = this.Response.Body.DeserializeJson<PartTemplateResource>();
-            resource.PartRoot.Should().Be("PARTTEMP");
+            resource.PartRoot.Should().Be(this.partRootString);
         }
     }
 }

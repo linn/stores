@@ -6,8 +6,7 @@ import partsSelectors from '../../selectors/partsSelectors';
 import { getPrivileges } from '../../selectors/userSelectors';
 import partTemplatesActions from '../../actions/partTemplatesActions';
 import partTemplatesSelectors from '../../selectors/partTemplatesSelectors';
-import partTemplateActions from '../../actions/partTemplatesActions';
-import partTemplateSelectors from '../../selectors/partTemplatesSelectors';
+import partTemplateSelectors from '../../selectors/partTemplateSelectors';
 
 const mapStateToProps = (state, { match }) => ({
     linkToSources: match?.url?.endsWith('/sources'),
