@@ -56,7 +56,10 @@ function GoodsInUtility({
     validateRsnResult,
     validateRsnResultLoading,
     clearPo,
-    clearRsn
+    clearRsn,
+    printRsnResult,
+    printRsnLoading,
+    printRsn
 }) {
     const [formData, setFormData] = useState({
         orderNumber: null,
@@ -1026,8 +1029,18 @@ function GoodsInUtility({
                         Book In
                     </Button>
                     {tab === 2 && (
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            disabled={!validateRsnResult}
+                            onClick={() => printRsn()}
+                        >
+                            Print RSN
+                        </Button>
+                    )}
+                    {tab === 2 && (
                         <CheckboxWithLabel
-                            label="Print Rsn Label?"
+                            label="Print RSN Label?"
                             checked={printRsnLabels}
                             onChange={() => setPrintRsnLabels(m => !m)}
                         />
@@ -1045,6 +1058,12 @@ function GoodsInUtility({
                         >
                             Clear Selected
                         </Button>
+                    )}
+                </Grid>
+                <Grid item xs={12}>
+                    {printRsnLoading && <LinearProgress />}
+                    {printRsnResult?.success && (
+                        <Typography variant="h6"> Print requested.</Typography>
                     )}
                 </Grid>
                 <Grid item xs={3}>
@@ -1151,7 +1170,10 @@ GoodsInUtility.propTypes = {
     }),
     validateRsnResultLoading: PropTypes.bool,
     clearPo: PropTypes.func.isRequired,
-    clearRsn: PropTypes.func.isRequired
+    clearRsn: PropTypes.func.isRequired,
+    printRsnResult: PropTypes.shape({ success: PropTypes.bool, message: PropTypes.string }),
+    printRsnLoading: PropTypes.bool,
+    printRsn: PropTypes.func.isRequired
 };
 
 GoodsInUtility.defaultProps = {
@@ -1172,7 +1194,9 @@ GoodsInUtility.defaultProps = {
     rsnAccessories: [],
     rsnAccessoriesLoading: false,
     validateRsnResult: null,
-    validateRsnResultLoading: false
+    validateRsnResultLoading: false,
+    printRsnResult: null,
+    printRsnLoading: false
 };
 
 export default GoodsInUtility;

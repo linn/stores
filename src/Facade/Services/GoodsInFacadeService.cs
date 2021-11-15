@@ -16,12 +16,16 @@
 
         private readonly IQueryRepository<LoanDetail> loanDetailRepository;
 
+        private readonly IPrintRsnService printRsnService;
+
         public GoodsInFacadeService(
             IGoodsInService domainService,
-            IQueryRepository<LoanDetail> loanDetailRepository)
+            IQueryRepository<LoanDetail> loanDetailRepository,
+            IPrintRsnService printRsnService)
         {
             this.domainService = domainService;
             this.loanDetailRepository = loanDetailRepository;
+            this.printRsnService = printRsnService;
         }
 
         public IResult<BookInResult> DoBookIn(BookInRequestResource requestResource)
@@ -136,6 +140,13 @@
         public IResult<ValidateRsnResult> ValidateRsn(int rsnNumber)
         {
             return new SuccessResult<ValidateRsnResult>(this.domainService.ValidateRsn(rsnNumber));
+        }
+
+        public IResult<ProcessResult> PrintRsn(int rsnNumber)
+        {
+            this.printRsnService.PrintRsn(rsnNumber, "Service Copy");
+
+            return new SuccessResult<ProcessResult>(new ProcessResult(true, "Printing..."));
         }
     }
 }

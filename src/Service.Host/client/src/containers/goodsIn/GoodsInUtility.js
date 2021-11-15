@@ -20,6 +20,8 @@ import rsnConditionsActions from '../../actions/rsnConditionsActions';
 import rsnConditionsSelectors from '../../selectors/rsnConditionsSelectors';
 import ValidateRsnActions from '../../actions/ValidateRsnActions';
 import validateRsnResultSelectors from '../../selectors/validateRsnResultSelectors';
+import printRsnSelectors from '../../selectors/printRsnSelectors';
+import printRsnActions from '../../actions/printRsnActions';
 
 const mapStateToProps = (state, { match }) => ({
     validatePurchaseOrderResult: validatePurchaseOrderResultSelectors.getItem(state),
@@ -47,7 +49,9 @@ const mapStateToProps = (state, { match }) => ({
     rsnConditionsLoading: rsnConditionsSelectors.getLoading(state),
     rsnAccessoriesLoading: rsnAccessoriesSelectors.getLoading(state),
     validateRsnResult: validateRsnResultSelectors.getItem(state),
-    validateRsnResultLoading: validateRsnResultSelectors.getLoading(state)
+    validateRsnResultLoading: validateRsnResultSelectors.getLoading(state),
+    printRsnResult: printRsnSelectors.getData(state),
+    printRsnLoading: printRsnSelectors.getWorking(state)
 });
 
 const initialise = () => dispatch => {
@@ -70,7 +74,8 @@ const mapDispatchToProps = {
     getRsnAccessories: rsnAccessoriesActions.fetch,
     validateRsn: ValidateRsnActions.fetchById,
     clearPo: validatePurchaseOrderActions.clearItems,
-    clearRsn: ValidateRsnActions.clearItems
+    clearRsn: ValidateRsnActions.clearItems,
+    printRsn: printRsnActions.requestProcessStart
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(GoodsInUtility));
