@@ -120,7 +120,6 @@
         private object PrintRsn()
         {
             var resource = this.Bind<PrintRsnMessageResource>();
-            var closedByUri = this.Context.CurrentUser.GetEmployeeUri();
             return this.Negotiate.WithModel(this.service.PrintRsn(resource.RsnNumber));
         }
 
