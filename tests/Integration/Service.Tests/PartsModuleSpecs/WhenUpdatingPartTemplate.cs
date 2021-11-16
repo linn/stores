@@ -87,7 +87,7 @@
         public void ShouldReturnResource()
         {
             var resource = this.Response.Body.DeserializeJson<PartTemplateResource>();
-            resource.Description.Should().Contain("A test for updating a part template");
+            resource.Description.Should().Be("A test for updating a part template");
             resource.NextNumber.Should().Be(32);
         }
     }
