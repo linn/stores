@@ -120,7 +120,9 @@
         private object PrintRsn()
         {
             var resource = this.Bind<PrintRsnMessageResource>();
-            return this.Negotiate.WithModel(this.service.PrintRsn(resource.RsnNumber));
+            var userNumber = int.Parse(this.Context.CurrentUser.GetEmployeeUri().Split("/").Last());
+
+            return this.Negotiate.WithModel(this.service.PrintRsn(resource.RsnNumber, userNumber));
         }
 
         private object GetRsnAccessories()

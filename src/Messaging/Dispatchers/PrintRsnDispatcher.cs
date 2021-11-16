@@ -3,6 +3,8 @@
     using System.Text;
 
     using Linn.Common.Messaging.RabbitMQ;
+    using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Resources.MessageDispatch;
 
@@ -17,18 +19,32 @@
 
         private readonly IMessageDispatcher messageDispatcher;
 
-        public PrintRsnDispatcher(IMessageDispatcher messageDispatcher)
+        private IRepository<PrinterMapping, int> printerRepository;
+
+        public PrintRsnDispatcher(
+            IMessageDispatcher messageDispatcher, 
+            IRepository<PrinterMapping, int> printerRepository)
         {
             this.messageDispatcher = messageDispatcher;
+            this.printerRepository = printerRepository;
         }
 
-        public void PrintRsn(int rsnNumber, string copy)
+        public void PrintRsn(int rsnNumber, int userNumber, string copy)
         {
+            var printer = this.printerRepository
+                .FindBy(a => a.UserNumber == userNumber && a.PrinterGroup == "GOODS-IN")?.PrinterName;
+
+            if (string.IsNullOrEmpty(printer))
+            {
+                 printer = this.printerRepository.FindBy(
+                    a => a.DefaultForGroup == "Y" && a.PrinterGroup == "GOODS-IN").PrinterName;
+            }
+
             var resource = new PrintRsnMessageResource
                                {
                                    RsnNumber = rsnNumber,
                                    Copy = copy,
-                                   Printer = "Invoice" // todo - find correct printer
+                                   Printer = printer
                                };
 
             var json = JsonConvert.SerializeObject(

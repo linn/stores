@@ -25,6 +25,6 @@
 
         IResult<ValidateRsnResult> ValidateRsn(int rsnNumber);
 
-        IResult<ProcessResult> PrintRsn(int rsnNumber);
+        IResult<ProcessResult> PrintRsn(int rsnNumber, int userNumber);
     }
 }

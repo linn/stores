@@ -2,6 +2,6 @@
 {
     public interface IPrintRsnService
     {
-        void PrintRsn(int rsnNumber, string copy);
+        void PrintRsn(int rsnNumber, int userNumber, string copy);
     }
 }

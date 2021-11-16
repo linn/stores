@@ -142,9 +142,9 @@
             return new SuccessResult<ValidateRsnResult>(this.domainService.ValidateRsn(rsnNumber));
         }
 
-        public IResult<ProcessResult> PrintRsn(int rsnNumber)
+        public IResult<ProcessResult> PrintRsn(int rsnNumber, int userNumber)
         {
-            this.printRsnService.PrintRsn(rsnNumber, "Service Copy");
+            this.printRsnService.PrintRsn(rsnNumber, userNumber, "Service Copy");
 
             return new SuccessResult<ProcessResult>(new ProcessResult(true, "Printing..."));
         }

@@ -22,7 +22,7 @@
         {
             this.successResult = new ProcessResult(true, "Printing...");
 
-            this.Service.PrintRsn(Arg.Any<int>()).Returns(
+            this.Service.PrintRsn(Arg.Any<int>(), 123).Returns(
                 new SuccessResult<ProcessResult>(this.successResult));
 
             this.Response = this.Browser.Post(
@@ -42,7 +42,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.Service.Received().PrintRsn(Arg.Any<int>());
+            this.Service.Received().PrintRsn(Arg.Any<int>(), 123);
         }
 
         [Test]
