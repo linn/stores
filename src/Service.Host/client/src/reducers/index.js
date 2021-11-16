@@ -130,6 +130,7 @@ import postDuty from './postDuty';
 import rsnAccessories from './rsnAccessories';
 import rsnConditions from './rsnConditions';
 import validateRsnResult from './validateRsnResult';
+import printRsn from './printRsn';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -209,6 +210,7 @@ const rootReducer = history =>
         printConsignmentDocuments,
         printConsignmentLabel,
         printGoodsInLabels,
+        printRsn,
         productAnalysisCodes,
         purchaseOrders,
         req,

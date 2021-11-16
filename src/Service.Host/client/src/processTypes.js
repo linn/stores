@@ -90,6 +90,8 @@ export const printGoodsInLabels = new ItemType(
     '/logistics/goods-in/print-labels'
 );
 
+export const printRsn = new ItemType('printRsn', 'PRINT_RSN', '/logistics/goods-in/print-rsn');
+
 export const printConsignmentDocuments = new ItemType(
     'printConsignmentDocuments',
     'PRINT_CONSIGNMENT_DOCUMENTS',
