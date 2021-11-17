@@ -1032,8 +1032,8 @@ function GoodsInUtility({
                         <Button
                             variant="contained"
                             color="secondary"
-                            disabled={!validateRsnResult}
-                            onClick={() => printRsn()}
+                            disabled={!validateRsnResult?.articleNumber}
+                            onClick={() => printRsn({ rsnNumber: formData.rsnNumber })}
                         >
                             Print RSN
                         </Button>
