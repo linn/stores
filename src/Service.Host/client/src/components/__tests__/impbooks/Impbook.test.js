@@ -79,6 +79,61 @@ const item = {
     totalImportValue: 1000
 };
 
+const cpcNumbers = [
+    {
+        cpcNumber: 1,
+        description: '51 00 00'
+    },
+    {
+        cpcNumber: 2,
+        description: '51 00 01'
+    },
+    {
+        cpcNumber: 3,
+        description: '40 00 00'
+    },
+    {
+        cpcNumber: 4,
+        description: '40 00 60'
+    },
+    {
+        cpcNumber: 5,
+        description: '40 00 63'
+    },
+    {
+        cpcNumber: 6,
+        description: 'EC Countries'
+    },
+    {
+        cpcNumber: 7,
+        description: '40 00 09 - SAMPLES ONLY'
+    },
+    {
+        cpcNumber: 8,
+        description: 'Low Value Shipment'
+    },
+    {
+        cpcNumber: 9,
+        description: '40 51 00 - IPR to Free'
+    },
+    {
+        cpcNumber: 10,
+        description: '40 00 58'
+    },
+    {
+        cpcNumber: 11,
+        description: '61 23 F01'
+    },
+    {
+        cpcNumber: 12,
+        description: '40 00 000'
+    },
+    {
+        cpcNumber: 13,
+        description: '51 00 000'
+    }
+];
+
 const privileges = ['potato.admin', 'import-books.admin'];
 
 describe('When loading', () => {
@@ -116,6 +171,7 @@ describe('On Create', () => {
                 getExchangeRatesForDate={getExchangeRatesForDate}
                 privileges={privileges}
                 loading={false}
+                cpcNumbers={cpcNumbers}
             />
         );
     });
@@ -190,6 +246,7 @@ describe('When dont have right privilege', () => {
                 getExchangeRatesForDate={getExchangeRatesForDate}
                 privileges={['not-right.priv']}
                 loading={false}
+                cpcNumbers={cpcNumbers}
             />
         );
     });
@@ -219,6 +276,7 @@ describe('When editing', () => {
                 privileges={privileges}
                 loading={false}
                 item={item}
+                cpcNumbers={cpcNumbers}
             />
         );
     });
@@ -257,6 +315,7 @@ describe('When clicking through to second tab', () => {
                 privileges={privileges}
                 loading={false}
                 item={item}
+                cpcNumbers={cpcNumbers}
             />
         );
 
