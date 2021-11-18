@@ -826,6 +826,8 @@ function GoodsInUtility({
                                             validateRsn(formData?.rsnNumber);
                                             getRsnAccessories();
                                             getRsnConditions();
+                                            setRsnAccessoriesString('');
+                                            setRsnConditionsString('');
                                         }
                                     }}
                                 />
@@ -1042,6 +1044,8 @@ function GoodsInUtility({
                             });
                             clearPo();
                             clearRsn();
+                            setRsnAccessoriesString('');
+                            setRsnConditionsString('');
                         }}
                     >
                         Book In
