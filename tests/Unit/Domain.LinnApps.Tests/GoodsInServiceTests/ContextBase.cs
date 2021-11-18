@@ -41,6 +41,7 @@
 
         protected IQueryRepository<StoragePlace> StoragePlaceRepository { get; private set; }
 
+        protected IPrintRsnService PrintRsnService { get; private set; }
 
         [SetUp]
         public void SetUpContext()
@@ -57,7 +58,7 @@
             this.PurchaseOrderRepository = Substitute.For<IRepository<PurchaseOrder, int>>();
             this.AuthUserRepository = Substitute.For<IQueryRepository<AuthUser>>();
             this.StoragePlaceRepository = Substitute.For<IQueryRepository<StoragePlace>>();
-
+            this.PrintRsnService = Substitute.For<IPrintRsnService>();
             this.StoragePlaceRepository.FindBy(Arg.Any<Expression<Func<StoragePlace, bool>>>())
                 .Returns(new StoragePlace());
 
@@ -73,6 +74,7 @@
                 this.Bartender,
                 this.PurchaseOrderRepository,
                 this.AuthUserRepository,
+                this.PrintRsnService,
                 this.StoragePlaceRepository);
         }
     }
