@@ -25,5 +25,15 @@
         public string CountryName { get; set; }
 
         public string AccountType { get; set; }
+
+        public string InvoiceDescription { get; set; }
+
+        public int? Weight { get; set; }
+
+        public int? Height { get; set; }
+
+        public int? Depth { get; set; }
+
+        public int? Width { get; set; }
     }
 }

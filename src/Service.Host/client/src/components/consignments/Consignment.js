@@ -79,7 +79,11 @@ function Consignment({
     saveDocumentsClearData,
     salesOutlets,
     salesOutletsLoading,
-    getSalesOutlets
+    getSalesOutlets,
+    rsnsSearchResults,
+    rsnsSearchLoading,
+    searchRsns,
+    clearRsnsSearch
 }) {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [termsMessage, setTermsMessage] = useState(false);
@@ -90,7 +94,7 @@ function Consignment({
     const [saveDisabled, setSaveDisabled] = useState(false);
     const [showCartonLabel, setShowCartonLabel] = useState(false);
     const [showNewCartonDialog, setShowNewCartonDialog] = useState(false);
-    const [showNewRSNDialog, setShowNewRSNDialog] = useState(false);    
+    const [showNewRSNDialog, setShowNewRSNDialog] = useState(false);
     const [cartonLabelOptions, setCartonLabelOptions] = useState({
         numberOfCopies: 1,
         firstItem: 1,
@@ -458,6 +462,22 @@ function Consignment({
                     depth: selectedCarton.depth
                 });
             }
+        } else if (propertyName === 'rsnNumber') {
+            const selectedRSN = rsnsSearchResults.find(
+                a => a.rsnNumber === newValue
+            );
+            if (selectedRSN) {
+                setNewCarton({
+                    ...newCarton,
+                    rsnNumber: selectedRSN.rsnNumber,
+                    itemDescription: selectedRSN.invoiceDescription,
+                    height: selectedRSN.height,
+                    depth: selectedRSN.depth,
+                    width: selectedRSN.width,
+                    weight: selectedRSN.weight,
+                    quantity: selectedRSN.quantity                 
+                });                
+            }
         }
     };
 
@@ -486,7 +506,7 @@ function Consignment({
         });
 
         setShowNewRSNDialog(true);
-    };    
+    };
 
     const handlePrintDocuments = () => {
         printDocumentsClearData();
@@ -507,8 +527,21 @@ function Consignment({
         }));
     };
 
+    const rsnSearchResult = () => {
+        return rsnsSearchResults?.map(rsn => ({
+            ...rsn,
+            name: rsn.rsnNumber,
+            description: rsn.invoiceDescription,
+            id: rsn.rsnNumber
+        }));
+    };
+
     const handleOnSelect = selectedCartonType => {
         updateNewCartonField('containerType', selectedCartonType.cartonTypeName);
+    };
+
+    const handleOnSelectRsn = selectedRsn => {
+        updateNewCartonField('rsnNumber', selectedRsn.rsnNumber);
     };
 
     return (
@@ -727,7 +760,7 @@ function Consignment({
                                     disabled={viewing()}
                                 >
                                     Add RSN
-                                </Button>                                   
+                                </Button>
                                 <Button
                                     variant="outlined"
                                     color="primary"
@@ -735,7 +768,7 @@ function Consignment({
                                     disabled={viewing()}
                                 >
                                     Add Item
-                                </Button>                             
+                                </Button>
                                 <Button
                                     variant="outlined"
                                     color="primary"
@@ -1060,6 +1093,21 @@ function Consignment({
                     <DialogContent>
                         <>
                             <Grid container>
+                                <Grid item xs={8}>
+                                    <Typeahead
+                                        items={rsnSearchResult()}
+                                        placeholder="RSN Number"                                     
+                                        fetchItems={rsnNo => searchRsns(rsnNo, `&accountId=${item?.salesAccountId}`)}
+                                        clearSearch={clearRsnsSearch}
+                                        loading={rsnsSearchLoading}
+                                        debounce={1000}
+                                        links={false}
+                                        modal
+                                        onSelect={p => handleOnSelectRsn(p)}
+                                        value={newCarton.rsnNumber}    
+                                        label="RSN Number"                                                                            
+                                    />
+                                </Grid>
                                 <Grid item xs={6}>
                                     <Dropdown
                                         label="Item Type"
@@ -1169,6 +1217,7 @@ function Consignment({
                                         onClick={addNewCarton}
                                         variant="contained"
                                         color="primary"
+                                        disabled={!newCarton.rsnNumber}
                                     >
                                         Add RSN
                                     </Button>
@@ -1186,7 +1235,6 @@ function Consignment({
                         </Button>
                     </DialogActions>
                 </Dialog>
-
             </Page>
         </div>
     );
@@ -1287,7 +1335,11 @@ Consignment.propTypes = {
     saveDocumentsClearData: PropTypes.func.isRequired,
     salesOutlets: PropTypes.arrayOf(PropTypes.shape({})),
     salesOutletsLoading: PropTypes.bool,
-    getSalesOutlets: PropTypes.func.isRequired
+    getSalesOutlets: PropTypes.func.isRequired,
+    rsnsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
+    rsnsSearchLoading: PropTypes.bool,
+    searchRsns: PropTypes.func.isRequired,
+    clearRsnsSearch: PropTypes.func.isRequired
 };
 
 Consignment.defaultProps = {
@@ -1320,7 +1372,9 @@ Consignment.defaultProps = {
     saveDocumentsWorking: false,
     saveDocumentsResult: null,
     salesOutlets: [],
-    salesOutletsLoading: false
+    salesOutletsLoading: false,
+    rsnsSearchResults: [],
+    rsnsSearchLoading: false
 };
 
 export default Consignment;
