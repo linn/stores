@@ -13,6 +13,8 @@ import employeesActions from '../../actions/employeesActions';
 import employeesSelectors from '../../selectors/employeesSelectors';
 import exchangeRatesActions from '../../actions/exchangeRatesActions';
 import exchangeRatesSelectors from '../../selectors/exchangeRatesSelectors';
+import cpcNumbersActions from '../../actions/impbookCpcNumbersActions';
+import cpcNumbersSelectors from '../../selectors/impbookCpcNumbersSelectors';
 
 const creating = match => match?.url?.endsWith('/create');
 
@@ -28,7 +30,13 @@ const mapStateToProps = (state, { match }) => ({
     allSuppliers: suppliersSelectors.getItems(state),
     countries: countriesSelectors.getItems(state),
     employees: employeesSelectors.getItems(state),
-    exchangeRates: exchangeRatesSelectors.getSearchItems(state)
+    exchangeRates: exchangeRatesSelectors.getSearchItems(state),
+    cpcNumbers: cpcNumbersSelectors.getItems(state)?.map(x => ({
+        displayText: `${x.cpcNumber === 13 ? `${x.cpcNumber} (IPR)` : x.cpcNumber} - ${
+            x.description
+        }`,
+        id: parseInt(x.cpcNumber, 10)
+    }))
 });
 
 const initialise = ({ itemId }) => dispatch => {
@@ -38,6 +46,7 @@ const initialise = ({ itemId }) => dispatch => {
     dispatch(suppliersActions.fetch());
     dispatch(countriesActions.fetch());
     dispatch(employeesActions.fetch());
+    dispatch(cpcNumbersActions.fetch());
 };
 
 const mapDispatchToProps = {
