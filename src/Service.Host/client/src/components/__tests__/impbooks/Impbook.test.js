@@ -79,58 +79,58 @@ const item = {
     totalImportValue: 1000
 };
 
-const cpcNumbers = [
+const cpcNumbers = () => [
     {
-        cpcNumber: 1,
-        description: '51 00 00'
+        id: 1,
+        displayText: '51 00 00'
     },
     {
-        cpcNumber: 2,
-        description: '51 00 01'
+        id: 2,
+        displayText: '51 00 01'
     },
     {
-        cpcNumber: 3,
-        description: '40 00 00'
+        id: 3,
+        displayText: '40 00 00'
     },
     {
-        cpcNumber: 4,
-        description: '40 00 60'
+        id: 4,
+        displayText: '40 00 60'
     },
     {
-        cpcNumber: 5,
-        description: '40 00 63'
+        id: 5,
+        displayText: '40 00 63'
     },
     {
-        cpcNumber: 6,
-        description: 'EC Countries'
+        id: 6,
+        displayText: 'EC Countries'
     },
     {
-        cpcNumber: 7,
-        description: '40 00 09 - SAMPLES ONLY'
+        id: 7,
+        displayText: '40 00 09 - SAMPLES ONLY'
     },
     {
-        cpcNumber: 8,
-        description: 'Low Value Shipment'
+        id: 8,
+        displayText: 'Low Value Shipment'
     },
     {
-        cpcNumber: 9,
-        description: '40 51 00 - IPR to Free'
+        id: 9,
+        displayText: '40 51 00 - IPR to Free'
     },
     {
-        cpcNumber: 10,
-        description: '40 00 58'
+        id: 10,
+        displayText: '40 00 58'
     },
     {
-        cpcNumber: 11,
-        description: '61 23 F01'
+        id: 11,
+        displayText: '61 23 F01'
     },
     {
-        cpcNumber: 12,
-        description: '40 00 000'
+        id: 12,
+        displayText: '40 00 000'
     },
     {
-        cpcNumber: 13,
-        description: '51 00 000'
+        id: 13,
+        displayText: '51 00 000'
     }
 ];
 
@@ -171,7 +171,7 @@ describe('On Create', () => {
                 getExchangeRatesForDate={getExchangeRatesForDate}
                 privileges={privileges}
                 loading={false}
-                cpcNumbers={cpcNumbers}
+                cpcNumbers={cpcNumbers()}
             />
         );
     });
@@ -246,7 +246,7 @@ describe('When dont have right privilege', () => {
                 getExchangeRatesForDate={getExchangeRatesForDate}
                 privileges={['not-right.priv']}
                 loading={false}
-                cpcNumbers={cpcNumbers}
+                cpcNumbers={cpcNumbers()}
             />
         );
     });
@@ -276,7 +276,7 @@ describe('When editing', () => {
                 privileges={privileges}
                 loading={false}
                 item={item}
-                cpcNumbers={cpcNumbers}
+                cpcNumbers={cpcNumbers()}
             />
         );
     });
@@ -315,7 +315,7 @@ describe('When clicking through to second tab', () => {
                 privileges={privileges}
                 loading={false}
                 item={item}
-                cpcNumbers={cpcNumbers}
+                cpcNumbers={cpcNumbers()}
             />
         );
 
