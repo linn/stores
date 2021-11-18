@@ -14,7 +14,7 @@
 
     using NUnit.Framework;
 
-    public class WhenBookingInRsnAndPrintRsnLabelsFalse : ContextBase
+    public class WhenBookingInRsn : ContextBase
     {
         private BookInResult result;
 
@@ -24,10 +24,11 @@
             this.PurchaseOrderPack.GetDocumentType(1).Returns("PO");
             this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1234").Returns(true);
             this.GoodsInPack.GetNextBookInRef().ReturnsForAnyArgs(1);
-            this.GoodsInPack.GetRsnDetails(1, out _, out _, out _, out _, out _, out _).Returns(x =>
+            this.GoodsInPack.ParcelRequired(null, 123456, null, out _).Returns(true);
+            this.GoodsInPack.GetRsnDetails(123456, out _, out _, out _, out _, out _, out _).Returns(x =>
             {
                 x[4] = 1;
-                x[5] = 123456;
+                x[5] = 00654323;
                 return true;
             });
 
@@ -50,7 +51,7 @@
                 null,
                 null,
                 null,
-                1,
+                123456,
                 "P1234",
                 null,
                 null,
@@ -81,7 +82,7 @@
                 null,
                 null,
                 null,
-                1,
+                123456,
                 null,
                 null,
                 "P1234",
@@ -101,8 +102,8 @@
                                 DateCreated = DateTime.UnixEpoch,
                                 LoanLine = 1,
                                 LoanNumber = 1,
-                                Quantity = 1,
-                                StoragePlace = "P1234"
+                                StoragePlace = "P1234",
+                                Quantity = 1
                             }
                     });
         }
@@ -120,7 +121,7 @@
                 null,
                 null,
                 null,
-                1,
+                123456,
                 "P1234",
                 null,
                 null,
@@ -140,16 +141,9 @@
         }
 
         [Test]
-        public void ShouldNotPrintRsnLabels()
+        public void ShouldPrintRsn()
         {
-            this.Bartender.DidNotReceiveWithAnyArgs()
-                .PrintLabels("RSN 1", "PRINTER", 1, "rsn_lab", "\"1\",\"PART\",\"123456\"", ref Arg.Any<string>());
-        }
-
-        [Test]
-        public void ShouldSetPrintLabelsFalse()
-        {
-            this.result.PrintLabels.Should().BeFalse();
+            this.PrintRsnService.Received().PrintRsn(123456, 1, "Service Copy");
         }
     }
 }

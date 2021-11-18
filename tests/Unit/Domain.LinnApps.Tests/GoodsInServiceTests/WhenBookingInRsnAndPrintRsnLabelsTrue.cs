@@ -101,7 +101,8 @@
                                 DateCreated = DateTime.UnixEpoch,
                                 LoanLine = 1,
                                 LoanNumber = 1,
-                                StoragePlace = "P1234"
+                                StoragePlace = "P1234",
+                                Quantity = 1
                             }
                     });
         }

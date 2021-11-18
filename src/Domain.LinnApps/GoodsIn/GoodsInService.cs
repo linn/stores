@@ -36,6 +36,8 @@
 
         private readonly IQueryRepository<StoragePlace> storagePlaceRepository;
 
+        private readonly IPrintRsnService printRsnService;
+
         public GoodsInService(
             IGoodsInPack goodsInPack,
             IStoresPack storesPack,
@@ -48,6 +50,7 @@
             IBartenderLabelPack bartender,
             IRepository<PurchaseOrder, int> purchaseOrderRepository,
             IQueryRepository<AuthUser> authUserRepository,
+            IPrintRsnService printRsnService,
             IQueryRepository<StoragePlace> storagePlaceRepository)
         {
             this.storesPack = storesPack;
@@ -62,6 +65,7 @@
             this.bartender = bartender;
             this.authUserRepository = authUserRepository;
             this.storagePlaceRepository = storagePlaceRepository;
+            this.printRsnService = printRsnService;
         }
 
         public BookInResult DoBookIn(
@@ -150,7 +154,7 @@
                 transactionType,
                 createdBy,
                 partNumber,
-                qty,
+                total,
                 orderNumber,
                 orderLine,
                 loanNumber,
@@ -253,6 +257,8 @@
                 {
                     result.ParcelComments = $"RSN{rsnNumber}";
                 }
+
+                this.printRsnService.PrintRsn((int)rsnNumber, createdBy, "Service Copy");
 
                 if (printRsnLabels)
                 {

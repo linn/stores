@@ -826,6 +826,8 @@ function GoodsInUtility({
                                             validateRsn(formData?.rsnNumber);
                                             getRsnAccessories();
                                             getRsnConditions();
+                                            setRsnAccessoriesString('');
+                                            setRsnConditionsString('');
                                         }
                                     }}
                                 />
@@ -835,7 +837,25 @@ function GoodsInUtility({
                                     rsnConditionsLoading ||
                                     validateRsnResultLoading) && <Loading />}
                             </Grid>
-                            <Grid item xs={8} />
+                            <Grid item xs={6} />
+                            <Grid item xs={2}>
+                                {tab === 2 && (
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        disabled={!validateRsnResult}
+                                        onClick={() => printRsn({ rsnNumber: formData.rsnNumber })}
+                                    >
+                                        Reprint RSN
+                                    </Button>
+                                )}
+                            </Grid>
+                            <Grid item xs={12}>
+                                {printRsnLoading && <LinearProgress />}
+                                {printRsnResult?.success && (
+                                    <Typography variant="h6"> Print requested.</Typography>
+                                )}
+                            </Grid>
                             <Grid item xs={6}>
                                 <InputField
                                     fullWidth
@@ -1024,20 +1044,13 @@ function GoodsInUtility({
                             });
                             clearPo();
                             clearRsn();
+                            setRsnAccessoriesString('');
+                            setRsnConditionsString('');
                         }}
                     >
                         Book In
                     </Button>
-                    {tab === 2 && (
-                        <Button
-                            variant="contained"
-                            color="secondary"
-                            disabled={!validateRsnResult?.articleNumber}
-                            onClick={() => printRsn({ rsnNumber: formData.rsnNumber })}
-                        >
-                            Print RSN
-                        </Button>
-                    )}
+
                     {tab === 2 && (
                         <CheckboxWithLabel
                             label="Print RSN Label?"
@@ -1058,12 +1071,6 @@ function GoodsInUtility({
                         >
                             Clear Selected
                         </Button>
-                    )}
-                </Grid>
-                <Grid item xs={12}>
-                    {printRsnLoading && <LinearProgress />}
-                    {printRsnResult?.success && (
-                        <Typography variant="h6"> Print requested.</Typography>
                     )}
                 </Grid>
                 <Grid item xs={3}>
