@@ -150,7 +150,7 @@
                 transactionType,
                 createdBy,
                 partNumber,
-                qty,
+                total,
                 orderNumber,
                 orderLine,
                 loanNumber,
