@@ -475,8 +475,8 @@ function Consignment({
                     depth: selectedRSN.depth,
                     width: selectedRSN.width,
                     weight: selectedRSN.weight,
-                    quantity: selectedRSN.quantity                 
-                });                
+                    quantity: selectedRSN.quantity
+                });
             }
         }
     };
@@ -1096,7 +1096,7 @@ function Consignment({
                                 <Grid item xs={8}>
                                     <Typeahead
                                         items={rsnSearchResult()}
-                                        placeholder="RSN Number"                                     
+                                        placeholder="RSN Number"
                                         fetchItems={rsnNo => searchRsns(rsnNo, `&accountId=${item?.salesAccountId}`)}
                                         clearSearch={clearRsnsSearch}
                                         loading={rsnsSearchLoading}
@@ -1104,8 +1104,8 @@ function Consignment({
                                         links={false}
                                         modal
                                         onSelect={p => handleOnSelectRsn(p)}
-                                        value={newCarton.rsnNumber}    
-                                        label="RSN Number"                                                                            
+                                        value={newCarton.rsnNumber}
+                                        label="RSN Number"
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
