@@ -36,6 +36,8 @@ import saveConsignmentDocumentsActions from '../../actions/saveConsignmentDocume
 import saveConsignmentDocumentsSelectors from '../../selectors/saveConsignmentDocumentsSelectors';
 import salesOutletsSelectors from '../../selectors/salesOutletsSelectors';
 import salesOutletsActions from '../../actions/salesOutletsActions';
+import exportRsnsActions from '../../actions/exportRsnsActions';
+import exportRsnsSelectors from '../../selectors/exportRsnsSelectors';
 
 const getOptions = ownProps => {
     const options = queryString.parse(ownProps.location.search);
@@ -95,7 +97,9 @@ const mapStateToProps = (state, ownProps) => ({
     saveDocumentsWorking: saveConsignmentDocumentsSelectors.getWorking(state),
     saveDocumentsResult: saveConsignmentDocumentsSelectors.getData(state),
     salesOutlets: salesOutletsSelectors.getSearchItems(state),
-    salesOutletsLoading: salesOutletsSelectors.getLoading(state)
+    salesOutletsLoading: salesOutletsSelectors.getLoading(state),
+    rsnsSearchResults: exportRsnsSelectors.getSearchItems(state),
+    rsnsSearchLoading: exportRsnsSelectors.getSearchLoading(state)
 });
 
 const mapDispatchToProps = {
@@ -122,7 +126,9 @@ const mapDispatchToProps = {
     clearCartonTypesSearch: cartonTypesActions.clearSearch,
     saveDocuments: saveConsignmentDocumentsActions.requestProcessStart,
     saveDocumentsClearData: saveConsignmentDocumentsActions.clearProcessData,
-    getSalesOutlets: salesOutletsActions.searchWithOptions
+    getSalesOutlets: salesOutletsActions.searchWithOptions,
+    searchRsns: exportRsnsActions.searchWithOptions,
+    clearRsnsSearch: exportRsnsActions.clearSearch
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Consignment));
