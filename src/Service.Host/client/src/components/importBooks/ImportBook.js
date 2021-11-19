@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
 import {
     SaveBackCancelButtons,
     InputField,
@@ -13,6 +14,8 @@ import {
     ErrorCard,
     SnackbarMessage
 } from '@linn-it/linn-form-components-library';
+import Dialog from '@material-ui/core/Dialog';
+import Typography from '@material-ui/core/Typography';
 import Page from '../../containers/Page';
 import ImpBookTab from '../../containers/importBooks/tabs/ImpBookTab';
 import OrderDetailsTab from '../../containers/importBooks/tabs/OrderDetailsTab';
@@ -40,7 +43,8 @@ function ImportBook({
     employees,
     userNumber,
     getExchangeRatesForDate,
-    exchangeRates
+    exchangeRates,
+    cpcNumbers
 }) {
     const defaultImpBook = {
         id: -1,
@@ -103,15 +107,6 @@ function ImportBook({
 
     const handleTabChange = (event, value) => {
         setTab(value);
-    };
-
-    const handleSaveClick = () => {
-        if (creating()) {
-            addItem(state.impbook);
-        } else {
-            updateItem(itemId, state.impbook);
-        }
-        setEditStatus('view');
     };
 
     const handleCancelClick = () => {
@@ -337,7 +332,6 @@ function ImportBook({
         const invoiceValue = totalInvoiceValue();
         if (exchangeRate && invoiceValue && invoiceValue > 0) {
             const convertedValue = currencyConvert(invoiceValue, exchangeRate);
-
             handleFieldChange('totalImportValue', convertedValue);
         }
     }, [totalInvoiceValue, currentExchangeRate, handleFieldChange]);
@@ -354,9 +348,22 @@ function ImportBook({
             !state.impbook.pva ||
             !state.impbook.foreignCurrency ||
             `${calcRemainingTotal()}` !== '0' ||
-            `${calcRemainingDuty()}` !== '0' ||
-            `${calcRemainingWeight()}` !== '0'
+            `${calcRemainingDuty()}` !== '0'
         );
+    };
+
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    const handleSaveClick = () => {
+        if (`${calcRemainingWeight()}` !== '0' && !dialogOpen) {
+            setDialogOpen(true);
+        } else if (creating()) {
+            addItem(state.impbook);
+            setEditStatus('view');
+        } else {
+            updateItem(itemId, state.impbook);
+            setEditStatus('view');
+        }
     };
 
     const print = () => {
@@ -368,6 +375,18 @@ function ImportBook({
             print();
         }
     }, [snackbarVisible]);
+
+    const useStyles = makeStyles(theme => ({
+        spaceAbove: {
+            marginTop: theme.spacing(2)
+        },
+        dialog: {
+            margin: theme.spacing(6),
+            minWidth: theme.spacing(70),
+            textAlign: 'center'
+        }
+    }));
+    const classes = useStyles();
 
     return (
         <>
@@ -408,12 +427,56 @@ function ImportBook({
                         comments={state.impbook.comments}
                         arrivalPort={state.impbook.arrivalPort}
                         pva={state.impbook.pva}
+                        cpcNumbers={cpcNumbers}
                     />
                 </Page>
             </div>
 
             <div className="hide-when-printing">
-                <Page>
+                <Dialog open={dialogOpen} fullWidth maxWidth="md">
+                    <>
+                        <div className={classes.dialog}>
+                            <Grid item xs={12}>
+                                <Typography variant="h5">Warning</Typography>
+                            </Grid>
+                            <Grid item xs={12} />
+                            <Grid item xs={12} className={classes.spaceAbove}>
+                                <Typography variant="h6">
+                                    Weight Mismatch! Difference of: {calcRemainingWeight()}
+                                    <br />
+                                    (Import Book tab weight is: {state.impbook?.weight})
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} />
+                            <Grid item xs={12} container className={classes.spaceAbove}>
+                                <Grid item xs={6}>
+                                    <Button
+                                        variant="outlined"
+                                        color="secondary"
+                                        onClick={() => {
+                                            handleSaveClick();
+                                            setDialogOpen(false);
+                                        }}
+                                    >
+                                        Save Anyway
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Button
+                                        variant="outlined"
+                                        color="primary"
+                                        onClick={() => {
+                                            setDialogOpen(false);
+                                        }}
+                                    >
+                                        Go Back
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </div>
+                    </>
+                </Dialog>
+                <Page width="xl">
                     <Grid container spacing={3}>
                         <Grid item xs={10}>
                             {creating() ? (
@@ -537,6 +600,7 @@ function ImportBook({
                                             currentUserNumber={userNumber}
                                             impbookId={state.impbook.id}
                                             exchangeRate={currentExchangeRate()}
+                                            cpcNumbers={cpcNumbers}
                                         />
                                     )}
                                     {tab === 2 && (
@@ -651,7 +715,8 @@ ImportBook.propTypes = {
     ),
     userNumber: PropTypes.number.isRequired,
     getExchangeRatesForDate: PropTypes.func.isRequired,
-    exchangeRates: PropTypes.arrayOf(PropTypes.shape({}))
+    exchangeRates: PropTypes.arrayOf(PropTypes.shape({})),
+    cpcNumbers: PropTypes.arrayOf(PropTypes.shape({})).isRequired
 };
 
 ImportBook.defaultProps = {

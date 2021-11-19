@@ -43,7 +43,8 @@ function ImpBookPrintOut({
     orderDetails,
     comments,
     arrivalPort,
-    pva
+    pva,
+    cpcNumbers
 }) {
     const useStyles = makeStyles(theme => ({
         gapAbove: {
@@ -58,6 +59,10 @@ function ImpBookPrintOut({
 
     const getNicerDate = date => {
         return date ? moment(date).format('DD-MMM-YYYY') : '-';
+    };
+
+    const getCpcNumber = id => {
+        return cpcNumbers.find(x => x.id === id)?.displayText;
     };
 
     return (
@@ -300,7 +305,11 @@ function ImpBookPrintOut({
                             </Grid>
                             <Grid item xs={2}>
                                 <InputLabel>Cpc Number</InputLabel>
-                                <TextField value={row.cpcNumber} variant="standard" fullWidth />
+                                <TextField
+                                    value={getCpcNumber(row.cpcNumber)}
+                                    variant="standard"
+                                    fullWidth
+                                />
                             </Grid>
 
                             <Grid item xs={12}>
@@ -351,7 +360,8 @@ ImpBookPrintOut.propTypes = {
     remainingInvoiceValue: PropTypes.number,
     remainingDutyValue: PropTypes.number,
     remainingWeightValue: PropTypes.number,
-    pva: PropTypes.string
+    pva: PropTypes.string,
+    cpcNumbers: PropTypes.arrayOf(PropTypes.shape({})).isRequired
 };
 
 ImpBookPrintOut.defaultProps = {

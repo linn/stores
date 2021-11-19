@@ -79,6 +79,61 @@ const item = {
     totalImportValue: 1000
 };
 
+const cpcNumbers = () => [
+    {
+        id: 1,
+        displayText: '51 00 00'
+    },
+    {
+        id: 2,
+        displayText: '51 00 01'
+    },
+    {
+        id: 3,
+        displayText: '40 00 00'
+    },
+    {
+        id: 4,
+        displayText: '40 00 60'
+    },
+    {
+        id: 5,
+        displayText: '40 00 63'
+    },
+    {
+        id: 6,
+        displayText: 'EC Countries'
+    },
+    {
+        id: 7,
+        displayText: '40 00 09 - SAMPLES ONLY'
+    },
+    {
+        id: 8,
+        displayText: 'Low Value Shipment'
+    },
+    {
+        id: 9,
+        displayText: '40 51 00 - IPR to Free'
+    },
+    {
+        id: 10,
+        displayText: '40 00 58'
+    },
+    {
+        id: 11,
+        displayText: '61 23 F01'
+    },
+    {
+        id: 12,
+        displayText: '40 00 000'
+    },
+    {
+        id: 13,
+        displayText: '51 00 000'
+    }
+];
+
 const privileges = ['potato.admin', 'import-books.admin'];
 
 describe('When loading', () => {
@@ -116,6 +171,7 @@ describe('On Create', () => {
                 getExchangeRatesForDate={getExchangeRatesForDate}
                 privileges={privileges}
                 loading={false}
+                cpcNumbers={cpcNumbers()}
             />
         );
     });
@@ -190,6 +246,7 @@ describe('When dont have right privilege', () => {
                 getExchangeRatesForDate={getExchangeRatesForDate}
                 privileges={['not-right.priv']}
                 loading={false}
+                cpcNumbers={cpcNumbers()}
             />
         );
     });
@@ -219,6 +276,7 @@ describe('When editing', () => {
                 privileges={privileges}
                 loading={false}
                 item={item}
+                cpcNumbers={cpcNumbers()}
             />
         );
     });
@@ -257,6 +315,7 @@ describe('When clicking through to second tab', () => {
                 privileges={privileges}
                 loading={false}
                 item={item}
+                cpcNumbers={cpcNumbers()}
             />
         );
 
