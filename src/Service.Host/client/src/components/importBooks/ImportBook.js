@@ -346,9 +346,7 @@ function ImportBook({
             !state.impbook.totalImportValue ||
             !state.impbook.deliveryTermCode ||
             !state.impbook.pva ||
-            !state.impbook.foreignCurrency ||
-            `${calcRemainingTotal()}` !== '0' ||
-            `${calcRemainingDuty()}` !== '0'
+            !state.impbook.foreignCurrency
         );
     };
 
@@ -356,6 +354,10 @@ function ImportBook({
 
     const handleSaveClick = () => {
         if (`${calcRemainingWeight()}` !== '0' && !dialogOpen) {
+            setDialogOpen(true);
+        } else if (`${calcRemainingTotal()}` !== '0' && !dialogOpen) {
+            setDialogOpen(true);
+        } else if (`${calcRemainingDuty()}` !== '0' && !dialogOpen) {
             setDialogOpen(true);
         } else if (creating()) {
             addItem(state.impbook);
@@ -386,7 +388,53 @@ function ImportBook({
             textAlign: 'center'
         }
     }));
+
     const classes = useStyles();
+
+    const ImportValueMismatchWarning = () => {
+        if (`${calcRemainingTotal()}` !== '0') {
+            return (
+                <Grid item xs={12} className={classes.spaceAbove}>
+                    <Typography variant="h6">
+                        Import Value Mismatch! Difference of: {calcRemainingTotal()}
+                        <br />
+                        (Import Book value is: {state.impbook?.totalImportValue})
+                    </Typography>
+                </Grid>
+            );
+        }
+        return <></>;
+    };
+
+    const DutyMismatchWarning = () => {
+        if (`${calcRemainingDuty()}` !== '0') {
+            return (
+                <Grid item xs={12} className={classes.spaceAbove}>
+                    <Typography variant="h6">
+                        Duty Mismatch! Difference of: {calcRemainingDuty()}
+                        <br />
+                        (Import Book tab duty is: {state.impbook?.linnDuty})
+                    </Typography>
+                </Grid>
+            );
+        }
+        return <></>;
+    };
+
+    const WeightMismatchWarning = () => {
+        if (`${calcRemainingWeight()}` !== '0') {
+            return (
+                <Grid item xs={12} className={classes.spaceAbove}>
+                    <Typography variant="h6">
+                        Weight Mismatch! Difference of: {calcRemainingWeight()}
+                        <br />
+                        (Import Book tab weight is: {state.impbook?.weight})
+                    </Typography>
+                </Grid>
+            );
+        }
+        return <></>;
+    };
 
     return (
         <>
@@ -440,13 +488,9 @@ function ImportBook({
                                 <Typography variant="h5">Warning</Typography>
                             </Grid>
                             <Grid item xs={12} />
-                            <Grid item xs={12} className={classes.spaceAbove}>
-                                <Typography variant="h6">
-                                    Weight Mismatch! Difference of: {calcRemainingWeight()}
-                                    <br />
-                                    (Import Book tab weight is: {state.impbook?.weight})
-                                </Typography>
-                            </Grid>
+                            <ImportValueMismatchWarning />
+                            <DutyMismatchWarning />
+                            <WeightMismatchWarning />
                             <Grid item xs={12} />
                             <Grid item xs={12} container className={classes.spaceAbove}>
                                 <Grid item xs={6}>
