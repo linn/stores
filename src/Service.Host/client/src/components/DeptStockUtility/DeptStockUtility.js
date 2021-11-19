@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Grid from '@material-ui/core/Grid';
 import {
     Title,
-    SingleEditTable,
+    DatePicker,
     Loading,
     SnackbarMessage,
     ErrorCard,
-    BackButton
+    BackButton,
+    Typeahead
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
+import { DataGrid } from '@mui/x-data-grid';
+import moment from 'moment';
 import Page from '../../containers/Page';
 
 function DeptStockUtility({
@@ -53,115 +56,125 @@ function DeptStockUtility({
         }
     }, [items, stockLocators, prevStockLocators, setNewRow, options]);
 
-    const selectDepartmentsSearchResult = (_propertyName, department, updatedItem) => {
-        setStockLocators(s =>
-            s.map(x =>
-                x.id === updatedItem.id
-                    ? { ...x, auditDepartmentCode: department.departmentCode }
-                    : x
+    const handleSelectRows = selected => {
+        setStockLocators(
+            stockLocators.map(r =>
+                selected.includes(r.id) ? { ...r, selected: true } : { ...r, selected: false }
             )
         );
-        setNewRow(x => ({ ...x, auditDepartmentCode: department.departmentCode }));
     };
 
-    const selectStoragePlaceSearchResult = (_propertyName, storagePlace, updatedItem) =>
-        setStockLocators(s => {
-            let updatedExisting = false;
-            const updatedStockLocators = s.map(x => {
-                if (x.id === updatedItem.id) {
-                    updatedExisting = true;
-                    return {
-                        ...x,
-                        storagePlaceName: storagePlace.name,
-                        storagePlaceDescription: storagePlace.description,
-                        palletNumber: storagePlace.palletNumber,
-                        locationId: storagePlace.locationId
-                    };
-                }
-                return x;
-            });
-            if (!updatedExisting) {
-                setNewRow(x => ({
-                    ...x,
-                    storagePlaceName: storagePlace.name,
-                    storagePlaceDescription: storagePlace.description,
-                    palletNumber: storagePlace.palletNumber,
-                    locationId: storagePlace.locationId
-                }));
-            }
-            return updatedStockLocators;
-        });
+    const handleFieldChange = (field, rowId, newValue) => {
+        setStockLocators(c =>
+            c.map(s => (Number(s.id) === Number(rowId) ? { ...s, [field]: newValue } : s))
+        );
+    };
 
-    const handleValueChange = (item, propertyName, newValue) => {
-        if (item.id === -1) {
-            setNewRow(row => ({ ...row, [propertyName]: newValue }));
-        } else {
-            setStockLocators(s =>
-                s.map(row => (row.id === item.id ? { ...row, [propertyName]: newValue } : row))
-            );
+    const handleEditRowsModelChange = useCallback(model => {
+        if (Object.keys(model).length > 0) {
+            const key = Object.keys(model)[0];
+            const field = Object.keys(model[key])?.[0];
+            const { value } = model[key][field];
+            handleFieldChange(field, key, value);
         }
+    }, []);
+    const valueGetter = (params, fieldName) => {
+        let value = stockLocators.find(x => Number(x.id) === Number(params.row.id))[fieldName];
+        if (fieldName === 'stockRotationDate') {
+            value = moment(value).format('DD/MM/YY');
+        }
+        return value;
     };
-
-    const editableColumns = [
+    const columns = [
         {
-            title: 'Storage Place',
-            id: 'storagePlaceName',
-            type: 'search',
+            headerName: 'Storage Place',
+            field: 'storagePlaceName',
             editable: true,
-            search: searchStoragePlaces,
-            clearSearch: clearStoragePlacesSearch,
-            searchResults: storagePlaces,
-            searchLoading: storagePlacesLoading,
-            selectSearchResult: selectStoragePlaceSearchResult,
-            searchTitle: 'Search Storage Places',
-            minimumSearchTermLength: 3,
-            required: true
+            width: 200,
+            valueGetter: params => valueGetter(params, 'storagePlaceName'),
+            renderEditCell: params => (
+                <Typeahead
+                    onSelect={newValue => {
+                        handleFieldChange('storagePlaceName', params.row.id, newValue.name);
+                        handleFieldChange(
+                            'storagePlaceDescription',
+                            params.row.id,
+                            newValue.description
+                        );
+                    }}
+                    label=""
+                    modal
+                    items={storagePlaces}
+                    value={valueGetter(params, 'storagePlaceName')}
+                    loading={storagePlacesLoading}
+                    fetchItems={searchStoragePlaces}
+                    links={false}
+                    clearSearch={() => clearStoragePlacesSearch}
+                    placeholder=""
+                />
+            )
         },
         {
-            title: 'Description',
-            id: 'storagePlaceDescription',
-            type: 'text',
-            editable: false
+            headerName: 'Description',
+            field: 'storagePlaceDescription',
+            width: 200
         },
         {
-            title: 'Batch Ref',
-            id: 'batchRef',
-            type: 'text',
-            required: false,
+            headerName: 'Batch Ref',
+            field: 'batchRef',
+            width: 200,
             editable: true
         },
         {
-            title: 'Batch Date',
-            id: 'stockRotationDate',
-            type: 'date',
-            editable: true
-        },
-        {
-            title: 'Qty',
-            id: 'quantity',
-            type: 'number',
-            editable: true
-        },
-        {
-            title: 'Remarks',
-            id: 'remarks',
-            textFieldRows: 3,
-            type: 'text',
-            editable: true
-        },
-        {
-            title: 'Audit Dept',
-            id: 'auditDepartmentCode',
-            type: 'search',
+            headerName: 'Batch Date',
+            field: 'stockRotationDate',
+            width: 200,
             editable: true,
-            search: searchDepartments,
-            clearSearch: clearDepartmentsSearch,
-            searchResults: departments,
-            searchLoading: departmentsLoading,
-            selectSearchResult: selectDepartmentsSearchResult,
-            searchTitle: 'Search Departments',
-            minimumSearchTermLength: 3,
-            required: false
+            valueGetter: params => valueGetter(params, 'stockRotationDate'),
+            renderEditCell: params => (
+                <DatePicker
+                    label=""
+                    value={valueGetter(params, 'stockRotationDate') || null}
+                    onChange={value => {
+                        handleFieldChange('stockRotationDate', params.row.id, value);
+                    }}
+                />
+            )
+        },
+        {
+            headerName: 'Qty',
+            field: 'quantity',
+            width: 200,
+            editable: true
+        },
+        {
+            headerName: 'Remarks',
+            field: 'remarks',
+            width: 200,
+            editable: true
+        },
+        {
+            headerName: 'Audit Dept',
+            field: 'auditDepartmentCode',
+            editable: true,
+            width: 200,
+            valueGetter: params => valueGetter(params, 'auditDepartmentCode'),
+            renderEditCell: params => (
+                <Typeahead
+                    onSelect={newValue => {
+                        handleFieldChange('auditDepartmentCode', params.row.id, newValue.name);
+                    }}
+                    label=""
+                    modal
+                    items={departments}
+                    value={valueGetter(params, 'auditDepartmentCode')}
+                    loading={departmentsLoading}
+                    fetchItems={searchDepartments}
+                    links={false}
+                    clearSearch={clearDepartmentsSearch}
+                    placeholder=""
+                />
+            )
         }
     ];
     return (
@@ -192,36 +205,25 @@ function DeptStockUtility({
                 ) : (
                     <Grid item xs={12}>
                         {stockLocators && (
-                            <SingleEditTable
-                                newRowPosition="top"
-                                columns={editableColumns}
-                                rows={stockLocators}
-                                saveRow={item => {
-                                    const body = item;
-                                    if (!body.partNumber) {
-                                        body.partNumber = stockLocators.find(
-                                            l => l.partNumber
-                                        ).partNumber;
-                                    }
-                                    updateStockLocator(body.id, body);
-                                }}
-                                updateRow={(item, _setItem, propertyName, newValue) => {
-                                    handleValueChange(item, propertyName, newValue);
-                                }}
-                                createRow={item => {
-                                    const body = item;
-                                    if (!body.partNumber) {
-                                        body.partNumber = stockLocators.find(
-                                            l => l.partNumber
-                                        ).partNumber;
-                                    }
-                                    createStockLocator(body);
-                                }}
-                                newRow={newRow}
-                                editable
-                                allowNewRowCreations
-                                deleteRow={deleteStockLocator}
-                            />
+                            <Grid item xs={12}>
+                                <div style={{ width: '100%' }}>
+                                    <DataGrid
+                                        rows={stockLocators}
+                                        columns={columns}
+                                        editMode="cell"
+                                        onEditRowsModelChange={handleEditRowsModelChange}
+                                        autoHeight
+                                        density="comfortable"
+                                        rowHeight={34}
+                                        loading={false}
+                                        hideFooter
+                                        disableSelectionOnClick
+                                        onSelectionModelChange={handleSelectRows}
+                                        checkboxSelection
+                                        //isCellEditable={params => params.row.selected}
+                                    />
+                                </div>
+                            </Grid>
                         )}
                     </Grid>
                 )}
