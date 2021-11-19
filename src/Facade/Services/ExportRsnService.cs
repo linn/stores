@@ -21,6 +21,7 @@
             {
                 return rsns;
             }
+
             return rsns.ToList().Where(r => r.RsnNumber.ToString().Contains(searchTerm));
         }
 
