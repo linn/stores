@@ -7,7 +7,8 @@ import {
     SnackbarMessage,
     ErrorCard,
     BackButton,
-    Typeahead
+    Typeahead,
+    SaveBackCancelButtons
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import { DataGrid } from '@mui/x-data-grid';
@@ -37,6 +38,7 @@ function DeptStockUtility({
 }) {
     const [prevStockLocators, setPrevStockLocators] = useState(null);
     const [stockLocators, setStockLocators] = useState([]);
+    const [rowsEdited, setRowsEdited] = useState();
     const [newRow, setNewRow] = useState({
         id: -1,
         partNumber: options.partNumber,
@@ -64,23 +66,30 @@ function DeptStockUtility({
         );
     };
 
-    const handleFieldChange = (field, rowId, newValue) => {
+    const handleFieldChange = useCallback((field, rowId, newValue) => {
         setStockLocators(c =>
-            c.map(s => (Number(s.id) === Number(rowId) ? { ...s, [field]: newValue } : s))
+            c.map(s =>
+                Number(s.id) === Number(rowId) ? { ...s, [field]: newValue, edited: true } : s
+            )
         );
-    };
-
-    const handleEditRowsModelChange = useCallback(model => {
-        if (Object.keys(model).length > 0) {
-            const key = Object.keys(model)[0];
-            const field = Object.keys(model[key])?.[0];
-            const { value } = model[key][field];
-            handleFieldChange(field, key, value);
-        }
     }, []);
-    const valueGetter = (params, fieldName) => {
+
+    const handleEditRowsModelChange = useCallback(
+        model => {
+            if (Object.keys(model).length > 0) {
+                const key = Object.keys(model)[0];
+
+                const field = Object.keys(model[key])?.[0];
+                const { value } = model[key][field];
+                handleFieldChange(field, key, value);
+            }
+        },
+        [handleFieldChange]
+    );
+
+    const valueGetter = (params, fieldName, formatDate) => {
         let value = stockLocators.find(x => Number(x.id) === Number(params.row.id))[fieldName];
-        if (fieldName === 'stockRotationDate') {
+        if (formatDate) {
             value = moment(value).format('DD/MM/YY');
         }
         return value;
@@ -101,6 +110,8 @@ function DeptStockUtility({
                             params.row.id,
                             newValue.description
                         );
+                        handleFieldChange('palletNumber', params.row.id, newValue.palletNumber);
+                        handleFieldChange('locationId', params.row.id, newValue.locationId);
                     }}
                     label=""
                     modal
@@ -130,11 +141,11 @@ function DeptStockUtility({
             field: 'stockRotationDate',
             width: 200,
             editable: true,
-            valueGetter: params => valueGetter(params, 'stockRotationDate'),
+            valueGetter: params => valueGetter(params, 'stockRotationDate', true),
             renderEditCell: params => (
                 <DatePicker
                     label=""
-                    value={valueGetter(params, 'stockRotationDate') || null}
+                    value={new Date(valueGetter(params, 'stockRotationDate')) || null}
                     onChange={value => {
                         handleFieldChange('stockRotationDate', params.row.id, value);
                     }}
@@ -145,6 +156,7 @@ function DeptStockUtility({
             headerName: 'Qty',
             field: 'quantity',
             width: 200,
+            type: 'number',
             editable: true
         },
         {
@@ -196,7 +208,18 @@ function DeptStockUtility({
                     </Grid>
                 )}
                 <Grid item xs={12}>
-                    <BackButton backClick={() => history.push('/inventory/dept-stock-parts')} />
+                    <SaveBackCancelButtons
+                        backClick={() => history.push('/inventory/dept-stock-parts')}
+                        saveDisabled={!stockLocators.some(x => x.edited)}
+                        cancelClick={() => setStockLocators(items)}
+                        saveClick={() =>
+                            stockLocators
+                                .filter(x => x.edited)
+                                .forEach(s => { 
+                                    updateStockLocator(s.id, s)
+                                })
+                        }
+                    />
                 </Grid>
                 {itemsLoading || stockLocatorLoading ? (
                     <Grid item xs={12}>
