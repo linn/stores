@@ -179,6 +179,7 @@
                         with.ResponseProcessor<AssemblyTechnologiesResponseProcessor>();
                         with.ResponseProcessor<DecrementRulesResponseProcessor>();
                         with.ResponseProcessor<ProductAnalysisCodesResponseProcessor>();
+                        with.ResponseProcessor<PartTemplateResponseProcessor>();
                         with.ResponseProcessor<PartTemplatesResponseProcessor>();
                         with.ResponseProcessor<PartLiveTestResponseProcessor>();
                         with.ResponseProcessor<MechPartSourceResponseProcessor>();

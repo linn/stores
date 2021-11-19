@@ -6,13 +6,15 @@ import partsSelectors from '../../selectors/partsSelectors';
 import { getPrivileges } from '../../selectors/userSelectors';
 import partTemplatesActions from '../../actions/partTemplatesActions';
 import partTemplatesSelectors from '../../selectors/partTemplatesSelectors';
+import partTemplateSelectors from '../../selectors/partTemplateSelectors';
 
 const mapStateToProps = (state, { match }) => ({
     linkToSources: match?.url?.endsWith('/sources'),
     items: partsSelectors.getSearchItems(state),
     loading: partsSelectors.getSearchLoading(state),
     privileges: getPrivileges(state),
-    partTemplates: partTemplatesSelectors.getItems(state)
+    partTemplates: partTemplatesSelectors.getItems(state),
+    partTemplate: partTemplateSelectors.getItem(state)
 });
 
 const initialise = () => dispatch => {

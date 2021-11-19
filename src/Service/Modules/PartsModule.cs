@@ -95,6 +95,9 @@
 
             this.partTemplateService = partTemplateService;
             this.Get("/inventory/part-templates", _ => this.GetPartTemplates());
+            this.Get("/inventory/part-templates/{id}", parameters => this.GetPartTemplate(parameters.id));
+            this.Put("/inventory/part-templates/{id}", parameters => this.UpdatePartTemplate(parameters.id));
+            this.Post("/inventory/part-templates", parameters => this.AddPartTemplate());
 
             this.productAnalysisCodeService = productAnalysisCodeService;
             this.Get("inventory/product-analysis-codes", _ => this.GetProductAnalysisCodes());
@@ -224,6 +227,29 @@
             var result = this.partCategoryService.GetCategories();
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object AddPartTemplate()
+        {
+            this.RequiresAuthentication();
+            var resource = this.Bind<PartTemplateResource>();
+            var result = this.partTemplateService.Add(resource);
+            return this.Negotiate.WithStatusCode(HttpStatusCode.Created).WithModel(result);
+        }
+
+        private object GetPartTemplate(string id)
+        {
+            var result = this.partTemplateService.GetById(id);
+            return this.Negotiate.WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object UpdatePartTemplate(string id)
+        {
+            this.RequiresAuthentication();
+            var resource = this.Bind<PartTemplateResource>();
+            var result = this.partTemplateService.Update(id, resource);
+            return this.Negotiate.WithModel(result);
         }
 
         private object GetPartTemplates()
