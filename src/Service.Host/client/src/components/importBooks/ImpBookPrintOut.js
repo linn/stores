@@ -57,7 +57,7 @@ function ImpBookPrintOut({
     }));
     const classes = useStyles();
 
-    const getNicerDate = date => {
+    const dateToDdMmmYyyy = date => {
         return date ? moment(date).format('DD-MMM-YYYY') : '-';
     };
 
@@ -73,7 +73,7 @@ function ImpBookPrintOut({
                 </Grid>
 
                 <Grid item xs={4}>
-                    Date Created: <b>{getNicerDate(dateCreated)}</b>
+                    Date Created: <b>{dateToDdMmmYyyy(dateCreated)}</b>
                 </Grid>
                 <Grid item xs={4}>
                     Created By:{' '}
@@ -181,7 +181,7 @@ function ImpBookPrintOut({
                     Delivery Term Code: <b>{deliveryTermCode}</b>
                 </Grid>
                 <Grid item xs={3}>
-                    Customs Entry Date: <b>{getNicerDate(customsEntryCodeDate)}</b>
+                    Customs Entry Date: <b>{dateToDdMmmYyyy(customsEntryCodeDate)}</b>
                 </Grid>
 
                 <Grid item xs={9}>
@@ -192,7 +192,7 @@ function ImpBookPrintOut({
                 </Grid>
 
                 <Grid item xs={9}>
-                    Arrival Date: <b>{getNicerDate(arrivalDate)}</b>
+                    Arrival Date: <b>{dateToDdMmmYyyy(arrivalDate)}</b>
                 </Grid>
                 <Grid item xs={3}>
                     Linn Vat: <b>{linnVat}</b>
