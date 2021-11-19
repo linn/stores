@@ -7,6 +7,7 @@
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.GoodsIn;
+    using Linn.Stores.Resources.MessageDispatch;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Resources.StockLocators;
     using Linn.Stores.Service.Extensions;
@@ -46,6 +47,7 @@
 
             this.Get("/logistics/purchase-orders/validate-qty", _ => this.ValidatePurchaseOrderBookInQty());
             this.Post("/logistics/goods-in/print-labels", _ => this.PrintLabels());
+            this.Post("/logistics/goods-in/print-rsn", _ => this.PrintRsn());
             this.Get("/logistics/goods-in/validate-storage-type", _ => this.ValidateStorageType());
 
             this.rsnAccessoriesService = rsnAccessoriesService;
@@ -113,6 +115,14 @@
             var closedByUri = this.Context.CurrentUser.GetEmployeeUri();
             resource.UserNumber = int.Parse(closedByUri.Split("/").Last());
             return this.Negotiate.WithModel(this.service.PrintGoodsInLabels(resource));
+        }
+
+        private object PrintRsn()
+        {
+            var resource = this.Bind<PrintRsnMessageResource>();
+            var userNumber = int.Parse(this.Context.CurrentUser.GetEmployeeUri().Split("/").Last());
+
+            return this.Negotiate.WithModel(this.service.PrintRsn(resource.RsnNumber, userNumber));
         }
 
         private object GetRsnAccessories()

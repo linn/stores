@@ -8,7 +8,7 @@
 
     using NUnit.Framework;
 
-    public class WhenValidatingStorageType : ContextBase
+    public class WhenValidatingStorageTypeAndNoError : ContextBase
     {
         private ValidateStorageTypeResult result;
 
@@ -16,31 +16,29 @@
         public void SetUp()
         {
             this.GoodsInPack.When(x => x.GetKardexLocations(
-                1, 
-                "PO",
-                null,
-                null,
-                out _,
-                out _,
-                null))
+                    1,
+                    "PO",
+                    null,
+                    null,
+                    out _,
+                    out _,
+                    null))
                 .Do(
                     x =>
                         {
                             x[4] = 1;
-                            x[5] = "LOCATION 1";
+                            x[5] = "LOC";
                         });
 
-            this.GoodsInPack.GetErrorMessage().Returns("SOME ERROR MESSAGE");
 
             this.result = this.Sut.ValidateStorageType(1, "PO", null, null, null);
         }
 
         [Test]
-        public void ShouldReturnResult()
+        public void ShouldReturnLocation()
         {
-            this.result.Message.Should().Be("SOME ERROR MESSAGE");
             this.result.LocationId.Should().Be(1);
-            this.result.LocationCode.Should().Be("LOCATION 1");
+            this.result.LocationCode.Should().Be("LOC");
         }
     }
 }

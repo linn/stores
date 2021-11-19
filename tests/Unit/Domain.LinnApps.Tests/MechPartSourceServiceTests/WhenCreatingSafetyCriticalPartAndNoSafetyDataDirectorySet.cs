@@ -7,11 +7,14 @@
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Parts;
 
+    using NSubstitute;
+
     using NUnit.Framework;
 
     public class WhenCreatingSafetyCriticalPartAndNoSafetyDataDirectorySet : ContextBase
     {
         private MechPartSource candidate;
+
 
         [SetUp]
         public void SetUp()
@@ -20,12 +23,14 @@
                                  {
                                      SafetyCritical = "Y"
                                  };
+
+            this.AuthorisationService.HasPermissionFor(Arg.Any<string>(), Arg.Any<IEnumerable<string>>()).Returns(true);
         }
 
         [Test]
         public void ShouldThrowException()
         {
-            var ex = Assert.Throws<CreatePartException>(() => this.Sut.Create(this.candidate, new List<PartDataSheet>()));
+            var ex = Assert.Throws<CreatePartException>(() => this.Sut.Create(this.candidate, new List<string>()));
             ex.Message.Should().Be("You must enter a EMC/safety data directory for EMC or safety critical parts");
         }
     }

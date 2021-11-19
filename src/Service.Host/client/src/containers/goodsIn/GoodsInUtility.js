@@ -1,14 +1,10 @@
 import { connect } from 'react-redux';
 import { initialiseOnMount } from '@linn-it/linn-form-components-library';
-import demLocationsActions from '../../actions/demLocationsActions';
 import validatePurchaseOrderActions from '../../actions/validatePurchaseOrderActions';
 import GoodsInUtility from '../../components/goodsIn/GoodsInUtility';
-import demLocationsSelectors from '../../selectors/demLocationsSelectors';
 import validatePurchaseOrderResultSelectors from '../../selectors/validatePurchaseOrderResultSelectors';
 import storagePlacesSelectors from '../../selectors/storagePlacesSelectors';
 import storagePlacesActions from '../../actions/storagePlacesActions';
-import salesArticlesSelectors from '../../selectors/salesArticlesSelectors';
-import salesArticlesActions from '../../actions/salesArticlesActions';
 import doBookInSelectors from '../../selectors/doBookInSelectors';
 import doBookInActions from '../../actions/doBookInActions';
 import validatePurchaseOrderBookInQtyResultActions from '../../actions/validatePurchaseOrderBookInQtyResultActions';
@@ -24,22 +20,16 @@ import rsnConditionsActions from '../../actions/rsnConditionsActions';
 import rsnConditionsSelectors from '../../selectors/rsnConditionsSelectors';
 import ValidateRsnActions from '../../actions/ValidateRsnActions';
 import validateRsnResultSelectors from '../../selectors/validateRsnResultSelectors';
+import printRsnSelectors from '../../selectors/printRsnSelectors';
+import printRsnActions from '../../actions/printRsnActions';
 
 const mapStateToProps = (state, { match }) => ({
     validatePurchaseOrderResult: validatePurchaseOrderResultSelectors.getItem(state),
     validatePurchaseOrderResultLoading: validatePurchaseOrderResultSelectors.getLoading(state),
-    demLocationsSearchResults: demLocationsSelectors
-        .getSearchItems(state)
-        .map(c => ({ id: c.id, name: c.locationCode, description: c.description })),
-    demLocationsSearchLoading: demLocationsSelectors.getSearchLoading(state),
     storagePlacesSearchResults: storagePlacesSelectors
         .getSearchItems(state)
         .map(i => ({ ...i, id: i.name })),
     storagePlacesSearchLoading: storagePlacesSelectors.getSearchLoading(state),
-    salesArticlesSearchResults: salesArticlesSelectors
-        .getSearchItems(state)
-        .map(c => ({ ...c, name: c.articleNumber })),
-    salesArticlesSearchLoading: salesArticlesSelectors.getSearchLoading(state),
     bookInResult: doBookInSelectors.getData(state),
     bookInResultLoading: doBookInSelectors.getWorking(state),
     validatePurchaseOrderBookInQtyResult: validatePurchaseOrderBookInQtyResultSelectors.getItem(
@@ -59,7 +49,9 @@ const mapStateToProps = (state, { match }) => ({
     rsnConditionsLoading: rsnConditionsSelectors.getLoading(state),
     rsnAccessoriesLoading: rsnAccessoriesSelectors.getLoading(state),
     validateRsnResult: validateRsnResultSelectors.getItem(state),
-    validateRsnResultLoading: validateRsnResultSelectors.getLoading(state)
+    validateRsnResultLoading: validateRsnResultSelectors.getLoading(state),
+    printRsnResult: printRsnSelectors.getData(state),
+    printRsnLoading: printRsnSelectors.getWorking(state)
 });
 
 const initialise = () => dispatch => {
@@ -73,16 +65,17 @@ const initialise = () => dispatch => {
 const mapDispatchToProps = {
     initialise,
     validatePurchaseOrder: validatePurchaseOrderActions.fetchById,
-    searchDemLocations: demLocationsActions.search,
     searchStoragePlaces: storagePlacesActions.search,
-    searchSalesArticles: salesArticlesActions.search,
     doBookIn: doBookInActions.requestProcessStart,
     validatePurchaseOrderBookInQty: validatePurchaseOrderBookInQtyResultActions.fetchByQueryString,
     validateStorageType: validateStorageTypeActions.fetchByQueryString,
     getLoanDetails: loanDetailsActions.fetchByQueryString,
     getRsnConditions: rsnConditionsActions.fetch,
     getRsnAccessories: rsnAccessoriesActions.fetch,
-    validateRsn: ValidateRsnActions.fetchById
+    validateRsn: ValidateRsnActions.fetchById,
+    clearPo: validatePurchaseOrderActions.clearItems,
+    clearRsn: ValidateRsnActions.clearItems,
+    printRsn: printRsnActions.requestProcessStart
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(GoodsInUtility));

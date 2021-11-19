@@ -24,12 +24,13 @@
             this.PurchaseOrderPack.GetDocumentType(1).Returns("PO");
             this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1234").Returns(true);
             this.GoodsInPack.GetNextBookInRef().ReturnsForAnyArgs(1);
-            this.GoodsInPack.GetRsnDetails(1, out _, out _, out _, out _, out _, out _).Returns(x =>
-                {
-                    x[4] = 1;
-                    x[5] = 123456;
-                    return true;
-                });
+            this.GoodsInPack.ParcelRequired(null, 123456, null, out _).Returns(true);
+            this.GoodsInPack.GetRsnDetails(123456, out _, out _, out _, out _, out _, out _).Returns(x =>
+            {
+                x[4] = 1;
+                x[5] = 00654323;
+                return true;
+            });
 
             this.ReqRepository.FindById(1).Returns(new RequisitionHeader { ReqNumber = 1, });
             this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>())
@@ -50,7 +51,7 @@
                 null,
                 null,
                 null,
-                1,
+                123456,
                 "P1234",
                 null,
                 null,
@@ -69,7 +70,7 @@
             this.GoodsInPack.GetNextLogId().Returns(1111);
 
             this.LabelTypeRepository.FindBy(Arg.Any<Expression<Func<StoresLabelType, bool>>>())
-                .Returns(new StoresLabelType { DefaultPrinter = "PRINTER", FileName = "rsn_lab" }); 
+                .Returns(new StoresLabelType { DefaultPrinter = "PRINTER", FileName = "rsn_lab" });
 
             this.result = this.Sut.DoBookIn(
                 "R",
@@ -81,7 +82,7 @@
                 null,
                 null,
                 null,
-                1,
+                123456,
                 null,
                 null,
                 "P1234",
@@ -92,6 +93,7 @@
                 null,
                 1,
                 false,
+                false,
                 new List<GoodsInLogEntry>
                     {
                         new GoodsInLogEntry
@@ -99,7 +101,9 @@
                                 ArticleNumber = "PART",
                                 DateCreated = DateTime.UnixEpoch,
                                 LoanLine = 1,
-                                LoanNumber = 1
+                                LoanNumber = 1,
+                                StoragePlace = "P1234",
+                                Quantity = 1
                             }
                     });
         }
@@ -117,7 +121,7 @@
                 null,
                 null,
                 null,
-                1,
+                123456,
                 "P1234",
                 null,
                 null,
@@ -137,15 +141,9 @@
         }
 
         [Test]
-        public void ShouldPrintRsnLabels()
+        public void ShouldPrintRsn()
         {
-            this.Bartender.Received().PrintLabels("RSN 1", "PRINTER", 1, "rsn_lab", "\"1\",\"PART\",\"123456\"", ref Arg.Any<string>());
-        }
-
-        [Test]
-        public void ShouldSetPrintLabelsFalse()
-        {
-            this.result.PrintLabels.Should().BeFalse();
+            this.PrintRsnService.Received().PrintRsn(123456, 1, "Service Copy");
         }
     }
 }

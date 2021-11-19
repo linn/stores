@@ -24,5 +24,7 @@
             ValidateStorageType(ValidateStorageTypeRequestResource requestResource);
 
         IResult<ValidateRsnResult> ValidateRsn(int rsnNumber);
+
+        IResult<ProcessResult> PrintRsn(int rsnNumber, int userNumber);
     }
 }
