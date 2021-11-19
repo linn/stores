@@ -463,9 +463,7 @@ function Consignment({
                 });
             }
         } else if (propertyName === 'rsnNumber') {
-            const selectedRSN = rsnsSearchResults.find(
-                a => a.rsnNumber === newValue
-            );
+            const selectedRSN = rsnsSearchResults.find(a => a.rsnNumber === newValue);
             if (selectedRSN) {
                 setNewCarton({
                     ...newCarton,
@@ -1097,7 +1095,9 @@ function Consignment({
                                     <Typeahead
                                         items={rsnSearchResult()}
                                         placeholder="RSN Number"
-                                        fetchItems={rsnNo => searchRsns(rsnNo, `&accountId=${item?.salesAccountId}`)}
+                                        fetchItems={rsnNo =>
+                                            searchRsns(rsnNo, `&accountId=${item?.salesAccountId}`)
+                                        }
                                         clearSearch={clearRsnsSearch}
                                         loading={rsnsSearchLoading}
                                         debounce={1000}
