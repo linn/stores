@@ -57,7 +57,6 @@ function PurchTab({
                     loading={suppliersSearchLoading}
                     fetchItems={searchSuppliers}
                     links={false}
-                    searc
                     clearSearch={() => clearSuppliersSearch}
                     placeholder="Search Code or Description"
                 />
