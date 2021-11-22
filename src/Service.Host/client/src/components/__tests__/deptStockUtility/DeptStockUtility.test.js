@@ -199,13 +199,13 @@ describe('When adding a row', () => {
         );
     });
 
-    test('Should add  new row when button clicked', () => {
+    test('Should add new row when button clicked', () => {
         const saveButton = screen.getAllByRole('button', { name: 'Save' })[0];
         fireEvent.click(saveButton);
         expect(createStockLocator).toHaveBeenCalledTimes(1);
         expect(createStockLocator).toHaveBeenCalledWith(
             expect.objectContaining({
-                id: -2
+                partNumber: 'EMPTY'
             })
         );
     });
