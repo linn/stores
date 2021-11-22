@@ -63,10 +63,10 @@
 
         public void UpdateStockLocator(StockLocator from, StockLocator to, IEnumerable<string> privileges)
         {
-            // if (!this.authService.HasPermissionFor(AuthorisedAction.UpdateStockLocator, privileges))
-            // {
-            //     throw new StockLocatorException("You are not authorised to update.");
-            // }
+            if (!this.authService.HasPermissionFor(AuthorisedAction.UpdateStockLocator, privileges))
+            {
+                throw new StockLocatorException("You are not authorised to update.");
+            }
 
             from.Part = this.partRepository.FindBy(p => p.PartNumber == from.PartNumber);
 
