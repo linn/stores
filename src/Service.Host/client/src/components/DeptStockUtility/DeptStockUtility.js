@@ -11,6 +11,7 @@ import {
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import { DataGrid } from '@mui/x-data-grid';
+import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import moment from 'moment';
 import Page from '../../containers/Page';
@@ -38,37 +39,37 @@ function DeptStockUtility({
 }) {
     const [prevStockLocators, setPrevStockLocators] = useState(null);
     const [stockLocators, setStockLocators] = useState([]);
-    const [newRows, setNewRows] = useState([]);
-    const [rows, setRows] = useState([]);
     useEffect(() => {
         if (items !== prevStockLocators) {
             if (items) {
                 setPrevStockLocators(items);
                 setStockLocators(items);
-                setNewRows([]);
             }
         }
     }, [items, stockLocators, prevStockLocators, options]);
 
-    useEffect(() => {
-        setRows([...newRows, ...stockLocators]);
-    }, [stockLocators, newRows]);
-
     const handleSelectRows = selected => {
-        setRows(
-            rows.map(r =>
+        setStockLocators(
+            stockLocators.map(r =>
                 selected.includes(r.id) ? { ...r, selected: true } : { ...r, selected: false }
             )
         );
     };
 
-    const handleFieldChange = useCallback((field, rowId, newValue) => {
-        setRows(c =>
-            c.map(s =>
-                Number(s.id) === Number(rowId) ? { ...s, [field]: newValue, edited: true } : s
-            )
-        );
-    }, []);
+    const handleFieldChange = useCallback(
+        (field, rowId, newValue) => {
+            if (!stockLocators.some(x => x.edited)) {
+                setStockLocators(c =>
+                    c.map(s =>
+                        Number(s.id) === Number(rowId)
+                            ? { ...s, [field]: newValue, edited: true }
+                            : s
+                    )
+                );
+            }
+        },
+        [stockLocators]
+    );
 
     const handleEditRowsModelChange = useCallback(
         model => {
@@ -84,7 +85,7 @@ function DeptStockUtility({
     );
 
     const valueGetter = (params, fieldName, formatDate) => {
-        let value = rows.find(x => Number(x.id) === Number(params.row.id))?.[fieldName];
+        let value = stockLocators.find(x => Number(x.id) === Number(params.row.id))?.[fieldName];
         if (formatDate) {
             value = moment(value).format('DD/MM/YY');
         }
@@ -92,13 +93,18 @@ function DeptStockUtility({
     };
 
     const addNewRow = () =>
-        setNewRows([
-            ...newRows,
-            { isNewRow: true, id: -1 - newRows.length, stockRotationDate: new Date() }
+        setStockLocators([
+            ...stockLocators,
+            {
+                isNewRow: true,
+                edited: true,
+                id: -stockLocators.length,
+                stockRotationDate: new Date()
+            }
         ]);
 
     const deleteSelectedRows = () => {
-        rows.filter(r => r.selected).forEach(s => deleteStockLocator(s.id, s));
+        stockLocators.filter(r => r.selected).forEach(s => deleteStockLocator(s.id, s));
     };
 
     const columns = [
@@ -196,6 +202,32 @@ function DeptStockUtility({
             )
         }
     ];
+
+    const saveBackCancelButtons = () => (
+        <Grid item xs={12}>
+            <SaveBackCancelButtons
+                backClick={() => history.push('/inventory/dept-stock-parts')}
+                saveDisabled={!stockLocators.some(x => x.edited)}
+                cancelClick={() => setStockLocators(items)}
+                saveClick={() => {
+                    stockLocators
+                        .filter(x => x.edited && !x.isNewRow)
+                        .forEach(s => {
+                            updateStockLocator(s.id, s);
+                        });
+                    stockLocators
+                        .filter(x => x.edited && x.isNewRow)
+                        .forEach(s => {
+                            const body = s;
+                            if (!body.partNumber) {
+                                body.partNumber = stockLocators.find(l => l.partNumber).partNumber;
+                            }
+                            createStockLocator(body);
+                        });
+                }}
+            />
+        </Grid>
+    );
     return (
         <Page>
             <SnackbarMessage
@@ -207,6 +239,16 @@ function DeptStockUtility({
                 <Grid item xs={12}>
                     <Title text="Departmental Pallets Utility" />
                 </Grid>
+                <Grid item xs={12}>
+                    <Typography variant="subtitle1">
+                        Double click a cell to start editing or use the buttons at the bottom of the
+                        page to add or delete a row.
+                    </Typography>
+                    <Typography variant="subtitle2">
+                        The table currently only supports adding/updating/deleting one row at a
+                        time.
+                    </Typography>
+                </Grid>
                 {itemError && (
                     <Grid item xs={12}>
                         <ErrorCard
@@ -214,65 +256,66 @@ function DeptStockUtility({
                         />
                     </Grid>
                 )}
-                <Grid item xs={12}>
-                    <SaveBackCancelButtons
-                        backClick={() => history.push('/inventory/dept-stock-parts')}
-                        saveDisabled={!rows.some(x => x.edited)}
-                        cancelClick={() => setRows(items)}
-                        saveClick={() => {
-                            rows.filter(x => x.edited && !x.isNewRow).forEach(s => {
-                                updateStockLocator(s.id, s);
-                            });
-                            rows.filter(x => x.edited && x.isNewRow).forEach(s => {
-                                const body = s;
-                                if (!body.partNumber) {
-                                    body.partNumber = stockLocators.find(
-                                        l => l.partNumber
-                                    ).partNumber;
-                                }
-                                createStockLocator(body);
-                            });
-                        }}
-                    />
-                </Grid>
-                <Grid item xs={2}>
-                    <Button onClick={addNewRow} variant="outlined">
-                        Add Row
-                    </Button>
-                </Grid>
-                <Grid item xs={8} />
-                <Grid item xs={2}>
-                    <Button variant="outlined" color="secondary" onClick={deleteSelectedRows}>
-                        Delete Selected
-                    </Button>
-                </Grid>
+                {saveBackCancelButtons()}
                 {itemsLoading || stockLocatorLoading ? (
                     <Grid item xs={12}>
                         <Loading />
                     </Grid>
                 ) : (
-                    <Grid item xs={12}>
-                        {stockLocators && (
-                            <Grid item xs={12}>
-                                <div style={{ width: '100%' }}>
-                                    <DataGrid
-                                        rows={rows}
-                                        columns={columns}
-                                        editMode="cell"
-                                        onEditRowsModelChange={handleEditRowsModelChange}
-                                        autoHeight
-                                        density="comfortable"
-                                        rowHeight={34}
-                                        loading={false}
-                                        hideFooter
-                                        disableSelectionOnClick
-                                        onSelectionModelChange={handleSelectRows}
-                                        checkboxSelection
-                                    />
-                                </div>
-                            </Grid>
-                        )}
-                    </Grid>
+                    <>
+                        <Grid item xs={12}>
+                            {stockLocators && (
+                                <Grid item xs={12}>
+                                    <div style={{ width: '100%' }}>
+                                        <DataGrid
+                                            rows={stockLocators}
+                                            columns={columns}
+                                            editMode="cell"
+                                            onEditRowsModelChange={handleEditRowsModelChange}
+                                            autoHeight
+                                            density="comfortable"
+                                            rowHeight={34}
+                                            loading={false}
+                                            hideFooter
+                                            disableSelectionOnClick
+                                            onSelectionModelChange={handleSelectRows}
+                                            checkboxSelection
+                                            isRowSelectable={params =>
+                                                !stockLocators
+                                                    .filter(s => s.id !== params.row.id)
+                                                    .some(x => x.selected)
+                                            }
+                                            isCellEditable={params =>
+                                                !stockLocators.some(x => x.edited) ||
+                                                params.row.edited
+                                            }
+                                        />
+                                    </div>
+                                </Grid>
+                            )}
+                        </Grid>
+                        <Grid item xs={2}>
+                            <Button
+                                variant="outlined"
+                                color="secondary"
+                                disabled={stockLocators.some(x => x.edited)}
+                                onClick={deleteSelectedRows}
+                            >
+                                Delete Selected
+                            </Button>
+                        </Grid>
+                        <Grid item xs={2}>
+                            <Button
+                                onClick={addNewRow}
+                                variant="outlined"
+                                disabled={stockLocators.some(x => x.edited)}
+                            >
+                                Add Row
+                            </Button>
+                        </Grid>
+                        <Grid item xs={8} />
+                        {saveBackCancelButtons()}
+                    </>
                 )}
             </Grid>
         </Page>
