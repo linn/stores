@@ -45,7 +45,8 @@ function Parcel({
     comments,
     inDialogBox,
     privileges,
-    closeDialog
+    closeDialog,
+    previousPaths
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -600,10 +601,12 @@ Parcel.propTypes = {
     comments: PropTypes.string,
     inDialogBox: PropTypes.bool,
     privileges: PropTypes.arrayOf(PropTypes.string).isRequired,
-    closeDialog: PropTypes.func
+    closeDialog: PropTypes.func,
+    previousPaths: PropTypes.arrayOf(PropTypes.string)
 };
 
 Parcel.defaultProps = {
+    previousPaths: [],
     item: {
         parcelNumber: -1,
         supplierId: '',

@@ -266,6 +266,7 @@ function DeptStockUtility({
                                             editMode="cell"
                                             onEditRowsModelChange={handleEditRowsModelChange}
                                             autoHeight
+                                            columnBuffer={7}
                                             density="comfortable"
                                             rowHeight={34}
                                             loading={false}
@@ -292,7 +293,10 @@ function DeptStockUtility({
                             <Button
                                 variant="outlined"
                                 color="secondary"
-                                disabled={stockLocators.some(x => x.edited)}
+                                disabled={
+                                    !stockLocators.some(x => x.selected) ||
+                                    stockLocators.some(x => x.edited)
+                                }
                                 onClick={deleteSelectedRows}
                             >
                                 Delete Selected
