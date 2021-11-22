@@ -219,7 +219,6 @@ function DeptStockUtility({
                         backClick={() => history.push('/inventory/dept-stock-parts')}
                         saveDisabled={!rows.some(x => x.edited)}
                         cancelClick={() => setRows(items)}
-                        // todo add v update
                         saveClick={() => {
                             rows.filter(x => x.edited && !x.isNewRow).forEach(s => {
                                 updateStockLocator(s.id, s);
@@ -269,7 +268,6 @@ function DeptStockUtility({
                                         disableSelectionOnClick
                                         onSelectionModelChange={handleSelectRows}
                                         checkboxSelection
-                                        //isCellEditable={params => params.row.selected}
                                     />
                                 </div>
                             </Grid>
