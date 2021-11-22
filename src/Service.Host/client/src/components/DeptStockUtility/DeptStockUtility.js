@@ -56,20 +56,13 @@ function DeptStockUtility({
         );
     };
 
-    const handleFieldChange = useCallback(
-        (field, rowId, newValue) => {
-            if (!stockLocators.some(x => x.edited)) {
-                setStockLocators(c =>
-                    c.map(s =>
-                        Number(s.id) === Number(rowId)
-                            ? { ...s, [field]: newValue, edited: true }
-                            : s
-                    )
-                );
-            }
-        },
-        [stockLocators]
-    );
+    const handleFieldChange = useCallback((field, rowId, newValue) => {
+        setStockLocators(c =>
+            c.map(s =>
+                Number(s.id) === Number(rowId) ? { ...s, [field]: newValue, edited: true } : s
+            )
+        );
+    }, []);
 
     const handleEditRowsModelChange = useCallback(
         model => {
@@ -112,7 +105,7 @@ function DeptStockUtility({
             headerName: 'Storage Place',
             field: 'storagePlaceName',
             editable: true,
-            width: 200,
+            width: 150,
             valueGetter: params => valueGetter(params, 'storagePlaceName'),
             renderEditCell: params => (
                 <Typeahead
@@ -146,13 +139,13 @@ function DeptStockUtility({
         {
             headerName: 'Batch Ref',
             field: 'batchRef',
-            width: 200,
+            width: 150,
             editable: true
         },
         {
             headerName: 'Batch Date',
             field: 'stockRotationDate',
-            width: 200,
+            width: 150,
             editable: true,
             valueGetter: params => valueGetter(params, 'stockRotationDate', true),
             renderEditCell: params => (
@@ -168,21 +161,21 @@ function DeptStockUtility({
         {
             headerName: 'Qty',
             field: 'quantity',
-            width: 200,
+            width: 100,
             type: 'number',
             editable: true
         },
         {
             headerName: 'Remarks',
             field: 'remarks',
-            width: 200,
+            width: 400,
             editable: true
         },
         {
             headerName: 'Audit Dept',
             field: 'auditDepartmentCode',
             editable: true,
-            width: 200,
+            width: 150,
             valueGetter: params => valueGetter(params, 'auditDepartmentCode'),
             renderEditCell: params => (
                 <Typeahead
@@ -286,7 +279,8 @@ function DeptStockUtility({
                                                     .some(x => x.selected)
                                             }
                                             isCellEditable={params =>
-                                                !stockLocators.some(x => x.edited) ||
+                                                (!stockLocators.some(x => x.edited) &&
+                                                    !stockLocators.some(x => x.selected)) ||
                                                 params.row.edited
                                             }
                                         />
