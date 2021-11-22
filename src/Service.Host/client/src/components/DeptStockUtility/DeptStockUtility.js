@@ -6,12 +6,12 @@ import {
     Loading,
     SnackbarMessage,
     ErrorCard,
-    BackButton,
     Typeahead,
     SaveBackCancelButtons
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import { DataGrid } from '@mui/x-data-grid';
+import Button from '@material-ui/core/Button';
 import moment from 'moment';
 import Page from '../../containers/Page';
 
@@ -38,36 +38,32 @@ function DeptStockUtility({
 }) {
     const [prevStockLocators, setPrevStockLocators] = useState(null);
     const [stockLocators, setStockLocators] = useState([]);
-    const [rowsEdited, setRowsEdited] = useState();
-    const [newRow, setNewRow] = useState({
-        id: -1,
-        partNumber: options.partNumber,
-        stockRotationDate: new Date()
-    });
+    const [newRows, setNewRows] = useState([]);
+    const [rows, setRows] = useState([]);
     useEffect(() => {
         if (items !== prevStockLocators) {
             if (items) {
                 setPrevStockLocators(items);
                 setStockLocators(items);
-                setNewRow({
-                    id: -1,
-                    partNumber: options?.partNumber,
-                    stockRotationDate: new Date()
-                });
+                setNewRows([]);
             }
         }
-    }, [items, stockLocators, prevStockLocators, setNewRow, options]);
+    }, [items, stockLocators, prevStockLocators, options]);
+
+    useEffect(() => {
+        setRows([...newRows, ...stockLocators]);
+    }, [stockLocators, newRows]);
 
     const handleSelectRows = selected => {
-        setStockLocators(
-            stockLocators.map(r =>
+        setRows(
+            rows.map(r =>
                 selected.includes(r.id) ? { ...r, selected: true } : { ...r, selected: false }
             )
         );
     };
 
     const handleFieldChange = useCallback((field, rowId, newValue) => {
-        setStockLocators(c =>
+        setRows(c =>
             c.map(s =>
                 Number(s.id) === Number(rowId) ? { ...s, [field]: newValue, edited: true } : s
             )
@@ -88,12 +84,23 @@ function DeptStockUtility({
     );
 
     const valueGetter = (params, fieldName, formatDate) => {
-        let value = stockLocators.find(x => Number(x.id) === Number(params.row.id))[fieldName];
+        let value = rows.find(x => Number(x.id) === Number(params.row.id))?.[fieldName];
         if (formatDate) {
             value = moment(value).format('DD/MM/YY');
         }
         return value;
     };
+
+    const addNewRow = () =>
+        setNewRows([
+            ...newRows,
+            { isNewRow: true, id: -1 - newRows.length, stockRotationDate: new Date() }
+        ]);
+
+    const deleteSelectedRows = () => {
+        rows.filter(r => r.selected).forEach(s => deleteStockLocator(s.id, s));
+    };
+
     const columns = [
         {
             headerName: 'Storage Place',
@@ -210,16 +217,35 @@ function DeptStockUtility({
                 <Grid item xs={12}>
                     <SaveBackCancelButtons
                         backClick={() => history.push('/inventory/dept-stock-parts')}
-                        saveDisabled={!stockLocators.some(x => x.edited)}
-                        cancelClick={() => setStockLocators(items)}
-                        saveClick={() =>
-                            stockLocators
-                                .filter(x => x.edited)
-                                .forEach(s => { 
-                                    updateStockLocator(s.id, s)
-                                })
-                        }
+                        saveDisabled={!rows.some(x => x.edited)}
+                        cancelClick={() => setRows(items)}
+                        // todo add v update
+                        saveClick={() => {
+                            rows.filter(x => x.edited && !x.isNewRow).forEach(s => {
+                                updateStockLocator(s.id, s);
+                            });
+                            rows.filter(x => x.edited && x.isNewRow).forEach(s => {
+                                const body = s;
+                                if (!body.partNumber) {
+                                    body.partNumber = stockLocators.find(
+                                        l => l.partNumber
+                                    ).partNumber;
+                                }
+                                createStockLocator(body);
+                            });
+                        }}
                     />
+                </Grid>
+                <Grid item xs={2}>
+                    <Button onClick={addNewRow} variant="outlined">
+                        Add Row
+                    </Button>
+                </Grid>
+                <Grid item xs={8} />
+                <Grid item xs={2}>
+                    <Button variant="outlined" color="secondary" onClick={deleteSelectedRows}>
+                        Delete Selected
+                    </Button>
                 </Grid>
                 {itemsLoading || stockLocatorLoading ? (
                     <Grid item xs={12}>
@@ -231,7 +257,7 @@ function DeptStockUtility({
                             <Grid item xs={12}>
                                 <div style={{ width: '100%' }}>
                                     <DataGrid
-                                        rows={stockLocators}
+                                        rows={rows}
                                         columns={columns}
                                         editMode="cell"
                                         onEditRowsModelChange={handleEditRowsModelChange}
