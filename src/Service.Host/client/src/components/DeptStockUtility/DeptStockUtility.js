@@ -205,7 +205,7 @@ function DeptStockUtility({
             <SaveBackCancelButtons
                 backClick={() => history.push('/inventory/dept-stock-parts')}
                 saveDisabled={!stockLocators.some(x => x.edited)}
-                cancelClick={() => setStockLocators(prevStockLocators)}
+                cancelClick={() => setStockLocators(items)}
                 saveClick={() => {
                     stockLocators
                         .filter(x => x.edited && !x.isNewRow)
