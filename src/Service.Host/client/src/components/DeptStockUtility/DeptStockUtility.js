@@ -39,6 +39,7 @@ function DeptStockUtility({
 }) {
     const [prevStockLocators, setPrevStockLocators] = useState(null);
     const [stockLocators, setStockLocators] = useState([]);
+
     useEffect(() => {
         if (items !== prevStockLocators) {
             if (items) {
@@ -139,6 +140,7 @@ function DeptStockUtility({
         {
             headerName: 'Batch Ref',
             field: 'batchRef',
+            valueGetter: params => valueGetter(params, 'batchRef'),
             width: 150,
             editable: true
         },
@@ -163,11 +165,13 @@ function DeptStockUtility({
             field: 'quantity',
             width: 100,
             type: 'number',
+            valueGetter: params => valueGetter(params, 'quantity'),
             editable: true
         },
         {
             headerName: 'Remarks',
             field: 'remarks',
+            valueGetter: params => valueGetter(params, 'remarks'),
             width: 400,
             editable: true
         },
