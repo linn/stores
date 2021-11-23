@@ -83,7 +83,11 @@ function Consignment({
     rsnsSearchResults,
     rsnsSearchLoading,
     searchRsns,
-    clearRsnsSearch
+    clearRsnsSearch,
+    salesAccountsSearchResults,
+    salesAccountsSearchLoading,  
+    searchSalesAccounts,
+    clearSalesAccountsSearch
 }) {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [termsMessage, setTermsMessage] = useState(false);
@@ -707,6 +711,10 @@ function Consignment({
                                         cartonTypes={cartonTypes}
                                         setEditStatus={setEditStatus}
                                         viewing={viewing()}
+                                        salesAccountsSearchResults={salesAccountsSearchResults}
+                                        salesAccountsSearchLoading={salesAccountsSearchLoading}  
+                                        searchSalesAccounts={searchSalesAccounts}
+                                        clearSalesAccountsSearch={clearSalesAccountsSearch}
                                     />
                                 )}
                                 {currentTab === 2 && (
@@ -1339,7 +1347,11 @@ Consignment.propTypes = {
     rsnsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     rsnsSearchLoading: PropTypes.bool,
     searchRsns: PropTypes.func.isRequired,
-    clearRsnsSearch: PropTypes.func.isRequired
+    clearRsnsSearch: PropTypes.func.isRequired,
+    salesAccountsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
+    salesAccountsSearchLoading: PropTypes.bool,    
+    searchSalesAccounts: PropTypes.func.isRequired,
+    clearSalesAccountsSearch: PropTypes.func.isRequired
 };
 
 Consignment.defaultProps = {
@@ -1374,7 +1386,9 @@ Consignment.defaultProps = {
     salesOutlets: [],
     salesOutletsLoading: false,
     rsnsSearchResults: [],
-    rsnsSearchLoading: false
+    rsnsSearchLoading: false,
+    salesAccountsSearchResults: [],
+    salesAccountsSearchLoading: false
 };
 
 export default Consignment;

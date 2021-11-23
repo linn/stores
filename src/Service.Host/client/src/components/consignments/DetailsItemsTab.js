@@ -6,7 +6,8 @@ import {
     InputField,
     Dropdown,
     DatePicker,
-    useGroupEditTable
+    useGroupEditTable,
+    Typeahead
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
@@ -43,7 +44,11 @@ function DetailsItemsTab({
     setSaveDisabled,
     cartonTypes,
     setEditStatus,
-    viewing
+    viewing,
+    salesAccountsSearchResults,
+    salesAccountsSearchLoading,
+    searchSalesAccounts,
+    clearSalesAccountsSearch
 }) {
     const {
         data: itemsData,
@@ -813,6 +818,20 @@ function DetailsItemsTab({
         }
     ];
 
+    const salesAccountsSearchResultsList = () => {
+        return salesAccountsSearchResults?.map(account => ({
+            ...account,
+            name: account.accountId,
+            description: account.accountName,
+            id: account.accountId
+        }));
+    };
+
+    const handleOnSelectSalesAccount = selectedAccount => {
+        updateField('salesAccountId', selectedAccount.accountId);
+        updateField('customerName', selectedAccount.accountName);
+    };
+
     return (
         <>
             <Grid item xs={12}>
@@ -827,22 +846,24 @@ function DetailsItemsTab({
                                     )}`
                                 ) : (
                                     <>
-                                        <InputField
+                                        <Typeahead
+                                            items={salesAccountsSearchResultsList()}
                                             placeholder="Account Id"
-                                            propertyName="salesAccountId"
+                                            fetchItems={name => searchSalesAccounts(name)}
+                                            clearSearch={clearSalesAccountsSearch}
+                                            loading={salesAccountsSearchLoading}
+                                            debounce={1000}
+                                            links={false}
+                                            modal
+                                            onSelect={p => handleOnSelectSalesAccount(p)}
                                             value={consignment.salesAccountId}
-                                            onChange={updateField}
-                                            maxLength={10}
-                                        />
-                                        <InputField
-                                            placeholder="Customer Name"
-                                            propertyName="customerName"
-                                            value={consignment.customerName}
-                                            onChange={updateField}
                                         />
                                     </>
                                 )}
                             </TableCell>
+                            <TableCell className={classes.tableCell}>
+                                {showText(consignment.customerName)}                                
+                            </TableCell>             
                         </TableRow>
                         <TableRow key="Address">
                             <TablePromptItem text="Address" />
@@ -1549,7 +1570,11 @@ DetailsItemsTab.propTypes = {
         PropTypes.shape({ cartonTypeName: PropTypes.string, description: PropTypes.string })
     ).isRequired,
     setEditStatus: PropTypes.func.isRequired,
-    viewing: PropTypes.bool.isRequired
+    viewing: PropTypes.bool.isRequired,
+    salesAccountsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
+    salesAccountsSearchLoading: PropTypes.bool,
+    searchSalesAccounts: PropTypes.func.isRequired,
+    clearSalesAccountsSearch: PropTypes.func.isRequired
 };
 
 DetailsItemsTab.defaultProps = {
@@ -1562,7 +1587,9 @@ DetailsItemsTab.defaultProps = {
     carriersLoading: false,
     shippingTerm: null,
     shippingTerms: [],
-    shippingTermsLoading: false
+    shippingTermsLoading: false,
+    salesAccountsSearchResults: [],
+    salesAccountsSearchLoading: false
 };
 
 export default DetailsItemsTab;
