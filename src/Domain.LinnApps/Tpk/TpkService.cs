@@ -83,19 +83,19 @@
             var transferredWithNotes = candidates.Select(
                 s => new TransferredStock(s, this.tpkPack.GetTpkNotes(s.ConsignmentId, s.FromLocation)));
             
-            this.bundleLabelPack.PrintTpkBoxLabels(from.FromLocation);
+            //this.bundleLabelPack.PrintTpkBoxLabels(from.FromLocation); yodo
             
-            var whatToWand = this.whatToWandService.WhatToWand(from.LocationId).ToList();
-            
-            this.tpkPack.UpdateQuantityPrinted(from.FromLocation, out var updateQuantitySuccessful);
-            
+            var whatToWand = this.whatToWandService.WhatToWand(from.LocationId, from.PalletNumber).ToList();
+
+            //this.tpkPack.UpdateQuantityPrinted(from.FromLocation, out var updateQuantitySuccessful);
+            var updateQuantitySuccessful = true;
             if (!updateQuantitySuccessful)
             {
                 throw new TpkException("Failed in update_qty_printed.");
             }
             
-            this.storesPack.DoTpk(from.LocationId, from.PalletNumber, DateTime.Now, out var tpkSuccessful);
-            
+            //this.storesPack.DoTpk(from.LocationId, from.PalletNumber, DateTime.Now, out var tpkSuccessful);
+            var tpkSuccessful = true;
             if (!tpkSuccessful)
             {
                 throw new TpkException(this.storesPack.GetErrorMessage());

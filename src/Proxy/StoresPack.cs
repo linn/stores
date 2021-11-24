@@ -77,7 +77,7 @@
             };
         }
 
-        public void DoTpk(int locationId, int palletNumber, DateTime dateTimeStarted, out bool success)
+        public void DoTpk(int? locationId, int? palletNumber, DateTime dateTimeStarted, out bool success)
         {
             success = false;
             using (var connection = this.databaseService.GetConnection())

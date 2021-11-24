@@ -9,7 +9,7 @@
     {
         ProcessResult UnAllocateRequisition(int reqNumber, int? reqLineNumber, int userNumber);
 
-        void DoTpk(int locationId, int palletNumber, DateTime dateTimeStarted, out bool success);
+        void DoTpk(int? locationId, int? palletNumber, DateTime dateTimeStarted, out bool success);
 
         string GetErrorMessage();
 
