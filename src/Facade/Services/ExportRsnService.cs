@@ -17,7 +17,8 @@
 
         public IEnumerable<ExportRsn> FindMatchingRSNs(IEnumerable<ExportRsn> rsns, string searchTerm)
         {
-            if (string.IsNullOrEmpty(searchTerm))
+            // fix for ticket 14895 search term coming in as null from Adam's export rsns lookup 
+            if ((string.IsNullOrEmpty(searchTerm)) || (searchTerm == "null"))
             {
                 return rsns;
             }
