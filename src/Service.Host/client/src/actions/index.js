@@ -345,3 +345,7 @@ export const rsnConditionsActionTypes = makeActionTypes(itemTypes.rsnConditions.
 export const rsnAccessoriesActionTypes = makeActionTypes(itemTypes.rsnAccessories.actionType);
 
 export const validateRsnActionTypes = makeActionTypes(itemTypes.validateRsnResult.actionType);
+
+export const unpickStockActionTypes = makeActionTypes(processTypes.unpickStock.actionType);
+
+export const unallocateReqActionTypes = makeActionTypes(processTypes.unallocateReq.actionType);

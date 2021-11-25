@@ -7,6 +7,8 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Page from '../../containers/Page';
 import WhatToWandPrintOut from './WhatToWandPrintOut';
+import { FALSE } from 'node-sass';
+import unallocateReq from '../../reducers/unallocateReq';
 
 export default function Tpk({
     transferableStock,
@@ -17,7 +19,15 @@ export default function Tpk({
     clearErrors,
     tpkLoading,
     whatToWandReport,
-    clearData
+    clearData,
+    unpickStockLoading,
+    unpickStockResult,
+    unAllocateReqLoading,
+    unAllocateReqResult,
+    unpickStock,
+    unAllocateReq,
+    clearUnpickErrors,
+    clearUnallocateErrors
 }) {
     const [selectedRows, setSelectedRows] = useState([]);
     const [dateTimeTpkViewQueried, setDateTimeTpkViewQueried] = useState(new Date());
@@ -118,7 +128,7 @@ export default function Tpk({
                                 />
                             </Grid>
                         )}
-                        <Grid item xs={2}>
+                        <Grid item xs={12}>
                             <Button
                                 style={{ marginTop: '22px' }}
                                 variant="contained"
@@ -131,6 +141,26 @@ export default function Tpk({
                                 }}
                             >
                                 Transfer
+                            </Button>
+                            <Button
+                                style={{ marginTop: '22px' }}
+                                variant="contained"
+                                onClick={() => {
+                                    clearUnpickErrors();
+                                    unpickStock();
+                                }}
+                            >
+                                Unpick Stock
+                            </Button>
+                            <Button
+                                style={{ marginTop: '22px' }}
+                                variant="contained"
+                                onClick={() => {
+                                    clearUnallocateErrors();
+                                    unallocateReq();
+                                }}
+                            >
+                                Unallocate Consignment
                             </Button>
                         </Grid>
                         <Grid item xs={12}>
@@ -167,7 +197,15 @@ Tpk.propTypes = {
     }),
     tpkLoading: PropTypes.bool,
     whatToWandReport: PropTypes.shape({}),
-    clearData: PropTypes.func.isRequired
+    clearData: PropTypes.func.isRequired,
+    unpickStockLoading: PropTypes.bool,
+    unpickStockResult: PropTypes.shape({}),
+    unAllocateReqLoading: PropTypes.bool,
+    unAllocateReqResult: PropTypes.shape({}),
+    unpickStock: PropTypes.func.isRequired,
+    unAllocateReq: PropTypes.func.isRequired,
+    clearUnpickErrors: PropTypes.func.isRequired,
+    clearUnallocateErrors: PropTypes.func.isRequired
 };
 
 Tpk.defaultProps = {
@@ -176,5 +214,9 @@ Tpk.defaultProps = {
     transferableStockLoading: true,
     itemError: null,
     tpkLoading: false,
-    whatToWandReport: null
+    whatToWandReport: null,
+    unpickStockLoading: false,
+    unpickStockResult: null,
+    unAllocateReqLoading: false,
+    unAllocateReqResult: null
 };

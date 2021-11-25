@@ -132,6 +132,8 @@ import rsnAccessories from './rsnAccessories';
 import rsnConditions from './rsnConditions';
 import validateRsnResult from './validateRsnResult';
 import printRsn from './printRsn';
+import unpickStock from './unpickStock';
+import unallocateReq from './unallocateReq';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -253,8 +255,10 @@ const rootReducer = history =>
         transferableStock,
         unallocateConsignment,
         unallocateConsignmentLine,
+        unallocateReq,
         unitsOfMeasure,
         unpickItemsAllocation,
+        unpickStock,
         validatePurchaseOrderBookInQtyResult,
         validatePurchaseOrderResult,
         validateRsnResult,
