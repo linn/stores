@@ -4,6 +4,7 @@
     using System.Security.Claims;
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
     using Linn.Stores.Facade.ResourceBuilders;
@@ -44,10 +45,12 @@
                     with.Dependency(this.DomainService);
                     with.Dependency<IResourceBuilder<TransferableStock>>(new TransferableStockResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<TransferableStock>>>(new TransferableStockListResourceBuilder());
+                    with.Dependency<IResourceBuilder<ProcessResult>>(new ProcessResultResourceBuilder());
                     with.Dependency<IResourceBuilder<TpkResult>>(new TpkResultResourceBuilder());
                     with.Module<TpkModule>();
                     with.ResponseProcessor<TransferableStockListResponseProcessor>();
                     with.ResponseProcessor<TpkResultsResponseProcessor>();
+                    with.ResponseProcessor<ProcessResultResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
                         {

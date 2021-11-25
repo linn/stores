@@ -6,6 +6,8 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
+    using Linn.Stores.Domain.LinnApps.Requisitions;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.Tpk;
 
     using NSubstitute;
@@ -36,6 +38,10 @@
 
         protected IQueryRepository<SalesOrder> SalesOrderRepository { get; set; }
 
+        protected IRepository<ReqMove, ReqMoveKey> ReqMovesRepository;
+
+        protected IFilterByWildcardRepository<StockLocator, int> StockLocatorRepository;
+
         [SetUp]
         public void SetUpContext()
         {
@@ -58,6 +64,8 @@
                              {
                                  ConsignmentId = 1
                              });
+            this.ReqMovesRepository = Substitute.For<IRepository<ReqMove, ReqMoveKey>>();
+            this.StockLocatorRepository = Substitute.For<IFilterByWildcardRepository<StockLocator, int>>();
             this.Sut = new TpkService(
                 this.TpkView,
                 this.AccountingCompaniesRepository,
@@ -68,7 +76,9 @@
                 this.StoresPack, 
                 this.ConsignmentRepository,
                 this.SalesOrderDetailRepository,
-                this.SalesOrderRepository);
+                this.SalesOrderRepository,
+                this.ReqMovesRepository,
+                this.StockLocatorRepository);
         }
     }
 }

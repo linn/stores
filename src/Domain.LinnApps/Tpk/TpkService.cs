@@ -7,6 +7,9 @@
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
+    using Linn.Stores.Domain.LinnApps.Models;
+    using Linn.Stores.Domain.LinnApps.Requisitions;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
 
     public class TpkService : ITpkService
@@ -31,6 +34,10 @@
 
         private readonly IQueryRepository<SalesOrder> salesOrderRepository;
 
+        private readonly IRepository<ReqMove, ReqMoveKey> reqMovesRepository;
+
+        private IFilterByWildcardRepository<StockLocator, int> stockLocatorRepository;
+
         public TpkService(
             IQueryRepository<TransferableStock> tpkView,
             IQueryRepository<AccountingCompany> accountingCompaniesRepository,
@@ -41,7 +48,9 @@
             IStoresPack storesPack,
             IRepository<Consignment, int> consignmentRepository,
             IQueryRepository<SalesOrderDetail> salesOrderDetailRepository,
-            IQueryRepository<SalesOrder> salesOrderRepository)
+            IQueryRepository<SalesOrder> salesOrderRepository,
+            IRepository<ReqMove, ReqMoveKey> reqMovesRepository,
+            IFilterByWildcardRepository<StockLocator, int> stockLocatorRepository)
         {
             this.tpkView = tpkView;
             this.tpkPack = tpkPack;
@@ -53,6 +62,8 @@
             this.consignmentRepository = consignmentRepository;
             this.salesOrderDetailRepository = salesOrderDetailRepository;
             this.salesOrderRepository = salesOrderRepository;
+            this.reqMovesRepository = reqMovesRepository;
+            this.stockLocatorRepository = stockLocatorRepository;
         }
 
         public TpkResult TransferStock(TpkRequest tpkRequest)
@@ -120,6 +131,49 @@
                                                 .FindBy(d => d.OrderNumber == x.OrderNumber && d.OrderLine == x.OrderLine).NettTotal),
                                         },
                                      };
+        }
+
+        public ProcessResult UnpickStock(
+            int reqNumber, 
+            int lineNumber, 
+            int orderNumber, 
+            int orderLine, 
+            int stockLocatorId, 
+            int amendedBy,
+            int? palletNumber,
+            int locationId)
+        {
+            var moves = this.reqMovesRepository.FilterBy(
+                x => x.StockLocatorId == stockLocatorId 
+                     && x.ReqNumber == reqNumber 
+                     && x.LineNumber == lineNumber 
+                     && !x.DateCancelled.HasValue
+                     && (x.StockLocator.PalletNumber == palletNumber || x.StockLocator.LocationId == locationId));
+
+            foreach (var reqMove in moves)
+            {
+                var result = this.storesPack.UnpickStock(
+                    reqNumber,
+                    lineNumber,
+                    reqMove.Sequence,
+                    orderNumber,
+                    orderLine,
+                    reqMove.Quantity,
+                    stockLocatorId,
+                    amendedBy);
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+            }
+
+            foreach (var reqMove in moves)
+            {
+                reqMove.DateCancelled = DateTime.Now;
+            }
+
+            return new ProcessResult(true, string.Empty);
         }
     }
 }

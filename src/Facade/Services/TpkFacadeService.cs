@@ -6,8 +6,11 @@
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Exceptions;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
+    using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
+    using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Resources.Tpk;
 
     public class TpkFacadeService : ITpkFacadeService
@@ -16,10 +19,16 @@
 
         private readonly ITpkService domainService;
 
-        public TpkFacadeService(IQueryRepository<TransferableStock> repository, ITpkService domainService)
+        private readonly IStoresPack storesPack;
+
+        public TpkFacadeService(
+            IQueryRepository<TransferableStock> repository, 
+            ITpkService domainService,
+            IStoresPack storesPack)
         {
             this.repository = repository;
             this.domainService = domainService;
+            this.storesPack = storesPack;
         }
 
         public IResult<IEnumerable<TransferableStock>> GetTransferableStock()
@@ -63,6 +72,25 @@
             {
                 return new BadRequestResult<TpkResult>(ex.Message);
             }
+        }
+
+        public IResult<ProcessResult> UnallocateReq(UnallocateReqRequestResource resource)
+        {
+            return new SuccessResult<ProcessResult>(this.storesPack.UnAllocateRequisition(resource.ReqNumber, null, resource.UnallocatedBy));
+        }
+
+        public IResult<ProcessResult> UnpickStock(UnpickStockRequestResource resource)
+        {
+            return new SuccessResult<ProcessResult>(
+                this.domainService.UnpickStock(
+                    resource.ReqNumber,
+                    resource.LineNumber,
+                    resource.OrderNumber,
+                    resource.OrderLine,
+                    resource.StockLocatorId,
+                    resource.AmendedBy,
+                    resource.PalletNumber,
+                    resource.LocationId));
         }
     }
 }
