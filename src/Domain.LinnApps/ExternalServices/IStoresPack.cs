@@ -50,7 +50,7 @@
             int orderNumber, 
             int orderLine, 
             decimal qty, 
-            int stockLocatorId, 
+            int? stockLocatorId, 
             int amendedBy);
     }
 }

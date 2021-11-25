@@ -87,7 +87,6 @@
                     resource.LineNumber,
                     resource.OrderNumber,
                     resource.OrderLine,
-                    resource.StockLocatorId,
                     resource.AmendedBy,
                     resource.PalletNumber,
                     resource.LocationId));

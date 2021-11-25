@@ -18,9 +18,9 @@
     {
         private readonly IQueryable<ReqMove> moves = new List<ReqMove>
                                                          {
-                                                             new ReqMove { Sequence = 1, Quantity = 1m, DateCancelled = null },
-                                                             new ReqMove { Sequence = 2, Quantity = 1m, DateCancelled = null },
-                                                             new ReqMove { Sequence = 3, Quantity = 1m, DateCancelled = null }
+                                                             new ReqMove { Sequence = 1, Quantity = 1m, DateCancelled = null, StockLocatorId = 1 },
+                                                             new ReqMove { Sequence = 2, Quantity = 1m, DateCancelled = null, StockLocatorId = 1 },
+                                                             new ReqMove { Sequence = 3, Quantity = 1m, DateCancelled = null, StockLocatorId = 1 }
                                                          }.AsQueryable();
         
         private ProcessResult result;
@@ -37,7 +37,7 @@
             this.StoresPack.UnpickStock(1, 1, Arg.Is<int>(x => x == 2), 1, 1, 1m, 1, 1)
                 .Returns(new ProcessResult(false, "Fell at the second hurdle"));
 
-            this.result = this.Sut.UnpickStock(1, 1, 1, 1, 1, 1, 1, 1);
+            this.result = this.Sut.UnpickStock(1, 1, 1, 1, 1, 1, 1);
         }
 
         [Test]

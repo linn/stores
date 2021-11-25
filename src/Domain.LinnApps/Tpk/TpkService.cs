@@ -138,14 +138,12 @@
             int lineNumber, 
             int orderNumber, 
             int orderLine, 
-            int stockLocatorId, 
             int amendedBy,
             int? palletNumber,
             int locationId)
         {
             var moves = this.reqMovesRepository.FilterBy(
-                x => x.StockLocatorId == stockLocatorId 
-                     && x.ReqNumber == reqNumber 
+                x => x.ReqNumber == reqNumber 
                      && x.LineNumber == lineNumber 
                      && !x.DateCancelled.HasValue
                      && (x.StockLocator.PalletNumber == palletNumber || x.StockLocator.LocationId == locationId));
@@ -159,7 +157,7 @@
                     orderNumber,
                     orderLine,
                     reqMove.Quantity,
-                    stockLocatorId,
+                    reqMove.StockLocatorId,
                     amendedBy);
 
                 if (!result.Success)

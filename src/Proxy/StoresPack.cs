@@ -556,7 +556,7 @@
             int orderNumber,
             int orderLine,
             decimal qty,
-            int stockLocatorId,
+            int? stockLocatorId,
             int amendedBy)
         {
             using (var connection = this.databaseService.GetConnection())

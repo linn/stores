@@ -20,9 +20,9 @@
 
         private IQueryable<ReqMove> moves = new List<ReqMove>
                                                         {
-                                                            new ReqMove { Sequence = 1, Quantity = 1m, DateCancelled = null },
-                                                            new ReqMove { Sequence = 2, Quantity = 1m, DateCancelled = null },
-                                                            new ReqMove { Sequence = 3, Quantity = 1m, DateCancelled = null }
+                                                            new ReqMove { Sequence = 1, Quantity = 1m, DateCancelled = null, StockLocatorId = 1 },
+                                                            new ReqMove { Sequence = 2, Quantity = 1m, DateCancelled = null, StockLocatorId = 1 },
+                                                            new ReqMove { Sequence = 3, Quantity = 1m, DateCancelled = null, StockLocatorId = 1 }
                                                         }.AsQueryable();
 
         [SetUp]
@@ -34,7 +34,7 @@
             this.StoresPack.UnpickStock(1, 1, Arg.Any<int>(), 1, 1, 1m, 1, 1)
                 .Returns(new ProcessResult(true, string.Empty));
 
-            this.result = this.Sut.UnpickStock(1, 1, 1, 1, 1, 1, 1, 1);
+            this.result = this.Sut.UnpickStock(1, 1, 1, 1, 1, 1, 1);
         }
 
         [Test]

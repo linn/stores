@@ -7,8 +7,6 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Page from '../../containers/Page';
 import WhatToWandPrintOut from './WhatToWandPrintOut';
-import { FALSE } from 'node-sass';
-import unallocateReq from '../../reducers/unallocateReq';
 
 export default function Tpk({
     transferableStock,
@@ -22,12 +20,14 @@ export default function Tpk({
     clearData,
     unpickStockLoading,
     unpickStockResult,
-    unAllocateReqLoading,
-    unAllocateReqResult,
+    unallocateReqLoading,
+    unallocateReqResult,
     unpickStock,
-    unAllocateReq,
+    unallocateReq,
     clearUnpickErrors,
-    clearUnallocateErrors
+    clearUnallocateErrors,
+    unpickError,
+    unallocateError
 }) {
     const [selectedRows, setSelectedRows] = useState([]);
     const [dateTimeTpkViewQueried, setDateTimeTpkViewQueried] = useState(new Date());
@@ -113,7 +113,7 @@ export default function Tpk({
                 <Grid item xs={10}>
                     <Title text="TPK" />
                 </Grid>
-                {tpkLoading && !itemError ? (
+                {(tpkLoading || unallocateReqLoading || unpickStockLoading) && !itemError ? (
                     <Grid item xs={12}>
                         <Loading />
                     </Grid>
@@ -124,6 +124,25 @@ export default function Tpk({
                                 <ErrorCard
                                     errorMessage={
                                         itemError?.details?.errors?.[0] || itemError.statusText
+                                    }
+                                />
+                            </Grid>
+                        )}
+                        {unpickError && (
+                            <Grid item xs={12}>
+                                <ErrorCard
+                                    errorMessage={
+                                        unpickError?.details?.errors?.[0] || unpickError.statusText
+                                    }
+                                />
+                            </Grid>
+                        )}
+                        {unallocateError && (
+                            <Grid item xs={12}>
+                                <ErrorCard
+                                    errorMessage={
+                                        unallocateError?.details?.errors?.[0] ||
+                                        unallocateError.statusText
                                     }
                                 />
                             </Grid>
@@ -147,7 +166,11 @@ export default function Tpk({
                                 variant="contained"
                                 onClick={() => {
                                     clearUnpickErrors();
-                                    unpickStock();
+                                    unpickStock({
+                                        reqNumber: selectedRows[0].reqNumber,
+                                        orderNumber: selectedRows[0].orderNumber,
+                                        orderLine: selectedRows[0].orderLine
+                                    });
                                 }}
                             >
                                 Unpick Stock
@@ -157,7 +180,7 @@ export default function Tpk({
                                 variant="contained"
                                 onClick={() => {
                                     clearUnallocateErrors();
-                                    unallocateReq();
+                                    unallocateReq({ reqNumber: selectedRows[0].reqNumber });
                                 }}
                             >
                                 Unallocate Consignment
@@ -195,15 +218,23 @@ Tpk.propTypes = {
         statusText: PropTypes.string,
         details: PropTypes.shape({ errors: PropTypes.arrayOf(PropTypes.string) })
     }),
+    unpickError: PropTypes.shape({
+        statusText: PropTypes.string,
+        details: PropTypes.shape({ errors: PropTypes.arrayOf(PropTypes.string) })
+    }),
+    unallocateError: PropTypes.shape({
+        statusText: PropTypes.string,
+        details: PropTypes.shape({ errors: PropTypes.arrayOf(PropTypes.string) })
+    }),
     tpkLoading: PropTypes.bool,
     whatToWandReport: PropTypes.shape({}),
     clearData: PropTypes.func.isRequired,
     unpickStockLoading: PropTypes.bool,
     unpickStockResult: PropTypes.shape({}),
-    unAllocateReqLoading: PropTypes.bool,
-    unAllocateReqResult: PropTypes.shape({}),
+    unallocateReqLoading: PropTypes.bool,
+    unallocateReqResult: PropTypes.shape({}),
     unpickStock: PropTypes.func.isRequired,
-    unAllocateReq: PropTypes.func.isRequired,
+    unallocateReq: PropTypes.func.isRequired,
     clearUnpickErrors: PropTypes.func.isRequired,
     clearUnallocateErrors: PropTypes.func.isRequired
 };
@@ -213,10 +244,12 @@ Tpk.defaultProps = {
     transferredStock: [],
     transferableStockLoading: true,
     itemError: null,
+    unpickError: null,
+    unallocateError: null,
     tpkLoading: false,
     whatToWandReport: null,
     unpickStockLoading: false,
     unpickStockResult: null,
-    unAllocateReqLoading: false,
-    unAllocateReqResult: null
+    unallocateReqLoading: false,
+    unallocateReqResult: null
 };

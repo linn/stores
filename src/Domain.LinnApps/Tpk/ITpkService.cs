@@ -12,7 +12,6 @@
             int lineNumber,
             int orderNumber,
             int orderLine,
-            int stockLocatorId,
             int amendedBy,
             int? palletNumber,
             int locationId);

@@ -6,7 +6,7 @@ import transferableStockActions from '../actions/transferableStockActions';
 import tpkActions from '../actions/tpkTransferStockActions';
 import tpkSelectors from '../selectors/tpkTransferStockSelectors';
 import unpickStockSelectors from '../selectors/unpickStockSelectors';
-import unAllocateReqSelectors from '../selectors/uanllocateReqSelectors';
+import unallocateReqSelectors from '../selectors/uanllocateReqSelectors';
 import * as processTypes from '../processTypes';
 import unpickStockActions from '../actions/unpickStockActions';
 import unallocateReqActions from '../actions/unallocateReqActions';
@@ -15,13 +15,15 @@ const mapStateToProps = state => ({
     transferableStock: transferableStockSelectors.getItems(state),
     transferableStockLoading: transferableStockSelectors.getLoading(state),
     itemError: getItemError(state, processTypes.tpkTransferStock.item),
+    unpickError: getItemError(state, processTypes.unpickStock.item),
+    unallocateError: getItemError(state, processTypes.unallocateReq.item),
     transferredStock: tpkSelectors.getData(state)?.transferred,
     whatToWandReport: tpkSelectors.getData(state)?.whatToWandReport,
     tpkLoading: tpkSelectors.getWorking(state),
     unpickStockLoading: unpickStockSelectors.getWorking(state),
     unpickStockResult: unpickStockSelectors.getData(state),
-    unAllocateReq: unAllocateReqSelectors.getWorking(state),
-    unAllocateReqResult: unAllocateReqSelectors.getData(state)
+    unallocateReqLoading: unallocateReqSelectors.getWorking(state),
+    unallocateReqResult: unallocateReqSelectors.getData(state)
 });
 
 const initialise = () => dispatch => {
@@ -35,7 +37,7 @@ const mapDispatchToProps = {
     initialise,
     transferStock: tpkActions.requestProcessStart,
     unpickStock: unpickStockActions.requestProcessStart,
-    unAllocateReq: unallocateReqActions.requestProcessStart,
+    unallocateReq: unallocateReqActions.requestProcessStart,
     clearUnpickErrors: unpickStockActions.clearErrorsForItem,
     clearUnallocateErrors: unallocateReqActions.clearErrorsForItem,
     clearErrors: tpkActions.clearErrorsForItem,
