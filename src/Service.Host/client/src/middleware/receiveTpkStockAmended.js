@@ -12,7 +12,7 @@ export default ({ dispatch }) => next => action => {
 
     switch (action.type) {
         case actionTypes.unpickStockActionTypes.RECEIVE_UNPICK_STOCK:
-        case actionTypes.unallocateConsignmentActionTypes.RECEIVE_UNALLOCATE_CONSIGNMENT:
+        case actionTypes.unallocateReqActionTypes.RECEIVE_UNALLOCATE_REQ:
             refresh(action.payload.data, dispatch);
             break;
         default:

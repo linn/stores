@@ -245,6 +245,7 @@ export default function Tpk({
                                 variant="contained"
                                 onClick={() => {
                                     refresh();
+                                    clearAllErrors();
                                 }}
                             >
                                 Refresh List
