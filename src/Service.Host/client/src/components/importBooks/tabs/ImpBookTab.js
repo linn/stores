@@ -319,7 +319,6 @@ function ImpBookTab({
                         type="number"
                         maxLength={20}
                         decimalPlaces={2}
-                        required
                         disabled
                     />
                 </Grid>
