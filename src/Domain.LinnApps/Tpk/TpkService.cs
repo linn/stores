@@ -112,25 +112,36 @@
             }
 
             var consignment = this.consignmentRepository.FindById(from.ConsignmentId);
-            return new TpkResult 
-                       {
-                           Success = true,
-                           Message = "TPK Successful",
-                           Transferred = transferredWithNotes,
-                           Report = new WhatToWandReport
-                                        {
-                                            Account = this.salesAccountQueryRepository
-                                                .FindBy(o => o.AccountId == consignment.SalesAccountId),
-                                            Consignment = consignment,
-                                            Type = this.tpkPack.GetWhatToWandType(consignment.ConsignmentId),
-                                            Lines = whatToWand,
-                                            CurrencyCode = this.salesOrderRepository
-                                                .FindBy(o => o.OrderNumber == whatToWand.First().OrderNumber)
-                                                .CurrencyCode, 
-                                            TotalNettValueOfConsignment = whatToWand.Sum(x => this.salesOrderDetailRepository
-                                                .FindBy(d => d.OrderNumber == x.OrderNumber && d.OrderLine == x.OrderLine).NettTotal),
-                                        },
-                                     };
+            try
+            {
+                return new TpkResult
+                           {
+                               Success = true,
+                               Message = "TPK Successful",
+                               Transferred = transferredWithNotes,
+                               Report = new WhatToWandReport
+                                            {
+                                                Account =
+                                                    this.salesAccountQueryRepository.FindBy(
+                                                        o => o.AccountId == consignment.SalesAccountId),
+                                                Consignment = consignment,
+                                                Type = this.tpkPack.GetWhatToWandType(consignment.ConsignmentId),
+                                                Lines = whatToWand,
+                                                CurrencyCode =
+                                                    this.salesOrderRepository.FindBy(
+                                                            o => o.OrderNumber == whatToWand.First().OrderNumber)
+                                                        .CurrencyCode,
+                                                TotalNettValueOfConsignment = whatToWand.Sum(
+                                                    x => this.salesOrderDetailRepository.FindBy(
+                                                        d => d.OrderNumber == x.OrderNumber
+                                                             && d.OrderLine == x.OrderLine).NettTotal),
+                                            },
+                           };
+            }
+            catch (Exception ex)
+            {
+                return new TpkResult { Success = false, Message = $"Error generating report. Stock transfer likely still succeeded. Click refresh to check. Error details: {ex.Message}" };
+            }
         }
 
         public ProcessResult UnpickStock(

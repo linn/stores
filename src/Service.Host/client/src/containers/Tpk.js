@@ -43,7 +43,10 @@ const mapDispatchToProps = {
     clearUnpickErrors: unpickStockActions.clearErrorsForItem,
     clearUnallocateErrors: unallocateReqActions.clearErrorsForItem,
     clearErrors: tpkActions.clearErrorsForItem,
-    clearData: tpkActions.clearProcessData
+    clearData: tpkActions.clearProcessData,
+    refresh: transferableStockActions.fetch,
+    clearUnpickData: unpickStockActions.clearProcessData,
+    clearUnallocateData: unallocateReqActions.clearProcessData
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Tpk));

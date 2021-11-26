@@ -23,7 +23,7 @@
         public ProcessResult UnallocateRequisition(int reqNumber, int? reqLineNumber, int userNumber)
         {
             var connection = this.databaseService.GetConnection();
-
+ 
             var cmd = new OracleCommand("stores_pack.unalloc_req_wrapper", connection)
                           {
                               CommandType = CommandType.StoredProcedure

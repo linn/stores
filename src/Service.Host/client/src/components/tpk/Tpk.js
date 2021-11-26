@@ -28,12 +28,23 @@ export default function Tpk({
     clearUnallocateErrors,
     unpickError,
     unallocateError,
-    userNumber
+    userNumber,
+    refresh,
+    clearUnpickData,
+    clearUnallocateData
 }) {
     const [selectedRows, setSelectedRows] = useState([]);
     const [dateTimeTpkViewQueried, setDateTimeTpkViewQueried] = useState(new Date());
     const [rows, setRows] = useState([]);
     const componentRef = useRef();
+
+    const clearAllErrors = () => {
+        clearErrors();
+        clearUnallocateErrors();
+        clearUnpickErrors();
+        clearUnpickData();
+        clearUnallocateData();
+    };
 
     const compare = (row, transferred) =>
         Object.keys(row).every(
@@ -178,8 +189,9 @@ export default function Tpk({
                                 style={{ marginTop: '22px' }}
                                 variant="contained"
                                 color="primary"
+                                disabled={!selectedRows?.length}
                                 onClick={() => {
-                                    clearErrors();
+                                    clearAllErrors();
                                     transferStock({
                                         stockToTransfer: selectedRows,
                                         dateTimeTpkViewQueried: dateTimeTpkViewQueried?.toISOString()
@@ -194,7 +206,7 @@ export default function Tpk({
                                 color="secondary"
                                 disabled={!selectedRows?.length || selectedRows?.length !== 1}
                                 onClick={() => {
-                                    clearUnpickErrors();
+                                    clearAllErrors();
                                     unpickStock({
                                         reqNumber: selectedRows[0].reqNumber,
                                         lineNumber: selectedRows[0].reqLine,
@@ -219,7 +231,7 @@ export default function Tpk({
                                     )
                                 }
                                 onClick={() => {
-                                    clearUnallocateErrors();
+                                    clearAllErrors();
                                     unallocateReq({
                                         reqNumber: selectedRows[0].reqNumber,
                                         unallocatedBy: userNumber
@@ -227,6 +239,15 @@ export default function Tpk({
                                 }}
                             >
                                 Unallocate Consignment
+                            </Button>
+                            <Button
+                                style={{ marginTop: '22px' }}
+                                variant="contained"
+                                onClick={() => {
+                                    refresh();
+                                }}
+                            >
+                                Refresh List
                             </Button>
                         </Grid>
                     </>
@@ -265,7 +286,10 @@ Tpk.propTypes = {
     unallocateReq: PropTypes.func.isRequired,
     clearUnpickErrors: PropTypes.func.isRequired,
     clearUnallocateErrors: PropTypes.func.isRequired,
-    userNumber: PropTypes.number.isRequired
+    userNumber: PropTypes.number.isRequired,
+    refresh: PropTypes.func.isRequired,
+    clearUnpickData: PropTypes.func.isRequired,
+    clearUnallocateData: PropTypes.func.isRequired
 };
 
 Tpk.defaultProps = {
