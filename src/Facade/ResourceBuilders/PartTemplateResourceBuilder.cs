@@ -1,6 +1,8 @@
 ﻿namespace Linn.Stores.Facade.ResourceBuilders
 {
     using System.Collections.Generic;
+    using System.Linq;
+
     using Linn.Common.Facade;
     using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps.Parts;
@@ -27,7 +29,9 @@
                            BomType = model.BomType,
                            AssemblyTechnology = model.AssemblyTechnology,
                            AllowPartCreation = model.AllowPartCreation,
-                           ParetoCode = model.ParetoCode
+                           ParetoCode = model.ParetoCode,
+                           Links = this.BuildLinks(model).ToArray()
+                           
                        };
         }
 
