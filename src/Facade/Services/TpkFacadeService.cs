@@ -21,14 +21,18 @@
 
         private readonly IStoresPack storesPack;
 
+        private readonly ITransactionManager transactionManager;
+
         public TpkFacadeService(
             IQueryRepository<TransferableStock> repository, 
             ITpkService domainService,
-            IStoresPack storesPack)
+            IStoresPack storesPack,
+            ITransactionManager transactionManager)
         {
             this.repository = repository;
             this.domainService = domainService;
             this.storesPack = storesPack;
+            this.transactionManager = transactionManager;
         }
 
         public IResult<IEnumerable<TransferableStock>> GetTransferableStock()
@@ -76,20 +80,26 @@
 
         public IResult<ProcessResult> UnallocateReq(UnallocateReqRequestResource resource)
         {
-            return new SuccessResult<ProcessResult>(this.storesPack.UnAllocateRequisition(resource.ReqNumber, null, resource.UnallocatedBy));
+            return new SuccessResult<ProcessResult>(this.storesPack.UnallocateRequisition(resource.ReqNumber, null, resource.UnallocatedBy));
         }
 
         public IResult<ProcessResult> UnpickStock(UnpickStockRequestResource resource)
         {
-            return new SuccessResult<ProcessResult>(
-                this.domainService.UnpickStock(
-                    resource.ReqNumber,
-                    resource.LineNumber,
-                    resource.OrderNumber,
-                    resource.OrderLine,
-                    resource.AmendedBy,
-                    resource.PalletNumber,
-                    resource.LocationId));
+            var result = this.domainService.UnpickStock(
+                resource.ReqNumber,
+                resource.LineNumber,
+                resource.OrderNumber,
+                resource.OrderLine,
+                resource.AmendedBy,
+                resource.PalletNumber,
+                resource.LocationId);
+
+            if (result.Success)
+            {
+                this.transactionManager.Commit();
+            }
+
+            return new SuccessResult<ProcessResult>(result);
         }
     }
 }

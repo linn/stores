@@ -10,8 +10,6 @@
 
         public int OrderLine { get; set; }
 
-        public int StockLocatorId { get; set; }
-
         public int AmendedBy { get; set; }
 
         public int PalletNumber { get; set; }

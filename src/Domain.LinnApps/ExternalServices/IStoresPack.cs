@@ -7,7 +7,7 @@
 
     public interface IStoresPack
     {
-        ProcessResult UnAllocateRequisition(int reqNumber, int? reqLineNumber, int userNumber);
+        ProcessResult UnallocateRequisition(int reqNumber, int? reqLineNumber, int userNumber);
 
         void DoTpk(int? locationId, int? palletNumber, DateTime dateTimeStarted, out bool success);
 

@@ -20,11 +20,11 @@
             this.databaseService = databaseService;
         }
 
-        public ProcessResult UnAllocateRequisition(int reqNumber, int? reqLineNumber, int userNumber)
+        public ProcessResult UnallocateRequisition(int reqNumber, int? reqLineNumber, int userNumber)
         {
             var connection = this.databaseService.GetConnection();
 
-            var cmd = new OracleCommand("stores_pack.unalloc_req", connection)
+            var cmd = new OracleCommand("stores_pack.unalloc_req_wrapper", connection)
                           {
                               CommandType = CommandType.StoredProcedure
                           };
@@ -55,14 +55,14 @@
                 });
             var messageParameter = new OracleParameter("p_message", OracleDbType.Varchar2)
                                        {
-                                           Direction = ParameterDirection.Output,
+                                           Direction = ParameterDirection.InputOutput,
                                            Size = 4000
                                        };
             cmd.Parameters.Add(messageParameter);
 
             var successParameter = new OracleParameter("p_success", OracleDbType.Int32)
                                        {
-                                           Direction = ParameterDirection.Output
+                                           Direction = ParameterDirection.InputOutput
                                        };
             cmd.Parameters.Add(successParameter);
 
@@ -562,7 +562,7 @@
             using (var connection = this.databaseService.GetConnection())
             {
                 connection.Open();
-                var cmd = new OracleCommand("stores_oo.unpick_stock", connection)
+                var cmd = new OracleCommand("stores_oo.unpick_stock_wrapper", connection)
                               {
                                   CommandType = CommandType.StoredProcedure
                               };
@@ -636,7 +636,7 @@
 
                 var messageParam = new OracleParameter("p_message", OracleDbType.Varchar2)
                                        {
-                                           Direction = ParameterDirection.Output,
+                                           Direction = ParameterDirection.InputOutput,
                                        };
                 cmd.Parameters.Add(messageParam);
 
