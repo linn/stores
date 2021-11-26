@@ -24,7 +24,7 @@
             using (var connection = this.databaseService.GetConnection())
             {
                 connection.Open();
-                var cmd = new OracleCommand("stores_oo.unalloc_req_wrapper", connection)
+                var cmd = new OracleCommand("stores_pack.unalloc_req", connection)
                 {
                     CommandType = CommandType.StoredProcedure
                 };
@@ -49,18 +49,6 @@
                 };
                 cmd.Parameters.Add(arg3);
 
-                var arg4 = new OracleParameter("p_qty_to_allocate", OracleDbType.Int32)
-                {
-                    Direction = ParameterDirection.Input
-                };
-                cmd.Parameters.Add(arg4);
-
-                var arg5 = new OracleParameter("p_qty_allocated", OracleDbType.Int32)
-                {
-                    Direction = ParameterDirection.Input
-                };
-                cmd.Parameters.Add(arg5);
-
                 var arg6 = new OracleParameter("p_commit ", OracleDbType.Int32)
                 {
                     Direction = ParameterDirection.Input,
@@ -68,17 +56,18 @@
                 };
                 cmd.Parameters.Add(arg6);
 
+                var messageParam = new OracleParameter("p_message", OracleDbType.Varchar2)
+                                       {
+                                           Direction = ParameterDirection.Output,
+                                           Size = 2000
+                                       };
+                cmd.Parameters.Add(messageParam);
+
                 var successParameter = new OracleParameter("p_success ", OracleDbType.Int32)
                 {
                     Direction = ParameterDirection.InputOutput,
                 };
                 cmd.Parameters.Add(successParameter);
-
-                var messageParam = new OracleParameter("p_message", OracleDbType.Varchar2)
-                {
-                    Direction = ParameterDirection.Output,
-                };
-                cmd.Parameters.Add(messageParam);
 
                 cmd.ExecuteNonQuery();
                 connection.Close();
@@ -517,7 +506,7 @@
 
                 var arg2 = new OracleParameter("p_line_number", OracleDbType.Int32)
                                {
-                                   Direction = ParameterDirection.Input,
+                                   Direction = ParameterDirection.Input, Value = lineNumber
                                };
                 cmd.Parameters.Add(arg2);
 
