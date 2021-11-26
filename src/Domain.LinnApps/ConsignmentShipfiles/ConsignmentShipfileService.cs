@@ -185,7 +185,6 @@
                             pdfData.PackingList =
                                 this.packingListService.BuildPackingList(pdfData.PackingList).ToArray();
                             var body = this.BuildEmailBody(pdfData);
-
                             toSend.Add(new ConsignmentShipfileEmailModel
                             {
                                 PdfAttachment = pdfData,
@@ -203,6 +202,7 @@
                 }
                 else
                 {
+                    shipfile.Message = null;
                     toSend.AddRange(
                         outlets.Select(o =>
                         {
