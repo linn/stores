@@ -511,10 +511,10 @@
                                };
                 cmd.Parameters.Add(arg5);
 
-                var arg6 = new OracleParameter("p_commit ", OracleDbType.Boolean)
+                var arg6 = new OracleParameter("p_commit ", OracleDbType.Int32)
                                {
                                    Direction = ParameterDirection.Input,
-                                   Value = new OracleBoolean(true) 
+                                   Value = 1
                                };
                 cmd.Parameters.Add(arg6);
 
