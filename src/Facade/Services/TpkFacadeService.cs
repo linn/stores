@@ -6,8 +6,11 @@
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Exceptions;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
+    using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Tpk;
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
+    using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Resources.Tpk;
 
     public class TpkFacadeService : ITpkFacadeService
@@ -16,10 +19,20 @@
 
         private readonly ITpkService domainService;
 
-        public TpkFacadeService(IQueryRepository<TransferableStock> repository, ITpkService domainService)
+        private readonly IStoresPack storesPack;
+
+        private readonly ITransactionManager transactionManager;
+
+        public TpkFacadeService(
+            IQueryRepository<TransferableStock> repository, 
+            ITpkService domainService,
+            IStoresPack storesPack,
+            ITransactionManager transactionManager)
         {
             this.repository = repository;
             this.domainService = domainService;
+            this.storesPack = storesPack;
+            this.transactionManager = transactionManager;
         }
 
         public IResult<IEnumerable<TransferableStock>> GetTransferableStock()
@@ -63,6 +76,30 @@
             {
                 return new BadRequestResult<TpkResult>(ex.Message);
             }
+        }
+
+        public IResult<ProcessResult> UnallocateReq(UnallocateReqRequestResource resource)
+        {
+            return new SuccessResult<ProcessResult>(this.storesPack.UnallocateRequisition(resource.ReqNumber, null, resource.UnallocatedBy));
+        }
+
+        public IResult<ProcessResult> UnpickStock(UnpickStockRequestResource resource)
+        {
+            var result = this.domainService.UnpickStock(
+                resource.ReqNumber,
+                resource.LineNumber,
+                resource.OrderNumber,
+                resource.OrderLine,
+                resource.AmendedBy,
+                resource.PalletNumber,
+                resource.LocationId);
+
+            if (result.Success)
+            {
+                this.transactionManager.Commit();
+            }
+
+            return new SuccessResult<ProcessResult>(result);
         }
     }
 }

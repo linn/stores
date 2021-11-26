@@ -7,7 +7,7 @@
 
     public interface IStoresPack
     {
-        ProcessResult UnAllocateRequisition(int reqNumber, int? reqLineNumber, int userNumber);
+        ProcessResult UnallocateRequisition(int reqNumber, int? reqLineNumber, int userNumber);
 
         void DoTpk(int? locationId, int? palletNumber, DateTime dateTimeStarted, out bool success);
 
@@ -40,5 +40,17 @@
         int GetQuantityBookedIn(int purchaseOrderNumber, int line);
 
         bool ValidOrderQty(int orderNumber, int orderLine, int qty, out int qtyRec, out int ourQty);
+
+        ProcessResult UnallocateReq(int reqNumber, int unallocatedBy);
+
+        ProcessResult UnpickStock(
+            int reqNumber, 
+            int lineNumber, 
+            int seq, 
+            int orderNumber, 
+            int orderLine, 
+            decimal qty, 
+            int? stockLocatorId, 
+            int amendedBy);
     }
 }
