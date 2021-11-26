@@ -75,6 +75,7 @@
                 });
             this.result = this.Sut.SendEmails(this.toSend);
         }
+
         [Test]
         public void ShouldSendEmail()
         {
@@ -90,6 +91,7 @@
                 Arg.Any<Stream>(),
                 Arg.Any<string>());
         }
+
         [Test]
         public void ShouldUpdateStatusMessage()
         {
