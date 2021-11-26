@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
+import Tooltip from '@material-ui/core/Tooltip';
 import {
     InputField,
     Dropdown,
@@ -253,16 +254,23 @@ function ImpBookTab({
                     />
                 </Grid>
                 <Grid item xs={6}>
-                    <InputField
-                        label="Total Import Value"
-                        value={totalImportValue}
-                        onChange={handleFieldChange}
-                        propertyName="totalImportValue"
-                        fullwidth
-                        type="number"
-                        disabled={!allowedToEdit}
-                        data-testid="totalImportValue"
-                    />
+                    <Tooltip
+                        title="Shouldn't need to manually enter this, auto calculated from invoice details below"
+                        placement="bottom-start"
+                    >
+                        <span>
+                            <InputField
+                                label="Total Import Value (GBP)"
+                                value={totalImportValue}
+                                onChange={handleFieldChange}
+                                propertyName="totalImportValue"
+                                fullwidth
+                                type="number"
+                                disabled={!allowedToEdit}
+                                data-testid="totalImportValue"
+                            />
+                        </span>
+                    </Tooltip>
                 </Grid>
                 <Grid item xs={1} />
 
@@ -303,7 +311,7 @@ function ImpBookTab({
                 <Grid item xs={6} />
                 <Grid item xs={6}>
                     <InputField
-                        label="Total Invoice Value"
+                        label="Total Invoice Value (Currency)"
                         value={totalInvoiceValue}
                         onChange={handleFieldChange}
                         propertyName="totalInvoiceValue"
@@ -311,6 +319,7 @@ function ImpBookTab({
                         type="number"
                         maxLength={20}
                         decimalPlaces={2}
+                        required
                         disabled
                     />
                 </Grid>

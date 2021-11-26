@@ -16,6 +16,7 @@ import {
 } from '@linn-it/linn-form-components-library';
 import Dialog from '@material-ui/core/Dialog';
 import Typography from '@material-ui/core/Typography';
+import moment from 'moment';
 import Page from '../../containers/Page';
 import ImpBookTab from '../../containers/importBooks/tabs/ImpBookTab';
 import OrderDetailsTab from '../../containers/importBooks/tabs/OrderDetailsTab';
@@ -95,9 +96,13 @@ function ImportBook({
         }
     }, [item, state.prevImpBook, editStatus, defaultImpBook]);
 
+    const dateToDdMmmYyyy = date => {
+        return date ? moment(date).format('DD-MMM-YYYY') : '-';
+    };
+
     useEffect(() => {
         if (state.impbook?.dateCreated) {
-            getExchangeRatesForDate(state.impbook.dateCreated);
+            getExchangeRatesForDate(dateToDdMmmYyyy(state.impbook.dateCreated));
         }
     }, [state.impbook.dateCreated, getExchangeRatesForDate]);
 
@@ -373,10 +378,10 @@ function ImportBook({
     };
 
     useEffect(() => {
-        if (snackbarVisible) {
+        if (snackbarVisible && state.impbook?.id !== -1) {
             print();
         }
-    }, [snackbarVisible]);
+    }, [snackbarVisible, state.impbook.id]);
 
     const useStyles = makeStyles(theme => ({
         spaceAbove: {
@@ -442,7 +447,7 @@ function ImportBook({
                 <Page width="xl">
                     <ImpBookPrintOut
                         impbookId={state.impbook.id}
-                        dateCreated={state.impbook.dateCreated}
+                        dateCreated={dateToDdMmmYyyy(state.impbook.dateCreated)}
                         createdBy={state.impbook.createdBy}
                         createdByName={getEmployeeNameById(state.impbook.createdBy)}
                         supplierId={state.impbook.supplierId}
@@ -464,10 +469,10 @@ function ImportBook({
                         deliveryTermCode={state.impbook.deliveryTermCode}
                         customsEntryCodePrefix={state.impbook.customsEntryCodePrefix}
                         customsEntryCode={state.impbook.customsEntryCode}
-                        customsEntryCodeDate={state.impbook.customsEntryCodeDate}
+                        customsEntryCodeDate={dateToDdMmmYyyy(state.impbook.customsEntryCodeDate)}
                         linnDuty={state.impbook.linnDuty}
                         linnVat={state.impbook.linnVat}
-                        arrivalDate={state.impbook.arrivalDate}
+                        arrivalDate={dateToDdMmmYyyy(state.impbook.arrivalDate)}
                         remainingInvoiceValue={calcRemainingTotal()}
                         remainingDutyValue={calcRemainingDuty()}
                         remainingWeightValue={calcRemainingWeight()}
