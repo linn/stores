@@ -48,10 +48,10 @@
                 });
 
             cmd.Parameters.Add(
-                new OracleParameter("p_commit", OracleDbType.Boolean)
+                new OracleParameter("p_commit", OracleDbType.Int32)
                 {
                     Direction = ParameterDirection.Input,
-                    Value = new OracleBoolean(true)
+                    Value = 1
                 });
             var messageParameter = new OracleParameter("p_message", OracleDbType.Varchar2)
                                        {
@@ -466,86 +466,6 @@
                 int.TryParse(arg4.Value.ToString(), out qtyRec);
                 int.TryParse(arg5.Value.ToString(), out ourQty);
                 return int.Parse(result.Value.ToString()) == 0;
-            }
-        }
-
-        public ProcessResult UnallocateReq(int reqNumber, int unallocatedBy)
-        {
-            using (var connection = this.databaseService.GetConnection())
-            {
-                connection.Open();
-                var cmd = new OracleCommand("stores_oo.unpick_stock", connection)
-                {
-                    CommandType = CommandType.StoredProcedure
-                };
-
-                var arg1 = new OracleParameter("p_req_number", OracleDbType.Int32)
-                {
-                    Direction = ParameterDirection.Input,
-                    Value = reqNumber
-                };
-                cmd.Parameters.Add(arg1);
-
-                var arg2 = new OracleParameter("p_line_number", OracleDbType.Int32)
-                               {
-                                   Direction = ParameterDirection.Input,
-                               };
-                cmd.Parameters.Add(arg2);
-
-                var arg3 = new OracleParameter("p_unalloc_by", OracleDbType.Int32)
-                               {
-                                   Direction = ParameterDirection.Input,
-                                   Value = unallocatedBy
-                               };
-                cmd.Parameters.Add(arg3);
-
-                var arg4 = new OracleParameter("p_qty_to_allocate", OracleDbType.Int32)
-                               {
-                                   Direction = ParameterDirection.Input
-                               };
-                cmd.Parameters.Add(arg4);
-
-                var arg5 = new OracleParameter("p_qty_allocated", OracleDbType.Int32)
-                               {
-                                   Direction = ParameterDirection.Input
-                               };
-                cmd.Parameters.Add(arg5);
-
-                var arg6 = new OracleParameter("p_commit ", OracleDbType.Int32)
-                               {
-                                   Direction = ParameterDirection.Input,
-                                   Value = 1
-                               };
-                cmd.Parameters.Add(arg6);
-
-                var successParameter = new OracleParameter("p_success ", OracleDbType.Int32)
-                               {
-                                   Direction = ParameterDirection.InputOutput,
-                               };
-                cmd.Parameters.Add(successParameter);
-
-                var messageParam = new OracleParameter("p_message", OracleDbType.Varchar2)
-                                       {
-                                           Direction = ParameterDirection.Output,
-                                       };
-                cmd.Parameters.Add(messageParam);
-
-                cmd.ExecuteNonQuery();
-                connection.Close();
-
-                if (int.TryParse(successParameter.Value.ToString(), out var success))
-                {
-                    if (success == 1)
-                    {
-                        return new ProcessResult(true, null);
-                    }
-
-                    return new ProcessResult(
-                        false,
-                        $"Failed to unallocate line: {reqNumber}. {messageParam.Value}");
-                }
-
-                return new ProcessResult(false, "Failed in procedure call: stores_oo.unallocate_req");
             }
         }
 
