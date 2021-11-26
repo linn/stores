@@ -12,8 +12,8 @@
 
         public int AmendedBy { get; set; }
 
-        public int PalletNumber { get; set; }
+        public int? PalletNumber { get; set; }
 
-        public int LocationId { get; set; }
+        public int? LocationId { get; set; }
     }
 }

@@ -10,6 +10,7 @@ import unallocateReqSelectors from '../selectors/uanllocateReqSelectors';
 import * as processTypes from '../processTypes';
 import unpickStockActions from '../actions/unpickStockActions';
 import unallocateReqActions from '../actions/unallocateReqActions';
+import { getUserNumber } from '../selectors/userSelectors';
 
 const mapStateToProps = state => ({
     transferableStock: transferableStockSelectors.getItems(state),
@@ -23,7 +24,8 @@ const mapStateToProps = state => ({
     unpickStockLoading: unpickStockSelectors.getWorking(state),
     unpickStockResult: unpickStockSelectors.getData(state),
     unallocateReqLoading: unallocateReqSelectors.getWorking(state),
-    unallocateReqResult: unallocateReqSelectors.getData(state)
+    unallocateReqResult: unallocateReqSelectors.getData(state),
+    userNumber: getUserNumber(state)
 });
 
 const initialise = () => dispatch => {

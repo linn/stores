@@ -5,7 +5,7 @@ import * as processTypes from '../processTypes';
 const defaultState = { working: false, messageText: '', messageVisible: false };
 
 export default processStoreFactory(
-    processTypes.unpickItemsAllocation.actionType,
+    processTypes.unpickStock.actionType,
     actionTypes,
     defaultState,
     'STOCK UNPICKED'

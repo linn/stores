@@ -48,10 +48,10 @@
                 });
 
             cmd.Parameters.Add(
-                new OracleParameter("p_commit", OracleDbType.Int32)
+                new OracleParameter("p_commit", OracleDbType.Boolean)
                 {
                     Direction = ParameterDirection.Input,
-                    Value = 1
+                    Value = new OracleBoolean(true)
                 });
             var messageParameter = new OracleParameter("p_message", OracleDbType.Varchar2)
                                        {
@@ -611,7 +611,7 @@
 
                 var arg8 = new OracleParameter("p_upd_sod_alloc_qty", OracleDbType.Varchar2)
                                {
-                                   Direction = ParameterDirection.Input, Value = "Y"
+                                   Direction = ParameterDirection.Input, Value = "Y", Size = 1
                                };
                 cmd.Parameters.Add(arg8);
 
@@ -630,13 +630,16 @@
 
                 var arg11 = new OracleParameter("p_realloc", OracleDbType.Varchar2)
                                 {
-                                    Direction = ParameterDirection.Input, Value = "N"
+                                    Direction = ParameterDirection.Input, 
+                                    Value = "N",
+                                    Size = 1
                                 };
                 cmd.Parameters.Add(arg11);
 
                 var messageParam = new OracleParameter("p_message", OracleDbType.Varchar2)
                                        {
                                            Direction = ParameterDirection.InputOutput,
+                                           Size = 100
                                        };
                 cmd.Parameters.Add(messageParam);
 

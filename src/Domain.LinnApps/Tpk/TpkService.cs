@@ -140,7 +140,7 @@
             int orderLine, 
             int amendedBy,
             int? palletNumber,
-            int locationId)
+            int? locationId)
         {
             var moves = this.reqMovesRepository.FilterBy(
                 x => x.ReqNumber == reqNumber 

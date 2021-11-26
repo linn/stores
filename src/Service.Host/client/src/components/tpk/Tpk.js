@@ -27,7 +27,8 @@ export default function Tpk({
     clearUnpickErrors,
     clearUnallocateErrors,
     unpickError,
-    unallocateError
+    unallocateError,
+    userNumber
 }) {
     const [selectedRows, setSelectedRows] = useState([]);
     const [dateTimeTpkViewQueried, setDateTimeTpkViewQueried] = useState(new Date());
@@ -137,6 +138,16 @@ export default function Tpk({
                                 />
                             </Grid>
                         )}
+                        {unpickStockResult && !unpickStockResult.success && (
+                            <Grid item xs={12}>
+                                <ErrorCard errorMessage={unpickStockResult?.message} />
+                            </Grid>
+                        )}
+                        {unallocateReqResult && !unallocateReqResult.success && (
+                            <Grid item xs={12}>
+                                <ErrorCard errorMessage={unallocateReqResult?.message} />
+                            </Grid>
+                        )}
                         {unallocateError && (
                             <Grid item xs={12}>
                                 <ErrorCard
@@ -147,45 +158,6 @@ export default function Tpk({
                                 />
                             </Grid>
                         )}
-                        <Grid item xs={12}>
-                            <Button
-                                style={{ marginTop: '22px' }}
-                                variant="contained"
-                                onClick={() => {
-                                    clearErrors();
-                                    transferStock({
-                                        stockToTransfer: selectedRows,
-                                        dateTimeTpkViewQueried: dateTimeTpkViewQueried?.toISOString()
-                                    });
-                                }}
-                            >
-                                Transfer
-                            </Button>
-                            <Button
-                                style={{ marginTop: '22px' }}
-                                variant="contained"
-                                onClick={() => {
-                                    clearUnpickErrors();
-                                    unpickStock({
-                                        reqNumber: selectedRows[0].reqNumber,
-                                        orderNumber: selectedRows[0].orderNumber,
-                                        orderLine: selectedRows[0].orderLine
-                                    });
-                                }}
-                            >
-                                Unpick Stock
-                            </Button>
-                            <Button
-                                style={{ marginTop: '22px' }}
-                                variant="contained"
-                                onClick={() => {
-                                    clearUnallocateErrors();
-                                    unallocateReq({ reqNumber: selectedRows[0].reqNumber });
-                                }}
-                            >
-                                Unallocate Consignment
-                            </Button>
-                        </Grid>
                         <Grid item xs={12}>
                             <div style={{ height: 500, width: '100%' }}>
                                 <DataGrid
@@ -200,6 +172,62 @@ export default function Tpk({
                                     hideFooter
                                 />
                             </div>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button
+                                style={{ marginTop: '22px' }}
+                                variant="contained"
+                                color="primary"
+                                onClick={() => {
+                                    clearErrors();
+                                    transferStock({
+                                        stockToTransfer: selectedRows,
+                                        dateTimeTpkViewQueried: dateTimeTpkViewQueried?.toISOString()
+                                    });
+                                }}
+                            >
+                                Transfer
+                            </Button>
+                            <Button
+                                style={{ marginTop: '22px' }}
+                                variant="contained"
+                                color="secondary"
+                                disabled={!selectedRows?.length || selectedRows?.length !== 1}
+                                onClick={() => {
+                                    clearUnpickErrors();
+                                    unpickStock({
+                                        reqNumber: selectedRows[0].reqNumber,
+                                        lineNumber: selectedRows[0].reqLine,
+                                        orderNumber: selectedRows[0].orderNumber,
+                                        orderLine: selectedRows[0].orderLine,
+                                        palletNumber: selectedRows[0].palletNumber,
+                                        locationId: selectedRows[0].locationId,
+                                        amendedBy: userNumber
+                                    });
+                                }}
+                            >
+                                Unpick Stock
+                            </Button>
+                            <Button
+                                style={{ marginTop: '22px' }}
+                                variant="contained"
+                                color="secondary"
+                                disabled={
+                                    !selectedRows?.length ||
+                                    selectedRows?.some(
+                                        r => r.reqNumber !== selectedRows[0]?.reqNumber
+                                    )
+                                }
+                                onClick={() => {
+                                    clearUnallocateErrors();
+                                    unallocateReq({
+                                        reqNumber: selectedRows[0].reqNumber,
+                                        unallocatedBy: userNumber
+                                    });
+                                }}
+                            >
+                                Unallocate Consignment
+                            </Button>
                         </Grid>
                     </>
                 )}
@@ -230,13 +258,14 @@ Tpk.propTypes = {
     whatToWandReport: PropTypes.shape({}),
     clearData: PropTypes.func.isRequired,
     unpickStockLoading: PropTypes.bool,
-    unpickStockResult: PropTypes.shape({}),
+    unpickStockResult: PropTypes.shape({ success: PropTypes.bool, message: PropTypes.string }),
     unallocateReqLoading: PropTypes.bool,
-    unallocateReqResult: PropTypes.shape({}),
+    unallocateReqResult: PropTypes.shape({ success: PropTypes.bool, message: PropTypes.string }),
     unpickStock: PropTypes.func.isRequired,
     unallocateReq: PropTypes.func.isRequired,
     clearUnpickErrors: PropTypes.func.isRequired,
-    clearUnallocateErrors: PropTypes.func.isRequired
+    clearUnallocateErrors: PropTypes.func.isRequired,
+    userNumber: PropTypes.number.isRequired
 };
 
 Tpk.defaultProps = {

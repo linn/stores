@@ -3,6 +3,7 @@
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Resources.Tpk;
+    using Linn.Stores.Service.Extensions;
 
     using Nancy;
     using Nancy.ModelBinding;

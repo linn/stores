@@ -14,6 +14,6 @@
             int orderLine,
             int amendedBy,
             int? palletNumber,
-            int locationId);
+            int? locationId);
     }
 }
