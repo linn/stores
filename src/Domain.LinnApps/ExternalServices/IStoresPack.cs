@@ -41,8 +41,6 @@
 
         bool ValidOrderQty(int orderNumber, int orderLine, int qty, out int qtyRec, out int ourQty);
 
-        ProcessResult UnallocateReq(int reqNumber, int unallocatedBy);
-
         ProcessResult UnpickStock(
             int reqNumber, 
             int lineNumber, 

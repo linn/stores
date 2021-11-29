@@ -216,6 +216,7 @@ export default function Tpk({
                                         locationId: selectedRows[0].locationId,
                                         amendedBy: userNumber
                                     });
+                                    setSelectedRows([]);
                                 }}
                             >
                                 Unpick Stock
@@ -236,6 +237,7 @@ export default function Tpk({
                                         reqNumber: selectedRows[0].reqNumber,
                                         unallocatedBy: userNumber
                                     });
+                                    setSelectedRows([]);
                                 }}
                             >
                                 Unallocate Consignment
@@ -245,6 +247,8 @@ export default function Tpk({
                                 variant="contained"
                                 onClick={() => {
                                     refresh();
+                                    setSelectedRows([]);
+                                    clearAllErrors();
                                 }}
                             >
                                 Refresh List
