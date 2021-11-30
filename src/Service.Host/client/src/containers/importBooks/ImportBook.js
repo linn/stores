@@ -24,7 +24,7 @@ const mapStateToProps = (state, { match }) => ({
     editStatus: creating(match) ? 'create' : importBookSelectors.getEditStatus(state),
     loading: importBookSelectors.getLoading(state),
     snackbarVisible: importBookSelectors.getSnackbarVisible(state),
-    itemError: getItemError(state, itemTypes.part.item),
+    itemError: getItemError(state, itemTypes.importBook.item),
     privileges: getPrivileges(state),
     userNumber: getUserNumber(state),
     allSuppliers: suppliersSelectors.getItems(state),

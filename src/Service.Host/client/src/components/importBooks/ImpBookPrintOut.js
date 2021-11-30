@@ -7,7 +7,6 @@ import { makeStyles } from '@material-ui/styles';
 import { Typography } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
-import moment from 'moment';
 
 function ImpBookPrintOut({
     impbookId,
@@ -57,10 +56,6 @@ function ImpBookPrintOut({
     }));
     const classes = useStyles();
 
-    const dateToDdMmmYyyy = date => {
-        return date ? moment(date).format('DD-MMM-YYYY') : '-';
-    };
-
     const getCpcNumber = id => {
         return cpcNumbers.find(x => x.id === id)?.displayText;
     };
@@ -73,7 +68,7 @@ function ImpBookPrintOut({
                 </Grid>
 
                 <Grid item xs={4}>
-                    Date Created: <b>{dateToDdMmmYyyy(dateCreated)}</b>
+                    Date Created: <b>{dateCreated}</b>
                 </Grid>
                 <Grid item xs={4}>
                     Created By:{' '}
@@ -181,7 +176,7 @@ function ImpBookPrintOut({
                     Delivery Term Code: <b>{deliveryTermCode}</b>
                 </Grid>
                 <Grid item xs={3}>
-                    Customs Entry Date: <b>{dateToDdMmmYyyy(customsEntryCodeDate)}</b>
+                    Customs Entry Date: <b>{customsEntryCodeDate}</b>
                 </Grid>
 
                 <Grid item xs={9}>
@@ -192,7 +187,7 @@ function ImpBookPrintOut({
                 </Grid>
 
                 <Grid item xs={9}>
-                    Arrival Date: <b>{dateToDdMmmYyyy(arrivalDate)}</b>
+                    Arrival Date: <b>{arrivalDate}</b>
                 </Grid>
                 <Grid item xs={3}>
                     Linn Vat: <b>{linnVat}</b>
