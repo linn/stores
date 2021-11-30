@@ -103,7 +103,7 @@
             builder.RegisterType<CountryFacadeService>()
                 .As<IFacadeService<Country, string, CountryResource, CountryResource>>();
             builder.RegisterType<PartTemplateService>()
-                .As<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
+                .As<IFacadeFilterService<PartTemplate, string, PartTemplateResource, PartTemplateResource, PartTemplateSearchRequestResource>>();
             builder.RegisterType<PartLiveService>().As<IPartLiveService>();
             builder.RegisterType<StoragePlaceAuditReportFacadeService>().As<IStoragePlaceAuditReportFacadeService>();
             builder.RegisterType<AuditLocationService>().As<IAuditLocationService>();

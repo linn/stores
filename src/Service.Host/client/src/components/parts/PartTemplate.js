@@ -201,7 +201,10 @@ function PartTemplate({
                             <Dropdown
                                 label="Number Seq?"
                                 propertyName="hasNumberSequence"
-                                items={['Y', 'N']}
+                                items={[
+                                    { id: 'Y', displayText: 'Yes' },
+                                    { id: 'N', displayText: 'No' }
+                                ]}
                                 fullWidth
                                 required
                                 value={partTemplate.hasNumberSequence}
@@ -226,7 +229,11 @@ function PartTemplate({
                             <Dropdown
                                 label="Allow Variants"
                                 propertyName="allowVariants"
-                                items={['N', 'R', 'A']}
+                                items={[
+                                    { id: 'N', displayText: 'No' },
+                                    { id: 'R', displayText: 'Restricted' },
+                                    { id: 'A', displayText: 'Any' }
+                                ]}
                                 required
                                 fullWidth
                                 value={partTemplate.allowVariants}
@@ -251,7 +258,11 @@ function PartTemplate({
                             <Dropdown
                                 label="Allow Part Creation"
                                 propertyName="allowPartCreation"
-                                items={['Y', 'N', 'S']}
+                                items={[
+                                    { id: 'Y', displayText: 'Yes' },
+                                    { id: 'N', displayText: 'No' },
+                                    { id: 'S', displayText: 'Sourced Only' }
+                                ]}
                                 fullWidth
                                 required
                                 value={partTemplate.allowPartCreation}
@@ -263,7 +274,10 @@ function PartTemplate({
                             <Dropdown
                                 label="Has Datasheet"
                                 propertyName="hasDataSheet"
-                                items={['Y', 'N']}
+                                items={[
+                                    { id: 'Y', displayText: 'Yes' },
+                                    { id: 'N', displayText: 'No' }
+                                ]}
                                 fullWidth
                                 required
                                 value={partTemplate.hasDataSheet}
@@ -302,7 +316,10 @@ function PartTemplate({
                             <Dropdown
                                 label="Linn Produced"
                                 propertyName="linnProduced"
-                                items={['Y', 'N']}
+                                items={[
+                                    { id: 'Y', displayText: 'Yes' },
+                                    { id: 'N', displayText: 'No' }
+                                ]}
                                 fullWidth
                                 value={partTemplate.linnProduced}
                                 onChange={handleFieldChange}
@@ -313,7 +330,10 @@ function PartTemplate({
                             <Dropdown
                                 label="Stock Controlled"
                                 propertyName="linnProduced"
-                                items={['Y', 'N']}
+                                items={[
+                                    { id: 'Y', displayText: 'Yes' },
+                                    { id: 'N', displayText: 'No' }
+                                ]}
                                 fullWidth
                                 value={partTemplate.linnProduced}
                                 onChange={handleFieldChange}
@@ -326,7 +346,11 @@ function PartTemplate({
                             <Dropdown
                                 label="Bom Type"
                                 propertyName="bomType"
-                                items={['C', 'A', 'P']}
+                                items={[
+                                    { id: 'C', displayText: 'Component' },
+                                    { id: 'A', displayText: 'Assembly' },
+                                    { id: 'P', displayText: 'Phantom' }
+                                ]}
                                 fullWidth
                                 value={partTemplate.bomType}
                                 onChange={handleFieldChange}
@@ -337,7 +361,10 @@ function PartTemplate({
                             <Dropdown
                                 label="Rm fg"
                                 propertyName="rmfgCode"
-                                items={['R', 'F']}
+                                items={[
+                                    { id: 'R', displayText: 'Raw Material' },
+                                    { id: 'F', displayText: 'Finished Good' }
+                                ]}
                                 fullWidth
                                 value={partTemplate.rmfgCode}
                                 onChange={handleFieldChange}

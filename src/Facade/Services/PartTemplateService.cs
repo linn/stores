@@ -7,8 +7,9 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources.Parts;
+    using Linn.Stores.Resources.RequestResources;
 
-    public class PartTemplateService : FacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>
+    public class PartTemplateService : FacadeFilterService<PartTemplate, string, PartTemplateResource, PartTemplateResource, PartTemplateSearchRequestResource>
     {
         public PartTemplateService(IRepository<PartTemplate, string> repository, ITransactionManager transactionManager)
             : base(repository, transactionManager)
@@ -62,7 +63,29 @@
 
         protected override Expression<Func<PartTemplate, bool>> SearchExpression(string searchTerm)
         {
-            throw new NotImplementedException();
+            return partTemplate => partTemplate.PartRoot.ToUpper().Contains(searchTerm.ToUpper())
+                           || partTemplate.Description.ToUpper().Contains(searchTerm.ToUpper())
+                           || partTemplate.AccountingCompany.ToUpper().Contains(searchTerm.ToUpper())
+                           || partTemplate.ProductCode.ToUpper().Contains(searchTerm.ToUpper())
+                           || partTemplate.AssemblyTechnology.ToUpper().Contains(searchTerm.ToUpper())
+                           || partTemplate.ParetoCode.ToUpper().Contains(searchTerm.ToUpper());
+        }
+
+        protected override Expression<Func<PartTemplate, bool>> FilterExpression(PartTemplateSearchRequestResource searchTerms)
+        {
+            return x =>
+                (string.IsNullOrWhiteSpace(searchTerms.PartRootSearchTerm)
+                 || x.PartRoot.ToString().Contains(searchTerms.PartRootSearchTerm))
+                && (string.IsNullOrWhiteSpace(searchTerms.AccountingCompanySearchTerm)
+                    || x.AccountingCompany.Contains(searchTerms.AccountingCompanySearchTerm))
+                && (string.IsNullOrWhiteSpace(searchTerms.AssemblyTechnologySearchTerm)
+                    || x.AssemblyTechnology.Contains(searchTerms.AssemblyTechnologySearchTerm))
+                && (string.IsNullOrWhiteSpace(searchTerms.DescriptionSearchTerm)
+                    || x.Description.Contains(searchTerms.DescriptionSearchTerm))
+                && (string.IsNullOrWhiteSpace(searchTerms.ParetoCodeSearchTerm)
+                    || x.ParetoCode.Contains(searchTerms.ParetoCodeSearchTerm))
+                && (string.IsNullOrWhiteSpace(searchTerms.ProductCodeSearchTerm)
+                    || x.ProductCode.Contains(searchTerms.ProductCodeSearchTerm));
         }
     }
 }
