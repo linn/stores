@@ -83,11 +83,9 @@ function PartTemplate({
     );
 
     useEffect(() => {
-        console.log(item);
         if (item && item !== prevPartTemplate) {
             setPartTemplate(item);
             setPrevPartTemplate(item);
-            console.log(item);
         }
     }, [item, prevPartTemplate]);
 
@@ -142,7 +140,6 @@ function PartTemplate({
     const handleFieldChange = (propertyName, newValue) => {
         if (viewing() || creating()) {
             setEditStatus('edit');
-            console.log(newValue);
         }
 
         setPartTemplate(x => ({ ...x, [propertyName]: newValue }));
