@@ -8,6 +8,7 @@ import {
     Title,
     ErrorCard,
     SnackbarMessage,
+    Typeahead,
     Dropdown
 } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
@@ -27,7 +28,12 @@ function PartTemplate({
     setSnackbarVisible,
     inDialogBox,
     privileges,
-    closeDialog
+    closeDialog,
+    productAnalysisCodeSearchResults,
+    productAnalysisCodesSearchLoading,
+    searchProductAnalysisCodes,
+    clearProductAnalysisCodesSearch,
+    assemblyTechnology
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -77,9 +83,11 @@ function PartTemplate({
     );
 
     useEffect(() => {
+        console.log(item);
         if (item && item !== prevPartTemplate) {
             setPartTemplate(item);
             setPrevPartTemplate(item);
+            console.log(item);
         }
     }, [item, prevPartTemplate]);
 
@@ -132,11 +140,22 @@ function PartTemplate({
     };
 
     const handleFieldChange = (propertyName, newValue) => {
-        if (viewing()) {
+        if (viewing() || creating()) {
             setEditStatus('edit');
+            console.log(newValue);
         }
 
-        setPartTemplate({ ...partTemplate, [propertyName]: newValue });
+        setPartTemplate(x => ({ ...x, [propertyName]: newValue }));
+    };
+
+    const handleProductCodeChange = product => {
+        handleFieldChange('productCode', product.name);
+        handleFieldChange('productAnalysisCodeDescription', product.description);
+    };
+
+    const handleAssemblyTechChange = assembly => {
+        handleFieldChange('assemblyTechnology', assembly.name);
+        handleFieldChange('assemblyTechnologyDescription', assembly.description);
     };
 
     const allowedToEdit = () => {
@@ -287,26 +306,41 @@ function PartTemplate({
                         <Grid item xs={12} />
 
                         <Grid item xs={4}>
-                            <InputField
-                                fullWidth
-                                value={partTemplate.accountingCompany}
+                            <Dropdown
                                 label="Accounting Company"
-                                maxLength={10}
-                                onChange={handleFieldChange}
                                 propertyName="accountingCompany"
-                                disabled={!allowedToEdit()}
+                                items={[
+                                    { id: 'LINN', displayText: 'Linn Products Ltd' },
+                                    { id: 'RECORDS', displayText: 'Linn Records' }
+                                ]}
+                                fullWidth
+                                required
+                                value={partTemplate.accountingCompany}
+                                onChange={handleFieldChange}
                             />
                         </Grid>
 
                         <Grid item xs={4}>
+                            <Typeahead
+                                onSelect={handleProductCodeChange}
+                                label="Product Analysis Code"
+                                modal
+                                items={productAnalysisCodeSearchResults}
+                                value={partTemplate.productCode}
+                                loading={productAnalysisCodesSearchLoading}
+                                fetchItems={searchProductAnalysisCodes}
+                                links={false}
+                                clearSearch={clearProductAnalysisCodesSearch}
+                                placeholder="Search Codes"
+                            />
+                        </Grid>
+                        <Grid item xs={8}>
                             <InputField
                                 fullWidth
-                                value={partTemplate.productCode}
-                                label="Product Code"
-                                maxLength={10}
-                                onChange={handleFieldChange}
-                                propertyName="productCode"
-                                disabled={!allowedToEdit()}
+                                value={partTemplate.productAnalysisCodeDescription}
+                                label="Description"
+                                disabled
+                                propertyName="ProductAnalysisCodeDescription"
                             />
                         </Grid>
 
@@ -372,16 +406,39 @@ function PartTemplate({
                         </Grid>
 
                         <Grid item xs={6} />
-
-                        <Grid item xs={3}>
-                            <InputField
+                        <Grid item xs={6}>
+                            <Dropdown
+                                label="Assembly Technology"
+                                propertyName="assemblyTechnology"
+                                items={assemblyTechnology.map(c => ({
+                                    id: c.name,
+                                    displayText: c.description
+                                }))}
                                 fullWidth
-                                value={partTemplate.paretoCode}
+                                allowNoValue
+                                value={partTemplate.assemblyTechnology}
+                                onChange={handleAssemblyTechChange}
+                            />
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Dropdown
+                                fullWidth
                                 label="Pareto Code"
+                                propertyName="paretoCode"
+                                items={[
+                                    { id: 'A', displayText: 'A - BOUGHT IN, TOP 80% OF SPEND' },
+                                    { id: 'B', displayText: 'B - BOUGHT IN, NEXT 15% OF SPEND' },
+                                    { id: 'C', displayText: 'C - BOUGHT IN, LEAST 5% OF SPEND' },
+                                    { id: 'D', displayText: 'D - BOUGHT IN. NO USAGE' },
+                                    { id: 'E', displayText: 'E - LINN PRODUCED PARTS' },
+                                    { id: 'L', displayText: 'L - LOEWE TVS AND ACCESSORIES' },
+                                    { id: 'R', displayText: 'R - ALL RECORDS, TAPES AND CDS' },
+                                    { id: 'U', displayText: 'U - UNSOURCED COMPONENTS' },
+                                    { id: 'X', displayText: 'X - PARTS OUTWITH PARETO CODES' }
+                                ]}
+                                value={partTemplate.paretoCode}
                                 maxLength={2}
                                 onChange={handleFieldChange}
-                                propertyName="paretoCode"
-                                disabled={!allowedToEdit()}
                             />
                         </Grid>
 
@@ -416,6 +473,11 @@ function PartTemplate({
     );
 }
 
+const productAnalysisCodeShape = PropTypes.shape({
+    productCode: PropTypes.string,
+    description: PropTypes.string
+});
+
 PartTemplate.propTypes = {
     item: PropTypes.shape({
         partTemplateNumber: PropTypes.number
@@ -437,7 +499,12 @@ PartTemplate.propTypes = {
     setSnackbarVisible: PropTypes.func.isRequired,
     inDialogBox: PropTypes.bool,
     privileges: PropTypes.arrayOf(PropTypes.string).isRequired,
-    closeDialog: PropTypes.func
+    closeDialog: PropTypes.func,
+    productAnalysisCodeSearchResults: PropTypes.arrayOf(productAnalysisCodeShape),
+    searchProductAnalysisCodes: PropTypes.func.isRequired,
+    clearProductAnalysisCodesSearch: PropTypes.func,
+    productAnalysisCodesSearchLoading: PropTypes.bool,
+    assemblyTechnology: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 PartTemplate.defaultProps = {
@@ -465,7 +532,11 @@ PartTemplate.defaultProps = {
     itemError: null,
     itemId: null,
     inDialogBox: false,
-    closeDialog: null
+    closeDialog: null,
+    productAnalysisCodeSearchResults: [],
+    productAnalysisCodesSearchLoading: false,
+    assemblyTechnology: [],
+    clearProductAnalysisCodesSearch: () => {}
 };
 
 export default PartTemplate;
