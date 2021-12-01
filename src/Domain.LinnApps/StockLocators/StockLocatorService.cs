@@ -127,7 +127,7 @@
 
         public void DeleteStockLocator(StockLocator toDelete, IEnumerable<string> privileges)
         {
-            if (!this.authService.HasPermissionFor(AuthorisedAction.CreateStockLocator, privileges))
+            if (!this.authService.HasPermissionFor(AuthorisedAction.UpdateStockLocator, privileges))
             {
                 throw new StockLocatorException("You are not authorised to delete.");
             }
