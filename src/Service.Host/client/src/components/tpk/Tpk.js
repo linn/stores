@@ -16,8 +16,9 @@ export default function Tpk({
     itemError,
     clearErrors,
     tpkLoading,
-    whatToWandReport,
+    tpkResult,
     clearData,
+    whatToWandReport,
     unpickStockLoading,
     unpickStockResult,
     unallocateReqLoading,
@@ -44,6 +45,7 @@ export default function Tpk({
         clearUnpickErrors();
         clearUnpickData();
         clearUnallocateData();
+        clearData();
     };
 
     const compare = (row, transferred) =>
@@ -138,6 +140,11 @@ export default function Tpk({
                                         itemError?.details?.errors?.[0] || itemError.statusText
                                     }
                                 />
+                            </Grid>
+                        )}
+                        {tpkResult && !tpkResult.success && (
+                            <Grid item xs={12}>
+                                <ErrorCard errorMessage={tpkResult.message} />
                             </Grid>
                         )}
                         {unpickError && (
@@ -280,8 +287,9 @@ Tpk.propTypes = {
         details: PropTypes.shape({ errors: PropTypes.arrayOf(PropTypes.string) })
     }),
     tpkLoading: PropTypes.bool,
-    whatToWandReport: PropTypes.shape({}),
+    tpkResult: PropTypes.shape({ success: PropTypes.bool, message: PropTypes.string }),
     clearData: PropTypes.func.isRequired,
+    whatToWandReport: PropTypes.shape({}),
     unpickStockLoading: PropTypes.bool,
     unpickStockResult: PropTypes.shape({ success: PropTypes.bool, message: PropTypes.string }),
     unallocateReqLoading: PropTypes.bool,
@@ -304,6 +312,7 @@ Tpk.defaultProps = {
     unpickError: null,
     unallocateError: null,
     tpkLoading: false,
+    tpkResult: null,
     whatToWandReport: null,
     unpickStockLoading: false,
     unpickStockResult: null,
