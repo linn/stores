@@ -79,6 +79,61 @@ const item = {
     totalImportValue: 1000
 };
 
+const cpcNumbers = () => [
+    {
+        id: 1,
+        displayText: '51 00 00'
+    },
+    {
+        id: 2,
+        displayText: '51 00 01'
+    },
+    {
+        id: 3,
+        displayText: '40 00 00'
+    },
+    {
+        id: 4,
+        displayText: '40 00 60'
+    },
+    {
+        id: 5,
+        displayText: '40 00 63'
+    },
+    {
+        id: 6,
+        displayText: 'EC Countries'
+    },
+    {
+        id: 7,
+        displayText: '40 00 09 - SAMPLES ONLY'
+    },
+    {
+        id: 8,
+        displayText: 'Low Value Shipment'
+    },
+    {
+        id: 9,
+        displayText: '40 51 00 - IPR to Free'
+    },
+    {
+        id: 10,
+        displayText: '40 00 58'
+    },
+    {
+        id: 11,
+        displayText: '61 23 F01'
+    },
+    {
+        id: 12,
+        displayText: '40 00 000'
+    },
+    {
+        id: 13,
+        displayText: '51 00 000'
+    }
+];
+
 const privileges = ['potato.admin', 'import-books.admin'];
 
 describe('When loading', () => {
@@ -116,6 +171,7 @@ describe('On Create', () => {
                 getExchangeRatesForDate={getExchangeRatesForDate}
                 privileges={privileges}
                 loading={false}
+                cpcNumbers={cpcNumbers()}
             />
         );
     });
@@ -133,11 +189,11 @@ describe('On Create', () => {
         expect(screen.getByText('Supplier Country')).toBeInTheDocument();
         expect(screen.getByText('Foreign Currency')).toBeInTheDocument();
         expect(screen.getByText('Currency')).toBeInTheDocument();
-        expect(screen.getByText('Total Import Value')).toBeInTheDocument();
+        expect(screen.getByText('Total Import Value (GBP)')).toBeInTheDocument();
         const invoiceDetailsTable = screen.getByTestId('invoiceDetailsTable');
         expect(within(invoiceDetailsTable).getByText('Invoice Number')).toBeInTheDocument();
         expect(screen.getByText('Invoice Value')).toBeInTheDocument();
-        expect(screen.getByText('Total Invoice Value')).toBeInTheDocument();
+        expect(screen.getByText('Total Invoice Value (Currency)')).toBeInTheDocument();
         expect(screen.getByText('Carrier')).toBeInTheDocument();
         expect(screen.getByText('Mode of Transport')).toBeInTheDocument();
         expect(screen.getByText('Transport Bill Number')).toBeInTheDocument();
@@ -160,9 +216,8 @@ describe('On Create', () => {
     });
 
     test('can edit fields because have right permission', () => {
-        expect(screen.getByLabelText('Total Import Value')).not.toBeDisabled();
+        expect(screen.getByLabelText('Total Import Value (GBP)')).not.toBeDisabled();
         expect(screen.getByLabelText('Parcel Number')).not.toBeDisabled();
-        expect(screen.getByLabelText('Total Import Value')).not.toBeDisabled();
         expect(screen.getByLabelText('Number of Cartons')).not.toBeDisabled();
         expect(screen.getByLabelText('Number of Pallets')).not.toBeDisabled();
         expect(screen.getByLabelText('Weight')).not.toBeDisabled();
@@ -171,7 +226,7 @@ describe('On Create', () => {
     test('but should never be able to edit certain fields', () => {
         expect(screen.getByLabelText('Supplier Country')).toBeDisabled();
         expect(screen.getByLabelText('EC (EU) Member')).toBeDisabled();
-        expect(screen.getByLabelText('Total Invoice Value')).toBeDisabled();
+        expect(screen.getByLabelText('Total Invoice Value (Currency)')).toBeDisabled();
         expect(screen.getByLabelText('Import Book Id')).toBeDisabled();
     });
 });
@@ -190,14 +245,15 @@ describe('When dont have right privilege', () => {
                 getExchangeRatesForDate={getExchangeRatesForDate}
                 privileges={['not-right.priv']}
                 loading={false}
+                cpcNumbers={cpcNumbers()}
             />
         );
     });
 
     test('cannot edit fields', () => {
         expect(screen.getByLabelText('Parcel Number')).toBeDisabled();
-        expect(screen.getByLabelText('Total Import Value')).toBeDisabled();
-        expect(screen.getByLabelText('Total Invoice Value')).toBeDisabled();
+        expect(screen.getByLabelText('Total Import Value (GBP)')).toBeDisabled();
+        expect(screen.getByLabelText('Total Invoice Value (Currency)')).toBeDisabled();
         expect(screen.getByLabelText('Number of Cartons')).toBeDisabled();
         expect(screen.getByLabelText('Number of Pallets')).toBeDisabled();
         expect(screen.getByLabelText('Weight')).toBeDisabled();
@@ -219,6 +275,8 @@ describe('When editing', () => {
                 privileges={privileges}
                 loading={false}
                 item={item}
+                cpcNumbers={cpcNumbers()}
+                e
             />
         );
     });
@@ -234,11 +292,9 @@ describe('When editing', () => {
     });
 
     test('total invoice value is right', () => {
-        expect(screen.getByLabelText('Total Invoice Value')).toHaveDisplayValue('1499.01');
-    });
-
-    test('total import value is right', () => {
-        expect(screen.getByLabelText('Total Invoice Value')).toHaveDisplayValue('1499.01');
+        expect(screen.getByLabelText('Total Invoice Value (Currency)')).toHaveDisplayValue(
+            '1499.01'
+        );
     });
 });
 
@@ -257,6 +313,7 @@ describe('When clicking through to second tab', () => {
                 privileges={privileges}
                 loading={false}
                 item={item}
+                cpcNumbers={cpcNumbers()}
             />
         );
 

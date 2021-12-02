@@ -1,4 +1,4 @@
-﻿namespace Linn.Stores.Facade.ResourceBuilders
+namespace Linn.Stores.Facade.ResourceBuilders
 {
     using System.Collections.Generic;
     using System.Linq;

@@ -1,6 +1,5 @@
 ﻿namespace Linn.Stores.Proxy
 {
-    using System;
     using System.Data;
 
     using Linn.Common.Proxy.LinnApps;
@@ -132,7 +131,7 @@
                                             {
                                                 Direction = ParameterDirection.Input,
                                                 Size = 50,
-                                                Value = storageType
+                                                Value = storageType?.ToUpper()
                                             };
                 cmd.Parameters.Add(storageTypeParam);
 
@@ -198,6 +197,7 @@
                 var successInt = int.Parse(successParam.Value.ToString());
                 var message = msgParam.Value.ToString();
                 success = successInt == 0;
+                
                 if (int.TryParse(reqNumberParam.Value.ToString(), out var reqNumberResult))
                 {
                     reqNumber = reqNumberResult;
@@ -209,9 +209,9 @@
 
                 connection.Close();
 
-                return message;
+                return message == "null" ? null : message;
             }
-         }
+        }
 
         public string GetErrorMessage()
         {

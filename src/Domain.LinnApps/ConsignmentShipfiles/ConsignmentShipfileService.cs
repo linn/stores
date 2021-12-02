@@ -185,14 +185,13 @@
                             pdfData.PackingList =
                                 this.packingListService.BuildPackingList(pdfData.PackingList).ToArray();
                             var body = this.BuildEmailBody(pdfData);
-
                             toSend.Add(new ConsignmentShipfileEmailModel
-                            {
-                                PdfAttachment = pdfData,
-                                ToCustomerName = account.ContactDetails.EmailAddress,
-                                ToEmailAddress = account.ContactDetails.EmailAddress,
-                                Body = body
-                            });
+                                           {
+                                               PdfAttachment = pdfData,
+                                               ToCustomerName = account.ContactDetails.EmailAddress,
+                                               ToEmailAddress = account.ContactDetails.EmailAddress,
+                                               Body = body
+                                           });
                         }
                     }
                     else
@@ -203,6 +202,7 @@
                 }
                 else
                 {
+                    shipfile.Message = null;
                     toSend.AddRange(
                         outlets.Select(o =>
                         {

@@ -5,6 +5,8 @@ import Grid from '@material-ui/core/Grid';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
+import { makeStyles } from '@material-ui/core/styles';
 import {
     SaveBackCancelButtons,
     InputField,
@@ -13,6 +15,9 @@ import {
     ErrorCard,
     SnackbarMessage
 } from '@linn-it/linn-form-components-library';
+import Dialog from '@material-ui/core/Dialog';
+import Typography from '@material-ui/core/Typography';
+import moment from 'moment';
 import Page from '../../containers/Page';
 import ImpBookTab from '../../containers/importBooks/tabs/ImpBookTab';
 import OrderDetailsTab from '../../containers/importBooks/tabs/OrderDetailsTab';
@@ -40,7 +45,8 @@ function ImportBook({
     employees,
     userNumber,
     getExchangeRatesForDate,
-    exchangeRates
+    exchangeRates,
+    cpcNumbers
 }) {
     const defaultImpBook = {
         id: -1,
@@ -91,9 +97,13 @@ function ImportBook({
         }
     }, [item, state.prevImpBook, editStatus, defaultImpBook]);
 
+    const dateToDdMmmYyyy = date => {
+        return date ? moment(date).format('DD-MMM-YYYY') : '-';
+    };
+
     useEffect(() => {
         if (state.impbook?.dateCreated) {
-            getExchangeRatesForDate(state.impbook.dateCreated);
+            getExchangeRatesForDate(dateToDdMmmYyyy(state.impbook.dateCreated));
         }
     }, [state.impbook.dateCreated, getExchangeRatesForDate]);
 
@@ -103,15 +113,6 @@ function ImportBook({
 
     const handleTabChange = (event, value) => {
         setTab(value);
-    };
-
-    const handleSaveClick = () => {
-        if (creating()) {
-            addItem(state.impbook);
-        } else {
-            updateItem(itemId, state.impbook);
-        }
-        setEditStatus('view');
     };
 
     const handleCancelClick = () => {
@@ -337,26 +338,72 @@ function ImportBook({
         const invoiceValue = totalInvoiceValue();
         if (exchangeRate && invoiceValue && invoiceValue > 0) {
             const convertedValue = currencyConvert(invoiceValue, exchangeRate);
-
             handleFieldChange('totalImportValue', convertedValue);
         }
     }, [totalInvoiceValue, currentExchangeRate, handleFieldChange]);
 
-    const impbookInvalid = () => {
-        return (
-            !state.impbook.supplierId ||
-            !state.impbook.carrierId ||
-            !state.impbook.parcelNumber ||
-            !state.impbook.transportId ||
-            !state.impbook.transactionId ||
-            !state.impbook.totalImportValue ||
-            !state.impbook.deliveryTermCode ||
-            !state.impbook.pva ||
-            !state.impbook.foreignCurrency ||
-            `${calcRemainingTotal()}` !== '0' ||
-            `${calcRemainingDuty()}` !== '0' ||
-            `${calcRemainingWeight()}` !== '0'
-        );
+    const impbookInvalidFields = () => {
+        const requiredFields = [
+            'parcelNumber',
+            'supplierId',
+            'pva',
+            'foreignCurrency',
+            'totalImportValue',
+            'carrierId',
+            'transportId',
+            'transactionId',
+            'deliveryTermCode'
+        ];
+
+        let invalidFields = requiredFields.filter(field => !state.impbook?.[field]);
+
+        invalidFields = !state.impbook.importBookInvoiceDetails.length
+            ? invalidFields.concat(['Invoice Details'])
+            : invalidFields;
+
+        invalidFields = !state.impbook.importBookOrderDetails.length
+            ? invalidFields.concat(['Order Details'])
+            : invalidFields;
+
+        if (
+            state.impbook.importBookOrderDetails.length &&
+            state.impbook.importBookOrderDetails.some(
+                o =>
+                    !o.lineType ||
+                    (o.lineType === 'RSN' && !o.rsnNumber) ||
+                    (o.lineType === 'PO' && !o.orderNumber) ||
+                    (o.lineType === 'LOAN' && !o.loanNumber) ||
+                    (o.lineType === 'INS' && !o.insNumber) ||
+                    !o.orderDescription ||
+                    (!o.qty && o.qty !== 0) ||
+                    (!o.orderValue && o.orderValue !== 0) ||
+                    (!o.dutyValue && o.dutyValue !== 0) ||
+                    (!o.vatValue && o.vatValue !== 0) ||
+                    (!o.weight && o.weight !== 0)
+            )
+        ) {
+            invalidFields = invalidFields.concat(['Order details inner fields']);
+        }
+
+        return invalidFields;
+    };
+
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    const handleSaveClick = () => {
+        if (`${calcRemainingWeight()}` !== '0' && !dialogOpen) {
+            setDialogOpen(true);
+        } else if (`${calcRemainingTotal()}` !== '0' && !dialogOpen) {
+            setDialogOpen(true);
+        } else if (`${calcRemainingDuty()}` !== '0' && !dialogOpen) {
+            setDialogOpen(true);
+        } else if (creating()) {
+            addItem(state.impbook);
+            setEditStatus('view');
+        } else {
+            updateItem(itemId, state.impbook);
+            setEditStatus('view');
+        }
     };
 
     const print = () => {
@@ -364,10 +411,71 @@ function ImportBook({
     };
 
     useEffect(() => {
-        if (snackbarVisible) {
+        if (snackbarVisible && state.impbook?.id !== -1) {
             print();
         }
-    }, [snackbarVisible]);
+    }, [snackbarVisible, state.impbook.id]);
+
+    const useStyles = makeStyles(theme => ({
+        spaceAbove: {
+            marginTop: theme.spacing(2)
+        },
+        dialog: {
+            margin: theme.spacing(6),
+            minWidth: theme.spacing(70),
+            textAlign: 'center'
+        },
+        right: {
+            float: 'right'
+        }
+    }));
+
+    const classes = useStyles();
+
+    const ImportValueMismatchWarning = () => {
+        if (`${calcRemainingTotal()}` !== '0') {
+            return (
+                <Grid item xs={12} className={classes.spaceAbove}>
+                    <Typography variant="h6">
+                        Import Value Mismatch! Difference of: {calcRemainingTotal()}
+                        <br />
+                        (Import Book value is: {state.impbook?.totalImportValue})
+                    </Typography>
+                </Grid>
+            );
+        }
+        return <></>;
+    };
+
+    const DutyMismatchWarning = () => {
+        if (`${calcRemainingDuty()}` !== '0') {
+            return (
+                <Grid item xs={12} className={classes.spaceAbove}>
+                    <Typography variant="h6">
+                        Duty Mismatch! Difference of: {calcRemainingDuty()}
+                        <br />
+                        (Import Book tab duty is: {state.impbook?.linnDuty})
+                    </Typography>
+                </Grid>
+            );
+        }
+        return <></>;
+    };
+
+    const WeightMismatchWarning = () => {
+        if (`${calcRemainingWeight()}` !== '0') {
+            return (
+                <Grid item xs={12} className={classes.spaceAbove}>
+                    <Typography variant="h6">
+                        Weight Mismatch! Difference of: {calcRemainingWeight()}
+                        <br />
+                        (Import Book tab weight is: {state.impbook?.weight})
+                    </Typography>
+                </Grid>
+            );
+        }
+        return <></>;
+    };
 
     return (
         <>
@@ -375,7 +483,7 @@ function ImportBook({
                 <Page width="xl">
                     <ImpBookPrintOut
                         impbookId={state.impbook.id}
-                        dateCreated={state.impbook.dateCreated}
+                        dateCreated={dateToDdMmmYyyy(state.impbook.dateCreated)}
                         createdBy={state.impbook.createdBy}
                         createdByName={getEmployeeNameById(state.impbook.createdBy)}
                         supplierId={state.impbook.supplierId}
@@ -397,10 +505,10 @@ function ImportBook({
                         deliveryTermCode={state.impbook.deliveryTermCode}
                         customsEntryCodePrefix={state.impbook.customsEntryCodePrefix}
                         customsEntryCode={state.impbook.customsEntryCode}
-                        customsEntryCodeDate={state.impbook.customsEntryCodeDate}
+                        customsEntryCodeDate={dateToDdMmmYyyy(state.impbook.customsEntryCodeDate)}
                         linnDuty={state.impbook.linnDuty}
                         linnVat={state.impbook.linnVat}
-                        arrivalDate={state.impbook.arrivalDate}
+                        arrivalDate={dateToDdMmmYyyy(state.impbook.arrivalDate)}
                         remainingInvoiceValue={calcRemainingTotal()}
                         remainingDutyValue={calcRemainingDuty()}
                         remainingWeightValue={calcRemainingWeight()}
@@ -408,12 +516,52 @@ function ImportBook({
                         comments={state.impbook.comments}
                         arrivalPort={state.impbook.arrivalPort}
                         pva={state.impbook.pva}
+                        cpcNumbers={cpcNumbers}
                     />
                 </Page>
             </div>
 
             <div className="hide-when-printing">
-                <Page>
+                <Dialog open={dialogOpen} fullWidth maxWidth="md">
+                    <>
+                        <div className={classes.dialog}>
+                            <Grid item xs={12}>
+                                <Typography variant="h5">Warning</Typography>
+                            </Grid>
+                            <Grid item xs={12} />
+                            <ImportValueMismatchWarning />
+                            <DutyMismatchWarning />
+                            <WeightMismatchWarning />
+                            <Grid item xs={12} />
+                            <Grid item xs={12} container className={classes.spaceAbove}>
+                                <Grid item xs={6}>
+                                    <Button
+                                        variant="outlined"
+                                        color="secondary"
+                                        onClick={() => {
+                                            handleSaveClick();
+                                            setDialogOpen(false);
+                                        }}
+                                    >
+                                        Save Anyway
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Button
+                                        variant="outlined"
+                                        color="primary"
+                                        onClick={() => {
+                                            setDialogOpen(false);
+                                        }}
+                                    >
+                                        Go Back
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </div>
+                    </>
+                </Dialog>
+                <Page width="xl">
                     <Grid container spacing={3}>
                         <Grid item xs={10}>
                             {creating() ? (
@@ -537,6 +685,7 @@ function ImportBook({
                                             currentUserNumber={userNumber}
                                             impbookId={state.impbook.id}
                                             exchangeRate={currentExchangeRate()}
+                                            cpcNumbers={cpcNumbers}
                                         />
                                     )}
                                     {tab === 2 && (
@@ -564,15 +713,33 @@ function ImportBook({
                                             onClick={print}
                                             variant="outlined"
                                             color="primary"
-                                            disabled={impbookInvalid()}
+                                            disabled={impbookInvalidFields().length}
                                         >
                                             Reprint
                                         </Button>
                                     </Grid>
+
+                                    {impbookInvalidFields().length && (
+                                        <Grid item xs={12}>
+                                            <Tooltip
+                                                title={impbookInvalidFields().map(f => `${f}, `)}
+                                                placement="top-start"
+                                            >
+                                                <span className={classes.right}>
+                                                    <Button variant="outlined" color="primary" pull>
+                                                        Hover to see fields preventing save
+                                                    </Button>
+                                                </span>
+                                            </Tooltip>
+                                        </Grid>
+                                    )}
+
                                     <Grid item xs={10}>
                                         <SaveBackCancelButtons
                                             saveDisabled={
-                                                viewing() || !allowedToEdit() || impbookInvalid()
+                                                viewing() ||
+                                                !allowedToEdit() ||
+                                                impbookInvalidFields().length
                                             }
                                             saveClick={handleSaveClick}
                                             cancelClick={handleCancelClick}
@@ -651,7 +818,8 @@ ImportBook.propTypes = {
     ),
     userNumber: PropTypes.number.isRequired,
     getExchangeRatesForDate: PropTypes.func.isRequired,
-    exchangeRates: PropTypes.arrayOf(PropTypes.shape({}))
+    exchangeRates: PropTypes.arrayOf(PropTypes.shape({})),
+    cpcNumbers: PropTypes.arrayOf(PropTypes.shape({})).isRequired
 };
 
 ImportBook.defaultProps = {

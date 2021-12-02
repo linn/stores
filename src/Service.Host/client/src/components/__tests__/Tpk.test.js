@@ -7,6 +7,11 @@ import Tpk from '../tpk/Tpk';
 const transferStock = jest.fn();
 const clearData = jest.fn();
 const clearErrors = jest.fn();
+const clearUnpickErrors = jest.fn();
+const clearUnallocateErrors = jest.fn();
+const clearUnallocateData = jest.fn();
+const clearUnpickData = jest.fn();
+const refresh = jest.fn();
 
 const defaultRender = props =>
     render(
@@ -14,6 +19,11 @@ const defaultRender = props =>
             transferStock={transferStock}
             clearData={clearData}
             clearErrors={clearErrors}
+            clearUnpickErrors={clearUnpickErrors}
+            clearUnallocateErrors={clearUnallocateErrors}
+            clearUnallocateData={clearUnallocateData}
+            clearUnpickData={clearUnpickData}
+            refresh={refresh}
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...props}
         />

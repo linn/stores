@@ -27,6 +27,7 @@
             int? reqNumber,
             int? numberOfLines,
             bool? multipleBookIn,
+            bool printRsnLabels,
             IEnumerable<GoodsInLogEntry> lines);
 
         ValidatePurchaseOrderResult ValidatePurchaseOrder(int orderNumber, int line);

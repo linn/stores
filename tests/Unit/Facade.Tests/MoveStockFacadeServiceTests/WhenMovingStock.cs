@@ -38,7 +38,7 @@
                                     ToPalletNumber = 8000,
                                     ToStockRotationDate = 2.April(2024).ToString("O"),
                                     UserNumber = 909,
-                                    StorageType = "type"
+                                    StorageType = "TYPE"
                                 };
             this.MoveStockService.MoveStock(
                     this.resource.ReqNumber,

@@ -104,6 +104,7 @@
                 null,
                 1,
                 true,
+                false,
                 new List<GoodsInLogEntry>
                     {
                         new GoodsInLogEntry

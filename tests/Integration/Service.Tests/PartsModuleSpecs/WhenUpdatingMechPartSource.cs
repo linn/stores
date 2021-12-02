@@ -50,7 +50,6 @@
                 DateEntered = DateTime.Today
             };
             this.MechPartSourceService.Update(1, Arg.Any<MechPartSourceResource>()).Returns(new SuccessResult<MechPartSource>(p));
-            this.AuthService.HasPermissionFor(Arg.Any<string>(), Arg.Any<IEnumerable<string>>()).Returns(true);
             this.Response = this.Browser.Put(
                 "/parts/sources/1",
                 with =>

@@ -30,7 +30,7 @@ describe('When creating...', () => {
     beforeEach(() => defaultRender({ editStatus: 'create' }));
 
     test('should render creating title', () => {
-        expect(screen.getByText('Create Mech Part Source')).toBeInTheDocument();
+        expect(screen.getByText('Create Part Source Sheet')).toBeInTheDocument();
     });
 
     test('should have save button disabled before any data', () => {
@@ -126,7 +126,7 @@ describe('When viewing...', () => {
     });
 
     test('should render viewing title', () => {
-        expect(screen.getByText('Mech Part Source Details')).toBeInTheDocument();
+        expect(screen.getByText('Part Source Sheet Details')).toBeInTheDocument();
     });
 
     test('save button should be disabled', () => {

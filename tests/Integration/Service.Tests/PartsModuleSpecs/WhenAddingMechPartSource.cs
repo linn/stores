@@ -41,7 +41,6 @@
 
             this.MechPartSourceService.Add(Arg.Any<MechPartSourceResource>())
                 .Returns(new CreatedResult<MechPartSource>(source));
-            this.AuthService.HasPermissionFor(Arg.Any<string>(), Arg.Any<IEnumerable<string>>()).Returns(true);
 
             this.Response = this.Browser.Post(
                 "/parts/sources",

@@ -10,6 +10,8 @@ import GoodsInUtility from '../goodsIn/GoodsInUtility';
 const validatePurchaseOrder = jest.fn();
 const searchDemLocations = jest.fn();
 const searchStoragePlaces = jest.fn();
+const clearPo = jest.fn();
+const clearRsn = jest.fn();
 const storagePlacesSearchResults = [{ name: 'LOC', id: 1 }];
 const searchSalesArticles = jest.fn();
 const doBookIn = jest.fn();
@@ -30,6 +32,8 @@ const defaultRender = props =>
             searchSalesArticles={searchSalesArticles}
             salesArticlesSearchResults={[]}
             doBookIn={doBookIn}
+            clearPo={clearPo}
+            clearRsn={clearRsn}
             validatePurchaseOrderBookInQty={validatePurchaseOrderBookInQty}
             userNumber={userNumber}
             validateStorageType={validateStorageType}
@@ -53,7 +57,6 @@ describe('On initial load...', () => {
     test('inputs should be disabled', () => {
         expect(screen.getByRole('button', { name: 'Add Line' })).toHaveClass('Mui-disabled');
         expect(screen.getByRole('button', { name: 'Book In' })).toHaveClass('Mui-disabled');
-        expect(screen.getByLabelText('S/Type')).toHaveClass('Mui-disabled');
         expect(screen.getByLabelText('Qty')).toHaveClass('Mui-disabled');
     });
 });
@@ -345,13 +348,8 @@ describe('When book in button clicked', () => {
         const qtyField = screen.getByLabelText('Qty');
         fireEvent.change(qtyField, { target: { value: 1 } });
 
-        // open the location search
-        const locationField = screen.getByLabelText('Onto Location');
-        fireEvent.click(locationField);
-
-        // select a result to close the dialog
-        const searchResult = screen.getByText('LOC');
-        fireEvent.click(searchResult);
+        const locField = screen.getByLabelText('Onto Location');
+        fireEvent.change(locField, { target: { value: 'LOC' } });
     });
 
     test('should call doBookIn', () => {
@@ -416,11 +414,6 @@ describe('When book in button clicked', () => {
 
         test('should show message', () => {
             expect(screen.getByDisplayValue('Book In Succesful!')).toBeInTheDocument();
-        });
-
-        test('should add lines to table', () => {
-            expect(screen.getByText('SOME-TRANS-TYPE')).toBeInTheDocument();
-            expect(screen.getByText('OTHER-TRANS-TYPE')).toBeInTheDocument();
         });
 
         test('should open label print dialog', () => {
@@ -520,13 +513,9 @@ describe('When adding multiple lines to a book in...', () => {
         const qtyField = screen.getByLabelText('Qty');
         fireEvent.change(qtyField, { target: { value: 1 } });
 
-        // open the location search
-        const locationField = screen.getByLabelText('Onto Location');
-        fireEvent.click(locationField);
+        const locField = screen.getByLabelText('Onto Location');
+        fireEvent.change(locField, { target: { value: 'LOC' } });
 
-        // select a result to close the dialog
-        const searchResult = screen.getByText('LOC');
-        fireEvent.click(searchResult);
         const addLineButton = screen.getByText('Add Line');
         fireEvent.click(addLineButton);
         const doBookInButton = screen.getByText('Book In');

@@ -32,7 +32,7 @@
             this.userNumber = 13;
             this.req = new RequisitionHeader { ReqNumber = this.reqNumber, Document1 = 808 };
             this.storesPackResult = new ProcessResult { Message = "ok", Success = true };
-            this.StoresPack.UnAllocateRequisition(this.reqNumber, this.reqLine, this.userNumber)
+            this.StoresPack.UnallocateRequisition(this.reqNumber, this.reqLine, this.userNumber)
                 .Returns(this.storesPackResult);
             this.RequistionHeaderRepository.FindById(this.reqNumber).Returns(this.req);
 
@@ -42,7 +42,7 @@
         [Test]
         public void ShouldCallProxy()
         {
-            this.StoresPack.Received().UnAllocateRequisition(this.reqNumber, this.reqLine, this.userNumber);
+            this.StoresPack.Received().UnallocateRequisition(this.reqNumber, this.reqLine, this.userNumber);
         }
 
         [Test]

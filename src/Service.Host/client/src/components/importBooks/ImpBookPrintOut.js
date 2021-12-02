@@ -7,7 +7,6 @@ import { makeStyles } from '@material-ui/styles';
 import { Typography } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import InputLabel from '@material-ui/core/InputLabel';
-import moment from 'moment';
 
 function ImpBookPrintOut({
     impbookId,
@@ -43,7 +42,8 @@ function ImpBookPrintOut({
     orderDetails,
     comments,
     arrivalPort,
-    pva
+    pva,
+    cpcNumbers
 }) {
     const useStyles = makeStyles(theme => ({
         gapAbove: {
@@ -56,8 +56,8 @@ function ImpBookPrintOut({
     }));
     const classes = useStyles();
 
-    const getNicerDate = date => {
-        return date ? moment(date).format('DD-MMM-YYYY') : '-';
+    const getCpcNumber = id => {
+        return cpcNumbers.find(x => x.id === id)?.displayText;
     };
 
     return (
@@ -68,7 +68,7 @@ function ImpBookPrintOut({
                 </Grid>
 
                 <Grid item xs={4}>
-                    Date Created: <b>{getNicerDate(dateCreated)}</b>
+                    Date Created: <b>{dateCreated}</b>
                 </Grid>
                 <Grid item xs={4}>
                     Created By:{' '}
@@ -176,7 +176,7 @@ function ImpBookPrintOut({
                     Delivery Term Code: <b>{deliveryTermCode}</b>
                 </Grid>
                 <Grid item xs={3}>
-                    Customs Entry Date: <b>{getNicerDate(customsEntryCodeDate)}</b>
+                    Customs Entry Date: <b>{customsEntryCodeDate}</b>
                 </Grid>
 
                 <Grid item xs={9}>
@@ -187,7 +187,7 @@ function ImpBookPrintOut({
                 </Grid>
 
                 <Grid item xs={9}>
-                    Arrival Date: <b>{getNicerDate(arrivalDate)}</b>
+                    Arrival Date: <b>{arrivalDate}</b>
                 </Grid>
                 <Grid item xs={3}>
                     Linn Vat: <b>{linnVat}</b>
@@ -300,7 +300,11 @@ function ImpBookPrintOut({
                             </Grid>
                             <Grid item xs={2}>
                                 <InputLabel>Cpc Number</InputLabel>
-                                <TextField value={row.cpcNumber} variant="standard" fullWidth />
+                                <TextField
+                                    value={getCpcNumber(row.cpcNumber)}
+                                    variant="standard"
+                                    fullWidth
+                                />
                             </Grid>
 
                             <Grid item xs={12}>
@@ -351,7 +355,8 @@ ImpBookPrintOut.propTypes = {
     remainingInvoiceValue: PropTypes.number,
     remainingDutyValue: PropTypes.number,
     remainingWeightValue: PropTypes.number,
-    pva: PropTypes.string
+    pva: PropTypes.string,
+    cpcNumbers: PropTypes.arrayOf(PropTypes.shape({})).isRequired
 };
 
 ImpBookPrintOut.defaultProps = {

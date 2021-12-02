@@ -306,112 +306,80 @@ function OrderDetailsTab({
                                 />
                             </Grid>
                             {(row.lineType === 'PO' || row.lineType === 'RO') && (
-                                <Grid item xs={3}>
-                                    <div className={classes.displayInline}>
-                                        <Typeahead
-                                            label="Order Number"
-                                            propertyName="orderNumber"
-                                            title="Search for an Order Number"
-                                            onSelect={newOrder =>
-                                                handleOrderNoUpdate(row, newOrder)
-                                            }
-                                            items={purchaseOrdersSearchResults}
-                                            loading={purchaseOrdersSearchLoading}
-                                            fetchItems={searchPurchaseOrders}
-                                            clearSearch={() => clearPurchaseOrdersSearch}
-                                            value={row.orderNumber}
-                                            modal
-                                            links={false}
-                                            debounce={1000}
-                                            minimumSearchTermLength={2}
-                                            required
-                                            disabled={!allowedToEdit}
-                                            maxLength={6}
-                                        />
-                                    </div>
-                                    <div className={classes.marginTop1}>
-                                        <Tooltip title="Clear Order No search">
-                                            <Button
-                                                variant="outlined"
-                                                onClick={() => editRow(row, 'orderNumber', '')}
-                                                disabled={!allowedToEdit}
-                                            >
-                                                X
-                                            </Button>
-                                        </Tooltip>
-                                    </div>
+                                <Grid item xs={4}>
+                                    <Typeahead
+                                        label="Order Number"
+                                        propertyName="orderNumber"
+                                        title="Search for an Order Number"
+                                        onSelect={newOrder => handleOrderNoUpdate(row, newOrder)}
+                                        items={purchaseOrdersSearchResults}
+                                        loading={purchaseOrdersSearchLoading}
+                                        fetchItems={searchPurchaseOrders}
+                                        clearSearch={() => clearPurchaseOrdersSearch}
+                                        value={row.orderNumber}
+                                        modal
+                                        links={false}
+                                        debounce={1000}
+                                        minimumSearchTermLength={2}
+                                        required
+                                        disabled={!allowedToEdit}
+                                        maxLength={6}
+                                        clearable
+                                        onClear={() => editRow(row, 'orderNumber', '')}
+                                        clearTooltipText="Clear Order No search"
+                                    />
                                 </Grid>
                             )}
                             {row.lineType === 'RSN' && (
-                                <Grid item xs={3}>
-                                    <div className={classes.displayInline}>
-                                        <Typeahead
-                                            label="RSN Number"
-                                            propertyName="rsnNumber"
-                                            title="Search for an rsn"
-                                            onSelect={newRsn => handleRsnUpdate(row, newRsn)}
-                                            items={rsnsSearchResults}
-                                            loading={rsnsSearchLoading}
-                                            fetchItems={searchRsns}
-                                            clearSearch={() => clearRsnsSearch}
-                                            value={row.rsnNumber}
-                                            modal
-                                            links={false}
-                                            debounce={1000}
-                                            minimumSearchTermLength={2}
-                                            required
-                                            disabled={!allowedToEdit}
-                                            maxLength={6}
-                                        />
-                                    </div>
-                                    <div className={classes.marginTop1}>
-                                        <Tooltip title="Clear Rsn search">
-                                            <Button
-                                                variant="outlined"
-                                                onClick={() => editRow(row, 'rsnNumber', '')}
-                                                disabled={!allowedToEdit}
-                                            >
-                                                X
-                                            </Button>
-                                        </Tooltip>
-                                    </div>
+                                <Grid item xs={4}>
+                                    <Typeahead
+                                        label="RSN Number"
+                                        propertyName="rsnNumber"
+                                        title="Search for an rsn"
+                                        onSelect={newRsn => handleRsnUpdate(row, newRsn)}
+                                        items={rsnsSearchResults}
+                                        loading={rsnsSearchLoading}
+                                        fetchItems={searchRsns}
+                                        clearSearch={() => clearRsnsSearch}
+                                        value={row.rsnNumber}
+                                        modal
+                                        links={false}
+                                        debounce={1000}
+                                        minimumSearchTermLength={2}
+                                        required
+                                        disabled={!allowedToEdit}
+                                        maxLength={6}
+                                        clearable
+                                        onClear={() => editRow(row, 'rsnNumber', '')}
+                                        clearTooltipText="Clear Rsn search"
+                                    />
                                 </Grid>
                             )}
                             {row.lineType === 'LOAN' && (
-                                <Grid item xs={3}>
-                                    <div className={classes.displayInline}>
-                                        <Typeahead
-                                            label="Loan Number"
-                                            propertyName="loanNumber"
-                                            title="Search for a Loan Number"
-                                            onSelect={newValue =>
-                                                editRow(row, 'loanNumber', newValue.id)
-                                            }
-                                            items={loansSearchResults}
-                                            loading={loansSearchLoading}
-                                            fetchItems={searchLoans}
-                                            clearSearch={() => clearLoansSearch}
-                                            value={row.loanNumber}
-                                            modal
-                                            links={false}
-                                            debounce={1000}
-                                            minimumSearchTermLength={2}
-                                            required
-                                            disabled={!allowedToEdit}
-                                            maxLength={6}
-                                        />
-                                    </div>
-                                    <div className={classes.marginTop1}>
-                                        <Tooltip title="Clear Loan Number search">
-                                            <Button
-                                                variant="outlined"
-                                                onClick={() => editRow(row, 'loanNumber', '')}
-                                                disabled={!allowedToEdit}
-                                            >
-                                                X
-                                            </Button>
-                                        </Tooltip>
-                                    </div>
+                                <Grid item xs={4}>
+                                    <Typeahead
+                                        label="Loan Number"
+                                        propertyName="loanNumber"
+                                        title="Search for a Loan Number"
+                                        onSelect={newValue =>
+                                            editRow(row, 'loanNumber', newValue.id)
+                                        }
+                                        items={loansSearchResults}
+                                        loading={loansSearchLoading}
+                                        fetchItems={searchLoans}
+                                        clearSearch={() => clearLoansSearch}
+                                        value={row.loanNumber}
+                                        modal
+                                        links={false}
+                                        debounce={1000}
+                                        minimumSearchTermLength={2}
+                                        required
+                                        disabled={!allowedToEdit}
+                                        maxLength={6}
+                                        clearable
+                                        onClear={() => editRow(row, 'loanNumber', '')}
+                                        clearTooltipText="Clear Loan Number search"
+                                    />
                                 </Grid>
                             )}
                             {row.lineType === 'INS' && (

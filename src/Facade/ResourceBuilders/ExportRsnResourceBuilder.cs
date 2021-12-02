@@ -20,7 +20,12 @@
                            OutletNumber = exportRsn.OutletNumber,
                            Country = exportRsn.Country,
                            CountryName = exportRsn.CountryName,
-                           AccountType = exportRsn.AccountType
+                           AccountType = exportRsn.AccountType,
+                           InvoiceDescription = exportRsn.InvoiceDescription,
+                           Depth = exportRsn.Depth,
+                           Height = exportRsn.Height,
+                           Weight = exportRsn.Weight,
+                           Width = exportRsn.Width
                        };
         }
 
