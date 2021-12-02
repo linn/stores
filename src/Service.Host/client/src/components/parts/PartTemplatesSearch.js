@@ -29,7 +29,9 @@ function PartTemplateSearch({ privileges, partTemplates }) {
                         text="Create"
                         to="/inventory/part-templates/create"
                         disabled={!canCreate()}
-                        tooltip={canCreate() ? null : 'You are not authorised to create parts.'}
+                        tooltip={
+                            canCreate() ? null : 'You are not authorised to create part templates.'
+                        }
                     />
                 </Grid>
                 <Grid item xs={12} />
@@ -56,7 +58,9 @@ function PartTemplateSearch({ privileges, partTemplates }) {
                         text="View"
                         to={createUrl()}
                         disabled={!canCreate()}
-                        tooltip={canCreate() ? null : 'You are not authorised to create parts.'}
+                        tooltip={
+                            canCreate() ? null : 'You are not authorised to create part templates.'
+                        }
                     />
                 </Grid>
                 <Grid item xs={1} />

@@ -17,7 +17,6 @@ import Page from '../../containers/Page';
 function PartTemplate({
     editStatus,
     itemError,
-    history,
     itemId,
     item,
     loading,
@@ -26,14 +25,12 @@ function PartTemplate({
     updateItem,
     setEditStatus,
     setSnackbarVisible,
-    inDialogBox,
     privileges,
-    closeDialog,
     productAnalysisCodeSearchResults,
     productAnalysisCodesSearchLoading,
     searchProductAnalysisCodes,
     clearProductAnalysisCodesSearch,
-    assemblyTechnology
+    assemblyTechnologies
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -90,18 +87,6 @@ function PartTemplate({
     }, [item, prevPartTemplate]);
 
     const useStyles = makeStyles(() => ({
-        marginTop1: {
-            marginTop: '10px',
-            display: 'inline-block',
-            width: '2em'
-        },
-        marginTopWiderLinkButton: {
-            marginTop: '-14px',
-            display: 'inline-block'
-        },
-        displayInline: {
-            display: 'inline'
-        },
         thinPage: {
             width: '60%',
             margin: '0 auto'
@@ -186,7 +171,7 @@ function PartTemplate({
                                 fullWidth
                                 value={partTemplate.partRoot}
                                 label="Part Root"
-                                maxLength={20}
+                                maxLength={14}
                                 required
                                 onChange={handleFieldChange}
                                 propertyName="partRoot"
@@ -199,7 +184,7 @@ function PartTemplate({
                                 fullWidth
                                 value={partTemplate.description}
                                 label="Description"
-                                maxLength={2000}
+                                maxLength={50}
                                 required
                                 onChange={handleFieldChange}
                                 propertyName="description"
@@ -228,7 +213,7 @@ function PartTemplate({
                                 fullWidth
                                 value={partTemplate.nextNumber}
                                 label="Seq Next Number"
-                                maxLength={2000}
+                                maxLength={6}
                                 onChange={handleFieldChange}
                                 allowNoValue
                                 propertyName="nextNumber"
@@ -257,7 +242,7 @@ function PartTemplate({
                                 fullWidth
                                 value={partTemplate.variants}
                                 label="Variants"
-                                maxLength={2000}
+                                maxLength={255}
                                 onChange={handleFieldChange}
                                 allowNoValue
                                 propertyName="variants"
@@ -402,7 +387,7 @@ function PartTemplate({
                             <Dropdown
                                 label="Assembly Technology"
                                 propertyName="assemblyTechnology"
-                                items={assemblyTechnology.map(c => ({
+                                items={assemblyTechnologies.map(c => ({
                                     id: c.name,
                                     displayText: c.description
                                 }))}
@@ -439,11 +424,6 @@ function PartTemplate({
                                 saveDisabled={viewing() || saveEnabled()}
                                 saveClick={handleSaveClick}
                                 cancelClick={handleCancelClick}
-                                backClick={() =>
-                                    inDialogBox
-                                        ? closeDialog()
-                                        : history.push('/inventory/part-templates')
-                                }
                             />
                         </Grid>
                     </>
@@ -454,13 +434,9 @@ function PartTemplate({
 
     return (
         <>
-            {inDialogBox ? (
-                content()
-            ) : (
-                <div className={classes.thinPage}>
-                    <Page> {content()}</Page>
-                </div>
-            )}
+            <div className={classes.thinPage}>
+                <Page> {content()}</Page>
+            </div>
         </>
     );
 }
@@ -489,45 +465,41 @@ PartTemplate.propTypes = {
     loading: PropTypes.bool,
     setEditStatus: PropTypes.func.isRequired,
     setSnackbarVisible: PropTypes.func.isRequired,
-    inDialogBox: PropTypes.bool,
     privileges: PropTypes.arrayOf(PropTypes.string).isRequired,
-    closeDialog: PropTypes.func,
     productAnalysisCodeSearchResults: PropTypes.arrayOf(productAnalysisCodeShape),
     searchProductAnalysisCodes: PropTypes.func.isRequired,
     clearProductAnalysisCodesSearch: PropTypes.func,
     productAnalysisCodesSearchLoading: PropTypes.bool,
-    assemblyTechnology: PropTypes.arrayOf(PropTypes.shape({}))
+    assemblyTechnologies: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 PartTemplate.defaultProps = {
     item: {
-        partRoot: '',
-        description: '',
-        hasDataSheet: 'N',
-        hasNumberSequence: '',
-        nextNumber: '',
-        allowVariants: 'N',
-        variants: '',
-        accountingCompany: '',
-        productCode: '',
-        stockControlled: '',
-        linnProduced: '',
-        rmfgCode: '',
-        bomType: '',
-        assemblyTechnology: '',
-        allowPartCreation: '',
-        paretoCode: '',
+        partRoot: null,
+        description: null,
+        hasDataSheet: null,
+        hasNumberSequence: null,
+        nextNumber: null,
+        allowVariants: null,
+        variants: null,
+        accountingCompany: null,
+        productCode: null,
+        stockControlled: null,
+        linnProduced: null,
+        rmfgCode: null,
+        bomType: null,
+        assemblyTechnology: null,
+        allowPartCreation: null,
+        paretoCode: null,
         links: {}
     },
     snackbarVisible: false,
     loading: false,
     itemError: null,
     itemId: null,
-    inDialogBox: false,
-    closeDialog: null,
     productAnalysisCodeSearchResults: [],
     productAnalysisCodesSearchLoading: false,
-    assemblyTechnology: [],
+    assemblyTechnologies: [],
     clearProductAnalysisCodesSearch: () => {}
 };
 
