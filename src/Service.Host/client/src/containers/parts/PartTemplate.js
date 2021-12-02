@@ -1,9 +1,5 @@
 import { connect } from 'react-redux';
-import {
-    getItemError,
-    initialiseOnMount,
-    getPreviousPaths
-} from '@linn-it/linn-form-components-library';
+import { getItemError, initialiseOnMount } from '@linn-it/linn-form-components-library';
 import assemblyTechnologiesSelectors from '../../selectors/assemblyTechnologiesSelectors';
 import assemblyTechnologiesActions from '../../actions/assemblyTechnologiesActions';
 import PartTemplate from '../../components/parts/PartTemplate';
@@ -26,12 +22,11 @@ const mapStateToProps = (state, { match }) => ({
     itemError: getItemError(state, itemTypes.partTemplate.item),
     privileges: getPrivileges(state),
     userNumber: getUserNumber(state),
-    previousPaths: getPreviousPaths(state),
     productAnalysisCodeSearchResults: productAnalysisCodesSelectors
         .getSearchItems(state)
         .map(c => ({ name: c.productCode, description: c.description })),
     productAnalysisCodesSearchLoading: productAnalysisCodesSelectors.getSearchLoading(state),
-    assemblyTechnology: assemblyTechnologiesSelectors.getItems(state)
+    assemblyTechnologies: assemblyTechnologiesSelectors.getItems(state)
 });
 
 const initialise = item => dispatch => {

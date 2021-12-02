@@ -6,10 +6,9 @@ import partTemplateSelectors from '../../selectors/partTemplateSelectors';
 import PartTemplatesSearch from '../../components/parts/PartTemplatesSearch';
 import { getPrivileges } from '../../selectors/userSelectors';
 
-const mapStateToProps = (state, { match }) => ({
+const mapStateToProps = state => ({
     items: partTemplatesSelectors.getItems(state),
     loading: partTemplatesSelectors.getLoading(state),
-    linkToSources: match?.url?.endsWith('/sources'),
     privileges: getPrivileges(state),
     partTemplates: partTemplatesSelectors.getItems(state),
     partTemplate: partTemplateSelectors.getItem(state)
@@ -21,7 +20,6 @@ const initialise = () => dispatch => {
 
 const mapDispatchToProps = {
     initialise,
-    fetchItems: partTemplatesActions.fetchByQueryString,
     classes: {}
 };
 

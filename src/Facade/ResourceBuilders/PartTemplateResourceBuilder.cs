@@ -31,7 +31,6 @@
                            AllowPartCreation = model.AllowPartCreation,
                            ParetoCode = model.ParetoCode,
                            Links = this.BuildLinks(model).ToArray()
-                           
                        };
         }
 
