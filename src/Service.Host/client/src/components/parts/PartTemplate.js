@@ -150,11 +150,6 @@ function PartTemplate({
         handleFieldChange('productAnalysisCodeDescription', product.description);
     };
 
-    const handleAssemblyTechChange = assembly => {
-        handleFieldChange('assemblyTechnology', assembly.name);
-        handleFieldChange('assemblyTechnologyDescription', assembly.description);
-    };
-
     const allowedToEdit = () => {
         return privileges?.some(priv => priv === 'part.admin');
     };
@@ -414,7 +409,7 @@ function PartTemplate({
                                 fullWidth
                                 allowNoValue
                                 value={partTemplate.assemblyTechnology}
-                                onChange={handleAssemblyTechChange}
+                                onChange={handleFieldChange}
                             />
                         </Grid>
                         <Grid item xs={3}>
