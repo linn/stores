@@ -1384,6 +1384,11 @@
             q.Property(e => e.Country).HasColumnName("COUNTRY").HasMaxLength(2);
             q.Property(e => e.CountryName).HasColumnName("COUNTRY_NAME").HasMaxLength(50);
             q.Property(e => e.AccountType).HasColumnName("ACCOUNT_TYPE").HasMaxLength(10);
+            q.Property(e => e.InvoiceDescription).HasColumnName("INVOICE_DESCRIPTION").HasMaxLength(50);
+            q.Property(e => e.Weight).HasColumnName("WEIGHT");
+            q.Property(e => e.Height).HasColumnName("HEIGHT");
+            q.Property(e => e.Depth).HasColumnName("DEPTH");
+            q.Property(e => e.Width).HasColumnName("WIDTH");
         }
 
         private void QuerySalesAccounts(ModelBuilder builder)

@@ -139,7 +139,6 @@ function StockMove({
             showMessage("You can't move from Kardex to Kardex");
             return;
         }
-
         doMove(moveDetails);
         clearAvailableStock();
         clearPartStorageTypes();
@@ -215,7 +214,7 @@ function StockMove({
         if (property === 'from') {
             setMoveDetails({
                 ...moveDetails,
-                from: value.toUpperCase(),
+                from: value,
                 fromPalletNumber: null,
                 fromLocationId: null,
                 fromLocationCode: null
@@ -223,13 +222,13 @@ function StockMove({
         } else if (property === 'to') {
             setMoveDetails({
                 ...moveDetails,
-                to: value.toUpperCase(),
+                to: value,
                 toPalletNumber: null,
                 toLocationId: null,
                 toLocationCode: null
             });
         } else {
-            setMoveDetails({ ...moveDetails, [property]: value.toUpperCase() });
+            setMoveDetails({ ...moveDetails, [property]: value });
         }
     };
 
@@ -239,11 +238,13 @@ function StockMove({
 
     const handleOnKeyPress = data => {
         if (data.keyCode === 13 || data.keyCode === 9) {
-            fetchAvailableStock(moveDetails.partNumber);
-            fetchPartStorageTypes(moveDetails.partNumber);
             clearMoveResult();
             clearMoveError();
-            fetchPartsLookup(moveDetails.partNumber, '&exactOnly=true');
+            if (moveDetails.partNumber) {
+                fetchAvailableStock(moveDetails.partNumber.toUpperCase());
+                fetchPartStorageTypes(moveDetails.partNumber.toUpperCase());
+                fetchPartsLookup(moveDetails.partNumber.toUpperCase(), '&exactOnly=true');
+            }
         }
     };
 

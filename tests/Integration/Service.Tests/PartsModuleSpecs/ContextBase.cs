@@ -12,7 +12,6 @@
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
-    using Linn.Stores.Persistence.LinnApps.Repositories;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Parts;
     using Linn.Stores.Service.Modules;
@@ -88,8 +87,6 @@
 
         protected IPartPack PartPack { get; private set; }
 
-        protected IAuthorisationService AuthService { get; private set; }
-
         protected IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource> TqmsCategoriesService
         {
             get; private set;
@@ -123,7 +120,6 @@
             this.ManufacturerRepository = Substitute.For<IRepository<Manufacturer, string>>();
             this.DataSheetValuesService = Substitute.For<IPartDataSheetValuesService>();
             this.PartPack = Substitute.For<IPartPack>();
-            this.AuthService = Substitute.For<IAuthorisationService>();
             this.TqmsCategoriesService = Substitute
                 .For<IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>>();
             var bootstrapper = new ConfigurableBootstrapper(
@@ -147,7 +143,6 @@
                         with.Dependency(this.ManufacturerService);
                         with.Dependency(this.DataSheetValuesService);
                         with.Dependency(this.PartPack);
-                        with.Dependency(this.AuthService);
                         with.Dependency(this.TqmsCategoriesService);
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());

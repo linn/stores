@@ -90,6 +90,8 @@ export const printGoodsInLabels = new ItemType(
     '/logistics/goods-in/print-labels'
 );
 
+export const printRsn = new ItemType('printRsn', 'PRINT_RSN', '/logistics/goods-in/print-rsn');
+
 export const printConsignmentDocuments = new ItemType(
     'printConsignmentDocuments',
     'PRINT_CONSIGNMENT_DOCUMENTS',
@@ -100,4 +102,16 @@ export const saveConsignmentDocuments = new ItemType(
     'saveConsignmentDocuments',
     'SAVE_CONSIGNMENT_DOCUMENTS',
     '/logistics/save-consignment-documents'
+);
+
+export const unpickStock = new ItemType(
+    'unpickStock',
+    'UNPICK_STOCK',
+    '/logistics/tpk/unpick-stock'
+);
+
+export const unallocateReq = new ItemType(
+    'unallocateReq',
+    'UNALLOCATE_REQ',
+    '/logistics/tpk/unallocate-req'
 );

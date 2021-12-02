@@ -1,8 +1,7 @@
 import { connect } from 'react-redux';
 import { getItemError, initialiseOnMount } from '@linn-it/linn-form-components-library';
 import OrderDetailsTab from '../../../components/importBooks/tabs/OrderDetailsTab';
-import cpcNumbersActions from '../../../actions/impbookCpcNumbersActions';
-import cpcNumbersSelectors from '../../../selectors/impbookCpcNumbersSelectors';
+
 import rsnsActions from '../../../actions/rsnsActions';
 import rsnsSelectors from '../../../selectors/rsnsSelectors';
 import loansActions from '../../../actions/loansActions';
@@ -14,12 +13,6 @@ import postDutySelectors from '../../../selectors/postDutySelectors';
 import * as itemTypes from '../../../itemTypes';
 
 const mapStateToProps = state => ({
-    cpcNumbers: cpcNumbersSelectors.getItems(state)?.map(x => ({
-        displayText: `${x.cpcNumber === 13 ? `${x.cpcNumber} (IPR)` : x.cpcNumber} - ${
-            x.description
-        }`,
-        id: parseInt(x.cpcNumber, 10)
-    })),
     rsnsSearchResults: rsnsSelectors.getSearchItems(state).map?.(r => ({
         id: r.rsnNumber,
         name: r.rsnNumber.toString(),
@@ -48,12 +41,7 @@ const mapStateToProps = state => ({
     snackbarVisible: postDutySelectors.getSnackbarVisible(state)
 });
 
-const initialise = () => dispatch => {
-    dispatch(cpcNumbersActions.fetch());
-};
-
 const mapDispatchToProps = {
-    initialise,
     searchRsns: rsnsActions.search,
     clearRsnsSearch: rsnsActions.clearSearch,
     searchLoans: loansActions.search,

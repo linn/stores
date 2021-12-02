@@ -7,6 +7,6 @@
 
     public interface IExportRsnService
     {
-        IResult<IEnumerable<ExportRsn>> SearchRsns(int accountId, int? outletNumber);
+        IResult<IEnumerable<ExportRsn>> SearchRsns(int accountId, int? outletNumber, string searchTerm);
     }
 }

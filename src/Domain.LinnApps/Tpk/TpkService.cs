@@ -7,6 +7,9 @@
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
+    using Linn.Stores.Domain.LinnApps.Models;
+    using Linn.Stores.Domain.LinnApps.Requisitions;
+    using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
 
     public class TpkService : ITpkService
@@ -31,6 +34,10 @@
 
         private readonly IQueryRepository<SalesOrder> salesOrderRepository;
 
+        private readonly IRepository<ReqMove, ReqMoveKey> reqMovesRepository;
+
+        private IFilterByWildcardRepository<StockLocator, int> stockLocatorRepository;
+
         public TpkService(
             IQueryRepository<TransferableStock> tpkView,
             IQueryRepository<AccountingCompany> accountingCompaniesRepository,
@@ -41,7 +48,9 @@
             IStoresPack storesPack,
             IRepository<Consignment, int> consignmentRepository,
             IQueryRepository<SalesOrderDetail> salesOrderDetailRepository,
-            IQueryRepository<SalesOrder> salesOrderRepository)
+            IQueryRepository<SalesOrder> salesOrderRepository,
+            IRepository<ReqMove, ReqMoveKey> reqMovesRepository,
+            IFilterByWildcardRepository<StockLocator, int> stockLocatorRepository)
         {
             this.tpkView = tpkView;
             this.tpkPack = tpkPack;
@@ -53,6 +62,8 @@
             this.consignmentRepository = consignmentRepository;
             this.salesOrderDetailRepository = salesOrderDetailRepository;
             this.salesOrderRepository = salesOrderRepository;
+            this.reqMovesRepository = reqMovesRepository;
+            this.stockLocatorRepository = stockLocatorRepository;
         }
 
         public TpkResult TransferStock(TpkRequest tpkRequest)
@@ -85,8 +96,8 @@
             
             this.bundleLabelPack.PrintTpkBoxLabels(from.FromLocation);
             
-            var whatToWand = this.whatToWandService.WhatToWand(from.LocationId).ToList();
-            
+            var whatToWand = this.whatToWandService.WhatToWand(from.LocationId, from.PalletNumber).ToList();
+
             this.tpkPack.UpdateQuantityPrinted(from.FromLocation, out var updateQuantitySuccessful);
             
             if (!updateQuantitySuccessful)
@@ -95,32 +106,83 @@
             }
             
             this.storesPack.DoTpk(from.LocationId, from.PalletNumber, DateTime.Now, out var tpkSuccessful);
-            
             if (!tpkSuccessful)
             {
                 throw new TpkException(this.storesPack.GetErrorMessage());
             }
 
             var consignment = this.consignmentRepository.FindById(from.ConsignmentId);
-            return new TpkResult 
-                       {
-                           Success = true,
-                           Message = "TPK Successful",
-                           Transferred = transferredWithNotes,
-                           Report = new WhatToWandReport
-                                        {
-                                            Account = this.salesAccountQueryRepository
-                                                .FindBy(o => o.AccountId == consignment.SalesAccountId),
-                                            Consignment = consignment,
-                                            Type = this.tpkPack.GetWhatToWandType(consignment.ConsignmentId),
-                                            Lines = whatToWand,
-                                            CurrencyCode = this.salesOrderRepository
-                                                .FindBy(o => o.OrderNumber == whatToWand.First().OrderNumber)
-                                                .CurrencyCode, 
-                                            TotalNettValueOfConsignment = whatToWand.Sum(x => this.salesOrderDetailRepository
-                                                .FindBy(d => d.OrderNumber == x.OrderNumber && d.OrderLine == x.OrderLine).NettTotal),
-                                        },
-                                     };
+            try
+            {
+                return new TpkResult
+                           {
+                               Success = true,
+                               Message = "TPK Successful",
+                               Transferred = transferredWithNotes,
+                               Report = new WhatToWandReport
+                                            {
+                                                Account =
+                                                    this.salesAccountQueryRepository.FindBy(
+                                                        o => o.AccountId == consignment.SalesAccountId),
+                                                Consignment = consignment,
+                                                Type = this.tpkPack.GetWhatToWandType(consignment.ConsignmentId),
+                                                Lines = whatToWand,
+                                                CurrencyCode =
+                                                    this.salesOrderRepository.FindBy(
+                                                            o => o.OrderNumber == whatToWand.First().OrderNumber)
+                                                        .CurrencyCode,
+                                                TotalNettValueOfConsignment = whatToWand.Sum(
+                                                    x => this.salesOrderDetailRepository.FindBy(
+                                                        d => d.OrderNumber == x.OrderNumber
+                                                             && d.OrderLine == x.OrderLine).NettTotal),
+                                            },
+                           };
+            }
+            catch (Exception ex)
+            {
+                return new TpkResult { Success = false, Message = $"Error generating report. Stock transfer likely still succeeded. Click refresh to check. Error details: {ex.Message}" };
+            }
+        }
+
+        public ProcessResult UnpickStock(
+            int reqNumber, 
+            int lineNumber, 
+            int orderNumber, 
+            int orderLine, 
+            int amendedBy,
+            int? palletNumber,
+            int? locationId)
+        {
+            var moves = this.reqMovesRepository.FilterBy(
+                x => x.ReqNumber == reqNumber 
+                     && x.LineNumber == lineNumber 
+                     && !x.DateCancelled.HasValue
+                     && (x.StockLocator.PalletNumber == palletNumber || x.StockLocator.LocationId == locationId));
+
+            foreach (var reqMove in moves)
+            {
+                var result = this.storesPack.UnpickStock(
+                    reqNumber,
+                    lineNumber,
+                    reqMove.Sequence,
+                    orderNumber,
+                    orderLine,
+                    reqMove.Quantity,
+                    reqMove.StockLocatorId,
+                    amendedBy);
+
+                if (!result.Success)
+                {
+                    return result;
+                }
+            }
+
+            foreach (var reqMove in moves)
+            {
+                reqMove.DateCancelled = DateTime.Now;
+            }
+
+            return new ProcessResult(true, string.Empty);
         }
     }
 }

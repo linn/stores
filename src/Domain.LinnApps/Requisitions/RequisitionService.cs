@@ -21,7 +21,7 @@
         public RequisitionActionResult Unallocate(int reqNumber, int? reqLine, int userNumber)
         {
             var header = this.requisitionHeaderRepository.FindById(reqNumber);
-            var result = this.storesPack.UnAllocateRequisition(reqNumber, reqLine, userNumber);
+            var result = this.storesPack.UnallocateRequisition(reqNumber, reqLine, userNumber);
             
             return new RequisitionActionResult
                        {
