@@ -105,7 +105,7 @@
             }
 
             if (ontoLocation.StartsWith("P") 
-                && !string.IsNullOrEmpty(partNumber))
+                && !string.IsNullOrEmpty(partNumber) && transactionType.Equals("O"))
             {
                 foreach (var entry in linesArray)
                 {
