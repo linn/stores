@@ -17,7 +17,7 @@
                            Message = tpkResult.Message,
                            Success = tpkResult.Success,
                            Transferred = tpkResult.Transferred
-                               .Select(s 
+                               ?.Select(s 
                                    => new TransferredStockResource
                                           {
                                             FromLocation = s.FromLocation,
