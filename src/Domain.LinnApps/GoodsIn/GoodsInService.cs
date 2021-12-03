@@ -258,7 +258,14 @@
                     result.ParcelComments = $"RSN{rsnNumber}";
                 }
 
-                this.printRsnService.PrintRsn((int)rsnNumber, createdBy, "Service Copy");
+                try
+                {
+                    this.printRsnService.PrintRsn((int)rsnNumber, createdBy, "Service Copy");
+                }
+                catch (Exception ex)
+                {
+                    result.Message = result.Message += " RSN print failed: " + ex.Message;
+                }
 
                 if (printRsnLabels)
                 {
