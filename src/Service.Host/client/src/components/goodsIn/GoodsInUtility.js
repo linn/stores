@@ -815,7 +815,11 @@ function GoodsInUtility({
                                     value={formData?.loanNumber}
                                     label="Loan Number*"
                                     propertyName="loanNumber"
-                                    disabled={formData?.orderNumber || formData?.rsnNumber}
+                                    disabled={
+                                        formData?.orderNumber ||
+                                        formData?.rsnNumber ||
+                                        !formData?.ontoLocation
+                                    }
                                     onChange={handleFieldChange}
                                     textFieldProps={{
                                         onKeyDown: data => {
@@ -1055,7 +1059,7 @@ function GoodsInUtility({
                                 ...formData,
                                 multipleBookIn,
                                 printRsnLabels,
-                                lines: [...lines, row],
+                                lines: getTransactionType() === 'O' ? [...lines, row] : lines,
                                 createdBy: userNumber,
                                 transactionType: getTransactionType(),
                                 partNumber:
