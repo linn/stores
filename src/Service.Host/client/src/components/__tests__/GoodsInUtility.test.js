@@ -516,7 +516,8 @@ describe('When adding multiple lines to a book in...', () => {
                 message: null,
                 orderNumber: 123456,
                 partNumber: 'A PART',
-                documentType: 'PO'
+                documentType: 'PO',
+                transactionType: 'O'
             }
         });
     });

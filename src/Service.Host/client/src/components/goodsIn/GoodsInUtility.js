@@ -274,7 +274,7 @@ function GoodsInUtility({
         if (formData.rsnNumber) {
             return 'R';
         }
-        return validatePurchaseOrderResult.transactionType;
+        return validatePurchaseOrderResult.transactionType || 'O';
     };
 
     const tableColumns = [
