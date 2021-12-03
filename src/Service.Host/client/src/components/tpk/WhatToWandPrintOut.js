@@ -82,7 +82,6 @@ export default class WhatToWandPrintout extends React.PureComponent {
                                     <th style={{ width: '5%' }}>Line</th>
                                     <th style={{ width: '15%' }}>Article</th>
                                     <th style={{ width: '20%' }}>Invoice Desc.</th>
-                                    <th style={{ width: '15%' }}>Manual</th>
                                     <th style={{ width: '15%' }}>Mains Lead</th>
                                     <th style={{ width: '5%' }}>Kitted</th>
                                     <th style={{ width: '5%' }}>Ordered</th>
@@ -96,7 +95,6 @@ export default class WhatToWandPrintout extends React.PureComponent {
                                         <td>{r.orderLine}</td>
                                         <td>{r.articleNumber}</td>
                                         <td>{r.invoiceDescription}</td>
-                                        <td>{r.manual}</td>
                                         <td>{r.mainsLead}</td>
                                         <td>{r.kitted}</td>
                                         <td>{r.ordered}</td>
