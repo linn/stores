@@ -274,7 +274,7 @@ function GoodsInUtility({
         if (formData.rsnNumber) {
             return 'R';
         }
-        return validatePurchaseOrderResult.transactionType;
+        return validatePurchaseOrderResult.transactionType || 'O';
     };
 
     const tableColumns = [
@@ -565,7 +565,7 @@ function GoodsInUtility({
                     <InputField
                         fullWidth
                         value={formData.storageType}
-                        label="S/Type"
+                        label="S/Type*"
                         disabled={
                             validatePurchaseOrderResult?.message !==
                                 'New part - enter storage type or location' &&
@@ -574,9 +574,14 @@ function GoodsInUtility({
                         propertyName="storageType"
                         onChange={handleFieldChange}
                         textFieldProps={{
-                            onBlur: () =>
-                                formData.storageType &&
-                                validateStorageType(`storageType`, formData.storageType)
+                            onKeyDown: data => {
+                                if (
+                                    formData.storageType &&
+                                    (data.keyCode === 13 || data.keyCode === 9)
+                                ) {
+                                    validateStorageType(`storageType`, formData.storageType);
+                                }
+                            }
                         }}
                     />
                 </Grid>
@@ -584,6 +589,12 @@ function GoodsInUtility({
                     {validateStorageTypeResultLoading && <Loading />}
                 </Grid>
                 <Grid item xs={6} />
+                <Grid item xs={12}>
+                    <Typography>
+                        Note: press enter or tab on fields marked with a * to validate / fill
+                        related fields
+                    </Typography>
+                </Grid>
                 <Grid item xs={6}>
                     <Tabs
                         value={tab}
@@ -604,7 +615,7 @@ function GoodsInUtility({
                                     fullWidth
                                     type="number"
                                     value={formData.orderNumber}
-                                    label="Order Number"
+                                    label="Order Number*"
                                     disabled={
                                         validatePurchaseOrderResultLoading ||
                                         formData?.rsnNumber ||
@@ -613,10 +624,14 @@ function GoodsInUtility({
                                     propertyName="orderNumber"
                                     onChange={handleFieldChange}
                                     textFieldProps={{
-                                        onBlur: () =>
-                                            formData.orderNumber
-                                                ? validatePurchaseOrder(formData.orderNumber)
-                                                : {}
+                                        onKeyDown: data => {
+                                            if (
+                                                formData.orderNumber &&
+                                                (data.keyCode === 13 || data.keyCode === 9)
+                                            ) {
+                                                validatePurchaseOrder(formData.orderNumber);
+                                            }
+                                        }
                                     }}
                                 />
                             </Grid>
@@ -634,7 +649,7 @@ function GoodsInUtility({
                                 <InputField
                                     fullWidth
                                     value={formData.qty}
-                                    label="Qty"
+                                    label="Qty*"
                                     propertyName="qty"
                                     type="number"
                                     disabled={
@@ -642,12 +657,19 @@ function GoodsInUtility({
                                         !!validatePurchaseOrderResult?.message
                                     }
                                     textFieldProps={{
-                                        onBlur: () =>
-                                            formData.qty &&
-                                            validatePurchaseOrderBookInQty(
-                                                `qty=${formData.qty}&orderLine=${1}&orderNumber`,
-                                                formData.orderNumber
-                                            )
+                                        onKeyDown: data => {
+                                            if (
+                                                formData?.qty &&
+                                                (data.keyCode === 13 || data.keyCode === 9)
+                                            ) {
+                                                validatePurchaseOrderBookInQty(
+                                                    `qty=${
+                                                        formData.qty
+                                                    }&orderLine=${1}&orderNumber`,
+                                                    formData.orderNumber
+                                                );
+                                            }
+                                        }
                                     }}
                                     onChange={handleFieldChange}
                                 />
@@ -791,15 +813,23 @@ function GoodsInUtility({
                                 <InputField
                                     fullWidth
                                     value={formData?.loanNumber}
-                                    label="Loan Number"
+                                    label="Loan Number*"
                                     propertyName="loanNumber"
-                                    disabled={formData?.orderNumber || formData?.rsnNumber}
+                                    disabled={
+                                        formData?.orderNumber ||
+                                        formData?.rsnNumber ||
+                                        !formData?.ontoLocation
+                                    }
                                     onChange={handleFieldChange}
                                     textFieldProps={{
-                                        onBlur: () =>
-                                            formData.loanNumber
-                                                ? getLoanDetails('loanNumber', formData.loanNumber)
-                                                : {}
+                                        onKeyDown: data => {
+                                            if (
+                                                formData?.loanNumber &&
+                                                (data.keyCode === 13 || data.keyCode === 9)
+                                            ) {
+                                                getLoanDetails('loanNumber', formData.loanNumber);
+                                            }
+                                        }
                                     }}
                                 />
                             </Grid>
@@ -817,17 +847,22 @@ function GoodsInUtility({
                                 <InputField
                                     fullWidth
                                     value={formData?.rsnNumber}
-                                    label="RSN Number"
+                                    label="RSN Number*"
                                     propertyName="rsnNumber"
                                     disabled={formData?.orderNumber || formData?.loanNumber}
                                     onChange={handleFieldChange}
                                     textFieldProps={{
-                                        onBlur: () => {
-                                            validateRsn(formData?.rsnNumber);
-                                            getRsnAccessories();
-                                            getRsnConditions();
-                                            setRsnAccessoriesString('');
-                                            setRsnConditionsString('');
+                                        onKeyDown: data => {
+                                            if (
+                                                formData?.rsnNumber &&
+                                                (data.keyCode === 13 || data.keyCode === 9)
+                                            ) {
+                                                validateRsn(formData?.rsnNumber);
+                                                getRsnAccessories();
+                                                getRsnConditions();
+                                                setRsnAccessoriesString('');
+                                                setRsnConditionsString('');
+                                            }
                                         }
                                     }}
                                 />
@@ -1024,7 +1059,7 @@ function GoodsInUtility({
                                 ...formData,
                                 multipleBookIn,
                                 printRsnLabels,
-                                lines: [...lines, row],
+                                lines: getTransactionType() === 'O' ? [...lines, row] : lines,
                                 createdBy: userNumber,
                                 transactionType: getTransactionType(),
                                 partNumber:
