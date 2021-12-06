@@ -55,7 +55,7 @@ function Part({
         stockControlled: 'Y',
         cccCriticalPart: 'N',
         safetyCriticalPart: 'N',
-        bomType: 'A',
+        bomType: '',
         paretoCode: 'U',
         createdBy: userNumber,
         createdByName: userName,
