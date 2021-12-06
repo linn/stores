@@ -406,7 +406,7 @@
                 success = this.bartender.PrintLabels(
                     labelName,
                     kardexLabelType.DefaultPrinter,
-                    1,
+                    lines != null ? 1 : lines.Count() + 1,
                     kardexLabelType.FileName,
                     data,
                     ref message);
