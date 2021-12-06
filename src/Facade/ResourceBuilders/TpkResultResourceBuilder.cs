@@ -63,7 +63,6 @@
                                                                                InvoiceDescription = l.InvoiceDescription,
                                                                                Kitted = l.Kitted,
                                                                                MainsLead = l.MainsLead,
-                                                                               Manual = l.Manual,
                                                                                OrderLine = l.OrderLine,
                                                                                OrderNumber = l.OrderNumber,
                                                                                Ordered = l.Ordered,
