@@ -99,7 +99,7 @@
                                                           {
                                                               CpcNumber = this.iprCpcNumberId,
                                                               RsnNumber = 140333,
-                                                              TariffCode = "8495abc",
+                                                              TariffCode = "8495 12192",
                                                               LineNumber = 1,
                                                               Qty = 1,
                                                               OrderDescription = "potatoes"
@@ -151,7 +151,7 @@
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("ShippingRef")).Should()
                 .Be("EdStob555");
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("TariffCode")).Should()
-                .Be("849500001111");
+                .Be("8495 0000"); //should cut down to 8 digits with a space in middle
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("OrderDescription"))
                 .Should().Be("carrots");
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("Qty")).Should()

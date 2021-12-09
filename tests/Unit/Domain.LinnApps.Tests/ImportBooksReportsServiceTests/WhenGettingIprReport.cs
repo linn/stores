@@ -44,7 +44,7 @@
                                                                      {
                                                                          CpcNumber = this.iprCpcNumberId,
                                                                          RsnNumber = 140111,
-                                                                         TariffCode = "849500001111",
+                                                                         TariffCode = " 8495 1234 11",
                                                                          LineNumber = 3,
                                                                          Qty = 1,
                                                                          OrderDescription = "carrots"
@@ -62,7 +62,7 @@
                                                                      {
                                                                          CpcNumber = 999999,
                                                                          RsnNumber = 140234,
-                                                                         TariffCode = "849500002222",
+                                                                         TariffCode = "84952222",
                                                                          LineNumber = 1,
                                                                          Qty = 1,
                                                                          OrderDescription = "garlic"
@@ -151,7 +151,7 @@
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("ShippingRef")).Should()
                 .Be("EdStob555");
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("TariffCode")).Should()
-                .Be("849500001111");
+                .Be("8495 1234"); //should cut down to 8 digits and remove whitespace from start
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("OrderDescription"))
                 .Should().Be("carrots");
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("Qty")).Should()
