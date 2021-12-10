@@ -53,9 +53,9 @@
                     {
                         ContractResolver = new CamelCasePropertyNamesContractResolver()
                     });
-
+            
             var body = Encoding.UTF8.GetBytes(json);
-
+            
             this.messageDispatcher.Dispatch(this.routingKey, body, this.contentType);
         }
     }
