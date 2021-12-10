@@ -85,9 +85,13 @@ function Consignment({
     searchRsns,
     clearRsnsSearch,
     salesAccountsSearchResults,
-    salesAccountsSearchLoading,  
+    salesAccountsSearchLoading,
     searchSalesAccounts,
-    clearSalesAccountsSearch
+    clearSalesAccountsSearch,
+    addressesSearchResults,
+    addressesSearchLoading,
+    searchAddresses,
+    clearAddresses
 }) {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [termsMessage, setTermsMessage] = useState(false);
@@ -712,9 +716,13 @@ function Consignment({
                                         setEditStatus={setEditStatus}
                                         viewing={viewing()}
                                         salesAccountsSearchResults={salesAccountsSearchResults}
-                                        salesAccountsSearchLoading={salesAccountsSearchLoading}  
+                                        salesAccountsSearchLoading={salesAccountsSearchLoading}
                                         searchSalesAccounts={searchSalesAccounts}
                                         clearSalesAccountsSearch={clearSalesAccountsSearch}
+                                        addressesSearchResults={addressesSearchResults}
+                                        addressesSearchLoading={addressesSearchLoading}
+                                        searchAddresses={searchAddresses}
+                                        clearAddresses={clearAddresses}
                                     />
                                 )}
                                 {currentTab === 2 && (
@@ -1349,9 +1357,13 @@ Consignment.propTypes = {
     searchRsns: PropTypes.func.isRequired,
     clearRsnsSearch: PropTypes.func.isRequired,
     salesAccountsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
-    salesAccountsSearchLoading: PropTypes.bool,    
+    salesAccountsSearchLoading: PropTypes.bool,
     searchSalesAccounts: PropTypes.func.isRequired,
-    clearSalesAccountsSearch: PropTypes.func.isRequired
+    clearSalesAccountsSearch: PropTypes.func.isRequired,
+    addressesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
+    addressesSearchLoading: PropTypes.bool,
+    searchAddresses: PropTypes.func.isRequired,
+    clearAddresses: PropTypes.func.isRequired
 };
 
 Consignment.defaultProps = {
@@ -1388,7 +1400,9 @@ Consignment.defaultProps = {
     rsnsSearchResults: [],
     rsnsSearchLoading: false,
     salesAccountsSearchResults: [],
-    salesAccountsSearchLoading: false
+    salesAccountsSearchLoading: false,
+    addressesSearchResults: [],
+    addressesSearchLoading: false
 };
 
 export default Consignment;

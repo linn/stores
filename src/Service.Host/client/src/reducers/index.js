@@ -132,6 +132,7 @@ import rsnAccessories from './rsnAccessories';
 import rsnConditions from './rsnConditions';
 import validateRsnResult from './validateRsnResult';
 import printRsn from './printRsn';
+import addresses from './addresses';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -141,6 +142,7 @@ const rootReducer = history =>
         historyStore,
         router: connectRouter(history),
         accountingCompanies,
+        addresses,
         allocation,
         assemblyTechnologies,
         auditLocation,

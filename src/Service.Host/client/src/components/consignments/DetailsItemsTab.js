@@ -23,6 +23,7 @@ import TableRow from '@material-ui/core/TableRow';
 import { DataGrid } from '@mui/x-data-grid';
 import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
+import config from '../../config';
 
 function DetailsItemsTab({
     consignment,
@@ -48,7 +49,11 @@ function DetailsItemsTab({
     salesAccountsSearchResults,
     salesAccountsSearchLoading,
     searchSalesAccounts,
-    clearSalesAccountsSearch
+    clearSalesAccountsSearch,
+    addressesSearchResults,
+    addressesSearchLoading,
+    searchAddresses,
+    clearAddresses
 }) {
     const {
         data: itemsData,
@@ -827,9 +832,22 @@ function DetailsItemsTab({
         }));
     };
 
+    const addressesSearchResultsList = () => {
+        return addressesSearchResults?.map(address => ({
+            ...address,
+            name: address.id,
+            description: address.addressee,
+            id: address.id
+        }));
+    };
+
     const handleOnSelectSalesAccount = selectedAccount => {
         updateField('salesAccountId', selectedAccount.accountId);
         updateField('customerName', selectedAccount.accountName);
+    };
+
+    const handleOnSelectAddress = selectedAddress => {
+        updateField('addressId', selectedAddress.id);
     };
 
     return (
@@ -862,8 +880,8 @@ function DetailsItemsTab({
                                 )}
                             </TableCell>
                             <TableCell className={classes.tableCell}>
-                                {showText(consignment.customerName)}                                
-                            </TableCell>             
+                                {showText(consignment.customerName)}
+                            </TableCell>
                         </TableRow>
                         <TableRow key="Address">
                             <TablePromptItem text="Address" />
@@ -872,12 +890,17 @@ function DetailsItemsTab({
                                     consignment.address && consignment.address.displayAddress
                                 ) : (
                                     <>
-                                        <InputField
-                                            placeholder="AddressId"
-                                            propertyName="addressId"
+                                        <Typeahead
+                                            items={addressesSearchResultsList()}
+                                            placeholder="Address Id"
+                                            fetchItems={name => searchAddresses(name)}
+                                            clearSearch={clearAddresses}
+                                            loading={addressesSearchLoading}
+                                            debounce={1000}
+                                            links={false}
+                                            modal
+                                            onSelect={p => handleOnSelectAddress(p)}
                                             value={consignment.addressId}
-                                            onChange={updateField}
-                                            maxLength={10}
                                         />
                                     </>
                                 )}
@@ -1574,7 +1597,11 @@ DetailsItemsTab.propTypes = {
     salesAccountsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     salesAccountsSearchLoading: PropTypes.bool,
     searchSalesAccounts: PropTypes.func.isRequired,
-    clearSalesAccountsSearch: PropTypes.func.isRequired
+    clearSalesAccountsSearch: PropTypes.func.isRequired,
+    addressesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
+    addressesSearchLoading: PropTypes.bool,
+    searchAddresses: PropTypes.func.isRequired,
+    clearAddresses: PropTypes.func.isRequired
 };
 
 DetailsItemsTab.defaultProps = {
@@ -1589,7 +1616,9 @@ DetailsItemsTab.defaultProps = {
     shippingTerms: [],
     shippingTermsLoading: false,
     salesAccountsSearchResults: [],
-    salesAccountsSearchLoading: false
+    salesAccountsSearchLoading: false,
+    addressesSearchResults: [],
+    addressesSearchLoading: false
 };
 
 export default DetailsItemsTab;

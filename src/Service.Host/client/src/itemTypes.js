@@ -463,3 +463,9 @@ export const validateRsnResult = new ItemType(
     'VALIDATE_RSN_RESULT',
     '/logistics/rsn/validate'
 );
+
+export const addresses = new ItemType(
+    'addresses',
+    'ADDRESSES',
+    '/production/maintenance/labels/addresses'
+);

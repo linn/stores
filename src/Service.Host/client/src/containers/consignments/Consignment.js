@@ -40,6 +40,8 @@ import exportRsnsActions from '../../actions/exportRsnsActions';
 import exportRsnsSelectors from '../../selectors/exportRsnsSelectors';
 import salesAccountsActions from '../../actions/salesAccountsActions';
 import salesAccountsSelectors from '../../selectors/salesAccountsSelectors';
+import addressesActions from '../../actions/addressesActions';
+import addressesSelectors from '../../selectors/addressesSelectors';
 
 const getOptions = ownProps => {
     const options = queryString.parse(ownProps.location.search);
@@ -103,7 +105,9 @@ const mapStateToProps = (state, ownProps) => ({
     rsnsSearchResults: exportRsnsSelectors.getSearchItems(state),
     rsnsSearchLoading: exportRsnsSelectors.getSearchLoading(state),
     salesAccountsSearchResults: salesAccountsSelectors.getSearchItems(state),
-    salesAccountsSearchLoading: salesAccountsSelectors.getSearchLoading(state)
+    salesAccountsSearchLoading: salesAccountsSelectors.getSearchLoading(state),
+    addressesSearchResults: addressesSelectors.getSearchItems(state),
+    addressesSearchLoading: addressesSelectors.getSearchLoading(state)
 });
 
 const mapDispatchToProps = {
@@ -134,7 +138,9 @@ const mapDispatchToProps = {
     searchRsns: exportRsnsActions.searchWithOptions,
     clearRsnsSearch: exportRsnsActions.clearSearch,
     searchSalesAccounts: salesAccountsActions.search,
-    clearSalesAccountsSearch: salesAccountsActions.clearSearch
+    clearSalesAccountsSearch: salesAccountsActions.clearSearch,
+    searchAddresses: addressesActions.search,
+    clearAddresses: addressesActions.clearSearch
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Consignment));
