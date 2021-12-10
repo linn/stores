@@ -400,18 +400,19 @@
 
             if (!string.IsNullOrEmpty(kardexLocation))
             {
+                var kardexMessage = string.Empty;
                 var labelName = $"KGI{orderNumber}";
                 var data = $"\"{kardexLocation.Replace("\"", "''")}\",\"{reqNumber}\"";
                 var kardexLabelType = this.labelTypeRepository.FindBy(x => x.Code == "KARDEX");
                 success = this.bartender.PrintLabels(
                     labelName,
                     kardexLabelType.DefaultPrinter,
-                    lines != null ? 1 : lines.Count() + 1,
+                    lines == null ? 1 : lines.Count() + 1,
                     kardexLabelType.FileName,
                     data,
-                    ref message);
+                    ref kardexMessage);
 
-                return new ProcessResult { Message = message, Success = success };
+                message = kardexMessage;
             }
 
             var labelType = this.labelTypeRepository.FindBy(x => x.Code == qcState);
@@ -422,7 +423,7 @@
             foreach (var line in lines)
             {
                 var printString = string.Empty;
-
+                var labelMessage = string.Empty;
                 switch (qcState)
                 {
                     case "QUARANTINE":
@@ -496,7 +497,8 @@
                     1, 
                     labelType.FileName, 
                     printString, 
-                    ref message);
+                    ref labelMessage);
+                message += labelMessage;
             }
 
             return new ProcessResult(success, message);
