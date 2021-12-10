@@ -423,7 +423,7 @@
             foreach (var line in lines)
             {
                 var printString = string.Empty;
-
+                var labelMessage = string.Empty;
                 switch (qcState)
                 {
                     case "QUARANTINE":
@@ -497,7 +497,8 @@
                     1, 
                     labelType.FileName, 
                     printString, 
-                    ref message);
+                    ref labelMessage);
+                message += labelMessage;
             }
 
             return new ProcessResult(success, message);
