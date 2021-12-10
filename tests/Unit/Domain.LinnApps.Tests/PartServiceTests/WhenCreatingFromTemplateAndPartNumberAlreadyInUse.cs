@@ -37,8 +37,16 @@
                                          PartNumber = "CAP 431"
                                      }
                              }.AsQueryable());
+            this.PartRepository.SearchPartsWithWildcard(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<int>())
+                .Returns(new List<Part>
+                             {
+                                 new Part
+                                     {
+                                         PartNumber = "CAP 431"
+                                     }
+                             }.AsQueryable());
             this.PartRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>()).Returns(new Part());
-            this.TemplateRepository.FindById(Arg.Any<string>()).Returns(new PartTemplate());
+            this.TemplateRepository.FindById(Arg.Any<string>()).Returns(new PartTemplate { HasNumberSequence = "Y", NextNumber = 432 });
             this.PartPack.PartRoot(Arg.Any<string>()).Returns("ROOT");
             this.result = Assert.Throws<CreatePartException>(() => this.Sut.CreatePart(this.part, this.privileges, true));
         }

@@ -119,7 +119,7 @@ function BuildTab({
                         { id: 'P', displayText: 'Phantom' }
                     ]}
                     fullWidth
-                    allowNoValue={false}
+                    allowNoValue
                     value={bomType}
                     onChange={handleFieldChange}
                 />

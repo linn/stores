@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tpk
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using Linn.Common.Persistence;
@@ -70,14 +71,15 @@
         {
             var candidates = tpkRequest.StockToTransfer.ToList();
             var from = candidates.First();
+            IEnumerable<WhatToWandLine> whatToWand = null;
             if (candidates.Any(s => s.FromLocation != from.FromLocation))
             {
                 throw new TpkException("You can only TPK one pallet at a time");
             }
             
-            var recordsToTpk = this.tpkView.FilterBy(r => r.FromLocation == from.FromLocation).Count();
+            var recordsToTpk = this.tpkView.FilterBy(r => r.FromLocation == from.FromLocation);
             
-            if (recordsToTpk != candidates.Count)
+            if (recordsToTpk.Count() != candidates.Count)
             {
                 throw new TpkException("You haven't looked at everything from location " + from.FromLocation);
             }
@@ -95,8 +97,12 @@
                 s => new TransferredStock(s, this.tpkPack.GetTpkNotes(s.ConsignmentId, s.FromLocation)));
             
             this.bundleLabelPack.PrintTpkBoxLabels(from.FromLocation);
-            
-            var whatToWand = this.whatToWandService.WhatToWand(from.LocationId, from.PalletNumber).ToList();
+
+            if (!this.tpkView.FilterBy(x => x.FromLocation != from.FromLocation)
+                .Any(x => x.ConsignmentId == tpkRequest.StockToTransfer.First().ConsignmentId))
+            {
+                whatToWand = this.whatToWandService.WhatToWand(from.LocationId, from.PalletNumber).ToList();
+            }
 
             this.tpkPack.UpdateQuantityPrinted(from.FromLocation, out var updateQuantitySuccessful);
             
@@ -114,28 +120,29 @@
             var consignment = this.consignmentRepository.FindById(from.ConsignmentId);
             try
             {
+                var whatToWandLines = whatToWand?.ToArray();
                 return new TpkResult
                            {
                                Success = true,
                                Message = "TPK Successful",
                                Transferred = transferredWithNotes,
-                               Report = new WhatToWandReport
+                               Report = whatToWandLines == null ? null : new WhatToWandReport
                                             {
                                                 Account =
                                                     this.salesAccountQueryRepository.FindBy(
                                                         o => o.AccountId == consignment.SalesAccountId),
                                                 Consignment = consignment,
                                                 Type = this.tpkPack.GetWhatToWandType(consignment.ConsignmentId),
-                                                Lines = whatToWand,
+                                                Lines = whatToWandLines,
                                                 CurrencyCode =
                                                     this.salesOrderRepository.FindBy(
-                                                            o => o.OrderNumber == whatToWand.First().OrderNumber)
+                                                            o => o.OrderNumber == whatToWandLines.First().OrderNumber)
                                                         .CurrencyCode,
-                                                TotalNettValueOfConsignment = whatToWand.Sum(
+                                                TotalNettValueOfConsignment = whatToWandLines.Sum(
                                                     x => this.salesOrderDetailRepository.FindBy(
                                                         d => d.OrderNumber == x.OrderNumber
                                                              && d.OrderLine == x.OrderLine).NettTotal),
-                                            },
+                                            }
                            };
             }
             catch (Exception ex)

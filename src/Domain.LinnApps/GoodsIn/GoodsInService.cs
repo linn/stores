@@ -258,7 +258,14 @@
                     result.ParcelComments = $"RSN{rsnNumber}";
                 }
 
-                this.printRsnService.PrintRsn((int)rsnNumber, createdBy, "Service Copy");
+                try
+                {
+                    this.printRsnService.PrintRsn((int)rsnNumber, createdBy, "Service Copy");
+                }
+                catch (Exception ex)
+                {
+                    result.Message = result.Message += " RSN print failed: " + ex.Message;
+                }
 
                 if (printRsnLabels)
                 {
@@ -399,7 +406,7 @@
                 success = this.bartender.PrintLabels(
                     labelName,
                     kardexLabelType.DefaultPrinter,
-                    1,
+                    lines != null ? 1 : lines.Count() + 1,
                     kardexLabelType.FileName,
                     data,
                     ref message);

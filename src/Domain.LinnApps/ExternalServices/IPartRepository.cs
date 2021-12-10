@@ -9,6 +9,10 @@
     {
         IEnumerable<Part> SearchParts(string searchTerm, int? resultLimit);
 
-        IEnumerable<Part> SearchPartsWithWildcard(string partNumberSearchTerm, string descriptionSearchTerm);
+        IEnumerable<Part> SearchPartsWithWildcard(
+            string partNumberSearchTerm, 
+            string descriptionSearchTerm, 
+            bool newestFirst = false,
+            int? limit = null);
     }
 }
