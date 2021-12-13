@@ -32,7 +32,6 @@ const mapStateToProps = (state, { match }) => ({
 
 const initialise = ({ jobId }) => dispatch => {
     dispatch(sosAllocHeadsActions.search(jobId));
-    dispatch(finishAllocationActions.clearErrorsForItem());
     dispatch(sosAllocDetailsActions.searchWithOptions(null, `&jobId=${jobId}`));
 };
 
