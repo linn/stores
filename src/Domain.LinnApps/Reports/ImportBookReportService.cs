@@ -11,15 +11,15 @@
 
     public class ImportBookReportService : IImportBookReportService
     {
-        private readonly IRepository<ImportBook, int> impbookRepository;
-
         private readonly IRepository<Country, string> countryRepository;
 
         private readonly IRepository<ExportReturnDetail, ExportReturnDetailKey> exportReturnDetailRepository;
 
-        private readonly IReportingHelper reportingHelper;
+        private readonly IRepository<ImportBook, int> impbookRepository;
 
         private readonly int IprCpcNumberId = 13;
+
+        private readonly IReportingHelper reportingHelper;
 
         public ImportBookReportService(
             IRepository<ImportBook, int> impbookRepository,
@@ -33,21 +33,58 @@
             this.reportingHelper = reportingHelper;
         }
 
-        public ResultsModel GetIPRReport(DateTime from, DateTime to, bool iprResults = true)
+        public ResultsModel GetEUExport(DateTime from, DateTime to, bool euResults = true)
         {
             var euCountries = this.countryRepository.FilterBy(x => x.ECMember == "Y").Select(z => z.CountryCode)
                 .ToList();
+
             var iprImpbooks = this.impbookRepository.FilterBy(
-                x => x.OrderDetails.Any(
-                         z => (z.CpcNumber.HasValue && z.CpcNumber.Value == this.IprCpcNumberId) == iprResults)
-                     && x.CustomsEntryCodeDate.HasValue && from < x.CustomsEntryCodeDate.Value
-                     && x.CustomsEntryCodeDate.Value < to);
+                x => euCountries.Contains(x.Supplier.CountryCode) == euResults && x.CustomsEntryCodeDate.HasValue
+                                                                               && from < x.CustomsEntryCodeDate.Value
+                                                                               && x.CustomsEntryCodeDate.Value < to);
 
             var reportLayout = new SimpleGridLayout(
                 this.reportingHelper,
                 CalculationValueModelType.TextValue,
                 null,
-                this.GenerateIprReportTitle(from, to, iprResults));
+                this.GenerateEUReportTitle(from, to, euResults));
+
+            this.AddExportColumns(reportLayout);
+
+            var values = new List<CalculationValueModel>();
+
+            foreach (var impbook in iprImpbooks)
+            {
+                var isInEU = euCountries.Contains(impbook.Supplier.CountryCode);
+                foreach (var orderDetail in impbook.OrderDetails)
+                {
+                    this.ExtractExportDetails(values, impbook, orderDetail, isInEU);
+                }
+            }
+
+            reportLayout.SetGridData(values);
+            var model = reportLayout.GetResultsModel();
+            model.RowDrillDownTemplates.Add(new DrillDownModel("Id", "/logistics/import-books/{textValue}"));
+            model.RowHeader = "Import Book Number/Ref";
+
+            return model;
+        }
+
+        public ResultsModel GetEUReport(DateTime from, DateTime to, bool euResults = true)
+        {
+            var euCountries = this.countryRepository.FilterBy(x => x.ECMember == "Y").Select(z => z.CountryCode)
+                .ToList();
+
+            var iprImpbooks = this.impbookRepository.FilterBy(
+                x => euCountries.Contains(x.Supplier.CountryCode) == euResults && x.CustomsEntryCodeDate.HasValue
+                                                                               && from < x.CustomsEntryCodeDate.Value
+                                                                               && x.CustomsEntryCodeDate.Value < to);
+
+            var reportLayout = new SimpleGridLayout(
+                this.reportingHelper,
+                CalculationValueModelType.TextValue,
+                null,
+                this.GenerateEUReportTitle(from, to, euResults));
 
             this.AddReportColumns(reportLayout);
 
@@ -55,12 +92,9 @@
 
             foreach (var impbook in iprImpbooks)
             {
-                var isInEU = euCountries.Contains(impbook.Supplier.CountryCode);
-
-                foreach (var orderDetail in impbook.OrderDetails.Where(
-                    x => (x.CpcNumber.HasValue && x.CpcNumber.Value == this.IprCpcNumberId) == iprResults))
+                foreach (var orderDetail in impbook.OrderDetails)
                 {
-                    this.ExtractDetails(values, impbook, orderDetail, isInEU);
+                    this.ExtractDetails(values, impbook, orderDetail, euResults);
                 }
             }
 
@@ -111,20 +145,21 @@
             return model;
         }
 
-        public ResultsModel GetEUReport(DateTime from, DateTime to, bool euResults = true)
+        public ResultsModel GetIPRReport(DateTime from, DateTime to, bool iprResults = true)
         {
             var euCountries = this.countryRepository.FilterBy(x => x.ECMember == "Y").Select(z => z.CountryCode)
                 .ToList();
-
             var iprImpbooks = this.impbookRepository.FilterBy(
-                x => (euCountries.Contains(x.Supplier.CountryCode) == euResults) && x.CustomsEntryCodeDate.HasValue
-                     && from < x.CustomsEntryCodeDate.Value && x.CustomsEntryCodeDate.Value < to);
+                x => x.OrderDetails.Any(
+                         z => (z.CpcNumber.HasValue && z.CpcNumber.Value == this.IprCpcNumberId) == iprResults)
+                     && x.CustomsEntryCodeDate.HasValue && from < x.CustomsEntryCodeDate.Value
+                     && x.CustomsEntryCodeDate.Value < to);
 
             var reportLayout = new SimpleGridLayout(
                 this.reportingHelper,
                 CalculationValueModelType.TextValue,
                 null,
-                this.GenerateEUReportTitle(from, to, euResults));
+                this.GenerateIprReportTitle(from, to, iprResults));
 
             this.AddReportColumns(reportLayout);
 
@@ -132,45 +167,12 @@
 
             foreach (var impbook in iprImpbooks)
             {
-                foreach (var orderDetail in impbook.OrderDetails)
-                {
-                    this.ExtractDetails(values, impbook, orderDetail, euResults);
-                }
-            }
-
-            reportLayout.SetGridData(values);
-            var model = reportLayout.GetResultsModel();
-            model.RowDrillDownTemplates.Add(new DrillDownModel("Id", "/logistics/import-books/{textValue}"));
-            model.RowHeader = "Import Book Number/Ref";
-
-            return model;
-        }
-
-        public ResultsModel GetEUExport(DateTime from, DateTime to, bool euResults = true)
-        {
-            var euCountries = this.countryRepository.FilterBy(x => x.ECMember == "Y").Select(z => z.CountryCode)
-                .ToList();
-
-            var iprImpbooks = this.impbookRepository.FilterBy(
-                x => (euCountries.Contains(x.Supplier.CountryCode) == euResults) && x.CustomsEntryCodeDate.HasValue
-                     && from < x.CustomsEntryCodeDate.Value && x.CustomsEntryCodeDate.Value < to);
-
-            var reportLayout = new SimpleGridLayout(
-                this.reportingHelper,
-                CalculationValueModelType.TextValue,
-                null,
-                this.GenerateEUReportTitle(from, to, euResults));
-
-            this.AddExportColumns(reportLayout);
-
-            var values = new List<CalculationValueModel>();
-
-            foreach (var impbook in iprImpbooks)
-            {
                 var isInEU = euCountries.Contains(impbook.Supplier.CountryCode);
-                foreach (var orderDetail in impbook.OrderDetails)
+
+                foreach (var orderDetail in impbook.OrderDetails.Where(
+                    x => (x.CpcNumber.HasValue && x.CpcNumber.Value == this.IprCpcNumberId) == iprResults))
                 {
-                    this.ExtractExportDetails(values, impbook, orderDetail, isInEU);
+                    this.ExtractDetails(values, impbook, orderDetail, isInEU);
                 }
             }
 
@@ -180,33 +182,6 @@
             model.RowHeader = "Import Book Number/Ref";
 
             return model;
-        }
-
-        private void AddReportColumns(SimpleGridLayout reportLayout)
-        {
-            reportLayout.AddColumnComponent(
-                null,
-                new List<AxisDetailsModel>
-                    {
-                        new AxisDetailsModel("RsnNo", "Unique RSN No", GridDisplayType.TextValue) { AllowWrap = false },
-                        new AxisDetailsModel("InvNo", "Job Ref or Invoice Number", GridDisplayType.TextValue),
-                        new AxisDetailsModel("SupplierCountry", "Country Importing From", GridDisplayType.TextValue),
-                        new AxisDetailsModel("Carrier", "Import Agent (Carrier)", GridDisplayType.TextValue),
-                        new AxisDetailsModel(
-                            "ShippingRef",
-                            "Import AWB/Transport Bill No (Shipping Ref)",
-                            GridDisplayType.TextValue),
-                        new AxisDetailsModel("CustomsEntryCode", "Import Entry Code", GridDisplayType.TextValue),
-                        new AxisDetailsModel(
-                            "CustomsEntryCodeDate",
-                            "Date of Entry (customs)",
-                            GridDisplayType.TextValue),
-                        new AxisDetailsModel("TariffCode", "Commodity (tariff) code", GridDisplayType.TextValue),
-                        new AxisDetailsModel("OrderDescription", "Goods Description", GridDisplayType.TextValue),
-                        new AxisDetailsModel("Qty", "Quantity", GridDisplayType.TextValue),
-                        new AxisDetailsModel("OriginalCurrency", "Original Currency", GridDisplayType.TextValue),
-                        new AxisDetailsModel("ForeignValue", "Value (in original currency)", GridDisplayType.TextValue),
-                    });
         }
 
         private void AddExportColumns(SimpleGridLayout reportLayout)
@@ -239,7 +214,34 @@
                         new AxisDetailsModel("ExchangeRate", "R/E", GridDisplayType.TextValue),
                         new AxisDetailsModel("Currency", GridDisplayType.TextValue),
                         new AxisDetailsModel("GBPValue", "GBP/Customs Value", GridDisplayType.TextValue),
-                        new AxisDetailsModel("Quarter", "Quarter or Month for BOD", GridDisplayType.TextValue),
+                        new AxisDetailsModel("Quarter", "Quarter or Month for BOD", GridDisplayType.TextValue)
+                    });
+        }
+
+        private void AddReportColumns(SimpleGridLayout reportLayout)
+        {
+            reportLayout.AddColumnComponent(
+                null,
+                new List<AxisDetailsModel>
+                    {
+                        new AxisDetailsModel("RsnNo", "Unique RSN No", GridDisplayType.TextValue) { AllowWrap = false },
+                        new AxisDetailsModel("InvNo", "Job Ref or Invoice Number", GridDisplayType.TextValue),
+                        new AxisDetailsModel("SupplierCountry", "Country Importing From", GridDisplayType.TextValue),
+                        new AxisDetailsModel("Carrier", "Import Agent (Carrier)", GridDisplayType.TextValue),
+                        new AxisDetailsModel(
+                            "ShippingRef",
+                            "Import AWB/Transport Bill No (Shipping Ref)",
+                            GridDisplayType.TextValue),
+                        new AxisDetailsModel("CustomsEntryCode", "Import Entry Code", GridDisplayType.TextValue),
+                        new AxisDetailsModel(
+                            "CustomsEntryCodeDate",
+                            "Date of Entry (customs)",
+                            GridDisplayType.TextValue),
+                        new AxisDetailsModel("TariffCode", "Commodity (tariff) code", GridDisplayType.TextValue),
+                        new AxisDetailsModel("OrderDescription", "Goods Description", GridDisplayType.TextValue),
+                        new AxisDetailsModel("Qty", "Quantity", GridDisplayType.TextValue),
+                        new AxisDetailsModel("OriginalCurrency", "Original Currency", GridDisplayType.TextValue),
+                        new AxisDetailsModel("ForeignValue", "Value (in original currency)", GridDisplayType.TextValue)
                     });
         }
 
@@ -321,7 +323,7 @@
                     {
                         RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                         ColumnId = "TariffCode",
-                        TextDisplay = orderDetail.TariffCode,
+                        TextDisplay = this.FormatTariffCodeToEightDigits(orderDetail.TariffCode),
                         RowTitle = impbook.Id.ToString()
                     });
             values.Add(
@@ -455,7 +457,7 @@
                     {
                         RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                         ColumnId = "TariffCode",
-                        TextDisplay = orderDetail.TariffCode,
+                        TextDisplay = this.FormatTariffCodeToEightDigits(orderDetail.TariffCode),
                         RowTitle = impbook.Id.ToString()
                     });
             values.Add(
@@ -535,17 +537,29 @@
                     });
         }
 
-        private string GenerateIprReportTitle(DateTime fromDate, DateTime toDate, bool ipr)
+        private string FormatTariffCodeToEightDigits(string tariffCode)
         {
-            var nonText = ipr ? string.Empty : "Non-";
+            if (tariffCode.Length <= 8)
+            {
+                return tariffCode;
+            }
 
-            return $"{nonText}IPR Impbooks between {fromDate:dd-MMM-yyyy} and {toDate:dd-MMM-yyyy}";
+            var noWhiteSpaceTariff = tariffCode.Replace(" ", string.Empty);
+
+            return $"{noWhiteSpaceTariff.Substring(0, 4)} {noWhiteSpaceTariff.Substring(4, 4)}";
         }
 
         private string GenerateEUReportTitle(DateTime fromDate, DateTime toDate, bool eu)
         {
             var nonText = eu ? string.Empty : "Non-";
             return $"{nonText}EU Impbooks between {fromDate:dd-MMM-yyyy} and {toDate:dd-MMM-yyyy}";
+        }
+
+        private string GenerateIprReportTitle(DateTime fromDate, DateTime toDate, bool ipr)
+        {
+            var nonText = ipr ? string.Empty : "Non-";
+
+            return $"{nonText}IPR Impbooks between {fromDate:dd-MMM-yyyy} and {toDate:dd-MMM-yyyy}";
         }
     }
 }

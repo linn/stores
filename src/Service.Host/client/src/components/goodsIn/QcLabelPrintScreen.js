@@ -218,11 +218,7 @@ function QcLabelPrintScreen({
             <Grid item xs={10} />
 
             <Grid item xs={12}>
-                <Accordion
-                    expanded={labelLinesExpanded}
-                    disabled={!!kardexLocation}
-                    data-testid="quantitiesExpansionPanel"
-                >
+                <Accordion expanded={labelLinesExpanded} data-testid="quantitiesExpansionPanel">
                     <AccordionSummary
                         onClick={() => setLabelLinesExpanded(!labelLinesExpanded)}
                         expandIcon={<ExpandMoreIcon />}

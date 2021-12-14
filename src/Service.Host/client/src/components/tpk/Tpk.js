@@ -110,6 +110,7 @@ export default function Tpk({
         { field: 'locationId', headerName: 'LocationID', hide: true },
         { field: 'locationCode', headerName: 'Location', width: 140, hide: true }
     ];
+
     const handleSelectRow = selected => {
         setSelectedRows(rows.filter(r => selected.includes(r.id)));
     };

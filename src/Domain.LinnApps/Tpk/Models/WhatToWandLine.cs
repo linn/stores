@@ -10,8 +10,6 @@
 
         public string InvoiceDescription { get; set; }
 
-        public string Manual { get; set; }
-
         public string MainsLead { get; set; }
 
         public int Kitted { get; set; }

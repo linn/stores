@@ -26,7 +26,6 @@
             SOD.ORDER_LINE ORDER_LINE,
             SA.ARTICLE_NUMBER ARTICLE_NUMBER, 
             SA.INVOICE_DESCRIPTION,
-            '' manual, --THIS IS A PLACEHOLDER FOR MANUAL - TODO - IS THIS STILL NEEDED?
             which_mains_lead(sod.article_number, ad.country) lead_to_display,
             SOD.ORDER_LINE KITTED,
             SOD.QTY_ORDERED QTY_ORDERED,
@@ -170,11 +169,10 @@
                                   OrderLine = int.Parse(data[1].ToString()),
                                   ArticleNumber = data[2].ToString(),
                                   InvoiceDescription = data[3].ToString(),
-                                  Manual = data[4].ToString(),
-                                  MainsLead = data[5].ToString(),
-                                  Kitted = int.Parse(data[6].ToString()),
-                                  Ordered = int.Parse(data[7].ToString()),
-                                  Sif = data[8].ToString()
+                                  MainsLead = data[4].ToString(),
+                                  Kitted = int.Parse(data[5].ToString()),
+                                  Ordered = int.Parse(data[6].ToString()),
+                                  Sif = data[7].ToString()
                 });
             }
 
