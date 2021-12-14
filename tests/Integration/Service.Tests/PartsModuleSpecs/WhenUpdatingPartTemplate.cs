@@ -66,7 +66,8 @@
                                            };
 
             this.PartTemplateService.Update(partTemplate.PartRoot, Arg.Any<PartTemplateResource>(), Arg.Any<IEnumerable<string>>())
-                .Returns(new SuccessResult<ResponseModel<PartTemplate>>(new ResponseModel<PartTemplate>(partTemplate, privileges)));
+                .Returns(new SuccessResult<ResponseModel<PartTemplate>>(
+                    new ResponseModel<PartTemplate>(partTemplate, privileges)));
 
             this.Response = this.Browser.Put(
                 "/inventory/part-templates/LRPT",

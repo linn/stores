@@ -151,7 +151,7 @@
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());
                         with.Dependency<IResourceBuilder<ResponseModel<PartTemplate>>>(new PartTemplateResourceBuilder(this.AuthorisationService));
-                        with.Dependency<IResourceBuilder<IEnumerable<ResponseModel<PartTemplate>>>>(new PartTemplatesResourceBuilder(this.AuthorisationService));
+                        with.Dependency<IResourceBuilder<ResponseModel<IEnumerable<PartTemplate>>>>(new PartTemplatesResourceBuilder(this.AuthorisationService));
                         with.Dependency<IResourceBuilder<UnitOfMeasure>>(new UnitOfMeasureResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<UnitOfMeasure>>>(new UnitsOfMeasureResourceBuilder());
                         with.Dependency<IResourceBuilder<PartCategory>>(new PartCategoryResourceBuilder());

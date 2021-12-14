@@ -24,7 +24,8 @@
             var partTemp = new PartTemplate { PartRoot = this.partRootString };
             var privileges = new List<string> { "part.admin" };
 
-            this.PartTemplateService.GetById(partTemp.PartRoot, Arg.Any<IEnumerable<string>>()).Returns(new SuccessResult<ResponseModel<PartTemplate>>(new ResponseModel<PartTemplate>(partTemp, privileges)));
+            this.PartTemplateService.GetById(partTemp.PartRoot, Arg.Any<IEnumerable<string>>()).Returns(
+                new SuccessResult<ResponseModel<PartTemplate>>(new ResponseModel<PartTemplate>(partTemp, privileges)));
 
 
             this.Response = this.Browser.Get(

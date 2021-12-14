@@ -5,9 +5,9 @@
     using Linn.Common.Nancy.Facade;
     using Linn.Stores.Domain.LinnApps.Parts;
 
-    public class PartTemplatesResponseProcessor : JsonResponseProcessor<IEnumerable<ResponseModel<PartTemplate>>>
+    public class PartTemplatesResponseProcessor : JsonResponseProcessor<ResponseModel<IEnumerable<PartTemplate>>>
     {
-        public PartTemplatesResponseProcessor(IResourceBuilder<IEnumerable<ResponseModel<PartTemplate>>> resourceBuilder)
+        public PartTemplatesResponseProcessor(IResourceBuilder<ResponseModel<IEnumerable<PartTemplate>>> resourceBuilder)
             : base(resourceBuilder, "linnapps-part-templates", 1)
         {
         }

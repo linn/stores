@@ -8,7 +8,7 @@
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources.Parts;
 
-    public class PartTemplatesResourceBuilder : IResourceBuilder<IEnumerable<ResponseModel<PartTemplate>>>
+    public class PartTemplatesResourceBuilder : IResourceBuilder<ResponseModel<IEnumerable<PartTemplate>>>
     {
         private readonly IAuthorisationService authorisationService;
 
@@ -21,15 +21,14 @@
             this.partTemplateResourceBuilder = new PartTemplateResourceBuilder(authorisationService);
         }
 
-
-        public IEnumerable<PartTemplateResource> Build(IEnumerable<ResponseModel<PartTemplate>> templates)
+        public IEnumerable<PartTemplateResource> Build(ResponseModel<IEnumerable<PartTemplate>> templates)
         {
-            return templates.OrderBy(t => t.ResponseData.PartRoot).Select(p => this.partTemplateResourceBuilder.Build(p));
+            return templates.ResponseData.OrderBy(t => t.PartRoot).Select(p => this.partTemplateResourceBuilder.Build(new ResponseModel<PartTemplate>(p, templates.Privileges)));
         }
 
-        object IResourceBuilder<IEnumerable<ResponseModel<PartTemplate>>>.Build(IEnumerable<ResponseModel<PartTemplate>> templates) => this.Build(templates);
+        object IResourceBuilder<ResponseModel<IEnumerable<PartTemplate>>>.Build(ResponseModel<IEnumerable<PartTemplate>> templates) => this.Build(templates);
 
-        public string GetLocation(IEnumerable<ResponseModel<PartTemplate>> model)
+        public string GetLocation(ResponseModel<IEnumerable<PartTemplate>> model)
         {
             throw new System.NotImplementedException();
         }

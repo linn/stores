@@ -9,6 +9,8 @@
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources.Parts;
 
+    using Microsoft.EntityFrameworkCore.Internal;
+
     using Nancy;
     using Nancy.Testing;
 
@@ -39,8 +41,8 @@
                 new List<string>());
 
             this.PartTemplateService.GetAll(Arg.Any<IEnumerable<string>>())
-                .Returns(new SuccessResult<ResponseModel<IEnumerable<PartTemplate>>>(new ResponseModel<IEnumerable<PartTemplate>>(new List<PartTemplate> { this.partTemplate }, privileges)));
-
+                .Returns(new SuccessResult<ResponseModel<IEnumerable<PartTemplate>>>(
+                    new ResponseModel<IEnumerable<PartTemplate>>(new List<PartTemplate> { this.partTemplate }, privileges)));
 
             this.Response = this.Browser.Get(
                 "/inventory/part-templates",
@@ -66,8 +68,7 @@
         public void ShouldReturnResource()
         {
             var resource = this.Response.Body.DeserializeJson<IEnumerable<PartTemplateResource>>().ToList();
-            resource.First().Description.Should().Be("A test for updating a part template");
-            resource.First().NextNumber.Should().Be(32);
+            resource.First().PartRoot.Should().Be("PART A");
         }
     }
 }
