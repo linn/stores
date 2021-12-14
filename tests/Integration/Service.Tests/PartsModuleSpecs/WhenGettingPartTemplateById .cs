@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Service.Tests.PartsModuleSpecs
 {
+    using System.Collections.Generic;
+
     using FluentAssertions;
 
     using Linn.Common.Facade;
@@ -10,7 +12,6 @@
     using Nancy.Testing;
 
     using NSubstitute;
-
     using NUnit.Framework;
 
     public class WhenGettingPartTemplatesById : ContextBase
@@ -21,8 +22,10 @@
         public void SetUp()
         {
             var partTemp = new PartTemplate { PartRoot = this.partRootString };
+            var privileges = new List<string> { "part.admin" };
 
-            this.PartTemplateService.GetById(partTemp.PartRoot).Returns(new SuccessResult<PartTemplate>(partTemp));
+            this.PartTemplateService.GetById(partTemp.PartRoot, Arg.Any<IEnumerable<string>>()).Returns(new SuccessResult<ResponseModel<PartTemplate>>(new ResponseModel<PartTemplate>(partTemp, privileges)));
+
 
             this.Response = this.Browser.Get(
                 "/inventory/part-templates/PARTTEMP",
@@ -38,7 +41,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.PartTemplateService.Received().GetById(this.partRootString);
+            this.PartTemplateService.Received().GetById(Arg.Any<string>(), Arg.Any<IEnumerable<string>>());
         }
 
         [Test]

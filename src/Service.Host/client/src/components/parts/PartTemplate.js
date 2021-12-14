@@ -469,7 +469,7 @@ PartTemplate.propTypes = {
     productAnalysisCodeSearchResults: PropTypes.arrayOf(productAnalysisCodeShape),
     searchProductAnalysisCodes: PropTypes.func.isRequired,
     clearProductAnalysisCodesSearch: PropTypes.func,
-    productAnalysisCodesSearchLoading: PropTypes.bool,
+    productAnalysisCodesSearchLoading: PropTypes.bool.isRequired,
     assemblyTechnologies: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
@@ -498,7 +498,6 @@ PartTemplate.defaultProps = {
     itemError: null,
     itemId: null,
     productAnalysisCodeSearchResults: [],
-    productAnalysisCodesSearchLoading: false,
     assemblyTechnologies: [],
     clearProductAnalysisCodesSearch: () => {}
 };

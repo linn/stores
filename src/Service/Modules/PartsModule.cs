@@ -233,13 +233,13 @@
         {
             this.RequiresAuthentication();
             var resource = this.Bind<PartTemplateResource>();
-            var result = this.partTemplateService.Add(resource);
+            var result = this.partTemplateService.Add(resource, this.Context.CurrentUser.GetPrivileges());
             return this.Negotiate.WithStatusCode(HttpStatusCode.Created).WithModel(result);
         }
 
         private object GetPartTemplate(string id)
         {
-            var result = this.partTemplateService.GetById(id);
+            var result = this.partTemplateService.GetById(id, this.Context.CurrentUser.GetPrivileges());
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
@@ -248,13 +248,13 @@
         {
             this.RequiresAuthentication();
             var resource = this.Bind<PartTemplateResource>();
-            var result = this.partTemplateService.Update(id, resource);
+            var result = this.partTemplateService.Update(id, resource, this.Context.CurrentUser.GetPrivileges());
             return this.Negotiate.WithModel(result);
         }
 
         private object GetPartTemplates()
         {
-            var result = this.partTemplateService.GetAll();
+            var result = this.partTemplateService.GetAll(this.Context.CurrentUser.GetPrivileges());
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

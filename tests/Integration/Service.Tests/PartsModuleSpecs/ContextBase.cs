@@ -92,6 +92,8 @@
             get; private set;
         }
 
+        protected IAuthorisationService AuthorisationService { get; set; }
+
         [SetUp]
         public void EstablishContext()
         {
@@ -122,6 +124,8 @@
             this.PartPack = Substitute.For<IPartPack>();
             this.TqmsCategoriesService = Substitute
                 .For<IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>>();
+            this.AuthorisationService = Substitute.For<IAuthorisationService>();
+
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
@@ -146,8 +150,8 @@
                         with.Dependency(this.TqmsCategoriesService);
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());
-                        with.Dependency<IResourceBuilder<PartTemplate>>(new PartTemplateResourceBuilder());
-                        with.Dependency<IResourceBuilder<IEnumerable<PartTemplate>>>(new PartTemplatesResourceBuilder());
+                        with.Dependency<IResourceBuilder<ResponseModel<PartTemplate>>>(new PartTemplateResourceBuilder(this.AuthorisationService));
+                        with.Dependency<IResourceBuilder<IEnumerable<ResponseModel<PartTemplate>>>>(new PartTemplatesResourceBuilder(this.AuthorisationService));
                         with.Dependency<IResourceBuilder<UnitOfMeasure>>(new UnitOfMeasureResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<UnitOfMeasure>>>(new UnitsOfMeasureResourceBuilder());
                         with.Dependency<IResourceBuilder<PartCategory>>(new PartCategoryResourceBuilder());
