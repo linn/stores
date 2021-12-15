@@ -11,6 +11,9 @@ function PartTemplateSearch({ privileges, partTemplates }) {
     const createUrl = () => {
         return `/inventory/part-templates/create`;
     };
+    const viewUrl = () => {
+        return `/inventory/part-templates/${template}`;
+    };
     const canCreate = () => {
         if (!(privileges.length < 1)) {
             return privileges.some(priv => priv === 'part.admin');
@@ -56,7 +59,7 @@ function PartTemplateSearch({ privileges, partTemplates }) {
                 <Grid item xs={1}>
                     <LinkButton
                         text="View"
-                        to={createUrl()}
+                        to={viewUrl()}
                         disabled={!canCreate()}
                         tooltip={
                             canCreate() ? null : 'You are not authorised to create part templates.'
