@@ -109,7 +109,8 @@ function PartTemplate({
             !partTemplate.description ||
             !partTemplate.hasDataSheet ||
             !partTemplate.allowVariants ||
-            !partTemplate.allowPartCreation
+            !partTemplate.allowPartCreation ||
+            !partTemplate.hasNumberSequence
         );
     };
 
