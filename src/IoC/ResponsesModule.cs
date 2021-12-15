@@ -89,7 +89,7 @@
             builder.RegisterType<CountryResourceBuilder>().As<IResourceBuilder<Country>>();
             builder.RegisterType<CountriesResourceBuilder>().As<IResourceBuilder<IEnumerable<Country>>>();
             builder.RegisterType<PartTemplateResourceBuilder>().As<IResourceBuilder<ResponseModel<PartTemplate>>>();
-            builder.RegisterType<PartTemplatesResourceBuilder>().As<IResourceBuilder<IEnumerable<ResponseModel<PartTemplate>>>>();
+            builder.RegisterType<PartTemplatesResourceBuilder>().As<IResourceBuilder<ResponseModel< IEnumerable<PartTemplate>>>>();
             builder.RegisterType<PartLiveTestResourceBuilder>().As<IResourceBuilder<PartLiveTest>>();
             builder.RegisterType<SosAllocHeadResourceBuilder>().As<IResourceBuilder<SosAllocHead>>();
             builder.RegisterType<SosAllocHeadsResourceBuilder>().As<IResourceBuilder<IEnumerable<SosAllocHead>>>();
