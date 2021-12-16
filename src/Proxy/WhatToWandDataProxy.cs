@@ -15,14 +15,17 @@
             this.databaseService = databaseService;
         }
 
-        public IEnumerable<WhatToWandLine> WhatToWand(int fromLocationId)
+        public IEnumerable<WhatToWandLine> WhatToWand(int? locationId, int? palletNumber)
         {
-            var q1 = $@"select
+            var locationIdAnd =
+                locationId.HasValue ? $"AND SR.LOCATION_ID ={locationId}" : "AND SR.LOCATION_ID IS NULL";
+            var palletNumberAnd =
+                palletNumber.HasValue ? $"AND SR.PALLET_NUMBER={palletNumber}" : "AND SR.PALLET_NUMBER IS NULL";
+            var q1 = $@"select  
             SOD.ORDER_NUMBER ORDER_NUMBER,
             SOD.ORDER_LINE ORDER_LINE,
             SA.ARTICLE_NUMBER ARTICLE_NUMBER, 
             SA.INVOICE_DESCRIPTION,
-            '' manual, --THIS IS A PLACEHOLDER FOR MANUAL - TODO - IS THIS STILL NEEDED?
             which_mains_lead(sod.article_number, ad.country) lead_to_display,
             SOD.ORDER_LINE KITTED,
             SOD.QTY_ORDERED QTY_ORDERED,
@@ -89,18 +92,19 @@
             which_mains_lead(sod.article_number, ad.country) 
             order by c.consignment_id, sod.order_number,SOD.SUPPLY_IN_FULL_CODE,sod.order_line";
 
-            var q2 = $@"select           
-                        distinct C.CONSIGNMENT_ID
+            var q2 = $@"select  distinct C.CONSIGNMENT_ID
                         FROM CONSIGNMENTS C,
                         REQUISITION_HEADERS RH,
                         REQUISITION_LINES RL,
                         REQ_MOVES RM,
                         STOCK_LOCATORS SR
                         WHERE C.CONSIGNMENT_ID=RH.DOCUMENT_1
+                        {palletNumberAnd}
                         AND SR.PALLET_NUMBER IS NOT NULL
                         AND RH.DOC1_NAME='CONS'
                         AND RL.PART_NUMBER = SR.PART_NUMBER 
-                        AND ((RH.FUNCTION_CODE = 'INVOICE'
+                        AND (
+                             (RH.FUNCTION_CODE = 'INVOICE'
                         AND RL.CANCELLED='N'
                         AND RH.CANCELLED='N'
                         AND RH.BOOKED = 'N')
@@ -110,42 +114,47 @@
                               --AND RM.BOOKED='N'
                         AND RL.CANCELLED='N'
                         AND RH.CANCELLED='N'
-                        AND RH.BOOKED = 'N'))
-                        AND RH.REQ_NUMBER=RL.REQ_NUMBER
-                        AND RL.REQ_NUMBER=RM.REQ_NUMBER
-                        AND RL.LINE_NUMBER=RM.LINE_NUMBER
-                        AND RM.STOCK_LOCATOR_ID=SR.STOCK_LOCATOR_ID
-                        AND C.DATE_CLOSED IS NULL
-                        AND c.status='L'
-                        union all
-                        select  distinct C.CONSIGNMENT_ID
-                        FROM CONSIGNMENTS C,
-                        REQUISITION_HEADERS RH,
-                        REQUISITION_LINES RL,
-                        REQ_MOVES RM,
-                        STOCK_LOCATORS SR
-                        WHERE C.CONSIGNMENT_ID=RH.DOCUMENT_1
-                        AND SR.LOCATION_ID={fromLocationId}
-                        AND SR.LOCATION_ID is not null
-                        AND RH.DOC1_NAME='CONS'
-                        AND RL.PART_NUMBER = SR.PART_NUMBER 
-                        AND ((RH.FUNCTION_CODE = 'INVOICE'
-                        AND RL.CANCELLED='N'
-                        AND RH.CANCELLED='N'
-                        AND RH.BOOKED = 'N')
+                        AND RH.BOOKED = 'N'
+                        )
+                              )
+                         AND RH.REQ_NUMBER=RL.REQ_NUMBER
+                         AND RL.REQ_NUMBER=RM.REQ_NUMBER
+                         AND RL.LINE_NUMBER=RM.LINE_NUMBER
+                         AND RM.STOCK_LOCATOR_ID=SR.STOCK_LOCATOR_ID
+                         AND C.DATE_CLOSED IS NULL
+                         AND c.status='L'
+                         union all
+                         select  distinct C.CONSIGNMENT_ID
+                         FROM CONSIGNMENTS C,
+                         REQUISITION_HEADERS RH,
+                         REQUISITION_LINES RL,
+                         REQ_MOVES RM,
+                         STOCK_LOCATORS SR
+                         WHERE C.CONSIGNMENT_ID=RH.DOCUMENT_1
+                         {locationIdAnd}
+                         AND SR.LOCATION_ID is not null
+                         AND RH.DOC1_NAME='CONS'
+                         AND RL.PART_NUMBER = SR.PART_NUMBER 
+                         AND (
+                              (RH.FUNCTION_CODE = 'INVOICE'
+                         AND RL.CANCELLED='N'
+                         AND RH.CANCELLED='N'
+                         AND RH.BOOKED = 'N')
                               OR
                               (RH.FUNCTION_CODE = 'ALLOC' AND 
                                RM.DATE_BOOKED IS NULL
                                --RM.BOOKED='N'
-                        AND RL.CANCELLED='N'
-                        AND RH.CANCELLED='N'
-                        AND RH.BOOKED = 'N'))
-                        AND RH.REQ_NUMBER=RL.REQ_NUMBER
-                        AND RL.REQ_NUMBER=RM.REQ_NUMBER
-                        AND RL.LINE_NUMBER=RM.LINE_NUMBER
-                        AND RM.STOCK_LOCATOR_ID=SR.STOCK_LOCATOR_ID
-                        AND C.DATE_CLOSED IS NULL
-                        AND c.status='L'";
+                         AND RL.CANCELLED='N'
+                         AND RH.CANCELLED='N'
+                         AND RH.BOOKED = 'N'
+                         )
+                              )
+                         AND RH.REQ_NUMBER=RL.REQ_NUMBER
+                         AND RL.REQ_NUMBER=RM.REQ_NUMBER
+                         AND RL.LINE_NUMBER=RM.LINE_NUMBER
+                         AND RM.STOCK_LOCATOR_ID=SR.STOCK_LOCATOR_ID
+                         AND C.DATE_CLOSED IS NULL
+                         AND c.status='L'";
 
             var sql = $@"select * from ({q1}) t1 inner join ({q2}) t2 on t1.consignment_id = t2.consignment_id";
             var rows = this.databaseService.ExecuteQuery(sql).Tables[0].Rows;
@@ -160,11 +169,10 @@
                                   OrderLine = int.Parse(data[1].ToString()),
                                   ArticleNumber = data[2].ToString(),
                                   InvoiceDescription = data[3].ToString(),
-                                  Manual = data[4].ToString(),
-                                  MainsLead = data[5].ToString(),
-                                  Kitted = int.Parse(data[6].ToString()),
-                                  Ordered = int.Parse(data[7].ToString()),
-                                  Sif = data[8].ToString()
+                                  MainsLead = data[4].ToString(),
+                                  Kitted = int.Parse(data[5].ToString()),
+                                  Ordered = int.Parse(data[6].ToString()),
+                                  Sif = data[7].ToString()
                 });
             }
 

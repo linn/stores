@@ -17,7 +17,7 @@
                            Message = tpkResult.Message,
                            Success = tpkResult.Success,
                            Transferred = tpkResult.Transferred
-                               .Select(s 
+                               ?.Select(s 
                                    => new TransferredStockResource
                                           {
                                             FromLocation = s.FromLocation,
@@ -63,7 +63,6 @@
                                                                                InvoiceDescription = l.InvoiceDescription,
                                                                                Kitted = l.Kitted,
                                                                                MainsLead = l.MainsLead,
-                                                                               Manual = l.Manual,
                                                                                OrderLine = l.OrderLine,
                                                                                OrderNumber = l.OrderNumber,
                                                                                Ordered = l.Ordered,

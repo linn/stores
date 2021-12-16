@@ -103,3 +103,15 @@ export const saveConsignmentDocuments = new ItemType(
     'SAVE_CONSIGNMENT_DOCUMENTS',
     '/logistics/save-consignment-documents'
 );
+
+export const unpickStock = new ItemType(
+    'unpickStock',
+    'UNPICK_STOCK',
+    '/logistics/tpk/unpick-stock'
+);
+
+export const unallocateReq = new ItemType(
+    'unallocateReq',
+    'UNALLOCATE_REQ',
+    '/logistics/tpk/unallocate-req'
+);

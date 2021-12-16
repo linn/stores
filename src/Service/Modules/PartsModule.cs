@@ -4,9 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    using Linn.Common.Authorisation;
     using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Facade.Services;

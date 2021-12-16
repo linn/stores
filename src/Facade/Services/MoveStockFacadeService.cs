@@ -29,19 +29,19 @@
             {
                 var result = this.moveStockService.MoveStock(
                     requestResource.ReqNumber,
-                    requestResource.PartNumber,
+                    requestResource.PartNumber?.ToUpper(),
                     requestResource.Quantity,
-                    requestResource.From,
+                    requestResource.From?.ToUpper(),
                     requestResource.FromLocationId,
                     requestResource.FromPalletNumber,
                     fromDate,
                     requestResource.FromState,
                     requestResource.FromStockPoolCode,
-                    requestResource.To,
+                    requestResource.To?.ToUpper(),
                     requestResource.ToLocationId,
                     requestResource.ToPalletNumber,
                     toDate,
-                    requestResource.StorageType,
+                    requestResource.StorageType?.ToUpper(),
                     requestResource.UserNumber);
                 if (result.Success)
                 {

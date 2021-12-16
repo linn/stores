@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles } from '@material-ui/core/styles';
 import {
     SaveBackCancelButtons,
@@ -16,6 +17,7 @@ import {
 } from '@linn-it/linn-form-components-library';
 import Dialog from '@material-ui/core/Dialog';
 import Typography from '@material-ui/core/Typography';
+import moment from 'moment';
 import Page from '../../containers/Page';
 import ImpBookTab from '../../containers/importBooks/tabs/ImpBookTab';
 import OrderDetailsTab from '../../containers/importBooks/tabs/OrderDetailsTab';
@@ -95,9 +97,13 @@ function ImportBook({
         }
     }, [item, state.prevImpBook, editStatus, defaultImpBook]);
 
+    const dateToDdMmmYyyy = date => {
+        return date ? moment(date).format('DD-MMM-YYYY') : '-';
+    };
+
     useEffect(() => {
         if (state.impbook?.dateCreated) {
-            getExchangeRatesForDate(state.impbook.dateCreated);
+            getExchangeRatesForDate(dateToDdMmmYyyy(state.impbook.dateCreated));
         }
     }, [state.impbook.dateCreated, getExchangeRatesForDate]);
 
@@ -336,18 +342,50 @@ function ImportBook({
         }
     }, [totalInvoiceValue, currentExchangeRate, handleFieldChange]);
 
-    const impbookInvalid = () => {
-        return (
-            !state.impbook.supplierId ||
-            !state.impbook.carrierId ||
-            !state.impbook.parcelNumber ||
-            !state.impbook.transportId ||
-            !state.impbook.transactionId ||
-            !state.impbook.totalImportValue ||
-            !state.impbook.deliveryTermCode ||
-            !state.impbook.pva ||
-            !state.impbook.foreignCurrency
-        );
+    const impbookInvalidFields = () => {
+        const requiredFields = [
+            'parcelNumber',
+            'supplierId',
+            'pva',
+            'foreignCurrency',
+            'totalImportValue',
+            'carrierId',
+            'transportId',
+            'transactionId',
+            'deliveryTermCode'
+        ];
+
+        let invalidFields = requiredFields.filter(field => !state.impbook?.[field]);
+
+        invalidFields = !state.impbook.importBookInvoiceDetails.length
+            ? invalidFields.concat(['Invoice Details'])
+            : invalidFields;
+
+        invalidFields = !state.impbook.importBookOrderDetails.length
+            ? invalidFields.concat(['Order Details'])
+            : invalidFields;
+
+        if (
+            state.impbook.importBookOrderDetails.length &&
+            state.impbook.importBookOrderDetails.some(
+                o =>
+                    !o.lineType ||
+                    (o.lineType === 'RSN' && !o.rsnNumber) ||
+                    (o.lineType === 'PO' && !o.orderNumber) ||
+                    (o.lineType === 'LOAN' && !o.loanNumber) ||
+                    (o.lineType === 'INS' && !o.insNumber) ||
+                    !o.orderDescription ||
+                    (!o.qty && o.qty !== 0) ||
+                    (!o.orderValue && o.orderValue !== 0) ||
+                    (!o.dutyValue && o.dutyValue !== 0) ||
+                    (!o.vatValue && o.vatValue !== 0) ||
+                    (!o.weight && o.weight !== 0)
+            )
+        ) {
+            invalidFields = invalidFields.concat(['Order details inner fields']);
+        }
+
+        return invalidFields;
     };
 
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -373,10 +411,10 @@ function ImportBook({
     };
 
     useEffect(() => {
-        if (snackbarVisible) {
+        if (snackbarVisible && state.impbook?.id !== -1) {
             print();
         }
-    }, [snackbarVisible]);
+    }, [snackbarVisible, state.impbook.id]);
 
     const useStyles = makeStyles(theme => ({
         spaceAbove: {
@@ -386,6 +424,9 @@ function ImportBook({
             margin: theme.spacing(6),
             minWidth: theme.spacing(70),
             textAlign: 'center'
+        },
+        right: {
+            float: 'right'
         }
     }));
 
@@ -442,7 +483,7 @@ function ImportBook({
                 <Page width="xl">
                     <ImpBookPrintOut
                         impbookId={state.impbook.id}
-                        dateCreated={state.impbook.dateCreated}
+                        dateCreated={dateToDdMmmYyyy(state.impbook.dateCreated)}
                         createdBy={state.impbook.createdBy}
                         createdByName={getEmployeeNameById(state.impbook.createdBy)}
                         supplierId={state.impbook.supplierId}
@@ -464,10 +505,10 @@ function ImportBook({
                         deliveryTermCode={state.impbook.deliveryTermCode}
                         customsEntryCodePrefix={state.impbook.customsEntryCodePrefix}
                         customsEntryCode={state.impbook.customsEntryCode}
-                        customsEntryCodeDate={state.impbook.customsEntryCodeDate}
+                        customsEntryCodeDate={dateToDdMmmYyyy(state.impbook.customsEntryCodeDate)}
                         linnDuty={state.impbook.linnDuty}
                         linnVat={state.impbook.linnVat}
-                        arrivalDate={state.impbook.arrivalDate}
+                        arrivalDate={dateToDdMmmYyyy(state.impbook.arrivalDate)}
                         remainingInvoiceValue={calcRemainingTotal()}
                         remainingDutyValue={calcRemainingDuty()}
                         remainingWeightValue={calcRemainingWeight()}
@@ -672,15 +713,33 @@ function ImportBook({
                                             onClick={print}
                                             variant="outlined"
                                             color="primary"
-                                            disabled={impbookInvalid()}
+                                            disabled={impbookInvalidFields().length}
                                         >
                                             Reprint
                                         </Button>
                                     </Grid>
+
+                                    {impbookInvalidFields().length && (
+                                        <Grid item xs={12}>
+                                            <Tooltip
+                                                title={impbookInvalidFields().map(f => `${f}, `)}
+                                                placement="top-start"
+                                            >
+                                                <span className={classes.right}>
+                                                    <Button variant="outlined" color="primary" pull>
+                                                        Hover to see fields preventing save
+                                                    </Button>
+                                                </span>
+                                            </Tooltip>
+                                        </Grid>
+                                    )}
+
                                     <Grid item xs={10}>
                                         <SaveBackCancelButtons
                                             saveDisabled={
-                                                viewing() || !allowedToEdit() || impbookInvalid()
+                                                viewing() ||
+                                                !allowedToEdit() ||
+                                                impbookInvalidFields().length
                                             }
                                             saveClick={handleSaveClick}
                                             cancelClick={handleCancelClick}

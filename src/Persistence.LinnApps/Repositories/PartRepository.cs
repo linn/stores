@@ -113,7 +113,11 @@
             return result;
         }
 
-        public IEnumerable<Part> SearchPartsWithWildcard(string partNumberSearchTerm, string descriptionSearchTerm)
+        public IEnumerable<Part> SearchPartsWithWildcard(
+            string partNumberSearchTerm, 
+            string descriptionSearchTerm, 
+            bool newestFirst = false,
+            int? limit = null)
         {
             var result = this.serviceDbContext.Parts.AsNoTracking().Where(
                 x => (string.IsNullOrEmpty(partNumberSearchTerm) || EF.Functions.Like(
@@ -122,6 +126,16 @@
                      && (string.IsNullOrEmpty(descriptionSearchTerm) || EF.Functions.Like(
                              x.Description,
                              $"{descriptionSearchTerm.Replace("*", "%")}")));
+            
+            if (newestFirst)
+            {
+                result = result.OrderByDescending(x => x.Id);
+            }
+
+            if (limit.HasValue)
+            {
+                result = result.Take((int)limit);
+            }
 
             return result;
         }

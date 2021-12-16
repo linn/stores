@@ -38,7 +38,7 @@
             this.TpkView.FilterBy(Arg.Any<Expression<Func<TransferableStock, bool>>>())
                 .Returns(this.repositoryResult.AsQueryable());
 
-            this.WhatToWandService.WhatToWand(Arg.Any<int>())
+            this.WhatToWandService.WhatToWand(Arg.Any<int?>(), Arg.Any<int?>())
                 .Returns(new List<WhatToWandLine> { new WhatToWandLine { OrderNumber = 1 } });
 
             this.TpkPack.When(x => x.UpdateQuantityPrinted(Arg.Any<string>(), out var success))

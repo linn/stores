@@ -187,10 +187,10 @@
                     throw new CreatePartException("The system no longer allows creation of " + partRoot + " parts.");
                 }
 
-                var newestPartOfThisType = this.partRepository.FilterBy(p => p.PartNumber.StartsWith(partRoot) && p.DateCreated.HasValue)
-                    .OrderByDescending(p => p.DateCreated).ToList().FirstOrDefault()
-                    ?.PartNumber;
-
+                var newestPartOfThisType = this.partRepository.SearchPartsWithWildcard($"{partRoot} %", null, true, 100)
+                    .Where(p => p.DateCreated.HasValue && !p.PartNumber.Contains("/")).OrderByDescending(p => p.Id)
+                    .FirstOrDefault()?.PartNumber;
+                
                 var realNextNumber = FindRealNextNumber(newestPartOfThisType, template);
 
                 if (this.partRepository.FilterBy(p => p.PartNumber == partToCreate.PartNumber).ToList()

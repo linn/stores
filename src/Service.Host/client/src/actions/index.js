@@ -351,3 +351,7 @@ export const addressesActionTypes = makeActionTypes(itemTypes.addresses.actionTy
 export const salesOutletAddressesActionTypes = makeActionTypes(
     itemTypes.salesOutletAddresses.actionType
 );
+
+export const unpickStockActionTypes = makeActionTypes(processTypes.unpickStock.actionType);
+
+export const unallocateReqActionTypes = makeActionTypes(processTypes.unallocateReq.actionType);

@@ -6,6 +6,6 @@
 
     public interface IWhatToWandService
     {
-        IEnumerable<WhatToWandLine> WhatToWand(int fromLocationId);
+        IEnumerable<WhatToWandLine> WhatToWand(int? locationId, int? palletNumber);
     }
 }

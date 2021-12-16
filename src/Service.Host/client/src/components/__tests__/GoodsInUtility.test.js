@@ -57,7 +57,7 @@ describe('On initial load...', () => {
     test('inputs should be disabled', () => {
         expect(screen.getByRole('button', { name: 'Add Line' })).toHaveClass('Mui-disabled');
         expect(screen.getByRole('button', { name: 'Book In' })).toHaveClass('Mui-disabled');
-        expect(screen.getByLabelText('Qty')).toHaveClass('Mui-disabled');
+        expect(screen.getByLabelText('Qty*')).toHaveClass('Mui-disabled');
     });
 });
 
@@ -66,24 +66,30 @@ describe('When order number entered...', () => {
         validatePurchaseOrder.mockClear();
     });
 
-    test('should call validation function onBlur if orderNumber input', () => {
+    test('should call validation function if order number entered and Tab key pressed', () => {
         cleanup();
         defaultRender();
-        const orderNumberField = screen.getByLabelText('Order Number');
-        orderNumberField.focus();
+        const orderNumberField = screen.getByLabelText('Order Number*');
         fireEvent.change(orderNumberField, { target: { value: 123456 } });
-        orderNumberField.blur();
-
+        fireEvent.keyDown(orderNumberField, { keyCode: 9 });
         expect(validatePurchaseOrder).toHaveBeenCalledWith(123456);
     });
 
-    test('should not call validation function onBlur if orderNumber blank', () => {
+    test('should call validation function if order number entered and Enter key pressed', () => {
+        cleanup();
         defaultRender();
-        const orderNumberField = screen.getByLabelText('Order Number');
-        orderNumberField.focus();
-        fireEvent.change(orderNumberField, { target: { value: '' } });
-        orderNumberField.blur();
+        const orderNumberField = screen.getByLabelText('Order Number*');
+        fireEvent.change(orderNumberField, { target: { value: 666666 } });
+        fireEvent.keyDown(orderNumberField, { keyCode: 13 });
+        expect(validatePurchaseOrder).toHaveBeenCalledWith(666666);
+    });
 
+    test('should not call validation function on Enter/Tab press if orderNumber blank', () => {
+        defaultRender();
+        const orderNumberField = screen.getByLabelText('Order Number*');
+        fireEvent.change(orderNumberField, { target: { value: '' } });
+        fireEvent.keyDown(orderNumberField, { keyCode: 13 });
+        fireEvent.keyDown(orderNumberField, { keyCode: 9 });
         expect(validatePurchaseOrder).not.toHaveBeenCalled();
     });
 
@@ -99,13 +105,13 @@ describe('When order number entered...', () => {
         });
 
         test('should disable orderNumber input', () => {
-            expect(screen.getByRole('spinbutton', { name: 'Order Number' })).toHaveClass(
+            expect(screen.getByRole('spinbutton', { name: 'Order Number*' })).toHaveClass(
                 'Mui-disabled'
             );
         });
 
         test('should disable qty input', () => {
-            expect(screen.getByRole('spinbutton', { name: 'Qty' })).toHaveClass('Mui-disabled');
+            expect(screen.getByRole('spinbutton', { name: 'Qty*' })).toHaveClass('Mui-disabled');
         });
     });
 
@@ -138,7 +144,7 @@ describe('When order number entered...', () => {
             });
 
             test('should enable storageType Field', () => {
-                expect(screen.getByLabelText('S/Type')).not.toHaveClass('Mui-disabled');
+                expect(screen.getByLabelText('S/Type*')).not.toHaveClass('Mui-disabled');
             });
         });
     });
@@ -156,7 +162,7 @@ describe('When order number entered...', () => {
         });
 
         test('should disable storageType field', () => {
-            expect(screen.getByLabelText('S/Type')).toHaveClass('Mui-disabled');
+            expect(screen.getByLabelText('S/Type*')).toHaveClass('Mui-disabled');
         });
     });
 
@@ -188,7 +194,7 @@ describe('When storage type entered', () => {
         validateStorageType.mockClear();
     });
 
-    test('should call validation function onBlur if storageType input', () => {
+    test('should call validation function if storageType input and Enter or Tab pressed', () => {
         defaultRender({
             validatePurchaseOrderResult: {
                 orderNumber: 123456,
@@ -197,14 +203,16 @@ describe('When storage type entered', () => {
                 message: 'New part - enter storage type or location'
             }
         });
-        const storageTypeField = screen.getByLabelText('S/Type');
-        storageTypeField.focus();
+        const storageTypeField = screen.getByLabelText('S/Type*');
         fireEvent.change(storageTypeField, { target: { value: 'K1' } });
-        storageTypeField.blur();
+        fireEvent.keyDown(storageTypeField, { keyCode: 9 });
+        expect(validateStorageType).toHaveBeenCalledWith('storageType', 'K1');
+        validateStorageType.mockClear();
+        fireEvent.keyDown(storageTypeField, { keyCode: 13 });
         expect(validateStorageType).toHaveBeenCalledWith('storageType', 'K1');
     });
 
-    test('should not call validation function onBlur if storageType blank', () => {
+    test('should not call validation function when Enter or Tab pressed if storageType blank', () => {
         defaultRender({
             validatePurchaseOrderResult: {
                 orderNumber: 123456,
@@ -213,10 +221,10 @@ describe('When storage type entered', () => {
                 message: 'New part - enter storage type or location'
             }
         });
-        const storageTypeField = screen.getByLabelText('S/Type');
-        storageTypeField.focus();
+        const storageTypeField = screen.getByLabelText('S/Type*');
         fireEvent.change(storageTypeField, { target: { value: '' } });
-        storageTypeField.blur();
+        fireEvent.keyDown(storageTypeField, { keyCode: 13 });
+        fireEvent.keyDown(storageTypeField, { keyCode: 9 });
         expect(validateStorageType).not.toHaveBeenCalled();
     });
 
@@ -272,15 +280,22 @@ describe('When qty Entered...', () => {
             }
         });
         // enter an order number so we are able to enter a qty
-        const orderNumberField = screen.getByLabelText('Order Number');
+        const orderNumberField = screen.getByLabelText('Order Number*');
         fireEvent.change(orderNumberField, { target: { value: 123456 } });
     });
 
-    test('should call validation function onBlur if qty input', () => {
-        const qtyField = screen.getByLabelText('Qty');
-        qtyField.focus();
+    test('should call validation function when Enter or Tab pressed if qty input', () => {
+        const qtyField = screen.getByLabelText('Qty*');
         fireEvent.change(qtyField, { target: { value: 1 } });
-        qtyField.blur();
+        fireEvent.keyDown(qtyField, { keyCode: 13 });
+
+        expect(validatePurchaseOrderBookInQty).toHaveBeenCalledWith(
+            'qty=1&orderLine=1&orderNumber',
+            123456
+        );
+
+        validatePurchaseOrderBookInQty.mockClear();
+        fireEvent.keyDown(qtyField, { keyCode: 9 });
 
         expect(validatePurchaseOrderBookInQty).toHaveBeenCalledWith(
             'qty=1&orderLine=1&orderNumber',
@@ -288,21 +303,20 @@ describe('When qty Entered...', () => {
         );
     });
 
-    test('should not call validation function onBlur if qty blank', () => {
-        const qtyField = screen.getByLabelText('Qty');
-        qtyField.focus();
+    test('should not call validation function when Enter or Tab pressed if qty blank', () => {
+        const qtyField = screen.getByLabelText('Qty*');
         fireEvent.change(qtyField, { target: { value: '' } });
-        qtyField.blur();
+        fireEvent.keyDown(qtyField, { keyCode: 9 });
+        fireEvent.keyDown(qtyField, { keyCode: 13 });
 
         expect(validatePurchaseOrderBookInQty).not.toHaveBeenCalled();
     });
 
-    test('should not call validation function onBlur if qty 0', () => {
-        const qtyField = screen.getByLabelText('Qty');
-        qtyField.focus();
+    test('should not call validation function when Enter or Tab pressed if qty 0', () => {
+        const qtyField = screen.getByLabelText('Qty*');
         fireEvent.change(qtyField, { target: { value: 0 } });
-        qtyField.blur();
-
+        fireEvent.keyDown(qtyField, { keyCode: 9 });
+        fireEvent.keyDown(qtyField, { keyCode: 13 });
         expect(validatePurchaseOrderBookInQty).not.toHaveBeenCalled();
     });
 
@@ -343,9 +357,9 @@ describe('When book in button clicked', () => {
 
         afterEach(() => cleanup());
 
-        const orderNumberField = screen.getByLabelText('Order Number');
+        const orderNumberField = screen.getByLabelText('Order Number*');
         fireEvent.change(orderNumberField, { target: { value: 123456 } });
-        const qtyField = screen.getByLabelText('Qty');
+        const qtyField = screen.getByLabelText('Qty*');
         fireEvent.change(qtyField, { target: { value: 1 } });
 
         const locField = screen.getByLabelText('Onto Location');
@@ -502,15 +516,16 @@ describe('When adding multiple lines to a book in...', () => {
                 message: null,
                 orderNumber: 123456,
                 partNumber: 'A PART',
-                documentType: 'PO'
+                documentType: 'PO',
+                transactionType: 'O'
             }
         });
     });
 
     test('should call doBookIn with lines', () => {
-        const orderNumberField = screen.getByLabelText('Order Number');
+        const orderNumberField = screen.getByLabelText('Order Number*');
         fireEvent.change(orderNumberField, { target: { value: 123456 } });
-        const qtyField = screen.getByLabelText('Qty');
+        const qtyField = screen.getByLabelText('Qty*');
         fireEvent.change(qtyField, { target: { value: 1 } });
 
         const locField = screen.getByLabelText('Onto Location');
