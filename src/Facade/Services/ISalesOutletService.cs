@@ -10,5 +10,7 @@
         IResult<IEnumerable<SalesOutlet>> SearchSalesOutlets(string searchTerm);
 
         IResult<IEnumerable<SalesOutlet>> GetByOrders(IEnumerable<int> orderNumbers);
+
+        IResult<IEnumerable<SalesOutlet>> GetOutletAddresses(int? accountId, string searchTerm);
     }
 }
