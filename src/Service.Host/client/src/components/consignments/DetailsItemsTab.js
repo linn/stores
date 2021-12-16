@@ -23,7 +23,6 @@ import TableRow from '@material-ui/core/TableRow';
 import { DataGrid } from '@mui/x-data-grid';
 import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
-import config from '../../config';
 
 function DetailsItemsTab({
     consignment,
@@ -53,7 +52,11 @@ function DetailsItemsTab({
     addressesSearchResults,
     addressesSearchLoading,
     searchAddresses,
-    clearAddresses
+    clearAddresses,
+    salesOutletAddressesSearchResults,
+    salesOutletAddressesSearchLoading,
+    searchSalesOutletAddresses,
+    clearSalesOutletAddresses
 }) {
     const {
         data: itemsData,
@@ -841,6 +844,15 @@ function DetailsItemsTab({
         }));
     };
 
+    const salesOutletAddressesSearchResultsList = () => {
+        return salesOutletAddressesSearchResults?.map(outlet => ({
+            ...outlet,
+            name: outlet.outletNumber,
+            description: outlet.name,
+            id: outlet.outletAddress
+        }));
+    };
+
     const handleOnSelectSalesAccount = selectedAccount => {
         updateField('salesAccountId', selectedAccount.accountId);
         updateField('customerName', selectedAccount.accountName);
@@ -848,6 +860,10 @@ function DetailsItemsTab({
 
     const handleOnSelectAddress = selectedAddress => {
         updateField('addressId', selectedAddress.id);
+    };
+
+    const handleOnSelectOutletAddress = selectedOutlet => {
+        updateField('addressId', selectedOutlet.outletAddress);
     };
 
     return (
@@ -902,6 +918,25 @@ function DetailsItemsTab({
                                             onSelect={p => handleOnSelectAddress(p)}
                                             value={consignment.addressId}
                                         />
+                                        <Typeahead
+                                            items={salesOutletAddressesSearchResultsList()}
+                                            placeholder="Search by outlet"
+                                            fetchItems={name =>
+                                                searchSalesOutletAddresses(
+                                                    name,
+                                                    `&accountId=${consignment.salesAccountId}`
+                                                )
+                                            }
+                                            clearSearch={clearSalesOutletAddresses}
+                                            loading={salesOutletAddressesSearchLoading}
+                                            debounce={1000}
+                                            links={false}
+                                            searchButtonOnly
+                                            modal
+                                            onSelect={p => handleOnSelectOutletAddress(p)}
+                                            value={consignment.addressId}
+                                        />
+                                        By Outlet
                                     </>
                                 )}
                             </TableCell>
@@ -1601,7 +1636,11 @@ DetailsItemsTab.propTypes = {
     addressesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     addressesSearchLoading: PropTypes.bool,
     searchAddresses: PropTypes.func.isRequired,
-    clearAddresses: PropTypes.func.isRequired
+    clearAddresses: PropTypes.func.isRequired,
+    salesOutletAddressesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
+    salesOutletAddressesSearchLoading: PropTypes.bool,
+    searchSalesOutletAddresses: PropTypes.func.isRequired,
+    clearSalesOutletAddresses: PropTypes.func.isRequired
 };
 
 DetailsItemsTab.defaultProps = {
@@ -1618,7 +1657,9 @@ DetailsItemsTab.defaultProps = {
     salesAccountsSearchResults: [],
     salesAccountsSearchLoading: false,
     addressesSearchResults: [],
-    addressesSearchLoading: false
+    addressesSearchLoading: false,
+    salesOutletAddressesSearchResults: [],
+    salesOutletAddressesSearchLoading: false
 };
 
 export default DetailsItemsTab;

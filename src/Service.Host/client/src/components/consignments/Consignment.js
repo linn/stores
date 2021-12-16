@@ -91,7 +91,11 @@ function Consignment({
     addressesSearchResults,
     addressesSearchLoading,
     searchAddresses,
-    clearAddresses
+    clearAddresses,
+    salesOutletAddressesSearchResults,
+    salesOutletAddressesSearchLoading,
+    searchSalesOutletAddresses,
+    clearSalesOutletAddresses
 }) {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [termsMessage, setTermsMessage] = useState(false);
@@ -723,6 +727,14 @@ function Consignment({
                                         addressesSearchLoading={addressesSearchLoading}
                                         searchAddresses={searchAddresses}
                                         clearAddresses={clearAddresses}
+                                        salesOutletAddressesSearchResults={
+                                            salesOutletAddressesSearchResults
+                                        }
+                                        salesOutletAddressesSearchLoading={
+                                            salesOutletAddressesSearchLoading
+                                        }
+                                        searchSalesOutletAddresses={searchSalesOutletAddresses}
+                                        clearSalesOutletAddresses={clearSalesOutletAddresses}
                                     />
                                 )}
                                 {currentTab === 2 && (
@@ -1363,7 +1375,11 @@ Consignment.propTypes = {
     addressesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     addressesSearchLoading: PropTypes.bool,
     searchAddresses: PropTypes.func.isRequired,
-    clearAddresses: PropTypes.func.isRequired
+    clearAddresses: PropTypes.func.isRequired,
+    salesOutletAddressesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
+    salesOutletAddressesSearchLoading: PropTypes.bool,
+    searchSalesOutletAddresses: PropTypes.func.isRequired,
+    clearSalesOutletAddresses: PropTypes.func.isRequired
 };
 
 Consignment.defaultProps = {
@@ -1402,7 +1418,9 @@ Consignment.defaultProps = {
     salesAccountsSearchResults: [],
     salesAccountsSearchLoading: false,
     addressesSearchResults: [],
-    addressesSearchLoading: false
+    addressesSearchLoading: false,
+    salesOutletAddressesSearchResults: [],
+    salesOutletAddressesSearchLoading: false
 };
 
 export default Consignment;

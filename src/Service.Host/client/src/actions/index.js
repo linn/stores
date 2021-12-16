@@ -347,3 +347,7 @@ export const rsnAccessoriesActionTypes = makeActionTypes(itemTypes.rsnAccessorie
 export const validateRsnActionTypes = makeActionTypes(itemTypes.validateRsnResult.actionType);
 
 export const addressesActionTypes = makeActionTypes(itemTypes.addresses.actionType);
+
+export const salesOutletAddressesActionTypes = makeActionTypes(
+    itemTypes.salesOutletAddresses.actionType
+);

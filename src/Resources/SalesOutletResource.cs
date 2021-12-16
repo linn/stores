@@ -17,5 +17,7 @@
         public string DateInvalid { get; set; }
 
         public string DispatchTerms { get; set; }
+
+        public int OutletAddress { get; set; }
     }
 }

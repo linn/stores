@@ -469,3 +469,9 @@ export const addresses = new ItemType(
     'ADDRESSES',
     '/production/maintenance/labels/addresses'
 );
+
+export const salesOutletAddresses = new ItemType(
+    'salesOutletAddresses',
+    'SALES_OUTLET_ADDRESSES',
+    '/inventory/sales-outlets/addresses'
+);

@@ -17,7 +17,8 @@
                            CountryName = salesOutlet.CountryName,
                            CountryCode = salesOutlet.CountryCode,
                            DateInvalid = salesOutlet.DateInvalid?.ToString("o"),
-                           DispatchTerms = salesOutlet.DispatchTerms
+                           DispatchTerms = salesOutlet.DispatchTerms,
+                           OutletAddress = salesOutlet.OutletAddressId
                        };
         }
 

@@ -133,6 +133,7 @@ import rsnConditions from './rsnConditions';
 import validateRsnResult from './validateRsnResult';
 import printRsn from './printRsn';
 import addresses from './addresses';
+import salesOutletAddresses from './salesOutletAddresses';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -226,6 +227,7 @@ const rootReducer = history =>
         salesAccounts,
         salesArticles,
         salesOutlets,
+        salesOutletAddresses,
         saveConsignmentDocuments,
         sernosSequences,
         shipfilesSendEmails,

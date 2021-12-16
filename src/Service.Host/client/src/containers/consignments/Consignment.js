@@ -42,6 +42,8 @@ import salesAccountsActions from '../../actions/salesAccountsActions';
 import salesAccountsSelectors from '../../selectors/salesAccountsSelectors';
 import addressesActions from '../../actions/addressesActions';
 import addressesSelectors from '../../selectors/addressesSelectors';
+import salesOutletAddressesActions from '../../actions/salesOutletAddressesActions';
+import salesOutletAddressesSelectors from '../../selectors/salesOutletAddressesSelectors';
 
 const getOptions = ownProps => {
     const options = queryString.parse(ownProps.location.search);
@@ -107,7 +109,9 @@ const mapStateToProps = (state, ownProps) => ({
     salesAccountsSearchResults: salesAccountsSelectors.getSearchItems(state),
     salesAccountsSearchLoading: salesAccountsSelectors.getSearchLoading(state),
     addressesSearchResults: addressesSelectors.getSearchItems(state),
-    addressesSearchLoading: addressesSelectors.getSearchLoading(state)
+    addressesSearchLoading: addressesSelectors.getSearchLoading(state),
+    salesOutletAddressesSearchResults: salesOutletAddressesSelectors.getSearchItems(state),
+    salesOutletAddressesSearchLoading: salesOutletAddressesSelectors.getSearchLoading(state)
 });
 
 const mapDispatchToProps = {
@@ -140,7 +144,9 @@ const mapDispatchToProps = {
     searchSalesAccounts: salesAccountsActions.search,
     clearSalesAccountsSearch: salesAccountsActions.clearSearch,
     searchAddresses: addressesActions.search,
-    clearAddresses: addressesActions.clearSearch
+    clearAddresses: addressesActions.clearSearch,
+    searchSalesOutletAddresses: salesOutletAddressesActions.searchWithOptions,
+    clearSalesOutletAddresses: salesOutletAddressesActions.clearSearch
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Consignment));
