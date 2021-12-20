@@ -262,7 +262,7 @@ function GoodsInUtility({
         if (bookInResult?.createParcel) {
             setParcelDialogOpen(true);
         } else {
-            setParcelDialogOpen(true);
+            setParcelDialogOpen(false);
         }
 
         if (['L', 'R'].includes(bookInResult?.transactionCode)) {
