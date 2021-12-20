@@ -562,7 +562,7 @@ function GoodsInUtility({
                                 onChange={() => {}}
                                 propertyName="parcelNumber"
                             />
-                        </Grid>{' '}
+                        </Grid>
                     </>
                 )}
                 <Grid item xs={3}>
