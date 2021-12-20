@@ -6,7 +6,8 @@ import {
     InputField,
     Dropdown,
     DatePicker,
-    useGroupEditTable
+    useGroupEditTable,
+    Typeahead
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
@@ -43,7 +44,19 @@ function DetailsItemsTab({
     setSaveDisabled,
     cartonTypes,
     setEditStatus,
-    viewing
+    viewing,
+    salesAccountsSearchResults,
+    salesAccountsSearchLoading,
+    searchSalesAccounts,
+    clearSalesAccountsSearch,
+    addressesSearchResults,
+    addressesSearchLoading,
+    searchAddresses,
+    clearAddresses,
+    salesOutletAddressesSearchResults,
+    salesOutletAddressesSearchLoading,
+    searchSalesOutletAddresses,
+    clearSalesOutletAddresses
 }) {
     const {
         data: itemsData,
@@ -813,6 +826,46 @@ function DetailsItemsTab({
         }
     ];
 
+    const salesAccountsSearchResultsList = () => {
+        return salesAccountsSearchResults?.map(account => ({
+            ...account,
+            name: account.accountId,
+            description: account.accountName,
+            id: account.accountId
+        }));
+    };
+
+    const addressesSearchResultsList = () => {
+        return addressesSearchResults?.map(address => ({
+            ...address,
+            name: address.id,
+            description: address.addressee,
+            id: address.id
+        }));
+    };
+
+    const salesOutletAddressesSearchResultsList = () => {
+        return salesOutletAddressesSearchResults?.map(outlet => ({
+            ...outlet,
+            name: outlet.outletNumber,
+            description: outlet.name,
+            id: outlet.outletAddress
+        }));
+    };
+
+    const handleOnSelectSalesAccount = selectedAccount => {
+        updateField('salesAccountId', selectedAccount.accountId);
+        updateField('customerName', selectedAccount.accountName);
+    };
+
+    const handleOnSelectAddress = selectedAddress => {
+        updateField('addressId', selectedAddress.id);
+    };
+
+    const handleOnSelectOutletAddress = selectedOutlet => {
+        updateField('addressId', selectedOutlet.outletAddress);
+    };
+
     return (
         <>
             <Grid item xs={12}>
@@ -827,21 +880,23 @@ function DetailsItemsTab({
                                     )}`
                                 ) : (
                                     <>
-                                        <InputField
+                                        <Typeahead
+                                            items={salesAccountsSearchResultsList()}
                                             placeholder="Account Id"
-                                            propertyName="salesAccountId"
+                                            fetchItems={name => searchSalesAccounts(name)}
+                                            clearSearch={clearSalesAccountsSearch}
+                                            loading={salesAccountsSearchLoading}
+                                            debounce={1000}
+                                            links={false}
+                                            modal
+                                            onSelect={p => handleOnSelectSalesAccount(p)}
                                             value={consignment.salesAccountId}
-                                            onChange={updateField}
-                                            maxLength={10}
-                                        />
-                                        <InputField
-                                            placeholder="Customer Name"
-                                            propertyName="customerName"
-                                            value={consignment.customerName}
-                                            onChange={updateField}
                                         />
                                     </>
                                 )}
+                            </TableCell>
+                            <TableCell className={classes.tableCell}>
+                                {showText(consignment.customerName)}
                             </TableCell>
                         </TableRow>
                         <TableRow key="Address">
@@ -851,13 +906,37 @@ function DetailsItemsTab({
                                     consignment.address && consignment.address.displayAddress
                                 ) : (
                                     <>
-                                        <InputField
-                                            placeholder="AddressId"
-                                            propertyName="addressId"
+                                        <Typeahead
+                                            items={addressesSearchResultsList()}
+                                            placeholder="Address Id"
+                                            fetchItems={name => searchAddresses(name)}
+                                            clearSearch={clearAddresses}
+                                            loading={addressesSearchLoading}
+                                            debounce={1000}
+                                            links={false}
+                                            modal
+                                            onSelect={p => handleOnSelectAddress(p)}
                                             value={consignment.addressId}
-                                            onChange={updateField}
-                                            maxLength={10}
                                         />
+                                        <Typeahead
+                                            items={salesOutletAddressesSearchResultsList()}
+                                            placeholder="Search by outlet"
+                                            fetchItems={name =>
+                                                searchSalesOutletAddresses(
+                                                    name,
+                                                    `&accountId=${consignment.salesAccountId}`
+                                                )
+                                            }
+                                            clearSearch={clearSalesOutletAddresses}
+                                            loading={salesOutletAddressesSearchLoading}
+                                            debounce={1000}
+                                            links={false}
+                                            searchButtonOnly
+                                            modal
+                                            onSelect={p => handleOnSelectOutletAddress(p)}
+                                            value={consignment.addressId}
+                                        />
+                                        By Outlet
                                     </>
                                 )}
                             </TableCell>
@@ -1549,7 +1628,19 @@ DetailsItemsTab.propTypes = {
         PropTypes.shape({ cartonTypeName: PropTypes.string, description: PropTypes.string })
     ).isRequired,
     setEditStatus: PropTypes.func.isRequired,
-    viewing: PropTypes.bool.isRequired
+    viewing: PropTypes.bool.isRequired,
+    salesAccountsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
+    salesAccountsSearchLoading: PropTypes.bool,
+    searchSalesAccounts: PropTypes.func.isRequired,
+    clearSalesAccountsSearch: PropTypes.func.isRequired,
+    addressesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
+    addressesSearchLoading: PropTypes.bool,
+    searchAddresses: PropTypes.func.isRequired,
+    clearAddresses: PropTypes.func.isRequired,
+    salesOutletAddressesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
+    salesOutletAddressesSearchLoading: PropTypes.bool,
+    searchSalesOutletAddresses: PropTypes.func.isRequired,
+    clearSalesOutletAddresses: PropTypes.func.isRequired
 };
 
 DetailsItemsTab.defaultProps = {
@@ -1562,7 +1653,13 @@ DetailsItemsTab.defaultProps = {
     carriersLoading: false,
     shippingTerm: null,
     shippingTerms: [],
-    shippingTermsLoading: false
+    shippingTermsLoading: false,
+    salesAccountsSearchResults: [],
+    salesAccountsSearchLoading: false,
+    addressesSearchResults: [],
+    addressesSearchLoading: false,
+    salesOutletAddressesSearchResults: [],
+    salesOutletAddressesSearchLoading: false
 };
 
 export default DetailsItemsTab;
