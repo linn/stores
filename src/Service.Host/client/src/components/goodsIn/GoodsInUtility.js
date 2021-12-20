@@ -59,7 +59,8 @@ function GoodsInUtility({
     clearRsn,
     printRsnResult,
     printRsnLoading,
-    printRsn
+    printRsn,
+    parcel
 }) {
     const [formData, setFormData] = useState({
         orderNumber: null,
@@ -132,6 +133,15 @@ function GoodsInUtility({
     const [rsnConditionsString, setRsnConditionsString] = useState('');
 
     const [rsnAccessoriesString, setRsnAccessoriesString] = useState('');
+
+    const [parcelNumber, setParcelNumber] = useState();
+
+    useEffect(() => {
+        if (parcel?.parcelNumber) {
+            setParcelDialogOpen(false);
+            setParcelNumber(parcel.parcelNumber);
+        }
+    }, [parcel]);
 
     const handleSelectLoanDetails = details => {
         setLoanDetailsDialogOpen(false);
@@ -252,7 +262,7 @@ function GoodsInUtility({
         if (bookInResult?.createParcel) {
             setParcelDialogOpen(true);
         } else {
-            setParcelDialogOpen(false);
+            setParcelDialogOpen(true);
         }
 
         if (['L', 'R'].includes(bookInResult?.transactionCode)) {
@@ -533,6 +543,28 @@ function GoodsInUtility({
                         propertyName="message"
                     />
                 </Grid>
+                {parcelNumber && (
+                    <>
+                        <Grid item xs={9} />
+                        <Grid item xs={3}>
+                            <InputField
+                                fullWidth
+                                disabled
+                                textFieldProps={{
+                                    InputProps: {
+                                        classes: {
+                                            notchedOutline: classes.notchedOutline
+                                        }
+                                    }
+                                }}
+                                value={parcelNumber}
+                                label="Parcel Created"
+                                onChange={() => {}}
+                                propertyName="parcelNumber"
+                            />
+                        </Grid>{' '}
+                    </>
+                )}
                 <Grid item xs={3}>
                     <Typeahead
                         onSelect={newValue =>
@@ -1039,6 +1071,7 @@ function GoodsInUtility({
                             (!formData.qty && !lines.length)
                         }
                         onClick={() => {
+                            setParcelNumber(null);
                             const row = {
                                 articleNumber:
                                     validatePurchaseOrderResult?.partNumber ||
@@ -1215,7 +1248,8 @@ GoodsInUtility.propTypes = {
     clearRsn: PropTypes.func.isRequired,
     printRsnResult: PropTypes.shape({ success: PropTypes.bool, message: PropTypes.string }),
     printRsnLoading: PropTypes.bool,
-    printRsn: PropTypes.func.isRequired
+    printRsn: PropTypes.func.isRequired,
+    parcel: PropTypes.shape({ parcelNumber: PropTypes.number })
 };
 
 GoodsInUtility.defaultProps = {
@@ -1238,7 +1272,8 @@ GoodsInUtility.defaultProps = {
     validateRsnResult: null,
     validateRsnResultLoading: false,
     printRsnResult: null,
-    printRsnLoading: false
+    printRsnLoading: false,
+    parcel: null
 };
 
 export default GoodsInUtility;
