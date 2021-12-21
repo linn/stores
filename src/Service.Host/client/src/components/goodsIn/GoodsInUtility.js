@@ -159,7 +159,8 @@ function GoodsInUtility({
                 serialNumber2: details.serialNumber2,
                 loanNumber: detail.loanNumber,
                 loanLine: detail.line,
-                createdBy: userNumber
+                createdBy: userNumber,
+                state: detail.state
             }))
         ]);
     };
