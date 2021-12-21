@@ -193,7 +193,7 @@
 
             newImportBook.PostEntries = postEntries;
 
-            return newImportBook;
+            return this.importBookService.Create(newImportBook);
         }
 
         protected override Expression<Func<ImportBook, bool>> SearchExpression(string searchTerm)

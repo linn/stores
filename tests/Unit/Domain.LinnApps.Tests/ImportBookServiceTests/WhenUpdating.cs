@@ -2,10 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq.Expressions;
 
     using FluentAssertions;
 
     using Linn.Stores.Domain.LinnApps.ImportBooks;
+
+    using NSubstitute;
 
     using NUnit.Framework;
 
@@ -92,6 +95,9 @@
                                   PostEntries = new List<ImportBookPostEntry>()
                               };
 
+            this.LedgerPeriodRepository.FindBy(Arg.Any<Expression<Func<LedgerPeriod, bool>>>())
+                .Returns(new LedgerPeriod { PeriodNumber = 1234 });
+
             this.Sut.Update(this.impbook, this.newImpBook);
         }
 
@@ -127,6 +133,7 @@
             this.impbook.CreatedBy.Equals(this.newImpBook.CreatedBy).Should().BeTrue();
             this.impbook.CustomsEntryCodePrefix.Equals(this.newImpBook.CustomsEntryCodePrefix).Should().BeTrue();
             this.impbook.Pva.Equals("N").Should().BeTrue();
+            this.impbook.PeriodNumber.Value.Should().Be(1234);
         }
     }
 }
