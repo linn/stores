@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { Dropdown } from '@linn-it/linn-form-components-library';
 import { DataGrid } from '@mui/x-data-grid';
 
 function LoanDetails({ loanDetails, onConfirm }) {
@@ -17,6 +18,8 @@ function LoanDetails({ loanDetails, onConfirm }) {
         { field: 'selected', headerName: 'Selected', width: 100, hide: true }
     ];
     const [rows, setRows] = useState(loanDetails);
+
+    const [state, setState] = useState('STORES');
 
     const handleSelectRow = selected => {
         setRows(rows.map(r => (selected.includes(r.id) ? { ...r, selected: true } : r)));
@@ -58,13 +61,23 @@ function LoanDetails({ loanDetails, onConfirm }) {
                     />
                 </div>
             </Grid>
-            <Grid item xs={10} />
+            <Grid item xs={8} />
+            <Grid item xs={2}>
+                <Dropdown
+                    label="STATE"
+                    items={['STORES', 'FAIL']}
+                    value={state}
+                    onChange={(_, newValue) => setState(newValue)}
+                />
+            </Grid>
             <Grid item xs={2}>
                 <Button
                     disabled={!rows.some(r => r.selected)}
                     style={{ marginTop: '22px' }}
                     variant="contained"
-                    onClick={() => onConfirm(rows.filter(r => r.selected))}
+                    onClick={() =>
+                        onConfirm(rows.filter(r => r.selected).map(r => ({ ...r, state })))
+                    }
                 >
                     Confirm
                 </Button>
