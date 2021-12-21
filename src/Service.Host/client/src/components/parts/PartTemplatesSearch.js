@@ -58,6 +58,7 @@ function PartTemplateSearch({ privileges, partTemplates }) {
                 </Grid>
                 <Grid item xs={1}>
                     <LinkButton
+                        label="View"
                         text="View"
                         to={viewUrl()}
                         disabled={!canCreate()}
