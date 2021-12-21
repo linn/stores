@@ -519,7 +519,7 @@
             firstPostEntry.LineNumber.Should().Be(firstResourcePostEntry.LineNumber);
             firstPostEntry.EntryCodePrefix.Should().Be(firstResourcePostEntry.EntryCodePrefix);
             firstPostEntry.EntryCode.Should().Be(firstResourcePostEntry.EntryCode);
-            firstPostEntry.EntryDate.Should().Be(null);
+            firstPostEntry.EntryDate.Should().BeNull();
             firstPostEntry.Reference.Should().Be(firstResourcePostEntry.Reference);
             firstPostEntry.Duty.Should().Be(firstResourcePostEntry.Duty);
             firstPostEntry.Vat.Should().Be(firstResourcePostEntry.Vat);
