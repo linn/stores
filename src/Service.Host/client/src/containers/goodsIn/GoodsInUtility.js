@@ -22,6 +22,7 @@ import ValidateRsnActions from '../../actions/ValidateRsnActions';
 import validateRsnResultSelectors from '../../selectors/validateRsnResultSelectors';
 import printRsnSelectors from '../../selectors/printRsnSelectors';
 import printRsnActions from '../../actions/printRsnActions';
+import parcelSelectors from '../../selectors/parcelSelectors';
 
 const mapStateToProps = (state, { match }) => ({
     validatePurchaseOrderResult: validatePurchaseOrderResultSelectors.getItem(state),
@@ -51,7 +52,8 @@ const mapStateToProps = (state, { match }) => ({
     validateRsnResult: validateRsnResultSelectors.getItem(state),
     validateRsnResultLoading: validateRsnResultSelectors.getLoading(state),
     printRsnResult: printRsnSelectors.getData(state),
-    printRsnLoading: printRsnSelectors.getWorking(state)
+    printRsnLoading: printRsnSelectors.getWorking(state),
+    parcel: parcelSelectors.getItem(state)
 });
 
 const initialise = () => dispatch => {

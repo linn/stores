@@ -18,16 +18,26 @@
     {
         private ProcessResult result;
 
+        private readonly string dateString = DateTime.Today.ToString("MMMddyyyy").ToUpper();
+
         [SetUp]
         public void SetUp()
         {
             this.LabelTypeRepository.FindBy(Arg.Any<Expression<Func<StoresLabelType, bool>>>())
-                .Returns(new StoresLabelType
-                {
-                    Code = "KARDEX",
-                    FileName = "kardex-template.ext",
-                    DefaultPrinter = "Printer"
-                });
+                .Returns(
+                    new StoresLabelType
+                    {
+                        Code = "KARDEX",
+                        FileName = "kardex-template.ext",
+                        DefaultPrinter = "Printer"
+                    }, 
+                    new StoresLabelType
+                       {
+                           Code = "PASS",
+                           FileName = "template.ext",
+                           DefaultPrinter = "Printer"
+                       });
+            
             this.AuthUserRepository.FindBy(Arg.Any<Expression<Func<AuthUser, bool>>>())
                 .Returns(new AuthUser
                 {
@@ -61,6 +71,14 @@
                 $"\"kardex-location\",\"1\"",
                 ref Arg.Any<string>()).Returns(true);
 
+            this.Bartender.PrintLabels(
+                Arg.Any<string>(),
+                "Printer",
+                Arg.Any<int>(),
+                "template.ext",
+                Arg.Any<string>(),
+                ref Arg.Any<string>()).Returns(true);
+
             this.result = this.Sut.PrintLabels(
                 "PO",
                 "PART",
@@ -76,12 +94,24 @@
         }
 
         [Test]
-        public void ShouldCallBartenderWithCorrectParameters()
+        public void ShouldPrintBigLabels()
         {
             this.Bartender.Received(1).PrintLabels(
-                "KGI1",
+                "QC 1-1",
                 "Printer",
                 1,
+                "template.ext",
+                $"\"1\",\"PART\",\"1\",\"SU\",\"\",\"1\",\"{this.dateString}\",\"**ROHS Compliant**\"{Environment.NewLine}",
+                ref Arg.Any<string>());
+        }
+
+        [Test]
+        public void ShouldPrintOneMoreKardexLabelThanBigLabels()
+        {
+            this.Bartender.Received().PrintLabels(
+                "KGI1",
+                "Printer",
+                2,
                 "kardex-template.ext",
                 $"\"kardex-location\",\"1\"",
                 ref Arg.Any<string>());

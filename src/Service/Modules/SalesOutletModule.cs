@@ -19,6 +19,7 @@
         {
             this.salesOutletService = salesOutletService;
             this.Get("/inventory/sales-outlets", parameters => this.GetSalesOutlets());
+            this.Get("/inventory/sales-outlets/addresses", parameters => this.GetSalesOutletAddresses());
         }
 
         private object GetSalesOutlets()
@@ -27,9 +28,21 @@
 
             var resource = this.Bind<SalesOutletRequestResource>();
 
-            result = resource.OrderNumbers?.Length > 0 
-                         ? this.salesOutletService.GetByOrders(resource.OrderNumbers) 
+            result = resource.OrderNumbers?.Length > 0
+                         ? this.salesOutletService.GetByOrders(resource.OrderNumbers)
                          : this.salesOutletService.SearchSalesOutlets(resource.SearchTerm);
+
+            return this.Negotiate
+                .WithModel(result)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get())
+                .WithView("Index");
+        }
+
+        private object GetSalesOutletAddresses()
+        {
+            var resource = this.Bind<SalesOutletRequestResource>();
+
+            IResult<IEnumerable<SalesOutlet>> result = this.salesOutletService.GetOutletAddresses(resource.accountId, resource.SearchTerm);
 
             return this.Negotiate
                 .WithModel(result)

@@ -69,18 +69,6 @@ describe('When not Kardex Location', () => {
     });
 });
 
-describe('When Kardex Location', () => {
-    beforeEach(() => {
-        cleanup();
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        render(<QcLabelPrintScreen {...props} kardexLocation="K106" />);
-    });
-
-    test('should disable quantities accordion', () => {
-        expect(screen.getByTestId('quantitiesExpansionPanel')).toHaveClass('Mui-disabled');
-    });
-});
-
 describe('When printLabels button clicked', () => {
     beforeEach(() => {
         cleanup();
