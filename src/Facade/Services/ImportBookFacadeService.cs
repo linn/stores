@@ -193,7 +193,7 @@
 
             newImportBook.PostEntries = postEntries;
 
-            return newImportBook;
+            return this.importBookService.Create(newImportBook);
         }
 
         protected override Expression<Func<ImportBook, bool>> SearchExpression(string searchTerm)
@@ -205,6 +205,7 @@
         {
             var newImportBook = new ImportBook
                                     {
+                                        DateCreated = DateTime.Parse(updateResource.DateCreated),
                                         ParcelNumber = updateResource.ParcelNumber,
                                         SupplierId = updateResource.SupplierId,
                                         ForeignCurrency = updateResource.ForeignCurrency,

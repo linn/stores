@@ -89,6 +89,14 @@
             return new ProcessResult(true, "Successfully posted duty");
         }
 
+        public ImportBook Create(ImportBook impbook)
+        {
+            var formattedDate = impbook.DateCreated.ToString("MMMyyyy").ToUpper();
+            impbook.PeriodNumber = this.ledgerPeriodRepository.FindBy(x => x.MonthName == formattedDate).PeriodNumber;
+
+            return impbook;
+        }
+
         public void Update(ImportBook from, ImportBook to)
         {
             this.UpdateTopLevelProperties(from, to);
@@ -264,6 +272,12 @@
             entity.CreatedBy = to.CreatedBy;
             entity.CustomsEntryCodePrefix = to.CustomsEntryCodePrefix;
             entity.Pva = to.Pva;
+
+            if (entity.DateCreated.Date != to.DateCreated.Date)
+            {
+                var formattedDate = to.DateCreated.ToString("MMMyyyy").ToUpper();
+                entity.PeriodNumber = this.ledgerPeriodRepository.FindBy(x => x.MonthName == formattedDate).PeriodNumber;
+            }
         }
     }
 }
