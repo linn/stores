@@ -274,7 +274,7 @@
             entity.CustomsEntryCodePrefix = to.CustomsEntryCodePrefix;
             entity.Pva = to.Pva;
 
-            if (!entity.DateCreated.Equals(to.DateCreated))
+            if (entity.DateCreated.Date != to.DateCreated.Date)
             {
                 var formattedDate = to.DateCreated.ToString("MMMyyyy").ToUpper();
                 entity.PeriodNumber = this.ledgerPeriodRepository.FindBy(x => x.MonthName == formattedDate).PeriodNumber;
