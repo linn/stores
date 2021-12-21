@@ -67,6 +67,7 @@ function LoanDetails({ loanDetails, onConfirm }) {
                     label="STATE"
                     items={['STORES', 'FAIL']}
                     value={state}
+                    propertyName="state"
                     onChange={(_, newValue) => setState(newValue)}
                 />
             </Grid>
