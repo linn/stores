@@ -59,7 +59,7 @@ describe('On Create', () => {
     });
 
     test('save button should be disabled', () => {
-        expect(screen.getAllByRole('button', { name: 'save-button' })).toHaveClass('Mui-disabled');
+        expect(screen.getByRole('button', { name: 'Save' })).toHaveClass('Mui-disabled');
     });
 
     test('Should Render Title', () => {
@@ -89,8 +89,15 @@ describe('On View', () => {
         expect(screen.getAllByText('Part Root')[0]).toBeInTheDocument();
         expect(screen.getByDisplayValue('REACT')).toBeInTheDocument();
 
+        expect(screen.getAllByText('Description')[0]).toBeInTheDocument();
+        expect(screen.getByDisplayValue('A test')).toBeInTheDocument();
+
         expect(screen.getByText('Seq Next Number')).toBeInTheDocument();
         expect(screen.getByDisplayValue('123')).toBeInTheDocument();
+
+        expect(screen.getByText('Variants')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('Integration UNIT')).toBeInTheDocument();
+
     });
 });
 
@@ -112,7 +119,10 @@ describe('When have no permissions/privileges', () => {
         );
     });
     test('cannot edit fields', () => {
-        expect(screen.getByText('Part Root')).not.toBeDisabled();
-        //  screen.debug(undefined, Infinity);
+        expect(screen.getByDisplayValue('REACT')).toBeDisabled();
+        expect(screen.getByDisplayValue('123')).toBeDisabled();
+        expect(screen.getByDisplayValue('MECHANICAL')).toBeDisabled();
+        expect(screen.getByDisplayValue('A test')).toBeDisabled();
+        expect(screen.getByDisplayValue('Integration UNIT')).toBeDisabled();
     });
 });

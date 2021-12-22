@@ -24,24 +24,6 @@ const partTemplate = [
         assemblyTechnology: 'TH',
         allowPartCreation: 'Y',
         paretoCode: 'E'
-    },
-    {
-        partRoot: 'TCAER',
-        description: 'Another test',
-        hasDataSheet: 'N',
-        hasNumberSequence: 'Y',
-        nextNumber: '321',
-        allowVariants: 'Y',
-        variants: 'Unit INTEGRATION',
-        accountingCompany: 'RECORDS',
-        productCode: 'ELECTRONIC',
-        stockControlled: 'Y',
-        linnProduced: 'Y',
-        rmfgCode: 'B',
-        bomType: 'A',
-        assemblyTechnology: 'TH',
-        allowPartCreation: 'Y',
-        paretoCode: 'E'
     }
 ];
 
