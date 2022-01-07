@@ -96,6 +96,7 @@
             this.partTemplateService = partTemplateService;
             this.Get("/inventory/part-templates", _ => this.GetPartTemplates());
             this.Get("/inventory/part-templates/{id}", parameters => this.GetPartTemplate(parameters.id));
+            this.Get("/inventory/part-templates/application-state", _ => this.GetApp());
             this.Put("/inventory/part-templates/{id}", parameters => this.UpdatePartTemplate(parameters.id));
             this.Post("/inventory/part-templates", parameters => this.AddPartTemplate());
 
