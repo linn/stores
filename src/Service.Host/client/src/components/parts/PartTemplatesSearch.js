@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
-import { LinkButton, Dropdown } from '@linn-it/linn-form-components-library';
+import { LinkButton, Dropdown, utilities } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Page from '../../containers/Page';
 
-function PartTemplateSearch({ privileges, partTemplates }) {
+function PartTemplateSearch({ applicationState, partTemplates }) {
     const [template, setTemplate] = useState();
 
     const createUrl = () => {
@@ -14,12 +14,11 @@ function PartTemplateSearch({ privileges, partTemplates }) {
     const viewUrl = () => {
         return `/inventory/part-templates/${template}`;
     };
-    const canCreate = () => {
-        if (!(privileges.length < 1)) {
-            return privileges.some(priv => priv === 'part.admin');
-        }
-        return false;
-    };
+    const [allowedToCreate, setAllowedToCreate] = useState(false);
+
+    useEffect(() => {
+        setAllowedToCreate(utilities.getHref(applicationState, 'create') !== null);
+    }, [applicationState]);
 
     return (
         <Page>
@@ -31,9 +30,11 @@ function PartTemplateSearch({ privileges, partTemplates }) {
                     <LinkButton
                         text="Create"
                         to={createUrl()}
-                        disabled={!canCreate()}
+                        disabled={!allowedToCreate}
                         tooltip={
-                            canCreate() ? null : 'You are not authorised to create part templates.'
+                            allowedToCreate
+                                ? null
+                                : 'You are not authorised to create part templates.'
                         }
                     />
                 </Grid>
@@ -61,9 +62,11 @@ function PartTemplateSearch({ privileges, partTemplates }) {
                         label="View"
                         text="View"
                         to={viewUrl()}
-                        disabled={!canCreate()}
+                        disabled={!allowedToCreate}
                         tooltip={
-                            canCreate() ? null : 'You are not authorised to create part templates.'
+                            allowedToCreate
+                                ? null
+                                : 'You are not authorised to create part templates.'
                         }
                     />
                 </Grid>
@@ -75,12 +78,13 @@ function PartTemplateSearch({ privileges, partTemplates }) {
 
 PartTemplateSearch.propTypes = {
     history: PropTypes.shape({}).isRequired,
-    privileges: PropTypes.arrayOf(PropTypes.string).isRequired,
-    partTemplates: PropTypes.arrayOf(PropTypes.shape({}))
+    partTemplates: PropTypes.arrayOf(PropTypes.shape({})),
+    applicationState: PropTypes.shape({ links: PropTypes.arrayOf(PropTypes.shape({})) })
 };
 
 PartTemplateSearch.defaultProps = {
-    partTemplates: []
+    partTemplates: [],
+    applicationState: null
 };
 
 export default PartTemplateSearch;
