@@ -33,7 +33,7 @@ const item = {
     assemblyTechnology: 'TH',
     allowPartCreation: 'Y',
     paretoCode: 'E',
-    links: { href: '', rel: 'self' }
+    links: { href: '', rel: 'create' }
 };
 
 describe('On Create', () => {
@@ -48,14 +48,9 @@ describe('On Create', () => {
                 addItem={addItem}
                 updateItem={updateItem}
                 setEditStatus={setEditStatus}
-                privileges={['part.admin']}
                 itemId={1}
             />
         );
-    });
-
-    test('page renders all fields without crashing...', () => {
-        expect(screen.queryByText('PartRoot')).toBeNull();
     });
 
     test('save button should be disabled', () => {
@@ -80,13 +75,12 @@ describe('On View', () => {
                 updateItem={updateItem}
                 setEditStatus={setEditStatus}
                 item={item}
-                privileges={['part.admin']}
             />
         );
     });
 
     test('Page renders populated fields', () => {
-        expect(screen.getAllByText('Part Root')[0]).toBeInTheDocument();
+        expect(screen.getByText('Part Root')).toBeInTheDocument();
         expect(screen.getByDisplayValue('REACT')).toBeInTheDocument();
 
         expect(screen.getAllByText('Description')[0]).toBeInTheDocument();
@@ -97,7 +91,6 @@ describe('On View', () => {
 
         expect(screen.getByText('Variants')).toBeInTheDocument();
         expect(screen.getByDisplayValue('Integration UNIT')).toBeInTheDocument();
-
     });
 });
 
@@ -114,7 +107,6 @@ describe('When have no permissions/privileges', () => {
                 updateItem={updateItem}
                 setEditStatus={setEditStatus}
                 item={item}
-                privileges={[]}
             />
         );
     });

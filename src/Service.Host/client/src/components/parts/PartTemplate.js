@@ -9,7 +9,8 @@ import {
     ErrorCard,
     SnackbarMessage,
     Typeahead,
-    Dropdown
+    Dropdown,
+    utilities
 } from '@linn-it/linn-form-components-library';
 import { makeStyles } from '@material-ui/styles';
 import Page from '../../containers/Page';
@@ -25,13 +26,18 @@ function PartTemplate({
     updateItem,
     setEditStatus,
     setSnackbarVisible,
-    privileges,
     productAnalysisCodeSearchResults,
     productAnalysisCodesSearchLoading,
     searchProductAnalysisCodes,
     clearProductAnalysisCodesSearch,
     assemblyTechnologies
 }) {
+    const [editHref, setEditHref] = useState(null);
+
+    useEffect(() => {
+        setEditHref(utilities.getHref(item, 'edit'));
+    }, [item, setEditHref]);
+
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
     const [partTemplate, setPartTemplate] = useState(
@@ -52,7 +58,8 @@ function PartTemplate({
                   bomType: '',
                   assemblyTechnology: '',
                   allowPartCreation: '',
-                  paretoCode: ''
+                  paretoCode: '',
+                  links: {}
               }
             : null
     );
@@ -74,7 +81,8 @@ function PartTemplate({
                   bomType: '',
                   assemblyTechnology: '',
                   allowPartCreation: '',
-                  paretoCode: ''
+                  paretoCode: '',
+                  links: {}
               }
             : null
     );
@@ -136,10 +144,6 @@ function PartTemplate({
         handleFieldChange('productAnalysisCodeDescription', product.description);
     };
 
-    const allowedToEdit = () => {
-        return privileges?.some(priv => priv === 'part.admin');
-    };
-
     const content = () => (
         <Grid container spacing={3}>
             <Grid item xs={12}>
@@ -176,7 +180,7 @@ function PartTemplate({
                                 required
                                 onChange={handleFieldChange}
                                 propertyName="partRoot"
-                                disabled={!allowedToEdit()}
+                                disabled={!editHref}
                             />
                         </Grid>
 
@@ -190,7 +194,7 @@ function PartTemplate({
                                 onChange={handleFieldChange}
                                 propertyName="description"
                                 rows={2}
-                                disabled={!allowedToEdit()}
+                                disabled={!editHref}
                             />
                         </Grid>
 
@@ -206,7 +210,7 @@ function PartTemplate({
                                 required
                                 value={partTemplate.hasNumberSequence}
                                 onChange={handleFieldChange}
-                                disabled={!allowedToEdit()}
+                                disabled={!editHref}
                             />
                         </Grid>
 
@@ -219,7 +223,7 @@ function PartTemplate({
                                 onChange={handleFieldChange}
                                 allowNoValue
                                 propertyName="nextNumber"
-                                disabled={!allowedToEdit()}
+                                disabled={!editHref}
                             />
                         </Grid>
                         <Grid item xs={6} />
@@ -237,7 +241,7 @@ function PartTemplate({
                                 fullWidth
                                 value={partTemplate.allowVariants}
                                 onChange={handleFieldChange}
-                                disabled={!allowedToEdit()}
+                                disabled={!editHref}
                             />
                         </Grid>
 
@@ -251,7 +255,7 @@ function PartTemplate({
                                 allowNoValue
                                 propertyName="variants"
                                 rows={2}
-                                disabled={!allowedToEdit()}
+                                disabled={!editHref}
                             />
                         </Grid>
 
@@ -268,7 +272,7 @@ function PartTemplate({
                                 required
                                 value={partTemplate.allowPartCreation}
                                 onChange={handleFieldChange}
-                                disabled={!allowedToEdit()}
+                                disabled={!editHref}
                             />
                         </Grid>
 
@@ -284,7 +288,7 @@ function PartTemplate({
                                 required
                                 value={partTemplate.hasDataSheet}
                                 onChange={handleFieldChange}
-                                disabled={!allowedToEdit()}
+                                disabled={!editHref}
                             />
                         </Grid>
                         <Grid item xs={12} />
@@ -301,7 +305,7 @@ function PartTemplate({
                                 required
                                 value={partTemplate.accountingCompany}
                                 onChange={handleFieldChange}
-                                disabled={!allowedToEdit()}
+                                disabled={!editHref}
                             />
                         </Grid>
 
@@ -317,7 +321,7 @@ function PartTemplate({
                                 links={false}
                                 clearSearch={clearProductAnalysisCodesSearch}
                                 placeholder="Search Codes"
-                                disabled={!allowedToEdit()}
+                                disabled={!editHref}
                             />
                         </Grid>
                         <Grid item xs={8}>
@@ -343,7 +347,7 @@ function PartTemplate({
                                 fullWidth
                                 value={partTemplate.linnProduced}
                                 onChange={handleFieldChange}
-                                disabled={!allowedToEdit()}
+                                disabled={!editHref}
                             />
                         </Grid>
 
@@ -358,7 +362,7 @@ function PartTemplate({
                                 fullWidth
                                 value={partTemplate.linnProduced}
                                 onChange={handleFieldChange}
-                                disabled={!allowedToEdit()}
+                                disabled={!editHref}
                             />
                         </Grid>
 
@@ -376,7 +380,7 @@ function PartTemplate({
                                 fullWidth
                                 value={partTemplate.bomType}
                                 onChange={handleFieldChange}
-                                disabled={!allowedToEdit()}
+                                disabled={!editHref}
                             />
                         </Grid>
 
@@ -391,7 +395,7 @@ function PartTemplate({
                                 fullWidth
                                 value={partTemplate.rmfgCode}
                                 onChange={handleFieldChange}
-                                disabled={!allowedToEdit()}
+                                disabled={!editHref}
                             />
                         </Grid>
 
@@ -408,7 +412,7 @@ function PartTemplate({
                                 allowNoValue
                                 value={partTemplate.assemblyTechnology}
                                 onChange={handleFieldChange}
-                                disabled={!allowedToEdit()}
+                                disabled={!editHref}
                             />
                         </Grid>
                         <Grid item xs={3}>
@@ -430,7 +434,7 @@ function PartTemplate({
                                 value={partTemplate.paretoCode}
                                 maxLength={2}
                                 onChange={handleFieldChange}
-                                disabled={!allowedToEdit()}
+                                disabled={!editHref}
                             />
                         </Grid>
 
@@ -480,7 +484,6 @@ PartTemplate.propTypes = {
     loading: PropTypes.bool,
     setEditStatus: PropTypes.func.isRequired,
     setSnackbarVisible: PropTypes.func.isRequired,
-    privileges: PropTypes.arrayOf(PropTypes.string).isRequired,
     productAnalysisCodeSearchResults: PropTypes.arrayOf(productAnalysisCodeShape),
     searchProductAnalysisCodes: PropTypes.func.isRequired,
     clearProductAnalysisCodesSearch: PropTypes.func,

@@ -58,8 +58,8 @@ namespace Linn.Stores.Facade.ResourceBuilders
         {
             if (this.authorisationService.HasPermissionFor(AuthorisedAction.PartAdmin, model.Privileges))
             {
-                yield return new LinkResource { Rel = "create", Href = this.GetLocation(model) };
-                yield return new LinkResource { Rel = "edit", Href = this.GetLocation(model) };
+                yield return new LinkResource { Rel = "create", Href = "/inventory/part-templates/" };
+                yield return new LinkResource { Rel = "edit", Href = "/inventory/part-templates/" };
             }
 
             yield return new LinkResource { Rel = "self", Href = this.GetLocation(model) };

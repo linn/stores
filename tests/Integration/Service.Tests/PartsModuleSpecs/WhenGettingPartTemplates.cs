@@ -9,8 +9,6 @@
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources.Parts;
 
-    using Microsoft.EntityFrameworkCore.Internal;
-
     using Nancy;
     using Nancy.Testing;
 
