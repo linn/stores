@@ -96,7 +96,7 @@
             this.partTemplateService = partTemplateService;
             this.Get("/inventory/part-templates", _ => this.GetPartTemplates());
             this.Get("/inventory/part-templates/{id}", parameters => this.GetPartTemplate(parameters.id));
-            this.Get("/inventory/part-templates/application-state", _ => this.GetApp());
+            this.Get("/inventory/part-templates/application-state", _ => this.GetApplicationState());
             this.Put("/inventory/part-templates/{id}", parameters => this.UpdatePartTemplate(parameters.id));
             this.Post("/inventory/part-templates", parameters => this.AddPartTemplate());
 
@@ -130,6 +130,16 @@
         public object GetApp()
         {
             return this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index");
+        }
+
+        public object GetApplicationState()
+        {
+            var privileges = this.Context?.CurrentUser?.GetPrivileges().ToList();
+
+            return this.Negotiate
+                .WithModel(new SuccessResult<ResponseModel<PartTemplate>>(new ResponseModel<PartTemplate>(new PartTemplate(), privileges)))
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
 
         private object GetPart(int id)
