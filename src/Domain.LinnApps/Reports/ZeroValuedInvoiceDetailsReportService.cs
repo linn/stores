@@ -23,7 +23,7 @@
         public ResultsModel GetZeroValuedInvoicedItemsBetweenDates(DateTime from, DateTime to)
         {
             var lines = this.repository.FilterBy(
-                x => x.Total == 0 && (x.Invoice.DocumentDate > from && x.Invoice.DocumentDate > to));
+                x => x.Total == 0 && (x.Invoice.DocumentDate > from && x.Invoice.DocumentDate <= to));
 
             var model = new ResultsModel
                             {

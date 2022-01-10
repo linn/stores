@@ -38,7 +38,9 @@ function ZeroValuedInvoiceDetailsReportOptions() {
                 </Grid>
                 <Grid item xs={12}>
                     <ExportButton
-                        href={`${config.appRoot}/logistics/zero-valued-invoiced-report?from=${fromDate}&to=${toDate}`}
+                        href={`${
+                            config.appRoot
+                        }/logistics/zero-valued-invoiced-report?from=${fromDate.toISOString()}&to=${toDate.toISOString()}`}
                     />
                 </Grid>
             </Grid>
