@@ -55,6 +55,7 @@ import ImportBooksEuReport from '../containers/reports/ImpbookEuReport';
 import DebitNotes from '../containers/purchasing/DebitNotes';
 import QcLabelPrintScreen from '../containers/goodsIn/QcLabelPrintScreen';
 import StockBatchesInRotationOrder from '../containers/stockLocatorUtility/StockBatchesInRotationOrder';
+import ZeroValuedInvoiceDetailsReportOptions from './reports/ZeroValuedInvoiceDetailsReportOptions';
 
 const Root = ({ store }) => (
     <div>
@@ -329,6 +330,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/purchasing/debit-notes"
                                         component={DebitNotes}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/zero-valued-items-on-invoices-report"
+                                        component={ZeroValuedInvoiceDetailsReportOptions}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>
