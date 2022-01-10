@@ -252,6 +252,8 @@
 
         public DbQuery<RsnCondition> RsnConditions{ get; set; }
 
+        public DbSet<InvoiceDetail> InvoiceDetails { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -344,7 +346,7 @@
             this.BuildTqmsJobRefs(builder);
             this.QueryTqmsOutstandingLoansByCategories(builder);
             this.QueryConsignmentShipFiles(builder);
-            this.QueryInvoices(builder);
+            this.BuildInvoices(builder);
             this.BuildConsignmentItems(builder);
             this.BuildContacts(builder);
             this.BuildPersons(builder);
@@ -372,6 +374,7 @@
             this.BuildPurchaseLedger(builder);
             this.QueryRsnAccessories(builder);
             this.QueryRsnConditions(builder);
+            this.BuildInvoiceDetails(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -1769,14 +1772,32 @@
             q.HasOne(f => f.Consignment).WithOne(c => c.Shipfile).HasForeignKey<ConsignmentShipfile>(s => s.ConsignmentId);
         }
 
-        private void QueryInvoices(ModelBuilder builder)
+        private void BuildInvoices(ModelBuilder builder)
         {
-            var q = builder.Entity<Invoice>().ToTable("INVOICES");
-            q.HasKey(i => i.DocumentNumber);
-            q.Property(i => i.DocumentType).HasColumnName("DOCUMENT_TYPE");
-            q.Property(i => i.DocumentNumber).HasColumnName("DOCUMENT_NUMBER");
-            q.Property(i => i.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
-            q.HasOne(i => i.Consignment).WithMany(c => c.Invoices).HasForeignKey(i => i.ConsignmentId);
+            var e = builder.Entity<Invoice>().ToTable("INVOICES");
+            e.HasKey(i => i.DocumentNumber);
+            e.Property(i => i.DocumentType).HasColumnName("DOCUMENT_TYPE");
+            e.Property(i => i.DocumentNumber).HasColumnName("DOCUMENT_NUMBER");
+            e.Property(i => i.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
+            e.HasOne(i => i.Consignment).WithMany(c => c.Invoices).HasForeignKey(i => i.ConsignmentId);
+            e.Property(i => i.AccountId).HasColumnName("ACCOUNT_ID");
+            e.HasOne(i => i.Account).WithMany(a => a.InvoicesAgainst).HasForeignKey(i => i.AccountId);
+            e.Property(i => i.DocumentDate).HasColumnName("DOCUMENT_DATE");
+            e.Property(i => i.DeliveryAddressId).HasColumnName("DELIVERY_ADDRESS");
+            e.HasOne(i => i.DeliveryAddress).WithMany(a => a.InvoicesDeliveredTo)
+                .HasForeignKey(i => i.DeliveryAddressId);
+        }
+
+        private void BuildInvoiceDetails(ModelBuilder builder)
+        {
+            var e = builder.Entity<InvoiceDetail>().ToTable("INVOICE_DETAILS");
+            e.HasKey(d => new { d.InvoiceNumber, d.LineNumber });
+            e.Property(d => d.InvoiceNumber).HasColumnName("DOCUMENT_NUMBER");
+            e.Property(d => d.LineNumber).HasColumnName("LINE_NO");
+            e.Property(d => d.Total).HasColumnName("TOTAL");
+            e.Property(d => d.PartNumber).HasColumnName("PART_NO");
+            e.Property(d => d.PartDescription).HasColumnName("DESCRIPTION");
+            e.Property(d => d.CountryOfOrigin).HasColumnName("COUNTRY_OF_ORIGIN");
         }
 
         private void BuildConsignmentItems(ModelBuilder builder)

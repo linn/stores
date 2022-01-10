@@ -149,6 +149,8 @@
             builder.RegisterType<PurchaseLedgerRepository>().As<IRepository<PurchaseLedger, int>>();
             builder.RegisterType<RsnAccessoriesRepository>().As<IQueryRepository<RsnAccessory>>();
             builder.RegisterType<RsnConditionsRepository>().As<IQueryRepository<RsnCondition>>();
+            builder.RegisterType<InvoiceDetailRepository>()
+                .As<IRepository<InvoiceDetail, InvoiceDetailKey>>();
         }
     }
 }

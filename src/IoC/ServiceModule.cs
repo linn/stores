@@ -76,6 +76,8 @@
             builder.RegisterType<ImportBookReportService>()
                 .As<IImportBookReportService>();
             builder.RegisterType<ConsignmentService>().As<IConsignmentService>();
+            builder.RegisterType<ZeroValuedInvoiceDetailsReportService>()
+                .As<IZeroValuedInvoiceDetailsReportService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -177,6 +179,8 @@
             builder.RegisterType<LoanService>().As<ILoanService>();
             builder.RegisterType<RsnConditionsService>().As<IRsnConditionsService>();
             builder.RegisterType<RsnAccessoriesService>().As<IRsnAccessoriesService>();
+            builder.RegisterType<ZeroValuedInvoiceDetailsReportFacadeService>()
+                .As<IZeroValuedInvoiceDetailsReportFacadeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
