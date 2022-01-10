@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Service.Tests.PartsModuleSpecs
 {
+    using System.Collections.Generic;
+
     using FluentAssertions;
 
     using Linn.Common.Facade;
@@ -18,6 +20,10 @@
         [SetUp]
         public void SetUp()
         {
+            var privileges = new List<string> { "part.admin" };
+           
+            this.AuthorisationService.HasPermissionFor("part.admin", privileges).Returns(true);
+            
             var partTemplate = new PartTemplate
                                    {
                                        PartRoot = "LRPT",
@@ -57,8 +63,8 @@
                                                ParetoCode = "J"
                                            };
 
-            this.PartTemplateService.Add(Arg.Any<PartTemplateResource>())
-                .Returns(new SuccessResult<PartTemplate>(partTemplate));
+            this.PartTemplateService.Add(Arg.Any<PartTemplateResource>(), Arg.Any<IEnumerable<string>>())
+                .Returns(new SuccessResult<ResponseModel<PartTemplate>>(new ResponseModel<PartTemplate>(partTemplate, privileges)));
 
             this.Response = this.Browser.Post(
                 "/inventory/part-templates",
@@ -69,6 +75,7 @@
                     }).Result;
         }
 
+
         [Test]
         public void ShouldReturnOk()
         {
@@ -78,7 +85,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.PartTemplateService.Received().Add(Arg.Any<PartTemplateResource>());
+            this.PartTemplateService.Received().Add(Arg.Any<PartTemplateResource>(), Arg.Any<IEnumerable<string>>());
         }
 
         [Test]

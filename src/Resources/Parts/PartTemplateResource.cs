@@ -1,6 +1,8 @@
 ﻿namespace Linn.Stores.Resources.Parts
 {
-    public class PartTemplateResource
+    using Linn.Common.Resources;
+
+    public class PartTemplateResource : HypermediaResource
     {
         public string PartRoot { get; set; }
 

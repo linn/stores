@@ -15,6 +15,8 @@ import userManager from '../helpers/userManager';
 import 'typeface-roboto';
 import Part from '../containers/parts/Part';
 import Parts from '../containers/parts/Parts';
+import PartTemplate from '../containers/parts/PartTemplate';
+import PartTemplates from '../containers/parts/PartTemplates';
 import StartAllocation from '../containers/allocations/StartAllocation';
 import SosAllocHeads from '../containers/allocations/SosAllocHeads';
 import WwdReportOptions from '../containers/reports/WwdReportOptions';
@@ -151,6 +153,24 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/dept-stock-parts"
                                         component={DeptStockParts}
+                                    />
+
+                                    <Route
+                                        exact
+                                        path="/inventory/part-templates/create"
+                                        component={PartTemplate}
+                                    />
+
+                                    <Route
+                                        exact
+                                        path="/inventory/part-templates/:id"
+                                        component={PartTemplate}
+                                    />
+
+                                    <Route
+                                        exact
+                                        path="/inventory/part-templates"
+                                        component={PartTemplates}
                                     />
 
                                     <Route exact path="/logistics/parcels" component={Parcels} />
