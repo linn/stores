@@ -1798,6 +1798,7 @@
             e.Property(d => d.PartNumber).HasColumnName("PART_NO");
             e.Property(d => d.PartDescription).HasColumnName("DESCRIPTION");
             e.Property(d => d.CountryOfOrigin).HasColumnName("COUNTRY_OF_ORIGIN");
+            e.HasOne(d => d.Invoice).WithMany(i => i.Details).HasForeignKey(d => d.InvoiceNumber);
         }
 
         private void BuildConsignmentItems(ModelBuilder builder)
