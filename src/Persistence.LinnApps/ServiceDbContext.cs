@@ -1039,6 +1039,7 @@
             q.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
             q.Property(e => e.CustomsEntryCodePrefix).HasColumnName("CUSTOMS_ENTRY_CODE_PREFIX").HasMaxLength(3);
             q.Property(e => e.Pva).HasColumnName("PVA").HasMaxLength(1);
+            q.Property(e => e.PeriodNumber).HasColumnName("PERIOD_NUMBER");
             q.HasMany(t => t.InvoiceDetails).WithOne()
                 .HasForeignKey(detail => detail.ImportBookId);
             q.HasMany(t => t.OrderDetails).WithOne()

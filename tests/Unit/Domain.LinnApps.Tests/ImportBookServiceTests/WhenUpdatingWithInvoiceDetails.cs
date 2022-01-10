@@ -11,6 +11,8 @@
     {
         private readonly int impbookId = 12007;
         private ImportBook impbook;
+        private readonly DateTime now = DateTime.Now;
+
 
         [SetUp]
         public void SetUp()
@@ -42,7 +44,7 @@
             this.impbook = new ImportBook
                            {
                                Id = this.impbookId,
-                               DateCreated = DateTime.Now.AddDays(-5),
+                               DateCreated = this.now.AddDays(-5),
                                SupplierId = 555,
                                CarrierId = 678,
                                TransportId = 1,
@@ -56,7 +58,7 @@
             var newImportBook = new ImportBook
                                 {
                                     Id = this.impbookId,
-                                    DateCreated = DateTime.Now.AddDays(-5),
+                                    DateCreated = this.now.AddDays(-5),
                                     SupplierId = 555,
                                     CarrierId = 678,
                                     TransactionId = 44,
