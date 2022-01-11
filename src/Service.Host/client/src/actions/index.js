@@ -24,6 +24,17 @@ export const partTemplateActionTypes = makeActionTypes(itemTypes.partTemplate.ac
 
 export const partTemplatesActionTypes = makeActionTypes(itemTypes.partTemplates.actionType);
 
+export const partTemplateStateActionTypes = makeActionTypes(
+    itemTypes.partTemplate.actionType,
+    true,
+    true
+);
+
+export const partTemplatesStateActionTypes = makeActionTypes(
+    itemTypes.partTemplates.actionType,
+    false
+);
+
 export const partLiveTestActionTypes = makeActionTypes(itemTypes.partLiveTest.actionType);
 
 export const suppliersActionTypes = makeActionTypes(itemTypes.suppliers.actionType);

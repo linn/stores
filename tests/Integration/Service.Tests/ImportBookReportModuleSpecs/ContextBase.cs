@@ -20,16 +20,22 @@
     {
         protected IImportBookReportFacadeService ImportBookReportFacadeService { get; private set; }
 
+        protected IZeroValuedInvoiceDetailsReportFacadeService ZeroValuedInvoiceDetailsReportService
+        {
+            get;
+            private set;
+        }
+
         [SetUp]
         public void EstablishContext()
         {
             this.ImportBookReportFacadeService = Substitute.For<IImportBookReportFacadeService>();
-
+            this.ZeroValuedInvoiceDetailsReportService = Substitute.For<IZeroValuedInvoiceDetailsReportFacadeService>();
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                     {
                         with.Dependency(this.ImportBookReportFacadeService);
-
+                        with.Dependency(this.ZeroValuedInvoiceDetailsReportService);
                         with.Dependency<IResourceBuilder<ResultsModel>>(new ResultsModelResourceBuilder());
 
                         with.Module<ImportBooksReportModule>();

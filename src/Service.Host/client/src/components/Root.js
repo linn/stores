@@ -15,6 +15,8 @@ import userManager from '../helpers/userManager';
 import 'typeface-roboto';
 import Part from '../containers/parts/Part';
 import Parts from '../containers/parts/Parts';
+import PartTemplate from '../containers/parts/PartTemplate';
+import PartTemplates from '../containers/parts/PartTemplates';
 import StartAllocation from '../containers/allocations/StartAllocation';
 import SosAllocHeads from '../containers/allocations/SosAllocHeads';
 import WwdReportOptions from '../containers/reports/WwdReportOptions';
@@ -53,6 +55,7 @@ import ImportBooksEuReport from '../containers/reports/ImpbookEuReport';
 import DebitNotes from '../containers/purchasing/DebitNotes';
 import QcLabelPrintScreen from '../containers/goodsIn/QcLabelPrintScreen';
 import StockBatchesInRotationOrder from '../containers/stockLocatorUtility/StockBatchesInRotationOrder';
+import ZeroValuedInvoiceDetailsReportOptions from './reports/ZeroValuedInvoiceDetailsReportOptions';
 
 const Root = ({ store }) => (
     <div>
@@ -151,6 +154,24 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/dept-stock-parts"
                                         component={DeptStockParts}
+                                    />
+
+                                    <Route
+                                        exact
+                                        path="/inventory/part-templates/create"
+                                        component={PartTemplate}
+                                    />
+
+                                    <Route
+                                        exact
+                                        path="/inventory/part-templates/:id"
+                                        component={PartTemplate}
+                                    />
+
+                                    <Route
+                                        exact
+                                        path="/inventory/part-templates"
+                                        component={PartTemplates}
                                     />
 
                                     <Route exact path="/logistics/parcels" component={Parcels} />
@@ -309,6 +330,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/purchasing/debit-notes"
                                         component={DebitNotes}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/zero-valued-items-on-invoices-report"
+                                        component={ZeroValuedInvoiceDetailsReportOptions}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>

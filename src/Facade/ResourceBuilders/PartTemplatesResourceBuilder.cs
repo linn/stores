@@ -3,22 +3,32 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Linn.Common.Authorisation;
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources.Parts;
 
-    public class PartTemplatesResourceBuilder : IResourceBuilder<IEnumerable<PartTemplate>>
+    public class PartTemplatesResourceBuilder : IResourceBuilder<ResponseModel<IEnumerable<PartTemplate>>>
     {
-        private readonly PartTemplateResourceBuilder partTemplateResourceBuilder = new PartTemplateResourceBuilder();
+        private readonly IAuthorisationService authorisationService;
 
-        public IEnumerable<PartTemplateResource> Build(IEnumerable<PartTemplate> templates)
+        private readonly PartTemplateResourceBuilder partTemplateResourceBuilder;
+
+        public PartTemplatesResourceBuilder(
+            IAuthorisationService authorisationService)
         {
-            return templates.OrderBy(t => t.PartRoot).Select(p => this.partTemplateResourceBuilder.Build(p));
+            this.authorisationService = authorisationService;
+            this.partTemplateResourceBuilder = new PartTemplateResourceBuilder(authorisationService);
         }
 
-        object IResourceBuilder<IEnumerable<PartTemplate>>.Build(IEnumerable<PartTemplate> templates) => this.Build(templates);
+        public IEnumerable<PartTemplateResource> Build(ResponseModel<IEnumerable<PartTemplate>> templates)
+        {
+            return templates.ResponseData.OrderBy(t => t.PartRoot).Select(p => this.partTemplateResourceBuilder.Build(new ResponseModel<PartTemplate>(p, templates.Privileges)));
+        }
 
-        public string GetLocation(IEnumerable<PartTemplate> model)
+        object IResourceBuilder<ResponseModel<IEnumerable<PartTemplate>>>.Build(ResponseModel<IEnumerable<PartTemplate>> templates) => this.Build(templates);
+
+        public string GetLocation(ResponseModel<IEnumerable<PartTemplate>> model)
         {
             throw new System.NotImplementedException();
         }
