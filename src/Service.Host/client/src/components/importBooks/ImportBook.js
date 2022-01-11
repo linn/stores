@@ -727,7 +727,7 @@ function ImportBook({
                                         </Button>
                                     </Grid>
 
-                                    {impbookInvalidFields().length && (
+                                    {impbookInvalidFields().length > 0 && (
                                         <Grid item xs={12}>
                                             <Tooltip
                                                 title={impbookInvalidFields().map(f => `${f}, `)}
