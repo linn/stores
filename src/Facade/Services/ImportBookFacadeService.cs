@@ -126,7 +126,10 @@
                                         Comments = resource.Comments,
                                         CreatedBy = resource.CreatedBy,
                                         CustomsEntryCodePrefix = resource.CustomsEntryCodePrefix,
-                                        Pva = resource.Pva
+                                        Pva = resource.Pva,
+                                        ExchangeCurrency = resource.Currency,
+                                        ExchangeRate = resource.ExchangeRate,
+                                        BaseCurrency = "GBP"
                                     };
 
             var invoiceDetails = new List<ImportBookInvoiceDetail>();
@@ -240,7 +243,9 @@
                                         Comments = updateResource.Comments,
                                         CreatedBy = updateResource.CreatedBy,
                                         CustomsEntryCodePrefix = updateResource.CustomsEntryCodePrefix,
-                                        Pva = updateResource.Pva
+                                        Pva = updateResource.Pva,
+                                        ExchangeCurrency = updateResource.Currency,
+                                        ExchangeRate = updateResource.ExchangeRate
                                     };
 
             var invoiceDetails = new List<ImportBookInvoiceDetail>();

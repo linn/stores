@@ -60,6 +60,7 @@
                                     CreatedBy = 33105,
                                     CustomsEntryCodePrefix = "AA",
                                     Pva = "Y",
+                                    ExchangeRate = 11.222m,
                                     ImportBookInvoiceDetails =
                                         new List<ImportBookInvoiceDetailResource>
                                             {
@@ -180,6 +181,9 @@
                                   CreatedBy = 33105,
                                   CustomsEntryCodePrefix = "AA",
                                   Pva = "Y",
+                                  ExchangeRate = 11.222m,
+                                  ExchangeCurrency = "GBD",
+                                  BaseCurrency = "GBP",
                                   InvoiceDetails =
                                       new List<ImportBookInvoiceDetail>
                                           {
@@ -313,7 +317,9 @@
                                                                       && x.CreatedBy == this.resource.CreatedBy
                                                                       && x.CustomsEntryCodePrefix
                                                                       == this.resource.CustomsEntryCodePrefix
-                                                                      && x.Pva == this.resource.Pva));
+                                                                      && x.Pva == this.resource.Pva
+                                                                      && x.ExchangeCurrency == this.resource.Currency
+                                                                      && x.ExchangeRate == this.resource.ExchangeRate));
 
             var firstResourceInvDetail = this.resource.ImportBookInvoiceDetails.FirstOrDefault(x => x.LineNumber == 1);
 
@@ -450,6 +456,9 @@
             dataResult.CreatedBy.Should().Be(this.resource.CreatedBy);
             dataResult.CustomsEntryCodePrefix.Should().Be(this.resource.CustomsEntryCodePrefix);
             dataResult.Pva.Should().Be("Y");
+            dataResult.ExchangeRate.Should().Be(this.resource.ExchangeRate);
+            dataResult.ExchangeCurrency.Should().Be(this.resource.Currency);
+            dataResult.BaseCurrency.Should().Be("GBP");
 
             var firstResourceInvDetail = this.resource.ImportBookInvoiceDetails.FirstOrDefault(x => x.LineNumber == 1);
             var secondResourceInvDetail = this.resource.ImportBookInvoiceDetails.FirstOrDefault(x => x.LineNumber == 2);

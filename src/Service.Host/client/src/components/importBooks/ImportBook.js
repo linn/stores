@@ -335,6 +335,14 @@ function ImportBook({
 
     useEffect(() => {
         const exchangeRate = currentExchangeRate();
+
+        if (state.impbook?.exchangeRate !== exchangeRate) {
+            handleFieldChange('exchangeRate', exchangeRate);
+        }
+    }, [state.impbook.exchangeRate, currentExchangeRate, handleFieldChange]);
+
+    useEffect(() => {
+        const exchangeRate = currentExchangeRate();
         const invoiceValue = totalInvoiceValue();
         if (exchangeRate && invoiceValue && invoiceValue > 0) {
             const convertedValue = currencyConvert(invoiceValue, exchangeRate);

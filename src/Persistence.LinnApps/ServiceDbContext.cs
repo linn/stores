@@ -1043,6 +1043,10 @@
             q.Property(e => e.CustomsEntryCodePrefix).HasColumnName("CUSTOMS_ENTRY_CODE_PREFIX").HasMaxLength(3);
             q.Property(e => e.Pva).HasColumnName("PVA").HasMaxLength(1);
             q.Property(e => e.PeriodNumber).HasColumnName("PERIOD_NUMBER");
+            q.Property(e => e.ExchangeRate).HasColumnName("EXCHANGE_RATE").HasMaxLength(20);
+            q.Property(e => e.PeriodNumber).HasColumnName("PERIOD_NUMBER");
+            q.Property(e => e.ExchangeCurrency).HasColumnName("EXCHANGE_CURRENCY");
+            q.Property(e => e.BaseCurrency).HasColumnName("BASE_CURRENCY");
             q.HasMany(t => t.InvoiceDetails).WithOne()
                 .HasForeignKey(detail => detail.ImportBookId);
             q.HasMany(t => t.OrderDetails).WithOne()

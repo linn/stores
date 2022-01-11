@@ -94,6 +94,7 @@
                                     CreatedBy = 33105,
                                     CustomsEntryCodePrefix = "AA",
                                     Pva = "Y",
+                                    ExchangeRate = 11.222m,
                                     ImportBookInvoiceDetails =
                                         new List<ImportBookInvoiceDetailResource>
                                             {
@@ -233,7 +234,9 @@
                                                                       && x.CreatedBy == this.resource.CreatedBy
                                                                       && x.CustomsEntryCodePrefix
                                                                       == this.resource.CustomsEntryCodePrefix
-                                                                      && x.Pva == "Y"));
+                                                                      && x.Pva == "Y"
+                                                                      && x.ExchangeCurrency == this.resource.Currency
+                                                                      && x.ExchangeRate == this.resource.ExchangeRate));
         }
 
         [Test]
