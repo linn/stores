@@ -8,7 +8,7 @@ import config from '../../config';
 
 function ZeroValuedInvoiceDetailsReportOptions() {
     const defaultStartDate = new Date();
-    defaultStartDate.setDate(defaultStartDate.getDate() - 90);
+    defaultStartDate.setDate(defaultStartDate.getDate() - 28);
     const [fromDate, setFromDate] = useState(defaultStartDate);
     const [toDate, setToDate] = useState(new Date());
 
