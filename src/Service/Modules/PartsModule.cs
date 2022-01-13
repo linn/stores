@@ -112,6 +112,8 @@
 
             this.mechPartSourceService = mechPartSourceService;
             this.Get("/parts/sources/{id}", parameters => this.GetMechPartSource(parameters.id));
+            this.Get("/parts/manufacturer-data/{id}", parameters => this.GetPartWithManufacturerData(parameters.id));
+
             this.Put("/parts/sources/{id}", parameters => this.UpdateMechPartSource(parameters.id));
             this.Post("/parts/sources", _ => this.AddMechPartSource());
 
@@ -143,6 +145,15 @@
         private object GetPart(int id)
         {
             var results = this.partsFacadeService.GetByIdNoTracking(id);
+            return this.Negotiate
+                .WithModel(results)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
+        }
+
+        private object GetPartWithManufacturerData(int id)
+        {
+            var results = this.partsFacadeService.GetByIdWithManufacturerData(id);
             return this.Negotiate
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
