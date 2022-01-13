@@ -27,7 +27,7 @@
         {
             this.ProductionTriggerLevelsService.GetWorkStationCode(this.partNumber).Returns("STATION");
 
-            this.WwdPack.JobId().Returns(1234);
+            this.WwdPack.WWD(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<int>()).Returns(1234);
 
             this.ChangeRequestRepository.FilterBy(Arg.Any<Expression<Func<ChangeRequest, bool>>>()).Returns(
                 new List<ChangeRequest> { new ChangeRequest { OldPartNumber = "PART 1", NewPartNumber = "NEW" } }
