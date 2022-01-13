@@ -79,6 +79,9 @@
 
             this.reportingHelper.AddResultsToModel(model, values, CalculationValueModelType.Quantity, true);
 
+            model.RowDrillDownTemplates.Add(new DrillDownModel("Id", "/inventory/reports/what-will-decrement/report?partNumber={textValue}&quantity=" + $"{quantity}&typeOfRun{typeOfRun}"));
+            model.RowHeader = "Part Number";
+
             return model;
         }
 
@@ -99,12 +102,6 @@
                 var changeRemarks = changeRequest != null
                                         ? $"{changeRequest.OldPartNumber} change to {changeRequest.NewPartNumber}"
                                         : string.Empty;
-
-                values.Add(
-                    new CalculationValueModel
-                        {
-                            RowId = wwdWork.PartNumber, TextDisplay = wwdWork.PartNumber, ColumnId = "Part Number"
-                        });
                 values.Add(
                     new CalculationValueModel
                         {
@@ -160,10 +157,6 @@
         {
             return new List<AxisDetailsModel>
                        {
-                           new AxisDetailsModel("Part Number")
-                               {
-                                   SortOrder = 0, GridDisplayType = GridDisplayType.TextValue
-                               },
                            new AxisDetailsModel("Description")
                                {
                                    SortOrder = 1, GridDisplayType = GridDisplayType.TextValue
