@@ -272,6 +272,8 @@
             entity.CreatedBy = to.CreatedBy;
             entity.CustomsEntryCodePrefix = to.CustomsEntryCodePrefix;
             entity.Pva = to.Pva;
+            entity.ExchangeCurrency = to.Currency;
+            entity.ExchangeRate = to.ExchangeRate;
 
             if (entity.DateCreated.Date != to.DateCreated.Date)
             {

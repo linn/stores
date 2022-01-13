@@ -9,6 +9,8 @@
 
         public string ArrivalPort { get; set; }
 
+        public string BaseCurrency { get; set; }
+
         public int? CancelledBy { get; set; }
 
         public string CancelledReason { get; set; }
@@ -35,6 +37,10 @@
 
         public string DeliveryTermCode { get; set; }
 
+        public string ExchangeCurrency { get; set; }
+
+        public decimal ExchangeRate { get; set; }
+
         public string ForeignCurrency { get; set; }
 
         public int Id { get; set; }
@@ -52,7 +58,7 @@
         public IList<ImportBookOrderDetail> OrderDetails { get; set; }
 
         public int? ParcelNumber { get; set; }
-        
+
         public int? PeriodNumber { get; set; }
 
         public IList<ImportBookPostEntry> PostEntries { get; set; }

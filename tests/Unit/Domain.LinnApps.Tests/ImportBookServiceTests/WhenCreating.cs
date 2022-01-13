@@ -55,6 +55,8 @@
                                CreatedBy = null,
                                CustomsEntryCodePrefix = "AA",
                                Pva = "Y",
+                               ExchangeCurrency = "GBP",
+                               ExchangeRate = 1m,
                                InvoiceDetails = new List<ImportBookInvoiceDetail>(),
                                OrderDetails = new List<ImportBookOrderDetail>(),
                                PostEntries = new List<ImportBookPostEntry>()

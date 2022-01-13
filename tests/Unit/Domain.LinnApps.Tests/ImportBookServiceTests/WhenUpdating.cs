@@ -66,8 +66,8 @@
                                   DateCreated = this.now.AddDays(2),
                                   ParcelNumber = 1,
                                   SupplierId = 556,
-                                  ForeignCurrency = "YN",
-                                  Currency = "GBD",
+                                  ForeignCurrency = "Y",
+                                  Currency = "YEN",
                                   CarrierId = 678,
                                   TransportId = 2,
                                   TransportBillNumber = "1212",
@@ -90,6 +90,8 @@
                                   CreatedBy = 33105,
                                   CustomsEntryCodePrefix = "AA",
                                   Pva = "N",
+                                  ExchangeCurrency = "YEN",
+                                  ExchangeRate = 15.929m,
                                   InvoiceDetails = new List<ImportBookInvoiceDetail>(),
                                   OrderDetails = new List<ImportBookOrderDetail>(),
                                   PostEntries = new List<ImportBookPostEntry>()
@@ -134,6 +136,9 @@
             this.impbook.CustomsEntryCodePrefix.Equals(this.newImpBook.CustomsEntryCodePrefix).Should().BeTrue();
             this.impbook.Pva.Equals("N").Should().BeTrue();
             this.impbook.PeriodNumber.Value.Should().Be(1234);
+            this.impbook.Currency.Should().Be("YEN");
+            this.impbook.ExchangeCurrency.Should().Be("YEN");
+            this.impbook.ExchangeRate.Should().Be(15.929m);
         }
     }
 }

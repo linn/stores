@@ -31,6 +31,7 @@ export default function WwdReport({ reportData, loading, error, options }) {
                                 showTotals={false}
                                 showTitle
                                 title={reportData ? reportData?.title.displayString : 'Loading'}
+                                showRowTitles
                             />
                         )
                     )}

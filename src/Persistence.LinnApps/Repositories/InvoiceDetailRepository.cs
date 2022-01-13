@@ -46,7 +46,7 @@
         public IQueryable<InvoiceDetail> FilterBy(Expression<Func<InvoiceDetail, bool>> expression)
         {
             return this.serviceDbContext
-                .InvoiceDetails.Where(expression)
+                .InvoiceDetails.Where(expression).AsNoTracking()
                 .Include(d => d.Invoice).ThenInclude(i => i.Account)
                 .Include(d => d.Invoice).ThenInclude(i => i.DeliveryAddress);
         }
