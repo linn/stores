@@ -44,9 +44,7 @@
                 workstationCode = this.productionTriggerLevelsService.GetWorkStationCode(partNumber);
             }
 
-            this.wwdPack.WWD(partNumber, workstationCode, quantity);
-
-            var jobId = this.wwdPack.JobId();
+            var jobId = this.wwdPack.WWD(partNumber, workstationCode, quantity);
 
             var changeRequests = this.changeRequestRepository.FilterBy(c => c.ChangeState == "ACCEPT").ToList();
 
