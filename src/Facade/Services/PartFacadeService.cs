@@ -106,7 +106,7 @@
         }
 
         public IResult<Part> GetByIdWithManufacturerData(int id)
-         {
+        {
             var data = this.partRepository.GetByIdWithManufacturerData(id);
             return new SuccessResult<Part>(data);
         }
