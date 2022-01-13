@@ -79,7 +79,7 @@
 
             this.reportingHelper.AddResultsToModel(model, values, CalculationValueModelType.Quantity, true);
 
-            model.RowDrillDownTemplates.Add(new DrillDownModel("Id", "/inventory/reports/what-will-decrement/report?partNumber={textValue}&quantity=" + $"{quantity}1&typeOfRun{typeOfRun}"));
+            model.RowDrillDownTemplates.Add(new DrillDownModel("Id", "/inventory/reports/what-will-decrement/report?partNumber={textValue}&quantity=" + $"{quantity}&typeOfRun{typeOfRun}"));
             model.RowHeader = "Part Number";
 
             return model;
