@@ -105,6 +105,12 @@
             return new SuccessResult<Part>(res);
         }
 
+        public IResult<Part> GetByIdWithManufacturerData(int id)
+        {
+            var data = this.partRepository.GetByIdWithManufacturerData(id);
+            return new SuccessResult<Part>(data);
+        }
+
         public IResult<IEnumerable<Part>> SearchParts(string searchTerm, int? resultLimit)
         {
             return new SuccessResult<IEnumerable<Part>>(

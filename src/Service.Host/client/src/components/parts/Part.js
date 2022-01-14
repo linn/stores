@@ -282,15 +282,27 @@ function Part({
     return (
         <Page>
             <Grid container spacing={3}>
-                <Grid item xs={10}>
+                <Grid item xs={8}>
                     {creating() ? <Title text="Create Part" /> : <Title text="Part Details" />}
                 </Grid>
                 {creating() ? (
-                    <Grid item xs={2} />
+                    <Grid item xs={4} />
                 ) : (
-                    <Grid item xs={2}>
-                        <LinkButton to="/parts/create?copy=true" text="Copy" />
-                    </Grid>
+                    <>
+                        {state.part?.sourceId ? (
+                            <Grid item xs={2}>
+                                <LinkButton
+                                    to={`/parts/sources/${state.part?.sourceId}`}
+                                    text="SOURCE SHEET"
+                                />
+                            </Grid>
+                        ) : (
+                            <Grid item xs={2} />
+                        )}
+                        <Grid item xs={2}>
+                            <LinkButton to="/parts/create?copy=true" text="Copy" />
+                        </Grid>
+                    </>
                 )}
                 {itemError && (
                     <Grid item xs={12}>

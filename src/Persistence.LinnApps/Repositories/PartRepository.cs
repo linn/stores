@@ -113,6 +113,13 @@
             return result;
         }
 
+        public Part GetByIdWithManufacturerData(int id)
+        {
+            return this.serviceDbContext.Parts.AsNoTracking().Include(p => p.MechPartSource)
+                .ThenInclude(s => s.MechPartManufacturerAlts).ThenInclude(m => m.Manufacturer)
+                .FirstOrDefault(p => p.Id == id);
+        }
+
         public IEnumerable<Part> SearchPartsWithWildcard(
             string partNumberSearchTerm, 
             string descriptionSearchTerm, 
