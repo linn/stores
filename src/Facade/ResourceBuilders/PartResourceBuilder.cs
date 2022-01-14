@@ -102,10 +102,12 @@
                                         {
                                             PartNumber = m.PartNumber,
                                             ManufacturerCode = m.ManufacturerCode,
+                                            ManufacturerDescription = m.Manufacturer?.Description,
                                             Preference = m.Preference
                                         }).OrderBy(m => m.Preference),
                            Links = this.BuildLinks(part).ToArray(),
-                           SalesArticleNumber = part.SalesArticle?.ArticleNumber
+                           SalesArticleNumber = part.SalesArticle?.ArticleNumber,
+                           SourceId = part.MechPartSource?.Id
                        };
         }
 

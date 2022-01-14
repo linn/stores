@@ -10,7 +10,8 @@ import {
     Title,
     ErrorCard,
     SnackbarMessage,
-    useGroupEditTable
+    useGroupEditTable,
+    LinkButton
 } from '@linn-it/linn-form-components-library';
 import Page from '../../../containers/Page';
 import DataSheetsTab from './tabs/DataSheetsTab';
@@ -320,13 +321,20 @@ function MechPartSource({
     return (
         <Page>
             <Grid container spacing={3}>
-                <Grid item xs={12}>
+                <Grid item xs={10}>
                     {creating() ? (
                         <Title text="Create Part Source Sheet" />
                     ) : (
                         <Title text="Part Source Sheet Details" />
                     )}
                 </Grid>
+                {mechPartSource?.part?.id ? (
+                    <Grid item xs={2}>
+                        <LinkButton to={`/parts/${mechPartSource?.part?.id}`} text="PART RECORD" />
+                    </Grid>
+                ) : (
+                    <Grid item xs={2} />
+                )}
                 {itemError && (
                     <Grid item xs={12}>
                         <ErrorCard

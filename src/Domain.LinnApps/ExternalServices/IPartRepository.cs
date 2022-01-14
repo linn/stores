@@ -9,6 +9,8 @@
     {
         IEnumerable<Part> SearchParts(string searchTerm, int? resultLimit);
 
+        Part GetByIdWithManufacturerData(int id);
+        
         IEnumerable<Part> SearchPartsWithWildcard(
             string partNumberSearchTerm, 
             string descriptionSearchTerm, 
