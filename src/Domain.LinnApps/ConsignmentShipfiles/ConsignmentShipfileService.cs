@@ -188,8 +188,8 @@
                             toSend.Add(new ConsignmentShipfileEmailModel
                                            {
                                                PdfAttachment = pdfData,
-                                               ToCustomerName = account.ContactDetails.EmailAddress.Trim(),
-                                               ToEmailAddress = account.ContactDetails.EmailAddress,
+                                               ToCustomerName = account.ContactDetails.EmailAddress,
+                                               ToEmailAddress = account.ContactDetails.EmailAddress.Trim(),
                                                Body = body
                                            });
                         }
