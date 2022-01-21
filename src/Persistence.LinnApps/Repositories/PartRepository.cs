@@ -115,7 +115,9 @@
 
         public Part GetByIdWithManufacturerData(int id)
         {
-            return this.serviceDbContext.Parts.AsNoTracking().Include(p => p.MechPartSource)
+            return this.serviceDbContext.Parts.AsNoTracking()
+                .Include(p => p.PreferredSupplier)
+                .Include(p => p.MechPartSource)
                 .ThenInclude(s => s.MechPartManufacturerAlts).ThenInclude(m => m.Manufacturer)
                 .FirstOrDefault(p => p.Id == id);
         }
