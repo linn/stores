@@ -189,7 +189,7 @@
                                            {
                                                PdfAttachment = pdfData,
                                                ToCustomerName = account.ContactDetails.EmailAddress,
-                                               ToEmailAddress = account.ContactDetails.EmailAddress,
+                                               ToEmailAddress = account.ContactDetails.EmailAddress.Trim(),
                                                Body = body
                                            });
                         }
@@ -213,7 +213,7 @@
                             return new ConsignmentShipfileEmailModel
                             {
                                 PdfAttachment = pdfData,
-                                ToEmailAddress = o.OrderContact.EmailAddress,
+                                ToEmailAddress = o.OrderContact.EmailAddress.Trim(),
                                 ToCustomerName = o.OrderContact.EmailAddress,
                                 Body = this.BuildEmailBody(pdfData)
                             };
