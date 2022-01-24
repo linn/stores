@@ -1,5 +1,6 @@
 # Stores Service
 
+
 Forms and reports application spanning across stock, logistics and materials handling .
 
 ## Solution summary
