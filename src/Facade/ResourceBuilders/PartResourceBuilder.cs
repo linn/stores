@@ -135,6 +135,24 @@
                                  Rel = "stock-locators",
                                  Href = $"/inventory/stock-locators?partId={part.Id}"
                              };
+
+            if (part.PreferredSupplierId.HasValue && part.PreferredSupplierId != 4415)
+            {
+                yield return new LinkResource
+                                 {
+                                     Rel = "part-supplier",
+                                     Href =
+                                         $"/purchasing/part-suppliers/record?partId={part.Id}&supplierId={part.PreferredSupplierId}"
+                                 };
+            }
+            else
+            {
+                yield return new LinkResource
+                                 {
+                                     Rel = "part-supplier",
+                                     Href = $"/purchasing/part-suppliers/"
+                                 };
+            }
         }
 
         private PartParamDataResource BuildParamDataResource(PartParamData entity)
