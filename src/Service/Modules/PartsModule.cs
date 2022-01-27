@@ -262,7 +262,8 @@
             this.RequiresAuthentication();
             var result = this.partTemplateService.GetById(id, this.Context.CurrentUser.GetPrivileges());
             return this.Negotiate.WithModel(result)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
 
         private object UpdatePartTemplate(string id)
@@ -278,7 +279,8 @@
             this.RequiresAuthentication();
             var result = this.partTemplateService.GetAll(this.Context.CurrentUser.GetPrivileges());
             return this.Negotiate.WithModel(result)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
 
         private object GetProductAnalysisCodes()
