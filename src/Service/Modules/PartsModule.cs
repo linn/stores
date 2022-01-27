@@ -259,6 +259,7 @@
 
         private object GetPartTemplate(string id)
         {
+            this.RequiresAuthentication();
             var result = this.partTemplateService.GetById(id, this.Context.CurrentUser.GetPrivileges());
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
@@ -274,6 +275,7 @@
 
         private object GetPartTemplates()
         {
+            this.RequiresAuthentication();
             var result = this.partTemplateService.GetAll(this.Context.CurrentUser.GetPrivileges());
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
