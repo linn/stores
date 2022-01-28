@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import { InputField, Dropdown, Typeahead, LinkButton } from '@linn-it/linn-form-components-library';
+import { InputField, Dropdown, LinkButton } from '@linn-it/linn-form-components-library';
+
+import config from '../../../config';
 
 function PurchTab({
     handleFieldChange,
@@ -9,10 +11,6 @@ function PurchTab({
     ourUnitOfMeasure,
     preferredSupplier,
     preferredSupplierName,
-    suppliersSearchResults,
-    suppliersSearchLoading,
-    searchSuppliers,
-    clearSuppliersSearch,
     currency,
     currencyUnitPrice,
     baseUnitPrice,
@@ -46,19 +44,13 @@ function PurchTab({
             </Grid>
             <Grid item xs={8} />
             <Grid item xs={4}>
-                <Typeahead
-                    onSelect={newValue => {
-                        handleFieldChange('preferredSupplier', newValue);
-                    }}
-                    label="Preferred Supplier"
-                    modal
-                    items={suppliersSearchResults}
+                <InputField
+                    fullWidth
                     value={preferredSupplier}
-                    loading={suppliersSearchLoading}
-                    fetchItems={searchSuppliers}
-                    links={false}
-                    clearSearch={() => clearSuppliersSearch}
-                    placeholder="Search Code or Description"
+                    label="Preferred Supplier"
+                    disabled
+                    onChange={() => {}}
+                    propertyName="preferredSupplier"
                 />
             </Grid>
             <Grid item xs={5}>
@@ -72,12 +64,14 @@ function PurchTab({
                 />
             </Grid>
             <Grid item xs={3}>
-                <LinkButton
-                    to="/parts/suppliers"
-                    text="Part Suppliers"
-                    tooltip="Coming soon - still on Oracle Forms"
-                    disabled
-                />
+                {links.find(l => l.rel === 'part-supplier') && (
+                    <LinkButton
+                        text="Part Suppliers"
+                        newTab
+                        external
+                        to={`${config.proxyRoot}${links.find(l => l.rel === 'part-supplier').href}`}
+                    />
+                )}
             </Grid>
             {links.find(l => l.rel === 'mechanical-sourcing-sheet') && (
                 <>
@@ -270,11 +264,6 @@ function PurchTab({
     );
 }
 
-const supplierShape = PropTypes.shape({
-    supplierCode: PropTypes.string,
-    description: PropTypes.string
-});
-
 const partCategoryShape = PropTypes.shape({
     category: PropTypes.string,
     description: PropTypes.string
@@ -290,10 +279,6 @@ PurchTab.propTypes = {
     ourUnitOfMeasure: PropTypes.string,
     preferredSupplier: PropTypes.string,
     preferredSupplierName: PropTypes.string,
-    suppliersSearchResults: PropTypes.arrayOf(supplierShape),
-    suppliersSearchLoading: PropTypes.bool,
-    searchSuppliers: PropTypes.func.isRequired,
-    clearSuppliersSearch: PropTypes.func.isRequired,
     currency: PropTypes.string,
     currencyUnitPrice: PropTypes.number,
     baseUnitPrice: PropTypes.number,
@@ -319,8 +304,6 @@ PurchTab.defaultProps = {
     ourUnitOfMeasure: null,
     preferredSupplier: null,
     preferredSupplierName: null,
-    suppliersSearchResults: [],
-    suppliersSearchLoading: null,
     currency: null,
     currencyUnitPrice: null,
     baseUnitPrice: null,

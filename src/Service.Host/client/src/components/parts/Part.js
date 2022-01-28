@@ -61,8 +61,6 @@ function Part({
         createdByName: userName,
         dateCreated: new Date(),
         railMethod: 'POLICY',
-        preferredSupplier: 4415,
-        preferredSupplierName: 'Linn Products Ltd',
         qcInformation: '',
         qcOnReceipt: 'N',
         orderHold: 'N'
