@@ -5,6 +5,7 @@ import assemblyTechnologiesActions from '../../actions/assemblyTechnologiesActio
 import PartTemplate from '../../components/parts/PartTemplate';
 import partTemplateSelectors from '../../selectors/partTemplateSelectors';
 import partTemplateActions from '../../actions/partTemplateActions';
+import partTemplateStateActions from '../../actions/partTemplateStateActions';
 import productAnalysisCodesSelectors from '../../selectors/productAnalysisCodesSelectors';
 import productAnalysisCodesActions from '../../actions/productAnalysisCodesActions';
 import { getPrivileges, getUserNumber } from '../../selectors/userSelectors';
@@ -26,13 +27,15 @@ const mapStateToProps = (state, { match }) => ({
         .getSearchItems(state)
         .map(c => ({ name: c.productCode, description: c.description })),
     productAnalysisCodesSearchLoading: productAnalysisCodesSelectors.getSearchLoading(state),
-    assemblyTechnologies: assemblyTechnologiesSelectors.getItems(state)
+    assemblyTechnologies: assemblyTechnologiesSelectors.getItems(state),
+    applicationState: partTemplateSelectors.getApplicationState(state)
 });
 
 const initialise = item => dispatch => {
     if (item.itemId) {
         dispatch(partTemplateActions.fetch(item.itemId));
     }
+    dispatch(partTemplateStateActions.fetchState());
     dispatch(assemblyTechnologiesActions.fetch());
 };
 
