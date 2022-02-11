@@ -8,7 +8,7 @@
     {
         public int Id { get; set; }
 
-        public int? Quantity { get; set; }
+        public decimal? Quantity { get; set; }
 
         public int? PalletNumber { get; set; }
 
@@ -28,7 +28,7 @@
 
         public string UnitOfMeasure { get; set; }
 
-        public int? QuantityAllocated { get; set; }
+        public decimal? QuantityAllocated { get; set; }
 
         public string StockPoolCode { get; set; }
 
