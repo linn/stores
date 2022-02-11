@@ -8,9 +8,9 @@
 
         public string PartNumber { get; set; }
 
-        public decimal? QuantityKitted { get; set; }
+        public int? QuantityKitted { get; set; }
 
-        public decimal? QuantityAtLocation { get; set; }
+        public int? QuantityAtLocation { get; set; }
 
         public string StoragePlace { get; set; }
 
