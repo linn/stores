@@ -83,7 +83,7 @@
                     into values
                     select new StockLocatorLocation
                                {
-                                   Quantity = Convert.ToInt32(values[0]),
+                                   Quantity = Convert.ToDecimal(values[0]),
                                    StorageLocationId = Convert.ToInt32(values[1]),
                                    StorageLocation = new StorageLocation
                                                          {
@@ -100,7 +100,7 @@
                                    Category = values[9].ToString(),
                                    StockPoolCode = values[10].ToString(),
                                    OurUnitOfMeasure = values[11].ToString(),
-                                   QuantityAllocated = values[12] == DBNull.Value ? (int?)null : Convert.ToInt32(values[12]),
+                                   QuantityAllocated = values[12] == DBNull.Value ? (decimal?)null : Convert.ToDecimal(values[12]),
                                }).ToList();
         }
     }
