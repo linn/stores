@@ -485,8 +485,7 @@ function Consignment({
                     depth: selectedRSN.depth,
                     width: selectedRSN.width,
                     weight: selectedRSN.weight,
-                    quantity: selectedRSN.quantity,
-                    itemTypeDisplay: 'Sealed Box'
+                    quantity: selectedRSN.quantity
                 });
             }
         }
