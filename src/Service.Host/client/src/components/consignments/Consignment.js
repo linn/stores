@@ -1124,7 +1124,10 @@ function Consignment({
                                         items={rsnSearchResult()}
                                         placeholder="RSN Number"
                                         fetchItems={rsnNo =>
-                                            searchRsns(rsnNo, `&accountId=${item?.salesAccountId}`)
+                                            searchRsns(
+                                                rsnNo,
+                                                `&accountId=${item?.salesAccountId}&hasExportReturn=Y`
+                                            )
                                         }
                                         clearSearch={clearRsnsSearch}
                                         loading={rsnsSearchLoading}

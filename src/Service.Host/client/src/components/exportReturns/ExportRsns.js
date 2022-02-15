@@ -80,9 +80,12 @@ export default function ExportRsns({
     const handleSelectAccount = item => {
         dispatch({ type: 'selectAccount', payload: item });
         if (item.type === 'account') {
-            searchRsns(null, `&accountId=${item.accountId}`);
+            searchRsns(null, `&accountId=${item.accountId}&hasExportReturn=N`);
         } else {
-            searchRsns(null, `&accountId=${item.accountId}&outletNumber=${item.outletNumber}`);
+            searchRsns(
+                null,
+                `&accountId=${item.accountId}&outletNumber=${item.outletNumber}&hasExportReturn=N`
+            );
         }
     };
 

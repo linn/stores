@@ -54,6 +54,8 @@
 
         public DateTime? CustomsEntryCodeDate { get; set; }
 
+        public string CarrierRef { get; set; }
+
         public IList<ConsignmentPallet> Pallets { get; set; }
 
         public IEnumerable<ExportBook> ExportBooks { get; set; }

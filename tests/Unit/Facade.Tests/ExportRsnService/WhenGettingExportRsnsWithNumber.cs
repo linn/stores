@@ -25,7 +25,7 @@
 
             this.ExportRsnRepository.FilterBy(Arg.Any<Expression<Func<ExportRsn, bool>>>()).Returns(rsns.AsQueryable());
 
-            this.result = this.Sut.SearchRsns(123, null, "2");
+            this.result = this.Sut.SearchRsns(123, null, "2", "Y");
         }
 
         [Test]
