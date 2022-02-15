@@ -35,6 +35,7 @@
                            CustomsEntryCodePrefix = consignment.CustomsEntryCodePrefix,
                            CustomsEntryCode = consignment.CustomsEntryCode,
                            CustomsEntryCodeDate = consignment.CustomsEntryCodeDate?.ToString("o"),
+                           CarrierRef = consignment.CarrierRef,
                            Pallets = consignment.Pallets?.Select(
                                pallet => new ConsignmentPalletResource
                                              {

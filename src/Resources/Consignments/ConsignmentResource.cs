@@ -42,6 +42,8 @@
 
         public string CustomsEntryCodeDate { get; set; }
 
+        public string CarrierRef { get; set; }
+
         public IEnumerable<ConsignmentPalletResource> Pallets { get; set; }
 
         public IEnumerable<ConsignmentItemResource> Items { get; set; }

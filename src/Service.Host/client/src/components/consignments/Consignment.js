@@ -485,7 +485,8 @@ function Consignment({
                     depth: selectedRSN.depth,
                     width: selectedRSN.width,
                     weight: selectedRSN.weight,
-                    quantity: selectedRSN.quantity
+                    quantity: selectedRSN.quantity,
+                    itemTypeDisplay: 'Sealed Box'
                 });
             }
         }
@@ -1124,7 +1125,10 @@ function Consignment({
                                         items={rsnSearchResult()}
                                         placeholder="RSN Number"
                                         fetchItems={rsnNo =>
-                                            searchRsns(rsnNo, `&accountId=${item?.salesAccountId}`)
+                                            searchRsns(
+                                                rsnNo,
+                                                `&accountId=${item?.salesAccountId}&hasExportReturn=Y`
+                                            )
                                         }
                                         clearSearch={clearRsnsSearch}
                                         loading={rsnsSearchLoading}
