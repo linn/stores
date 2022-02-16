@@ -90,6 +90,8 @@
                 entity.CustomsEntryCodeDate = string.IsNullOrEmpty(updateResource.CustomsEntryCodeDate)
                                                   ? (DateTime?)null
                                                   : DateTime.Parse(updateResource.CustomsEntryCodeDate);
+                entity.CarrierRef = updateResource.CarrierRef;
+                entity.MasterCarrierRef = updateResource.MasterCarrierRef;
 
                 this.UpdatePallets(entity, updateResource.Pallets.ToList());
                 this.UpdateItems(entity, updateResource.Items.ToList());

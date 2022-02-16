@@ -44,6 +44,8 @@
 
         public string CarrierRef { get; set; }
 
+        public string MasterCarrierRef { get; set; }
+
         public IEnumerable<ConsignmentPalletResource> Pallets { get; set; }
 
         public IEnumerable<ConsignmentItemResource> Items { get; set; }

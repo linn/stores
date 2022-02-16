@@ -1603,6 +1603,7 @@
             q.Property(c => c.CustomsEntryCode).HasColumnName("CUSTOMS_ENTRY_CODE").HasMaxLength(20);
             q.Property(c => c.CustomsEntryCodeDate).HasColumnName("CUSTOMS_ENTRY_CODE_DATE");
             q.Property(c => c.CarrierRef).HasColumnName("CARRIER_REF").HasMaxLength(32);
+            q.Property(c => c.MasterCarrierRef).HasColumnName("MASTER_CARRIER_REF").HasMaxLength(32);
             q.HasOne(c => c.ClosedBy).WithMany(m => m.ConsignmentClosedBy).HasForeignKey(s => s.ClosedById);
             q.HasMany(c => c.Pallets).WithOne().HasForeignKey(cp => cp.ConsignmentId);
             q.HasMany(c => c.Items).WithOne().HasForeignKey(ci => ci.ConsignmentId);
