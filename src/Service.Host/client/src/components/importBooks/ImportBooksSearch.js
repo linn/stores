@@ -32,7 +32,9 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
     const doSearch = searchTerm => {
         fetchItems(
             searchTerm,
-            `&fromDate=${options.fromDate?.toISOString()}&toDate=${options.toDate?.toISOString()}`
+            `&fromDate=${options.fromDate ? options.fromDate.toISOString() : ''}&toDate=${
+                options.toDate ? options.toDate.toISOString() : ''
+            }`
         );
     };
 
