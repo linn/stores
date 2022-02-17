@@ -1397,6 +1397,8 @@
             q.Property(e => e.Height).HasColumnName("HEIGHT");
             q.Property(e => e.Depth).HasColumnName("DEPTH");
             q.Property(e => e.Width).HasColumnName("WIDTH");
+            q.Property(e => e.RsnState).HasColumnName("RSN_STATE").HasMaxLength(2);
+            q.Property(e => e.HasExportReturn).HasColumnName("HAS_EXPORT_RETURN").HasMaxLength(1);
         }
 
         private void QuerySalesAccounts(ModelBuilder builder)
@@ -1600,6 +1602,8 @@
             q.Property(c => c.CustomsEntryCodePrefix).HasColumnName("CUSTOMS_ENTRY_CODE_PREFIX").HasMaxLength(3);
             q.Property(c => c.CustomsEntryCode).HasColumnName("CUSTOMS_ENTRY_CODE").HasMaxLength(20);
             q.Property(c => c.CustomsEntryCodeDate).HasColumnName("CUSTOMS_ENTRY_CODE_DATE");
+            q.Property(c => c.CarrierRef).HasColumnName("CARRIER_REF").HasMaxLength(32);
+            q.Property(c => c.MasterCarrierRef).HasColumnName("MASTER_CARRIER_REF").HasMaxLength(32);
             q.HasOne(c => c.ClosedBy).WithMany(m => m.ConsignmentClosedBy).HasForeignKey(s => s.ClosedById);
             q.HasMany(c => c.Pallets).WithOne().HasForeignKey(cp => cp.ConsignmentId);
             q.HasMany(c => c.Items).WithOne().HasForeignKey(ci => ci.ConsignmentId);

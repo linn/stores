@@ -30,13 +30,14 @@ function PartTemplate({
     productAnalysisCodesSearchLoading,
     searchProductAnalysisCodes,
     clearProductAnalysisCodesSearch,
-    assemblyTechnologies
+    assemblyTechnologies,
+    applicationState
 }) {
     const [editHref, setEditHref] = useState(null);
 
     useEffect(() => {
-        setEditHref(utilities.getHref(item, 'edit'));
-    }, [item, setEditHref]);
+        setEditHref(utilities.getHref(applicationState, 'edit') !== null);
+    }, [applicationState]);
 
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';

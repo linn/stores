@@ -66,7 +66,7 @@ function StoresTab({
                 <Dropdown
                     label="Rail Method"
                     propertyName="railMethod"
-                    items={['MR9', 'SMM', 'POLICY', 'FIXED', 'OVERRIDE']}
+                    items={['MR9', 'SMM', 'POLICY', 'FIXED', 'OVERRIDE', 'LEADTIME']}
                     fullWidth
                     allowNoValue
                     value={railMethod}

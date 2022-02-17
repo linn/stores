@@ -6,9 +6,9 @@
 
         public string PartNumber { get; set; }
 
-        public int? QuantityAtLocation { get; set; }
+        public decimal? QuantityAtLocation { get; set; }
 
-        public int? QuantityAllocated { get; set; }
+        public decimal? QuantityAllocated { get; set; }
 
         public string Remarks { get; set; }
 

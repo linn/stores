@@ -4,7 +4,7 @@
 
     public class StockLocatorBatch
     {
-        public int? Quantity { get; set; }
+        public decimal? Quantity { get; set; }
         
         public int LocationId { get; set; }
         
@@ -28,6 +28,6 @@
         
         public string StockPoolCode { get; set; }
         
-        public int? QuantityAllocated { get; set; }
+        public decimal? QuantityAllocated { get; set; }
     }
 }
