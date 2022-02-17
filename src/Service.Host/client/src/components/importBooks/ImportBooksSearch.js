@@ -12,7 +12,7 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
         return items?.map(item => ({
             ...item,
             name: item.id.toString(),
-            description: `${item.id}, created ${item.dateCreated}`,
+            description: `${item.id}, created ${new Date(item.dateCreated).toLocaleDateString()}`,
             href: item.href
         }));
     };
