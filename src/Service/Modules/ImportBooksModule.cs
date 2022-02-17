@@ -73,15 +73,9 @@
 
         private object GetImportBooks()
         {
-            var resource = this.Bind<SearchRequestResource>();
+            var resource = this.Bind<ImportBookSearchResource>();
 
-            if (string.IsNullOrWhiteSpace(resource.SearchTerm))
-            {
-                return this.Negotiate.WithMediaRangeModel("text/html", ApplicationSettings.Get)
-                    .WithView("Index");
-            }
-
-            var results = this.importBookFacadeService.Search(resource.SearchTerm);
+            var results = this.importBookFacadeService.FilterBy(resource);
 
             return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");

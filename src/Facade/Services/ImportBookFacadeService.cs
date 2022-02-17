@@ -12,7 +12,7 @@
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Resources.ImportBooks;
 
-    public class ImportBookFacadeService : FacadeService<ImportBook, int, ImportBookResource, ImportBookResource>,
+    public class ImportBookFacadeService : FacadeFilterService<ImportBook, int, ImportBookResource, ImportBookResource, ImportBookSearchResource>,
                                            IImportBookFacadeService
     {
         private readonly IDatabaseService databaseService;
@@ -202,6 +202,15 @@
         protected override Expression<Func<ImportBook, bool>> SearchExpression(string searchTerm)
         {
             return imps => imps.Id.ToString().Contains(searchTerm);
+        }
+
+        protected override Expression<Func<ImportBook, bool>> FilterExpression(ImportBookSearchResource searchResource)
+        {
+            return x => (string.IsNullOrEmpty(searchResource.SearchTerm) || x.Id.ToString().Contains(searchResource.SearchTerm))
+                        && (string.IsNullOrEmpty(searchResource.ToDate)
+                            || x.DateCreated <= DateTime.Parse(searchResource.ToDate))
+                        && (string.IsNullOrEmpty(searchResource.FromDate)
+                            || x.DateCreated >= DateTime.Parse(searchResource.FromDate));
         }
 
         protected override void UpdateFromResource(ImportBook entity, ImportBookResource updateResource)

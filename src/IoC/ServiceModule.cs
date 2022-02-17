@@ -214,7 +214,6 @@
             builder.RegisterType<DeptStockPartsService>().As<IDeptStockPartsService>();
             builder.RegisterType<PurchaseLedgerPack>().As<IPurchaseLedgerPack>();
 
-
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();
             builder.RegisterType<ProductionTriggerLevelsProxy>().As<IProductionTriggerLevelsService>().WithParameter(
