@@ -469,7 +469,6 @@ function OrderDetailsTab({
                                     value={row.dutyValue}
                                     disabled={!allowedToEdit}
                                     required
-                                    maxLength={14}
                                     decimalPlaces={2}
                                 />
                             </Grid>
@@ -498,7 +497,6 @@ function OrderDetailsTab({
                                     value={row.vatValue}
                                     disabled={!allowedToEdit}
                                     required
-                                    maxLength={14}
                                     decimalPlaces={2}
                                 />
                             </Grid>
@@ -514,7 +512,6 @@ function OrderDetailsTab({
                                     value={row.weight}
                                     disabled={!allowedToEdit}
                                     required
-                                    maxLength={10}
                                     decimalPlaces={2}
                                 />
                             </Grid>
