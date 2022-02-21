@@ -69,7 +69,7 @@
 
         public void Add(ConsignmentShipfile entity)
         {
-            throw new NotImplementedException();
+            this.serviceDbContext.Add(entity);
         }
     }
 }

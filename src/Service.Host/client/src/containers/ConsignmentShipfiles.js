@@ -29,7 +29,8 @@ const mapDispatchToProps = {
     sendEmails: shipfilesSendEmailsActions.requestProcessStart,
     clearErrors: shipfilesSendEmailsActions.clearErrorsForItem,
     clearData: shipfilesSendEmailsActions.clearProcessData,
-    deleteShipfile: consignmentShipfileActions.delete
+    deleteShipfile: consignmentShipfileActions.delete,
+    addShipfile: consignmentShipfileActions.add
 };
 
 export default connect(

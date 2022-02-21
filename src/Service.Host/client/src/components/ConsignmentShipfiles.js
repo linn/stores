@@ -15,11 +15,13 @@ export default function ConsignmentShipfiles({
     clearErrors,
     deleteShipfile,
     deleteLoading,
-    fetchShipfiles
+    fetchShipfiles,
+    addShipfile
 }) {
     const [selectedRows, setSelectedRows] = useState([]);
     const [rows, setRows] = useState([]);
     const [testEmailAddress, setTestEmailAddress] = useState();
+    const [invoiceNo, setinvoiceNo] = useState();
 
     useEffect(() => {
         setRows(
@@ -165,6 +167,29 @@ export default function ConsignmentShipfiles({
                                 Test Selected
                             </Button>
                         </Grid>
+                        <Grid item xs={6} />
+
+                        <Grid item xs={4}>
+                            <InputField
+                                label="Invoice No"
+                                propertyName="invoiceNo"
+                                onChange={(_, newValue) => setinvoiceNo(newValue)}
+                                value={invoiceNo}
+                            />
+                        </Grid>
+                        <Grid item xs={2}>
+                            <Button
+                                style={{ marginTop: '22px' }}
+                                variant="contained"
+                                disabled={!invoiceNo}
+                                onClick={() => {
+                                    clearErrors();
+                                    addShipfile({ invoiceNumbers: invoiceNo });
+                                }}
+                            >
+                                Reinstate For Invoice
+                            </Button>
+                        </Grid>
                     </>
                 )}
             </Grid>
@@ -187,7 +212,8 @@ ConsignmentShipfiles.propTypes = {
             errors: PropTypes.arrayOf(PropTypes.string)
         })
     }),
-    fetchShipfiles: PropTypes.func.isRequired
+    fetchShipfiles: PropTypes.func.isRequired,
+    addShipfile: PropTypes.func.isRequired
 };
 
 ConsignmentShipfiles.defaultProps = {
