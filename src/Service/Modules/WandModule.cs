@@ -28,7 +28,6 @@
             this.Post("/logistics/shipfiles/send-emails", _ => this.SendEmails());
             this.Delete("/logistics/shipfiles/{id}", parameters => this.DeleteShipfile(parameters.id));
             this.Post("/logistics/shipfiles", _ => this.AddShipfile());
-
         }
 
         private object WandItem()
