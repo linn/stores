@@ -32,7 +32,6 @@
 
             this.resource = new ConsignmentShipfileResource { InvoiceNumbers = "123" };
 
-
             this.ShipfileService.Add(Arg.Any<ConsignmentShipfileResource>())
                 .Returns(new CreatedResult<ConsignmentShipfile>(this.result));
 
