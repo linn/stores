@@ -11,15 +11,19 @@ export default function ConsignmentShipfiles({
     consignmentShipfilesLoading,
     sendEmails,
     processedShipfiles,
+    processError,
     itemError,
-    clearErrors,
+    clearProcessErrors,
+    clearItemErrors,
     deleteShipfile,
     deleteLoading,
-    fetchShipfiles
+    fetchShipfiles,
+    addShipfile
 }) {
     const [selectedRows, setSelectedRows] = useState([]);
     const [rows, setRows] = useState([]);
     const [testEmailAddress, setTestEmailAddress] = useState();
+    const [invoiceNo, setinvoiceNo] = useState();
 
     useEffect(() => {
         setRows(
@@ -41,10 +45,10 @@ export default function ConsignmentShipfiles({
     }, [processedShipfiles]);
 
     useEffect(() => {
-        if (itemError) {
+        if (processError) {
             fetchShipfiles();
         }
-    }, [itemError, fetchShipfiles]);
+    }, [processError, fetchShipfiles]);
 
     const columns = [
         { field: 'id', headerName: 'Id', width: 0, hide: true },
@@ -63,12 +67,23 @@ export default function ConsignmentShipfiles({
                 <Grid item xs={12}>
                     <Title text="Send Shipfile Emails" />
                 </Grid>
-                {deleteLoading && !itemError ? (
+                {deleteLoading && !processError ? (
                     <Grid item xs={12}>
                         <Loading />
                     </Grid>
                 ) : (
                     <>
+                        {processError && (
+                            <Grid item xs={12}>
+                                <ErrorCard
+                                    errorMessage={
+                                        processError?.details?.errors?.[0] ||
+                                        processError?.details?.message ||
+                                        processError.statusText
+                                    }
+                                />
+                            </Grid>
+                        )}
                         {itemError && (
                             <Grid item xs={12}>
                                 <ErrorCard
@@ -86,7 +101,8 @@ export default function ConsignmentShipfiles({
                                 variant="contained"
                                 disabled={selectedRows?.length < 1}
                                 onClick={() => {
-                                    clearErrors();
+                                    clearProcessErrors();
+                                    clearItemErrors();
                                     selectedRows.forEach(r => {
                                         setRows(shipfiles =>
                                             shipfiles.map(s =>
@@ -110,7 +126,8 @@ export default function ConsignmentShipfiles({
                                 color="secondary"
                                 disabled={selectedRows?.length < 1}
                                 onClick={() => {
-                                    clearErrors();
+                                    clearProcessErrors();
+                                    clearItemErrors();
                                     selectedRows.forEach(r => deleteShipfile(r.id, null));
                                 }}
                             >
@@ -147,7 +164,8 @@ export default function ConsignmentShipfiles({
                                 variant="contained"
                                 disabled={!testEmailAddress}
                                 onClick={() => {
-                                    clearErrors();
+                                    clearProcessErrors();
+                                    clearItemErrors();
                                     selectedRows.forEach(r => {
                                         setRows(shipfiles =>
                                             shipfiles.map(s =>
@@ -165,6 +183,30 @@ export default function ConsignmentShipfiles({
                                 Test Selected
                             </Button>
                         </Grid>
+                        <Grid item xs={6} />
+
+                        <Grid item xs={4}>
+                            <InputField
+                                label="Invoice No"
+                                propertyName="invoiceNo"
+                                onChange={(_, newValue) => setinvoiceNo(newValue)}
+                                value={invoiceNo}
+                            />
+                        </Grid>
+                        <Grid item xs={2}>
+                            <Button
+                                style={{ marginTop: '22px' }}
+                                variant="contained"
+                                disabled={!invoiceNo}
+                                onClick={() => {
+                                    clearProcessErrors();
+                                    clearItemErrors();
+                                    addShipfile({ invoiceNumbers: invoiceNo });
+                                }}
+                            >
+                                Reinstate For Invoice
+                            </Button>
+                        </Grid>
                     </>
                 )}
             </Grid>
@@ -179,7 +221,15 @@ ConsignmentShipfiles.propTypes = {
     sendEmails: PropTypes.func.isRequired,
     deleteShipfile: PropTypes.func.isRequired,
     deleteLoading: PropTypes.bool,
-    clearErrors: PropTypes.func.isRequired,
+    clearProcessErrors: PropTypes.func.isRequired,
+    clearItemErrors: PropTypes.func.isRequired,
+    processError: PropTypes.shape({
+        statusText: PropTypes.string,
+        details: PropTypes.shape({
+            message: PropTypes.string,
+            errors: PropTypes.arrayOf(PropTypes.string)
+        })
+    }),
     itemError: PropTypes.shape({
         statusText: PropTypes.string,
         details: PropTypes.shape({
@@ -187,13 +237,15 @@ ConsignmentShipfiles.propTypes = {
             errors: PropTypes.arrayOf(PropTypes.string)
         })
     }),
-    fetchShipfiles: PropTypes.func.isRequired
+    fetchShipfiles: PropTypes.func.isRequired,
+    addShipfile: PropTypes.func.isRequired
 };
 
 ConsignmentShipfiles.defaultProps = {
     consignmentShipfiles: [],
     processedShipfiles: null,
     consignmentShipfilesLoading: false,
+    processError: null,
     itemError: null,
     deleteLoading: false
 };

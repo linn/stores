@@ -6,14 +6,16 @@ import ConsignmentShipfiles from '../ConsignmentShipfiles';
 
 const sendEmails = jest.fn();
 const deleteShipfile = jest.fn();
-const clearErrors = jest.fn();
+const clearProcessErrors = jest.fn();
+const clearItemErrors = jest.fn();
 
 const defaultRender = props =>
     render(
         <ConsignmentShipfiles
             sendEmails={sendEmails}
             deleteShipfile={deleteShipfile}
-            clearErrors={clearErrors}
+            clearProcessErrors={clearProcessErrors}
+            clearItemErrors={clearItemErrors}
             //eslint-disable-next-line react/jsx-props-no-spreading
             {...props}
         />
@@ -115,7 +117,7 @@ describe('When Sending Emails...', () => {
     });
 
     test('should clear errors', () => {
-        expect(clearErrors).toHaveBeenCalled();
+        expect(clearProcessErrors).toHaveBeenCalled();
     });
 
     test('should say update startus to "Processing" for each shipfile', () => {

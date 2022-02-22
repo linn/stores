@@ -13,5 +13,7 @@
         IResult<IEnumerable<ConsignmentShipfile>> SendEmails(ConsignmentShipfilesSendEmailsRequestResource toSend);
 
         IResult<ConsignmentShipfile> DeleteShipfile(int id);
+
+        IResult<ConsignmentShipfile> Add(ConsignmentShipfileResource resource);
     }
 }

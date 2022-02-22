@@ -6,6 +6,8 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
+    using Linn.Common.Proxy.LinnApps;
+    using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
@@ -14,18 +16,26 @@
     {
         private readonly IRepository<ConsignmentShipfile, int> repository;
 
+        private readonly IRepository<Consignment, int> consignmentRepository;
+
         private readonly ITransactionManager transactionManager;
 
         private readonly IConsignmentShipfileService domainService;
 
+        private readonly IDatabaseService databaseService;
+
         public ConsignmentShipfileFacadeService(
             IRepository<ConsignmentShipfile, int> repository,
+            IRepository<Consignment, int> consignmentRepository,
             IConsignmentShipfileService domainService,
-            ITransactionManager transactionManager)
+            ITransactionManager transactionManager,
+            IDatabaseService databaseService)
         {
             this.repository = repository;
+            this.consignmentRepository = consignmentRepository;
             this.domainService = domainService;
             this.transactionManager = transactionManager;
+            this.databaseService = databaseService;
         }
 
         public IResult<IEnumerable<ConsignmentShipfile>> GetShipfiles()
@@ -70,6 +80,33 @@
             var toDelete = this.repository.FindBy(s => s.Id == id);
             this.repository.Remove(toDelete);
             return new SuccessResult<ConsignmentShipfile>(toDelete);
+        }
+
+        public IResult<ConsignmentShipfile> Add(ConsignmentShipfileResource resource)
+        {
+            if (!int.TryParse(resource.InvoiceNumbers.Trim(), out var invoiceNo))
+            {
+                return new BadRequestResult<ConsignmentShipfile>("Invalid Invoice Number");
+            }
+
+            var consignment =
+                this.consignmentRepository.FindBy(x => x.Invoices.Any(i => i.DocumentNumber == invoiceNo));
+
+            if (consignment == null)
+            {
+                return new BadRequestResult<ConsignmentShipfile>("Consignment Not Found");
+            }
+
+            var id = this.databaseService.GetIdSequence("SHIPFILE_EMAIL_SEQ");
+            var shipfile = new ConsignmentShipfile
+                               {
+                                   ConsignmentId = consignment.ConsignmentId,
+                                   Id = id
+                               };
+            this.repository.Add(shipfile);
+            this.transactionManager.Commit();
+
+            return new CreatedResult<ConsignmentShipfile>(shipfile);
         }
     }
 }
