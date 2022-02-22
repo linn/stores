@@ -6,6 +6,7 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
+    using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.ConsignmentShipfiles;
     using Linn.Stores.Proxy;
@@ -21,16 +22,20 @@
 
         private readonly IConsignmentShipfileService domainService;
 
+        private readonly IDatabaseService databaseService;
+
         public ConsignmentShipfileFacadeService(
             IRepository<ConsignmentShipfile, int> repository,
             IRepository<Consignment, int> consignmentRepository,
             IConsignmentShipfileService domainService,
-            ITransactionManager transactionManager)
+            ITransactionManager transactionManager,
+            IDatabaseService databaseService)
         {
             this.repository = repository;
             this.consignmentRepository = consignmentRepository;
             this.domainService = domainService;
             this.transactionManager = transactionManager;
+            this.databaseService = databaseService;
         }
 
         public IResult<IEnumerable<ConsignmentShipfile>> GetShipfiles()
@@ -95,7 +100,7 @@
             var shipfile = new ConsignmentShipfile
                                {
                                    ConsignmentId = consignment.ConsignmentId,
-                                   Id = this.repository.FindAll().Max(x => x.Id) + 1
+                                   Id = this.databaseService.GetNextVal("SHIPFILE_EMAIL_SEQ")
                                };
             this.repository.Add(shipfile);
             this.transactionManager.Commit();

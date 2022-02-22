@@ -25,7 +25,7 @@
         {
             this.ConsignmentRepository.FindBy(Arg.Any<Expression<Func<Consignment, bool>>>())
                 .Returns(new Consignment {});
-            this.Repository.FindAll().Returns(new List<ConsignmentShipfile> { new ConsignmentShipfile { Id = 1 } }.AsQueryable());
+            this.DatabaseService.GetNextVal("SHIPFILE_EMAIL_SEQ").Returns(2);
 
             this.result = this.Sut.Add(new ConsignmentShipfileResource { InvoiceNumbers = "123" });
         }
