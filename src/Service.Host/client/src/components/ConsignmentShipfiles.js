@@ -11,8 +11,10 @@ export default function ConsignmentShipfiles({
     consignmentShipfilesLoading,
     sendEmails,
     processedShipfiles,
+    processError,
     itemError,
-    clearErrors,
+    clearProcessErrors,
+    clearItemErrors,
     deleteShipfile,
     deleteLoading,
     fetchShipfiles,
@@ -43,10 +45,10 @@ export default function ConsignmentShipfiles({
     }, [processedShipfiles]);
 
     useEffect(() => {
-        if (itemError) {
+        if (processError) {
             fetchShipfiles();
         }
-    }, [itemError, fetchShipfiles]);
+    }, [processError, fetchShipfiles]);
 
     const columns = [
         { field: 'id', headerName: 'Id', width: 0, hide: true },
@@ -65,12 +67,23 @@ export default function ConsignmentShipfiles({
                 <Grid item xs={12}>
                     <Title text="Send Shipfile Emails" />
                 </Grid>
-                {deleteLoading && !itemError ? (
+                {deleteLoading && !processError ? (
                     <Grid item xs={12}>
                         <Loading />
                     </Grid>
                 ) : (
                     <>
+                        {processError && (
+                            <Grid item xs={12}>
+                                <ErrorCard
+                                    errorMessage={
+                                        processError?.details?.errors?.[0] ||
+                                        processError?.details?.message ||
+                                        processError.statusText
+                                    }
+                                />
+                            </Grid>
+                        )}
                         {itemError && (
                             <Grid item xs={12}>
                                 <ErrorCard
@@ -88,7 +101,8 @@ export default function ConsignmentShipfiles({
                                 variant="contained"
                                 disabled={selectedRows?.length < 1}
                                 onClick={() => {
-                                    clearErrors();
+                                    clearProcessErrors();
+                                    clearItemErrors();
                                     selectedRows.forEach(r => {
                                         setRows(shipfiles =>
                                             shipfiles.map(s =>
@@ -112,7 +126,8 @@ export default function ConsignmentShipfiles({
                                 color="secondary"
                                 disabled={selectedRows?.length < 1}
                                 onClick={() => {
-                                    clearErrors();
+                                    clearProcessErrors();
+                                    clearItemErrors();
                                     selectedRows.forEach(r => deleteShipfile(r.id, null));
                                 }}
                             >
@@ -149,7 +164,8 @@ export default function ConsignmentShipfiles({
                                 variant="contained"
                                 disabled={!testEmailAddress}
                                 onClick={() => {
-                                    clearErrors();
+                                    clearProcessErrors();
+                                    clearItemErrors();
                                     selectedRows.forEach(r => {
                                         setRows(shipfiles =>
                                             shipfiles.map(s =>
@@ -183,7 +199,8 @@ export default function ConsignmentShipfiles({
                                 variant="contained"
                                 disabled={!invoiceNo}
                                 onClick={() => {
-                                    clearErrors();
+                                    clearProcessErrors();
+                                    clearItemErrors();
                                     addShipfile({ invoiceNumbers: invoiceNo });
                                 }}
                             >
@@ -204,7 +221,15 @@ ConsignmentShipfiles.propTypes = {
     sendEmails: PropTypes.func.isRequired,
     deleteShipfile: PropTypes.func.isRequired,
     deleteLoading: PropTypes.bool,
-    clearErrors: PropTypes.func.isRequired,
+    clearProcessErrors: PropTypes.func.isRequired,
+    clearItemErrors: PropTypes.func.isRequired,
+    processError: PropTypes.shape({
+        statusText: PropTypes.string,
+        details: PropTypes.shape({
+            message: PropTypes.string,
+            errors: PropTypes.arrayOf(PropTypes.string)
+        })
+    }),
     itemError: PropTypes.shape({
         statusText: PropTypes.string,
         details: PropTypes.shape({
@@ -220,6 +245,7 @@ ConsignmentShipfiles.defaultProps = {
     consignmentShipfiles: [],
     processedShipfiles: null,
     consignmentShipfilesLoading: false,
+    processError: null,
     itemError: null,
     deleteLoading: false
 };

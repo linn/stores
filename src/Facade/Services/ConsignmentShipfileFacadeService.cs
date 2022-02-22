@@ -84,7 +84,7 @@
 
         public IResult<ConsignmentShipfile> Add(ConsignmentShipfileResource resource)
         {
-            if (!int.TryParse(resource.InvoiceNumbers, out var invoiceNo))
+            if (!int.TryParse(resource.InvoiceNumbers.Trim(), out var invoiceNo))
             {
                 return new BadRequestResult<ConsignmentShipfile>("Invalid Invoice Number");
             }
@@ -97,10 +97,11 @@
                 return new BadRequestResult<ConsignmentShipfile>("Consignment Not Found");
             }
 
+            var id = this.databaseService.GetIdSequence("SHIPFILE_EMAIL_SEQ");
             var shipfile = new ConsignmentShipfile
                                {
                                    ConsignmentId = consignment.ConsignmentId,
-                                   Id = this.databaseService.GetNextVal("SHIPFILE_EMAIL_SEQ")
+                                   Id = id
                                };
             this.repository.Add(shipfile);
             this.transactionManager.Commit();
