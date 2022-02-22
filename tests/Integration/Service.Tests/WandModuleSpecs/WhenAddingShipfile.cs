@@ -57,7 +57,7 @@
         }
 
         [Test]
-        public void ShouldReturnDeleted()
+        public void ShouldReturnCreated()
         {
             var res = this.Response.Body.DeserializeJson<ConsignmentShipfile>();
             res.ConsignmentId.Should().Be(1);
