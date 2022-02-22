@@ -19,7 +19,6 @@
 
         protected IRepository<Consignment, int> ConsignmentRepository { get; private set; }
 
-
         protected IConsignmentShipfileService DomainService { get; private set; }
 
         [SetUp]
