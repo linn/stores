@@ -24,9 +24,4 @@
     <ProjectReference Include="..\Resources\Resources.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ResourceBuilders\Purchasing\" />
-    <Folder Include="Services\Purchasing\" />
-  </ItemGroup>
-
 </Project>

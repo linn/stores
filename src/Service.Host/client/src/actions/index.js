@@ -301,10 +301,6 @@ export const validatePurchaseOrderBookInQtyResultActionTypes = makeActionTypes(
 
 export const reqActionTypes = makeActionTypes(itemTypes.req.actionType);
 
-export const debitNoteActionTypes = makeActionTypes(itemTypes.debitNote.actionType);
-
-export const debitNotesActionTypes = makeActionTypes(itemTypes.debitNotes.actionType);
-
 export const stockMovesActionTypes = makeActionTypes(itemTypes.stockMoves.actionType);
 
 export const printConsignmentLabelActionTypes = makeProcessActionTypes(

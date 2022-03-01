@@ -15,7 +15,6 @@
     using Linn.Stores.Domain.LinnApps.InterCompanyInvoices;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
-    using Linn.Stores.Domain.LinnApps.Purchasing;
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
@@ -27,7 +26,6 @@
     using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Persistence.LinnApps;
     using Linn.Stores.Persistence.LinnApps.Repositories;
-    using Linn.Stores.Persistence.LinnApps.Repositories.Purchasing;
 
     using Microsoft.EntityFrameworkCore;
 
@@ -139,7 +137,6 @@
             builder.RegisterType<CartonTypeRepository>().As<IRepository<CartonType, string>>();
             builder.RegisterType<GoodsInLogRepository>().As<IRepository<GoodsInLogEntry, int>>();
             builder.RegisterType<ExportBookRepository>().As<IRepository<ExportBook, int>>();
-            builder.RegisterType<PlCreditDebitNoteRepository>().As<IRepository<PlCreditDebitNote, int>>();
             builder.RegisterType<StoresLabelTypeRepository>().As<IQueryRepository<StoresLabelType>>();
             builder.RegisterType<PurchaseOrderRepository>().As<IRepository<PurchaseOrder, int>>();
             builder.RegisterType<AuthUserRepository>().As<IQueryRepository<AuthUser>>();

@@ -112,8 +112,6 @@ import ports from './importBooks/ports';
 import cartonTypes from './cartonTypes';
 import validatePurchaseOrderBookInQtyResult from './validatePurchaseOrderBookInQtyResult';
 import req from './req';
-import debitNote from './purchasing/debitNote';
-import debitNotes from './purchasing/debitNotes';
 import stockMoves from './stockLocators/stockMoves';
 import printConsignmentLabel from './printConsignmentLabel';
 import currencies from './currencies';
@@ -162,8 +160,6 @@ const rootReducer = history =>
         countries,
         createAuditReqs,
         currencies,
-        debitNote,
-        debitNotes,
         demLocations,
         departments,
         decrementRules,
