@@ -388,18 +388,6 @@ export const validatePurchaseOrderBookInQtyResult = new ItemType(
 
 export const req = new ItemType('req', 'REQ', '/logistics/requisitions');
 
-export const debitNote = new ItemType(
-    'debitNote',
-    'DEBIT_NOTE',
-    '/inventory/purchasing/debit-notes'
-);
-
-export const debitNotes = new ItemType(
-    'debitNotes',
-    'DEBIT_NOTES',
-    '/inventory/purchasing/debit-notes'
-);
-
 export const stockMoves = new ItemType(
     'stockMoves',
     'STOCK-MOVES',

@@ -5,7 +5,6 @@
 
     using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.Parts;
-    using Linn.Stores.Domain.LinnApps.Purchasing;
 
     public class Supplier
     {
@@ -24,8 +23,6 @@
         public string Name { get; set; }
 
         public IEnumerable<Part> PartsPreferredSupplierOf { get; set; }
-
-        public IEnumerable<PlCreditDebitNote> PlCreditDebitNotes { get; set; }
 
         public IEnumerable<PurchaseOrder> PurchaseOrders { get; set; }
 
