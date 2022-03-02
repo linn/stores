@@ -162,7 +162,7 @@
             builder.RegisterType<TqmsMasterFacadeService>().As<ISingleRecordFacadeService<TqmsMaster, TqmsMasterResource>>();
             builder.RegisterType<TqmsJobrefsFacadeService>().As<IFacadeService<TqmsJobRef, string, TqmsJobRefResource, TqmsJobRefResource>>();
             builder.RegisterType<ConsignmentShipfileFacadeService>().As<IConsignmentShipfileFacadeService>();
-            builder.RegisterType<ConsignmentFacadeService>().As<IFacadeService<Consignment, int, ConsignmentResource, ConsignmentUpdateResource>>();
+            builder.RegisterType<ConsignmentFacadeService>().As<IConsignmentFacadeService>();
             builder.RegisterType<CurrencyFacadeService>()
                 .As<IFacadeService<Currency, string, CurrencyResource, CurrencyResource>>();
             builder.RegisterType<HubFacadeService>().As<IFacadeService<Hub, int, HubResource, HubResource>>();

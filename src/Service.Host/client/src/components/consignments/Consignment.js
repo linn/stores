@@ -7,7 +7,8 @@ import {
     utilities,
     ErrorCard,
     InputField,
-    Typeahead
+    Typeahead,
+    LinkButton
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
@@ -690,6 +691,9 @@ function Consignment({
                                     >
                                         Show Consignment
                                     </Button>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <LinkButton to="exports/consignments" text="Export Details" />
                                 </Grid>
                             </>
                         )}

@@ -16,7 +16,7 @@
 
     public sealed class ConsignmentsModule : NancyModule
     {
-        private readonly IFacadeService<Consignment, int, ConsignmentResource, ConsignmentUpdateResource> consignmentFacadeService;
+        private readonly IConsignmentFacadeService consignmentFacadeService;
 
         private readonly IFacadeService<Hub, int, HubResource, HubResource> hubFacadeService;
 
@@ -31,7 +31,7 @@
         private readonly ILogisticsReportsFacadeService logisticsReportsFacadeService;
 
         public ConsignmentsModule(
-            IFacadeService<Consignment, int, ConsignmentResource, ConsignmentUpdateResource> consignmentFacadeService,
+            IConsignmentFacadeService consignmentFacadeService,
             IFacadeService<Hub, int, HubResource, HubResource> hubFacadeService,
             IFacadeService<Carrier, string, CarrierResource, CarrierResource> carrierFacadeService,
             IFacadeService<ShippingTerm, int, ShippingTermResource, ShippingTermResource> shippingTermFacadeService,
@@ -190,8 +190,10 @@
 
         private object GetConsignments()
         {
+            var resource = this.Bind<ConsignmentsRequestResource>();
+
             return this.Negotiate
-                .WithModel(this.consignmentFacadeService.GetAll())
+                .WithModel(this.consignmentFacadeService.GetByRequestResource(resource))
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");
         }
