@@ -11,12 +11,15 @@
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Resources.Consignments;
+    using Linn.Stores.Resources.RequestResources;
 
-    public class ConsignmentFacadeService : FacadeService<Consignment, int, ConsignmentResource, ConsignmentUpdateResource>
+    public class ConsignmentFacadeService : FacadeService<Consignment, int, ConsignmentResource, ConsignmentUpdateResource>, IConsignmentFacadeService
     {
         private readonly IConsignmentService consignmentService;
 
         private readonly IDatabaseService databaseService;
+
+        private readonly IRepository<Consignment, int> repository;
 
         public ConsignmentFacadeService(
             IRepository<Consignment, int> repository,
@@ -27,6 +30,7 @@
         {
             this.consignmentService = consignmentService;
             this.databaseService = databaseService;
+            this.repository = repository;
         }
 
         protected override Consignment CreateFromResource(ConsignmentResource resource)
@@ -62,21 +66,31 @@
         {
             if (updateResource.Status == "C")
             {
-                if (entity.Status != "L")
+                if (entity.Status == "L")
                 {
-                    throw new ConsignmentEditException($"You cannot edit closed consignment {entity.ConsignmentId}.");
+                    if (!updateResource.ClosedById.HasValue)
+                    {
+                        throw new ConsignmentCloseException("Closed by id must be provided to close consignment");
+                    }
+
+                    this.consignmentService.CloseConsignment(entity, updateResource.ClosedById.Value);
+
+                    entity.ClosedById = updateResource.ClosedById;
+                    entity.Status = "C";
+                    entity.DateClosed = DateTime.Now;
+                }
+                else
+                {
+                    // only update customs fields
+                    entity.CustomsEntryCodePrefix = updateResource.CustomsEntryCodePrefix;
+                    entity.CustomsEntryCode = updateResource.CustomsEntryCode;
+                    entity.CustomsEntryCodeDate = string.IsNullOrEmpty(updateResource.CustomsEntryCodeDate)
+                                                      ? (DateTime?)null
+                                                      : DateTime.Parse(updateResource.CustomsEntryCodeDate);
+                    entity.CarrierRef = updateResource.CarrierRef;
+                    entity.MasterCarrierRef = updateResource.MasterCarrierRef;
                 }
 
-                if (!updateResource.ClosedById.HasValue)
-                {
-                    throw new ConsignmentCloseException("Closed by id must be provided to close consignment");
-                }
-
-                this.consignmentService.CloseConsignment(entity, updateResource.ClosedById.Value);
-
-                entity.ClosedById = updateResource.ClosedById;
-                entity.Status = "C";
-                entity.DateClosed = DateTime.Now;
             }
             else
             {
@@ -199,6 +213,31 @@
                     entity.Items.RemoveAt(entity.Items.IndexOf(removedItem));
                 }
             }
+        }
+
+        public IResult<IEnumerable<Consignment>> GetByRequestResource(ConsignmentsRequestResource resource)
+        {
+            if (!string.IsNullOrEmpty(resource.From))
+            {
+                if (string.IsNullOrEmpty(resource.To))
+                {
+                    return new BadRequestResult<IEnumerable<Consignment>>("No To Date specified");
+                }
+
+                var fromDate = DateTime.Parse(resource.From);
+                var toDate = DateTime.Parse(resource.To);
+
+                if (resource.HubId == null)
+                {
+                    return new SuccessResult<IEnumerable<Consignment>>(this.repository.FilterBy(c => c.DateClosed >= fromDate && c.DateClosed <= toDate));
+                }
+                else
+                {
+                    return new SuccessResult<IEnumerable<Consignment>>(this.repository.FilterBy(c => c.DateClosed >= fromDate && c.DateClosed <= toDate && c.HubId == resource.HubId));
+                }
+            }
+
+            return this.GetAll();
         }
     }
 }

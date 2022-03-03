@@ -45,6 +45,7 @@ import TqmsSummaryByCategoryReportOptions from '../containers/reports/TqmsSummar
 import TqmsSummaryByCategoryReport from '../containers/reports/TqmsSummaryByCategoryReport';
 import ConsignmentShipfiles from '../containers/ConsignmentShipfiles';
 import Consignment from '../containers/consignments/Consignment';
+import ExportConsignments from '../containers/consignments/ExportConsignments';
 import GoodsInUtility from '../containers/goodsIn/GoodsInUtility';
 import ImportBook from '../containers/importBooks/ImportBook';
 import ImportBooks from '../containers/importBooks/ImportBooks';
@@ -279,6 +280,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/logistics/consignments/:consignmentId"
                                         component={Consignment}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/exports/consignments"
+                                        component={ExportConsignments}
                                     />
                                     <Route
                                         exact
