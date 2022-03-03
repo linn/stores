@@ -227,7 +227,6 @@
                 var fromDate = DateTime.Parse(resource.From);
                 var toDate = DateTime.Parse(resource.To);
 
-
                 if (resource.HubId == null)
                 {
                     return new SuccessResult<IEnumerable<Consignment>>(this.repository.FilterBy(c => c.DateClosed >= fromDate && c.DateClosed <= toDate));
