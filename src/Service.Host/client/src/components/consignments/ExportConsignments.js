@@ -4,6 +4,7 @@ import {
     Loading,
     DatePicker,
     utilities,
+    InputField,
     Dropdown,
     SaveBackCancelButtons,
     Title
@@ -31,7 +32,9 @@ function ExportConsignments({
     );
     const [toDate, setToDate] = useState(options.toDate ? new Date(options.toDate) : new Date());
     const [hubId, setHubId] = useState(null);
+    const [masterCarrierRef, setMasterCarrierRef] = useState(null);
     const [rows, setRows] = useState([]);
+    const [selectedRows, setSelectedRows] = useState([]);
     const [editing, setEditing] = useState(false);
 
     const hubOptions = () => {
@@ -49,12 +52,25 @@ function ExportConsignments({
 
     const findConsignments = () => {
         const searchTerm = options.consignmentId ? options.consignmentId : null;
-        searchConsignments(
-            searchTerm,
-            `&from=${moment(fromDate).format('DD-MMM-YYYY')}&to=${moment(toDate).format(
-                'DD-MMM-YYYY'
-            )}`
-        );
+        if (hubId) {
+            searchConsignments(
+                searchTerm,
+                `&from=${moment(fromDate).format('DD-MMM-YYYY')}&to=${moment(toDate).format(
+                    'DD-MMM-YYYY'
+                )}&hubId=${hubId}`
+            );
+        } else {
+            searchConsignments(
+                searchTerm,
+                `&from=${moment(fromDate).format('DD-MMM-YYYY')}&to=${moment(toDate).format(
+                    'DD-MMM-YYYY'
+                )}`
+            );
+        }
+    };
+
+    const handleSelectRow = selected => {
+        setSelectedRows(rows.filter(r => selected.includes(r.id)));
     };
 
     useEffect(() => {
@@ -87,29 +103,30 @@ function ExportConsignments({
     };
 
     const columns = [
-        { field: 'id', headerName: 'Cons Id', width: 150, disableColumnMenu: true },
+        { field: 'id', headerName: 'Cons Id', width: 120, disableColumnMenu: true },
         { field: 'customerName', headerName: 'Customer Name', width: 300 },
-        { field: 'carrier', headerName: 'Carrier', width: 100 },
+        { field: 'carrier', headerName: 'Carrier', width: 120 },
         { field: 'masterCarrierRef', headerName: 'Master Carrier Ref', editable: true, width: 250 },
         { field: 'carrierRef', headerName: 'Carrier Ref', editable: true, width: 250 },
         {
             field: 'customsEntryCodePrefix',
             headerName: 'Customs Entry Prefix',
-            width: 100,
+            width: 140,
             editable: true,
             disableColumnMenu: true
         },
         {
             field: 'customsEntryCode',
             headerName: 'Code',
-            width: 100,
+            width: 120,
             editable: true,
             disableColumnMenu: true
         },
         {
             field: 'customsEntryCodeDate',
             headerName: 'Date',
-            width: 100,
+            type: 'date',
+            width: 200,
             editable: true,
             disableColumnMenu: true
         }
@@ -117,19 +134,27 @@ function ExportConsignments({
 
     const updateRow = useCallback(
         (rowId, fieldName, newValue) => {
-            const newRows = rows.map(r =>
-                r.consignmentId === rowId
-                    ? {
-                          ...r,
-                          [fieldName]: newValue,
-                          updating: true
-                      }
-                    : r
+            setRows(rows =>
+                rows.map(r =>
+                    r.consignmentId === rowId
+                        ? {
+                              ...r,
+                              [fieldName]: newValue,
+                              updating: true
+                          }
+                        : r
+                )
             );
-            setRows(newRows);
         },
         [rows]
     );
+
+    const multiSetMCarrierRef = () => {
+        if (selectedRows) {
+            selectedRows.forEach(r => updateRow(r.id, 'masterCarrierRef', masterCarrierRef));
+            setEditing(true);
+        }
+    };
 
     const handleEditRowsModelChange = useCallback(
         model => {
@@ -177,6 +202,7 @@ function ExportConsignments({
                     </Grid>
                     <Grid item xs={3}>
                         <Button
+                            style={{ marginTop: '20px' }}
                             onClick={() => findConsignments()}
                             variant="outlined"
                             color="primary"
@@ -192,14 +218,39 @@ function ExportConsignments({
                         <>
                             {consignments?.length > 0 ? (
                                 <>
-                                    <DataGrid
-                                        rows={rows}
-                                        columns={columns}
-                                        onEditRowsModelChange={handleEditRowsModelChange}
-                                        density="compact"
-                                        autoHeight
-                                        hideFooter
-                                    />
+                                    <Grid container spacing={3} style={{ paddingTop: '10px' }}>
+                                        <Grid item xs={4}>
+                                            <>
+                                                <InputField
+                                                    label="Master Carrier Ref"
+                                                    placeholder="Master Carrier Ref"
+                                                    propertyName="consignmentIdSelect"
+                                                    value={masterCarrierRef}
+                                                    onChange={(_, val) => setMasterCarrierRef(val)}
+                                                />
+                                                <Button
+                                                    style={{ marginTop: '10px' }}
+                                                    onClick={() => multiSetMCarrierRef()}
+                                                    variant="outlined"
+                                                    color="primary"
+                                                >
+                                                    Set
+                                                </Button>
+                                            </>
+                                        </Grid>
+                                    </Grid>
+                                    <div style={{ width: '100%' }}>
+                                        <DataGrid
+                                            rows={rows}
+                                            columns={columns}
+                                            onEditRowsModelChange={handleEditRowsModelChange}
+                                            checkboxSelection
+                                            onSelectionModelChange={handleSelectRow}
+                                            density="compact"
+                                            autoHeight
+                                            hideFooter
+                                        />
+                                    </div>
                                     <SaveBackCancelButtons
                                         saveDisabled={!editing}
                                         saveClick={handleSave}
@@ -232,7 +283,7 @@ ExportConsignments.propTypes = {
         PropTypes.shape({ message: PropTypes.string, name: PropTypes.string })
     ),
     searchConsignments: PropTypes.func.isRequired,
-    updateConsignments: PropTypes.func.isRequired,
+    updateConsignment: PropTypes.func.isRequired,
     loading: PropTypes.bool,
     consignments: PropTypes.arrayOf(PropTypes.shape({}))
 };

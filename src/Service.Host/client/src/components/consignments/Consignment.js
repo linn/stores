@@ -693,7 +693,10 @@ function Consignment({
                                     </Button>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <LinkButton to="exports/consignments" text="Export Details" />
+                                    <LinkButton
+                                        to="exports/consignments"
+                                        text="Consignments Export Details"
+                                    />
                                 </Grid>
                             </>
                         )}
