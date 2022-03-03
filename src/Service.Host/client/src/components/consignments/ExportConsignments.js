@@ -28,9 +28,9 @@ function ExportConsignments({
     const defaultStartDate = new Date();
     defaultStartDate.setDate(defaultStartDate.getDate() - 1);
     const [fromDate, setFromDate] = useState(
-        options.fromDate ? new Date(options.fromDate) : defaultStartDate
+        options?.fromDate ? new Date(options.fromDate) : defaultStartDate
     );
-    const [toDate, setToDate] = useState(options.toDate ? new Date(options.toDate) : new Date());
+    const [toDate, setToDate] = useState(options?.toDate ? new Date(options.toDate) : new Date());
     const [hubId, setHubId] = useState(null);
     const [newMasterCarrierRef, setNewMasterCarrierRef] = useState(null);
     const [rows, setRows] = useState([]);
