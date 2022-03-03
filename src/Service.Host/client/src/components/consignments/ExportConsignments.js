@@ -32,9 +32,8 @@ function ExportConsignments({
     );
     const [toDate, setToDate] = useState(options.toDate ? new Date(options.toDate) : new Date());
     const [hubId, setHubId] = useState(null);
-    const [masterCarrierRef, setMasterCarrierRef] = useState(null);
+    const [newMasterCarrierRef, setNewMasterCarrierRef] = useState(null);
     const [rows, setRows] = useState([]);
-    const [selectedRows, setSelectedRows] = useState([]);
     const [editing, setEditing] = useState(false);
 
     const hubOptions = () => {
@@ -67,10 +66,6 @@ function ExportConsignments({
                 )}`
             );
         }
-    };
-
-    const handleSelectRow = selected => {
-        setSelectedRows(rows.filter(r => selected.includes(r.id)));
     };
 
     useEffect(() => {
@@ -134,26 +129,47 @@ function ExportConsignments({
 
     const updateRow = useCallback(
         (rowId, fieldName, newValue) => {
-            setRows(rows =>
-                rows.map(r =>
-                    r.consignmentId === rowId
-                        ? {
-                              ...r,
-                              [fieldName]: newValue,
-                              updating: true
-                          }
-                        : r
-                )
+            const newRows = rows.map(r =>
+                r.consignmentId === rowId
+                    ? {
+                          ...r,
+                          [fieldName]: newValue,
+                          updating: true
+                      }
+                    : r
             );
+            setRows(newRows);
         },
         [rows]
     );
 
-    const multiSetMCarrierRef = () => {
-        if (selectedRows) {
-            selectedRows.forEach(r => updateRow(r.id, 'masterCarrierRef', masterCarrierRef));
-            setEditing(true);
-        }
+    const handleSelectRow = selected => {
+        const newRows = rows.map(r =>
+            selected.includes(r.id)
+                ? {
+                      ...r,
+                      selected: true
+                  }
+                : {
+                      ...r,
+                      selected: false
+                  }
+        );
+        setRows(newRows);
+    };
+
+    const setMultiMasterCarrierRef = () => {
+        const newRows = rows.map(r =>
+            r.selected
+                ? {
+                      ...r,
+                      masterCarrierRef: newMasterCarrierRef,
+                      updating: true
+                  }
+                : r
+        );
+        setRows(newRows);
+        setEditing(true);
     };
 
     const handleEditRowsModelChange = useCallback(
@@ -225,12 +241,14 @@ function ExportConsignments({
                                                     label="Master Carrier Ref"
                                                     placeholder="Master Carrier Ref"
                                                     propertyName="consignmentIdSelect"
-                                                    value={masterCarrierRef}
-                                                    onChange={(_, val) => setMasterCarrierRef(val)}
+                                                    value={newMasterCarrierRef}
+                                                    onChange={(_, val) =>
+                                                        setNewMasterCarrierRef(val)
+                                                    }
                                                 />
                                                 <Button
                                                     style={{ marginTop: '10px' }}
-                                                    onClick={() => multiSetMCarrierRef()}
+                                                    onClick={() => setMultiMasterCarrierRef()}
                                                     variant="outlined"
                                                     color="primary"
                                                 >
