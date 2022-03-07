@@ -410,6 +410,7 @@ function Part({
                                     rawOrFinished={state.part.rawOrFinished}
                                     salesArticleNumber={state.part.salesArticleNumber}
                                     editStatus={editStatus}
+                                    partNumber={state.part.partNumber}
                                 />
                             )}
                             {tab === 1 && (

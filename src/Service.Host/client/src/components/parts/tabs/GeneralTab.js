@@ -8,6 +8,7 @@ import {
     DatePicker,
     TypeaheadTable
 } from '@linn-it/linn-form-components-library';
+import Link from '@material-ui/core/Link';
 
 function GeneralTab({
     accountingCompany,
@@ -45,7 +46,8 @@ function GeneralTab({
     safetyCertificateExpirationDate,
     safetyDataDirectory,
     rawOrFinished,
-    salesArticleNumber
+    salesArticleNumber,
+    partNumber
 }) {
     const nominalAccountsTable = {
         totalItemCount: nominalAccountsSearchResults.length,
@@ -296,6 +298,11 @@ function GeneralTab({
                     propertyName="safetyDataDirectory"
                 />
             </Grid>
+            <Grid item xs={12}>
+                <Link href={`/production/boms/ShowBom.aspx?partNumber=${partNumber}`}>
+                    View Bom
+                </Link>
+            </Grid>
         </Grid>
     );
 }
@@ -358,7 +365,8 @@ GeneralTab.propTypes = {
     departmentDescription: PropTypes.string,
     rawOrFinished: PropTypes.string,
     editStatus: PropTypes.string,
-    salesArticleNumber: PropTypes.string
+    salesArticleNumber: PropTypes.string,
+    partNumber: PropTypes.string
 };
 
 GeneralTab.defaultProps = {
@@ -393,7 +401,8 @@ GeneralTab.defaultProps = {
     departmentDescription: null,
     rawOrFinished: null,
     editStatus: null,
-    salesArticleNumber: null
+    salesArticleNumber: null,
+    partNumber: null
 };
 
 export default GeneralTab;
