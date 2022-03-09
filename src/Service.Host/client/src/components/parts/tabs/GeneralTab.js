@@ -97,6 +97,7 @@ function GeneralTab({
                     }}
                     label="Root Product"
                     modal
+                    propertyName="rootProduct"
                     items={rootProductsSearchResults}
                     value={rootProduct}
                     loading={rootProductsSearchLoading}
@@ -133,6 +134,7 @@ function GeneralTab({
                     loading={nominalAccountsSearchLoading}
                     label="Nominal"
                     title="Search Nominals"
+                    propertyName="nominal"
                     value={nominal}
                     onSelect={newValue => handleFieldChange('nominalAccount', newValue)}
                     debounce={1000}
@@ -183,6 +185,7 @@ function GeneralTab({
                     disabled={!!salesArticleNumber}
                     clearSearch={clearProductAnalysisCodesSearch}
                     placeholder="Search Codes"
+                    propertyName="productAnalysisCode"
                 />
             </Grid>
             <Grid item xs={8}>

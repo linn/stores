@@ -525,7 +525,7 @@ Part.propTypes = {
     fetchLiveTest: PropTypes.func.isRequired,
     fetchParts: PropTypes.func.isRequired,
     clearErrors: PropTypes.func.isRequired,
-    previousPaths: PropTypes.arrayOf(PropTypes.string)
+    previousPaths: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 Part.defaultProps = {
