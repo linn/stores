@@ -75,39 +75,14 @@ function Part({
     useEffect(() => {
         if (copy) {
             dispatch({
-                type: 'fieldChange',
-                fieldName: 'currencyUnitPrice',
-                payload: null
+                type: 'initialiseCopy',
+                payload: {
+                    userNumber,
+                    userName
+                }
             });
-            dispatch({
-                type: 'fieldChange',
-                fieldName: 'baseUnitPrice',
-                payload: null
-            });
-            dispatch({
-                type: 'fieldChange',
-                fieldName: 'materialPrice',
-                payload: null
-            });
-            dispatch({
-                type: 'fieldChange',
-                fieldName: 'labourPrice',
-                payload: null
-            });
-            dispatch({
-                type: 'fieldChange',
-                fieldName: 'costingPrice',
-                payload: null
-            });
-            if (state.part?.linnProduced === 'N') {
-                dispatch({
-                    type: 'fieldChange',
-                    fieldName: 'preferredSupplier',
-                    payload: { name: null, description: null }
-                });
-            }
         }
-    }, [copy, state.part.linnProduced]);
+    }, [copy, userName, userNumber]);
 
     // checking whether partNumber already exists when partNumber is entered
     useEffect(() => {
@@ -550,7 +525,7 @@ Part.propTypes = {
     fetchLiveTest: PropTypes.func.isRequired,
     fetchParts: PropTypes.func.isRequired,
     clearErrors: PropTypes.func.isRequired,
-    previousPaths: PropTypes.arrayOf(PropTypes.string)
+    previousPaths: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 Part.defaultProps = {

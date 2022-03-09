@@ -4,6 +4,34 @@ export default function partReducer(state = initialState, action) {
     switch (action.type) {
         case 'initialise':
             return { ...state, part: action.payload, prevPart: action.payload };
+        case 'initialiseCopy':
+            return {
+                ...state,
+                part: {
+                    ...state.part,
+                    createdBy: action.payload.userNumber,
+                    createdByName: action.payload.userName,
+                    currencyUnitPrice: null,
+                    baseUnitPrice: null,
+                    materialPrice: null,
+                    labourPrice: null,
+                    costingPrice: null,
+                    dateLive: null,
+                    phasedOutBy: null,
+                    phasedOutByName: null,
+                    reasonPhasedOut: null,
+                    datePhasedOut: null,
+                    scrapOrConvert: null,
+                    purchasingPhaseOutType: null,
+                    dateDesignObsolete: null,
+                    madeLiveBy: null,
+                    madeLiveByName: null,
+                    dateCreated: new Date().toISOString(),
+                    preferredSupplier: null,
+                    preferredSupplierName: null
+                },
+                prevPart: action.payload
+            };
         case 'fieldChange':
             if (action.fieldName === 'rawOrFinished') {
                 if (action.payload === 'F') {

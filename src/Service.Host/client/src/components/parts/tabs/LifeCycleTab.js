@@ -120,7 +120,7 @@ function LifeCycleTab({
                     onChange={handleFieldChange}
                     propertyName="reasonPhasedOut"
                     helperText="Note: Must provide a reason before clicking PHASE OUT"
-                    disabled={!canPhaseOut || datePhasedOut}
+                    disabled={!canPhaseOut || !!datePhasedOut}
                 />
             </Grid>
             <Grid item xs={3}>
