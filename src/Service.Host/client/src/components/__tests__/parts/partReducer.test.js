@@ -71,6 +71,66 @@ describe('partReducer tests', () => {
         });
     });
 
+    it('should handle initialiseCopy', () => {
+        expect(
+            partReducer(
+                {
+                    partNumber: 'PART TO COPY',
+                    description: 'DESC',
+                    createdBy: 666,
+                    createdByName: 'USER 666',
+                    currencyUnitPrice: 12,
+                    baseUnitPrice: 12,
+                    materialPrice: 12,
+                    labourPrice: 12,
+                    costingPrice: 12,
+                    dateLive: new Date().toISOString(),
+                    phasedOutBy: 666,
+                    phasedOutByName: 'USER 666',
+                    reasonPhasedOut: 'REASON',
+                    datePhasedOut: new Date().toISOString(),
+                    scrapOrConvert: 'CONVERT',
+                    purchasingPhaseOutType: 'TYPE',
+                    dateDesignObsolete: new Date().toISOString(),
+                    madeLiveBy: null,
+                    madeLiveByName: null,
+                    dateCreated: new Date().toISOString(),
+                    preferredSupplier: null,
+                    preferredSupplierName: null
+                },
+                {
+                    type: 'initialiseCopy',
+                    payload: {
+                        userNumber: 123,
+                        userName: 'USER 123'
+                    }
+                }
+            )
+        ).toMatchObject({
+            part: {
+                createdBy: 123,
+                createdByName: 'USER 123',
+                currencyUnitPrice: null,
+                baseUnitPrice: null,
+                materialPrice: null,
+                labourPrice: null,
+                costingPrice: null,
+                dateLive: null,
+                phasedOutBy: null,
+                phasedOutByName: null,
+                reasonPhasedOut: null,
+                datePhasedOut: null,
+                scrapOrConvert: null,
+                purchasingPhaseOutType: null,
+                dateDesignObsolete: null,
+                madeLiveBy: null,
+                madeLiveByName: null,
+                preferredSupplier: null,
+                preferredSupplierName: null
+            }
+        });
+    });
+
     it('should handle simple field changes', () => {
         expect(
             partReducer({}, { type: 'fieldChange', fieldName: 'partNumber', payload: 'PART' })

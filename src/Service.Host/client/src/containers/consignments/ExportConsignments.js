@@ -22,7 +22,7 @@ const mapStateToProps = (state, ownProps) => ({
     consignments: consignmentsSelectors.getSearchItems(state)
 });
 
-const initialise = ({ options }) => dispatch => {
+const initialise = () => dispatch => {
     dispatch(hubsActions.fetch());
 };
 
