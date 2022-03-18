@@ -35,6 +35,9 @@ function ExportConsignments({
     const [newMasterCarrierRef, setNewMasterCarrierRef] = useState(null);
     const [rows, setRows] = useState([]);
     const [editing, setEditing] = useState(false);
+    const [newCustomsEntryPrefix, setCustomsEntryPrefix] = useState(null);
+    const [newCustomsEntryCode, setCustomsEntryCode] = useState(null);
+    const [newCustomsEntryDate, setCustomsEntryDate] = useState(null);
 
     const hubOptions = () => {
         return utilities.sortEntityList(hubs, 'hubId')?.map(h => ({
@@ -159,17 +162,35 @@ function ExportConsignments({
     };
 
     const setMultiMasterCarrierRef = () => {
-        const newRows = rows.map(r =>
-            r.selected
-                ? {
-                      ...r,
-                      masterCarrierRef: newMasterCarrierRef,
-                      updating: true
-                  }
-                : r
-        );
-        setRows(newRows);
-        setEditing(true);
+        if (newCustomsEntryPrefix && newCustomsEntryCode && newCustomsEntryDate) {
+            // only set customs entry if all three exist
+            const newRows = rows.map(r =>
+                r.selected
+                    ? {
+                          ...r,
+                          customsEntryCodePrefix: newCustomsEntryPrefix,
+                          customsEntryCode: newCustomsEntryCode,
+                          customsEntryCodeDate: newCustomsEntryDate,
+                          masterCarrierRef: newMasterCarrierRef,
+                          updating: true
+                      }
+                    : r
+            );
+            setRows(newRows);
+            setEditing(true);
+        } else if (newMasterCarrierRef) {
+            const newRows = rows.map(r =>
+                r.selected
+                    ? {
+                          ...r,
+                          masterCarrierRef: newMasterCarrierRef,
+                          updating: true
+                      }
+                    : r
+            );
+            setRows(newRows);
+            setEditing(true);
+        }
     };
 
     const handleEditRowsModelChange = useCallback(
@@ -235,16 +256,39 @@ function ExportConsignments({
                             {consignments?.length > 0 ? (
                                 <>
                                     <Grid container spacing={3} style={{ paddingTop: '10px' }}>
-                                        <Grid item xs={4}>
+                                        <Grid item xs={3}>
+                                            <InputField
+                                                label="Master Carrier Ref"
+                                                placeholder="Master Carrier Ref"
+                                                propertyName="consignmentIdSelect"
+                                                value={newMasterCarrierRef}
+                                                onChange={(_, val) => setNewMasterCarrierRef(val)}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <InputField
+                                                label="Customs Entry Prefix"
+                                                placeholder="Prefix"
+                                                propertyName="customsEntryPrefix"
+                                                value={newCustomsEntryPrefix}
+                                                onChange={(_, val) => setCustomsEntryPrefix(val)}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <InputField
+                                                label="Customs Entry Code"
+                                                placeholder="Code"
+                                                propertyName="customsEntryCode"
+                                                value={newCustomsEntryCode}
+                                                onChange={(_, val) => setCustomsEntryCode(val)}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={3}>
                                             <>
-                                                <InputField
-                                                    label="Master Carrier Ref"
-                                                    placeholder="Master Carrier Ref"
-                                                    propertyName="consignmentIdSelect"
-                                                    value={newMasterCarrierRef}
-                                                    onChange={(_, val) =>
-                                                        setNewMasterCarrierRef(val)
-                                                    }
+                                                <DatePicker
+                                                    label="Customs Entry Date"
+                                                    value={newCustomsEntryDate?.toString()}
+                                                    onChange={setCustomsEntryDate}
                                                 />
                                                 <Button
                                                     style={{ marginTop: '10px' }}
