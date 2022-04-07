@@ -102,6 +102,7 @@ function PurchTab({
                     fullWidth
                     value={currencyUnitPrice}
                     label="Currency Unit Price"
+                    disabled
                     onChange={handleFieldChange}
                     type="number"
                     propertyName="currencyUnitPrice"
@@ -123,6 +124,7 @@ function PurchTab({
                     fullWidth
                     value={baseUnitPrice}
                     label="Base Unit Price"
+                    disabled
                     onChange={handleFieldChange}
                     type="number"
                     propertyName="baseUnitPrice"
@@ -145,6 +147,7 @@ function PurchTab({
                     value={materialPrice}
                     label="Material Price"
                     type="number"
+                    disabled
                     onChange={handleFieldChange}
                     propertyName="materialPrice"
                 />
@@ -166,6 +169,7 @@ function PurchTab({
                     value={labourPrice}
                     label="Labour Price"
                     type="number"
+                    disabled
                     onChange={handleFieldChange}
                     propertyName="labourPrice"
                 />
