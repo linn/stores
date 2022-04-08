@@ -20,10 +20,21 @@
 
         public IResult<IEnumerable<NominalAccount>> GetNominalAccounts(string searchTerm)
         {
+            var exactMatches = this.nominalAccountRepository
+                .FilterBy(n
+                    => n.Department.Description.ToUpper().Equals(searchTerm)
+                       || n.Department.DepartmentCode.Equals(searchTerm)
+                       || n.Nominal.Description.ToUpper().Equals(searchTerm)
+                       || n.Nominal.NominalCode.Equals(searchTerm)).Take(50);
+            if (exactMatches.Any())
+            {
+                return new SuccessResult<IEnumerable<NominalAccount>>(exactMatches);
+            }
+
             var result = this.nominalAccountRepository
-                .FilterBy(n 
+                .FilterBy(n
                     => n.Department.DepartmentCode.ContainsIgnoringCase(searchTerm)
-                    || n.Department.DepartmentCode.ContainsIgnoringCase(searchTerm)
+                    || n.Department.Description.ContainsIgnoringCase(searchTerm)
                     || n.Nominal.NominalCode.ContainsIgnoringCase(searchTerm)
                     || n.Nominal.Description.ContainsIgnoringCase(searchTerm)).Take(50);
             return new SuccessResult<IEnumerable<NominalAccount>>(result);
