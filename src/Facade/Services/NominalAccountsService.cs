@@ -25,7 +25,7 @@
                     => n.Department.Description.ToUpper().Equals(searchTerm)
                        || n.Department.DepartmentCode.Equals(searchTerm)
                        || n.Nominal.Description.ToUpper().Equals(searchTerm)
-                       || n.Nominal.NominalCode.Equals(searchTerm)).Take(5);
+                       || n.Nominal.NominalCode.Equals(searchTerm)).Take(50);
             if (exactMatches.Any())
             {
                 return new SuccessResult<IEnumerable<NominalAccount>>(exactMatches);
