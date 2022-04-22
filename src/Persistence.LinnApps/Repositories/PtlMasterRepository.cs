@@ -19,10 +19,5 @@
         {
             return this.serviceDbContext.PtlMaster.ToList().FirstOrDefault();
         }
-
-        public void UpdateRecord(PtlMaster newValues)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }
