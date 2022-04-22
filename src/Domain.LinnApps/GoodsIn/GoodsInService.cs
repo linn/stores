@@ -73,7 +73,7 @@
             int createdBy,
             string partNumber,
             string manufacturersPartNumber,
-            int qty,
+            decimal qty,
             int? orderNumber,
             int? orderLine,
             int? loanNumber,
