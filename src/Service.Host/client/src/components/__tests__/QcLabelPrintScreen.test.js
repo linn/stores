@@ -39,8 +39,6 @@ describe('When not Kardex Location', () => {
         });
         test('should display correct number of label lines', () => {
             expect(screen.getByLabelText('1')).toBeInTheDocument();
-            expect(screen.getByLabelText('2')).toBeInTheDocument();
-            expect(screen.getByLabelText('3')).toBeInTheDocument();
         });
     });
 
@@ -60,11 +58,11 @@ describe('When not Kardex Location', () => {
 
     describe('When qty changed for a line', () => {
         beforeEach(() => {
-            const input = screen.getByLabelText('3');
+            const input = screen.getByLabelText('1');
             fireEvent.change(input, { target: { value: 3 } });
         });
         test('should update correct line', () => {
-            expect(screen.getByLabelText('3').value).toBe('3');
+            expect(screen.getByLabelText('1').value).toBe('3');
         });
     });
 });
