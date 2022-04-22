@@ -21,7 +21,7 @@
             string transactionType,
             int createdBy,
             string partNumber,
-            int qty,
+            decimal qty,
             int? orderNumber,
             int? orderLine,
             int? loanNumber,
@@ -77,7 +77,7 @@
                                          };
                 cmd.Parameters.Add(partNumberParam);
 
-                var qtyParam = new OracleParameter("p_qty", OracleDbType.Int32)
+                var qtyParam = new OracleParameter("p_qty", OracleDbType.Decimal)
                                          {
                                              Direction = ParameterDirection.Input,
                                              Value = qty

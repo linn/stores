@@ -12,7 +12,7 @@
 
         public string ManufacturersPartNumber { get; set; }
 
-        public int Qty { get; set; }
+        public decimal Qty { get; set; }
 
         public int? OrderNumber { get; set; }
 

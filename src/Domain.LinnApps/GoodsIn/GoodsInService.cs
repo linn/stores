@@ -392,7 +392,7 @@
             int numberOfLines,
             string qcState,
             int reqNumber,
-            string kardexLocation,
+            string kardexLocation,  
             IEnumerable<GoodsInLabelLine> lines)
         {
             var message = string.Empty;
