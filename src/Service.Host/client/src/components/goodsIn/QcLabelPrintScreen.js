@@ -41,7 +41,7 @@ function QcLabelPrintScreen({
         for (let index = 0; index < numContainers; index += 1) {
             lines.push({
                 id: index.toString(),
-                qty: divide(qtyReceived, numContainers).toDecimalPlaces(2)
+                qty: divide(qtyReceived, numContainers)?.toDecimalPlaces(2) ?? 0
             });
         }
 
