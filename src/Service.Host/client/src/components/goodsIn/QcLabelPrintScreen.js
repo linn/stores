@@ -27,7 +27,7 @@ function QcLabelPrintScreen({
     kardexLocation
 }) {
     const [deliveryRef, setDeliveryRef] = useState('');
-    const [numContainers, setNumContainers] = useState(qtyReceived);
+    const [numContainers, setNumContainers] = useState(1);
     const [labelLines, setLabelLines] = useState([]);
     const [labelLinesExpanded, setLabelLinesExpanded] = useState(false);
 
