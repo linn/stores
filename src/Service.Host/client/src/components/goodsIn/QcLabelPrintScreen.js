@@ -27,7 +27,7 @@ function QcLabelPrintScreen({
     kardexLocation
 }) {
     const [deliveryRef, setDeliveryRef] = useState('');
-    const [numContainers, setNumContainers] = useState(qtyReceived);
+    const [numContainers, setNumContainers] = useState(1);
     const [labelLines, setLabelLines] = useState([]);
     const [labelLinesExpanded, setLabelLinesExpanded] = useState(false);
 
@@ -39,7 +39,10 @@ function QcLabelPrintScreen({
     useEffect(() => {
         const lines = [];
         for (let index = 0; index < numContainers; index += 1) {
-            lines.push({ id: index.toString(), qty: divide(qtyReceived, numContainers) });
+            lines.push({
+                id: index.toString(),
+                qty: divide(qtyReceived, numContainers)?.toDecimalPlaces(2) ?? 0
+            });
         }
 
         setLabelLines(lines);

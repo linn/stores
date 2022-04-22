@@ -7,7 +7,7 @@
             string transactionType,
             int createdBy,
             string partNumber,
-            int qty,
+            decimal qty,
             int? orderNumber,
             int? orderLine,
             int? loanNumber,

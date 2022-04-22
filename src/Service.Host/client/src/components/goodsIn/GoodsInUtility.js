@@ -124,6 +124,8 @@ function GoodsInUtility({
 
     const [printDialogOpen, setPrintDialogOpen] = useState(false);
 
+    const [qcDialogOpen, setQcDialogOpen] = useState(false);
+
     const [parcelDialogOpen, setParcelDialogOpen] = useState(false);
 
     const [loanDetailsDialogOpen, setLoanDetailsDialogOpen] = useState(false);
@@ -206,6 +208,9 @@ function GoodsInUtility({
                 error: !!validatePurchaseOrderResult.message,
                 text: validatePurchaseOrderResult.message
             });
+            if (validatePurchaseOrderResult.qcPart === 'Yes') {
+                setQcDialogOpen(true);
+            }
         }
     }, [validatePurchaseOrderResult]);
 
@@ -422,6 +427,37 @@ function GoodsInUtility({
     return (
         <Page>
             <Grid container spacing={3}>
+                <Dialog open={qcDialogOpen} fullWidth maxWidth="md">
+                    <div>
+                        <IconButton
+                            className={classes.pullRight}
+                            aria-label="Close"
+                            onClick={() => setQcDialogOpen(false)}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <div className={classes.dialog}>
+                            <Grid container spacing={3}>
+                                <Grid item xs={12}>
+                                    <Typography variant="h5" color="secondary">
+                                        {`Note: ${validatePurchaseOrderResult?.partNumber} part is in QC`}
+                                    </Typography>
+                                </Grid>
+
+                                <Grid item xs={4} />
+                                <Grid item xs={4}>
+                                    <Button
+                                        onClick={() => setQcDialogOpen(false)}
+                                        variant="contained"
+                                    >
+                                        Acknowledge and continue
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={4} />
+                            </Grid>
+                        </div>
+                    </div>
+                </Dialog>
                 <Dialog open={printDialogOpen} fullWidth maxWidth="md">
                     <div>
                         <IconButton

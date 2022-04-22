@@ -61,7 +61,7 @@
                 Arg.Any<string>(),
                 Arg.Any<int>(),
                 Arg.Any<string>(),
-                Arg.Any<int>(),
+                Arg.Any<decimal>(),
                 Arg.Any<int>(),
                 Arg.Any<int>(),
                 Arg.Any<int>(),
