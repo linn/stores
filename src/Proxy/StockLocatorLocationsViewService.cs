@@ -45,8 +45,8 @@
             {
                 whereClauseParts.Add(
                     partDescription.Contains("*")
-                        ? $"DESCRIPTION LIKE '{partDescription.Replace("*", "%").ToUpper()}'"
-                        : $"DESCRIPTION = '{partDescription.ToUpper()}'");
+                        ? $"PART_DESCRIPTION LIKE '{partDescription.Replace("*", "%").ToUpper()}'"
+                        : $"PART_DESCRIPTION = '{partDescription.ToUpper()}'");
             }
 
             if (!string.IsNullOrEmpty(locationName))

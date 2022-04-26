@@ -13,7 +13,7 @@
     {
         private readonly string correctQuery = "SELECT * FROM STOCK_LOCATOR_PARTS_VIEW "
                                                + "WHERE PART_NUMBER LIKE 'PART%' "
-                                               + "AND DESCRIPTION LIKE 'DESC%' "
+                                               + "AND PART_DESCRIPTION LIKE 'DESC%' "
                                                + "AND LOCATION_CODE LIKE 'LOC%' "
                                                + "AND LOCATION_ID = 1 AND PALLET_NUMBER = 1 "
                                                + "AND STOCK_POOL_CODE = 'POOL' AND STATE = 'STATE' "
