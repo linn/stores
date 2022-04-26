@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { Typeahead, LinkButton, DatePicker } from '@linn-it/linn-form-components-library';
+import {
+    Typeahead,
+    LinkButton,
+    DatePicker,
+    InputField
+} from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import makeStyles from '@material-ui/styles/makeStyles';
 import Page from '../../containers/Page';
@@ -12,7 +17,11 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
         return items?.map(item => ({
             ...item,
             name: item.id.toString(),
-            description: `${item.id}, created ${new Date(item.dateCreated).toLocaleDateString()}`,
+            description: `created ${new Date(item.dateCreated).toLocaleDateString(
+                'en-GB'
+            )}. Customs entry: ${item.customsEntryCodePrefix} ${
+                item.customsEntryCode
+            }, entry date ${new Date(item.customsEntryCodeDate).toLocaleDateString('en-GB')}`,
             href: item.href
         }));
     };
@@ -34,6 +43,9 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
             searchTerm,
             `&fromDate=${options.fromDate ? options.fromDate.toISOString() : ''}&toDate=${
                 options.toDate ? options.toDate.toISOString() : ''
+            }&customsEntryCodePrefix=${options.customsEntryCodePrefix ??
+                ''}&customsEntryCode=${options.customsEntryCode ?? ''}&customsEntryDate=${
+                options.customsEntryDate ? options.customsEntryDate.toISOString() : ''
             }`
         );
     };
@@ -63,7 +75,7 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
                     />
                 </Grid>
                 <Grid item xs={1} />
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                     <DatePicker
                         label="From Date"
                         value={options.fromDate ? options.fromDate : null}
@@ -72,7 +84,7 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
                         }}
                     />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                     <DatePicker
                         label="To Date"
                         value={options.toDate ? options.toDate : null}
@@ -81,6 +93,35 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
                         }}
                     />
                 </Grid>
+
+                <Grid item xs={1}>
+                    <InputField
+                        label="Customs Prefix"
+                        value={options.customsEntryCodePrefix}
+                        onChange={handleFieldChange}
+                        propertyName="customsEntryCodePrefix"
+                        fullwidth
+                    />
+                </Grid>
+                <Grid item xs={2}>
+                    <InputField
+                        label="Customs Entry Code"
+                        value={options.customsEntryCode}
+                        onChange={handleFieldChange}
+                        propertyName="customsEntryCode"
+                        fullwidth
+                    />
+                </Grid>
+                <Grid item xs={3}>
+                    <DatePicker
+                        label="Customs Entry Date"
+                        value={options.customsEntryDate ? options.customsEntryDate : null}
+                        onChange={value => {
+                            handleFieldChange('customsEntryDate', value);
+                        }}
+                    />
+                </Grid>
+                <Grid item xs={8} />
                 <Grid item xs={4}>
                     <Button
                         className={classes.button}

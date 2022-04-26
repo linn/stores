@@ -210,7 +210,13 @@
                         && (string.IsNullOrEmpty(searchResource.ToDate)
                             || x.DateCreated <= DateTime.Parse(searchResource.ToDate))
                         && (string.IsNullOrEmpty(searchResource.FromDate)
-                            || x.DateCreated >= DateTime.Parse(searchResource.FromDate));
+                            || x.DateCreated >= DateTime.Parse(searchResource.FromDate))
+                        && (string.IsNullOrEmpty(searchResource.CustomsEntryCodePrefix)
+                            || x.CustomsEntryCodePrefix.Equals(searchResource.CustomsEntryCodePrefix))
+                            && (string.IsNullOrEmpty(searchResource.CustomsEntryCode)
+                                || x.CustomsEntryCode.Equals(searchResource.CustomsEntryCode))
+                        && (string.IsNullOrEmpty(searchResource.CustomsEntryDate)
+                            || (x.CustomsEntryCodeDate.HasValue && x.CustomsEntryCodeDate.Value.Date.Equals(DateTime.Parse(searchResource.CustomsEntryDate).Date)));
         }
 
         protected override void UpdateFromResource(ImportBook entity, ImportBookResource updateResource)
