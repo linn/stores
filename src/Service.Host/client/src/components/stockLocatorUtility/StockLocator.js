@@ -35,7 +35,7 @@ function StockLocator({
     fetchMoves,
     clearMoves
 }) {
-    const [selectedQuantities, setSelectQuantities] = useState();
+    const [selectedQuantities, setSelectedQuantities] = useState();
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const useStyles = makeStyles(theme => ({
@@ -54,10 +54,12 @@ function StockLocator({
     }, [options, fetchItems]);
 
     useEffect(() => {
-        if (quantities?.length > 0) {
-            setSelectQuantities(quantities[0]);
+        if (quantities?.length > 0 && items?.length > 0) {
+            setSelectedQuantities(
+                quantities.filter(q => items.map(i => i.partNumber).includes(q.partNumber))[0]
+            );
         }
-    }, [quantities]);
+    }, [quantities, items]);
 
     const columns = [
         {
@@ -352,7 +354,7 @@ function StockLocator({
                                                                     _propertyName,
                                                                     newValue
                                                                 ) =>
-                                                                    setSelectQuantities(
+                                                                    setSelectedQuantities(
                                                                         quantities.find(
                                                                             x =>
                                                                                 x.partNumber ===
