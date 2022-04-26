@@ -12,6 +12,7 @@
             int? palletNumber,
             string stockPool,
             string stockState,
-            string category);
+            string category,
+            string locationName);
     }
 }

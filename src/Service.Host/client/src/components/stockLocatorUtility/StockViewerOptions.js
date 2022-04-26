@@ -30,7 +30,7 @@ function StockViewerOptions({
 }) {
     const [options, setOptions] = useState({
         partNumber: '',
-        storageLocation: '',
+        locationName: '',
         locationId: '',
         stockPoolCode: '',
         batchRef: '',
@@ -85,16 +85,23 @@ function StockViewerOptions({
                         items={storageLocations}
                         fetchItems={searchStorageLocations}
                         modal
+                        openModalOnClick={false}
                         links={false}
                         clearSearch={clearStorageLocationsSearch}
                         loading={storageLocationsLoading}
                         label="Storage Location"
                         title="Search Storage Locations"
-                        value={options.storageLocation}
+                        value={options.locationName}
+                        handleFieldChange={(_, newValue) => {
+                            setOptions({
+                                ...options,
+                                locationName: newValue
+                            });
+                        }}
                         onSelect={newValue =>
                             setOptions({
                                 ...options,
-                                storageLocation: newValue.locationCode,
+                                locationName: newValue.locationCode,
                                 locationId: newValue.id
                             })
                         }
@@ -168,7 +175,7 @@ function StockViewerOptions({
                             !options.stockPoolCode &&
                             !options.batchRef &&
                             !options.partNumber &&
-                            !(options.storageLocation || options.palletNumber)
+                            !(options.locationName || options.palletNumber)
                         }
                         to={`/inventory/stock-locator/locators?${queryString.stringify(options)}`}
                     />

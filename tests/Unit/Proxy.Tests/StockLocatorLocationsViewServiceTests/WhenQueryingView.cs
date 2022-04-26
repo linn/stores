@@ -13,7 +13,10 @@
     {
         private IEnumerable<StockLocatorLocation> result;
 
-        private string correctQuery = "SELECT * FROM STOCK_LOCATOR_PARTS_VIEW WHERE PART_NUMBER = 'PART' AND LOCATION_ID = 1 AND PALLET_NUMBER = 1 AND STOCK_POOL_CODE = 'POOL' AND STATE = 'STATE' AND CATEGORY = 'CAT'";
+        private string correctQuery = "SELECT * FROM STOCK_LOCATOR_PARTS_VIEW WHERE PART_NUMBER = 'PART' "
+                                      + "AND LOCATION_CODE = 'LOC' "
+                                      + "AND LOCATION_ID = 1 AND PALLET_NUMBER = 1 AND STOCK_POOL_CODE = 'POOL' "
+                                      + "AND STATE = 'STATE' AND CATEGORY = 'CAT'";
 
         [SetUp]
         public void SetUp()
@@ -22,7 +25,7 @@
             dataset.Tables.Add(new DataTable());
 
             this.DatabaseService.ExecuteQuery(Arg.Any<string>()).Returns(dataset);
-            this.result = this.Sut.QueryView("PART", 1, 1, "POOL", "STATE", "CAT");
+            this.result = this.Sut.QueryView("PART", 1, 1, "POOL", "STATE", "CAT", "LOC");
         }
 
         [Test]

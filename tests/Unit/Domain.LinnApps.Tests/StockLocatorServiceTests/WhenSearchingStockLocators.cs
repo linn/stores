@@ -51,6 +51,7 @@
                         null, 
                         Arg.Any<string>(), 
                         Arg.Any<string>(), 
+                        Arg.Any<string>(),
                         Arg.Any<string>())
                 .Returns(this.repositoryResult);
 
@@ -60,7 +61,8 @@
                 palletNumber: null,
                 stockPool: "LINN",
                 stockState: "FREE",
-                category: null);
+                category: null,
+                locationName: null);
         }
 
         [Test]

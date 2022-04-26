@@ -25,7 +25,8 @@
             int? palletNumber,
             string stockPool,
             string stockState,
-            string category);
+            string category,
+            string locationName);
 
         IEnumerable<StockLocator> SearchStockLocatorBatchView(
             string partNumber,

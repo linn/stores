@@ -25,7 +25,8 @@
             int? palletNumber,
             string stockPool,
             string stockState,
-            string category)
+            string category,
+            string locationName)
         {
             var whereClause = "WHERE ";
 
@@ -37,6 +38,14 @@
                     partNumber.Contains("*")
                         ? $"PART_NUMBER LIKE '{partNumber.Replace("*", "%").ToUpper()}'"
                         : $"PART_NUMBER = '{partNumber.ToUpper()}'");
+            }
+
+            if (!string.IsNullOrEmpty(locationName))
+            {
+                whereClauseParts.Add(
+                    locationName.Contains("*")
+                        ? $"LOCATION_CODE LIKE '{locationName.Replace("*", "%").ToUpper()}'"
+                        : $"LOCATION_CODE = '{locationName.ToUpper()}'");
             }
 
             if (locationId != null)

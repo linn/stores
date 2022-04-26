@@ -81,7 +81,8 @@
                 searchResource.PalletNumber,
                 searchResource.StockPoolCode,
                 searchResource.State,
-                searchResource.Category));
+                searchResource.Category,
+                searchResource.LocationName));
         }
 
         public IResult<IEnumerable<StockMove>> GetMoves(string partNumber, int? palletNumber, int? locationId)
