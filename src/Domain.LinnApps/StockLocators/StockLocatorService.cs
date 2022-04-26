@@ -224,7 +224,8 @@
             string stockPool,
             string stockState,
             string category,
-            string locationName)
+            string locationName,
+            string partDescription)
         {
             return this.locationsViewService
                 .QueryView(
@@ -234,7 +235,8 @@
                     stockPool, 
                     stockState, 
                     category, 
-                    locationName)
+                    locationName,
+                    partDescription)
                 .Select(
                     x => new StockLocator
                              {

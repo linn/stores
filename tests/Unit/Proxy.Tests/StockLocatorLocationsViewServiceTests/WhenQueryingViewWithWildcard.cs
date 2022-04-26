@@ -12,7 +12,9 @@
     public class WhenQueryingViewWithWildcard : ContextBase
     {
         private readonly string correctQuery = "SELECT * FROM STOCK_LOCATOR_PARTS_VIEW "
-                                               + "WHERE PART_NUMBER LIKE 'PART%' AND LOCATION_CODE LIKE 'LOC%' "
+                                               + "WHERE PART_NUMBER LIKE 'PART%' "
+                                               + "AND DESCRIPTION LIKE 'DESC%' "
+                                               + "AND LOCATION_CODE LIKE 'LOC%' "
                                                + "AND LOCATION_ID = 1 AND PALLET_NUMBER = 1 "
                                                + "AND STOCK_POOL_CODE = 'POOL' AND STATE = 'STATE' "
                                                + "AND CATEGORY = 'CAT'";
@@ -24,7 +26,7 @@
             dataset.Tables.Add(new DataTable());
 
             this.DatabaseService.ExecuteQuery(Arg.Any<string>()).Returns(dataset);
-            this.Sut.QueryView("PART*", 1, 1, "POOL", "STATE", "CAT", "LOC*");
+            this.Sut.QueryView("PART*", 1, 1, "POOL", "STATE", "CAT", "LOC*", "DESC*");
         }
 
         [Test]

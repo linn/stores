@@ -30,6 +30,7 @@ function StockViewerOptions({
 }) {
     const [options, setOptions] = useState({
         partNumber: '',
+        partDescription: '',
         locationName: '',
         locationId: '',
         stockPoolCode: '',
@@ -63,11 +64,21 @@ function StockViewerOptions({
                         label="Part Number"
                         propertyName="partNumber"
                         onChange={(_, newValue) => setOptions({ ...options, partNumber: newValue })}
-                        helperText="note: * can be used as a wildcard character"
+                        helperText="note: * can be used as a wildcard character on text inputs"
                         value={options.partNumber}
                     />
                 </Grid>
-                <Grid item xs={9} />
+                <Grid item xs={6}>
+                    <InputField
+                        label="Desc"
+                        propertyName="partDescription"
+                        onChange={(_, newValue) =>
+                            setOptions({ ...options, partDescription: newValue })
+                        }
+                        value={options.partDescription}
+                    />
+                </Grid>
+                <Grid item xs={3} />
                 <Grid item xs={3}>
                     <InputField
                         label="Pallet Number"
@@ -175,6 +186,7 @@ function StockViewerOptions({
                             !options.stockPoolCode &&
                             !options.batchRef &&
                             !options.partNumber &&
+                            !options.partDescription &&
                             !(options.locationName || options.palletNumber)
                         }
                         to={`/inventory/stock-locator/locators?${queryString.stringify(options)}`}

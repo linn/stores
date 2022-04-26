@@ -52,6 +52,7 @@
                         Arg.Any<string>(), 
                         Arg.Any<string>(), 
                         Arg.Any<string>(),
+                        Arg.Any<string>(),
                         Arg.Any<string>())
                 .Returns(this.repositoryResult);
 
@@ -62,7 +63,8 @@
                 stockPool: "LINN",
                 stockState: "FREE",
                 category: null,
-                locationName: null);
+                locationName: null,
+                partDescription: null);
         }
 
         [Test]

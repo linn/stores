@@ -13,6 +13,7 @@
             string stockPool,
             string stockState,
             string category,
-            string locationName);
+            string locationName,
+            string partDescription);
     }
 }

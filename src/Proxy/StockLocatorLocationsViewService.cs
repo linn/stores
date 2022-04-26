@@ -26,7 +26,8 @@
             string stockPool,
             string stockState,
             string category,
-            string locationName)
+            string locationName,
+            string partDescription)
         {
             var whereClause = "WHERE ";
 
@@ -38,6 +39,14 @@
                     partNumber.Contains("*")
                         ? $"PART_NUMBER LIKE '{partNumber.Replace("*", "%").ToUpper()}'"
                         : $"PART_NUMBER = '{partNumber.ToUpper()}'");
+            }
+
+            if (partDescription != null)
+            {
+                whereClauseParts.Add(
+                    partDescription.Contains("*")
+                        ? $"DESCRIPTION LIKE '{partDescription.Replace("*", "%").ToUpper()}'"
+                        : $"DESCRIPTION = '{partDescription.ToUpper()}'");
             }
 
             if (!string.IsNullOrEmpty(locationName))
