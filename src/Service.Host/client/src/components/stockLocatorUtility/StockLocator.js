@@ -54,10 +54,12 @@ function StockLocator({
     }, [options, fetchItems]);
 
     useEffect(() => {
-        if (quantities?.length > 0) {
-            setSelectQuantities(quantities[0]);
+        if (quantities?.length > 0 && items?.length > 0) {
+            setSelectQuantities(
+                quantities.filter(q => items.map(i => i.partNumber).includes(q.partNumber))[0]
+            );
         }
-    }, [quantities]);
+    }, [quantities, items]);
 
     const columns = [
         {
