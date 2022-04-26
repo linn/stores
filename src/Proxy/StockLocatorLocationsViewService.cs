@@ -41,7 +41,7 @@
                         : $"PART_NUMBER = '{partNumber.ToUpper()}'");
             }
 
-            if (partDescription != null)
+            if (!string.IsNullOrEmpty(partDescription))
             {
                 whereClauseParts.Add(
                     partDescription.Contains("*")

@@ -1,9 +1,6 @@
 ﻿namespace Linn.Stores.Proxy.Tests.StockLocatorLocationsViewServiceTests
 {
-    using System.Collections.Generic;
     using System.Data;
-
-    using Linn.Stores.Domain.LinnApps.StockLocators;
 
     using NSubstitute;
 
