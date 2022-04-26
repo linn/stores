@@ -223,10 +223,21 @@
             int? palletNumber,
             string stockPool,
             string stockState,
-            string category)
+            string category,
+            string locationName,
+            string partDescription)
         {
             return this.locationsViewService
-                .QueryView(partNumber?.Trim(' '), locationId, palletNumber, stockPool, stockState, category).Select(
+                .QueryView(
+                    partNumber?.Trim(' '), 
+                    locationId, 
+                    palletNumber, 
+                    stockPool, 
+                    stockState, 
+                    category, 
+                    locationName,
+                    partDescription)
+                .Select(
                     x => new StockLocator
                              {
                                  PartNumber = x.PartNumber,
@@ -238,8 +249,16 @@
                                  State = x.State,
                                  QuantityAllocated = x.QuantityAllocated,
                                  StockPoolCode = x.StockPoolCode,
-                                 Part = new Part { PartNumber = x.PartNumber, OurUnitOfMeasure = x.OurUnitOfMeasure, Description = x.PartDescription, Id = x.Part.Id },
-                                 TriggerLevel = this.triggerLevelRepository.FindBy(l => l.PartNumber.Equals(x.PartNumber) && l.LocationId.Equals(x.StorageLocationId))
+                                 Part = new Part 
+                                            { 
+                                                PartNumber = x.PartNumber, 
+                                                OurUnitOfMeasure = x.OurUnitOfMeasure, 
+                                                Description = x.PartDescription, 
+                                                Id = x.Part.Id
+                                            },
+                                 TriggerLevel = this.triggerLevelRepository
+                                     .FindBy(l => l.PartNumber.Equals(x.PartNumber) 
+                                                  && l.LocationId.Equals(x.StorageLocationId))
                              });
         }
 
@@ -259,7 +278,8 @@
                          && (string.IsNullOrEmpty(partNumber) || x.PartNumber == partNumberTrimmed)
                          && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
                          && (string.IsNullOrEmpty(category) || x.Category == category)
-                         && (string.IsNullOrEmpty(stockState) || x.State == stockState)).Select(
+                         && (string.IsNullOrEmpty(stockState) || x.State == stockState))
+                .Select(
                     x => new StockLocator
                              {
                                  PartNumber = x.PartNumber,

@@ -30,7 +30,8 @@ function StockViewerOptions({
 }) {
     const [options, setOptions] = useState({
         partNumber: '',
-        storageLocation: '',
+        partDescription: '',
+        locationName: '',
         locationId: '',
         stockPoolCode: '',
         batchRef: '',
@@ -63,11 +64,21 @@ function StockViewerOptions({
                         label="Part Number"
                         propertyName="partNumber"
                         onChange={(_, newValue) => setOptions({ ...options, partNumber: newValue })}
-                        helperText="note: * can be used as a wildcard character"
+                        helperText="note: * can be used as a wildcard character on text inputs"
                         value={options.partNumber}
                     />
                 </Grid>
-                <Grid item xs={9} />
+                <Grid item xs={6}>
+                    <InputField
+                        label="Desc"
+                        propertyName="partDescription"
+                        onChange={(_, newValue) =>
+                            setOptions({ ...options, partDescription: newValue })
+                        }
+                        value={options.partDescription}
+                    />
+                </Grid>
+                <Grid item xs={3} />
                 <Grid item xs={3}>
                     <InputField
                         label="Pallet Number"
@@ -85,16 +96,23 @@ function StockViewerOptions({
                         items={storageLocations}
                         fetchItems={searchStorageLocations}
                         modal
+                        openModalOnClick={false}
                         links={false}
                         clearSearch={clearStorageLocationsSearch}
                         loading={storageLocationsLoading}
                         label="Storage Location"
                         title="Search Storage Locations"
-                        value={options.storageLocation}
+                        value={options.locationName}
+                        handleFieldChange={(_, newValue) => {
+                            setOptions({
+                                ...options,
+                                locationName: newValue
+                            });
+                        }}
                         onSelect={newValue =>
                             setOptions({
                                 ...options,
-                                storageLocation: newValue.locationCode,
+                                locationName: newValue.locationCode,
                                 locationId: newValue.id
                             })
                         }
@@ -168,7 +186,8 @@ function StockViewerOptions({
                             !options.stockPoolCode &&
                             !options.batchRef &&
                             !options.partNumber &&
-                            !(options.storageLocation || options.palletNumber)
+                            !options.partDescription &&
+                            !(options.locationName || options.palletNumber)
                         }
                         to={`/inventory/stock-locator/locators?${queryString.stringify(options)}`}
                     />
