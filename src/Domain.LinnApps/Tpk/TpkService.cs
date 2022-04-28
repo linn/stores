@@ -37,8 +37,6 @@
 
         private readonly IRepository<ReqMove, ReqMoveKey> reqMovesRepository;
 
-        private IFilterByWildcardRepository<StockLocator, int> stockLocatorRepository;
-
         public TpkService(
             IQueryRepository<TransferableStock> tpkView,
             IQueryRepository<AccountingCompany> accountingCompaniesRepository,
@@ -50,8 +48,7 @@
             IRepository<Consignment, int> consignmentRepository,
             IQueryRepository<SalesOrderDetail> salesOrderDetailRepository,
             IQueryRepository<SalesOrder> salesOrderRepository,
-            IRepository<ReqMove, ReqMoveKey> reqMovesRepository,
-            IFilterByWildcardRepository<StockLocator, int> stockLocatorRepository)
+            IRepository<ReqMove, ReqMoveKey> reqMovesRepository)
         {
             this.tpkView = tpkView;
             this.tpkPack = tpkPack;
@@ -64,7 +61,6 @@
             this.salesOrderDetailRepository = salesOrderDetailRepository;
             this.salesOrderRepository = salesOrderRepository;
             this.reqMovesRepository = reqMovesRepository;
-            this.stockLocatorRepository = stockLocatorRepository;
         }
 
         public TpkResult TransferStock(TpkRequest tpkRequest)
@@ -98,8 +94,7 @@
             
             this.bundleLabelPack.PrintTpkBoxLabels(from.FromLocation);
 
-            if (!this.tpkView.FilterBy(x => x.FromLocation != from.FromLocation)
-                .Any(x => x.ConsignmentId == tpkRequest.StockToTransfer.First().ConsignmentId))
+            if (this.whatToWandService.ShouldPrintWhatToWand(from.FromLocation))
             {
                 whatToWand = this.whatToWandService.WhatToWand(from.LocationId, from.PalletNumber).ToList();
             }

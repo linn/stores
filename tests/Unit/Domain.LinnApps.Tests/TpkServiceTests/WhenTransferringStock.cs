@@ -42,6 +42,8 @@
             this.WhatToWandService.WhatToWand(Arg.Any<int?>(), Arg.Any<int?>())
                 .Returns(new List<WhatToWandLine> { new WhatToWandLine { OrderNumber = 1 } });
 
+            this.WhatToWandService.ShouldPrintWhatToWand(toTransfer.First().FromLocation).Returns(true);
+
             this.TpkPack.When(x => x.UpdateQuantityPrinted(Arg.Any<string>(), out var success))
                 .Do(x =>
                     {

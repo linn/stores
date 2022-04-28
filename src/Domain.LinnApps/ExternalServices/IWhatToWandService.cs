@@ -7,5 +7,7 @@
     public interface IWhatToWandService
     {
         IEnumerable<WhatToWandLine> WhatToWand(int? locationId, int? palletNumber);
+
+        bool ShouldPrintWhatToWand(string storagePlace);
     }
 }

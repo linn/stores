@@ -15,6 +15,51 @@
             this.databaseService = databaseService;
         }
 
+        public bool ShouldPrintWhatToWand(string storagePlace)
+        {
+            var sql = $@"select count(distinct C.CONSIGNMENT_ID)
+                        FROM CONSIGNMENTS C,
+                          REQUISITION_HEADERS RH,
+                          REQUISITION_LINES RL,
+                          REQ_MOVES RM,
+                          STOCK_LOCATORS SR,
+                          STORAGE_LOCATIONS SL,
+                          SALES_ORDER_DETAILS SOD,
+                          V_STORAGE_PLACES STP
+                        WHERE C.CONSIGNMENT_ID=RH.DOCUMENT_1
+                        AND STP.STORAGE_PLACE = '{storagePlace}'
+		                		AND NVL(SR.LOCATION_ID,-1)=NVL(STP.LOCATION_ID,-1)
+		                		AND NVL(SR.PALLET_NUMBER,-1)=NVL(STP.PALLET_NUMBER,-1)
+                        AND RH.DOC1_NAME='CONS'
+                        AND (
+                        (RH.FUNCTION_CODE = 'INVOICE'
+                        AND RH.BOOKED = 'N'
+                        AND RH.CANCELLED = 'N')
+                        OR
+                        (RH.FUNCTION_CODE = 'ALLOC'
+                        AND RH.BOOKED = 'N'
+                        AND RM.DATE_BOOKED IS NULL
+                        AND RH.CANCELLED='N'
+                        AND RL.CANCELLED='N'
+                        )
+                        )
+                        AND RH.REQ_NUMBER=RL.REQ_NUMBER
+                        AND RL.REQ_NUMBER=RM.REQ_NUMBER
+                        AND RL.LINE_NUMBER=RM.LINE_NUMBER
+                        AND RL.DOCUMENT_1=SOD.ORDER_NUMBER
+                        AND RL.DOCUMENT_1_LINE=SOD.ORDER_LINE
+                        AND RL.NAME='O'
+                        AND RL.LINE_NUMBER=RM.LINE_NUMBER
+                        AND RM.STOCK_LOCATOR_ID=SR.STOCK_LOCATOR_ID
+                        AND SR.LOCATION_ID=SL.LOCATION_ID (+)
+                        AND tpk_oo.wtw_type(C.CONSIGNMENT_ID)<>'*TPKD*'
+                        AND C.STATUS='L'";
+            
+            var result = int.Parse(this.databaseService.ExecuteQuery(sql).Tables[0].Rows[0].ItemArray[0].ToString());
+
+            return result > 0;
+        }
+
         public IEnumerable<WhatToWandLine> WhatToWand(int? locationId, int? palletNumber)
         {
             var locationIdAnd =

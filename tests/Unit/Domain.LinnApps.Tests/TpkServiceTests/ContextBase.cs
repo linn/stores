@@ -40,8 +40,6 @@
 
         protected IRepository<ReqMove, ReqMoveKey> ReqMovesRepository;
 
-        protected IFilterByWildcardRepository<StockLocator, int> StockLocatorRepository;
-
         [SetUp]
         public void SetUpContext()
         {
@@ -65,7 +63,6 @@
                                  ConsignmentId = 1
                              });
             this.ReqMovesRepository = Substitute.For<IRepository<ReqMove, ReqMoveKey>>();
-            this.StockLocatorRepository = Substitute.For<IFilterByWildcardRepository<StockLocator, int>>();
             this.Sut = new TpkService(
                 this.TpkView,
                 this.AccountingCompaniesRepository,
@@ -77,8 +74,7 @@
                 this.ConsignmentRepository,
                 this.SalesOrderDetailRepository,
                 this.SalesOrderRepository,
-                this.ReqMovesRepository,
-                this.StockLocatorRepository);
+                this.ReqMovesRepository);
         }
     }
 }
