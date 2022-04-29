@@ -4,6 +4,7 @@ import { useReactToPrint } from 'react-to-print';
 import Grid from '@material-ui/core/Grid';
 import { Title, ErrorCard, Loading } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import Button from '@material-ui/core/Button';
 import Page from '../../containers/Page';
 import WhatToWandPrintOut from './WhatToWandPrintOut';
@@ -35,7 +36,7 @@ export default function Tpk({
     clearUnallocateData
 }) {
     const [selectedRows, setSelectedRows] = useState([]);
-    const [dateTimeTpkViewQueried, setDateTimeTpkViewQueried] = useState(new Date());
+    const [dateTimeTpkViewQueried, setDateTimeTpkViewQueried] = useState();
     const [rows, setRows] = useState([]);
     const componentRef = useRef();
 
@@ -60,7 +61,7 @@ export default function Tpk({
                 id: s.articleNumber + s.orderNumber + s.orderLine + s.fromLocation
             }))
         );
-        setDateTimeTpkViewQueried(new Date());
+        setDateTimeTpkViewQueried(moment().toISOString(true));
     }, [transferableStock]);
 
     const handlePrint = useReactToPrint({
@@ -202,7 +203,7 @@ export default function Tpk({
                                     clearAllErrors();
                                     transferStock({
                                         stockToTransfer: selectedRows,
-                                        dateTimeTpkViewQueried: dateTimeTpkViewQueried?.toISOString()
+                                        dateTimeTpkViewQueried
                                     });
                                 }}
                             >

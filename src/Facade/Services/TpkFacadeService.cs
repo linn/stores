@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -44,7 +45,7 @@
         {
             var tpkRequest = new TpkRequest
                                  {
-                                     DateTimeTpkViewQueried = tpkRequestResource.DateTimeTpkViewQueried,
+                                     DateTimeTpkViewQueried = DateTime.Parse(tpkRequestResource.DateTimeTpkViewQueried),
                                      StockToTransfer = tpkRequestResource.StockToTransfer
                                          .Select(s => 
                                              new TransferableStock
