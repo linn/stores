@@ -7,6 +7,6 @@
     {
         public IEnumerable<TransferableStockResource> StockToTransfer { get; set; }
 
-        public DateTime DateTimeTpkViewQueried { get; set; }
+        public string DateTimeTpkViewQueried { get; set; }
     }
 }
