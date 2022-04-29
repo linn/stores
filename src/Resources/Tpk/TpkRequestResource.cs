@@ -1,6 +1,5 @@
 ﻿namespace Linn.Stores.Resources.Tpk
 {
-    using System;
     using System.Collections.Generic;
 
     public class TpkRequestResource
