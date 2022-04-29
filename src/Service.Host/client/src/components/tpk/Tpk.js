@@ -36,7 +36,6 @@ export default function Tpk({
     clearUnallocateData
 }) {
     const [selectedRows, setSelectedRows] = useState([]);
-    console.log(moment().toISOString(true));
     const [dateTimeTpkViewQueried, setDateTimeTpkViewQueried] = useState();
     const [rows, setRows] = useState([]);
     const componentRef = useRef();
