@@ -13,7 +13,7 @@ export default class WhatToWandPrintout extends React.PureComponent {
             <div className="show-only-when-printing">
                 <style>
                     {`@media print {
-                @page { size: landscape; }
+                @page { size: portrait; margin: 100px; }
               }`}
                 </style>
                 <Grid container spacing={3}>
@@ -37,7 +37,6 @@ export default class WhatToWandPrintout extends React.PureComponent {
                         </Typography>
                     </Grid>
                     <Grid item xs={1} />
-
                     <Grid item xs={11}>
                         <Typography variant="h2">
                             {whatToWandReport.consignment.consignmentId}
@@ -61,11 +60,7 @@ export default class WhatToWandPrintout extends React.PureComponent {
                     <Grid item xs={2}>
                         {whatToWandReport.consignment.addressId}
                     </Grid>
-                    <Grid item xs={2}>
-                        {/* {whatToWandReport.account.accountName} */}
-                    </Grid>
-                    <Grid item xs={5} />
-                    <Grid item xs={1} />
+                    <Grid item xs={8} />
                     <Grid item xs={2}>
                         Country:
                     </Grid>
@@ -74,7 +69,7 @@ export default class WhatToWandPrintout extends React.PureComponent {
                     </Grid>
                     <Grid item xs={5} />
                     <Grid item xs={1} />
-                    <Grid item xs={10}>
+                    <Grid item xs={12}>
                         <table style={{ width: '100%', borderSpacing: '0 20px' }}>
                             <thead style={{ textAlign: 'left', marginTop: '20px' }}>
                                 <tr>
