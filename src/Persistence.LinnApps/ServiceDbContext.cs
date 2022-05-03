@@ -129,7 +129,7 @@
 
         public DbQuery<PartDataSheetValues> PartDataSheetValues { get; set; }
 
-        public DbSet<PartTqmsOverride> TqmsCategories { get; set; }
+        public DbSet<PartTqmsOverride> PartTqmsOverrides { get; set; }
 
         public DbSet<PtlMaster> PtlMaster { get; set; }
 

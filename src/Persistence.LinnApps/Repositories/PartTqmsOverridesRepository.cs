@@ -23,7 +23,7 @@
 
         public IQueryable<PartTqmsOverride> FindAll()
         {
-            return this.serviceDbContext.TqmsCategories;
+            return this.serviceDbContext.PartTqmsOverrides;
         }
 
         public void Add(PartTqmsOverride entity)
