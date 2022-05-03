@@ -175,7 +175,7 @@
                             new ManufacturersResourceBuilder());
                         with.Dependency<IResourceBuilder<PartTqmsOverride>>(new PartTqmsOverrideResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<PartTqmsOverride>>>(
-                            new partTqmsOverridesResourceBuilder());
+                            new PartTqmsOverridesResourceBuilder());
                         with.ResponseProcessor<PartResponseProcessor>();
                         with.ResponseProcessor<PartsResponseProcessor>();
                         with.ResponseProcessor<UnitsOfMeasureResponseProcessor>();

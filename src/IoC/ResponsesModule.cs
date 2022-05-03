@@ -140,7 +140,7 @@
                 .As<IResourceBuilder<IEnumerable<ImportBookCpcNumber>>>();
             builder.RegisterType<PartTqmsOverrideResourceBuilder>()
                 .As<IResourceBuilder<PartTqmsOverride>>();
-            builder.RegisterType<partTqmsOverridesResourceBuilder>()
+            builder.RegisterType<PartTqmsOverridesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<PartTqmsOverride>>>();
             builder.RegisterType<WorkstationTopUpStatusResourceBuilder>()
                 .As<IResourceBuilder<ResponseModel<WorkstationTopUpStatus>>>();

@@ -8,23 +8,23 @@
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources.Parts;
 
-    public class partTqmsOverridesResourceBuilder 
+    public class PartTqmsOverridesResourceBuilder 
         : IResourceBuilder<IEnumerable<PartTqmsOverride>>
     {
         private readonly PartTqmsOverrideResourceBuilder rootProductResourceBuilder 
             = new PartTqmsOverrideResourceBuilder();
 
         public IEnumerable<PartTqmsOverrideResource> Build(
-            IEnumerable<PartTqmsOverride> rootProducts)
+            IEnumerable<PartTqmsOverride> overrides)
         {
-            return rootProducts
+            return overrides
                 .Select(a => this.rootProductResourceBuilder.Build(a));
         }
 
         object IResourceBuilder<IEnumerable<PartTqmsOverride>>.Build(
-            IEnumerable<PartTqmsOverride> rootProducts) => this.Build(rootProducts);
+            IEnumerable<PartTqmsOverride> overrides) => this.Build(overrides);
 
-        public string GetLocation(IEnumerable<PartTqmsOverride> rootProducts)
+        public string GetLocation(IEnumerable<PartTqmsOverride> overrides)
         {
             throw new NotImplementedException();
         }
