@@ -129,7 +129,7 @@
 
         public DbQuery<PartDataSheetValues> PartDataSheetValues { get; set; }
 
-        public DbSet<TqmsCategory> TqmsCategories { get; set; }
+        public DbSet<PartTqmsOverride> PartTqmsOverrides { get; set; }
 
         public DbSet<PtlMaster> PtlMaster { get; set; }
 
@@ -1201,9 +1201,9 @@
 
         private void BuildTqmsCategories(ModelBuilder builder)
         {
-            var e = builder.Entity<TqmsCategory>().ToTable("TQMS_CATEGORIES");
+            var e = builder.Entity<PartTqmsOverride>().ToTable("PART_TQMS_OVERRIDES");
             e.HasKey(c => c.Name);
-            e.Property(c => c.Name).HasColumnName("TQMS_CATEGORY");
+            e.Property(c => c.Name).HasColumnName("CATEGORY");
             e.Property(c => c.Description).HasColumnName("DESCRIPTION");
         }
 

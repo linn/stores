@@ -138,10 +138,10 @@
             builder.RegisterType<ImportBookCpcNumberResourceBuilder>().As<IResourceBuilder<ImportBookCpcNumber>>();
             builder.RegisterType<ImportBookCpcNumbersResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<ImportBookCpcNumber>>>();
-            builder.RegisterType<TqmsCategoryResourceBuilder>()
-                .As<IResourceBuilder<TqmsCategory>>();
-            builder.RegisterType<TqmsCategoriesResourceBuilder>()
-                .As<IResourceBuilder<IEnumerable<TqmsCategory>>>();
+            builder.RegisterType<PartTqmsOverrideResourceBuilder>()
+                .As<IResourceBuilder<PartTqmsOverride>>();
+            builder.RegisterType<PartTqmsOverridesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<PartTqmsOverride>>>();
             builder.RegisterType<WorkstationTopUpStatusResourceBuilder>()
                 .As<IResourceBuilder<ResponseModel<WorkstationTopUpStatus>>>();
             builder.RegisterType<StockLocatorResourceBuilder>().As<IResourceBuilder<StockLocator>>();

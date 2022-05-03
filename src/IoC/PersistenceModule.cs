@@ -87,7 +87,7 @@
                 .As<IRepository<ImportBookTransactionCode, int>>();
             builder.RegisterType<ImportBookTransportCodeRepository>().As<IRepository<ImportBookTransportCode, int>>();
             builder.RegisterType<PortRepository>().As<IRepository<Port, string>>();
-            builder.RegisterType<TqmsCategoriesRepository>().As<IRepository<TqmsCategory, string>>();
+            builder.RegisterType<PartTqmsOverridesRepository>().As<IRepository<PartTqmsOverride, string>>();
             builder.RegisterType<PtlMasterRepository>().As<ISingleRecordRepository<PtlMaster>>();
             builder.RegisterType<TopUpListJobRefRepository>().As<IRepository<TopUpListJobRef, string>>();
             builder.RegisterType<StoresPalletRepository>().As<IStoresPalletRepository>();

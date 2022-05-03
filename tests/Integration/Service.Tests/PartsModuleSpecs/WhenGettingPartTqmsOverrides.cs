@@ -16,23 +16,23 @@
 
     using NUnit.Framework;
 
-    public class WhenGettingTqmsCategories : ContextBase
+    public class WhenGettingPartTqmsOverrides : ContextBase
     {
         [SetUp]
         public void SetUp()
         {
-            var a = new TqmsCategory
+            var a = new PartTqmsOverride
                         {
                             Name = "A"
                         };
-            var b = new TqmsCategory
+            var b = new PartTqmsOverride
                         {
                             Name = "B"
                         };
 
             this.TqmsCategoriesService.GetAll()
-                .Returns(new SuccessResult<IEnumerable<TqmsCategory>>(
-                    new List<TqmsCategory> { a, b }));
+                .Returns(new SuccessResult<IEnumerable<PartTqmsOverride>>(
+                    new List<PartTqmsOverride> { a, b }));
 
             this.Response = this.Browser.Get(
                 "/parts/tqms-categories",
@@ -57,7 +57,7 @@
         [Test]
         public void ShouldReturnResource()
         {
-            var resource = this.Response.Body.DeserializeJson<IEnumerable<TqmsCategoryResource>>()
+            var resource = this.Response.Body.DeserializeJson<IEnumerable<PartTqmsOverrideResource>>()
                 .ToList();
             resource.Should().HaveCount(2);
             resource.Should().Contain(a => a.Name == "A");

@@ -8,25 +8,25 @@
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources.Parts;
 
-    public class TqmsCategoryResourceBuilder : IResourceBuilder<TqmsCategory>
+    public class PartTqmsOverrideResourceBuilder : IResourceBuilder<PartTqmsOverride>
     {
-        public TqmsCategoryResource Build(TqmsCategory cat)
+        public PartTqmsOverrideResource Build(PartTqmsOverride cat)
         {
-            return new TqmsCategoryResource
+            return new PartTqmsOverrideResource
                        {
                            Name = cat.Name,
                            Description = cat.Description,
                        };
         }
 
-        public string GetLocation(TqmsCategory rootProduct)
+        public string GetLocation(PartTqmsOverride rootProduct)
         {
             throw new NotImplementedException();
         }
 
-        object IResourceBuilder<TqmsCategory>.Build(TqmsCategory cat) => this.Build(cat);
+        object IResourceBuilder<PartTqmsOverride>.Build(PartTqmsOverride cat) => this.Build(cat);
 
-        private IEnumerable<LinkResource> BuildLinks(TqmsCategory cat)
+        private IEnumerable<LinkResource> BuildLinks(PartTqmsOverride cat)
         {
             throw new NotImplementedException();
         }

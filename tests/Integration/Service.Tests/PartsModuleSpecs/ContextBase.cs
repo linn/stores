@@ -87,7 +87,7 @@
 
         protected IPartPack PartPack { get; private set; }
 
-        protected IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource> TqmsCategoriesService
+        protected IFacadeService<PartTqmsOverride, string, PartTqmsOverrideResource, PartTqmsOverrideResource> TqmsCategoriesService
         {
             get; private set;
         }
@@ -123,7 +123,7 @@
             this.DataSheetValuesService = Substitute.For<IPartDataSheetValuesService>();
             this.PartPack = Substitute.For<IPartPack>();
             this.TqmsCategoriesService = Substitute
-                .For<IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>>();
+                .For<IFacadeService<PartTqmsOverride, string, PartTqmsOverrideResource, PartTqmsOverrideResource>>();
             this.AuthorisationService = Substitute.For<IAuthorisationService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
@@ -173,9 +173,9 @@
                         with.Dependency<IResourceBuilder<Manufacturer>>(new ManufacturerResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Manufacturer>>>(
                             new ManufacturersResourceBuilder());
-                        with.Dependency<IResourceBuilder<TqmsCategory>>(new TqmsCategoryResourceBuilder());
-                        with.Dependency<IResourceBuilder<IEnumerable<TqmsCategory>>>(
-                            new TqmsCategoriesResourceBuilder());
+                        with.Dependency<IResourceBuilder<PartTqmsOverride>>(new PartTqmsOverrideResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<PartTqmsOverride>>>(
+                            new PartTqmsOverridesResourceBuilder());
                         with.ResponseProcessor<PartResponseProcessor>();
                         with.ResponseProcessor<PartsResponseProcessor>();
                         with.ResponseProcessor<UnitsOfMeasureResponseProcessor>();
@@ -188,7 +188,7 @@
                         with.ResponseProcessor<PartLiveTestResponseProcessor>();
                         with.ResponseProcessor<MechPartSourceResponseProcessor>();
                         with.ResponseProcessor<ManufacturersResponseProcessor>();
-                        with.ResponseProcessor<TqmsCategoriesResponseProcessor>();
+                        with.ResponseProcessor<PartTqmsOverridesResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
                                 {

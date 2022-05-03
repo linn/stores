@@ -1,6 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Parts
 {
-    public class TqmsCategory
+    public class PartTqmsOverride
     {
         public string Name { get; set; }
 

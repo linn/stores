@@ -1,6 +1,6 @@
 ﻿namespace Linn.Stores.Resources.Parts
 {
-    public class TqmsCategoryResource
+    public class PartTqmsOverrideResource
     {
         public string Name { get; set; }
 
