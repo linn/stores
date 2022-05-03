@@ -127,8 +127,8 @@
             builder.RegisterType<ImportBookTransportCodeFacadeService>().As<IFacadeService<ImportBookTransportCode, int, ImportBookTransportCodeResource, ImportBookTransportCodeResource>>();
             builder.RegisterType<ImportBookCpcNumberFacadeService>().As<IFacadeService<ImportBookCpcNumber, int, ImportBookCpcNumberResource, ImportBookCpcNumberResource>>();
             builder.RegisterType<PartDataSheetValuesService>().As<IPartDataSheetValuesService>();
-            builder.RegisterType<TqmsCategoriesService>()
-                .As<IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>>();
+            builder.RegisterType<PartTqmsOverridesService>()
+                .As<IFacadeService<PartTqmsOverride, string, PartTqmsOverrideResource, PartTqmsOverrideResource>>();
             builder.RegisterType<WorkstationFacadeService>().As<IWorkstationFacadeService>();
             builder.RegisterType<StockLocatorsFacadeService>()
                 .As<IStockLocatorFacadeService>();

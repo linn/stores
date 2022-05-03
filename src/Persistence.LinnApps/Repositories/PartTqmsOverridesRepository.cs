@@ -7,41 +7,41 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Parts;
 
-    public class TqmsCategoriesRepository : IRepository<TqmsCategory, string>
+    public class PartTqmsOverridesRepository : IRepository<PartTqmsOverride, string>
     {
         private readonly ServiceDbContext serviceDbContext;
 
-        public TqmsCategoriesRepository(ServiceDbContext serviceDbContext)
+        public PartTqmsOverridesRepository(ServiceDbContext serviceDbContext)
         {
             this.serviceDbContext = serviceDbContext;
         }
 
-        public TqmsCategory FindById(string key)
+        public PartTqmsOverride FindById(string key)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<TqmsCategory> FindAll()
+        public IQueryable<PartTqmsOverride> FindAll()
         {
             return this.serviceDbContext.TqmsCategories;
         }
 
-        public void Add(TqmsCategory entity)
+        public void Add(PartTqmsOverride entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(TqmsCategory entity)
+        public void Remove(PartTqmsOverride entity)
         {
             throw new NotImplementedException();
         }
 
-        public TqmsCategory FindBy(Expression<Func<TqmsCategory, bool>> expression)
+        public PartTqmsOverride FindBy(Expression<Func<PartTqmsOverride, bool>> expression)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<TqmsCategory> FilterBy(Expression<Func<TqmsCategory, bool>> expression)
+        public IQueryable<PartTqmsOverride> FilterBy(Expression<Func<PartTqmsOverride, bool>> expression)
         {
             throw new NotImplementedException();
         }

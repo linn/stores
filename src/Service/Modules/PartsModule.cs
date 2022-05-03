@@ -52,8 +52,8 @@
 
         private readonly IPartDataSheetValuesService dataSheetsValuesService;
 
-        private readonly IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>
-            tqmsCategoriesService;
+        private readonly IFacadeService<PartTqmsOverride, string, PartTqmsOverrideResource, PartTqmsOverrideResource>
+            tqmsOverridesService;
 
         public PartsModule(
             IPartsFacadeService partsFacadeService,
@@ -68,7 +68,7 @@
             IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> mechPartSourceService,
             IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> manufacturerService,
             IPartDataSheetValuesService dataSheetsValuesService,
-            IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource> tqmsCategoriesService)
+            IFacadeService<PartTqmsOverride, string, PartTqmsOverrideResource, PartTqmsOverrideResource> tqmsOverridesService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
@@ -123,8 +123,8 @@
             this.dataSheetsValuesService = dataSheetsValuesService;
             this.Get("/parts/data-sheet-values", _ => this.GetPartDataSheetValues());
 
-            this.tqmsCategoriesService = tqmsCategoriesService;
-            this.Get("/parts/tqms-categories", _ => this.GetTqmsCategories());
+            this.tqmsOverridesService = tqmsOverridesService;
+            this.Get("/parts/tqms-categories", _ => this.GetTqmsOverrides());
         }
 
         public object GetApp()
@@ -377,10 +377,10 @@
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
 
-        private object GetTqmsCategories()
+        private object GetTqmsOverrides()
         {
             return this.Negotiate.WithModel(
-                    this.tqmsCategoriesService.GetAll())
+                    this.tqmsOverridesService.GetAll())
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
     }
