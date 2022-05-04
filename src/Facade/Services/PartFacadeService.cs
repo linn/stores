@@ -117,12 +117,16 @@
                 this.partRepository.SearchParts(searchTerm.Trim().ToUpper(), resultLimit));
         }
 
-        public IResult<IEnumerable<Part>> SearchPartsWithWildcard(string partNumberSearch, string descriptionSearch)
+        public IResult<IEnumerable<Part>> SearchPartsWithWildcard(
+            string partNumberSearch, 
+            string descriptionSearch, 
+            string productAnalysisCodeSearch)
         {
             return new SuccessResult<IEnumerable<Part>>(
                 this.partRepository.SearchPartsWithWildcard(
                     partNumberSearch?.Trim().ToUpper(), 
-                    descriptionSearch?.Trim().ToUpper()));
+                    descriptionSearch?.Trim().ToUpper(),
+                    productAnalysisCodeSearch?.Trim().ToUpper()));
         }
 
         protected override Part CreateFromResource(PartResource resource)

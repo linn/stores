@@ -166,11 +166,13 @@
             IResult<IEnumerable<Part>> results;
 
             if (!string.IsNullOrEmpty(resource.PartNumberSearchTerm)
-                || !string.IsNullOrEmpty(resource.DescriptionSearchTerm))
+                || !string.IsNullOrEmpty(resource.DescriptionSearchTerm)
+                || !string.IsNullOrEmpty(resource.ProductAnalysisCodeSearchTerm))
             {
                 results = this.partsFacadeService.SearchPartsWithWildcard(
                     resource.PartNumberSearchTerm,
-                    resource.DescriptionSearchTerm);
+                    resource.DescriptionSearchTerm,
+                    resource.ProductAnalysisCodeSearchTerm);
             }
             else if (!string.IsNullOrEmpty(resource.SearchTerm))
             {

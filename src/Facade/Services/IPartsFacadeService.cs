@@ -20,6 +20,9 @@
 
         IResult<IEnumerable<Part>> SearchParts(string searchTerm, int? resultLimit);
 
-        IResult<IEnumerable<Part>> SearchPartsWithWildcard(string partNumberSearch, string descriptionSearch);
+        IResult<IEnumerable<Part>> SearchPartsWithWildcard(
+            string partNumberSearch, 
+            string descriptionSearch, 
+            string productAnalysisCodeSearch);
     }
 }

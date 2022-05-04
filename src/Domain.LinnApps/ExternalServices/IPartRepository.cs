@@ -13,7 +13,8 @@
         
         IEnumerable<Part> SearchPartsWithWildcard(
             string partNumberSearchTerm, 
-            string descriptionSearchTerm, 
+            string descriptionSearchTerm,
+            string productAnalysisCodeSearchTerm,
             bool newestFirst = false,
             int? limit = null);
     }
