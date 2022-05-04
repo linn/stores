@@ -28,7 +28,8 @@
             this.privileges = new List<string> { "part.admin" };
 
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
-            this.PartRepository.SearchPartsWithWildcard("CAP %", Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<int>())
+            this.PartRepository.SearchPartsWithWildcard(
+                    "CAP %", Arg.Any<string>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<int>())
                 .Returns(new List<Part>
                              {
                                  new Part
@@ -49,6 +50,7 @@
         {
             this.PartRepository.Received().SearchPartsWithWildcard(
                 "CAP %",
+                Arg.Any<string>(),
                 Arg.Any<string>(),
                 Arg.Any<bool>(),
                 Arg.Any<int>());

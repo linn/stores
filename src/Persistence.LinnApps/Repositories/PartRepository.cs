@@ -124,17 +124,22 @@
 
         public IEnumerable<Part> SearchPartsWithWildcard(
             string partNumberSearchTerm, 
-            string descriptionSearchTerm, 
+            string descriptionSearchTerm,
+            string productAnalysisCodeSearchTerm,
             bool newestFirst = false,
             int? limit = null)
         {
-            var result = this.serviceDbContext.Parts.AsNoTracking().Where(
+            var result = this.serviceDbContext.Parts.Include(x => x.ProductAnalysisCode).AsNoTracking().Where(
                 x => (string.IsNullOrEmpty(partNumberSearchTerm) || EF.Functions.Like(
                           x.PartNumber,
                           $"{partNumberSearchTerm.Replace("*", "%")}"))
                      && (string.IsNullOrEmpty(descriptionSearchTerm) || EF.Functions.Like(
                              x.Description,
-                             $"{descriptionSearchTerm.Replace("*", "%")}")));
+                             $"{descriptionSearchTerm.Replace("*", "%")}"))
+                    
+                     && (string.IsNullOrEmpty(productAnalysisCodeSearchTerm)
+                         || (x.ProductAnalysisCode != null  
+                         && EF.Functions.Like(x.ProductAnalysisCode.ProductCode, $"{productAnalysisCodeSearchTerm.Replace("*", "%")}"))));
             
             if (newestFirst)
             {
