@@ -130,7 +130,7 @@ function PartsSearch({
                                             label="Part Number"
                                             propertyName="partNumber"
                                             onChange={handleOptionsChange}
-                                            helperText="* can be used as a wildcard on both fields"
+                                            helperText="* can be used as a wildcard on all fields"
                                         />
                                     </Grid>
                                     <Grid item xs={3}>
