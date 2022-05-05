@@ -21,6 +21,7 @@ import { Link } from 'react-router-dom';
 import makeStyles from '@material-ui/styles/makeStyles';
 import queryString from 'query-string';
 import Page from '../../containers/Page';
+import config from '../../config';
 
 function StockLocator({
     items,
@@ -267,15 +268,15 @@ function StockLocator({
                                                         {i.partNumber}
                                                     </Link>
                                                     {'       '}
-                                                    <Link
-                                                        to={
+                                                    <a
+                                                        href={`${config.appRoot}${
                                                             i.links.find(
                                                                 l => l.rel === 'part-used-on'
                                                             )?.href
-                                                        }
+                                                        }`}
                                                     >
                                                         UO
-                                                    </Link>
+                                                    </a>
                                                 </>
                                             ),
                                             drillDownButtonComponent: (
