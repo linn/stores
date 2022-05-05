@@ -268,20 +268,29 @@ function StockLocator({
                                                         {i.partNumber}
                                                     </Link>
                                                     {'       '}
-                                                    <a
-                                                        href={`${config.appRoot}${
-                                                            i.links.find(
-                                                                l => l.rel === 'part-used-on'
-                                                            )?.href
-                                                        }`}
+                                                    <button
+                                                        type="button"
+                                                        style={{ cursor: 'pointer' }}
+                                                        onClick={() => {
+                                                            window.open(
+                                                                `${config.appRoot}${
+                                                                    i.links.find(
+                                                                        l =>
+                                                                            l.rel === 'part-used-on'
+                                                                    )?.href
+                                                                }`,
+                                                                '_blank'
+                                                            );
+                                                        }}
                                                     >
-                                                        UO
-                                                    </a>
+                                                        +
+                                                    </button>
                                                 </>
                                             ),
                                             drillDownButtonComponent: (
                                                 <button
                                                     type="button"
+                                                    style={{ cursor: 'pointer' }}
                                                     onClick={() => {
                                                         history.push(
                                                             `/inventory/stock-locator/locators/batches?${queryString.stringify(
@@ -304,6 +313,7 @@ function StockLocator({
                                                 <>
                                                     {i.quantityAllocated && (
                                                         <button
+                                                            style={{ cursor: 'pointer' }}
                                                             type="button"
                                                             onClick={() => {
                                                                 fetchMoves(
