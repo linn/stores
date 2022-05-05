@@ -22,10 +22,10 @@
         {
             var exactMatches = this.nominalAccountRepository
                 .FilterBy(n
-                    => n.Department.Description.ToUpper().Equals(searchTerm)
-                       || n.Department.DepartmentCode.Equals(searchTerm)
-                       || n.Nominal.Description.ToUpper().Equals(searchTerm)
-                       || n.Nominal.NominalCode.Equals(searchTerm)).Take(50);
+                    => n.Department.Description.ToUpper().Equals(searchTerm.ToUpper())
+                       || n.Department.DepartmentCode.ToUpper().Equals(searchTerm.ToUpper())
+                       || n.Nominal.Description.ToUpper().Equals(searchTerm.ToUpper())
+                       || n.Nominal.NominalCode.ToUpper().Equals(searchTerm.ToUpper())).Take(50);
             if (exactMatches.Any())
             {
                 return new SuccessResult<IEnumerable<NominalAccount>>(exactMatches);
