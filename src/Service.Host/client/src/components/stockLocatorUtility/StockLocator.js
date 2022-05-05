@@ -257,11 +257,26 @@ function StockLocator({
                                             ...i,
                                             id: index,
                                             partLinkComponent: (
-                                                <Link
-                                                    to={i.links.find(l => l.rel === 'part')?.href}
-                                                >
-                                                    {i.partNumber}
-                                                </Link>
+                                                <>
+                                                    <Link
+                                                        to={
+                                                            i.links.find(l => l.rel === 'part')
+                                                                ?.href
+                                                        }
+                                                    >
+                                                        {i.partNumber}
+                                                    </Link>
+                                                    {'       '}
+                                                    <Link
+                                                        to={
+                                                            i.links.find(
+                                                                l => l.rel === 'part-used-on'
+                                                            )?.href
+                                                        }
+                                                    >
+                                                        UO
+                                                    </Link>
+                                                </>
                                             ),
                                             drillDownButtonComponent: (
                                                 <button
