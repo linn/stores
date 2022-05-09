@@ -10,7 +10,6 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
-    using Linn.Stores.Persistence.LinnApps.Repositories;
     using Linn.Stores.Resources.Parts;
 
     public class PartFacadeService : FacadeService<Part, int, PartResource, PartResource>, IPartsFacadeService
@@ -90,7 +89,10 @@
 
         public IResult<IEnumerable<Part>> GetPartByPartNumber(string partNumber)
         {
-            return new SuccessResult<IEnumerable<Part>>(new List<Part> { this.partRepository.FindBy(a => a.PartNumber == partNumber.ToUpper()) });
+            var part = this.partRepository.FindBy(a => a.PartNumber == partNumber.ToUpper());
+            return part != null
+                ? new SuccessResult<IEnumerable<Part>>(new List<Part> { part })
+                : new SuccessResult<IEnumerable<Part>>(Enumerable.Empty<Part>());
         }
 
         public IResult<Part> GetByIdNoTracking(int id)
