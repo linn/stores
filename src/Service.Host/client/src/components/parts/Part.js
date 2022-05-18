@@ -60,7 +60,7 @@ function Part({
         createdBy: userNumber,
         createdByName: userName,
         dateCreated: new Date(),
-        railMethod: 'POLICY',
+        railMethod: 'LEADTIME',
         qcInformation: '',
         qcOnReceipt: 'N',
         orderHold: 'N'
