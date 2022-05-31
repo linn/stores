@@ -515,7 +515,7 @@
                     {
                         RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                         ColumnId = "Currency",
-                        TextDisplay = string.Empty,
+                        TextDisplay = impbook.Currency,
                         RowTitle = impbook.Id.ToString()
                     });
 
