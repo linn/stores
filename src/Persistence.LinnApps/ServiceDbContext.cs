@@ -804,6 +804,7 @@
             builder.Entity<Nominal>().HasKey(n => n.NominalCode);
             builder.Entity<Nominal>().Property(n => n.NominalCode).HasColumnName("NOMINAL_CODE");
             builder.Entity<Nominal>().Property(n => n.Description).HasColumnName("DESCRIPTION");
+            builder.Entity<Nominal>().Property(n => n.DateClosed).HasColumnName("DATE_CLOSED");
             builder.Entity<Nominal>().HasMany(n => n.NominalAccounts).WithOne(a => a.Nominal).HasForeignKey("NOMINAL");
         }
 
