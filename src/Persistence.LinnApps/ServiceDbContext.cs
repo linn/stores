@@ -249,6 +249,9 @@
 
         public DbSet<InvoiceDetail> InvoiceDetails { get; set; }
 
+        public DbQuery<PhoneListEntry> PhoneList { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -367,6 +370,7 @@
             this.BuildPurchaseLedger(builder);
             this.QueryRsnAccessories(builder);
             this.QueryRsnConditions(builder);
+            this.QueryPhoneList(builder);
             this.BuildInvoiceDetails(builder);
         }
 
@@ -2117,6 +2121,13 @@
             q.Property(a => a.Code).HasColumnName("COND_CODE");
             q.Property(a => a.Description).HasColumnName("DESCRIPTION");
             q.Property(a => a.ExtraInfoRequired).HasColumnName("EXTRA_INFO_REQD");
+        }
+
+        private void QueryPhoneList(ModelBuilder builder)
+        {
+            var q = builder.Query<PhoneListEntry>().ToView("USER_NUMBER");
+            q.Property(a => a.EmailAddress).HasColumnName("EMAIL_ADDRESS");
+            q.HasOne(a => a.User).WithOne(u => u.PhoneListEntry).HasForeignKey("USER_NUMBER");
         }
     }
 }

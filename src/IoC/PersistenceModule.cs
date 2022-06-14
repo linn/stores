@@ -147,6 +147,8 @@
             builder.RegisterType<RsnConditionsRepository>().As<IQueryRepository<RsnCondition>>();
             builder.RegisterType<InvoiceDetailRepository>()
                 .As<IRepository<InvoiceDetail, InvoiceDetailKey>>();
+            builder.RegisterType<PhoneListRepository>().As<IQueryRepository<PhoneListEntry>>();
+
         }
     }
 }
