@@ -21,7 +21,7 @@ import ManufacturersTab from '../../../containers/parts/mechPartSource/tabs/Manu
 import SuppliersTab from '../../../containers/parts/mechPartSource/tabs/SuppliersTab';
 import ParamDataTab from '../../../containers/parts/mechPartSource/tabs/ParamDataTab';
 import CadDataTab from './tabs/CadDataTab';
-import UsagesTab from '../../../containers/parts/mechPartSource/tabs/UsagesTab';
+import UsagesTab from './tabs/UsagesTab';
 import VerificationTab from './tabs/VerificationTab';
 import PurchasingQuotesTab from '../../../containers/parts/mechPartSource/tabs/PurchasingQuotesTab';
 import handleBackClick from '../../../helpers/handleBackClick';
@@ -84,10 +84,6 @@ function MechPartSource({
         setTab(value);
     };
 
-    const mechPartSourceInvalid = () =>
-        !mechPartSource.samplesRequired ||
-        !mechPartSource.assemblyType ||
-        (mechPartSource.mechanicalOrElectrical === 'E' && !mechPartSource.partType);
     useEffect(() => {
         if (item !== prevMechPartSource && editStatus !== 'create') {
             setMechPartSource({
@@ -141,7 +137,7 @@ function MechPartSource({
         updateRow: updateUsagesRow,
         removeRow: removeUsagesRow,
         setEditing: setUsagesEditing,
-        setData: setUsagesData,
+        //setData: setUsagesData,
         setRowToBeDeleted: setUsagesRowToBeDeleted,
         setRowToBeSaved: setUsagesRowToBeSaved
     } = useGroupEditTable({
@@ -173,7 +169,7 @@ function MechPartSource({
         body.mechPartAlts = suppliersData;
         body.mechPartManufacturerAlts = manufacturersData;
         body.capacitance = mechPartSource.capacitance?.toFixed(13);
-        body.usages = usagesData;
+        body.usages = usagesData.map((u, i) => ({ ...u, id: i }));
         body.purchasingQuotes = quotesData;
         if (creating()) {
             addItem(body);
@@ -182,6 +178,12 @@ function MechPartSource({
         }
         setEditStatus('view');
     };
+
+    const mechPartSourceInvalid = () =>
+        !mechPartSource.samplesRequired ||
+        !mechPartSource.assemblyType ||
+        (creating() && (usagesData?.length ?? 0) < 1) ||
+        (mechPartSource.mechanicalOrElectrical === 'E' && !mechPartSource.partType);
 
     const handleCancelClick = () => {
         setMechPartSource(item);
@@ -272,20 +274,6 @@ function MechPartSource({
                           supplierId: newValue.name,
                           supplierName: newValue.description,
                           editing: true
-                      }
-                    : x
-            )
-        );
-    };
-
-    const handleRootProductChange = (rootProductName, newValue) => {
-        setUsagesData(u =>
-            u.map(x =>
-                x.rootProductName === rootProductName
-                    ? {
-                          ...x,
-                          rootProductName: newValue.name,
-                          rootProductDescription: newValue.description
                       }
                     : x
             )
@@ -602,7 +590,6 @@ function MechPartSource({
                                     removeRow={removeUsagesRow}
                                     addRow={addUsagesRow}
                                     updateRow={updateUsagesRow}
-                                    handleRootProductChange={handleRootProductChange}
                                     rows={usagesData}
                                 />
                             )}

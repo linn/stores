@@ -251,10 +251,7 @@
                                  Usages = resource.Usages?.Select(u => new MechPartUsage
                                                                            {
                                                                                QuantityUsed = u.QuantityUsed,
-                                                                               RootProductName = u.RootProductName,
-                                                                               RootProduct = u.RootProductName == null ? this.rootProductRepository
-                                                                                       .FindBy(p => p.Name == u.RootProductName)
-                                                                                   : null
+                                                                               RootProductName = u.RootProductName
                                                                            }).ToList(),
                                  LifeExpectancyPart = resource.LifeExpectancyPart,
                                  Configuration = resource.Configuration

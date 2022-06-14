@@ -1221,7 +1221,6 @@
             e.Property(u => u.SourceId).HasColumnName("MS_ID");
             e.HasOne(u => u.Source).WithMany(s => s.Usages).HasForeignKey(u => u.SourceId);
             e.Property(u => u.QuantityUsed).HasColumnName("QTY_USED");
-            e.HasOne(u => u.RootProduct).WithMany(p => p.UsagesRootProductOn).HasForeignKey(u => u.RootProductName);
         }
 
         private void BuildPtlMaster(ModelBuilder builder)
