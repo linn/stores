@@ -251,7 +251,7 @@
                                  Usages = resource.Usages?.Select(u => new MechPartUsage
                                                                            {
                                                                                QuantityUsed = u.QuantityUsed,
-                                                                               RootProductName = u.RootProductName
+                                                                               Product = u.RootProductName
                                                                            }).ToList(),
                                  LifeExpectancyPart = resource.LifeExpectancyPart,
                                  Configuration = resource.Configuration

@@ -25,6 +25,10 @@
                                      SafetyCritical = "Y",
                                      SafetyDataDirectory = "/path",
                                      MechanicalOrElectrical = "M",
+                                     Usages = new List<MechPartUsage>
+                                                  {
+                                                      new MechPartUsage { Product = "TEST" }
+                                                  }
                                  };
 
             var userPrivileges = new List<string>();

@@ -8,6 +8,6 @@
 
         public int QuantityUsed { get; set; }
 
-        public string RootProductName { get; set; }
+        public string Product { get; set; }
     }
 }

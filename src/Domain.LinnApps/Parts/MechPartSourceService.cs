@@ -65,12 +65,17 @@
                         AuthorisedAction.PartAdmin,
                         userPrivileges))
             {
-                throw new UpdatePartException("You are not authorised to update.");
+                throw new CreatePartException("You are not authorised to create.");
             }
 
             if (candidate.SafetyCritical == "Y" && string.IsNullOrEmpty(candidate.SafetyDataDirectory))
             {
                 throw new CreatePartException("You must enter a EMC/safety data directory for EMC or safety critical parts");
+            }
+
+            if (candidate.Usages?.FirstOrDefault() == null)
+            {
+                throw new CreatePartException("You must enter at least one Usage when creating a source sheet");
             }
 
             return candidate;
