@@ -190,10 +190,8 @@
                                                 c => c.Sequence == resource.SernosSequenceName)
                                             : null,
                                     IgnoreWorkstationStock = resource.IgnoreWorkstationStock,
-                                    MechanicalOrElectronic = resource.MechanicalOrElectronic,
                                     ImdsIdNumber = resource.ImdsIdNumber,
                                     ImdsWeight = resource.ImdsWeight,
-                                    PartCategory = resource.PartCategory,
                                     OrderHold = resource.OrderHold,
                                     MaterialPrice = resource.MaterialPrice,
                                     SparesRequirement = resource.SparesRequirement,
@@ -289,10 +287,8 @@
                                                   c => c.Sequence == resource.SernosSequenceName)
                                               : null,
                                       IgnoreWorkstationStock = resource.IgnoreWorkstationStock,
-                                      MechanicalOrElectronic = resource.MechanicalOrElectronic,
                                       ImdsIdNumber = resource.ImdsIdNumber,
                                       ImdsWeight = resource.ImdsWeight,
-                                      PartCategory = resource.PartCategory,
                                       OrderHold = resource.OrderHold,
                                       MaterialPrice = resource.MaterialPrice,
                                       SparesRequirement = resource.SparesRequirement,

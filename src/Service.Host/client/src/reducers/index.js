@@ -15,7 +15,6 @@ import part from './parts/part';
 import partTemplate from './parts/partTemplate';
 import partTemplates from './parts/partTemplates';
 import partLiveTest from './parts/partLiveTest';
-import partCategories from './partCategories';
 import productAnalysisCodes from './productAnalysisCodes';
 import rootProducts from './rootProducts';
 import sernosSequences from './sernosSequences';
@@ -200,7 +199,6 @@ const rootReducer = history =>
         parcel,
         parcels,
         part,
-        partCategories,
         partDataSheetValues,
         partLiveTest,
         parts,

@@ -18,8 +18,6 @@ export const departmentsActionTypes = makeActionTypes(itemTypes.departments.acti
 
 export const rootProductsActionTypes = makeActionTypes(itemTypes.rootProducts.actionType);
 
-export const partCategoriesActionTypes = makeActionTypes(itemTypes.partCategories.actionType);
-
 export const partTemplateActionTypes = makeActionTypes(itemTypes.partTemplate.actionType);
 
 export const partTemplatesActionTypes = makeActionTypes(itemTypes.partTemplates.actionType);

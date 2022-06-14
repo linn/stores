@@ -49,8 +49,6 @@
 
         public DbQuery<UnitOfMeasure> UnitsOfMeasure { get; set; }
 
-        public DbQuery<PartCategory> PartCategories { get; set; }
-
         public DbSet<Supplier> Suppliers { get; set; }
 
         public DbSet<Nominal> Nominals { get; set; }
@@ -263,7 +261,6 @@
             this.BuildSosOptions(builder);
             this.BuildSernosSequences(builder);
             this.QueryUnitsOfMeasure(builder);
-            this.QueryPartCategories(builder);
             this.BuildSuppliers(builder);
             this.BuildNominals(builder);
             this.BuildNominalAccounts(builder);
@@ -467,7 +464,6 @@
             e.Property(p => p.LabourPrice).HasColumnName("LABOUR_PRICE");
             e.Property(p => p.CostingPrice).HasColumnName("COSTING_PRICE");
             e.Property(p => p.OrderHold).HasColumnName("ORDER_HOLD").HasMaxLength(1);
-            e.Property(p => p.PartCategory).HasColumnName("PART_CATEGORY").HasMaxLength(2);
             e.Property(p => p.NonForecastRequirement).HasColumnName("NON_FC_REQT");
             e.Property(p => p.OneOffRequirement).HasColumnName("ONE_OFF_REQT");
             e.Property(p => p.SparesRequirement).HasColumnName("SPARES_REQT");
@@ -475,7 +471,6 @@
             e.Property(p => p.IgnoreWorkstationStock).HasColumnName("IGNORE_WORKSTN_STOCK").HasMaxLength(1);
             e.Property(p => p.ImdsIdNumber).HasColumnName("IMDS_ID_NUMBER");
             e.Property(p => p.ImdsWeight).HasColumnName("IMDS_WEIGHT_G");
-            e.Property(p => p.MechanicalOrElectronic).HasColumnName("MECHANICAL_OR_ELECTRONIC").HasMaxLength(2);
             e.Property(p => p.QcOnReceipt).HasColumnName("QC_ON_RECEIPT").HasMaxLength(1);
             e.Property(p => p.QcInformation).HasColumnName("QC_INFORMATION").HasMaxLength(90);
             e.Property(p => p.RawOrFinished).HasColumnName("RM_FG").HasMaxLength(1);
@@ -790,13 +785,6 @@
         {
             builder.Query<UnitOfMeasure>().ToView("UNITS_OF_MEASURE");
             builder.Query<UnitOfMeasure>().Property(p => p.Unit).HasColumnName("UNIT_OF_MEASURE");
-        }
-
-        private void QueryPartCategories(ModelBuilder builder)
-        {
-            builder.Query<PartCategory>().ToView("PART_CATEGORIES");
-            builder.Query<PartCategory>().Property(p => p.Category).HasColumnName("CATEGORY");
-            builder.Query<PartCategory>().Property(p => p.Description).HasColumnName("DESCRIPTION");
         }
 
         private void BuildNominals(ModelBuilder builder)

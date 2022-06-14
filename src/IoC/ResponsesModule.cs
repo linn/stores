@@ -57,10 +57,6 @@
                 .As<IResourceBuilder<UnitOfMeasure>>();
             builder.RegisterType<UnitsOfMeasureResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<UnitOfMeasure>>>();
-            builder.RegisterType<PartCategoryResourceBuilder>()
-                .As<IResourceBuilder<PartCategory>>();
-            builder.RegisterType<PartCategoriesResourceBuilder>()
-                .As<IResourceBuilder<IEnumerable<PartCategory>>>();
             builder.RegisterType<SupplierResourceBuilder>()
                 .As<IResourceBuilder<Supplier>>();
             builder.RegisterType<SuppliersResourceBuilder>()

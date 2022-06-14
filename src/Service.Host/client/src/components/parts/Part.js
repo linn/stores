@@ -417,14 +417,12 @@ function Part({
                                     labourPrice={state.part.labourPrice}
                                     costingPrice={state.part.costingPrice}
                                     orderHold={state.part.orderHold}
-                                    partCategory={state.part.partCategory}
                                     nonForecastRequirement={state.part.nonForecastRequirement}
                                     oneOffRequirement={state.part.oneOffRequirement}
                                     sparesRequirement={state.part.sparesRequirement}
                                     ignoreWorkstationStock={state.part.ignoreWorkstationStock}
                                     imdsIdNumber={state.part.imdsIdNumber}
                                     imdsWeight={state.part.imdsWeight}
-                                    mechanicalOrElectronic={state.part.mechanicalOrElectronic}
                                     manufacturers={state.part.manufacturers}
                                     links={item?.links}
                                 />

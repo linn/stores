@@ -131,10 +131,8 @@
             from.BomId = to.BomId;
             from.SernosSequence = to.SernosSequence;
             from.IgnoreWorkstationStock = to.IgnoreWorkstationStock;
-            from.MechanicalOrElectronic = to.MechanicalOrElectronic;
             from.ImdsIdNumber = to.ImdsIdNumber;
             from.ImdsWeight = to.ImdsWeight;
-            from.PartCategory = to.PartCategory;
             from.OrderHold = to.OrderHold;
             from.MaterialPrice = to.MaterialPrice;
             from.SparesRequirement = to.SparesRequirement;

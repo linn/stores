@@ -85,7 +85,6 @@
             builder.RegisterType<AllocationFacadeService>().As<IAllocationFacadeService>();
             builder.RegisterType<SernosSequencesService>().As<ISernosSequencesService>();
             builder.RegisterType<UnitsOfMeasureService>().As<IUnitsOfMeasureService>();
-            builder.RegisterType<PartCategoryService>().As<IPartCategoryService>();
             builder.RegisterType<SuppliersService>().As<ISuppliersService>();
             builder.RegisterType<ProductAnalysisCodeService>()
                 .As<IProductAnalysisCodeService>();

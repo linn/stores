@@ -75,8 +75,6 @@
 
         public string OrderHold { get; set; }
 
-        public string PartCategory { get; set; }
-
         public decimal? NonForecastRequirement { get; set; }
 
         public decimal? OneOffRequirement { get; set; }
@@ -88,8 +86,6 @@
         public int? ImdsIdNumber { get; set; }
 
         public decimal? ImdsWeight { get; set; }
-
-        public string MechanicalOrElectronic { get; set; }
 
         public string QcOnReceipt { get; set; }
 
