@@ -15,7 +15,6 @@
     {
         private MechPartSource candidate;
 
-
         [SetUp]
         public void SetUp()
         {
