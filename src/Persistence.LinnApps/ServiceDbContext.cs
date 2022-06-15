@@ -49,8 +49,6 @@
 
         public DbQuery<UnitOfMeasure> UnitsOfMeasure { get; set; }
 
-        public DbQuery<PartCategory> PartCategories { get; set; }
-
         public DbSet<Supplier> Suppliers { get; set; }
 
         public DbSet<Nominal> Nominals { get; set; }
@@ -233,7 +231,7 @@
 
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
 
-        public DbQuery<AuthUser> AuthUsers { get; set; }
+        public DbSet<AuthUser> AuthUsers { get; set; }
 
         public DbSet<Rsn> Rsns { get; set; }
 
@@ -251,6 +249,8 @@
 
         public DbSet<InvoiceDetail> InvoiceDetails { get; set; }
 
+        public DbSet<PhoneListEntry> PhoneList { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -263,7 +263,6 @@
             this.BuildSosOptions(builder);
             this.BuildSernosSequences(builder);
             this.QueryUnitsOfMeasure(builder);
-            this.QueryPartCategories(builder);
             this.BuildSuppliers(builder);
             this.BuildNominals(builder);
             this.BuildNominalAccounts(builder);
@@ -360,7 +359,7 @@
             this.BuildExportBooks(builder);
             this.QueryStoresLabelTypes(builder);
             this.BuildPurchaseOrders(builder);
-            this.QueryAuthUsers(builder);
+            this.BuildAuthUsers(builder);
             this.BuildRsns(builder);
             this.QueryTariffs(builder);
             this.QueryLoans(builder);
@@ -370,6 +369,7 @@
             this.BuildPurchaseLedger(builder);
             this.QueryRsnAccessories(builder);
             this.QueryRsnConditions(builder);
+            this.BuildPhoneList(builder);
             this.BuildInvoiceDetails(builder);
         }
 
@@ -467,7 +467,6 @@
             e.Property(p => p.LabourPrice).HasColumnName("LABOUR_PRICE");
             e.Property(p => p.CostingPrice).HasColumnName("COSTING_PRICE");
             e.Property(p => p.OrderHold).HasColumnName("ORDER_HOLD").HasMaxLength(1);
-            e.Property(p => p.PartCategory).HasColumnName("PART_CATEGORY").HasMaxLength(2);
             e.Property(p => p.NonForecastRequirement).HasColumnName("NON_FC_REQT");
             e.Property(p => p.OneOffRequirement).HasColumnName("ONE_OFF_REQT");
             e.Property(p => p.SparesRequirement).HasColumnName("SPARES_REQT");
@@ -475,7 +474,6 @@
             e.Property(p => p.IgnoreWorkstationStock).HasColumnName("IGNORE_WORKSTN_STOCK").HasMaxLength(1);
             e.Property(p => p.ImdsIdNumber).HasColumnName("IMDS_ID_NUMBER");
             e.Property(p => p.ImdsWeight).HasColumnName("IMDS_WEIGHT_G");
-            e.Property(p => p.MechanicalOrElectronic).HasColumnName("MECHANICAL_OR_ELECTRONIC").HasMaxLength(2);
             e.Property(p => p.QcOnReceipt).HasColumnName("QC_ON_RECEIPT").HasMaxLength(1);
             e.Property(p => p.QcInformation).HasColumnName("QC_INFORMATION").HasMaxLength(90);
             e.Property(p => p.RawOrFinished).HasColumnName("RM_FG").HasMaxLength(1);
@@ -790,13 +788,6 @@
         {
             builder.Query<UnitOfMeasure>().ToView("UNITS_OF_MEASURE");
             builder.Query<UnitOfMeasure>().Property(p => p.Unit).HasColumnName("UNIT_OF_MEASURE");
-        }
-
-        private void QueryPartCategories(ModelBuilder builder)
-        {
-            builder.Query<PartCategory>().ToView("PART_CATEGORIES");
-            builder.Query<PartCategory>().Property(p => p.Category).HasColumnName("CATEGORY");
-            builder.Query<PartCategory>().Property(p => p.Description).HasColumnName("DESCRIPTION");
         }
 
         private void BuildNominals(ModelBuilder builder)
@@ -1228,12 +1219,11 @@
         private void BuildMechPartUsages(ModelBuilder builder)
         {
             var e = builder.Entity<MechPartUsage>().ToTable("MECH_PART_USAGES");
-            e.Property(u => u.RootProductName).HasColumnName("ROOT_PRODUCT").HasMaxLength(14);
-            e.HasKey(u => new { u.SourceId, u.RootProductName });
+            e.Property(u => u.Product).HasColumnName("ROOT_PRODUCT").HasMaxLength(50);
+            e.HasKey(u => new { u.SourceId, u.Product });
             e.Property(u => u.SourceId).HasColumnName("MS_ID");
             e.HasOne(u => u.Source).WithMany(s => s.Usages).HasForeignKey(u => u.SourceId);
             e.Property(u => u.QuantityUsed).HasColumnName("QTY_USED");
-            e.HasOne(u => u.RootProduct).WithMany(p => p.UsagesRootProductOn).HasForeignKey(u => u.RootProductName);
         }
 
         private void BuildPtlMaster(ModelBuilder builder)
@@ -2041,12 +2031,13 @@
                 .HasForeignKey(d => d.OrderNumber);
         }
 
-        private void QueryAuthUsers(ModelBuilder builder)
+        private void BuildAuthUsers(ModelBuilder builder)
         {
-            var query = builder.Query<AuthUser>().ToView("AUTH_USER_VIEW");
-            query.Property(t => t.UserNumber).HasColumnName("USER_NUMBER");
-            query.Property(t => t.Initials).HasColumnName("INITIALS");
-            query.Property(t => t.Name).HasColumnName("USER_NAME");
+            var entity = builder.Entity<AuthUser>().ToTable("AUTH_USER_VIEW");
+            entity.HasKey(t => t.UserNumber);
+            entity.Property(t => t.UserNumber).HasColumnName("USER_NUMBER");
+            entity.Property(t => t.Initials).HasColumnName("INITIALS");
+            entity.Property(t => t.Name).HasColumnName("USER_NAME");
         }
 
         private void BuildRsns(ModelBuilder builder)
@@ -2130,6 +2121,16 @@
             q.Property(a => a.Code).HasColumnName("COND_CODE");
             q.Property(a => a.Description).HasColumnName("DESCRIPTION");
             q.Property(a => a.ExtraInfoRequired).HasColumnName("EXTRA_INFO_REQD");
+        }
+
+        private void BuildPhoneList(ModelBuilder builder)
+        {
+            var q = builder.Entity<PhoneListEntry>().ToTable("PHONE_LIST");
+            q.HasKey(a => a.Id);
+            q.Property(a => a.Id).HasColumnName("PHONE_LIST_ID");
+            q.Property(a => a.EmailAddress).HasColumnName("EMAIL_ADDRESS");
+            q.Property(a => a.UserNumber).HasColumnName("USER_NUMBER");
+            q.HasOne(a => a.User).WithOne(u => u.PhoneListEntry).HasForeignKey<PhoneListEntry>(p => p.UserNumber);
         }
     }
 }

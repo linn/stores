@@ -6,8 +6,6 @@ import unitsOfMeasureActions from '../../../actions/unitsOfMeasureActions';
 import unitsOfMeasureSelectors from '../../../selectors/unitsOfMeasureSelectors';
 import suppliersActions from '../../../actions/suppliersActions';
 import suppliersSelectors from '../../../selectors/suppliersSelectors';
-import partCategoriesActions from '../../../actions/partCategoriesActions';
-import partCategoriesSelectors from '../../../selectors/partCategoriesSelectors';
 
 const mapStateToProps = state => ({
     editStatus: partSelectors.getEditStatus(state),
@@ -16,13 +14,11 @@ const mapStateToProps = state => ({
     suppliersSearchResults: suppliersSelectors
         .getSearchItems(state)
         .map(c => ({ name: c.id, description: c.name })),
-    suppliersSearchLoading: suppliersSelectors.getSearchLoading(state),
-    partCategories: partCategoriesSelectors.getItems(state)
+    suppliersSearchLoading: suppliersSelectors.getSearchLoading(state)
 });
 
 const initialise = () => dispatch => {
     dispatch(unitsOfMeasureActions.fetch());
-    dispatch(partCategoriesActions.fetch());
 };
 
 const mapDispatchToProps = {

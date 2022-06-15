@@ -42,8 +42,6 @@
             get; private set;
         }
 
-        protected IPartCategoryService PartCategoriesService { get; set; }
-
         protected IUnitsOfMeasureService UnitsOfMeasureService { get; private set; }
 
         protected IProductAnalysisCodeService ProductAnalysisCodeService { get; set; }
@@ -101,7 +99,6 @@
                 .For<IPartsFacadeService>();
             this.PartLiveService = Substitute.For<IPartLiveService>();
             this.PartsDomainService = Substitute.For<IPartService>();
-            this.PartCategoriesService = Substitute.For<IPartCategoryService>();
             this.UnitsOfMeasureService = Substitute.For<IUnitsOfMeasureService>();
             this.ProductAnalysisCodeService = Substitute.For<IProductAnalysisCodeService>();
             this.PartRepository = Substitute.For<IPartRepository>();
@@ -132,7 +129,6 @@
                         with.Dependency(this.PartLiveService);
                         with.Dependency(this.PartsFacadeService);
                         with.Dependency(this.UnitsOfMeasureService);
-                        with.Dependency(this.PartCategoriesService);
                         with.Dependency(this.ProductAnalysisCodeService);
                         with.Dependency(this.PartRepository);
                         with.Dependency(this.ParetoClassRepository);
@@ -154,8 +150,6 @@
                         with.Dependency<IResourceBuilder<ResponseModel<IEnumerable<PartTemplate>>>>(new PartTemplatesResourceBuilder(this.AuthorisationService));
                         with.Dependency<IResourceBuilder<UnitOfMeasure>>(new UnitOfMeasureResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<UnitOfMeasure>>>(new UnitsOfMeasureResourceBuilder());
-                        with.Dependency<IResourceBuilder<PartCategory>>(new PartCategoryResourceBuilder());
-                        with.Dependency<IResourceBuilder<IEnumerable<PartCategory>>>(new PartCategoriesResourceBuilder());
                         with.Dependency<IResourceBuilder<ProductAnalysisCode>>(new ProductAnalysisCodeResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<ProductAnalysisCode>>>(
                             new ProductAnalysisCodesResourceBuilder());
@@ -179,7 +173,6 @@
                         with.ResponseProcessor<PartResponseProcessor>();
                         with.ResponseProcessor<PartsResponseProcessor>();
                         with.ResponseProcessor<UnitsOfMeasureResponseProcessor>();
-                        with.ResponseProcessor<PartCategoriesResponseProcessor>();
                         with.ResponseProcessor<AssemblyTechnologiesResponseProcessor>();
                         with.ResponseProcessor<DecrementRulesResponseProcessor>();
                         with.ResponseProcessor<ProductAnalysisCodesResponseProcessor>();

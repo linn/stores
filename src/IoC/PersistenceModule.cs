@@ -46,7 +46,6 @@
             builder.RegisterType<SosOptionRepository>().As<IRepository<SosOption, int>>();
             builder.RegisterType<SernosSequenceRepository>().As<IQueryRepository<SernosSequence>>();
             builder.RegisterType<UnitsOfMeasureRepository>().As<IQueryRepository<UnitOfMeasure>>();
-            builder.RegisterType<PartCategoryRepository>().As<IQueryRepository<PartCategory>>();
             builder.RegisterType<SupplierRepository>().As<IQueryRepository<Supplier>>();
             builder.RegisterType<NominalRepository>().As<IQueryRepository<Nominal>>();
             builder.RegisterType<NominalAccountRepository>().As<IQueryRepository<NominalAccount>>();
@@ -148,6 +147,8 @@
             builder.RegisterType<RsnConditionsRepository>().As<IQueryRepository<RsnCondition>>();
             builder.RegisterType<InvoiceDetailRepository>()
                 .As<IRepository<InvoiceDetail, InvoiceDetailKey>>();
+            builder.RegisterType<PhoneListRepository>().As<IQueryRepository<PhoneListEntry>>();
+
         }
     }
 }

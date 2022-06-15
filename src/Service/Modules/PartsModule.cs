@@ -27,8 +27,6 @@
 
         private readonly IUnitsOfMeasureService unitsOfMeasureService;
 
-        private readonly IPartCategoryService partCategoryService;
-
         private readonly IProductAnalysisCodeService productAnalysisCodeService;
 
         private readonly
@@ -58,7 +56,6 @@
         public PartsModule(
             IPartsFacadeService partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
-            IPartCategoryService partCategoryService,
             IProductAnalysisCodeService productAnalysisCodeService,
             IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource> assemblyTechnologyService,
             IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource> decrementRuleService,
@@ -87,9 +84,6 @@
 
             this.unitsOfMeasureService = unitsOfMeasureService;
             this.Get("inventory/units-of-measure", _ => this.GetUnitsOfMeasure());
-
-            this.partCategoryService = partCategoryService;
-            this.Get("/inventory/part-categories", _ => this.GetPartCategories());
 
             this.partTemplateService = partTemplateService;
             this.Get("/inventory/part-templates", _ => this.GetPartTemplates());
@@ -240,13 +234,6 @@
         private object GetUnitsOfMeasure()
         {
             var result = this.unitsOfMeasureService.GetUnitsOfMeasure();
-            return this.Negotiate.WithModel(result)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
-        }
-
-        private object GetPartCategories()
-        {
-            var result = this.partCategoryService.GetCategories();
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }

@@ -6,7 +6,6 @@ import departmentsActions from '../../../actions/departmentsActions';
 import accountingCompaniesSelectors from '../../../selectors/accountingCompaniesSelectors';
 import departmentsSelectors from '../../../selectors/departmentsSelectors';
 import rootProductsSelectors from '../../../selectors/rootProductsSelectors';
-import partCategoriesSelectors from '../../../selectors/partCategoriesSelectors';
 import productAnalysisCodesSelectors from '../../../selectors/productAnalysisCodesSelectors';
 import sernosSequencesSelectors from '../../../selectors/sernosSequencesSelectors';
 import suppliersSelectors from '../../../selectors/suppliersSelectors';
@@ -21,7 +20,6 @@ const mapStateToProps = (state, ownProps) => ({
         .getSearchItems(state)
         .map(c => ({ name: c.departmentCode, description: c.description })),
     departmentsSearchLoading: departmentsSelectors.getSearchLoading(state),
-    partCategories: partCategoriesSelectors.getItems(state),
     rootProducts: rootProductsSelectors.getItems(state),
     sernosSequences: sernosSequencesSelectors.getItems(state),
     suppliers: suppliersSelectors.getItems(state),

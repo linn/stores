@@ -18,15 +18,12 @@ function PurchTab({
     labourPrice,
     costingPrice,
     orderHold,
-    partCategory,
     nonForecastRequirement,
     oneOffRequirement,
     sparesRequirement,
     ignoreWorkstationStock,
     imdsIdNumber,
     imdsWeight,
-    mechanicalOrElectronic,
-    partCategories,
     links
 }) {
     return (
@@ -238,40 +235,9 @@ function PurchTab({
                 />
             </Grid>
             <Grid item xs={8} />
-            <Grid item xs={4}>
-                <Dropdown
-                    label="Part Categories"
-                    propertyName="partCategory"
-                    items={partCategories.map(c => ({
-                        id: c.category,
-                        displayText: c.description
-                    }))}
-                    fullWidth
-                    allowNoValue={false}
-                    value={partCategory}
-                    onChange={handleFieldChange}
-                />
-            </Grid>
-            <Grid item xs={4}>
-                <Dropdown
-                    label="Mechanical Or Electronic"
-                    propertyName="mechanicalOrElectronic"
-                    items={['M', 'E']}
-                    fullWidth
-                    allowNoValue
-                    value={mechanicalOrElectronic}
-                    onChange={handleFieldChange}
-                />
-            </Grid>
-            <Grid item xs={4} />
         </Grid>
     );
 }
-
-const partCategoryShape = PropTypes.shape({
-    category: PropTypes.string,
-    description: PropTypes.string
-});
 
 const unitOfMeasureShape = PropTypes.shape({
     unit: PropTypes.string
@@ -290,15 +256,12 @@ PurchTab.propTypes = {
     labourPrice: PropTypes.number,
     costingPrice: PropTypes.number,
     orderHold: PropTypes.string,
-    partCategory: PropTypes.string,
     nonForecastRequirement: PropTypes.number,
     oneOffRequirement: PropTypes.number,
     sparesRequirement: PropTypes.number,
     ignoreWorkstationStock: PropTypes.string,
     imdsIdNumber: PropTypes.number,
     imdsWeight: PropTypes.number,
-    mechanicalOrElectronic: PropTypes.string,
-    partCategories: PropTypes.arrayOf(partCategoryShape),
     links: PropTypes.arrayOf(PropTypes.shape({ href: PropTypes.string, rel: PropTypes.string }))
 };
 
@@ -315,15 +278,12 @@ PurchTab.defaultProps = {
     labourPrice: null,
     costingPrice: null,
     orderHold: null,
-    partCategory: null,
     nonForecastRequirement: null,
     oneOffRequirement: null,
     sparesRequirement: null,
     ignoreWorkstationStock: null,
     imdsIdNumber: null,
-    imdsWeight: null,
-    mechanicalOrElectronic: null,
-    partCategories: []
+    imdsWeight: null
 };
 
 export default PurchTab;

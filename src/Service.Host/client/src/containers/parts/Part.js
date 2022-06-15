@@ -10,13 +10,11 @@ import partActions from '../../actions/partActions';
 import partSelectors from '../../selectors/partSelectors';
 import departmentsActions from '../../actions/departmentsActions';
 import rootProductsActions from '../../actions/rootProductsActions';
-import partCategoriesActions from '../../actions/partCategoriesActions';
 import sernosSequencesActions from '../../actions/sernosSequencesActions';
 import suppliersActions from '../../actions/suppliersActions';
 import unitsOfMeasureActions from '../../actions/unitsOfMeasureActions';
 import departmentsSelectors from '../../selectors/departmentsSelectors';
 import rootProductsSelectors from '../../selectors/rootProductsSelectors';
-import partCategoriesSelectors from '../../selectors/partCategoriesSelectors';
 import sernosSequencesSelectors from '../../selectors/sernosSequencesSelectors';
 import suppliersSelectors from '../../selectors/suppliersSelectors';
 import unitsOfMeasureSelectors from '../../selectors/unitsOfMeasureSelectors';
@@ -40,7 +38,6 @@ const mapStateToProps = (state, { match, location }) => ({
     snackbarVisible: partSelectors.getSnackbarVisible(state),
     itemError: getItemError(state, itemTypes.part.item),
     departments: departmentsSelectors.getItems(state),
-    partCategories: partCategoriesSelectors.getItems(state),
     rootProducts: rootProductsSelectors.getItems(state),
     sernosSequences: sernosSequencesSelectors.getItems(state),
     suppliers: suppliersSelectors.getItems(state),
@@ -63,7 +60,6 @@ const mapDispatchToProps = dispatch => {
                 dispatch(partLiveTestActions.fetch(itemId));
             }
             dispatch(departmentsActions.fetch());
-            dispatch(partCategoriesActions.fetch());
             dispatch(rootProductsActions.fetch());
             dispatch(sernosSequencesActions.fetch());
             dispatch(suppliersActions.fetch());
