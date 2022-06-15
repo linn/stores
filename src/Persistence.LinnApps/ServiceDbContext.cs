@@ -231,7 +231,7 @@
 
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
 
-        public DbQuery<AuthUser> AuthUsers { get; set; }
+        public DbSet<AuthUser> AuthUsers { get; set; }
 
         public DbSet<Rsn> Rsns { get; set; }
 
@@ -360,7 +360,7 @@
             this.BuildExportBooks(builder);
             this.QueryStoresLabelTypes(builder);
             this.BuildPurchaseOrders(builder);
-            this.QueryAuthUsers(builder);
+            this.BuildAuthUsers(builder);
             this.BuildRsns(builder);
             this.QueryTariffs(builder);
             this.QueryLoans(builder);
@@ -1221,7 +1221,7 @@
         {
             var e = builder.Entity<MechPartUsage>().ToTable("MECH_PART_USAGES");
             e.Property(u => u.Product).HasColumnName("ROOT_PRODUCT").HasMaxLength(14);
-            e.HasKey(u => new { u.SourceId, RootProductName = u.Product });
+            e.HasKey(u => new { u.SourceId, u.Product });
             e.Property(u => u.SourceId).HasColumnName("MS_ID");
             e.HasOne(u => u.Source).WithMany(s => s.Usages).HasForeignKey(u => u.SourceId);
             e.Property(u => u.QuantityUsed).HasColumnName("QTY_USED");
@@ -2032,12 +2032,13 @@
                 .HasForeignKey(d => d.OrderNumber);
         }
 
-        private void QueryAuthUsers(ModelBuilder builder)
+        private void BuildAuthUsers(ModelBuilder builder)
         {
-            var query = builder.Query<AuthUser>().ToView("AUTH_USER_VIEW");
-            query.Property(t => t.UserNumber).HasColumnName("USER_NUMBER");
-            query.Property(t => t.Initials).HasColumnName("INITIALS");
-            query.Property(t => t.Name).HasColumnName("USER_NAME");
+            var entity = builder.Entity<AuthUser>().ToTable("AUTH_USER_VIEW");
+            entity.HasKey(t => t.UserNumber);
+            entity.Property(t => t.UserNumber).HasColumnName("USER_NUMBER");
+            entity.Property(t => t.Initials).HasColumnName("INITIALS");
+            entity.Property(t => t.Name).HasColumnName("USER_NAME");
         }
 
         private void BuildRsns(ModelBuilder builder)
@@ -2129,7 +2130,8 @@
             q.HasKey(a => a.Id);
             q.Property(a => a.Id).HasColumnName("PHONE_LIST_ID");
             q.Property(a => a.EmailAddress).HasColumnName("EMAIL_ADDRESS");
-            q.HasOne(a => a.User).WithOne(u => u.PhoneListEntry).HasForeignKey("USER_NUMBER");
+            q.Property(a => a.UserNumber).HasColumnName("USER_NUMBER");
+            q.HasOne(a => a.User).WithOne(u => u.PhoneListEntry).HasForeignKey<PhoneListEntry>(p => p.UserNumber);
         }
     }
 }
