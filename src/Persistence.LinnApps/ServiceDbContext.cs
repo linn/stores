@@ -251,7 +251,6 @@
 
         public DbSet<PhoneListEntry> PhoneList { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
