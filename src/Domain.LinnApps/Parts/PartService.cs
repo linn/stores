@@ -274,7 +274,7 @@
             var bcc1 = this.phoneList.FindBy(x => x.UserNumber == 33145);
             var bcc2 = this.phoneList.FindBy(x => x.UserNumber == 5000);
 
-            var bcc = new List<Dictionary<string, string>>
+            var cc = new List<Dictionary<string, string>>
                           { 
                               new Dictionary<string, string>
                                 {
@@ -290,8 +290,8 @@
             this.emailService.SendEmail(
                 to.EmailAddress,
                 to.User.Name,
+                cc,
                 null,
-                bcc,
                 "stores@linn.co.uk",
                 "Parts Utility",
                 $"New Source Sheet Created - {source.PartNumber}",
