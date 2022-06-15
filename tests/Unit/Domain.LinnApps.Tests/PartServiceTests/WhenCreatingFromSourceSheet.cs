@@ -35,8 +35,8 @@
             this.EmailService.Received().SendEmail(
                 "user1@linn.co.uk",
                 "user1",
-                Arg.Is<List<Dictionary<string, string>>>(x => x == null),
                 Arg.Any<List<Dictionary<string, string>>>(),
+                Arg.Is<List<Dictionary<string, string>>>(x => x == null),
                 "stores@linn.co.uk",
                 "Parts Utility",
                 "New Source Sheet Created - PART",
