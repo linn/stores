@@ -169,7 +169,7 @@ function MechPartSource({
         body.mechPartAlts = suppliersData;
         body.mechPartManufacturerAlts = manufacturersData;
         body.capacitance = mechPartSource.capacitance?.toFixed(13);
-        body.usages = usagesData.map((u, i) => ({ ...u, id: i }));
+        body.usages = usagesData?.map((u, i) => ({ ...u, id: i }));
         body.purchasingQuotes = quotesData;
         if (creating()) {
             addItem(body);
@@ -182,7 +182,6 @@ function MechPartSource({
     const mechPartSourceInvalid = () =>
         !mechPartSource.samplesRequired ||
         !mechPartSource.assemblyType ||
-        (creating() && (usagesData?.length ?? 0) < 1) ||
         (mechPartSource.mechanicalOrElectrical === 'E' && !mechPartSource.partType);
 
     const handleCancelClick = () => {

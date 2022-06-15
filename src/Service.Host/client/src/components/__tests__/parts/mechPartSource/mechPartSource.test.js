@@ -248,7 +248,6 @@ describe('When clicking tabs...', () => {
         const tab = screen.getByText('Usages');
         fireEvent.click(tab);
         expect(screen.getByText('Product')).toBeInTheDocument();
-        expect(screen.getByText('Description')).toBeInTheDocument();
         expect(screen.getByText('Quantity Used')).toBeInTheDocument();
     });
 
@@ -310,7 +309,6 @@ describe('When url specifies tab...', () => {
     test('should render Usages tab', () => {
         defaultRender({ editStatus: 'create', options: { tab: 'usages' } });
         expect(screen.getByText('Product')).toBeInTheDocument();
-        expect(screen.getByText('Description')).toBeInTheDocument();
         expect(screen.getByText('Quantity Used')).toBeInTheDocument();
     });
 
