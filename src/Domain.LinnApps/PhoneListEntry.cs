@@ -2,6 +2,8 @@
 {
     public class PhoneListEntry
     {
+        public int Id { get; set; }
+
         public int UserNumber { get; set; }
 
         public string EmailAddress { get; set; }
