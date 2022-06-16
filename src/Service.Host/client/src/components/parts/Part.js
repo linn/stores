@@ -442,6 +442,7 @@ function Part({
                                     secondStageDescription={state.part.secondStageDescription}
                                     tqmsCategoryOverride={state.part.tqmsCategoryOverride}
                                     stockNotes={state.part.stockNotes}
+                                    plannerStory={state.part.plannerStory}
                                 />
                             )}
                             {tab === 4 && (

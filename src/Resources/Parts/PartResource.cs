@@ -144,6 +144,8 @@
 
         public string DateDesignObsolete { get; set; }
 
+        public string PlannerStory { get; set; }
+
         public int? NominalAccount { get; set; }
 
         public string Nominal { get; set; }
