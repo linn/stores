@@ -59,6 +59,7 @@
                            PreferredSupplierName = part.PreferredSupplier?.Name,
                            SecondStageDescription = part.SecondStageDescription,
                            RailMethod = part.RailMethod,
+                           PlannerStory = part.PlannerStory,
                            DatePhasedOut = part.DatePhasedOut?.ToString("o"),
                            DateLive = part.DateLive?.ToString("o"),
                            StockNotes = part.StockNotes,

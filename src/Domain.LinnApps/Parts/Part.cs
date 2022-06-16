@@ -129,6 +129,8 @@
 
         public string PurchasingPhaseOutType { get; set; }
 
+        public string PlannerStory { get; set; }
+
         public DateTime? DateDesignObsolete { get; set; }
 
         public SernosSequence SernosSequence { get; set; }

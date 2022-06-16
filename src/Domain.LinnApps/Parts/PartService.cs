@@ -163,6 +163,7 @@
             from.SecondStageDescription = to.SecondStageDescription;
             from.TqmsCategoryOverride = to.TqmsCategoryOverride;
             from.StockNotes = to.StockNotes;
+            from.PlannerStory = to.PlannerStory;
             from.DateDesignObsolete = to.DateDesignObsolete;
             from.PurchasingPhaseOutType = to.PurchasingPhaseOutType;
         }
