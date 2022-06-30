@@ -195,6 +195,8 @@
 
         public DbSet<TqmsJobRef> TqmsJobRefs { get; set; }
 
+        public DbSet<TqmsCategory> TqmsCategories { get; set; }
+
         public DbQuery<TqmsOutstandingLoansByCategory> TqmsOutstandingLoansByCategories { get; set; }
 
         public DbSet<ConsignmentShipfile> ConsignmentShipfiles { get; set; }
@@ -302,7 +304,7 @@
             this.BuildPartParamDataSheets(builder);
             this.QueryPartDataSheetValues(builder);
             this.BuildSosAllocDetails(builder);
-            this.BuildTqmsCategories(builder);
+            this.BuildTqmsOverrideCategories(builder);
             this.BuildSalesOutlets(builder);
             this.BuildMechPartPurchasingQuotes(builder);
             this.BuildMechPartUsages(builder);
@@ -340,6 +342,7 @@
             this.QueryTqmsSummaryByCategories(builder);
             this.BuildTqmsMaster(builder);
             this.BuildTqmsJobRefs(builder);
+            this.BuildTqmsCategories(builder);
             this.QueryTqmsOutstandingLoansByCategories(builder);
             this.QueryConsignmentShipFiles(builder);
             this.BuildInvoices(builder);
@@ -1193,7 +1196,7 @@
             q.Property(v => v.Value).HasColumnName("VALUE");
         }
 
-        private void BuildTqmsCategories(ModelBuilder builder)
+        private void BuildTqmsOverrideCategories(ModelBuilder builder)
         {
             var e = builder.Entity<PartTqmsOverride>().ToTable("PART_TQMS_OVERRIDES");
             e.HasKey(c => c.Name);
@@ -1746,6 +1749,17 @@
             e.HasKey(a => a.JobRef);
             e.Property(a => a.JobRef).HasColumnName("JOBREF").HasMaxLength(6);
             e.Property(a => a.DateOfRun).HasColumnName("JOBREF_DATE");
+        }
+
+        private void BuildTqmsCategories(ModelBuilder builder)
+        {
+            var e = builder.Entity<TqmsCategory>().ToTable("TQMS_CATEGORIES");
+            e.HasKey(a => a.Category);
+            e.Property(a => a.Category).HasColumnName("TQMS_CATEGORY").HasMaxLength(10);
+            e.Property(a => a.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
+            e.Property(a => a.SortOrder).HasColumnName("SORT_ORDER");
+            e.Property(a => a.Explanation).HasColumnName("EXPLANATION").HasMaxLength(2000);
+            e.Property(a => a.DateInvalid).HasColumnName("DATE_INVALID");
         }
 
         private void QueryTqmsOutstandingLoansByCategories(ModelBuilder builder)
