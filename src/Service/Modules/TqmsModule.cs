@@ -18,23 +18,33 @@
 
         private readonly IFacadeService<TqmsJobRef, string, TqmsJobRefResource, TqmsJobRefResource> tqmsJobRefsFacadeService;
 
+        private readonly IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource> tqmsCategoriesFacadeService;
+
         public TqmsModule(
             ITqmsReportsFacadeService tqmsReportsFacadeService,
             ISingleRecordFacadeService<TqmsMaster, TqmsMasterResource> tqmsMasterFacadeService,
-            IFacadeService<TqmsJobRef, string, TqmsJobRefResource, TqmsJobRefResource> tqmsJobRefsFacadeService)
+            IFacadeService<TqmsJobRef, string, TqmsJobRefResource, TqmsJobRefResource> tqmsJobRefsFacadeService,
+            IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource> tqmsCategoriesFacadeService)
         {
             this.tqmsReportsFacadeService = tqmsReportsFacadeService;
             this.tqmsMasterFacadeService = tqmsMasterFacadeService;
             this.tqmsJobRefsFacadeService = tqmsJobRefsFacadeService;
+            this.tqmsCategoriesFacadeService = tqmsCategoriesFacadeService;
             this.Get("/inventory/tqms-category-summary", _ => this.GetApp());
             this.Get("/inventory/tqms-category-summary/report", _ => this.GetTqmsSummaryByCategory());
             this.Get("/inventory/tqms-master", _ => this.GetTqmsMaster());
             this.Get("/inventory/tqms-jobrefs", _ => this.GetTqmsJobrefs());
+            this.Get("/inventory/tqms-categories", _ => this.GetTqmsCategories());
         }
 
         private object GetTqmsJobrefs()
         {
             return this.Negotiate.WithModel(this.tqmsJobRefsFacadeService.GetAll());
+        }
+
+        private object GetTqmsCategories()
+        {
+            return this.Negotiate.WithModel(this.tqmsCategoriesFacadeService.GetAll());
         }
 
         private object GetTqmsMaster()
