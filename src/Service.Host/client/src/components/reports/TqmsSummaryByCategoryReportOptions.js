@@ -9,6 +9,7 @@ import Page from '../../containers/Page';
 export default function TqmsSummaryByCategoryReportOptions({ history, jobRefs, jobRefsLoading }) {
     const [jobRef, setJobRef] = useState(null);
     const [runType, setRunType] = useState('Headings Only');
+    const [showDecimalPlaces, setShowDecimalPlaces] = useState('false');
 
     useEffect(() => {
         if (jobRefs && jobRefs.length > 0) {
@@ -19,7 +20,8 @@ export default function TqmsSummaryByCategoryReportOptions({ history, jobRefs, j
     const typeOfRunOptions = ['Headings Only', 'Show Categories'];
 
     const handleRunClick = () => {
-        const searchString = `?jobref=${jobRef}&headingsOnly=${runType === 'Headings Only'}`;
+        const searchString = `?jobref=${jobRef}&headingsOnly=${runType ===
+            'Headings Only'}&showDecimalPlaces=${showDecimalPlaces}`;
 
         history.push({
             pathname: '/inventory/tqms-category-summary/report',
@@ -34,12 +36,21 @@ export default function TqmsSummaryByCategoryReportOptions({ history, jobRefs, j
         }));
     };
 
+    const decimalPlaceOptions = [
+        { id: 'true', displayText: 'Yes' },
+        { id: 'false', displayText: 'No' }
+    ];
+
     const handleFieldChange = (_, newValue) => {
         setJobRef(newValue);
     };
 
     const handleRunTypeChange = (_, newValue) => {
         setRunType(newValue);
+    };
+
+    const handleShowDecimalPlacesChange = (_, newValue) => {
+        setShowDecimalPlaces(newValue);
     };
 
     return (
@@ -68,6 +79,17 @@ export default function TqmsSummaryByCategoryReportOptions({ history, jobRefs, j
                             value={runType}
                             items={typeOfRunOptions}
                             required
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Dropdown
+                            label="Show Decimal Places"
+                            onChange={handleShowDecimalPlacesChange}
+                            propertyName="showDecimalPlaces"
+                            value={showDecimalPlaces}
+                            items={decimalPlaceOptions}
+                            required
+                            allowNoValue={false}
                         />
                     </Grid>
                     <Grid item xs={12}>

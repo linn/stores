@@ -19,7 +19,10 @@
         public IResult<IEnumerable<ResultsModel>> GetTqmsSummaryByCategory(TqmsSummaryRequestResource requestResource)
         {
             return new SuccessResult<IEnumerable<ResultsModel>>(
-                this.tqmsReportsService.TqmsSummaryByCategoryReport(requestResource.JobRef, requestResource.HeadingsOnly));
+                this.tqmsReportsService.TqmsSummaryByCategoryReport(
+                    requestResource.JobRef,
+                    requestResource.HeadingsOnly,
+                    requestResource.ShowDecimalPlaces));
         }
     }
 }
