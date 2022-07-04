@@ -28,7 +28,10 @@
             this.tqmsJobRefsRepository = tqmsJobRefsRepository;
         }
 
-        public IEnumerable<ResultsModel> TqmsSummaryByCategoryReport(string jobRef, bool headingsOnly = true)
+        public IEnumerable<ResultsModel> TqmsSummaryByCategoryReport(
+            string jobRef,
+            bool headingsOnly = true,
+            bool showDecimalPlaces = false)
         {
             var stock = this.tqmsSummaryByCategoryQueryRepository.FilterBy(t => t.JobRef == jobRef);
             var loan = this.tqmsOutstandingLoansByCategoryRepository.FilterBy(t => t.JobRef == jobRef);
@@ -42,7 +45,7 @@
             summaryResultsModel.AddSortedColumns(new List<AxisDetailsModel>
                                                      {
                                                          new AxisDetailsModel("StockType", GridDisplayType.TextValue),
-                                                         new AxisDetailsModel("Value", GridDisplayType.Value)
+                                                         new AxisDetailsModel("Value", GridDisplayType.Value) { DecimalPlaces = showDecimalPlaces ? 2 : 0 }
                                                      });
             summaryResultsModel.AddRow("Total Stock");
             summaryResultsModel.AddRow("Loan Stock Value");
@@ -57,9 +60,9 @@
                 var columns = new List<AxisDetailsModel>
                                   {
                                       new AxisDetailsModel("Heading", GridDisplayType.TextValue),
-                                      new AxisDetailsModel("Active", GridDisplayType.Value),
-                                      new AxisDetailsModel("Inactive", GridDisplayType.Value),
-                                      new AxisDetailsModel("Value", GridDisplayType.Value)
+                                      new AxisDetailsModel("Active", GridDisplayType.Value) { DecimalPlaces = showDecimalPlaces ? 2 : 0 },
+                                      new AxisDetailsModel("Inactive", GridDisplayType.Value) { DecimalPlaces = showDecimalPlaces ? 2 : 0 },
+                                      new AxisDetailsModel("Value", GridDisplayType.Value) { DecimalPlaces = showDecimalPlaces ? 2 : 0 }
                                   };
                 resultsModel.AddSortedColumns(columns);
                 var models = new List<CalculationValueModel>();

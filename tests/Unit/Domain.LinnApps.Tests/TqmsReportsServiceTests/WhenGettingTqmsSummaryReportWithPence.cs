@@ -14,7 +14,7 @@
 
     using NUnit.Framework;
 
-    public class WhenGettingTqmsSummaryReport : ContextBase
+    public class WhenGettingTqmsSummaryReportWithPence : ContextBase
     {
         private IEnumerable<ResultsModel> results;
 
@@ -53,47 +53,16 @@
             this.TqmsOutstandingLoansByCategoryRepository
                 .FilterBy(Arg.Any<Expression<Func<TqmsOutstandingLoansByCategory, bool>>>())
                 .Returns(loans.AsQueryable());
-            this.results = this.Sut.TqmsSummaryByCategoryReport(this.JobRef, true);
-        }
-
-        [Test]
-        public void ShouldCallRepositories()
-        {
-            this.TqmsSummaryByCategoryRepository.Received()
-                .FilterBy(Arg.Any<Expression<Func<TqmsSummaryByCategory, bool>>>());
-            this.TqmsOutstandingLoansByCategoryRepository.Received()
-                .FilterBy(Arg.Any<Expression<Func<TqmsOutstandingLoansByCategory, bool>>>());
+            this.results = this.Sut.TqmsSummaryByCategoryReport(this.JobRef, true, true);
         }
 
         [Test]
         public void ShouldReturnReportValues()
         {
             var totalStockSummary = this.results.First();
-            var tqmsSummary = this.results.Last();
-            totalStockSummary.RowCount().Should().Be(2);
-            totalStockSummary.GetGridTextValue(totalStockSummary.RowIndex("Total Stock"), totalStockSummary.ColumnIndex("StockType"))
-                .Should().Be("Stock Value");
-            totalStockSummary.GetGridValue(totalStockSummary.RowIndex("Total Stock"), totalStockSummary.ColumnIndex("Value"))
-                .Should().Be(42);
-            totalStockSummary.GetGridTextValue(totalStockSummary.RowIndex("Loan Stock Value"), totalStockSummary.ColumnIndex("StockType"))
-                .Should().Be("Loan Stock Value");
-            totalStockSummary.GetGridValue(totalStockSummary.RowIndex("Loan Stock Value"), totalStockSummary.ColumnIndex("Value"))
-                .Should().Be(27);
             totalStockSummary.GetRowValues()
                 .First(a => a.RowIndex == totalStockSummary.RowIndex("Total Stock")).Values
-                .First(a => a.Key == totalStockSummary.ColumnIndex("Value")).Value.DecimalPlaces.Should().Be(0);
-            totalStockSummary.GetTotalValue(totalStockSummary.ColumnIndex("Value")).Should().Be(69);
-
-            tqmsSummary.RowCount().Should().Be(2);
-            tqmsSummary.GetGridTextValue(tqmsSummary.RowIndex("c"), tqmsSummary.ColumnIndex("Heading"))
-                .Should().Be("c");
-            tqmsSummary.GetGridValue(tqmsSummary.RowIndex("c"), tqmsSummary.ColumnIndex("Value"))
-                .Should().Be(22);
-            tqmsSummary.GetGridTextValue(tqmsSummary.RowIndex("d"), tqmsSummary.ColumnIndex("Heading"))
-                .Should().Be("d");
-            tqmsSummary.GetGridValue(tqmsSummary.RowIndex("d"), tqmsSummary.ColumnIndex("Value"))
-                .Should().Be(20);
-            tqmsSummary.GetTotalValue(tqmsSummary.ColumnIndex("Value")).Should().Be(42);
+                .First(a => a.Key == totalStockSummary.ColumnIndex("Value")).Value.DecimalPlaces.Should().Be(2);
         }
     }
 }
