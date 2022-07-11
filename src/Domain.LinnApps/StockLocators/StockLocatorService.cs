@@ -256,10 +256,14 @@
                                                 Description = x.PartDescription, 
                                                 Id = x.Part.Id
                                             },
-                                 TriggerLevel = this.triggerLevelRepository
-                                     .FindBy(l => l.PartNumber.Equals(x.PartNumber) 
-                                                  && l.LocationId.Equals(x.StorageLocationId))
-                             });
+                                 TriggerLevel = x.PalletNumber.HasValue 
+                                                    ? this.triggerLevelRepository
+                                                        .FindBy(l => l.PartNumber.Equals(x.PartNumber)
+                                                                     && l.PalletNumber.Equals(x.PalletNumber))
+                                                    : this.triggerLevelRepository
+                                                    .FindBy(l => l.PartNumber.Equals(x.PartNumber)
+                                                                 && l.LocationId.Equals(x.StorageLocationId))
+                    });
         }
 
         public IEnumerable<StockLocator> SearchStockLocatorBatchView(

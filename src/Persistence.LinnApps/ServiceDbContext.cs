@@ -2086,6 +2086,7 @@
             e.Property(l => l.PartNumber).HasColumnName("PART_NUMBER");
             e.Property(l => l.MaxCapacity).HasColumnName("MAXIMUM_CAPACITY");
             e.Property(l => l.TriggerLevel).HasColumnName("TRIGGER_LEVEL");
+            e.Property(l => l.PalletNumber).HasColumnName("PALLET_NUMBER");
         }
 
         private void BuildPurchaseLedger(ModelBuilder builder)
