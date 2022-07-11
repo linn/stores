@@ -9,5 +9,7 @@
         public decimal? TriggerLevel { get; set; }
 
         public decimal? MaxCapacity { get; set; }
+
+        public int? PalletNumber { get; set; }
     }
 }
