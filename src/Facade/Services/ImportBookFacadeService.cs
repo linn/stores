@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Linq.Expressions;
 
     using Linn.Common.Facade;
@@ -223,8 +224,8 @@
                 && (string.IsNullOrEmpty(searchResource.RsnNumber.ToString())
                     || x.OrderDetails.Any(d => d.RsnNumber.HasValue && d.RsnNumber.Equals(searchResource.RsnNumber)))
                 && (string.IsNullOrEmpty(searchResource.PoNumber.ToString())
-                    || (x.OrderDetails[0].OrderNumber.HasValue
-                        && x.OrderDetails[0].OrderNumber.Equals(searchResource.PoNumber)));
+                    || x.OrderDetails.Any(d => d.OrderNumber.HasValue
+                                          && d.OrderNumber.Equals(searchResource.PoNumber)));
         }
 
         protected override void UpdateFromResource(ImportBook entity, ImportBookResource updateResource)
