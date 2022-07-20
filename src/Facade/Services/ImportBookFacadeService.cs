@@ -206,17 +206,25 @@
 
         protected override Expression<Func<ImportBook, bool>> FilterExpression(ImportBookSearchResource searchResource)
         {
-            return x => (string.IsNullOrEmpty(searchResource.SearchTerm) || x.Id.ToString().Contains(searchResource.SearchTerm))
-                        && (string.IsNullOrEmpty(searchResource.ToDate)
-                            || x.DateCreated <= DateTime.Parse(searchResource.ToDate))
-                        && (string.IsNullOrEmpty(searchResource.FromDate)
-                            || x.DateCreated >= DateTime.Parse(searchResource.FromDate))
-                        && (string.IsNullOrEmpty(searchResource.CustomsEntryCodePrefix)
-                            || x.CustomsEntryCodePrefix.Equals(searchResource.CustomsEntryCodePrefix))
-                            && (string.IsNullOrEmpty(searchResource.CustomsEntryCode)
-                                || x.CustomsEntryCode.Equals(searchResource.CustomsEntryCode))
-                        && (string.IsNullOrEmpty(searchResource.CustomsEntryDate)
-                            || (x.CustomsEntryCodeDate.HasValue && x.CustomsEntryCodeDate.Value.Date.Equals(DateTime.Parse(searchResource.CustomsEntryDate).Date)));
+            return x =>
+                (string.IsNullOrEmpty(searchResource.SearchTerm) || x.Id.ToString().Contains(searchResource.SearchTerm))
+                && (string.IsNullOrEmpty(searchResource.ToDate)
+                    || x.DateCreated <= DateTime.Parse(searchResource.ToDate))
+                && (string.IsNullOrEmpty(searchResource.FromDate)
+                    || x.DateCreated >= DateTime.Parse(searchResource.FromDate))
+                && (string.IsNullOrEmpty(searchResource.CustomsEntryCodePrefix)
+                    || x.CustomsEntryCodePrefix.Equals(searchResource.CustomsEntryCodePrefix))
+                && (string.IsNullOrEmpty(searchResource.CustomsEntryCode)
+                    || x.CustomsEntryCode.Equals(searchResource.CustomsEntryCode))
+                && (string.IsNullOrEmpty(searchResource.CustomsEntryDate)
+                    || (x.CustomsEntryCodeDate.HasValue
+                        && x.CustomsEntryCodeDate.Value.Date.Equals(
+                            DateTime.Parse(searchResource.CustomsEntryDate).Date)))
+                && (string.IsNullOrEmpty(searchResource.RsnNumber.ToString())
+                    || x.OrderDetails.Any(d => d.RsnNumber.HasValue && d.RsnNumber.Equals(searchResource.RsnNumber)))
+                && (string.IsNullOrEmpty(searchResource.PoNumber.ToString())
+                    || (x.OrderDetails[0].OrderNumber.HasValue
+                        && x.OrderDetails[0].OrderNumber.Equals(searchResource.PoNumber)));
         }
 
         protected override void UpdateFromResource(ImportBook entity, ImportBookResource updateResource)

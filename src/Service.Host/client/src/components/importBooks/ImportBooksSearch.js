@@ -41,7 +41,8 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
     const doSearch = searchTerm => {
         fetchItems(
             searchTerm,
-            `&fromDate=${options.fromDate ? options.fromDate.toISOString() : ''}&toDate=${
+            `&rsnNumber=${options.rsnNumber ?? ''}&poNumber=${options.poNumber ?? ''}
+            &fromDate=${options.fromDate ? options.fromDate.toISOString() : ''}&toDate=${
                 options.toDate ? options.toDate.toISOString() : ''
             }&customsEntryCodePrefix=${options.customsEntryCodePrefix ??
                 ''}&customsEntryCode=${options.customsEntryCode ?? ''}&customsEntryDate=${
@@ -109,6 +110,24 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
                         value={options.customsEntryCode}
                         onChange={handleFieldChange}
                         propertyName="customsEntryCode"
+                        fullwidth
+                    />
+                </Grid>
+                <Grid item xs={2}>
+                    <InputField
+                        label="RSN Number"
+                        value={options.rsnNumber}
+                        onChange={handleFieldChange}
+                        propertyName="rsnNumber"
+                        fullwidth
+                    />
+                </Grid>
+                <Grid item xs={2}>
+                    <InputField
+                        label="poNumber"
+                        value={options.poNumber}
+                        onChange={handleFieldChange}
+                        propertyName="poNumber"
                         fullwidth
                     />
                 </Grid>
