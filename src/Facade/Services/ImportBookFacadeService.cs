@@ -208,16 +208,16 @@
         protected override Expression<Func<ImportBook, bool>> FilterExpression(ImportBookSearchResource searchResource)
         {
             return x =>
-                (string.IsNullOrEmpty(searchResource.SearchTerm) || x.Id.ToString().Contains(searchResource.SearchTerm))
-                && (string.IsNullOrEmpty(searchResource.ToDate)
+                (string.IsNullOrWhiteSpace(searchResource.SearchTerm) || x.Id.ToString().Contains(searchResource.SearchTerm))
+                && (string.IsNullOrWhiteSpace(searchResource.ToDate)
                     || x.DateCreated <= DateTime.Parse(searchResource.ToDate))
-                && (string.IsNullOrEmpty(searchResource.FromDate)
+                && (string.IsNullOrWhiteSpace(searchResource.FromDate)
                     || x.DateCreated >= DateTime.Parse(searchResource.FromDate))
-                && (string.IsNullOrEmpty(searchResource.CustomsEntryCodePrefix)
+                && (string.IsNullOrWhiteSpace(searchResource.CustomsEntryCodePrefix)
                     || x.CustomsEntryCodePrefix.Equals(searchResource.CustomsEntryCodePrefix))
-                && (string.IsNullOrEmpty(searchResource.CustomsEntryCode)
+                && (string.IsNullOrWhiteSpace(searchResource.CustomsEntryCode)
                     || x.CustomsEntryCode.Equals(searchResource.CustomsEntryCode))
-                && (string.IsNullOrEmpty(searchResource.CustomsEntryDate)
+                && (string.IsNullOrWhiteSpace(searchResource.CustomsEntryDate)
                     || (x.CustomsEntryCodeDate.HasValue
                         && x.CustomsEntryCodeDate.Value.Date.Equals(
                             DateTime.Parse(searchResource.CustomsEntryDate).Date)))

@@ -38,13 +38,7 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
     }));
     const classes = useStyles();
 
-    const handleFieldChange = (propertyName, newValue) => {
-        setOptions(o => ({ ...o, [propertyName]: newValue }));
-    };
-
     const doSearch = searchTerm => {
-        handleFieldChange('searchTerm', searchTerm);
-
         fetchItems(
             searchTerm,
             `&rsnNumber=${options.rsnNumber ?? ''}&poNumber=${options.poNumber ?? ''}&fromDate=${
@@ -60,6 +54,10 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
 
     const canCreate = () => {
         return privileges?.some(priv => priv === 'import-books.admin');
+    };
+
+    const handleFieldChange = (propertyName, newValue) => {
+        setOptions(o => ({ ...o, [propertyName]: newValue }));
     };
     return (
         <Page>
@@ -149,7 +147,7 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
                     <Button
                         className={classes.button}
                         variant="outlined"
-                        onClick={() => doSearch(options.searchTerm)}
+                        onClick={() => doSearch('')}
                         color="primary"
                     >
                         Go
