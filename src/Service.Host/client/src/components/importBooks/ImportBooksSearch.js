@@ -25,7 +25,7 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
             href: item.href
         }));
     };
-    const [options, setOptions] = useState({});
+    const [options, setOptions] = useState({ poNumber: null, rsnNumber: null });
 
     const useStyles = makeStyles(theme => ({
         button: {
@@ -38,14 +38,16 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
     }));
     const classes = useStyles();
 
-    const doSearch = searchTerm => {
-        console.log(options.poNumber != null ? parseInt(options.poNumber, 10) : null);
+    const handleFieldChange = (propertyName, newValue) => {
+        setOptions(o => ({ ...o, [propertyName]: newValue }));
+    };
 
-        console.log('rsn ' + options.rsnNumber ?? null);
+    const doSearch = searchTerm => {
+        handleFieldChange('searchTerm', searchTerm);
 
         fetchItems(
             searchTerm,
-            `&rsnNumber=${options.rsnNumber ?? null}&poNumber=${options.poNumber}fromDate=${
+            `&rsnNumber=${options.rsnNumber ?? ''}&poNumber=${options.poNumber ?? ''}&fromDate=${
                 options.fromDate ? options.fromDate.toISOString() : ''
             }&toDate=${
                 options.toDate ? options.toDate.toISOString() : ''
@@ -59,11 +61,6 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
     const canCreate = () => {
         return privileges?.some(priv => priv === 'import-books.admin');
     };
-
-    const handleFieldChange = (propertyName, newValue) => {
-        setOptions(o => ({ ...o, [propertyName]: newValue }));
-    };
-
     return (
         <Page>
             <Grid container spacing={3}>
@@ -125,6 +122,7 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
                         onChange={handleFieldChange}
                         propertyName="rsnNumber"
                         fullwidth
+                        type="number"
                     />
                 </Grid>
                 <Grid item xs={2}>
@@ -134,6 +132,7 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
                         onChange={handleFieldChange}
                         propertyName="poNumber"
                         fullwidth
+                        type="number"
                     />
                 </Grid>
                 <Grid item xs={3}>
@@ -150,7 +149,7 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
                     <Button
                         className={classes.button}
                         variant="outlined"
-                        onClick={() => doSearch('')}
+                        onClick={() => doSearch(options.searchTerm)}
                         color="primary"
                     >
                         Go

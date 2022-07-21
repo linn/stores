@@ -222,7 +222,7 @@
                         && x.CustomsEntryCodeDate.Value.Date.Equals(
                             DateTime.Parse(searchResource.CustomsEntryDate).Date)))
             && (string.IsNullOrWhiteSpace(searchResource.RsnNumber)
-                || x.OrderDetails.Any(d => d.RsnNumber.HasValue && 
+                || x.OrderDetails.Any(d => d.RsnNumber.HasValue &&
                                            d.RsnNumber.Value.ToString().Equals(searchResource.RsnNumber)))
             && (string.IsNullOrWhiteSpace(searchResource.PoNumber)
                 || x.OrderDetails.Any(d => d.OrderNumber.HasValue &&
