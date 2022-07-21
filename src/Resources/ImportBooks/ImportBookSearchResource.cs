@@ -14,8 +14,8 @@
 
         public string CustomsEntryDate { get; set; }
 
-        public int RsnNumber { get; set; }
+        public string RsnNumber { get; set; }
 
-        public int PoNumber { get; set; }
+        public string PoNumber { get; set; }
     }
 }

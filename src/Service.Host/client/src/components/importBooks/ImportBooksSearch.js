@@ -39,10 +39,15 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
     const classes = useStyles();
 
     const doSearch = searchTerm => {
+        console.log(options.poNumber != null ? parseInt(options.poNumber, 10) : null);
+
+        console.log('rsn ' + options.rsnNumber ?? null);
+
         fetchItems(
             searchTerm,
-            `&rsnNumber=${options.rsnNumber ?? ''}&poNumber=${options.poNumber ?? ''}
-            &fromDate=${options.fromDate ? options.fromDate.toISOString() : ''}&toDate=${
+            `&rsnNumber=${options.rsnNumber ?? null}&poNumber=${options.poNumber}fromDate=${
+                options.fromDate ? options.fromDate.toISOString() : ''
+            }&toDate=${
                 options.toDate ? options.toDate.toISOString() : ''
             }&customsEntryCodePrefix=${options.customsEntryCodePrefix ??
                 ''}&customsEntryCode=${options.customsEntryCode ?? ''}&customsEntryDate=${

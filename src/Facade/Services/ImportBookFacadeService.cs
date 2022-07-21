@@ -221,11 +221,12 @@
                     || (x.CustomsEntryCodeDate.HasValue
                         && x.CustomsEntryCodeDate.Value.Date.Equals(
                             DateTime.Parse(searchResource.CustomsEntryDate).Date)))
-                && (string.IsNullOrEmpty(searchResource.RsnNumber.ToString())
-                    || x.OrderDetails.Any(d => d.RsnNumber.HasValue && d.RsnNumber.Equals(searchResource.RsnNumber)))
-                && (string.IsNullOrEmpty(searchResource.PoNumber.ToString())
-                    || x.OrderDetails.Any(d => d.OrderNumber.HasValue
-                                          && d.OrderNumber.Equals(searchResource.PoNumber)));
+            && (string.IsNullOrWhiteSpace(searchResource.RsnNumber)
+                || x.OrderDetails.Any(d => d.RsnNumber.HasValue && 
+                                           d.RsnNumber.Value.ToString().Equals(searchResource.RsnNumber)))
+            && (string.IsNullOrWhiteSpace(searchResource.PoNumber)
+                || x.OrderDetails.Any(d => d.OrderNumber.HasValue &&
+                                           d.OrderNumber.Value.ToString().Equals(searchResource.PoNumber)));
         }
 
         protected override void UpdateFromResource(ImportBook entity, ImportBookResource updateResource)
