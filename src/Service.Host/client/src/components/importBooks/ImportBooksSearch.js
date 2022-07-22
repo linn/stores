@@ -25,7 +25,7 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
             href: item.href
         }));
     };
-    const [options, setOptions] = useState({});
+    const [options, setOptions] = useState({ poNumber: null, rsnNumber: null });
 
     const useStyles = makeStyles(theme => ({
         button: {
@@ -41,7 +41,9 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
     const doSearch = searchTerm => {
         fetchItems(
             searchTerm,
-            `&fromDate=${options.fromDate ? options.fromDate.toISOString() : ''}&toDate=${
+            `&rsnNumber=${options.rsnNumber ?? ''}&poNumber=${options.poNumber ?? ''}&fromDate=${
+                options.fromDate ? options.fromDate.toISOString() : ''
+            }&toDate=${
                 options.toDate ? options.toDate.toISOString() : ''
             }&customsEntryCodePrefix=${options.customsEntryCodePrefix ??
                 ''}&customsEntryCode=${options.customsEntryCode ?? ''}&customsEntryDate=${
@@ -57,7 +59,6 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
     const handleFieldChange = (propertyName, newValue) => {
         setOptions(o => ({ ...o, [propertyName]: newValue }));
     };
-
     return (
         <Page>
             <Grid container spacing={3}>
@@ -110,6 +111,26 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
                         onChange={handleFieldChange}
                         propertyName="customsEntryCode"
                         fullwidth
+                    />
+                </Grid>
+                <Grid item xs={2}>
+                    <InputField
+                        label="RSN Number"
+                        value={options.rsnNumber}
+                        onChange={handleFieldChange}
+                        propertyName="rsnNumber"
+                        fullwidth
+                        type="number"
+                    />
+                </Grid>
+                <Grid item xs={2}>
+                    <InputField
+                        label="PO Number"
+                        value={options.poNumber}
+                        onChange={handleFieldChange}
+                        propertyName="poNumber"
+                        fullwidth
+                        type="number"
                     />
                 </Grid>
                 <Grid item xs={3}>

@@ -13,5 +13,9 @@
         public string CustomsEntryCode { get; set; }
 
         public string CustomsEntryDate { get; set; }
+
+        public string RsnNumber { get; set; }
+
+        public string PoNumber { get; set; }
     }
 }
