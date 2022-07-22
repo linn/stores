@@ -125,7 +125,7 @@ function ImportBooksSearch({ items, fetchItems, loading, clearSearch, history, p
                 </Grid>
                 <Grid item xs={2}>
                     <InputField
-                        label="poNumber"
+                        label="PO Number"
                         value={options.poNumber}
                         onChange={handleFieldChange}
                         propertyName="poNumber"
