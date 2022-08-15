@@ -27,7 +27,8 @@
             this.part = new Part
             {
                 PartNumber = " CAP 431 ",
-                StockControlled = "N"
+                StockControlled = "N",
+                RawOrFinished = "R"
             };
             this.privileges = new List<string> { "part.admin" };
 

@@ -26,7 +26,8 @@
             this.to = new Part
                           {
                               TqmsCategoryOverride = "override",
-                              StockControlled = "N"
+                              StockControlled = "N",
+                              RawOrFinished = "R"
                           };
             this.privileges = new List<string> { "part.admin" };
             this.TemplateRepository.FindById(Arg.Any<string>()).Returns(new PartTemplate());

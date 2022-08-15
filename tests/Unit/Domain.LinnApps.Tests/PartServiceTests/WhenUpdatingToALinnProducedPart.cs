@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Linq.Expressions;
 
     using FluentAssertions;
@@ -13,33 +12,31 @@
 
     using NUnit.Framework;
 
-    public class WhenCreatingLinnProducedPartAndPreferredSupplierNotSpecified : ContextBase
+    public class WhenUpdatingToALinnProducedPart : ContextBase
     {
-        private Part partToCreate;
+        private Part to;
 
         private List<string> privileges;
 
         [SetUp]
         public void SetUp()
         {
-            this.partToCreate = new Part
+            this.to = new Part
                                     {
-                                        LinnProduced = "Y", 
+                                        LinnProduced = "Y",
                                         StockControlled = "N",
                                         RawOrFinished = "R"
                                     };
             this.privileges = new List<string> { "part.admin" };
-            this.TemplateRepository.FindById(Arg.Any<string>()).Returns(new PartTemplate());
-            this.PartPack.PartRoot(Arg.Any<string>()).Returns("ROOT");
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
             this.SupplierRepo.FindBy(Arg.Any<Expression<Func<Supplier, bool>>>()).Returns(new Supplier { Id = 4415 });
-            this.Sut.CreatePart(this.partToCreate, this.privileges, false);
+            this.Sut.UpdatePart(new Part(), this.to, this.privileges);
         }
 
         [Test]
         public void ShouldDefaultLinn()
         {
-            this.partToCreate.PreferredSupplier.Id.Should().Be(4415);
+            this.to.PreferredSupplier.Id.Should().Be(4415);
         }
     }
 }

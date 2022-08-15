@@ -105,6 +105,11 @@
                     throw new UpdatePartException(message);
                 }
 
+                if (to.PreferredSupplier == null)
+                {
+                    throw new UpdatePartException("Cannot make live without a preferred supplier!");
+                }
+
                 from.DateLive = to.DateLive;
                 from.MadeLiveBy = to.MadeLiveBy;
             }
@@ -142,13 +147,9 @@
             from.ImdsIdNumber = to.ImdsIdNumber;
             from.ImdsWeight = to.ImdsWeight;
             from.OrderHold = to.OrderHold;
-            from.MaterialPrice = to.MaterialPrice;
             from.SparesRequirement = to.SparesRequirement;
-            from.CurrencyUnitPrice = to.CurrencyUnitPrice;
             from.NonForecastRequirement = to.NonForecastRequirement;
-            from.BaseUnitPrice = to.BaseUnitPrice;
             from.OneOffRequirement = to.OneOffRequirement;
-            from.LabourPrice = to.LabourPrice;
             from.LinnProduced = to.LinnProduced;
             from.PreferredSupplier = to.PreferredSupplier;
             from.QcOnReceipt = to.QcOnReceipt;
@@ -219,14 +220,9 @@
                 partToCreate.RailMethod = "POLICY";
             }
 
-            if (partToCreate.LinnProduced == "Y" && partToCreate.PreferredSupplier == null)
-            {
-                partToCreate.PreferredSupplier = this.supplierRepository.FindBy(s => s.Id == 4415);
-            }
-
             partToCreate.OrderHold = "N";
 
-            Validate(partToCreate);
+            this.Validate(partToCreate);
 
             return partToCreate;
         }
@@ -307,27 +303,6 @@
             return this.deptStockPartsService.GetDeptStockPalletParts();
         }
 
-        private static void Validate(Part to)
-        {
-            if (!string.IsNullOrEmpty(to.ScrapOrConvert)  && to.PhasedOutBy == null)
-            {
-                to.ScrapOrConvert = null;
-            }
-
-            if (to.RailMethod == "SMM"
-                && to.StockControlled == "Y"
-                && to.MinStockRail == 0
-                && to.MaxStockRail == 0)
-            {
-                throw new UpdatePartException("Rail method SMM with 0 min/max rails is not a valid stocking policy.");
-            }
-
-            if (to.TqmsCategoryOverride != null && to.StockNotes == null)
-            {
-                throw new UpdatePartException("You must enter a reason and/or reference or project code when setting an override");
-            }
-        }
-
         private static int? FindRealNextNumber(string newestPartOfThisType, PartTemplate template)
         {
             var highestNumber = newestPartOfThisType?.Split(" ").Last().Split("/")[0];
@@ -342,6 +317,37 @@
             }
 
             return template.NextNumber;
+        }
+
+        private void Validate(Part to)
+        {
+            if (!string.IsNullOrEmpty(to.ScrapOrConvert) && to.PhasedOutBy == null)
+            {
+                to.ScrapOrConvert = null;
+            }
+
+            if (to.RailMethod == "SMM"
+                && to.StockControlled == "Y"
+                && to.MinStockRail == 0
+                && to.MaxStockRail == 0)
+            {
+                throw new UpdatePartException("Rail method SMM with 0 min/max rails is not a valid stocking policy.");
+            }
+
+            if (string.IsNullOrEmpty(to.RawOrFinished))
+            {
+                throw new CreatePartException("Must specify raw or finished!");
+            }
+
+            if (to.TqmsCategoryOverride != null && to.StockNotes == null)
+            {
+                throw new UpdatePartException("You must enter a reason and/or reference or project code when setting an override");
+            }
+
+            if (to.LinnProduced != null && to.LinnProduced.Equals("Y"))
+            {
+                to.PreferredSupplier = this.supplierRepository.FindBy(s => s.Id == 4415);
+            }
         }
     }
 }
