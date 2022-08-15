@@ -105,6 +105,11 @@
                     throw new UpdatePartException(message);
                 }
 
+                if (to.PreferredSupplier == null)
+                {
+                    throw new UpdatePartException("Cannot make live without a preferred supplier!");
+                }
+
                 from.DateLive = to.DateLive;
                 from.MadeLiveBy = to.MadeLiveBy;
             }
