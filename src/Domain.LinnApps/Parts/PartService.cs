@@ -142,13 +142,9 @@
             from.ImdsIdNumber = to.ImdsIdNumber;
             from.ImdsWeight = to.ImdsWeight;
             from.OrderHold = to.OrderHold;
-            from.MaterialPrice = to.MaterialPrice;
             from.SparesRequirement = to.SparesRequirement;
-            from.CurrencyUnitPrice = to.CurrencyUnitPrice;
             from.NonForecastRequirement = to.NonForecastRequirement;
-            from.BaseUnitPrice = to.BaseUnitPrice;
             from.OneOffRequirement = to.OneOffRequirement;
-            from.LabourPrice = to.LabourPrice;
             from.LinnProduced = to.LinnProduced;
             from.PreferredSupplier = to.PreferredSupplier;
             from.QcOnReceipt = to.QcOnReceipt;
