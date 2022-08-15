@@ -21,7 +21,12 @@
         public void SetUp()
         {
             this.from = new Part { DatePhasedOut = null };
-            this.to = new Part { DatePhasedOut = null, ScrapOrConvert = "CONVERT" };
+            this.to = new Part
+                          {
+                              DatePhasedOut = null, 
+                              ScrapOrConvert = "CONVERT",
+                              RawOrFinished = "R"
+                          };
             this.privileges = new List<string>();
         }
 

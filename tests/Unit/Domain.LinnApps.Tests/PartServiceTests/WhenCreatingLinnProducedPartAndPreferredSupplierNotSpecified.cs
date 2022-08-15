@@ -22,7 +22,12 @@
         [SetUp]
         public void SetUp()
         {
-            this.partToCreate = new Part { LinnProduced = "Y", StockControlled = "N" };
+            this.partToCreate = new Part
+                                    {
+                                        LinnProduced = "Y", 
+                                        StockControlled = "N",
+                                        RawOrFinished = "R"
+                                    };
             this.privileges = new List<string> { "part.admin" };
             this.TemplateRepository.FindById(Arg.Any<string>()).Returns(new PartTemplate());
             this.PartPack.PartRoot(Arg.Any<string>()).Returns("ROOT");

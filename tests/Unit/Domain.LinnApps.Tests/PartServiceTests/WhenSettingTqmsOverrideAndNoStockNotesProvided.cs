@@ -23,7 +23,8 @@
             this.from = new Part();
             this.to = new Part
                           {
-                              TqmsCategoryOverride = "override"
+                              TqmsCategoryOverride = "override",
+                              RawOrFinished = "R"
                           };
             this.privileges = new List<string> { "part.admin" };
         }

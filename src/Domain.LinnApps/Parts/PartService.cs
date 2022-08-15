@@ -322,6 +322,11 @@
                 throw new UpdatePartException("Rail method SMM with 0 min/max rails is not a valid stocking policy.");
             }
 
+            if (string.IsNullOrEmpty(to.RawOrFinished))
+            {
+                throw new CreatePartException("Must specify raw or finished!");
+            }
+
             if (to.TqmsCategoryOverride != null && to.StockNotes == null)
             {
                 throw new UpdatePartException("You must enter a reason and/or reference or project code when setting an override");
