@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.CompilerServices;
 
     using Exceptions;
 
@@ -220,14 +221,9 @@
                 partToCreate.RailMethod = "POLICY";
             }
 
-            if (partToCreate.LinnProduced == "Y" && partToCreate.PreferredSupplier == null)
-            {
-                partToCreate.PreferredSupplier = this.supplierRepository.FindBy(s => s.Id == 4415);
-            }
-
             partToCreate.OrderHold = "N";
 
-            Validate(partToCreate);
+            this.Validate(partToCreate);
 
             return partToCreate;
         }
@@ -308,9 +304,25 @@
             return this.deptStockPartsService.GetDeptStockPalletParts();
         }
 
-        private static void Validate(Part to)
+        private static int? FindRealNextNumber(string newestPartOfThisType, PartTemplate template)
         {
-            if (!string.IsNullOrEmpty(to.ScrapOrConvert)  && to.PhasedOutBy == null)
+            var highestNumber = newestPartOfThisType?.Split(" ").Last().Split("/")[0];
+            if (int.TryParse(highestNumber, out var res))
+            {
+                return res + 1;
+            }
+
+            if (template.HasNumberSequence != "Y")
+            {
+                throw new CreatePartException("Template has no number sequence");
+            }
+
+            return template.NextNumber;
+        }
+
+        private void Validate(Part to)
+        {
+            if (!string.IsNullOrEmpty(to.ScrapOrConvert) && to.PhasedOutBy == null)
             {
                 to.ScrapOrConvert = null;
             }
@@ -332,22 +344,11 @@
             {
                 throw new UpdatePartException("You must enter a reason and/or reference or project code when setting an override");
             }
-        }
 
-        private static int? FindRealNextNumber(string newestPartOfThisType, PartTemplate template)
-        {
-            var highestNumber = newestPartOfThisType?.Split(" ").Last().Split("/")[0];
-            if (int.TryParse(highestNumber, out var res))
+            if (to.LinnProduced != null && to.LinnProduced.Equals("Y"))
             {
-                return res + 1;
+                to.PreferredSupplier = this.supplierRepository.FindBy(s => s.Id == 4415);
             }
-
-            if (template.HasNumberSequence != "Y")
-            {
-                throw new CreatePartException("Template has no number sequence");
-            }
-
-            return template.NextNumber;
         }
     }
 }
