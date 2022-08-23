@@ -26,7 +26,7 @@
                                         LinnProduced = "Y",
                                         StockControlled = "N",
                                         RawOrFinished = "R",
-                                        QcOnReceipt - "Y"
+                                        QcOnReceipt = "N"
                                     };
             this.privileges = new List<string> { "part.admin" };
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
