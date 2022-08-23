@@ -50,6 +50,7 @@
                         new AxisDetailsModel("Supplier", "Supplier", GridDisplayType.TextValue),
                         new AxisDetailsModel("Who", "Who", GridDisplayType.TextValue),
                         new AxisDetailsModel("Why", "Why", GridDisplayType.TextValue),
+                        new AxisDetailsModel("When", "When", GridDisplayType.TextValue)
                     });
 
             var values = new List<CalculationValueModel>();
@@ -94,6 +95,13 @@
                             RowId = currentRowId,
                             ColumnId = "Why",
                             TextDisplay = qc?.Reason
+                        });
+                values.Add(
+                    new CalculationValueModel
+                        {
+                            RowId = currentRowId,
+                            ColumnId = "When",
+                            TextDisplay = qc?.TransactionDate.ToShortDateString()
                         });
             }
 
