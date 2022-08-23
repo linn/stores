@@ -236,6 +236,7 @@
         {
             var updatedPart = new Part
                                   {
+                                      PartNumber = resource.PartNumber,
                                       Description = resource.Description,
                                       AccountingCompany = 
                                           this.accountingCompanyRepository.FindBy(
