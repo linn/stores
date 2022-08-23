@@ -24,9 +24,7 @@
 
         public ResultsModel GetReport()
         {
-            var bomTypes = new string[2] { "C", "A" };
             var excludedSuppliers = new int[3] { 058894, 101837, 9716 };
-            var paretoCodes = new string[3] { "C", "B", "A" };
 
             var data = this.repository.FindAll().Where(p =>
                 p.Part.QcOnReceipt.Equals("Y") 
