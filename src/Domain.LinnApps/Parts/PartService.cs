@@ -61,7 +61,7 @@
             this.phoneList = phoneList;
         }
 
-        public void UpdatePart(Part from, Part to, List<string> privileges)
+        public void UpdatePart(Part from, Part to, List<string> privileges, int who)
         {
             to.PartNumber = to.PartNumber?.ToUpper();
             if (from.DatePhasedOut == null && to.DatePhasedOut != null)
@@ -115,6 +115,11 @@
             }
 
             Validate(to);
+
+            if (to.QcOnReceipt.Equals("Y"))
+            {
+                this.AddQcControl(to.PartNumber, who, to.QcInformation);
+            }
 
             from.PhasedOutBy = to.PhasedOutBy;
             from.DatePhasedOut = to.DatePhasedOut;
@@ -233,7 +238,7 @@
                                              {
                                                  Id = null,
                                                  PartNumber = partNumber,
-                                                 TransactionDate = DateTime.Today,
+                                                 TransactionDate = DateTime.Today.Date,
                                                  ChangedBy = createdBy,
                                                  NumberOfBookIns = 0,
                                                  OnOrOffQc = "ON",
@@ -337,6 +342,16 @@
             if (string.IsNullOrEmpty(to.RawOrFinished))
             {
                 throw new CreatePartException("Must specify raw or finished!");
+            }
+
+            if (string.IsNullOrEmpty(to.QcOnReceipt))
+            {
+                throw new CreatePartException("Must specify QC Yes/No");
+            }
+
+            if (to.QcOnReceipt.Equals("Y") && string.IsNullOrEmpty(to.QcInformation))
+            {
+                throw new CreatePartException("Must specify QC Information if setting part to be QC.");
             }
 
             if (to.TqmsCategoryOverride != null && to.StockNotes == null)

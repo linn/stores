@@ -4,7 +4,7 @@
 
     public interface IPartService
     {
-        void UpdatePart(Part from, Part to, List<string> privileges);
+        void UpdatePart(Part from, Part to, List<string> privileges, int who);
 
         Part CreatePart(Part partToCreate, List<string> privileges, bool fromTemplate);
 

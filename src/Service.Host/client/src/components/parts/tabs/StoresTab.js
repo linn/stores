@@ -27,7 +27,7 @@ function StoresTab({
                     propertyName="qcOnReceipt"
                     items={['Y', 'N']}
                     fullWidth
-                    allowNoValue={false}
+                    allowNoValue
                     value={qcOnReceipt}
                     onChange={handleFieldChange}
                 />

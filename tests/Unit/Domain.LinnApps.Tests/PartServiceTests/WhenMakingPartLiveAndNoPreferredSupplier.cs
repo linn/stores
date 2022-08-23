@@ -35,7 +35,7 @@
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
 
             this.result = Assert.Throws<UpdatePartException>(() => this.Sut.UpdatePart(
-                new Part(), this.to, this.privileges));
+                new Part(), this.to, this.privileges, 33087));
         }
 
         [Test]

@@ -253,6 +253,8 @@
 
         public DbSet<PhoneListEntry> PhoneList { get; set; }
 
+        public DbQuery<MrPart> MrParts { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -374,6 +376,7 @@
             this.QueryRsnConditions(builder);
             this.BuildPhoneList(builder);
             this.BuildInvoiceDetails(builder);
+            this.QueryMrParts(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -457,8 +460,9 @@
             e.Property(p => p.SingleSourcePart).HasColumnName("SINGLE_SOURCE_PART").HasMaxLength(1);
             e.Property(p => p.SafetyCertificateExpirationDate).HasColumnName("SAFETY_CERTIFICATE_EXPIRY_DATE");
             e.Property(p => p.SafetyDataDirectory).HasColumnName("SAFETY_DATA_DIRECTORY").HasMaxLength(500);
-            e.Property(p => p.LinnProduced).HasColumnName("LINN_PRODUCED").HasMaxLength(1);
-            e.Property(p => p.BomType).HasColumnName("BOM_TYPE").HasMaxLength(1);
+            e.Property(p => p.LinnProduced).HasColumnName("LINN_PRODUCED")
+                .HasMaxLength(1).HasColumnType("VARCHAR2").IsUnicode(false);
+            e.Property(p => p.BomType).HasColumnName("BOM_TYPE").HasMaxLength(1).HasColumnType("VARCHAR2").IsUnicode(false);
             e.Property(p => p.OptionSet).HasColumnName("OPTION_SET").HasMaxLength(14);
             e.Property(p => p.DrawingReference).HasColumnName("DRAWING_REFERENCE").HasMaxLength(100);
             e.Property(p => p.BomId).HasColumnName("BOM_ID");
@@ -477,7 +481,7 @@
             e.Property(p => p.IgnoreWorkstationStock).HasColumnName("IGNORE_WORKSTN_STOCK").HasMaxLength(1);
             e.Property(p => p.ImdsIdNumber).HasColumnName("IMDS_ID_NUMBER");
             e.Property(p => p.ImdsWeight).HasColumnName("IMDS_WEIGHT_G");
-            e.Property(p => p.QcOnReceipt).HasColumnName("QC_ON_RECEIPT").HasMaxLength(1);
+            e.Property(p => p.QcOnReceipt).HasColumnName("QC_ON_RECEIPT").HasMaxLength(1).HasColumnType("VARCHAR2").IsUnicode(false);
             e.Property(p => p.QcInformation).HasColumnName("QC_INFORMATION").HasMaxLength(90);
             e.Property(p => p.RawOrFinished).HasColumnName("RM_FG").HasMaxLength(1);
             e.Property(p => p.OurInspectionWeeks).HasColumnName("OUR_INSP_WEEKS");
@@ -514,6 +518,7 @@
             e.HasOne(p => p.DecrementRule).WithMany(s => s.Parts).HasForeignKey("DECREMENT_RULE");
             e.HasOne(p => p.MechPartSource).WithOne(m => m.Part);
             e.HasOne(p => p.SalesArticle).WithOne(a => a.Part).HasForeignKey<Part>(x => x.PartNumber);
+            e.HasMany(p => p.QcControls).WithOne().HasForeignKey(q => q.PartNumber);
         }
 
         private void BuildPartDataSheets(ModelBuilder builder)
@@ -712,13 +717,15 @@
             e.Property(q => q.OnOrOffQc).HasColumnName("ON_OR_OFF_QC");
             e.Property(q => q.Reason).HasColumnName("REASON");
             e.Property(q => q.TransactionDate).HasColumnName("TRANSACTION_DATE");
+            e.HasOne(q => q.Employee).WithMany().HasForeignKey(q => q.ChangedBy);
         }
 
         private void BuildParetoClasses(ModelBuilder builder)
         {
             var e = builder.Entity<ParetoClass>().ToTable("PARETO_CLASSES");
             e.HasKey(p => p.ParetoCode);
-            e.Property(p => p.ParetoCode).HasColumnName("PARETO_CODE").HasMaxLength(2);
+            e.Property(p => p.ParetoCode).HasColumnName("PARETO_CODE")
+                .HasMaxLength(2).HasColumnType("VARCHAR2").IsUnicode(false);
             e.Property(p => p.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
         }
 
@@ -2077,6 +2084,13 @@
         {
             var q = builder.Query<Loan>().ToView("LOAN_HEADERS");
             q.Property(e => e.LoanNumber).HasColumnName("LOAN_NUMBER").HasMaxLength(6);
+        }
+
+        private void QueryMrParts(ModelBuilder builder)
+        {
+            var q = builder.Query<MrPart>().ToView("V_MASTER_MRH");
+            q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER");
+            q.HasOne(e => e.Part).WithMany().HasForeignKey(e => e.PartNumber);
         }
 
         private void BuildStockTriggerLevels(ModelBuilder builder)

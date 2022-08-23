@@ -133,6 +133,7 @@ import addresses from './addresses';
 import salesOutletAddresses from './salesOutletAddresses';
 import unpickStock from './unpickStock';
 import unallocateReq from './unallocateReq';
+import qcPartsReport from './qcPartsReport';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -214,6 +215,7 @@ const rootReducer = history =>
         printRsn,
         productAnalysisCodes,
         purchaseOrders,
+        qcPartsReport,
         req,
         reqMoves,
         rootProducts,
