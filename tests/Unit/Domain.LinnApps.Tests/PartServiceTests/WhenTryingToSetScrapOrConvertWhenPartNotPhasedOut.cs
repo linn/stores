@@ -25,7 +25,8 @@
                           {
                               DatePhasedOut = null, 
                               ScrapOrConvert = "CONVERT",
-                              RawOrFinished = "R"
+                              RawOrFinished = "R",
+                              QcOnReceipt = "N"
                           };
             this.privileges = new List<string>();
         }

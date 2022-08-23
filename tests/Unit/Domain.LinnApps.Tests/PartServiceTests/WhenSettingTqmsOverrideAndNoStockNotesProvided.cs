@@ -24,7 +24,8 @@
             this.to = new Part
                           {
                               TqmsCategoryOverride = "override",
-                              RawOrFinished = "R"
+                              RawOrFinished = "R",
+                              QcOnReceipt = "N"
                           };
             this.privileges = new List<string> { "part.admin" };
         }

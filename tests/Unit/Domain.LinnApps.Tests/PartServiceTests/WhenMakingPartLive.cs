@@ -28,7 +28,8 @@
                               PartNumber = "PART",
                               MadeLiveBy = new Employee { Id = 1 },
                               DateLive = DateTime.UnixEpoch,
-                              RawOrFinished = "R"
+                              RawOrFinished = "R",
+                              QcOnReceipt = "N"
                           };
             this.privileges = new List<string> { "part.admin" };
             this.PartPack.PartLiveTest(Arg.Any<string>(), out _).Returns(true);

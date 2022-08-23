@@ -25,9 +25,9 @@ function StoresTab({
                 <Dropdown
                     label="QC On Receipt"
                     propertyName="qcOnReceipt"
-                    items={['Y', 'N']}
+                    items={['Y', 'N', '']}
                     fullWidth
-                    allowNoValue={false}
+                    allowNoValue
                     value={qcOnReceipt}
                     onChange={handleFieldChange}
                 />

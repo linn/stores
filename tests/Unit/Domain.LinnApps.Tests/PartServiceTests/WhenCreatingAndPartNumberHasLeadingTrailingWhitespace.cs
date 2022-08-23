@@ -28,7 +28,8 @@
             {
                 PartNumber = " CAP 431 ",
                 StockControlled = "N",
-                RawOrFinished = "R"
+                RawOrFinished = "R",
+                QcOnReceipt = "N"
             };
             this.privileges = new List<string> { "part.admin" };
 

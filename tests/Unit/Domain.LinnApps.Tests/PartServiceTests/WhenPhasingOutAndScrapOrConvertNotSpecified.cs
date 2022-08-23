@@ -28,7 +28,8 @@
                               DatePhasedOut = DateTime.Today, 
                               ReasonPhasedOut = "reason", 
                               ScrapOrConvert = null,
-                              RawOrFinished = "R"
+                              RawOrFinished = "R",
+                              QcOnReceipt = "N"
                           };
             this.privileges = new List<string> { "part.admin" };
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);

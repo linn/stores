@@ -327,6 +327,16 @@
                 throw new CreatePartException("Must specify raw or finished!");
             }
 
+            if (string.IsNullOrEmpty(to.QcOnReceipt))
+            {
+                throw new CreatePartException("Must specify QC Yes/No");
+            }
+
+            if (to.QcOnReceipt.Equals("Y") && string.IsNullOrEmpty(to.QcInformation))
+            {
+                throw new CreatePartException("Must specify QC Information if setting part to be QC.");
+            }
+
             if (to.TqmsCategoryOverride != null && to.StockNotes == null)
             {
                 throw new UpdatePartException("You must enter a reason and/or reference or project code when setting an override");
