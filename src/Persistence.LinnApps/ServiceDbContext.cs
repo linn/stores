@@ -519,8 +519,6 @@
             e.HasOne(p => p.MechPartSource).WithOne(m => m.Part);
             e.HasOne(p => p.SalesArticle).WithOne(a => a.Part).HasForeignKey<Part>(x => x.PartNumber);
             e.HasMany(p => p.QcControls).WithOne().HasForeignKey(q => q.PartNumber);
-            // e.Property(p => p.ParetoCode).HasColumnName("PARETO_CODE")
-            //     .HasMaxLength(2).HasColumnType("VARCHAR2").IsUnicode(false);
         }
 
         private void BuildPartDataSheets(ModelBuilder builder)
@@ -719,6 +717,7 @@
             e.Property(q => q.OnOrOffQc).HasColumnName("ON_OR_OFF_QC");
             e.Property(q => q.Reason).HasColumnName("REASON");
             e.Property(q => q.TransactionDate).HasColumnName("TRANSACTION_DATE");
+            e.HasOne(q => q.Employee).WithMany().HasForeignKey(q => q.ChangedBy);
         }
 
         private void BuildParetoClasses(ModelBuilder builder)

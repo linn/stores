@@ -360,3 +360,8 @@ export const salesOutletAddressesActionTypes = makeActionTypes(
 export const unpickStockActionTypes = makeActionTypes(processTypes.unpickStock.actionType);
 
 export const unallocateReqActionTypes = makeActionTypes(processTypes.unallocateReq.actionType);
+
+export const qcPartsReportActionTypes = makeReportActionTypes(
+    reportTypes.qcPartsReport.actionType,
+    false
+);

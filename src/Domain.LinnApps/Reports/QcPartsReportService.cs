@@ -88,7 +88,7 @@
                         {
                             RowId = currentRowId,
                             ColumnId = "Who",
-                            TextDisplay = qc?.ChangedBy.ToString()
+                            TextDisplay = qc?.Employee?.FullName
                         });
                 values.Add(
                     new CalculationValueModel

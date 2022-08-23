@@ -35,6 +35,7 @@
                     .ThenInclude(p => p.PreferredSupplier)
                     .Include(p => p.Part)
                     .ThenInclude(p => p.QcControls)
+                    .ThenInclude(q => q.Employee)
                     .Include(p => p.Part)
                     .ThenInclude(p => p.ParetoClass)
                     .AsNoTracking();

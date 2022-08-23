@@ -42,3 +42,9 @@ export const impbookEuReport = new ItemType(
     'IMPBOOK_EU_REPORT',
     '/logistics/import-books/eu/report'
 );
+
+export const qcPartsReport = new ItemType(
+    'qcPartsReport',
+    'QC_PARTS_REPORT',
+    '/inventory/reports/qc-parts'
+);

@@ -12,6 +12,8 @@
 
         public int? ChangedBy { get; set; }
 
+        public Employee Employee { get; set; }
+
         public int? NumberOfBookIns { get; set; }
 
         public int? NumberOfBookInsDone { get; set; }
