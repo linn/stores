@@ -12,9 +12,9 @@
 
         public int? ChangedBy { get; set; }
 
-        public int NumberOfBookIns { get; set; }
+        public int? NumberOfBookIns { get; set; }
 
-        public int NumberOfBookInsDone { get; set; }
+        public int? NumberOfBookInsDone { get; set; }
 
         public string Reason { get; set; }
 
