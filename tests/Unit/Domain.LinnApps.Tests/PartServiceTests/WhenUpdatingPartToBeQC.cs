@@ -11,7 +11,7 @@
 
     using NUnit.Framework;
 
-    public class WhenUpdatingPartToBeQC : ContextBase
+    public class WhenUpdatingPartToBeQc : ContextBase
     {
         private Part to;
 
