@@ -121,11 +121,6 @@
                 this.AddQcControl(to.PartNumber, who, to.QcInformation);
             }
 
-            if (to.QcOnReceipt.Equals("Y"))
-            {
-                this.AddQcControl(to.PartNumber, who, to.QcInformation);
-            }
-
             from.PhasedOutBy = to.PhasedOutBy;
             from.DatePhasedOut = to.DatePhasedOut;
             from.ReasonPhasedOut = to.ReasonPhasedOut;
