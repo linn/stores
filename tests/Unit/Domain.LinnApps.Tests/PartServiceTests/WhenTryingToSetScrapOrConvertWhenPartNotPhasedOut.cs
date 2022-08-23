@@ -34,7 +34,7 @@
         [Test]
         public void ShouldSetScrapOrConvertNull()
         {
-            this.Sut.UpdatePart(this.from, this.to, this.privileges);
+            this.Sut.UpdatePart(this.from, this.to, this.privileges, 33087);
             this.to.ScrapOrConvert.Should().BeNull();
         }
     }

@@ -46,7 +46,7 @@
         [Test]
         public void ShouldThrowException()
         {
-            var ex = Assert.Throws<UpdatePartException>(() => this.Sut.UpdatePart(this.from, this.to, this.privileges));
+            var ex = Assert.Throws<UpdatePartException>(() => this.Sut.UpdatePart(this.from, this.to, this.privileges, 33087));
             ex.Message.Should().Be("Cannot change product analysis code if part has a sales article.");
         }
     }

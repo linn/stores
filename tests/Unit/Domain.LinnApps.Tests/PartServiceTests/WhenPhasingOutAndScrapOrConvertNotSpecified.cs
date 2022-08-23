@@ -34,7 +34,7 @@
             this.privileges = new List<string> { "part.admin" };
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
 
-            this.Sut.UpdatePart(this.from, this.to, this.privileges);
+            this.Sut.UpdatePart(this.from, this.to, this.privileges, 33087);
         }
 
         [Test]

@@ -11,7 +11,7 @@
 
     using NUnit.Framework;
 
-    public class WhenMakingPartLive : ContextBase
+    public class WhenUpdatingPartToBeQC : ContextBase
     {
         private Part to;
 
@@ -26,10 +26,9 @@
             this.to = new Part
                           {
                               PartNumber = "PART",
-                              MadeLiveBy = new Employee { Id = 1 },
-                              DateLive = DateTime.UnixEpoch,
                               RawOrFinished = "R",
-                              QcOnReceipt = "N"
+                              QcOnReceipt = "Y",
+                              QcInformation = "Making it QC"
                           };
             this.privileges = new List<string> { "part.admin" };
             this.PartPack.PartLiveTest(Arg.Any<string>(), out _).Returns(true);
@@ -38,16 +37,21 @@
         }
 
         [Test]
-        public void ShouldSetDatePartLive()
+        public void ShouldUpdate()
         {
-            this.from.DateLive.Should().Be(DateTime.UnixEpoch);
+            this.from.QcOnReceipt.Should().Be(this.to.QcOnReceipt);
+            this.from.QcInformation.Should().Be(this.to.QcInformation);
         }
 
         [Test]
-        public void ShouldSetLiveBy()
+        public void ShouldAddQcControlRecord()
         {
-            this.from.DateLive.Should().Be(DateTime.UnixEpoch);
-            this.from.MadeLiveBy.Id.Should().Be(1);
+            this.QcControlRepo.Received().Add(Arg.Is<QcControl>(x => 
+                x.PartNumber == this.to.PartNumber
+                && x.OnOrOffQc == "ON"
+                && x.ChangedBy == 33087
+                && x.TransactionDate == DateTime.Today.Date
+                && x.Reason == this.to.QcInformation));
         }
     }
 }

@@ -33,7 +33,7 @@
         [Test]
         public void ShouldThrowException()
         {
-            var ex = Assert.Throws<UpdatePartException>(() => this.Sut.UpdatePart(this.from, this.to, this.privileges));
+            var ex = Assert.Throws<UpdatePartException>(() => this.Sut.UpdatePart(this.from, this.to, this.privileges, 33087));
             ex.Message.Should().Be("You must enter a reason and/or reference or project code when setting an override");
         }
     }

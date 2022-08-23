@@ -337,7 +337,7 @@
                                               : null
                                   };
           
-            this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList());
+            this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList(), resource.UpdatedBy.Value);
         }
 
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)
