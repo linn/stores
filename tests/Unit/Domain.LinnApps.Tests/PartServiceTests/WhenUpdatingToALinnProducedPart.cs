@@ -25,12 +25,13 @@
                                     {
                                         LinnProduced = "Y",
                                         StockControlled = "N",
-                                        RawOrFinished = "R"
+                                        RawOrFinished = "R",
+                                        QcOnReceipt - "Y"
                                     };
             this.privileges = new List<string> { "part.admin" };
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
             this.SupplierRepo.FindBy(Arg.Any<Expression<Func<Supplier, bool>>>()).Returns(new Supplier { Id = 4415 });
-            this.Sut.UpdatePart(new Part(), this.to, this.privileges);
+            this.Sut.UpdatePart(new Part(), this.to, this.privileges, 33087);
         }
 
         [Test]
