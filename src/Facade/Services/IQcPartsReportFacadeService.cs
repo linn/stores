@@ -10,6 +10,5 @@
         IResult<ResultsModel> GetReport();
 
         IResult<IEnumerable<IEnumerable<string>>> GetExport();
-
     }
 }
