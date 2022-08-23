@@ -105,6 +105,11 @@
                     throw new UpdatePartException(message);
                 }
 
+                if (to.PreferredSupplier == null)
+                {
+                    throw new UpdatePartException("Cannot make live without a preferred supplier!");
+                }
+
                 from.DateLive = to.DateLive;
                 from.MadeLiveBy = to.MadeLiveBy;
             }
@@ -147,13 +152,9 @@
             from.ImdsIdNumber = to.ImdsIdNumber;
             from.ImdsWeight = to.ImdsWeight;
             from.OrderHold = to.OrderHold;
-            from.MaterialPrice = to.MaterialPrice;
             from.SparesRequirement = to.SparesRequirement;
-            from.CurrencyUnitPrice = to.CurrencyUnitPrice;
             from.NonForecastRequirement = to.NonForecastRequirement;
-            from.BaseUnitPrice = to.BaseUnitPrice;
             from.OneOffRequirement = to.OneOffRequirement;
-            from.LabourPrice = to.LabourPrice;
             from.LinnProduced = to.LinnProduced;
             from.PreferredSupplier = to.PreferredSupplier;
             from.QcOnReceipt = to.QcOnReceipt;
@@ -224,14 +225,9 @@
                 partToCreate.RailMethod = "POLICY";
             }
 
-            if (partToCreate.LinnProduced == "Y" && partToCreate.PreferredSupplier == null)
-            {
-                partToCreate.PreferredSupplier = this.supplierRepository.FindBy(s => s.Id == 4415);
-            }
-
             partToCreate.OrderHold = "N";
 
-            Validate(partToCreate);
+            this.Validate(partToCreate);
 
             return partToCreate;
         }
@@ -312,9 +308,25 @@
             return this.deptStockPartsService.GetDeptStockPalletParts();
         }
 
-        private static void Validate(Part to)
+        private static int? FindRealNextNumber(string newestPartOfThisType, PartTemplate template)
         {
-            if (!string.IsNullOrEmpty(to.ScrapOrConvert)  && to.PhasedOutBy == null)
+            var highestNumber = newestPartOfThisType?.Split(" ").Last().Split("/")[0];
+            if (int.TryParse(highestNumber, out var res))
+            {
+                return res + 1;
+            }
+
+            if (template.HasNumberSequence != "Y")
+            {
+                throw new CreatePartException("Template has no number sequence");
+            }
+
+            return template.NextNumber;
+        }
+
+        private void Validate(Part to)
+        {
+            if (!string.IsNullOrEmpty(to.ScrapOrConvert) && to.PhasedOutBy == null)
             {
                 to.ScrapOrConvert = null;
             }
@@ -346,22 +358,11 @@
             {
                 throw new UpdatePartException("You must enter a reason and/or reference or project code when setting an override");
             }
-        }
 
-        private static int? FindRealNextNumber(string newestPartOfThisType, PartTemplate template)
-        {
-            var highestNumber = newestPartOfThisType?.Split(" ").Last().Split("/")[0];
-            if (int.TryParse(highestNumber, out var res))
+            if (to.LinnProduced != null && to.LinnProduced.Equals("Y"))
             {
-                return res + 1;
+                to.PreferredSupplier = this.supplierRepository.FindBy(s => s.Id == 4415);
             }
-
-            if (template.HasNumberSequence != "Y")
-            {
-                throw new CreatePartException("Template has no number sequence");
-            }
-
-            return template.NextNumber;
         }
     }
 }

@@ -28,6 +28,7 @@
                                         RawOrFinished = "R",
                                         QcOnReceipt = "N"
                                     };
+
             this.privileges = new List<string> { "part.admin" };
             this.TemplateRepository.FindById(Arg.Any<string>()).Returns(new PartTemplate());
             this.PartPack.PartRoot(Arg.Any<string>()).Returns("ROOT");
