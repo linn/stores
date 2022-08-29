@@ -9,7 +9,7 @@ const addItem = jest.fn();
 const setSnackbarVisible = jest.fn();
 const history = { goBack: jest.fn() };
 const setEditStatus = jest.fn();
-
+const clearErrors = jest.fn();
 const defaultRender = props =>
     render(
         <MechPartSource
@@ -19,6 +19,7 @@ const defaultRender = props =>
             history={history}
             setEditStatus={setEditStatus}
             editStatus="view"
+            clearErrors={clearErrors}
             //eslint-disable-next-line react/jsx-props-no-spreading
             {...props}
         />
