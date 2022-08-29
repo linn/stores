@@ -107,7 +107,6 @@ function BuildTab({
                     fullWidth
                     allowNoValue
                     value={assemblyTechnologyName}
-                    disabled={!creating()}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -123,6 +122,7 @@ function BuildTab({
                     ]}
                     fullWidth
                     allowNoValue
+                    disabled={!creating()}
                     value={bomType}
                     onChange={handleFieldChange}
                 />
