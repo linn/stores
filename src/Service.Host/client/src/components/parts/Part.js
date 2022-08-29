@@ -391,6 +391,7 @@ function Part({
                             {tab === 1 && (
                                 <BuildTab
                                     handleFieldChange={handleFieldChange}
+                                    creating={creating}
                                     linnProduced={state.part.linnProduced}
                                     sernosSequenceName={state.part.sernosSequenceName}
                                     sernosSequenceDescription={state.part.sernosSequenceDescription}
