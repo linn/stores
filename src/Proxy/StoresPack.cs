@@ -39,6 +39,7 @@
                 var arg2 = new OracleParameter("p_line_number", OracleDbType.Int32)
                 {
                     Direction = ParameterDirection.Input,
+                    Value = reqLineNumber
                 };
                 cmd.Parameters.Add(arg2);
 
@@ -65,7 +66,7 @@
 
                 var successParameter = new OracleParameter("p_success ", OracleDbType.Int32)
                 {
-                    Direction = ParameterDirection.InputOutput,
+                    Direction = ParameterDirection.Output,
                 };
                 cmd.Parameters.Add(successParameter);
 
