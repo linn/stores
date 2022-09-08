@@ -28,47 +28,48 @@
                 {
                     CommandType = CommandType.StoredProcedure
                 };
-
+                
                 var arg1 = new OracleParameter("p_req_number", OracleDbType.Int32)
                 {
                     Direction = ParameterDirection.Input,
                     Value = reqNumber
                 };
                 cmd.Parameters.Add(arg1);
-
+                
                 var arg2 = new OracleParameter("p_line_number", OracleDbType.Int32)
                 {
                     Direction = ParameterDirection.Input,
+                    Value = reqLineNumber
                 };
                 cmd.Parameters.Add(arg2);
-
+                
                 var arg3 = new OracleParameter("p_unalloc_by", OracleDbType.Int32)
                 {
                     Direction = ParameterDirection.Input,
                     Value = userNumber
                 };
                 cmd.Parameters.Add(arg3);
-
+                
                 var arg6 = new OracleParameter("p_commit ", OracleDbType.Int32)
                 {
                     Direction = ParameterDirection.Input,
                     Value = 1
                 };
                 cmd.Parameters.Add(arg6);
-
+                
                 var messageParam = new OracleParameter("p_message", OracleDbType.Varchar2)
                                        {
                                            Direction = ParameterDirection.Output,
                                            Size = 2000
                                        };
                 cmd.Parameters.Add(messageParam);
-
+                
                 var successParameter = new OracleParameter("p_success ", OracleDbType.Int32)
                 {
                     Direction = ParameterDirection.InputOutput,
                 };
                 cmd.Parameters.Add(successParameter);
-
+                
                 cmd.ExecuteNonQuery();
                 connection.Close();
 
@@ -76,7 +77,7 @@
                 {
                     if (success == 1)
                     {
-                        return new ProcessResult(true, null);
+                        return new ProcessResult(true, "Unallocation Successful");
                     }
 
                     return new ProcessResult(

@@ -53,7 +53,6 @@ function Wand({
     const [selectedRow, setSelectedRow] = useState(null);
     const [lastWandLogId, setLastWandLogId] = useState(null);
     const [printLabels, setPrintLabels] = useState('Y');
-
     const wandStringInput = useRef(null);
     const manualSelectInput = useRef(null);
 
@@ -63,6 +62,26 @@ function Wand({
             wandStringInput.current.focus();
         }
     }, [items]);
+
+    const loadConsignmentItems = id => {
+        if (id) {
+            getItems(id);
+        } else {
+            clearItems();
+        }
+
+        setResultStyle('noMessage');
+        setWandMessage('');
+        wandStringInput.current.focus();
+    };
+
+    useEffect(() => {
+        if (unallocateConsignmentLineResult?.success) {
+            if (selectedRow) {
+                getItems(selectedRow.consignmentId);
+            }
+        }
+    }, [unallocateConsignmentLineResult, selectedRow, getItems]);
 
     useEffect(() => {
         if (!wandString) {
@@ -122,18 +141,6 @@ function Wand({
     }));
 
     const classes = useStyles();
-
-    const loadConsignmentItems = id => {
-        if (id) {
-            getItems(id);
-        } else {
-            clearItems();
-        }
-
-        setResultStyle('noMessage');
-        setWandMessage('');
-        wandStringInput.current.focus();
-    };
 
     const handleConsignmentChange = newValue => {
         setConsignmentId(newValue.target.value ? parseInt(newValue.target.value, 10) : null);
@@ -337,10 +344,8 @@ function Wand({
         clearUnallocateConsignment({});
     };
 
-    const showUnallocateConsignmentLineError = () =>
-        unallocateConsignmentLineResult &&
-        !unallocateConsignmentLineResult.success &&
-        unallocateConsignmentLineResult.message;
+    const showUnallocateConsignmentLineMessage = () =>
+        unallocateConsignmentLineResult && unallocateConsignmentLineResult.message;
 
     const closeUnallocateConsignmentLine = () => {
         clearUnallocateConsignmentLine({});
@@ -382,7 +387,7 @@ function Wand({
                         message={unallocateConsignmentResult?.message}
                     />
                     <SnackbarMessage
-                        visible={showUnallocateConsignmentLineError()}
+                        visible={showUnallocateConsignmentLineMessage()}
                         onClose={closeUnallocateConsignmentLine}
                         message={unallocateConsignmentLineResult?.message}
                     />
@@ -596,18 +601,9 @@ Wand.defaultProps = {
     items: [],
     itemsLoading: false,
     doWandItemWorking: false,
-    wandResult: {
-        message: null,
-        success: true
-    },
-    unallocateConsignmentResult: {
-        message: 'ok',
-        success: true
-    },
-    unallocateConsignmentLineResult: {
-        message: 'ok',
-        success: true
-    },
+    wandResult: null,
+    unallocateConsignmentResult: null,
+    unallocateConsignmentLineResult: null,
     unallocateConsignmentWorking: false,
     unallocateConsignmentLineWorking: false
 };
