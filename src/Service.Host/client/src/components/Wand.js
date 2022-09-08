@@ -63,18 +63,6 @@ function Wand({
         }
     }, [items]);
 
-    const loadConsignmentItems = id => {
-        if (id) {
-            getItems(id);
-        } else {
-            clearItems();
-        }
-
-        setResultStyle('noMessage');
-        setWandMessage('');
-        wandStringInput.current.focus();
-    };
-
     useEffect(() => {
         if (unallocateConsignmentLineResult?.success) {
             if (selectedRow) {
@@ -141,6 +129,18 @@ function Wand({
     }));
 
     const classes = useStyles();
+
+    const loadConsignmentItems = id => {
+        if (id) {
+            getItems(id);
+        } else {
+            clearItems();
+        }
+
+        setResultStyle('noMessage');
+        setWandMessage('');
+        wandStringInput.current.focus();
+    };
 
     const handleConsignmentChange = newValue => {
         setConsignmentId(newValue.target.value ? parseInt(newValue.target.value, 10) : null);
