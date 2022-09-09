@@ -66,7 +66,7 @@
                 
                 var successParameter = new OracleParameter("p_success ", OracleDbType.Int32)
                 {
-                    Direction = ParameterDirection.InputOutput,
+                    Direction = ParameterDirection.Output,
                 };
                 cmd.Parameters.Add(successParameter);
                 
