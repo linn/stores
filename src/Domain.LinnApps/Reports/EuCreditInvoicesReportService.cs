@@ -22,17 +22,20 @@
 
         public ResultsModel GetReport(DateTime from, DateTime to)
         {
-            var data = this.repository.FilterBy(x => x.InvoiceDate >= from && x.InvoiceDate <= to);
+            var f = from.Date.AddDays(-1d);
+            var t = to.AddDays(1).Date;
+            var data = this.repository.FilterBy(x => x.InvoiceDate > f && x.InvoiceDate < t);
             var reportLayout = new SimpleGridLayout(
                 this.reportingHelper,
                 CalculationValueModelType.Value,
                 null,
-                "QC controlled parts that have an MR requirement or sales forecast and that aren't obsolete.");
+                "EU Credit Invoices");
             reportLayout.AddColumnComponent(
                 null,
                 new List<AxisDetailsModel>
                     {
                         new AxisDetailsModel("AccountName", "Account", GridDisplayType.TextValue),
+                        new AxisDetailsModel("InvoiceDate", "Date", GridDisplayType.TextValue),
                         new AxisDetailsModel("Invoice", "Invoice", GridDisplayType.TextValue),
                         new AxisDetailsModel("LineNo", "Line", GridDisplayType.TextValue),
                         new AxisDetailsModel("GoodsTotal", "Goods", GridDisplayType.Value) { DecimalPlaces = 2 },
@@ -47,7 +50,7 @@
             var values = new List<CalculationValueModel>();
             foreach (var datum in data)
             {
-                var rowId = $"{datum.Invoice}/{datum.RsnNumber}";
+                var rowId = $"{datum.Invoice}/{datum.LineNo}/{datum.RsnNumber}";
                 values.Add(
                     new CalculationValueModel
                         {
@@ -55,6 +58,13 @@
                             ColumnId = "AccountName",
                             TextDisplay = datum.AccountName
                     });
+                values.Add(
+                    new CalculationValueModel
+                        {
+                            RowId = rowId,
+                            ColumnId = "InvoiceDate",
+                            TextDisplay = $"{datum.InvoiceDate.Day}/{datum.InvoiceDate.Month}/{datum.InvoiceDate.Year}"
+                        });
                 values.Add(
                     new CalculationValueModel
                         {

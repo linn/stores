@@ -16,6 +16,7 @@
             this.reportService = reportService;
             this.Get("/logistics/reports/eu-credit-invoices", _ => this.GetApp());
             this.Get("/logistics/reports/eu-credit-invoices/report", _ => this.GetReport());
+            this.Get("/logistics/reports/eu-credit-invoices/export", _ => this.GetExport());
         }
 
         private object GetApp()
@@ -29,6 +30,15 @@
             var result = this.reportService.GetReport(resource.From, resource.To);
             return this.Negotiate.WithModel(
                     result);
+        }
+
+        private object GetExport()
+        {
+            var resource = this.Bind<FromToDateResource>();
+
+            var results = this.reportService.GetExport(resource.From, resource.To);
+            return this.Negotiate.WithModel(results).WithAllowedMediaRange("text/csv")
+                .WithView("Index");
         }
     }
 }

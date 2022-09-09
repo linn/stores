@@ -2170,6 +2170,7 @@
         {
             var q = builder.Query<EuCreditInvoice>().ToView("EU_CREDIT_INVOICES");
             q.Property(a => a.AccountId).HasColumnName("ACCOUNT_ID");
+            q.Property(a => a.AccountName).HasColumnName("ACCOUNT_NAME");
             q.Property(a => a.Invoice).HasColumnName("INVOICE");
             q.Property(a => a.LineNo).HasColumnName("LINE_NO");
             q.Property(a => a.InvoiceDate).HasColumnName("INVOICE_DATE");
