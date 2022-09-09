@@ -255,6 +255,8 @@
 
         public DbQuery<MrPart> MrParts { get; set; }
 
+        public DbQuery<EuCreditInvoice> EuCreditInvoices { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -377,6 +379,7 @@
             this.BuildPhoneList(builder);
             this.BuildInvoiceDetails(builder);
             this.QueryMrParts(builder);
+            this.QueryEuCreditInvoices(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -2161,6 +2164,23 @@
             q.Property(a => a.EmailAddress).HasColumnName("EMAIL_ADDRESS");
             q.Property(a => a.UserNumber).HasColumnName("USER_NUMBER");
             q.HasOne(a => a.User).WithOne(u => u.PhoneListEntry).HasForeignKey<PhoneListEntry>(p => p.UserNumber);
+        }
+
+        private void QueryEuCreditInvoices(ModelBuilder builder)
+        {
+            var q = builder.Query<EuCreditInvoice>().ToView("EU_CREDIT_INVOICES");
+            q.Property(a => a.AccountId).HasColumnName("ACCOUNT_ID");
+            q.Property(a => a.Invoice).HasColumnName("INVOICE");
+            q.Property(a => a.LineNo).HasColumnName("LINE_NO");
+            q.Property(a => a.InvoiceDate).HasColumnName("INVOICE_DATE");
+            q.Property(a => a.GoodsTotal).HasColumnName("GOODS_TOTAL");
+            q.Property(a => a.VatTotal).HasColumnName("VAT_TOTAL");
+            q.Property(a => a.DocumentTotal).HasColumnName("DOCUMENT_TOTAL");
+            q.Property(a => a.RsnNumber).HasColumnName("RSN_NUMBER");
+            q.Property(a => a.CreditNoteNumber).HasColumnName("CREDIT_NOTE_NUMBER");
+            q.Property(a => a.DocumentType).HasColumnName("DOCUMENT_TYPE");
+            q.Property(a => a.CreditCode).HasColumnName("CREDIT_CODE");
+            q.Property(a => a.CreditCodeDescription).HasColumnName("CC_DESCRIPTION");
         }
     }
 }
