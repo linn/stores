@@ -22,9 +22,8 @@
 
         public ResultsModel GetReport(DateTime from, DateTime to)
         {
-            var f = from.Date.AddDays(-1d);
-            var t = to.AddDays(1).Date;
-            var data = this.repository.FilterBy(x => x.InvoiceDate > f && x.InvoiceDate < t);
+            var data = this.repository.FilterBy(x => x.InvoiceDate > from.Date.AddDays(-1d) 
+                                                     && x.InvoiceDate < to.AddDays(1).Date);
             var reportLayout = new SimpleGridLayout(
                 this.reportingHelper,
                 CalculationValueModelType.Value,
