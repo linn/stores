@@ -142,7 +142,11 @@
             }
             catch (Exception ex)
             {
-                return new TpkResult { Success = false, Message = $"Error generating report. Stock transfer likely still succeeded. Click refresh to check. Error details: {ex.Message}" };
+                return new TpkResult
+                           {
+                               Success = false, 
+                               Message = $"Error generating report. Stock transfer likely still succeeded. Click refresh to check. Error details: {ex.Message}"
+                           };
             }
         }
 

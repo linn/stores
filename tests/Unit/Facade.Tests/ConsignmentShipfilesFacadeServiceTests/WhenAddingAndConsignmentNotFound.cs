@@ -22,7 +22,7 @@
         public void ShouldReturnBadRequest()
         {
             this.result.GetType().Should().Be(typeof(BadRequestResult<ConsignmentShipfile>));
-            ((BadRequestResult<ConsignmentShipfile>)this.result).Message.Should().Be("Consignments Not Found");
+            ((BadRequestResult<ConsignmentShipfile>)this.result).Message.Should().Be("Consignment Not Found");
         }
     }
 }

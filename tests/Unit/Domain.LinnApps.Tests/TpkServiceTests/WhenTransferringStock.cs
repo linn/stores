@@ -17,20 +17,32 @@
     public class WhenTransferringStock : ContextBase
     {
         private readonly IEnumerable<TransferableStock> repositoryResult =
-            new List<TransferableStock> { new TransferableStock { FromLocation = "A" }, };
+            new List<TransferableStock>
+                {
+                    new TransferableStock
+                        {
+                            FromLocation = "A", LocationId = 1, PalletNumber = 1, ConsignmentId = 1
+                        },
+                    new TransferableStock
+                        {
+                            FromLocation = "A", LocationId = 1, PalletNumber = 1, ConsignmentId = 2
+                        },
+                    new TransferableStock
+                        {
+                            FromLocation = "A", LocationId = 1, PalletNumber = 1, ConsignmentId = 2
+                        },
+                    new TransferableStock
+                        {
+                            FromLocation = "A", LocationId = 1, PalletNumber = 1, ConsignmentId = 3
+                        }
+                };
 
         private TpkResult result; 
 
         [SetUp]
         public void SetUp()
         {
-            var toTransfer = new List<TransferableStock>
-                                 {
-                                     new TransferableStock
-                                         {
-                                             FromLocation = "A", LocationId = 1, PalletNumber = 1, ConsignmentId = 1
-                                         }
-                                 };
+            var toTransfer = this.repositoryResult.ToList();
                                      
             this.AccountingCompaniesRepository
                                          .FindBy(Arg.Any<Expression<Func<AccountingCompany, bool>>>()).Returns(
@@ -40,17 +52,23 @@
                 .Returns(this.repositoryResult.AsQueryable());
 
             this.WhatToWandService.WhatToWand(Arg.Any<int?>(), Arg.Any<int?>())
-                .Returns(new List<WhatToWandLine> { new WhatToWandLine { OrderNumber = 1, ConsignmentId = 1 } });
+                .Returns(new List<WhatToWandLine>
+                             {
+                                 new WhatToWandLine { OrderNumber = 1, ConsignmentId = 1 },
+                                 new WhatToWandLine { OrderNumber = 2, ConsignmentId = 2 },
+                                 new WhatToWandLine { OrderNumber = 3, ConsignmentId = 2 },
+                                 new WhatToWandLine { OrderNumber = 4, ConsignmentId = 3 },
+                             });
 
             this.WhatToWandService.ShouldPrintWhatToWand(toTransfer.First().FromLocation).Returns(true);
 
-            this.TpkPack.When(x => x.UpdateQuantityPrinted(Arg.Any<string>(), out var success))
+            this.TpkPack.When(x => x.UpdateQuantityPrinted(Arg.Any<string>(), out _))
                 .Do(x =>
                     {
                         x[1] = true;
                     });
 
-            this.StoresPack.When(x => x.DoTpk(1, 1, Arg.Any<DateTime>(), out var success))
+            this.StoresPack.When(x => x.DoTpk(1, 1, Arg.Any<DateTime>(), out _))
                 .Do(x =>
                     {
                         x[3] = true;
@@ -92,6 +110,15 @@
         {
             this.result.Should().BeOfType<TpkResult>();
             this.result.Consignments.First().Consignment.ConsignmentId.Should().Be(1);
+        }
+
+        [Test]
+        public void ShouldGroupConsignments()
+        {
+            this.result.Consignments.Count().Should().Be(3);
+            this.result.Consignments.Single(c => c.Consignment.ConsignmentId == 1).Lines.Count().Should().Be(1);
+            this.result.Consignments.Single(c => c.Consignment.ConsignmentId == 2).Lines.Count().Should().Be(2);
+            this.result.Consignments.Single(c => c.Consignment.ConsignmentId == 3).Lines.Count().Should().Be(1);
         }
     }
 }

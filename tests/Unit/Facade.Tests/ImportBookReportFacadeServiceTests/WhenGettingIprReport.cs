@@ -20,7 +20,7 @@
         {
             var resource = new IPRSearchResource { FromDate = "01-Jan-2021", ToDate = "01-Jun-2021", IprResults = true };
             this.ReportService.GetIPRReport(1.January(2021), 1.June(2021), true).Returns(
-                new ResultsModel { ReportTitle = new NameModel("IPR Import Books Consignments") });
+                new ResultsModel { ReportTitle = new NameModel("IPR Import Books Report") });
             this.result = this.Sut.GetImpbookIPRReport(resource);
         }
 
@@ -35,7 +35,7 @@
         {
             this.result.Should().BeOfType<SuccessResult<ResultsModel>>();
             var dataResult = ((SuccessResult<ResultsModel>)this.result).Data;
-            dataResult.ReportTitle.DisplayValue.Should().Be("IPR Import Books Consignments");
+            dataResult.ReportTitle.DisplayValue.Should().Be("IPR Import Books Report");
         }
     }
 }

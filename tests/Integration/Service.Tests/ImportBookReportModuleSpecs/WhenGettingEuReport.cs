@@ -28,7 +28,7 @@
             this.ImportBookReportFacadeService.GetImpbookEuReport(Arg.Any<EUSearchResource>()).Returns(
                 new SuccessResult<ResultsModel>(results)
                     {
-                        Data = new ResultsModel { ReportTitle = new NameModel("EU Import Books Consignments") }
+                        Data = new ResultsModel { ReportTitle = new NameModel("EU Import Books Report") }
                     });
 
             this.Response = this.Browser.Get(
@@ -58,7 +58,7 @@
         public void ShouldReturnReport()
         {
             var resource = this.Response.Body.DeserializeJson<ReportReturnResource>();
-            resource.ReportResults.First().title.displayString.Should().Be("EU Import Books Consignments");
+            resource.ReportResults.First().title.displayString.Should().Be("EU Import Books Report");
         }
     }
 }

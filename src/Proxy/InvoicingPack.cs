@@ -55,7 +55,7 @@
 
                 return new ProcessResult(
                     true,
-                    $"Consignments {consignmentId} invoiced successfully");
+                    $"Consignment {consignmentId} invoiced successfully");
             }
         }
     }

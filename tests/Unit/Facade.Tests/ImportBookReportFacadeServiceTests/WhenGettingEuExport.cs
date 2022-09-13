@@ -22,7 +22,7 @@
         {
             var resource = new EUSearchResource { FromDate = "01-Jan-2021", ToDate = "01-Jun-2021", EuResults = true};
             this.ReportService.GetEUExport(1.January(2021), 1.June(2021), true).Returns(
-                new ResultsModel { ReportTitle = new NameModel("EU Import Books Consignments") });
+                new ResultsModel { ReportTitle = new NameModel("EU Import Books Report") });
             this.result = this.Sut.GetImpbookEuReportExport(resource);
         }
 

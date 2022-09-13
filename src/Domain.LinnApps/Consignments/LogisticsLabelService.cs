@@ -145,7 +145,7 @@
             }
 
             return
-                $"Carton: {item.ContainerNumber}{Environment.NewLine}Article:{item.ItemDescription}{Environment.NewLine}Serial No: {item.SerialNumber}{Environment.NewLine}Order: {item.OrderNumber}{Environment.NewLine}Consignments: {consignment.ConsignmentId}";
+                $"Carton: {item.ContainerNumber}{Environment.NewLine}Article:{item.ItemDescription}{Environment.NewLine}Serial No: {item.SerialNumber}{Environment.NewLine}Order: {item.OrderNumber}{Environment.NewLine}Consignment: {consignment.ConsignmentId}";
         }
 
         private string GetPrinter(int userNumber)
