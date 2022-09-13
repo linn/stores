@@ -217,7 +217,8 @@
                                   MainsLead = data[4].ToString(),
                                   Kitted = int.Parse(data[5].ToString()),
                                   Ordered = int.Parse(data[6].ToString()),
-                                  Sif = data[7].ToString()
+                                  Sif = data[7].ToString(),
+                                  ConsignmentId = int.Parse(data[8].ToString())
                 });
             }
 

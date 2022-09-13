@@ -28,7 +28,7 @@
             this.ImportBookReportFacadeService.GetImpbookIPRReport(Arg.Any<IPRSearchResource>()).Returns(
                 new SuccessResult<ResultsModel>(results)
                     {
-                        Data = new ResultsModel { ReportTitle = new NameModel("IPR Import Books Report") }
+                        Data = new ResultsModel { ReportTitle = new NameModel("IPR Import Books Consignments") }
                     });
 
             this.Response = this.Browser.Get(
@@ -58,7 +58,7 @@
         public void ShouldReturnReport()
         {
             var resource = this.Response.Body.DeserializeJson<ReportReturnResource>();
-            resource.ReportResults.First().title.displayString.Should().Be("IPR Import Books Report");
+            resource.ReportResults.First().title.displayString.Should().Be("IPR Import Books Consignments");
         }
     }
 }

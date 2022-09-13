@@ -111,32 +111,33 @@
                 throw new TpkException(this.storesPack.GetErrorMessage());
             }
 
-            var consignment = this.consignmentRepository.FindById(from.ConsignmentId);
             try
             {
-                var whatToWandLines = whatToWand?.ToArray();
+                var consignmentGroups = whatToWand?.GroupBy(x => x.ConsignmentId).ToList();
                 return new TpkResult
                            {
                                Success = true,
                                Message = "TPK Successful",
                                Transferred = transferredWithNotes,
-                               Report = whatToWandLines == null ? null : new WhatToWandReport
-                                            {
-                                                Account =
-                                                    this.salesAccountQueryRepository.FindBy(
-                                                        o => o.AccountId == consignment.SalesAccountId),
-                                                Consignment = consignment,
-                                                Type = this.tpkPack.GetWhatToWandType(consignment.ConsignmentId),
-                                                Lines = whatToWandLines,
-                                                CurrencyCode =
-                                                    this.salesOrderRepository.FindBy(
-                                                            o => o.OrderNumber == whatToWandLines.First().OrderNumber)
-                                                        .CurrencyCode,
-                                                TotalNettValueOfConsignment = whatToWandLines.Sum(
-                                                    x => this.salesOrderDetailRepository.FindBy(
-                                                        d => d.OrderNumber == x.OrderNumber
-                                                             && d.OrderLine == x.OrderLine).NettTotal),
-                                            }
+                               Consignments = consignmentGroups?.Select(
+                                   x =>
+                                       {
+                                           var consignment = this.consignmentRepository.FindById(x.Key);
+                                           return new WhatToWandConsignment
+                                                      {
+                                                          Lines = x.ToList(), 
+                                                          Consignment = consignment, 
+                                                          Type = this.tpkPack.GetWhatToWandType(consignment.ConsignmentId), 
+                                                          Account = this.salesAccountQueryRepository.FindBy(
+                                                                                        o => o.AccountId == consignment.SalesAccountId),
+                                                          TotalNettValueOfConsignment = x.Sum(l => this.salesOrderDetailRepository.FindBy(
+                                                              d => d.OrderNumber == l.OrderNumber
+                                                                   && d.OrderLine == l.OrderLine).NettTotal),
+                                                          CurrencyCode = this.salesOrderRepository.FindBy(
+                                                                  o => o.OrderNumber == x.First().OrderNumber)
+                                                              .CurrencyCode
+                                           };
+                                       })
                            };
             }
             catch (Exception ex)

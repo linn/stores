@@ -22,7 +22,7 @@
         {
             var resource = new IPRSearchResource { FromDate = "01-Jan-2021", ToDate = "01-Jun-2021", IprResults = true};
             this.ReportService.GetIPRExport(1.January(2021), 1.June(2021), true).Returns(
-                new ResultsModel { ReportTitle = new NameModel("IPR Import Books Report") });
+                new ResultsModel { ReportTitle = new NameModel("IPR Import Books Consignments") });
             this.result = this.Sut.GetImpbookIprReportExport(resource);
         }
 

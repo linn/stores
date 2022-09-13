@@ -94,7 +94,7 @@
 
             if (consignment == null)
             {
-                return new BadRequestResult<ConsignmentShipfile>("Consignment Not Found");
+                return new BadRequestResult<ConsignmentShipfile>("Consignments Not Found");
             }
 
             var id = this.databaseService.GetIdSequence("SHIPFILE_EMAIL_SEQ");

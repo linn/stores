@@ -40,7 +40,7 @@
                 .Returns(this.repositoryResult.AsQueryable());
 
             this.WhatToWandService.WhatToWand(Arg.Any<int?>(), Arg.Any<int?>())
-                .Returns(new List<WhatToWandLine> { new WhatToWandLine { OrderNumber = 1 } });
+                .Returns(new List<WhatToWandLine> { new WhatToWandLine { OrderNumber = 1, ConsignmentId = 1 } });
 
             this.WhatToWandService.ShouldPrintWhatToWand(toTransfer.First().FromLocation).Returns(true);
 
@@ -91,7 +91,7 @@
         public void ShouldReturnResult()
         {
             this.result.Should().BeOfType<TpkResult>();
-            this.result.Report.Consignment.ConsignmentId.Should().Be(1);
+            this.result.Consignments.First().Consignment.ConsignmentId.Should().Be(1);
         }
     }
 }
