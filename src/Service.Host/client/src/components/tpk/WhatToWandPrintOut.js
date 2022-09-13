@@ -14,8 +14,8 @@ export default class WhatToWandPrintout extends React.PureComponent {
               }`}
                 </style>
                 <Grid container spacing={3}>
-                    {whatToWandReport.map(consignment => {
-                        const rows = consignment.lines.map(l => ({
+                    {whatToWandReport.map(c => {
+                        const rows = c.lines.map(l => ({
                             ...l,
                             id: `${l.orderNumber - l.orderLine}`
                         }));
@@ -31,18 +31,18 @@ export default class WhatToWandPrintout extends React.PureComponent {
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Typography align="center" variant="h2">
-                                        {consignment.type}
+                                        {c.type}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={12}>
                                     <Typography align="center" variant="h4">
-                                        {consignment.account.accountName}
+                                        {c.account.accountName}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={1} />
                                 <Grid item xs={11}>
                                     <Typography variant="h2">
-                                        {consignment.consignment.consignmentId}
+                                        {c.consignment.consignmentId}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={1} />
@@ -50,10 +50,10 @@ export default class WhatToWandPrintout extends React.PureComponent {
                                     Account:
                                 </Grid>
                                 <Grid item xs={2}>
-                                    {consignment.account.accountId}
+                                    {c.account.accountId}
                                 </Grid>
                                 <Grid item xs={2}>
-                                    {consignment.account.accountName}
+                                    {c.account.accountName}
                                 </Grid>
                                 <Grid item xs={5} />
                                 <Grid item xs={1} />
@@ -61,14 +61,14 @@ export default class WhatToWandPrintout extends React.PureComponent {
                                     Delivery Address:
                                 </Grid>
                                 <Grid item xs={2}>
-                                    {consignment.consignment.addressId}
+                                    {c.consignment.addressId}
                                 </Grid>
                                 <Grid item xs={8} />
                                 <Grid item xs={2}>
                                     Country:
                                 </Grid>
                                 <Grid item xs={4}>
-                                    {consignment.consignment.country}
+                                    {c.consignment.country}
                                 </Grid>
                                 <Grid item xs={5} />
                                 <Grid item xs={1} />
@@ -107,8 +107,8 @@ export default class WhatToWandPrintout extends React.PureComponent {
                                 <Grid item xs={10}>
                                     <Typography align="center" variant="h6">
                                         {`Total Nett Value Of Consignment (${
-                                            consignment.currencyCode
-                                        }): ${consignment.totalNettValue.toFixed(2)}`}
+                                            c.consignment.currencyCode
+                                        }): ${c.consignment.totalNettValue.toFixed(2)}`}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={1} />
