@@ -365,3 +365,7 @@ export const qcPartsReportActionTypes = makeReportActionTypes(
     reportTypes.qcPartsReport.actionType,
     false
 );
+
+export const euCreditInvoicesReportActionTypes = makeReportActionTypes(
+    reportTypes.euCreditInvoicesReport.actionType
+);

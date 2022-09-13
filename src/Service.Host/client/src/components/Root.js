@@ -57,6 +57,7 @@ import QcLabelPrintScreen from '../containers/goodsIn/QcLabelPrintScreen';
 import StockBatchesInRotationOrder from '../containers/stockLocatorUtility/StockBatchesInRotationOrder';
 import ZeroValuedInvoiceDetailsReportOptions from './reports/ZeroValuedInvoiceDetailsReportOptions';
 import QcPartsReport from '../containers/reports/QcPartsReport';
+import EuCreditInvoicesReport from '../containers/reports/EuCreditInvoicesReport';
 
 const Root = ({ store }) => (
     <div>
@@ -341,6 +342,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/reports/qc-parts"
                                         component={QcPartsReport}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/reports/eu-credit-invoices"
+                                        component={EuCreditInvoicesReport}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>

@@ -48,3 +48,9 @@ export const qcPartsReport = new ItemType(
     'QC_PARTS_REPORT',
     '/inventory/reports/qc-parts'
 );
+
+export const euCreditInvoicesReport = new ItemType(
+    'euCreditInvoicesReport',
+    'EU_CREDIT_INVOICES_REPORT',
+    '/logistics/reports/eu-credit-invoices/report'
+);

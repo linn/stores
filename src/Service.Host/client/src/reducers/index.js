@@ -134,6 +134,7 @@ import salesOutletAddresses from './salesOutletAddresses';
 import unpickStock from './unpickStock';
 import unallocateReq from './unallocateReq';
 import qcPartsReport from './qcPartsReport';
+import euCreditInvoicesReport from './euCreditInvoicesReport';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -171,6 +172,7 @@ const rootReducer = history =>
         doStockMove,
         doWandItem,
         employees,
+        euCreditInvoicesReport,
         exchangeRates,
         exportReturn,
         exportRsns,
