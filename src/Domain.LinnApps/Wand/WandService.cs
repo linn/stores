@@ -121,7 +121,7 @@
         private string GetLabelInformation(WandLog wandLog)
         {
             return
-                $"Carton: {wandLog.ContainerNo}{Environment.NewLine}Article:{wandLog.ArticleNumber}{Environment.NewLine}Serial No: {wandLog.SeriaNumber1} {wandLog.SeriaNumber2}{Environment.NewLine}Order: {wandLog.OrderNumber}{Environment.NewLine}Consignments: {wandLog.ConsignmentId}";
+                $"Carton: {wandLog.ContainerNo}{Environment.NewLine}Article:{wandLog.ArticleNumber}{Environment.NewLine}Serial No: {wandLog.SeriaNumber1} {wandLog.SeriaNumber2}{Environment.NewLine}Order: {wandLog.OrderNumber}{Environment.NewLine}Consignment: {wandLog.ConsignmentId}";
         }
 
         private string GetPrintAddress(Address address)
