@@ -17,5 +17,7 @@
         public int Ordered { get; set; }
 
         public string Sif { get; set; }
+
+        public int ConsignmentId { get; set; }
     }
 }
