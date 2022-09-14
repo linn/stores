@@ -180,9 +180,6 @@ describe('When whatToWandReport...', () => {
             ]
         })
     );
-    test('should show print dialog', () => {
-        expect(screen.getByText('What to Wand')).toBeInTheDocument();
-    });
     test('should render currency code and rounded nett total', () => {
         expect(
             screen.getByText('Total Nett Value Of Consignment (GBP): 100.12')
