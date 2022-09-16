@@ -108,7 +108,7 @@
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = wwdWork.PartNumber, Quantity = wwdWork.QuantityKitted ?? 0, ColumnId = "Qty Kitted"
+                            RowId = wwdWork.PartNumber, TextDisplay = wwdWork.QuantityKitted.ToString() ?? "0", ColumnId = "Qty Kitted"
                         });
                 values.Add(
                     new CalculationValueModel
@@ -121,7 +121,7 @@
                     new CalculationValueModel
                         {
                             RowId = wwdWork.PartNumber,
-                            Quantity = wwdWork.QuantityAtLocation ?? 0,
+                            TextDisplay = wwdWork.QuantityAtLocation.ToString() ?? "0",
                             ColumnId = "Qty at Work Station"
                         });
                 values.Add(
@@ -142,7 +142,7 @@
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = wwdWork.PartNumber, Quantity = wwdWorkDetail?.Quantity ?? 0, ColumnId = "Qty"
+                            RowId = wwdWork.PartNumber, TextDisplay = wwdWorkDetail?.Quantity.ToString() ?? "0", ColumnId = "Qty"
                         });
                 values.Add(
                     new CalculationValueModel { RowId = wwdWork.PartNumber, TextDisplay = changeRemarks, ColumnId = "Change" });
@@ -161,7 +161,7 @@
                                },
                            new AxisDetailsModel("Qty Kitted")
                                {
-                                   SortOrder = 2, GridDisplayType = GridDisplayType.Value
+                                   SortOrder = 2, GridDisplayType = GridDisplayType.TextValue
                                },
                            new AxisDetailsModel("Work Station Storage Place")
                                {
@@ -169,7 +169,7 @@
                                },
                            new AxisDetailsModel("Qty at Work Station")
                                {
-                                   SortOrder = 4, GridDisplayType = GridDisplayType.Value
+                                   SortOrder = 4, GridDisplayType = GridDisplayType.TextValue
                                },
                            new AxisDetailsModel("Remarks")
                                {
@@ -177,7 +177,7 @@
                                },
                            new AxisDetailsModel("Site") { SortOrder = 6, GridDisplayType = GridDisplayType.TextValue },
                            new AxisDetailsModel("State") { SortOrder = 7, GridDisplayType = GridDisplayType.TextValue },
-                           new AxisDetailsModel("Qty") { SortOrder = 8, GridDisplayType = GridDisplayType.Value },
+                           new AxisDetailsModel("Qty") { SortOrder = 8, GridDisplayType = GridDisplayType.TextValue },
                            new AxisDetailsModel("Change") { SortOrder = 9, GridDisplayType = GridDisplayType.TextValue }
                        };
         }
