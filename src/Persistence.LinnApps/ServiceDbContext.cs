@@ -257,6 +257,8 @@
 
         public DbQuery<EuCreditInvoice> EuCreditInvoices { get; set; }
 
+        public DbQuery<ProductUpgradeRule> ProductUpgradeRules { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -379,7 +381,7 @@
             this.BuildPhoneList(builder);
             this.BuildInvoiceDetails(builder);
             this.QueryMrParts(builder);
-            this.QueryEuCreditInvoices(builder);
+            this.QueryProductUpgradeRules(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -2182,6 +2184,12 @@
             q.Property(a => a.DocumentType).HasColumnName("DOCUMENT_TYPE");
             q.Property(a => a.CreditCode).HasColumnName("CREDIT_CODE");
             q.Property(a => a.CreditCodeDescription).HasColumnName("CC_DESCRIPTION");
+        }
+
+        private void QueryProductUpgradeRules(ModelBuilder builder)
+        {
+            var q = builder.Query<ProductUpgradeRule>().ToView("PRODUCT_UPGRADE_RULES");
+            q.Property(r => r.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
         }
     }
 }

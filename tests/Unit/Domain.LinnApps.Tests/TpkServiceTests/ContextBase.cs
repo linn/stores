@@ -40,9 +40,12 @@
 
         protected IRepository<ReqMove, ReqMoveKey> ReqMovesRepository { get; set; }
 
+        protected IQueryRepository<ProductUpgradeRule> ProductUpgradeRuleRepository { get; set; }
+
         [SetUp]
         public void SetUpContext()
         {
+            this.ProductUpgradeRuleRepository = Substitute.For<IQueryRepository<ProductUpgradeRule>>();
             this.TpkView = Substitute.For<IQueryRepository<TransferableStock>>();
             this.AccountingCompaniesRepository = Substitute.For<IQueryRepository<AccountingCompany>>();
             this.TpkPack = Substitute.For<ITpkPack>();
@@ -84,7 +87,8 @@
                 this.ConsignmentRepository,
                 this.SalesOrderDetailRepository,
                 this.SalesOrderRepository,
-                this.ReqMovesRepository);
+                this.ReqMovesRepository,
+                this.ProductUpgradeRuleRepository);
         }
     }
 }
