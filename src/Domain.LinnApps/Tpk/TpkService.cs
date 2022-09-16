@@ -36,6 +36,8 @@
 
         private readonly IRepository<ReqMove, ReqMoveKey> reqMovesRepository;
 
+        private readonly IQueryRepository<ProductUpgradeRule> productUpgradeRulesRepository;
+
         public TpkService(
             IQueryRepository<TransferableStock> tpkView,
             IQueryRepository<AccountingCompany> accountingCompaniesRepository,
@@ -47,7 +49,8 @@
             IRepository<Consignment, int> consignmentRepository,
             IQueryRepository<SalesOrderDetail> salesOrderDetailRepository,
             IQueryRepository<SalesOrder> salesOrderRepository,
-            IRepository<ReqMove, ReqMoveKey> reqMovesRepository)
+            IRepository<ReqMove, ReqMoveKey> reqMovesRepository,
+            IQueryRepository<ProductUpgradeRule> productUpgradeRulesRepository)
         {
             this.tpkView = tpkView;
             this.tpkPack = tpkPack;
@@ -60,6 +63,7 @@
             this.salesOrderDetailRepository = salesOrderDetailRepository;
             this.salesOrderRepository = salesOrderRepository;
             this.reqMovesRepository = reqMovesRepository;
+            this.productUpgradeRulesRepository = productUpgradeRulesRepository;
         }
 
         public TpkResult TransferStock(TpkRequest tpkRequest)
@@ -113,6 +117,20 @@
 
             try
             {
+                foreach (var line in whatToWand)
+                {
+                    var hasUpgradeRule = this.productUpgradeRulesRepository
+                        .FilterBy(r  => r.ArticleNumber == line.ArticleNumber).Any();
+
+                    if (hasUpgradeRule && !string.IsNullOrEmpty(line.RenewSernos))
+                    {
+                        line.SerialNumberComments =
+                            $"*** Please select on of the following renew serial numbers: {line.RenewSernos} (Original serial number: {line.OldSernos})";
+                    } 
+
+                    //line.SerialNumberComments = "*** THIS WILL BE THE SERIAL NUMBER COMMENT (SOMETHING SOMETHING SOMETHING";
+                }
+
                 var consignmentGroups = whatToWand?.GroupBy(x => x.ConsignmentId).ToList();
                 return new TpkResult
                            {
