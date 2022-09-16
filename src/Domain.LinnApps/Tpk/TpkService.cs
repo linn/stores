@@ -126,9 +126,7 @@
                     {
                         line.SerialNumberComments =
                             $"*** Please select on of the following renew serial numbers: {line.RenewSernos} (Original serial number: {line.OldSernos})";
-                    } 
-
-                    //line.SerialNumberComments = "*** THIS WILL BE THE SERIAL NUMBER COMMENT (SOMETHING SOMETHING SOMETHING";
+                    }
                 }
 
                 var consignmentGroups = whatToWand?.GroupBy(x => x.ConsignmentId).ToList();
