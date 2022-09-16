@@ -7,7 +7,7 @@ import tpkActions from '../actions/tpkTransferStockActions';
 import tpkSelectors from '../selectors/tpkTransferStockSelectors';
 import unpickStockSelectors from '../selectors/unpickStockSelectors';
 import unallocateReqSelectors from '../selectors/uanllocateReqSelectors';
-import * as processtypes from '../processTypes';
+import * as processTypes from '../processTypes';
 import unpickStockActions from '../actions/unpickStockActions';
 import unallocateReqActions from '../actions/unallocateReqActions';
 import { getUserNumber } from '../selectors/userSelectors';
@@ -15,9 +15,9 @@ import { getUserNumber } from '../selectors/userSelectors';
 const mapStateToProps = state => ({
     transferableStock: transferableStockSelectors.getItems(state),
     transferableStockLoading: transferableStockSelectors.getLoading(state),
-    itemError: getItemError(state, processtypes.tpkTransferStock.item),
-    unpickError: getItemError(state, processtypes.unpickStock.item),
-    unallocateError: getItemError(state, processtypes.unallocateReq.item),
+    itemError: getItemError(state, processTypes.tpkTransferStock.item),
+    unpickError: getItemError(state, processTypes.unpickStock.item),
+    unallocateError: getItemError(state, processTypes.unallocateReq.item),
     transferredStock: tpkSelectors.getData(state)?.transferred,
     whatToWandReport: tpkSelectors.getData(state)?.whatToWandReport,
     tpkLoading: tpkSelectors.getWorking(state),
