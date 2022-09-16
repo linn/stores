@@ -4,7 +4,7 @@
 
     using Linn.Stores.Domain.LinnApps.Consignments;
 
-    public class WhatToWandReport
+    public class WhatToWandConsignment
     {
         public IEnumerable<WhatToWandLine> Lines { get; set; }
 

@@ -171,16 +171,15 @@ describe('When tpk error...', () => {
 describe('When whatToWandReport...', () => {
     beforeEach(() =>
         defaultRender({
-            whatToWandReport: {
-                lines: [],
-                account: { accountName: 'something' },
-                consignment: { totalNettValue: 100.1234, currencyCode: 'GBP' }
-            }
+            whatToWandReport: [
+                {
+                    lines: [],
+                    account: { accountName: 'something' },
+                    consignment: { totalNettValue: 100.1234, currencyCode: 'GBP' }
+                }
+            ]
         })
     );
-    test('should show print dialog', () => {
-        expect(screen.getByText('What to Wand')).toBeInTheDocument();
-    });
     test('should render currency code and rounded nett total', () => {
         expect(
             screen.getByText('Total Nett Value Of Consignment (GBP): 100.12')

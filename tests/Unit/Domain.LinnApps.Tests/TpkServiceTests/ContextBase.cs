@@ -38,7 +38,7 @@
 
         protected IQueryRepository<SalesOrder> SalesOrderRepository { get; set; }
 
-        protected IRepository<ReqMove, ReqMoveKey> ReqMovesRepository;
+        protected IRepository<ReqMove, ReqMoveKey> ReqMovesRepository { get; set; }
 
         [SetUp]
         public void SetUpContext()
@@ -61,6 +61,16 @@
                 .Returns(new Consignment
                              {
                                  ConsignmentId = 1
+                             });
+            this.ConsignmentRepository.FindById(2)
+                .Returns(new Consignment
+                             {
+                                 ConsignmentId = 2
+                             });
+            this.ConsignmentRepository.FindById(3)
+                .Returns(new Consignment
+                             {
+                                 ConsignmentId = 3
                              });
             this.ReqMovesRepository = Substitute.For<IRepository<ReqMove, ReqMoveKey>>();
             this.Sut = new TpkService(
