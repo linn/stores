@@ -163,11 +163,11 @@
                                {
                                    SortOrder = 2, GridDisplayType = GridDisplayType.TextValue
                                },
-                           new AxisDetailsModel("Work Station Storage Place")
+                           new AxisDetailsModel("Work Station Storage Place", "Storage Place")
                                {
                                    SortOrder = 3, GridDisplayType = GridDisplayType.TextValue
                                },
-                           new AxisDetailsModel("Qty at Work Station")
+                           new AxisDetailsModel("Qty at Work Station", "Qty At WS")
                                {
                                    SortOrder = 4, GridDisplayType = GridDisplayType.TextValue
                                },
