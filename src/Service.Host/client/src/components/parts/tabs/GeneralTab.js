@@ -47,7 +47,7 @@ function GeneralTab({
     safetyDataDirectory,
     rawOrFinished,
     salesArticleNumber,
-    partNumber
+    bomTreeLink
 }) {
     const nominalAccountsTable = {
         totalItemCount: nominalAccountsSearchResults.length,
@@ -301,11 +301,11 @@ function GeneralTab({
                     propertyName="safetyDataDirectory"
                 />
             </Grid>
-            <Grid item xs={12}>
-                <Link href={`/production/boms/ShowBom.aspx?partNumber=${partNumber}`}>
-                    View Bom
-                </Link>
-            </Grid>
+            {bomTreeLink && (
+                <Grid item xs={12}>
+                    <Link href={bomTreeLink}>View Bom</Link>
+                </Grid>
+            )}
         </Grid>
     );
 }
@@ -369,7 +369,7 @@ GeneralTab.propTypes = {
     rawOrFinished: PropTypes.string,
     editStatus: PropTypes.string,
     salesArticleNumber: PropTypes.string,
-    partNumber: PropTypes.string
+    bomTreeLink: PropTypes.string
 };
 
 GeneralTab.defaultProps = {
@@ -405,7 +405,7 @@ GeneralTab.defaultProps = {
     rawOrFinished: null,
     editStatus: null,
     salesArticleNumber: null,
-    partNumber: null
+    bomTreeLink: null
 };
 
 export default GeneralTab;
