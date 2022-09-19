@@ -1,21 +1,9 @@
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import {
-    Dropdown,
-    Title,
-    InputField,
-    TypeaheadDialog
-} from '@linn-it/linn-form-components-library';
-import { makeStyles } from '@material-ui/styles';
+import { Dropdown, Title, InputField, Typeahead } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Page from '../../containers/Page';
-
-const useStyles = makeStyles(theme => ({
-    marginTop: {
-        marginTop: theme.spacing(2)
-    }
-}));
 
 export default function WwdReportOptions({
     history,
@@ -29,8 +17,6 @@ export default function WwdReportOptions({
         quantity: 1,
         typeOfRun: 'SHORTAGES ONLY'
     });
-
-    const classes = useStyles();
 
     const typeOfRunOptions = ['ALL PARTS', 'SHORTAGES ONLY'];
 
@@ -62,6 +48,15 @@ export default function WwdReportOptions({
         });
     };
 
+    const getItems = () => {
+        return partsSearchResults?.map(p => ({
+            ...p,
+            name: p.partNumber,
+            description: p.description,
+            id: p.partNumber
+        }));
+    };
+
     return (
         <Page>
             <Title text="What Will Decrement Report" />
@@ -69,27 +64,28 @@ export default function WwdReportOptions({
             <Grid style={{ marginTop: 40 }} container spacing={3} justifyContent="center">
                 <Grid item xs={4}>
                     <InputField
-                        disabled
                         label="Part"
                         maxLength={14}
                         fullWidth
                         value={reportOptions.partNumber}
                         onChange={handleFieldChange}
-                        propertyName="partSearchTerm"
+                        propertyName="partNumber"
                         required
                     />
                 </Grid>
                 <Grid item xs={1}>
-                    <div className={classes.marginTop}>
-                        <TypeaheadDialog
-                            title="Search For Part"
-                            onSelect={handlePartSelect}
-                            searchItems={partsSearchResults || []}
-                            loading={partsSearchLoading}
-                            fetchItems={searchParts}
-                            clearSearch={() => clearPartsSearch}
-                        />
-                    </div>
+                    <Typeahead
+                        items={getItems()}
+                        fetchItems={searchParts}
+                        clearSearch={clearPartsSearch}
+                        loading={partsSearchLoading}
+                        debounce={1000}
+                        links={false}
+                        modal
+                        searchButtonOnly
+                        onSelect={handlePartSelect}
+                        label="Part"
+                    />
                 </Grid>
                 <Grid item xs={7}>
                     <InputField
