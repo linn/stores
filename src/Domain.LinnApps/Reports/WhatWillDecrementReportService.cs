@@ -5,6 +5,7 @@
 
     using Linn.Common.Persistence;
     using Linn.Common.Reporting.Models;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
 
     public class WhatWillDecrementReportService : IWhatWillDecrementReportService
@@ -39,6 +40,13 @@
 
         public ResultsModel WhatWillDecrementReport(string partNumber, int quantity, string typeOfRun, string workstationCode)
         {
+            if (string.IsNullOrWhiteSpace(partNumber))
+            {
+                throw new EmptyException("You must provide a part number");
+            }
+
+            partNumber = partNumber.ToUpper();
+
             if (string.IsNullOrEmpty(workstationCode))
             {
                 workstationCode = this.productionTriggerLevelsService.GetWorkStationCode(partNumber);
