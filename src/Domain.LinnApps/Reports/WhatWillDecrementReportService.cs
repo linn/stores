@@ -5,6 +5,7 @@
 
     using Linn.Common.Persistence;
     using Linn.Common.Reporting.Models;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
 
     public class WhatWillDecrementReportService : IWhatWillDecrementReportService
@@ -39,6 +40,13 @@
 
         public ResultsModel WhatWillDecrementReport(string partNumber, int quantity, string typeOfRun, string workstationCode)
         {
+            if (string.IsNullOrWhiteSpace(partNumber))
+            {
+                throw new EmptyException("You must provide a part number");
+            }
+
+            partNumber = partNumber.ToUpper();
+
             if (string.IsNullOrEmpty(workstationCode))
             {
                 workstationCode = this.productionTriggerLevelsService.GetWorkStationCode(partNumber);
@@ -108,7 +116,7 @@
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = wwdWork.PartNumber, Quantity = wwdWork.QuantityKitted ?? 0, ColumnId = "Qty Kitted"
+                            RowId = wwdWork.PartNumber, TextDisplay = wwdWork.QuantityKitted.ToString() ?? "0", ColumnId = "Qty Kitted"
                         });
                 values.Add(
                     new CalculationValueModel
@@ -121,7 +129,7 @@
                     new CalculationValueModel
                         {
                             RowId = wwdWork.PartNumber,
-                            Quantity = wwdWork.QuantityAtLocation ?? 0,
+                            TextDisplay = wwdWork.QuantityAtLocation.ToString() ?? "0",
                             ColumnId = "Qty at Work Station"
                         });
                 values.Add(
@@ -142,7 +150,7 @@
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = wwdWork.PartNumber, Quantity = wwdWorkDetail?.Quantity ?? 0, ColumnId = "Qty"
+                            RowId = wwdWork.PartNumber, TextDisplay = wwdWorkDetail?.Quantity.ToString() ?? "0", ColumnId = "Qty"
                         });
                 values.Add(
                     new CalculationValueModel { RowId = wwdWork.PartNumber, TextDisplay = changeRemarks, ColumnId = "Change" });
@@ -161,15 +169,15 @@
                                },
                            new AxisDetailsModel("Qty Kitted")
                                {
-                                   SortOrder = 2, GridDisplayType = GridDisplayType.Value
+                                   SortOrder = 2, GridDisplayType = GridDisplayType.TextValue
                                },
-                           new AxisDetailsModel("Work Station Storage Place")
+                           new AxisDetailsModel("Work Station Storage Place", "Storage Place")
                                {
                                    SortOrder = 3, GridDisplayType = GridDisplayType.TextValue
                                },
-                           new AxisDetailsModel("Qty at Work Station")
+                           new AxisDetailsModel("Qty at Work Station", "Qty At WS")
                                {
-                                   SortOrder = 4, GridDisplayType = GridDisplayType.Value
+                                   SortOrder = 4, GridDisplayType = GridDisplayType.TextValue
                                },
                            new AxisDetailsModel("Remarks")
                                {
@@ -177,7 +185,7 @@
                                },
                            new AxisDetailsModel("Site") { SortOrder = 6, GridDisplayType = GridDisplayType.TextValue },
                            new AxisDetailsModel("State") { SortOrder = 7, GridDisplayType = GridDisplayType.TextValue },
-                           new AxisDetailsModel("Qty") { SortOrder = 8, GridDisplayType = GridDisplayType.Value },
+                           new AxisDetailsModel("Qty") { SortOrder = 8, GridDisplayType = GridDisplayType.TextValue },
                            new AxisDetailsModel("Change") { SortOrder = 9, GridDisplayType = GridDisplayType.TextValue }
                        };
         }
