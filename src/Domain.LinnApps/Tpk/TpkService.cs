@@ -70,7 +70,7 @@
         {
             var candidates = tpkRequest.StockToTransfer.ToList();
             var from = candidates.First();
-            IEnumerable<WhatToWandLine> whatToWand = null;
+            IEnumerable<WhatToWandLine> whatToWand = new List<WhatToWandLine>();
             if (candidates.Any(s => s.FromLocation != from.FromLocation))
             {
                 throw new TpkException("You can only TPK one pallet at a time");
@@ -125,7 +125,7 @@
                     if (hasUpgradeRule && !string.IsNullOrEmpty(line.RenewSernos))
                     {
                         line.SerialNumberComments =
-                            $"*** Please select on of the following renew serial numbers: {line.RenewSernos} (Original serial number: {line.OldSernos})";
+                            $"*** Please select one of the following renew serial numbers: {line.RenewSernos} (Original serial number: {line.OldSernos})";
                     }
                 }
 

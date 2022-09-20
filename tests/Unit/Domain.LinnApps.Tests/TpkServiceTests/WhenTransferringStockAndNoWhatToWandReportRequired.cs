@@ -67,7 +67,7 @@
         public void ShouldNotAddReport()
         {
             this.result.Should().BeOfType<TpkResult>();
-            this.result.Consignments.Should().BeNull();
+            this.result.Consignments.Should().BeEmpty();
         }
     }
 }
