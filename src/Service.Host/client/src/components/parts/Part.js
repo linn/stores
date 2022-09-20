@@ -11,7 +11,8 @@ import {
     Title,
     ErrorCard,
     SnackbarMessage,
-    LinkButton
+    LinkButton,
+    utilities
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 import GeneralTab from '../../containers/parts/tabs/GeneralTab';
@@ -385,7 +386,7 @@ function Part({
                                     rawOrFinished={state.part.rawOrFinished}
                                     salesArticleNumber={state.part.salesArticleNumber}
                                     editStatus={editStatus}
-                                    partNumber={state.part.partNumber}
+                                    bomTreeLink={utilities.getHref(state.part, 'bom-tree')}
                                 />
                             )}
                             {tab === 1 && (
