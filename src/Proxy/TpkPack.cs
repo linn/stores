@@ -78,7 +78,7 @@
                                {
                                    Direction = ParameterDirection.Input,
                                    Size = 50,
-                                   Value = consignmentId
+                                   Value = storagePlace
                                };
                 cmd.Parameters.Add(arg2);
 
