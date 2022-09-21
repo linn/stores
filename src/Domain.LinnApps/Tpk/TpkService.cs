@@ -69,6 +69,7 @@
         public TpkResult TransferStock(TpkRequest tpkRequest)
         {
             var candidates = tpkRequest.StockToTransfer.ToList();
+
             var from = candidates.First();
             IEnumerable<WhatToWandLine> whatToWand = new List<WhatToWandLine>();
             if (candidates.Any(s => s.FromLocation != from.FromLocation))
@@ -143,7 +144,7 @@
                                                       {
                                                           Lines = x.ToList(), 
                                                           Consignment = consignment, 
-                                                          Type = this.tpkPack.GetWhatToWandType(consignment.ConsignmentId), 
+                                                          Type = this.tpkPack.GetWhatToWandType(consignment.ConsignmentId, from.FromLocation), 
                                                           Account = this.salesAccountQueryRepository.FindBy(
                                                                                         o => o.AccountId == consignment.SalesAccountId),
                                                           TotalNettValueOfConsignment = x.Sum(l => this.salesOrderDetailRepository.FindBy(

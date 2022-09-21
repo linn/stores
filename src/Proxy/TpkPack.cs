@@ -52,7 +52,7 @@
             }
         }
 
-        public string GetWhatToWandType(int consignmentId)
+        public string GetWhatToWandType(int consignmentId, string storagePlace)
         {
             using (var connection = this.databaseService.GetConnection())
             {
@@ -73,6 +73,14 @@
                                    Value = consignmentId
                                };
                 cmd.Parameters.Add(arg1);
+
+                var arg2 = new OracleParameter("p_storage_place", OracleDbType.Varchar2)
+                               {
+                                   Direction = ParameterDirection.Input,
+                                   Size = 50,
+                                   Value = consignmentId
+                               };
+                cmd.Parameters.Add(arg2);
 
                 cmd.ExecuteNonQuery();
                 connection.Close();

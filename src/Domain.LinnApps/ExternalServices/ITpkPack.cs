@@ -4,7 +4,7 @@
     {
         string GetTpkNotes(int consignmentId, string fromLocation);
 
-        string GetWhatToWandType(int consignmentId);
+        string GetWhatToWandType(int consignmentId, string storagePlace);
 
         void UpdateQuantityPrinted(string fromLocation, out bool success);
     }
