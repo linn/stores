@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { useReactToPrint } from 'react-to-print';
 import Grid from '@material-ui/core/Grid';
-import { Title, ErrorCard, Loading } from '@linn-it/linn-form-components-library';
+import { ErrorCard, Loading } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import Button from '@material-ui/core/Button';
@@ -126,9 +126,6 @@ export default function Tpk({
     return (
         <Page>
             <Grid container spacing={3}>
-                <Grid item xs={10}>
-                    <Title text="TPK" />
-                </Grid>
                 {(tpkLoading || unallocateReqLoading || unpickStockLoading) && !itemError ? (
                     <Grid item xs={12}>
                         <Loading />
@@ -179,12 +176,82 @@ export default function Tpk({
                             </Grid>
                         )}
                         <Grid item xs={12}>
+                            <Grid item xs={12}>
+                                <Button
+                                    style={{ marginTop: '22px' }}
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={!selectedRows?.length}
+                                    onClick={() => {
+                                        clearAllErrors();
+                                        transferStock({
+                                            stockToTransfer: selectedRows,
+                                            dateTimeTpkViewQueried
+                                        });
+                                    }}
+                                >
+                                    Transfer
+                                </Button>
+                                <Button
+                                    style={{ marginTop: '22px' }}
+                                    variant="contained"
+                                    color="secondary"
+                                    disabled={!selectedRows?.length || selectedRows?.length !== 1}
+                                    onClick={() => {
+                                        clearAllErrors();
+                                        unpickStock({
+                                            reqNumber: selectedRows[0].reqNumber,
+                                            lineNumber: selectedRows[0].reqLine,
+                                            orderNumber: selectedRows[0].orderNumber,
+                                            orderLine: selectedRows[0].orderLine,
+                                            palletNumber: selectedRows[0].palletNumber,
+                                            locationId: selectedRows[0].locationId,
+                                            amendedBy: userNumber
+                                        });
+                                        setSelectedRows([]);
+                                    }}
+                                >
+                                    Unpick Stock
+                                </Button>
+                                <Button
+                                    style={{ marginTop: '22px' }}
+                                    variant="contained"
+                                    color="secondary"
+                                    disabled={
+                                        !selectedRows?.length ||
+                                        selectedRows?.some(
+                                            r => r.reqNumber !== selectedRows[0]?.reqNumber
+                                        )
+                                    }
+                                    onClick={() => {
+                                        clearAllErrors();
+                                        unallocateReq({
+                                            reqNumber: selectedRows[0].reqNumber,
+                                            unallocatedBy: userNumber
+                                        });
+                                        setSelectedRows([]);
+                                    }}
+                                >
+                                    Unallocate Consignment
+                                </Button>
+                                <Button
+                                    style={{ marginTop: '22px' }}
+                                    variant="contained"
+                                    onClick={() => {
+                                        refresh();
+                                        setSelectedRows([]);
+                                        clearAllErrors();
+                                    }}
+                                >
+                                    Refresh List
+                                </Button>
+                            </Grid>
                             <div style={{ height: 500, width: '100%' }}>
                                 <DataGrid
                                     rows={rows}
                                     columnBuffer={9}
                                     columns={columns}
-                                    density="standard"
+                                    density="compact"
                                     rowHeight={34}
                                     checkboxSelection
                                     onSelectionModelChange={handleSelectRow}

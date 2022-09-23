@@ -35,7 +35,7 @@ describe('On initial load...', () => {
     beforeEach(() => defaultRender());
 
     test('component renders without crashing', () => {
-        expect(screen.getByText('TPK')).toBeInTheDocument();
+        expect(screen.getByText('From')).toBeInTheDocument();
     });
 });
 
@@ -83,7 +83,7 @@ describe('When doing tpk...', () => {
 
         checkboxes.forEach((c, i) => i > 0 && fireEvent.click(c));
 
-        const sendButton = screen.getByRole('button', { name: 'Transfer' });
+        const sendButton = screen.getAllByRole('button', { name: 'Transfer' })[0];
 
         fireEvent.click(sendButton);
     });
