@@ -125,8 +125,8 @@
 
                     if (hasUpgradeRule && !string.IsNullOrEmpty(line.RenewSernos))
                     {
-                        line.SerialNumberComments =
-                            $"*** Please select one of the following renew serial numbers: {line.RenewSernos} (Original serial number: {line.OldSernos})";
+                        line.SerialNumberComments +=
+                            $" *** Please select one of the following renew serial numbers: {line.RenewSernos} (Original serial number: {line.OldSernos}) ***";
                     }
                 }
 
