@@ -120,8 +120,8 @@
             catch (Exception ex)
             {
                 this.logger.Write(
-                    LoggingLevel.Error, 
-                    null, 
+                    LoggingLevel.Error,
+                    Enumerable.Empty<LoggingProperty>(), 
                     $"{message}. {ex.Message}",
                     ex);
                 throw new
