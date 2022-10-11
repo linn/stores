@@ -111,7 +111,6 @@
 
             try
             {
-                //throw new Exception();
                 if (this.whatToWandService.ShouldPrintWhatToWand(from.FromLocation))
                 {
                     whatToWand = this.whatToWandService.WhatToWand(
