@@ -125,7 +125,7 @@
                     $"{message}. {ex.Message}",
                     ex);
                 throw new
-                    TpkException($"An  error occurred  - phone IT support. {message}");
+                    TpkException($"An  error occurred  - phone IT support. {message}.  {ex.Message}");
             }
 
             this.tpkPack.UpdateQuantityPrinted(from.FromLocation, out var updateQuantitySuccessful);
