@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Linn.Common.Logging;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.Exceptions;
@@ -38,6 +39,8 @@
 
         private readonly IQueryRepository<ProductUpgradeRule> productUpgradeRulesRepository;
 
+        private readonly ILog logger;
+
         public TpkService(
             IQueryRepository<TransferableStock> tpkView,
             IQueryRepository<AccountingCompany> accountingCompaniesRepository,
@@ -50,7 +53,8 @@
             IQueryRepository<SalesOrderDetail> salesOrderDetailRepository,
             IQueryRepository<SalesOrder> salesOrderRepository,
             IRepository<ReqMove, ReqMoveKey> reqMovesRepository,
-            IQueryRepository<ProductUpgradeRule> productUpgradeRulesRepository)
+            IQueryRepository<ProductUpgradeRule> productUpgradeRulesRepository,
+            ILog logger)
         {
             this.tpkView = tpkView;
             this.tpkPack = tpkPack;
@@ -64,6 +68,7 @@
             this.salesOrderRepository = salesOrderRepository;
             this.reqMovesRepository = reqMovesRepository;
             this.productUpgradeRulesRepository = productUpgradeRulesRepository;
+            this.logger = logger;
         }
 
         public TpkResult TransferStock(TpkRequest tpkRequest)
@@ -71,6 +76,12 @@
             var candidates = tpkRequest.StockToTransfer.ToList();
 
             var from = candidates.First();
+
+            var message =
+                $"LocationId: {from.LocationId}. " 
+                + $"PalletNumber: {from.PalletNumber}. " 
+                + $"Consignment: {from.ConsignmentId}.";
+
             IEnumerable<WhatToWandLine> whatToWand = new List<WhatToWandLine>();
             if (candidates.Any(s => s.FromLocation != from.FromLocation))
             {
@@ -98,9 +109,23 @@
             
             this.bundleLabelPack.PrintTpkBoxLabels(from.FromLocation);
 
-            if (this.whatToWandService.ShouldPrintWhatToWand(from.FromLocation))
+            try
             {
-                whatToWand = this.whatToWandService.WhatToWand(from.LocationId, from.PalletNumber).ToList();
+                if (this.whatToWandService.ShouldPrintWhatToWand(from.FromLocation))
+                {
+                    whatToWand = this.whatToWandService.WhatToWand(
+                        from.LocationId, from.PalletNumber).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                this.logger.Write(
+                    LoggingLevel.Error,
+                    Enumerable.Empty<LoggingProperty>(), 
+                    $"{message}. {ex.Message}",
+                    ex);
+                throw new
+                    TpkException($"An  error occurred  - phone IT support. {message}.  {ex.Message}");
             }
 
             this.tpkPack.UpdateQuantityPrinted(from.FromLocation, out var updateQuantitySuccessful);
