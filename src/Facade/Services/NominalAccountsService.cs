@@ -38,10 +38,11 @@
                 .FilterBy(n
                     => !n.Department.DateClosed.HasValue && !n.Nominal.DateClosed.HasValue &&
                        n.Department.ObseleteInStores == "N" &&
+                       n.StoresPostsAllowed == "Y" &&
                        (n.Department.DepartmentCode.ContainsIgnoringCase(searchTerm)
-                       || n.Department.Description.ContainsIgnoringCase(searchTerm)
-                       || n.Nominal.NominalCode.ContainsIgnoringCase(searchTerm)
-                       || n.Nominal.Description.ContainsIgnoringCase(searchTerm))).Take(50);
+                        || n.Department.Description.ContainsIgnoringCase(searchTerm)
+                        || n.Nominal.NominalCode.ContainsIgnoringCase(searchTerm)
+                        || n.Nominal.Description.ContainsIgnoringCase(searchTerm)));
             return new SuccessResult<IEnumerable<NominalAccount>>(result);
         }
     }
