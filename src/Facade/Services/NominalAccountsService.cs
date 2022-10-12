@@ -24,10 +24,11 @@
                 .FilterBy(n
                     => !n.Department.DateClosed.HasValue && !n.Nominal.DateClosed.HasValue &&
                        n.Department.ObseleteInStores == "N" &&
+                       n.StoresPostsAllowed == "Y" &&
                        (n.Department.Description.ToUpper().Equals(searchTerm.ToUpper())
                         || n.Department.DepartmentCode.ToUpper().Equals(searchTerm.ToUpper())
                         || n.Nominal.Description.ToUpper().Equals(searchTerm.ToUpper())
-                        || n.Nominal.NominalCode.ToUpper().Equals(searchTerm.ToUpper()))).Take(50);
+                        || n.Nominal.NominalCode.ToUpper().Equals(searchTerm.ToUpper())));
             if (exactMatches.Any())
             {
                 return new SuccessResult<IEnumerable<NominalAccount>>(exactMatches);
