@@ -821,6 +821,7 @@
             builder.Entity<NominalAccount>().ToTable("NOMINAL_ACCOUNTS");
             builder.Entity<NominalAccount>().HasKey(a => a.NominalAccountId);
             builder.Entity<NominalAccount>().Property(a => a.NominalAccountId).HasColumnName("NOMACC_ID");
+            builder.Entity<NominalAccount>().Property(a => a.StoresPostsAllowed).HasColumnName("STORES_POSTS_ALLOWED");
         }
 
         private void BuildDespatchLocations(ModelBuilder builder)

@@ -12,6 +12,8 @@
 
         public Nominal Nominal { get; set; }
 
+        public string StoresPostsAllowed { get; set; }
+
         public IEnumerable<Part> Parts { get; set; }
     }
 }
