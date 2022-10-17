@@ -25,5 +25,7 @@
         public string OldSernos { get; set; }
 
         public string RenewSernos { get; set; }
+
+        public string Comments { get; set; }
     }
 }

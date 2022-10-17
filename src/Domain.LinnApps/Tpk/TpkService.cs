@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.InteropServices;
 
     using Linn.Common.Logging;
     using Linn.Common.Persistence;
@@ -231,6 +232,28 @@
             }
 
             return new ProcessResult(true, string.Empty);
+        }
+
+        public WhatToWandConsignment ReprintWhatToWand(int consignmentId)
+        {
+            var consignment = this.consignmentRepository.FindById(consignmentId);
+            var account = this.salesAccountQueryRepository.FindBy(o => o.AccountId == consignment.SalesAccountId);
+            var data = this.whatToWandService.ReprintWhatToWand(consignmentId, consignment.Address.CountryCode).ToList();
+
+            var result = new WhatToWandConsignment
+                       {
+                           Lines = data,
+                           Consignment = consignment,
+                           Type = "REPRINT",
+                           Account = account,
+                           TotalNettValueOfConsignment = data.Sum(l => this.salesOrderDetailRepository.FindBy(
+                               d => d.OrderNumber == l.OrderNumber
+                                    && d.OrderLine == l.OrderLine).NettTotal),
+                           CurrencyCode = this.salesOrderRepository.FindBy(
+                                   o => o.OrderNumber == data.First().OrderNumber)
+                               .CurrencyCode
+                       };
+            return result;
         }
     }
 }

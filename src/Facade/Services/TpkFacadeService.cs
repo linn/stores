@@ -102,5 +102,10 @@
 
             return new SuccessResult<ProcessResult>(result);
         }
+
+        public IResult<WhatToWandConsignment> ReprintWhatToWand(int consignmentId)
+        {
+            return new SuccessResult<WhatToWandConsignment>(this.domainService.ReprintWhatToWand(consignmentId));
+        }
     }
 }

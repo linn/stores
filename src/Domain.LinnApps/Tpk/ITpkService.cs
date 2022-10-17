@@ -15,5 +15,7 @@
             int amendedBy,
             int? palletNumber,
             int? locationId);
+
+        WhatToWandConsignment ReprintWhatToWand(int consignmentId);
     }
 }
