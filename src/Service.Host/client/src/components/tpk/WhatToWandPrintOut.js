@@ -76,6 +76,16 @@ export default class WhatToWandPrintout extends React.PureComponent {
                                                         </Typography>
                                                     </td>
                                                 </tr>
+                                                <tr>
+                                                    <td colSpan={8}>
+                                                        <Typography
+                                                            align="center"
+                                                            variant="subtitle2"
+                                                        >
+                                                            {r.comments}
+                                                        </Typography>
+                                                    </td>
+                                                </tr>
                                             </>
                                         ))}
                                     </tbody>

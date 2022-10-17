@@ -457,3 +457,9 @@ export const salesOutletAddresses = new ItemType(
     'SALES_OUTLET_ADDRESSES',
     '/inventory/sales-outlets/addresses'
 );
+
+export const whatToWandReprint = new ItemType(
+    'whatToWandReprint',
+    'WHAT_TO_WAND_REPRINT',
+    '/logistics/tpk/what-to-wand-reprint'
+);

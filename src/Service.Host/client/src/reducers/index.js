@@ -135,6 +135,7 @@ import unpickStock from './unpickStock';
 import unallocateReq from './unallocateReq';
 import qcPartsReport from './qcPartsReport';
 import euCreditInvoicesReport from './euCreditInvoicesReport';
+import whatToWandReprint from './whatToWandReprint';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -267,6 +268,7 @@ const rootReducer = history =>
         validateStorageTypeResult,
         wandConsignments,
         wandItems,
+        whatToWandReprint,
         workstationTopUpStatus,
         wwdReport,
         ...sharedLibraryReducers,
