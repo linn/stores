@@ -105,7 +105,14 @@
 
         public IResult<WhatToWandConsignment> ReprintWhatToWand(int consignmentId)
         {
-            return new SuccessResult<WhatToWandConsignment>(this.domainService.ReprintWhatToWand(consignmentId));
+            try
+            {
+                return new SuccessResult<WhatToWandConsignment>(this.domainService.ReprintWhatToWand(consignmentId));
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestResult<WhatToWandConsignment>(ex.Message);
+            }
         }
     }
 }

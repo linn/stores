@@ -237,6 +237,12 @@
         public WhatToWandConsignment ReprintWhatToWand(int consignmentId)
         {
             var consignment = this.consignmentRepository.FindById(consignmentId);
+
+            if (consignment == null)
+            {
+                throw new NotFoundException("Consignment Not Found");
+            }
+
             var account = this.salesAccountQueryRepository.FindBy(o => o.AccountId == consignment.SalesAccountId);
             var data = this.whatToWandService.ReprintWhatToWand(consignmentId, consignment.Address.CountryCode).ToList();
 
