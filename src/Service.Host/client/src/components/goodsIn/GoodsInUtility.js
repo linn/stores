@@ -146,12 +146,11 @@ function GoodsInUtility({
     }, [parcel]);
 
     const handleSelectLoanDetails = details => {
-        console.log(details);
         setLoanDetailsDialogOpen(false);
         setLines(l => [
             ...l,
-            ...details.map(detail => ({
-                id: detail.line,
+            ...details.map((detail, i) => ({
+                id: i + 1,
                 articleNumber: detail.articleNumber,
                 transactionType: 'L',
                 dateCreated: new Date().toISOString(),

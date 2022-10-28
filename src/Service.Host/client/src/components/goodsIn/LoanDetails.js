@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -20,7 +20,6 @@ function LoanDetails({ loanDetails, onConfirm }) {
     const [rows, setRows] = useState(loanDetails);
     const [state, setState] = useState('STORES');
     const handleSelectRow = selected => {
-        console.log(selected);
         setRows(current =>
             current.map(r =>
                 selected.includes(r.id) ? { ...r, selected: true } : { ...r, selected: false }
@@ -30,7 +29,6 @@ function LoanDetails({ loanDetails, onConfirm }) {
 
     const handleEditRowsModelChange = model => {
         const key = Object.keys(model)[0];
-        console.log(key);
 
         setRows(current =>
             current.map(r => {
