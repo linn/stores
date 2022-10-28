@@ -146,11 +146,12 @@ function GoodsInUtility({
     }, [parcel]);
 
     const handleSelectLoanDetails = details => {
+        console.log(details);
         setLoanDetailsDialogOpen(false);
         setLines(l => [
             ...l,
-            ...details.map((detail, i) => ({
-                id: l.length + i,
+            ...details.map(detail => ({
+                id: detail.line,
                 articleNumber: detail.articleNumber,
                 transactionType: 'L',
                 dateCreated: new Date().toISOString(),
@@ -517,8 +518,7 @@ function GoodsInUtility({
                             <LoanDetails
                                 loanDetails={loanDetails?.map(d => ({
                                     ...d,
-                                    id: d.line,
-                                    return: d.qtyOnLoan,
+                                    id: `${d.line}/${d.itemNumber}`,
                                     selected: false
                                 }))}
                                 onConfirm={handleSelectLoanDetails}
