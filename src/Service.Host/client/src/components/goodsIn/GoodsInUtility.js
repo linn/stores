@@ -149,8 +149,8 @@ function GoodsInUtility({
         setLoanDetailsDialogOpen(false);
         setLines(l => [
             ...l,
-            ...details.map((detail, i) => ({
-                id: i + 1,
+            ...details.map(detail => ({
+                id: `${detail.line}/${l.itemNumber}`,
                 articleNumber: detail.articleNumber,
                 transactionType: 'L',
                 dateCreated: new Date().toISOString(),
