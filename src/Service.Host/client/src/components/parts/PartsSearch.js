@@ -40,7 +40,11 @@ function PartsSearch({
 
     const [expanded, setExpanded] = useState(false);
 
-    const [options, setOptions] = useState({ partNumber: '', description: '' });
+    const [options, setOptions] = useState({
+        partNumber: '',
+        description: '',
+        productAnalysisCode: ''
+    });
 
     const handleOptionsChange = (propertyName, newValue) =>
         setOptions({ ...options, [propertyName]: newValue });
