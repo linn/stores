@@ -171,7 +171,7 @@
                            accountOutlets.First();
 
                         // and it is the same address as the account
-                        if (outlet.OutletAddressId == account.ContactDetails.AddressId && account.ContactDetails.AddressId != null)
+                        if (outlet.OutletAddressId == account.ContactDetails?.AddressId && account.ContactDetails?.AddressId != null)
                         {
                             // check account has contact details
                             if (string.IsNullOrEmpty(shipfile.Consignment.SalesAccount?.ContactDetails?.EmailAddress))
