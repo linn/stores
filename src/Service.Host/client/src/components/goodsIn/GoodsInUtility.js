@@ -518,6 +518,7 @@ function GoodsInUtility({
                                 loanDetails={loanDetails?.map(d => ({
                                     ...d,
                                     id: `${d.line}/${d.itemNumber}`,
+                                    return: d.qtyOnLoan,
                                     selected: false
                                 }))}
                                 onConfirm={handleSelectLoanDetails}
