@@ -369,3 +369,5 @@ export const qcPartsReportActionTypes = makeReportActionTypes(
 export const euCreditInvoicesReportActionTypes = makeReportActionTypes(
     reportTypes.euCreditInvoicesReport.actionType
 );
+
+export const whatToWandReprintActionTypes = makeActionTypes(itemTypes.whatToWandReprint.actionType);

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -9,33 +9,33 @@ import { DataGrid } from '@mui/x-data-grid';
 function LoanDetails({ loanDetails, onConfirm }) {
     const columns = [
         { field: 'return', headerName: 'Return', width: 150, editable: true },
-        { field: 'line', headerName: '#', width: 100 },
+        { field: 'line', headerName: 'line', width: 200 },
         { field: 'articleNumber', headerName: 'Article', width: 250 },
         { field: 'qtyOnLoan', headerName: 'Qty', width: 100 },
         { field: 'serialNumber', headerName: 'Serial', width: 150 },
         { field: 'serialNumber2', headerName: 'Serial 2', width: 150 },
-        { field: 'itemNumber', headerName: 'Item', width: 100 },
+        { field: 'itemNumber', headerName: 'Item', width: 200 },
         { field: 'selected', headerName: 'Selected', width: 100, hide: true }
     ];
     const [rows, setRows] = useState(loanDetails);
-
     const [state, setState] = useState('STORES');
-
     const handleSelectRow = selected => {
-        setRows(rows.map(r => (selected.includes(r.id) ? { ...r, selected: true } : r)));
+        setRows(current =>
+            current.map(r =>
+                selected.includes(r.id) ? { ...r, selected: true } : { ...r, selected: false }
+            )
+        );
     };
 
-    const handleEditRowsModelChange = useCallback(
-        model => {
-            const key = Object.keys(model)[0];
-            setRows(
-                rows.map(r => {
-                    return r.id === Number(key) ? { ...r, return: model[key].return.value } : r;
-                })
-            );
-        },
-        [rows]
-    );
+    const handleEditRowsModelChange = model => {
+        const key = Object.keys(model)[0];
+
+        setRows(current =>
+            current.map(r => {
+                return r.id === key ? { ...r, return: model[key].return.value } : r;
+            })
+        );
+    };
 
     return (
         <Grid container spacing={3}>

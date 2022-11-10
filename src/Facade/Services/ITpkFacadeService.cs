@@ -18,5 +18,7 @@
         IResult<ProcessResult> UnallocateReq(UnallocateReqRequestResource resource);
 
         IResult<ProcessResult> UnpickStock(UnpickStockRequestResource resource);
+
+        IResult<WhatToWandConsignment> ReprintWhatToWand(int consignmentId);
     }
 }

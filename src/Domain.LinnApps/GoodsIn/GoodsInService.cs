@@ -187,18 +187,16 @@
                                       loanNumber,
                                       out var supplierId) && (multipleBookIn == null || !multipleBookIn.Value);
 
-            var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
-
             result.Lines = goodsInLogEntries;
 
             result.CreatedBy = createdBy;
 
             result.QcState = !string.IsNullOrEmpty(state) && state.Equals("QC") ? "QUARANTINE" : "PASS";
-            result.QcInfo = part?.QcInformation;
-
 
             if (transactionType == "O")
             {
+                var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
+                result.QcInfo = part?.QcInformation;
                 this.goodsInPack.GetPurchaseOrderDetails(
                     orderNumber.Value,
                     orderLine.Value,
@@ -240,11 +238,13 @@
 
             if (transactionType.Equals("L"))
             {
+                var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(lines.First().ArticleNumber));
                 result.DocType = "L";
                 result.TransactionCode = "L";
                 result.QtyReceived = qty;
-                result.PartNumber = partNumber;
+                result.PartNumber = part.PartNumber;
                 result.PartDescription = part.Description;
+                result.QcInfo = part?.QcInformation;
 
                 result.SupplierId = supplierId;
 

@@ -149,8 +149,8 @@ function GoodsInUtility({
         setLoanDetailsDialogOpen(false);
         setLines(l => [
             ...l,
-            ...details.map((detail, i) => ({
-                id: l.length + i,
+            ...details.map(detail => ({
+                id: `${detail.line}/${l.itemNumber}`,
                 articleNumber: detail.articleNumber,
                 transactionType: 'L',
                 dateCreated: new Date().toISOString(),
@@ -517,8 +517,7 @@ function GoodsInUtility({
                             <LoanDetails
                                 loanDetails={loanDetails?.map(d => ({
                                     ...d,
-                                    id: d.line,
-                                    return: d.qtyOnLoan,
+                                    id: `${d.line}/${d.itemNumber}`,
                                     selected: false
                                 }))}
                                 onConfirm={handleSelectLoanDetails}

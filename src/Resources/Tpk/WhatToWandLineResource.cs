@@ -18,6 +18,8 @@
 
         public string Sif { get; set; }
 
+        public string Comments { get; set; }
+
         public string SerialNumberComments { get; set; }
     }
 }

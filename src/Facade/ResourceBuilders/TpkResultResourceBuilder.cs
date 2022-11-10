@@ -52,7 +52,8 @@
                                                    Kitted = l.Kitted,
                                                    Ordered = l.Ordered,
                                                    Sif = l.Sif,
-                                                   SerialNumberComments = l.SerialNumberComments
+                                                   SerialNumberComments = l.SerialNumberComments,
+                                                   Comments = l.Comments
                                                }),
                                        Consignment = new TpkConsignmentResource
                                                      {

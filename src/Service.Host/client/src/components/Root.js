@@ -58,6 +58,7 @@ import StockBatchesInRotationOrder from '../containers/stockLocatorUtility/Stock
 import ZeroValuedInvoiceDetailsReportOptions from './reports/ZeroValuedInvoiceDetailsReportOptions';
 import QcPartsReport from '../containers/reports/QcPartsReport';
 import EuCreditInvoicesReport from '../containers/reports/EuCreditInvoicesReport';
+import WhatToWandReprint from '../containers/WhatToWandReprint';
 
 const Root = ({ store }) => (
     <div>
@@ -347,6 +348,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/logistics/reports/eu-credit-invoices"
                                         component={EuCreditInvoicesReport}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/what-to-wand-reprint"
+                                        component={WhatToWandReprint}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>

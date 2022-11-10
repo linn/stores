@@ -60,6 +60,108 @@
             return result > 0;
         }
 
+        public IEnumerable<WhatToWandLine> ReprintWhatToWand(int consignmentId, string country)
+        {
+            var sql = $@"SELECT CONSIGNMENT_ID,
+                        ORDER_NUMBER,
+                        ORDER_LINE,
+                        ARTICLE_NUMBER,
+                        INVOICE_DESCRIPTION,
+                        QTY_ORDERED,
+                        NETT_TOTAL,
+                        COMMENTS,
+                        INTERNAL_COMMENTS,
+                        SUPPLY_IN_FULL_CODE,
+                        SUM(KITTED) KITTED,
+                        which_mains_lead(article_number, '{country}') lead_to_display
+                        FROM (
+                        SELECT RH.DOCUMENT_1 CONSIGNMENT_ID,
+                        SOD.ORDER_NUMBER ORDER_NUMBER,
+                        SOD.ORDER_LINE ORDER_LINE,
+                        SA.ARTICLE_NUMBER ARTICLE_NUMBER,
+                        SA.INVOICE_dESCRIPTION INVOICE_DESCRIPTION,
+                        SOD.QTY_ORDERED QTY_ORDERED,
+                        SOD.NETT_TOTAL,
+                        SOD.COMMENTS,
+                        SOD.INTERNAL_COMMENTS,
+                        SOD.SUPPLY_IN_FULL_CODE,
+                        NVL(RM.QTY,0) KITTED,
+                        SOD.PROMOTION_CODE
+                        FROM SALES_ORDER_DETAILS SOD,
+                        SALES_ARTICLES SA,
+                        REQUISITION_HEADERS RH,
+                        REQUISITION_LINES RL,
+                        REQ_MOVES RM
+                        WHERE SOD.ARTICLE_NUMBER = SA.ARTICLE_NUMBER
+                        AND RH.CANCELLED='N'
+                        AND RH.DOC1_NAME='CONS'
+                        AND RH.FUNCTION_CODE='INVOICE'
+                        AND RH.REQ_NUMBER=RL.REQ_NUMBER
+                        AND RL.DOCUMENT_1=SOD.ORDER_NUMBER
+                        AND RL.DOCUMENT_1_LINE=SOD.ORDER_LINE
+                        AND RL.NAME='O'
+                        AND RL.CANCELLED='N'
+                        AND RL.REQ_NUMBER=RM.REQ_NUMBER
+                        AND RL.LINE_NUMBER=RM.LINE_NUMBER
+                        AND RH.DOCUMENT_1={consignmentId}
+                        UNION ALL
+                        SELECT VTPK.CONSIGNMENT_ID,
+                        VTPK.ORDER_NUMBER ORDER_NUMBER,
+                        VTPK.ORDER_LINE ORDER_LINE,
+                        SA.ARTICLE_NUMBER ARTICLE_NUMBER,
+                        SA.INVOICE_dESCRIPTION INVOICE_DESCRIPTION,
+                        SOD.QTY_ORDERED QTY_ORDERED,
+                        SOD.NETT_TOTAL,
+                        SOD.COMMENTS,
+                        SOD.INTERNAL_COMMENTS,
+                        SOD.SUPPLY_IN_FULL_CODE,
+                        NVL(VTPK.QTY,0) KITTED,
+                        SOD.PROMOTION_CODE
+                        FROM V_TPK_OO VTPK,
+                        SALES_ORDER_DETAILS SOD,
+                        SALES_ARTICLES SA
+                        WHERE VTPK.ORDER_NUMBER=SOD.ORDER_NUMBER
+                        AND VTPK.ORDER_LINE=SOD.ORDER_LINE
+                        AND SOD.ARTICLE_NUMBER=SA.ARTICLE_NUMBER
+                        AND VTPK.CONSIGNMENT_ID={consignmentId}
+                        )
+                        GROUP BY CONSIGNMENT_ID,
+                        ORDER_NUMBER,
+                        ORDER_LINE,
+                        ARTICLE_NUMBER,
+                        INVOICE_DESCRIPTION,
+                        QTY_ORDERED,
+                        NETT_TOTAL,
+                        COMMENTS,
+                        INTERNAL_COMMENTS,
+                        SUPPLY_IN_FULL_CODE,
+                        PROMOTION_CODE";
+
+            var rows = this.databaseService.ExecuteQuery(sql).Tables[0].Rows;
+            var result = new List<WhatToWandLine>();
+
+            for (var i = 0; i < rows.Count; i++)
+            {
+                var data = rows[i].ItemArray;
+                result.Add(new WhatToWandLine
+                               {
+                                   ConsignmentId = int.Parse(data[0].ToString()),
+                                   OrderNumber = int.Parse(data[1].ToString()),
+                                   OrderLine = int.Parse(data[2].ToString()),
+                                   ArticleNumber = data[3].ToString(),
+                                   InvoiceDescription = data[4].ToString(),
+                                   Ordered = int.Parse(data[5].ToString()),
+                                   Comments = data[7].ToString(),
+                                   SerialNumberComments = data[8].ToString(),
+                                   Sif = data[9].ToString(),
+                                   Kitted = int.Parse(data[10].ToString()),
+                                   MainsLead = data[11].ToString()
+                               });
+            }
+
+            return result;
+        }
+
         public IEnumerable<WhatToWandLine> WhatToWand(int? locationId, int? palletNumber)
         {
             var locationIdAnd =
@@ -78,7 +180,8 @@
             C.CONSIGNMENT_ID,
             SOD.INTERNAL_COMMENTS,
             substr(internal_comments,instr(internal_comments, ':' ) + 1 ,instr(internal_comments, '******',2) - 1 -instr(internal_comments, ':')) old_sernos,
-            product_upgrade_pack.Get_Renew_Sernos_From_Original(to_number(substr(internal_comments,instr(internal_comments, ':' ) + 1 ,instr(internal_comments, '******',2) - 1 -instr(internal_comments, ':')))) renew_sernos 
+            product_upgrade_pack.Get_Renew_Sernos_From_Original(to_number(substr(internal_comments,instr(internal_comments, ':' ) + 1 ,instr(internal_comments, '******',2) - 1 -instr(internal_comments, ':')))) renew_sernos,
+            SOD.COMMENTS
             FROM SALES_ARTICLES SA,
             SALES_ACCOUNTS A,
             ADDRESSES AD,
@@ -224,7 +327,8 @@
                                   ConsignmentId = int.Parse(data[8].ToString()),
                                   SerialNumberComments = data[9].ToString(),
                                   OldSernos = data[10].ToString(),
-                                  RenewSernos = data[11].ToString()
+                                  RenewSernos = data[11].ToString(),
+                                  Comments = data[12].ToString()
                 });
             }
 
