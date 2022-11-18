@@ -141,7 +141,7 @@
                                  {
                                      Rel = "bom-tree",
                                      Href =
-                                         $"/purchasing/boms/tree/{part.BomId}"
+                                         $"/purchasing/boms/tree/options?bomName={part.PartNumber}"
                                  };
             }
 
