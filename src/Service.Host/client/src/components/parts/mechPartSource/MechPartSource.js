@@ -168,7 +168,7 @@ function MechPartSource({
         body.capacitanceUnit = capacitanceUnits[mechPartSource.capacitanceUnits];
         body.mechPartAlts = suppliersData;
         body.mechPartManufacturerAlts = manufacturersData;
-        body.capicatance =
+        body.capacitance =
             typeof mechPartSource.capacitance === 'string'
                 ? mechPartSource.capacitance
                 : mechPartSource.capacitance?.toFixed(13);
