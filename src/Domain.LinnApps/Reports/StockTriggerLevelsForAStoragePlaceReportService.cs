@@ -28,9 +28,12 @@
 
         public ResultsModel GetReport(string location)
         {
-            var place = this.storagePlaces.FindBy(x => x.Name == location.ToUpper());
+            var place = this.storagePlaces.FindBy(x => x.Name == location.Trim().ToUpper());
 
-            var triggers = this.triggerLevels.FilterBy(x => x.LocationId == place.LocationId).OrderBy(l => l.PartNumber);
+            var triggers = place.PalletNumber.HasValue ? 
+                                 this.triggerLevels.FilterBy(x => x.PalletNumber == place.PalletNumber)
+                               : this.triggerLevels.FilterBy(x => x.LocationId == place.LocationId)
+                                     .OrderBy(l => l.PartNumber);
 
             var reportLayout = new SimpleGridLayout(
                 this.reportingHelper,
