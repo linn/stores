@@ -61,7 +61,7 @@
         {
             var resource = this.Bind<SearchRequestResource>();
 
-            var results = this.triggerReportService.GetReport(resource.SearchTerm);
+            var results = string.IsNullOrEmpty(resource?.SearchTerm) ? null : this.triggerReportService.GetReport(resource.SearchTerm);
 
             return this.Negotiate
                 .WithModel(results)
