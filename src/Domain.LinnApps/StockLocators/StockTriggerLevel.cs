@@ -11,5 +11,7 @@
         public decimal? MaxCapacity { get; set; }
 
         public int? PalletNumber { get; set; }
+
+        public decimal? KanbanSize { get; set; }
     }
 }

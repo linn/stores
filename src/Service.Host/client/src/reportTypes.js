@@ -54,3 +54,9 @@ export const euCreditInvoicesReport = new ItemType(
     'EU_CREDIT_INVOICES_REPORT',
     '/logistics/reports/eu-credit-invoices/report'
 );
+
+export const triggerLevelsForStoragePlaceReport = new ItemType(
+    'triggerLevelsForAStoragePlaceReport',
+    'TRIGGER_LEVELS_FOR_STORAGE_PLACE_REPORT',
+    '/inventory/storage-places/reports/stock-trigger-levels'
+);

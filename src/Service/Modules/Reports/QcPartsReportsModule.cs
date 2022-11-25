@@ -19,7 +19,6 @@
 
         private object GetExport()
         {
-
             var results = this.reportService.GetExport();
             return this.Negotiate.WithModel(results).WithAllowedMediaRange("text/csv")
                 .WithView("Index");

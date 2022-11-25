@@ -77,6 +77,8 @@
                 .As<IZeroValuedInvoiceDetailsReportService>();
             builder.RegisterType<QcPartsReportService>().As<IQcPartsReportService>();
             builder.RegisterType<EuCreditInvoicesReportService>().As<IEuCreditInvoicesReportService>();
+            builder.RegisterType<StockTriggerLevelsForAStoragePlaceReportService>()
+                .As<IStockTriggerLevelsForAStoragePlaceReportService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -182,6 +184,8 @@
                 .As<IZeroValuedInvoiceDetailsReportFacadeService>();
             builder.RegisterType<QcPartsReportFacadeService>().As<IQcPartsReportFacadeService>();
             builder.RegisterType<EuCreditInvoicesReportFacadeService>().As<IEuCreditInvoicesReportFacadeService>();
+            builder.RegisterType<StockTriggerLevelsForAStoragePlaceFacadeService>()
+                .As<IStockTriggerLevelsForAStoragePlaceFacadeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

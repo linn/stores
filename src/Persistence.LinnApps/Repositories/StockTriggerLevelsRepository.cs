@@ -26,7 +26,7 @@
 
         public IQueryable<StockTriggerLevel> FilterBy(Expression<Func<StockTriggerLevel, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.StockTriggerLevels.Where(expression);
         }
 
         public IQueryable<StockTriggerLevel> FindAll()
