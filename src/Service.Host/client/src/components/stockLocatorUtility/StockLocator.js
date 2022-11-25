@@ -259,7 +259,8 @@ function StockLocator({
                         <>
                             {items && (
                                 <>
-                                    <Grid item xs={12}>
+                                    <Grid item xs={10} />
+                                    <Grid item xs={2}>
                                         <CSVLink data={csvData}>
                                             <Button variant="contained">Export</Button>
                                         </CSVLink>

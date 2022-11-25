@@ -59,6 +59,7 @@ import ZeroValuedInvoiceDetailsReportOptions from './reports/ZeroValuedInvoiceDe
 import QcPartsReport from '../containers/reports/QcPartsReport';
 import EuCreditInvoicesReport from '../containers/reports/EuCreditInvoicesReport';
 import WhatToWandReprint from '../containers/WhatToWandReprint';
+import TriggerLevelsForAStoragePlaceReport from '../containers/reports/TriggerLevelsForAStoragePlaceReport';
 
 const Root = ({ store }) => (
     <div>
@@ -353,6 +354,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/logistics/what-to-wand-reprint"
                                         component={WhatToWandReprint}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/storage-places/reports/stock-trigger-levels"
+                                        component={TriggerLevelsForAStoragePlaceReport}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>

@@ -136,6 +136,7 @@ import unallocateReq from './unallocateReq';
 import qcPartsReport from './qcPartsReport';
 import euCreditInvoicesReport from './euCreditInvoicesReport';
 import whatToWandReprint from './whatToWandReprint';
+import triggerLevelsForAStoragePlaceReport from './triggerLevelsForAStoragePlaceReport';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -256,6 +257,7 @@ const rootReducer = history =>
         tqmsJobRefs,
         tqmsSummaryByCategoryReport,
         transferableStock,
+        triggerLevelsForAStoragePlaceReport,
         unallocateConsignment,
         unallocateConsignmentLine,
         unallocateReq,

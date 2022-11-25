@@ -371,3 +371,7 @@ export const euCreditInvoicesReportActionTypes = makeReportActionTypes(
 );
 
 export const whatToWandReprintActionTypes = makeActionTypes(itemTypes.whatToWandReprint.actionType);
+
+export const triggerLevelsForAStoragePlaceReportActionTypes = makeReportActionTypes(
+    reportTypes.triggerLevelsForStoragePlaceReport.actionType
+);
