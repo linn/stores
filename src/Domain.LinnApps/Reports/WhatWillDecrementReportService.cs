@@ -135,7 +135,13 @@
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = wwdWork.PartNumber, TextDisplay = wwdWork.Remarks, ColumnId = "Remarks"
+                            RowId = wwdWork.PartNumber,
+                            TextDisplay = wwdWork.Remarks,
+                            ColumnId = "Remarks",
+                            Attributes = new List<ReportAttribute>
+                                             {
+                                                 new ReportAttribute(ReportAttributeType.TextColour, "red")
+                                             }
                         });
                 values.Add(
                     new CalculationValueModel

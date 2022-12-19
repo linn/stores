@@ -13,7 +13,7 @@
     <PackageReference Include="Linn.Common.Domain.LinnApps" Version="1.0.0" />
     <PackageReference Include="Linn.Common.Logging" Version="2.0.0" />
     <PackageReference Include="Linn.Common.Persistence" Version="3.0.0" />
-    <PackageReference Include="Linn.Common.Reporting" Version="1.4.0" />
+    <PackageReference Include="Linn.Common.Reporting" Version="1.6.1" />
   </ItemGroup>
 
 </Project>
