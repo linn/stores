@@ -124,7 +124,7 @@ export default function WwdReportOptions({
                     <InputField
                         label="Workstation"
                         fullWidth
-                        value={reportOptions.workstationCode}
+                        value={reportOptions.workStationCode}
                         onChange={handleFieldChange}
                         propertyName="workStationCode"
                     />
