@@ -721,10 +721,7 @@ function GoodsInUtility({
                                     label="Qty*"
                                     propertyName="qty"
                                     type="number"
-                                    disabled={
-                                        !validatePurchaseOrderResult ||
-                                        !!validatePurchaseOrderResult?.message
-                                    }
+                                    disabled={!validatePurchaseOrderResult}
                                     textFieldProps={{
                                         onKeyDown: data => {
                                             if (
@@ -1072,10 +1069,7 @@ function GoodsInUtility({
                     <Button
                         variant="contained"
                         disabled={
-                            !validatePurchaseOrderResult ||
-                            !!validatePurchaseOrderResult?.message ||
-                            !formData.ontoLocation ||
-                            !formData.qty
+                            !validatePurchaseOrderResult || !formData.ontoLocation || !formData.qty
                         }
                         onClick={() => {
                             setLines(l => [
