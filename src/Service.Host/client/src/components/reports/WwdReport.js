@@ -1,8 +1,9 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { ReportTable, Loading, ErrorCard, BackButton } from '@linn-it/linn-form-components-library';
+import { Loading, ErrorCard, BackButton } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
+import ReportTable from './ReportTable';
 
 export default function WwdReport({ reportData, loading, error, options, history }) {
     return (
@@ -16,8 +17,8 @@ export default function WwdReport({ reportData, loading, error, options, history
                 <Grid item xs={10}>
                     <Typography variant="subtitle2">{`What Will Decrement Report - Part Number: ${
                         options.partNumber
-                    }, Quantity: ${options.quantity}, Type of Run: ${options.typeOfRun}${
-                        options.workStationCode ? options.workStationCode : ''
+                    }, Quantity: ${options.quantity}, Type of Run: ${options.typeOfRun} ${
+                        options.workStationCode ? `Workstation: ${options.workStationCode}` : ''
                     }`}</Typography>
                 </Grid>
                 <Grid item xs={2} className="hide-when-printing">
