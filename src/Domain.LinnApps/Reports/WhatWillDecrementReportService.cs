@@ -116,7 +116,9 @@
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = wwdWork.PartNumber, TextDisplay = wwdWork.QuantityKitted.ToString() ?? "0", ColumnId = "Qty Kitted"
+                            RowId = wwdWork.PartNumber,
+                            TextDisplay = wwdWork.QuantityKitted.ToString() ?? "0",
+                            ColumnId = "Qty Kitted"
                         });
                 values.Add(
                     new CalculationValueModel
@@ -138,10 +140,12 @@
                             RowId = wwdWork.PartNumber,
                             TextDisplay = wwdWork.Remarks,
                             ColumnId = "Remarks",
-                            Attributes = new List<ReportAttribute>
-                                             {
-                                                 new ReportAttribute(ReportAttributeType.TextColour, "red")
-                                             }
+                            Attributes = wwdWork.Remarks.Contains("totally SHORT")
+                                             ? new List<ReportAttribute>
+                                                   {
+                                                       new ReportAttribute(ReportAttributeType.TextColour, "red")
+                                                   }
+                                             : null
                         });
                 values.Add(
                     new CalculationValueModel
@@ -156,10 +160,15 @@
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = wwdWork.PartNumber, TextDisplay = wwdWorkDetail?.Quantity.ToString() ?? "0", ColumnId = "Qty"
+                            RowId = wwdWork.PartNumber,
+                            TextDisplay = wwdWorkDetail?.Quantity.ToString() ?? "0",
+                            ColumnId = "Qty"
                         });
                 values.Add(
-                    new CalculationValueModel { RowId = wwdWork.PartNumber, TextDisplay = changeRemarks, ColumnId = "Change" });
+                    new CalculationValueModel
+                        {
+                            RowId = wwdWork.PartNumber, TextDisplay = changeRemarks, ColumnId = "Change"
+                        });
             }
 
             return values;

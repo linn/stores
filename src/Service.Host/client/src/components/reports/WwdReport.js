@@ -17,8 +17,8 @@ export default function WwdReport({ reportData, loading, error, options, history
                 <Grid item xs={10}>
                     <Typography variant="subtitle2">{`What Will Decrement Report - Part Number: ${
                         options.partNumber
-                    }, Quantity: ${options.quantity}, Type of Run: ${options.typeOfRun}${
-                        options.workStationCode ? options.workStationCode : ''
+                    }, Quantity: ${options.quantity}, Type of Run: ${options.typeOfRun} ${
+                        options.workStationCode ? `Workstation: ${options.workStationCode}` : ''
                     }`}</Typography>
                 </Grid>
                 <Grid item xs={2} className="hide-when-printing">

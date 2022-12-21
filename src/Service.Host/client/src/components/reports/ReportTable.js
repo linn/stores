@@ -49,6 +49,9 @@ const useStyles = makeStyles(() => ({
     largeCol: {
         width: '300px',
         overflow: 'auto'
+    },
+    textHighlight: {
+        fontWeight: 'bolder'
     }
 }));
 
@@ -61,7 +64,8 @@ const setCellClasses = (
     textColumn,
     totalColumn,
     allowWrap,
-    defaultClasses
+    defaultClasses,
+    attributes
 ) => {
     let generatedClasses = '';
     if (rowType === 'Subtotal' || totalColumn) {
@@ -80,7 +84,21 @@ const setCellClasses = (
         generatedClasses += `${defaultClasses} `;
     }
 
+    if (attributes?.length) {
+        if (attributes.some(a => a.attributeType === 'text-colour')) {
+            generatedClasses += `${classes.textHighlight} `;
+        }
+    }
     return generatedClasses;
+};
+
+const getTextColour = attributes => {
+    if (attributes?.length) {
+        const textAttribute = attributes.find(a => a.attributeType === 'text-colour');
+        return textAttribute?.attributeValue;
+    }
+
+    return null;
 };
 
 const setHeaderCellClasses = (
@@ -171,15 +189,22 @@ const Results = ({
                             ) : null}
                             {item.values.map((value, i) => (
                                 <TableCell
+                                    style={
+                                        getTextColour(value?.attributes)
+                                            ? { color: getTextColour(value?.attributes) }
+                                            : {}
+                                    }
                                     className={setCellClasses(
                                         classes,
-                                        value ? value.displayValue : null,
-                                        value ? value.textDisplayValue : null,
+                                        value?.displayValue,
+                                        value?.textDisplayValue,
                                         item.rowType,
                                         reportData.headers.varianceColumns.includes(i),
                                         reportData.headers.textColumns.includes(i),
                                         reportData.headers.totalColumns.includes(i),
-                                        value ? value.allowWrap : true
+                                        value?.allowWrap ?? true,
+                                        null,
+                                        value?.attributes
                                     )}
                                     // remove this if we implement reordering of columns
                                     // eslint-disable-next-line react/no-array-index-key
@@ -201,13 +226,13 @@ const Results = ({
                                 <TableCell
                                     className={setCellClasses(
                                         classes,
-                                        value ? value.displayValue : null,
-                                        value ? value.textDisplayValue : null,
+                                        value?.displayValue,
+                                        value?.textDisplayValue,
                                         'Total',
                                         reportData.headers.varianceColumns.includes(i),
                                         reportData.headers.textColumns.includes(i),
                                         reportData.headers.totalColumns.includes(i),
-                                        value ? value.allowWrap : true
+                                        value?.allowWrap ?? true
                                     )}
                                     // remove this if we implement reordering of columns
                                     // eslint-disable-next-line react/no-array-index-key
