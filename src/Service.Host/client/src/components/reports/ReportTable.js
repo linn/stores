@@ -92,13 +92,21 @@ const setCellClasses = (
     return generatedClasses;
 };
 
-const getTextColour = attributes => {
+const getAttributeStyles = attributes => {
+    let style = {};
     if (attributes?.length) {
         const textAttribute = attributes.find(a => a.attributeType === 'text-colour');
-        return textAttribute?.attributeValue;
+        if (textAttribute) {
+            style = { ...style, color: textAttribute?.attributeValue };
+        }
+
+        const backgroundAttribute = attributes.find(a => a.attributeType === 'background-colour');
+        if (backgroundAttribute) {
+            style = { ...style, backgroundColor: backgroundAttribute?.attributeValue };
+        }
     }
 
-    return null;
+    return style;
 };
 
 const setHeaderCellClasses = (
@@ -189,11 +197,7 @@ const Results = ({
                             ) : null}
                             {item.values.map((value, i) => (
                                 <TableCell
-                                    style={
-                                        getTextColour(value?.attributes)
-                                            ? { color: getTextColour(value?.attributes) }
-                                            : {}
-                                    }
+                                    style={getAttributeStyles(value?.attributes)}
                                     className={setCellClasses(
                                         classes,
                                         value?.displayValue,
@@ -224,6 +228,7 @@ const Results = ({
                             ) : null}
                             {reportData.totals.values.map((value, i) => (
                                 <TableCell
+                                    style={getAttributeStyles(value?.attributes)}
                                     className={setCellClasses(
                                         classes,
                                         value?.displayValue,
@@ -232,7 +237,9 @@ const Results = ({
                                         reportData.headers.varianceColumns.includes(i),
                                         reportData.headers.textColumns.includes(i),
                                         reportData.headers.totalColumns.includes(i),
-                                        value?.allowWrap ?? true
+                                        value?.allowWrap ?? true,
+                                        null,
+                                        value?.attributes
                                     )}
                                     // remove this if we implement reordering of columns
                                     // eslint-disable-next-line react/no-array-index-key
