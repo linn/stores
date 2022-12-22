@@ -407,7 +407,7 @@
                 var kardexLabelType = this.labelTypeRepository.FindBy(x => x.Code == "KARDEX");
                 var printer = string.IsNullOrEmpty(printerName) ?
                                   kardexLabelType.DefaultPrinter 
-                                  : this.labelTypeRepository.FindBy(x => x.DefaultPrinter.ToLower() == printerName)
+                                  : this.labelTypeRepository.FindBy(x => x.DefaultPrinter.ToLower() == printerName.ToLower())
                                       .DefaultPrinter;
                 success = this.bartender.PrintLabels(
                     labelName,
@@ -496,7 +496,7 @@
                 }
                 var printer = string.IsNullOrEmpty(printerName) ?
                                   labelType.DefaultPrinter
-                                  : this.labelTypeRepository.FindBy(x => x.DefaultPrinter.ToLower() == printerName)
+                                  : this.labelTypeRepository.FindBy(x => x.DefaultPrinter.ToLower() == printerName.ToLower())
                                       .DefaultPrinter;
                 message = string.Empty;
                 success = this.bartender.PrintLabels(
