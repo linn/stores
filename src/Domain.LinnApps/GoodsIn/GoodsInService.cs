@@ -393,7 +393,8 @@
             string qcState,
             int reqNumber,
             string kardexLocation,  
-            IEnumerable<GoodsInLabelLine> lines)
+            IEnumerable<GoodsInLabelLine> lines,
+            string printerName = null)
         {
             var message = string.Empty;
             var success = false;
@@ -404,9 +405,13 @@
                 var labelName = $"KGI{orderNumber}";
                 var data = $"\"{kardexLocation.Replace("\"", "''")}\",\"{reqNumber}\"";
                 var kardexLabelType = this.labelTypeRepository.FindBy(x => x.Code == "KARDEX");
+                var printer = string.IsNullOrEmpty(printerName) ?
+                                  kardexLabelType.DefaultPrinter 
+                                  : this.labelTypeRepository.FindBy(x => x.DefaultPrinter.ToLower() == printerName)
+                                      .DefaultPrinter;
                 success = this.bartender.PrintLabels(
                     labelName,
-                    kardexLabelType.DefaultPrinter,
+                    printer,
                     lines == null ? 1 : lines.Count() + 1,
                     kardexLabelType.FileName,
                     data,
@@ -489,11 +494,14 @@
                         printString += Environment.NewLine;
                         break;
                 }
-
+                var printer = string.IsNullOrEmpty(printerName) ?
+                                  labelType.DefaultPrinter
+                                  : this.labelTypeRepository.FindBy(x => x.DefaultPrinter.ToLower() == printerName)
+                                      .DefaultPrinter;
                 message = string.Empty;
                 success = this.bartender.PrintLabels(
                     $"QC {orderNumber}-{line.Id}", 
-                    labelType.DefaultPrinter, 
+                    printer, 
                     1, 
                     labelType.FileName, 
                     printString, 

@@ -1305,6 +1305,7 @@
             e.Property(l => l.LocationCode).HasColumnName("LOCATION_CODE").HasMaxLength(16);
             e.Property(l => l.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
             e.Property(l => l.DateInvalid).HasColumnName("DATE_INVALID");
+            e.Property(l => l.StorageType).HasColumnName("STORAGE_TYPE");
             e.Property(l => l.LocationType).HasColumnName("LOCATION_TYPE").HasMaxLength(1);
             e.Property(l => l.DefaultStockPool).HasColumnName("DEFAULT_STOCK_POOL").HasMaxLength(10);
         }
@@ -1439,13 +1440,19 @@
 
         private void BuildRequisitionHeaders(ModelBuilder builder)
         {
-            var r = builder.Entity<RequisitionHeader>().ToTable("REQUISITION_HEADERS");
-            r.HasKey(l => l.ReqNumber);
-            r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
-            r.Property(l => l.Document1).HasColumnName("DOCUMENT_1");
-            r.Property(l => l.DateCreated).HasColumnName("DATE_CREATED");
-            r.HasMany(t => t.Lines).WithOne().HasForeignKey(requisitionLine => requisitionLine.ReqNumber);
-            r.HasMany(h => h.Moves).WithOne(m => m.Header).HasForeignKey(h => h.ReqNumber);
+            var e = builder.Entity<RequisitionHeader>().ToTable("REQUISITION_HEADERS");
+            e.HasKey(r => r.ReqNumber);
+            e.Property(r => r.ReqNumber).HasColumnName("REQ_NUMBER");
+            e.Property(r => r.Document1).HasColumnName("DOCUMENT_1");
+            e.Property(r => r.DateCreated).HasColumnName("DATE_CREATED");
+            e.Property(r => r.Qty).HasColumnName("QTY");
+            e.Property(r => r.ToLocationId).HasColumnName("TO_LOCATION_ID");
+            e.Property(r => r.Document1Name).HasColumnName("DOC1_NAME");
+            e.Property(r => r.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            e.HasOne(r => r.Part).WithMany().HasForeignKey(r => r.PartNumber);
+            e.HasMany(r => r.Lines).WithOne().HasForeignKey(r => r.ReqNumber);
+            e.HasMany(r => r.Moves).WithOne(m => m.Header).HasForeignKey(r => r.ReqNumber);
+            e.HasOne(r => r.ToLocation).WithMany().HasForeignKey(r => r.ToLocationId);
         }
 
         private void BuildRequisitionLines(ModelBuilder builder)
@@ -1454,6 +1461,7 @@
             r.HasKey(l => new { l.ReqNumber, l.LineNumber });
             r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
             r.Property(l => l.LineNumber).HasColumnName("LINE_NUMBER");
+           
             r.Property(l => l.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
             r.Property(l => l.TransactionCode).HasColumnName("TRANSACTION_CODE").HasMaxLength(10);
             r.HasMany(t => t.Moves).WithOne().HasForeignKey(reqMove => new { reqMove.ReqNumber, reqMove.LineNumber });
