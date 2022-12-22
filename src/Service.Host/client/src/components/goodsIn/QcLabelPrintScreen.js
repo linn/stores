@@ -84,11 +84,11 @@ function QcLabelPrintScreen({
                     deliveryRef,
                     qcInformation: req?.qcInfo ?? qcInfo,
                     qty: req?.qtyReceived ?? qtyReceived,
-                    orderNumber: req?.documentNumber ?? orderNumber,
+                    orderNumber: req?.document1 ?? orderNumber,
                     numberOfLabels: numContainers,
                     numberOfLines: numContainers,
                     qcState: req?.qcState ?? qcState,
-                    reqNumber: enteredReqNumber,
+                    reqNumber: req?.reqNumber ?? enteredReqNumber,
                     lines: labelLines,
                     printerName: printerName ?? null
                 })
@@ -118,7 +118,7 @@ function QcLabelPrintScreen({
                 <InputField
                     fullWidth
                     disabled
-                    value={req?.documentNumber ?? orderNumber}
+                    value={req?.document1 ?? orderNumber}
                     label="Order Number"
                     propertyName="orderNumber"
                 />

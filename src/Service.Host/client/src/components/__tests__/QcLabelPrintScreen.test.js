@@ -1,6 +1,5 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import Decimal from 'decimal.js';
 import { cleanup, fireEvent, screen } from '@testing-library/react';
 import render from '../../test-utils';
 import QcLabelPrintScreen from '../goodsIn/QcLabelPrintScreen';
@@ -144,5 +143,54 @@ describe('When qties do not add up', () => {
     test('should disable button', () => {
         const button = screen.getByRole('button', { name: 'Print' });
         expect(button).toBeDisabled();
+    });
+});
+
+describe('When req', () => {
+    test('should call PrintLabels with correct args', () => {
+        cleanup();
+        jest.clearAllMocks();
+        render(
+            <QcLabelPrintScreen
+                printLabels={printLabels}
+                req={{
+                    reqNumber: 1182852,
+                    document1: 827552,
+                    documentType: 'PO',
+                    qcState: 'PASS',
+                    partNumber: 'CAP 500',
+                    partDescription: '470PF,+5%,-5%,50V,CCOG,SM,CC1206,,,,,,,,,,,',
+                    qtyReceived: 200,
+                    unitOfMeasure: 'ONES',
+                    qcInfo: 'KB 7234   QTY 4000',
+                    storageType: 'K206',
+                    lines: [{ transactionCode: 'SUSTI', line: 1 }],
+                    links: [{ href: '/logistics/requisitions/1182852', rel: 'self' }]
+                }}
+            />
+        );
+        let input = screen.getByLabelText('# Containers');
+        fireEvent.change(input, { target: { value: 1 } });
+        input = screen.getByLabelText('Printer');
+        fireEvent.change(input, { target: { value: 'MyPrinter' } });
+        const button = screen.getByText('Print');
+        fireEvent.click(button);
+        expect(printLabels).toHaveBeenCalledWith(
+            expect.objectContaining({
+                documentType: 'PO',
+                kardexLocation: 'K206',
+                partNumber: 'CAP 500',
+                partDescription: '470PF,+5%,-5%,50V,CCOG,SM,CC1206,,,,,,,,,,,',
+                deliveryRef: '',
+                qcInformation: 'KB 7234   QTY 4000',
+                qty: 200,
+                orderNumber: 827552,
+                numberOfLabels: 1,
+                numberOfLines: 1,
+                qcState: 'PASS',
+                reqNumber: 1182852,
+                printerName: 'MyPrinter'
+            })
+        );
     });
 });
