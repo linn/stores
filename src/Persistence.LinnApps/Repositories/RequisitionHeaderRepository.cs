@@ -21,15 +21,17 @@
         public RequisitionHeader FindById(int key)
         {
             return this.serviceDbContext.RequisitionHeaders
-                .Where(p => p.ReqNumber == key)
-                .Include(a => a.Lines)
-                .ThenInclude(b => b.Moves)
-                .ThenInclude(c => c.Location)
-                .Include(a => a.Lines)
-                .ThenInclude(b => b.Moves)
-                .ThenInclude(c => c.StockLocator)
-                .ThenInclude(d => d.StorageLocation)
-                .Include(a => a.Lines).ThenInclude(l => l.TransactionDefinition)
+                .Where(r => r.ReqNumber == key)
+                .Include(r => r.Part)
+                .Include(r => r.Lines)
+                .ThenInclude(l => l.Moves)
+                .ThenInclude(m => m.Location)
+                .Include(r => r.Lines)
+                .ThenInclude(l => l.Moves)
+                .ThenInclude(m => m.StockLocator)
+                .ThenInclude(s => s.StorageLocation)
+                .Include(r => r.Lines).ThenInclude(l => l.TransactionDefinition)
+                .Include(r => r.ToLocation)
                 .ToList().FirstOrDefault();
         }
 

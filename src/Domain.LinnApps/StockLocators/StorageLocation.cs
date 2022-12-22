@@ -19,6 +19,8 @@
 
         public DateTime? DateInvalid { get; set; }
 
+        public string StorageType { get; set; }
+
         public IEnumerable<StockLocator> StockLocators { get; set; }
 
         public IEnumerable<StockLocatorLocation> StockLocatorLocations { get; set; }

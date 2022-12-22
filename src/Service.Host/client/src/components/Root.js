@@ -302,7 +302,7 @@ const Root = ({ store }) => (
                                     />
                                     <Route
                                         exact
-                                        path="/logistics/goods-in-utility/test-labels"
+                                        path="/logistics/reqs/labels"
                                         component={QcLabelPrintScreen}
                                     />
                                     <Route

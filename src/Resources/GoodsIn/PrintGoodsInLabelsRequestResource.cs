@@ -29,5 +29,7 @@
         public string KardexLocation { get; set; }
 
         public IEnumerable<GoodsInLabelLineResource> Lines { get; set; }
+
+        public string PrinterName { get; set; }
     }
 }

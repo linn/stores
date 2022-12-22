@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { Decimal } from 'decimal.js';
@@ -24,29 +24,42 @@ function QcLabelPrintScreen({
     printLabels,
     printLabelsResult,
     printLabelsLoading,
-    kardexLocation
+    kardexLocation,
+    fetchReq,
+    req,
+    initialNumContainers
 }) {
     const [deliveryRef, setDeliveryRef] = useState('');
-    const [numContainers, setNumContainers] = useState(1);
-    const [labelLines, setLabelLines] = useState([]);
+    const [numContainers, setNumContainers] = useState(initialNumContainers);
+    const [labelLines, setLabelLines] = useState([
+        {
+            id: 0,
+            qty: req?.qtyReceived ?? qtyReceived
+        }
+    ]);
     const [labelLinesExpanded, setLabelLinesExpanded] = useState(false);
+    const [printerName, setPrinterName] = useState();
+
+    const [enteredReqNumber, setEnteredReqNumber] = useState(reqNumber);
 
     const divide = (a, b) => (!a || !b ? null : new Decimal(a).dividedBy(new Decimal(b)));
 
     const qtiesInvalid = () =>
-        Number(qtyReceived) !== labelLines.reduce((a, b) => Number(a) + Number(b.qty), 0);
+        !numContainers ||
+        Number(req?.qtyReceived ?? qtyReceived) !==
+            labelLines.reduce((a, b) => Number(a) + Number(b.qty), 0);
 
-    useEffect(() => {
+    const handleNumContainersChange = newValue => {
         const lines = [];
-        for (let index = 0; index < numContainers; index += 1) {
+        for (let index = 0; index < newValue; index += 1) {
             lines.push({
                 id: index.toString(),
-                qty: divide(qtyReceived, numContainers)?.toDecimalPlaces(2) ?? 0
+                qty: divide(req?.qtyReceived ?? qtyReceived, newValue)?.toDecimalPlaces(2) ?? 0
             });
         }
-
+        setNumContainers(newValue);
         setLabelLines(lines);
-    }, [numContainers, qtyReceived]);
+    };
 
     const handleLabelLineQtyChange = (propertyName, newValue) => {
         const index = propertyName.replace('line ', '');
@@ -64,19 +77,20 @@ function QcLabelPrintScreen({
             disabled={qtiesInvalid()}
             onClick={() =>
                 printLabels({
-                    documentType: docType,
-                    kardexLocation,
-                    partNumber,
-                    partDescription,
+                    documentType: req?.documentType ?? docType,
+                    kardexLocation: req?.storageType ?? kardexLocation,
+                    partNumber: req?.partNumber ?? partNumber,
+                    partDescription: req?.partDescription ?? partDescription,
                     deliveryRef,
-                    qcInformation: qcInfo,
-                    qty: qtyReceived,
-                    orderNumber,
+                    qcInformation: req?.qcInfo ?? qcInfo,
+                    qty: req?.qtyReceived ?? qtyReceived,
+                    orderNumber: req?.document1 ?? orderNumber,
                     numberOfLabels: numContainers,
                     numberOfLines: numContainers,
-                    qcState,
-                    reqNumber,
-                    lines: labelLines
+                    qcState: req?.qcState ?? qcState,
+                    reqNumber: req?.reqNumber ?? enteredReqNumber,
+                    lines: labelLines,
+                    printerName: printerName ?? null
                 })
             }
         >
@@ -95,7 +109,7 @@ function QcLabelPrintScreen({
                 <InputField
                     fullWidth
                     disabled
-                    value={docType}
+                    value={req?.documentType ?? docType}
                     label="Document Type"
                     propertyName="docType"
                 />
@@ -104,7 +118,7 @@ function QcLabelPrintScreen({
                 <InputField
                     fullWidth
                     disabled
-                    value={orderNumber}
+                    value={req?.document1 ?? orderNumber}
                     label="Order Number"
                     propertyName="orderNumber"
                 />
@@ -112,10 +126,19 @@ function QcLabelPrintScreen({
             <Grid item xs={3}>
                 <InputField
                     fullWidth
-                    disabled
-                    value={reqNumber}
+                    value={enteredReqNumber}
                     label="Req Number"
                     propertyName="reqNumber"
+                    onChange={(_, newValue) => {
+                        setEnteredReqNumber(newValue);
+                    }}
+                    textFieldProps={{
+                        onKeyDown: data => {
+                            if (data.keyCode === 13 || data.keyCode === 9) {
+                                fetchReq(enteredReqNumber);
+                            }
+                        }
+                    }}
                 />
             </Grid>
             <Grid item xs={3} />
@@ -123,9 +146,9 @@ function QcLabelPrintScreen({
                 <InputField
                     fullWidth
                     disabled
-                    value={qcState}
+                    value={req?.qcState ?? qcState}
                     label="QC State"
-                    propertyName="orderNumber"
+                    propertyName="qcState"
                 />
             </Grid>
             <Grid item xs={9} />
@@ -133,7 +156,7 @@ function QcLabelPrintScreen({
                 <InputField
                     fullWidth
                     disabled
-                    value={partNumber}
+                    value={req?.partNumber ?? partNumber}
                     label="Part"
                     propertyName="partNumber"
                 />
@@ -142,7 +165,7 @@ function QcLabelPrintScreen({
                 <InputField
                     fullWidth
                     disabled
-                    value={partDescription}
+                    value={req?.partDescription ?? partDescription}
                     label="Part Description"
                     propertyName="description"
                 />
@@ -151,7 +174,7 @@ function QcLabelPrintScreen({
                 <InputField
                     fullWidth
                     disabled
-                    value={qtyReceived}
+                    value={req?.qtyReceived ?? qtyReceived}
                     label="Qty Received"
                     propertyName="qtyReceived"
                 />
@@ -160,7 +183,7 @@ function QcLabelPrintScreen({
                 <InputField
                     fullWidth
                     disabled
-                    value={unitOfMeasure}
+                    value={req?.unitOfMeasure ?? unitOfMeasure}
                     label="Unit of Measure"
                     propertyName="unitOfMeasure"
                 />
@@ -180,7 +203,7 @@ function QcLabelPrintScreen({
                 <InputField
                     fullWidth
                     disabled
-                    value={qcInfo}
+                    value={req?.qcInfo ?? qcInfo}
                     label="QC Info"
                     propertyName="qcInfo"
                 />
@@ -190,7 +213,7 @@ function QcLabelPrintScreen({
                 <InputField
                     fullWidth
                     disabled
-                    value={kardexLocation}
+                    value={req?.storageType ?? kardexLocation}
                     label="Kardex Location"
                     propertyName="kardexLocation"
                 />
@@ -200,14 +223,23 @@ function QcLabelPrintScreen({
                 <InputField
                     fullWidth
                     value={numContainers}
-                    onChange={(_, newValue) => setNumContainers(newValue)}
+                    onChange={(_, newValue) => handleNumContainersChange(newValue)}
                     label="# Containers"
                     type="number"
                     propertyName="numberOfContainers"
                 />
             </Grid>
             <Grid item xs={10} />
-
+            {!initialNumContainers && (
+                <Grid item xs={12}>
+                    <InputField
+                        value={printerName}
+                        onChange={(_, newValue) => setPrinterName(newValue)}
+                        label="Printer"
+                        propertyName="printerName"
+                    />
+                </Grid>
+            )}
             <Grid item xs={2}>
                 {qtiesInvalid() ? (
                     <Tooltip title="Values entered don't add up to Qty Received">
@@ -283,7 +315,10 @@ QcLabelPrintScreen.propTypes = {
     printLabels: PropTypes.func.isRequired,
     printLabelsResult: PropTypes.shape({ message: PropTypes.string, success: PropTypes.bool }),
     printLabelsLoading: PropTypes.bool,
-    kardexLocation: PropTypes.string
+    kardexLocation: PropTypes.string,
+    fetchReq: PropTypes.func,
+    req: PropTypes.shape(PropTypes.shape({})),
+    initialNumContainers: PropTypes.number
 };
 
 QcLabelPrintScreen.defaultProps = {
@@ -298,7 +333,10 @@ QcLabelPrintScreen.defaultProps = {
     qcInfo: null,
     printLabelsResult: null,
     printLabelsLoading: false,
-    kardexLocation: null
+    kardexLocation: null,
+    fetchReq: null,
+    req: null,
+    initialNumContainers: null
 };
 
 export default QcLabelPrintScreen;
