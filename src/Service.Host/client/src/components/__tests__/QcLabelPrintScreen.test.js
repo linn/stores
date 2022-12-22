@@ -20,7 +20,8 @@ const props = {
     printLabels,
     printLabelsResult: null,
     printLabelsLoading: false,
-    kardexLocation: null
+    kardexLocation: null,
+    initialNumContainers: 1
 };
 describe('When not Kardex Location', () => {
     beforeEach(() => {
@@ -82,9 +83,7 @@ describe('When printLabels button clicked', () => {
                 deliveryRef: '',
                 documentType: 'PO',
                 kardexLocation: null,
-                lines: expect.arrayContaining([
-                    expect.objectContaining({ id: '0', qty: new Decimal(1) })
-                ]),
+                lines: expect.arrayContaining([expect.objectContaining({ id: 0, qty: 1 })]),
                 numberOfLabels: 1,
                 numberOfLines: 1,
                 orderNumber: '123456',
@@ -93,7 +92,8 @@ describe('When printLabels button clicked', () => {
                 qcInformation: 'INFO',
                 qcState: 'PASS',
                 qty: 1,
-                reqNumber: '4567890'
+                reqNumber: '4567890',
+                printerName: null
             })
         );
     });
@@ -133,9 +133,11 @@ describe('When qties do not add up', () => {
         cleanup();
         // eslint-disable-next-line react/jsx-props-no-spreading
         render(<QcLabelPrintScreen {...props} />);
+        let input = screen.getByLabelText('# Containers');
+        fireEvent.change(input, { target: { value: 2 } });
         const expansionPanel = screen.getByTestId('quantitiesExpansionPanel');
         fireEvent.click(expansionPanel);
-        const input = screen.getByLabelText('1');
+        input = screen.getByLabelText('1');
         fireEvent.change(input, { target: { value: 5 } });
     });
 

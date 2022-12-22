@@ -31,7 +31,12 @@ function QcLabelPrintScreen({
 }) {
     const [deliveryRef, setDeliveryRef] = useState('');
     const [numContainers, setNumContainers] = useState(initialNumContainers);
-    const [labelLines, setLabelLines] = useState([]);
+    const [labelLines, setLabelLines] = useState([
+        {
+            id: 0,
+            qty: req?.qtyReceived ?? qtyReceived
+        }
+    ]);
     const [labelLinesExpanded, setLabelLinesExpanded] = useState(false);
     const [printerName, setPrinterName] = useState();
 
@@ -40,8 +45,9 @@ function QcLabelPrintScreen({
     const divide = (a, b) => (!a || !b ? null : new Decimal(a).dividedBy(new Decimal(b)));
 
     const qtiesInvalid = () =>
+        !numContainers ||
         Number(req?.qtyReceived ?? qtyReceived) !==
-        labelLines.reduce((a, b) => Number(a) + Number(b.qty), 0);
+            labelLines.reduce((a, b) => Number(a) + Number(b.qty), 0);
 
     const handleNumContainersChange = newValue => {
         const lines = [];
@@ -82,9 +88,9 @@ function QcLabelPrintScreen({
                     numberOfLabels: numContainers,
                     numberOfLines: numContainers,
                     qcState: req?.qcState ?? qcState,
-                    enteredReqNumber,
+                    reqNumber: enteredReqNumber,
                     lines: labelLines,
-                    printerName
+                    printerName: printerName ?? null
                 })
             }
         >
