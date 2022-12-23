@@ -14,13 +14,13 @@
 
     using NUnit.Framework;
 
-    public class WhenBookingInAndInvalidLocation : ContextBase
+    public class WhenBookingInAndPartNotLive : ContextBase
     {
         [Test]
         public void ShouldReturnErrorResult()
         {
             this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>())
-                .Returns(new Part { DateLive = DateTime.Today });
+                .Returns(new Part { DateLive = null });
             this.StoragePlaceRepository.FindBy(Arg.Any<Expression<Func<StoragePlace, bool>>>()).ReturnsNull();
             var result = this.Sut.DoBookIn(
                 "O",
@@ -36,7 +36,7 @@
                 null,
                 null,
                 "P1234",
-                "QC",
+                "PASS",
                 null,
                 null,
                 null,
@@ -58,7 +58,7 @@
                     });
 
             result.Success.Should().BeFalse();
-            result.Message.Should().Be("Invalid location entered");
+            result.Message.Should().Be("PART NOT LIVE - SEE PURCHASING!");
         }
     }
 }

@@ -359,6 +359,12 @@
                 throw new UpdatePartException("You must enter a reason and/or reference or project code when setting an override");
             }
 
+
+            if (to.LinnProduced == "Y" && to.BomType == "C")
+            {
+                throw new CreatePartException("Can't have a Linn Produced COMPONENT - Bom Type must be assembly");
+            }
+
             if (to.LinnProduced != null && to.LinnProduced.Equals("Y"))
             {
                 to.PreferredSupplier = this.supplierRepository.FindBy(s => s.Id == 4415);

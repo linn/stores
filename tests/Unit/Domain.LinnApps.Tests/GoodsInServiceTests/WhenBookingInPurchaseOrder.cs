@@ -46,7 +46,8 @@
                     {
                         PartNumber = "PART",
                         Description = "A PART",
-                        QcInformation = "Some Info"
+                        QcInformation = "Some Info",
+                        DateLive = DateTime.Today
                     });
             
             this.GoodsInPack.When(x => x.GetPurchaseOrderDetails(

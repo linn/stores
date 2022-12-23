@@ -28,7 +28,13 @@
             this.StoresPack.ValidOrderQty(1, 1, 1, out Arg.Any<int>(), out Arg.Any<int>()).Returns(false);
 
             this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>()).Returns(
-                new Part { PartNumber = "PART", Description = "A PART", QcInformation = "Some Info" });
+                new Part
+                    {
+                        PartNumber = "PART", 
+                        Description = "A PART", 
+                        QcInformation = "Some Info",
+                        DateLive = DateTime.Today
+                });
 
             this.GoodsInPack
                 .When(
