@@ -92,6 +92,13 @@
             bool printRsnLabels,
             IEnumerable<GoodsInLogEntry> lines)
         {
+            var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
+
+            if (transactionType == "O" && !part.DateLive.HasValue)
+            {
+                return new BookInResult(false, "PART NOT LIVE - SEE PURCHASING!");
+            }
+
             if (string.IsNullOrEmpty(ontoLocation))
             {
                 return new BookInResult(false, "Onto location/pallet must be entered");
@@ -195,7 +202,6 @@
 
             if (transactionType == "O")
             {
-                var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
                 result.QcInfo = part?.QcInformation;
                 this.goodsInPack.GetPurchaseOrderDetails(
                     orderNumber.Value,
@@ -238,13 +244,13 @@
 
             if (transactionType.Equals("L"))
             {
-                var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(lines.First().ArticleNumber));
+                var article = this.partsRepository.FindBy(x => x.PartNumber.Equals(lines.First().ArticleNumber));
                 result.DocType = "L";
                 result.TransactionCode = "L";
                 result.QtyReceived = qty;
-                result.PartNumber = part.PartNumber;
-                result.PartDescription = part.Description;
-                result.QcInfo = part?.QcInformation;
+                result.PartNumber = article.PartNumber;
+                result.PartDescription = article.Description;
+                result.QcInfo = article?.QcInformation;
 
                 result.SupplierId = supplierId;
 
