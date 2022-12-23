@@ -225,6 +225,11 @@
                 partToCreate.RailMethod = "POLICY";
             }
 
+            if (partToCreate.LinnProduced == "Y" && partToCreate.BomType == "C")
+            {
+                throw new CreatePartException("Can't create a Linn Produced COMPONENT - must be assembly");
+            }
+
             partToCreate.OrderHold = "N";
 
             this.Validate(partToCreate);
