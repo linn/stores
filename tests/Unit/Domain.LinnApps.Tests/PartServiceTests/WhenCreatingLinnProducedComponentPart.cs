@@ -2,8 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
 
     using FluentAssertions;
 
@@ -41,7 +39,7 @@
         {
             this.result.Should().BeOfType<CreatePartException>();
             this.result.Message.Should()
-                .Be("Can't create a Linn Produced COMPONENT - must be assembly");
+                .Be("Can't have a Linn Produced COMPONENT - Bom Type must be assembly");
         }
     }
 }

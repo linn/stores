@@ -64,7 +64,8 @@ function Part({
         railMethod: 'LEADTIME',
         qcInformation: '',
         qcOnReceipt: 'N',
-        orderHold: 'N'
+        orderHold: 'N',
+        ourUnitOfMeasure: 'ONES'
     };
     const creating = () => editStatus === 'create';
 

@@ -225,11 +225,6 @@
                 partToCreate.RailMethod = "POLICY";
             }
 
-            if (partToCreate.LinnProduced == "Y" && partToCreate.BomType == "C")
-            {
-                throw new CreatePartException("Can't create a Linn Produced COMPONENT - must be assembly");
-            }
-
             partToCreate.OrderHold = "N";
 
             this.Validate(partToCreate);
@@ -362,6 +357,12 @@
             if (to.TqmsCategoryOverride != null && to.StockNotes == null)
             {
                 throw new UpdatePartException("You must enter a reason and/or reference or project code when setting an override");
+            }
+
+
+            if (to.LinnProduced == "Y" && to.BomType == "C")
+            {
+                throw new CreatePartException("Can't have a Linn Produced COMPONENT - Bom Type must be assembly");
             }
 
             if (to.LinnProduced != null && to.LinnProduced.Equals("Y"))

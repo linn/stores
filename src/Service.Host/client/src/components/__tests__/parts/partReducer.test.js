@@ -272,7 +272,10 @@ describe('partReducer tests', () => {
             part: {
                 linnProduced: 'Y',
                 sernosSequenceName: 'SERIAL 1',
-                sernosSequenceDescription: 'MASTER SERIAL NUMBER RECORDS.'
+                sernosSequenceDescription: 'MASTER SERIAL NUMBER RECORDS.',
+                decrementRuleName: 'YES',
+                assemblyTechnologyName: 'TH',
+                bomType: 'A'
             }
         });
         expect(
