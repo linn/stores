@@ -140,7 +140,7 @@
                             RowId = wwdWork.PartNumber,
                             TextDisplay = wwdWork.Remarks,
                             ColumnId = "Remarks",
-                            Attributes = wwdWork.Remarks.Contains("totally SHORT")
+                            Attributes = !string.IsNullOrWhiteSpace(wwdWork.Remarks) && wwdWork.Remarks.Contains("totally SHORT")
                                              ? new List<ReportAttribute>
                                                    {
                                                        new ReportAttribute(ReportAttributeType.TextColour, "red")
