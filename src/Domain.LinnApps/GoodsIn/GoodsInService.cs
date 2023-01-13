@@ -8,6 +8,7 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models;
+    using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Requisitions;
 
     public class GoodsInService : IGoodsInService
@@ -92,13 +93,6 @@
             bool printRsnLabels,
             IEnumerable<GoodsInLogEntry> lines)
         {
-            var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
-
-            if (transactionType == "O" && !part.DateLive.HasValue)
-            {
-                return new BookInResult(false, "PART NOT LIVE - SEE PURCHASING!");
-            }
-
             if (string.IsNullOrEmpty(ontoLocation))
             {
                 return new BookInResult(false, "Onto location/pallet must be entered");
@@ -121,7 +115,6 @@
                         return new BookInResult(false, $"Can't put {partNumber} on {entry.StoragePlace}");
                     }
                 }
-                
             }
 
             var goodsInLogEntries = lines as GoodsInLogEntry[] ?? linesArray.ToArray();
@@ -154,6 +147,16 @@
             {
                 var res = this.ValidatePurchaseOrder((int)orderNumber, (int)orderLine);
                 return new BookInResult(false, $"Overbook: PO was for {res.OrderQty} but you have tried to book in {total}");
+            }
+
+            if (transactionType.Equals("O"))
+            {
+                var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
+
+                if (!part.DateLive.HasValue)
+                {
+                    return new BookInResult(false, "PART NOT LIVE - SEE PURCHASING!");
+                }
             }
 
             var message = this.goodsInPack.DoBookIn(
@@ -202,6 +205,8 @@
 
             if (transactionType == "O")
             {
+                var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
+
                 result.QcInfo = part?.QcInformation;
                 this.goodsInPack.GetPurchaseOrderDetails(
                     orderNumber.Value,
