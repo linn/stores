@@ -25,18 +25,6 @@
                 .Returns(new StoragePlace());
             this.StoresPack.ValidOrderQty(1, 1, 1, out Arg.Any<int>(), out Arg.Any<int>()).Returns(true);
 
-            this.GoodsInPack.When(x => x.GetPurchaseOrderDetails(
-                1,
-                1,
-                out var _,
-                out var _,
-                out var uom,
-                out var _,
-                out var _,
-                out var _,
-                out var _,
-                out var _))
-                .Do(x => x[4] = "ONES");
             this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1234").Returns(true);
 
             var result = this.Sut.DoBookIn(
