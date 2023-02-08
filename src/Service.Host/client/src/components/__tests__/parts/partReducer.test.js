@@ -307,4 +307,20 @@ describe('partReducer tests', () => {
             }
         });
     });
+    it('should handle bomVerifyFreqWeeks Change', () => {
+        expect(
+            partReducer(
+                {},
+                {
+                    type: 'fieldChange',
+                    fieldName: 'bomVerifyFreqWeeks',
+                    payload: 6
+                }
+            )
+        ).toEqual({
+            part: {
+                bomVerifyFreqWeeks: 6
+            }
+        });
+    });
 });

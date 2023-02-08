@@ -17,6 +17,7 @@ function BuildTab({
     assemblyTechnologyName,
     bomType,
     bomId,
+    bomVerifyFreqWeeks,
     optionSet,
     drawingReference,
     safetyCriticalPart,
@@ -153,6 +154,16 @@ function BuildTab({
                     propertyName="optionSet"
                 />
             </Grid>
+            <Grid item xs={2}>
+                <InputField
+                    fullWidth
+                    value={bomVerifyFreqWeeks}
+                    type="number"
+                    label="Bom Frequency (Weeks)"
+                    onChange={handleFieldChange}
+                    propertyName="bomVerifyFreqWeeks"
+                />
+            </Grid>
             <Grid item xs={8} />
             <Grid item xs={6}>
                 <InputField
@@ -200,6 +211,7 @@ BuildTab.propTypes = {
     assemblyTechnologyName: PropTypes.string,
     bomType: PropTypes.string,
     bomId: PropTypes.number,
+    bomVerifyFreqWeeks: PropTypes.number,
     optionSet: PropTypes.string,
     drawingReference: PropTypes.string,
     safetyCriticalPart: PropTypes.string,
@@ -220,6 +232,7 @@ BuildTab.defaultProps = {
     assemblyTechnologyName: null,
     bomType: null,
     bomId: null,
+    bomVerifyFreqWeeks: null,
     optionSet: null,
     drawingReference: null,
     safetyCriticalPart: null,

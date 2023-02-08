@@ -398,6 +398,7 @@ function Part({
                                     assemblyTechnologyName={state.part.assemblyTechnologyName}
                                     bomType={state.part.bomType}
                                     bomId={state.part.bomId}
+                                    bomVerifyFreqWeeks={state.part.bomVerifyFreqWeeks}
                                     optionSet={state.part.optionSet}
                                     drawingReference={state.part.drawingReference}
                                     safetyCriticalPart={state.part.safetyCriticalPart}

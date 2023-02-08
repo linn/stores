@@ -31,6 +31,7 @@
                            DecrementRuleDescription = part.DecrementRule?.Description,
                            SparesRequirement = part.SparesRequirement,
                            BomType = part.BomType,
+                           BomVerifyFreqWeeks= part.BomVerifyFreqWeeks,
                            AccountingCompany = part.AccountingCompany?.Name,
                            AccountingCompanyDescription = part.AccountingCompany?.Description,
                            OptionSet = part.OptionSet,
