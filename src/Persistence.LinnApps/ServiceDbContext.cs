@@ -253,6 +253,12 @@
 
         public DbSet<PhoneListEntry> PhoneList { get; set; }
 
+        public DbQuery<MrPart> MrParts { get; set; }
+
+        public DbQuery<EuCreditInvoice> EuCreditInvoices { get; set; }
+
+        public DbQuery<ProductUpgradeRule> ProductUpgradeRules { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -374,6 +380,8 @@
             this.QueryRsnConditions(builder);
             this.BuildPhoneList(builder);
             this.BuildInvoiceDetails(builder);
+            this.QueryMrParts(builder);
+            this.QueryProductUpgradeRules(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -478,7 +486,7 @@
             e.Property(p => p.IgnoreWorkstationStock).HasColumnName("IGNORE_WORKSTN_STOCK").HasMaxLength(1);
             e.Property(p => p.ImdsIdNumber).HasColumnName("IMDS_ID_NUMBER");
             e.Property(p => p.ImdsWeight).HasColumnName("IMDS_WEIGHT_G");
-            e.Property(p => p.QcOnReceipt).HasColumnName("QC_ON_RECEIPT").HasMaxLength(1);
+            e.Property(p => p.QcOnReceipt).HasColumnName("QC_ON_RECEIPT").HasMaxLength(1).HasColumnType("VARCHAR2").IsUnicode(false);
             e.Property(p => p.QcInformation).HasColumnName("QC_INFORMATION").HasMaxLength(90);
             e.Property(p => p.RawOrFinished).HasColumnName("RM_FG").HasMaxLength(1);
             e.Property(p => p.OurInspectionWeeks).HasColumnName("OUR_INSP_WEEKS");
@@ -515,6 +523,7 @@
             e.HasOne(p => p.DecrementRule).WithMany(s => s.Parts).HasForeignKey("DECREMENT_RULE");
             e.HasOne(p => p.MechPartSource).WithOne(m => m.Part);
             e.HasOne(p => p.SalesArticle).WithOne(a => a.Part).HasForeignKey<Part>(x => x.PartNumber);
+            e.HasMany(p => p.QcControls).WithOne().HasForeignKey(q => q.PartNumber);
         }
 
         private void BuildPartDataSheets(ModelBuilder builder)
@@ -713,13 +722,15 @@
             e.Property(q => q.OnOrOffQc).HasColumnName("ON_OR_OFF_QC");
             e.Property(q => q.Reason).HasColumnName("REASON");
             e.Property(q => q.TransactionDate).HasColumnName("TRANSACTION_DATE");
+            e.HasOne(q => q.Employee).WithMany().HasForeignKey(q => q.ChangedBy);
         }
 
         private void BuildParetoClasses(ModelBuilder builder)
         {
             var e = builder.Entity<ParetoClass>().ToTable("PARETO_CLASSES");
             e.HasKey(p => p.ParetoCode);
-            e.Property(p => p.ParetoCode).HasColumnName("PARETO_CODE").HasMaxLength(2);
+            e.Property(p => p.ParetoCode).HasColumnName("PARETO_CODE")
+                .HasMaxLength(2).HasColumnType("VARCHAR2").IsUnicode(false);
             e.Property(p => p.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
         }
 
@@ -810,6 +821,7 @@
             builder.Entity<NominalAccount>().ToTable("NOMINAL_ACCOUNTS");
             builder.Entity<NominalAccount>().HasKey(a => a.NominalAccountId);
             builder.Entity<NominalAccount>().Property(a => a.NominalAccountId).HasColumnName("NOMACC_ID");
+            builder.Entity<NominalAccount>().Property(a => a.StoresPostsAllowed).HasColumnName("STORES_POSTS_ALLOWED");
         }
 
         private void BuildDespatchLocations(ModelBuilder builder)
@@ -1293,6 +1305,7 @@
             e.Property(l => l.LocationCode).HasColumnName("LOCATION_CODE").HasMaxLength(16);
             e.Property(l => l.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
             e.Property(l => l.DateInvalid).HasColumnName("DATE_INVALID");
+            e.Property(l => l.StorageType).HasColumnName("STORAGE_TYPE");
             e.Property(l => l.LocationType).HasColumnName("LOCATION_TYPE").HasMaxLength(1);
             e.Property(l => l.DefaultStockPool).HasColumnName("DEFAULT_STOCK_POOL").HasMaxLength(10);
         }
@@ -1427,13 +1440,19 @@
 
         private void BuildRequisitionHeaders(ModelBuilder builder)
         {
-            var r = builder.Entity<RequisitionHeader>().ToTable("REQUISITION_HEADERS");
-            r.HasKey(l => l.ReqNumber);
-            r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
-            r.Property(l => l.Document1).HasColumnName("DOCUMENT_1");
-            r.Property(l => l.DateCreated).HasColumnName("DATE_CREATED");
-            r.HasMany(t => t.Lines).WithOne().HasForeignKey(requisitionLine => requisitionLine.ReqNumber);
-            r.HasMany(h => h.Moves).WithOne(m => m.Header).HasForeignKey(h => h.ReqNumber);
+            var e = builder.Entity<RequisitionHeader>().ToTable("REQUISITION_HEADERS");
+            e.HasKey(r => r.ReqNumber);
+            e.Property(r => r.ReqNumber).HasColumnName("REQ_NUMBER");
+            e.Property(r => r.Document1).HasColumnName("DOCUMENT_1");
+            e.Property(r => r.DateCreated).HasColumnName("DATE_CREATED");
+            e.Property(r => r.Qty).HasColumnName("QTY");
+            e.Property(r => r.ToLocationId).HasColumnName("TO_LOCATION_ID");
+            e.Property(r => r.Document1Name).HasColumnName("DOC1_NAME");
+            e.Property(r => r.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            e.HasOne(r => r.Part).WithMany().HasForeignKey(r => r.PartNumber);
+            e.HasMany(r => r.Lines).WithOne().HasForeignKey(r => r.ReqNumber);
+            e.HasMany(r => r.Moves).WithOne(m => m.Header).HasForeignKey(r => r.ReqNumber);
+            e.HasOne(r => r.ToLocation).WithMany().HasForeignKey(r => r.ToLocationId);
         }
 
         private void BuildRequisitionLines(ModelBuilder builder)
@@ -1442,6 +1461,7 @@
             r.HasKey(l => new { l.ReqNumber, l.LineNumber });
             r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
             r.Property(l => l.LineNumber).HasColumnName("LINE_NUMBER");
+           
             r.Property(l => l.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
             r.Property(l => l.TransactionCode).HasColumnName("TRANSACTION_CODE").HasMaxLength(10);
             r.HasMany(t => t.Moves).WithOne().HasForeignKey(reqMove => new { reqMove.ReqNumber, reqMove.LineNumber });
@@ -2080,6 +2100,13 @@
             q.Property(e => e.LoanNumber).HasColumnName("LOAN_NUMBER").HasMaxLength(6);
         }
 
+        private void QueryMrParts(ModelBuilder builder)
+        {
+            var q = builder.Query<MrPart>().ToView("V_MASTER_MRH");
+            q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER");
+            q.HasOne(e => e.Part).WithMany().HasForeignKey(e => e.PartNumber);
+        }
+
         private void BuildStockTriggerLevels(ModelBuilder builder)
         {
             var e = builder.Query<StockTriggerLevel>().ToView("STOCK_TRIGGER_LEVELS");
@@ -2088,6 +2115,7 @@
             e.Property(l => l.MaxCapacity).HasColumnName("MAXIMUM_CAPACITY");
             e.Property(l => l.TriggerLevel).HasColumnName("TRIGGER_LEVEL");
             e.Property(l => l.PalletNumber).HasColumnName("PALLET_NUMBER");
+            e.Property(l => l.KanbanSize).HasColumnName("KANBAN_SIZE");
         }
 
         private void BuildPurchaseLedger(ModelBuilder builder)
@@ -2148,6 +2176,30 @@
             q.Property(a => a.EmailAddress).HasColumnName("EMAIL_ADDRESS");
             q.Property(a => a.UserNumber).HasColumnName("USER_NUMBER");
             q.HasOne(a => a.User).WithOne(u => u.PhoneListEntry).HasForeignKey<PhoneListEntry>(p => p.UserNumber);
+        }
+
+        private void QueryEuCreditInvoices(ModelBuilder builder)
+        {
+            var q = builder.Query<EuCreditInvoice>().ToView("EU_CREDIT_INVOICES");
+            q.Property(a => a.AccountId).HasColumnName("ACCOUNT_ID");
+            q.Property(a => a.AccountName).HasColumnName("ACCOUNT_NAME");
+            q.Property(a => a.Invoice).HasColumnName("INVOICE");
+            q.Property(a => a.LineNo).HasColumnName("LINE_NO");
+            q.Property(a => a.InvoiceDate).HasColumnName("INVOICE_DATE");
+            q.Property(a => a.GoodsTotal).HasColumnName("GOODS_TOTAL");
+            q.Property(a => a.VatTotal).HasColumnName("VAT_TOTAL");
+            q.Property(a => a.DocumentTotal).HasColumnName("DOCUMENT_TOTAL");
+            q.Property(a => a.RsnNumber).HasColumnName("RSN_NUMBER");
+            q.Property(a => a.CreditNoteNumber).HasColumnName("CREDIT_NOTE_NUMBER");
+            q.Property(a => a.DocumentType).HasColumnName("DOCUMENT_TYPE");
+            q.Property(a => a.CreditCode).HasColumnName("CREDIT_CODE");
+            q.Property(a => a.CreditCodeDescription).HasColumnName("CC_DESCRIPTION");
+        }
+
+        private void QueryProductUpgradeRules(ModelBuilder builder)
+        {
+            var q = builder.Query<ProductUpgradeRule>().ToView("PRODUCT_UPGRADE_RULES");
+            q.Property(r => r.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
         }
     }
 }

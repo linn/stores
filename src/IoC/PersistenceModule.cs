@@ -149,7 +149,9 @@
             builder.RegisterType<InvoiceDetailRepository>()
                 .As<IRepository<InvoiceDetail, InvoiceDetailKey>>();
             builder.RegisterType<PhoneListRepository>().As<IQueryRepository<PhoneListEntry>>();
-
+            builder.RegisterType<MrPartsRepository>().As<IQueryRepository<MrPart>>();
+            builder.RegisterType<EuCreditInvoiceRepository>().As<IQueryRepository<EuCreditInvoice>>();
+            builder.RegisterType<ProductUpgradeRulesRepository>().As<IQueryRepository<ProductUpgradeRule>>();
         }
     }
 }

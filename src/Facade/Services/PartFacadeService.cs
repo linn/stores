@@ -237,6 +237,7 @@
         {
             var updatedPart = new Part
                                   {
+                                      PartNumber = resource.PartNumber,
                                       Description = resource.Description,
                                       AccountingCompany = 
                                           this.accountingCompanyRepository.FindBy(
@@ -339,7 +340,7 @@
                                               : null
                                   };
           
-            this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList());
+            this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList(), resource.UpdatedBy.Value);
         }
 
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)

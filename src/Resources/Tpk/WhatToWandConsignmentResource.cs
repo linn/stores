@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    public class WhatToWandResource
+    public class WhatToWandConsignmentResource
     {
         public IEnumerable<WhatToWandLineResource> Lines { get; set; }
 

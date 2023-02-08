@@ -3,9 +3,12 @@
     using FluentAssertions;
 
     using Linn.Stores.Domain.LinnApps.GoodsIn;
+    using Linn.Stores.Domain.LinnApps.Parts;
     using NSubstitute;
 
     using NUnit.Framework;
+    using System.Linq.Expressions;
+    using System;
 
     public class WhenBookingInAndNoBookInLines : ContextBase
     {
@@ -14,6 +17,8 @@
         [SetUp]
         public void SetUp()
         {
+            this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>())
+                .Returns(new Part { DateLive = DateTime.Today });
             this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1234").Returns(true);
             this.result = this.Sut.DoBookIn(
                 "O",

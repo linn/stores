@@ -24,4 +24,9 @@
     <ProjectReference Include="..\..\..\src\Service\Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ImportBooksReportModuleTests\" />
+    <Folder Include="QcPartsReportModuleSpecs\" />
+  </ItemGroup>
+
 </Project>

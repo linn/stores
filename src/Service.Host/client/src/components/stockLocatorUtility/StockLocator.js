@@ -14,7 +14,9 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Dialog from '@material-ui/core/Dialog';
+import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
+import { CSVLink } from 'react-csv';
 import CloseIcon from '@material-ui/icons/Close';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -187,6 +189,12 @@ function StockLocator({
             editable: false
         }
     ];
+    const csvData = [
+        columns.map(c => c.title),
+        ...items.map(i =>
+            columns.map(col => i[col.id === 'partLinkComponent' ? 'partNumber' : col.id])
+        )
+    ];
     return (
         <div className="print-landscape">
             <Page width="xl">
@@ -250,92 +258,101 @@ function StockLocator({
                     ) : (
                         <>
                             {items && (
-                                <Grid item xs={12}>
-                                    <SingleEditTable
-                                        newRowPosition="top"
-                                        columns={columns}
-                                        rows={items.map((i, index) => ({
-                                            ...i,
-                                            id: index,
-                                            partLinkComponent: (
-                                                <>
-                                                    <Link
-                                                        to={
-                                                            i.links.find(l => l.rel === 'part')
-                                                                ?.href
-                                                        }
-                                                    >
-                                                        {i.partNumber}
-                                                    </Link>
-                                                    {'       '}
+                                <>
+                                    <Grid item xs={10} />
+                                    <Grid item xs={2}>
+                                        <CSVLink data={csvData}>
+                                            <Button variant="contained">Export</Button>
+                                        </CSVLink>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <SingleEditTable
+                                            newRowPosition="top"
+                                            columns={columns}
+                                            rows={items.map((i, index) => ({
+                                                ...i,
+                                                id: index,
+                                                partLinkComponent: (
+                                                    <>
+                                                        <Link
+                                                            to={
+                                                                i.links.find(l => l.rel === 'part')
+                                                                    ?.href
+                                                            }
+                                                        >
+                                                            {i.partNumber}
+                                                        </Link>
+                                                        {'       '}
+                                                        <button
+                                                            type="button"
+                                                            style={{ cursor: 'pointer' }}
+                                                            onClick={() => {
+                                                                window.open(
+                                                                    `${config.appRoot}${
+                                                                        i.links.find(
+                                                                            l =>
+                                                                                l.rel ===
+                                                                                'part-used-on'
+                                                                        )?.href
+                                                                    }`,
+                                                                    '_blank'
+                                                                );
+                                                            }}
+                                                        >
+                                                            +
+                                                        </button>
+                                                    </>
+                                                ),
+                                                drillDownButtonComponent: (
                                                     <button
                                                         type="button"
                                                         style={{ cursor: 'pointer' }}
                                                         onClick={() => {
-                                                            window.open(
-                                                                `${config.appRoot}${
-                                                                    i.links.find(
-                                                                        l =>
-                                                                            l.rel === 'part-used-on'
-                                                                    )?.href
-                                                                }`,
-                                                                '_blank'
+                                                            history.push(
+                                                                `/inventory/stock-locator/locators/batches?${queryString.stringify(
+                                                                    {
+                                                                        partNumber: i.partNumber,
+                                                                        locationId: i.locationId,
+                                                                        palletNumber: i.palletNumber?.toString(),
+                                                                        state: i.state,
+                                                                        category: i.category?.toString(),
+                                                                        queryBatchView: true
+                                                                    }
+                                                                )}`
                                                             );
                                                         }}
                                                     >
                                                         +
                                                     </button>
-                                                </>
-                                            ),
-                                            drillDownButtonComponent: (
-                                                <button
-                                                    type="button"
-                                                    style={{ cursor: 'pointer' }}
-                                                    onClick={() => {
-                                                        history.push(
-                                                            `/inventory/stock-locator/locators/batches?${queryString.stringify(
-                                                                {
-                                                                    partNumber: i.partNumber,
-                                                                    locationId: i.locationId,
-                                                                    palletNumber: i.palletNumber?.toString(),
-                                                                    state: i.state,
-                                                                    category: i.category?.toString(),
-                                                                    queryBatchView: true
-                                                                }
-                                                            )}`
-                                                        );
-                                                    }}
-                                                >
-                                                    +
-                                                </button>
-                                            ),
-                                            qtyAllocatedComponent: (
-                                                <>
-                                                    {i.quantityAllocated && (
-                                                        <button
-                                                            style={{ cursor: 'pointer' }}
-                                                            type="button"
-                                                            onClick={() => {
-                                                                fetchMoves(
-                                                                    i.partNumber,
-                                                                    `&palletNumber=${i.palletNumber ||
-                                                                        ''}&locationId=${i.locationId ||
-                                                                        ''} `
-                                                                );
-                                                                setDialogOpen(true);
-                                                            }}
-                                                        >
-                                                            {i.quantityAllocated}
-                                                        </button>
-                                                    )}
-                                                </>
-                                            )
-                                        }))}
-                                        allowNewRowCreation={false}
-                                        editable={false}
-                                        allowNewRowCreations
-                                    />
-                                </Grid>
+                                                ),
+                                                qtyAllocatedComponent: (
+                                                    <>
+                                                        {i.quantityAllocated && (
+                                                            <button
+                                                                style={{ cursor: 'pointer' }}
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    fetchMoves(
+                                                                        i.partNumber,
+                                                                        `&palletNumber=${i.palletNumber ||
+                                                                            ''}&locationId=${i.locationId ||
+                                                                            ''} `
+                                                                    );
+                                                                    setDialogOpen(true);
+                                                                }}
+                                                            >
+                                                                {i.quantityAllocated}
+                                                            </button>
+                                                        )}
+                                                    </>
+                                                )
+                                            }))}
+                                            allowNewRowCreation={false}
+                                            editable={false}
+                                            allowNewRowCreations
+                                        />
+                                    </Grid>
+                                </>
                             )}
                             <Grid item xs={12}>
                                 <Accordion>

@@ -27,12 +27,15 @@
                           {
                               PartNumber = "PART",
                               MadeLiveBy = new Employee { Id = 1 },
-                              DateLive = DateTime.UnixEpoch
+                              DateLive = DateTime.UnixEpoch,
+                              RawOrFinished = "R",
+                              QcOnReceipt = "N",
+                              PreferredSupplier = new Supplier { Id = 1234 }
                           };
             this.privileges = new List<string> { "part.admin" };
             this.PartPack.PartLiveTest(Arg.Any<string>(), out _).Returns(true);
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
-            this.Sut.UpdatePart(this.from, this.to, this.privileges);
+            this.Sut.UpdatePart(this.from, this.to, this.privileges, 33087);
         }
 
         [Test]

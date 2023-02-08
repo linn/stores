@@ -149,8 +149,8 @@ function GoodsInUtility({
         setLoanDetailsDialogOpen(false);
         setLines(l => [
             ...l,
-            ...details.map((detail, i) => ({
-                id: l.length + i,
+            ...details.map(detail => ({
+                id: `${detail.line}/${l.itemNumber}`,
                 articleNumber: detail.articleNumber,
                 transactionType: 'L',
                 dateCreated: new Date().toISOString(),
@@ -517,7 +517,7 @@ function GoodsInUtility({
                             <LoanDetails
                                 loanDetails={loanDetails?.map(d => ({
                                     ...d,
-                                    id: d.line,
+                                    id: `${d.line}/${d.itemNumber}`,
                                     return: d.qtyOnLoan,
                                     selected: false
                                 }))}
@@ -721,10 +721,7 @@ function GoodsInUtility({
                                     label="Qty*"
                                     propertyName="qty"
                                     type="number"
-                                    disabled={
-                                        !validatePurchaseOrderResult ||
-                                        !!validatePurchaseOrderResult?.message
-                                    }
+                                    disabled={!validatePurchaseOrderResult}
                                     textFieldProps={{
                                         onKeyDown: data => {
                                             if (
@@ -1072,10 +1069,7 @@ function GoodsInUtility({
                     <Button
                         variant="contained"
                         disabled={
-                            !validatePurchaseOrderResult ||
-                            !!validatePurchaseOrderResult?.message ||
-                            !formData.ontoLocation ||
-                            !formData.qty
+                            !validatePurchaseOrderResult || !formData.ontoLocation || !formData.qty
                         }
                         onClick={() => {
                             setLines(l => [

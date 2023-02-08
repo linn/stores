@@ -35,7 +35,7 @@ describe('On initial load...', () => {
     beforeEach(() => defaultRender());
 
     test('component renders without crashing', () => {
-        expect(screen.getByText('TPK')).toBeInTheDocument();
+        expect(screen.getByText('From')).toBeInTheDocument();
     });
 });
 
@@ -83,7 +83,7 @@ describe('When doing tpk...', () => {
 
         checkboxes.forEach((c, i) => i > 0 && fireEvent.click(c));
 
-        const sendButton = screen.getByRole('button', { name: 'Transfer' });
+        const sendButton = screen.getAllByRole('button', { name: 'Transfer' })[0];
 
         fireEvent.click(sendButton);
     });
@@ -171,16 +171,15 @@ describe('When tpk error...', () => {
 describe('When whatToWandReport...', () => {
     beforeEach(() =>
         defaultRender({
-            whatToWandReport: {
-                lines: [],
-                account: { accountName: 'something' },
-                consignment: { totalNettValue: 100.1234, currencyCode: 'GBP' }
-            }
+            whatToWandReport: [
+                {
+                    lines: [],
+                    account: { accountName: 'something' },
+                    consignment: { totalNettValue: 100.1234, currencyCode: 'GBP' }
+                }
+            ]
         })
     );
-    test('should show print dialog', () => {
-        expect(screen.getByText('What to Wand')).toBeInTheDocument();
-    });
     test('should render currency code and rounded nett total', () => {
         expect(
             screen.getByText('Total Nett Value Of Consignment (GBP): 100.12')

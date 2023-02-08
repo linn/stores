@@ -1,11 +1,14 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.GoodsInServiceTests
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq.Expressions;
 
     using FluentAssertions;
 
     using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.Models;
+    using Linn.Stores.Domain.LinnApps.Parts;
 
     using NSubstitute;
 
@@ -18,6 +21,8 @@
         [SetUp]
         public void SetUp()
         {
+            this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>())
+                .Returns(new Part { DateLive = DateTime.Today });
             this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1234").Returns(true);
             this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1235").Returns(true);
             this.PalletAnalysisPack.CanPutPartOnPallet("PART", "1236").Returns(false);

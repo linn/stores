@@ -6,6 +6,7 @@ import { InputField, Dropdown, Typeahead, LinkButton } from '@linn-it/linn-form-
 function BuildTab({
     appRoot,
     handleFieldChange,
+    creating,
     linnProduced,
     sernosSequenceName,
     sernosSequenceDescription,
@@ -83,6 +84,7 @@ function BuildTab({
                     fullWidth
                     allowNoValue
                     value={decrementRuleName}
+                    disabled={!creating()}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -121,6 +123,7 @@ function BuildTab({
                     ]}
                     fullWidth
                     allowNoValue
+                    disabled={!creating()}
                     value={bomType}
                     onChange={handleFieldChange}
                 />
@@ -206,6 +209,7 @@ function BuildTab({
 BuildTab.propTypes = {
     appRoot: PropTypes.string.isRequired,
     handleFieldChange: PropTypes.func.isRequired,
+    creating: PropTypes.func.isRequired,
     linnProduced: PropTypes.string,
     decrementRuleName: PropTypes.string,
     assemblyTechnologyName: PropTypes.string,

@@ -181,5 +181,7 @@
         public string SalesArticleNumber { get; set; }
 
         public bool FromTemplate { get; set; }
+
+        public int? UpdatedBy { get; set; }
     }
 }

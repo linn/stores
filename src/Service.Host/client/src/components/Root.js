@@ -56,6 +56,10 @@ import ImportBooksEuReport from '../containers/reports/ImpbookEuReport';
 import QcLabelPrintScreen from '../containers/goodsIn/QcLabelPrintScreen';
 import StockBatchesInRotationOrder from '../containers/stockLocatorUtility/StockBatchesInRotationOrder';
 import ZeroValuedInvoiceDetailsReportOptions from './reports/ZeroValuedInvoiceDetailsReportOptions';
+import QcPartsReport from '../containers/reports/QcPartsReport';
+import EuCreditInvoicesReport from '../containers/reports/EuCreditInvoicesReport';
+import WhatToWandReprint from '../containers/WhatToWandReprint';
+import TriggerLevelsForAStoragePlaceReport from '../containers/reports/TriggerLevelsForAStoragePlaceReport';
 
 const Root = ({ store }) => (
     <div>
@@ -298,7 +302,7 @@ const Root = ({ store }) => (
                                     />
                                     <Route
                                         exact
-                                        path="/logistics/goods-in-utility/test-labels"
+                                        path="/logistics/reqs/labels"
                                         component={QcLabelPrintScreen}
                                     />
                                     <Route
@@ -335,6 +339,26 @@ const Root = ({ store }) => (
                                         exact
                                         path="/logistics/zero-valued-items-on-invoices-report"
                                         component={ZeroValuedInvoiceDetailsReportOptions}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/reports/qc-parts"
+                                        component={QcPartsReport}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/reports/eu-credit-invoices"
+                                        component={EuCreditInvoicesReport}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/what-to-wand-reprint"
+                                        component={WhatToWandReprint}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/storage-places/reports/stock-trigger-levels"
+                                        component={TriggerLevelsForAStoragePlaceReport}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>

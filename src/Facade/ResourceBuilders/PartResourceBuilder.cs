@@ -136,6 +136,16 @@
                                  Href = $"/inventory/stock-locators?partId={part.Id}"
                              };
 
+            if (part.BomId.HasValue)
+            {
+                yield return new LinkResource
+                                 {
+                                     Rel = "bom-tree",
+                                     Href =
+                                         $"/purchasing/boms/tree/options?bomName={part.PartNumber}"
+                                 };
+            }
+
             if (part.PreferredSupplierId.HasValue && part.PreferredSupplierId != 4415)
             {
                 yield return new LinkResource

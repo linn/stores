@@ -133,6 +133,10 @@ import addresses from './addresses';
 import salesOutletAddresses from './salesOutletAddresses';
 import unpickStock from './unpickStock';
 import unallocateReq from './unallocateReq';
+import qcPartsReport from './qcPartsReport';
+import euCreditInvoicesReport from './euCreditInvoicesReport';
+import whatToWandReprint from './whatToWandReprint';
+import triggerLevelsForAStoragePlaceReport from './triggerLevelsForAStoragePlaceReport';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -170,6 +174,7 @@ const rootReducer = history =>
         doStockMove,
         doWandItem,
         employees,
+        euCreditInvoicesReport,
         exchangeRates,
         exportReturn,
         exportRsns,
@@ -214,6 +219,7 @@ const rootReducer = history =>
         printRsn,
         productAnalysisCodes,
         purchaseOrders,
+        qcPartsReport,
         req,
         reqMoves,
         rootProducts,
@@ -251,6 +257,7 @@ const rootReducer = history =>
         tqmsJobRefs,
         tqmsSummaryByCategoryReport,
         transferableStock,
+        triggerLevelsForAStoragePlaceReport,
         unallocateConsignment,
         unallocateConsignmentLine,
         unallocateReq,
@@ -263,6 +270,7 @@ const rootReducer = history =>
         validateStorageTypeResult,
         wandConsignments,
         wandItems,
+        whatToWandReprint,
         workstationTopUpStatus,
         wwdReport,
         ...sharedLibraryReducers,

@@ -8,6 +8,7 @@
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models;
+    using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Requisitions;
 
     public class GoodsInService : IGoodsInService
@@ -114,7 +115,6 @@
                         return new BookInResult(false, $"Can't put {partNumber} on {entry.StoragePlace}");
                     }
                 }
-                
             }
 
             var goodsInLogEntries = lines as GoodsInLogEntry[] ?? linesArray.ToArray();
@@ -147,6 +147,16 @@
             {
                 var res = this.ValidatePurchaseOrder((int)orderNumber, (int)orderLine);
                 return new BookInResult(false, $"Overbook: PO was for {res.OrderQty} but you have tried to book in {total}");
+            }
+
+            if (transactionType.Equals("O"))
+            {
+                var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
+
+                if (!part.DateLive.HasValue)
+                {
+                    return new BookInResult(false, "PART NOT LIVE - SEE PURCHASING!");
+                }
             }
 
             var message = this.goodsInPack.DoBookIn(
@@ -187,18 +197,17 @@
                                       loanNumber,
                                       out var supplierId) && (multipleBookIn == null || !multipleBookIn.Value);
 
-            var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
-
             result.Lines = goodsInLogEntries;
 
             result.CreatedBy = createdBy;
 
             result.QcState = !string.IsNullOrEmpty(state) && state.Equals("QC") ? "QUARANTINE" : "PASS";
-            result.QcInfo = part?.QcInformation;
-
 
             if (transactionType == "O")
             {
+                var part = this.partsRepository.FindBy(x => x.PartNumber.Equals(partNumber.ToUpper()));
+
+                result.QcInfo = part?.QcInformation;
                 this.goodsInPack.GetPurchaseOrderDetails(
                     orderNumber.Value,
                     orderLine.Value,
@@ -240,11 +249,13 @@
 
             if (transactionType.Equals("L"))
             {
+                var article = this.partsRepository.FindBy(x => x.PartNumber.Equals(lines.First().ArticleNumber));
                 result.DocType = "L";
                 result.TransactionCode = "L";
                 result.QtyReceived = qty;
-                result.PartNumber = partNumber;
-                result.PartDescription = part.Description;
+                result.PartNumber = article.PartNumber;
+                result.PartDescription = article.Description;
+                result.QcInfo = article?.QcInformation;
 
                 result.SupplierId = supplierId;
 
@@ -393,7 +404,8 @@
             string qcState,
             int reqNumber,
             string kardexLocation,  
-            IEnumerable<GoodsInLabelLine> lines)
+            IEnumerable<GoodsInLabelLine> lines,
+            string printerName = null)
         {
             var message = string.Empty;
             var success = false;
@@ -404,9 +416,13 @@
                 var labelName = $"KGI{orderNumber}";
                 var data = $"\"{kardexLocation.Replace("\"", "''")}\",\"{reqNumber}\"";
                 var kardexLabelType = this.labelTypeRepository.FindBy(x => x.Code == "KARDEX");
+                var printer = string.IsNullOrEmpty(printerName) ?
+                                  kardexLabelType.DefaultPrinter 
+                                  : this.labelTypeRepository.FindBy(x => x.DefaultPrinter.ToLower() == printerName.ToLower())
+                                      .DefaultPrinter;
                 success = this.bartender.PrintLabels(
                     labelName,
-                    kardexLabelType.DefaultPrinter,
+                    printer,
                     lines == null ? 1 : lines.Count() + 1,
                     kardexLabelType.FileName,
                     data,
@@ -489,11 +505,14 @@
                         printString += Environment.NewLine;
                         break;
                 }
-
+                var printer = string.IsNullOrEmpty(printerName) ?
+                                  labelType.DefaultPrinter
+                                  : this.labelTypeRepository.FindBy(x => x.DefaultPrinter.ToLower() == printerName.ToLower())
+                                      .DefaultPrinter;
                 message = string.Empty;
                 success = this.bartender.PrintLabels(
                     $"QC {orderNumber}-{line.Id}", 
-                    labelType.DefaultPrinter, 
+                    printer, 
                     1, 
                     labelType.FileName, 
                     printString, 

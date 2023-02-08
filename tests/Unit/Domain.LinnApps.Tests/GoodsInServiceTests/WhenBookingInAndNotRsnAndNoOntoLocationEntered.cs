@@ -1,9 +1,15 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.GoodsInServiceTests
 {
+    using System;
+    using System.Linq.Expressions;
+
     using FluentAssertions;
 
     using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.Models;
+    using Linn.Stores.Domain.LinnApps.Parts;
+
+    using NSubstitute;
 
     using NUnit.Framework;
 
@@ -14,6 +20,8 @@
         [SetUp]
         public void SetUp()
         {
+            this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>())
+                .Returns(new Part { DateLive = DateTime.Today });
             this.processResult = this.Sut.DoBookIn(
                 "O",
                 1,
@@ -37,6 +45,7 @@
                 false,
                 false,
                 new GoodsInLogEntry[0]);
+            
         }
 
         [Test]

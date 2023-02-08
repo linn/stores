@@ -41,7 +41,8 @@ function MechPartSource({
     options,
     userName,
     userNumber,
-    previousPaths
+    previousPaths,
+    clearErrors
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -137,7 +138,6 @@ function MechPartSource({
         updateRow: updateUsagesRow,
         removeRow: removeUsagesRow,
         setEditing: setUsagesEditing,
-        //setData: setUsagesData,
         setRowToBeDeleted: setUsagesRowToBeDeleted,
         setRowToBeSaved: setUsagesRowToBeSaved
     } = useGroupEditTable({
@@ -163,12 +163,15 @@ function MechPartSource({
         const body = mechPartSource;
         const rkmLetters = { KΩ: 'K', MΩ: 'M', Ω: '' };
         const capacitanceUnits = { uF: 'u', nF: 'n', pF: 'p' };
-
+        clearErrors();
         body.resistanceUnits = rkmLetters[mechPartSource.resistanceUnits];
         body.capacitanceUnit = capacitanceUnits[mechPartSource.capacitanceUnits];
         body.mechPartAlts = suppliersData;
         body.mechPartManufacturerAlts = manufacturersData;
-        body.capacitance = mechPartSource.capacitance?.toFixed(13);
+        body.capacitance =
+            typeof mechPartSource.capacitance === 'string'
+                ? mechPartSource.capacitance
+                : mechPartSource.capacitance?.toFixed(13);
         body.usages = usagesData?.map((u, i) => ({ ...u, id: i }));
         body.purchasingQuotes = quotesData;
         if (creating()) {
@@ -661,7 +664,8 @@ MechPartSource.propTypes = {
     userNumber: PropTypes.number,
     options: PropTypes.shape({ tab: PropTypes.string }),
     liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
-    previousPaths: PropTypes.arrayOf(PropTypes.string)
+    previousPaths: PropTypes.arrayOf(PropTypes.string),
+    clearErrors: PropTypes.func.isRequired
 };
 
 MechPartSource.defaultProps = {

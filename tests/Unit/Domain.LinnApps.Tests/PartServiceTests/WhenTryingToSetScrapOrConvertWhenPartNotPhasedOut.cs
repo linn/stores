@@ -21,14 +21,20 @@
         public void SetUp()
         {
             this.from = new Part { DatePhasedOut = null };
-            this.to = new Part { DatePhasedOut = null, ScrapOrConvert = "CONVERT" };
+            this.to = new Part
+                          {
+                              DatePhasedOut = null, 
+                              ScrapOrConvert = "CONVERT",
+                              RawOrFinished = "R",
+                              QcOnReceipt = "N"
+                          };
             this.privileges = new List<string>();
         }
 
         [Test]
         public void ShouldSetScrapOrConvertNull()
         {
-            this.Sut.UpdatePart(this.from, this.to, this.privileges);
+            this.Sut.UpdatePart(this.from, this.to, this.privileges, 33087);
             this.to.ScrapOrConvert.Should().BeNull();
         }
     }

@@ -48,7 +48,8 @@
             string qcState,
             int reqNumber,
             string kardexLocation,
-            IEnumerable<GoodsInLabelLine> lines);
+            IEnumerable<GoodsInLabelLine> lines,
+            string printerName = null);
 
         ValidateStorageTypeResult ValidateStorageType(
             int? orderNumber,

@@ -3,7 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Runtime.InteropServices;
 
+    using Linn.Common.Logging;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.Exceptions;
@@ -36,6 +38,10 @@
 
         private readonly IRepository<ReqMove, ReqMoveKey> reqMovesRepository;
 
+        private readonly IQueryRepository<ProductUpgradeRule> productUpgradeRulesRepository;
+
+        private readonly ILog logger;
+
         public TpkService(
             IQueryRepository<TransferableStock> tpkView,
             IQueryRepository<AccountingCompany> accountingCompaniesRepository,
@@ -47,7 +53,9 @@
             IRepository<Consignment, int> consignmentRepository,
             IQueryRepository<SalesOrderDetail> salesOrderDetailRepository,
             IQueryRepository<SalesOrder> salesOrderRepository,
-            IRepository<ReqMove, ReqMoveKey> reqMovesRepository)
+            IRepository<ReqMove, ReqMoveKey> reqMovesRepository,
+            IQueryRepository<ProductUpgradeRule> productUpgradeRulesRepository,
+            ILog logger)
         {
             this.tpkView = tpkView;
             this.tpkPack = tpkPack;
@@ -60,13 +68,22 @@
             this.salesOrderDetailRepository = salesOrderDetailRepository;
             this.salesOrderRepository = salesOrderRepository;
             this.reqMovesRepository = reqMovesRepository;
+            this.productUpgradeRulesRepository = productUpgradeRulesRepository;
+            this.logger = logger;
         }
 
         public TpkResult TransferStock(TpkRequest tpkRequest)
         {
             var candidates = tpkRequest.StockToTransfer.ToList();
+
             var from = candidates.First();
-            IEnumerable<WhatToWandLine> whatToWand = null;
+
+            var message =
+                $"LocationId: {from.LocationId}. " 
+                + $"PalletNumber: {from.PalletNumber}. " 
+                + $"Consignment: {from.ConsignmentId}.";
+
+            IEnumerable<WhatToWandLine> whatToWand = new List<WhatToWandLine>();
             if (candidates.Any(s => s.FromLocation != from.FromLocation))
             {
                 throw new TpkException("You can only TPK one pallet at a time");
@@ -93,9 +110,23 @@
             
             this.bundleLabelPack.PrintTpkBoxLabels(from.FromLocation);
 
-            if (this.whatToWandService.ShouldPrintWhatToWand(from.FromLocation))
+            try
             {
-                whatToWand = this.whatToWandService.WhatToWand(from.LocationId, from.PalletNumber).ToList();
+                if (this.whatToWandService.ShouldPrintWhatToWand(from.FromLocation))
+                {
+                    whatToWand = this.whatToWandService.WhatToWand(
+                        from.LocationId, from.PalletNumber).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                this.logger.Write(
+                    LoggingLevel.Error,
+                    Enumerable.Empty<LoggingProperty>(), 
+                    $"{message}. {ex.Message}",
+                    ex);
+                throw new
+                    TpkException($"An  error occurred  - phone IT support. {message}.  {ex.Message}");
             }
 
             this.tpkPack.UpdateQuantityPrinted(from.FromLocation, out var updateQuantitySuccessful);
@@ -111,37 +142,54 @@
                 throw new TpkException(this.storesPack.GetErrorMessage());
             }
 
-            var consignment = this.consignmentRepository.FindById(from.ConsignmentId);
             try
             {
-                var whatToWandLines = whatToWand?.ToArray();
+                foreach (var line in whatToWand)
+                {
+                    var hasUpgradeRule = this.productUpgradeRulesRepository
+                        .FilterBy(r  => r.ArticleNumber == line.ArticleNumber).Any();
+
+                    if (hasUpgradeRule && !string.IsNullOrEmpty(line.RenewSernos))
+                    {
+                        line.SerialNumberComments +=
+                            $" *** Please select one of the following renew serial numbers: {line.RenewSernos} (Original serial number: {line.OldSernos}) ***";
+                    }
+                }
+
+                var consignmentGroups = whatToWand?.GroupBy(x => x.ConsignmentId).ToList();
                 return new TpkResult
                            {
                                Success = true,
                                Message = "TPK Successful",
                                Transferred = transferredWithNotes,
-                               Report = whatToWandLines == null ? null : new WhatToWandReport
-                                            {
-                                                Account =
-                                                    this.salesAccountQueryRepository.FindBy(
-                                                        o => o.AccountId == consignment.SalesAccountId),
-                                                Consignment = consignment,
-                                                Type = this.tpkPack.GetWhatToWandType(consignment.ConsignmentId),
-                                                Lines = whatToWandLines,
-                                                CurrencyCode =
-                                                    this.salesOrderRepository.FindBy(
-                                                            o => o.OrderNumber == whatToWandLines.First().OrderNumber)
-                                                        .CurrencyCode,
-                                                TotalNettValueOfConsignment = whatToWandLines.Sum(
-                                                    x => this.salesOrderDetailRepository.FindBy(
-                                                        d => d.OrderNumber == x.OrderNumber
-                                                             && d.OrderLine == x.OrderLine).NettTotal),
-                                            }
+                               Consignments = consignmentGroups?.Select(
+                                   x =>
+                                       {
+                                           var consignment = this.consignmentRepository.FindById(x.Key);
+                                           return new WhatToWandConsignment
+                                                      {
+                                                          Lines = x.ToList(), 
+                                                          Consignment = consignment, 
+                                                          Type = this.tpkPack.GetWhatToWandType(consignment.ConsignmentId, from.FromLocation), 
+                                                          Account = this.salesAccountQueryRepository.FindBy(
+                                                                                        o => o.AccountId == consignment.SalesAccountId),
+                                                          TotalNettValueOfConsignment = x.Sum(l => this.salesOrderDetailRepository.FindBy(
+                                                              d => d.OrderNumber == l.OrderNumber
+                                                                   && d.OrderLine == l.OrderLine).NettTotal),
+                                                          CurrencyCode = this.salesOrderRepository.FindBy(
+                                                                  o => o.OrderNumber == x.First().OrderNumber)
+                                                              .CurrencyCode
+                                           };
+                                       })
                            };
             }
             catch (Exception ex)
             {
-                return new TpkResult { Success = false, Message = $"Error generating report. Stock transfer likely still succeeded. Click refresh to check. Error details: {ex.Message}" };
+                return new TpkResult
+                           {
+                               Success = false, 
+                               Message = $"Error generating report. Stock transfer likely still succeeded. Click refresh to check. Error details: {ex.Message}"
+                           };
             }
         }
 
@@ -184,6 +232,34 @@
             }
 
             return new ProcessResult(true, string.Empty);
+        }
+
+        public WhatToWandConsignment ReprintWhatToWand(int consignmentId)
+        {
+            var consignment = this.consignmentRepository.FindById(consignmentId);
+
+            if (consignment == null)
+            {
+                throw new NotFoundException("Consignment Not Found");
+            }
+
+            var account = this.salesAccountQueryRepository.FindBy(o => o.AccountId == consignment.SalesAccountId);
+            var data = this.whatToWandService.ReprintWhatToWand(consignmentId, consignment.Address.CountryCode).ToList();
+
+            var result = new WhatToWandConsignment
+                       {
+                           Lines = data,
+                           Consignment = consignment,
+                           Type = "REPRINT",
+                           Account = account,
+                           TotalNettValueOfConsignment = data.Sum(l => this.salesOrderDetailRepository.FindBy(
+                               d => d.OrderNumber == l.OrderNumber
+                                    && d.OrderLine == l.OrderLine).NettTotal),
+                           CurrencyCode = this.salesOrderRepository.FindBy(
+                                   o => o.OrderNumber == data.First().OrderNumber)
+                               .CurrencyCode
+                       };
+            return result;
         }
     }
 }

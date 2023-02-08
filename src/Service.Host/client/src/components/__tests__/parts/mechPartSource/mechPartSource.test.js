@@ -9,7 +9,7 @@ const addItem = jest.fn();
 const setSnackbarVisible = jest.fn();
 const history = { goBack: jest.fn() };
 const setEditStatus = jest.fn();
-
+const clearErrors = jest.fn();
 const defaultRender = props =>
     render(
         <MechPartSource
@@ -19,6 +19,7 @@ const defaultRender = props =>
             history={history}
             setEditStatus={setEditStatus}
             editStatus="view"
+            clearErrors={clearErrors}
             //eslint-disable-next-line react/jsx-props-no-spreading
             {...props}
         />
@@ -99,13 +100,47 @@ describe('When creating...', () => {
 
         describe('when Part Type entered...', () => {
             test('should enable save button', () => {
-                const partTypeDropdown = screen.getByLabelText('Mechanical Or Electrical*');
+                const partTypeDropdown = screen.getByLabelText('Part Type*');
                 fireEvent.change(partTypeDropdown, { target: { value: 'RES' } });
                 expect(screen.getByRole('button', { name: 'Save' })).not.toHaveClass(
                     'Mui-disabled'
                 );
             });
         });
+    });
+});
+
+describe('When creating Capacitor...', () => {
+    test('should call addItem with capacitance', () => {
+        jest.clearAllMocks();
+
+        defaultRender({ editStatus: 'create' });
+        const assemblyDropdown = screen.getByLabelText('Assembly Type*');
+        fireEvent.change(assemblyDropdown, { target: { value: 'TH' } });
+
+        const mechElecDropdown = screen.getByLabelText('Mechanical Or Electrical*');
+        fireEvent.change(mechElecDropdown, { target: { value: 'E' } });
+        const partTypeDropdown = screen.getByLabelText('Part Type*');
+        fireEvent.change(partTypeDropdown, { target: { value: 'CAP' } });
+
+        const ParamDataTab = screen.getByText('Param Data');
+        fireEvent.click(ParamDataTab);
+
+        const unitsDropdown = screen.getByLabelText('units');
+        fireEvent.change(unitsDropdown, { target: { value: 'uF' } });
+
+        const capacitanceInput = screen.getByLabelText('Capacitance');
+        fireEvent.change(capacitanceInput, { target: { value: '68' } });
+
+        const saveButton = screen.getByRole('button', { name: 'Save' });
+        fireEvent.click(saveButton);
+        expect(addItem).toHaveBeenCalledWith(
+            expect.objectContaining({
+                assemblyType: 'TH',
+                mechanicalOrElectrical: 'E',
+                capacitance: '0.0000680000000' // 68 micro farads
+            })
+        );
     });
 });
 

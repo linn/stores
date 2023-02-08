@@ -360,3 +360,18 @@ export const salesOutletAddressesActionTypes = makeActionTypes(
 export const unpickStockActionTypes = makeActionTypes(processTypes.unpickStock.actionType);
 
 export const unallocateReqActionTypes = makeActionTypes(processTypes.unallocateReq.actionType);
+
+export const qcPartsReportActionTypes = makeReportActionTypes(
+    reportTypes.qcPartsReport.actionType,
+    false
+);
+
+export const euCreditInvoicesReportActionTypes = makeReportActionTypes(
+    reportTypes.euCreditInvoicesReport.actionType
+);
+
+export const whatToWandReprintActionTypes = makeActionTypes(itemTypes.whatToWandReprint.actionType);
+
+export const triggerLevelsForAStoragePlaceReportActionTypes = makeReportActionTypes(
+    reportTypes.triggerLevelsForStoragePlaceReport.actionType
+);

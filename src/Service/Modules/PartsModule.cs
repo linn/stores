@@ -226,6 +226,9 @@
             this.RequiresAuthentication();
             var resource = this.Bind<PartResource>();
             resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
+            var who = this.Context.CurrentUser.GetEmployeeUri();
+            resource.UpdatedBy = int.Parse(who.Split("/").Last());
+
             var result = this.partsFacadeService.Update(id, resource);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);

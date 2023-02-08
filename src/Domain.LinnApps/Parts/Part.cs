@@ -154,5 +154,7 @@
         public IEnumerable<StockLocatorLocation> Locations { get; set; }
 
         public SalesArticle SalesArticle { get; set; }
+
+        public IEnumerable<QcControl> QcControls { get; set; }
     }
 }
