@@ -24,17 +24,21 @@
             this.from = new Part
             {
                 PartNumber = "A-PART-LIKE-NO-OTHER",
-                BomVerifyFreqWeeks = 0
+                BomVerifyFreqWeeks = 0,
+                RawOrFinished = "F",
+                QcOnReceipt = "N"
             };
             this.to = new Part
             {
                 PartNumber = "A-PART-LIKE-NO-OTHER",
-                BomVerifyFreqWeeks = 600
+                BomVerifyFreqWeeks = 600,
+                RawOrFinished = "F",
+                QcOnReceipt = "N"
             };
             this.privileges = new List<string> { "part.admin" };
             this.PartPack.PartLiveTest(Arg.Any<string>(), out _).Returns(true);
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
-            this.Sut.UpdatePart(this.from, this.to, this.privileges);
+            this.Sut.UpdatePart(this.from, this.to, this.privileges, 33087);
         }
 
         [Test]
