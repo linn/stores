@@ -148,6 +148,7 @@
                                         this.accountingCompanyRepository.FindBy(c => c.Name == resource.AccountingCompany),
                                     ParetoClass = this.paretoClassRepository.FindById(resource.ParetoCode),
                                     BomType = resource.BomType,
+                                    BomVerifyFreqWeeks = resource.BomVerifyFreqWeeks,
                                     LinnProduced = resource.LinnProduced,
                                     QcOnReceipt = resource.QcOnReceipt,
                                     EmcCriticalPart = resource.EmcCriticalPart,
@@ -282,6 +283,7 @@
                                       OptionSet = resource.OptionSet,
                                       DrawingReference = resource.DrawingReference,
                                       BomType = resource.BomType,
+                                      BomVerifyFreqWeeks = resource.BomVerifyFreqWeeks,
                                       BomId = resource.BomId,
                                       SernosSequence =
                                           resource.SernosSequenceName != null

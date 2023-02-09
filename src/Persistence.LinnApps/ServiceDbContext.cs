@@ -465,9 +465,9 @@
             e.Property(p => p.SingleSourcePart).HasColumnName("SINGLE_SOURCE_PART").HasMaxLength(1);
             e.Property(p => p.SafetyCertificateExpirationDate).HasColumnName("SAFETY_CERTIFICATE_EXPIRY_DATE");
             e.Property(p => p.SafetyDataDirectory).HasColumnName("SAFETY_DATA_DIRECTORY").HasMaxLength(500);
-            e.Property(p => p.LinnProduced).HasColumnName("LINN_PRODUCED")
-                .HasMaxLength(1).HasColumnType("VARCHAR2").IsUnicode(false);
+            e.Property(p => p.LinnProduced).HasColumnName("LINN_PRODUCED").HasMaxLength(1).HasColumnType("VARCHAR2").IsUnicode(false);
             e.Property(p => p.BomType).HasColumnName("BOM_TYPE").HasMaxLength(1).HasColumnType("VARCHAR2").IsUnicode(false);
+            e.Property(p => p.BomVerifyFreqWeeks).HasColumnName("BOM_VERIFY_FREQ_WEEKS").HasMaxLength(4);
             e.Property(p => p.OptionSet).HasColumnName("OPTION_SET").HasMaxLength(14);
             e.Property(p => p.DrawingReference).HasColumnName("DRAWING_REFERENCE").HasMaxLength(100);
             e.Property(p => p.BomId).HasColumnName("BOM_ID");

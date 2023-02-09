@@ -45,6 +45,8 @@
 
         public string LinnProduced { get; set; }
 
+        public int? BomVerifyFreqWeeks { get; set; }
+
         public string BomType { get; set; }
 
         public string OptionSet { get; set; }

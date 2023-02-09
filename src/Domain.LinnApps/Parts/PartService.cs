@@ -146,6 +146,7 @@
             from.OptionSet = to.OptionSet;
             from.DrawingReference = to.DrawingReference;
             from.BomType = to.BomType;
+            from.BomVerifyFreqWeeks = to.BomVerifyFreqWeeks;
             from.BomId = to.BomId;
             from.SernosSequence = to.SernosSequence;
             from.IgnoreWorkstationStock = to.IgnoreWorkstationStock;
