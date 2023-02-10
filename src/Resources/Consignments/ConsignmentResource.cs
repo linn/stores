@@ -53,5 +53,9 @@
         public IEnumerable<ExportBookResource> ExportBooks { get; set; }
 
         public IEnumerable<InvoiceResource> Invoices { get; set; }
+
+        public int? RsnNumber { get; set; }
+
+        public string Ipr { get; set; }
     }
 }

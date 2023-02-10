@@ -14,6 +14,10 @@
         {
             var addressBuilder = new AddressResourceBuilder();
             var employeeBuilder = new EmployeeResourceBuilder();
+            if (consignment.ConsignmentId == 396692)
+            {
+                var stop = 10;
+            }
 
             return new ConsignmentResource
                        {
@@ -82,7 +86,9 @@
                                                  ConsignmentId = exportBook.ConsignmentId,
                                                  ExportId = exportBook.ExportId
                                              }),
-                           Links = this.BuildLinks(consignment).ToArray()
+                           Links = this.BuildLinks(consignment).ToArray(),
+                           RsnNumber = consignment.Items?.FirstOrDefault(x => x.RsnNumber.HasValue)?.RsnNumber,
+                           Ipr = consignment.Items != null && consignment.Items.Any(i => i.Rsn?.Ipr == "Y") ? "Y" : "N"
                        };
         }
 

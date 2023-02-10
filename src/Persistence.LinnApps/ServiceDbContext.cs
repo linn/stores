@@ -1854,6 +1854,7 @@
             entity.Property(i => i.ItemBaseWeight).HasColumnName("ITEM_BASE_WEIGHT");
             entity.Property(i => i.ItemDescription).HasColumnName("ITEM_DESCRIPTION").HasMaxLength(50);
             entity.Property(i => i.RsnNumber).HasColumnName("RSN_NUMBER");
+            entity.HasOne(i => i.Rsn).WithMany().HasForeignKey(i => i.RsnNumber);
             entity.Property(i => i.OrderNumber).HasColumnName("ORDER_NUMBER");
             entity.Property(i => i.OrderLine).HasColumnName("ORDER_LINE");
             entity.HasOne(i => i.SalesOrder).WithMany(o => o.ConsignmentItems).HasForeignKey(i => i.OrderNumber);
@@ -2083,6 +2084,7 @@
             q.Property(e => e.RsnNumber).HasColumnName("RSN_NUMBER");
             q.Property(e => e.ArticleNumber).HasColumnName("ARTICLE_NUMBER").HasMaxLength(14);
             q.Property(e => e.Quantity).HasColumnName("QUANTITY").HasMaxLength(5);
+            q.Property(e => e.Ipr).HasColumnName("IPR");
             q.HasOne(a => a.SalesArticle).WithMany(x => x.Rsns).HasForeignKey(z => z.ArticleNumber);
         }
 
