@@ -129,7 +129,7 @@ function ExportConsignments({
             disableColumnMenu: true
         },
         { field: 'rsnNumber', headerName: 'RSN', width: 100 },
-        { field: 'iprNumber', headerName: 'IPR', width: 100 }
+        { field: 'ipr', headerName: 'IPR', width: 100 }
     ];
 
     const updateRow = useCallback(
