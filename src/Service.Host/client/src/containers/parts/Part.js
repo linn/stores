@@ -26,6 +26,8 @@ import partLiveTestSelectors from '../../selectors/partLiveTestSelectors';
 import partLiveTestActions from '../../actions/partLiveTestActions';
 import partsActions from '../../actions/partsActions';
 import partsSelectors from '../../selectors/partsSelectors';
+import bomStandardPricesSelectors from '../../selectors/bomStandardPricesSelectors';
+import bomStandardPricesActions from '../../actions/bomStandardPricesActions';
 
 const creating = match => match?.url?.endsWith('/create');
 
@@ -36,6 +38,7 @@ const mapStateToProps = (state, { match, location }) => ({
     editStatus: creating(match) ? 'create' : partSelectors.getEditStatus(state),
     loading: partSelectors.getLoading(state),
     snackbarVisible: partSelectors.getSnackbarVisible(state),
+    options: queryString.parse(location?.search),
     itemError: getItemError(state, itemTypes.part.item),
     departments: departmentsSelectors.getItems(state),
     rootProducts: rootProductsSelectors.getItems(state),
@@ -49,7 +52,9 @@ const mapStateToProps = (state, { match, location }) => ({
     partTemplates: partTemplatesSelectors.getItems(state),
     liveTest: creating(match) ? null : partLiveTestSelectors.getItem(state),
     partsSearchResults: partsSelectors.getSearchItems(state),
-    previousPaths: getPreviousPaths(state)
+    previousPaths: getPreviousPaths(state),
+    bomStandardPrices: bomStandardPricesSelectors.getItem(state),
+    bomStandardPricesLoading: bomStandardPricesSelectors.getLoading(state)
 });
 
 const mapDispatchToProps = dispatch => {
@@ -72,7 +77,12 @@ const mapDispatchToProps = dispatch => {
         setEditStatus: status => dispatch(partActions.setEditStatus(status)),
         setSnackbarVisible: () => dispatch(partActions.setSnackbarVisible()),
         fetchLiveTest: itemId => dispatch(partLiveTestActions.fetch(itemId)),
-        clearErrors: () => dispatch(partActions.clearErrorsForItem())
+        clearErrors: () => dispatch(partActions.clearErrorsForItem()),
+        refreshPart: itemId => {
+            dispatch(partActions.fetch(itemId));
+            dispatch(partLiveTestActions.fetch(itemId));
+        },
+        clearBomStandardPrices: () => dispatch(bomStandardPricesActions.clearItem())
     };
 };
 

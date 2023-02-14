@@ -375,3 +375,5 @@ export const whatToWandReprintActionTypes = makeActionTypes(itemTypes.whatToWand
 export const triggerLevelsForAStoragePlaceReportActionTypes = makeReportActionTypes(
     reportTypes.triggerLevelsForStoragePlaceReport.actionType
 );
+
+export const bomStandardPricesActionTypes = makeActionTypes(itemTypes.bomStandardPrices.actionType);
