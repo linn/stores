@@ -19,7 +19,7 @@ import GeneralTab from '../../containers/parts/tabs/GeneralTab';
 import BuildTab from '../../containers/parts/tabs/BuildTab';
 import PurchTab from '../../containers/parts/tabs/PurchTab';
 import StoresTab from '../../containers/parts/tabs/StoresTab';
-import LifeCycleTab from './tabs/LifeCycleTab';
+import LifeCycleTab from '../../containers/parts/tabs/LifeCycleTab';
 import partReducer from './partReducer';
 import handleBackClick from '../../helpers/handleBackClick';
 
@@ -41,12 +41,14 @@ function Part({
     userNumber,
     templateName,
     partTemplates,
-    liveTest,
-    fetchLiveTest,
     fetchParts,
     partsSearchResults,
     clearErrors,
-    previousPaths
+    previousPaths,
+    options,
+    bomStandardPrices,
+    bomStandardPricesLoading,
+    refreshPart
 }) {
     const defaultPart = {
         partNumber: '',
@@ -86,6 +88,12 @@ function Part({
         }
     }, [copy, userName, userNumber]);
 
+    useEffect(() => {
+        if (bomStandardPrices?.message) {
+            refreshPart(itemId);
+        }
+    }, [bomStandardPrices, refreshPart, itemId]);
+
     // checking whether partNumber already exists when partNumber is entered
     useEffect(() => {
         if (editStatus === 'create') {
@@ -97,12 +105,6 @@ function Part({
             }
         }
     }, [state.part.partNumber, fetchParts, editStatus]);
-
-    useEffect(() => {
-        if (itemId) {
-            fetchLiveTest(itemId);
-        }
-    }, [fetchLiveTest, itemId]);
 
     useEffect(() => {
         if (templateName && partTemplates.length) {
@@ -137,7 +139,16 @@ function Part({
 
     const viewing = () => editStatus === 'view';
 
-    const [tab, setTab] = useState(0);
+    const tabDictionary = {
+        general: 0,
+        build: 1,
+        purch: 2,
+        stores: 3,
+        lifecycle: 4
+    };
+    const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
+
+    const liveTestDialogOpen = options?.liveTestDialogOpen;
 
     const handleTabChange = (event, value) => {
         setTab(value);
@@ -286,7 +297,7 @@ function Part({
                         />
                     </Grid>
                 )}
-                {loading ? (
+                {loading || bomStandardPricesLoading ? (
                     <Grid item xs={12}>
                         <Loading />
                     </Grid>
@@ -469,8 +480,9 @@ function Part({
                                     purchasingPhaseOutType={state.part.purchasingPhaseOutType}
                                     datePhasedOut={state.part.datePhasedOut}
                                     dateDesignObsolete={state.part.dateDesignObsolete}
-                                    liveTest={liveTest}
                                     handleChangeLiveness={handleChangeLiveness}
+                                    liveTestDialogOpen={liveTestDialogOpen}
+                                    partNumber={state.part.partNumber}
                                 />
                             )}
                             <Grid item xs={12}>
@@ -524,11 +536,13 @@ Part.propTypes = {
     userNumber: PropTypes.number,
     templateName: PropTypes.string,
     partTemplates: PropTypes.arrayOf(PropTypes.shape({ partRoot: PropTypes.string })),
-    liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
-    fetchLiveTest: PropTypes.func.isRequired,
     fetchParts: PropTypes.func.isRequired,
     clearErrors: PropTypes.func.isRequired,
-    previousPaths: PropTypes.arrayOf(PropTypes.shape({}))
+    previousPaths: PropTypes.arrayOf(PropTypes.shape({})),
+    options: PropTypes.shape({ tab: PropTypes.string, liveTestDialogOpen: PropTypes.bool }),
+    bomStandardPrices: PropTypes.shape({ message: PropTypes.string }),
+    bomStandardPricesLoading: PropTypes.bool,
+    refreshPart: PropTypes.func.isRequired
 };
 
 Part.defaultProps = {
@@ -545,8 +559,10 @@ Part.defaultProps = {
     templateName: null,
     partTemplates: [],
     previousPaths: [],
-    liveTest: null,
-    partsSearchResults: []
+    partsSearchResults: [],
+    options: null,
+    bomStandardPrices: null,
+    bomStandardPricesLoading: false
 };
 
 export default Part;

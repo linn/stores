@@ -29,10 +29,13 @@ function LifeCycleTab({
     handlePhaseOutClick,
     handlePhaseInClick,
     handleChangeLiveness,
-    liveTest
+    liveTest,
+    liveTestDialogOpen,
+    setBomStandardPrices,
+    partNumber
 }) {
     const classes = useStyles();
-    const [dialogOpen, setDialogOpen] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(liveTestDialogOpen);
     return (
         <Grid container spacing={3}>
             <LiveDialog
@@ -41,6 +44,12 @@ function LifeCycleTab({
                 liveTest={liveTest}
                 dateLive={dateLive}
                 handleChangeLiveness={handleChangeLiveness}
+                setStandardPrices={() =>
+                    setBomStandardPrices({
+                        lines: { bomName: partNumber },
+                        remarks: 'MAKE PART LIVE'
+                    })
+                }
             />
             <Grid item xs={3}>
                 <DatePicker
@@ -214,7 +223,11 @@ LifeCycleTab.propTypes = {
     editStatus: PropTypes.string.isRequired,
     liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
     handleChangeLiveness: PropTypes.func.isRequired,
-    handlePhaseInClick: PropTypes.func.isRequired
+    handlePhaseInClick: PropTypes.func.isRequired,
+    liveTestDialogOpen: PropTypes.bool,
+    bomStandardPrices: PropTypes.shape({}),
+    setBomStandardPrices: PropTypes.func.isRequired,
+    partNumber: PropTypes.string
 };
 
 LifeCycleTab.defaultProps = {
@@ -229,7 +242,10 @@ LifeCycleTab.defaultProps = {
     datePhasedOut: null,
     dateDesignObsolete: null,
     canPhaseOut: false,
-    liveTest: null
+    liveTest: null,
+    liveTestDialogOpen: false,
+    bomStandardPrices: null,
+    partNumber: null
 };
 
 export default LifeCycleTab;

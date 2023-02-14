@@ -463,3 +463,9 @@ export const whatToWandReprint = new ItemType(
     'WHAT_TO_WAND_REPRINT',
     '/logistics/tpk/what-to-wand-reprint'
 );
+
+export const bomStandardPrices = new ItemType(
+    'bomStandardPrices',
+    'BOM_STANDARD_PRICES',
+    '/purchasing/boms/prices'
+);
