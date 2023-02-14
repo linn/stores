@@ -546,7 +546,8 @@ Part.propTypes = {
     options: PropTypes.shape({ tab: PropTypes.string, liveTestDialogOpen: PropTypes.bool }),
     bomStandardPrices: PropTypes.shape({ message: PropTypes.string }),
     bomStandardPricesLoading: PropTypes.bool,
-    refreshPart: PropTypes.func.isRequired
+    refreshPart: PropTypes.func.isRequired,
+    clearBomStandardPrices: PropTypes.func.isRequired
 };
 
 Part.defaultProps = {
