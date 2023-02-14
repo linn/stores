@@ -78,7 +78,10 @@ const mapDispatchToProps = dispatch => {
         setSnackbarVisible: () => dispatch(partActions.setSnackbarVisible()),
         fetchLiveTest: itemId => dispatch(partLiveTestActions.fetch(itemId)),
         clearErrors: () => dispatch(partActions.clearErrorsForItem()),
-        refreshPart: itemId => dispatch(partActions.fetch(itemId)),
+        refreshPart: itemId => {
+            dispatch(partActions.fetch(itemId));
+            dispatch(partLiveTestActions.fetch(itemId));
+        },
         clearBomStandardPrices: () => dispatch(bomStandardPricesActions.clearItem())
     };
 };

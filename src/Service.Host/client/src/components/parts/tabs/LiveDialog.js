@@ -38,9 +38,7 @@ export default function LiveDialog(props) {
                         fullWidth
                     />
                 )}
-                {liveTest?.message?.includes(
-                    'Assembly does not have correct standard price please autocost it '
-                ) ? (
+                {!liveTest?.message?.includes('YES') ? (
                     <Button
                         className={classes.pullRight}
                         onClick={setStandardPrices}

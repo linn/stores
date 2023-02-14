@@ -91,10 +91,9 @@ function Part({
 
     useEffect(() => {
         if (bomStandardPrices?.message) {
-            console.log(bomStandardPrices?.message);
             clearBomStandardPrices();
             refreshPart(itemId);
-            history.push(`/parts/${itemId}?tab=lifecycle&liveTestDialogOpen=True`);
+            history.push(`/parts/${itemId}?tab=lifecycle&liveTestDialogOpen=true`);
         }
     }, [bomStandardPrices, refreshPart, itemId, history, clearBomStandardPrices]);
 
@@ -267,6 +266,7 @@ function Part({
                 madeLiveByName: null
             });
         }
+        history.push(`/parts/${itemId}?tab=lifecycle`);
     };
 
     return (
