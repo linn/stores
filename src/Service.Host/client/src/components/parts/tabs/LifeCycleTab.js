@@ -46,7 +46,7 @@ function LifeCycleTab({
                 handleChangeLiveness={handleChangeLiveness}
                 setStandardPrices={() =>
                     setBomStandardPrices({
-                        lines: { bomName: partNumber },
+                        lines: [{ bomName: partNumber }],
                         remarks: 'MAKE PART LIVE'
                     })
                 }

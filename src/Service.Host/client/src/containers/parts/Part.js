@@ -27,6 +27,7 @@ import partLiveTestActions from '../../actions/partLiveTestActions';
 import partsActions from '../../actions/partsActions';
 import partsSelectors from '../../selectors/partsSelectors';
 import bomStandardPricesSelectors from '../../selectors/bomStandardPricesSelectors';
+import bomStandardPricesActions from '../../actions/bomStandardPricesActions';
 
 const creating = match => match?.url?.endsWith('/create');
 
@@ -77,7 +78,8 @@ const mapDispatchToProps = dispatch => {
         setSnackbarVisible: () => dispatch(partActions.setSnackbarVisible()),
         fetchLiveTest: itemId => dispatch(partLiveTestActions.fetch(itemId)),
         clearErrors: () => dispatch(partActions.clearErrorsForItem()),
-        refreshPart: itemId => dispatch(partActions.fetch(itemId))
+        refreshPart: itemId => dispatch(partActions.fetch(itemId)),
+        clearBomStandardPrices: () => dispatch(bomStandardPricesActions.clearItem())
     };
 };
 

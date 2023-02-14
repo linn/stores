@@ -6,7 +6,7 @@ export default ({ getState }) => next => action => {
     const result = next(action);
     if (
         action.type.startsWith('RECEIVE_NEW_') &&
-        action.type !== actionTypes.bomStandardPricesActionTypes.RECEIVE_NEW_BON_STANDARD_PRICES
+        action.type !== actionTypes.bomStandardPricesActionTypes.RECEIVE_NEW_BOM_STANDARD_PRICES
     ) {
         if (!getState().router?.location?.pathname?.includes('/logistics/goods-in-utility')) {
             history.push(utilities.getSelfHref(action.payload.data));

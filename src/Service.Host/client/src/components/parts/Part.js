@@ -46,6 +46,7 @@ function Part({
     clearErrors,
     previousPaths,
     options,
+    clearBomStandardPrices,
     bomStandardPrices,
     bomStandardPricesLoading,
     refreshPart
@@ -90,9 +91,12 @@ function Part({
 
     useEffect(() => {
         if (bomStandardPrices?.message) {
+            console.log(bomStandardPrices?.message);
+            clearBomStandardPrices();
             refreshPart(itemId);
+            history.push(`/parts/${itemId}?tab=lifecycle&liveTestDialogOpen=True`);
         }
-    }, [bomStandardPrices, refreshPart, itemId]);
+    }, [bomStandardPrices, refreshPart, itemId, history, clearBomStandardPrices]);
 
     // checking whether partNumber already exists when partNumber is entered
     useEffect(() => {

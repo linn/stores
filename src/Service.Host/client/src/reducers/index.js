@@ -137,6 +137,7 @@ import qcPartsReport from './qcPartsReport';
 import euCreditInvoicesReport from './euCreditInvoicesReport';
 import whatToWandReprint from './whatToWandReprint';
 import triggerLevelsForAStoragePlaceReport from './triggerLevelsForAStoragePlaceReport';
+import bomStandardPrices from './bomStandardPrices';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -152,6 +153,7 @@ const rootReducer = history =>
         auditLocation,
         auditLocations,
         availableStock,
+        bomStandardPrices,
         carrier,
         carriers,
         cartonTypes,
