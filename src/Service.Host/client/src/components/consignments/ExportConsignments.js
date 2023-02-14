@@ -102,14 +102,14 @@ function ExportConsignments({
 
     const columns = [
         { field: 'id', headerName: 'Cons Id', width: 120, disableColumnMenu: true },
-        { field: 'customerName', headerName: 'Customer Name', width: 300 },
-        { field: 'carrier', headerName: 'Carrier', width: 120 },
-        { field: 'masterCarrierRef', headerName: 'Master Carrier Ref', editable: true, width: 250 },
-        { field: 'carrierRef', headerName: 'Carrier Ref', editable: true, width: 250 },
+        { field: 'customerName', headerName: 'Customer Name', width: 200 },
+        { field: 'carrier', headerName: 'Carrier', width: 100 },
+        { field: 'masterCarrierRef', headerName: 'Master Carrier Ref', editable: true, width: 150 },
+        { field: 'carrierRef', headerName: 'Carrier Ref', editable: true, width: 150 },
         {
             field: 'customsEntryCodePrefix',
             headerName: 'Customs Entry Prefix',
-            width: 140,
+            width: 120,
             editable: true,
             disableColumnMenu: true
         },
@@ -127,7 +127,9 @@ function ExportConsignments({
             width: 200,
             editable: true,
             disableColumnMenu: true
-        }
+        },
+        { field: 'rsnNumber', headerName: 'RSN', width: 100 },
+        { field: 'ipr', headerName: 'IPR', width: 100 }
     ];
 
     const updateRow = useCallback(

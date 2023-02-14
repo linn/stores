@@ -14,7 +14,6 @@
         {
             var addressBuilder = new AddressResourceBuilder();
             var employeeBuilder = new EmployeeResourceBuilder();
-
             return new ConsignmentResource
                        {
                            ConsignmentId = consignment.ConsignmentId,
@@ -50,39 +49,41 @@
                            Items = consignment.Items?.Select(
                                item => new ConsignmentItemResource
                                            {
-                                                ConsignmentId = item.ConsignmentId,
-                                                ItemNumber = item.ItemNumber,
-                                                ItemType = item.ItemType,
-                                                Quantity = item.Quantity,
-                                                SerialNumber = item.SerialNumber,
-                                                Weight = item.Weight,
-                                                Width = item.Width,
-                                                Height = item.Height,
-                                                Depth = item.Depth,
-                                                ContainerNumber = item.ContainerNumber,
-                                                PalletNumber = item.PalletNumber,
-                                                ContainerType = item.ContainerType,
-                                                MaybeHalfAPair = item.MaybeHalfAPair,
-                                                OrderNumber = item.OrderNumber,
-                                                OrderLine = item.OrderLine,
-                                                ItemBaseWeight = item.ItemBaseWeight,
-                                                ItemDescription = item.ItemDescription,
-                                                RsnNumber = item.RsnNumber
+                                               ConsignmentId = item.ConsignmentId,
+                                               ItemNumber = item.ItemNumber,
+                                               ItemType = item.ItemType,
+                                               Quantity = item.Quantity,
+                                               SerialNumber = item.SerialNumber,
+                                               Weight = item.Weight,
+                                               Width = item.Width,
+                                               Height = item.Height,
+                                               Depth = item.Depth,
+                                               ContainerNumber = item.ContainerNumber,
+                                               PalletNumber = item.PalletNumber,
+                                               ContainerType = item.ContainerType,
+                                               MaybeHalfAPair = item.MaybeHalfAPair,
+                                               OrderNumber = item.OrderNumber,
+                                               OrderLine = item.OrderLine,
+                                               ItemBaseWeight = item.ItemBaseWeight,
+                                               ItemDescription = item.ItemDescription,
+                                               RsnNumber = item.RsnNumber
                                            }),
                            Invoices = consignment.Invoices?.Select(
                                inv => new InvoiceResource
-                                             {
-                                                 ConsignmentId = inv.ConsignmentId,
-                                                 DocumentType = inv.DocumentType,
-                                                 DocumentNumber = inv.DocumentNumber
-                                             }),
+                                          {
+                                              ConsignmentId = inv.ConsignmentId,
+                                              DocumentType = inv.DocumentType,
+                                              DocumentNumber = inv.DocumentNumber
+                                          }),
                            ExportBooks = consignment.ExportBooks?.Select(
                                exportBook => new ExportBookResource
-                                             {
-                                                 ConsignmentId = exportBook.ConsignmentId,
-                                                 ExportId = exportBook.ExportId
-                                             }),
-                           Links = this.BuildLinks(consignment).ToArray()
+                                                 {
+                                                     ConsignmentId = exportBook.ConsignmentId,
+                                                     ExportId = exportBook.ExportId
+                                                 }),
+                           Links = this.BuildLinks(consignment).ToArray(),
+                           RsnNumber = consignment.Items?.FirstOrDefault(x => x.RsnNumber.HasValue)?.RsnNumber,
+                           Ipr = consignment.Items != null && consignment.Items.Any(i => i.Rsn?.Ipr == "Y") ? "Y" : "N"
                        };
         }
 

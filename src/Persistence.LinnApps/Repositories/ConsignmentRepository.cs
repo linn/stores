@@ -34,6 +34,7 @@
         {
             return this.serviceDbContext.Consignments.Where(expression)
                 .Include(c => c.Invoices)
+                .Include(c => c.Items).ThenInclude(c => c.Rsn)
                 .Include(a => a.Address)
                 .ThenInclude(c => c.Country);
         }

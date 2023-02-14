@@ -11,5 +11,7 @@
         public SalesArticle SalesArticle { get; set; }
 
         public int Quantity { get; set; }
+
+        public string Ipr { get; set; }
     }
 }
