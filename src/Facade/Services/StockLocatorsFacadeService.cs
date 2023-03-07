@@ -3,6 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq.Expressions;
+
+    using Linn.Common.Domain.Exceptions;
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Common.Proxy.LinnApps;
@@ -64,26 +66,33 @@
 
         public IResult<IEnumerable<StockLocator>> GetStockLocations(StockLocatorQueryResource searchResource)
         {
-            if (searchResource.QueryBatchView)
+            try
             {
-                return new SuccessResult<IEnumerable<StockLocator>>(this.domainService.SearchStockLocatorBatchView(
+                if (searchResource.QueryBatchView)
+                {
+                    return new SuccessResult<IEnumerable<StockLocator>>(this.domainService.SearchStockLocatorBatchView(
+                        searchResource.PartNumber,
+                        searchResource.LocationId,
+                        searchResource.PalletNumber,
+                        searchResource.StockPoolCode,
+                        searchResource.State,
+                        searchResource.Category));
+                }
+
+                return new SuccessResult<IEnumerable<StockLocator>>(this.domainService.SearchStockLocators(
                     searchResource.PartNumber,
                     searchResource.LocationId,
                     searchResource.PalletNumber,
                     searchResource.StockPoolCode,
                     searchResource.State,
-                    searchResource.Category));
+                    searchResource.Category,
+                    searchResource.LocationName,
+                    searchResource.PartDescription));
             }
-
-            return new SuccessResult<IEnumerable<StockLocator>>(this.domainService.SearchStockLocators(
-                searchResource.PartNumber,
-                searchResource.LocationId,
-                searchResource.PalletNumber,
-                searchResource.StockPoolCode,
-                searchResource.State,
-                searchResource.Category,
-                searchResource.LocationName,
-                searchResource.PartDescription));
+            catch (DomainException x)
+            {
+                return new ServerFailureResult<IEnumerable<StockLocator>>(x.Message);
+            }
         }
 
         public IResult<IEnumerable<StockMove>> GetMoves(string partNumber, int? palletNumber, int? locationId)
