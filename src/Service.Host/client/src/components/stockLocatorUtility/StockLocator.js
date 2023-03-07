@@ -5,6 +5,7 @@ import {
     SingleEditTable,
     Loading,
     Dropdown,
+    ErrorCard,
     InputField,
     BackButton
 } from '@linn-it/linn-form-components-library';
@@ -36,7 +37,9 @@ function StockLocator({
     moves,
     movesLoading,
     fetchMoves,
-    clearMoves
+    clearMoves,
+    itemError,
+    clearErrors
 }) {
     const [selectedQuantities, setSelectedQuantities] = useState();
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -52,9 +55,10 @@ function StockLocator({
 
     useEffect(() => {
         if (Object.values(queryString.parse(options)).some(x => x !== null && x !== '')) {
+            clearErrors();
             fetchItems(null, `&${options}`);
         }
-    }, [options, fetchItems]);
+    }, [options, fetchItems, clearErrors]);
 
     useEffect(() => {
         if (quantities?.length > 0 && items?.length > 0) {
@@ -251,6 +255,13 @@ function StockLocator({
                         />
                     </Grid>
                     <Grid item xs={9} />
+                    <Grid item xs={12}>
+                        {itemError && (
+                            <ErrorCard
+                                errorMessage={itemError.details?.message || itemError.statusText}
+                            />
+                        )}
+                    </Grid>
                     {itemsLoading ? (
                         <Grid item xs={12}>
                             <Loading />
@@ -521,7 +532,12 @@ StockLocator.propTypes = {
     moves: PropTypes.arrayOf(PropTypes.shape({})),
     movesLoading: PropTypes.bool,
     fetchMoves: PropTypes.func.isRequired,
-    clearMoves: PropTypes.func.isRequired
+    clearMoves: PropTypes.func.isRequired,
+    itemError: PropTypes.shape({
+        statusText: PropTypes.string,
+        details: PropTypes.shape({ message: PropTypes.string })
+    }),
+    clearErrors: PropTypes.func.isRequired
 };
 
 StockLocator.defaultProps = {
@@ -530,7 +546,8 @@ StockLocator.defaultProps = {
     quantities: null,
     quantitiesLoading: false,
     moves: [],
-    movesLoading: false
+    movesLoading: false,
+    itemError: null
 };
 
 export default StockLocator;
