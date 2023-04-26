@@ -19,7 +19,6 @@
     using Linn.Stores.Domain.LinnApps.Tqms;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
-    using Linn.Stores.Domain.LinnApps.Wcs;
     using Linn.Stores.Domain.LinnApps.Workstation;
 
     using Microsoft.EntityFrameworkCore;
