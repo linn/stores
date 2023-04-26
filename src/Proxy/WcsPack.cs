@@ -214,8 +214,6 @@
                         Value = who
                     });
 
-
-
             connection.Open();
             cmd.ExecuteNonQuery();
             connection.Close();
@@ -284,8 +282,6 @@
                     Value = who
                 });
 
-
-
             connection.Open();
             cmd.ExecuteNonQuery();
             connection.Close();
@@ -345,8 +341,6 @@
                     Direction = ParameterDirection.Input,
                     Value = who
                 });
-
-
 
             connection.Open();
             cmd.ExecuteNonQuery();
