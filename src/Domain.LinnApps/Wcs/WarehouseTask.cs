@@ -35,5 +35,21 @@
         public int Priority { get; set; }
 
         public int JobNo { get; set; }
+
+        public bool ValidPalletNumber()
+        {
+            return this.PalletNumber >= 1 && this.PalletNumber <= 4000;
+        }
+
+        public bool ValidPriority()
+        {
+            return this.Priority >= 0 && this.Priority <= 100;
+        }
+
+        public bool TaskIsMove() => this.TaskType == "MV";
+
+        public bool TaskIsAtMove() => this.TaskType == "AT";
+
+        public bool TaskIsEmpty() => this.TaskType == "EM";
     }
 }

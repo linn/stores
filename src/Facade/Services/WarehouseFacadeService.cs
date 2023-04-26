@@ -37,12 +37,21 @@
                 return new BadRequestResult<MessageResult>("No task to add");
             }
 
-            if (resource.PalletNumber < 1 || resource.PalletNumber > 4000)
+            var task = new WarehouseTask
+                           {
+                               PalletNumber = resource.PalletNumber,
+                               Priority = resource.Priority,
+                               OriginalLocation = resource.OriginalLocation,
+                               Destination = resource.Destination,
+                               TaskType = resource.TaskType
+                           };
+
+            if (!task.ValidPalletNumber())
             {
                 return new BadRequestResult<MessageResult>("Not a valid pallet number");
             }
 
-            if (resource.Priority < 0 || resource.Priority > 100)
+            if (!task.ValidPriority())
             {
                 return new BadRequestResult<MessageResult>("Not a valid priority");
             }
@@ -53,20 +62,20 @@
                 return new NotFoundResult<MessageResult>("Employee not found");
             }
 
-            if (resource.TaskType == "MV")
+            if (task.TaskIsMove())
             {
-                if (this.warehouseService.MovePallet(resource.PalletNumber, resource.Destination, resource.Priority, employee))
+                if (this.warehouseService.MovePallet(task.PalletNumber, task.Destination, task.Priority, employee))
                 {
                     return new SuccessResult<MessageResult>(new MessageResult($"Task submitted to move pallet {resource.PalletNumber} to {resource.Destination}"));
                 }
             }
-            else if (resource.TaskType == "AT")
+            else if (task.TaskIsAtMove())
             {
                 if (this.warehouseService.AtMovePallet(
-                        resource.PalletNumber,
-                        resource.OriginalLocation,
-                        resource.Destination,
-                        resource.Priority,
+                        task.PalletNumber,
+                        task.OriginalLocation,
+                        task.Destination,
+                        task.Priority,
                         employee))
                 {
                     return new SuccessResult<MessageResult>(
@@ -74,9 +83,9 @@
                             $"Task submitted to move pallet {resource.PalletNumber} from {resource.OriginalLocation} to {resource.Destination}"));
                 }
             }
-            else if (resource.TaskType == "EM")
+            else if (task.TaskIsEmpty())
             {
-                if (this.warehouseService.EmptyLocation(resource.PalletNumber, resource.OriginalLocation, resource.Priority, employee))
+                if (this.warehouseService.EmptyLocation(task.PalletNumber, task.OriginalLocation, task.Priority, employee))
                 {
                     return new SuccessResult<MessageResult>(new MessageResult($"Task submitted to move pallet {resource.PalletNumber} to {resource.Destination}"));
                 }
