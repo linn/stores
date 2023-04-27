@@ -138,6 +138,8 @@ import euCreditInvoicesReport from './euCreditInvoicesReport';
 import whatToWandReprint from './whatToWandReprint';
 import triggerLevelsForAStoragePlaceReport from './triggerLevelsForAStoragePlaceReport';
 import bomStandardPrices from './bomStandardPrices';
+import warehouseTask from './warehouseTask';
+import warehousePallet from './warehousePallet';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -272,6 +274,8 @@ const rootReducer = history =>
         validateStorageTypeResult,
         wandConsignments,
         wandItems,
+        warehouseTask,
+        warehousePallet,
         whatToWandReprint,
         workstationTopUpStatus,
         wwdReport,

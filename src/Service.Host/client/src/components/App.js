@@ -40,6 +40,9 @@ function App() {
                 <ListItem component={Link} to="/logistics/consignments" button>
                     <Typography color="primary">Consignment Utility</Typography>
                 </ListItem>
+                <ListItem component={Link} to="/logistics/bk" button>
+                    <Typography color="primary">Enter WCS Job (Bahnhofkoenig)</Typography>
+                </ListItem>
             </List>
             <Typography variant="h6">Reports</Typography>
             <List>
