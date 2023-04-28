@@ -23,7 +23,7 @@
     {
         protected IFacadeService<StockTriggerLevel, int, StockTriggerLevelsResource, StockTriggerLevelsResource> StockTriggerLevelsFaceFacadeService { get; private set; }
        
-        protected IRepository <StockTriggerLevel, int> StockTriggerLevelsRepository { get; private set; }
+        protected IRepository<StockTriggerLevel, int> StockTriggerLevelsRepository { get; private set; }
 
         [SetUp]
         public void EstablishContext()
@@ -40,6 +40,7 @@
                     with.Dependency<IResourceBuilder<StockTriggerLevel>>(new StockTriggerLevelResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<StockTriggerLevel>>>(new StockTriggerLevelsResourceBuilder());
                     with.Module<StockTriggerLevelsModule>();
+                    with.ResponseProcessor<StockTriggerLevelResponseProcessor>();
                     with.ResponseProcessor<StockTriggerLevelsResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>

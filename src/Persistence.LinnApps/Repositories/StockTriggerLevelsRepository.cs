@@ -9,7 +9,7 @@
 
     using Microsoft.EntityFrameworkCore;
 
-    public class StockTriggerLevelsRepository : IQueryRepository<StockTriggerLevel>
+    public class StockTriggerLevelsRepository : IRepository<StockTriggerLevel, int>
     {
 
         private readonly ServiceDbContext serviceDbContext;
@@ -30,6 +30,21 @@
         }
 
         public IQueryable<StockTriggerLevel> FindAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public StockTriggerLevel FindById(int key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Add(StockTriggerLevel entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(StockTriggerLevel entity)
         {
             throw new NotImplementedException();
         }

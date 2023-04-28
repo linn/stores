@@ -142,7 +142,7 @@
             builder.RegisterType<AuthUserRepository>().As<IQueryRepository<AuthUser>>();
             builder.RegisterType<RsnRepository>().As<IQueryRepository<Rsn>>();
             builder.RegisterType<LoanRepository>().As<IQueryRepository<Loan>>();
-            builder.RegisterType<StockTriggerLevelsRepository>().As<IQueryRepository<StockTriggerLevel>>();
+            builder.RegisterType<StockTriggerLevelsRepository>().As<IRepository<StockTriggerLevel, int>>();
             builder.RegisterType<PurchaseLedgerRepository>().As<IRepository<PurchaseLedger, int>>();
             builder.RegisterType<RsnAccessoriesRepository>().As<IQueryRepository<RsnAccessory>>();
             builder.RegisterType<RsnConditionsRepository>().As<IQueryRepository<RsnCondition>>();
@@ -152,7 +152,6 @@
             builder.RegisterType<MrPartsRepository>().As<IQueryRepository<MrPart>>();
             builder.RegisterType<EuCreditInvoiceRepository>().As<IQueryRepository<EuCreditInvoice>>();
             builder.RegisterType<ProductUpgradeRulesRepository>().As<IQueryRepository<ProductUpgradeRule>>();
-            builder.RegisterType<StockTriggerLevelsRepository>().As<IRepository<StockTriggerLevel, int>>();
         }
     }
 }
