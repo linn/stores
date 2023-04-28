@@ -23,9 +23,7 @@
     public abstract class ContextBase : NancyContextBase
     {
         protected IFacadeService<StockTriggerLevel, int, StockTriggerLevelsResource, StockTriggerLevelsResource> StockTriggerLevelsFaceFacadeService { get; private set; }
-       
-        protected IRepository<StockTriggerLevel, int> StockTriggerLevelsRepository { get; private set; }
-
+        
         protected IAuthorisationService AuthorisationService { get; set; }
 
         [SetUp]
@@ -33,15 +31,12 @@
         {
             this.StockTriggerLevelsFaceFacadeService = Substitute.For<IFacadeService<StockTriggerLevel, int, StockTriggerLevelsResource, StockTriggerLevelsResource>>();
 
-            this.StockTriggerLevelsRepository = Substitute.For<IRepository<StockTriggerLevel, int>>();
-
             this.AuthorisationService = Substitute.For<IAuthorisationService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                 {
                     with.Dependency(this.StockTriggerLevelsFaceFacadeService);
-                    with.Dependency(this.StockTriggerLevelsRepository);
                     with.Dependency<IResourceBuilder<StockTriggerLevel>>(new StockTriggerLevelResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<StockTriggerLevel>>>(new StockTriggerLevelsResourceBuilder());
                     with.Dependency(this.AuthorisationService);
