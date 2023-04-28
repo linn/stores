@@ -152,6 +152,7 @@
             builder.RegisterType<MrPartsRepository>().As<IQueryRepository<MrPart>>();
             builder.RegisterType<EuCreditInvoiceRepository>().As<IQueryRepository<EuCreditInvoice>>();
             builder.RegisterType<ProductUpgradeRulesRepository>().As<IQueryRepository<ProductUpgradeRule>>();
+            builder.RegisterType<StockTriggerLevelsRepository>().As<IRepository<StockTriggerLevel, int>>();
         }
     }
 }
