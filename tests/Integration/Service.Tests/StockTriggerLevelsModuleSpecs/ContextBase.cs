@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Security.Claims;
 
+    using Linn.Common.Authorisation;
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
@@ -25,12 +26,16 @@
        
         protected IRepository<StockTriggerLevel, int> StockTriggerLevelsRepository { get; private set; }
 
+        protected IAuthorisationService AuthorisationService { get; set; }
+
         [SetUp]
         public void EstablishContext()
         {
             this.StockTriggerLevelsFaceFacadeService = Substitute.For<IFacadeService<StockTriggerLevel, int, StockTriggerLevelsResource, StockTriggerLevelsResource>>();
 
             this.StockTriggerLevelsRepository = Substitute.For<IRepository<StockTriggerLevel, int>>();
+
+            this.AuthorisationService = Substitute.For<IAuthorisationService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
@@ -39,6 +44,7 @@
                     with.Dependency(this.StockTriggerLevelsRepository);
                     with.Dependency<IResourceBuilder<StockTriggerLevel>>(new StockTriggerLevelResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<StockTriggerLevel>>>(new StockTriggerLevelsResourceBuilder());
+                    with.Dependency(this.AuthorisationService);
                     with.Module<StockTriggerLevelsModule>();
                     with.ResponseProcessor<StockTriggerLevelResponseProcessor>();
                     with.ResponseProcessor<StockTriggerLevelsResponseProcessor>();
