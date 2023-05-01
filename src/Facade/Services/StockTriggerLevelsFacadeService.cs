@@ -1,24 +1,32 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq.Expressions;
 
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
-    using Linn.Common.Proxy.LinnApps;
-    using Linn.Stores.Domain.LinnApps;
-    using Linn.Stores.Domain.LinnApps.ImportBooks;
-    using Linn.Stores.Domain.LinnApps.StockLocators;
-    using Linn.Stores.Proxy;
-    using Linn.Stores.Resources;
-    using Linn.Stores.Resources.StockLocators;
 
-    public class StockTriggerLevelsFacadeService : FacadeService<StockTriggerLevel, int, StockTriggerLevelsResource, StockTriggerLevelsResource>
+    using Linn.Stores.Domain.LinnApps.StockLocators;
+
+    using Linn.Stores.Resources;
+
+    public class StockTriggerLevelsFacadeService : FacadeService<StockTriggerLevel, int, StockTriggerLevelsResource, StockTriggerLevelsResource>, IStockTriggerLevelsFacadeService
     {
-        public StockTriggerLevelsFacadeService(IRepository<StockTriggerLevel, int> repository, ITransactionManager transactionManager)
-            : base(repository, transactionManager)
+        private readonly IRepository<StockTriggerLevel, int> repository;
+
+        private readonly ITransactionManager transactionManager;
+
+        public StockTriggerLevelsFacadeService(IRepository<StockTriggerLevel, int> repository, ITransactionManager transactionManager) : base(repository, transactionManager)
         {
+            this.repository = repository;
+            this.transactionManager = transactionManager;
+        }
+
+        public IResult<StockTriggerLevel> DeleteStockTriggerLevel(int id)
+        {
+            var toDelete = this.repository.FindBy(s => s.Id == id);
+            this.repository.Remove(toDelete);
+            return new SuccessResult<StockTriggerLevel>(toDelete);
         }
 
         protected override StockTriggerLevel CreateFromResource(StockTriggerLevelsResource resource)

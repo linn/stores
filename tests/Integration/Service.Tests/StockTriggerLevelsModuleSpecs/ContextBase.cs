@@ -9,6 +9,7 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Facade.ResourceBuilders;
+    using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
@@ -22,21 +23,21 @@
 
     public abstract class ContextBase : NancyContextBase
     {
-        protected IFacadeService<StockTriggerLevel, int, StockTriggerLevelsResource, StockTriggerLevelsResource> StockTriggerLevelsFaceFacadeService { get; private set; }
+        protected IStockTriggerLevelsFacadeService StockTriggerLevelsFacadeService { get; private set; }
         
         protected IAuthorisationService AuthorisationService { get; set; }
 
         [SetUp]
         public void EstablishContext()
         {
-            this.StockTriggerLevelsFaceFacadeService = Substitute.For<IFacadeService<StockTriggerLevel, int, StockTriggerLevelsResource, StockTriggerLevelsResource>>();
+            this.StockTriggerLevelsFacadeService = Substitute.For<IStockTriggerLevelsFacadeService>();
 
             this.AuthorisationService = Substitute.For<IAuthorisationService>();
 
             var bootstrapper = new ConfigurableBootstrapper(
                 with =>
                 {
-                    with.Dependency(this.StockTriggerLevelsFaceFacadeService);
+                    with.Dependency(this.StockTriggerLevelsFacadeService);
                     with.Dependency<IResourceBuilder<StockTriggerLevel>>(new StockTriggerLevelResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<StockTriggerLevel>>>(new StockTriggerLevelsResourceBuilder());
                     with.Dependency(this.AuthorisationService);

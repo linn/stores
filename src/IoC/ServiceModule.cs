@@ -186,7 +186,7 @@
             builder.RegisterType<EuCreditInvoicesReportFacadeService>().As<IEuCreditInvoicesReportFacadeService>();
             builder.RegisterType<StockTriggerLevelsForAStoragePlaceFacadeService>()
                 .As<IStockTriggerLevelsForAStoragePlaceFacadeService>();
-            builder.RegisterType<StockTriggerLevelsFacadeService>().As<IFacadeService<StockTriggerLevel, int, StockTriggerLevelsResource, StockTriggerLevelsResource>>();
+            builder.RegisterType<StockTriggerLevelsFacadeService>().As<IStockTriggerLevelsFacadeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

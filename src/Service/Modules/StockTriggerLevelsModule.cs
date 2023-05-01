@@ -23,12 +23,12 @@
 
     public sealed class StockTriggerLevelsModule : NancyModule
     {
-        private readonly IFacadeService<StockTriggerLevel, int, StockTriggerLevelsResource, StockTriggerLevelsResource> stockTriggerLevelsFacadeService;
+        private readonly IStockTriggerLevelsFacadeService stockTriggerLevelsFacadeService;
 
         private readonly IAuthorisationService authorisationService;
 
         public StockTriggerLevelsModule(
-            IFacadeService<StockTriggerLevel, int, StockTriggerLevelsResource, StockTriggerLevelsResource> stockTriggerLevelsFacadeService,
+            IStockTriggerLevelsFacadeService stockTriggerLevelsFacadeService,
             IAuthorisationService authorisationService)
         {
             this.stockTriggerLevelsFacadeService = stockTriggerLevelsFacadeService;
@@ -38,7 +38,7 @@
             this.Get("/inventory/stock-trigger-levels/{id:int}", parameters => this.GetStockTriggerLevel(parameters.id));
             this.Get("/inventory/stock-trigger-levels", _ => this.SearchStockTriggerLevels());
             this.Put("/inventory/stock-trigger-levels/{id:int}", parameters => this.UpdateStockTriggerLevel(parameters.id));
-            //this.Delete("/inventory/stock-trigger-levels/{id:int}", parameters => this.DeleteStockTriggerLevel(parameters.id));
+            this.Delete("/inventory/stock-trigger-levels/{id:int}", parameters => this.DeleteStockTriggerLevel(parameters.id));
         }
 
         private object SearchStockTriggerLevels()
@@ -88,6 +88,11 @@
             var results = this.stockTriggerLevelsFacadeService.GetById(id);
             return this.Negotiate.WithModel(results).WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");
+        }
+
+        private object DeleteStockTriggerLevel(int id)
+        {
+            return this.Negotiate.WithModel(this.stockTriggerLevelsFacadeService.DeleteStockTriggerLevel(id));
         }
     }
 }
