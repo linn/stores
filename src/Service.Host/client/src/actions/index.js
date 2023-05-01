@@ -377,3 +377,7 @@ export const triggerLevelsForAStoragePlaceReportActionTypes = makeReportActionTy
 );
 
 export const bomStandardPricesActionTypes = makeActionTypes(itemTypes.bomStandardPrices.actionType);
+
+export const warehouseTaskActionTypes = makeActionTypes(itemTypes.warehouseTask.actionType);
+
+export const warehousePalletActionTypes = makeActionTypes(itemTypes.warehousePallet.actionType);

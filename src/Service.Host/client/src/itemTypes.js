@@ -469,3 +469,15 @@ export const bomStandardPrices = new ItemType(
     'BOM_STANDARD_PRICES',
     '/purchasing/boms/prices'
 );
+
+export const warehouseTask = new ItemType(
+    'warehouseTask',
+    'WAREHOUSE_TASK',
+    '/logistics/wcs/warehouse-tasks'
+);
+
+export const warehousePallet = new ItemType(
+    'warehousePallet',
+    'WAREHOUSE_PALLET',
+    '/logistics/wcs/warehouse-pallets'
+);

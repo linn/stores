@@ -26,6 +26,7 @@
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
     using Linn.Stores.Domain.LinnApps.Tqms;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
+    using Linn.Stores.Domain.LinnApps.Wcs;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Facade.ResourceBuilders;
 
@@ -234,6 +235,7 @@
             builder.RegisterType<RsnAccessoriesResourceBuilder>().As<IResourceBuilder<IEnumerable<RsnAccessory>>>();
             builder.RegisterType<ValidateRsnResultResourceBuilder>().As<IResourceBuilder<ValidateRsnResult>>();
             builder.RegisterType<WhatToWandConsignmentResourceBuilder>().As<IResourceBuilder<WhatToWandConsignment>>();
+            builder.RegisterType<WarehouseLocationResourceBuilder>().As<IResourceBuilder<WarehouseLocation>>();
             builder.RegisterType<StockTriggerLevelResourceBuilder>().As<IResourceBuilder<StockTriggerLevel>>();
             builder.RegisterType<StockTriggerLevelsResourceBuilder>().As<IResourceBuilder<IEnumerable<StockTriggerLevel>>>();
         }
