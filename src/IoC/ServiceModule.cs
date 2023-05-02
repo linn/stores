@@ -79,6 +79,7 @@
             builder.RegisterType<EuCreditInvoicesReportService>().As<IEuCreditInvoicesReportService>();
             builder.RegisterType<StockTriggerLevelsForAStoragePlaceReportService>()
                 .As<IStockTriggerLevelsForAStoragePlaceReportService>();
+            builder.RegisterType<StoresMoveLogReportService>().As<IStoresMoveLogReportService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -186,6 +187,7 @@
             builder.RegisterType<EuCreditInvoicesReportFacadeService>().As<IEuCreditInvoicesReportFacadeService>();
             builder.RegisterType<StockTriggerLevelsForAStoragePlaceFacadeService>()
                 .As<IStockTriggerLevelsForAStoragePlaceFacadeService>();
+            builder.RegisterType<StoresMoveLogReportFacadeService>().As<IStoresMoveLogReportFacadeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

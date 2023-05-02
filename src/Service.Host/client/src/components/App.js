@@ -71,6 +71,9 @@ function App() {
                 <ListItem component={Link} to="/logistics/import-books/eu" button>
                     <Typography color="primary">EU Import Books Report</Typography>
                 </ListItem>
+                <ListItem component={Link} to="/inventory/reports/stores-move-log" button>
+                    <Typography color="primary">Stores Move Log Report</Typography>
+                </ListItem>
             </List>
         </Page>
     );

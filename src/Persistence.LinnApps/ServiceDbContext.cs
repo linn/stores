@@ -259,6 +259,8 @@
 
         public DbQuery<ProductUpgradeRule> ProductUpgradeRules { get; set; }
 
+        public DbQuery<StoresMoveLog> StoresMoveLogs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -382,6 +384,7 @@
             this.BuildInvoiceDetails(builder);
             this.QueryMrParts(builder);
             this.QueryProductUpgradeRules(builder);
+            this.QueryStoresMoveLogs(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -2202,6 +2205,38 @@
         {
             var q = builder.Query<ProductUpgradeRule>().ToView("PRODUCT_UPGRADE_RULES");
             q.Property(r => r.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
+        }
+
+        // QueryStoresMoveLogs
+        private void QueryStoresMoveLogs(ModelBuilder builder)
+        {
+            var q = builder.Query<StoresMoveLog>().ToView("STORES_MOVE_LOG_VIEW");
+            q.Property(a => a.Id).HasColumnName("MOVE_LOG_ID");
+            q.Property(a => a.PartNumber).HasColumnName("PART_NUMBER");
+            q.Property(a => a.DateProcessed).HasColumnName("DATE_PROCESSED");
+            q.Property(a => a.ReqNumber).HasColumnName("REQ_NUMBER");
+            q.Property(a => a.ReqLine).HasColumnName("REQ_LINE");
+            q.Property(a => a.BudgetId).HasColumnName("BUDGET_ID");
+            q.Property(a => a.TransactionCode).HasColumnName("TRANSACTION_CODE");
+            q.Property(a => a.CreatedBy).HasColumnName("CREATED_BY");
+            q.Property(a => a.Qty).HasColumnName("QTY");
+            q.Property(a => a.FromLocation).HasColumnName("FROM_LOCATION");
+            q.Property(a => a.FromBatchDate).HasColumnName("FROM_BATCH_DATE");
+            q.Property(a => a.FromBatchRef).HasColumnName("FROM_BATCH_REF");
+            q.Property(a => a.FromState).HasColumnName("FROM_STATE");
+            q.Property(a => a.FromStockPool).HasColumnName("FROM_STOCK_POOL");
+            q.Property(a => a.FromQtyBefore).HasColumnName("FROM_QTY_BEFORE");
+            q.Property(a => a.FromQtyAfter).HasColumnName("FROM_QTY_AFTER");
+            q.Property(a => a.ToLocation).HasColumnName("TO_LOCATION");
+            q.Property(a => a.ToBatchDate).HasColumnName("TO_BATCH_DATE");
+            q.Property(a => a.ToBatchRef).HasColumnName("TO_BATCH_REF");
+            q.Property(a => a.ToState).HasColumnName("TO_STATE");
+            q.Property(a => a.ToStockPool).HasColumnName("TO_STOCK_POOL");
+            q.Property(a => a.ToQtyBefore).HasColumnName("TO_QTY_BEFORE");
+            q.Property(a => a.ToQtyAfter).HasColumnName("TO_QTY_AFTER");
+            q.Property(a => a.QtyInStock).HasColumnName("QTY_IN_STOCK");
+            q.Property(a => a.QtyInQC).HasColumnName("QTY_IN_QC");
+            q.Property(a => a.QtyAtSupplier).HasColumnName("QTY_AT_SUPPLIER");
         }
     }
 }
