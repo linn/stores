@@ -60,3 +60,9 @@ export const triggerLevelsForStoragePlaceReport = new ItemType(
     'TRIGGER_LEVELS_FOR_STORAGE_PLACE_REPORT',
     '/inventory/storage-places/reports/stock-trigger-levels'
 );
+
+export const storesMoveLogReport = new ItemType(
+    'storesMoveLogReport',
+    'STORES_MOVE_LOG_REPORT',
+    '/inventory/reports/stores-move-log/report'
+);
