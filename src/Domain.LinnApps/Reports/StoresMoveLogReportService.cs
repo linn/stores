@@ -36,7 +36,6 @@
 
             var values = SetModelRows(moveLog);
 
-
             this.reportingHelper.AddResultsToModel(model, values, CalculationValueModelType.Quantity, true);
 
             return model;

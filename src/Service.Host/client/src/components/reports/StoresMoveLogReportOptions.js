@@ -21,7 +21,6 @@ export default function StoresMoveLogReportOptions({
     });
 
     const handleFieldChange = (propertyName, newValue) => {
-        console.log(propertyName);
         setReportOptions({ ...reportOptions, [propertyName]: newValue });
     };
 

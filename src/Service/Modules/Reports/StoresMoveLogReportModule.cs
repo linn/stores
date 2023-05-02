@@ -19,8 +19,6 @@
             this.Get("/inventory/reports/stores-move-log", _ => this.GetOptions());
             this.Get("/inventory/reports/stores-move-log/report", _ => this.GetReport());
             this.Get("/inventory/reports/stores-move-log/export", _ => this.GetExport());
-
-            // http://localhost:3000/inventory/reports/stores-move-log/report
         }
 
         private object GetOptions()
