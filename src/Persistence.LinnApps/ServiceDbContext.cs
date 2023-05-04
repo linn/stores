@@ -241,7 +241,7 @@
 
         public DbQuery<Loan> Loans { get; set; }
 
-        public DbQuery<StockTriggerLevel> StockTriggerLevels { get; set; }
+        public DbSet<StockTriggerLevel> StockTriggerLevels { get; set; }
 
         public DbSet<PurchaseLedger> PurchaseLedgers { get; set; }
 

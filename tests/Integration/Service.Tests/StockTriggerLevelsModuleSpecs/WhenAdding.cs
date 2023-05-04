@@ -1,7 +1,8 @@
 ﻿namespace Linn.Stores.Service.Tests.StockTriggerLevelsModuleSpecs
 {
-    using FluentAssertions;
+    using System.Collections.Generic;
 
+    using FluentAssertions;
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Resources;
@@ -12,7 +13,6 @@
     using NSubstitute;
 
     using NUnit.Framework;
-    using System.Collections.Generic;
 
     public class WhenAdding : ContextBase
     {
@@ -22,25 +22,25 @@
         public void SetUp()
         {
             this.requestResource = new StockTriggerLevel
-            {
-                                           PartNumber = "PART",
-                                           Id = 1,
-                                           KanbanSize = 1,
-                                           LocationId = 1,
-                                           MaxCapacity = 1,
-                                           PalletNumber = 1,
-                                           TriggerLevel = 1
-            };
+                                        {
+                                            PartNumber = "PART",
+                                            Id = 1,
+                                            KanbanSize = 1,
+                                            LocationId = 1,
+                                            MaxCapacity = 1,
+                                            PalletNumber = 1,
+                                            TriggerLevel = 1
+                                        };
             var stockTriggerLevel = new StockTriggerLevel
-            {
-                                           PartNumber = "PART",
-                                           Id = 1,
-                                           KanbanSize = 1,
-                                           LocationId = 1,
-                                           MaxCapacity = 1,
-                                           PalletNumber = 1,
-                                           TriggerLevel = 1
-            };
+                                        { 
+                                            PartNumber = "PART",
+                                            Id = 1,
+                                            KanbanSize = 1,
+                                            LocationId = 1,
+                                            MaxCapacity = 1,
+                                            PalletNumber = 1,
+                                            TriggerLevel = 1
+                                        };
 
             this.AuthorisationService.HasPermissionFor("stock-trigger-level.create", Arg.Any<IEnumerable<string>>()).Returns(true);
 

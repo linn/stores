@@ -11,7 +11,6 @@
 
     public class StockTriggerLevelsRepository : IRepository<StockTriggerLevel, int>
     {
-
         private readonly ServiceDbContext serviceDbContext;
 
         public StockTriggerLevelsRepository(ServiceDbContext serviceDbContext)
@@ -31,22 +30,23 @@
 
         public IQueryable<StockTriggerLevel> FindAll()
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.StockTriggerLevels.AsNoTracking();
         }
 
         public StockTriggerLevel FindById(int key)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.StockTriggerLevels.Where(stockTriggerLevels => stockTriggerLevels.LocationId == key)
+                .ToList().FirstOrDefault();
         }
 
         public void Add(StockTriggerLevel entity)
         {
-            throw new NotImplementedException();
+            this.serviceDbContext.StockTriggerLevels.Add(entity);
         }
 
         public void Remove(StockTriggerLevel entity)
         {
-            throw new NotImplementedException();
+            this.serviceDbContext.StockTriggerLevels.Remove(entity);
         }
     }
 }

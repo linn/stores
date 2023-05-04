@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Service.Tests.StockTriggerLevelsModuleSpecs
 {
+    using System.Collections.Generic;
     using FluentAssertions;
 
     using Linn.Common.Facade;
@@ -18,6 +19,7 @@
         [SetUp]
         public void SetUp()
         {
+            this.AuthorisationService.HasPermissionFor("stock-trigger-level.create", Arg.Any<IEnumerable<string>>()).Returns(true);
             this.StockTriggerLevelsFacadeService.DeleteStockTriggerLevel(Arg.Any<int>())
                 .Returns(new SuccessResult<StockTriggerLevel>(new StockTriggerLevel()
                 {

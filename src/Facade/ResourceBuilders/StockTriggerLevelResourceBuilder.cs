@@ -13,20 +13,21 @@
         public StockTriggerLevelsResource Build(StockTriggerLevel stockTriggerLevel)
         {
             return new StockTriggerLevelsResource
-            {
-                           PartNumber = stockTriggerLevel.PartNumber,
-                           LocationId = stockTriggerLevel.LocationId,
-                           TriggerLevel = stockTriggerLevel.TriggerLevel,
-                           MaxCapacity = stockTriggerLevel.MaxCapacity,
-                           PalletNumber = stockTriggerLevel.PalletNumber,
-                           KanbanSize = stockTriggerLevel.KanbanSize,
-                           Links = this.BuildLinks(stockTriggerLevel).ToArray()
-                       };
+            { 
+                Id = stockTriggerLevel.Id,
+                PartNumber = stockTriggerLevel.PartNumber,
+                LocationId = stockTriggerLevel.LocationId,
+                TriggerLevel = stockTriggerLevel.TriggerLevel,
+                MaxCapacity = stockTriggerLevel.MaxCapacity,
+                PalletNumber = stockTriggerLevel.PalletNumber,
+                KanbanSize = stockTriggerLevel.KanbanSize,
+                Links = this.BuildLinks(stockTriggerLevel).ToArray()
+            };
         }
 
         public string GetLocation(StockTriggerLevel stockTriggerLevel)
         {
-            return $"/inventory/stock-trigger-levels/{stockTriggerLevel.LocationId}";
+            return $"/inventory/stock-trigger-levels/{stockTriggerLevel.Id}";
         }
 
         object IResourceBuilder<StockTriggerLevel>.Build(StockTriggerLevel stockTriggerLevel) => this.Build(stockTriggerLevel);

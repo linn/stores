@@ -23,14 +23,26 @@
         public void SetUp()
         {
             this.requestResource = new StockTriggerLevelsResource
-            {
-                PartNumber = "PART",
-                LocationId = 1
-            };
+                                       {
+                                           PartNumber = "PART",
+                                           Id = 1,
+                                           KanbanSize = 1,
+                                           LocationId = 1,
+                                           MaxCapacity = 1,
+                                           PalletNumber = 1,
+                                           TriggerLevel = 1
+                        };
+
             var stockTriggerLevel = new StockTriggerLevel
-            {
-                PartNumber = "UPDATED PART", LocationId = 1
-            };
+                                        {
+                                            PartNumber = "PART",
+                                            Id = 1,
+                                            KanbanSize = 1,
+                                            LocationId = 1,
+                                            MaxCapacity = 1,
+                                            PalletNumber = 1,
+                                            TriggerLevel = 1
+                                        };
 
             this.AuthorisationService.HasPermissionFor("stock-trigger-level.update", Arg.Any<IEnumerable<string>>()).Returns(true);
 
@@ -58,7 +70,7 @@
         {
             this.StockTriggerLevelsFacadeService
                 .Received()
-                .Update(1, Arg.Is<StockTriggerLevelsResource>(r => r.LocationId == this.requestResource.LocationId));
+                .Update(1, Arg.Is<StockTriggerLevelsResource>(r => r.Id == this.requestResource.Id));
         }
 
         [Test]

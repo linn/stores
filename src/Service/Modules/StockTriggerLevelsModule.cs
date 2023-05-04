@@ -1,22 +1,14 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-
     using Linn.Common.Authorisation;
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
-    using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
-    using Linn.Stores.Resources.Requisitions;
-    using Linn.Stores.Resources.StockLocators;
     using Linn.Stores.Service.Extensions;
     using Linn.Stores.Service.Models;
-
-    using Microsoft.AspNetCore.Http;
 
     using Nancy;
     using Nancy.ModelBinding;
@@ -92,6 +84,14 @@
 
         private object DeleteStockTriggerLevel(int id)
         {
+            if (!this.authorisationService.HasPermissionFor(
+                    AuthorisedAction.CreateStockTriggerLevel,
+                    this.Context.CurrentUser.GetPrivileges()))
+            {
+                return new UnauthorisedResult<StockTriggerLevel>(
+                    "You are not authorised to create stock trigger levels");
+            }
+
             return this.Negotiate.WithModel(this.stockTriggerLevelsFacadeService.DeleteStockTriggerLevel(id));
         }
     }

@@ -43,7 +43,6 @@
 
         protected IRepository<StockTriggerLevel, int> TriggerLevelRepository { get; private set; }
 
-
         [SetUp]
         public void SetUpContext()
         {

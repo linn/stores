@@ -19,7 +19,15 @@
         [SetUp]
         public void SetUp()
         {
-            this.stockTriggerLevel1 = new StockTriggerLevel { PalletNumber = 123, PartNumber = "SAMPLE PART", TriggerLevel = 1, LocationId = 35, KanbanSize = 1, MaxCapacity = 1 };
+            this.stockTriggerLevel1 = new StockTriggerLevel 
+                                          { 
+                                              PalletNumber = 123, 
+                                              PartNumber = "SAMPLE PART", 
+                                              TriggerLevel = 1, 
+                                              LocationId = 35, 
+                                              KanbanSize = 1, 
+                                              MaxCapacity = 1
+                                          };
 
             this.StockTriggerLevelsFacadeService.GetById(Arg.Any<int>())
                 .Returns(new SuccessResult<StockTriggerLevel>(this.stockTriggerLevel1));
