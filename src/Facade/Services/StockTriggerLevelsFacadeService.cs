@@ -1,10 +1,8 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
-    using System.Runtime.InteropServices.ComTypes;
 
     using Linn.Common.Facade;
     using Linn.Common.Logging;
@@ -44,12 +42,15 @@
             var message =
                 $"StockTriggerLevel ID : {toDelete.Id}. "
                 + $"LocationID : {toDelete.LocationId}. "
+                + $"Part Number : {toDelete.PartNumber}. "
                 + $"has been deleted by user : {userNumber}.";
 
             this.logger.Write(
                 LoggingLevel.Debug,
                 Enumerable.Empty<LoggingProperty>(),
                 $"{message}");
+
+            this.transactionManager.Commit();
 
             return new SuccessResult<StockTriggerLevel>(toDelete);
         }
