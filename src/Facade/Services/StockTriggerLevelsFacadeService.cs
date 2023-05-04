@@ -45,10 +45,7 @@
                 + $"Part Number : {toDelete.PartNumber}. "
                 + $"has been deleted by user : {userNumber}.";
 
-            this.logger.Write(
-                LoggingLevel.Debug,
-                Enumerable.Empty<LoggingProperty>(),
-                $"{message}");
+            this.logger.Debug($"{message}");
 
             this.transactionManager.Commit();
 
@@ -59,7 +56,7 @@
         {
             var newStockTriggerLevel = new StockTriggerLevel 
                                            {
-                                               Id = this.databaseService.GetNextVal("STL_ID"),
+                                               Id = this.databaseService.GetNextVal("STL_SEQ"),
                                                LocationId = resource.LocationId,
                                                TriggerLevel = resource.TriggerLevel,
                                                PartNumber = resource.PartNumber,
@@ -75,7 +72,6 @@
             StockTriggerLevel entity,
             StockTriggerLevelsResource updateResource)
         {
-            entity.Id = updateResource.Id;
             entity.LocationId = updateResource.LocationId;
             entity.TriggerLevel = updateResource.TriggerLevel;
             entity.PartNumber = updateResource.PartNumber;
