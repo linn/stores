@@ -43,17 +43,16 @@
                     with.ResponseProcessor<StockTriggerLevelsResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>
-                        {
-                            var claims = new List<Claim>
+                            {
+                                var claims = new List<Claim>
                                                  {
-                                                         new Claim(ClaimTypes.Role, "employee"),
-                                                         new Claim(ClaimTypes.NameIdentifier, "test-user")
+                                                     new Claim("employee", "employees/123"),
+                                                     new Claim(ClaimTypes.NameIdentifier, "test-user")
                                                  };
+                                var user = new ClaimsIdentity(claims, "jwt");
 
-                            var user = new ClaimsIdentity(claims, "jwt");
-
-                            context.CurrentUser = new ClaimsPrincipal(user);
-                        });
+                                context.CurrentUser = new ClaimsPrincipal(user);
+                            });
                 });
 
             this.Browser = new Browser(bootstrapper);

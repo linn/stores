@@ -6,6 +6,6 @@
 
     public interface IStockTriggerLevelsFacadeService : IFacadeService<StockTriggerLevel, int, StockTriggerLevelsResource, StockTriggerLevelsResource>
     {
-        IResult<StockTriggerLevel> DeleteStockTriggerLevel(int id);
+        IResult<StockTriggerLevel> DeleteStockTriggerLevel(int id, int userNumber);
     }
 }

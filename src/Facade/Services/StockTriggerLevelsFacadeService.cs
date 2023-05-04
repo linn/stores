@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Linq.Expressions;
     using System.Runtime.InteropServices.ComTypes;
 
@@ -35,10 +36,20 @@
             this.logger = logger;
         }
 
-        public IResult<StockTriggerLevel> DeleteStockTriggerLevel(int id)
+        public IResult<StockTriggerLevel> DeleteStockTriggerLevel(int id, int userNumber)
         {
             var toDelete = this.repository.FindBy(s => s.Id == id);
             this.repository.Remove(toDelete);
+
+            var message =
+                $"StockTriggerLevel ID : {toDelete.Id}. "
+                + $"LocationID : {toDelete.LocationId}. "
+                + $"has been deleted by user : {userNumber}.";
+
+            this.logger.Write(
+                LoggingLevel.Debug,
+                Enumerable.Empty<LoggingProperty>(),
+                $"{message}");
 
             return new SuccessResult<StockTriggerLevel>(toDelete);
         }

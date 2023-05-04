@@ -1,11 +1,14 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System.Linq;
+
     using Linn.Common.Authorisation;
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
+    using Linn.Stores.Resources.Parts;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Service.Extensions;
     using Linn.Stores.Service.Models;
@@ -92,7 +95,9 @@
                     "You are not authorised to create stock trigger levels");
             }
 
-            return this.Negotiate.WithModel(this.stockTriggerLevelsFacadeService.DeleteStockTriggerLevel(id));
+            var userNumber = int.Parse(this.Context.CurrentUser.GetEmployeeUri().Split("/").Last());
+
+            return this.Negotiate.WithModel(this.stockTriggerLevelsFacadeService.DeleteStockTriggerLevel(id, userNumber));
         }
     }
 }

@@ -20,7 +20,7 @@
         public void SetUp()
         {
             this.AuthorisationService.HasPermissionFor("stock-trigger-level.create", Arg.Any<IEnumerable<string>>()).Returns(true);
-            this.StockTriggerLevelsFacadeService.DeleteStockTriggerLevel(Arg.Any<int>())
+            this.StockTriggerLevelsFacadeService.DeleteStockTriggerLevel(Arg.Any<int>(), 123)
                 .Returns(new SuccessResult<StockTriggerLevel>(new StockTriggerLevel()
                 {
                     LocationId = 1
@@ -42,7 +42,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.StockTriggerLevelsFacadeService.Received().DeleteStockTriggerLevel(Arg.Any<int>());
+            this.StockTriggerLevelsFacadeService.Received().DeleteStockTriggerLevel(Arg.Any<int>(), 123);
         }
 
         [Test]
