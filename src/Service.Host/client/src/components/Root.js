@@ -61,6 +61,8 @@ import EuCreditInvoicesReport from '../containers/reports/EuCreditInvoicesReport
 import WhatToWandReprint from '../containers/WhatToWandReprint';
 import TriggerLevelsForAStoragePlaceReport from '../containers/reports/TriggerLevelsForAStoragePlaceReport';
 import BahnhofKoenig from '../containers/BahnofKoenig';
+import StoresMoveLogReport from '../containers/reports/StoresMoveLogReport';
+import StoresMoveLogReportOptions from '../containers/reports/StoresMoveLogReportOptions';
 
 const Root = ({ store }) => (
     <div>
@@ -362,6 +364,16 @@ const Root = ({ store }) => (
                                         component={TriggerLevelsForAStoragePlaceReport}
                                     />
                                     <Route exact path="/logistics/bk" component={BahnhofKoenig} />
+                                    <Route
+                                        exact
+                                        path="/inventory/reports/stores-move-log"
+                                        component={StoresMoveLogReportOptions}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/reports/stores-move-log/report"
+                                        component={StoresMoveLogReport}
+                                    />
                                     <Route component={NotFoundPage} />
                                 </Switch>
                             </div>

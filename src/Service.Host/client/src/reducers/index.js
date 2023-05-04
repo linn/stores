@@ -140,6 +140,7 @@ import triggerLevelsForAStoragePlaceReport from './triggerLevelsForAStoragePlace
 import bomStandardPrices from './bomStandardPrices';
 import warehouseTask from './warehouseTask';
 import warehousePallet from './warehousePallet';
+import storesMoveLogReport from './storesMoveLogReport';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -254,6 +255,7 @@ const rootReducer = history =>
         storagePlace,
         storagePlaces,
         storagePlaceAuditReport,
+        storesMoveLogReport,
         suppliers,
         suppliersApprovedCarrier,
         tpkTransferStock,
