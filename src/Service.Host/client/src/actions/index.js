@@ -381,3 +381,7 @@ export const bomStandardPricesActionTypes = makeActionTypes(itemTypes.bomStandar
 export const warehouseTaskActionTypes = makeActionTypes(itemTypes.warehouseTask.actionType);
 
 export const warehousePalletActionTypes = makeActionTypes(itemTypes.warehousePallet.actionType);
+
+export const storesMoveLogReportActionTypes = makeReportActionTypes(
+    reportTypes.storesMoveLogReport.actionType
+);
