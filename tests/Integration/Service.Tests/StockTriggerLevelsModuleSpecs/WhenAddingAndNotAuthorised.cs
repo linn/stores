@@ -1,7 +1,5 @@
 ﻿namespace Linn.Stores.Service.Tests.StockTriggerLevelsModuleSpecs
 {
-    using System.Collections.Generic;
-
     using FluentAssertions;
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.StockLocators;
