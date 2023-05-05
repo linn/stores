@@ -52,7 +52,7 @@
                     AuthorisedAction.CreateStockTriggerLevel,
                     this.Context.CurrentUser.GetPrivileges()))
             {
-                return new UnauthorisedResult<StockTriggerLevel>(
+                return new BadRequestResult<StockTriggerLevel>(
                     "You are not authorised to create stock trigger levels");
             }
 
@@ -69,7 +69,7 @@
                     AuthorisedAction.UpdateStockTriggerLevel,
                     this.Context.CurrentUser.GetPrivileges()))
             {
-                return new UnauthorisedResult<StockTriggerLevel>(
+                return new BadRequestResult<StockTriggerLevel>(
                     "You are not authorised to update stock trigger levels");
             }
             
@@ -91,7 +91,7 @@
                     AuthorisedAction.CreateStockTriggerLevel,
                     this.Context.CurrentUser.GetPrivileges()))
             {
-                return new UnauthorisedResult<StockTriggerLevel>(
+                return new BadRequestResult<StockTriggerLevel>(
                     "You are not authorised to create stock trigger levels");
             }
 

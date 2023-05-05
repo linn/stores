@@ -4,6 +4,7 @@
 
     using FluentAssertions;
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Resources;
 
@@ -42,7 +43,7 @@
                                             TriggerLevel = 1
                                         };
 
-            this.AuthorisationService.HasPermissionFor("stock-trigger-level.create", Arg.Any<IEnumerable<string>>()).Returns(true);
+            this.AuthorisationService.HasPermissionFor(AuthorisedAction.CreateStockTriggerLevel, Arg.Any<IEnumerable<string>>()).Returns(true);
 
             this.StockTriggerLevelsFacadeService.Add(Arg.Any<StockTriggerLevelsResource>())
                 .Returns(new SuccessResult<StockTriggerLevel>(stockTriggerLevel));

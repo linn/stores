@@ -1,11 +1,9 @@
 ﻿namespace Linn.Stores.Facade.Tests.StockTriggerLevelsServiceTests
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq.Expressions;
 
     using Linn.Common.Logging;
-    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
     using NSubstitute;
@@ -14,22 +12,16 @@
 
     public class WhenDeletingLogMessage : ContextBase
     {
-        private readonly IEnumerable<string> privileges = new[] 
-                                                              { 
-                                                                  AuthorisedAction.CreateStockTriggerLevel,
-                                                                  AuthorisedAction.UpdateStockTriggerLevel
-                                                              };
-
         private readonly StockTriggerLevel toDelete = new StockTriggerLevel
-        {
-            PartNumber = "PART",
-            Id = 1,
-            KanbanSize = 1,
-            LocationId = 1,
-            MaxCapacity = 1,
-            PalletNumber = 1,
-            TriggerLevel = 1
-        };
+                                                          {
+                                                              PartNumber = "PART",
+                                                              Id = 1,
+                                                              KanbanSize = 1,
+                                                              LocationId = 1,
+                                                              MaxCapacity = 1,
+                                                              PalletNumber = 1,
+                                                              TriggerLevel = 1
+                                                          };
 
         [SetUp]
 
