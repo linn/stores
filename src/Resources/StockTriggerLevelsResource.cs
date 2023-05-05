@@ -1,6 +1,8 @@
-﻿namespace Linn.Stores.Domain.LinnApps.StockLocators
+﻿namespace Linn.Stores.Resources
 {
-    public class StockTriggerLevel
+    using Linn.Common.Resources;
+
+    public class StockTriggerLevelsResource : HypermediaResource
     {
         public int Id { get; set; }
 

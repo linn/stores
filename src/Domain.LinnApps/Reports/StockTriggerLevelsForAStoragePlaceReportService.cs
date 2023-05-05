@@ -12,13 +12,13 @@
     {
         private readonly IQueryRepository<StoragePlace> storagePlaces;
 
-        private readonly IQueryRepository<StockTriggerLevel> triggerLevels;
+        private readonly IRepository<StockTriggerLevel, int> triggerLevels;
 
         private readonly IReportingHelper reportingHelper;
 
         public StockTriggerLevelsForAStoragePlaceReportService(
             IQueryRepository<StoragePlace> storagePlaces,
-            IQueryRepository<StockTriggerLevel> triggerLevels,
+            IRepository<StockTriggerLevel, int> triggerLevels,
             IReportingHelper reportingHelper)
         {
             this.storagePlaces = storagePlaces;

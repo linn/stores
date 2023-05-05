@@ -241,7 +241,7 @@
 
         public DbQuery<Loan> Loans { get; set; }
 
-        public DbQuery<StockTriggerLevel> StockTriggerLevels { get; set; }
+        public DbSet<StockTriggerLevel> StockTriggerLevels { get; set; }
 
         public DbSet<PurchaseLedger> PurchaseLedgers { get; set; }
 
@@ -2114,7 +2114,9 @@
 
         private void BuildStockTriggerLevels(ModelBuilder builder)
         {
-            var e = builder.Query<StockTriggerLevel>().ToView("STOCK_TRIGGER_LEVELS");
+            var e = builder.Entity<StockTriggerLevel>().ToTable("STOCK_TRIGGER_LEVELS");
+            e.HasKey(p => p.Id);
+            e.Property(l => l.Id).HasColumnName("STL_ID");
             e.Property(l => l.LocationId).HasColumnName("LOCATION_ID");
             e.Property(l => l.PartNumber).HasColumnName("PART_NUMBER");
             e.Property(l => l.MaxCapacity).HasColumnName("MAXIMUM_CAPACITY");

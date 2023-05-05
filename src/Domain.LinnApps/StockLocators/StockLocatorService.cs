@@ -33,7 +33,7 @@
 
         private readonly IRepository<ReqMove, ReqMoveKey> reqMoveRepository;
 
-        private readonly IQueryRepository<StockTriggerLevel> triggerLevelRepository;
+        private readonly IRepository<StockTriggerLevel, int> triggerLevelRepository;
 
         public StockLocatorService(
             IFilterByWildcardRepository<StockLocator, int> stockLocatorRepository,
@@ -46,7 +46,7 @@
             IQueryRepository<StockLocatorPrices> stockLocatorView,
             IPartRepository partRepository,
             IRepository<ReqMove, ReqMoveKey> reqMoveRepository,
-            IQueryRepository<StockTriggerLevel> triggerLevelRepository)
+            IRepository<StockTriggerLevel, int> triggerLevelRepository)
         {
             this.stockLocatorRepository = stockLocatorRepository;
             this.palletRepository = palletRepository;

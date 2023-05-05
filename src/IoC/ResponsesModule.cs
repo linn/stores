@@ -236,6 +236,8 @@
             builder.RegisterType<ValidateRsnResultResourceBuilder>().As<IResourceBuilder<ValidateRsnResult>>();
             builder.RegisterType<WhatToWandConsignmentResourceBuilder>().As<IResourceBuilder<WhatToWandConsignment>>();
             builder.RegisterType<WarehouseLocationResourceBuilder>().As<IResourceBuilder<WarehouseLocation>>();
+            builder.RegisterType<StockTriggerLevelResourceBuilder>().As<IResourceBuilder<StockTriggerLevel>>();
+            builder.RegisterType<StockTriggerLevelsResourceBuilder>().As<IResourceBuilder<IEnumerable<StockTriggerLevel>>>();
         }
     }
 }

@@ -188,6 +188,7 @@
             builder.RegisterType<StockTriggerLevelsForAStoragePlaceFacadeService>()
                 .As<IStockTriggerLevelsForAStoragePlaceFacadeService>();
             builder.RegisterType<StoresMoveLogReportFacadeService>().As<IStoresMoveLogReportFacadeService>();
+            builder.RegisterType<StockTriggerLevelsFacadeService>().As<IStockTriggerLevelsFacadeService>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
