@@ -385,3 +385,5 @@ export const warehousePalletActionTypes = makeActionTypes(itemTypes.warehousePal
 export const storesMoveLogReportActionTypes = makeReportActionTypes(
     reportTypes.storesMoveLogReport.actionType
 );
+
+export const stockTriggerLevelsActionTypes = makeActionTypes(itemTypes.stockTriggerLevels.actionType);

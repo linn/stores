@@ -141,6 +141,7 @@ import bomStandardPrices from './bomStandardPrices';
 import warehouseTask from './warehouseTask';
 import warehousePallet from './warehousePallet';
 import storesMoveLogReport from './storesMoveLogReport';
+import stockTriggerLevels from './stockTriggerLevels';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -251,6 +252,7 @@ const rootReducer = history =>
         stockMoves,
         stockPools,
         stockQuantities,
+        stockTriggerLevels,
         storageLocations,
         storagePlace,
         storagePlaces,
