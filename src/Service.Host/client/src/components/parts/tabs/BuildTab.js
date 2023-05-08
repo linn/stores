@@ -24,7 +24,8 @@ function BuildTab({
     safetyCriticalPart,
     plannedSurplus,
     decrementRules,
-    assemblyTechnologies
+    assemblyTechnologies,
+    partNumber
 }) {
     return (
         <Grid container spacing={3}>
@@ -140,13 +141,19 @@ function BuildTab({
             </Grid>
             <Grid item xs={2}>
                 <LinkButton
-                    to="/parts/change-bom-type"
+                    to={`/purchasing/change-bom-type?partNumber=${partNumber}`}
                     text="Change Bom Type"
-                    tooltip="Coming soon - still on Oracle Forms"
-                    disabled
+                    disabled={creating()}
                 />
             </Grid>
-            <Grid item xs={2} />
+            <Grid item xs={2}>
+                {bomId && (
+                    <LinkButton
+                        to={`/purchasing/boms/bom-utility?bomName=${partNumber}`}
+                        text="View Bom"
+                    />
+                )}
+            </Grid>
             <Grid item xs={4}>
                 <InputField
                     fullWidth
@@ -227,7 +234,8 @@ BuildTab.propTypes = {
     searchSernosSequences: PropTypes.func.isRequired,
     clearSernosSequencesSearch: PropTypes.func.isRequired,
     decrementRules: PropTypes.arrayOf(PropTypes.shape({})),
-    assemblyTechnologies: PropTypes.arrayOf(PropTypes.shape({}))
+    assemblyTechnologies: PropTypes.arrayOf(PropTypes.shape({})),
+    partNumber: PropTypes.string
 };
 
 BuildTab.defaultProps = {
@@ -246,7 +254,8 @@ BuildTab.defaultProps = {
     sernosSequencesSearchResults: [],
     sernosSequencesSearchLoading: false,
     decrementRules: [],
-    assemblyTechnologies: []
+    assemblyTechnologies: [],
+    partNumber: null
 };
 
 export default BuildTab;
