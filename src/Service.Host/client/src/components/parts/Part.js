@@ -421,6 +421,7 @@ function Part({
                                     drawingReference={state.part.drawingReference}
                                     safetyCriticalPart={state.part.safetyCriticalPart}
                                     plannedSurplus={state.part.plannedSurplus}
+                                    partNumber={state.part?.partNumber}
                                 />
                             )}
                             {tab === 2 && (
