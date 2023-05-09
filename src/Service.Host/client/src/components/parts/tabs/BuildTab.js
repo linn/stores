@@ -143,6 +143,7 @@ function BuildTab({
                 <LinkButton
                     to={`/purchasing/bom-type-change?partNumber=${partNumber}`}
                     text="Change Bom Type"
+                    external
                     disabled={creating()}
                 />
             </Grid>
@@ -150,6 +151,7 @@ function BuildTab({
                 {bomId && (
                     <LinkButton
                         to={`/purchasing/boms/bom-utility?bomName=${partNumber}`}
+                        external
                         text="View Bom"
                     />
                 )}
