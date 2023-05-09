@@ -141,7 +141,7 @@ function BuildTab({
             </Grid>
             <Grid item xs={2}>
                 <LinkButton
-                    to={`/purchasing/change-bom-type?partNumber=${partNumber}`}
+                    to={`/purchasing/bom-type-change?partNumber=${partNumber}`}
                     text="Change Bom Type"
                     disabled={creating()}
                 />
