@@ -63,6 +63,7 @@ import TriggerLevelsForAStoragePlaceReport from '../containers/reports/TriggerLe
 import BahnhofKoenig from '../containers/BahnofKoenig';
 import StoresMoveLogReport from '../containers/reports/StoresMoveLogReport';
 import StoresMoveLogReportOptions from '../containers/reports/StoresMoveLogReportOptions';
+import StockTriggerLevelsUtility from '../containers/stockTriggerLevelsUtility/StockTriggerLevelsUtility';
 
 const Root = ({ store }) => (
     <div>
@@ -373,6 +374,21 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/reports/stores-move-log/report"
                                         component={StoresMoveLogReport}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/reports/stores-move-log/report"
+                                        component={StoresMoveLogReport}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/stock-trigger-levels/"
+                                        component={StockTriggerLevelsUtility}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/stock-trigger-levels/:id"
+                                        component={StockTriggerLevelsUtility}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>

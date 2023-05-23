@@ -28,9 +28,9 @@
             this.stockTriggerLevelsFacadeService = stockTriggerLevelsFacadeService;
             this.authorisationService = authorisationService;
 
-            this.Post("/inventory/stock-trigger-levels/create", _ => this.CreateStockTriggerLevel());
+            this.Post("/inventory/stock-trigger-levels/", _ => this.CreateStockTriggerLevel());
             this.Get("/inventory/stock-trigger-levels/{id:int}", parameters => this.GetStockTriggerLevel(parameters.id));
-            this.Get("/inventory/stock-trigger-levels", _ => this.SearchStockTriggerLevels());
+            this.Get("/inventory/stock-trigger-levels/", _ => this.SearchStockTriggerLevels());
             this.Put("/inventory/stock-trigger-levels/{id:int}", parameters => this.UpdateStockTriggerLevel(parameters.id));
             this.Delete("/inventory/stock-trigger-levels/{id:int}", parameters => this.DeleteStockTriggerLevel(parameters.id));
         }

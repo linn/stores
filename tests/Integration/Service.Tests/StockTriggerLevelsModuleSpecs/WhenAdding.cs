@@ -49,7 +49,7 @@
                 .Returns(new SuccessResult<StockTriggerLevel>(stockTriggerLevel));
 
             this.Response = this.Browser.Post(
-                "/inventory/stock-trigger-levels/create",
+                "/inventory/stock-trigger-levels/",
                 with =>
                     {
                         with.Header("Accept", "application/json");
