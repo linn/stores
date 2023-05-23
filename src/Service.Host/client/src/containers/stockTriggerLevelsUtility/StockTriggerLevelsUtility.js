@@ -19,7 +19,7 @@ const mapStateToProps = (state, { location }) => ({
     partsLoading: partsSelectors.getSearchLoading(state),
     stockTriggerLevelsSearchResults: stockTriggerLevelsSelectors.getItems(state).map(i => ({
         ...i,
-        name: i.locationId,
+        name: i.id,
         href: i.links.find(l => l.rel === 'stock-trigger-levels')?.href
     })),
     stockTriggerLevelsSearchLoading: stockTriggerLevelsSelectors.getLoading(state),

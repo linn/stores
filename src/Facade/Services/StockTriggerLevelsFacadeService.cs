@@ -56,7 +56,7 @@
         {
             var newStockTriggerLevel = new StockTriggerLevel 
                                            {
-                                               Id = this.databaseService.GetNextVal("STL_SEQ"),
+                                               Id = this.databaseService.GetIdSequence("STL_SEQ"),
                                                LocationId = resource.LocationId,
                                                TriggerLevel = resource.TriggerLevel,
                                                PartNumber = resource.PartNumber,

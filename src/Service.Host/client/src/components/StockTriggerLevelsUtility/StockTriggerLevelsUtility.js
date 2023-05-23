@@ -74,7 +74,6 @@ function StockTriggerLevelsUtility({
         model => {
             if (Object.keys(model).length > 0) {
                 const key = Object.keys(model)[0];
-
                 const field = Object.keys(model[key])?.[0];
                 const { value } = model[key][field];
                 handleFieldChange(field, key, value);
@@ -207,10 +206,8 @@ function StockTriggerLevelsUtility({
                         .filter(x => x.edited && x.isNewRow)
                         .forEach(s => {
                             const body = s;
-                            if (!body.partNumber) {
-                                body.partNumber = stockTriggerLevel.find(
-                                    l => l.partNumber
-                                ).partNumber;
+                            if (!body.id) {
+                                body.id = stockTriggerLevel.find(l => l.id).id;
                             }
                             createStockTriggerLevel(body);
                         });

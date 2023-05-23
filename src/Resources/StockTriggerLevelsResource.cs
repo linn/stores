@@ -8,7 +8,7 @@
 
         public string PartNumber { get; set; }
 
-        public int LocationId { get; set; }
+        public int? LocationId { get; set; }
 
         public decimal? TriggerLevel { get; set; }
 
