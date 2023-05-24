@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Persistence.LinnApps.Repositories
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
 
@@ -47,6 +48,33 @@
         public void Remove(StockTriggerLevel entity)
         {
             this.serviceDbContext.StockTriggerLevels.Remove(entity);
+        }
+
+        public IEnumerable<StockTriggerLevel> SearchStockTriggerLevelsWithWildCard(
+            string partNumberSearchTerm,
+            string storagePlaceSearchTerm,
+            bool newestFirst = false,
+            int? limit = null)
+        {
+            var result = this.serviceDbContext.StockTriggerLevels.AsNoTracking().Where(
+                x => (string.IsNullOrEmpty(partNumberSearchTerm) || EF.Functions.Like(
+                          x.PartNumber,
+                          $"{partNumberSearchTerm.Replace("*", "%")}"))
+                     && (string.IsNullOrEmpty(storagePlaceSearchTerm) || EF.Functions.Like(
+                             x.PalletNumber.ToString(),
+                             $"{storagePlaceSearchTerm.Replace("*", "%")}")));
+
+            if (newestFirst)
+            {
+                result = result.OrderByDescending(x => x.Id);
+            }
+
+            if (limit.HasValue)
+            {
+                result = result.Take((int)limit);
+            }
+
+            return result;
         }
     }
 }

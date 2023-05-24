@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
 
@@ -8,6 +9,7 @@
     using Linn.Common.Logging;
     using Linn.Common.Persistence;
     using Linn.Common.Proxy.LinnApps;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
     using Linn.Stores.Resources;
@@ -15,6 +17,8 @@
     public class StockTriggerLevelsFacadeService : FacadeService<StockTriggerLevel, int, StockTriggerLevelsResource, StockTriggerLevelsResource>, IStockTriggerLevelsFacadeService
     {
         private readonly IRepository<StockTriggerLevel, int> repository;
+
+        private readonly IStockTriggerLevelsRepository stockTriggerLevelsRepository;
 
         private readonly ITransactionManager transactionManager;
 
@@ -52,6 +56,16 @@
             return new SuccessResult<StockTriggerLevel>(toDelete);
         }
 
+        public IResult<IEnumerable<StockTriggerLevel>> SearchStockTriggerLevelsWithWildcard(
+            string partNumberSearch,
+            string storagePlaceSearch)
+        {
+            return new SuccessResult<IEnumerable<StockTriggerLevel>>(
+                this.stockTriggerLevelsRepository.SearchStockTriggerLevelsWithWildCard(
+                    partNumberSearch?.Trim().ToUpper(),
+                    storagePlaceSearch?.Trim().ToUpper()));
+        }
+
         protected override StockTriggerLevel CreateFromResource(StockTriggerLevelsResource resource)
         {
             var newStockTriggerLevel = new StockTriggerLevel 
@@ -82,7 +96,8 @@
 
         protected override Expression<Func<StockTriggerLevel, bool>> SearchExpression(string searchTerm)
         {
-            return imps => imps.LocationId.ToString().Contains(searchTerm);
+            return imps => imps.PalletNumber.ToString().ToUpper().Contains(searchTerm) ||
+                           imps.PartNumber.ToUpper().Contains(searchTerm);
         }
     }
 }
