@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { initialiseOnMount, getItemError } from '@linn-it/linn-form-components-library';
+import { getItemError } from '@linn-it/linn-form-components-library';
 import partsActions from '../../actions/partsActions';
 import partsSelectors from '../../selectors/partsSelectors';
 import StockTriggerLevelsUtility from '../../components/StockTriggerLevelsUtility/StockTriggerLevelsUtility';
@@ -16,21 +16,16 @@ const mapStateToProps = state => ({
         .getSearchItems(state)
         .map(s => ({ ...s, id: s.partNumber, name: s.partNumber })),
     partsLoading: partsSelectors.getSearchLoading(state),
-    stockTriggerLevels: stockTriggerLevelsSelectors.getSearchItems(state),
+    stockTriggerLevels: stockTriggerLevelsSelectors
+        .getSearchItems(state)
+        .map(i => ({ ...i, id: i.id, name: i.palletNumber, description: i.partNumber })),
     stockTriggerLevelsSearchLoading: stockTriggerLevelsSelectors.getLoading(state),
     storagePlaces: storagePlacesSelectors.getSearchItems(state).map(i => ({ ...i, id: i.name })),
     storagePlacesLoading: storagePlacesSelectors.getSearchLoading(state),
     itemError: getItemError(state, itemTypes.stockTriggerLevels.item)
 });
 
-const initialise = props => dispatch => {
-    if (!props.items || props.items.length === 0) {
-        dispatch(stockTriggerLevelsActions.search());
-    }
-};
-
 const mapDispatchToProps = {
-    initialise,
     clearStoragePlacesSearch: storagePlacesActions.clearSearch,
     searchStoragePlaces: storagePlacesActions.search,
     clearPartsSearch: partsActions.clearSearch,
@@ -43,7 +38,4 @@ const mapDispatchToProps = {
     setSnackbarVisible: stockTriggerLevelActions.setSnackbarVisible
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(initialiseOnMount(StockTriggerLevelsUtility));
+export default connect(mapStateToProps, mapDispatchToProps)(StockTriggerLevelsUtility);

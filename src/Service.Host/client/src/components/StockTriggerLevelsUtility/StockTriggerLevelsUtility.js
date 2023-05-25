@@ -31,6 +31,7 @@ function StockTriggerLevelsUtility({
     partsSearchResults,
     partsLoading,
     clearPartsSearch,
+    stockTriggerLevels,
     searchStockTriggerLevels,
     updateStockTriggerLevel,
     createStockTriggerLevel,
@@ -66,6 +67,11 @@ function StockTriggerLevelsUtility({
             }
         }
     }, [items, stockTriggerLevel, prevStockTriggerLevel, options]);
+
+    useEffect(() => {
+        console.log('Test');
+        setStockTriggerLevel(stockTriggerLevels);
+    }, [stockTriggerLevels]);
 
     const handleSelectRows = selected => {
         setStockTriggerLevel(
@@ -250,9 +256,9 @@ function StockTriggerLevelsUtility({
                     <Grid item xs={3}>
                         <InputField
                             fullWidth
-                            value={options.description}
-                            label="Description"
-                            propertyName="description"
+                            value={options.storagePlace}
+                            label="Storage Place"
+                            propertyName="storagePlace"
                             onChange={handleOptionsChange}
                         />
                     </Grid>
@@ -261,12 +267,12 @@ function StockTriggerLevelsUtility({
                             variant="outlined"
                             color="primary"
                             className={classes.button}
-                            onClick={() =>
+                            onClick={() => {
                                 searchStockTriggerLevels(
                                     '',
-                                    `&partNumberSearchTerm=${options.partNumber}&storagePlaceSearchTerm=${options.description}`
-                                )
-                            }
+                                    `&partNumberSearchTerm=${options.partNumber}&storagePlaceSearchTerm=${options.storagePlace}`
+                                );
+                            }}
                         >
                             Go
                         </Button>
@@ -380,6 +386,7 @@ StockTriggerLevelsUtility.propTypes = {
     clearStoragePlacesSearch: PropTypes.func.isRequired,
     searchStoragePlaces: PropTypes.func.isRequired,
     storagePlacesLoading: PropTypes.bool,
+    stockTriggerLevels: PropTypes.arrayOf(PropTypes.shape({})),
     updateStockTriggerLevel: PropTypes.func.isRequired,
     createStockTriggerLevel: PropTypes.func.isRequired,
     deleteStockTriggerLevel: PropTypes.func.isRequired,
@@ -404,6 +411,7 @@ StockTriggerLevelsUtility.defaultProps = {
     partsSearchResults: [],
     storagePlacesLoading: false,
     storagePlaces: [],
+    stockTriggerLevels: [],
     stockTriggerLevelsLoading: false,
     snackbarVisible: false,
     itemError: null
