@@ -16,9 +16,7 @@
 
     public class StockTriggerLevelsFacadeService : FacadeService<StockTriggerLevel, int, StockTriggerLevelsResource, StockTriggerLevelsResource>, IStockTriggerLevelsFacadeService
     {
-        private readonly IRepository<StockTriggerLevel, int> repository;
-
-        private readonly IStockTriggerLevelsRepository stockTriggerLevelsRepository;
+        private readonly IStockTriggerLevelsRepository repository;
 
         private readonly ITransactionManager transactionManager;
 
@@ -27,7 +25,7 @@
         private readonly ILog logger;
 
         public StockTriggerLevelsFacadeService(
-            IRepository<StockTriggerLevel, int> repository, 
+            IStockTriggerLevelsRepository repository,
             ITransactionManager transactionManager,
             IDatabaseService databaseService,
             ILog logger) : base(repository, transactionManager)
@@ -61,7 +59,7 @@
             string storagePlaceSearch)
         {
             return new SuccessResult<IEnumerable<StockTriggerLevel>>(
-                this.stockTriggerLevelsRepository.SearchStockTriggerLevelsWithWildCard(
+                this.repository.SearchStockTriggerLevelsWithWildCard(
                     partNumberSearch?.Trim().ToUpper(),
                     storagePlaceSearch?.Trim().ToUpper()));
         }

@@ -6,19 +6,20 @@
     using Linn.Common.Persistence;
     using Linn.Common.Reporting.Layouts;
     using Linn.Common.Reporting.Models;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
     public class StockTriggerLevelsForAStoragePlaceReportService : IStockTriggerLevelsForAStoragePlaceReportService
     {
         private readonly IQueryRepository<StoragePlace> storagePlaces;
 
-        private readonly IRepository<StockTriggerLevel, int> triggerLevels;
+        private readonly IStockTriggerLevelsRepository triggerLevels;
 
         private readonly IReportingHelper reportingHelper;
 
         public StockTriggerLevelsForAStoragePlaceReportService(
             IQueryRepository<StoragePlace> storagePlaces,
-            IRepository<StockTriggerLevel, int> triggerLevels,
+            IStockTriggerLevelsRepository triggerLevels,
             IReportingHelper reportingHelper)
         {
             this.storagePlaces = storagePlaces;

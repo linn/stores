@@ -4,13 +4,11 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
-
-    using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.StockLocators;
-
     using Microsoft.EntityFrameworkCore;
 
-    public class StockTriggerLevelsRepository : IRepository<StockTriggerLevel, int>
+    public class StockTriggerLevelsRepository : IStockTriggerLevelsRepository
     {
         private readonly ServiceDbContext serviceDbContext;
 

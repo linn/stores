@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import Grid from '@material-ui/core/Grid';
 import {
+    InputField,
     Loading,
     SnackbarMessage,
     ErrorCard,
@@ -11,7 +12,18 @@ import PropTypes from 'prop-types';
 import { DataGrid } from '@mui/x-data-grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import makeStyles from '@material-ui/styles/makeStyles';
 import Page from '../../containers/Page';
+
+const useStyles = makeStyles(theme => ({
+    button: {
+        marginLeft: theme.spacing(1),
+        marginTop: theme.spacing(3)
+    },
+    a: {
+        textDecoration: 'none'
+    }
+}));
 
 function StockTriggerLevelsUtility({
     items,
@@ -19,6 +31,7 @@ function StockTriggerLevelsUtility({
     partsSearchResults,
     partsLoading,
     clearPartsSearch,
+    searchStockTriggerLevels,
     updateStockTriggerLevel,
     createStockTriggerLevel,
     deleteStockTriggerLevel,
@@ -27,17 +40,23 @@ function StockTriggerLevelsUtility({
     clearStoragePlacesSearch,
     searchStoragePlaces,
     storagePlacesLoading,
-    options,
     snackbarVisible,
     setSnackbarVisible,
     itemError,
     history
 }) {
+    const classes = useStyles();
+
     const [prevStockTriggerLevel, setPrevStockTriggerLevel] = useState(null);
     const [stockTriggerLevel, setStockTriggerLevel] = useState([]);
 
-    const [searchResults, setSearchResults] = useState([]);
-    const [hasSearched, setHasSearched] = useState(false);
+    const [options, setOptions] = useState({
+        partNumber: '',
+        storagePlace: ''
+    });
+
+    const handleOptionsChange = (propertyName, newValue) =>
+        setOptions({ ...options, [propertyName]: newValue });
 
     useEffect(() => {
         if (items !== prevStockTriggerLevel) {
@@ -47,12 +66,6 @@ function StockTriggerLevelsUtility({
             }
         }
     }, [items, stockTriggerLevel, prevStockTriggerLevel, options]);
-
-    useEffect(() => {
-        if (hasSearched) {
-            setSearchResults(items);
-        }
-    }, [items, hasSearched]);
 
     const handleSelectRows = selected => {
         setStockTriggerLevel(
@@ -206,8 +219,8 @@ function StockTriggerLevelsUtility({
                         .filter(x => x.edited && x.isNewRow)
                         .forEach(s => {
                             const body = s;
-                            if (!body.id) {
-                                body.id = stockTriggerLevel.find(l => l.id).id;
+                            if (!body.partNumber) {
+                                body.id = stockTriggerLevel.find(l => l.partNumber).id;
                             }
                             createStockTriggerLevel(body);
                         });
@@ -223,28 +236,41 @@ function StockTriggerLevelsUtility({
                 message="Save Successful"
             />
             <Grid container spacing={3}>
-                <Grid item xs={12}>
-                    {stockTriggerLevelsLoading ? (
-                        <Loading />
-                    ) : (
-                        <Typeahead
-                            items={searchResults.slice(0, 10)}
-                            fetchItems={searchTerm => {
-                                setHasSearched(true);
-                                setSearchResults(
-                                    items?.filter(i =>
-                                        i.locationId.includes(searchTerm?.toUpperCase())
-                                    )
-                                );
-                            }}
-                            clearSearch={() => {}}
-                            loading={stockTriggerLevelsLoading}
-                            title="Stock Trigger Levels"
-                            history={history}
-                            minimumSearchTermLength={2}
-                            debounce={1}
+                <Grid container spacing={3}>
+                    <Grid item xs={3}>
+                        <InputField
+                            fullWidth
+                            value={options.partNumber}
+                            label="Part Number"
+                            propertyName="partNumber"
+                            onChange={handleOptionsChange}
+                            helperText="* can be used as a wildcard on all fields"
                         />
-                    )}
+                    </Grid>
+                    <Grid item xs={3}>
+                        <InputField
+                            fullWidth
+                            value={options.description}
+                            label="Description"
+                            propertyName="description"
+                            onChange={handleOptionsChange}
+                        />
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Button
+                            variant="outlined"
+                            color="primary"
+                            className={classes.button}
+                            onClick={() =>
+                                searchStockTriggerLevels(
+                                    '',
+                                    `&partNumberSearchTerm=${options.partNumber}&storagePlaceSearchTerm=${options.description}`
+                                )
+                            }
+                        >
+                            Go
+                        </Button>
+                    </Grid>
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant="subtitle1">
@@ -357,8 +383,8 @@ StockTriggerLevelsUtility.propTypes = {
     updateStockTriggerLevel: PropTypes.func.isRequired,
     createStockTriggerLevel: PropTypes.func.isRequired,
     deleteStockTriggerLevel: PropTypes.func.isRequired,
+    searchStockTriggerLevels: PropTypes.func.isRequired,
     stockTriggerLevelsLoading: PropTypes.bool,
-    options: PropTypes.shape({ partNumber: PropTypes.string }).isRequired,
     snackbarVisible: PropTypes.bool,
     setSnackbarVisible: PropTypes.func.isRequired,
     itemError: PropTypes.shape({

@@ -51,7 +51,7 @@
                     {
                         with.Header("Accept", "application/json");
                         with.Query("partNumberSearchTerm", "P*");
-                        with.Query("StoragePlaceSearchTerm", "*");
+                        with.Query("storagePlaceSearchTerm", "*");
                     }).Result;
         }
 
