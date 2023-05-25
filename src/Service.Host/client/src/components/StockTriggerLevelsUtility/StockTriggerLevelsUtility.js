@@ -49,7 +49,18 @@ function StockTriggerLevelsUtility({
     const classes = useStyles();
 
     const [prevStockTriggerLevel, setPrevStockTriggerLevel] = useState(null);
-    const [stockTriggerLevel, setStockTriggerLevel] = useState([]);
+    const [triggerLevelRows, setStockTriggerLevelRows] = useState([]);
+
+    useEffect(() => {
+        setStockTriggerLevelRows(
+            stockTriggerLevels.map(i => ({
+                ...i,
+                id: i.id,
+                name: i.palletNumber,
+                description: i.partNumber
+            }))
+        );
+    }, [stockTriggerLevels, setStockTriggerLevelRows]);
 
     const [options, setOptions] = useState({
         partNumber: '',
@@ -63,26 +74,21 @@ function StockTriggerLevelsUtility({
         if (items !== prevStockTriggerLevel) {
             if (items) {
                 setPrevStockTriggerLevel(items);
-                setStockTriggerLevel(items);
+                setStockTriggerLevelRows(items);
             }
         }
-    }, [items, stockTriggerLevel, prevStockTriggerLevel, options]);
-
-    useEffect(() => {
-        console.log('Test');
-        setStockTriggerLevel(stockTriggerLevels);
-    }, [stockTriggerLevels]);
+    }, [items, triggerLevelRows, prevStockTriggerLevel, options]);
 
     const handleSelectRows = selected => {
-        setStockTriggerLevel(
-            stockTriggerLevel.map(r =>
+        setStockTriggerLevelRows(
+            triggerLevelRows.map(r =>
                 selected.includes(r.id) ? { ...r, selected: true } : { ...r, selected: false }
             )
         );
     };
 
     const handleFieldChange = useCallback((field, rowId, newValue) => {
-        setStockTriggerLevel(c =>
+        setStockTriggerLevelRows(c =>
             c.map(s =>
                 Number(s.id) === Number(rowId) ? { ...s, [field]: newValue, edited: true } : s
             )
@@ -101,25 +107,18 @@ function StockTriggerLevelsUtility({
         [handleFieldChange]
     );
 
-    const valueGetter = (params, fieldName) => {
-        const value = stockTriggerLevel.find(x => Number(x.id) === Number(params.row.id))?.[
-            fieldName
-        ];
-        return value;
-    };
-
     const addNewRow = () =>
-        setStockTriggerLevel([
-            ...stockTriggerLevel,
+        setStockTriggerLevelRows([
+            ...triggerLevelRows,
             {
                 isNewRow: true,
                 edited: true,
-                id: -stockTriggerLevel.length
+                id: -triggerLevelRows.length
             }
         ]);
 
     const deleteSelectedRows = () => {
-        stockTriggerLevel.filter(r => r.selected).forEach(s => deleteStockTriggerLevel(s.id, s));
+        triggerLevelRows.filter(r => r.selected).forEach(s => deleteStockTriggerLevel(s.id, s));
     };
 
     const columns = [
@@ -128,7 +127,6 @@ function StockTriggerLevelsUtility({
             field: 'storagePlaceName',
             editable: true,
             width: 150,
-            valueGetter: params => valueGetter(params, 'storagePlaceName'),
             renderEditCell: params => (
                 <Typeahead
                     onSelect={newValue => {
@@ -146,7 +144,7 @@ function StockTriggerLevelsUtility({
                     label=""
                     modal
                     items={storagePlaces}
-                    value={valueGetter(params, 'storagePlaceName')}
+                    value={params.row.storagePlaceName}
                     loading={storagePlacesLoading}
                     fetchItems={searchStoragePlaces}
                     links={false}
@@ -160,7 +158,6 @@ function StockTriggerLevelsUtility({
             field: 'partNumber',
             editable: true,
             width: 150,
-            valueGetter: params => valueGetter(params, 'partNumber'),
             renderEditCell: params => (
                 <Typeahead
                     onSelect={newValue => {
@@ -168,7 +165,7 @@ function StockTriggerLevelsUtility({
                     }}
                     modal
                     items={partsSearchResults}
-                    value={valueGetter(params, 'partNumber')}
+                    value={params.row.partNumber}
                     fetchItems={searchParts}
                     links={false}
                     clearSearch={() => clearPartsSearch}
@@ -183,7 +180,6 @@ function StockTriggerLevelsUtility({
             field: 'triggerLevel',
             width: 200,
             type: 'number',
-            valueGetter: params => valueGetter(params, 'triggerLevel'),
             editable: true
         },
         {
@@ -191,7 +187,6 @@ function StockTriggerLevelsUtility({
             field: 'maxCapacity',
             width: 200,
             type: 'number',
-            valueGetter: params => valueGetter(params, 'maxCapacity'),
             editable: true
         },
         {
@@ -199,7 +194,6 @@ function StockTriggerLevelsUtility({
             field: 'kanbanSize',
             width: 200,
             type: 'number',
-            valueGetter: params => valueGetter(params, 'kanbanSize'),
             editable: true
         },
         {
@@ -213,20 +207,20 @@ function StockTriggerLevelsUtility({
         <Grid item xs={12}>
             <SaveBackCancelButtons
                 backClick={() => history.push('/inventory/stock-trigger-levels/')}
-                saveDisabled={!stockTriggerLevel.some(x => x.edited)}
-                cancelClick={() => setStockTriggerLevel(items)}
+                saveDisabled={!triggerLevelRows.some(x => x.edited)}
+                cancelClick={() => setStockTriggerLevelRows(items)}
                 saveClick={() => {
-                    stockTriggerLevel
+                    triggerLevelRows
                         .filter(x => x.edited && !x.isNewRow)
                         .forEach(s => {
                             updateStockTriggerLevel(s.id, s);
                         });
-                    stockTriggerLevel
+                    triggerLevelRows
                         .filter(x => x.edited && x.isNewRow)
                         .forEach(s => {
                             const body = s;
                             if (!body.partNumber) {
-                                body.id = stockTriggerLevel.find(l => l.partNumber).id;
+                                body.id = triggerLevelRows.find(l => l.partNumber).id;
                             }
                             createStockTriggerLevel(body);
                         });
@@ -303,11 +297,11 @@ function StockTriggerLevelsUtility({
                 ) : (
                     <>
                         <Grid item xs={12}>
-                            {stockTriggerLevel && (
+                            {triggerLevelRows && (
                                 <Grid item xs={12}>
                                     <div style={{ width: '100%' }}>
                                         <DataGrid
-                                            rows={stockTriggerLevel}
+                                            rows={triggerLevelRows}
                                             columns={columns}
                                             editMode="cell"
                                             onEditRowsModelChange={handleEditRowsModelChange}
@@ -321,13 +315,13 @@ function StockTriggerLevelsUtility({
                                             onSelectionModelChange={handleSelectRows}
                                             checkboxSelection
                                             isRowSelectable={params =>
-                                                !stockTriggerLevel
+                                                !triggerLevelRows
                                                     .filter(s => s.id !== params.row.id)
                                                     .some(x => x.selected)
                                             }
                                             isCellEditable={params =>
-                                                (!stockTriggerLevel.some(x => x.edited) &&
-                                                    !stockTriggerLevel.some(x => x.selected)) ||
+                                                (!triggerLevelRows.some(x => x.edited) &&
+                                                    !triggerLevelRows.some(x => x.selected)) ||
                                                 params.row.edited
                                             }
                                         />
@@ -340,8 +334,8 @@ function StockTriggerLevelsUtility({
                                 variant="outlined"
                                 color="secondary"
                                 disabled={
-                                    !stockTriggerLevel.some(x => x.selected) ||
-                                    stockTriggerLevel.some(x => x.edited)
+                                    !triggerLevelRows.some(x => x.selected) ||
+                                    triggerLevelRows.some(x => x.edited)
                                 }
                                 onClick={deleteSelectedRows}
                             >
@@ -352,7 +346,7 @@ function StockTriggerLevelsUtility({
                             <Button
                                 onClick={addNewRow}
                                 variant="outlined"
-                                disabled={stockTriggerLevel.some(x => x.edited)}
+                                disabled={triggerLevelRows.some(x => x.edited)}
                             >
                                 Add Row
                             </Button>
