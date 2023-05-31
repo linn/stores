@@ -5,6 +5,7 @@ import {
     Loading,
     SnackbarMessage,
     ErrorCard,
+    Title,
     Typeahead,
     SaveBackCancelButtons
 } from '@linn-it/linn-form-components-library';
@@ -124,7 +125,7 @@ function StockTriggerLevelsUtility({
     const columns = [
         {
             headerName: 'Storage Place',
-            field: 'storagePlaceName',
+            field: 'palletNumber',
             editable: true,
             width: 150,
             renderEditCell: params => (
@@ -136,7 +137,7 @@ function StockTriggerLevelsUtility({
                             params.row.id,
                             newValue.description
                         );
-                        handleFieldChange('palletNumber', params.row.id, newValue.palletNumber);
+                        handleFieldChange('storagePlaceName', params.row.id, newValue.palletNumber);
                         handleFieldChange('locationId', params.row.id, newValue.locationId);
                         handleFieldChange('triggerLevel', params.row.id, newValue.triggerLevel);
                         handleFieldChange('maxCapacity', params.row.id, newValue.kanbanSize);
@@ -235,6 +236,7 @@ function StockTriggerLevelsUtility({
                 onClose={() => setSnackbarVisible(false)}
                 message="Save Successful"
             />
+            <Title text="Stock Trigger Levels" />
             <Grid container spacing={3}>
                 <Grid container spacing={3}>
                     <Grid item xs={3}>
