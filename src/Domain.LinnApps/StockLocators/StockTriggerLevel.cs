@@ -15,5 +15,7 @@
         public int? PalletNumber { get; set; }
 
         public decimal? KanbanSize { get; set; }
+
+        public StorageLocation StorageLocation { get; set; }
     }
 }

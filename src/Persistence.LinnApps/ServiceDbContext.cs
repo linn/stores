@@ -2123,6 +2123,7 @@
             e.Property(l => l.TriggerLevel).HasColumnName("TRIGGER_LEVEL");
             e.Property(l => l.PalletNumber).HasColumnName("PALLET_NUMBER");
             e.Property(l => l.KanbanSize).HasColumnName("KANBAN_SIZE");
+            e.HasOne(l => l.StorageLocation).WithMany().HasForeignKey(l => l.LocationId);
         }
 
         private void BuildPurchaseLedger(ModelBuilder builder)

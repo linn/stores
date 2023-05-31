@@ -5,11 +5,14 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Resources;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Resources;
 
     public class StockTriggerLevelResourceBuilder : IResourceBuilder<StockTriggerLevel>
     {
+        private readonly StorageLocationResourceBuilder storageLocationResourceBuilder = new StorageLocationResourceBuilder();
+
         public StockTriggerLevelsResource Build(StockTriggerLevel stockTriggerLevel)
         {
             return new StockTriggerLevelsResource
@@ -21,6 +24,10 @@
                 MaxCapacity = stockTriggerLevel.MaxCapacity,
                 PalletNumber = stockTriggerLevel.PalletNumber,
                 KanbanSize = stockTriggerLevel.KanbanSize,
+                StorageLocation =
+                stockTriggerLevel.StorageLocation != null
+                                   ? this.storageLocationResourceBuilder.Build(stockTriggerLevel.StorageLocation)
+                                   : null,
                 Links = this.BuildLinks(stockTriggerLevel).ToArray()
             };
         }
