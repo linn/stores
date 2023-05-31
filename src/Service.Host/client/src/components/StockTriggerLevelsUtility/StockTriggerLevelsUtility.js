@@ -231,8 +231,8 @@ function StockTriggerLevelsUtility({
     );
     return (
         <Page>
-            <Title text="Stock Trigger Levels" />
             <Grid container spacing={3}>
+                <Title text="Stock Trigger Levels" />
                 <Grid container spacing={3}>
                     <Grid item xs={3}>
                         <InputField
