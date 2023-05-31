@@ -42,7 +42,7 @@
                                             TriggerLevel = 2
                                         };
 
-            this.StockTriggerLevelsFacadeService.Search("256")
+            this.StockTriggerLevelsFacadeService.SearchStockTriggerLevelsWithWildcard("P*", "*")
                 .Returns(new SuccessResult<IEnumerable<StockTriggerLevel>>(new List<StockTriggerLevel> { stockTriggerLevelA, stockTriggerLevelB }));
 
             this.Response = this.Browser.Get(
@@ -50,7 +50,8 @@
                 with =>
                     {
                         with.Header("Accept", "application/json");
-                        with.Query("searchTerm", "256");
+                        with.Query("partNumberSearchTerm", "P*");
+                        with.Query("storagePlaceSearchTerm", "*");
                     }).Result;
         }
 
@@ -63,7 +64,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.StockTriggerLevelsFacadeService.Search("256");
+            this.StockTriggerLevelsFacadeService.SearchStockTriggerLevelsWithWildcard("P*", "*");
         }
 
         [Test]

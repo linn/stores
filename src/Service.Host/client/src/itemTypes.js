@@ -481,3 +481,15 @@ export const warehousePallet = new ItemType(
     'WAREHOUSE_PALLET',
     '/logistics/wcs/warehouse-pallets'
 );
+
+export const stockTriggerLevel = new ItemType(
+    'stockTriggerLevel',
+    'STOCK_TRIGGER_LEVEL',
+    '/inventory/stock-trigger-levels'
+);
+
+export const stockTriggerLevels = new ItemType(
+    'stockTriggerLevels',
+    'STOCK_TRIGGER_LEVELS',
+    '/inventory/stock-trigger-levels'
+);

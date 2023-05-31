@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
 
@@ -8,13 +9,14 @@
     using Linn.Common.Logging;
     using Linn.Common.Persistence;
     using Linn.Common.Proxy.LinnApps;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
     using Linn.Stores.Resources;
 
     public class StockTriggerLevelsFacadeService : FacadeService<StockTriggerLevel, int, StockTriggerLevelsResource, StockTriggerLevelsResource>, IStockTriggerLevelsFacadeService
     {
-        private readonly IRepository<StockTriggerLevel, int> repository;
+        private readonly IStockTriggerLevelsRepository repository;
 
         private readonly ITransactionManager transactionManager;
 
@@ -23,7 +25,7 @@
         private readonly ILog logger;
 
         public StockTriggerLevelsFacadeService(
-            IRepository<StockTriggerLevel, int> repository, 
+            IStockTriggerLevelsRepository repository,
             ITransactionManager transactionManager,
             IDatabaseService databaseService,
             ILog logger) : base(repository, transactionManager)
@@ -52,11 +54,21 @@
             return new SuccessResult<StockTriggerLevel>(toDelete);
         }
 
+        public IResult<IEnumerable<StockTriggerLevel>> SearchStockTriggerLevelsWithWildcard(
+            string partNumberSearch,
+            string storagePlaceSearch)
+        {
+            return new SuccessResult<IEnumerable<StockTriggerLevel>>(
+                this.repository.SearchStockTriggerLevelsWithWildCard(
+                    partNumberSearch?.Trim().ToUpper(),
+                    storagePlaceSearch?.Trim().ToUpper()));
+        }
+
         protected override StockTriggerLevel CreateFromResource(StockTriggerLevelsResource resource)
         {
             var newStockTriggerLevel = new StockTriggerLevel 
                                            {
-                                               Id = this.databaseService.GetNextVal("STL_SEQ"),
+                                               Id = this.databaseService.GetIdSequence("STL_SEQ"),
                                                LocationId = resource.LocationId,
                                                TriggerLevel = resource.TriggerLevel,
                                                PartNumber = resource.PartNumber,
@@ -82,7 +94,8 @@
 
         protected override Expression<Func<StockTriggerLevel, bool>> SearchExpression(string searchTerm)
         {
-            return imps => imps.LocationId.ToString().Contains(searchTerm);
+            return imps => imps.PalletNumber.ToString().ToUpper().Contains(searchTerm) ||
+                           imps.PartNumber.ToUpper().Contains(searchTerm);
         }
     }
 }

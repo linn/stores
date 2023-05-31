@@ -41,7 +41,7 @@
 
         protected IRepository<ReqMove, ReqMoveKey> ReqMoveRepository { get; private set; }
 
-        protected IRepository<StockTriggerLevel, int> TriggerLevelRepository { get; private set; }
+        protected IStockTriggerLevelsRepository TriggerLevelRepository { get; private set; }
 
         [SetUp]
         public void SetUpContext()
@@ -57,7 +57,7 @@
             this.LocationsViewService = Substitute.For<IStockLocatorLocationsViewService>();
             this.StockLocatorView = Substitute.For<IQueryRepository<StockLocatorPrices>>();
             this.ReqMoveRepository = Substitute.For<IRepository<ReqMove, ReqMoveKey>>();
-            this.TriggerLevelRepository = Substitute.For<IRepository<StockTriggerLevel, int>>();
+            this.TriggerLevelRepository = Substitute.For<IStockTriggerLevelsRepository>();
             this.ReqMoveRepository.FindBy(Arg.Any<Expression<Func<ReqMove, bool>>>()).ReturnsNull();
             this.Sut = new StockLocatorService(
                 this.StockLocatorRepository,

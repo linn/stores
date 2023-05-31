@@ -1,15 +1,14 @@
 ﻿namespace Linn.Stores.Persistence.LinnApps.Repositories
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
-
-    using Linn.Common.Persistence;
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.StockLocators;
-
     using Microsoft.EntityFrameworkCore;
 
-    public class StockTriggerLevelsRepository : IRepository<StockTriggerLevel, int>
+    public class StockTriggerLevelsRepository : IStockTriggerLevelsRepository
     {
         private readonly ServiceDbContext serviceDbContext;
 
@@ -47,6 +46,21 @@
         public void Remove(StockTriggerLevel entity)
         {
             this.serviceDbContext.StockTriggerLevels.Remove(entity);
+        }
+
+        public IEnumerable<StockTriggerLevel> SearchStockTriggerLevelsWithWildCard(
+            string partNumberSearchTerm,
+            string storagePlaceSearchTerm)
+        {
+            var result = this.serviceDbContext.StockTriggerLevels.AsNoTracking().Where(
+                x => (string.IsNullOrEmpty(partNumberSearchTerm) || EF.Functions.Like(
+                          x.PartNumber,
+                          $"{partNumberSearchTerm.Replace("*", "%")}"))
+                     && (string.IsNullOrEmpty(storagePlaceSearchTerm) || EF.Functions.Like(
+                             x.PalletNumber.ToString(),
+                             $"{storagePlaceSearchTerm.Replace("*", "%")}")));
+
+            return result;
         }
     }
 }
