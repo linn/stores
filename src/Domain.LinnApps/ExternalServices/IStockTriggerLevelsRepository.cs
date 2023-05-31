@@ -9,8 +9,6 @@
     {
         IEnumerable<StockTriggerLevel> SearchStockTriggerLevelsWithWildCard(
             string partNumberSearchTerm, 
-            string storagePlaceSearchTerm,
-            bool newestFirst = false,
-            int? limit = null);
+            string storagePlaceSearchTerm);
     }
 }

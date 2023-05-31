@@ -50,9 +50,7 @@
 
         public IEnumerable<StockTriggerLevel> SearchStockTriggerLevelsWithWildCard(
             string partNumberSearchTerm,
-            string storagePlaceSearchTerm,
-            bool newestFirst = false,
-            int? limit = null)
+            string storagePlaceSearchTerm)
         {
             var result = this.serviceDbContext.StockTriggerLevels.AsNoTracking().Where(
                 x => (string.IsNullOrEmpty(partNumberSearchTerm) || EF.Functions.Like(
@@ -61,16 +59,6 @@
                      && (string.IsNullOrEmpty(storagePlaceSearchTerm) || EF.Functions.Like(
                              x.PalletNumber.ToString(),
                              $"{storagePlaceSearchTerm.Replace("*", "%")}")));
-
-            if (newestFirst)
-            {
-                result = result.OrderByDescending(x => x.Id);
-            }
-
-            if (limit.HasValue)
-            {
-                result = result.Take((int)limit);
-            }
 
             return result;
         }

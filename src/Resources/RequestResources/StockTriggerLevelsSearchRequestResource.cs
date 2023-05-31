@@ -1,6 +1,6 @@
 ﻿namespace Linn.Stores.Resources.RequestResources
 {
-    public class StockTriggerLevelsSearchRequestResource : SearchRequestResource
+    public class StockTriggerLevelsSearchRequestResource 
     {
         public string PartNumberSearchTerm { get; set; }
 

@@ -377,11 +377,6 @@ const Root = ({ store }) => (
                                     />
                                     <Route
                                         exact
-                                        path="/inventory/reports/stores-move-log/report"
-                                        component={StoresMoveLogReport}
-                                    />
-                                    <Route
-                                        exact
                                         path="/inventory/stock-trigger-levels/"
                                         component={StockTriggerLevelsUtility}
                                     />
