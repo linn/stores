@@ -34,7 +34,10 @@
 
         public StockTriggerLevel FindById(int key)
         {
-            return this.serviceDbContext.StockTriggerLevels.Where(stockTriggerLevels => stockTriggerLevels.Id == key).Include(l => l.StorageLocation)
+            return this.serviceDbContext.StockTriggerLevels.Where(
+                stockTriggerLevels => stockTriggerLevels.Id == key).Include(
+                s => s.StorageLocation).ThenInclude(
+                l => l.Description)
                 .ToList().FirstOrDefault();
         }
 
