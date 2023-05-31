@@ -386,7 +386,11 @@ export const storesMoveLogReportActionTypes = makeReportActionTypes(
     reportTypes.storesMoveLogReport.actionType
 );
 
-export const stockTriggerLevelActionTypes = makeActionTypes(itemTypes.stockTriggerLevel.actionType);
+export const stockTriggerLevelActionTypes = makeActionTypes(
+    itemTypes.stockTriggerLevel.actionType,
+    true,
+    true
+);
 
 export const stockTriggerLevelsActionTypes = makeActionTypes(
     itemTypes.stockTriggerLevels.actionType

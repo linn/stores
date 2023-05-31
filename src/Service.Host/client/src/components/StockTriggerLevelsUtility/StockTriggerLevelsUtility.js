@@ -119,7 +119,7 @@ function StockTriggerLevelsUtility({
         ]);
 
     const deleteSelectedRows = () => {
-        triggerLevelRows.filter(r => r.selected).forEach(s => deleteStockTriggerLevel(s.id, s));
+        triggerLevelRows.filter(r => r.selected).forEach(s => deleteStockTriggerLevel(s.id, null));
     };
 
     const columns = [
@@ -231,11 +231,6 @@ function StockTriggerLevelsUtility({
     );
     return (
         <Page>
-            <SnackbarMessage
-                visible={snackbarVisible}
-                onClose={() => setSnackbarVisible(false)}
-                message="Save Successful"
-            />
             <Title text="Stock Trigger Levels" />
             <Grid container spacing={3}>
                 <Grid container spacing={3}>
@@ -299,6 +294,11 @@ function StockTriggerLevelsUtility({
                 ) : (
                     <>
                         <Grid item xs={12}>
+                            <SnackbarMessage
+                                visible={snackbarVisible}
+                                onClose={() => setSnackbarVisible(false)}
+                                message="Save Successful"
+                            />
                             {triggerLevelRows && (
                                 <Grid item xs={12}>
                                     <div style={{ width: '100%' }}>

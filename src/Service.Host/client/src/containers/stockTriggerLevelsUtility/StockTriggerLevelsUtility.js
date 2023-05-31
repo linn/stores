@@ -5,6 +5,7 @@ import partsSelectors from '../../selectors/partsSelectors';
 import StockTriggerLevelsUtility from '../../components/StockTriggerLevelsUtility/StockTriggerLevelsUtility';
 import stockTriggerLevelActions from '../../actions/stockTriggerLevelActions';
 import stockTriggerLevelsActions from '../../actions/stockTriggerLevelsActions';
+import stockTriggerLevelSelectors from '../../selectors/stockTriggerLevelSelectors';
 import stockTriggerLevelsSelectors from '../../selectors/stockTriggerLevelsSelectors';
 import storagePlacesSelectors from '../../selectors/storagePlacesSelectors';
 import storagePlacesActions from '../../actions/storagePlacesActions';
@@ -20,7 +21,8 @@ const mapStateToProps = state => ({
     stockTriggerLevelsSearchLoading: stockTriggerLevelsSelectors.getLoading(state),
     storagePlaces: storagePlacesSelectors.getSearchItems(state).map(i => ({ ...i, id: i.name })),
     storagePlacesLoading: storagePlacesSelectors.getSearchLoading(state),
-    itemError: getItemError(state, itemTypes.stockTriggerLevels.item)
+    itemError: getItemError(state, itemTypes.stockTriggerLevels.item),
+    snackbarVisible: stockTriggerLevelSelectors.getSnackbarVisible(state)
 });
 
 const mapDispatchToProps = {
