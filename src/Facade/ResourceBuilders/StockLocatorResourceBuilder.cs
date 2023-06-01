@@ -6,10 +6,18 @@
     using Linn.Common.Facade;
     using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Proxy;
     using Linn.Stores.Resources.StockLocators;
 
     public class StockLocatorResourceBuilder : IResourceBuilder<StockLocator>
     {
+        private readonly IProductsService productsService;
+
+        public StockLocatorResourceBuilder(IProductsService productsService)
+        {
+            this.productsService = productsService;
+        }
+
         public StockLocatorResource Build(StockLocator stockLocator)
         {
             return new StockLocatorResource
@@ -49,6 +57,7 @@
             if (stockLocator.Part != null)
             {
                 yield return new LinkResource { Rel = "part", Href = $"/parts/{stockLocator.Part.Id}" };
+                yield return new LinkResource { Rel = "product", Href = this.productsService.GetLinkToProduct(stockLocator.PartNumber) };
                 yield return new LinkResource
                                  {
                                      Rel = "part-used-on",

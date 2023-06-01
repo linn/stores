@@ -26,7 +26,6 @@
         {
             this.stockLocator1 = new StockLocatorWithStoragePlaceInfo { LocationId = 1, PartNumber = "A" };
             this.stockLocator2 = new StockLocatorWithStoragePlaceInfo { LocationId = 2, PartNumber = "A" };
-
             this.StockLocatorFacadeService.GetStockLocatorsForPart(Arg.Any<int>())
                 .Returns(new 
                     SuccessResult<IEnumerable<StockLocatorWithStoragePlaceInfo>>(new List<StockLocatorWithStoragePlaceInfo>
@@ -60,6 +59,7 @@
         {
             var resultResource = this.Response.Body.DeserializeJson<IEnumerable<StockLocatorWithStoragePlaceInfo>>().ToList();
             resultResource.Should().HaveCount(2);
+            resultResource.First().PartNumber.Should().Be("A");
         }
     }
 }

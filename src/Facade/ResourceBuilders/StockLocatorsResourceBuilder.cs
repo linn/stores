@@ -6,12 +6,17 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.StockLocators;
+    using Linn.Stores.Proxy;
     using Linn.Stores.Resources.StockLocators;
 
     public class StockLocatorsResourceBuilder : IResourceBuilder<IEnumerable<StockLocator>>
     {
-        private readonly StockLocatorResourceBuilder stockLocatorResourceBuilder 
-            = new StockLocatorResourceBuilder();
+        private readonly StockLocatorResourceBuilder stockLocatorResourceBuilder;
+
+        public StockLocatorsResourceBuilder(IProductsService productsService)
+        {
+            this.stockLocatorResourceBuilder = new StockLocatorResourceBuilder(productsService);
+        }
 
         public IEnumerable<StockLocatorResource> Build(IEnumerable<StockLocator> stockLocators)
         {
