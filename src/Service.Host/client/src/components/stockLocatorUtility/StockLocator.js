@@ -333,23 +333,25 @@ function StockLocator({
                                                         >
                                                             +
                                                         </button>
-                                                        <button
-                                                            type="button"
-                                                            style={{ cursor: 'pointer' }}
-                                                            onClick={() => {
-                                                                window.open(
-                                                                    `${
-                                                                        config.appRoot
-                                                                    }${utilities.getHref(
-                                                                        i,
-                                                                        'product'
-                                                                    )}`,
-                                                                    '_blank'
-                                                                );
-                                                            }}
-                                                        >
-                                                            P
-                                                        </button>
+                                                        {utilities.getHref(i, 'product') && (
+                                                            <button
+                                                                type="button"
+                                                                style={{ cursor: 'pointer' }}
+                                                                onClick={() => {
+                                                                    window.open(
+                                                                        `${
+                                                                            config.appRoot
+                                                                        }${utilities.getHref(
+                                                                            i,
+                                                                            'product'
+                                                                        )}`,
+                                                                        '_blank'
+                                                                    );
+                                                                }}
+                                                            >
+                                                                P
+                                                            </button>
+                                                        )}
                                                     </>
                                                 ),
                                                 qtyAllocatedComponent: (
