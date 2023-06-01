@@ -25,7 +25,6 @@
         {
             var uri = new Uri(
                 $"{this.rootUri}/products/search?name={partNumber}"
-                + "&filters=sales-product"
                 + "&filters=sales-part" 
                 + "&filters=service-part" 
                 + "&showPhasedOut=true" 

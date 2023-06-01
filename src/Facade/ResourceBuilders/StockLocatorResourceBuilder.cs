@@ -57,7 +57,16 @@
             if (stockLocator.Part != null)
             {
                 yield return new LinkResource { Rel = "part", Href = $"/parts/{stockLocator.Part.Id}" };
-                yield return new LinkResource { Rel = "product", Href = this.productsService.GetLinkToProduct(stockLocator.PartNumber) };
+                
+                var productLink = this.productsService.GetLinkToProduct(stockLocator.PartNumber);
+                if (!string.IsNullOrEmpty(productLink))
+                {
+                    yield return new LinkResource
+                                     {
+                                         Rel = "product",
+                                         Href = this.productsService.GetLinkToProduct(stockLocator.PartNumber)
+                                     };
+                }
                 yield return new LinkResource
                                  {
                                      Rel = "part-used-on",
