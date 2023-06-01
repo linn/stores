@@ -7,7 +7,8 @@ import {
     Dropdown,
     ErrorCard,
     InputField,
-    BackButton
+    BackButton,
+    utilities
 } from '@linn-it/linn-form-components-library';
 import Typography from '@material-ui/core/Typography';
 import Accordion from '@material-ui/core/Accordion';
@@ -285,12 +286,7 @@ function StockLocator({
                                                 id: index,
                                                 partLinkComponent: (
                                                     <>
-                                                        <Link
-                                                            to={
-                                                                i.links.find(l => l.rel === 'part')
-                                                                    ?.href
-                                                            }
-                                                        >
+                                                        <Link to={utilities.getHref(i, 'part')}>
                                                             {i.partNumber}
                                                         </Link>
                                                         {'       '}
@@ -299,42 +295,64 @@ function StockLocator({
                                                             style={{ cursor: 'pointer' }}
                                                             onClick={() => {
                                                                 window.open(
-                                                                    `${config.appRoot}${
-                                                                        i.links.find(
-                                                                            l =>
-                                                                                l.rel ===
-                                                                                'part-used-on'
-                                                                        )?.href
-                                                                    }`,
+                                                                    `${
+                                                                        config.appRoot
+                                                                    }${utilities.getHref(
+                                                                        i,
+                                                                        'part-used-on'
+                                                                    )}`,
                                                                     '_blank'
+                                                                );
+                                                            }}
+                                                        >
+                                                            UO
+                                                        </button>
+                                                    </>
+                                                ),
+                                                drillDownButtonComponent: (
+                                                    <>
+                                                        <button
+                                                            type="button"
+                                                            style={{ cursor: 'pointer' }}
+                                                            onClick={() => {
+                                                                history.push(
+                                                                    `/inventory/stock-locator/locators/batches?${queryString.stringify(
+                                                                        {
+                                                                            partNumber:
+                                                                                i.partNumber,
+                                                                            locationId:
+                                                                                i.locationId,
+                                                                            palletNumber: i.palletNumber?.toString(),
+                                                                            state: i.state,
+                                                                            category: i.category?.toString(),
+                                                                            queryBatchView: true
+                                                                        }
+                                                                    )}`
                                                                 );
                                                             }}
                                                         >
                                                             +
                                                         </button>
+                                                        {utilities.getHref(i, 'product') && (
+                                                            <button
+                                                                type="button"
+                                                                style={{ cursor: 'pointer' }}
+                                                                onClick={() => {
+                                                                    window.open(
+                                                                        `${
+                                                                            config.appRoot
+                                                                        }${utilities.getHref(
+                                                                            i,
+                                                                            'product'
+                                                                        )}`,
+                                                                        '_blank'
+                                                                    );
+                                                                }}
+                                                            >
+                                                                P
+                                                            </button>
+                                                        )}
                                                     </>
-                                                ),
-                                                drillDownButtonComponent: (
-                                                    <button
-                                                        type="button"
-                                                        style={{ cursor: 'pointer' }}
-                                                        onClick={() => {
-                                                            history.push(
-                                                                `/inventory/stock-locator/locators/batches?${queryString.stringify(
-                                                                    {
-                                                                        partNumber: i.partNumber,
-                                                                        locationId: i.locationId,
-                                                                        palletNumber: i.palletNumber?.toString(),
-                                                                        state: i.state,
-                                                                        category: i.category?.toString(),
-                                                                        queryBatchView: true
-                                                                    }
-                                                                )}`
-                                                            );
-                                                        }}
-                                                    >
-                                                        +
-                                                    </button>
                                                 ),
                                                 qtyAllocatedComponent: (
                                                     <>
@@ -485,13 +503,13 @@ function StockLocator({
                                                                 value={`${selectedQuantities.otherStock} (${selectedQuantities.otherStockAllocated})`}
                                                                 disabled
                                                             />
-                                                        </Grid>{' '}
+                                                        </Grid>
                                                     </>
                                                 )}
                                             <Grid item xs={8} />
                                         </Grid>
                                     </AccordionDetails>
-                                </Accordion>{' '}
+                                </Accordion>
                             </Grid>
                         </>
                     )}

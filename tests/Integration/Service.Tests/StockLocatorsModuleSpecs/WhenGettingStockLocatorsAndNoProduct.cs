@@ -15,10 +15,11 @@
     using Nancy.Testing;
 
     using NSubstitute;
+    using NSubstitute.ReturnsExtensions;
 
     using NUnit.Framework;
 
-    public class WhenGettingLocatorLocations : ContextBase
+    public class WhenGettingLocatorLocationsAndNoProduct : ContextBase
     {
         private StockLocatorWithStoragePlaceInfo stockLocator1;
 
@@ -28,20 +29,19 @@
         public void SetUp()
         {
             this.stockLocator1 = new StockLocatorWithStoragePlaceInfo
-                                     {
-                                         LocationId = 1, PartNumber = "A", Part = new Part { PartNumber = "A" }
-                                     };
-            this.stockLocator2 = new StockLocatorWithStoragePlaceInfo
-                                     {
-                                         LocationId = 2, PartNumber = "A",  Part = new Part { PartNumber = "A" }
-                                     };
-            this.ProductService.GetLinkToProduct("A").Returns("/link-to-product/A");
+            {
+                LocationId = 1,
+                PartNumber = "A",
+                Part = new Part { PartNumber = "A" }
+            };
+
+            this.ProductService.GetLinkToProduct("A").ReturnsNull();
 
             this.StockLocatorFacadeService.GetStockLocations(Arg.Any<StockLocatorQueryResource>())
                 .Returns(new
                     SuccessResult<IEnumerable<StockLocator>>(new List<StockLocator>
                                                                           {
-                                                                              this.stockLocator1, this.stockLocator2
+                                                                              this.stockLocator1
                                                                           }));
 
             this.Response = this.Browser.Get(
@@ -54,23 +54,11 @@
         }
 
         [Test]
-        public void ShouldReturnOk()
-        {
-            this.Response.StatusCode.Should().Be(HttpStatusCode.OK);
-        }
-
-        [Test]
-        public void ShouldCallService()
-        {
-            this.StockLocatorFacadeService.Received().GetStockLocations(Arg.Any<StockLocatorQueryResource>());
-        }
-
-        [Test]
-        public void ShouldReturnResource()
+        public void ShouldNotHaveProductLink()
         {
             var resultResource = this.Response.Body.DeserializeJson<IEnumerable<StockLocatorResource>>().ToList();
-            resultResource.Should().HaveCount(2);
-            resultResource.First().Links.First(l => l.Rel == "product").Href.Should().Be("/link-to-product/A");
+            resultResource.Should().HaveCount(1);
+            resultResource.First().Links.Any(l => l.Rel == "product").Should().BeFalse();
         }
     }
 }
