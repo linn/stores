@@ -27,7 +27,9 @@
                 $"{this.rootUri}/products/search?name={partNumber}"
                 + "&filters=sales-product"
                 + "&filters=sales-part" 
-                + "&filters=service-part&showPhasedOut=true",
+                + "&filters=service-part" 
+                + "&showPhasedOut=true" 
+                + "&exactMatch=true",
                 UriKind.RelativeOrAbsolute);
             var response = this.restClient.Get(
                 CancellationToken.None,
