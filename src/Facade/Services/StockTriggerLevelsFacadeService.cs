@@ -58,7 +58,7 @@
             string partNumberSearch,
             string storagePlaceSearch)
         {
-            if (storagePlaceSearch.ToUpper().StartsWith("P"))
+            if (!string.IsNullOrEmpty(storagePlaceSearch) && storagePlaceSearch.ToUpper().StartsWith("P"))
             {
                 storagePlaceSearch = storagePlaceSearch.Remove(0, 1);
             }

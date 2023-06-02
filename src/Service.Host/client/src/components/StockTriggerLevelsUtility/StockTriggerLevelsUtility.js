@@ -373,7 +373,7 @@ StockTriggerLevelsUtility.propTypes = {
             maxCapacity: PropTypes.number,
             palletNumber: PropTypes.number,
             kanbanSize: PropTypes.number,
-            storageLocation: PropTypes.arrayOf(PropTypes.shape({}))
+            storageLocation: PropTypes.shape({})
         })
     ),
     searchParts: PropTypes.func.isRequired,

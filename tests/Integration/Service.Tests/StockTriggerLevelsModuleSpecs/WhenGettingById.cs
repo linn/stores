@@ -1,6 +1,5 @@
 ﻿namespace Linn.Stores.Service.Tests.StockTriggerLevelsModuleSpecs
 {
-    using Amazon.Auth.AccessControlPolicy;
     using FluentAssertions;
 
     using Linn.Common.Facade;
