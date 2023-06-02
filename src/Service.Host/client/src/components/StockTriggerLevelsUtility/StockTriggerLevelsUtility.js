@@ -58,7 +58,8 @@ function StockTriggerLevelsUtility({
                 ...i,
                 id: i.id,
                 name: i.palletNumber,
-                description: i.partNumber
+                description: i.partNumber,
+                storagePlaceDescription: i.storageLocation?.description
             }))
         );
     }, [stockTriggerLevels, setStockTriggerLevelRows]);
@@ -119,7 +120,7 @@ function StockTriggerLevelsUtility({
         ]);
 
     const deleteSelectedRows = () => {
-        triggerLevelRows.filter(r => r.selected).forEach(s => deleteStockTriggerLevel(s.id, s));
+        triggerLevelRows.filter(r => r.selected).forEach(s => deleteStockTriggerLevel(s.id, null));
     };
 
     const columns = [
@@ -231,13 +232,8 @@ function StockTriggerLevelsUtility({
     );
     return (
         <Page>
-            <SnackbarMessage
-                visible={snackbarVisible}
-                onClose={() => setSnackbarVisible(false)}
-                message="Save Successful"
-            />
-            <Title text="Stock Trigger Levels" />
             <Grid container spacing={3}>
+                <Title text="Stock Trigger Levels" />
                 <Grid container spacing={3}>
                     <Grid item xs={3}>
                         <InputField
@@ -246,7 +242,7 @@ function StockTriggerLevelsUtility({
                             label="Part Number"
                             propertyName="partNumber"
                             onChange={handleOptionsChange}
-                            helperText="* can be used as a wildcard on all fields"
+                            helperText="* can be used as a wildcard on all fields. Leave blank for all."
                         />
                     </Grid>
                     <Grid item xs={3}>
@@ -299,6 +295,11 @@ function StockTriggerLevelsUtility({
                 ) : (
                     <>
                         <Grid item xs={12}>
+                            <SnackbarMessage
+                                visible={snackbarVisible}
+                                onClose={() => setSnackbarVisible(false)}
+                                message="Save Successful"
+                            />
                             {triggerLevelRows && (
                                 <Grid item xs={12}>
                                     <div style={{ width: '100%' }}>
@@ -371,7 +372,8 @@ StockTriggerLevelsUtility.propTypes = {
             triggerLevel: PropTypes.number,
             maxCapacity: PropTypes.number,
             palletNumber: PropTypes.number,
-            kanbanSize: PropTypes.number
+            kanbanSize: PropTypes.number,
+            storageLocation: PropTypes.shape({})
         })
     ),
     searchParts: PropTypes.func.isRequired,

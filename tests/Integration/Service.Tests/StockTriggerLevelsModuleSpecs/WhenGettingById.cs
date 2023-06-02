@@ -26,8 +26,12 @@
                                               TriggerLevel = 1, 
                                               LocationId = 35, 
                                               KanbanSize = 1, 
-                                              MaxCapacity = 1
-                                          };
+                                              MaxCapacity = 1,
+                                              StorageLocation = new StorageLocation()
+                                                                    {
+                                                                        Description = "A Part Description"
+                                                                    }
+            };
 
             this.StockTriggerLevelsFacadeService.GetById(Arg.Any<int>())
                 .Returns(new SuccessResult<StockTriggerLevel>(this.stockTriggerLevel1));
@@ -57,6 +61,8 @@
         {
             var resultResource = this.Response.Body.DeserializeJson<StockTriggerLevel>();
             resultResource.LocationId.Should().Be(35);
+            resultResource.PartNumber.Should().Be("SAMPLE PART");
+            resultResource.StorageLocation.Description.Should().Be("A Part Description");
         }
     }
 }

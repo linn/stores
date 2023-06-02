@@ -58,6 +58,11 @@
             string partNumberSearch,
             string storagePlaceSearch)
         {
+            if (!string.IsNullOrEmpty(storagePlaceSearch) && storagePlaceSearch.ToUpper().StartsWith("P"))
+            {
+                storagePlaceSearch = storagePlaceSearch.Remove(0, 1);
+            }
+            
             return new SuccessResult<IEnumerable<StockTriggerLevel>>(
                 this.repository.SearchStockTriggerLevelsWithWildCard(
                     partNumberSearch?.Trim().ToUpper(),

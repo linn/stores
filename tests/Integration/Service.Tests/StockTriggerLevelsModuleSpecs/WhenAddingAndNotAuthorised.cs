@@ -27,8 +27,12 @@
                                             LocationId = 1,
                                             MaxCapacity = 1,
                                             PalletNumber = 1,
-                                            TriggerLevel = 1
-                                        };
+                                            TriggerLevel = 1,
+                                            StorageLocation = new StorageLocation()
+                                                                  {
+                                                                      Description = "A Part Description"
+                                                                  }
+            };
             var stockTriggerLevel = new StockTriggerLevel
                                         { 
                                             PartNumber = "PART",
@@ -37,8 +41,12 @@
                                             LocationId = 1,
                                             MaxCapacity = 1,
                                             PalletNumber = 1,
-                                            TriggerLevel = 1
-                                        };
+                                            TriggerLevel = 1,
+                                            StorageLocation = new StorageLocation()
+                                                                  {
+                                                                      Description = "A Part Description"
+                                                                  }
+            };
 
             this.StockTriggerLevelsFacadeService.Add(Arg.Any<StockTriggerLevelsResource>())
                 .Returns(new SuccessResult<StockTriggerLevel>(stockTriggerLevel));
