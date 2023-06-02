@@ -242,7 +242,7 @@ function StockTriggerLevelsUtility({
                             label="Part Number"
                             propertyName="partNumber"
                             onChange={handleOptionsChange}
-                            helperText="* can be used as a wildcard on all fields"
+                            helperText="* can be used as a wildcard on all fields. Leave blank for all."
                         />
                     </Grid>
                     <Grid item xs={3}>
