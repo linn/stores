@@ -61,7 +61,8 @@
                           $"{partNumberSearchTerm.Replace("*", "%")}"))
                      && (string.IsNullOrEmpty(storagePlaceSearchTerm) || EF.Functions.Like(
                              x.PalletNumber.ToString(),
-                             $"{storagePlaceSearchTerm.Replace("*", "%")}")));
+                             $"{storagePlaceSearchTerm.Replace("*", "%")}"))).Include(
+                s => s.StorageLocation);
 
             return result;
         }

@@ -58,7 +58,8 @@ function StockTriggerLevelsUtility({
                 ...i,
                 id: i.id,
                 name: i.palletNumber,
-                description: i.partNumber
+                description: i.partNumber,
+                storagePlaceDescription: i.storageLocation?.description
             }))
         );
     }, [stockTriggerLevels, setStockTriggerLevelRows]);
@@ -371,7 +372,8 @@ StockTriggerLevelsUtility.propTypes = {
             triggerLevel: PropTypes.number,
             maxCapacity: PropTypes.number,
             palletNumber: PropTypes.number,
-            kanbanSize: PropTypes.number
+            kanbanSize: PropTypes.number,
+            storageLocation: PropTypes.arrayOf(PropTypes.shape({}))
         })
     ),
     searchParts: PropTypes.func.isRequired,
