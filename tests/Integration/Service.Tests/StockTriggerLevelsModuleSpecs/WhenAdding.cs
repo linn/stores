@@ -30,7 +30,11 @@
                                             LocationId = 1,
                                             MaxCapacity = 1,
                                             PalletNumber = 1,
-                                            TriggerLevel = 1
+                                            TriggerLevel = 1,
+                                            StorageLocation = new StorageLocation()
+                                                                  {
+                                                                      Description = "A Part Description"
+                                                                  }
                                         };
             var stockTriggerLevel = new StockTriggerLevel
                                         { 
@@ -40,7 +44,11 @@
                                             LocationId = 1,
                                             MaxCapacity = 1,
                                             PalletNumber = 1,
-                                            TriggerLevel = 1
+                                            TriggerLevel = 1,
+                                            StorageLocation = new StorageLocation()
+                                                                  {
+                                                                      Description = "A Part Description"
+                                                                  }
                                         };
 
             this.AuthorisationService.HasPermissionFor(AuthorisedAction.CreateStockTriggerLevel, Arg.Any<IEnumerable<string>>()).Returns(true);
@@ -77,6 +85,8 @@
         {
             var resource = this.Response.Body.DeserializeJson<StockTriggerLevelsResource>();
             resource.LocationId.Should().Be(1);
+            resource.PartNumber.Should().Be("PART");
+            resource.StorageLocation.Description.Should().Be("A Part Description");
         }
     }
 }
