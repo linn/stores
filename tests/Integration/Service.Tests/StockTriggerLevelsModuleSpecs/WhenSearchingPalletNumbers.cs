@@ -16,7 +16,7 @@
 
     using NUnit.Framework;
 
-    public class WhenSearching : ContextBase
+    public class WhenSearchingPalletNumbers : ContextBase
     {
         [SetUp]
         public void SetUp()
