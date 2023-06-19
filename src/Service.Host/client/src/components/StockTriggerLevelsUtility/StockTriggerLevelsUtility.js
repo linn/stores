@@ -152,6 +152,7 @@ function StockTriggerLevelsUtility({
                     links={false}
                     clearSearch={() => clearStoragePlacesSearch}
                     placeholder=""
+                    debounce={1000}
                 />
             )
         },
@@ -174,6 +175,8 @@ function StockTriggerLevelsUtility({
                     placeholder=""
                     loading={partsLoading}
                     resultLimit={500}
+                    debounce={1000}
+                    minimumSearchTermLength={2}
                 />
             )
         },
