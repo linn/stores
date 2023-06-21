@@ -59,7 +59,8 @@ function StockTriggerLevelsUtility({
                 id: i.id,
                 name: i.palletNumber,
                 description: i.partNumber,
-                storagePlaceDescription: i.storageLocation?.description
+                storagePlaceDescription: i.storageLocation?.description,
+                locationCode: i.storageLocation?.locationCode
             }))
         );
     }, [stockTriggerLevels, setStockTriggerLevelRows]);
@@ -128,7 +129,7 @@ function StockTriggerLevelsUtility({
             headerName: 'Storage Place',
             field: 'palletNumber',
             editable: true,
-            width: 150,
+            width: 300,
             renderEditCell: params => (
                 <Typeahead
                     onSelect={newValue => {
@@ -142,6 +143,7 @@ function StockTriggerLevelsUtility({
                         handleFieldChange('locationId', params.row.id, newValue.locationId);
                         handleFieldChange('triggerLevel', params.row.id, newValue.triggerLevel);
                         handleFieldChange('maxCapacity', params.row.id, newValue.kanbanSize);
+                        handleFieldChange('locationCode', params.row.id, newValue.locationCode);
                     }}
                     label=""
                     modal
@@ -200,6 +202,11 @@ function StockTriggerLevelsUtility({
             width: 200,
             type: 'number',
             editable: true
+        },
+        {
+            headerName: 'Storage Location Code',
+            field: 'locationCode',
+            width: 200
         },
         {
             headerName: 'Description',
@@ -312,7 +319,7 @@ function StockTriggerLevelsUtility({
                                             editMode="cell"
                                             onEditRowsModelChange={handleEditRowsModelChange}
                                             autoHeight
-                                            columnBuffer={7}
+                                            columnBuffer={8}
                                             density="comfortable"
                                             rowHeight={34}
                                             loading={false}
