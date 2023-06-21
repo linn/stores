@@ -126,7 +126,7 @@ function StockTriggerLevelsUtility({
 
     const columns = [
         {
-            headerName: 'Storage Place',
+            headerName: 'Pallet Number',
             field: 'palletNumber',
             editable: true,
             width: 300,
