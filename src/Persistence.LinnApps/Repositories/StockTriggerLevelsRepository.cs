@@ -54,15 +54,15 @@
             string storagePlaceSearchTerm)
         {
             var result = this.serviceDbContext.StockTriggerLevels.AsNoTracking().Where(
-                x => ((string.IsNullOrEmpty(partNumberSearchTerm) || EF.Functions.Like(
+                x => (string.IsNullOrEmpty(partNumberSearchTerm) || EF.Functions.Like(
                           x.PartNumber,
                           $"{partNumberSearchTerm.Replace("*", "%")}"))
-                     && (string.IsNullOrEmpty(storagePlaceSearchTerm) || EF.Functions.Like(
+                     && ((string.IsNullOrEmpty(storagePlaceSearchTerm) || EF.Functions.Like(
                              x.PalletNumber.ToString(),
-                             $"{storagePlaceSearchTerm.Replace("*", "%")}")))
+                             $"{storagePlaceSearchTerm.Replace("*", "%")}"))
                      || EF.Functions.Like(
                              x.StorageLocation.LocationCode,
-                             $"{storagePlaceSearchTerm.Replace("*", "%")}")).Include(s => s.StorageLocation);
+                             $"{storagePlaceSearchTerm.Replace("*", "%")}"))).Include(s => s.StorageLocation);
 
             return result;
         }
