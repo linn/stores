@@ -159,6 +159,11 @@ function StockTriggerLevelsUtility({
             )
         },
         {
+            headerName: 'Location Code',
+            field: 'locationCode',
+            width: 200
+        },
+        {
             headerName: 'Part',
             field: 'partNumber',
             editable: true,
@@ -202,11 +207,6 @@ function StockTriggerLevelsUtility({
             width: 200,
             type: 'number',
             editable: true
-        },
-        {
-            headerName: 'Storage Location Code',
-            field: 'locationCode',
-            width: 200
         },
         {
             headerName: 'Description',
