@@ -101,9 +101,11 @@
         public IEnumerable<Part> SearchParts(string searchTerm, int? resultLimit)
         {
             var result = this.serviceDbContext.Parts
-                .Where(x => EF.Functions.Like(x.PartNumber, $"%{searchTerm}%") 
-                            || EF.Functions.Like(x.Description, $"%{searchTerm}%"))
-                .Include(p => p.MechPartSource).AsNoTracking();
+                .Include(p => p.MechPartSource)
+                .AsNoTracking()
+                .Where(x => EF.Functions.Like(x.PartNumber, $"%{searchTerm}%"))
+                .Union(this.serviceDbContext.Parts
+                    .Where(x => EF.Functions.Like(x.Description, $"%{searchTerm}%")));
 
             if (resultLimit.HasValue)
             {
