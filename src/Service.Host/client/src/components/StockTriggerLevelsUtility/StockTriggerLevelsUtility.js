@@ -53,17 +53,19 @@ function StockTriggerLevelsUtility({
     const [triggerLevelRows, setStockTriggerLevelRows] = useState([]);
 
     useEffect(() => {
-        setStockTriggerLevelRows(
-            stockTriggerLevels.map(i => ({
-                ...i,
-                id: i.id,
-                name: i.palletNumber,
-                description: i.partNumber,
-                storagePlaceDescription: i.storageLocation?.description,
-                locationCode: i.storageLocation?.locationCode
-            }))
-        );
-    }, [stockTriggerLevels, setStockTriggerLevelRows]);
+        if (stockTriggerLevels !== prevStockTriggerLevel) {
+            console.log(stockTriggerLevels);
+            setStockTriggerLevelRows(
+                stockTriggerLevels.map(i => ({
+                    ...i,
+                    id: i.id,
+                    name: i.palletNumber,
+                    description: i.partNumber,
+                    storagePlaceDescription: i.storageLocation?.description
+                }))
+            );
+        }
+    }, [stockTriggerLevels, prevStockTriggerLevel]);
 
     const [options, setOptions] = useState({
         partNumber: '',
@@ -74,13 +76,13 @@ function StockTriggerLevelsUtility({
         setOptions({ ...options, [propertyName]: newValue });
 
     useEffect(() => {
-        if (items !== prevStockTriggerLevel) {
-            if (items) {
-                setPrevStockTriggerLevel(items);
-                setStockTriggerLevelRows(items);
+        if (stockTriggerLevels !== prevStockTriggerLevel) {
+            if (stockTriggerLevels) {
+                setPrevStockTriggerLevel(stockTriggerLevels);
+                setStockTriggerLevelRows(stockTriggerLevels);
             }
         }
-    }, [items, triggerLevelRows, prevStockTriggerLevel, options]);
+    }, [stockTriggerLevels, triggerLevelRows, prevStockTriggerLevel, options, items]);
 
     const handleSelectRows = selected => {
         setStockTriggerLevelRows(
@@ -126,7 +128,7 @@ function StockTriggerLevelsUtility({
 
     const columns = [
         {
-            headerName: 'Pallet Number',
+            headerName: 'Storage Location',
             field: 'palletNumber',
             editable: true,
             width: 300,
@@ -139,11 +141,9 @@ function StockTriggerLevelsUtility({
                             params.row.id,
                             newValue.description
                         );
-                        handleFieldChange('storagePlaceName', params.row.id, newValue.palletNumber);
                         handleFieldChange('locationId', params.row.id, newValue.locationId);
                         handleFieldChange('triggerLevel', params.row.id, newValue.triggerLevel);
                         handleFieldChange('maxCapacity', params.row.id, newValue.kanbanSize);
-                        handleFieldChange('locationCode', params.row.id, newValue.locationCode);
                     }}
                     label=""
                     modal
@@ -157,11 +157,6 @@ function StockTriggerLevelsUtility({
                     debounce={1000}
                 />
             )
-        },
-        {
-            headerName: 'Location Code',
-            field: 'locationCode',
-            width: 200
         },
         {
             headerName: 'Part',

@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Linq.Expressions;
 
     using Linn.Common.Facade;
@@ -18,6 +17,8 @@
     {
         private readonly IStockTriggerLevelsRepository repository;
 
+        private readonly IRepository<StorageLocation, int> storageLocationRepository;
+
         private readonly ITransactionManager transactionManager;
 
         private readonly IDatabaseService databaseService;
@@ -26,11 +27,13 @@
 
         public StockTriggerLevelsFacadeService(
             IStockTriggerLevelsRepository repository,
+            IRepository<StorageLocation, int> storageLocationRepository,
             ITransactionManager transactionManager,
             IDatabaseService databaseService,
             ILog logger) : base(repository, transactionManager)
         {
             this.repository = repository;
+            this.storageLocationRepository = storageLocationRepository;
             this.transactionManager = transactionManager;
             this.databaseService = databaseService;
             this.logger = logger;
@@ -79,7 +82,11 @@
                                                PartNumber = resource.PartNumber,
                                                PalletNumber = resource.PalletNumber,
                                                MaxCapacity = resource.MaxCapacity,
-                                               KanbanSize = resource.KanbanSize
+                                               KanbanSize = resource.KanbanSize,
+                                               StorageLocation = resource.StorageLocation != null
+                                                                     ? this.storageLocationRepository.FindBy(
+                                                                         c => c.LocationCode == resource.StorageLocation.LocationCode)
+                                                                     : null
                                            };
 
             return newStockTriggerLevel;
@@ -95,6 +102,9 @@
             entity.PalletNumber = updateResource.PalletNumber;
             entity.MaxCapacity = updateResource.MaxCapacity;
             entity.KanbanSize = updateResource.KanbanSize;
+            entity.StorageLocation = updateResource.StorageLocation != null
+                                ? this.storageLocationRepository.FindBy(c => c.LocationCode == updateResource.StorageLocation.LocationCode)
+                                : null;
         }
 
         protected override Expression<Func<StockTriggerLevel, bool>> SearchExpression(string searchTerm)

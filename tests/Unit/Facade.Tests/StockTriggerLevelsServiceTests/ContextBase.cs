@@ -23,16 +23,20 @@
 
         protected IStockTriggerLevelsRepository Repository { get; private set; }
 
+        protected IRepository<StorageLocation, int> StorageLocationRepository { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
             this.Repository = Substitute.For<IStockTriggerLevelsRepository>();
+            this.StorageLocationRepository = Substitute.For<IRepository<StorageLocation, int>>();
             this.TransactionManager = Substitute.For<ITransactionManager>();
             this.DatabaseService = Substitute.For<IDatabaseService>();
             this.LoggingService = Substitute.For<ILog>();
 
             this.Sut = new StockTriggerLevelsFacadeService(
                 this.Repository,
+                this.StorageLocationRepository,
                 this.TransactionManager,
                 this.DatabaseService,
                 this.LoggingService);
