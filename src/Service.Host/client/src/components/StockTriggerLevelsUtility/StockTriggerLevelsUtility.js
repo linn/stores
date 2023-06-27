@@ -49,28 +49,21 @@ function StockTriggerLevelsUtility({
 }) {
     const classes = useStyles();
 
-    const [prevStockTriggerLevel, setPrevStockTriggerLevel] = useState([]);
-
     const [triggerLevelRows, setStockTriggerLevelRows] = useState([]);
 
-    // this effect runs when the search results (stockTriggerLevels) changes
-    // if there are no searchResults, the redux state selector returns a new empty array, which is never equal to the empty array in the previous render
-    // since [] === [] = false
-    // so we need to find some way of stopping that happening
     useEffect(() => {
-        // one way would be checking the array has length
         if (stockTriggerLevels?.length) {
             setStockTriggerLevelRows(
                 stockTriggerLevels.map(i => ({
                     ...i,
                     id: i.id,
-                    name: i.palletNumber,
+                    name: i.storageLocation?.locationCode || i.palletNumber,
                     description: i.partNumber,
                     storagePlaceDescription: i.storageLocation?.description
                 }))
             );
         }
-    }, [stockTriggerLevels, prevStockTriggerLevel]);
+    }, [stockTriggerLevels]);
 
     const [options, setOptions] = useState({
         partNumber: '',
@@ -79,16 +72,6 @@ function StockTriggerLevelsUtility({
 
     const handleOptionsChange = (propertyName, newValue) =>
         setOptions({ ...options, [propertyName]: newValue });
-
-    // I'm not sure what this effect is supposed to be doing, so i took it out
-    // useEffect(() => {
-    //     if (stockTriggerLevels !== prevStockTriggerLevel) {
-    //         if (stockTriggerLevels.length) {
-    //             setPrevStockTriggerLevel(stockTriggerLevels);
-    //             setStockTriggerLevelRows(stockTriggerLevels);
-    //         }
-    //     }
-    // }, [stockTriggerLevels, triggerLevelRows, prevStockTriggerLevel, options, items]);
 
     const handleSelectRows = selected => {
         setStockTriggerLevelRows(
@@ -141,7 +124,17 @@ function StockTriggerLevelsUtility({
             renderEditCell: params => (
                 <Typeahead
                     onSelect={newValue => {
-                        handleFieldChange('storagePlaceName', params.row.id, newValue.name);
+                        console.log('BEFORE');
+                        console.log(newValue.name);
+                        console.log(newValue.name?.locationCode);
+                        console.log(newValue.palletNumber);
+                        handleFieldChange(
+                            'palletNumber',
+                            params.row.id,
+                            newValue.name ? newValue.name?.locationCode : newValue.palletNumber
+                        );
+                        console.log('AFTER');
+                        console.log(newValue.name);
                         handleFieldChange(
                             'storagePlaceDescription',
                             params.row.id,
@@ -286,10 +279,6 @@ function StockTriggerLevelsUtility({
                         Double click a cell to start editing or use the buttons at the bottom of the
                         page to add or delete a row.
                     </Typography>
-                    <Typography variant="subtitle2">
-                        The table currently only supports adding/updating/deleting one row at a
-                        time.
-                    </Typography>
                 </Grid>
                 {itemError && (
                     <Grid item xs={12}>
@@ -332,11 +321,6 @@ function StockTriggerLevelsUtility({
                                                 !triggerLevelRows
                                                     .filter(s => s.id !== params.row.id)
                                                     .some(x => x.selected)
-                                            }
-                                            isCellEditable={params =>
-                                                (!triggerLevelRows.some(x => x.edited) &&
-                                                    !triggerLevelRows.some(x => x.selected)) ||
-                                                params.row.edited
                                             }
                                         />
                                     </div>
@@ -382,7 +366,7 @@ StockTriggerLevelsUtility.propTypes = {
             locationId: PropTypes.number,
             triggerLevel: PropTypes.number,
             maxCapacity: PropTypes.number,
-            palletNumber: PropTypes.number,
+            palletNumber: PropTypes.string,
             kanbanSize: PropTypes.number,
             storageLocation: PropTypes.shape({})
         })
