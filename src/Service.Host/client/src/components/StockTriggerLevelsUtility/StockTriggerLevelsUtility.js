@@ -49,12 +49,17 @@ function StockTriggerLevelsUtility({
 }) {
     const classes = useStyles();
 
-    const [prevStockTriggerLevel, setPrevStockTriggerLevel] = useState(null);
+    const [prevStockTriggerLevel, setPrevStockTriggerLevel] = useState([]);
+
     const [triggerLevelRows, setStockTriggerLevelRows] = useState([]);
 
+    // this effect runs when the search results (stockTriggerLevels) changes
+    // if there are no searchResults, the redux state selector returns a new empty array, which is never equal to the empty array in the previous render
+    // since [] === [] = false
+    // so we need to find some way of stopping that happening
     useEffect(() => {
-        if (stockTriggerLevels !== prevStockTriggerLevel) {
-            console.log(stockTriggerLevels);
+        // one way would be checking the array has length
+        if (stockTriggerLevels?.length) {
             setStockTriggerLevelRows(
                 stockTriggerLevels.map(i => ({
                     ...i,
@@ -75,14 +80,15 @@ function StockTriggerLevelsUtility({
     const handleOptionsChange = (propertyName, newValue) =>
         setOptions({ ...options, [propertyName]: newValue });
 
-    useEffect(() => {
-        if (stockTriggerLevels !== prevStockTriggerLevel) {
-            if (stockTriggerLevels) {
-                setPrevStockTriggerLevel(stockTriggerLevels);
-                setStockTriggerLevelRows(stockTriggerLevels);
-            }
-        }
-    }, [stockTriggerLevels, triggerLevelRows, prevStockTriggerLevel, options, items]);
+    // I'm not sure what this effect is supposed to be doing, so i took it out
+    // useEffect(() => {
+    //     if (stockTriggerLevels !== prevStockTriggerLevel) {
+    //         if (stockTriggerLevels.length) {
+    //             setPrevStockTriggerLevel(stockTriggerLevels);
+    //             setStockTriggerLevelRows(stockTriggerLevels);
+    //         }
+    //     }
+    // }, [stockTriggerLevels, triggerLevelRows, prevStockTriggerLevel, options, items]);
 
     const handleSelectRows = selected => {
         setStockTriggerLevelRows(
