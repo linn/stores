@@ -57,9 +57,10 @@ function StockTriggerLevelsUtility({
                 stockTriggerLevels.map(i => ({
                     ...i,
                     id: i.id,
-                    name: i.storageLocation?.locationCode || i.palletNumber,
+                    name: i.storagePlaceName,
                     description: i.partNumber,
-                    storagePlaceDescription: i.storageLocation?.description
+                    storagePlaceDescription: i.storageLocation?.description,
+                    palletNumber: i.palletNumber || i.storageLocation?.locationCode
                 }))
             );
         }
@@ -124,17 +125,13 @@ function StockTriggerLevelsUtility({
             renderEditCell: params => (
                 <Typeahead
                     onSelect={newValue => {
-                        console.log('BEFORE');
-                        console.log(newValue.name);
-                        console.log(newValue.name?.locationCode);
-                        console.log(newValue.palletNumber);
                         handleFieldChange(
                             'palletNumber',
                             params.row.id,
-                            newValue.name ? newValue.name?.locationCode : newValue.palletNumber
+                            newValue.palletNumber
+                                ? newValue.palletNumber
+                                : newValue.storageLocation?.locationCode
                         );
-                        console.log('AFTER');
-                        console.log(newValue.name);
                         handleFieldChange(
                             'storagePlaceDescription',
                             params.row.id,
