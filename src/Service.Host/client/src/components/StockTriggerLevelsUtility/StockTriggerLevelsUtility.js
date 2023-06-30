@@ -49,21 +49,21 @@ function StockTriggerLevelsUtility({
 }) {
     const classes = useStyles();
 
-    const [prevStockTriggerLevel, setPrevStockTriggerLevel] = useState(null);
     const [triggerLevelRows, setStockTriggerLevelRows] = useState([]);
 
     useEffect(() => {
-        setStockTriggerLevelRows(
-            stockTriggerLevels.map(i => ({
-                ...i,
-                id: i.id,
-                name: i.palletNumber,
-                description: i.partNumber,
-                storagePlaceDescription: i.storageLocation?.description,
-                locationCode: i.storageLocation?.locationCode
-            }))
-        );
-    }, [stockTriggerLevels, setStockTriggerLevelRows]);
+        if (stockTriggerLevels?.length) {
+            setStockTriggerLevelRows(
+                stockTriggerLevels.map(i => ({
+                    ...i,
+                    id: i.id,
+                    description: i.storageLocation?.description,
+                    storagePlaceDescription: i.storageLocation?.description,
+                    locationName: i.palletNumber || i.storageLocation?.locationCode
+                }))
+            );
+        }
+    }, [stockTriggerLevels]);
 
     const [options, setOptions] = useState({
         partNumber: '',
@@ -72,15 +72,6 @@ function StockTriggerLevelsUtility({
 
     const handleOptionsChange = (propertyName, newValue) =>
         setOptions({ ...options, [propertyName]: newValue });
-
-    useEffect(() => {
-        if (items !== prevStockTriggerLevel) {
-            if (items) {
-                setPrevStockTriggerLevel(items);
-                setStockTriggerLevelRows(items);
-            }
-        }
-    }, [items, triggerLevelRows, prevStockTriggerLevel, options]);
 
     const handleSelectRows = selected => {
         setStockTriggerLevelRows(
@@ -126,29 +117,31 @@ function StockTriggerLevelsUtility({
 
     const columns = [
         {
-            headerName: 'Pallet Number',
-            field: 'palletNumber',
+            headerName: 'Storage Location',
+            field: 'locationName',
             editable: true,
             width: 300,
             renderEditCell: params => (
                 <Typeahead
                     onSelect={newValue => {
-                        handleFieldChange('storagePlaceName', params.row.id, newValue.name);
+                        handleFieldChange(
+                            'locationName',
+                            params.row.id,
+                            newValue.locationName || newValue.storageLocation?.locationCode
+                        );
                         handleFieldChange(
                             'storagePlaceDescription',
                             params.row.id,
                             newValue.description
                         );
-                        handleFieldChange('storagePlaceName', params.row.id, newValue.palletNumber);
                         handleFieldChange('locationId', params.row.id, newValue.locationId);
                         handleFieldChange('triggerLevel', params.row.id, newValue.triggerLevel);
                         handleFieldChange('maxCapacity', params.row.id, newValue.kanbanSize);
-                        handleFieldChange('locationCode', params.row.id, newValue.locationCode);
                     }}
                     label=""
                     modal
                     items={storagePlaces}
-                    value={params.row.storagePlaceName}
+                    value={params.row.storageLocation?.locationCode}
                     loading={storagePlacesLoading}
                     fetchItems={searchStoragePlaces}
                     links={false}
@@ -157,11 +150,6 @@ function StockTriggerLevelsUtility({
                     debounce={1000}
                 />
             )
-        },
-        {
-            headerName: 'Location Code',
-            field: 'locationCode',
-            width: 200
         },
         {
             headerName: 'Part',
@@ -285,10 +273,6 @@ function StockTriggerLevelsUtility({
                         Double click a cell to start editing or use the buttons at the bottom of the
                         page to add or delete a row.
                     </Typography>
-                    <Typography variant="subtitle2">
-                        The table currently only supports adding/updating/deleting one row at a
-                        time.
-                    </Typography>
                 </Grid>
                 {itemError && (
                     <Grid item xs={12}>
@@ -331,11 +315,6 @@ function StockTriggerLevelsUtility({
                                                 !triggerLevelRows
                                                     .filter(s => s.id !== params.row.id)
                                                     .some(x => x.selected)
-                                            }
-                                            isCellEditable={params =>
-                                                (!triggerLevelRows.some(x => x.edited) &&
-                                                    !triggerLevelRows.some(x => x.selected)) ||
-                                                params.row.edited
                                             }
                                         />
                                     </div>

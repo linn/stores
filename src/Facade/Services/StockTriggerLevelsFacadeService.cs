@@ -2,13 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Linq.Expressions;
 
     using Linn.Common.Facade;
     using Linn.Common.Logging;
     using Linn.Common.Persistence;
     using Linn.Common.Proxy.LinnApps;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
@@ -18,6 +18,10 @@
     {
         private readonly IStockTriggerLevelsRepository repository;
 
+        private readonly IRepository<StorageLocation, int> storageLocationRepository;
+
+        private readonly IQueryRepository<StoragePlace> storagePlaceRepository;
+
         private readonly ITransactionManager transactionManager;
 
         private readonly IDatabaseService databaseService;
@@ -26,11 +30,15 @@
 
         public StockTriggerLevelsFacadeService(
             IStockTriggerLevelsRepository repository,
+            IRepository<StorageLocation, int> storageLocationRepository,
+            IQueryRepository<StoragePlace> storagePlaceRepository,
             ITransactionManager transactionManager,
             IDatabaseService databaseService,
             ILog logger) : base(repository, transactionManager)
         {
             this.repository = repository;
+            this.storageLocationRepository = storageLocationRepository;
+            this.storagePlaceRepository = storagePlaceRepository;
             this.transactionManager = transactionManager;
             this.databaseService = databaseService;
             this.logger = logger;
@@ -71,16 +79,31 @@
 
         protected override StockTriggerLevel CreateFromResource(StockTriggerLevelsResource resource)
         {
-            var newStockTriggerLevel = new StockTriggerLevel 
+
+            var newStockTriggerLevel = new StockTriggerLevel
                                            {
                                                Id = this.databaseService.GetIdSequence("STL_SEQ"),
                                                LocationId = resource.LocationId,
                                                TriggerLevel = resource.TriggerLevel,
                                                PartNumber = resource.PartNumber,
-                                               PalletNumber = resource.PalletNumber,
                                                MaxCapacity = resource.MaxCapacity,
-                                               KanbanSize = resource.KanbanSize
+                                               KanbanSize = resource.KanbanSize,
                                            };
+
+            var storagePlace = this.storagePlaceRepository.FindBy(x => x.LocationId == resource.LocationId);
+
+            if (storagePlace.PalletNumber.HasValue)
+            {
+                newStockTriggerLevel.PalletNumber = storagePlace.PalletNumber;
+            }
+            else
+            {
+                newStockTriggerLevel.StorageLocation = resource.StorageLocation != null
+                                                           ? this.storageLocationRepository.FindBy(
+                                                               c => c.LocationCode
+                                                                    == resource.StorageLocation.LocationCode)
+                                                           : null;
+            }
 
             return newStockTriggerLevel;
         }
@@ -92,9 +115,25 @@
             entity.LocationId = updateResource.LocationId;
             entity.TriggerLevel = updateResource.TriggerLevel;
             entity.PartNumber = updateResource.PartNumber;
-            entity.PalletNumber = updateResource.PalletNumber;
             entity.MaxCapacity = updateResource.MaxCapacity;
             entity.KanbanSize = updateResource.KanbanSize;
+          
+            var storagePlace = this.storagePlaceRepository.FindBy(x => x.LocationId == updateResource.LocationId);
+
+            if (storagePlace != null)
+            {
+                if (storagePlace.PalletNumber.HasValue)
+                {
+                    entity.PalletNumber = storagePlace.PalletNumber;
+                }
+                else
+                {
+                    entity.StorageLocation = updateResource.StorageLocation != null
+                                                 ? this.storageLocationRepository.FindBy(
+                                                     c => c.LocationCode == updateResource.StorageLocation.LocationCode)
+                                                 : null;
+                }
+            }
         }
 
         protected override Expression<Func<StockTriggerLevel, bool>> SearchExpression(string searchTerm)
