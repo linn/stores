@@ -57,10 +57,9 @@ function StockTriggerLevelsUtility({
                 stockTriggerLevels.map(i => ({
                     ...i,
                     id: i.id,
-                    name: i.storagePlaceName,
-                    description: i.partNumber,
+                    description: i.storageLocation?.description,
                     storagePlaceDescription: i.storageLocation?.description,
-                    palletNumber: i.palletNumber || i.storageLocation?.locationCode
+                    locationName: i.palletNumber || i.storageLocation?.locationCode
                 }))
             );
         }
@@ -119,18 +118,16 @@ function StockTriggerLevelsUtility({
     const columns = [
         {
             headerName: 'Storage Location',
-            field: 'palletNumber',
+            field: 'locationName',
             editable: true,
             width: 300,
             renderEditCell: params => (
                 <Typeahead
                     onSelect={newValue => {
                         handleFieldChange(
-                            'palletNumber',
+                            'locationName',
                             params.row.id,
-                            newValue.palletNumber
-                                ? newValue.palletNumber
-                                : newValue.storageLocation?.locationCode
+                            newValue.locationName || newValue.storageLocation?.locationCode
                         );
                         handleFieldChange(
                             'storagePlaceDescription',
@@ -144,7 +141,7 @@ function StockTriggerLevelsUtility({
                     label=""
                     modal
                     items={storagePlaces}
-                    value={params.row.storagePlaceName}
+                    value={params.row.storageLocation?.locationCode}
                     loading={storagePlacesLoading}
                     fetchItems={searchStoragePlaces}
                     links={false}
