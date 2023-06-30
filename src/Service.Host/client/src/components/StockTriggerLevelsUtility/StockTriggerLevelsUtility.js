@@ -360,7 +360,7 @@ StockTriggerLevelsUtility.propTypes = {
             locationId: PropTypes.number,
             triggerLevel: PropTypes.number,
             maxCapacity: PropTypes.number,
-            palletNumber: PropTypes.string,
+            palletNumber: PropTypes.number,
             kanbanSize: PropTypes.number,
             storageLocation: PropTypes.shape({})
         })
