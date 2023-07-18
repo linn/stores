@@ -53,6 +53,9 @@
         private readonly IFacadeService<PartTqmsOverride, string, PartTqmsOverrideResource, PartTqmsOverrideResource>
             tqmsOverridesService;
 
+        private readonly IFacadeService<PartLibrary, string, PartLibraryResource, PartLibraryResource>
+            partLibrariesService;
+
         public PartsModule(
             IPartsFacadeService partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
@@ -65,7 +68,8 @@
             IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> mechPartSourceService,
             IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> manufacturerService,
             IPartDataSheetValuesService dataSheetsValuesService,
-            IFacadeService<PartTqmsOverride, string, PartTqmsOverrideResource, PartTqmsOverrideResource> tqmsOverridesService)
+            IFacadeService<PartTqmsOverride, string, PartTqmsOverrideResource, PartTqmsOverrideResource> tqmsOverridesService,
+            IFacadeService<PartLibrary, string, PartLibraryResource, PartLibraryResource> partLibrariesService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
@@ -119,6 +123,9 @@
 
             this.tqmsOverridesService = tqmsOverridesService;
             this.Get("/parts/tqms-categories", _ => this.GetTqmsOverrides());
+
+            this.partLibrariesService = partLibrariesService;
+            this.Get("/parts/libraries", _ => this.GetPartLibraries());
         }
 
         public object GetApp()
@@ -373,6 +380,13 @@
         {
             return this.Negotiate.WithModel(
                     this.tqmsOverridesService.GetAll())
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetPartLibraries()
+        {
+            return this.Negotiate.WithModel(
+                    this.partLibrariesService.GetAll())
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
     }

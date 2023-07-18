@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { InputField, Dropdown } from '@linn-it/linn-form-components-library';
 
-export default function CadDataTab({
+function CadInfoTab({
     handleFieldChange,
     partLibraries,
     libraryName,
     libraryRef,
-    footprintRef,
+    footprintRef1,
     footprintRef2,
     footprintRef3
 }) {
@@ -27,43 +27,45 @@ export default function CadDataTab({
                 />
             </Grid>
             <Grid item xs={6} />
+
             <Grid item xs={6}>
                 <InputField
-                    label="Library Ref"
+                    fullWidth
                     value={libraryRef}
+                    label="Library Ref"
+                    onChange={handleFieldChange}
                     propertyName="libraryRef"
+                />
+            </Grid>
+            <Grid item xs={6} />
+
+            <Grid item xs={6}>
+                <InputField
                     fullWidth
+                    value={footprintRef1}
+                    label="Footprint Ref 1"
                     onChange={handleFieldChange}
+                    propertyName="footprintRef1"
                 />
             </Grid>
             <Grid item xs={6} />
             <Grid item xs={6}>
                 <InputField
-                    label="Footprint Ref"
-                    value={footprintRef}
-                    propertyName="footprintRef"
                     fullWidth
-                    onChange={handleFieldChange}
-                />
-            </Grid>
-            <Grid item xs={6} />
-            <Grid item xs={6}>
-                <InputField
-                    label="Footprint Ref 2"
                     value={footprintRef2}
-                    propertyName="footprintRef2"
-                    fullWidth
+                    label="Footprint Ref 2"
                     onChange={handleFieldChange}
+                    propertyName="footprintRef2"
                 />
             </Grid>
             <Grid item xs={6} />
             <Grid item xs={6}>
                 <InputField
-                    label="Footprint Ref 3"
-                    value={footprintRef3}
-                    propertyName="footprintRef3"
                     fullWidth
+                    value={footprintRef3}
+                    label="Footprint Ref 3"
                     onChange={handleFieldChange}
+                    propertyName="footprintRef3"
                 />
             </Grid>
             <Grid item xs={6} />
@@ -71,21 +73,23 @@ export default function CadDataTab({
     );
 }
 
-CadDataTab.propTypes = {
+CadInfoTab.propTypes = {
     handleFieldChange: PropTypes.func.isRequired,
-    libraryRef: PropTypes.string,
     libraryName: PropTypes.string,
-    footprintRef: PropTypes.string,
+    libraryRef: PropTypes.string,
+    footprintRef1: PropTypes.string,
     footprintRef2: PropTypes.string,
     footprintRef3: PropTypes.string,
     partLibraries: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
-CadDataTab.defaultProps = {
-    libraryRef: null,
+CadInfoTab.defaultProps = {
+    partLibraries: [],
     libraryName: null,
-    footprintRef: null,
+    libraryRef: null,
+    footprintRef1: null,
     footprintRef2: null,
-    footprintRef3: null,
-    partLibraries: []
+    footprintRef3: null
 };
+
+export default CadInfoTab;

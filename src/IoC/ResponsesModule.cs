@@ -238,6 +238,8 @@
             builder.RegisterType<WarehouseLocationResourceBuilder>().As<IResourceBuilder<WarehouseLocation>>();
             builder.RegisterType<StockTriggerLevelResourceBuilder>().As<IResourceBuilder<StockTriggerLevel>>();
             builder.RegisterType<StockTriggerLevelsResourceBuilder>().As<IResourceBuilder<IEnumerable<StockTriggerLevel>>>();
+            builder.RegisterType<PartLibraryResourceBuilder>().As<IResourceBuilder<PartLibrary>>();
+            builder.RegisterType<PartLibrariesResourceBuilder>().As<IResourceBuilder<IEnumerable<PartLibrary>>>();
         }
     }
 }

@@ -493,3 +493,5 @@ export const stockTriggerLevels = new ItemType(
     'STOCK_TRIGGER_LEVELS',
     '/inventory/stock-trigger-levels'
 );
+
+export const partLibraries = new ItemType('partLibraries', 'PART_LIBRARIES', '/parts/libraries');

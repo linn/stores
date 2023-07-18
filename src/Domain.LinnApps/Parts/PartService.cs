@@ -173,6 +173,11 @@
             from.PlannerStory = to.PlannerStory;
             from.DateDesignObsolete = to.DateDesignObsolete;
             from.PurchasingPhaseOutType = to.PurchasingPhaseOutType;
+            from.LibraryName = to.LibraryName;
+            from.LibraryRef = to.LibraryRef;
+            from.FootprintRef1 = to.FootprintRef1;
+            from.FootprintRef2 = to.FootprintRef2;
+            from.FootprintRef3 = to.FootprintRef3;
         }
 
         public Part CreatePart(Part partToCreate, List<string> privileges, bool fromTemplate)

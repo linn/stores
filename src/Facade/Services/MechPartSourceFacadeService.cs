@@ -61,7 +61,11 @@
             candidate.PartCreatedDate = resource.PartCreatedDate != null
                                             ? DateTime.Parse(resource.PartCreatedDate)
                                             : (DateTime?)null;
-            
+            candidate.LibraryName = resource.LibraryName;
+            candidate.LibraryRef = resource.LibraryRef;
+            candidate.FootprintRef = resource.FootprintRef;
+            candidate.FootprintRef2 = resource.FootprintRef2;
+            candidate.FootprintRef3 = resource.FootprintRef3;
 
             return this.domainService.Create(candidate, resource.UserPrivileges);
         }

@@ -22,6 +22,7 @@ import StoresTab from '../../containers/parts/tabs/StoresTab';
 import LifeCycleTab from '../../containers/parts/tabs/LifeCycleTab';
 import partReducer from './partReducer';
 import handleBackClick from '../../helpers/handleBackClick';
+import CadInfoTab from '../../containers/parts/tabs/CadInfoTab';
 
 function Part({
     copy,
@@ -147,7 +148,8 @@ function Part({
         build: 1,
         purch: 2,
         stores: 3,
-        lifecycle: 4
+        lifecycle: 4,
+        cadInfo: 5
     };
     const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
 
@@ -370,6 +372,7 @@ function Part({
                                 <Tab label="Purch" />
                                 <Tab label="Stores" />
                                 <Tab label="LifeCycle" />
+                                <Tab label="Cad Info" />
                             </Tabs>
                             {tab === 0 && (
                                 <GeneralTab
@@ -488,6 +491,16 @@ function Part({
                                     handleChangeLiveness={handleChangeLiveness}
                                     liveTestDialogOpen={liveTestDialogOpen}
                                     partNumber={state.part.partNumber}
+                                />
+                            )}
+                            {tab === 5 && (
+                                <CadInfoTab
+                                    handleFieldChange={handleFieldChange}
+                                    libraryName={state.part.libraryName}
+                                    libraryRef={state.part.libraryRef}
+                                    footprintRef1={state.part.footprintRef1}
+                                    footprintRef2={state.part.footprintRef2}
+                                    footprintRef3={state.part.footprintRef3}
                                 />
                             )}
                             <Grid item xs={12}>

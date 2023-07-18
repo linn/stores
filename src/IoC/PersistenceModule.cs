@@ -153,6 +153,7 @@
             builder.RegisterType<EuCreditInvoiceRepository>().As<IQueryRepository<EuCreditInvoice>>();
             builder.RegisterType<ProductUpgradeRulesRepository>().As<IQueryRepository<ProductUpgradeRule>>();
             builder.RegisterType<StoresMoveLogRepository>().As<IQueryRepository<StoresMoveLog>>();
+            builder.RegisterType<PartLibraryRepository>().As<IRepository<PartLibrary, string>>();
         }
     }
 }
