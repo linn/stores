@@ -149,7 +149,8 @@
                             LifeExpectancyPart = model.LifeExpectancyPart,
                             Configuration = model.Configuration,
                             FootprintRef2 = model.FootprintRef2,
-                            FootprintRef3 = model.FootprintRef3
+                            FootprintRef3 = model.FootprintRef3,
+                            LibraryName = model.LibraryName
             };
         }
 

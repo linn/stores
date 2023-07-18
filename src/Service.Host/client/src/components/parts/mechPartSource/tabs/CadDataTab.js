@@ -12,6 +12,7 @@ export default function CadDataTab({
     footprintRef2,
     footprintRef3
 }) {
+    console.log(libraryName);
     return (
         <Grid container spacing={3}>
             <Grid item xs={6}>

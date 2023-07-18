@@ -61,12 +61,7 @@
             candidate.PartCreatedDate = resource.PartCreatedDate != null
                                             ? DateTime.Parse(resource.PartCreatedDate)
                                             : (DateTime?)null;
-            candidate.LibraryName = resource.LibraryName;
-            candidate.LibraryRef = resource.LibraryRef;
-            candidate.FootprintRef = resource.FootprintRef;
-            candidate.FootprintRef2 = resource.FootprintRef2;
-            candidate.FootprintRef3 = resource.FootprintRef3;
-
+            
             return this.domainService.Create(candidate, resource.UserPrivileges);
         }
 
@@ -134,16 +129,16 @@
                                                   RohsCompliant = a.RohsCompliant
                                               }).ToList(),
                                  MechPartAlts = resource.MechPartAlts?.Select(a => new MechPartAlt
-                                     {
-                                         PartNumber = a.PartNumber,
-                                         Sequence = a.Sequence,
-                                         Supplier = a.SupplierId == null ? null :
-                                                        new Supplier
-                                                            {
-                                                                Id = (int)a.SupplierId,
-                                                                Name = a.SupplierName
-                                                            }
-                                     }).ToList(),
+                                                                                       {
+                                                                                           PartNumber = a.PartNumber,
+                                                                                           Sequence = a.Sequence,
+                                                                                           Supplier = a.SupplierId == null ? null :
+                                                                                                          new Supplier
+                                                                                                              {
+                                                                                                                  Id = (int)a.SupplierId,
+                                                                                                                  Name = a.SupplierName
+                                                                                                              }
+                                                                                       }).ToList(),
                                  ApprovedReferenceStandards = resource.ApprovedReferenceStandards,
                                  ApprovedReferencesAvailable = resource.ApprovedReferencesAvailable,
                                  ApprovedReferencesDate = resource.ApprovedReferencesDate != null
@@ -205,10 +200,13 @@
                                  TransistorPolarity = resource.TransistorPolarity,
                                  IcType = resource.IcType,
                                  IcFunction = resource.IcFunction,
+                                 LibraryName = resource.LibraryName,
                                  LibraryRef = resource.LibraryRef,
                                  FootprintRef = resource.FootprintRef,
+                                 FootprintRef2 = resource.FootprintRef2,
+                                 FootprintRef3 = resource.FootprintRef3,
                                  RkmCode = resource.Resistance == null ? null :
-                                               this.domainService.GetRkmCode(resource.ResistanceUnits, (decimal)resource.Resistance),
+                                 this.domainService.GetRkmCode(resource.ResistanceUnits, (decimal)resource.Resistance),
 
                                  ApplyTCodeBy = resource.ApplyTCodeBy != null ?
                                                     this.employeeRepository.FindById((int)resource.ApplyTCodeBy) : null,
@@ -241,16 +239,16 @@
                                                     DateTime.Parse(resource.VerifiedDate) : (DateTime?)null,
 
                                  PurchasingQuotes = resource.PurchasingQuotes?.Select(q => new MechPartPurchasingQuote
-                                     {
-                                         LeadTime = q.LeadTime,
-                                         Manufacturer = q.ManufacturerCode != null ?
-                                                            this.manufacturerRepository.FindById(q.ManufacturerCode) : null,
-                                         ManufacturersPartNumber = q.ManufacturersPartNumber,
-                                         Moq = q.Moq,
-                                         RohsCompliant = q.RohsCompliant,
-                                         UnitPrice = q.UnitPrice,
-                                         Supplier = this.supplierRepository.FindBy(s => s.Id == q.SupplierId)
-                                     }).ToList(),
+                                                                                               {
+                                                                                                   LeadTime = q.LeadTime,
+                                                                                                   Manufacturer = q.ManufacturerCode != null ?
+                                                                                                                      this.manufacturerRepository.FindById(q.ManufacturerCode) : null,
+                                                                                                   ManufacturersPartNumber = q.ManufacturersPartNumber,
+                                                                                                   Moq = q.Moq,
+                                                                                                   RohsCompliant = q.RohsCompliant,
+                                                                                                   UnitPrice = q.UnitPrice,
+                                                                                                   Supplier = this.supplierRepository.FindBy(s => s.Id == q.SupplierId)
+                                                                                               }).ToList(),
 
                                  Usages = resource.Usages?.Select(u => new MechPartUsage
                                                                            {
@@ -260,7 +258,6 @@
                                  LifeExpectancyPart = resource.LifeExpectancyPart,
                                  Configuration = resource.Configuration
                              };
-
             return entity;
         }
     }
