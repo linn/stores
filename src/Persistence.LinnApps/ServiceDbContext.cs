@@ -261,6 +261,8 @@
 
         public DbQuery<StoresMoveLog> StoresMoveLogs { get; set; }
 
+        public DbSet<PartLibrary> PartLibraries { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -385,6 +387,7 @@
             this.QueryMrParts(builder);
             this.QueryProductUpgradeRules(builder);
             this.QueryStoresMoveLogs(builder);
+            this.BuildPartLibraries(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -527,6 +530,11 @@
             e.HasOne(p => p.MechPartSource).WithOne(m => m.Part);
             e.HasOne(p => p.SalesArticle).WithOne(a => a.Part).HasForeignKey<Part>(x => x.PartNumber);
             e.HasMany(p => p.QcControls).WithOne().HasForeignKey(q => q.PartNumber);
+            e.Property(p => p.LibraryName).HasColumnName("LIBRARY_NAME").HasMaxLength(200);
+            e.Property(p => p.LibraryRef).HasColumnName("LIBRARY_REF").HasMaxLength(100);
+            e.Property(p => p.FootprintRef1).HasColumnName("FOOTPRINT_REF").HasMaxLength(100);
+            e.Property(p => p.FootprintRef2).HasColumnName("FOOTPRINT_REF_2").HasMaxLength(100);
+            e.Property(p => p.FootprintRef3).HasColumnName("FOOTPRINT_REF_3").HasMaxLength(100);
         }
 
         private void BuildPartDataSheets(ModelBuilder builder)
@@ -649,6 +657,9 @@
             e.Property(s => s.DateCancelled).HasColumnName("DATE_CANCELLED");
             e.Property(s => s.LifeExpectancyPart).HasColumnName("LIFE_EXPECTANCY_PART").HasMaxLength(50);
             e.Property(s => s.Configuration).HasColumnName("CONFIGURATION").HasMaxLength(200);
+            e.Property(s => s.LibraryName).HasColumnName("LIBRARY_NAME").HasMaxLength(200);
+            e.Property(s => s.FootprintRef2).HasColumnName("FOOTPRINT_REF_2").HasMaxLength(100);
+            e.Property(s => s.FootprintRef3).HasColumnName("FOOTPRINT_REF_3").HasMaxLength(100);
         }
 
         private void BuildMechPartAlts(ModelBuilder builder)
@@ -2210,7 +2221,6 @@
             q.Property(r => r.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
         }
 
-        // QueryStoresMoveLogs
         private void QueryStoresMoveLogs(ModelBuilder builder)
         {
             var q = builder.Query<StoresMoveLog>().ToView("STORES_MOVE_LOG_VIEW");
@@ -2240,6 +2250,13 @@
             q.Property(a => a.QtyInStock).HasColumnName("QTY_IN_STOCK");
             q.Property(a => a.QtyInQC).HasColumnName("QTY_IN_QC");
             q.Property(a => a.QtyAtSupplier).HasColumnName("QTY_AT_SUPPLIER");
+        }
+
+        private void BuildPartLibraries(ModelBuilder builder)
+        {
+            var q = builder.Entity<PartLibrary>().ToTable("ECIT_LIBRARIES");
+            q.HasKey(a => a.LibraryName);
+            q.Property(a => a.LibraryName).HasColumnName("LIBRARY_NAME").HasMaxLength(100);
         }
     }
 }

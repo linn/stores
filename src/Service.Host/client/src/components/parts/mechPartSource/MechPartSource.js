@@ -20,7 +20,7 @@ import QualityRequirementsTab from './tabs/QualityRequirementsTab';
 import ManufacturersTab from '../../../containers/parts/mechPartSource/tabs/ManufacturersTab';
 import SuppliersTab from '../../../containers/parts/mechPartSource/tabs/SuppliersTab';
 import ParamDataTab from '../../../containers/parts/mechPartSource/tabs/ParamDataTab';
-import CadDataTab from './tabs/CadDataTab';
+import CadDataTab from '../../../containers/parts/mechPartSource/tabs/CadDataTab';
 import UsagesTab from './tabs/UsagesTab';
 import VerificationTab from './tabs/VerificationTab';
 import PurchasingQuotesTab from '../../../containers/parts/mechPartSource/tabs/PurchasingQuotesTab';
@@ -561,8 +561,11 @@ function MechPartSource({
                             )}
                             {tab === 6 && (
                                 <CadDataTab
+                                    libraryName={mechPartSource.libraryName}
                                     libraryRef={mechPartSource.libraryRef}
                                     footprintRef={mechPartSource.footprintRef}
+                                    footprintRef2={mechPartSource.footprintRef2}
+                                    footprintRef3={mechPartSource.footprintRef3}
                                     handleFieldChange={handleFieldChange}
                                 />
                             )}

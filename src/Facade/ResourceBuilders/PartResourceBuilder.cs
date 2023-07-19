@@ -107,7 +107,12 @@
                                         }).OrderBy(m => m.Preference),
                            Links = this.BuildLinks(part).ToArray(),
                            SalesArticleNumber = part.SalesArticle?.ArticleNumber,
-                           SourceId = part.MechPartSource?.Id
+                           SourceId = part.MechPartSource?.Id,
+                           LibraryName = part.LibraryName,
+                           LibraryRef = part.LibraryRef,
+                           FootprintRef1 = part.FootprintRef1,
+                           FootprintRef2 = part.FootprintRef2,
+                           FootprintRef3 = part.FootprintRef3
                        };
         }
 

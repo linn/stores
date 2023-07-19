@@ -90,11 +90,19 @@
             get; private set;
         }
 
+        protected IFacadeService<PartLibrary, string, PartLibraryResource, PartLibraryResource> PartLibrariesService
+        {
+            get;
+            private set;
+        }
+
         protected IAuthorisationService AuthorisationService { get; set; }
 
         [SetUp]
         public void EstablishContext()
         {
+            this.PartLibrariesService =
+                Substitute.For<IFacadeService<PartLibrary, string, PartLibraryResource, PartLibraryResource>>();
             this.PartsFacadeService = Substitute
                 .For<IPartsFacadeService>();
             this.PartLiveService = Substitute.For<IPartLiveService>();
@@ -144,6 +152,7 @@
                         with.Dependency(this.DataSheetValuesService);
                         with.Dependency(this.PartPack);
                         with.Dependency(this.TqmsCategoriesService);
+                        with.Dependency(this.PartLibrariesService);
                         with.Dependency<IResourceBuilder<Part>>(new PartResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<Part>>>(new PartsResourceBuilder());
                         with.Dependency<IResourceBuilder<ResponseModel<PartTemplate>>>(new PartTemplateResourceBuilder(this.AuthorisationService));
@@ -170,6 +179,9 @@
                         with.Dependency<IResourceBuilder<PartTqmsOverride>>(new PartTqmsOverrideResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<PartTqmsOverride>>>(
                             new PartTqmsOverridesResourceBuilder());
+                        with.Dependency<IResourceBuilder<PartLibrary>>(new PartLibraryResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<PartLibrary>>>(
+                            new PartLibrariesResourceBuilder());
                         with.ResponseProcessor<PartResponseProcessor>();
                         with.ResponseProcessor<PartsResponseProcessor>();
                         with.ResponseProcessor<UnitsOfMeasureResponseProcessor>();
@@ -182,6 +194,8 @@
                         with.ResponseProcessor<MechPartSourceResponseProcessor>();
                         with.ResponseProcessor<ManufacturersResponseProcessor>();
                         with.ResponseProcessor<PartTqmsOverridesResponseProcessor>();
+                        with.ResponseProcessor<PartLibraryResponseProcessor>();
+                        with.ResponseProcessor<PartLibrariesResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
                                 {

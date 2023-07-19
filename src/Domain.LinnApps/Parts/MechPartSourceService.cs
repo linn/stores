@@ -170,6 +170,9 @@
             current.IcFunction = updated.IcFunction;
             current.LibraryRef = updated.LibraryRef;
             current.FootprintRef = updated.FootprintRef;
+            current.LibraryName = updated.LibraryName;
+            current.FootprintRef2 = updated.FootprintRef2;
+            current.FootprintRef3 = updated.FootprintRef3;
             current.RkmCode = updated.RkmCode;
             current.ApplyTCodeBy = updated.ApplyTCodeBy;
             current.ApplyTCodeDate = updated.ApplyTCodeDate;

@@ -228,7 +228,12 @@
                                     DatePhasedOut = string.IsNullOrEmpty(resource.DatePhasedOut)
                                                         ? (DateTime?)null
                                                         : DateTime.Parse(resource.DatePhasedOut),
-                                    ReasonPhasedOut = resource.ReasonPhasedOut
+                                    ReasonPhasedOut = resource.ReasonPhasedOut,
+                                    LibraryName = resource.LibraryName,
+                                    LibraryRef = resource.LibraryRef,
+                                    FootprintRef1 = resource.FootprintRef1,
+                                    FootprintRef2 = resource.FootprintRef2,
+                                    FootprintRef3 = resource.FootprintRef3
                                 };
             return this.partService.CreatePart(partToAdd, resource.UserPrivileges.ToList(), resource.FromTemplate);
         }
@@ -337,8 +342,13 @@
                                       MadeLiveBy = 
                                           resource.MadeLiveBy != null
                                               ? this.employeeRepository.FindById((int)resource.MadeLiveBy)
-                                              : null
-                                  };
+                                              : null,
+                                      LibraryName = resource.LibraryName,
+                                      LibraryRef = resource.LibraryRef,
+                                      FootprintRef1 = resource.FootprintRef1,
+                                      FootprintRef2 = resource.FootprintRef2,
+                                      FootprintRef3 = resource.FootprintRef3
+            };
           
             this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList(), resource.UpdatedBy.Value);
         }
