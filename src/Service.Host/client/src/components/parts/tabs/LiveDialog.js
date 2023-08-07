@@ -17,13 +17,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function LiveDialog(props) {
-    const { onClose, dateLive, open, liveTest, handleChangeLiveness } = props;
+    const { onClose, dateLive, open, liveTest, handleChangeLiveness, setStandardPrices } = props;
     const classes = useStyles();
 
     const handleClose = () => {
         onClose();
     };
-
     return (
         <Dialog onClose={handleClose} open={open} fullWidth>
             <div className={classes.dialog}>
@@ -39,15 +38,26 @@ export default function LiveDialog(props) {
                         fullWidth
                     />
                 )}
-                <Button
-                    className={classes.pullRight}
-                    disabled={!liveTest?.canMakeLive}
-                    onClick={handleChangeLiveness}
-                    variant="outlined"
-                    color="primary"
-                >
-                    CONFIRM
-                </Button>
+                {!liveTest?.message?.includes('YES') ? (
+                    <Button
+                        className={classes.pullRight}
+                        onClick={setStandardPrices}
+                        variant="outlined"
+                        color="primary"
+                    >
+                        FIX IT
+                    </Button>
+                ) : (
+                    <Button
+                        className={classes.pullRight}
+                        disabled={!liveTest?.canMakeLive}
+                        onClick={handleChangeLiveness}
+                        variant="contained"
+                        color="primary"
+                    >
+                        CONFIRM
+                    </Button>
+                )}
             </div>
         </Dialog>
     );
@@ -58,7 +68,8 @@ LiveDialog.propTypes = {
     open: PropTypes.bool.isRequired,
     dateLive: PropTypes.string,
     liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
-    handleChangeLiveness: PropTypes.func.isRequired
+    handleChangeLiveness: PropTypes.func.isRequired,
+    setStandardPrices: PropTypes.func.isRequired
 };
 
 LiveDialog.defaultProps = {

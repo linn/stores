@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import { InputField, Dropdown, Typeahead, LinkButton } from '@linn-it/linn-form-components-library';
+import { InputField, Dropdown, LinkButton } from '@linn-it/linn-form-components-library';
+
+import config from '../../../config';
 
 function PurchTab({
     handleFieldChange,
@@ -9,10 +11,6 @@ function PurchTab({
     ourUnitOfMeasure,
     preferredSupplier,
     preferredSupplierName,
-    suppliersSearchResults,
-    suppliersSearchLoading,
-    searchSuppliers,
-    clearSuppliersSearch,
     currency,
     currencyUnitPrice,
     baseUnitPrice,
@@ -20,15 +18,12 @@ function PurchTab({
     labourPrice,
     costingPrice,
     orderHold,
-    partCategory,
     nonForecastRequirement,
     oneOffRequirement,
     sparesRequirement,
     ignoreWorkstationStock,
     imdsIdNumber,
     imdsWeight,
-    mechanicalOrElectronic,
-    partCategories,
     links
 }) {
     return (
@@ -46,19 +41,13 @@ function PurchTab({
             </Grid>
             <Grid item xs={8} />
             <Grid item xs={4}>
-                <Typeahead
-                    onSelect={newValue => {
-                        handleFieldChange('preferredSupplier', newValue);
-                    }}
-                    label="Preferred Supplier"
-                    modal
-                    items={suppliersSearchResults}
+                <InputField
+                    fullWidth
                     value={preferredSupplier}
-                    loading={suppliersSearchLoading}
-                    fetchItems={searchSuppliers}
-                    links={false}
-                    clearSearch={() => clearSuppliersSearch}
-                    placeholder="Search Code or Description"
+                    label="Preferred Supplier"
+                    disabled
+                    onChange={() => {}}
+                    propertyName="preferredSupplier"
                 />
             </Grid>
             <Grid item xs={5}>
@@ -72,12 +61,14 @@ function PurchTab({
                 />
             </Grid>
             <Grid item xs={3}>
-                <LinkButton
-                    to="/parts/suppliers"
-                    text="Part Suppliers"
-                    tooltip="Coming soon - still on Oracle Forms"
-                    disabled
-                />
+                {links.find(l => l.rel === 'part-supplier') && (
+                    <LinkButton
+                        text="Part Suppliers"
+                        newTab
+                        external
+                        to={`${config.proxyRoot}${links.find(l => l.rel === 'part-supplier').href}`}
+                    />
+                )}
             </Grid>
             {links.find(l => l.rel === 'mechanical-sourcing-sheet') && (
                 <>
@@ -108,6 +99,7 @@ function PurchTab({
                     fullWidth
                     value={currencyUnitPrice}
                     label="Currency Unit Price"
+                    disabled
                     onChange={handleFieldChange}
                     type="number"
                     propertyName="currencyUnitPrice"
@@ -129,6 +121,7 @@ function PurchTab({
                     fullWidth
                     value={baseUnitPrice}
                     label="Base Unit Price"
+                    disabled
                     onChange={handleFieldChange}
                     type="number"
                     propertyName="baseUnitPrice"
@@ -151,6 +144,7 @@ function PurchTab({
                     value={materialPrice}
                     label="Material Price"
                     type="number"
+                    disabled
                     onChange={handleFieldChange}
                     propertyName="materialPrice"
                 />
@@ -172,6 +166,7 @@ function PurchTab({
                     value={labourPrice}
                     label="Labour Price"
                     type="number"
+                    disabled
                     onChange={handleFieldChange}
                     propertyName="labourPrice"
                 />
@@ -240,45 +235,9 @@ function PurchTab({
                 />
             </Grid>
             <Grid item xs={8} />
-            <Grid item xs={4}>
-                <Dropdown
-                    label="Part Categories"
-                    propertyName="partCategory"
-                    items={partCategories.map(c => ({
-                        id: c.category,
-                        displayText: c.description
-                    }))}
-                    fullWidth
-                    allowNoValue={false}
-                    value={partCategory}
-                    onChange={handleFieldChange}
-                />
-            </Grid>
-            <Grid item xs={4}>
-                <Dropdown
-                    label="Mechanical Or Electronic"
-                    propertyName="mechanicalOrElectronic"
-                    items={['M', 'E']}
-                    fullWidth
-                    allowNoValue
-                    value={mechanicalOrElectronic}
-                    onChange={handleFieldChange}
-                />
-            </Grid>
-            <Grid item xs={4} />
         </Grid>
     );
 }
-
-const supplierShape = PropTypes.shape({
-    supplierCode: PropTypes.string,
-    description: PropTypes.string
-});
-
-const partCategoryShape = PropTypes.shape({
-    category: PropTypes.string,
-    description: PropTypes.string
-});
 
 const unitOfMeasureShape = PropTypes.shape({
     unit: PropTypes.string
@@ -290,10 +249,6 @@ PurchTab.propTypes = {
     ourUnitOfMeasure: PropTypes.string,
     preferredSupplier: PropTypes.string,
     preferredSupplierName: PropTypes.string,
-    suppliersSearchResults: PropTypes.arrayOf(supplierShape),
-    suppliersSearchLoading: PropTypes.bool,
-    searchSuppliers: PropTypes.func.isRequired,
-    clearSuppliersSearch: PropTypes.func.isRequired,
     currency: PropTypes.string,
     currencyUnitPrice: PropTypes.number,
     baseUnitPrice: PropTypes.number,
@@ -301,15 +256,12 @@ PurchTab.propTypes = {
     labourPrice: PropTypes.number,
     costingPrice: PropTypes.number,
     orderHold: PropTypes.string,
-    partCategory: PropTypes.string,
     nonForecastRequirement: PropTypes.number,
     oneOffRequirement: PropTypes.number,
     sparesRequirement: PropTypes.number,
     ignoreWorkstationStock: PropTypes.string,
     imdsIdNumber: PropTypes.number,
     imdsWeight: PropTypes.number,
-    mechanicalOrElectronic: PropTypes.string,
-    partCategories: PropTypes.arrayOf(partCategoryShape),
     links: PropTypes.arrayOf(PropTypes.shape({ href: PropTypes.string, rel: PropTypes.string }))
 };
 
@@ -319,8 +271,6 @@ PurchTab.defaultProps = {
     ourUnitOfMeasure: null,
     preferredSupplier: null,
     preferredSupplierName: null,
-    suppliersSearchResults: [],
-    suppliersSearchLoading: null,
     currency: null,
     currencyUnitPrice: null,
     baseUnitPrice: null,
@@ -328,15 +278,12 @@ PurchTab.defaultProps = {
     labourPrice: null,
     costingPrice: null,
     orderHold: null,
-    partCategory: null,
     nonForecastRequirement: null,
     oneOffRequirement: null,
     sparesRequirement: null,
     ignoreWorkstationStock: null,
     imdsIdNumber: null,
-    imdsWeight: null,
-    mechanicalOrElectronic: null,
-    partCategories: []
+    imdsWeight: null
 };
 
 export default PurchTab;

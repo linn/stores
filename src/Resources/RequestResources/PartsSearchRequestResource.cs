@@ -5,5 +5,7 @@
         public string DescriptionSearchTerm { get; set; }
 
         public string PartNumberSearchTerm { get; set; }
+
+        public string ProductAnalysisCodeSearchTerm { get; set; }
     }
 }

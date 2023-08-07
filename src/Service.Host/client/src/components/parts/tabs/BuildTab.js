@@ -6,6 +6,7 @@ import { InputField, Dropdown, Typeahead, LinkButton } from '@linn-it/linn-form-
 function BuildTab({
     appRoot,
     handleFieldChange,
+    creating,
     linnProduced,
     sernosSequenceName,
     sernosSequenceDescription,
@@ -17,12 +18,14 @@ function BuildTab({
     assemblyTechnologyName,
     bomType,
     bomId,
+    bomVerifyFreqWeeks,
     optionSet,
     drawingReference,
     safetyCriticalPart,
     plannedSurplus,
     decrementRules,
-    assemblyTechnologies
+    assemblyTechnologies,
+    partNumber
 }) {
     return (
         <Grid container spacing={3}>
@@ -82,6 +85,7 @@ function BuildTab({
                     fullWidth
                     allowNoValue
                     value={decrementRuleName}
+                    disabled={!creating()}
                     onChange={handleFieldChange}
                 />
             </Grid>
@@ -120,6 +124,7 @@ function BuildTab({
                     ]}
                     fullWidth
                     allowNoValue
+                    disabled={!creating()}
                     value={bomType}
                     onChange={handleFieldChange}
                 />
@@ -136,13 +141,21 @@ function BuildTab({
             </Grid>
             <Grid item xs={2}>
                 <LinkButton
-                    to="/parts/change-bom-type"
+                    to={`/purchasing/bom-type-change?partNumber=${partNumber}`}
                     text="Change Bom Type"
-                    tooltip="Coming soon - still on Oracle Forms"
-                    disabled
+                    disabled={creating()}
+                    external
                 />
             </Grid>
-            <Grid item xs={2} />
+            <Grid item xs={2}>
+                {bomId && (
+                    <LinkButton
+                        to={`/purchasing/boms/bom-utility?bomName=${partNumber}`}
+                        text="View Bom"
+                        external
+                    />
+                )}
+            </Grid>
             <Grid item xs={4}>
                 <InputField
                     fullWidth
@@ -151,6 +164,16 @@ function BuildTab({
                     disabled
                     onChange={handleFieldChange}
                     propertyName="optionSet"
+                />
+            </Grid>
+            <Grid item xs={2}>
+                <InputField
+                    fullWidth
+                    value={bomVerifyFreqWeeks}
+                    type="number"
+                    label="Bom Frequency (Weeks)"
+                    onChange={handleFieldChange}
+                    propertyName="bomVerifyFreqWeeks"
                 />
             </Grid>
             <Grid item xs={8} />
@@ -195,11 +218,13 @@ function BuildTab({
 BuildTab.propTypes = {
     appRoot: PropTypes.string.isRequired,
     handleFieldChange: PropTypes.func.isRequired,
+    creating: PropTypes.func.isRequired,
     linnProduced: PropTypes.string,
     decrementRuleName: PropTypes.string,
     assemblyTechnologyName: PropTypes.string,
     bomType: PropTypes.string,
     bomId: PropTypes.number,
+    bomVerifyFreqWeeks: PropTypes.number,
     optionSet: PropTypes.string,
     drawingReference: PropTypes.string,
     safetyCriticalPart: PropTypes.string,
@@ -211,7 +236,8 @@ BuildTab.propTypes = {
     searchSernosSequences: PropTypes.func.isRequired,
     clearSernosSequencesSearch: PropTypes.func.isRequired,
     decrementRules: PropTypes.arrayOf(PropTypes.shape({})),
-    assemblyTechnologies: PropTypes.arrayOf(PropTypes.shape({}))
+    assemblyTechnologies: PropTypes.arrayOf(PropTypes.shape({})),
+    partNumber: PropTypes.string
 };
 
 BuildTab.defaultProps = {
@@ -220,6 +246,7 @@ BuildTab.defaultProps = {
     assemblyTechnologyName: null,
     bomType: null,
     bomId: null,
+    bomVerifyFreqWeeks: null,
     optionSet: null,
     drawingReference: null,
     safetyCriticalPart: null,
@@ -229,7 +256,8 @@ BuildTab.defaultProps = {
     sernosSequencesSearchResults: [],
     sernosSequencesSearchLoading: false,
     decrementRules: [],
-    assemblyTechnologies: []
+    assemblyTechnologies: [],
+    partNumber: null
 };
 
 export default BuildTab;

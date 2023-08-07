@@ -15,7 +15,6 @@ import part from './parts/part';
 import partTemplate from './parts/partTemplate';
 import partTemplates from './parts/partTemplates';
 import partLiveTest from './parts/partLiveTest';
-import partCategories from './partCategories';
 import productAnalysisCodes from './productAnalysisCodes';
 import rootProducts from './rootProducts';
 import sernosSequences from './sernosSequences';
@@ -112,8 +111,6 @@ import ports from './importBooks/ports';
 import cartonTypes from './cartonTypes';
 import validatePurchaseOrderBookInQtyResult from './validatePurchaseOrderBookInQtyResult';
 import req from './req';
-import debitNote from './purchasing/debitNote';
-import debitNotes from './purchasing/debitNotes';
 import stockMoves from './stockLocators/stockMoves';
 import printConsignmentLabel from './printConsignmentLabel';
 import currencies from './currencies';
@@ -136,6 +133,17 @@ import addresses from './addresses';
 import salesOutletAddresses from './salesOutletAddresses';
 import unpickStock from './unpickStock';
 import unallocateReq from './unallocateReq';
+import qcPartsReport from './qcPartsReport';
+import euCreditInvoicesReport from './euCreditInvoicesReport';
+import whatToWandReprint from './whatToWandReprint';
+import triggerLevelsForAStoragePlaceReport from './triggerLevelsForAStoragePlaceReport';
+import bomStandardPrices from './bomStandardPrices';
+import warehouseTask from './warehouseTask';
+import warehousePallet from './warehousePallet';
+import storesMoveLogReport from './storesMoveLogReport';
+import stockTriggerLevel from './stockTriggerLevel';
+import stockTriggerLevels from './stockTriggerLevels';
+import partLibraries from './parts/partLibraries';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -151,6 +159,7 @@ const rootReducer = history =>
         auditLocation,
         auditLocations,
         availableStock,
+        bomStandardPrices,
         carrier,
         carriers,
         cartonTypes,
@@ -162,8 +171,6 @@ const rootReducer = history =>
         countries,
         createAuditReqs,
         currencies,
-        debitNote,
-        debitNotes,
         demLocations,
         departments,
         decrementRules,
@@ -175,6 +182,7 @@ const rootReducer = history =>
         doStockMove,
         doWandItem,
         employees,
+        euCreditInvoicesReport,
         exchangeRates,
         exportReturn,
         exportRsns,
@@ -204,10 +212,10 @@ const rootReducer = history =>
         parcel,
         parcels,
         part,
-        partCategories,
         partDataSheetValues,
         partLiveTest,
         parts,
+        partLibraries,
         partStorageTypes,
         partTemplate,
         partTemplates,
@@ -220,6 +228,7 @@ const rootReducer = history =>
         printRsn,
         productAnalysisCodes,
         purchaseOrders,
+        qcPartsReport,
         req,
         reqMoves,
         rootProducts,
@@ -246,10 +255,13 @@ const rootReducer = history =>
         stockMoves,
         stockPools,
         stockQuantities,
+        stockTriggerLevel,
+        stockTriggerLevels,
         storageLocations,
         storagePlace,
         storagePlaces,
         storagePlaceAuditReport,
+        storesMoveLogReport,
         suppliers,
         suppliersApprovedCarrier,
         tpkTransferStock,
@@ -257,6 +269,7 @@ const rootReducer = history =>
         tqmsJobRefs,
         tqmsSummaryByCategoryReport,
         transferableStock,
+        triggerLevelsForAStoragePlaceReport,
         unallocateConsignment,
         unallocateConsignmentLine,
         unallocateReq,
@@ -269,6 +282,9 @@ const rootReducer = history =>
         validateStorageTypeResult,
         wandConsignments,
         wandItems,
+        warehouseTask,
+        warehousePallet,
+        whatToWandReprint,
         workstationTopUpStatus,
         wwdReport,
         ...sharedLibraryReducers,

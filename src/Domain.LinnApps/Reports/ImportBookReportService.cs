@@ -41,7 +41,8 @@
             var iprImpbooks = this.impbookRepository.FilterBy(
                 x => euCountries.Contains(x.Supplier.CountryCode) == euResults && x.CustomsEntryCodeDate.HasValue
                                                                                && from < x.CustomsEntryCodeDate.Value
-                                                                               && x.CustomsEntryCodeDate.Value < to);
+                                                                               && x.CustomsEntryCodeDate.Value < to
+                                                                               && !x.DateCancelled.HasValue);
 
             var reportLayout = new SimpleGridLayout(
                 this.reportingHelper,
@@ -78,7 +79,8 @@
             var iprImpbooks = this.impbookRepository.FilterBy(
                 x => euCountries.Contains(x.Supplier.CountryCode) == euResults && x.CustomsEntryCodeDate.HasValue
                                                                                && from < x.CustomsEntryCodeDate.Value
-                                                                               && x.CustomsEntryCodeDate.Value < to);
+                                                                               && x.CustomsEntryCodeDate.Value < to
+                                                                               && !x.DateCancelled.HasValue);
 
             var reportLayout = new SimpleGridLayout(
                 this.reportingHelper,
@@ -115,7 +117,8 @@
                 x => x.OrderDetails.Any(
                          z => (z.CpcNumber.HasValue && z.CpcNumber.Value == this.IprCpcNumberId) == iprResults)
                      && x.CustomsEntryCodeDate.HasValue && from < x.CustomsEntryCodeDate.Value
-                     && x.CustomsEntryCodeDate.Value < to);
+                     && x.CustomsEntryCodeDate.Value < to
+                     && !x.DateCancelled.HasValue);
 
             var reportLayout = new SimpleGridLayout(
                 this.reportingHelper,
@@ -153,7 +156,8 @@
                 x => x.OrderDetails.Any(
                          z => (z.CpcNumber.HasValue && z.CpcNumber.Value == this.IprCpcNumberId) == iprResults)
                      && x.CustomsEntryCodeDate.HasValue && from < x.CustomsEntryCodeDate.Value
-                     && x.CustomsEntryCodeDate.Value < to);
+                     && x.CustomsEntryCodeDate.Value < to
+                     && !x.DateCancelled.HasValue);
 
             var reportLayout = new SimpleGridLayout(
                 this.reportingHelper,
@@ -515,7 +519,7 @@
                     {
                         RowId = $"{impbook.Id.ToString()}/{orderDetail.LineNumber}",
                         ColumnId = "Currency",
-                        TextDisplay = string.Empty,
+                        TextDisplay = impbook.Currency,
                         RowTitle = impbook.Id.ToString()
                     });
 

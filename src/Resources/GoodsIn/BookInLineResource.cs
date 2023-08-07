@@ -2,8 +2,8 @@
 {
     public class BookInLineResource
     {
-        public int Id { get; set; }
-
+        public string Id { get; set; }
+        
         public string TransactionType { get; set; }
 
         public string DateCreated { get; set; }
@@ -18,7 +18,7 @@
 
         public string Location { get; set; }
 
-        public int? Quantity { get; set; }
+        public decimal? Quantity { get; set; }
 
         public string ManufacturersPartNumber { get; set; }
 

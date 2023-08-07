@@ -16,7 +16,8 @@ function StoresTab({
     secondStageDescription,
     tqmsCategoryOverride,
     stockNotes,
-    tqmsCategories
+    tqmsCategories,
+    plannerStory
 }) {
     return (
         <Grid container spacing={3}>
@@ -26,7 +27,7 @@ function StoresTab({
                     propertyName="qcOnReceipt"
                     items={['Y', 'N']}
                     fullWidth
-                    allowNoValue={false}
+                    allowNoValue
                     value={qcOnReceipt}
                     onChange={handleFieldChange}
                 />
@@ -40,7 +41,16 @@ function StoresTab({
                     propertyName="qcInformation"
                 />
             </Grid>
-            <Grid item xs={8} />
+            <Grid item xs={4}>
+                <InputField
+                    fullWidth
+                    value={safetyWeeks}
+                    type="number"
+                    label="Safety Weeks"
+                    onChange={handleFieldChange}
+                    propertyName="safetyWeeks"
+                />
+            </Grid>
             <Grid item xs={4}>
                 <InputField
                     fullWidth
@@ -52,21 +62,10 @@ function StoresTab({
                 />
             </Grid>
             <Grid item xs={4}>
-                <InputField
-                    fullWidth
-                    value={safetyWeeks}
-                    type="number"
-                    label="Safety Weeks"
-                    onChange={handleFieldChange}
-                    propertyName="safetyWeeks"
-                />
-            </Grid>
-            <Grid item xs={4} />
-            <Grid item xs={4}>
                 <Dropdown
                     label="Rail Method"
                     propertyName="railMethod"
-                    items={['MR9', 'SMM', 'POLICY', 'FIXED', 'OVERRIDE']}
+                    items={['MR9', 'SMM', 'POLICY', 'FIXED', 'OVERRIDE', 'LEADTIME']}
                     fullWidth
                     allowNoValue
                     value={railMethod}
@@ -124,7 +123,17 @@ function StoresTab({
                     onChange={handleFieldChange}
                 />
             </Grid>
-            <Grid item xs={8} />
+            <Grid item xs={2} />
+            <Grid item xs={6}>
+                <InputField
+                    fullWidth
+                    value={plannerStory}
+                    label="MR Notes"
+                    onChange={handleFieldChange}
+                    propertyName="plannerStory"
+                />
+            </Grid>
+            <Grid item xs={6} />
             <Grid item xs={6}>
                 <InputField
                     fullWidth
@@ -139,6 +148,7 @@ function StoresTab({
                     rows={4}
                 />
             </Grid>
+            <Grid item xs={6} />
         </Grid>
     );
 }
@@ -158,7 +168,8 @@ StoresTab.propTypes = {
     stockNotes: PropTypes.string,
     tqmsCategories: PropTypes.arrayOf(
         PropTypes.shape({ name: PropTypes.string, description: PropTypes.string })
-    )
+    ),
+    plannerStory: PropTypes.string
 };
 
 StoresTab.defaultProps = {
@@ -173,7 +184,8 @@ StoresTab.defaultProps = {
     secondStageDescription: null,
     tqmsCategoryOverride: null,
     stockNotes: null,
-    tqmsCategories: []
+    tqmsCategories: [],
+    plannerStory: null
 };
 
 export default StoresTab;

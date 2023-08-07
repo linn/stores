@@ -7,6 +7,8 @@
 
     public interface IImportBookService
     {
+        ImportBook Create(ImportBook impbook);
+
         void Update(ImportBook from, ImportBook to);
 
         IEnumerable<ImportBookExchangeRate> GetExchangeRates(string date);

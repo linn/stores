@@ -15,6 +15,8 @@ import userManager from '../helpers/userManager';
 import 'typeface-roboto';
 import Part from '../containers/parts/Part';
 import Parts from '../containers/parts/Parts';
+import PartTemplate from '../containers/parts/PartTemplate';
+import PartTemplates from '../containers/parts/PartTemplates';
 import StartAllocation from '../containers/allocations/StartAllocation';
 import SosAllocHeads from '../containers/allocations/SosAllocHeads';
 import WwdReportOptions from '../containers/reports/WwdReportOptions';
@@ -43,6 +45,7 @@ import TqmsSummaryByCategoryReportOptions from '../containers/reports/TqmsSummar
 import TqmsSummaryByCategoryReport from '../containers/reports/TqmsSummaryByCategoryReport';
 import ConsignmentShipfiles from '../containers/ConsignmentShipfiles';
 import Consignment from '../containers/consignments/Consignment';
+import ExportConsignments from '../containers/consignments/ExportConsignments';
 import GoodsInUtility from '../containers/goodsIn/GoodsInUtility';
 import ImportBook from '../containers/importBooks/ImportBook';
 import ImportBooks from '../containers/importBooks/ImportBooks';
@@ -50,9 +53,17 @@ import ImportBooksIprReportOptions from '../containers/reports/ImpbookIprReportO
 import ImportBooksIprReport from '../containers/reports/ImpbookIprReport';
 import ImportBooksEuReportOptions from '../containers/reports/ImpbookEuReportOptions';
 import ImportBooksEuReport from '../containers/reports/ImpbookEuReport';
-import DebitNotes from '../containers/purchasing/DebitNotes';
 import QcLabelPrintScreen from '../containers/goodsIn/QcLabelPrintScreen';
 import StockBatchesInRotationOrder from '../containers/stockLocatorUtility/StockBatchesInRotationOrder';
+import ZeroValuedInvoiceDetailsReportOptions from './reports/ZeroValuedInvoiceDetailsReportOptions';
+import QcPartsReport from '../containers/reports/QcPartsReport';
+import EuCreditInvoicesReport from '../containers/reports/EuCreditInvoicesReport';
+import WhatToWandReprint from '../containers/WhatToWandReprint';
+import TriggerLevelsForAStoragePlaceReport from '../containers/reports/TriggerLevelsForAStoragePlaceReport';
+import BahnhofKoenig from '../containers/BahnofKoenig';
+import StoresMoveLogReport from '../containers/reports/StoresMoveLogReport';
+import StoresMoveLogReportOptions from '../containers/reports/StoresMoveLogReportOptions';
+import StockTriggerLevelsUtility from '../containers/stockTriggerLevelsUtility/StockTriggerLevelsUtility';
 
 const Root = ({ store }) => (
     <div>
@@ -151,6 +162,24 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/dept-stock-parts"
                                         component={DeptStockParts}
+                                    />
+
+                                    <Route
+                                        exact
+                                        path="/inventory/part-templates/create"
+                                        component={PartTemplate}
+                                    />
+
+                                    <Route
+                                        exact
+                                        path="/inventory/part-templates/:id"
+                                        component={PartTemplate}
+                                    />
+
+                                    <Route
+                                        exact
+                                        path="/inventory/part-templates"
+                                        component={PartTemplates}
                                     />
 
                                     <Route exact path="/logistics/parcels" component={Parcels} />
@@ -262,6 +291,11 @@ const Root = ({ store }) => (
                                     />
                                     <Route
                                         exact
+                                        path="/logistics/exports/consignments"
+                                        component={ExportConsignments}
+                                    />
+                                    <Route
+                                        exact
                                         path="/logistics/consignments"
                                         component={Consignment}
                                     />
@@ -272,7 +306,7 @@ const Root = ({ store }) => (
                                     />
                                     <Route
                                         exact
-                                        path="/logistics/goods-in-utility/test-labels"
+                                        path="/logistics/reqs/labels"
                                         component={QcLabelPrintScreen}
                                     />
                                     <Route
@@ -307,8 +341,49 @@ const Root = ({ store }) => (
                                     />
                                     <Route
                                         exact
-                                        path="/inventory/purchasing/debit-notes"
-                                        component={DebitNotes}
+                                        path="/logistics/zero-valued-items-on-invoices-report"
+                                        component={ZeroValuedInvoiceDetailsReportOptions}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/reports/qc-parts"
+                                        component={QcPartsReport}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/reports/eu-credit-invoices"
+                                        component={EuCreditInvoicesReport}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/what-to-wand-reprint"
+                                        component={WhatToWandReprint}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/storage-places/reports/stock-trigger-levels"
+                                        component={TriggerLevelsForAStoragePlaceReport}
+                                    />
+                                    <Route exact path="/logistics/bk" component={BahnhofKoenig} />
+                                    <Route
+                                        exact
+                                        path="/inventory/reports/stores-move-log"
+                                        component={StoresMoveLogReportOptions}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/reports/stores-move-log/report"
+                                        component={StoresMoveLogReport}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/stock-trigger-levels/"
+                                        component={StockTriggerLevelsUtility}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/stock-trigger-levels/:id"
+                                        component={StockTriggerLevelsUtility}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>

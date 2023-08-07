@@ -79,6 +79,9 @@
                 .Should().Be("Loan Stock Value");
             totalStockSummary.GetGridValue(totalStockSummary.RowIndex("Loan Stock Value"), totalStockSummary.ColumnIndex("Value"))
                 .Should().Be(27);
+            totalStockSummary.GetRowValues()
+                .First(a => a.RowIndex == totalStockSummary.RowIndex("Total Stock")).Values
+                .First(a => a.Key == totalStockSummary.ColumnIndex("Value")).Value.DecimalPlaces.Should().Be(0);
             totalStockSummary.GetTotalValue(totalStockSummary.ColumnIndex("Value")).Should().Be(69);
 
             tqmsSummary.RowCount().Should().Be(2);

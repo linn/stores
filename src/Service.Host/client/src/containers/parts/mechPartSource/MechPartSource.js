@@ -38,7 +38,8 @@ const mapDispatchToProps = {
     updateItem: mechPartSourceActions.update,
     setEditStatus: mechPartSourceActions.setEditStatus,
     setSnackbarVisible: mechPartSourceActions.setSnackbarVisible,
-    addItem: mechPartSourceActions.add
+    addItem: mechPartSourceActions.add,
+    clearErrors: mechPartSourceActions.clearErrorsForItem
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(MechPartSource));

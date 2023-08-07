@@ -18,10 +18,5 @@
         {
             return this.serviceDbContext.TqmsMaster.ToList().FirstOrDefault();
         }
-
-        public void UpdateRecord(TqmsMaster newValues)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

@@ -28,7 +28,7 @@
 
         public string GetLocation(ConsignmentShipfile shipfile)
         {
-            throw new NotImplementedException();
+            return $"logistics/shipfiles/{shipfile.Id}";
         }
 
         object IResourceBuilder<ConsignmentShipfile>.Build(ConsignmentShipfile shipfile) => this.Build(shipfile);

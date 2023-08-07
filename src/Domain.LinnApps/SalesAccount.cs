@@ -24,5 +24,7 @@
         public IEnumerable<Consignment> Consignments { get; set; }
 
         public Contact ContactDetails { get; set; }
+
+        public IEnumerable<Invoice> InvoicesAgainst { get; set; }
     }
 }

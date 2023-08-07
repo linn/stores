@@ -124,7 +124,8 @@
                             {
                                 Id = x.Id,
                                 Qty = x.Qty
-                            })));
+                            }),
+                    requestResource.PrinterName));
         }
 
         public IResult<ValidateStorageTypeResult> ValidateStorageType(ValidateStorageTypeRequestResource requestResource)

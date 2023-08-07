@@ -10,6 +10,6 @@
 
         public IEnumerable<TransferredStockResource> Transferred { get; set; }
 
-        public WhatToWandResource WhatToWandReport { get; set; }
+        public IEnumerable<WhatToWandConsignmentResource> WhatToWandReport { get; set; }
     }
 }

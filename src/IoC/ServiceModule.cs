@@ -20,7 +20,6 @@
     using Linn.Stores.Domain.LinnApps.GoodsIn;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
     using Linn.Stores.Domain.LinnApps.Parts;
-    using Linn.Stores.Domain.LinnApps.Purchasing;
     using Linn.Stores.Domain.LinnApps.Reports;
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.StockLocators;
@@ -30,14 +29,12 @@
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Workstation;
     using Linn.Stores.Facade.Services;
-    using Linn.Stores.Facade.Services.Purchasing;
     using Linn.Stores.Proxy;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Allocation;
     using Linn.Stores.Resources.Consignments;
     using Linn.Stores.Resources.ImportBooks;
     using Linn.Stores.Resources.Parts;
-    using Linn.Stores.Resources.Purchasing;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Resources.Requisitions;
     using Linn.Stores.Resources.StockLocators;
@@ -76,6 +73,13 @@
             builder.RegisterType<ImportBookReportService>()
                 .As<IImportBookReportService>();
             builder.RegisterType<ConsignmentService>().As<IConsignmentService>();
+            builder.RegisterType<ZeroValuedInvoiceDetailsReportService>()
+                .As<IZeroValuedInvoiceDetailsReportService>();
+            builder.RegisterType<QcPartsReportService>().As<IQcPartsReportService>();
+            builder.RegisterType<EuCreditInvoicesReportService>().As<IEuCreditInvoicesReportService>();
+            builder.RegisterType<StockTriggerLevelsForAStoragePlaceReportService>()
+                .As<IStockTriggerLevelsForAStoragePlaceReportService>();
+            builder.RegisterType<StoresMoveLogReportService>().As<IStoresMoveLogReportService>();
 
             // facade services
             builder.RegisterType<PartFacadeService>()
@@ -86,7 +90,6 @@
             builder.RegisterType<AllocationFacadeService>().As<IAllocationFacadeService>();
             builder.RegisterType<SernosSequencesService>().As<ISernosSequencesService>();
             builder.RegisterType<UnitsOfMeasureService>().As<IUnitsOfMeasureService>();
-            builder.RegisterType<PartCategoryService>().As<IPartCategoryService>();
             builder.RegisterType<SuppliersService>().As<ISuppliersService>();
             builder.RegisterType<ProductAnalysisCodeService>()
                 .As<IProductAnalysisCodeService>();
@@ -128,8 +131,8 @@
             builder.RegisterType<ImportBookTransportCodeFacadeService>().As<IFacadeService<ImportBookTransportCode, int, ImportBookTransportCodeResource, ImportBookTransportCodeResource>>();
             builder.RegisterType<ImportBookCpcNumberFacadeService>().As<IFacadeService<ImportBookCpcNumber, int, ImportBookCpcNumberResource, ImportBookCpcNumberResource>>();
             builder.RegisterType<PartDataSheetValuesService>().As<IPartDataSheetValuesService>();
-            builder.RegisterType<TqmsCategoriesService>()
-                .As<IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>>();
+            builder.RegisterType<PartTqmsOverridesService>()
+                .As<IFacadeService<PartTqmsOverride, string, PartTqmsOverrideResource, PartTqmsOverrideResource>>();
             builder.RegisterType<WorkstationFacadeService>().As<IWorkstationFacadeService>();
             builder.RegisterType<StockLocatorsFacadeService>()
                 .As<IStockLocatorFacadeService>();
@@ -159,8 +162,9 @@
             builder.RegisterType<TqmsReportsFacadeService>().As<ITqmsReportsFacadeService>();
             builder.RegisterType<TqmsMasterFacadeService>().As<ISingleRecordFacadeService<TqmsMaster, TqmsMasterResource>>();
             builder.RegisterType<TqmsJobrefsFacadeService>().As<IFacadeService<TqmsJobRef, string, TqmsJobRefResource, TqmsJobRefResource>>();
+            builder.RegisterType<TqmsCategoriesFacadeService>().As<IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>>();
             builder.RegisterType<ConsignmentShipfileFacadeService>().As<IConsignmentShipfileFacadeService>();
-            builder.RegisterType<ConsignmentFacadeService>().As<IFacadeService<Consignment, int, ConsignmentResource, ConsignmentUpdateResource>>();
+            builder.RegisterType<ConsignmentFacadeService>().As<IConsignmentFacadeService>();
             builder.RegisterType<CurrencyFacadeService>()
                 .As<IFacadeService<Currency, string, CurrencyResource, CurrencyResource>>();
             builder.RegisterType<HubFacadeService>().As<IFacadeService<Hub, int, HubResource, HubResource>>();
@@ -177,6 +181,16 @@
             builder.RegisterType<LoanService>().As<ILoanService>();
             builder.RegisterType<RsnConditionsService>().As<IRsnConditionsService>();
             builder.RegisterType<RsnAccessoriesService>().As<IRsnAccessoriesService>();
+            builder.RegisterType<ZeroValuedInvoiceDetailsReportFacadeService>()
+                .As<IZeroValuedInvoiceDetailsReportFacadeService>();
+            builder.RegisterType<QcPartsReportFacadeService>().As<IQcPartsReportFacadeService>();
+            builder.RegisterType<EuCreditInvoicesReportFacadeService>().As<IEuCreditInvoicesReportFacadeService>();
+            builder.RegisterType<StockTriggerLevelsForAStoragePlaceFacadeService>()
+                .As<IStockTriggerLevelsForAStoragePlaceFacadeService>();
+            builder.RegisterType<StoresMoveLogReportFacadeService>().As<IStoresMoveLogReportFacadeService>();
+            builder.RegisterType<StockTriggerLevelsFacadeService>().As<IStockTriggerLevelsFacadeService>();
+            builder.RegisterType<PartLibraryService>()
+                .As<IFacadeService<PartLibrary, string, PartLibraryResource, PartLibraryResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();
@@ -204,16 +218,16 @@
             builder.RegisterType<ConsignmentProxyService>().As<IConsignmentProxyService>();
             builder.RegisterType<InvoicingPack>().As<IInvoicingPack>();
             builder.RegisterType<ExportBookPack>().As<IExportBookPack>();
-            builder.RegisterType<PlCreditDebitNoteService>()
-                .As<IFacadeFilterService<PlCreditDebitNote, int, PlCreditDebitNoteResource, PlCreditDebitNoteResource, PlCreditDebitNoteResource>>();
             builder.RegisterType<LogisticsLabelService>().As<ILogisticsLabelService>();
             builder.RegisterType<DeptStockPartsService>().As<IDeptStockPartsService>();
             builder.RegisterType<PurchaseLedgerPack>().As<IPurchaseLedgerPack>();
 
-
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();
             builder.RegisterType<ProductionTriggerLevelsProxy>().As<IProductionTriggerLevelsService>().WithParameter(
+                "rootUri",
+                ConfigurationManager.Configuration["PROXY_ROOT"]);
+            builder.RegisterType<ProductsService>().As<IProductsService>().WithParameter(
                 "rootUri",
                 ConfigurationManager.Configuration["PROXY_ROOT"]);
 

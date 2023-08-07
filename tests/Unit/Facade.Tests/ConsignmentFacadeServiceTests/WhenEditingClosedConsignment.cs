@@ -61,7 +61,8 @@
             this.updateResource = new ConsignmentUpdateResource
                                       {
                                           HubId = 2222,
-                                          Status = "C"
+                                          Status = "C",
+                                          CarrierRef = "test"
                                       };
                                           
             this.ConsignmentRepository.FindById(this.consignmentId).Returns(consignment);
@@ -80,9 +81,21 @@
         [Test]
         public void ShouldReturnSuccess()
         {
-            this.result.Should().BeOfType<BadRequestResult<Consignment>>();
-            var badRequestResult = (BadRequestResult<Consignment>)this.result;
-            badRequestResult.Message.Should().Be($"Error updating {this.consignmentId} - You cannot edit closed consignment {this.consignmentId}.");
+            this.result.Should().BeOfType<SuccessResult<Consignment>>();
+        }
+
+        [Test]
+        public void ShouldNotUpdateHub()
+        {
+            var successResult = (SuccessResult<Consignment>)this.result;
+            successResult.Data.HubId.Should().Be(1);
+        }
+
+        [Test]
+        public void ShouldUpdateCarrierRef()
+        {
+            var successResult = (SuccessResult<Consignment>)this.result;
+            successResult.Data.CarrierRef.Should().Be("test");
         }
     }
 }

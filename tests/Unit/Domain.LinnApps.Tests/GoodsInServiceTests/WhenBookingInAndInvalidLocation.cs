@@ -7,6 +7,7 @@
     using FluentAssertions;
 
     using Linn.Stores.Domain.LinnApps.GoodsIn;
+    using Linn.Stores.Domain.LinnApps.Parts;
 
     using NSubstitute;
     using NSubstitute.ReturnsExtensions;
@@ -18,6 +19,8 @@
         [Test]
         public void ShouldReturnErrorResult()
         {
+            this.PartsRepository.FindBy(Arg.Any<Expression<Func<Part, bool>>>())
+                .Returns(new Part { DateLive = DateTime.Today });
             this.StoragePlaceRepository.FindBy(Arg.Any<Expression<Func<StoragePlace, bool>>>()).ReturnsNull();
             var result = this.Sut.DoBookIn(
                 "O",

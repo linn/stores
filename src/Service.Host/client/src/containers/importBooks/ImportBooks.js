@@ -17,7 +17,7 @@ const initialise = () => dispatch => {
 
 const mapDispatchToProps = {
     initialise,
-    fetchItems: importBooksActions.search,
+    fetchItems: importBooksActions.searchWithOptions,
     clearSearch: importBooksActions.clearSearch,
     classes: {}
 };

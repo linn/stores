@@ -18,11 +18,20 @@ export const departmentsActionTypes = makeActionTypes(itemTypes.departments.acti
 
 export const rootProductsActionTypes = makeActionTypes(itemTypes.rootProducts.actionType);
 
-export const partCategoriesActionTypes = makeActionTypes(itemTypes.partCategories.actionType);
-
 export const partTemplateActionTypes = makeActionTypes(itemTypes.partTemplate.actionType);
 
 export const partTemplatesActionTypes = makeActionTypes(itemTypes.partTemplates.actionType);
+
+export const partTemplateStateActionTypes = makeActionTypes(
+    itemTypes.partTemplate.actionType,
+    true,
+    true
+);
+
+export const partTemplatesStateActionTypes = makeActionTypes(
+    itemTypes.partTemplates.actionType,
+    false
+);
 
 export const partLiveTestActionTypes = makeActionTypes(itemTypes.partLiveTest.actionType);
 
@@ -290,10 +299,6 @@ export const validatePurchaseOrderBookInQtyResultActionTypes = makeActionTypes(
 
 export const reqActionTypes = makeActionTypes(itemTypes.req.actionType);
 
-export const debitNoteActionTypes = makeActionTypes(itemTypes.debitNote.actionType);
-
-export const debitNotesActionTypes = makeActionTypes(itemTypes.debitNotes.actionType);
-
 export const stockMovesActionTypes = makeActionTypes(itemTypes.stockMoves.actionType);
 
 export const printConsignmentLabelActionTypes = makeProcessActionTypes(
@@ -355,3 +360,40 @@ export const salesOutletAddressesActionTypes = makeActionTypes(
 export const unpickStockActionTypes = makeActionTypes(processTypes.unpickStock.actionType);
 
 export const unallocateReqActionTypes = makeActionTypes(processTypes.unallocateReq.actionType);
+
+export const qcPartsReportActionTypes = makeReportActionTypes(
+    reportTypes.qcPartsReport.actionType,
+    false
+);
+
+export const euCreditInvoicesReportActionTypes = makeReportActionTypes(
+    reportTypes.euCreditInvoicesReport.actionType
+);
+
+export const whatToWandReprintActionTypes = makeActionTypes(itemTypes.whatToWandReprint.actionType);
+
+export const triggerLevelsForAStoragePlaceReportActionTypes = makeReportActionTypes(
+    reportTypes.triggerLevelsForStoragePlaceReport.actionType
+);
+
+export const bomStandardPricesActionTypes = makeActionTypes(itemTypes.bomStandardPrices.actionType);
+
+export const warehouseTaskActionTypes = makeActionTypes(itemTypes.warehouseTask.actionType);
+
+export const warehousePalletActionTypes = makeActionTypes(itemTypes.warehousePallet.actionType);
+
+export const storesMoveLogReportActionTypes = makeReportActionTypes(
+    reportTypes.storesMoveLogReport.actionType
+);
+
+export const stockTriggerLevelActionTypes = makeActionTypes(
+    itemTypes.stockTriggerLevel.actionType,
+    true,
+    true
+);
+
+export const stockTriggerLevelsActionTypes = makeActionTypes(
+    itemTypes.stockTriggerLevels.actionType
+);
+
+export const partLibrariesActionTypes = makeActionTypes(itemTypes.partLibraries.actionType);

@@ -45,6 +45,8 @@
 
         public string LinnProduced { get; set; }
 
+        public int? BomVerifyFreqWeeks { get; set; }
+
         public string BomType { get; set; }
 
         public string OptionSet { get; set; }
@@ -75,8 +77,6 @@
 
         public string OrderHold { get; set; }
 
-        public string PartCategory { get; set; }
-
         public decimal? NonForecastRequirement { get; set; }
 
         public decimal? OneOffRequirement { get; set; }
@@ -88,8 +88,6 @@
         public int? ImdsIdNumber { get; set; }
 
         public decimal? ImdsWeight { get; set; }
-
-        public string MechanicalOrElectronic { get; set; }
 
         public string QcOnReceipt { get; set; }
 
@@ -133,6 +131,8 @@
 
         public string PurchasingPhaseOutType { get; set; }
 
+        public string PlannerStory { get; set; }
+
         public DateTime? DateDesignObsolete { get; set; }
 
         public SernosSequence SernosSequence { get; set; }
@@ -154,5 +154,17 @@
         public IEnumerable<StockLocatorLocation> Locations { get; set; }
 
         public SalesArticle SalesArticle { get; set; }
+
+        public IEnumerable<QcControl> QcControls { get; set; }
+
+        public string LibraryName { get; set; }
+
+        public string LibraryRef { get; set; }
+
+        public string FootprintRef1 { get; set; }
+
+        public string FootprintRef2 { get; set; }
+
+        public string FootprintRef3 { get; set; }
     }
 }

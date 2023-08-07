@@ -15,10 +15,18 @@
             {
                 ReqNumber = requisition.ReqNumber,
                 Document1 = requisition.Document1,
+                PartNumber = requisition.PartNumber,
+                UnitOfMeasure = requisition.Part?.OurUnitOfMeasure,
+                QcInfo = requisition.Part?.QcInformation,
+                DocumentType = requisition.Document1Name,
+                QcState = requisition.Part?.QcOnReceipt == "Y" ? "QUARANTINE" : "PASS",
+                PartDescription = requisition.Part?.Description,
+                QtyReceived = requisition.Qty,
+                StorageType = requisition.ToLocation?.StorageType,
                 Lines = requisition.Lines.Select(l => new RequisitionLineResource
                                                           {
                                                               TransactionCode = l.TransactionCode,
-                                                              Line = l.LineNumber
+                                                              Line = l.LineNumber,
                                                           }),
                 Links = this.BuildLinks(requisition).ToArray()
             };

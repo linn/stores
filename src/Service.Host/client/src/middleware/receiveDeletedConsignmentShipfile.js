@@ -8,6 +8,9 @@ export default ({ dispatch }) => next => action => {
         case actionTypes.consignmentShipfileActionTypes.RECEIVE_DELETED_CONSIGNMENT_SHIPFILE:
             dispatch(consignmentShipfilesActions.fetch(action.payload.data, dispatch));
             break;
+        case actionTypes.consignmentShipfileActionTypes.RECEIVE_NEW_CONSIGNMENT_SHIPFILE:
+            dispatch(consignmentShipfilesActions.fetch(action.payload.data, dispatch));
+            break;
         default:
     }
 

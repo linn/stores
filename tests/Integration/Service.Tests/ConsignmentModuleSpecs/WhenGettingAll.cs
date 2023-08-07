@@ -8,7 +8,7 @@
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Resources.Consignments;
-
+    using Linn.Stores.Resources.RequestResources;
     using Nancy;
     using Nancy.Testing;
 
@@ -28,7 +28,7 @@
             this.consignment1 = new Consignment { ConsignmentId = 1 };
             this.consignment2 = new Consignment { ConsignmentId = 2 };
 
-            this.ConsignmentFacadeService.GetAll()
+            this.ConsignmentFacadeService.GetByRequestResource(Arg.Any<ConsignmentsRequestResource>())
                 .Returns(new SuccessResult<IEnumerable<Consignment>>(new List<Consignment>
                                                                          {
                                                                              this.consignment1, this.consignment2
@@ -51,7 +51,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ConsignmentFacadeService.Received().GetAll();
+            this.ConsignmentFacadeService.Received().GetByRequestResource(Arg.Any<ConsignmentsRequestResource>());
         }
 
         [Test]

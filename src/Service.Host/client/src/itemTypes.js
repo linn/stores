@@ -18,12 +18,6 @@ export const suppliersApprovedCarrier = new ItemType(
     '/inventory/suppliers-approved-carrier'
 );
 
-export const partCategories = new ItemType(
-    'partCategories',
-    'PART_CATEGORIES',
-    '/inventory/part-categories'
-);
-
 export const partTemplate = new ItemType(
     'partTemplate',
     'PART_TEMPLATE',
@@ -388,18 +382,6 @@ export const validatePurchaseOrderBookInQtyResult = new ItemType(
 
 export const req = new ItemType('req', 'REQ', '/logistics/requisitions');
 
-export const debitNote = new ItemType(
-    'debitNote',
-    'DEBIT_NOTE',
-    '/inventory/purchasing/debit-notes'
-);
-
-export const debitNotes = new ItemType(
-    'debitNotes',
-    'DEBIT_NOTES',
-    '/inventory/purchasing/debit-notes'
-);
-
 export const stockMoves = new ItemType(
     'stockMoves',
     'STOCK-MOVES',
@@ -475,3 +457,41 @@ export const salesOutletAddresses = new ItemType(
     'SALES_OUTLET_ADDRESSES',
     '/inventory/sales-outlets/addresses'
 );
+
+export const whatToWandReprint = new ItemType(
+    'whatToWandReprint',
+    'WHAT_TO_WAND_REPRINT',
+    '/logistics/tpk/what-to-wand-reprint'
+);
+
+export const bomStandardPrices = new ItemType(
+    'bomStandardPrices',
+    'BOM_STANDARD_PRICES',
+    '/purchasing/boms/prices'
+);
+
+export const warehouseTask = new ItemType(
+    'warehouseTask',
+    'WAREHOUSE_TASK',
+    '/logistics/wcs/warehouse-tasks'
+);
+
+export const warehousePallet = new ItemType(
+    'warehousePallet',
+    'WAREHOUSE_PALLET',
+    '/logistics/wcs/warehouse-pallets'
+);
+
+export const stockTriggerLevel = new ItemType(
+    'stockTriggerLevel',
+    'STOCK_TRIGGER_LEVEL',
+    '/inventory/stock-trigger-levels'
+);
+
+export const stockTriggerLevels = new ItemType(
+    'stockTriggerLevels',
+    'STOCK_TRIGGER_LEVELS',
+    '/inventory/stock-trigger-levels'
+);
+
+export const partLibraries = new ItemType('partLibraries', 'PART_LIBRARIES', '/parts/libraries');

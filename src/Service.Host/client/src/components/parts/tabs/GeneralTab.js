@@ -8,6 +8,7 @@ import {
     DatePicker,
     TypeaheadTable
 } from '@linn-it/linn-form-components-library';
+import Link from '@material-ui/core/Link';
 
 function GeneralTab({
     accountingCompany,
@@ -45,7 +46,8 @@ function GeneralTab({
     safetyCertificateExpirationDate,
     safetyDataDirectory,
     rawOrFinished,
-    salesArticleNumber
+    salesArticleNumber,
+    bomTreeLink
 }) {
     const nominalAccountsTable = {
         totalItemCount: nominalAccountsSearchResults.length,
@@ -95,6 +97,7 @@ function GeneralTab({
                     }}
                     label="Root Product"
                     modal
+                    propertyName="rootProduct"
                     items={rootProductsSearchResults}
                     value={rootProduct}
                     loading={rootProductsSearchLoading}
@@ -131,6 +134,7 @@ function GeneralTab({
                     loading={nominalAccountsSearchLoading}
                     label="Nominal"
                     title="Search Nominals"
+                    propertyName="nominal"
                     value={nominal}
                     onSelect={newValue => handleFieldChange('nominalAccount', newValue)}
                     debounce={1000}
@@ -181,6 +185,7 @@ function GeneralTab({
                     disabled={!!salesArticleNumber}
                     clearSearch={clearProductAnalysisCodesSearch}
                     placeholder="Search Codes"
+                    propertyName="productAnalysisCode"
                 />
             </Grid>
             <Grid item xs={8}>
@@ -296,6 +301,11 @@ function GeneralTab({
                     propertyName="safetyDataDirectory"
                 />
             </Grid>
+            {bomTreeLink && (
+                <Grid item xs={12}>
+                    <Link href={bomTreeLink}>View Bom</Link>
+                </Grid>
+            )}
         </Grid>
     );
 }
@@ -358,7 +368,8 @@ GeneralTab.propTypes = {
     departmentDescription: PropTypes.string,
     rawOrFinished: PropTypes.string,
     editStatus: PropTypes.string,
-    salesArticleNumber: PropTypes.string
+    salesArticleNumber: PropTypes.string,
+    bomTreeLink: PropTypes.string
 };
 
 GeneralTab.defaultProps = {
@@ -393,7 +404,8 @@ GeneralTab.defaultProps = {
     departmentDescription: null,
     rawOrFinished: null,
     editStatus: null,
-    salesArticleNumber: null
+    salesArticleNumber: null,
+    bomTreeLink: null
 };
 
 export default GeneralTab;

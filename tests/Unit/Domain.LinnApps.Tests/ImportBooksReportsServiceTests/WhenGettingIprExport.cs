@@ -169,7 +169,7 @@
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("ExchangeRate"))
                 .Should().Be(string.Empty);
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("Currency"))
-                .Should().Be(string.Empty);
+                .Should().Be("EUR");
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("GBPValue"))
                 .Should().Be(string.Empty);
             this.result.GetGridTextValue(this.result.RowIndex("123/3"), this.result.ColumnIndex("Quarter"))

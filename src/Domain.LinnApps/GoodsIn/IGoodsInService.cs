@@ -11,7 +11,7 @@
             int createdBy,
             string partNumber,
             string manufacturersPartNumber,
-            int qty,
+            decimal qty,
             int? orderNumber,
             int? orderLine,
             int? loanNumber,
@@ -48,7 +48,8 @@
             string qcState,
             int reqNumber,
             string kardexLocation,
-            IEnumerable<GoodsInLabelLine> lines);
+            IEnumerable<GoodsInLabelLine> lines,
+            string printerName = null);
 
         ValidateStorageTypeResult ValidateStorageType(
             int? orderNumber,

@@ -36,6 +36,10 @@
 
         protected IDeptStockPartsService DeptStockPartsService { get; private set; }
 
+        protected IEmailService EmailService { get; private set; }
+
+        protected IQueryRepository<PhoneListEntry> PhoneList { get; set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -50,6 +54,9 @@
             this.PartPack = Substitute.For<IPartPack>();
             this.DataSheetRepository = Substitute.For<IRepository<PartDataSheet, PartDataSheetKey>>();
             this.DeptStockPartsService = Substitute.For<IDeptStockPartsService>();
+            this.EmailService = Substitute.For<IEmailService>();
+            this.PhoneList = Substitute.For<IQueryRepository<PhoneListEntry>>();
+
             this.Sut = new PartService(
                 this.AuthService,
                 this.QcControlRepo,
@@ -59,7 +66,9 @@
                 this.SourceRepository,
                 this.DataSheetRepository,
                 this.PartPack,
-                this.DeptStockPartsService);
+                this.DeptStockPartsService,
+                this.EmailService,
+                this.PhoneList);
         }
     }
 }

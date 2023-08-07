@@ -34,7 +34,7 @@
         public void ShouldThrowException()
         {
             var ex = Assert.Throws<UpdatePartException>(() => this.Sut.UpdatePart(
-                new Part(), this.to, this.privileges));
+                new Part(), this.to, this.privileges, 33087));
         }
     }
 }

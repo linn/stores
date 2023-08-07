@@ -11,16 +11,18 @@ import {
     Title,
     ErrorCard,
     SnackbarMessage,
-    LinkButton
+    LinkButton,
+    utilities
 } from '@linn-it/linn-form-components-library';
 import Page from '../../containers/Page';
 import GeneralTab from '../../containers/parts/tabs/GeneralTab';
 import BuildTab from '../../containers/parts/tabs/BuildTab';
 import PurchTab from '../../containers/parts/tabs/PurchTab';
 import StoresTab from '../../containers/parts/tabs/StoresTab';
-import LifeCycleTab from './tabs/LifeCycleTab';
+import LifeCycleTab from '../../containers/parts/tabs/LifeCycleTab';
 import partReducer from './partReducer';
 import handleBackClick from '../../helpers/handleBackClick';
+import CadInfoTab from '../../containers/parts/tabs/CadInfoTab';
 
 function Part({
     copy,
@@ -40,12 +42,15 @@ function Part({
     userNumber,
     templateName,
     partTemplates,
-    liveTest,
-    fetchLiveTest,
     fetchParts,
     partsSearchResults,
     clearErrors,
-    previousPaths
+    previousPaths,
+    options,
+    clearBomStandardPrices,
+    bomStandardPrices,
+    bomStandardPricesLoading,
+    refreshPart
 }) {
     const defaultPart = {
         partNumber: '',
@@ -60,12 +65,11 @@ function Part({
         createdBy: userNumber,
         createdByName: userName,
         dateCreated: new Date(),
-        railMethod: 'POLICY',
-        preferredSupplier: 4415,
-        preferredSupplierName: 'Linn Products Ltd',
+        railMethod: 'LEADTIME',
         qcInformation: '',
         qcOnReceipt: 'N',
-        orderHold: 'N'
+        orderHold: 'N',
+        ourUnitOfMeasure: 'ONES'
     };
     const creating = () => editStatus === 'create';
 
@@ -77,39 +81,22 @@ function Part({
     useEffect(() => {
         if (copy) {
             dispatch({
-                type: 'fieldChange',
-                fieldName: 'currencyUnitPrice',
-                payload: null
+                type: 'initialiseCopy',
+                payload: {
+                    userNumber,
+                    userName
+                }
             });
-            dispatch({
-                type: 'fieldChange',
-                fieldName: 'baseUnitPrice',
-                payload: null
-            });
-            dispatch({
-                type: 'fieldChange',
-                fieldName: 'materialPrice',
-                payload: null
-            });
-            dispatch({
-                type: 'fieldChange',
-                fieldName: 'labourPrice',
-                payload: null
-            });
-            dispatch({
-                type: 'fieldChange',
-                fieldName: 'costingPrice',
-                payload: null
-            });
-            if (state.part?.linnProduced === 'N') {
-                dispatch({
-                    type: 'fieldChange',
-                    fieldName: 'preferredSupplier',
-                    payload: { name: null, description: null }
-                });
-            }
         }
-    }, [copy, state.part.linnProduced]);
+    }, [copy, userName, userNumber]);
+
+    useEffect(() => {
+        if (bomStandardPrices?.message) {
+            clearBomStandardPrices();
+            refreshPart(itemId);
+            history.push(`/parts/${itemId}?tab=lifecycle&liveTestDialogOpen=true`);
+        }
+    }, [bomStandardPrices, refreshPart, itemId, history, clearBomStandardPrices]);
 
     // checking whether partNumber already exists when partNumber is entered
     useEffect(() => {
@@ -122,12 +109,6 @@ function Part({
             }
         }
     }, [state.part.partNumber, fetchParts, editStatus]);
-
-    useEffect(() => {
-        if (itemId) {
-            fetchLiveTest(itemId);
-        }
-    }, [fetchLiveTest, itemId]);
 
     useEffect(() => {
         if (templateName && partTemplates.length) {
@@ -162,7 +143,17 @@ function Part({
 
     const viewing = () => editStatus === 'view';
 
-    const [tab, setTab] = useState(0);
+    const tabDictionary = {
+        general: 0,
+        build: 1,
+        purch: 2,
+        stores: 3,
+        lifecycle: 4,
+        cadInfo: 5
+    };
+    const [tab, setTab] = useState(options?.tab ? tabDictionary[options?.tab] : 0);
+
+    const liveTestDialogOpen = options?.liveTestDialogOpen;
 
     const handleTabChange = (event, value) => {
         setTab(value);
@@ -277,20 +268,33 @@ function Part({
                 madeLiveByName: null
             });
         }
+        history.push(`/parts/${itemId}?tab=lifecycle`);
     };
 
     return (
         <Page>
             <Grid container spacing={3}>
-                <Grid item xs={10}>
+                <Grid item xs={8}>
                     {creating() ? <Title text="Create Part" /> : <Title text="Part Details" />}
                 </Grid>
                 {creating() ? (
-                    <Grid item xs={2} />
+                    <Grid item xs={4} />
                 ) : (
-                    <Grid item xs={2}>
-                        <LinkButton to="/parts/create?copy=true" text="Copy" />
-                    </Grid>
+                    <>
+                        {state.part?.sourceId ? (
+                            <Grid item xs={2}>
+                                <LinkButton
+                                    to={`/parts/sources/${state.part?.sourceId}`}
+                                    text="SOURCE SHEET"
+                                />
+                            </Grid>
+                        ) : (
+                            <Grid item xs={2} />
+                        )}
+                        <Grid item xs={2}>
+                            <LinkButton to="/parts/create?copy=true" text="Copy" />
+                        </Grid>
+                    </>
                 )}
                 {itemError && (
                     <Grid item xs={12}>
@@ -299,7 +303,7 @@ function Part({
                         />
                     </Grid>
                 )}
-                {loading ? (
+                {loading || bomStandardPricesLoading ? (
                     <Grid item xs={12}>
                         <Loading />
                     </Grid>
@@ -368,6 +372,7 @@ function Part({
                                 <Tab label="Purch" />
                                 <Tab label="Stores" />
                                 <Tab label="LifeCycle" />
+                                <Tab label="Cad Info" />
                             </Tabs>
                             {tab === 0 && (
                                 <GeneralTab
@@ -400,11 +405,13 @@ function Part({
                                     rawOrFinished={state.part.rawOrFinished}
                                     salesArticleNumber={state.part.salesArticleNumber}
                                     editStatus={editStatus}
+                                    bomTreeLink={utilities.getHref(state.part, 'bom-tree')}
                                 />
                             )}
                             {tab === 1 && (
                                 <BuildTab
                                     handleFieldChange={handleFieldChange}
+                                    creating={creating}
                                     linnProduced={state.part.linnProduced}
                                     sernosSequenceName={state.part.sernosSequenceName}
                                     sernosSequenceDescription={state.part.sernosSequenceDescription}
@@ -412,10 +419,12 @@ function Part({
                                     assemblyTechnologyName={state.part.assemblyTechnologyName}
                                     bomType={state.part.bomType}
                                     bomId={state.part.bomId}
+                                    bomVerifyFreqWeeks={state.part.bomVerifyFreqWeeks}
                                     optionSet={state.part.optionSet}
                                     drawingReference={state.part.drawingReference}
                                     safetyCriticalPart={state.part.safetyCriticalPart}
                                     plannedSurplus={state.part.plannedSurplus}
+                                    partNumber={state.part?.partNumber}
                                 />
                             )}
                             {tab === 2 && (
@@ -431,14 +440,12 @@ function Part({
                                     labourPrice={state.part.labourPrice}
                                     costingPrice={state.part.costingPrice}
                                     orderHold={state.part.orderHold}
-                                    partCategory={state.part.partCategory}
                                     nonForecastRequirement={state.part.nonForecastRequirement}
                                     oneOffRequirement={state.part.oneOffRequirement}
                                     sparesRequirement={state.part.sparesRequirement}
                                     ignoreWorkstationStock={state.part.ignoreWorkstationStock}
                                     imdsIdNumber={state.part.imdsIdNumber}
                                     imdsWeight={state.part.imdsWeight}
-                                    mechanicalOrElectronic={state.part.mechanicalOrElectronic}
                                     manufacturers={state.part.manufacturers}
                                     links={item?.links}
                                 />
@@ -458,6 +465,7 @@ function Part({
                                     secondStageDescription={state.part.secondStageDescription}
                                     tqmsCategoryOverride={state.part.tqmsCategoryOverride}
                                     stockNotes={state.part.stockNotes}
+                                    plannerStory={state.part.plannerStory}
                                 />
                             )}
                             {tab === 4 && (
@@ -480,8 +488,19 @@ function Part({
                                     purchasingPhaseOutType={state.part.purchasingPhaseOutType}
                                     datePhasedOut={state.part.datePhasedOut}
                                     dateDesignObsolete={state.part.dateDesignObsolete}
-                                    liveTest={liveTest}
                                     handleChangeLiveness={handleChangeLiveness}
+                                    liveTestDialogOpen={liveTestDialogOpen}
+                                    partNumber={state.part.partNumber}
+                                />
+                            )}
+                            {tab === 5 && (
+                                <CadInfoTab
+                                    handleFieldChange={handleFieldChange}
+                                    libraryName={state.part.libraryName}
+                                    libraryRef={state.part.libraryRef}
+                                    footprintRef1={state.part.footprintRef1}
+                                    footprintRef2={state.part.footprintRef2}
+                                    footprintRef3={state.part.footprintRef3}
                                 />
                             )}
                             <Grid item xs={12}>
@@ -535,11 +554,14 @@ Part.propTypes = {
     userNumber: PropTypes.number,
     templateName: PropTypes.string,
     partTemplates: PropTypes.arrayOf(PropTypes.shape({ partRoot: PropTypes.string })),
-    liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
-    fetchLiveTest: PropTypes.func.isRequired,
     fetchParts: PropTypes.func.isRequired,
     clearErrors: PropTypes.func.isRequired,
-    previousPaths: PropTypes.arrayOf(PropTypes.string)
+    previousPaths: PropTypes.arrayOf(PropTypes.shape({})),
+    options: PropTypes.shape({ tab: PropTypes.string, liveTestDialogOpen: PropTypes.bool }),
+    bomStandardPrices: PropTypes.shape({ message: PropTypes.string }),
+    bomStandardPricesLoading: PropTypes.bool,
+    refreshPart: PropTypes.func.isRequired,
+    clearBomStandardPrices: PropTypes.func.isRequired
 };
 
 Part.defaultProps = {
@@ -556,8 +578,10 @@ Part.defaultProps = {
     templateName: null,
     partTemplates: [],
     previousPaths: [],
-    liveTest: null,
-    partsSearchResults: []
+    partsSearchResults: [],
+    options: null,
+    bomStandardPrices: null,
+    bomStandardPricesLoading: false
 };
 
 export default Part;

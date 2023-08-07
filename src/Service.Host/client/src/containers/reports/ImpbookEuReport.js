@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { ReportSelectors, initialiseOnMount } from '@linn-it/linn-form-components-library';
 import queryString from 'query-string';
-import ImpbookIEuReport from '../../components/reports/ImpbookIprReport';
+import ImpbookEuReport from '../../components/reports/ImpbookEuReport';
 import actions from '../../actions/impbookEuReportActions';
 import config from '../../config';
 import * as reportTypes from '../../reportTypes';
@@ -28,4 +28,4 @@ const mapDispatchToProps = {
     initialise
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(ImpbookIEuReport));
+export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(ImpbookEuReport));

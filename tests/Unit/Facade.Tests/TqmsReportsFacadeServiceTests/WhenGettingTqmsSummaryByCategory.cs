@@ -27,9 +27,10 @@
         public void SetUp()
         {
             this.jobRef = "DEF";
-            this.requestResource = new TqmsSummaryRequestResource { JobRef = this.jobRef, HeadingsOnly = false };
+            this.requestResource =
+                new TqmsSummaryRequestResource { JobRef = this.jobRef, HeadingsOnly = false, ShowDecimalPlaces = true };
             this.resultsModel = new ResultsModel { ReportTitle = new NameModel("title") };
-            this.TqmsReportsService.TqmsSummaryByCategoryReport(this.jobRef, false)
+            this.TqmsReportsService.TqmsSummaryByCategoryReport(this.jobRef, false, true)
                 .Returns(new List<ResultsModel> { this.resultsModel });
             this.results = this.Sut.GetTqmsSummaryByCategory(this.requestResource);
         }
@@ -37,7 +38,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.TqmsReportsService.Received().TqmsSummaryByCategoryReport(this.jobRef, false);
+            this.TqmsReportsService.Received().TqmsSummaryByCategoryReport(this.jobRef, false, true);
         }
 
         [Test]

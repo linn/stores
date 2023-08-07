@@ -18,7 +18,6 @@
     using Linn.Stores.Domain.LinnApps.InterCompanyInvoices;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Parts;
-    using Linn.Stores.Domain.LinnApps.Purchasing;
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Requisitions.Models;
     using Linn.Stores.Domain.LinnApps.StockLocators;
@@ -27,9 +26,9 @@
     using Linn.Stores.Domain.LinnApps.Tpk.Models;
     using Linn.Stores.Domain.LinnApps.Tqms;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
+    using Linn.Stores.Domain.LinnApps.Wcs;
     using Linn.Stores.Domain.LinnApps.Workstation.Models;
     using Linn.Stores.Facade.ResourceBuilders;
-    using Linn.Stores.Facade.ResourceBuilders.Purchasing;
 
     public class ResponsesModule : Module
     {
@@ -59,10 +58,6 @@
                 .As<IResourceBuilder<UnitOfMeasure>>();
             builder.RegisterType<UnitsOfMeasureResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<UnitOfMeasure>>>();
-            builder.RegisterType<PartCategoryResourceBuilder>()
-                .As<IResourceBuilder<PartCategory>>();
-            builder.RegisterType<PartCategoriesResourceBuilder>()
-                .As<IResourceBuilder<IEnumerable<PartCategory>>>();
             builder.RegisterType<SupplierResourceBuilder>()
                 .As<IResourceBuilder<Supplier>>();
             builder.RegisterType<SuppliersResourceBuilder>()
@@ -88,8 +83,8 @@
             builder.RegisterType<ResultsModelsResourceBuilder>().As<IResourceBuilder<IEnumerable<ResultsModel>>>();
             builder.RegisterType<CountryResourceBuilder>().As<IResourceBuilder<Country>>();
             builder.RegisterType<CountriesResourceBuilder>().As<IResourceBuilder<IEnumerable<Country>>>();
-            builder.RegisterType<PartTemplateResourceBuilder>().As<IResourceBuilder<PartTemplate>>();
-            builder.RegisterType<PartTemplatesResourceBuilder>().As<IResourceBuilder<IEnumerable<PartTemplate>>>();
+            builder.RegisterType<PartTemplateResourceBuilder>().As<IResourceBuilder<ResponseModel<PartTemplate>>>();
+            builder.RegisterType<PartTemplatesResourceBuilder>().As<IResourceBuilder<ResponseModel< IEnumerable<PartTemplate>>>>();
             builder.RegisterType<PartLiveTestResourceBuilder>().As<IResourceBuilder<PartLiveTest>>();
             builder.RegisterType<SosAllocHeadResourceBuilder>().As<IResourceBuilder<SosAllocHead>>();
             builder.RegisterType<SosAllocHeadsResourceBuilder>().As<IResourceBuilder<IEnumerable<SosAllocHead>>>();
@@ -140,10 +135,10 @@
             builder.RegisterType<ImportBookCpcNumberResourceBuilder>().As<IResourceBuilder<ImportBookCpcNumber>>();
             builder.RegisterType<ImportBookCpcNumbersResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<ImportBookCpcNumber>>>();
-            builder.RegisterType<TqmsCategoryResourceBuilder>()
-                .As<IResourceBuilder<TqmsCategory>>();
-            builder.RegisterType<TqmsCategoriesResourceBuilder>()
-                .As<IResourceBuilder<IEnumerable<TqmsCategory>>>();
+            builder.RegisterType<PartTqmsOverrideResourceBuilder>()
+                .As<IResourceBuilder<PartTqmsOverride>>();
+            builder.RegisterType<PartTqmsOverridesResourceBuilder>()
+                .As<IResourceBuilder<IEnumerable<PartTqmsOverride>>>();
             builder.RegisterType<WorkstationTopUpStatusResourceBuilder>()
                 .As<IResourceBuilder<ResponseModel<WorkstationTopUpStatus>>>();
             builder.RegisterType<StockLocatorResourceBuilder>().As<IResourceBuilder<StockLocator>>();
@@ -194,6 +189,7 @@
                 .As<IResourceBuilder<IEnumerable<InterCompanyInvoice>>>();
             builder.RegisterType<TqmsMasterResourceBuilder>().As<IResourceBuilder<TqmsMaster>>();
             builder.RegisterType<TqmsJobRefsResourceBuilder>().As<IResourceBuilder<IEnumerable<TqmsJobRef>>>();
+            builder.RegisterType<TqmsCategoriesResourceBuilder>().As<IResourceBuilder<IEnumerable<TqmsCategory>>>();
             builder.RegisterType<ConsignmentShipfileResourceBuilder>().As<IResourceBuilder<ConsignmentShipfile>>();
             builder.RegisterType<ConsignmentShipfilesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<ConsignmentShipfile>>>();
@@ -221,10 +217,6 @@
             builder.RegisterType<PortResourceBuilder>().As<IResourceBuilder<Port>>();
             builder.RegisterType<PortsResourceBuilder>().As<IResourceBuilder<IEnumerable<Port>>>();
             builder.RegisterType<BookInResultResourceBuilder>().As<IResourceBuilder<BookInResult>>();
-            builder.RegisterType<PlCreditDebitNoteResourceBuilder>()
-                .As<IResourceBuilder<PlCreditDebitNote>>();
-            builder.RegisterType<PlCreditDebitNotesResourceBuilder>()
-                .As<IResourceBuilder<IEnumerable<PlCreditDebitNote>>>();
             builder.RegisterType<StockMoveResourceBuilder>().As<IResourceBuilder<StockMove>>();
             builder.RegisterType<StockMovesResourceBuilder>()
                 .As<IResourceBuilder<IEnumerable<StockMove>>>();
@@ -242,6 +234,12 @@
             builder.RegisterType<RsnAccessoryResourceBuilder>().As<IResourceBuilder<RsnAccessory>>();
             builder.RegisterType<RsnAccessoriesResourceBuilder>().As<IResourceBuilder<IEnumerable<RsnAccessory>>>();
             builder.RegisterType<ValidateRsnResultResourceBuilder>().As<IResourceBuilder<ValidateRsnResult>>();
+            builder.RegisterType<WhatToWandConsignmentResourceBuilder>().As<IResourceBuilder<WhatToWandConsignment>>();
+            builder.RegisterType<WarehouseLocationResourceBuilder>().As<IResourceBuilder<WarehouseLocation>>();
+            builder.RegisterType<StockTriggerLevelResourceBuilder>().As<IResourceBuilder<StockTriggerLevel>>();
+            builder.RegisterType<StockTriggerLevelsResourceBuilder>().As<IResourceBuilder<IEnumerable<StockTriggerLevel>>>();
+            builder.RegisterType<PartLibraryResourceBuilder>().As<IResourceBuilder<PartLibrary>>();
+            builder.RegisterType<PartLibrariesResourceBuilder>().As<IResourceBuilder<IEnumerable<PartLibrary>>>();
         }
     }
 }

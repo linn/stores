@@ -27,8 +27,6 @@
 
         private readonly IUnitsOfMeasureService unitsOfMeasureService;
 
-        private readonly IPartCategoryService partCategoryService;
-
         private readonly IProductAnalysisCodeService productAnalysisCodeService;
 
         private readonly
@@ -52,13 +50,15 @@
 
         private readonly IPartDataSheetValuesService dataSheetsValuesService;
 
-        private readonly IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource>
-            tqmsCategoriesService;
+        private readonly IFacadeService<PartTqmsOverride, string, PartTqmsOverrideResource, PartTqmsOverrideResource>
+            tqmsOverridesService;
+
+        private readonly IFacadeService<PartLibrary, string, PartLibraryResource, PartLibraryResource>
+            partLibrariesService;
 
         public PartsModule(
             IPartsFacadeService partsFacadeService,
             IUnitsOfMeasureService unitsOfMeasureService,
-            IPartCategoryService partCategoryService,
             IProductAnalysisCodeService productAnalysisCodeService,
             IFacadeService<AssemblyTechnology, string, AssemblyTechnologyResource, AssemblyTechnologyResource> assemblyTechnologyService,
             IFacadeService<DecrementRule, string, DecrementRuleResource, DecrementRuleResource> decrementRuleService,
@@ -68,7 +68,8 @@
             IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> mechPartSourceService,
             IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> manufacturerService,
             IPartDataSheetValuesService dataSheetsValuesService,
-            IFacadeService<TqmsCategory, string, TqmsCategoryResource, TqmsCategoryResource> tqmsCategoriesService)
+            IFacadeService<PartTqmsOverride, string, PartTqmsOverrideResource, PartTqmsOverrideResource> tqmsOverridesService,
+            IFacadeService<PartLibrary, string, PartLibraryResource, PartLibraryResource> partLibrariesService)
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
@@ -88,12 +89,10 @@
             this.unitsOfMeasureService = unitsOfMeasureService;
             this.Get("inventory/units-of-measure", _ => this.GetUnitsOfMeasure());
 
-            this.partCategoryService = partCategoryService;
-            this.Get("/inventory/part-categories", _ => this.GetPartCategories());
-
             this.partTemplateService = partTemplateService;
             this.Get("/inventory/part-templates", _ => this.GetPartTemplates());
             this.Get("/inventory/part-templates/{id}", parameters => this.GetPartTemplate(parameters.id));
+            this.Get("/inventory/part-templates/application-state", _ => this.GetApplicationState());
             this.Put("/inventory/part-templates/{id}", parameters => this.UpdatePartTemplate(parameters.id));
             this.Post("/inventory/part-templates", parameters => this.AddPartTemplate());
 
@@ -111,6 +110,8 @@
 
             this.mechPartSourceService = mechPartSourceService;
             this.Get("/parts/sources/{id}", parameters => this.GetMechPartSource(parameters.id));
+            this.Get("/parts/manufacturer-data/{id}", parameters => this.GetPartWithManufacturerData(parameters.id));
+
             this.Put("/parts/sources/{id}", parameters => this.UpdateMechPartSource(parameters.id));
             this.Post("/parts/sources", _ => this.AddMechPartSource());
 
@@ -120,8 +121,11 @@
             this.dataSheetsValuesService = dataSheetsValuesService;
             this.Get("/parts/data-sheet-values", _ => this.GetPartDataSheetValues());
 
-            this.tqmsCategoriesService = tqmsCategoriesService;
-            this.Get("/parts/tqms-categories", _ => this.GetTqmsCategories());
+            this.tqmsOverridesService = tqmsOverridesService;
+            this.Get("/parts/tqms-categories", _ => this.GetTqmsOverrides());
+
+            this.partLibrariesService = partLibrariesService;
+            this.Get("/parts/libraries", _ => this.GetPartLibraries());
         }
 
         public object GetApp()
@@ -129,9 +133,28 @@
             return this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index");
         }
 
+        public object GetApplicationState()
+        {
+            var privileges = this.Context?.CurrentUser?.GetPrivileges().ToList();
+
+            return this.Negotiate
+                .WithModel(new SuccessResult<ResponseModel<PartTemplate>>(new ResponseModel<PartTemplate>(new PartTemplate(), privileges)))
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
+        }
+
         private object GetPart(int id)
         {
             var results = this.partsFacadeService.GetByIdNoTracking(id);
+            return this.Negotiate
+                .WithModel(results)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
+        }
+
+        private object GetPartWithManufacturerData(int id)
+        {
+            var results = this.partsFacadeService.GetByIdWithManufacturerData(id);
             return this.Negotiate
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
@@ -144,11 +167,13 @@
             IResult<IEnumerable<Part>> results;
 
             if (!string.IsNullOrEmpty(resource.PartNumberSearchTerm)
-                || !string.IsNullOrEmpty(resource.DescriptionSearchTerm))
+                || !string.IsNullOrEmpty(resource.DescriptionSearchTerm)
+                || !string.IsNullOrEmpty(resource.ProductAnalysisCodeSearchTerm))
             {
                 results = this.partsFacadeService.SearchPartsWithWildcard(
                     resource.PartNumberSearchTerm,
-                    resource.DescriptionSearchTerm);
+                    resource.DescriptionSearchTerm,
+                    resource.ProductAnalysisCodeSearchTerm);
             }
             else if (!string.IsNullOrEmpty(resource.SearchTerm))
             {
@@ -208,6 +233,9 @@
             this.RequiresAuthentication();
             var resource = this.Bind<PartResource>();
             resource.UserPrivileges = this.Context.CurrentUser.GetPrivileges();
+            var who = this.Context.CurrentUser.GetEmployeeUri();
+            resource.UpdatedBy = int.Parse(who.Split("/").Last());
+
             var result = this.partsFacadeService.Update(id, resource);
             return this.Negotiate.WithModel(result)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
@@ -220,41 +248,36 @@
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
 
-        private object GetPartCategories()
-        {
-            var result = this.partCategoryService.GetCategories();
-            return this.Negotiate.WithModel(result)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
-        }
-
         private object AddPartTemplate()
         {
             this.RequiresAuthentication();
             var resource = this.Bind<PartTemplateResource>();
-            var result = this.partTemplateService.Add(resource);
+            var result = this.partTemplateService.Add(resource, this.Context.CurrentUser.GetPrivileges());
             return this.Negotiate.WithStatusCode(HttpStatusCode.Created).WithModel(result);
         }
 
         private object GetPartTemplate(string id)
         {
-            var result = this.partTemplateService.GetById(id);
+            var result = this.partTemplateService.GetById(id, this.Context?.CurrentUser?.GetPrivileges());
             return this.Negotiate.WithModel(result)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
 
         private object UpdatePartTemplate(string id)
         {
             this.RequiresAuthentication();
             var resource = this.Bind<PartTemplateResource>();
-            var result = this.partTemplateService.Update(id, resource);
+            var result = this.partTemplateService.Update(id, resource, this.Context.CurrentUser.GetPrivileges());
             return this.Negotiate.WithModel(result);
         }
 
         private object GetPartTemplates()
         {
-            var result = this.partTemplateService.GetAll();
+            var result = this.partTemplateService.GetAll(this.Context?.CurrentUser?.GetPrivileges());
             return this.Negotiate.WithModel(result)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
 
         private object GetProductAnalysisCodes()
@@ -353,10 +376,17 @@
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
 
-        private object GetTqmsCategories()
+        private object GetTqmsOverrides()
         {
             return this.Negotiate.WithModel(
-                    this.tqmsCategoriesService.GetAll())
+                    this.tqmsOverridesService.GetAll())
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetPartLibraries()
+        {
+            return this.Negotiate.WithModel(
+                    this.partLibrariesService.GetAll())
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
         }
     }

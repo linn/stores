@@ -23,7 +23,7 @@
         {
             var tpkRequest = new TpkRequestResource
                                  {
-                                     DateTimeTpkViewQueried = DateTime.UnixEpoch,
+                                     DateTimeTpkViewQueried = DateTime.UnixEpoch.ToString("o"),
                                      StockToTransfer = new List<TransferableStockResource>
                                                            {
                                                                new TransferableStockResource

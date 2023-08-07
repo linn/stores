@@ -9,7 +9,7 @@
 
     public class WwdPack : IWwdPack
     {
-        public void WWD(string partNumber, string workStationCode, int quantity)
+        public int WWD(string partNumber, string workStationCode, int quantity)
         {
             var connection = new OracleConnection(ConnectionStrings.ManagedConnectionString());
 
@@ -37,28 +37,22 @@
                                         };
             cmd.Parameters.Add(quantityParameter);
 
-            connection.Open();
-            cmd.ExecuteNonQuery();
-            connection.Close();
-        }
 
-        public int JobId()
-        {
-            var connection = new OracleConnection(ConnectionStrings.ManagedConnectionString());
-
-            var cmd = new OracleCommand("WWD_PACK.JOB_ID", connection) { CommandType = CommandType.StoredProcedure };
+            var jobidcmd = new OracleCommand("WWD_PACK.JOB_ID", connection) { CommandType = CommandType.StoredProcedure };
 
             var result = new OracleParameter(null, OracleDbType.Int32)
                              {
                                  Direction = ParameterDirection.ReturnValue
                              };
-            cmd.Parameters.Add(result);
+            jobidcmd.Parameters.Add(result);
 
             connection.Open();
             cmd.ExecuteNonQuery();
+            jobidcmd.ExecuteNonQuery();
             connection.Close();
 
             return int.Parse(result.Value.ToString());
+
         }
     }
 }

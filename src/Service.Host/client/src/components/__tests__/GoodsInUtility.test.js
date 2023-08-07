@@ -166,6 +166,23 @@ describe('When order number entered...', () => {
         });
     });
 
+    describe('When QC Part...', () => {
+        beforeEach(() => {
+            defaultRender({
+                validatePurchaseOrderResult: {
+                    qcPart: 'Yes',
+                    orderNumber: 123456,
+                    partNumber: 'QCPART123',
+                    documentType: 'PO'
+                }
+            });
+        });
+
+        test('should show warning', () => {
+            expect(screen.getByText('Note: QCPART123 part is in QC')).toBeInTheDocument();
+        });
+    });
+
     describe('When validatePurchaseOrderResult error...', () => {
         beforeEach(() => {
             defaultRender({

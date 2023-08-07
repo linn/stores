@@ -26,7 +26,7 @@
 
         public string UnitOfMeasure { get; set; }
 
-        public int QtyReceived { get; set; }
+        public decimal QtyReceived { get; set; }
 
         public string PartNumber { get; set; }
 

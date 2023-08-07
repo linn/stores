@@ -11,6 +11,8 @@
 
         public DateTime? DateClosed { get; set; }
 
+        public string ObseleteInStores { get; set; }
+
         public IEnumerable<NominalAccount> NominalAccounts { get; set; }
     }
 }

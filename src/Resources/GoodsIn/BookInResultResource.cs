@@ -18,7 +18,7 @@
 
         public string TransactionCode { get; set; }
 
-        public int QtyReceived { get; set; }
+        public decimal QtyReceived { get; set; }
 
         public string UnitOfMeasure { get; set; }
 

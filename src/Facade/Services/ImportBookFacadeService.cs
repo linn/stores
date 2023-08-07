@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Linq.Expressions;
 
     using Linn.Common.Facade;
@@ -12,7 +13,7 @@
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Resources.ImportBooks;
 
-    public class ImportBookFacadeService : FacadeService<ImportBook, int, ImportBookResource, ImportBookResource>,
+    public class ImportBookFacadeService : FacadeFilterService<ImportBook, int, ImportBookResource, ImportBookResource, ImportBookSearchResource>,
                                            IImportBookFacadeService
     {
         private readonly IDatabaseService databaseService;
@@ -126,7 +127,10 @@
                                         Comments = resource.Comments,
                                         CreatedBy = resource.CreatedBy,
                                         CustomsEntryCodePrefix = resource.CustomsEntryCodePrefix,
-                                        Pva = resource.Pva
+                                        Pva = resource.Pva,
+                                        ExchangeCurrency = resource.Currency,
+                                        ExchangeRate = resource.ExchangeRate,
+                                        BaseCurrency = "GBP"
                                     };
 
             var invoiceDetails = new List<ImportBookInvoiceDetail>();
@@ -193,7 +197,7 @@
 
             newImportBook.PostEntries = postEntries;
 
-            return newImportBook;
+            return this.importBookService.Create(newImportBook);
         }
 
         protected override Expression<Func<ImportBook, bool>> SearchExpression(string searchTerm)
@@ -201,10 +205,35 @@
             return imps => imps.Id.ToString().Contains(searchTerm);
         }
 
+        protected override Expression<Func<ImportBook, bool>> FilterExpression(ImportBookSearchResource searchResource)
+        {
+            return x =>
+                (string.IsNullOrWhiteSpace(searchResource.SearchTerm) || x.Id.ToString().Contains(searchResource.SearchTerm))
+                && (string.IsNullOrWhiteSpace(searchResource.ToDate)
+                    || x.DateCreated <= DateTime.Parse(searchResource.ToDate))
+                && (string.IsNullOrWhiteSpace(searchResource.FromDate)
+                    || x.DateCreated >= DateTime.Parse(searchResource.FromDate))
+                && (string.IsNullOrWhiteSpace(searchResource.CustomsEntryCodePrefix)
+                    || x.CustomsEntryCodePrefix.Equals(searchResource.CustomsEntryCodePrefix))
+                && (string.IsNullOrWhiteSpace(searchResource.CustomsEntryCode)
+                    || x.CustomsEntryCode.Equals(searchResource.CustomsEntryCode))
+                && (string.IsNullOrWhiteSpace(searchResource.CustomsEntryDate)
+                    || (x.CustomsEntryCodeDate.HasValue
+                        && x.CustomsEntryCodeDate.Value.Date.Equals(
+                            DateTime.Parse(searchResource.CustomsEntryDate).Date)))
+            && (string.IsNullOrWhiteSpace(searchResource.RsnNumber)
+                || x.OrderDetails.Any(d => d.RsnNumber.HasValue &&
+                                           d.RsnNumber.Value.ToString().Equals(searchResource.RsnNumber)))
+            && (string.IsNullOrWhiteSpace(searchResource.PoNumber)
+                || x.OrderDetails.Any(d => d.OrderNumber.HasValue &&
+                                           d.OrderNumber.Value.ToString().Equals(searchResource.PoNumber)));
+        }
+
         protected override void UpdateFromResource(ImportBook entity, ImportBookResource updateResource)
         {
             var newImportBook = new ImportBook
                                     {
+                                        DateCreated = DateTime.Parse(updateResource.DateCreated),
                                         ParcelNumber = updateResource.ParcelNumber,
                                         SupplierId = updateResource.SupplierId,
                                         ForeignCurrency = updateResource.ForeignCurrency,
@@ -239,7 +268,9 @@
                                         Comments = updateResource.Comments,
                                         CreatedBy = updateResource.CreatedBy,
                                         CustomsEntryCodePrefix = updateResource.CustomsEntryCodePrefix,
-                                        Pva = updateResource.Pva
+                                        Pva = updateResource.Pva,
+                                        ExchangeCurrency = updateResource.Currency,
+                                        ExchangeRate = updateResource.ExchangeRate
                                     };
 
             var invoiceDetails = new List<ImportBookInvoiceDetail>();

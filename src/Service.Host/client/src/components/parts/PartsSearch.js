@@ -29,7 +29,10 @@ function PartsSearch({
     history,
     privileges,
     partTemplates,
-    linkToSources
+    linkToSources,
+    productAnalysisCodeSearchResults,
+    productAnalysisCodeSearchLoading,
+    searchProductAnalysisCodes
 }) {
     const classes = useStyles();
 
@@ -37,7 +40,11 @@ function PartsSearch({
 
     const [expanded, setExpanded] = useState(false);
 
-    const [options, setOptions] = useState({ partNumber: '', description: '' });
+    const [options, setOptions] = useState({
+        partNumber: '',
+        description: '',
+        productAnalysisCode: ''
+    });
 
     const handleOptionsChange = (propertyName, newValue) =>
         setOptions({ ...options, [propertyName]: newValue });
@@ -74,7 +81,9 @@ function PartsSearch({
         <Page>
             <Grid container spacing={3}>
                 <Grid item xs={7}>
-                    <Typography variant="h3">Parts Utility</Typography>
+                    <Typography variant="h3">
+                        {linkToSources ? 'Search Part Source Sheets' : 'Search Parts'}
+                    </Typography>
                 </Grid>
                 <Grid item xs={3}>
                     {!linkToSources && (
@@ -118,23 +127,52 @@ function PartsSearch({
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Grid container spacing={3}>
-                                    <Grid item xs={5}>
+                                    <Grid item xs={3}>
                                         <InputField
                                             fullWidth
                                             value={options.partNumber}
                                             label="Part Number"
                                             propertyName="partNumber"
                                             onChange={handleOptionsChange}
-                                            helperText="* can be used as a wildcard on both fields"
+                                            helperText="* can be used as a wildcard on all fields"
                                         />
                                     </Grid>
-                                    <Grid item xs={5}>
+                                    <Grid item xs={3}>
                                         <InputField
                                             fullWidth
                                             value={options.description}
                                             label="Description"
                                             propertyName="description"
                                             onChange={handleOptionsChange}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <Typeahead
+                                            items={productAnalysisCodeSearchResults}
+                                            fetchItems={searchProductAnalysisCodes}
+                                            modal
+                                            openModalOnClick={false}
+                                            links={false}
+                                            clearSearch={() => {}}
+                                            loading={productAnalysisCodeSearchLoading}
+                                            label="Product Analysis Code"
+                                            title="Search Codes"
+                                            value={options.productAnalysisCode}
+                                            handleFieldChange={(_, newValue) => {
+                                                setOptions({
+                                                    ...options,
+                                                    productAnalysisCode: newValue
+                                                });
+                                            }}
+                                            onSelect={newValue =>
+                                                setOptions({
+                                                    ...options,
+                                                    productAnalysisCode: newValue.id
+                                                })
+                                            }
+                                            history={history}
+                                            debounce={1000}
+                                            minimumSearchTermLength={2}
                                         />
                                     </Grid>
                                     <Grid item xs={2}>
@@ -145,7 +183,7 @@ function PartsSearch({
                                             onClick={() =>
                                                 fetchItems(
                                                     '',
-                                                    `&partNumberSearchTerm=${options.partNumber}&descriptionSearchTerm=${options.description}`
+                                                    `&partNumberSearchTerm=${options.partNumber}&descriptionSearchTerm=${options.description}&productAnalysisCodeSearchTerm=${options.productAnalysisCode}`
                                                 )
                                             }
                                         >
@@ -202,13 +240,22 @@ PartsSearch.propTypes = {
     history: PropTypes.shape({}).isRequired,
     privileges: PropTypes.arrayOf(PropTypes.string).isRequired,
     partTemplates: PropTypes.arrayOf(PropTypes.shape({})),
-    linkToSources: PropTypes.bool
+    linkToSources: PropTypes.bool,
+    productAnalysisCodeSearchResults: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        })
+    ),
+    productAnalysisCodeSearchLoading: PropTypes.bool,
+    searchProductAnalysisCodes: PropTypes.func.isRequired
 };
 
 PartsSearch.defaultProps = {
     loading: false,
     partTemplates: [],
-    linkToSources: false
+    linkToSources: false,
+    productAnalysisCodeSearchResults: [],
+    productAnalysisCodeSearchLoading: false
 };
 
 export default PartsSearch;

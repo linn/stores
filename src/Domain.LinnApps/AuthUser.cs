@@ -7,5 +7,7 @@
         public string Initials { get; set; }
 
         public string Name { get; set; }
+
+        public PhoneListEntry PhoneListEntry { get; set; }
     }
 }

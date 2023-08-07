@@ -15,5 +15,9 @@
         public const string ParcelKillAdmin = "parcel-kill.admin";
 
         public const string ImpbookAdmin = "import-books.admin";
+
+        public const string CreateStockTriggerLevel = "stock-trigger-level.create";
+
+        public const string UpdateStockTriggerLevel = "stock-trigger-level.update";
     }
 }

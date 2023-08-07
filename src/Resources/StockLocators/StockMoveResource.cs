@@ -4,7 +4,7 @@
     {
         public string PartNumber { get; set; }
 
-        public int? QtyAllocated { get; set; }
+        public decimal? QtyAllocated { get; set; }
 
         public string TransactionCode { get; set; }
 

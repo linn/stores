@@ -223,5 +223,11 @@
         public string Configuration { get; set; }
 
         public IEnumerable<string> UserPrivileges { get; set; }
+
+        public string LibraryName { get; set; }
+
+        public string FootprintRef2 { get; set; }
+
+        public string FootprintRef3 { get; set; }
     }
 }

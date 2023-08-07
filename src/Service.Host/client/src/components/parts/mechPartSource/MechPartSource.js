@@ -10,7 +10,8 @@ import {
     Title,
     ErrorCard,
     SnackbarMessage,
-    useGroupEditTable
+    useGroupEditTable,
+    LinkButton
 } from '@linn-it/linn-form-components-library';
 import Page from '../../../containers/Page';
 import DataSheetsTab from './tabs/DataSheetsTab';
@@ -19,8 +20,8 @@ import QualityRequirementsTab from './tabs/QualityRequirementsTab';
 import ManufacturersTab from '../../../containers/parts/mechPartSource/tabs/ManufacturersTab';
 import SuppliersTab from '../../../containers/parts/mechPartSource/tabs/SuppliersTab';
 import ParamDataTab from '../../../containers/parts/mechPartSource/tabs/ParamDataTab';
-import CadDataTab from './tabs/CadDataTab';
-import UsagesTab from '../../../containers/parts/mechPartSource/tabs/UsagesTab';
+import CadDataTab from '../../../containers/parts/mechPartSource/tabs/CadDataTab';
+import UsagesTab from './tabs/UsagesTab';
 import VerificationTab from './tabs/VerificationTab';
 import PurchasingQuotesTab from '../../../containers/parts/mechPartSource/tabs/PurchasingQuotesTab';
 import handleBackClick from '../../../helpers/handleBackClick';
@@ -40,7 +41,8 @@ function MechPartSource({
     options,
     userName,
     userNumber,
-    previousPaths
+    previousPaths,
+    clearErrors
 }) {
     const creating = () => editStatus === 'create';
     const viewing = () => editStatus === 'view';
@@ -83,10 +85,6 @@ function MechPartSource({
         setTab(value);
     };
 
-    const mechPartSourceInvalid = () =>
-        !mechPartSource.samplesRequired ||
-        !mechPartSource.assemblyType ||
-        (mechPartSource.mechanicalOrElectrical === 'E' && !mechPartSource.partType);
     useEffect(() => {
         if (item !== prevMechPartSource && editStatus !== 'create') {
             setMechPartSource({
@@ -140,7 +138,6 @@ function MechPartSource({
         updateRow: updateUsagesRow,
         removeRow: removeUsagesRow,
         setEditing: setUsagesEditing,
-        setData: setUsagesData,
         setRowToBeDeleted: setUsagesRowToBeDeleted,
         setRowToBeSaved: setUsagesRowToBeSaved
     } = useGroupEditTable({
@@ -166,13 +163,16 @@ function MechPartSource({
         const body = mechPartSource;
         const rkmLetters = { KΩ: 'K', MΩ: 'M', Ω: '' };
         const capacitanceUnits = { uF: 'u', nF: 'n', pF: 'p' };
-
+        clearErrors();
         body.resistanceUnits = rkmLetters[mechPartSource.resistanceUnits];
         body.capacitanceUnit = capacitanceUnits[mechPartSource.capacitanceUnits];
         body.mechPartAlts = suppliersData;
         body.mechPartManufacturerAlts = manufacturersData;
-        body.capacitance = mechPartSource.capacitance?.toFixed(13);
-        body.usages = usagesData;
+        body.capacitance =
+            typeof mechPartSource.capacitance === 'string'
+                ? mechPartSource.capacitance
+                : mechPartSource.capacitance?.toFixed(13);
+        body.usages = usagesData?.map((u, i) => ({ ...u, id: i }));
         body.purchasingQuotes = quotesData;
         if (creating()) {
             addItem(body);
@@ -181,6 +181,11 @@ function MechPartSource({
         }
         setEditStatus('view');
     };
+
+    const mechPartSourceInvalid = () =>
+        !mechPartSource.samplesRequired ||
+        !mechPartSource.assemblyType ||
+        (mechPartSource.mechanicalOrElectrical === 'E' && !mechPartSource.partType);
 
     const handleCancelClick = () => {
         setMechPartSource(item);
@@ -277,20 +282,6 @@ function MechPartSource({
         );
     };
 
-    const handleRootProductChange = (rootProductName, newValue) => {
-        setUsagesData(u =>
-            u.map(x =>
-                x.rootProductName === rootProductName
-                    ? {
-                          ...x,
-                          rootProductName: newValue.name,
-                          rootProductDescription: newValue.description
-                      }
-                    : x
-            )
-        );
-    };
-
     const handleManufacturerChange = (sequence, newValue) => {
         setManufacturersData(m =>
             m.map(x => (x.sequence === sequence ? { ...x, manufacturerCode: newValue.name } : x))
@@ -320,13 +311,20 @@ function MechPartSource({
     return (
         <Page>
             <Grid container spacing={3}>
-                <Grid item xs={12}>
+                <Grid item xs={10}>
                     {creating() ? (
                         <Title text="Create Part Source Sheet" />
                     ) : (
                         <Title text="Part Source Sheet Details" />
                     )}
                 </Grid>
+                {mechPartSource?.part?.id ? (
+                    <Grid item xs={2}>
+                        <LinkButton to={`/parts/${mechPartSource?.part?.id}`} text="PART RECORD" />
+                    </Grid>
+                ) : (
+                    <Grid item xs={2} />
+                )}
                 {itemError && (
                     <Grid item xs={12}>
                         <ErrorCard
@@ -563,8 +561,11 @@ function MechPartSource({
                             )}
                             {tab === 6 && (
                                 <CadDataTab
+                                    libraryName={mechPartSource.libraryName}
                                     libraryRef={mechPartSource.libraryRef}
                                     footprintRef={mechPartSource.footprintRef}
+                                    footprintRef2={mechPartSource.footprintRef2}
+                                    footprintRef3={mechPartSource.footprintRef3}
                                     handleFieldChange={handleFieldChange}
                                 />
                             )}
@@ -594,7 +595,6 @@ function MechPartSource({
                                     removeRow={removeUsagesRow}
                                     addRow={addUsagesRow}
                                     updateRow={updateUsagesRow}
-                                    handleRootProductChange={handleRootProductChange}
                                     rows={usagesData}
                                 />
                             )}
@@ -667,7 +667,8 @@ MechPartSource.propTypes = {
     userNumber: PropTypes.number,
     options: PropTypes.shape({ tab: PropTypes.string }),
     liveTest: PropTypes.shape({ canMakeLive: PropTypes.bool, message: PropTypes.string }),
-    previousPaths: PropTypes.arrayOf(PropTypes.string)
+    previousPaths: PropTypes.arrayOf(PropTypes.string),
+    clearErrors: PropTypes.func.isRequired
 };
 
 MechPartSource.defaultProps = {

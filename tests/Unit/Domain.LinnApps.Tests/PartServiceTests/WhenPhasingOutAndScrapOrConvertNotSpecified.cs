@@ -23,11 +23,18 @@
         public void SetUp()
         {
             this.from = new Part { DatePhasedOut = null };
-            this.to = new Part { DatePhasedOut = DateTime.Today, ReasonPhasedOut = "reason", ScrapOrConvert = null };
+            this.to = new Part
+                          {
+                              DatePhasedOut = DateTime.Today, 
+                              ReasonPhasedOut = "reason", 
+                              ScrapOrConvert = null,
+                              RawOrFinished = "R",
+                              QcOnReceipt = "N"
+                          };
             this.privileges = new List<string> { "part.admin" };
             this.AuthService.HasPermissionFor(AuthorisedAction.PartAdmin, this.privileges).Returns(true);
 
-            this.Sut.UpdatePart(this.from, this.to, this.privileges);
+            this.Sut.UpdatePart(this.from, this.to, this.privileges, 33087);
         }
 
         [Test]

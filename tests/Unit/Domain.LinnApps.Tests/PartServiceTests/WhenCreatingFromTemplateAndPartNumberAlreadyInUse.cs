@@ -37,7 +37,8 @@
                                          PartNumber = "CAP 431"
                                      }
                              }.AsQueryable());
-            this.PartRepository.SearchPartsWithWildcard(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<int>())
+            this.PartRepository.SearchPartsWithWildcard(
+                    Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<bool>(), Arg.Any<int>())
                 .Returns(new List<Part>
                              {
                                  new Part

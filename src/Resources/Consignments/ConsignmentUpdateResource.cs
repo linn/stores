@@ -20,6 +20,10 @@
 
         public string CustomsEntryCodeDate { get; set; }
 
+        public string CarrierRef { get; set; }
+
+        public string MasterCarrierRef { get; set; }
+
         public IEnumerable<ConsignmentPalletResource> Pallets { get; set; } = new List<ConsignmentPalletResource>();
 
         public IEnumerable<ConsignmentItemResource> Items { get; set; } = new List<ConsignmentItemResource>();

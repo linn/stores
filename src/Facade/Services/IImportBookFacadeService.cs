@@ -7,7 +7,7 @@
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Resources.ImportBooks;
 
-    public interface IImportBookFacadeService : IFacadeService<ImportBook, int, ImportBookResource, ImportBookResource>
+    public interface IImportBookFacadeService : IFacadeFilterService<ImportBook, int, ImportBookResource, ImportBookResource, ImportBookSearchResource>
     {
         IResult<ProcessResult> PostDuty(PostDutyResource resource, IEnumerable<string> privileges);
     }

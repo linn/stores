@@ -23,7 +23,8 @@
         {
             var importBooks = new List<ImportBook> { new ImportBook { Id = 118 }, new ImportBook { Id = 2118 } };
 
-            this.ImportBooksFacadeService.Search(Arg.Any<string>())
+            this.ImportBooksFacadeService
+                .FilterBy(Arg.Is<ImportBookSearchResource>(x => x.SearchTerm.Equals("118")))
                 .Returns(new SuccessResult<IEnumerable<ImportBook>>(importBooks));
             this.Response = this.Browser.Get(
                 "/logistics/import-books",
@@ -43,7 +44,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ImportBooksFacadeService.Received().Search(Arg.Any<string>());
+            this.ImportBooksFacadeService.Received().FilterBy(Arg.Is<ImportBookSearchResource>(x => x.SearchTerm.Equals("118")));
         }
 
         [Test]

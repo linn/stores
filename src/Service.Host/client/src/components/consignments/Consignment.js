@@ -7,7 +7,8 @@ import {
     utilities,
     ErrorCard,
     InputField,
-    Typeahead
+    Typeahead,
+    LinkButton
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
@@ -691,6 +692,12 @@ function Consignment({
                                         Show Consignment
                                     </Button>
                                 </Grid>
+                                <Grid item xs={12}>
+                                    <LinkButton
+                                        to="exports/consignments"
+                                        text="Consignments Export Details"
+                                    />
+                                </Grid>
                             </>
                         )}
                         {currentTab !== 0 && (loading || !state.consignment) ? (
@@ -1124,7 +1131,10 @@ function Consignment({
                                         items={rsnSearchResult()}
                                         placeholder="RSN Number"
                                         fetchItems={rsnNo =>
-                                            searchRsns(rsnNo, `&accountId=${item?.salesAccountId}`)
+                                            searchRsns(
+                                                rsnNo,
+                                                `&accountId=${item?.salesAccountId}&hasExportReturn=Y`
+                                            )
                                         }
                                         clearSearch={clearRsnsSearch}
                                         loading={rsnsSearchLoading}

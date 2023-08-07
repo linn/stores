@@ -7,6 +7,7 @@
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
+    using Linn.Stores.Proxy;
     using Linn.Stores.Resources.StockLocators;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
@@ -43,13 +44,15 @@
 
         protected IStockLocatorPricesService PricesService { get; private set; }
 
+        protected IProductsService ProductService { get; private set; }
+
         [SetUp]
         public void EstablishContext()
         {
             this.StockLocatorFacadeService = 
                 Substitute
                     .For<IStockLocatorFacadeService>();
-
+            this.ProductService = Substitute.For<IProductsService>();
             this.QuantitiesService = Substitute.For<IStockQuantitiesService>();
 
             this.StorageLocationService = Substitute
@@ -72,14 +75,14 @@
                     with.Dependency<IResourceBuilder<IEnumerable<StockQuantities>>>(new StockQuantitiesListResourceBuilder());
                     with.Dependency<IResourceBuilder<InspectedState>>(new InspectedStateResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<InspectedState>>>(new InspectedStatesResourceBuilder());
-                    with.Dependency<IResourceBuilder<StockLocator>>(new StockLocatorResourceBuilder());
-                    with.Dependency<IResourceBuilder<IEnumerable<StockLocator>>>(new StockLocatorsResourceBuilder());
+                    with.Dependency<IResourceBuilder<StockLocator>>(new StockLocatorResourceBuilder(this.ProductService));
+                    with.Dependency<IResourceBuilder<IEnumerable<StockLocator>>>(new StockLocatorsResourceBuilder(this.ProductService));
                     with.Dependency<IResourceBuilder<StockMove>>(new StockMoveResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<StockMove>>>(new StockMovesResourceBuilder());
                     with.Dependency<IResourceBuilder<StorageLocation>>(new StorageLocationResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<StorageLocation>>>(new StorageLocationsResourceBuilder());
                     with.Dependency<IResourceBuilder<StockLocatorWithStoragePlaceInfo>>(
-                        new StockLocatorResourceBuilder());
+                        new StockLocatorResourceBuilder(this.ProductService));
                     with.Dependency<IResourceBuilder<IEnumerable<StockLocatorWithStoragePlaceInfo>>>(
                         new StockLocatorsWithStoragePlaceInfoResourceBuilder());
                     with.Dependency<IResourceBuilder<IEnumerable<StockLocatorPrices>>>(

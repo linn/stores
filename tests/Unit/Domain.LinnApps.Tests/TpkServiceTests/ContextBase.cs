@@ -3,6 +3,7 @@
     using System;
     using System.Linq.Expressions;
 
+    using Linn.Common.Logging;
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
@@ -38,13 +39,16 @@
 
         protected IQueryRepository<SalesOrder> SalesOrderRepository { get; set; }
 
-        protected IRepository<ReqMove, ReqMoveKey> ReqMovesRepository;
+        protected IRepository<ReqMove, ReqMoveKey> ReqMovesRepository { get; set; }
 
-        protected IFilterByWildcardRepository<StockLocator, int> StockLocatorRepository;
+        protected IQueryRepository<ProductUpgradeRule> ProductUpgradeRuleRepository { get; set; }
+
+        protected ILog Logger { get; set; }
 
         [SetUp]
         public void SetUpContext()
         {
+            this.ProductUpgradeRuleRepository = Substitute.For<IQueryRepository<ProductUpgradeRule>>();
             this.TpkView = Substitute.For<IQueryRepository<TransferableStock>>();
             this.AccountingCompaniesRepository = Substitute.For<IQueryRepository<AccountingCompany>>();
             this.TpkPack = Substitute.For<ITpkPack>();
@@ -64,8 +68,18 @@
                              {
                                  ConsignmentId = 1
                              });
+            this.ConsignmentRepository.FindById(2)
+                .Returns(new Consignment
+                             {
+                                 ConsignmentId = 2
+                             });
+            this.ConsignmentRepository.FindById(3)
+                .Returns(new Consignment
+                             {
+                                 ConsignmentId = 3
+                             });
             this.ReqMovesRepository = Substitute.For<IRepository<ReqMove, ReqMoveKey>>();
-            this.StockLocatorRepository = Substitute.For<IFilterByWildcardRepository<StockLocator, int>>();
+            this.Logger = Substitute.For<ILog>();
             this.Sut = new TpkService(
                 this.TpkView,
                 this.AccountingCompaniesRepository,
@@ -73,12 +87,13 @@
                 this.BundleLabelPack,
                 this.WhatToWandService,
                 this.SalesAccountRepository,
-                this.StoresPack, 
+                this.StoresPack,
                 this.ConsignmentRepository,
                 this.SalesOrderDetailRepository,
                 this.SalesOrderRepository,
                 this.ReqMovesRepository,
-                this.StockLocatorRepository);
+                this.ProductUpgradeRuleRepository,
+                this.Logger);
         }
     }
 }

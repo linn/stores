@@ -10,13 +10,11 @@ import partActions from '../../actions/partActions';
 import partSelectors from '../../selectors/partSelectors';
 import departmentsActions from '../../actions/departmentsActions';
 import rootProductsActions from '../../actions/rootProductsActions';
-import partCategoriesActions from '../../actions/partCategoriesActions';
 import sernosSequencesActions from '../../actions/sernosSequencesActions';
 import suppliersActions from '../../actions/suppliersActions';
 import unitsOfMeasureActions from '../../actions/unitsOfMeasureActions';
 import departmentsSelectors from '../../selectors/departmentsSelectors';
 import rootProductsSelectors from '../../selectors/rootProductsSelectors';
-import partCategoriesSelectors from '../../selectors/partCategoriesSelectors';
 import sernosSequencesSelectors from '../../selectors/sernosSequencesSelectors';
 import suppliersSelectors from '../../selectors/suppliersSelectors';
 import unitsOfMeasureSelectors from '../../selectors/unitsOfMeasureSelectors';
@@ -28,6 +26,8 @@ import partLiveTestSelectors from '../../selectors/partLiveTestSelectors';
 import partLiveTestActions from '../../actions/partLiveTestActions';
 import partsActions from '../../actions/partsActions';
 import partsSelectors from '../../selectors/partsSelectors';
+import bomStandardPricesSelectors from '../../selectors/bomStandardPricesSelectors';
+import bomStandardPricesActions from '../../actions/bomStandardPricesActions';
 
 const creating = match => match?.url?.endsWith('/create');
 
@@ -38,9 +38,9 @@ const mapStateToProps = (state, { match, location }) => ({
     editStatus: creating(match) ? 'create' : partSelectors.getEditStatus(state),
     loading: partSelectors.getLoading(state),
     snackbarVisible: partSelectors.getSnackbarVisible(state),
+    options: queryString.parse(location?.search),
     itemError: getItemError(state, itemTypes.part.item),
     departments: departmentsSelectors.getItems(state),
-    partCategories: partCategoriesSelectors.getItems(state),
     rootProducts: rootProductsSelectors.getItems(state),
     sernosSequences: sernosSequencesSelectors.getItems(state),
     suppliers: suppliersSelectors.getItems(state),
@@ -52,7 +52,9 @@ const mapStateToProps = (state, { match, location }) => ({
     partTemplates: partTemplatesSelectors.getItems(state),
     liveTest: creating(match) ? null : partLiveTestSelectors.getItem(state),
     partsSearchResults: partsSelectors.getSearchItems(state),
-    previousPaths: getPreviousPaths(state)
+    previousPaths: getPreviousPaths(state),
+    bomStandardPrices: bomStandardPricesSelectors.getItem(state),
+    bomStandardPricesLoading: bomStandardPricesSelectors.getLoading(state)
 });
 
 const mapDispatchToProps = dispatch => {
@@ -63,7 +65,6 @@ const mapDispatchToProps = dispatch => {
                 dispatch(partLiveTestActions.fetch(itemId));
             }
             dispatch(departmentsActions.fetch());
-            dispatch(partCategoriesActions.fetch());
             dispatch(rootProductsActions.fetch());
             dispatch(sernosSequencesActions.fetch());
             dispatch(suppliersActions.fetch());
@@ -76,7 +77,12 @@ const mapDispatchToProps = dispatch => {
         setEditStatus: status => dispatch(partActions.setEditStatus(status)),
         setSnackbarVisible: () => dispatch(partActions.setSnackbarVisible()),
         fetchLiveTest: itemId => dispatch(partLiveTestActions.fetch(itemId)),
-        clearErrors: () => dispatch(partActions.clearErrorsForItem())
+        clearErrors: () => dispatch(partActions.clearErrorsForItem()),
+        refreshPart: itemId => {
+            dispatch(partActions.fetch(itemId));
+            dispatch(partLiveTestActions.fetch(itemId));
+        },
+        clearBomStandardPrices: () => dispatch(bomStandardPricesActions.clearItem())
     };
 };
 

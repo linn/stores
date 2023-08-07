@@ -22,7 +22,7 @@ const mapStateToProps = (state, { location }) => ({
     loading: stockLocatorLocationsSelectors.getLoading(state),
     quantities: stockQuantitiesSelectors.getItem(state),
     quantitiesLoading: stockQuantitiesSelectors.getLoading(state),
-    itemError: getItemError(state, itemTypes.stockLocator.item),
+    itemError: getItemError(state, itemTypes.stockLocatorLocations.item),
     previousPaths: getPreviousPaths(state),
     moves: stockMovesSelectors.getSearchItems(state),
     movesLoading: stockMovesSelectors.getSearchLoading(state)
@@ -51,7 +51,9 @@ const mapDispatchToProps = {
     initialise,
     fetchItems: stockLocatorLocationsActions.searchWithOptions,
     fetchMoves: stockMovesActions.searchWithOptions,
-    clearMoves: stockMovesActions.clearSearch
+    clearMoves: stockMovesActions.clearSearch,
+    clearErrors: stockLocatorLocationsActions.clearErrorsForItem,
+    clearItems: stockLocatorLocationsActions.clearItems
 };
 
 export default connect(

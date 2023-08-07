@@ -5,28 +5,32 @@
     using System.Linq;
 
     using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps.Parts;
-    using Linn.Stores.Resources.Parts;
+    using Linn.Stores.Domain.LinnApps.Tqms;
+    using Linn.Stores.Resources.Tqms;
 
-    public class TqmsCategoriesResourceBuilder 
-        : IResourceBuilder<IEnumerable<TqmsCategory>>
+    public class TqmsCategoriesResourceBuilder : IResourceBuilder<IEnumerable<TqmsCategory>>
     {
-        private readonly TqmsCategoryResourceBuilder rootProductResourceBuilder 
-            = new TqmsCategoryResourceBuilder();
-
-        public IEnumerable<TqmsCategoryResource> Build(
-            IEnumerable<TqmsCategory> rootProducts)
+        public IEnumerable<TqmsCategoryResource> Build(IEnumerable<TqmsCategory> tqmsCategories)
         {
-            return rootProducts
-                .Select(a => this.rootProductResourceBuilder.Build(a));
+            return tqmsCategories
+                .Select(
+                a => new TqmsCategoryResource
+                         {
+                             Category = a.Category,
+                             Description = a.Description,
+                             Explanation = a.Explanation,
+                             SortOrder = a.SortOrder
+                         });
         }
 
-        object IResourceBuilder<IEnumerable<TqmsCategory>>.Build(
-            IEnumerable<TqmsCategory> rootProducts) => this.Build(rootProducts);
-
-        public string GetLocation(IEnumerable<TqmsCategory> rootProducts)
+        public string GetLocation(IEnumerable<TqmsCategory> tqmsCategories)
         {
             throw new NotImplementedException();
+        }
+
+        object IResourceBuilder<IEnumerable<TqmsCategory>>.Build(IEnumerable<TqmsCategory> categories)
+        {
+            return this.Build(categories);
         }
     }
 }

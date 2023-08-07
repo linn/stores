@@ -24,7 +24,7 @@
             var rsn1 = new ExportRsn { RsnNumber = 1, AccountId = 123, OutletNumber = 1 };
             var rsn2 = new ExportRsn { RsnNumber = 2, AccountId = 123, OutletNumber = 1 };
 
-            this.ExportRsnService.SearchRsns(123, 1, "1")
+            this.ExportRsnService.SearchRsns(123, 1, "1","Y")
                 .Returns(new SuccessResult<IEnumerable<ExportRsn>>(new List<ExportRsn> { rsn1, rsn2 }));
 
             this.Response = this.Browser.Get(
@@ -35,6 +35,7 @@
                         with.Query("accountId", "123");
                         with.Query("outletNumber", "1");
                         with.Query("searchTerm", "1");
+                        with.Query("hasExportReturn", "Y");
                     }).Result;
         }
 
@@ -47,7 +48,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.ExportRsnService.Received().SearchRsns(123, 1, "1");
+            this.ExportRsnService.Received().SearchRsns(123, 1, "1","Y");
         }
 
         [Test]

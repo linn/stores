@@ -20,7 +20,7 @@
 
         public SalesOrder FindBy(Expression<Func<SalesOrder, bool>> expression)
         {
-            return this.serviceDbContext.SalesOrders.Where(expression).ToList().FirstOrDefault();
+            return this.serviceDbContext.SalesOrders.Where(expression).FirstOrDefault();
         }
 
         public IQueryable<SalesOrder> FilterBy(Expression<Func<SalesOrder, bool>> expression)

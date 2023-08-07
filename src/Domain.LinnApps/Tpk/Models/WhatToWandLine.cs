@@ -17,5 +17,15 @@
         public int Ordered { get; set; }
 
         public string Sif { get; set; }
+
+        public int ConsignmentId { get; set; }
+
+        public string SerialNumberComments { get; set; }
+
+        public string OldSernos { get; set; }
+
+        public string RenewSernos { get; set; }
+
+        public string Comments { get; set; }
     }
 }

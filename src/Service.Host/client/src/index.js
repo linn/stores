@@ -8,6 +8,7 @@ import configureStore from './configureStore';
 import Root from './components/Root';
 import userManager from './helpers/userManager';
 import 'typeface-roboto';
+import './css/stores.css';
 
 const NextRoot = require('./components/Root').default;
 

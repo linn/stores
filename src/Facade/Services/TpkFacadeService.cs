@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Facade.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -44,7 +45,7 @@
         {
             var tpkRequest = new TpkRequest
                                  {
-                                     DateTimeTpkViewQueried = tpkRequestResource.DateTimeTpkViewQueried,
+                                     DateTimeTpkViewQueried = DateTime.Parse(tpkRequestResource.DateTimeTpkViewQueried),
                                      StockToTransfer = tpkRequestResource.StockToTransfer
                                          .Select(s => 
                                              new TransferableStock
@@ -100,6 +101,18 @@
             }
 
             return new SuccessResult<ProcessResult>(result);
+        }
+
+        public IResult<WhatToWandConsignment> ReprintWhatToWand(int consignmentId)
+        {
+            try
+            {
+                return new SuccessResult<WhatToWandConsignment>(this.domainService.ReprintWhatToWand(consignmentId));
+            }
+            catch (Exception ex)
+            {
+                return new BadRequestResult<WhatToWandConsignment>(ex.Message);
+            }
         }
     }
 }

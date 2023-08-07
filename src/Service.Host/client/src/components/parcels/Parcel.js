@@ -404,7 +404,6 @@ function Parcel({
                                 fullWidth
                                 value={parcel.weight}
                                 label="Weight"
-                                maxLength={12}
                                 onChange={handleFieldChange}
                                 propertyName="weight"
                                 type="number"

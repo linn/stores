@@ -35,5 +35,9 @@
         public int? Depth { get; set; }
 
         public int? Width { get; set; }
+
+        public string RsnState { get; set; }
+
+        public string HasExportReturn { get; set; }
     }
 }

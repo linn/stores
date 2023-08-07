@@ -62,7 +62,7 @@
 
         protected override Expression<Func<PartTemplate, bool>> SearchExpression(string searchTerm)
         {
-            throw new NotImplementedException();
+            return partTemplate  => partTemplate.PartRoot.Contains(searchTerm);
         }
     }
 }

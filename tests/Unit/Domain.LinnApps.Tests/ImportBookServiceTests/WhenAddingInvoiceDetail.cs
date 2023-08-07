@@ -3,10 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
+    using System.Linq.Expressions;
+    
     using FluentAssertions;
 
     using Linn.Stores.Domain.LinnApps.ImportBooks;
+
+    using NSubstitute;
 
     using NUnit.Framework;
 
@@ -53,6 +56,9 @@
                                         OrderDetails = new List<ImportBookOrderDetail>(),
                                         PostEntries = new List<ImportBookPostEntry>()
                                     };
+
+            this.LedgerPeriodRepository.FindBy(Arg.Any<Expression<Func<LedgerPeriod, bool>>>())
+                .Returns(new LedgerPeriod { PeriodNumber = 1234 });
 
             this.Sut.Update(this.impbook, newImportBook);
         }

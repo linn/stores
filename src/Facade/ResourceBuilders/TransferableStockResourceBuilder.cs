@@ -24,7 +24,7 @@
                            OrderNumber = model.OrderNumber,
                            StoragePlaceDescription = model.StoragePlaceDescription,
                            PalletNumber = model.PalletNumber,
-                           Quantity = model.PalletNumber,
+                           Quantity = model.Quantity,
                            ReqLine = model.ReqLine,
                            ReqNumber = model.ReqNumber,
                            VaxPallet = model.VaxPallet

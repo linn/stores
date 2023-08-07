@@ -33,7 +33,7 @@
 
         private readonly IRepository<ReqMove, ReqMoveKey> reqMoveRepository;
 
-        private readonly IQueryRepository<StockTriggerLevel> triggerLevelRepository;
+        private readonly IStockTriggerLevelsRepository triggerLevelRepository;
 
         public StockLocatorService(
             IFilterByWildcardRepository<StockLocator, int> stockLocatorRepository,
@@ -46,7 +46,7 @@
             IQueryRepository<StockLocatorPrices> stockLocatorView,
             IPartRepository partRepository,
             IRepository<ReqMove, ReqMoveKey> reqMoveRepository,
-            IQueryRepository<StockTriggerLevel> triggerLevelRepository)
+            IStockTriggerLevelsRepository triggerLevelRepository)
         {
             this.stockLocatorRepository = stockLocatorRepository;
             this.palletRepository = palletRepository;
@@ -223,10 +223,21 @@
             int? palletNumber,
             string stockPool,
             string stockState,
-            string category)
+            string category,
+            string locationName,
+            string partDescription)
         {
             return this.locationsViewService
-                .QueryView(partNumber?.Trim(' '), locationId, palletNumber, stockPool, stockState, category).Select(
+                .QueryView(
+                    partNumber?.Trim(' '), 
+                    locationId, 
+                    palletNumber, 
+                    stockPool, 
+                    stockState, 
+                    category, 
+                    locationName,
+                    partDescription)
+                .Select(
                     x => new StockLocator
                              {
                                  PartNumber = x.PartNumber,
@@ -238,9 +249,21 @@
                                  State = x.State,
                                  QuantityAllocated = x.QuantityAllocated,
                                  StockPoolCode = x.StockPoolCode,
-                                 Part = new Part { PartNumber = x.PartNumber, OurUnitOfMeasure = x.OurUnitOfMeasure, Description = x.PartDescription, Id = x.Part.Id },
-                                 TriggerLevel = this.triggerLevelRepository.FindBy(l => l.PartNumber.Equals(x.PartNumber) && l.LocationId.Equals(x.StorageLocationId))
-                             });
+                                 Part = new Part 
+                                            { 
+                                                PartNumber = x.PartNumber, 
+                                                OurUnitOfMeasure = x.OurUnitOfMeasure, 
+                                                Description = x.PartDescription, 
+                                                Id = x.Part.Id
+                                            },
+                                 TriggerLevel = x.PalletNumber.HasValue 
+                                                    ? this.triggerLevelRepository
+                                                        .FindBy(l => l.PartNumber.Equals(x.PartNumber)
+                                                                     && l.PalletNumber.Equals(x.PalletNumber))
+                                                    : this.triggerLevelRepository
+                                                    .FindBy(l => l.PartNumber.Equals(x.PartNumber)
+                                                                 && l.LocationId.Equals(x.StorageLocationId))
+                    });
         }
 
         public IEnumerable<StockLocator> SearchStockLocatorBatchView(
@@ -259,7 +282,8 @@
                          && (string.IsNullOrEmpty(partNumber) || x.PartNumber == partNumberTrimmed)
                          && (string.IsNullOrEmpty(stockPool) || x.StockPoolCode == stockPool)
                          && (string.IsNullOrEmpty(category) || x.Category == category)
-                         && (string.IsNullOrEmpty(stockState) || x.State == stockState)).Select(
+                         && (string.IsNullOrEmpty(stockState) || x.State == stockState))
+                .Select(
                     x => new StockLocator
                              {
                                  PartNumber = x.PartNumber,

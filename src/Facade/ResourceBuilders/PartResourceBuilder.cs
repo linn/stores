@@ -31,6 +31,7 @@
                            DecrementRuleDescription = part.DecrementRule?.Description,
                            SparesRequirement = part.SparesRequirement,
                            BomType = part.BomType,
+                           BomVerifyFreqWeeks= part.BomVerifyFreqWeeks,
                            AccountingCompany = part.AccountingCompany?.Name,
                            AccountingCompanyDescription = part.AccountingCompany?.Description,
                            OptionSet = part.OptionSet,
@@ -38,7 +39,6 @@
                            SingleSourcePart = part.SingleSourcePart,
                            StockControlled = part.StockControlled,
                            LinnProduced = part.LinnProduced,
-                           PartCategory = part.PartCategory,
                            IgnoreWorkstationStock = part.IgnoreWorkstationStock,
                            EmcCriticalPart = part.EmcCriticalPart,
                            Currency = part.Currency,
@@ -55,12 +55,12 @@
                            BaseUnitPrice = part.BaseUnitPrice,
                            OurUnitOfMeasure = part.OurUnitOfMeasure,
                            PerformanceCriticalPart = part.PerformanceCriticalPart,
-                           MechanicalOrElectronic = part.MechanicalOrElectronic,
                            RootProduct = part.RootProduct,
                            PreferredSupplier = part.PreferredSupplier?.Id,
                            PreferredSupplierName = part.PreferredSupplier?.Name,
                            SecondStageDescription = part.SecondStageDescription,
                            RailMethod = part.RailMethod,
+                           PlannerStory = part.PlannerStory,
                            DatePhasedOut = part.DatePhasedOut?.ToString("o"),
                            DateLive = part.DateLive?.ToString("o"),
                            StockNotes = part.StockNotes,
@@ -102,10 +102,17 @@
                                         {
                                             PartNumber = m.PartNumber,
                                             ManufacturerCode = m.ManufacturerCode,
+                                            ManufacturerDescription = m.Manufacturer?.Description,
                                             Preference = m.Preference
                                         }).OrderBy(m => m.Preference),
                            Links = this.BuildLinks(part).ToArray(),
-                           SalesArticleNumber = part.SalesArticle?.ArticleNumber
+                           SalesArticleNumber = part.SalesArticle?.ArticleNumber,
+                           SourceId = part.MechPartSource?.Id,
+                           LibraryName = part.LibraryName,
+                           LibraryRef = part.LibraryRef,
+                           FootprintRef1 = part.FootprintRef1,
+                           FootprintRef2 = part.FootprintRef2,
+                           FootprintRef3 = part.FootprintRef3
                        };
         }
 
@@ -133,6 +140,34 @@
                                  Rel = "stock-locators",
                                  Href = $"/inventory/stock-locators?partId={part.Id}"
                              };
+
+            if (part.BomId.HasValue)
+            {
+                yield return new LinkResource
+                                 {
+                                     Rel = "bom-tree",
+                                     Href =
+                                         $"/purchasing/boms/tree/options?bomName={part.PartNumber}"
+                                 };
+            }
+
+            if (part.PreferredSupplierId.HasValue && part.PreferredSupplierId != 4415)
+            {
+                yield return new LinkResource
+                                 {
+                                     Rel = "part-supplier",
+                                     Href =
+                                         $"/purchasing/part-suppliers/record?partId={part.Id}&supplierId={part.PreferredSupplierId}"
+                                 };
+            }
+            else
+            {
+                yield return new LinkResource
+                                 {
+                                     Rel = "part-supplier",
+                                     Href = $"/purchasing/part-suppliers/"
+                                 };
+            }
         }
 
         private PartParamDataResource BuildParamDataResource(PartParamData entity)

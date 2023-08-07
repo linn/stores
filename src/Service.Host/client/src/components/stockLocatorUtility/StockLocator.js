@@ -5,8 +5,10 @@ import {
     SingleEditTable,
     Loading,
     Dropdown,
+    ErrorCard,
     InputField,
-    BackButton
+    BackButton,
+    utilities
 } from '@linn-it/linn-form-components-library';
 import Typography from '@material-ui/core/Typography';
 import Accordion from '@material-ui/core/Accordion';
@@ -14,13 +16,16 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Dialog from '@material-ui/core/Dialog';
+import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
+import { CSVLink } from 'react-csv';
 import CloseIcon from '@material-ui/icons/Close';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import makeStyles from '@material-ui/styles/makeStyles';
 import queryString from 'query-string';
 import Page from '../../containers/Page';
+import config from '../../config';
 
 function StockLocator({
     items,
@@ -33,9 +38,11 @@ function StockLocator({
     moves,
     movesLoading,
     fetchMoves,
-    clearMoves
+    clearMoves,
+    itemError,
+    clearErrors
 }) {
-    const [selectedQuantities, setSelectQuantities] = useState();
+    const [selectedQuantities, setSelectedQuantities] = useState();
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const useStyles = makeStyles(theme => ({
@@ -49,15 +56,18 @@ function StockLocator({
 
     useEffect(() => {
         if (Object.values(queryString.parse(options)).some(x => x !== null && x !== '')) {
+            clearErrors();
             fetchItems(null, `&${options}`);
         }
-    }, [options, fetchItems]);
+    }, [options, fetchItems, clearErrors]);
 
     useEffect(() => {
-        if (quantities?.length > 0) {
-            setSelectQuantities(quantities[0]);
+        if (quantities?.length > 0 && items?.length > 0) {
+            setSelectedQuantities(
+                quantities.filter(q => items.map(i => i.partNumber).includes(q.partNumber))[0]
+            );
         }
-    }, [quantities]);
+    }, [quantities, items]);
 
     const columns = [
         {
@@ -184,6 +194,12 @@ function StockLocator({
             editable: false
         }
     ];
+    const csvData = [
+        columns.map(c => c.title),
+        ...items.map(i =>
+            columns.map(col => i[col.id === 'partLinkComponent' ? 'partNumber' : col.id])
+        )
+    ];
     return (
         <div className="print-landscape">
             <Page width="xl">
@@ -240,6 +256,13 @@ function StockLocator({
                         />
                     </Grid>
                     <Grid item xs={9} />
+                    <Grid item xs={12}>
+                        {itemError && (
+                            <ErrorCard
+                                errorMessage={itemError.details?.message || itemError.statusText}
+                            />
+                        )}
+                    </Grid>
                     {itemsLoading ? (
                         <Grid item xs={12}>
                             <Loading />
@@ -247,67 +270,118 @@ function StockLocator({
                     ) : (
                         <>
                             {items && (
-                                <Grid item xs={12}>
-                                    <SingleEditTable
-                                        newRowPosition="top"
-                                        columns={columns}
-                                        rows={items.map((i, index) => ({
-                                            ...i,
-                                            id: index,
-                                            partLinkComponent: (
-                                                <Link
-                                                    to={i.links.find(l => l.rel === 'part')?.href}
-                                                >
-                                                    {i.partNumber}
-                                                </Link>
-                                            ),
-                                            drillDownButtonComponent: (
-                                                <button
-                                                    type="button"
-                                                    onClick={() => {
-                                                        history.push(
-                                                            `/inventory/stock-locator/locators/batches?${queryString.stringify(
-                                                                {
-                                                                    partNumber: i.partNumber,
-                                                                    locationId: i.locationId,
-                                                                    palletNumber: i.palletNumber?.toString(),
-                                                                    state: i.state,
-                                                                    category: i.category?.toString(),
-                                                                    queryBatchView: true
-                                                                }
-                                                            )}`
-                                                        );
-                                                    }}
-                                                >
-                                                    +
-                                                </button>
-                                            ),
-                                            qtyAllocatedComponent: (
-                                                <>
-                                                    {i.quantityAllocated && (
+                                <>
+                                    <Grid item xs={10} />
+                                    <Grid item xs={2}>
+                                        <CSVLink data={csvData}>
+                                            <Button variant="contained">Export</Button>
+                                        </CSVLink>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <SingleEditTable
+                                            newRowPosition="top"
+                                            columns={columns}
+                                            rows={items.map((i, index) => ({
+                                                ...i,
+                                                id: index,
+                                                partLinkComponent: (
+                                                    <>
+                                                        <Link to={utilities.getHref(i, 'part')}>
+                                                            {i.partNumber}
+                                                        </Link>
+                                                        {'       '}
                                                         <button
                                                             type="button"
+                                                            style={{ cursor: 'pointer' }}
                                                             onClick={() => {
-                                                                fetchMoves(
-                                                                    i.partNumber,
-                                                                    `&palletNumber=${i.palletNumber ||
-                                                                        ''}&locationId=${i.locationId ||
-                                                                        ''} `
+                                                                window.open(
+                                                                    `${
+                                                                        config.appRoot
+                                                                    }${utilities.getHref(
+                                                                        i,
+                                                                        'part-used-on'
+                                                                    )}`,
+                                                                    '_blank'
                                                                 );
-                                                                setDialogOpen(true);
                                                             }}
                                                         >
-                                                            {i.quantityAllocated}
+                                                            UO
                                                         </button>
-                                                    )}
-                                                </>
-                                            )
-                                        }))}
-                                        allowNewRowCreation={false}
-                                        editable={false}
-                                        allowNewRowCreations
-                                    />
-                                </Grid>
+                                                    </>
+                                                ),
+                                                drillDownButtonComponent: (
+                                                    <>
+                                                        <button
+                                                            type="button"
+                                                            style={{ cursor: 'pointer' }}
+                                                            onClick={() => {
+                                                                history.push(
+                                                                    `/inventory/stock-locator/locators/batches?${queryString.stringify(
+                                                                        {
+                                                                            partNumber:
+                                                                                i.partNumber,
+                                                                            locationId:
+                                                                                i.locationId,
+                                                                            palletNumber: i.palletNumber?.toString(),
+                                                                            state: i.state,
+                                                                            category: i.category?.toString(),
+                                                                            queryBatchView: true
+                                                                        }
+                                                                    )}`
+                                                                );
+                                                            }}
+                                                        >
+                                                            +
+                                                        </button>
+                                                        {utilities.getHref(i, 'product') && (
+                                                            <button
+                                                                type="button"
+                                                                style={{ cursor: 'pointer' }}
+                                                                onClick={() => {
+                                                                    window.open(
+                                                                        `${
+                                                                            config.appRoot
+                                                                        }${utilities.getHref(
+                                                                            i,
+                                                                            'product'
+                                                                        )}`,
+                                                                        '_blank'
+                                                                    );
+                                                                }}
+                                                            >
+                                                                P
+                                                            </button>
+                                                        )}
+                                                    </>
+                                                ),
+                                                qtyAllocatedComponent: (
+                                                    <>
+                                                        {i.quantityAllocated && (
+                                                            <button
+                                                                style={{ cursor: 'pointer' }}
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    fetchMoves(
+                                                                        i.partNumber,
+                                                                        `&palletNumber=${i.palletNumber ||
+                                                                            ''}&locationId=${i.locationId ||
+                                                                            ''} `
+                                                                    );
+                                                                    setDialogOpen(true);
+                                                                }}
+                                                            >
+                                                                {i.quantityAllocated}
+                                                            </button>
+                                                        )}
+                                                    </>
+                                                )
+                                            }))}
+                                            allowNewRowCreation={false}
+                                            editable={false}
+                                            allowNewRowCreations
+                                        />
+                                    </Grid>
+                                </>
                             )}
                             <Grid item xs={12}>
                                 <Accordion>
@@ -352,7 +426,7 @@ function StockLocator({
                                                                     _propertyName,
                                                                     newValue
                                                                 ) =>
-                                                                    setSelectQuantities(
+                                                                    setSelectedQuantities(
                                                                         quantities.find(
                                                                             x =>
                                                                                 x.partNumber ===
@@ -429,13 +503,13 @@ function StockLocator({
                                                                 value={`${selectedQuantities.otherStock} (${selectedQuantities.otherStockAllocated})`}
                                                                 disabled
                                                             />
-                                                        </Grid>{' '}
+                                                        </Grid>
                                                     </>
                                                 )}
                                             <Grid item xs={8} />
                                         </Grid>
                                     </AccordionDetails>
-                                </Accordion>{' '}
+                                </Accordion>
                             </Grid>
                         </>
                     )}
@@ -476,7 +550,12 @@ StockLocator.propTypes = {
     moves: PropTypes.arrayOf(PropTypes.shape({})),
     movesLoading: PropTypes.bool,
     fetchMoves: PropTypes.func.isRequired,
-    clearMoves: PropTypes.func.isRequired
+    clearMoves: PropTypes.func.isRequired,
+    itemError: PropTypes.shape({
+        statusText: PropTypes.string,
+        details: PropTypes.shape({ message: PropTypes.string })
+    }),
+    clearErrors: PropTypes.func.isRequired
 };
 
 StockLocator.defaultProps = {
@@ -485,7 +564,8 @@ StockLocator.defaultProps = {
     quantities: null,
     quantitiesLoading: false,
     moves: [],
-    movesLoading: false
+    movesLoading: false,
+    itemError: null
 };
 
 export default StockLocator;

@@ -18,21 +18,29 @@
 
     public class WhenGettingPartTemplates : ContextBase
     {
+        private ResponseModel<PartTemplate> partTemplateResponseModel;
+
+        private PartTemplate partTemplate;
+
         [SetUp]
         public void SetUp()
         {
-            var a = new PartTemplate
-                        {
-                            PartRoot = "PART A"
-                        };
+            var privileges = new List<string> { "part.admin" };
 
-            var b = new PartTemplate
-                           {
-                               PartRoot = "PART B"
-                           };
-            
-            this.PartTemplateService.GetAll()
-                .Returns(new SuccessResult<IEnumerable<PartTemplate>>(new List<PartTemplate> { a, b }));
+            this.AuthorisationService.HasPermissionFor("part.admin", privileges).Returns(true);
+
+            this.partTemplate = new PartTemplate 
+                                    {
+                                        PartRoot = "PART A"
+                                    };
+
+            this.partTemplateResponseModel = new ResponseModel<PartTemplate>(
+                this.partTemplate,
+                new List<string>());
+
+            this.PartTemplateService.GetAll(Arg.Any<IEnumerable<string>>())
+                .Returns(new SuccessResult<ResponseModel<IEnumerable<PartTemplate>>>(
+                    new ResponseModel<IEnumerable<PartTemplate>>(new List<PartTemplate> { this.partTemplate }, privileges)));
 
             this.Response = this.Browser.Get(
                 "/inventory/part-templates",
@@ -51,15 +59,14 @@
         [Test]
         public void ShouldCallService()
         {
-            this.PartTemplateService.Received().GetAll();
+            this.PartTemplateService.Received().GetAll(Arg.Any<IEnumerable<string>>());
         }
 
         [Test]
         public void ShouldReturnResource()
         {
             var resource = this.Response.Body.DeserializeJson<IEnumerable<PartTemplateResource>>().ToList();
-            resource.Should().HaveCount(2);
-            resource.Should().Contain(a => a.PartRoot == "PART A");
+            resource.First().PartRoot.Should().Be("PART A");
         }
     }
 }

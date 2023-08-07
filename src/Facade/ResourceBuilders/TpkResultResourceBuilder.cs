@@ -38,38 +38,40 @@
                                             VaxPallet = s.VaxPallet,
                                             Notes = s.Notes
                                         }),
-                           WhatToWandReport = tpkResult.Report != null ? new WhatToWandResource
-                                                  {
-                                                      Account = new SalesAccountResource
-                                                                    {
-                                                                        AccountId = tpkResult.Report.Account.AccountId,
-                                                                        AccountName = tpkResult.Report.Account.AccountName
-                                                                    },
-                                                      Type = tpkResult.Report.Type,
-                                                      Consignment = new TpkConsignmentResource
-                                                                        {
-                                                                            AddressId = tpkResult.Report.Consignment.AddressId,
-                                                                            ConsignmentId = tpkResult.Report.Consignment.ConsignmentId,
-                                                                            CountryCode = tpkResult.Report.Consignment.Address?.Country?.CountryCode,
-                                                                            Country = tpkResult.Report.Consignment.Address?.Country?.DisplayName,
-                                                                            SalesAccountId = tpkResult.Report.Consignment.SalesAccountId,
-                                                                            TotalNettValue = tpkResult.Report.TotalNettValueOfConsignment,
-                                                                            CurrencyCode = tpkResult.Report.CurrencyCode
-                                                                        },
-                                                      Lines = tpkResult.Report.Lines
-                                                          .Select(l => new WhatToWandLineResource
-                                                                           {
-                                                                               ArticleNumber = l.ArticleNumber,
-                                                                               InvoiceDescription = l.InvoiceDescription,
-                                                                               Kitted = l.Kitted,
-                                                                               MainsLead = l.MainsLead,
-                                                                               OrderLine = l.OrderLine,
-                                                                               OrderNumber = l.OrderNumber,
-                                                                               Ordered = l.Ordered,
-                                                                               Sif = l.Sif
-                                                                           })
-                                                  } 
-                                                  : null
+                           WhatToWandReport = tpkResult.Consignments?.Select(c =>
+                               new WhatToWandConsignmentResource
+                                   {
+                                       Lines = c.Lines.Select(l => 
+                                           new WhatToWandLineResource
+                                               {
+                                                   OrderNumber = l.OrderNumber,
+                                                   OrderLine = l.OrderLine,
+                                                   ArticleNumber = l.ArticleNumber,
+                                                   InvoiceDescription = l.InvoiceDescription,
+                                                   MainsLead = l.MainsLead,
+                                                   Kitted = l.Kitted,
+                                                   Ordered = l.Ordered,
+                                                   Sif = l.Sif,
+                                                   SerialNumberComments = l.SerialNumberComments,
+                                                   Comments = l.Comments
+                                               }),
+                                       Consignment = new TpkConsignmentResource
+                                                     {
+                                                         AddressId = c.Consignment.AddressId,
+                                                         ConsignmentId = c.Consignment.ConsignmentId,
+                                                         CountryCode = c.Consignment.Address?.Country?.CountryCode,
+                                                         Country = c.Consignment.Address?.Country?.DisplayName,
+                                                         SalesAccountId = c.Consignment.SalesAccountId,
+                                                         TotalNettValue = c.TotalNettValueOfConsignment,
+                                                         CurrencyCode = c.CurrencyCode
+                                                     },
+                                        Account = new SalesAccountResource
+                                                     {
+                                                         AccountId = c.Account.AccountId,
+                                                         AccountName = c.Account.AccountName
+                                                     },
+                                       Type = c.Type,
+                                   })
                        };
         }
 

@@ -26,10 +26,13 @@
 
         protected IStoragePlaceService StoragePlaceService { get; private set; }
 
+        protected IStockTriggerLevelsForAStoragePlaceFacadeService TriggerLevelReportService { get; private set; }
+
         [SetUp]
         public void EstablishContext()
         {
             this.StoragePlaceAuditReportFacadeService = Substitute.For<IStoragePlaceAuditReportFacadeService>();
+            this.TriggerLevelReportService = Substitute.For<IStockTriggerLevelsForAStoragePlaceFacadeService>();
             this.AuditLocationService = Substitute.For<IAuditLocationService>();
             this.StoragePlaceService = Substitute.For<IStoragePlaceService>();
 
@@ -39,6 +42,7 @@
                         with.Dependency(this.StoragePlaceAuditReportFacadeService);
                         with.Dependency(this.AuditLocationService);
                         with.Dependency(this.StoragePlaceService);
+                        with.Dependency(this.TriggerLevelReportService);
                         with.Dependency<IResourceBuilder<ResultsModel>>(new ResultsModelResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<AuditLocation>>>(
                             new AuditLocationsResourceBuilder());

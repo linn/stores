@@ -6,8 +6,10 @@
     using FluentAssertions;
 
     using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Resources.RequestResources;
+    using Linn.Stores.Resources.StockLocators;
 
     using Nancy;
     using Nancy.Testing;
@@ -25,8 +27,15 @@
         [SetUp]
         public void SetUp()
         {
-            this.stockLocator1 = new StockLocatorWithStoragePlaceInfo { LocationId = 1, PartNumber = "A" };
-            this.stockLocator2 = new StockLocatorWithStoragePlaceInfo { LocationId = 2, PartNumber = "A" };
+            this.stockLocator1 = new StockLocatorWithStoragePlaceInfo
+                                     {
+                                         LocationId = 1, PartNumber = "A", Part = new Part { PartNumber = "A" }
+                                     };
+            this.stockLocator2 = new StockLocatorWithStoragePlaceInfo
+                                     {
+                                         LocationId = 2, PartNumber = "A",  Part = new Part { PartNumber = "A" }
+                                     };
+            this.ProductService.GetLinkToProduct("A").Returns("/link-to-product/A");
 
             this.StockLocatorFacadeService.GetStockLocations(Arg.Any<StockLocatorQueryResource>())
                 .Returns(new
@@ -59,8 +68,9 @@
         [Test]
         public void ShouldReturnResource()
         {
-            var resultResource = this.Response.Body.DeserializeJson<IEnumerable<StockLocator>>().ToList();
+            var resultResource = this.Response.Body.DeserializeJson<IEnumerable<StockLocatorResource>>().ToList();
             resultResource.Should().HaveCount(2);
+            resultResource.First().Links.First(l => l.Rel == "product").Href.Should().Be("/link-to-product/A");
         }
     }
 }

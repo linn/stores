@@ -26,16 +26,16 @@
             return rsns.ToList().Where(r => r.RsnNumber.ToString().Contains(searchTerm));
         }
 
-        public IResult<IEnumerable<ExportRsn>> SearchRsns(int accountId, int? outletNumber, string searchTerm)
+        public IResult<IEnumerable<ExportRsn>> SearchRsns(int accountId, int? outletNumber, string searchTerm, string hasExportReturn)
         {
             if (outletNumber != null)
             {
                 return new SuccessResult<IEnumerable<ExportRsn>>(
-                    this.FindMatchingRSNs(this.repository.FilterBy(rsn => rsn.AccountId == accountId && rsn.OutletNumber == outletNumber), searchTerm));
+                    this.FindMatchingRSNs(this.repository.FilterBy(rsn => rsn.AccountId == accountId && rsn.OutletNumber == outletNumber && rsn.HasExportReturn == hasExportReturn), searchTerm));
             }
 
             return new SuccessResult<IEnumerable<ExportRsn>>(
-                this.FindMatchingRSNs(this.repository.FilterBy(rsn => rsn.AccountId == accountId),searchTerm));
+                this.FindMatchingRSNs(this.repository.FilterBy(rsn => rsn.AccountId == accountId && rsn.HasExportReturn == hasExportReturn),searchTerm));
         }
 
 

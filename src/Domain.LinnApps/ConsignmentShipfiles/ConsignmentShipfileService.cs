@@ -171,7 +171,7 @@
                            accountOutlets.First();
 
                         // and it is the same address as the account
-                        if (outlet.OutletAddressId == account.ContactDetails.AddressId && account.ContactDetails.AddressId != null)
+                        if (outlet.OutletAddressId == account.ContactDetails?.AddressId && account.ContactDetails?.AddressId != null)
                         {
                             // check account has contact details
                             if (string.IsNullOrEmpty(shipfile.Consignment.SalesAccount?.ContactDetails?.EmailAddress))
@@ -189,7 +189,7 @@
                                            {
                                                PdfAttachment = pdfData,
                                                ToCustomerName = account.ContactDetails.EmailAddress,
-                                               ToEmailAddress = account.ContactDetails.EmailAddress,
+                                               ToEmailAddress = account.ContactDetails.EmailAddress.Trim(),
                                                Body = body
                                            });
                         }
@@ -213,7 +213,7 @@
                             return new ConsignmentShipfileEmailModel
                             {
                                 PdfAttachment = pdfData,
-                                ToEmailAddress = o.OrderContact.EmailAddress,
+                                ToEmailAddress = o.OrderContact.EmailAddress.Trim(),
                                 ToCustomerName = o.OrderContact.EmailAddress,
                                 Body = this.BuildEmailBody(pdfData)
                             };

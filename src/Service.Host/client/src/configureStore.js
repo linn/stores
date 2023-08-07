@@ -15,7 +15,6 @@ import receiveUpdatedStockLocator from './middleware/receiveUpdatedStockLocator'
 import receiveMakeIntercompnayInvoices from './middleware/receiveMakeIntercompanyInvoices';
 import receiveUnallocateConsignment from './middleware/receiveUnallocateConsignment';
 import receiveDeletedConsignmentShipfile from './middleware/receiveDeletedConsignmentShipfile';
-import receiveUpdatedDebitNote from './middleware/receiveUpdatedDebitNote';
 import receiveTpkStockAmended from './middleware/receiveTpkStockAmended';
 // eslint-disable-next-line no-underscore-dangle
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -35,7 +34,6 @@ const middleware = [
     receiveMakeIntercompnayInvoices,
     receiveUnallocateConsignment,
     receiveDeletedConsignmentShipfile,
-    receiveUpdatedDebitNote,
     receiveTpkStockAmended
 ];
 

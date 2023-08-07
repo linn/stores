@@ -5,11 +5,6 @@ import Grid from '@material-ui/core/Grid';
 
 function UsagesTab({
     rows,
-    searchRootProducts,
-    clearRootProductsSearch,
-    rootProductsSearchResults,
-    rootProductsSearchLoading,
-    handleRootProductChange,
     resetRow,
     setRowToBeDeleted,
     setRowToBeSaved,
@@ -18,31 +13,12 @@ function UsagesTab({
     addRow,
     updateRow
 }) {
-    const selectRootProductSearchResult = (_propertyName, rootProduct, updatedItem) => {
-        handleRootProductChange(updatedItem.rootProductName, rootProduct);
-    };
-
     const columns = [
         {
             title: 'Product',
             id: 'rootProductName',
-            type: 'search',
-            editable: true,
-            search: searchRootProducts,
-            clearSearch: clearRootProductsSearch,
-            searchResults: rootProductsSearchResults.filter(
-                p => !rows.some(u => u.rootProductName === p.name)
-            ),
-            searchLoading: rootProductsSearchLoading,
-            selectSearchResult: selectRootProductSearchResult,
-            searchTitle: 'Search Parts',
-            minimumSearchTermLength: 3
-        },
-        {
-            title: 'Description',
-            id: 'rootProductDescription',
             type: 'text',
-            editable: false
+            editable: true
         },
         {
             title: 'Quantity Used',
@@ -76,12 +52,7 @@ function UsagesTab({
 }
 
 UsagesTab.propTypes = {
-    handleRootProductChange: PropTypes.func.isRequired,
     rows: PropTypes.arrayOf(PropTypes.shape({})),
-    searchRootProducts: PropTypes.func.isRequired,
-    clearRootProductsSearch: PropTypes.func.isRequired,
-    rootProductsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
-    rootProductsSearchLoading: PropTypes.bool,
     resetRow: PropTypes.func.isRequired,
     updateRow: PropTypes.func.isRequired,
     setRowToBeDeleted: PropTypes.func.isRequired,
@@ -92,9 +63,7 @@ UsagesTab.propTypes = {
 };
 
 UsagesTab.defaultProps = {
-    rows: [],
-    rootProductsSearchResults: [],
-    rootProductsSearchLoading: false
+    rows: []
 };
 
 export default UsagesTab;

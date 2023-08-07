@@ -1023,6 +1023,40 @@ function DetailsItemsTab({
                                 />
                             </TableCell>
                         </TableRow>
+                        <TableRow key="CarrierRef">
+                            <TablePromptItem text="Carrier Refs" />
+                            <TableCell className={classes.tableCell}>
+                                {viewMode ? (
+                                    `${showText(consignment.carrierRef)}`
+                                ) : (
+                                    <>
+                                        <InputField
+                                            placeholder="Carrier Ref"
+                                            propertyName="carrierRef"
+                                            value={consignment.carrierRef}
+                                            onChange={updateField}
+                                            maxLength={32}
+                                        />
+                                    </>
+                                )}
+                            </TableCell>
+                            <TablePromptItem text="Master Ref" />
+                            <TableCell className={classes.tableCell}>
+                                {viewMode ? (
+                                    `${showText(consignment.masterCarrierRef)}`
+                                ) : (
+                                    <>
+                                        <InputField
+                                            placeholder="Master Carrier Ref"
+                                            propertyName="masterCarrierRef"
+                                            value={consignment.masterCarrierRef}
+                                            onChange={updateField}
+                                            maxLength={32}
+                                        />
+                                    </>
+                                )}
+                            </TableCell>
+                        </TableRow>
                         <TableRow key="CustomsEntry">
                             <TablePromptItem text="Customs Entry Code" />
                             <TableCell className={classes.tableCell}>
@@ -1594,6 +1628,8 @@ DetailsItemsTab.propTypes = {
         terms: PropTypes.string,
         status: PropTypes.string,
         hubId: PropTypes.number,
+        carrierRef: PropTypes.string,
+        masterCarrierRef: PropTypes.string,
         customsEntryCodePrefix: PropTypes.string,
         customsEntryCode: PropTypes.string,
         customsEntryCodeDate: PropTypes.string,

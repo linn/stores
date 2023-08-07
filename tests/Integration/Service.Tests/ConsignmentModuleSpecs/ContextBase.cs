@@ -22,7 +22,7 @@
 
     public abstract class ContextBase : NancyContextBase
     {
-        protected IFacadeService<Consignment, int, ConsignmentResource, ConsignmentUpdateResource> ConsignmentFacadeService { get; private set; }
+        protected IConsignmentFacadeService ConsignmentFacadeService { get; private set; }
 
         protected IFacadeService<Hub, int, HubResource, HubResource> HubFacadeService { get; private set; }
 
@@ -39,7 +39,7 @@
         [SetUp]
         public void EstablishContext()
         {
-            this.ConsignmentFacadeService = Substitute.For<IFacadeService<Consignment, int, ConsignmentResource, ConsignmentUpdateResource>>();
+            this.ConsignmentFacadeService = Substitute.For<IConsignmentFacadeService>();
             this.HubFacadeService = Substitute.For<IFacadeService<Hub, int, HubResource, HubResource>>();
             this.CarrierFacadeService = Substitute.For<IFacadeService<Carrier, string, CarrierResource, CarrierResource>>();
             this.CartonTypeFacadeService = Substitute.For<IFacadeService<CartonType, string, CartonTypeResource, CartonTypeResource>>();

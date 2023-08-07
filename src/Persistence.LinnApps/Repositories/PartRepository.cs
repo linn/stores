@@ -101,9 +101,11 @@
         public IEnumerable<Part> SearchParts(string searchTerm, int? resultLimit)
         {
             var result = this.serviceDbContext.Parts
-                .Where(x => EF.Functions.Like(x.PartNumber, $"%{searchTerm}%") 
-                            || EF.Functions.Like(x.Description, $"%{searchTerm}%"))
-                .Include(p => p.MechPartSource).AsNoTracking();
+                .Include(p => p.MechPartSource)
+                .AsNoTracking()
+                .Where(x => EF.Functions.Like(x.PartNumber, $"%{searchTerm}%"))
+                .Union(this.serviceDbContext.Parts
+                    .Where(x => EF.Functions.Like(x.Description, $"%{searchTerm}%")));
 
             if (resultLimit.HasValue)
             {
@@ -113,19 +115,33 @@
             return result;
         }
 
+        public Part GetByIdWithManufacturerData(int id)
+        {
+            return this.serviceDbContext.Parts.AsNoTracking()
+                .Include(p => p.PreferredSupplier)
+                .Include(p => p.MechPartSource)
+                .ThenInclude(s => s.MechPartManufacturerAlts).ThenInclude(m => m.Manufacturer)
+                .FirstOrDefault(p => p.Id == id);
+        }
+
         public IEnumerable<Part> SearchPartsWithWildcard(
             string partNumberSearchTerm, 
-            string descriptionSearchTerm, 
+            string descriptionSearchTerm,
+            string productAnalysisCodeSearchTerm,
             bool newestFirst = false,
             int? limit = null)
         {
-            var result = this.serviceDbContext.Parts.AsNoTracking().Where(
+            var result = this.serviceDbContext.Parts.Include(x => x.ProductAnalysisCode).AsNoTracking().Where(
                 x => (string.IsNullOrEmpty(partNumberSearchTerm) || EF.Functions.Like(
                           x.PartNumber,
                           $"{partNumberSearchTerm.Replace("*", "%")}"))
                      && (string.IsNullOrEmpty(descriptionSearchTerm) || EF.Functions.Like(
                              x.Description,
-                             $"{descriptionSearchTerm.Replace("*", "%")}")));
+                             $"{descriptionSearchTerm.Replace("*", "%")}"))
+                    
+                     && (string.IsNullOrEmpty(productAnalysisCodeSearchTerm)
+                         || (x.ProductAnalysisCode != null  
+                         && EF.Functions.Like(x.ProductAnalysisCode.ProductCode, $"{productAnalysisCodeSearchTerm.Replace("*", "%")}"))));
             
             if (newestFirst)
             {

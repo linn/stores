@@ -1,7 +1,5 @@
 ﻿namespace Linn.Stores.Service.Tests.PartsModuleSpecs
 {
-    using System.Collections.Generic;
-
     using FluentAssertions;
 
     using Linn.Common.Facade;

@@ -335,6 +335,14 @@ function ImportBook({
 
     useEffect(() => {
         const exchangeRate = currentExchangeRate();
+
+        if (state.impbook?.exchangeRate !== exchangeRate) {
+            handleFieldChange('exchangeRate', exchangeRate);
+        }
+    }, [state.impbook.exchangeRate, currentExchangeRate, handleFieldChange]);
+
+    useEffect(() => {
+        const exchangeRate = currentExchangeRate();
         const invoiceValue = totalInvoiceValue();
         if (exchangeRate && invoiceValue && invoiceValue > 0) {
             const convertedValue = currencyConvert(invoiceValue, exchangeRate);
@@ -719,7 +727,7 @@ function ImportBook({
                                         </Button>
                                     </Grid>
 
-                                    {impbookInvalidFields().length && (
+                                    {impbookInvalidFields().length > 0 && (
                                         <Grid item xs={12}>
                                             <Tooltip
                                                 title={impbookInvalidFields().map(f => `${f}, `)}

@@ -5,6 +5,7 @@
 
     using Linn.Common.Persistence;
     using Linn.Common.Reporting.Models;
+    using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
 
     public class WhatWillDecrementReportService : IWhatWillDecrementReportService
@@ -39,14 +40,19 @@
 
         public ResultsModel WhatWillDecrementReport(string partNumber, int quantity, string typeOfRun, string workstationCode)
         {
+            if (string.IsNullOrWhiteSpace(partNumber))
+            {
+                throw new EmptyException("You must provide a part number");
+            }
+
+            partNumber = partNumber.ToUpper();
+
             if (string.IsNullOrEmpty(workstationCode))
             {
                 workstationCode = this.productionTriggerLevelsService.GetWorkStationCode(partNumber);
             }
 
-            this.wwdPack.WWD(partNumber, workstationCode, quantity);
-
-            var jobId = this.wwdPack.JobId();
+            var jobId = this.wwdPack.WWD(partNumber, workstationCode, quantity);
 
             var changeRequests = this.changeRequestRepository.FilterBy(c => c.ChangeState == "ACCEPT").ToList();
 
@@ -79,6 +85,9 @@
 
             this.reportingHelper.AddResultsToModel(model, values, CalculationValueModelType.Quantity, true);
 
+            model.RowDrillDownTemplates.Add(new DrillDownModel("Id", "/inventory/reports/what-will-decrement/report?partNumber={textValue}&quantity=" + $"{quantity}&typeOfRun{typeOfRun}"));
+            model.RowHeader = "Part Number";
+
             return model;
         }
 
@@ -99,12 +108,6 @@
                 var changeRemarks = changeRequest != null
                                         ? $"{changeRequest.OldPartNumber} change to {changeRequest.NewPartNumber}"
                                         : string.Empty;
-
-                values.Add(
-                    new CalculationValueModel
-                        {
-                            RowId = wwdWork.PartNumber, TextDisplay = wwdWork.PartNumber, ColumnId = "Part Number"
-                        });
                 values.Add(
                     new CalculationValueModel
                         {
@@ -113,7 +116,9 @@
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = wwdWork.PartNumber, Quantity = wwdWork.QuantityKitted ?? 0, ColumnId = "Qty Kitted"
+                            RowId = wwdWork.PartNumber,
+                            TextDisplay = wwdWork.QuantityKitted.ToString() ?? "0",
+                            ColumnId = "Qty Kitted"
                         });
                 values.Add(
                     new CalculationValueModel
@@ -126,13 +131,21 @@
                     new CalculationValueModel
                         {
                             RowId = wwdWork.PartNumber,
-                            Quantity = wwdWork.QuantityAtLocation ?? 0,
+                            TextDisplay = wwdWork.QuantityAtLocation.ToString() ?? "0",
                             ColumnId = "Qty at Work Station"
                         });
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = wwdWork.PartNumber, TextDisplay = wwdWork.Remarks, ColumnId = "Remarks"
+                            RowId = wwdWork.PartNumber,
+                            TextDisplay = wwdWork.Remarks,
+                            ColumnId = "Remarks",
+                            Attributes = !string.IsNullOrWhiteSpace(wwdWork.Remarks) && wwdWork.Remarks.Contains("totally SHORT")
+                                             ? new List<ReportAttribute>
+                                                   {
+                                                       new ReportAttribute(ReportAttributeType.TextColour, "red")
+                                                   }
+                                             : null
                         });
                 values.Add(
                     new CalculationValueModel
@@ -147,10 +160,15 @@
                 values.Add(
                     new CalculationValueModel
                         {
-                            RowId = wwdWork.PartNumber, Quantity = wwdWorkDetail?.Quantity ?? 0, ColumnId = "Qty"
+                            RowId = wwdWork.PartNumber,
+                            TextDisplay = wwdWorkDetail?.Quantity.ToString() ?? "0",
+                            ColumnId = "Qty"
                         });
                 values.Add(
-                    new CalculationValueModel { RowId = wwdWork.PartNumber, TextDisplay = changeRemarks, ColumnId = "Change" });
+                    new CalculationValueModel
+                        {
+                            RowId = wwdWork.PartNumber, TextDisplay = changeRemarks, ColumnId = "Change"
+                        });
             }
 
             return values;
@@ -160,25 +178,21 @@
         {
             return new List<AxisDetailsModel>
                        {
-                           new AxisDetailsModel("Part Number")
-                               {
-                                   SortOrder = 0, GridDisplayType = GridDisplayType.TextValue
-                               },
                            new AxisDetailsModel("Description")
                                {
                                    SortOrder = 1, GridDisplayType = GridDisplayType.TextValue
                                },
                            new AxisDetailsModel("Qty Kitted")
                                {
-                                   SortOrder = 2, GridDisplayType = GridDisplayType.Value
+                                   SortOrder = 2, GridDisplayType = GridDisplayType.TextValue
                                },
-                           new AxisDetailsModel("Work Station Storage Place")
+                           new AxisDetailsModel("Work Station Storage Place", "Storage Place")
                                {
                                    SortOrder = 3, GridDisplayType = GridDisplayType.TextValue
                                },
-                           new AxisDetailsModel("Qty at Work Station")
+                           new AxisDetailsModel("Qty at Work Station", "Qty At WS")
                                {
-                                   SortOrder = 4, GridDisplayType = GridDisplayType.Value
+                                   SortOrder = 4, GridDisplayType = GridDisplayType.TextValue
                                },
                            new AxisDetailsModel("Remarks")
                                {
@@ -186,7 +200,7 @@
                                },
                            new AxisDetailsModel("Site") { SortOrder = 6, GridDisplayType = GridDisplayType.TextValue },
                            new AxisDetailsModel("State") { SortOrder = 7, GridDisplayType = GridDisplayType.TextValue },
-                           new AxisDetailsModel("Qty") { SortOrder = 8, GridDisplayType = GridDisplayType.Value },
+                           new AxisDetailsModel("Qty") { SortOrder = 8, GridDisplayType = GridDisplayType.TextValue },
                            new AxisDetailsModel("Change") { SortOrder = 9, GridDisplayType = GridDisplayType.TextValue }
                        };
         }

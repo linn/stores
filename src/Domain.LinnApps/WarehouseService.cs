@@ -2,6 +2,7 @@
 {
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models;
+    using Linn.Stores.Domain.LinnApps.Wcs;
 
     public class WarehouseService : IWarehouseService
     {
@@ -27,6 +28,54 @@
 
             this.wcsPack.MovePalletToUpper(palletNumber, reference);
             return new MessageResult($"Pallet {palletNumber} move to upper called successfully");
+        }
+
+        public string GetPalletLocation(int palletNumber)
+        {
+            return this.wcsPack.PalletLocation(palletNumber);
+        }
+
+        public int? GetPalletAtLocation(string location)
+        {
+            return this.wcsPack.PalletAtLocation(location);
+        }
+
+        public WarehouseLocation GetWarehouseLocation(string location, int? palletNumber)
+        {
+            var warehouseLocation = new WarehouseLocation() {Location = location, PalletId = palletNumber};
+
+            if (string.IsNullOrEmpty(location) && palletNumber != null)
+            {
+                warehouseLocation.Location = this.wcsPack.PalletLocation((int) palletNumber);
+            }
+            else if (!string.IsNullOrEmpty(location) && palletNumber == null)
+            {
+                warehouseLocation.PalletId = this.wcsPack.PalletAtLocation(location);
+            }
+            else
+            {
+                return null;
+            }
+            
+            return warehouseLocation;
+        }
+
+        public bool MovePallet(int palletNumber, string destination, int priority, Employee who)
+        {
+            var taskNo = this.wcsPack.MovePallet(palletNumber, destination, priority, "BK", who.Id);
+            return taskNo > 0;
+        }
+
+        public bool AtMovePallet(int palletNumber, string fromLocation, string destination, int priority, Employee who)
+        {
+            var taskNo = this.wcsPack.AtMovePallet(palletNumber, fromLocation, destination, priority, "BK", who.Id);
+            return taskNo > 0;
+        }
+
+        public bool EmptyLocation(int palletNumber, string location, int priority, Employee who)
+        {
+            var taskNo = this.wcsPack.EmptyLocation(palletNumber, location, priority, "BK", who.Id);
+            return taskNo > 0;
         }
     }
 }

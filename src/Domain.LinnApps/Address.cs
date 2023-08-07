@@ -35,5 +35,7 @@
         public List<InterCompanyInvoice> InvoiceInterCompanies { get; set; }
 
         public List<InterCompanyInvoice> DeliveryInterCompanies { get; set; }
+
+        public IEnumerable<Invoice> InvoicesDeliveredTo { get; set; }
     }
 }

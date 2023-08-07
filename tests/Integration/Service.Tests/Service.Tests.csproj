@@ -25,7 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="PurchasingModuleSpecs\" />
+    <Folder Include="ImportBooksReportModuleTests\" />
+    <Folder Include="QcPartsReportModuleSpecs\" />
   </ItemGroup>
 
 </Project>

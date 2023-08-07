@@ -157,7 +157,7 @@
                                {
                                    SortOrder = 3, GridDisplayType = GridDisplayType.TextValue
                                },
-                           new AxisDetailsModel("Quantity") { SortOrder = 4, GridDisplayType = GridDisplayType.Value },
+                           new AxisDetailsModel("Quantity") { SortOrder = 4, GridDisplayType = GridDisplayType.Value, DecimalPlaces = 1 },
                            new AxisDetailsModel("UOM") { SortOrder = 5, GridDisplayType = GridDisplayType.TextValue },
                            new AxisDetailsModel("Allocated") { SortOrder = 6, GridDisplayType = GridDisplayType.Value }
                        };

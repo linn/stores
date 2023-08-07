@@ -21,6 +21,7 @@
         {
             this.requisitionActionsFacadeService = requisitionActionsFacadeService;
             this.requisitionFacadeService = requisitionFacadeService;
+            this.Get("/logistics/reqs/labels", _ => this.GetApp());
             this.Get("/logistics/requisitions/{reqNumber}", p => this.GetReq(p.reqNumber));
             this.Post("/logistics/requisitions/actions/un-allocate", _ => this.Unallocate());
             this.Post("/logistics/requisitions/{reqNumber}/lines/{lineNumber}/un-allocate", p => this.Unallocate(p.reqNumber, p.lineNumber));
@@ -49,5 +50,10 @@
                     resource.RequisitionLine,
                     resource.UserNumber));
         }
+
+        private object GetApp()
+        {
+            return this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index");
+        } 
     }
 }

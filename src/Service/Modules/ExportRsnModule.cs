@@ -21,7 +21,7 @@
         {
             var resource = this.Bind<ExportRsnSearchRequestResource>();
 
-            var results = this.exportRsnService.SearchRsns(resource.AccountId, resource.OutletNumber, resource.SearchTerm);
+            var results = this.exportRsnService.SearchRsns(resource.AccountId, resource.OutletNumber, resource.SearchTerm, resource.HasExportReturn);
 
             return this.Negotiate
                 .WithModel(results)

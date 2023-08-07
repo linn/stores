@@ -38,6 +38,8 @@
 
         public int? RsnNumber { get; set; }
 
+        public Rsn Rsn { get; set; }
+
         public SalesOrder SalesOrder { get; set; }
     }
 }

@@ -3,6 +3,7 @@
     using System.Collections.Generic;
 
     using Linn.Stores.Domain.LinnApps.GoodsIn;
+    using Linn.Stores.Domain.LinnApps.Parts;
 
     public class RequisitionLine
     {

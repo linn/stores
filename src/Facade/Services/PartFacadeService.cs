@@ -10,7 +10,6 @@
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
-    using Linn.Stores.Persistence.LinnApps.Repositories;
     using Linn.Stores.Resources.Parts;
 
     public class PartFacadeService : FacadeService<Part, int, PartResource, PartResource>, IPartsFacadeService
@@ -90,7 +89,10 @@
 
         public IResult<IEnumerable<Part>> GetPartByPartNumber(string partNumber)
         {
-            return new SuccessResult<IEnumerable<Part>>(new List<Part> { this.partRepository.FindBy(a => a.PartNumber == partNumber.ToUpper()) });
+            var part = this.partRepository.FindBy(a => a.PartNumber == partNumber.ToUpper());
+            return part != null
+                ? new SuccessResult<IEnumerable<Part>>(new List<Part> { part })
+                : new SuccessResult<IEnumerable<Part>>(Enumerable.Empty<Part>());
         }
 
         public IResult<Part> GetByIdNoTracking(int id)
@@ -105,18 +107,28 @@
             return new SuccessResult<Part>(res);
         }
 
+        public IResult<Part> GetByIdWithManufacturerData(int id)
+        {
+            var data = this.partRepository.GetByIdWithManufacturerData(id);
+            return new SuccessResult<Part>(data);
+        }
+
         public IResult<IEnumerable<Part>> SearchParts(string searchTerm, int? resultLimit)
         {
             return new SuccessResult<IEnumerable<Part>>(
                 this.partRepository.SearchParts(searchTerm.Trim().ToUpper(), resultLimit));
         }
 
-        public IResult<IEnumerable<Part>> SearchPartsWithWildcard(string partNumberSearch, string descriptionSearch)
+        public IResult<IEnumerable<Part>> SearchPartsWithWildcard(
+            string partNumberSearch, 
+            string descriptionSearch, 
+            string productAnalysisCodeSearch)
         {
             return new SuccessResult<IEnumerable<Part>>(
                 this.partRepository.SearchPartsWithWildcard(
                     partNumberSearch?.Trim().ToUpper(), 
-                    descriptionSearch?.Trim().ToUpper()));
+                    descriptionSearch?.Trim().ToUpper(),
+                    productAnalysisCodeSearch?.Trim().ToUpper()));
         }
 
         protected override Part CreateFromResource(PartResource resource)
@@ -136,6 +148,7 @@
                                         this.accountingCompanyRepository.FindBy(c => c.Name == resource.AccountingCompany),
                                     ParetoClass = this.paretoClassRepository.FindById(resource.ParetoCode),
                                     BomType = resource.BomType,
+                                    BomVerifyFreqWeeks = resource.BomVerifyFreqWeeks,
                                     LinnProduced = resource.LinnProduced,
                                     QcOnReceipt = resource.QcOnReceipt,
                                     EmcCriticalPart = resource.EmcCriticalPart,
@@ -178,10 +191,8 @@
                                                 c => c.Sequence == resource.SernosSequenceName)
                                             : null,
                                     IgnoreWorkstationStock = resource.IgnoreWorkstationStock,
-                                    MechanicalOrElectronic = resource.MechanicalOrElectronic,
                                     ImdsIdNumber = resource.ImdsIdNumber,
                                     ImdsWeight = resource.ImdsWeight,
-                                    PartCategory = resource.PartCategory,
                                     OrderHold = resource.OrderHold,
                                     MaterialPrice = resource.MaterialPrice,
                                     SparesRequirement = resource.SparesRequirement,
@@ -199,6 +210,7 @@
                                     RailMethod = resource.RailMethod,
                                     MinStockRail = resource.MinStockRail,
                                     MaxStockRail = resource.MaxStockRail,
+                                    PlannerStory = resource.PlannerStory,
                                     SecondStageBoard = resource.SecondStageBoard,
                                     SecondStageDescription = resource.SecondStageDescription,
                                     TqmsCategoryOverride = resource.TqmsCategoryOverride,
@@ -216,7 +228,12 @@
                                     DatePhasedOut = string.IsNullOrEmpty(resource.DatePhasedOut)
                                                         ? (DateTime?)null
                                                         : DateTime.Parse(resource.DatePhasedOut),
-                                    ReasonPhasedOut = resource.ReasonPhasedOut
+                                    ReasonPhasedOut = resource.ReasonPhasedOut,
+                                    LibraryName = resource.LibraryName,
+                                    LibraryRef = resource.LibraryRef,
+                                    FootprintRef1 = resource.FootprintRef1,
+                                    FootprintRef2 = resource.FootprintRef2,
+                                    FootprintRef3 = resource.FootprintRef3
                                 };
             return this.partService.CreatePart(partToAdd, resource.UserPrivileges.ToList(), resource.FromTemplate);
         }
@@ -225,6 +242,7 @@
         {
             var updatedPart = new Part
                                   {
+                                      PartNumber = resource.PartNumber,
                                       Description = resource.Description,
                                       AccountingCompany = 
                                           this.accountingCompanyRepository.FindBy(
@@ -270,6 +288,7 @@
                                       OptionSet = resource.OptionSet,
                                       DrawingReference = resource.DrawingReference,
                                       BomType = resource.BomType,
+                                      BomVerifyFreqWeeks = resource.BomVerifyFreqWeeks,
                                       BomId = resource.BomId,
                                       SernosSequence =
                                           resource.SernosSequenceName != null
@@ -277,10 +296,8 @@
                                                   c => c.Sequence == resource.SernosSequenceName)
                                               : null,
                                       IgnoreWorkstationStock = resource.IgnoreWorkstationStock,
-                                      MechanicalOrElectronic = resource.MechanicalOrElectronic,
                                       ImdsIdNumber = resource.ImdsIdNumber,
                                       ImdsWeight = resource.ImdsWeight,
-                                      PartCategory = resource.PartCategory,
                                       OrderHold = resource.OrderHold,
                                       MaterialPrice = resource.MaterialPrice,
                                       SparesRequirement = resource.SparesRequirement,
@@ -295,6 +312,7 @@
                                       QcOnReceipt = resource.QcOnReceipt,
                                       QcInformation = resource.QcInformation,
                                       RawOrFinished = resource.RawOrFinished,
+                                      PlannerStory = resource.PlannerStory,
                                       OurInspectionWeeks = resource.OurInspectionWeeks,
                                       SafetyWeeks = resource.SafetyWeeks,
                                       RailMethod = resource.RailMethod,
@@ -324,10 +342,15 @@
                                       MadeLiveBy = 
                                           resource.MadeLiveBy != null
                                               ? this.employeeRepository.FindById((int)resource.MadeLiveBy)
-                                              : null
-                                  };
+                                              : null,
+                                      LibraryName = resource.LibraryName,
+                                      LibraryRef = resource.LibraryRef,
+                                      FootprintRef1 = resource.FootprintRef1,
+                                      FootprintRef2 = resource.FootprintRef2,
+                                      FootprintRef3 = resource.FootprintRef3
+            };
           
-            this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList());
+            this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList(), resource.UpdatedBy.Value);
         }
 
         protected override Expression<Func<Part, bool>> SearchExpression(string searchTerm)

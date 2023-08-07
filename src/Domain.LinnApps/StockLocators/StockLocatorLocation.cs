@@ -4,7 +4,7 @@
 
     public class StockLocatorLocation
     {
-        public int Quantity { get; set; }
+        public decimal Quantity { get; set; }
 
         public int StorageLocationId { get; set; }
 
@@ -28,6 +28,6 @@
 
         public string OurUnitOfMeasure { get; set; }
 
-        public int? QuantityAllocated { get; set; }
+        public decimal? QuantityAllocated { get; set; }
     }
 }

@@ -47,9 +47,13 @@
                     with.Dependency<IResourceBuilder<IEnumerable<TransferableStock>>>(new TransferableStockListResourceBuilder());
                     with.Dependency<IResourceBuilder<ProcessResult>>(new ProcessResultResourceBuilder());
                     with.Dependency<IResourceBuilder<TpkResult>>(new TpkResultResourceBuilder());
+                    with.Dependency<IResourceBuilder<WhatToWandConsignment>>(new WhatToWandConsignmentResourceBuilder());
+
                     with.Module<TpkModule>();
                     with.ResponseProcessor<TransferableStockListResponseProcessor>();
                     with.ResponseProcessor<TpkResultsResponseProcessor>();
+                    with.ResponseProcessor<WhatToWandConsignmentResponseProcessor>();
+
                     with.ResponseProcessor<ProcessResultResponseProcessor>();
                     with.RequestStartup(
                         (container, pipelines, context) =>

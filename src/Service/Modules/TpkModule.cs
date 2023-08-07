@@ -19,6 +19,9 @@
             this.Post("/logistics/tpk/unpick-stock", _ => this.UnpickStock());
             this.Post("/logistics/tpk/unallocate-req", _ => this.UnallocateReq());
             this.Post("/logistics/tpk/transfer", _ => this.TransferStock());
+            this.Get(
+                "/logistics/tpk/what-to-wand-reprint/{consignmentId}", 
+                parameters => this.ReprintWhatToWand(parameters.consignmentId));
         }
 
         private object GetItems()
@@ -42,6 +45,12 @@
         {
             var resource = this.Bind<UnallocateReqRequestResource>();
             return this.Negotiate.WithModel(this.tpkFacadeService.UnallocateReq(resource));
+        }
+
+        private object ReprintWhatToWand(int consignmentId)
+        {
+            var res = this.tpkFacadeService.ReprintWhatToWand(consignmentId);
+            return this.Negotiate.WithModel(res);
         }
     }
 }
