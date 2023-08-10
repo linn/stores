@@ -42,6 +42,8 @@
 
         private readonly ILog logger;
 
+        private readonly IProductUpgradePack productUpgradePack;
+
         public TpkService(
             IQueryRepository<TransferableStock> tpkView,
             IQueryRepository<AccountingCompany> accountingCompaniesRepository,
@@ -55,7 +57,8 @@
             IQueryRepository<SalesOrder> salesOrderRepository,
             IRepository<ReqMove, ReqMoveKey> reqMovesRepository,
             IQueryRepository<ProductUpgradeRule> productUpgradeRulesRepository,
-            ILog logger)
+            ILog logger,
+            IProductUpgradePack productUpgradePack)
         {
             this.tpkView = tpkView;
             this.tpkPack = tpkPack;
@@ -70,6 +73,7 @@
             this.reqMovesRepository = reqMovesRepository;
             this.productUpgradeRulesRepository = productUpgradeRulesRepository;
             this.logger = logger;
+            this.productUpgradePack = productUpgradePack;
         }
 
         public TpkResult TransferStock(TpkRequest tpkRequest)
@@ -147,12 +151,16 @@
                 foreach (var line in whatToWand)
                 {
                     var hasUpgradeRule = this.productUpgradeRulesRepository
-                        .FilterBy(r  => r.ArticleNumber == line.ArticleNumber).Any();
+                        .FilterBy(r  => r.ArticleNumber == line.ArticleNumber && !string.IsNullOrEmpty(r.RenewProduct)).Any();
 
-                    if (hasUpgradeRule && !string.IsNullOrEmpty(line.RenewSernos))
+                    if (hasUpgradeRule)
                     {
-                        line.SerialNumberComments +=
-                            $" *** Please select one of the following renew serial numbers: {line.RenewSernos} (Original serial number: {line.OldSernos}) ***";
+                        if (int.TryParse(line.OldSernos, out var oldSernos))
+                        {
+                            var renewSernos = this.productUpgradePack.GetRenewSernosFromOriginal(oldSernos);
+                            line.SerialNumberComments +=
+                                $" *** Please select one of the following renew serial numbers: {renewSernos} (Original serial number: {line.OldSernos}) ***";
+                        }
                     }
                 }
 
@@ -245,6 +253,22 @@
 
             var account = this.salesAccountQueryRepository.FindBy(o => o.AccountId == consignment.SalesAccountId);
             var data = this.whatToWandService.ReprintWhatToWand(consignmentId, consignment.Address.CountryCode).ToList();
+            
+            foreach (var line in data)
+            {
+                var hasUpgradeRule = this.productUpgradeRulesRepository
+                    .FilterBy(r => r.ArticleNumber == line.ArticleNumber && !string.IsNullOrEmpty(r.RenewProduct)).Any();
+
+                if (hasUpgradeRule)
+                {
+                    if (int.TryParse(line.OldSernos, out var oldSernos))
+                    {
+                        var renewSernos = this.productUpgradePack.GetRenewSernosFromOriginal(oldSernos);
+                        line.SerialNumberComments +=
+                            $" *** Please select one of the following renew serial numbers: {renewSernos} (Original serial number: {line.OldSernos}) ***";
+                    }
+                }
+            }
 
             var result = new WhatToWandConsignment
                        {

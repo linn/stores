@@ -221,6 +221,7 @@
             builder.RegisterType<LogisticsLabelService>().As<ILogisticsLabelService>();
             builder.RegisterType<DeptStockPartsService>().As<IDeptStockPartsService>();
             builder.RegisterType<PurchaseLedgerPack>().As<IPurchaseLedgerPack>();
+            builder.RegisterType<ProductUpgradePack>().As<IProductUpgradePack>();
 
             // rest client proxies
             builder.RegisterType<RestClient>().As<IRestClient>();
