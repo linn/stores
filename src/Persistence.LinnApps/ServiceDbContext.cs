@@ -2219,6 +2219,7 @@
         {
             var q = builder.Query<ProductUpgradeRule>().ToView("PRODUCT_UPGRADE_RULES");
             q.Property(r => r.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
+            q.Property(r => r.RenewProduct).HasColumnName("RENEW_PRODUCT");
         }
 
         private void QueryStoresMoveLogs(ModelBuilder builder)

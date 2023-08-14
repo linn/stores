@@ -79,7 +79,7 @@
                         SOD.ORDER_NUMBER ORDER_NUMBER,
                         SOD.ORDER_LINE ORDER_LINE,
                         SA.ARTICLE_NUMBER ARTICLE_NUMBER,
-                        SA.INVOICE_dESCRIPTION INVOICE_DESCRIPTION,
+                        SA.INVOICE_DESCRIPTION INVOICE_DESCRIPTION,
                         SOD.QTY_ORDERED QTY_ORDERED,
                         SOD.NETT_TOTAL,
                         SOD.COMMENTS,
@@ -180,7 +180,6 @@
             C.CONSIGNMENT_ID,
             SOD.INTERNAL_COMMENTS,
             substr(internal_comments,instr(internal_comments, ':' ) + 1 ,instr(internal_comments, '******',2) - 1 -instr(internal_comments, ':')) old_sernos,
-            product_upgrade_pack.Get_Renew_Sernos_From_Original(to_number(substr(internal_comments,instr(internal_comments, ':' ) + 1 ,instr(internal_comments, '******',2) - 1 -instr(internal_comments, ':')))) renew_sernos,
             SOD.COMMENTS
             FROM SALES_ARTICLES SA,
             SALES_ACCOUNTS A,
@@ -314,6 +313,7 @@
             for (var i = 0; i < rows.Count; i++)
             {
                 var data = rows[i].ItemArray;
+
                 result.Add(new WhatToWandLine
                               {
                                   OrderNumber = int.Parse(data[0].ToString()),
@@ -327,8 +327,7 @@
                                   ConsignmentId = int.Parse(data[8].ToString()),
                                   SerialNumberComments = data[9].ToString(),
                                   OldSernos = data[10].ToString(),
-                                  RenewSernos = data[11].ToString(),
-                                  Comments = data[12].ToString()
+                                  Comments = data[11].ToString()
                 });
             }
 
