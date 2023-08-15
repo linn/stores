@@ -274,7 +274,7 @@ function DeptStockUtility({
                                             density="comfortable"
                                             rowHeight={34}
                                             loading={false}
-                                            hideFooter
+                                            hideFooter={stockLocators?.length <= 100}
                                             disableSelectionOnClick
                                             onSelectionModelChange={handleSelectRows}
                                             checkboxSelection
