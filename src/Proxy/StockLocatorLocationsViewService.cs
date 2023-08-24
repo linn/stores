@@ -142,7 +142,7 @@
             catch (Exception ex)
             {
                 this.log.Error(ex.Message, ex);
-                throw new StockLocatorException("Am unknown error occurred");
+                throw new StockLocatorException("An unknown error occurred");
             }
         }
     }
