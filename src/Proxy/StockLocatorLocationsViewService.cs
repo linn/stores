@@ -5,6 +5,7 @@
     using System.Data;
     using System.Linq;
 
+    using Linn.Common.Logging;
     using Linn.Common.Proxy.LinnApps;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
@@ -16,9 +17,14 @@
     {
         private readonly IDatabaseService databaseService;
 
-        public StockLocatorLocationsViewService(IDatabaseService databaseService)
+        private readonly ILog log;
+
+        public StockLocatorLocationsViewService(
+            IDatabaseService databaseService,
+            ILog log)
         {
             this.databaseService = databaseService;
+            this.log = log;
         }
 
         public IEnumerable<StockLocatorLocation> QueryView(
@@ -130,7 +136,13 @@
             }
             catch (OracleException ex)
             {
+                this.log.Error(ex.Message, ex);
                 throw new StockLocatorException("An Error occurred contacting the database. Please try again");
+            }
+            catch (Exception ex)
+            {
+                this.log.Error(ex.Message, ex);
+                throw new StockLocatorException("Am unknown error occurred");
             }
         }
     }
