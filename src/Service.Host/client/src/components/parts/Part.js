@@ -135,7 +135,8 @@ function Part({
                     stockControlled: template.stockControlled,
                     cccCriticalPart: 'N',
                     safetyCriticalPart: 'N',
-                    psuPart: 'N'
+                    psuPart: 'N',
+                    ourUnitOfMeasure: 'ONES'
                 }
             });
         }
