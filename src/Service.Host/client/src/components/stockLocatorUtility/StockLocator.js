@@ -259,7 +259,11 @@ function StockLocator({
                     <Grid item xs={12}>
                         {itemError && (
                             <ErrorCard
-                                errorMessage={itemError.details?.message || itemError.statusText}
+                                errorMessage={
+                                    itemError?.details?.errors?.[0] ||
+                                    itemError.details?.message ||
+                                    itemError.statusText
+                                }
                             />
                         )}
                     </Grid>
@@ -553,7 +557,10 @@ StockLocator.propTypes = {
     clearMoves: PropTypes.func.isRequired,
     itemError: PropTypes.shape({
         statusText: PropTypes.string,
-        details: PropTypes.shape({ message: PropTypes.string })
+        details: PropTypes.shape({
+            message: PropTypes.string,
+            errors: PropTypes.arrayOf(PropTypes.shape({}))
+        })
     }),
     clearErrors: PropTypes.func.isRequired
 };
