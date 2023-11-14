@@ -6,6 +6,7 @@
 
     using Linn.Stores.Domain.LinnApps.Wcs;
     using Linn.Stores.Resources;
+    using Linn.Stores.Domain;
 
     public interface IWarehouseFacadeService
     {
@@ -18,5 +19,7 @@
         IResult<WarehouseLocation> GetPalletLocation(int palletNumber);
 
         IResult<WarehouseLocation> GetPalletAtLocation(string location);
+
+        IResult<IEnumerable<ScsPallet>> GetScsPallets();
     }
 }

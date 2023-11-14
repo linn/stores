@@ -1,5 +1,8 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
+    using System.Collections.Generic;
+
+    using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Wcs;
@@ -8,9 +11,12 @@
     {
         private readonly IWcsPack wcsPack;
 
-        public WarehouseService(IWcsPack wcsPack)
+        private readonly IQueryRepository<WarehouseLocation> warehouseLocationRepository;
+
+        public WarehouseService(IWcsPack wcsPack, IQueryRepository<WarehouseLocation> warehouseLocationRepository)
         {
             this.wcsPack = wcsPack;
+            this.warehouseLocationRepository = warehouseLocationRepository;
         }
 
         public MessageResult MoveAllPalletsToUpper()
@@ -76,6 +82,12 @@
         {
             var taskNo = this.wcsPack.EmptyLocation(palletNumber, location, priority, "BK", who.Id);
             return taskNo > 0;
+        }
+
+        public IEnumerable<WarehouseLocation> GetWarehouseLocationsWithPallets()
+        {
+            var locations = this.warehouseLocationRepository.FilterBy(p => p.PalletId != null && p.PalletId <= 3000);
+            return locations;
         }
     }
 }
