@@ -1,5 +1,8 @@
 ﻿namespace Linn.Stores.Domain.LinnApps
 {
+    using System.Collections;
+    using System.Collections.Generic;
+
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Wcs;
 
@@ -20,5 +23,7 @@
         bool AtMovePallet(int palletNumber, string fromLocation, string destination, int priority, Employee who);
 
         bool EmptyLocation(int palletNumber, string location, int priority, Employee who);
+
+        IEnumerable<WarehouseLocation> GetWarehouseLocationsWithPallets();
     }
 }

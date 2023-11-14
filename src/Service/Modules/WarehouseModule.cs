@@ -21,7 +21,8 @@
             this.Post("/logistics/wcs/move-all-to-upper", _  => this.MoveAllPalletsToUpper());
             this.Post("/logistics/wcs/move-to-upper", _  => this.MovePalletToUpper());
             this.Post("/logistics/wcs/warehouse-tasks", _ => this.AddWarehouseTask());
-            this.Get("/logistics/wcs/warehouse-pallets/{palletId}", parameters => this.GetWarehousePallet(parameters.palletId));
+            this.Get("/logistics/wcs/warehouse-pallets/{palletId:int}", parameters => this.GetWarehousePallet(parameters.palletId));
+            this.Get("/logistics/wcs/warehouse-pallets/scs", _ => this.QueryScsPallets());
             this.Get("/logistics/wcs/warehouse-pallets", _ => this.QueryWarehousePallet());
         }
 
@@ -59,6 +60,14 @@
         {
             var resource = this.Bind<SearchWarehousePallet>();
             var result = this.warehouseFacadeService.GetPalletAtLocation(resource.LocRef);
+
+            return this.Negotiate
+                .WithModel(result);
+        }
+
+        private object QueryScsPallets()
+        {
+            var result = this.warehouseFacadeService.GetScsPallets();
 
             return this.Negotiate
                 .WithModel(result);

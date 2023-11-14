@@ -6,6 +6,7 @@
 
     using Linn.Common.Facade;
     using Linn.Common.Reporting.Models;
+    using Linn.Stores.Domain;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
@@ -240,6 +241,7 @@
             builder.RegisterType<StockTriggerLevelsResourceBuilder>().As<IResourceBuilder<IEnumerable<StockTriggerLevel>>>();
             builder.RegisterType<PartLibraryResourceBuilder>().As<IResourceBuilder<PartLibrary>>();
             builder.RegisterType<PartLibrariesResourceBuilder>().As<IResourceBuilder<IEnumerable<PartLibrary>>>();
+            builder.RegisterType<ScsPalletsResourceBuilder>().As<IResourceBuilder<IEnumerable<ScsPallet>>>();
         }
     }
 }

@@ -2,10 +2,17 @@
 {
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
+    using Linn.Stores.Domain;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Wcs;
     using Linn.Stores.Resources;
+
+    using Microsoft.EntityFrameworkCore.Internal;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Linn.Stores.Facade.Extensions;
 
     public class WarehouseFacadeService : IWarehouseFacadeService
     {
@@ -114,6 +121,18 @@
             }
 
             return new SuccessResult<WarehouseLocation>(warehouseLocation);
+        }
+
+        public IResult<IEnumerable<ScsPallet>> GetScsPallets()
+        {
+            var locations = this.warehouseService.GetWarehouseLocationsWithPallets().Select(l => l.ToScsPallet());
+
+            if (locations.Any())
+            {
+                return new SuccessResult<IEnumerable<ScsPallet>>(locations);
+            }
+
+            return new NotFoundResult<IEnumerable<ScsPallet>>("No locations found");
         }
     }
 }

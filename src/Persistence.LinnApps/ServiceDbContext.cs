@@ -19,6 +19,7 @@
     using Linn.Stores.Domain.LinnApps.Tqms;
     using Linn.Stores.Domain.LinnApps.Wand;
     using Linn.Stores.Domain.LinnApps.Wand.Models;
+    using Linn.Stores.Domain.LinnApps.Wcs;
     using Linn.Stores.Domain.LinnApps.Workstation;
 
     using Microsoft.EntityFrameworkCore;
@@ -263,6 +264,8 @@
 
         public DbSet<PartLibrary> PartLibraries { get; set; }
 
+        public DbSet<WarehouseLocation> WarehouseLocations { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -388,6 +391,8 @@
             this.QueryProductUpgradeRules(builder);
             this.QueryStoresMoveLogs(builder);
             this.BuildPartLibraries(builder);
+            this.BuildWarehouseLocations(builder);
+            this.BuildWarehousePallets(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -2258,6 +2263,32 @@
             var q = builder.Entity<PartLibrary>().ToTable("ECIT_LIBRARIES");
             q.HasKey(a => a.LibraryName);
             q.Property(a => a.LibraryName).HasColumnName("LIBRARY_NAME").HasMaxLength(100);
+        }
+
+        private void BuildWarehouseLocations(ModelBuilder builder)
+        {
+            var q = builder.Entity<WarehouseLocation>().ToTable("WAREHOUSE_LOCATIONS");
+            q.HasKey(a => a.Location);
+            q.Property(a => a.Location).HasColumnName("LOC_REF");
+            q.Property(a => a.PalletId).HasColumnName("PALLET_ID");
+            q.Property(a => a.Aisle).HasColumnName("AISLE");
+            q.Property(a => a.AreaCode).HasColumnName("AREA_CODE");
+            q.Property(a => a.XCoord).HasColumnName("X_COORD");
+            q.Property(a => a.YCoord).HasColumnName("Y_COORD");
+
+            q.HasOne(p => p.Pallet).WithOne(a => a.Location).HasForeignKey<WarehouseLocation>(x => x.PalletId);
+        }
+
+        private void BuildWarehousePallets(ModelBuilder builder)
+        {
+            var q = builder.Entity<WarehousePallet>().ToTable("WAREHOUSE_PALLETS");
+
+            q.HasKey(a => a.PalletId);
+            q.Property(a => a.PalletId).HasColumnName("PALLET_ID");
+            q.Property(a => a.SizeCode).HasColumnName("SIZE_CODE");
+            q.Property(a => a.SpeedFactor).HasColumnName("SPEED_FACTOR");
+            q.Property(a => a.RotationAverage).HasColumnName("ROTATION_AVERAGE");
+            q.Property(a => a.Heat).HasColumnName("HEAT");
         }
     }
 }
