@@ -12,13 +12,16 @@
     {
         private readonly ScsPalletResourceBuilder palletResourceBuilder = new ScsPalletResourceBuilder();
 
-        public IEnumerable<ScsPalletResource> Build(IEnumerable<ScsPallet> pallets)
+        public ScsPalletsResource Build(IEnumerable<ScsPallet> pallets)
         {
-            return pallets
-                .Select(a =>
-                    {
-                        return this.palletResourceBuilder.Build(a);
-                    });
+            return new ScsPalletsResource
+                       {
+                           data = pallets.Select(
+                               a =>
+                                   {
+                                       return this.palletResourceBuilder.Build(a);
+                                   })
+                       };
         }
 
         object IResourceBuilder<IEnumerable<ScsPallet>>.Build(IEnumerable<ScsPallet> pallets) => this.Build(pallets);
