@@ -1,6 +1,5 @@
 ﻿namespace Linn.Stores.Resources.Scs
 {
-
     public class LocationResource
     {
         public bool Allocated { get; set; }

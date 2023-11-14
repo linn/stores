@@ -34,7 +34,7 @@
 
         public int ScsHeat()
         {
-            // SpeedFactor is too unrelia
+            // SpeedFactor is too unreliable
             switch (this.SpeedFactor)
             {
                 case 1:
