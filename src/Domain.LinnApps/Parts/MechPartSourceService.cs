@@ -41,14 +41,21 @@
 
         public string GetCapacitanceLetterAndNumeralCode(string unit, decimal value)
         {
-            var units = new Dictionary<string, decimal>
-                            {
-                                { "u", 0.000001m },
-                                { "n", 0.000000001m },
-                                { "p", 0.000000000001m },
-                            };
+            var divisor = 1m;
 
-            var result = (value / units[unit]).ToString("G29");
+            if (!string.IsNullOrEmpty(unit))
+            {
+                var units = new Dictionary<string, decimal>
+                                {
+                                    { "u", 0.000001m },
+                                    { "n", 0.000000001m },
+                                    { "p", 0.000000000001m },
+                                };
+                divisor = units[unit];
+            }
+           
+
+            var result = (value / divisor).ToString("G29");
 
             if (result.Contains("."))
             {
