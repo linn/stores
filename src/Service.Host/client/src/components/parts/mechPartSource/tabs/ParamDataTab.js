@@ -42,8 +42,7 @@ function ParamDataTab({
     capacitorLength,
     transistorPackageValues,
     transistorPolarityValues,
-    icPackageValues,
-    creating
+    icPackageValues
 }) {
     const ohmUnitMultipliers = {
         KΩ: 1000,
@@ -85,7 +84,6 @@ function ParamDataTab({
                                 }
                             }}
                             type="number"
-                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={3}>
@@ -93,7 +91,6 @@ function ParamDataTab({
                             items={Object.keys(ohmUnitMultipliers)}
                             value={resistanceUnits}
                             label="units"
-                            disabled={!creating()}
                             propertyName="resistanceUnits"
                             onChange={handleFieldChange}
                             allowNoValue={false}
@@ -116,7 +113,6 @@ function ParamDataTab({
                             label="Tolerance"
                             value={resistorTolerance}
                             propertyName="resistorTolerance"
-                            disabled={!creating()}
                             onChange={handleFieldChange}
                         />
                     </Grid>
@@ -129,7 +125,6 @@ function ParamDataTab({
                             label="Construction"
                             value={construction}
                             propertyName="construction"
-                            disabled={!creating()}
                             onChange={handleFieldChange}
                         />
                     </Grid>
@@ -145,7 +140,6 @@ function ParamDataTab({
                             label="Package"
                             value={packageName}
                             propertyName="packageName"
-                            disabled={!creating()}
                             onChange={handleFieldChange}
                         />
                     </Grid>
@@ -156,7 +150,6 @@ function ParamDataTab({
                             propertyName="resistorLength"
                             label="Length (mm)"
                             onChange={handleFieldChange}
-                            disabled={!creating()}
                             type="number"
                         />
                     </Grid>
@@ -166,7 +159,6 @@ function ParamDataTab({
                             propertyName="resistorWidth"
                             label="Width (mm)"
                             onChange={handleFieldChange}
-                            disabled={!creating()}
                             type="number"
                         />
                     </Grid>
@@ -176,7 +168,6 @@ function ParamDataTab({
                             propertyName="resistorHeight"
                             label="Height (mm)"
                             onChange={handleFieldChange}
-                            disabled={!creating()}
                             type="number"
                         />
                     </Grid>
@@ -187,7 +178,6 @@ function ParamDataTab({
                             propertyName="resistorVoltageRating"
                             label="Voltage Rating (V)"
                             onChange={handleFieldChange}
-                            disabled={!creating()}
                             type="number"
                         />
                     </Grid>
@@ -197,7 +187,6 @@ function ParamDataTab({
                             propertyName="resistorPowerRating"
                             label="Power Rating (W)"
                             onChange={handleFieldChange}
-                            disabled={!creating()}
                             type="number"
                         />
                     </Grid>
@@ -208,7 +197,6 @@ function ParamDataTab({
                             label="Temp Coeff"
                             value={temperatureCoefficient}
                             propertyName="temperatureCoefficient"
-                            disabled={!creating()}
                             onChange={handleFieldChange}
                         />
                     </Grid>
@@ -234,7 +222,6 @@ function ParamDataTab({
                                 );
                             }}
                             type="number"
-                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={3}>
@@ -266,7 +253,6 @@ function ParamDataTab({
                             label="Max Voltage (V)"
                             onChange={handleFieldChange}
                             type="number"
-                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={3}>
@@ -276,7 +262,6 @@ function ParamDataTab({
                             label="+ve Tolerance"
                             onChange={handleFieldChange}
                             type="number"
-                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={3}>
@@ -286,7 +271,6 @@ function ParamDataTab({
                             label="-ve Tolerance"
                             onChange={handleFieldChange}
                             type="number"
-                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={3} />
@@ -300,7 +284,6 @@ function ParamDataTab({
                             value={capacitorDielectric}
                             propertyName="capacitorDielectric"
                             onChange={handleFieldChange}
-                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={9} />
@@ -316,7 +299,6 @@ function ParamDataTab({
                             value={packageName}
                             propertyName="packageName"
                             onChange={handleFieldChange}
-                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={9} />
@@ -327,7 +309,6 @@ function ParamDataTab({
                             label="Pitch (mm)"
                             onChange={handleFieldChange}
                             type="number"
-                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={3}>
@@ -337,7 +318,6 @@ function ParamDataTab({
                             label="Length (mm)"
                             onChange={handleFieldChange}
                             type="number"
-                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={3}>
@@ -347,7 +327,6 @@ function ParamDataTab({
                             label="Width (mm)"
                             onChange={handleFieldChange}
                             type="number"
-                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={3}>
@@ -357,7 +336,6 @@ function ParamDataTab({
                             label="Height (mm)"
                             onChange={handleFieldChange}
                             type="number"
-                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={3}>
@@ -367,7 +345,6 @@ function ParamDataTab({
                             label="Diameter (mm)"
                             onChange={handleFieldChange}
                             type="number"
-                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={3}>
@@ -377,7 +354,6 @@ function ParamDataTab({
                             label="Ripple Current (mA RMS)"
                             onChange={handleFieldChange}
                             type="number"
-                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={6} />
@@ -392,7 +368,6 @@ function ParamDataTab({
                             propertyName="transistorDeviceName"
                             label="Device/Type"
                             onChange={handleFieldChange}
-                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={9} />
@@ -407,7 +382,6 @@ function ParamDataTab({
                             allowNoValue
                             propertyName="transistorPolarity"
                             onChange={handleFieldChange}
-                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={9} />
@@ -427,7 +401,6 @@ function ParamDataTab({
                             label="Current (A)"
                             onChange={handleFieldChange}
                             type="number"
-                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={6} />
@@ -444,7 +417,6 @@ function ParamDataTab({
                             value={packageName}
                             propertyName="packageName"
                             onChange={handleFieldChange}
-                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={9} />
@@ -459,7 +431,6 @@ function ParamDataTab({
                             propertyName="icType"
                             label="Type"
                             onChange={handleFieldChange}
-                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={9} />
@@ -469,7 +440,6 @@ function ParamDataTab({
                             propertyName="icFunction"
                             label="Function"
                             onChange={handleFieldChange}
-                            disabled={!creating()}
                         />
                     </Grid>
                     <Grid item xs={9} />
@@ -486,7 +456,6 @@ function ParamDataTab({
                             value={packageName}
                             propertyName="packageName"
                             onChange={handleFieldChange}
-                            disabled={!creating()}
                         />
                     </Grid>
 
@@ -540,8 +509,7 @@ ParamDataTab.propTypes = {
     transistorPolarityValues: PropTypes.arrayOf(PropTypes.shape({})),
     icPackageValues: PropTypes.arrayOf(PropTypes.shape({})),
     capacitorPackageValues: PropTypes.arrayOf(PropTypes.shape({})),
-    resistorConstructionValues: PropTypes.arrayOf(PropTypes.shape({})),
-    creating: PropTypes.func.isRequired
+    resistorConstructionValues: PropTypes.arrayOf(PropTypes.shape({}))
 };
 
 ParamDataTab.defaultProps = {

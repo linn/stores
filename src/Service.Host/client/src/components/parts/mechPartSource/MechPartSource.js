@@ -89,8 +89,8 @@ function MechPartSource({
         if (item !== prevMechPartSource && editStatus !== 'create') {
             setMechPartSource({
                 ...item,
-                resistanceUnits: 'KΩ',
-                capacitanceUnits: 'uF',
+                resistanceUnits: item?.rkmCode?.replace(/[^a-zA-Z]/g, '').concat('Ω'),
+                capacitanceUnits: item?.capacitanceLetterAndNumeralCode?.replace(/[^a-zA-Z]/g, ''),
                 mechPartManufacturerAlts: item?.mechPartManufacturerAlts?.map(m => ({
                     ...m,
                     id: m.sequence
@@ -508,24 +508,11 @@ function MechPartSource({
                                 <ParamDataTab
                                     partType={mechPartSource.partType}
                                     resistance={mechPartSource.resistance}
-                                    resistanceUnits={
-                                        creating()
-                                            ? mechPartSource.resistanceUnits
-                                            : mechPartSource?.rkmCode
-                                                  ?.replace(/[^a-zA-Z]/g, '')
-                                                  .concat('Ω')
-                                    }
+                                    resistanceUnits={mechPartSource.resistanceUnits}
                                     handleFieldChange={handleFieldChange}
                                     capacitorRippleCurrent={mechPartSource.capacitorRippleCurrent}
                                     capacitance={mechPartSource.capacitance}
-                                    capacitanceUnits={
-                                        creating()
-                                            ? mechPartSource.capacitanceUnits
-                                            : mechPartSource?.capacitanceLetterAndNumeralCode?.replace(
-                                                  /[^a-zA-Z]/g,
-                                                  ''
-                                              )
-                                    }
+                                    capacitanceUnits={mechPartSource.capacitanceUnits}
                                     capacitorVoltageRating={mechPartSource.capacitorVoltageRating}
                                     capacitorPositiveTolerance={
                                         mechPartSource.capacitorPositiveTolerance
@@ -533,7 +520,6 @@ function MechPartSource({
                                     capacitorNegativeTolerance={
                                         mechPartSource.capacitorNegativeTolerance
                                     }
-                                    creating={creating}
                                     capacitorDielectric={mechPartSource.capacitorDielectric}
                                     packageName={mechPartSource.packageName}
                                     capacitorPitch={mechPartSource.capacitorPitch}
@@ -645,7 +631,9 @@ function MechPartSource({
 MechPartSource.propTypes = {
     item: PropTypes.shape({
         mechPartManufacturerAlts: PropTypes.arrayOf(PropTypes.shape({})),
-        mechPartAlts: PropTypes.arrayOf(PropTypes.shape({}))
+        mechPartAlts: PropTypes.arrayOf(PropTypes.shape({})),
+        capacitanceLetterAndNumeralCode: PropTypes.string,
+        rkmCode: PropTypes.string
     }),
     history: PropTypes.shape({ goBack: PropTypes.func }).isRequired,
     editStatus: PropTypes.string.isRequired,
