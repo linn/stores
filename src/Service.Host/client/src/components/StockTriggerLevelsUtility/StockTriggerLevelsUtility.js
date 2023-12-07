@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import Grid from '@material-ui/core/Grid';
 import {
+    ErrorCard,
     InputField,
     Loading,
+    SaveBackCancelButtons,
     SnackbarMessage,
-    ErrorCard,
     Title,
-    Typeahead,
-    SaveBackCancelButtons
+    Typeahead
 } from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import { DataGrid } from '@mui/x-data-grid';
@@ -38,6 +38,7 @@ function StockTriggerLevelsUtility({
     createStockTriggerLevel,
     deleteStockTriggerLevel,
     stockTriggerLevelsLoading,
+    stockTriggerLevelsSearchLoading,
     storagePlaces,
     clearStoragePlacesSearch,
     searchStoragePlaces,
@@ -137,6 +138,7 @@ function StockTriggerLevelsUtility({
                         handleFieldChange('locationId', params.row.id, newValue.locationId);
                         handleFieldChange('triggerLevel', params.row.id, newValue.triggerLevel);
                         handleFieldChange('maxCapacity', params.row.id, newValue.kanbanSize);
+                        handleFieldChange('palletNumber', params.row.id, newValue.palletNumber);
                     }}
                     label=""
                     modal
@@ -306,8 +308,7 @@ function StockTriggerLevelsUtility({
                                             columnBuffer={8}
                                             density="comfortable"
                                             rowHeight={34}
-                                            loading={false}
-                                            hideFooter
+                                            loading={stockTriggerLevelsSearchLoading}
                                             disableSelectionOnClick
                                             onSelectionModelChange={handleSelectRows}
                                             checkboxSelection
@@ -379,6 +380,7 @@ StockTriggerLevelsUtility.propTypes = {
     deleteStockTriggerLevel: PropTypes.func.isRequired,
     searchStockTriggerLevels: PropTypes.func.isRequired,
     stockTriggerLevelsLoading: PropTypes.bool,
+    stockTriggerLevelsSearchLoading: PropTypes.bool,
     snackbarVisible: PropTypes.bool,
     setSnackbarVisible: PropTypes.func.isRequired,
     itemError: PropTypes.shape({
@@ -400,6 +402,7 @@ StockTriggerLevelsUtility.defaultProps = {
     storagePlaces: [],
     stockTriggerLevels: [],
     stockTriggerLevelsLoading: false,
+    stockTriggerLevelsSearchLoading: false,
     snackbarVisible: false,
     itemError: null
 };

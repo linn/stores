@@ -18,7 +18,7 @@ const mapStateToProps = state => ({
         .map(s => ({ ...s, id: s.partNumber, name: s.partNumber })),
     partsLoading: partsSelectors.getSearchLoading(state),
     stockTriggerLevels: stockTriggerLevelsSelectors.getSearchItems(state),
-    stockTriggerLevelsSearchLoading: stockTriggerLevelsSelectors.getLoading(state),
+    stockTriggerLevelsSearchLoading: stockTriggerLevelsSelectors.getSearchLoading(state),
     storagePlaces: storagePlacesSelectors.getSearchItems(state).map(i => ({ ...i, id: i.name })),
     storagePlacesLoading: storagePlacesSelectors.getSearchLoading(state),
     itemError: getItemError(state, itemTypes.stockTriggerLevels.item),
