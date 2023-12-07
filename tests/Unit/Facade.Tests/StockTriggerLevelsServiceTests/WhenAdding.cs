@@ -10,9 +10,9 @@
 
     using NUnit.Framework;
 
-    public class WhenUpdatingLocationToPallet : ContextBase
+    public class WhenAdding : ContextBase
     {
-        private int stockTriggerLevelId = 1;
+        private readonly int stockTriggerLevelId = 1;
 
         private StockTriggerLevelsResource resource;
 
@@ -44,24 +44,20 @@
             };
 
             this.result = this.Sut.Add(this.resource);
-
-            this.Repository.FindById(this.stockTriggerLevelId).Returns(stockTriggerLevel);
-
-            this.result = this.Sut.Update(this.resource.Id, this.resource);
         }
 
         [Test]
-        public void ShouldGet()
+        public void ShouldAdd()
         {
-            this.Repository.Received().FindById(this.stockTriggerLevelId);
+            this.Repository.Received().Add(Arg.Any<StockTriggerLevel>());
         }
 
         [Test]
         public void ShouldReturnSuccess()
         {
-            this.result.Should().BeOfType<SuccessResult<StockTriggerLevel>>();
-            var dataResult = ((SuccessResult<StockTriggerLevel>)this.result).Data;
-            dataResult.Id.Should().Be(this.stockTriggerLevelId);
+            this.result.Should().BeOfType<CreatedResult<StockTriggerLevel>>();
+            var dataResult = ((CreatedResult<StockTriggerLevel>)this.result).Data;
+            dataResult.Id.Should().Be(0);
             dataResult.PartNumber.Should().Be("ES PART");
             dataResult.KanbanSize.Should().Be(2);
             dataResult.LocationId.Should().Be(null);
