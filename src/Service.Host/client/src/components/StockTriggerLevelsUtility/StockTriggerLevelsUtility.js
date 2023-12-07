@@ -138,6 +138,7 @@ function StockTriggerLevelsUtility({
                         handleFieldChange('locationId', params.row.id, newValue.locationId);
                         handleFieldChange('triggerLevel', params.row.id, newValue.triggerLevel);
                         handleFieldChange('maxCapacity', params.row.id, newValue.kanbanSize);
+                        handleFieldChange('palletNumber', params.row.id, newValue.palletNumber);
                     }}
                     label=""
                     modal

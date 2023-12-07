@@ -122,7 +122,6 @@
             entity.PartNumber = updateResource.PartNumber;
             entity.MaxCapacity = updateResource.MaxCapacity;
             entity.KanbanSize = updateResource.KanbanSize;
-            entity.KanbanSize = updateResource.KanbanSize;
             entity.PalletNumber = updateResource.PalletNumber;
 
             if (entity.LocationId.HasValue)
