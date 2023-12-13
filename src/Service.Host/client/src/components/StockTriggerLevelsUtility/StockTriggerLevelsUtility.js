@@ -49,22 +49,17 @@ function StockTriggerLevelsUtility({
     history
 }) {
     const classes = useStyles();
-
+    const [prevTriggerLevelRows, setPrevStockTriggerLevelRows] = useState(null);
     const [triggerLevelRows, setStockTriggerLevelRows] = useState([]);
 
     useEffect(() => {
-        if (stockTriggerLevels?.length) {
-            setStockTriggerLevelRows(
-                stockTriggerLevels.map(i => ({
-                    ...i,
-                    id: i.id,
-                    description: i.storageLocation?.description,
-                    storagePlaceDescription: i.storageLocation?.description,
-                    locationName: i.palletNumber || i.storageLocation?.locationCode
-                }))
-            );
+        if (stockTriggerLevels !== prevTriggerLevelRows) {
+            if (stockTriggerLevels) {
+                setPrevStockTriggerLevelRows(stockTriggerLevels);
+                setStockTriggerLevelRows(stockTriggerLevels);
+            }
         }
-    }, [stockTriggerLevels]);
+    }, [stockTriggerLevels, prevTriggerLevelRows]);
 
     const [options, setOptions] = useState({
         partNumber: '',
@@ -143,7 +138,7 @@ function StockTriggerLevelsUtility({
                     label=""
                     modal
                     items={storagePlaces}
-                    value={params.row.storageLocation?.locationCode}
+                    value={params.row.storageLocation?.locationCode || params.row.locationName}
                     loading={storagePlacesLoading}
                     fetchItems={searchStoragePlaces}
                     links={false}
@@ -232,6 +227,13 @@ function StockTriggerLevelsUtility({
     );
     return (
         <Page>
+            <Grid item xs={12}>
+                <SnackbarMessage
+                    visible={snackbarVisible}
+                    onClose={() => setSnackbarVisible(false)}
+                    message="Save Successful"
+                />
+            </Grid>
             <Grid container spacing={3}>
                 <Title text="Stock Trigger Levels" />
                 <Grid container spacing={3}>
@@ -284,44 +286,42 @@ function StockTriggerLevelsUtility({
                     </Grid>
                 )}
                 {saveBackCancelButtons()}
-                {stockTriggerLevelsLoading ? (
+                {stockTriggerLevelsLoading || stockTriggerLevelsSearchLoading ? (
                     <Grid item xs={12}>
                         <Loading />
                     </Grid>
                 ) : (
                     <>
-                        <Grid item xs={12}>
-                            <SnackbarMessage
-                                visible={snackbarVisible}
-                                onClose={() => setSnackbarVisible(false)}
-                                message="Save Successful"
-                            />
-                            {triggerLevelRows && (
-                                <Grid item xs={12}>
-                                    <div style={{ width: '100%' }}>
-                                        <DataGrid
-                                            rows={triggerLevelRows}
-                                            columns={columns}
-                                            editMode="cell"
-                                            onEditRowsModelChange={handleEditRowsModelChange}
-                                            autoHeight
-                                            columnBuffer={8}
-                                            density="comfortable"
-                                            rowHeight={34}
-                                            loading={stockTriggerLevelsSearchLoading}
-                                            disableSelectionOnClick
-                                            onSelectionModelChange={handleSelectRows}
-                                            checkboxSelection
-                                            isRowSelectable={params =>
-                                                !triggerLevelRows
-                                                    .filter(s => s.id !== params.row.id)
-                                                    .some(x => x.selected)
-                                            }
-                                        />
-                                    </div>
-                                </Grid>
-                            )}
-                        </Grid>
+                        {triggerLevelRows && (
+                            <Grid item xs={12}>
+                                <div style={{ width: '100%' }}>
+                                    <DataGrid
+                                        rows={triggerLevelRows}
+                                        columns={columns}
+                                        editMode="cell"
+                                        onEditRowsModelChange={handleEditRowsModelChange}
+                                        autoHeight
+                                        columnBuffer={8}
+                                        density="comfortable"
+                                        rowHeight={34}
+                                        loading={false}
+                                        disableSelectionOnClick
+                                        onSelectionModelChange={handleSelectRows}
+                                        checkboxSelection
+                                        isRowSelectable={params =>
+                                            !triggerLevelRows
+                                                .filter(s => s.id !== params.row.id)
+                                                .some(x => x.selected)
+                                        }
+                                        isCellEditable={params =>
+                                            (!triggerLevelRows.some(x => x.edited) &&
+                                                !triggerLevelRows.some(x => x.selected)) ||
+                                            params.row.edited
+                                        }
+                                    />
+                                </div>
+                            </Grid>
+                        )}
                         <Grid item xs={2}>
                             <Button
                                 variant="outlined"
