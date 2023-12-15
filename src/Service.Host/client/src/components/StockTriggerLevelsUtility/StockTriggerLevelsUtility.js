@@ -49,11 +49,19 @@ function StockTriggerLevelsUtility({
     history
 }) {
     const classes = useStyles();
-    const [triggerLevelRows, setStockTriggerLevelRows] = useState([]);
+    const [triggerLevelRows, setTriggerLevelRows] = useState([]);
+
+    const [options, setOptions] = useState({
+        partNumber: '',
+        storagePlace: ''
+    });
+
+    const handleOptionsChange = (propertyName, newValue) =>
+        setOptions({ ...options, [propertyName]: newValue });
 
     useEffect(() => {
         if (stockTriggerLevels?.length) {
-            setStockTriggerLevelRows(
+            setTriggerLevelRows(
                 stockTriggerLevels.map(i => ({
                     ...i,
                     id: i.id,
@@ -65,16 +73,16 @@ function StockTriggerLevelsUtility({
         }
     }, [stockTriggerLevels]);
 
-    const [options, setOptions] = useState({
-        partNumber: '',
-        storagePlace: ''
-    });
-
-    const handleOptionsChange = (propertyName, newValue) =>
-        setOptions({ ...options, [propertyName]: newValue });
+    useEffect(() => {
+        if (snackbarVisible)
+            searchStockTriggerLevels(
+                '',
+                `&partNumberSearchTerm=${options.partNumber}&storagePlaceSearchTerm=${options.storagePlace}`
+            );
+    }, [snackbarVisible, searchStockTriggerLevels, options]);
 
     const handleSelectRows = selected => {
-        setStockTriggerLevelRows(
+        setTriggerLevelRows(
             triggerLevelRows.map(r =>
                 selected.includes(r.id) ? { ...r, selected: true } : { ...r, selected: false }
             )
@@ -82,7 +90,7 @@ function StockTriggerLevelsUtility({
     };
 
     const handleFieldChange = useCallback((field, rowId, newValue) => {
-        setStockTriggerLevelRows(c =>
+        setTriggerLevelRows(c =>
             c.map(s =>
                 Number(s.id) === Number(rowId) ? { ...s, [field]: newValue, edited: true } : s
             )
@@ -102,7 +110,7 @@ function StockTriggerLevelsUtility({
     );
 
     const addNewRow = () =>
-        setStockTriggerLevelRows([
+        setTriggerLevelRows([
             ...triggerLevelRows,
             {
                 isNewRow: true,
@@ -205,7 +213,7 @@ function StockTriggerLevelsUtility({
             <SaveBackCancelButtons
                 backClick={() => history.push('/inventory/stock-trigger-levels/')}
                 saveDisabled={!triggerLevelRows.some(x => x.edited)}
-                cancelClick={() => setStockTriggerLevelRows(items)}
+                cancelClick={() => setTriggerLevelRows(items)}
                 saveClick={() => {
                     triggerLevelRows
                         .filter(x => x.edited && !x.isNewRow)
