@@ -124,11 +124,7 @@ function StockTriggerLevelsUtility({
             renderEditCell: params => (
                 <Typeahead
                     onSelect={newValue => {
-                        handleFieldChange(
-                            'locationName',
-                            params.row.id,
-                            newValue.locationName || newValue.storageLocation?.locationCode
-                        );
+                        handleFieldChange('locationName', params.row.id, newValue.name);
                         handleFieldChange(
                             'storagePlaceDescription',
                             params.row.id,
@@ -142,7 +138,7 @@ function StockTriggerLevelsUtility({
                     label=""
                     modal
                     items={storagePlaces}
-                    value={params.row.storageLocation?.locationCode || params.row.locationName}
+                    value={params.row.palletNumber || params.row.name}
                     loading={storagePlacesLoading}
                     fetchItems={searchStoragePlaces}
                     links={false}
