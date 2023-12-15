@@ -49,17 +49,21 @@ function StockTriggerLevelsUtility({
     history
 }) {
     const classes = useStyles();
-    const [prevTriggerLevelRows, setPrevStockTriggerLevelRows] = useState(null);
     const [triggerLevelRows, setStockTriggerLevelRows] = useState([]);
 
     useEffect(() => {
-        if (stockTriggerLevels !== prevTriggerLevelRows) {
-            if (stockTriggerLevels) {
-                setPrevStockTriggerLevelRows(stockTriggerLevels);
-                setStockTriggerLevelRows(stockTriggerLevels);
-            }
+        if (stockTriggerLevels?.length) {
+            setStockTriggerLevelRows(
+                stockTriggerLevels.map(i => ({
+                    ...i,
+                    id: i.id,
+                    description: i.storageLocation?.description,
+                    storagePlaceDescription: i.storageLocation?.description,
+                    locationName: i.palletNumber || i.storageLocation?.locationCode
+                }))
+            );
         }
-    }, [stockTriggerLevels, prevTriggerLevelRows]);
+    }, [stockTriggerLevels]);
 
     const [options, setOptions] = useState({
         partNumber: '',
