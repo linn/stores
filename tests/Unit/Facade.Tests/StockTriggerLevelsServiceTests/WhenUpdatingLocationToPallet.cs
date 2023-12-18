@@ -3,10 +3,8 @@
     using FluentAssertions;
 
     using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Resources;
-    using Linn.Stores.Resources.Parts;
 
     using NSubstitute;
 
