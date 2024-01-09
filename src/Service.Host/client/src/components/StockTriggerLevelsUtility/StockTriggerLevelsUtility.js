@@ -81,6 +81,13 @@ function StockTriggerLevelsUtility({
             );
     }, [snackbarVisible, searchStockTriggerLevels, options]);
 
+    const valueGetter = (params, fieldName) => {
+        const value = triggerLevelRows.find(x => Number(x.id) === Number(params.row.id))?.[
+            fieldName
+        ];
+        return value;
+    };
+
     const handleSelectRows = selected => {
         setTriggerLevelRows(
             triggerLevelRows.map(r =>
@@ -129,6 +136,7 @@ function StockTriggerLevelsUtility({
             field: 'locationName',
             editable: true,
             width: 300,
+            valueGetter: params => valueGetter(params, 'locationName'),
             renderEditCell: params => (
                 <Typeahead
                     onSelect={newValue => {
@@ -139,8 +147,6 @@ function StockTriggerLevelsUtility({
                             newValue.description
                         );
                         handleFieldChange('locationId', params.row.id, newValue.locationId);
-                        handleFieldChange('triggerLevel', params.row.id, newValue.triggerLevel);
-                        handleFieldChange('maxCapacity', params.row.id, newValue.kanbanSize);
                         handleFieldChange('palletNumber', params.row.id, newValue.palletNumber);
                     }}
                     label=""
@@ -161,10 +167,11 @@ function StockTriggerLevelsUtility({
             field: 'partNumber',
             editable: true,
             width: 150,
+            valueGetter: params => valueGetter(params, 'partNumber'),
             renderEditCell: params => (
                 <Typeahead
                     onSelect={newValue => {
-                        handleFieldChange('partNumber', params.row.id, newValue.name);
+                        handleFieldChange('partNumber', params.row.id, newValue.partNumber);
                     }}
                     modal
                     items={partsSearchResults}
