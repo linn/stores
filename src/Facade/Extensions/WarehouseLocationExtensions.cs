@@ -15,7 +15,7 @@
                            Level = location.ScsLevelIndex(),
                            Side = location.ScsSideIndex(),
                            Height = location.Pallet.ScsHeight(),
-                           HeatValue = location.Pallet.ScsHeat(),
+                           HeatValue = location.Pallet.Heat ?? 2,
                            RotationAverage = location.Pallet.RotationAverage
                        };
         }
