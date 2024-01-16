@@ -242,6 +242,8 @@
             builder.RegisterType<PartLibraryResourceBuilder>().As<IResourceBuilder<PartLibrary>>();
             builder.RegisterType<PartLibrariesResourceBuilder>().As<IResourceBuilder<IEnumerable<PartLibrary>>>();
             builder.RegisterType<ScsPalletsResourceBuilder>().As<IResourceBuilder<IEnumerable<ScsPallet>>>();
+            builder.RegisterType<DespatchPalletQueueScsDetailResourceBuilder>().As<IResourceBuilder<DespatchPalletQueueScsDetail>>();
+            builder.RegisterType<DespatchPalletQueueScsDetailsResourceBuilder>().As<IResourceBuilder<IEnumerable<DespatchPalletQueueScsDetail>>>();
         }
     }
 }
