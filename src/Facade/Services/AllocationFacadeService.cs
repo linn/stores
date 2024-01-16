@@ -2,8 +2,10 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Linn.Common.Facade;
+    using Linn.Common.Persistence;
     using Linn.Common.Reporting.Models;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Domain.LinnApps.Allocation.Models;
@@ -17,10 +19,13 @@
 
         private readonly IAllocationReportsService allocationReportsService;
 
-        public AllocationFacadeService(IAllocationService allocationService, IAllocationReportsService allocationReportsService)
+        private readonly IQueryRepository<DespatchPalletQueueScsDetail> dpqRepository;
+
+        public AllocationFacadeService(IAllocationService allocationService, IAllocationReportsService allocationReportsService, IQueryRepository<DespatchPalletQueueScsDetail> dpqRepository)
         {
             this.allocationService = allocationService;
             this.allocationReportsService = allocationReportsService;
+            this.dpqRepository = dpqRepository;
         }
 
         public IResult<AllocationResult> StartAllocation(AllocationOptionsResource allocationOptionsResource)
@@ -97,6 +102,11 @@
         public IResult<DespatchPalletQueueResult> DespatchPalletQueueReport()
         {
             return new SuccessResult<DespatchPalletQueueResult>(this.allocationReportsService.DespatchPalletQueue());
+        }
+
+        public IResult<IEnumerable<DespatchPalletQueueScsDetail>> DespatchPalletQueueForScs()
+        {
+            return new SuccessResult<IEnumerable<DespatchPalletQueueScsDetail>>(this.dpqRepository.FindAll().ToList());
         }
     }
 }

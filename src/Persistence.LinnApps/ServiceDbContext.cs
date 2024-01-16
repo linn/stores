@@ -266,6 +266,8 @@
 
         public DbSet<WarehouseLocation> WarehouseLocations { get; set; }
 
+        public DbQuery<DespatchPalletQueueScsDetail> DespatchPalletQueueScsDetails { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -393,6 +395,7 @@
             this.BuildPartLibraries(builder);
             this.BuildWarehouseLocations(builder);
             this.BuildWarehousePallets(builder);
+            this.QueryDespatchPalletQueueScsDetails(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -2289,6 +2292,14 @@
             q.Property(a => a.SpeedFactor).HasColumnName("SPEED_FACTOR");
             q.Property(a => a.RotationAverage).HasColumnName("ROTATION_AVERAGE");
             q.Property(a => a.Heat).HasColumnName("HEAT");
+        }
+
+        private void QueryDespatchPalletQueueScsDetails(ModelBuilder builder)
+        {
+            var q = builder.Query<DespatchPalletQueueScsDetail>().ToView("V_DPQ_SUMMARY_FOR_SCS");
+            q.Property(v => v.KittedFromTime).HasColumnName("KITTED_FROM");
+            q.Property(v => v.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(v => v.PickingSequence).HasColumnName("PICKING_SEQUENCE");
         }
     }
 }
