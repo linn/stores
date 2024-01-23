@@ -43,6 +43,7 @@
             this.Put("/logistics/sos-alloc-details/{id:int}", p => this.UpdateAllocDetail(p.id));
             this.Get("/logistics/allocations/despatch-picking-summary", _ => this.GetPickingSummaryReport());
             this.Get("/logistics/allocations/despatch-pallet-queue", _ => this.GetPalletQueueReport());
+            this.Get("/logistics/allocations/despatch-pallet-queue/scs", _ => this.GetPalletQueueForScs());
         }
 
         private object GetPalletQueueReport()
@@ -129,6 +130,11 @@
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
                 .WithView("Index");
+        }
+
+        private object GetPalletQueueForScs()
+        {
+            return this.Negotiate.WithModel(this.allocationFacadeService.DespatchPalletQueueForScs());
         }
 
         private object GetApp()

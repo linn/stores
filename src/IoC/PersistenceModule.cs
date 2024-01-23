@@ -156,6 +156,7 @@
             builder.RegisterType<StoresMoveLogRepository>().As<IQueryRepository<StoresMoveLog>>();
             builder.RegisterType<PartLibraryRepository>().As<IRepository<PartLibrary, string>>();
             builder.RegisterType<WarehouseLocationRepository>().As<IQueryRepository<WarehouseLocation>>();
+            builder.RegisterType<DespatchPalletQueueScsDetailsRepository>().As<IQueryRepository<DespatchPalletQueueScsDetail>>();
         }
     }
 }
