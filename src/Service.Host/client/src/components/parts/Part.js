@@ -502,6 +502,9 @@ function Part({
                                     footprintRef1={state.part.footprintRef1}
                                     footprintRef2={state.part.footprintRef2}
                                     footprintRef3={state.part.footprintRef3}
+                                    theirPartNumber={state.part.theirPartNumber}
+                                    datasheetPath={state.part.datasheetPath}
+                                    icType={state.part.icType}
                                 />
                             )}
                             <Grid item xs={12}>

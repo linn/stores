@@ -10,7 +10,10 @@ function CadInfoTab({
     libraryRef,
     footprintRef1,
     footprintRef2,
-    footprintRef3
+    footprintRef3,
+    theirPartNumber,
+    datasheetPath,
+    icType
 }) {
     return (
         <Grid container spacing={3}>
@@ -69,6 +72,36 @@ function CadInfoTab({
                 />
             </Grid>
             <Grid item xs={6} />
+            <Grid item xs={6}>
+                <InputField
+                    fullWidth
+                    value={theirPartNumber}
+                    label="Their Part Number"
+                    onChange={handleFieldChange}
+                    propertyName="theirPartNumber"
+                />
+            </Grid>
+            <Grid item xs={6} />
+            <Grid item xs={6}>
+                <InputField
+                    fullWidth
+                    value={datasheetPath}
+                    label="Datasheet Path"
+                    onChange={handleFieldChange}
+                    propertyName="datasheetPath"
+                />
+            </Grid>
+            <Grid item xs={6} />
+            <Grid item xs={6}>
+                <InputField
+                    fullWidth
+                    value={icType}
+                    label="IC Type"
+                    onChange={handleFieldChange}
+                    propertyName="icType"
+                />
+            </Grid>
+            <Grid item xs={6} />
         </Grid>
     );
 }
@@ -80,7 +113,10 @@ CadInfoTab.propTypes = {
     footprintRef1: PropTypes.string,
     footprintRef2: PropTypes.string,
     footprintRef3: PropTypes.string,
-    partLibraries: PropTypes.arrayOf(PropTypes.shape({}))
+    partLibraries: PropTypes.arrayOf(PropTypes.shape({})),
+    theirPartNumber: PropTypes.string,
+    datasheetPath: PropTypes.string,
+    icType: PropTypes.string,
 };
 
 CadInfoTab.defaultProps = {
@@ -89,7 +125,10 @@ CadInfoTab.defaultProps = {
     libraryRef: null,
     footprintRef1: null,
     footprintRef2: null,
-    footprintRef3: null
+    footprintRef3: null,
+    theirPartNumber: null,
+    datasheetPath: null,
+    icType: null
 };
 
 export default CadInfoTab;
