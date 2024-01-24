@@ -2,17 +2,18 @@
 {
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
-    using Linn.Stores.Domain;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Models;
     using Linn.Stores.Domain.LinnApps.Wcs;
     using Linn.Stores.Resources;
-
-    using Microsoft.EntityFrameworkCore.Internal;
+    
     using System.Collections.Generic;
     using System.Linq;
 
+    using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Facade.Extensions;
+    using Linn.Stores.Domain.LinnApps.Scs;
+    using Linn.Stores.Resources.Scs;
 
     public class WarehouseFacadeService : IWarehouseFacadeService
     {
@@ -20,10 +21,13 @@
 
         private readonly IRepository<Employee, int> employeeRepository;
 
-        public WarehouseFacadeService(IWarehouseService warehouseService, IRepository<Employee, int> employeeRepository)
+        private readonly IScsPalletsRepository scsPalletsRepository;
+
+        public WarehouseFacadeService(IWarehouseService warehouseService, IRepository<Employee, int> employeeRepository, IScsPalletsRepository scsPalletsRepository)
         {
             this.warehouseService = warehouseService;
             this.employeeRepository = employeeRepository;
+            this.scsPalletsRepository = scsPalletsRepository;
         }
 
         public IResult<MessageResult> MoveAllPalletsToUpper()
@@ -133,6 +137,43 @@
             }
 
             return new NotFoundResult<IEnumerable<ScsPallet>>("No locations found");
+        }
+
+        public IResult<MessageResult> StorePallets(ScsPalletsResource resource)
+        {
+            var pallets = resource.data.Select(
+                a => new ScsPallet()
+                         {
+                             PalletNumber = a.PalletNumber,
+                             Allocated = a.Allocated,
+                             Disabled = a.Disabled,
+                             Height = a.Height,
+                             HeatValue = a.HeatValue,
+                             RotationAverage = a.RotationAverage,
+                             Area = a.CurrentLocation.Area,
+                             Column = a.CurrentLocation.Column,
+                             Level = a.CurrentLocation.Level,
+                             Side = a.CurrentLocation.Side
+                         });
+
+            var storePallets = pallets.Select(a => new ScsStorePallet(a));
+
+            if (storePallets.Any())
+            {
+
+                // check for duplicate pallets
+                var duplicatePallets = storePallets.GroupBy(p => p.PalletNumber).Where(d => d.Count() > 1).Select(p => p.Key)
+                    .ToList();
+                if (duplicatePallets.Any())
+                {
+                    return new ServerFailureResult<MessageResult>($"Failed store pallets. Found {duplicatePallets.Count} duplicate pallet numbers e.g. pallet {duplicatePallets.First()}");
+                }
+
+                this.scsPalletsRepository.ReplaceAll(storePallets.ToList());
+                return new SuccessResult<MessageResult>(new MessageResult($"Saved {storePallets.Count()} pallets to Oracle"));
+            }
+
+            return new ServerFailureResult<MessageResult>("Failed store pallets");
         }
     }
 }
