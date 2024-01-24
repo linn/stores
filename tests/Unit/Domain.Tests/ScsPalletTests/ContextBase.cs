@@ -1,6 +1,5 @@
 ﻿namespace Linn.Stores.Domain.Tests.ScsPalletTests
 {
-    using Linn.Stores.Domain.LinnApps.Scs;
     using NUnit.Framework;
 
     public class ContextBase

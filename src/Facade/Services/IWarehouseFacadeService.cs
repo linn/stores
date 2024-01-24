@@ -4,9 +4,9 @@
     using Linn.Stores.Domain.LinnApps.Models;
     using System.Collections.Generic;
 
+    using Linn.Stores.Domain;
     using Linn.Stores.Domain.LinnApps.Wcs;
     using Linn.Stores.Resources;
-    using Linn.Stores.Domain.LinnApps.Scs;
     using Linn.Stores.Resources.Scs;
 
     public interface IWarehouseFacadeService

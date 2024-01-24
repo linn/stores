@@ -10,6 +10,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
+    using Linn.Stores.Domain;
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Facade.Extensions;
     using Linn.Stores.Domain.LinnApps.Scs;

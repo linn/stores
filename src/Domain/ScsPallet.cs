@@ -1,7 +1,5 @@
 ﻿namespace Linn.Stores.Domain
 {
-    using Linn.Stores.Domain.LinnApps.Scs;
-
     public class ScsPallet : StoresAddress
     {
         public int PalletNumber { get; set; }
