@@ -178,6 +178,9 @@
             from.FootprintRef1 = to.FootprintRef1;
             from.FootprintRef2 = to.FootprintRef2;
             from.FootprintRef3 = to.FootprintRef3;
+            from.ManufacturersPartNumber = to.ManufacturersPartNumber;
+            from.IcType = to.IcType;
+            from.DataSheetPdfPath = to.DataSheetPdfPath;
         }
 
         public Part CreatePart(Part partToCreate, List<string> privileges, bool fromTemplate)
@@ -275,8 +278,17 @@
                                                      Part = part,
                                                      PdfFilePath = partDataSheet.PdfFilePath
                                                  });
+                if (seq == 1)
+                {
+                    part.DataSheetPdfPath = partDataSheet.PdfFilePath;
+                }
+
                 seq++;
             }
+
+            part.ManufacturersPartNumber = source.MechPartManufacturerAlts?.FirstOrDefault(x => x.Preference == 1)?.PartNumber;
+
+            part.IcType = source.IcType;
 
             var to = this.phoneList.FindBy(x => x.UserNumber == 16008);
             var bcc1 = this.phoneList.FindBy(x => x.UserNumber == 33145);

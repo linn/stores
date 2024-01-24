@@ -112,8 +112,11 @@
                            LibraryRef = part.LibraryRef,
                            FootprintRef1 = part.FootprintRef1,
                            FootprintRef2 = part.FootprintRef2,
-                           FootprintRef3 = part.FootprintRef3
-                       };
+                           FootprintRef3 = part.FootprintRef3,
+                           IcType = part.IcType,
+                           DatasheetPath = part.DataSheetPdfPath,
+                           TheirPartNumber = part.ManufacturersPartNumber
+            };
         }
 
         public string GetLocation(Part part)

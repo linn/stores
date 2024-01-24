@@ -543,6 +543,9 @@
             e.Property(p => p.FootprintRef1).HasColumnName("FOOTPRINT_REF").HasMaxLength(100);
             e.Property(p => p.FootprintRef2).HasColumnName("FOOTPRINT_REF_2").HasMaxLength(100);
             e.Property(p => p.FootprintRef3).HasColumnName("FOOTPRINT_REF_3").HasMaxLength(100);
+            e.Property(p => p.DataSheetPdfPath).HasColumnName("ALTIUM_DATASHEET_PATH").HasMaxLength(500);
+            e.Property(p => p.IcType).HasColumnName("ALTIUM_TYPE").HasMaxLength(100);
+            e.Property(p => p.ManufacturersPartNumber).HasColumnName("ALTIUM_THEIR_PART_NUMBER").HasMaxLength(100);
         }
 
         private void BuildPartDataSheets(ModelBuilder builder)

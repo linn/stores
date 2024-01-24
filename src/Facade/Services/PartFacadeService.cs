@@ -38,6 +38,8 @@
 
         private readonly IPartService partService;
 
+        private readonly ITransactionManager transactionManager;
+
         public PartFacadeService(
             IPartRepository partRepository,
             IRepository<ParetoClass, string> paretoClassRepository,
@@ -67,6 +69,7 @@
             this.employeeRepository = employeeRepository;
             this.partService = partService;
             this.databaseService = databaseService;
+            this.transactionManager = transactionManager;
         }
 
         public IResult<IEnumerable<Part>> GetDeptStockPalletParts()
@@ -85,6 +88,7 @@
                         PdfFilePath = s.PdfFilePath,
                         Sequence = s.Sequence ?? -1
                     }));
+            this.transactionManager.Commit();
         }
 
         public IResult<IEnumerable<Part>> GetPartByPartNumber(string partNumber)
@@ -233,7 +237,10 @@
                                     LibraryRef = resource.LibraryRef,
                                     FootprintRef1 = resource.FootprintRef1,
                                     FootprintRef2 = resource.FootprintRef2,
-                                    FootprintRef3 = resource.FootprintRef3
+                                    FootprintRef3 = resource.FootprintRef3,
+                                    IcType = resource.IcType,
+                                    DataSheetPdfPath = resource.DatasheetPath,
+                                    ManufacturersPartNumber = resource.TheirPartNumber
                                 };
             return this.partService.CreatePart(partToAdd, resource.UserPrivileges.ToList(), resource.FromTemplate);
         }
@@ -347,7 +354,10 @@
                                       LibraryRef = resource.LibraryRef,
                                       FootprintRef1 = resource.FootprintRef1,
                                       FootprintRef2 = resource.FootprintRef2,
-                                      FootprintRef3 = resource.FootprintRef3
+                                      FootprintRef3 = resource.FootprintRef3,
+                                      IcType = resource.IcType,
+                                      DataSheetPdfPath = resource.DatasheetPath,
+                                      ManufacturersPartNumber = resource.TheirPartNumber
             };
           
             this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList(), resource.UpdatedBy.Value);
