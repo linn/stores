@@ -1,5 +1,7 @@
-﻿namespace Linn.Stores.Domain.LinnApps.Scs
+﻿namespace Linn.Stores.Domain
 {
+    using Linn.Stores.Domain.LinnApps.Scs;
+
     public class ScsPallet : StoresAddress
     {
         public int PalletNumber { get; set; }
@@ -52,7 +54,7 @@
                     {
                         return this.Side == 0 ? "U1" : "U2";
                     }
-                    else if (Level == 1)
+                    else if (this.Level == 1)
                     {
                         return this.Side == 0 ? "B5" : "B6";
                     }
@@ -63,7 +65,7 @@
                     {
                         return this.Side == 0 ? "SDA" : "SDB";
                     }
-                    else if (Level == 1)
+                    else if (this.Level == 1)
                     {
                         return this.Side == 0 ? "SAA" : "SAB";
                     }
@@ -79,7 +81,7 @@
                     {
                         return this.Side == 0 ? "U3" : "U4";
                     }
-                    else if (Level == 1)
+                    else if (this.Level == 1)
                     {
                         return this.Side == 0 ? "B7" : "B8";
                     }
@@ -90,7 +92,7 @@
                     {
                         return this.Side == 0 ? "SEA" : "SEB";
                     }
-                    else if (Level == 1)
+                    else if (this.Level == 1)
                     {
                         return this.Side == 0 ? "SBA" : "SBB";
                     }
@@ -106,7 +108,7 @@
                     {
                         return this.Side == 0 ? "U5" : "U6";
                     }
-                    else if (Level == 1)
+                    else if (this.Level == 1)
                     {
                         return this.Side == 0 ? "B9" : "B10";
                     }
@@ -117,7 +119,7 @@
                     {
                         return this.Side == 0 ? "SEA" : "SEB";
                     }
-                    else if (Level == 1)
+                    else if (this.Level == 1)
                     {
                         return this.Side == 0 ? "SCA" : "SCB";
                     }

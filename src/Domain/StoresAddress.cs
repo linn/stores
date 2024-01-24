@@ -1,9 +1,5 @@
-﻿namespace Linn.Stores.Domain.LinnApps.Scs
+﻿namespace Linn.Stores.Domain
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
     public class StoresAddress
     {
         public int Area { get; set; }
