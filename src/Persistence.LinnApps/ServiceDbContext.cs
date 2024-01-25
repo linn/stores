@@ -12,6 +12,7 @@
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.ProductionTriggers;
     using Linn.Stores.Domain.LinnApps.Requisitions;
+    using Linn.Stores.Domain.LinnApps.Scs;
     using Linn.Stores.Domain.LinnApps.Sos;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
@@ -268,6 +269,8 @@
 
         public DbQuery<DespatchPalletQueueScsDetail> DespatchPalletQueueScsDetails { get; set; }
 
+        public DbSet<ScsStorePallet> ScsPallets { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -396,6 +399,7 @@
             this.BuildWarehouseLocations(builder);
             this.BuildWarehousePallets(builder);
             this.QueryDespatchPalletQueueScsDetails(builder);
+            this.BuildScsStorePallets(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -2303,6 +2307,26 @@
             q.Property(v => v.KittedFromTime).HasColumnName("KITTED_FROM");
             q.Property(v => v.PalletNumber).HasColumnName("PALLET_NUMBER");
             q.Property(v => v.PickingSequence).HasColumnName("PICKING_SEQUENCE");
+        }
+
+        private void BuildScsStorePallets(ModelBuilder builder)
+        {
+            var q = builder.Entity<ScsStorePallet>().ToTable("SCS_PALLETS");
+
+            q.HasKey(a => a.PalletNumber);
+            q.Property(a => a.PalletNumber).HasColumnName("PALLET_NUMBER");
+            q.Property(a => a.SizeCode).HasColumnName("SIZE_CODE").HasMaxLength(1);
+            q.Property(a => a.UserFriendlyName).HasColumnName("USER_FRIENDLY_NAME").HasMaxLength(255);
+            q.Property(a => a.RotationAverage).HasColumnName("ROTATION_AVERAGE");
+            q.Property(a => a.HeatValue).HasColumnName("HEAT_VALUE");
+            q.Property(a => a.Height).HasColumnName("HEIGHT");
+            q.Property(a => a.Allocated).HasColumnName("ALLOCATED").HasMaxLength(1);
+            q.Property(a => a.Disabled).HasColumnName("DISABLED").HasMaxLength(1);
+            q.Property(a => a.Area).HasColumnName("AREA");
+            q.Property(a => a.Column).HasColumnName("COL");
+            q.Property(a => a.Level).HasColumnName("LVL");
+            q.Property(a => a.Side).HasColumnName("SIDE");
+            q.Property(a => a.LastUpdated).HasColumnName("LAST_UPDATED");
         }
     }
 }

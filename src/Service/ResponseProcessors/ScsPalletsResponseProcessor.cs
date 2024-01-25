@@ -8,6 +8,7 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain;
+    using Linn.Stores.Domain.LinnApps.Scs;
 
     public class ScsPalletsResponseProcessor : JsonResponseProcessor<IEnumerable<ScsPallet>>
     {
