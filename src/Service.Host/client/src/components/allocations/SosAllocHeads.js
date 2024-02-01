@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 import SosAllocDetails from './SosAllocDetails';
+import config from '../../config';
 
 import Page from '../../containers/Page';
 
@@ -124,7 +125,7 @@ function SosAllocHeads({
                     </Link>
                     <Link
                         className={classes.nounderline}
-                        to="/logistics/allocations/despatch-pallet-queue"
+                        to={`${config.appRoot}/warehouse/despatch-pallet-queue`}
                     >
                         <Tooltip title="Despatch Pallet Queue (Upper)">
                             <Button variant="outlined">Pallet Queue</Button>

@@ -240,11 +240,6 @@ const Root = ({ store }) => (
                                         path="/inventory/stock-locator/rotations"
                                         component={StockBatchesInRotationOrder}
                                     />
-                                    <Route
-                                        exact
-                                        path="/logistics/allocations/despatch-pallet-queue"
-                                        component={DespatchPalletQueueReport}
-                                    />
                                     <Route exact path="/logistics/wand" component={Wand} />
                                     <Route
                                         exact
