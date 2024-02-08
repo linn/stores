@@ -171,6 +171,7 @@
             builder.RegisterType<CarrierFacadeService>().As<IFacadeService<Carrier, string, CarrierResource, CarrierResource>>();
             builder.RegisterType<ShippingTermFacadeService>().As<IFacadeService<ShippingTerm, int, ShippingTermResource, ShippingTermResource>>();
             builder.RegisterType<GoodsInFacadeService>().As<IGoodsInFacadeService>();
+            builder.RegisterType<StoresBudgetPostingFacadeService>().As<IFacadeFilterService<StoresBudgetPosting, StoresBudgetPostingKey, StoresBudgetPostingResource, StoresBudgetPostingResource, StoresBudgetPostingResource>>();
             builder.RegisterType<SalesArticleService>().As<ISalesArticleService>();
             builder.RegisterType<CartonTypeFacadeService>().As<IFacadeService<CartonType, string, CartonTypeResource, CartonTypeResource>>();
             builder.RegisterType<PortFacadeService>().As<IFacadeService<Port, string, PortResource, PortResource>>();

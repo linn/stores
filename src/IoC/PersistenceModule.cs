@@ -158,6 +158,7 @@
             builder.RegisterType<WarehouseLocationRepository>().As<IQueryRepository<WarehouseLocation>>();
             builder.RegisterType<DespatchPalletQueueScsDetailsRepository>().As<IQueryRepository<DespatchPalletQueueScsDetail>>();
             builder.RegisterType<ScsPalletFastRepository>().As<IScsPalletsRepository>();
+            builder.RegisterType<StoresBudgetPostingRepository>().As<IRepository<StoresBudgetPosting, StoresBudgetPostingKey>>();
         }
     }
 }
