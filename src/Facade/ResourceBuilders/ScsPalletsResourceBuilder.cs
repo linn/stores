@@ -7,6 +7,7 @@
     using System.Linq;
 
     using Linn.Stores.Resources.Scs;
+    using Linn.Stores.Domain.LinnApps.Scs;
 
     public class ScsPalletsResourceBuilder : IResourceBuilder<IEnumerable<ScsPallet>>
     {

@@ -1,6 +1,7 @@
 ﻿namespace Linn.Stores.Facade.Extensions
 {
     using Linn.Stores.Domain;
+    using Linn.Stores.Domain.LinnApps.Scs;
     using Linn.Stores.Domain.LinnApps.Wcs;
 
     public static class WarehouseLocationExtensions

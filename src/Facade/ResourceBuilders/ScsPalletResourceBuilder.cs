@@ -4,6 +4,7 @@
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain;
+    using Linn.Stores.Domain.LinnApps.Scs;
     using Linn.Stores.Resources.Scs;
 
     public class ScsPalletResourceBuilder : IResourceBuilder<ScsPallet>

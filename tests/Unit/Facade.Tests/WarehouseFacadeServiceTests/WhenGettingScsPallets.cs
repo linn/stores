@@ -13,6 +13,7 @@
     using NSubstitute;
     using FluentAssertions;
     using Linn.Stores.Domain.LinnApps.Models;
+    using Linn.Stores.Domain.LinnApps.Scs;
 
     public class WhenGettingScsPallets : ContextBase
     {

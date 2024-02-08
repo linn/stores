@@ -193,5 +193,11 @@
         public string FootprintRef2 { get; set; }
 
         public string FootprintRef3 { get; set; }
+
+        public string TheirPartNumber { get; set; }
+
+        public string DatasheetPath { get; set; }
+
+        public string IcType { get; set; }
     }
 }

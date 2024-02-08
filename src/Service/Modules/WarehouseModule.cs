@@ -6,6 +6,7 @@
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
+    using Linn.Stores.Resources.Scs;
     using Linn.Stores.Service.Extensions;
 
     using Nancy;
@@ -23,6 +24,7 @@
             this.Post("/logistics/wcs/warehouse-tasks", _ => this.AddWarehouseTask());
             this.Get("/logistics/wcs/warehouse-pallets/{palletId:int}", parameters => this.GetWarehousePallet(parameters.palletId));
             this.Get("/logistics/wcs/warehouse-pallets/scs", _ => this.QueryScsPallets());
+            this.Post("/logistics/wcs/warehouse-pallets/scs", _ => this.PostScsPallets());
             this.Get("/logistics/wcs/warehouse-pallets", _ => this.QueryWarehousePallet());
         }
 
@@ -71,6 +73,14 @@
 
             return this.Negotiate
                 .WithModel(result);
+        }
+
+        private object PostScsPallets()
+        {
+            var resource = this.Bind<ScsPalletsResource>();
+
+            return this.Negotiate.WithModel(
+                this.warehouseFacadeService.StorePallets(resource));
         }
     }
 }
