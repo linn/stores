@@ -271,6 +271,8 @@
 
         public DbSet<ScsStorePallet> ScsPallets { get; set; }
 
+        public DbSet<StoresBudgetPosting> StoresBudgetPostings { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             this.BuildParts(builder);
@@ -400,6 +402,7 @@
             this.BuildWarehousePallets(builder);
             this.QueryDespatchPalletQueueScsDetails(builder);
             this.BuildScsStorePallets(builder);
+            this.BuildStoresBudgetPostings(builder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -963,6 +966,21 @@
             var q = builder.Query<AuditLocation>();
             q.ToView("V_AUDIT_LOCATIONS");
             q.Property(e => e.StoragePlace).HasColumnName("STORAGE_PLACE");
+        }
+
+        private void BuildStoresBudgetPostings(ModelBuilder builder)
+        {
+            var table = builder.Entity<StoresBudgetPosting>().ToTable("STORES_BUDGET_POSTINGS");
+            table.HasKey(s => new { s.BudgetId, s.Sequence });
+            table.Property(s => s.BudgetId).HasColumnName("BUDGET_ID");
+            table.Property(s => s.Sequence).HasColumnName("SEQ");
+            table.Property(s => s.Quantity).HasColumnName("QTY");
+            table.Property(s => s.DebitOrCredit).HasColumnName("DEBIT_OR_CREDIT").HasMaxLength(1);
+            table.Property(s => s.Person).HasColumnName("PERSON");
+            table.Property(s => s.Product).HasColumnName("PRODUCT").HasMaxLength(10);
+            table.Property(s => s.Building).HasColumnName("BUILDING").HasMaxLength(10);
+            table.Property(s => s.Vehicle).HasColumnName("VEHICLE").HasMaxLength(10);
+            table.HasOne(s => s.NominalAccount).WithMany().HasForeignKey("NOMACC_ID");
         }
 
         private void BuildSosAllocHeads(ModelBuilder builder)
