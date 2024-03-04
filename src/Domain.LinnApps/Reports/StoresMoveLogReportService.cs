@@ -6,6 +6,7 @@
 
     using Linn.Common.Persistence;
     using Linn.Common.Reporting.Models;
+    using Linn.Stores.Domain.LinnApps.Workstation;
 
     public class StoresMoveLogReportService : IStoresMoveLogReportService
     {
@@ -24,21 +25,73 @@
             var moveLog = this.repository.FilterBy(
                 l => l.PartNumber == partNumber && l.DateProcessed >= fromDate && l.DateProcessed <= toDate).ToList();
 
+            var filteredMoveLog = moveLog.Where(m => this.MatchesFilter(m, transType, location, stockPool)).ToList();
+
             var model = new ResultsModel
                             {
                                 ReportTitle = new NameModel(
-                                    $"{fromDate:ddMMMyy} - {fromDate:ddMMMyy} {partNumber} ")
+                                    $"{fromDate:ddMMMyy} - {fromDate:ddMMMyy} {partNumber}{this.FiltersTitle(transType,location,stockPool)}")
                             };
 
             var columns = this.ModelColumns();
 
             model.AddSortedColumns(columns);
 
-            var values = SetModelRows(moveLog);
+            var values = SetModelRows(filteredMoveLog);
 
             this.reportingHelper.AddResultsToModel(model, values, CalculationValueModelType.Quantity, true);
 
             return model;
+        }
+
+        private string FiltersTitle(string transType, string location, string stockPool)
+        {
+            var title = string.Empty;
+            if (!string.IsNullOrEmpty(transType))
+            {
+                title += $" trans {transType}";
+            }
+
+            if (!string.IsNullOrEmpty(location))
+            {
+                title += $" location {location}";
+            }
+
+            if (!string.IsNullOrEmpty(stockPool))
+            {
+                title += $" stock pool {stockPool}";
+            }
+
+            return title;
+        }
+
+        private bool MatchesFilter(StoresMoveLog moveLog, string transType, string location, string stockPool)
+        {
+            if (!string.IsNullOrEmpty(location))
+            {
+                if (!moveLog.FromLocation.Contains(location) && !moveLog.ToLocation.Contains(location))
+                {
+                    return false;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(stockPool))
+            {
+                if (moveLog.FromStockPool != stockPool && moveLog.ToStockPool != stockPool)
+                {
+                    return false;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(transType))
+            {
+                if (moveLog.TransactionCode != transType.ToUpper())
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private List<AxisDetailsModel> ModelColumns()
