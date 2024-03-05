@@ -6,7 +6,6 @@
 
     using Linn.Common.Persistence;
     using Linn.Common.Reporting.Models;
-    using Linn.Stores.Domain.LinnApps.Workstation;
 
     public class StoresMoveLogReportService : IStoresMoveLogReportService
     {
@@ -67,12 +66,9 @@
 
         private bool MatchesFilter(StoresMoveLog moveLog, string transType, string location, string stockPool)
         {
-            if (!string.IsNullOrEmpty(location))
+            if (!moveLog.MatchesLocation(location))
             {
-                if (!moveLog.MatchesLocation(location))
-                {
-                    return false;
-                }
+                return false;
             }
 
             if (!string.IsNullOrEmpty(stockPool))
