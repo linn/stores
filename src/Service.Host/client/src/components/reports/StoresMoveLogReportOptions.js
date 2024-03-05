@@ -17,7 +17,10 @@ export default function StoresMoveLogReportOptions({
     const [reportOptions, setReportOptions] = useState({
         partNumber: '',
         from: defaultDate,
-        to: defaultDate
+        to: defaultDate,
+        location: '',
+        transType: '',
+        stockPool: ''
     });
 
     const handleFieldChange = (propertyName, newValue) => {
@@ -43,9 +46,21 @@ export default function StoresMoveLogReportOptions({
     const validateReportOptions = () => !!reportOptions.partNumber;
 
     const handleRunClick = () => {
-        const searchString = `?partNumber=${
+        let searchString = `?partNumber=${
             reportOptions.partNumber
         }&from=${reportOptions.from.toISOString()}&to=${reportOptions.to.toISOString()}`;
+
+        if (reportOptions.location) {
+            searchString += `&location=${reportOptions.location}`;
+        }
+
+        if (reportOptions.transType) {
+            searchString += `&transType=${reportOptions.transType}`;
+        }
+
+        if (reportOptions.stockPool) {
+            searchString += `&stockPool=${reportOptions.stockPool}`;
+        }
 
         history.push({
             pathname: '/inventory/reports/stores-move-log/report',
@@ -101,14 +116,14 @@ export default function StoresMoveLogReportOptions({
                         label="Description"
                     />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={6}>
                     <DatePicker
                         label="From Date"
                         value={reportOptions.from.toString()}
                         onChange={setFromDate}
                     />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={6}>
                     <DatePicker
                         label="To Date"
                         value={reportOptions.to.toString()}
@@ -116,8 +131,34 @@ export default function StoresMoveLogReportOptions({
                         onChange={setToDate}
                     />
                 </Grid>
-                <Grid item xs={6} />
-                <Grid item xs={12}>
+                <Grid item xs={3}>
+                    <InputField
+                        fullWidth
+                        propertyName="location"
+                        value={reportOptions.location}
+                        label="Location"
+                        onChange={handleFieldChange}
+                    />
+                </Grid>
+                <Grid item xs={3}>
+                    <InputField
+                        fullWidth
+                        propertyName="transType"
+                        value={reportOptions.transType}
+                        label="Trans Type"
+                        onChange={handleFieldChange}
+                    />
+                </Grid>
+                <Grid item xs={3}>
+                    <InputField
+                        fullWidth
+                        propertyName="stockPool"
+                        value={reportOptions.stockPool}
+                        label="Stock Pool"
+                        onChange={handleFieldChange}
+                    />
+                </Grid>
+                <Grid item xs={3}>
                     <Button
                         color="primary"
                         variant="contained"

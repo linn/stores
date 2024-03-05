@@ -30,7 +30,7 @@
             var model = new ResultsModel
                             {
                                 ReportTitle = new NameModel(
-                                    $"{fromDate:ddMMMyy} - {fromDate:ddMMMyy} {partNumber}{this.FiltersTitle(transType,location,stockPool)}")
+                                    $"{fromDate:ddMMMyy} - {toDate:ddMMMyy} {partNumber}{this.FiltersTitle(transType,location,stockPool)}")
                             };
 
             var columns = this.ModelColumns();
@@ -69,7 +69,7 @@
         {
             if (!string.IsNullOrEmpty(location))
             {
-                if (!moveLog.FromLocation.Contains(location) && !moveLog.ToLocation.Contains(location))
+                if (!moveLog.MatchesLocation(location))
                 {
                     return false;
                 }
@@ -125,11 +125,11 @@
                            new AxisDetailsModel("Qty") { SortOrder = 7, GridDisplayType = GridDisplayType.TextValue },
                            new AxisDetailsModel("From")
                                {
-                                   SortOrder = 8, GridDisplayType = GridDisplayType.TextValue
+                                   SortOrder = 8, GridDisplayType = GridDisplayType.TextValue, Name = "From (Location Batch Stock Pool)"
                                },
                            new AxisDetailsModel("To")
                                {
-                                   SortOrder = 9, GridDisplayType = GridDisplayType.TextValue
+                                   SortOrder = 9, GridDisplayType = GridDisplayType.TextValue, Name = "To (Location Batch Stock Pool)"
                                }
                        };
         }
@@ -193,14 +193,14 @@
                     new CalculationValueModel
                         {
                             RowId = moveLog.Id.ToString(),
-                            TextDisplay = string.IsNullOrEmpty(moveLog.FromLocation) ? string.Empty : $"{moveLog.FromLocation} {moveLog.FromBatchRef}/{moveLog.FromBatchDate.ToShortDateString()}",
+                            TextDisplay = string.IsNullOrEmpty(moveLog.FromLocation) ? string.Empty : $"{moveLog.FromLocation} {moveLog.FromBatchRef}/{moveLog.FromBatchDate.ToShortDateString()} {moveLog.FromStockPool}",
                             ColumnId = "From"
                         });
                 values.Add(
                     new CalculationValueModel
                         {
                             RowId = moveLog.Id.ToString(),
-                            TextDisplay = $"{moveLog.ToLocation} {moveLog.ToBatchRef}/{moveLog.ToBatchDate.ToShortDateString()}",
+                            TextDisplay = string.IsNullOrEmpty(moveLog.ToLocation) ? string.Empty : $"{moveLog.ToLocation} {moveLog.ToBatchRef}/{moveLog.ToBatchDate.ToShortDateString()} {moveLog.ToStockPool}",
                             ColumnId = "To"
                         });
             }
