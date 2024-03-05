@@ -1,9 +1,5 @@
 ﻿namespace Linn.Stores.Resources.RequestResources
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
     public class StoresMoveLogReportRequestResource : FromToDateResource
     {
         public string PartNumber { get; set; }
