@@ -24,21 +24,70 @@
             var moveLog = this.repository.FilterBy(
                 l => l.PartNumber == partNumber && l.DateProcessed >= fromDate && l.DateProcessed <= toDate).ToList();
 
+            var filteredMoveLog = moveLog.Where(m => this.MatchesFilter(m, transType, location, stockPool)).ToList();
+
             var model = new ResultsModel
                             {
                                 ReportTitle = new NameModel(
-                                    $"{fromDate:ddMMMyy} - {fromDate:ddMMMyy} {partNumber} ")
+                                    $"{fromDate:ddMMMyy} - {toDate:ddMMMyy} {partNumber}{this.FiltersTitle(transType,location,stockPool)}")
                             };
 
             var columns = this.ModelColumns();
 
             model.AddSortedColumns(columns);
 
-            var values = SetModelRows(moveLog);
+            var values = SetModelRows(filteredMoveLog);
 
             this.reportingHelper.AddResultsToModel(model, values, CalculationValueModelType.Quantity, true);
 
             return model;
+        }
+
+        private string FiltersTitle(string transType, string location, string stockPool)
+        {
+            var title = string.Empty;
+            if (!string.IsNullOrEmpty(transType))
+            {
+                title += $" trans {transType}";
+            }
+
+            if (!string.IsNullOrEmpty(location))
+            {
+                title += $" location {location}";
+            }
+
+            if (!string.IsNullOrEmpty(stockPool))
+            {
+                title += $" stock pool {stockPool}";
+            }
+
+            return title;
+        }
+
+        private bool MatchesFilter(StoresMoveLog moveLog, string transType, string location, string stockPool)
+        {
+            if (!moveLog.MatchesLocation(location))
+            {
+                return false;
+            }
+
+            if (!string.IsNullOrEmpty(stockPool))
+            {
+                if (moveLog.FromStockPool != stockPool && moveLog.ToStockPool != stockPool)
+                {
+                    return false;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(transType))
+            {
+                if (moveLog.TransactionCode != transType.ToUpper())
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private List<AxisDetailsModel> ModelColumns()
@@ -72,11 +121,11 @@
                            new AxisDetailsModel("Qty") { SortOrder = 7, GridDisplayType = GridDisplayType.TextValue },
                            new AxisDetailsModel("From")
                                {
-                                   SortOrder = 8, GridDisplayType = GridDisplayType.TextValue
+                                   SortOrder = 8, GridDisplayType = GridDisplayType.TextValue, Name = "From (Location Batch Stock Pool)"
                                },
                            new AxisDetailsModel("To")
                                {
-                                   SortOrder = 9, GridDisplayType = GridDisplayType.TextValue
+                                   SortOrder = 9, GridDisplayType = GridDisplayType.TextValue, Name = "To (Location Batch Stock Pool)"
                                }
                        };
         }
@@ -140,14 +189,14 @@
                     new CalculationValueModel
                         {
                             RowId = moveLog.Id.ToString(),
-                            TextDisplay = string.IsNullOrEmpty(moveLog.FromLocation) ? string.Empty : $"{moveLog.FromLocation} {moveLog.FromBatchRef}/{moveLog.FromBatchDate.ToShortDateString()}",
+                            TextDisplay = string.IsNullOrEmpty(moveLog.FromLocation) ? string.Empty : $"{moveLog.FromLocation} {moveLog.FromBatchRef}/{moveLog.FromBatchDate.ToShortDateString()} {moveLog.FromStockPool}",
                             ColumnId = "From"
                         });
                 values.Add(
                     new CalculationValueModel
                         {
                             RowId = moveLog.Id.ToString(),
-                            TextDisplay = $"{moveLog.ToLocation} {moveLog.ToBatchRef}/{moveLog.ToBatchDate.ToShortDateString()}",
+                            TextDisplay = string.IsNullOrEmpty(moveLog.ToLocation) ? string.Empty : $"{moveLog.ToLocation} {moveLog.ToBatchRef}/{moveLog.ToBatchDate.ToShortDateString()} {moveLog.ToStockPool}",
                             ColumnId = "To"
                         });
             }

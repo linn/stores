@@ -19,6 +19,26 @@ export default function StoresMoveLogReport({
     history,
     config
 }) {
+    const titleStr = () => {
+        let title = `Stores Move Log - Part Number: ${options.partNumber} from ${moment(
+            options.from
+        ).format('DD MMM YY')} to ${moment(options.to).format('DD MMM YY')} `;
+
+        if (options.location) {
+            title += ` Location ${options.location}`;
+        }
+
+        if (options.transType) {
+            title += ` Trans Type ${options.transType}`;
+        }
+
+        if (options.stockPool) {
+            title += ` Stock Pool ${options.stockPool}`;
+        }
+
+        return title;
+    };
+
     return (
         <div className="zoomed-out-printing no-page">
             <Grid container spacing={3}>
@@ -28,11 +48,7 @@ export default function StoresMoveLogReport({
                     </Grid>
                 )}
                 <Grid item xs={8}>
-                    <Typography variant="subtitle2">{`Stores Move Log - Part Number: ${
-                        options.partNumber
-                    } from ${moment(options.from).format('DD MMM YY')} to ${moment(
-                        options.to
-                    ).format('DD MMM YY')}`}</Typography>
+                    <Typography variant="subtitle2">{titleStr()}</Typography>
                 </Grid>
                 <Grid item xs={2} className="hide-when-printing">
                     <ExportButton
@@ -72,7 +88,10 @@ StoresMoveLogReport.propTypes = {
     options: PropTypes.shape({
         partNumber: PropTypes.string,
         from: PropTypes.string,
-        to: PropTypes.string
+        to: PropTypes.string,
+        location: PropTypes.string,
+        transType: PropTypes.string,
+        stockPool: PropTypes.string
     }),
     config: PropTypes.shape({ appRoot: PropTypes.string }).isRequired
 };
