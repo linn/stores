@@ -10,7 +10,11 @@ export default function StoresMoveLogReportOptions({
     searchParts,
     clearPartsSearch,
     partsSearchLoading,
-    partsSearchResults
+    partsSearchResults,
+    stockPools,
+    stockPoolsLoading,
+    searchStockPools,
+    clearStockPoolsSearch
 }) {
     const defaultDate = new Date();
 
@@ -149,13 +153,36 @@ export default function StoresMoveLogReportOptions({
                         onChange={handleFieldChange}
                     />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={2}>
                     <InputField
                         fullWidth
                         propertyName="stockPool"
                         value={reportOptions.stockPool}
                         label="Stock Pool"
                         onChange={handleFieldChange}
+                    />
+                </Grid>
+                <Grid item xs={1}>
+                    <Typeahead
+                        items={stockPools}
+                        fetchItems={searchStockPools}
+                        modal
+                        searchButtonOnly
+                        links={false}
+                        clearSearch={clearStockPoolsSearch}
+                        loading={stockPoolsLoading}
+                        label="Stock Pool"
+                        title="Search Stock Pools"
+                        value={reportOptions.stockPool}
+                        onSelect={newValue =>
+                            setReportOptions({
+                                ...reportOptions,
+                                stockPool: newValue.stockPoolCode
+                            })
+                        }
+                        history={history}
+                        debounce={1000}
+                        minimumSearchTermLength={2}
                     />
                 </Grid>
                 <Grid item xs={3}>
@@ -179,10 +206,22 @@ StoresMoveLogReportOptions.propTypes = {
     searchParts: PropTypes.func.isRequired,
     clearPartsSearch: PropTypes.func.isRequired,
     partsSearchLoading: PropTypes.bool,
-    partsSearchResults: PropTypes.arrayOf(PropTypes.shape({}))
+    partsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
+    stockPools: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+            name: PropTypes.string,
+            description: PropTypes.string
+        })
+    ),
+    stockPoolsLoading: PropTypes.bool,
+    searchStockPools: PropTypes.func.isRequired,
+    clearStockPoolsSearch: PropTypes.func.isRequired
 };
 
 StoresMoveLogReportOptions.defaultProps = {
     partsSearchLoading: false,
-    partsSearchResults: []
+    partsSearchResults: [],
+    stockPools: [],
+    stockPoolsLoading: false
 };

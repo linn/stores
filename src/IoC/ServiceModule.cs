@@ -192,6 +192,8 @@
             builder.RegisterType<StockTriggerLevelsFacadeService>().As<IStockTriggerLevelsFacadeService>();
             builder.RegisterType<PartLibraryService>()
                 .As<IFacadeService<PartLibrary, string, PartLibraryResource, PartLibraryResource>>();
+            builder.RegisterType<StoresTransactionDefinitionFacadeService>()
+                .As<IFacadeService<StoresTransactionDefinition, string, StoresTransactionDefinitionResource, StoresTransactionDefinitionResource>>();
 
             // oracle proxies
             builder.RegisterType<SosPack>().As<ISosPack>();

@@ -159,6 +159,7 @@
             builder.RegisterType<DespatchPalletQueueScsDetailsRepository>().As<IQueryRepository<DespatchPalletQueueScsDetail>>();
             builder.RegisterType<ScsPalletFastRepository>().As<IScsPalletsRepository>();
             builder.RegisterType<StoresBudgetPostingRepository>().As<IRepository<StoresBudgetPosting, StoresBudgetPostingKey>>();
+            builder.RegisterType<StoresTransactionDefinitionRepository>().As<IRepository<StoresTransactionDefinition, string>>();
         }
     }
 }

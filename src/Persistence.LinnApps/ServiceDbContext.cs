@@ -2066,6 +2066,7 @@
             var q = builder.Entity<StoresTransactionDefinition>().ToTable("STORES_TRANS_DEFS");
             q.HasKey(d => d.TransactionCode);
             q.Property(d => d.TransactionCode).HasColumnName("TRANSACTION_CODE");
+            q.Property(d => d.Description).HasColumnName("DESCRIPTION");
             q.Property(d => d.QcType).HasColumnName("QC_TYPE");
             q.Property(d => d.DocType).HasColumnName("DOC1_TYPE");
             q.HasMany(d => d.RequisitionLines).WithOne(l => l.TransactionDefinition)
