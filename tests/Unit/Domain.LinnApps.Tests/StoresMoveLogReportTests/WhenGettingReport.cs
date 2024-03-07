@@ -51,7 +51,7 @@
         [Test]
         public void ShouldSetColumns()
         {
-            this.result.Columns.Should().HaveCount(9);
+            this.result.Columns.Should().HaveCount(12);
         }
     }
 }

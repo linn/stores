@@ -121,11 +121,23 @@
                            new AxisDetailsModel("Qty") { SortOrder = 7, GridDisplayType = GridDisplayType.TextValue },
                            new AxisDetailsModel("From")
                                {
-                                   SortOrder = 8, GridDisplayType = GridDisplayType.TextValue, Name = "From (Location Batch Stock Pool)"
+                                   SortOrder = 8, GridDisplayType = GridDisplayType.TextValue, Name = "From"
+                               },
+                           new AxisDetailsModel("FromDetails")
+                               {
+                                   SortOrder = 9, GridDisplayType = GridDisplayType.TextValue, Name = "Batch - Stock Pool - State"
                                },
                            new AxisDetailsModel("To")
                                {
-                                   SortOrder = 9, GridDisplayType = GridDisplayType.TextValue, Name = "To (Location Batch Stock Pool)"
+                                   SortOrder = 10, GridDisplayType = GridDisplayType.TextValue, Name = "To"
+                               },
+                           new AxisDetailsModel("ToDetails")
+                               {
+                                   SortOrder = 11, GridDisplayType = GridDisplayType.TextValue, Name = "Batch - Stock Pool - State"
+                               },
+                           new AxisDetailsModel("QIS")
+                               {
+                                   SortOrder = 12, GridDisplayType = GridDisplayType.TextValue, Name = "QIS"
                                }
                        };
         }
@@ -189,15 +201,36 @@
                     new CalculationValueModel
                         {
                             RowId = moveLog.Id.ToString(),
-                            TextDisplay = string.IsNullOrEmpty(moveLog.FromLocation) ? string.Empty : $"{moveLog.FromLocation} {moveLog.FromBatchRef}/{moveLog.FromBatchDate.ToShortDateString()} {moveLog.FromStockPool}",
+                            TextDisplay = moveLog.FromLocation,
                             ColumnId = "From"
                         });
                 values.Add(
                     new CalculationValueModel
                         {
                             RowId = moveLog.Id.ToString(),
-                            TextDisplay = string.IsNullOrEmpty(moveLog.ToLocation) ? string.Empty : $"{moveLog.ToLocation} {moveLog.ToBatchRef}/{moveLog.ToBatchDate.ToShortDateString()} {moveLog.ToStockPool}",
+                            TextDisplay = string.IsNullOrEmpty(moveLog.FromLocation) ? string.Empty : $"{moveLog.FromBatchRef}/{moveLog.FromBatchDate.ToShortDateString()} - {moveLog.FromStockPool} - {moveLog.FromState}",
+                            ColumnId = "FromDetails"
+                        });
+                values.Add(
+                    new CalculationValueModel
+                        {
+                            RowId = moveLog.Id.ToString(),
+                            TextDisplay = moveLog.ToLocation,
                             ColumnId = "To"
+                        });
+                values.Add(
+                    new CalculationValueModel
+                        {
+                            RowId = moveLog.Id.ToString(),
+                            TextDisplay = string.IsNullOrEmpty(moveLog.ToLocation) ? string.Empty : $"{moveLog.ToBatchRef}/{moveLog.ToBatchDate.ToShortDateString()} - {moveLog.ToStockPool} - {moveLog.ToState}",
+                            ColumnId = "ToDetails"
+                        });
+                values.Add(
+                    new CalculationValueModel
+                        {
+                            RowId = moveLog.Id.ToString(),
+                            TextDisplay = moveLog.QtyInStock.ToString(),
+                            ColumnId = "QIS"
                         });
             }
 
