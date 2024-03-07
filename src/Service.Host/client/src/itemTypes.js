@@ -495,3 +495,9 @@ export const stockTriggerLevels = new ItemType(
 );
 
 export const partLibraries = new ItemType('partLibraries', 'PART_LIBRARIES', '/parts/libraries');
+
+export const storesTransactionDefinitions = new ItemType(
+    'storesTransactionDefinitions',
+    'STORES_TRANSACTION_DEFINITIONS',
+    '/inventory/stores-transaction-definitions'
+);

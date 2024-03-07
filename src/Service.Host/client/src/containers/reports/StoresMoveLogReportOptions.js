@@ -6,6 +6,8 @@ import partsSelectors from '../../selectors/partsSelectors';
 import StoresMoveLogReportOptions from '../../components/reports/StoresMoveLogReportOptions';
 import stockPoolsActions from '../../actions/stockPoolsActions';
 import stockPoolsSelectors from '../../selectors/stockPoolsSelectors';
+import storesTransactionDefinitionsActions from '../../actions/storesTransactionDefinitionsActions';
+import storesTransactionDefinitionsSelectors from '../../selectors/storesTransactionDefinitionsSelectors';
 
 const mapStateToProps = state => ({
     partsSearchLoading: partsSelectors.getSearchLoading(state),
@@ -17,7 +19,17 @@ const mapStateToProps = state => ({
         id: i.id,
         name: i.stockPoolCode
     })),
-    stockPoolsLoading: stockPoolsSelectors.getSearchLoading(state)
+    stockPoolsLoading: stockPoolsSelectors.getSearchLoading(state),
+    storesTransactionDefinitions: storesTransactionDefinitionsSelectors
+        .getSearchItems(state, 100)
+        .map(i => ({
+            ...i,
+            id: i.id,
+            name: i.stockPoolCode
+        })),
+    storesTransactionDefinitionsLoading: storesTransactionDefinitionsSelectors.getSearchLoading(
+        state
+    )
 });
 
 const initialise = () => dispatch => {
@@ -29,7 +41,9 @@ const mapDispatchToProps = {
     searchParts: partsActions.search,
     clearPartsSearch: partsActions.clearSearch,
     searchStockPools: stockPoolsActions.search,
-    clearStockPoolsSearch: stockPoolsActions.clearSearch
+    clearStockPoolsSearch: stockPoolsActions.clearSearch,
+    searchStoresTransactionDefinitions: storesTransactionDefinitionsActions.search,
+    clearStoresTransactionDefinitions: storesTransactionDefinitionsActions.clearSearch
 };
 
 export default connect(

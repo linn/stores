@@ -6,6 +6,7 @@
     using System.Linq.Expressions;
 
     using Linn.Stores.Domain.LinnApps.GoodsIn;
+    using Microsoft.EntityFrameworkCore;
 
     public class StoresTransactionDefinitionRepository : IRepository<StoresTransactionDefinition, string>
     {
@@ -43,7 +44,7 @@
 
         public IQueryable<StoresTransactionDefinition> FilterBy(Expression<Func<StoresTransactionDefinition, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.StoresTransactionDefinitions.AsNoTracking().Where(expression).AsNoTracking();
         }
     }
 }
