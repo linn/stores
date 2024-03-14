@@ -123,15 +123,15 @@ function SosAllocHeads({
                             <Button variant="outlined">Run DPS</Button>
                         </Tooltip>
                     </Link>
-                   
+
                     <Tooltip title="Despatch Pallet Queue (Upper)">
-                        <Button 
-                            onClick={
-                                () => { window.location=`${config.appRoot}/warehouse/despatch-pallet-queue`; }
-                            }
+                        <Button
+                            onClick={() => {
+                                window.location = `${config.appRoot}/warehouse/despatch-pallet-queue`;
+                            }}
                             variant="outlined"
                         >
-                                Pallet Queue
+                            Pallet Queue
                         </Button>
                     </Tooltip>
                     <Link className={classes.nounderline} to="/logistics/allocations">
