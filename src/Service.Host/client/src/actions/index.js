@@ -397,3 +397,7 @@ export const stockTriggerLevelsActionTypes = makeActionTypes(
 );
 
 export const partLibrariesActionTypes = makeActionTypes(itemTypes.partLibraries.actionType);
+
+export const storesTransactionDefinitionsActionTypes = makeActionTypes(
+    itemTypes.storesTransactionDefinitions.actionType
+);

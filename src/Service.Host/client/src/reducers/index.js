@@ -144,6 +144,7 @@ import storesMoveLogReport from './storesMoveLogReport';
 import stockTriggerLevel from './stockTriggerLevel';
 import stockTriggerLevels from './stockTriggerLevels';
 import partLibraries from './parts/partLibraries';
+import storesTransactionDefinitions from './storesTransactionDefinitions';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -262,6 +263,7 @@ const rootReducer = history =>
         storagePlaces,
         storagePlaceAuditReport,
         storesMoveLogReport,
+        storesTransactionDefinitions,
         suppliers,
         suppliersApprovedCarrier,
         tpkTransferStock,

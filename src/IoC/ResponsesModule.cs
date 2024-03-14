@@ -21,7 +21,6 @@
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.Requisitions;
     using Linn.Stores.Domain.LinnApps.Requisitions.Models;
-    using Linn.Stores.Domain.LinnApps.Scs;
     using Linn.Stores.Domain.LinnApps.StockLocators;
     using Linn.Stores.Domain.LinnApps.StockMove.Models;
     using Linn.Stores.Domain.LinnApps.Tpk;
@@ -247,6 +246,8 @@
             builder.RegisterType<DespatchPalletQueueScsDetailsResourceBuilder>().As<IResourceBuilder<IEnumerable<DespatchPalletQueueScsDetail>>>();
             builder.RegisterType<StoresBudgetPostingResourceBuilder>().As<IResourceBuilder<StoresBudgetPosting>>();
             builder.RegisterType<StoresBudgetPostingsResourceBuilder>().As<IResourceBuilder<IEnumerable<StoresBudgetPosting>>>();
+            builder.RegisterType<StoresTransactionDefinitionResourceBuilder>().As<IResourceBuilder<StoresTransactionDefinition>>();
+            builder.RegisterType<StoresTransactionDefinitionsResourceBuilder>().As<IResourceBuilder<IEnumerable<StoresTransactionDefinition>>>();
         }
     }
 }
