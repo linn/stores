@@ -61,25 +61,6 @@ export default function LabelReprint({
         return labelOptions.labelType === 'Carton' || labelOptions.labelType === 'Pallet';
     };
 
-    const displayAddress = () => {
-        if (hasConsignmentFields()) {
-            if (consignmentItem?.address) {
-                return consignmentItem.address.displayAddress;
-            }
-        }
-        return null;
-    };
-
-    const addressId = () => {
-        if (labelOptions.labelType === 'Carton' || labelOptions.labelType === 'Pallet') {
-            return consignmentItem?.address?.id;
-        }
-        if (labelOptions.labelType === 'Address') {
-            return labelOptions.addressId;
-        }
-        return null;
-    };
-
     const doPrintLabel = () => {
         printConsignmentLabel({
             labelType: labelOptions.labelType,
@@ -122,7 +103,7 @@ export default function LabelReprint({
                 <Grid item xs={4} />
                 {hasConsignmentFields() && (
                     <>
-                        <Grid item xs={3}>
+                        <Grid item xs={6}>
                             <InputField
                                 label="Consignment Id"
                                 fullWidth
@@ -131,6 +112,14 @@ export default function LabelReprint({
                                 propertyName="consignmentId"
                                 type="number"
                             />
+                            {consignmentLoading ? (
+                                <Loading />
+                            ) : (
+                                <Typography>
+                                    {consignmentItem?.address.id}{' '}
+                                    {consignmentItem?.address.displayAddress}
+                                </Typography>
+                            )}
                         </Grid>
                         <Grid item xs={3}>
                             <InputField
@@ -155,19 +144,19 @@ export default function LabelReprint({
                     </>
                 )}
 
-                <Grid item xs={6}>
-                    <InputField
-                        label="Address"
-                        fullWidth
-                        value={addressId()}
-                        onChange={handleFieldChange}
-                        disabled={labelOptions.labelType !== 'Address'}
-                        propertyName="addressId"
-                        type="number"
-                    />
-                    {consignmentLoading && <Loading />}
-                    {displayAddress()}
-                </Grid>
+                {labelOptions.labelType === 'Address' && (
+                    <Grid item xs={6}>
+                        <InputField
+                            label="Address"
+                            fullWidth
+                            value={labelOptions.labelType}
+                            onChange={handleFieldChange}
+                            propertyName="addressId"
+                            type="number"
+                        />
+                    </Grid>
+                )}
+
                 <Grid item xs={6} />
                 <Grid item xs={4}>
                     <Button
