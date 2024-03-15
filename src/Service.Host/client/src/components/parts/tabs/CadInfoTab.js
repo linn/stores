@@ -116,7 +116,7 @@ CadInfoTab.propTypes = {
     partLibraries: PropTypes.arrayOf(PropTypes.shape({})),
     theirPartNumber: PropTypes.string,
     datasheetPath: PropTypes.string,
-    icType: PropTypes.string,
+    icType: PropTypes.string
 };
 
 CadInfoTab.defaultProps = {

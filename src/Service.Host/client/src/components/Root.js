@@ -31,7 +31,6 @@ import WorkstationTopUpStatus from '../containers/workstations/WorkstationTopUpS
 import DeptStockUtility from '../containers/DeptStockUtility/DeptStockUtility';
 import DeptStockParts from '../containers/DeptStockUtility/DeptStockParts';
 import DespatchPickingSummaryReport from '../containers/reports/DespatchPickingSummaryReport';
-import DespatchPalletQueueReport from '../containers/reports/DespatchPalletQueueReport';
 import StockViewerOptions from '../containers/stockLocatorUtility/StockViewerOptions';
 import StockLocator from '../containers/stockLocatorUtility/StockLocator';
 import Wand from '../containers/Wand';
@@ -60,10 +59,10 @@ import QcPartsReport from '../containers/reports/QcPartsReport';
 import EuCreditInvoicesReport from '../containers/reports/EuCreditInvoicesReport';
 import WhatToWandReprint from '../containers/WhatToWandReprint';
 import TriggerLevelsForAStoragePlaceReport from '../containers/reports/TriggerLevelsForAStoragePlaceReport';
-import BahnhofKoenig from '../containers/BahnofKoenig';
 import StoresMoveLogReport from '../containers/reports/StoresMoveLogReport';
 import StoresMoveLogReportOptions from '../containers/reports/StoresMoveLogReportOptions';
 import StockTriggerLevelsUtility from '../containers/stockTriggerLevelsUtility/StockTriggerLevelsUtility';
+import LabelReprint from '../containers/LabelReprint';
 
 const Root = ({ store }) => (
     <div>
@@ -359,7 +358,6 @@ const Root = ({ store }) => (
                                         path="/inventory/storage-places/reports/stock-trigger-levels"
                                         component={TriggerLevelsForAStoragePlaceReport}
                                     />
-                                    <Route exact path="/logistics/bk" component={BahnhofKoenig} />
                                     <Route
                                         exact
                                         path="/inventory/reports/stores-move-log"
@@ -379,6 +377,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/inventory/stock-trigger-levels/:id"
                                         component={StockTriggerLevelsUtility}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/logistics/labels-reprint"
+                                        component={LabelReprint}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>
