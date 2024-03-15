@@ -114,6 +114,11 @@
             return new ProcessResult(true, $"{labelCount} pallet label(s) printed");
         }
 
+        public ProcessResult PrintAddressLabel(int addressId, int userNumber, int numberOfCopies = 1)
+        {
+            throw new NotImplementedException();
+        }
+
         private string GetPalletLabelInfo(Consignment consignment, int palletNumber)
         {
             var pallet = consignment.Pallets.FirstOrDefault(a => a.PalletNumber == palletNumber);
