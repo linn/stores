@@ -16,14 +16,18 @@
 
         private readonly IRepository<PrinterMapping, int> printerMappingRepository;
 
+        private readonly IRepository<Address, int> addressRepository;
+
         public LogisticsLabelService(
             IBartenderLabelPack bartenderLabelPack,
             IRepository<Consignment, int> consignmentRepository,
-            IRepository<PrinterMapping, int> printerMappingRepository)
+            IRepository<PrinterMapping, int> printerMappingRepository,
+            IRepository<Address, int> addressRepository)
         {
             this.bartenderLabelPack = bartenderLabelPack;
             this.consignmentRepository = consignmentRepository;
             this.printerMappingRepository = printerMappingRepository;
+            this.addressRepository = addressRepository;
         }
 
         public ProcessResult PrintCartonLabel(
@@ -116,7 +120,34 @@
 
         public ProcessResult PrintAddressLabel(int addressId, int userNumber, int numberOfCopies = 1)
         {
-            throw new NotImplementedException();
+            var address = this.addressRepository.FindById(addressId);
+            if (address == null)
+            {
+                return new ProcessResult(false, $"no address found for {addressId}");
+            }
+
+            string labelData = null;
+            try
+            {
+                labelData = $"\"{this.GetPrintAddress(address)}\", \"\"";
+            }
+            catch (ProcessException exception)
+            {
+                return new ProcessResult(false, exception.Message);
+            }
+
+            var printerName = this.GetPrinter(userNumber);
+            var labelMessage = string.Empty;
+
+            this.bartenderLabelPack.PrintLabels(
+                $"AddressLabel{addressId}",
+                printerName,
+                numberOfCopies,
+                "dispatchaddress.btw",
+                labelData,
+                ref labelMessage);
+
+            return new ProcessResult(true, $"{numberOfCopies} address label(s) printed");
         }
 
         private string GetPalletLabelInfo(Consignment consignment, int palletNumber)
@@ -140,6 +171,12 @@
 
         private string GetLabelInformation(Consignment consignment, int cartonNumber)
         {
+            if (consignment == null)
+            {
+                return
+                    $"Carton: {Environment.NewLine}Article:{Environment.NewLine}Serial No: {Environment.NewLine}Order: {Environment.NewLine}Consignment: ";
+            }
+
             var item = consignment.Items.FirstOrDefault(a =>
                 a.ContainerNumber == cartonNumber && (a.ItemType == "C" || a.ItemType == "S"));
 

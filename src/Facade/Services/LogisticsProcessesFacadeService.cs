@@ -30,8 +30,8 @@
                     try
                     {
                         labelServiceResult = this.logisticsLabelService.PrintCartonLabel(
-                            resource.ConsignmentId,
-                            resource.FirstItem,
+                            resource.ConsignmentId.Value,
+                            resource.FirstItem.Value,
                             resource.LastItem,
                             resource.UserNumber,
                             resource.NumberOfCopies);
@@ -46,9 +46,29 @@
                     try
                     {
                         labelServiceResult = this.logisticsLabelService.PrintPalletLabel(
-                            resource.ConsignmentId,
-                            resource.FirstItem,
+                            resource.ConsignmentId.Value,
+                            resource.FirstItem.Value,
                             resource.LastItem,
+                            resource.UserNumber,
+                            resource.NumberOfCopies);
+                    }
+                    catch (ProcessException exception)
+                    {
+                        return new BadRequestResult<ProcessResult>(exception.Message);
+                    }
+
+                    break;
+
+                case "Address":
+                    try
+                    {
+                        if (resource.AddressId == null)
+                        {
+                            return new BadRequestResult<ProcessResult>("Address Id not supplied");
+                        }
+
+                        labelServiceResult = this.logisticsLabelService.PrintAddressLabel(
+                            resource.AddressId.Value,
                             resource.UserNumber,
                             resource.NumberOfCopies);
                     }

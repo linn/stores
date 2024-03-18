@@ -100,6 +100,7 @@ export default function LabelReprint({
             consignmentId: labelOptions.consignmentId,
             firstItem: labelOptions.firstItem,
             lastItem: labelOptions.lastItem,
+            addressId: labelOptions.addressId,
             numberOfCopies: labelOptions.numberOfCopies,
             userNumber
         });

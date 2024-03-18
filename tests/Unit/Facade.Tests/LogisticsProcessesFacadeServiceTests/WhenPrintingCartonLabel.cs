@@ -32,8 +32,8 @@
                                 };
             this.serviceResult = new ProcessResult(true, "ok");
             this.LogisticsLabelService.PrintCartonLabel(
-                    this.resource.ConsignmentId,
-                    this.resource.FirstItem,
+                    this.resource.ConsignmentId.Value,
+                    this.resource.FirstItem.Value,
                     this.resource.LastItem, 
                     this.resource.UserNumber,
                     this.resource.NumberOfCopies)
@@ -46,8 +46,8 @@
         public void ShouldCallService()
         {
             this.LogisticsLabelService.Received().PrintCartonLabel(
-                this.resource.ConsignmentId,
-                this.resource.FirstItem,
+                this.resource.ConsignmentId.Value,
+                this.resource.FirstItem.Value,
                 this.resource.LastItem,
                 this.resource.UserNumber,
                 this.resource.NumberOfCopies);
