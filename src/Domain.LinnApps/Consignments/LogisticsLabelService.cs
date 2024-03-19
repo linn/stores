@@ -171,12 +171,6 @@
 
         private string GetLabelInformation(Consignment consignment, int cartonNumber)
         {
-            if (consignment == null)
-            {
-                return
-                    $"Carton: {Environment.NewLine}Article:{Environment.NewLine}Serial No: {Environment.NewLine}Order: {Environment.NewLine}Consignment: ";
-            }
-
             var item = consignment.Items.FirstOrDefault(a =>
                 a.ContainerNumber == cartonNumber && (a.ItemType == "C" || a.ItemType == "S"));
 
