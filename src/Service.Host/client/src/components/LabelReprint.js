@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { Title, Dropdown, InputField, Loading } from '@linn-it/linn-form-components-library';
+import {
+    Title,
+    Dropdown,
+    InputField,
+    Loading,
+    Typeahead
+} from '@linn-it/linn-form-components-library';
 import PropTypes from 'prop-types';
 import Page from '../containers/Page';
 
@@ -14,7 +20,11 @@ export default function LabelReprint({
     clearConsignmentLabelData,
     consignmentItem,
     consignmentLoading,
-    getConsignment
+    getConsignment,
+    searchAddresses,
+    clearAddresses,
+    addressesSearchResults,
+    addressesSearchLoading
 }) {
     const [labelOptions, setLabelOptions] = useState({
         labelType: 'Carton',
@@ -23,6 +33,15 @@ export default function LabelReprint({
         lastItem: null,
         numberOfCopies: 1,
         addressId: null
+    });
+
+    const [addressInfo, setAddressInfo] = useState({
+        addressee: null,
+        addressee2: null,
+        line1: null,
+        line2: null,
+        line3: null,
+        line4: null
     });
 
     const handleFieldChange = (propertyName, newValue) => {
@@ -61,12 +80,27 @@ export default function LabelReprint({
         return labelOptions.labelType === 'Carton' || labelOptions.labelType === 'Pallet';
     };
 
+    const addressesSearchResultsList = () => {
+        return addressesSearchResults?.map(address => ({
+            ...address,
+            name: address.id,
+            description: address.addressee,
+            id: address.id
+        }));
+    };
+
+    const handleOnSelectAddress = selectedAddress => {
+        handleFieldChange('addressId', selectedAddress.id);
+        setAddressInfo(selectedAddress);
+    };
+
     const doPrintLabel = () => {
         printConsignmentLabel({
             labelType: labelOptions.labelType,
             consignmentId: labelOptions.consignmentId,
             firstItem: labelOptions.firstItem,
             lastItem: labelOptions.lastItem,
+            addressId: labelOptions.addressId,
             numberOfCopies: labelOptions.numberOfCopies,
             userNumber
         });
@@ -146,14 +180,27 @@ export default function LabelReprint({
 
                 {labelOptions.labelType === 'Address' && (
                     <Grid item xs={6}>
-                        <InputField
-                            label="Address"
-                            fullWidth
-                            value={labelOptions.labelType}
-                            onChange={handleFieldChange}
-                            propertyName="addressId"
-                            type="number"
+                        <Typeahead
+                            label="Address Id"
+                            items={addressesSearchResultsList()}
+                            placeholder="Address Id"
+                            fetchItems={name => searchAddresses(name)}
+                            clearSearch={clearAddresses}
+                            loading={addressesSearchLoading}
+                            debounce={1000}
+                            links={false}
+                            modal
+                            onSelect={p => handleOnSelectAddress(p)}
+                            value={labelOptions.addressId}
                         />
+                        <Typography>
+                            {`${addressInfo.addressee ? addressInfo.addressee : ''}\n
+                          ${addressInfo.addressee2 ? addressInfo.addressee2 : ''}\n
+                          ${addressInfo.line1 ? addressInfo.line1 : ''}\n
+                          ${addressInfo.line2 ? addressInfo.line2 : ''}\n
+                          ${addressInfo.line3 ? addressInfo.line3 : ''}\n
+                          ${addressInfo.line4 ? addressInfo.line1 : ''}`}
+                        </Typography>
                     </Grid>
                 )}
 
@@ -192,12 +239,18 @@ LabelReprint.propTypes = {
         address: PropTypes.shape({ id: PropTypes.number, displayAddress: PropTypes.string })
     }),
     consignmentLoading: PropTypes.bool,
-    getConsignment: PropTypes.func.isRequired
+    getConsignment: PropTypes.func.isRequired,
+    searchAddresses: PropTypes.func.isRequired,
+    clearAddresses: PropTypes.func.isRequired,
+    addressesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
+    addressesSearchLoading: PropTypes.bool
 };
 
 LabelReprint.defaultProps = {
     printConsignmentLabelWorking: false,
     printConsignmentLabelResult: null,
     consignmentItem: null,
-    consignmentLoading: false
+    consignmentLoading: false,
+    addressesSearchResults: [],
+    addressesSearchLoading: false
 };
