@@ -8,6 +8,7 @@
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Common.Proxy.LinnApps;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Resources.Consignments;
@@ -21,16 +22,20 @@
 
         private readonly IRepository<Consignment, int> repository;
 
+        private readonly IRepository<Invoice, int> invoiceRepository;
+
         public ConsignmentFacadeService(
             IRepository<Consignment, int> repository,
             ITransactionManager transactionManager,
             IConsignmentService consignmentService,
-            IDatabaseService databaseService)
+            IDatabaseService databaseService,
+            IRepository<Invoice, int> invoiceRepository)
             : base(repository, transactionManager)
         {
             this.consignmentService = consignmentService;
             this.databaseService = databaseService;
             this.repository = repository;
+            this.invoiceRepository = invoiceRepository;
         }
 
         protected override Consignment CreateFromResource(ConsignmentResource resource)
@@ -238,6 +243,29 @@
             }
 
             return this.GetAll();
+        }
+
+        public IResult<IEnumerable<Consignment>> GetByInvoiceNumber(int invoiceNumber)
+        {
+            var invoice = this.invoiceRepository.FindById(invoiceNumber);
+            if (invoice == null)
+            {
+                return new NotFoundResult<IEnumerable<Consignment>>("Could not find invoice");
+            }
+
+            if (invoice.ConsignmentId == null)
+            {
+                return new NotFoundResult<IEnumerable<Consignment>>("Invoice does not have consignment");
+            }
+
+            var consignment = this.repository.FindById(invoice.ConsignmentId.Value);
+
+            if (consignment == null)
+            {
+                return new NotFoundResult<IEnumerable<Consignment>>("Consignment does not exist");
+            }
+
+            return new SuccessResult<IEnumerable<Consignment>>(new List<Consignment>() { consignment });
         }
     }
 }

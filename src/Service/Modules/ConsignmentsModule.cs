@@ -193,6 +193,11 @@
         {
             var resource = this.Bind<ConsignmentsRequestResource>();
 
+            if (resource.InvoiceNumber != null)
+            {
+                return this.Negotiate.WithModel(this.consignmentFacadeService.GetByInvoiceNumber(resource.InvoiceNumber.Value));
+            }
+
             return this.Negotiate
                 .WithModel(this.consignmentFacadeService.GetByRequestResource(resource))
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)
