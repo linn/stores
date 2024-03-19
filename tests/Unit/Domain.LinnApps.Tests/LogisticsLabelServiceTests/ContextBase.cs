@@ -22,6 +22,8 @@
 
         protected IRepository<PrinterMapping, int> PrinterMappingRepository { get; private set; }
 
+        protected IRepository<Address, int> AddressRepository { get; private set; }
+
         protected int UserNumber { get; set; }
 
         protected int ConsignmentId { get; set; }
@@ -34,6 +36,7 @@
             this.BartenderLabelPack = Substitute.For<IBartenderLabelPack>();
             this.ConsignmentRepository = Substitute.For<IRepository<Consignment, int>>();
             this.PrinterMappingRepository = Substitute.For<IRepository<PrinterMapping, int>>();
+            this.AddressRepository = Substitute.For<IRepository<Address, int>>();
 
             this.ConsignmentId = 808;
             this.Consignment = new Consignment
@@ -111,7 +114,8 @@
             this.Sut = new LogisticsLabelService(
                 this.BartenderLabelPack,
                 this.ConsignmentRepository,
-                this.PrinterMappingRepository);
+                this.PrinterMappingRepository,
+                this.AddressRepository);
         }
     }
 }
