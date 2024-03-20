@@ -32,7 +32,12 @@ export default function LabelReprint({
         firstItem: null,
         lastItem: null,
         numberOfCopies: 1,
-        addressId: null
+        addressId: null,
+        line1: null,
+        line2: null,
+        line3: null,
+        line4: null,
+        line5: null
     });
 
     const [addressInfo, setAddressInfo] = useState({
@@ -53,16 +58,39 @@ export default function LabelReprint({
 
     const handleLabelTypeChange = (_propertyName, newValue) => {
         clearConsignmentLabelData();
-        if (labelOptions.labelType === 'Address') {
+        if (newValue === 'Address') {
             setLabelOptions({
                 ...labelOptions,
                 consignmentId: null,
                 firstItem: null,
                 lastItem: null,
-                labelType: newValue
+                labelType: newValue,
+                line1: null,
+                line2: null,
+                line3: null,
+                line4: null,
+                line5: null
+            });
+        } else if (newValue === 'General') {
+            setLabelOptions({
+                ...labelOptions,
+                consignmentId: null,
+                firstItem: null,
+                lastItem: null,
+                labelType: newValue,
+                addressId: null
             });
         } else {
-            setLabelOptions({ ...labelOptions, labelType: newValue });
+            setLabelOptions({
+                ...labelOptions,
+                labelType: newValue,
+                addressId: null,
+                line1: null,
+                line2: null,
+                line3: null,
+                line4: null,
+                line5: null
+            });
         }
     };
 
@@ -101,8 +129,24 @@ export default function LabelReprint({
             firstItem: labelOptions.firstItem,
             lastItem: labelOptions.lastItem,
             addressId: labelOptions.addressId,
+            line1: labelOptions.line1,
+            line2: labelOptions.line2,
+            line3: labelOptions.line3,
+            line4: labelOptions.line4,
+            line5: labelOptions.line5,
             numberOfCopies: labelOptions.numberOfCopies,
             userNumber
+        });
+    };
+
+    const DoNotBreakdownLabel = () => {
+        setLabelOptions({
+            ...labelOptions,
+            line1: 'DO NOT BREAKDOWN',
+            line2: 'DO NOT REMOVE',
+            line3: 'BOXED',
+            line4: null,
+            line5: null
         });
     };
 
@@ -118,6 +162,7 @@ export default function LabelReprint({
                         items={[
                             { id: 'Carton', displayText: 'Carton Label' },
                             { id: 'Pallet', displayText: 'Pallet Label' },
+                            { id: 'General', displayText: 'General Label' },
                             { id: 'Address', displayText: 'Address Label' }
                         ]}
                         value={labelOptions.labelType}
@@ -204,10 +249,53 @@ export default function LabelReprint({
                     </Grid>
                 )}
 
+                {labelOptions.labelType === 'General' && (
+                    <Grid item xs={6}>
+                        <InputField
+                            placeholder="line 1"
+                            fullWidth
+                            value={labelOptions.line1}
+                            onChange={handleFieldChange}
+                            propertyName="line1"
+                        />
+                        <InputField
+                            placeholder="line 2"
+                            fullWidth
+                            value={labelOptions.line2}
+                            onChange={handleFieldChange}
+                            propertyName="line2"
+                        />
+                        <InputField
+                            placeholder="line 3"
+                            fullWidth
+                            value={labelOptions.line3}
+                            onChange={handleFieldChange}
+                            propertyName="line3"
+                        />
+                        <InputField
+                            placeholder="line 4"
+                            fullWidth
+                            value={labelOptions.line4}
+                            onChange={handleFieldChange}
+                            propertyName="line4"
+                        />
+                        <InputField
+                            placeholder="line 5"
+                            fullWidth
+                            value={labelOptions.line5}
+                            onChange={handleFieldChange}
+                            propertyName="line5"
+                        />
+                        <Button onClick={DoNotBreakdownLabel} variant="text">
+                            Do not breakdown label
+                        </Button>
+                    </Grid>
+                )}
+
                 <Grid item xs={6} />
                 <Grid item xs={4}>
                     <Button
-                        style={{ marginTop: '30px', marginBottom: '40px' }}
+                        style={{ marginTop: '20px', marginBottom: '40px' }}
                         onClick={doPrintLabel}
                         variant="contained"
                         color="primary"
