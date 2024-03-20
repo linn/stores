@@ -78,6 +78,26 @@
                     }
 
                     break;
+
+                case "General":
+                    try
+                    {
+                        labelServiceResult = this.logisticsLabelService.PrintGeneralLabel(
+                            resource.Line1,
+                            resource.Line2,
+                            resource.Line3,
+                            resource.Line4,
+                            resource.Line5,
+                            resource.UserNumber,
+                            resource.NumberOfCopies);
+                    }
+                    catch (ProcessException exception)
+                    {
+                        return new BadRequestResult<ProcessResult>(exception.Message);
+                    }
+
+                    break;
+
                 default:
                     return new BadRequestResult<ProcessResult>($"Cannot print label type {resource.LabelType}");
             }
