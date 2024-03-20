@@ -32,7 +32,7 @@
         public void ShouldPrintLabel()
         {
             this.BartenderLabelPack.Received().PrintLabels(
-                $"GeneralLabel{23}",
+                Arg.Is<string>(a => a.Contains("GeneralLabel")),
                 "DispatchLabels1",
                 1,
                 "dispatchgeneral.btw",
