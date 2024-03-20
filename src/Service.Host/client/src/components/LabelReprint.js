@@ -139,6 +139,17 @@ export default function LabelReprint({
         });
     };
 
+    const DoNotBreakdownLabel = () => {
+        setLabelOptions({
+            ...labelOptions,
+            line1: 'DO NOT BREAKDOWN',
+            line2: 'DO NOT REMOVE',
+            line3: 'BOXED',
+            line4: null,
+            line5: null
+        });
+    };
+
     return (
         <Page>
             <Title text="Label Reprint" />
@@ -275,13 +286,16 @@ export default function LabelReprint({
                             onChange={handleFieldChange}
                             propertyName="line5"
                         />
+                        <Button onClick={DoNotBreakdownLabel} variant="text">
+                            Do not breakdown label
+                        </Button>
                     </Grid>
                 )}
 
                 <Grid item xs={6} />
                 <Grid item xs={4}>
                     <Button
-                        style={{ marginTop: '30px', marginBottom: '40px' }}
+                        style={{ marginTop: '20px', marginBottom: '40px' }}
                         onClick={doPrintLabel}
                         variant="contained"
                         color="primary"
