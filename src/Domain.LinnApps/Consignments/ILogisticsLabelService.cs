@@ -20,6 +20,8 @@
 
         ProcessResult PrintAddressLabel(
             int addressId,
+            string line1,
+            string line2,
             int userNumber,
             int numberOfCopies = 1);
 
