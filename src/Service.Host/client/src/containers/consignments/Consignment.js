@@ -111,7 +111,9 @@ const mapStateToProps = (state, ownProps) => ({
     addressesSearchResults: addressesSelectors.getSearchItems(state),
     addressesSearchLoading: addressesSelectors.getSearchLoading(state),
     salesOutletAddressesSearchResults: salesOutletAddressesSelectors.getSearchItems(state),
-    salesOutletAddressesSearchLoading: salesOutletAddressesSelectors.getSearchLoading(state)
+    salesOutletAddressesSearchLoading: salesOutletAddressesSelectors.getSearchLoading(state),
+    consignmentsSearchResults: consignmentsSelectors.getSearchItems(state),
+    consignmentsSearchLoading: consignmentsSelectors.getSearchLoading(state)
 });
 
 const mapDispatchToProps = {
@@ -146,7 +148,8 @@ const mapDispatchToProps = {
     searchAddresses: addressesActions.search,
     clearAddresses: addressesActions.clearSearch,
     searchSalesOutletAddresses: salesOutletAddressesActions.searchWithOptions,
-    clearSalesOutletAddresses: salesOutletAddressesActions.clearSearch
+    clearSalesOutletAddresses: salesOutletAddressesActions.clearSearch,
+    searchConsignments: consignmentsActions.searchWithOptions
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(initialiseOnMount(Consignment));

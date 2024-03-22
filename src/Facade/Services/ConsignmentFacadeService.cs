@@ -250,12 +250,12 @@
             var invoice = this.invoiceRepository.FindById(invoiceNumber);
             if (invoice == null)
             {
-                return new NotFoundResult<IEnumerable<Consignment>>("Could not find invoice");
+                return new SuccessResult<IEnumerable<Consignment>>(new List<Consignment>());
             }
 
             if (invoice.ConsignmentId == null)
             {
-                return new NotFoundResult<IEnumerable<Consignment>>("Invoice does not have consignment");
+                return new SuccessResult<IEnumerable<Consignment>>(new List<Consignment>());
             }
 
             var consignment = this.repository.FindById(invoice.ConsignmentId.Value);
