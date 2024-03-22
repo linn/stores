@@ -1,14 +1,16 @@
 ﻿namespace Linn.Stores.Facade.Tests.ConsignmentFacadeServiceTests
 {
-    using FluentAssertions;
-    using Linn.Common.Facade;
-    using Linn.Stores.Domain.LinnApps.Consignments;
-    using NSubstitute;
-    using NUnit.Framework;
     using System.Collections.Generic;
     using System.Linq;
 
-    using Linn.Stores.Domain.LinnApps;
+    using FluentAssertions;
+
+    using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps.Consignments;
+
+    using NSubstitute;
+
+    using NUnit.Framework;
 
     public class WhenGettingConsignmentFromInvoiceNumber : ContextBase
     {
@@ -24,13 +26,6 @@
             this.invoiceNumber = 1001;
             this.consignmentId = 202;
 
-            var invoice = new Invoice
-                              {
-                                  DocumentType = "I",
-                                  DocumentNumber = this.invoiceNumber,
-                                  ConsignmentId = this.consignmentId
-                              };
-
             var consignment = new Consignment
                                   {
                                       ConsignmentId = this.consignmentId,
@@ -41,7 +36,8 @@
                                       ShippingMethod = "Throw"
                                   };
 
-            this.InvoiceRepository.FindById(this.invoiceNumber).Returns(invoice);
+            this.ConsignmentService.GetByInvoiceNumber(this.invoiceNumber)
+                .Returns(new List<Consignment>() {consignment});
 
             this.ConsignmentRepository.FindById(this.consignmentId).Returns(consignment);
 

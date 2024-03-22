@@ -1,10 +1,12 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Tests.LogisticsLabelServiceTests
 {
-    using Linn.Stores.Domain.LinnApps.Models;
-    using NSubstitute;
-    using NUnit.Framework;
-
     using FluentAssertions;
+
+    using Linn.Stores.Domain.LinnApps.Models;
+
+    using NSubstitute;
+
+    using NUnit.Framework;
 
     public class WhenPrintingAddressLabel : ContextBase
     {
@@ -12,13 +14,10 @@
 
         private int addressId;
 
-        private int? lastCarton;
-
         [SetUp]
         public void SetUp()
         {
             this.addressId = 1;
-            this.lastCarton = 2;
 
             var address = new Address()
                               {
@@ -30,7 +29,7 @@
             this.AddressRepository.FindById(this.addressId).Returns(address);
 
             this.result = this.Sut.PrintAddressLabel(
-                this.addressId,
+                this.addressId,string.Empty,string.Empty,
                 this.UserNumber);
         }
 

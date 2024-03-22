@@ -22,8 +22,6 @@
 
         protected IDatabaseService DatabaseService { get; private set; }
 
-        protected IRepository<Invoice, int> InvoiceRepository { get; private set; }
-
         [SetUp]
         public void SetUpContext()
         {
@@ -31,7 +29,6 @@
             this.TransactionManager = Substitute.For<ITransactionManager>();
             this.ConsignmentService = Substitute.For<IConsignmentService>();
             this.DatabaseService = Substitute.For<IDatabaseService>();
-            this.InvoiceRepository = Substitute.For<IRepository<Invoice, int>>();
 
             this.DatabaseService.GetNextVal("CONS_SEQ").Returns(10101);
 
@@ -39,8 +36,7 @@
                 this.ConsignmentRepository,
                 this.TransactionManager,
                 this.ConsignmentService,
-                this.DatabaseService,
-                this.InvoiceRepository);
+                this.DatabaseService);
         }
     }
 }

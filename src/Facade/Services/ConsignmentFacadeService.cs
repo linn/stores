@@ -22,20 +22,16 @@
 
         private readonly IRepository<Consignment, int> repository;
 
-        private readonly IRepository<Invoice, int> invoiceRepository;
-
         public ConsignmentFacadeService(
             IRepository<Consignment, int> repository,
             ITransactionManager transactionManager,
             IConsignmentService consignmentService,
-            IDatabaseService databaseService,
-            IRepository<Invoice, int> invoiceRepository)
+            IDatabaseService databaseService)
             : base(repository, transactionManager)
         {
             this.consignmentService = consignmentService;
             this.databaseService = databaseService;
             this.repository = repository;
-            this.invoiceRepository = invoiceRepository;
         }
 
         protected override Consignment CreateFromResource(ConsignmentResource resource)
@@ -247,25 +243,13 @@
 
         public IResult<IEnumerable<Consignment>> GetByInvoiceNumber(int invoiceNumber)
         {
-            var invoice = this.invoiceRepository.FindById(invoiceNumber);
-            if (invoice == null)
+            var consignments = this.consignmentService.GetByInvoiceNumber(invoiceNumber);
+            if (consignments == null)
             {
-                return new SuccessResult<IEnumerable<Consignment>>(new List<Consignment>());
+                return new NotFoundResult<IEnumerable<Consignment>>("Could not find consignment");
             }
 
-            if (invoice.ConsignmentId == null)
-            {
-                return new SuccessResult<IEnumerable<Consignment>>(new List<Consignment>());
-            }
-
-            var consignment = this.repository.FindById(invoice.ConsignmentId.Value);
-
-            if (consignment == null)
-            {
-                return new NotFoundResult<IEnumerable<Consignment>>("Consignment does not exist");
-            }
-
-            return new SuccessResult<IEnumerable<Consignment>>(new List<Consignment>() { consignment });
+            return new SuccessResult<IEnumerable<Consignment>>(consignments);
         }
     }
 }
