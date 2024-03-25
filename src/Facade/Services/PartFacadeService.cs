@@ -238,7 +238,7 @@
                                     FootprintRef1 = resource.FootprintRef1,
                                     FootprintRef2 = resource.FootprintRef2,
                                     FootprintRef3 = resource.FootprintRef3,
-                                    IcType = resource.IcType,
+                                    Type = resource.Type,
                                     DataSheetPdfPath = resource.DatasheetPath,
                                     ManufacturersPartNumber = resource.TheirPartNumber
                                 };
@@ -355,7 +355,7 @@
                                       FootprintRef1 = resource.FootprintRef1,
                                       FootprintRef2 = resource.FootprintRef2,
                                       FootprintRef3 = resource.FootprintRef3,
-                                      IcType = resource.IcType,
+                                      Type = resource.Type,
                                       DataSheetPdfPath = resource.DatasheetPath,
                                       ManufacturersPartNumber = resource.TheirPartNumber
             };

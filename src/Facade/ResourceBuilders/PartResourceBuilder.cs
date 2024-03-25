@@ -113,9 +113,25 @@
                            FootprintRef1 = part.FootprintRef1,
                            FootprintRef2 = part.FootprintRef2,
                            FootprintRef3 = part.FootprintRef3,
-                           IcType = part.IcType,
+                           Type = part.Type,
                            DatasheetPath = part.DataSheetPdfPath,
-                           TheirPartNumber = part.ManufacturersPartNumber
+                           TheirPartNumber = part.ManufacturersPartNumber,
+                           TemperatureCoefficient = part.TemperatureCoefficient,
+                           Device = part.Device,
+                           RkmValue = part.RkmValue,
+                           Dielectric = part.Dielectric,
+                           Construction = part.Construction,
+                           CapNegativeTolerance = part.CapNegativeTolerance,
+                           CapPositiveTolerance = part.CapPositiveTolerance,
+                           CapVoltageRating = part.CapVoltageRating,
+                           Capacitance = part.Capacitance,
+                           Frequency = part.Frequency,
+                           FrequencyLabel = part.FrequencyLabel,
+                           SimKind = part.SimKind,
+                           SimSubKind = part.SimSubKind,
+                           SimModelName = part.SimModelName,
+                           AltiumValue = part.AltiumValue,
+                           ResistorTolerance = part.ResistorTolerance
             };
         }
 

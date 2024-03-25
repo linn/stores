@@ -179,7 +179,7 @@
             from.FootprintRef2 = to.FootprintRef2;
             from.FootprintRef3 = to.FootprintRef3;
             from.ManufacturersPartNumber = to.ManufacturersPartNumber;
-            from.IcType = to.IcType;
+            from.Type = to.Type;
             from.DataSheetPdfPath = to.DataSheetPdfPath;
         }
 
@@ -288,7 +288,7 @@
 
             part.ManufacturersPartNumber = source.MechPartManufacturerAlts?.FirstOrDefault(x => x.Preference == 1)?.PartNumber;
 
-            part.IcType = source.IcType;
+            part.Type = source.IcType;
 
             var to = this.phoneList.FindBy(x => x.UserNumber == 16008);
             var bcc1 = this.phoneList.FindBy(x => x.UserNumber == 33145);
