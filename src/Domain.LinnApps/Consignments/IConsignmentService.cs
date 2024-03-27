@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Consignments
 {
+    using System.Collections.Generic;
+
     using Linn.Stores.Domain.LinnApps.Consignments.Models;
     using Linn.Stores.Domain.LinnApps.Models;
 
@@ -12,5 +14,7 @@
         PackingList GetPackingList(int consignmentId);
 
         ProcessResult SaveConsignmentDocuments(int resourceConsignmentId);
+
+        IEnumerable<Consignment> GetByInvoiceNumber(int invoiceNumber);
     }
 }

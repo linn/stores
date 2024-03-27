@@ -96,7 +96,10 @@ function Consignment({
     salesOutletAddressesSearchResults,
     salesOutletAddressesSearchLoading,
     searchSalesOutletAddresses,
-    clearSalesOutletAddresses
+    clearSalesOutletAddresses,
+    consignmentsSearchResults,
+    consignmentsSearchLoading,
+    searchConsignments
 }) {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [termsMessage, setTermsMessage] = useState(false);
@@ -124,6 +127,8 @@ function Consignment({
         originalConsignment: null
     });
     const [newCarton, setNewCarton] = useState({});
+    const [invoiceNumber, setInvoiceNumber] = useState(null);
+    const [lookupMess, setLookupMess] = useState(null);
 
     const getItemTypeDisplay = itemType => {
         switch (itemType) {
@@ -227,6 +232,18 @@ function Consignment({
         }
     }, [item, getHub, getCarrier, getShippingTerm, clearHub, clearShippingTerm]);
 
+    useEffect(() => {
+        if (consignmentsSearchResults && invoiceNumber && !consignmentIdSelect) {
+            const firstConsignment = consignmentsSearchResults[0];
+            if (firstConsignment) {
+                setConsignmentIdSelect(firstConsignment.consignmentId);
+                setLookupMess(`Found consignment ${firstConsignment.consignmentId}`);
+            } else {
+                setLookupMess('No consignment found');
+            }
+        }
+    }, [consignmentsSearchResults, invoiceNumber, consignmentIdSelect]);
+
     const useStyles = makeStyles(theme => ({
         pullRight: {
             float: 'right'
@@ -282,6 +299,11 @@ function Consignment({
     const handleCreate = () => {
         createConsignment();
         setcurrentTab(1);
+    };
+
+    const lookupConsignmentFromInvoice = () => {
+        searchConsignments(null, `&invoiceNumber=${invoiceNumber}`);
+        setLookupMess('No consignment found');
     };
 
     const closeConsignment = () => {
@@ -673,7 +695,7 @@ function Consignment({
                                         </span>
                                     </Tooltip>
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid item xs={6}>
                                     <InputField
                                         label="Select Consignment By Id"
                                         placeholder="Consignment Id"
@@ -691,6 +713,30 @@ function Consignment({
                                     >
                                         Show Consignment
                                     </Button>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    {consignmentsSearchLoading ? (
+                                        <Loading />
+                                    ) : (
+                                        <>
+                                            <InputField
+                                                label="Find Consignment by Invoice Number"
+                                                placeholder="Invoice Number"
+                                                propertyName="invoiceNumber"
+                                                value={invoiceNumber}
+                                                onChange={(_, val) => setInvoiceNumber(val)}
+                                            />
+                                            <Button
+                                                style={{ marginTop: '10px' }}
+                                                variant="outlined"
+                                                color="primary"
+                                                onClick={() => lookupConsignmentFromInvoice()}
+                                            >
+                                                Lookup
+                                            </Button>
+                                            <Typography>{lookupMess}</Typography>
+                                        </>
+                                    )}
                                 </Grid>
                                 <Grid item xs={12}>
                                     <LinkButton
@@ -1389,7 +1435,12 @@ Consignment.propTypes = {
     salesOutletAddressesSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     salesOutletAddressesSearchLoading: PropTypes.bool,
     searchSalesOutletAddresses: PropTypes.func.isRequired,
-    clearSalesOutletAddresses: PropTypes.func.isRequired
+    clearSalesOutletAddresses: PropTypes.func.isRequired,
+    consignmentsSearchResults: PropTypes.arrayOf(
+        PropTypes.shape({ consignmentId: PropTypes.number })
+    ),
+    consignmentsSearchLoading: PropTypes.bool,
+    searchConsignments: PropTypes.func.isRequired
 };
 
 Consignment.defaultProps = {
@@ -1430,7 +1481,9 @@ Consignment.defaultProps = {
     addressesSearchResults: [],
     addressesSearchLoading: false,
     salesOutletAddressesSearchResults: [],
-    salesOutletAddressesSearchLoading: false
+    salesOutletAddressesSearchLoading: false,
+    consignmentsSearchResults: [],
+    consignmentsSearchLoading: false
 };
 
 export default Consignment;
