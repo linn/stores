@@ -91,7 +91,6 @@
                     entity.CarrierRef = updateResource.CarrierRef;
                     entity.MasterCarrierRef = updateResource.MasterCarrierRef;
                 }
-
             }
             else
             {
@@ -143,13 +142,14 @@
                     existingPallet.Width = updatePallet.Width;
                     existingPallet.Depth = updatePallet.Depth;
                 }
+            }
 
-                var removedPallets = entity.Pallets.Where(
-                    e => updatePallets.Select(a => a.PalletNumber).Contains(e.PalletNumber) == false).ToList();
-                foreach (var removedPallet in removedPallets)
-                {
-                    entity.Pallets.RemoveAt(entity.Pallets.IndexOf(removedPallet));
-                }
+            var removedPallets = entity.Pallets
+                .Where(e => updatePallets.Select(a => a.PalletNumber).Contains(e.PalletNumber) == false)
+                .ToList();
+            foreach (var removedPallet in removedPallets)
+            {
+                entity.Pallets.RemoveAt(entity.Pallets.IndexOf(removedPallet));
             }
         }
 
