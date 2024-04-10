@@ -118,7 +118,7 @@
             return new ProcessResult(true, $"{labelCount} pallet label(s) printed");
         }
 
-        public ProcessResult PrintAddressLabel(int addressId, int userNumber, int numberOfCopies = 1)
+        public ProcessResult PrintAddressLabel(int addressId, string line1, string line2, int userNumber, int numberOfCopies = 1)
         {
             var address = this.addressRepository.FindById(addressId);
             if (address == null)
@@ -129,7 +129,7 @@
             string labelData = null;
             try
             {
-                labelData = $"\"{this.GetPrintAddress(address)}\", \"\"";
+                labelData = $"\"{this.GetPrintAddress(address)}\", \"{this.GetGeneralText(line1, line2, string.Empty, string.Empty, string.Empty)}\"";
             }
             catch (ProcessException exception)
             {
@@ -197,6 +197,12 @@
 
         private string GetLabelInformation(Consignment consignment, int cartonNumber)
         {
+            if (consignment == null)
+            {
+                return
+                    $"Carton: {Environment.NewLine}Article:{Environment.NewLine}Serial No: {Environment.NewLine}Order: {Environment.NewLine}Consignment: ";
+            }
+
             var item = consignment.Items.FirstOrDefault(a =>
                 a.ContainerNumber == cartonNumber && (a.ItemType == "C" || a.ItemType == "S"));
 

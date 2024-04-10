@@ -246,6 +246,22 @@ export default function LabelReprint({
                           ${addressInfo.line3 ? addressInfo.line3 : ''}\n
                           ${addressInfo.line4 ? addressInfo.line1 : ''}`}
                         </Typography>
+                        <br />
+                        <InputField
+                            label="Additional Info"
+                            placeholder="line 1"
+                            fullWidth
+                            value={labelOptions.line1}
+                            onChange={handleFieldChange}
+                            propertyName="line1"
+                        />
+                        <InputField
+                            placeholder="line 2"
+                            fullWidth
+                            value={labelOptions.line2}
+                            onChange={handleFieldChange}
+                            propertyName="line2"
+                        />
                     </Grid>
                 )}
 

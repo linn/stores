@@ -29,6 +29,8 @@
 
         private readonly IRepository<ExportBook, int> exportBookRepository;
 
+        private readonly IRepository<Invoice, int> invoiceRepository;
+
         public ConsignmentService(
             IRepository<Consignment, int> consignmentRepository,
             IRepository<ExportBook, int> exportBookRepository,
@@ -37,7 +39,8 @@
             IExportBookPack exportBookPack,
             IPrintInvoiceDispatcher printInvoiceDispatcher,
             IPrintConsignmentNoteDispatcher printConsignmentNoteDispatcher,
-            IRepository<PrinterMapping, int> printerMappingRepository)
+            IRepository<PrinterMapping, int> printerMappingRepository,
+            IRepository<Invoice, int> invoiceRepository)
         {
             this.consignmentProxyService = consignmentProxyService;
             this.invoicingPack = invoicingPack;
@@ -47,6 +50,7 @@
             this.printerMappingRepository = printerMappingRepository;
             this.consignmentRepository = consignmentRepository;
             this.exportBookRepository = exportBookRepository;
+            this.invoiceRepository = invoiceRepository;
         }
 
         public void CloseConsignment(Consignment consignment, int closedById)
@@ -190,6 +194,29 @@
                 $"Packing List {consignment.ConsignmentId}.pdf");
 
             return new ProcessResult(true, $"Documents saved for consignment {consignmentId}");
+        }
+
+        public IEnumerable<Consignment> GetByInvoiceNumber(int invoiceNumber)
+        {
+            var invoice = this.invoiceRepository.FindById(invoiceNumber);
+            if (invoice == null)
+            {
+                return new List<Consignment>();
+            }
+
+            if (invoice.ConsignmentId == null)
+            {
+                return new List<Consignment>();
+            }
+
+            var consignment = this.consignmentRepository.FindById(invoice.ConsignmentId.Value);
+
+            if (consignment == null)
+            {
+                return null;
+            }
+
+            return new List<Consignment>() { consignment };
         }
 
         private string PackingListDescription(ConsignmentItem selectedItem, IEnumerable<ConsignmentItem> items)

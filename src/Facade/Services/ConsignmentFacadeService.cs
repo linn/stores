@@ -8,6 +8,7 @@
     using Linn.Common.Facade;
     using Linn.Common.Persistence;
     using Linn.Common.Proxy.LinnApps;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Domain.LinnApps.Consignments;
     using Linn.Stores.Domain.LinnApps.Exceptions;
     using Linn.Stores.Resources.Consignments;
@@ -90,7 +91,6 @@
                     entity.CarrierRef = updateResource.CarrierRef;
                     entity.MasterCarrierRef = updateResource.MasterCarrierRef;
                 }
-
             }
             else
             {
@@ -142,13 +142,14 @@
                     existingPallet.Width = updatePallet.Width;
                     existingPallet.Depth = updatePallet.Depth;
                 }
+            }
 
-                var removedPallets = entity.Pallets.Where(
-                    e => updatePallets.Select(a => a.PalletNumber).Contains(e.PalletNumber) == false).ToList();
-                foreach (var removedPallet in removedPallets)
-                {
-                    entity.Pallets.RemoveAt(entity.Pallets.IndexOf(removedPallet));
-                }
+            var removedPallets = entity.Pallets
+                .Where(e => updatePallets.Select(a => a.PalletNumber).Contains(e.PalletNumber) == false)
+                .ToList();
+            foreach (var removedPallet in removedPallets)
+            {
+                entity.Pallets.RemoveAt(entity.Pallets.IndexOf(removedPallet));
             }
         }
 
@@ -238,6 +239,17 @@
             }
 
             return this.GetAll();
+        }
+
+        public IResult<IEnumerable<Consignment>> GetByInvoiceNumber(int invoiceNumber)
+        {
+            var consignments = this.consignmentService.GetByInvoiceNumber(invoiceNumber);
+            if (consignments == null)
+            {
+                return new NotFoundResult<IEnumerable<Consignment>>("Could not find consignment");
+            }
+
+            return new SuccessResult<IEnumerable<Consignment>>(consignments);
         }
     }
 }

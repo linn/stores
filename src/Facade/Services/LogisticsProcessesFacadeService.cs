@@ -68,7 +68,7 @@
                         }
 
                         labelServiceResult = this.logisticsLabelService.PrintAddressLabel(
-                            resource.AddressId.Value,
+                            resource.AddressId.Value, string.Empty, string.Empty,
                             resource.UserNumber,
                             resource.NumberOfCopies);
                     }

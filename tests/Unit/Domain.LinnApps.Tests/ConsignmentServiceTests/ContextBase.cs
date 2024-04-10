@@ -38,6 +38,8 @@
 
         protected IRepository<PrinterMapping, int> PrinterMappingRepository { get; private set; }
 
+        protected IRepository<Invoice, int> InvoiceRepository { get; private set; }
+
         [SetUp]
         public void SetUpContext()
         {
@@ -49,6 +51,7 @@
             this.PrintInvoiceDispatcher = Substitute.For<IPrintInvoiceDispatcher>();
             this.PrintConsignmentNoteDispatcher = Substitute.For<IPrintConsignmentNoteDispatcher>();
             this.PrinterMappingRepository = Substitute.For<IRepository<PrinterMapping, int>>();
+            this.InvoiceRepository = Substitute.For<IRepository<Invoice, int>>();
 
             this.ConsignmentId = 808;
             this.Consignment = new Consignment
@@ -145,7 +148,8 @@
                 this.ExportBookPack,
                 this.PrintInvoiceDispatcher,
                 this.PrintConsignmentNoteDispatcher,
-                this.PrinterMappingRepository);
+                this.PrinterMappingRepository,
+                this.InvoiceRepository);
         }
     }
 }
