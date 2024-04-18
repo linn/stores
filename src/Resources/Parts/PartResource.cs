@@ -174,8 +174,6 @@
 
         public int? SourceId { get; set; }
 
-        public int SourceCreatedBy { get; set; }
-
         public IEnumerable<MechPartManufacturerAltResource> Manufacturers { get; set; }
 
         public string SalesArticleNumber { get; set; }
@@ -198,13 +196,13 @@
 
         public string DatasheetPath { get; set; }
 
-        public string Type { get; set; }
+        public string AltiumType { get; set; }
 
         public int? TemperatureCoefficient { get; set; }
 
         public string Device { get; set; }
 
-        public string RkmValue { get; set; }
+        public string AltiumValueRkm { get; set; }
 
         public string Dielectric { get; set; }
 
@@ -215,8 +213,6 @@
         public int? CapPositiveTolerance { get; set; }
 
         public decimal? CapVoltageRating { get; set; }
-
-        public decimal? Capacitance { get; set; }
 
         public string Frequency { get; set; }
 

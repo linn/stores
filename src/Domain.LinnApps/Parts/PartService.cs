@@ -179,7 +179,7 @@
             from.FootprintRef2 = to.FootprintRef2;
             from.FootprintRef3 = to.FootprintRef3;
             from.ManufacturersPartNumber = to.ManufacturersPartNumber;
-            from.Type = to.Type;
+            from.AltiumType = to.AltiumType;
             from.DataSheetPdfPath = to.DataSheetPdfPath;
         }
 
@@ -288,7 +288,33 @@
 
             part.ManufacturersPartNumber = source.MechPartManufacturerAlts?.FirstOrDefault(x => x.Preference == 1)?.PartNumber;
 
-            part.Type = source.IcType;
+            part.AltiumType = source.IcType;
+
+            part.LibraryName = source.LibraryName;
+
+            part.ResistorTolerance = source.ResistorTolerance;
+
+            if (part.LibraryName == "Resistors")
+            {
+                part.AltiumValueRkm = source.RkmCode;
+                part.AltiumValue = source.Resistance.ToString();
+            }
+            else if (part.LibraryName == "Capacitors")
+            {
+                part.AltiumValueRkm = source.CapacitanceLetterAndNumeralCode;
+                part.AltiumValue = source.Resistance.ToString();
+            }
+
+            part.CapNegativeTolerance = source.CapacitorNegativeTolerance;
+            part.CapPositiveTolerance = source.CapacitorPositiveTolerance;
+            part.CapVoltageRating = source.CapacitorVoltageRating;
+
+            part.TemperatureCoefficient = source.TemperatureCoefficient;
+
+            part.Dielectric = source.CapacitorDielectric;
+            part.Construction = source.Construction;
+
+            part.Device = source.TransistorDeviceName;
 
             var to = this.phoneList.FindBy(x => x.UserNumber == 16008);
             var bcc1 = this.phoneList.FindBy(x => x.UserNumber == 33145);

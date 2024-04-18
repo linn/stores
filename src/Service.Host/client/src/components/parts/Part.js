@@ -504,7 +504,12 @@ function Part({
                                     footprintRef3={state.part.footprintRef3}
                                     theirPartNumber={state.part.theirPartNumber}
                                     datasheetPath={state.part.datasheetPath}
-                                    icType={state.part.icType}
+                                    altiumType={state.part.altiumType}
+                                    altiumValue={state.part.altiumValue}
+                                    altiumValueRkm={state.part.altiumValueRkm}
+                                    construction={state.part.construction}
+                                    temperatureCoefficient={state.part.temperatureCoefficient}
+                                    resistorTolerance={state.part.resistorTolerance}
                                 />
                             )}
                             <Grid item xs={12}>

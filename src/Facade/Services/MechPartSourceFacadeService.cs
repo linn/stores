@@ -18,8 +18,6 @@
 
         private readonly IPartRepository partRepository;
 
-        private readonly IQueryRepository<RootProduct> rootProductRepository;
-
         private readonly IQueryRepository<Supplier> supplierRepository;
 
         private readonly IRepository<Manufacturer, string> manufacturerRepository;
@@ -44,7 +42,6 @@
             this.partRepository = partRepository;
             this.databaseService = databaseService;
             this.supplierRepository = supplierRepository;
-            this.rootProductRepository = rootProductRepository;
             this.manufacturerRepository = manufacturerRepository;
         }
 
