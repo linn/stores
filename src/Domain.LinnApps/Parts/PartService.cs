@@ -181,6 +181,18 @@
             from.ManufacturersPartNumber = to.ManufacturersPartNumber;
             from.AltiumType = to.AltiumType;
             from.DataSheetPdfPath = to.DataSheetPdfPath;
+            from.TemperatureCoefficient = to.TemperatureCoefficient;
+            from.Device = to.Device;
+            from.Construction = to.Construction;
+            from.Dielectric = to.Dielectric;
+            from.CapNegativeTolerance = to.CapNegativeTolerance;
+            from.CapPositiveTolerance = to.CapPositiveTolerance;
+            from.CapVoltageRating = to.CapVoltageRating;
+            from.Frequency = to.Frequency;
+            from.FrequencyLabel = to.FrequencyLabel;
+            from.AltiumValue = to.AltiumValue;
+            from.AltiumValueRkm = to.AltiumValueRkm;
+            from.ResistorTolerance = to.ResistorTolerance;
         }
 
         public Part CreatePart(Part partToCreate, List<string> privileges, bool fromTemplate)
