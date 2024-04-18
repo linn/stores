@@ -510,6 +510,11 @@ function Part({
                                     construction={state.part.construction}
                                     temperatureCoefficient={state.part.temperatureCoefficient}
                                     resistorTolerance={state.part.resistorTolerance}
+                                    device={state.part.device}
+                                    dielectric={state.part.dielectric}
+                                    CapVoltageRating={state.part.CapVoltageRating}
+                                    CapNegativeTolerance={state.part.CapNegativeTolerance}
+                                    CapPositiveTolerance={state.part.CapPositiveTolerance}
                                 />
                             )}
                             <Grid item xs={12}>

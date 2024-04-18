@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { InputField, Dropdown } from '@linn-it/linn-form-components-library';
+import Typography from '@material-ui/core/Typography';
 
 function CadInfoTab({
     handleFieldChange,
@@ -18,10 +19,24 @@ function CadInfoTab({
     altiumValueRkm,
     construction,
     temperatureCoefficient,
-    resistorTolerance
+    resistorTolerance,
+    device,
+    dielectric,
+    capNegativeTolerance,
+    capPositiveTolerance,
+    capVoltageRating,
+    frequency,
+    frequencyLabel
 }) {
     return (
         <Grid container spacing={3}>
+            <Grid item xs={12}>
+                <Typography variant="subtitle1">
+                    The information on this tab informs the values that propogate through to the
+                    libraries for use in Altium. The fields will differ depending on the Library
+                    Name, which ultimately decides which library this part will appear in
+                </Typography>
+            </Grid>
             <Grid item xs={6}>
                 <Dropdown
                     label="Library Name"
@@ -87,7 +102,7 @@ function CadInfoTab({
                 />
             </Grid>
             <Grid item xs={6} />
-            <Grid item xs={6}>
+            <Grid item xs={12}>
                 <InputField
                     fullWidth
                     value={datasheetPath}
@@ -96,7 +111,6 @@ function CadInfoTab({
                     propertyName="datasheetPath"
                 />
             </Grid>
-            <Grid item xs={6} />
             <Grid item xs={6}>
                 <InputField
                     fullWidth
@@ -104,6 +118,16 @@ function CadInfoTab({
                     label="Type"
                     onChange={handleFieldChange}
                     propertyName="altiumType"
+                />
+            </Grid>
+            <Grid item xs={6} />
+            <Grid item xs={6}>
+                <InputField
+                    fullWidth
+                    value={device}
+                    label="Device"
+                    onChange={handleFieldChange}
+                    propertyName="device"
                 />
             </Grid>
             <Grid item xs={6} />
@@ -145,30 +169,78 @@ function CadInfoTab({
                     <Grid item xs={6} />
                 </>
             )}
-            {libraryName === 'Resistors' ||
-            libraryName === 'Capacitors' ||
-            libraryName === 'Inductors & Transformers' ? (
+            {libraryName === 'Capacitors' && (
                 <>
                     <Grid item xs={6}>
                         <InputField
                             fullWidth
-                            value={construction}
-                            label="Construction"
+                            value={dielectric}
+                            label="Dielectric"
                             onChange={handleFieldChange}
-                            propertyName="construction"
+                            propertyName="dielectric"
                         />
                     </Grid>
                     <Grid item xs={6} />
                     <Grid item xs={6}>
                         <InputField
                             fullWidth
-                            value={temperatureCoefficient}
-                            label="Temp Coeff"
+                            value={capVoltageRating}
+                            label="Voltage Rating"
                             onChange={handleFieldChange}
-                            propertyName="temperatureCoefficient"
+                            propertyName="capVoltageRatingc"
                         />
                     </Grid>
                     <Grid item xs={6} />
+                    <Grid item xs={6}>
+                        <InputField
+                            fullWidth
+                            value={capPositiveTolerance}
+                            label="Positive Tolerance"
+                            onChange={handleFieldChange}
+                            propertyName="capPositiveTolerance"
+                        />
+                    </Grid>
+                    <Grid item xs={6} />
+                    <Grid item xs={6}>
+                        <InputField
+                            fullWidth
+                            value={capNegativeTolerance}
+                            label="Negative Tolerance"
+                            onChange={handleFieldChange}
+                            propertyName="capNegativeTolerance"
+                        />
+                    </Grid>
+                    <Grid item xs={6} />
+                </>
+            )}
+            {libraryName === 'Crystals' && (
+                <>
+                    <Grid item xs={6}>
+                        <InputField
+                            fullWidth
+                            value={frequency}
+                            label="Frequency"
+                            onChange={handleFieldChange}
+                            propertyName="frequency"
+                        />
+                    </Grid>
+                    <Grid item xs={6} />
+                    <Grid item xs={6}>
+                        <InputField
+                            fullWidth
+                            value={frequencyLabel}
+                            label="Frequency Label"
+                            onChange={handleFieldChange}
+                            propertyName="frequencyLabel"
+                        />
+                    </Grid>
+                    <Grid item xs={6} />
+                </>
+            )}
+            {libraryName === 'Resistors' ||
+            libraryName === 'Capacitors' ||
+            libraryName === 'Inductors & Transformers' ? (
+                <>
                     <Grid item xs={6}>
                         <InputField
                             fullWidth
@@ -223,7 +295,14 @@ CadInfoTab.propTypes = {
     altiumValueRkm: PropTypes.string,
     construction: PropTypes.string,
     temperatureCoefficient: PropTypes.string,
-    resistorTolerance: PropTypes.string
+    resistorTolerance: PropTypes.string,
+    device: PropTypes.string,
+    dielectric: PropTypes.string,
+    capNegativeTolerance: PropTypes.string,
+    capPositiveTolerance: PropTypes.string,
+    capVoltageRating: PropTypes.string,
+    frequency: PropTypes.string,
+    frequencyLabel: PropTypes.string
 };
 
 CadInfoTab.defaultProps = {
@@ -240,7 +319,14 @@ CadInfoTab.defaultProps = {
     altiumValueRkm: null,
     construction: null,
     temperatureCoefficient: null,
-    resistorTolerance: null
+    resistorTolerance: null,
+    device: null,
+    dielectric: null,
+    capNegativeTolerance: null,
+    capPositiveTolerance: null,
+    capVoltageRating: null,
+    frequency: null,
+    frequencyLabel: null
 };
 
 export default CadInfoTab;
