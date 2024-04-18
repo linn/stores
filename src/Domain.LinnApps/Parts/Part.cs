@@ -167,10 +167,40 @@
 
         public string FootprintRef3 { get; set; }
 
-        public string IcType { get; set; }
+        public string AltiumType { get; set; }
 
         public string ManufacturersPartNumber { get; set; }
 
         public string DataSheetPdfPath { get; set; }
+
+        public int? TemperatureCoefficient { get; set; }
+
+        public string Device { get; set; }
+
+        public string Construction { get; set; }
+
+        public string Dielectric { get; set; }
+
+        public int? CapNegativeTolerance { get; set; }
+
+        public int? CapPositiveTolerance { get; set; }
+
+        public decimal? CapVoltageRating { get; set; }
+
+        public string Frequency { get; set; }
+
+        public string FrequencyLabel { get; set; }
+
+        public string SimKind { get; set; } // todo - delete if this never ends up being used
+
+        public string SimSubKind { get; set; } // todo - delete if this never ends up being used
+
+        public string SimModelName { get; set; } // todo - delete if this never ends up being used
+
+        public string AltiumValue { get; set; }
+
+        public string AltiumValueRkm { get; set; }
+
+        public decimal? ResistorTolerance { get; set; }
     }
 }

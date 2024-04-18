@@ -179,8 +179,20 @@
             from.FootprintRef2 = to.FootprintRef2;
             from.FootprintRef3 = to.FootprintRef3;
             from.ManufacturersPartNumber = to.ManufacturersPartNumber;
-            from.IcType = to.IcType;
+            from.AltiumType = to.AltiumType;
             from.DataSheetPdfPath = to.DataSheetPdfPath;
+            from.TemperatureCoefficient = to.TemperatureCoefficient;
+            from.Device = to.Device;
+            from.Construction = to.Construction;
+            from.Dielectric = to.Dielectric;
+            from.CapNegativeTolerance = to.CapNegativeTolerance;
+            from.CapPositiveTolerance = to.CapPositiveTolerance;
+            from.CapVoltageRating = to.CapVoltageRating;
+            from.Frequency = to.Frequency;
+            from.FrequencyLabel = to.FrequencyLabel;
+            from.AltiumValue = to.AltiumValue;
+            from.AltiumValueRkm = to.AltiumValueRkm;
+            from.ResistorTolerance = to.ResistorTolerance;
         }
 
         public Part CreatePart(Part partToCreate, List<string> privileges, bool fromTemplate)
@@ -288,7 +300,33 @@
 
             part.ManufacturersPartNumber = source.MechPartManufacturerAlts?.FirstOrDefault(x => x.Preference == 1)?.PartNumber;
 
-            part.IcType = source.IcType;
+            part.AltiumType = source.IcType;
+
+            part.LibraryName = source.LibraryName;
+
+            part.ResistorTolerance = source.ResistorTolerance;
+
+            if (part.LibraryName == "Resistors")
+            {
+                part.AltiumValueRkm = source.RkmCode;
+                part.AltiumValue = source.Resistance.ToString();
+            }
+            else if (part.LibraryName == "Capacitors")
+            {
+                part.AltiumValueRkm = source.CapacitanceLetterAndNumeralCode;
+                part.AltiumValue = source.Capacitance.ToString();
+            }
+
+            part.CapNegativeTolerance = source.CapacitorNegativeTolerance;
+            part.CapPositiveTolerance = source.CapacitorPositiveTolerance;
+            part.CapVoltageRating = source.CapacitorVoltageRating;
+
+            part.TemperatureCoefficient = source.TemperatureCoefficient;
+
+            part.Dielectric = source.CapacitorDielectric;
+            part.Construction = source.Construction;
+
+            part.Device = source.TransistorDeviceName;
 
             var to = this.phoneList.FindBy(x => x.UserNumber == 16008);
             var bcc1 = this.phoneList.FindBy(x => x.UserNumber == 33145);
