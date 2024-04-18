@@ -314,7 +314,7 @@
             else if (part.LibraryName == "Capacitors")
             {
                 part.AltiumValueRkm = source.CapacitanceLetterAndNumeralCode;
-                part.AltiumValue = source.Resistance.ToString();
+                part.AltiumValue = source.Capacitance.ToString();
             }
 
             part.CapNegativeTolerance = source.CapacitorNegativeTolerance;
