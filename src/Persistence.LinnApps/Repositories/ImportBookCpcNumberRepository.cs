@@ -23,7 +23,7 @@
 
         public IQueryable<ImportBookCpcNumber> FindAll()
         {
-            return this.serviceDbContext.ImportBookCpcNumbers.Where(n => !n.DateInvalid.HasValue);
+            return this.serviceDbContext.ImportBookCpcNumbers;
         }
 
         public void Add(ImportBookCpcNumber entity)
