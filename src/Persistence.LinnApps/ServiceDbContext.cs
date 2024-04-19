@@ -1190,6 +1190,7 @@
             q.HasKey(e => e.CpcNumber);
             q.Property(e => e.CpcNumber).HasColumnName("CPC_NUMBER");
             q.Property(e => e.Description).HasColumnName("DESCRIPTION").HasMaxLength(30);
+            q.Property(e => e.DateInvalid).HasColumnName("DATE_INVALID");
         }
 
         private void BuildImportBookExchangeRates(ModelBuilder builder)

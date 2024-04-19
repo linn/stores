@@ -31,12 +31,19 @@ const mapStateToProps = (state, { match }) => ({
     countries: countriesSelectors.getItems(state),
     employees: employeesSelectors.getItems(state),
     exchangeRates: exchangeRatesSelectors.getSearchItems(state),
-    cpcNumbers: cpcNumbersSelectors.getItems(state)?.map(x => ({
-        displayText: `${x.cpcNumber === 13 ? `${x.cpcNumber} (IPR)` : x.cpcNumber} - ${
-            x.description
-        }`,
-        id: parseInt(x.cpcNumber, 10)
-    }))
+    cpcNumbers: cpcNumbersSelectors
+        .getItems(state)
+        ?.sort((a, b) => {
+            const dateInvalidA = a.dateInvalid ? 1 : -1;
+            const dateInvalidB = b.dateInvalid ? 1 : -1;
+            return dateInvalidA - dateInvalidB;
+        })
+        .map(x => ({
+            displayText: `${x.cpcNumber === 13 ? `${x.cpcNumber} (IPR)` : x.cpcNumber} - ${
+                x.description
+            } ${x.dateInvalid ? ' **INVALID** ' : ''}`,
+            id: parseInt(x.cpcNumber, 10)
+        }))
 });
 
 const initialise = ({ itemId }) => dispatch => {
