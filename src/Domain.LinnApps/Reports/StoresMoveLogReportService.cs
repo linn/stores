@@ -21,10 +21,7 @@
 
         public ResultsModel GetReport(DateTime fromDate, DateTime toDate, string partNumber, string transType, string location, string stockPool)
         {
-            var moveLog = this.repository.FilterBy(
-                l => l.PartNumber == partNumber && l.DateProcessed >= fromDate && l.DateProcessed <= toDate).ToList();
-
-            var filteredMoveLog = moveLog.Where(m => this.MatchesFilter(m, transType, location, stockPool)).ToList();
+            var filteredMoveLog = this.GetReportData(fromDate, toDate, partNumber, transType, location, stockPool);
 
             var model = new ResultsModel
                             {
@@ -62,6 +59,34 @@
             }
 
             return title;
+        }
+
+        private IList<StoresMoveLog> GetReportData(DateTime fromDate, DateTime toDate, string partNumber, string transType, string location, string stockPool)
+        {
+            if (!string.IsNullOrEmpty(partNumber))
+            {
+                var partMoveLog = this.repository.FilterBy(
+                    l => l.PartNumber == partNumber && l.DateProcessed >= fromDate && l.DateProcessed <= toDate).ToList();
+
+                return partMoveLog.Where(m => this.MatchesFilter(m, transType, location, stockPool)).ToList();
+            }
+
+            // for speed reasons
+            if (!string.IsNullOrEmpty(location))
+            {
+                var locationMoveLog = this.repository.FilterBy(
+                    l => l.DateProcessed >= fromDate && l.DateProcessed <= toDate && (l.FromLocation == location || l.ToLocation == location)).ToList();
+
+                return locationMoveLog.Where(m => this.MatchesFilter(m, transType, string.Empty, stockPool)).ToList();
+            }
+
+            // this could be massive
+            var moveLog = this.repository.FilterBy(
+                l => l.DateProcessed >= fromDate && l.DateProcessed <= toDate).ToList();
+
+            var filteredMoveLog = moveLog.Where(m => this.MatchesFilter(m, transType, location, stockPool)).ToList();
+
+            return filteredMoveLog;
         }
 
         private bool MatchesFilter(StoresMoveLog moveLog, string transType, string location, string stockPool)
