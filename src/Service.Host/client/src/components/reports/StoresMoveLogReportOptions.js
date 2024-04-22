@@ -51,7 +51,8 @@ export default function StoresMoveLogReportOptions({
         });
     };
 
-    const validateReportOptions = () => !!reportOptions.partNumber;
+    const validateReportOptions = () =>
+        reportOptions.partNumber || reportOptions.location || reportOptions.transType;
 
     const handleRunClick = () => {
         let searchString = `?partNumber=${
