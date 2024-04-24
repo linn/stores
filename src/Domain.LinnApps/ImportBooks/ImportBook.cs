@@ -39,7 +39,7 @@
 
         public string ExchangeCurrency { get; set; }
 
-        public decimal ExchangeRate { get; set; }
+        public decimal? ExchangeRate { get; set; }
 
         public string ForeignCurrency { get; set; }
 

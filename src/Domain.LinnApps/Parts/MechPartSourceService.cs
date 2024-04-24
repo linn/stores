@@ -59,10 +59,10 @@
 
             if (result.Contains("."))
             {
-                return result.Replace(".", unit) + "F";
+                return result.Replace(".", unit).ToUpper();
             }
 
-            return result + unit + "F";
+            return (result + unit).ToUpper();
         }
 
         public MechPartSource Create(MechPartSource candidate, IEnumerable<string> userPrivileges)

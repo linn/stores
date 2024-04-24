@@ -551,8 +551,24 @@
             e.Property(p => p.FootprintRef2).HasColumnName("FOOTPRINT_REF_2").HasMaxLength(100);
             e.Property(p => p.FootprintRef3).HasColumnName("FOOTPRINT_REF_3").HasMaxLength(100);
             e.Property(p => p.DataSheetPdfPath).HasColumnName("ALTIUM_DATASHEET_PATH").HasMaxLength(500);
-            e.Property(p => p.IcType).HasColumnName("ALTIUM_TYPE").HasMaxLength(100);
+            e.Property(p => p.AltiumType).HasColumnName("ALTIUM_TYPE").HasMaxLength(100);
             e.Property(p => p.ManufacturersPartNumber).HasColumnName("ALTIUM_THEIR_PART_NUMBER").HasMaxLength(100);
+            e.Property(p => p.TemperatureCoefficient).HasColumnName("TEMP_COEFF");
+            e.Property(p => p.Device).HasColumnName("ALTIUM_DEVICE").HasMaxLength(100);
+            e.Property(p => p.AltiumValueRkm).HasColumnName("ALTIUM_VALUE_RKM").HasMaxLength(100);
+            e.Property(p => p.AltiumValueRkm).HasColumnName("ALTIUM_VALUE_RKM").HasMaxLength(100);
+            e.Property(p => p.Dielectric).HasColumnName("CAP_DIELECTRIC").HasMaxLength(40);
+            e.Property(p => p.Construction).HasColumnName("CONSTRUCTION").HasMaxLength(14);
+            e.Property(p => p.CapNegativeTolerance).HasColumnName("CAP_NEGATIVE_TOLERANCE");
+            e.Property(p => p.CapPositiveTolerance).HasColumnName("CAP_POSITIVE_TOLERANCE");
+            e.Property(p => p.CapVoltageRating).HasColumnName("CAP_VOLTAGE_RATING");
+            e.Property(p => p.Frequency).HasColumnName("ALTIUM_FREQUENCY").HasMaxLength(100);
+            e.Property(p => p.FrequencyLabel).HasColumnName("ALTIUM_FREQUENCY_LABEL").HasMaxLength(100);
+            e.Property(p => p.SimKind).HasColumnName("SIM_KIND").HasMaxLength(100);
+            e.Property(p => p.SimSubKind).HasColumnName("SIM_SUBKIND").HasMaxLength(100);
+            e.Property(p => p.SimModelName).HasColumnName("SIM_MODEL_NAME").HasMaxLength(100);
+            e.Property(p => p.AltiumValue).HasColumnName("ALTIUM_VALUE").HasMaxLength(100);
+            e.Property(p => p.ResistorTolerance).HasColumnName("RES_TOLERANCE");
         }
 
         private void BuildPartDataSheets(ModelBuilder builder)
@@ -1174,6 +1190,7 @@
             q.HasKey(e => e.CpcNumber);
             q.Property(e => e.CpcNumber).HasColumnName("CPC_NUMBER");
             q.Property(e => e.Description).HasColumnName("DESCRIPTION").HasMaxLength(30);
+            q.Property(e => e.DateInvalid).HasColumnName("DATE_INVALID");
         }
 
         private void BuildImportBookExchangeRates(ModelBuilder builder)

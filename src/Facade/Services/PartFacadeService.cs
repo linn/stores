@@ -238,9 +238,24 @@
                                     FootprintRef1 = resource.FootprintRef1,
                                     FootprintRef2 = resource.FootprintRef2,
                                     FootprintRef3 = resource.FootprintRef3,
-                                    IcType = resource.IcType,
+                                    AltiumType = resource.AltiumType,
                                     DataSheetPdfPath = resource.DatasheetPath,
-                                    ManufacturersPartNumber = resource.TheirPartNumber
+                                    ManufacturersPartNumber = resource.TheirPartNumber,
+                                    ResistorTolerance = resource.ResistorTolerance,
+                                    AltiumValueRkm = resource.AltiumValueRkm,
+                                    CapNegativeTolerance = resource.CapNegativeTolerance,
+                                    CapPositiveTolerance = resource.CapPositiveTolerance,
+                                    Construction = resource.Construction,
+                                    AltiumValue = resource.AltiumValue,
+                                    Device = resource.Device,
+                                    Frequency = resource.Frequency,
+                                    Dielectric = resource.Dielectric,
+                                    TemperatureCoefficient = resource.TemperatureCoefficient,
+                                    FrequencyLabel = resource.FrequencyLabel,
+                                    CapVoltageRating = resource.CapVoltageRating,
+                                    SimKind = resource.SimKind,
+                                    SimSubKind = resource.SimSubKind,
+                                    SimModelName = resource.SimModelName
                                 };
             return this.partService.CreatePart(partToAdd, resource.UserPrivileges.ToList(), resource.FromTemplate);
         }
@@ -355,9 +370,24 @@
                                       FootprintRef1 = resource.FootprintRef1,
                                       FootprintRef2 = resource.FootprintRef2,
                                       FootprintRef3 = resource.FootprintRef3,
-                                      IcType = resource.IcType,
+                                      AltiumType = resource.AltiumType,
                                       DataSheetPdfPath = resource.DatasheetPath,
-                                      ManufacturersPartNumber = resource.TheirPartNumber
+                                      ManufacturersPartNumber = resource.TheirPartNumber,
+                                      ResistorTolerance = resource.ResistorTolerance,
+                                      AltiumValueRkm = resource.AltiumValueRkm,
+                                      CapNegativeTolerance = resource.CapNegativeTolerance,
+                                      CapPositiveTolerance = resource.CapPositiveTolerance,
+                                      Construction = resource.Construction,
+                                      AltiumValue = resource.AltiumValue,
+                                      Device = resource.Device,
+                                      Frequency = resource.Frequency,
+                                      Dielectric = resource.Dielectric,
+                                      TemperatureCoefficient = resource.TemperatureCoefficient,
+                                      FrequencyLabel = resource.FrequencyLabel,
+                                      CapVoltageRating = resource.CapVoltageRating,
+                                      SimKind = resource.SimKind,
+                                      SimSubKind = resource.SimSubKind,
+                                      SimModelName = resource.SimModelName
             };
           
             this.partService.UpdatePart(entity, updatedPart, resource.UserPrivileges.ToList(), resource.UpdatedBy.Value);
