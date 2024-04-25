@@ -1,60 +1,43 @@
 ﻿namespace Linn.Stores.Service.Tests.AccountingCompaniesModuleSpecs
 {
-    using System.Collections.Generic;
-    using System.Security.Claims;
-    using Linn.Common.Facade;
+    using System.Net.Http;
+
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
-    using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
+    using Linn.Stores.IoC;
     using Linn.Stores.Service.Modules;
-    using Linn.Stores.Service.ResponseProcessors;
+    using Linn.Stores.Service.Tests;
 
-    using Nancy.Testing;
+    using Microsoft.Extensions.DependencyInjection;
 
     using NSubstitute;
 
     using NUnit.Framework;
 
-    public class ContextBase : NancyContextBase
+    public class ContextBase
     {
-        protected IAccountingCompanyService AccountingCompaniesService { get; private set; }
+        protected HttpClient Client { get; set; }
+
+        protected HttpResponseMessage Response { get; set; }
+
+        protected IAccountingCompanyService AccountingCompanyFacadeService { get; private set; }
 
         protected IQueryRepository<AccountingCompany> AccountingCompanyRepository { get; private set; }
 
         [SetUp]
-        public void EstablishContext()
+        public void SetUpContext()
         {
-            this.AccountingCompaniesService = Substitute
-                .For<IAccountingCompanyService>();
+            this.AccountingCompanyRepository = Substitute.For<IQueryRepository<AccountingCompany>>();
+            this.AccountingCompanyFacadeService = new AccountingCompanyService(this.AccountingCompanyRepository);
 
-            this.AccountingCompanyRepository = Substitute
-                .For<IQueryRepository<AccountingCompany>>();
-           
-            var bootstrapper = new ConfigurableBootstrapper(
-                with =>
-                {
-                    with.Dependency(this.AccountingCompaniesService);
-                    with.Dependency(this.AccountingCompanyRepository);
-                    with.Dependency<IResourceBuilder<AccountingCompany>>(new AccountingCompanyResourceBuilder());
-                    with.Dependency<IResourceBuilder<IEnumerable<AccountingCompany>>>(new AccountingCompaniesResourceBuilder());
-                    with.Module<AccountingCompaniesModule>();
-                    with.ResponseProcessor<AccountingCompaniesResponseProcessor>();
-                    with.RequestStartup(
-                        (container, pipelines, context) =>
-                        {
-                            var claims = new List<Claim>
-                                                 {
-                                                         new Claim(ClaimTypes.Role, "employee"),
-                                                         new Claim(ClaimTypes.NameIdentifier, "test-user")
-                                                 };
-                            var user = new ClaimsIdentity(claims, "jwt");
-
-                            context.CurrentUser = new ClaimsPrincipal(user);
-                        });
-                });
-
-            this.Browser = new Browser(bootstrapper);
+            this.Client = TestClient.With<AccountingCompaniesModule>(
+                services =>
+                    {
+                        services.AddSingleton(this.AccountingCompanyFacadeService);
+                        services.AddHandlers();
+                        services.AddRouting();
+                    });
         }
     }
 }

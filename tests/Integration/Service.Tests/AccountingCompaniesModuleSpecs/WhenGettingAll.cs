@@ -1,16 +1,13 @@
 ﻿namespace Linn.Stores.Service.Tests.AccountingCompaniesModuleSpecs
 {
     using System.Collections.Generic;
-    using System.Linq;
+    using System.Net;
 
     using FluentAssertions;
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
-
-    using Nancy;
-    using Nancy.Testing;
 
     using NSubstitute;
 
@@ -30,7 +27,7 @@
                                    Name = "B", Description = "description B"
                                };
 
-            this.AccountingCompaniesService.GetValid()
+            this.AccountingCompanyFacadeService.GetValid()
                 .Returns(new SuccessResult<IEnumerable<AccountingCompany>>(new List<AccountingCompany> { companyA, companyB }));
 
             this.Response = this.Browser.Get(
@@ -50,7 +47,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.AccountingCompaniesService.Received().GetValid();
+            this.AccountingCompanyFacadeService.Received().GetValid();
         }
 
         [Test]

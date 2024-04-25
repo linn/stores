@@ -1,15 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>Linn.Stores.Service</AssemblyName>
     <RootNamespace>Linn.Stores.Service</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Linn.Common.Configuration" Version="2.0.0" />
-    <PackageReference Include="Linn.Common.Nancy.Facade" Version="2.3.0" />
-    <PackageReference Include="Nancy" Version="2.0.0" />
+    <PackageReference Include="linn.common.service.core" Version="0.0.3" />
   </ItemGroup>
 
   <ItemGroup>

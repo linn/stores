@@ -1,8 +1,8 @@
 ﻿namespace Linn.Stores.Facade.ResourceBuilders
 {
     using Linn.Common.Facade;
+    using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps.Models;
-    using Linn.Stores.Resources;
 
     public class ProcessResultResourceBuilder : IResourceBuilder<ProcessResult>
     {

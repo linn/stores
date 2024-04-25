@@ -5,7 +5,6 @@
     using System.Linq;
 
     using FluentAssertions;
-    using FluentAssertions.Common;
 
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps.ImportBooks;
@@ -21,11 +20,11 @@
 
         private readonly DateTime now = DateTime.Now;
 
+        private readonly int periodNumber = 5121;
+        
         private ImportBookResource resource;
 
         private IResult<ImportBook> result;
-
-        private readonly int periodNumber = 5121;
 
         [SetUp]
         public void SetUp()
@@ -284,9 +283,9 @@
         public void ShouldCallDomainWithRightData()
         {
             this.DomainService.Received().Create(Arg.Is<ImportBook>(x => x.ParcelNumber == this.resource.ParcelNumber));
-            var dataResult = ((CreatedResult<ImportBook>) this.result).Data;
+            var dataResult = ((CreatedResult<ImportBook>)this.result).Data;
             this.DomainService.Received()
-                .Create(Arg.Is<ImportBook>(x => x.DateCreated.IsSameOrEqualTo(this.now.AddDays(2))));
+                .Create(Arg.Is<ImportBook>(x => x.DateCreated.Equals(this.now.AddDays(2))));
 
             this.DomainService.Received().Create(
                 Arg.Is<ImportBook>(
@@ -425,9 +424,9 @@
         [Test]
         public void ShouldReturnCorrectData()
         {
-            var dataResult = ((CreatedResult<ImportBook>) this.result).Data;
+            var dataResult = ((CreatedResult<ImportBook>)this.result).Data;
             dataResult.PeriodNumber.Should().Be(this.periodNumber);
-            dataResult.DateCreated.IsSameOrEqualTo(this.now.AddDays(2)).Should().BeTrue();
+            dataResult.DateCreated.Should().BeCloseTo(this.now.AddDays(2), new TimeSpan(0, 1, 0));
             dataResult.ParcelNumber.Should().Be(this.resource.ParcelNumber);
             dataResult.SupplierId.Should().Be(this.resource.SupplierId);
             dataResult.ForeignCurrency.Should().Be(this.resource.ForeignCurrency);

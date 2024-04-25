@@ -1,59 +1,73 @@
 ﻿namespace Linn.Stores.Messaging.Host
 {
-    using System;
     using System.Threading;
-
-    using Autofac;
+    using System.Threading.Tasks;
 
     using Linn.Common.Logging;
-    using Linn.Common.Messaging.RabbitMQ;
-    using Linn.Common.Messaging.RabbitMQ.Unicast;
+    using Linn.Common.Messaging.RabbitMQ.Configuration;
 
-    public class Listener
+    using Microsoft.Extensions.Hosting;
+
+    using RabbitMQ.Client;
+    using RabbitMQ.Client.Events;
+
+    public class Listener : BackgroundService
     {
-        private readonly IReceiver receiver;
-        private readonly DedupingMessageConsumer consumer;
+        private readonly IModel channel;
+
+        private readonly string queueName;
+
+        private readonly EventingBasicConsumer consumer;
+
         private readonly ILog logger;
 
-        public Listener(ILifetimeScope scope, ILog logger)
+        private readonly ChannelConfiguration channelConfiguration;
+
+        public Listener(
+            EventingBasicConsumer consumer,
+            ChannelConfiguration channelConfiguration,
+            ILog logger)
         {
+            this.queueName = "sales";
+            this.consumer = consumer;
             this.logger = logger;
-            this.receiver = scope.Resolve<IReceiver>();
-            this.consumer = new DedupingMessageConsumer(new MessageConsumer(this.receiver), this.receiver);
-
-            this.logger.Info("Started pricing-listener");
-
-            this.consumer.For("stores.some-type")
-                .OnConsumed(m =>
-                    {
-                        using (var handlerScope = scope.BeginLifetimeScope("messageHandler"))
-                        {
-                            // var handler = handlerScope.Resolve<DiscountCacheHandler>();
-                            // return handler.Execute(m);
-                            return true;
-                        }
-                    })
-                .OnRejected(this.LogRejection);
+            this.channelConfiguration = channelConfiguration;
+            this.channel = this.channelConfiguration.ConsumerChannel;
         }
 
-        public void Listen()
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            try
+            this.logger.Info("Waiting for messages. To exit press CTRL+C");
+            this.consumer.Received += (_, ea) =>
             {
-                var message = this.receiver.Receive(5000);
-                this.consumer.Consume(message);
-            }
-            catch (Exception e)
-            {
-                this.logger.Error("Exception thrown by message handler: " + e.Message, e);
-                Thread.Sleep(1000);
-            }
+                // switch on message RoutingKey to decide which handler to use
+                // handlers process the message and return true if successful
+                // or log errors and return false if unsuccessful
+                bool success = ea.RoutingKey switch
+                {
+                    _ => false
+                };
+
+                if (success)
+                {
+                    // acknowledge successfully handled messages
+                    this.channelConfiguration.ConsumerChannel.BasicAck(ea.DeliveryTag, false);
+                }
+                else
+                {
+                    // reject problem messages
+                    this.channelConfiguration.ConsumerChannel.BasicReject(ea.DeliveryTag, false);
+                }
+            };
+            this.channel.BasicConsume(queue: $"{this.queueName}.q", autoAck: false, consumer: this.consumer);
+            await Task.CompletedTask;
         }
 
-        private void LogRejection(IReceivedMessage message)
+        public override Task StopAsync(CancellationToken stoppingToken)
         {
-            Console.WriteLine($"The message with Id {message.MessageId} was rejected.");
-            this.logger.Error($"The message with Id {message.MessageId} was rejected.");
+            this.channelConfiguration.Connection.Dispose();
+            this.logger.Info("Closing connection...");
+            return Task.CompletedTask;
         }
     }
 }

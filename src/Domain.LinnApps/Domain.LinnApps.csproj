@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>Linn.Stores.Domain.LinnApps</AssemblyName>
     <RootNamespace>Linn.Stores.Domain.LinnApps</RootNamespace>
   </PropertyGroup>
@@ -9,11 +9,11 @@
   <ItemGroup>
     <PackageReference Include="Linn.Common.Authorisation" Version="1.0.0" />
     <PackageReference Include="Linn.Common.Configuration" Version="2.0.0" />
-    <PackageReference Include="Linn.Common.Domain" Version="1.0.0" />
+    <PackageReference Include="Linn.Common.Domain" Version="1.2.0" />
     <PackageReference Include="Linn.Common.Domain.LinnApps" Version="1.0.0" />
     <PackageReference Include="Linn.Common.Logging" Version="2.0.0" />
     <PackageReference Include="Linn.Common.Persistence" Version="3.0.0" />
-    <PackageReference Include="Linn.Common.Reporting" Version="1.6.1" />
+    <PackageReference Include="Linn.Common.Reporting" Version="1.7.0" />
   </ItemGroup>
 
   <ItemGroup>

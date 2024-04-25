@@ -1,5 +1,7 @@
 ﻿namespace Linn.Stores.Resources.GoodsIn
 {
+    using Linn.Common.Resources;
+
     public class ValidateRsnResultResource : ProcessResultResource
     {
         public string State { get; set; }

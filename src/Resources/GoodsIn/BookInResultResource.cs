@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
 
+    using Linn.Common.Resources;
+
     public class BookInResultResource : ProcessResultResource
     {
         public int? OrderNumber { get; set; }

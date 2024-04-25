@@ -1,13 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>Linn.Stores.Messaging</AssemblyName>
     <RootNamespace>Linn.Stores.Messaging</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Linn.Common.Messaging.RabbitMQ.Autofac" Version="2.0.1" />
+    <PackageReference Include="Linn.Common.Messaging.RabbitMQ" Version="3.2.4" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>

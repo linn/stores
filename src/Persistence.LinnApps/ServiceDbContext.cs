@@ -49,7 +49,7 @@
 
         public DbSet<SernosSequence> SernosSequences { get; set; }
 
-        public DbQuery<UnitOfMeasure> UnitsOfMeasure { get; set; }
+        public DbSet<UnitOfMeasure> UnitsOfMeasure { get; set; }
 
         public DbSet<Supplier> Suppliers { get; set; }
 
@@ -65,11 +65,11 @@
 
         public DbSet<AssemblyTechnology> AssemblyTechnologies { get; set; }
 
-        public DbQuery<ChangeRequest> ChangeRequests { get; set; }
+        public DbSet<ChangeRequest> ChangeRequests { get; set; }
 
-        public DbQuery<WwdWork> WwdWorks { get; set; }
+        public DbSet<WwdWork> WwdWorks { get; set; }
 
-        public DbQuery<WwdWorkDetail> WwdWorkDetails { get; set; }
+        public DbSet<WwdWorkDetail> WwdWorkDetails { get; set; }
 
         public DbSet<Country> Countries { get; set; }
 
@@ -83,11 +83,11 @@
 
         public DbSet<StockLocator> StockLocators { get; set; }
 
-        public DbQuery<StoragePlace> StoragePlaces { get; set; }
+        public DbSet<StoragePlace> StoragePlaces { get; set; }
 
-        public DbQuery<StoresBudget> StoresBudgets { get; set; }
+        public DbSet<StoresBudget> StoresBudgets { get; set; }
 
-        public DbQuery<AuditLocation> AuditLocations { get; set; }
+        public DbSet<AuditLocation> AuditLocations { get; set; }
 
         public DbSet<SosAllocHead> SosAllocHeads { get; set; }
 
@@ -123,11 +123,7 @@
 
         public DbSet<Port> Ports { get; set; }
 
-        public DbSet<PartParamData> PartParamDataSheets { get; set; }
-
-        public DbSet<MechPartPurchasingQuote> MechPartPurchasingQuotes { get; set; }
-
-        public DbQuery<PartDataSheetValues> PartDataSheetValues { get; set; }
+        public DbSet<PartDataSheetValues> PartDataSheetValues { get; set; }
 
         public DbSet<PartTqmsOverride> PartTqmsOverrides { get; set; }
 
@@ -135,37 +131,35 @@
 
         public DbSet<TopUpListJobRef> TopUpListJobRefs { get; set; }
 
-        public DbSet<MechPartUsage> MechPartUsages { get; set; }
-
         public DbSet<StoresPallet> StoresPallets { get; set; }
 
-        public DbQuery<DespatchPickingSummary> DespatchPickingSummary { get; set; }
+        public DbSet<DespatchPickingSummary> DespatchPickingSummary { get; set; }
 
-        public DbQuery<DespatchPalletQueueDetail> DespatchPalletQueueDetails { get; set; }
+        public DbSet<DespatchPalletQueueDetail> DespatchPalletQueueDetails { get; set; }
 
         public DbSet<StorageLocation> StorageLocations { get; set; }
 
         public DbSet<InspectedState> InspectedStates { get; set; }
 
-        public DbQuery<StockLocatorLocation> StockLocatorLocationsView { get; set; }
+        public DbSet<StockLocatorLocation> StockLocatorLocationsView { get; set; }
 
-        public DbQuery<StockLocatorBatch> StockLocatorBatchesView { get; set; }
+        public DbSet<StockLocatorBatch> StockLocatorBatchesView { get; set; }
 
-        public DbQuery<WandConsignment> WandConsignments { get; set; }
+        public DbSet<WandConsignment> WandConsignments { get; set; }
 
-        public DbQuery<WandItem> WandItems { get; set; }
+        public DbSet<WandItem> WandItems { get; set; }
 
-        public DbQuery<ExportRsn> ExportRsns { get; set; }
+        public DbSet<ExportRsn> ExportRsns { get; set; }
 
         public DbSet<SalesAccount> SalesAccounts { get; set; }
 
         public DbSet<SalesOutlet> SalesOutlets { get; set; }
 
-        public DbQuery<StockQuantities> StockQuantitiesForMrView { get; set; }
+        public DbSet<StockQuantities> StockQuantitiesForMrView { get; set; }
 
         public DbSet<RequisitionHeader> RequisitionHeaders { get; set; }
 
-        public DbQuery<TransferableStock> TransferableStock { get; set; }
+        public DbSet<TransferableStock> TransferableStock { get; set; }
 
         public DbSet<Consignment> Consignments { get; set; }
 
@@ -175,9 +169,9 @@
 
         public DbSet<WandLog> WandLogs { get; set; }
 
-        public DbQuery<AvailableStock> StockAvailable { get; set; }
+        public DbSet<AvailableStock> StockAvailable { get; set; }
 
-        public DbQuery<StockLocatorPrices> StockLocatorView { get; set; }
+        public DbSet<StockLocatorPrices> StockLocatorView { get; set; }
 
         public DbSet<PartStorageType> PartStorageTypes { get; set; }
 
@@ -185,13 +179,13 @@
 
         public DbSet<SalesOrder> SalesOrders { get; set; }
 
-        public DbQuery<SalesOrderDetail> SalesOrderDetails { get; set; }
+        public DbSet<SalesOrderDetail> SalesOrderDetails { get; set; }
 
         public DbSet<InterCompanyInvoice> IntercompanyInvoices { get; set; }
 
         public DbSet<ReqMove> ReqMoves { get; set; }
 
-        public DbQuery<TqmsSummaryByCategory> TqmsSummaryByCategories { get; set; }
+        public DbSet<TqmsSummaryByCategory> TqmsSummaryByCategories { get; set; }
 
         public DbSet<TqmsMaster> TqmsMaster { get; set; }
 
@@ -199,7 +193,7 @@
 
         public DbSet<TqmsCategory> TqmsCategories { get; set; }
 
-        public DbQuery<TqmsOutstandingLoansByCategory> TqmsOutstandingLoansByCategories { get; set; }
+        public DbSet<TqmsOutstandingLoansByCategory> TqmsOutstandingLoansByCategories { get; set; }
 
         public DbSet<ConsignmentShipfile> ConsignmentShipfiles { get; set; }
 
@@ -221,7 +215,7 @@
 
         public DbSet<ShippingTerm> ShippingTerms { get; set; }
 
-        public DbQuery<LoanDetail> LoanDetails { get; set; }
+        public DbSet<LoanDetail> LoanDetails { get; set; }
 
         public DbSet<CartonType> CartonTypes { get; set; }
         
@@ -231,7 +225,7 @@
 
         public DbSet<StoresTransactionDefinition> StoresTransactionDefinitions { get; set; }
         
-        public DbQuery<StoresLabelType> StoresLabelTypes { get; set; }
+        public DbSet<StoresLabelType> StoresLabelTypes { get; set; }
 
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
 
@@ -241,33 +235,33 @@
 
         public DbSet<Tariff> Tariffs { get; set; }
 
-        public DbQuery<Loan> Loans { get; set; }
+        public DbSet<Loan> Loans { get; set; }
 
         public DbSet<StockTriggerLevel> StockTriggerLevels { get; set; }
 
         public DbSet<PurchaseLedger> PurchaseLedgers { get; set; }
 
-        public DbQuery<RsnAccessory> RsnAccessories { get; set; }
+        public DbSet<RsnAccessory> RsnAccessories { get; set; }
 
-        public DbQuery<RsnCondition> RsnConditions{ get; set; }
+        public DbSet<RsnCondition> RsnConditions{ get; set; }
 
         public DbSet<InvoiceDetail> InvoiceDetails { get; set; }
 
         public DbSet<PhoneListEntry> PhoneList { get; set; }
 
-        public DbQuery<MrPart> MrParts { get; set; }
+        public DbSet<MrPart> MrParts { get; set; }
 
-        public DbQuery<EuCreditInvoice> EuCreditInvoices { get; set; }
+        public DbSet<EuCreditInvoice> EuCreditInvoices { get; set; }
 
-        public DbQuery<ProductUpgradeRule> ProductUpgradeRules { get; set; }
+        public DbSet<ProductUpgradeRule> ProductUpgradeRules { get; set; }
 
-        public DbQuery<StoresMoveLog> StoresMoveLogs { get; set; }
+        public DbSet<StoresMoveLog> StoresMoveLogs { get; set; }
 
         public DbSet<PartLibrary> PartLibraries { get; set; }
 
         public DbSet<WarehouseLocation> WarehouseLocations { get; set; }
 
-        public DbQuery<DespatchPalletQueueScsDetail> DespatchPalletQueueScsDetails { get; set; }
+        public DbSet<DespatchPalletQueueScsDetail> DespatchPalletQueueScsDetails { get; set; }
 
         public DbSet<ScsStorePallet> ScsPallets { get; set; }
 
@@ -275,6 +269,7 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Model.AddAnnotation("MaxIdentifierLength", 30);
             this.BuildParts(builder);
             this.BuildParetoClasses(builder);
             this.BuildDepartments(builder);
@@ -320,7 +315,6 @@
             this.BuildImportBookTransportCodes(builder);
             this.BuildLedgerPeriods(builder);
             this.BuildPorts(builder);
-            builder.Model.Relational().MaxIdentifierLength = 30;
             this.BuildPartParamDataSheets(builder);
             this.QueryPartDataSheetValues(builder);
             this.BuildSosAllocDetails(builder);
@@ -850,8 +844,8 @@
 
         private void QueryUnitsOfMeasure(ModelBuilder builder)
         {
-            builder.Query<UnitOfMeasure>().ToView("UNITS_OF_MEASURE");
-            builder.Query<UnitOfMeasure>().Property(p => p.Unit).HasColumnName("UNIT_OF_MEASURE");
+            builder.Entity<UnitOfMeasure>().ToTable("UNITS_OF_MEASURE").HasNoKey();
+            builder.Entity<UnitOfMeasure>().Property(p => p.Unit).HasColumnName("UNIT_OF_MEASURE");
         }
 
         private void BuildNominals(ModelBuilder builder)
@@ -903,8 +897,8 @@
 
         private void QueryChangeRequests(ModelBuilder builder)
         {
-            var q = builder.Query<ChangeRequest>();
-            q.ToView("CHANGE_REQUESTS");
+            var q = builder.Entity<ChangeRequest>();
+            q.ToTable("CHANGE_REQUESTS").HasNoKey();
             q.Property(e => e.ChangeState).HasColumnName("CHANGE_STATE");
             q.Property(e => e.DocumentNumber).HasColumnName("DOCUMENT_NUMBER");
             q.Property(e => e.NewPartNumber).HasColumnName("NEW_PART_NUMBER");
@@ -913,8 +907,8 @@
 
         private void QueryWwdWorkDetails(ModelBuilder builder)
         {
-            var q = builder.Query<WwdWorkDetail>();
-            q.ToView("WWD_WORK_DETAILS");
+            var q = builder.Entity<WwdWorkDetail>();
+            q.ToTable("WWD_WORK_DETAILS").HasNoKey();
             q.Property(e => e.LocationGroup).HasColumnName("LOCATION_GROUP");
             q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER");
             q.Property(e => e.Quantity).HasColumnName("QTY");
@@ -924,8 +918,8 @@
 
         private void QueryWwdWorks(ModelBuilder builder)
         {
-            var q = builder.Query<WwdWork>();
-            q.ToView("WWD_WORK");
+            var q = builder.Entity<WwdWork>();
+            q.ToTable("WWD_WORK").HasNoKey();
             q.Property(e => e.JobId).HasColumnName("JOB_ID");
             q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER");
             q.Property(e => e.QuantityKitted).HasColumnName("QTY_KITTED");
@@ -961,8 +955,8 @@
 
         private void QueryStoragePlaces(ModelBuilder builder)
         {
-            var q = builder.Query<StoragePlace>();
-            q.ToView("V_STORAGE_PLACES");
+            var q = builder.Entity<StoragePlace>();
+            q.ToTable("V_STORAGE_PLACES").HasNoKey();
             q.Property(e => e.Description).HasColumnName("STORAGE_PLACE_DESCRIPTION");
             q.Property(e => e.Name).HasColumnName("STORAGE_PLACE");
             q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
@@ -972,15 +966,15 @@
 
         private void QueryStoresBudgets(ModelBuilder builder)
         {
-            var q = builder.Query<StoresBudget>();
-            q.ToView("STORES_BUDGETS");
+            var q = builder.Entity<StoresBudget>();
+            q.ToTable("STORES_BUDGETS").HasNoKey();
             q.Property(e => e.BudgetId).HasColumnName("BUDGET_ID");
         }
 
         private void QueryAuditLocations(ModelBuilder builder)
         {
-            var q = builder.Query<AuditLocation>();
-            q.ToView("V_AUDIT_LOCATIONS");
+            var q = builder.Entity<AuditLocation>();
+            q.ToTable("V_AUDIT_LOCATIONS").HasNoKey();
             q.Property(e => e.StoragePlace).HasColumnName("STORAGE_PLACE");
         }
 
@@ -1266,7 +1260,7 @@
 
         private void QueryPartDataSheetValues(ModelBuilder builder)
         {
-            var q = builder.Query<PartDataSheetValues>().ToView("PART_DATA_SHEET_VALUES");
+            var q = builder.Entity<PartDataSheetValues>().ToTable("PART_DATA_SHEET_VALUES").HasNoKey();
             q.Property(v => v.AttributeSet).HasColumnName("ATTRIBUTE_SET");
             q.Property(v => v.Description).HasColumnName("DESCRIPTION");
             q.Property(v => v.Field).HasColumnName("FIELD");
@@ -1338,7 +1332,7 @@
 
         private void QueryDespatchPickingSummary(ModelBuilder builder)
         {
-            var q = builder.Query<DespatchPickingSummary>().ToView("V_DPS_LINN");
+            var q = builder.Entity<DespatchPickingSummary>().ToTable("V_DPS_LINN").HasNoKey();
             q.Property(v => v.FromPlace).HasColumnName("FROM_PLACE");
             q.Property(v => v.Addressee).HasColumnName("ADDRESSEE");
             q.Property(v => v.PalletNumber).HasColumnName("PALLET_NUMBER");
@@ -1354,7 +1348,7 @@
 
         private void QueryDespatchPalletQueueDetails(ModelBuilder builder)
         {
-            var q = builder.Query<DespatchPalletQueueDetail>().ToView("V_DPQ_SUMMARY");
+            var q = builder.Entity<DespatchPalletQueueDetail>().ToTable("V_DPQ_SUMMARY").HasNoKey();
             q.Property(v => v.KittedFromTime).HasColumnName("KITTED_FROM");
             q.Property(v => v.PalletNumber).HasColumnName("PALLET_NUMBER");
             q.Property(v => v.PickingSequence).HasColumnName("PICKING_SEQUENCE");
@@ -1384,7 +1378,7 @@
 
         private void QueryStockLocatorLocationsView(ModelBuilder builder)
         {
-            var q = builder.Query<StockLocatorLocation>().ToView("STOCK_LOCATOR_LOC_VIEW");
+            var q = builder.Entity<StockLocatorLocation>().ToTable("STOCK_LOCATOR_LOC_VIEW").HasNoKey();
             q.Property(e => e.Quantity).HasColumnName("QTY");
             q.Property(e => e.StorageLocationId).HasColumnName("LOCATION_ID");
             q.HasOne(e => e.StorageLocation).WithMany(s => s.StockLocatorLocations).HasForeignKey("LOCATION_ID");
@@ -1401,7 +1395,7 @@
 
         private void QueryStockLocatorBatches(ModelBuilder builder)
         {
-            var q = builder.Query<StockLocatorBatch>().ToView("STOCK_LOCATOR_BATCH_VIEW");
+            var q = builder.Entity<StockLocatorBatch>().ToTable("STOCK_LOCATOR_BATCH_VIEW").HasNoKey();
             q.Property(e => e.Quantity).HasColumnName("QTY");
             q.Property(e => e.LocationId).HasColumnName("LOCATION_ID");
             q.Property(e => e.LocationCode).HasColumnName("LOCATION_CODE").HasMaxLength(16);
@@ -1419,7 +1413,7 @@
 
         private void QueryWandConsignments(ModelBuilder builder)
         {
-            var q = builder.Query<WandConsignment>().ToView("WAND_CONSIGNMENTS_VIEW");
+            var q = builder.Entity<WandConsignment>().ToTable("WAND_CONSIGNMENTS_VIEW").HasNoKey();
             q.Property(v => v.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
             q.Property(v => v.Addressee).HasColumnName("ADDRESSEE");
             q.Property(v => v.IsDone).HasColumnName("DONE");
@@ -1429,7 +1423,7 @@
 
         private void QueryWandItems(ModelBuilder builder)
         {
-            var q = builder.Query<WandItem>().ToView("WAND_ITEMS_VIEW");
+            var q = builder.Entity<WandItem>().ToTable("WAND_ITEMS_VIEW").HasNoKey();
             q.Property(v => v.ConsignmentId).HasColumnName("CONSIGNMENT_ID");
             q.Property(v => v.PartNumber).HasColumnName("PART_NUMBER");
             q.Property(v => v.PartDescription).HasColumnName("INVOICE_DESCRIPTION");
@@ -1450,7 +1444,7 @@
 
         private void QueryExportRsns(ModelBuilder builder)
         {
-            var q = builder.Query<ExportRsn>().ToView("EXPORT_RSNS_VIEW");
+            var q = builder.Entity<ExportRsn>().ToTable("EXPORT_RSNS_VIEW").HasNoKey();
             q.Property(e => e.RsnNumber).HasColumnName("RSN_NUMBER");
             q.Property(e => e.ReasonCodeAlleged).HasColumnName("REASON_CODE_ALLEGED").HasMaxLength(10);
             q.Property(e => e.DateEntered).HasColumnName("DATE_ENTERED");
@@ -1486,7 +1480,7 @@
 
         private void QueryStockQuantitIesForMrView(ModelBuilder builder)
         {
-            var q = builder.Query<StockQuantities>().ToView("V_STOCK_QTIES_FOR_MR");
+            var q = builder.Entity<StockQuantities>().ToTable("V_STOCK_QTIES_FOR_MR").HasNoKey();
             q.Property(s => s.PartNumber).HasColumnName("PART_NUMBER");
             q.Property(s => s.GoodStock).HasColumnName("GOOD_STOCK");
             q.Property(s => s.GoodStockAllocated).HasColumnName("GOOD_STOCK_ALLOCATED");
@@ -1573,7 +1567,7 @@
 
         private void QueryStockLocatorView(ModelBuilder builder)
         {
-            var view = builder.Query<StockLocatorPrices>().ToView("STOCK_LOCATOR_VIEW");
+            var view = builder.Entity<StockLocatorPrices>().ToTable("STOCK_LOCATOR_VIEW").HasNoKey();
             view.Property(v => v.StockLocatorId).HasColumnName("STOCK_LOCATOR_ID");
             view.Property(v => v.BatchDate).HasColumnName("STOCK_ROTATION_DATE");
             view.Property(v => v.QuantityAtLocation).HasColumnName("QTY");
@@ -1595,7 +1589,7 @@
 
         private void QueryStockAvailable(ModelBuilder builder)
         {
-            var q = builder.Query<AvailableStock>().ToView("STOCK_MOVE_STOCK_VIEW");
+            var q = builder.Entity<AvailableStock>().ToTable("STOCK_MOVE_STOCK_VIEW").HasNoKey();
             q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER");
             q.Property(e => e.QuantityAvailable).HasColumnName("QTY_FREE");
             q.Property(e => e.StockRotationDate).HasColumnName("STOCK_ROTATION_DATE");
@@ -1637,7 +1631,7 @@
 
         private void QueryTpkView(ModelBuilder builder)
         {
-            var q = builder.Query<TransferableStock>().ToView("V_TPK_OO");
+            var q = builder.Entity<TransferableStock>().ToTable("V_TPK_OO").HasNoKey();
             q.Property(s => s.LocationId).HasColumnName("LOCATION_ID");
             q.Property(s => s.LocationCode).HasColumnName("LOCATION_CODE");
             q.Property(s => s.PalletNumber).HasColumnName("PALLET_NUMBER");
@@ -1699,7 +1693,7 @@
 
         private void QuerySalesOrderDetails(ModelBuilder builder)
         {
-            var q = builder.Query<SalesOrderDetail>().ToView("SALES_ORDER_DETAILS");
+            var q = builder.Entity<SalesOrderDetail>().ToTable("SALES_ORDER_DETAILS").HasNoKey();
             q.Property(d => d.OrderLine).HasColumnName("ORDER_LINE");
             q.Property(d => d.OrderNumber).HasColumnName("ORDER_NUMBER");
             q.Property(d => d.NettTotal).HasColumnName("NETT_TOTAL");
@@ -1809,7 +1803,7 @@
 
         private void QueryTqmsSummaryByCategories(ModelBuilder builder)
         {
-            var q = builder.Query<TqmsSummaryByCategory>().ToView("TQMS_CATEGORY_SUMMARY_VIEW");
+            var q = builder.Entity<TqmsSummaryByCategory>().ToTable("TQMS_CATEGORY_SUMMARY_VIEW").HasNoKey();
             q.Property(t => t.JobRef).HasColumnName("JOBREF");
             q.Property(t => t.HeadingCode).HasColumnName("TQMS_HEADING_CODE");
             q.Property(t => t.HeadingDescription).HasColumnName("HEADING_DESCRIPTION");
@@ -1849,7 +1843,7 @@
 
         private void QueryTqmsOutstandingLoansByCategories(ModelBuilder builder)
         {
-            var q = builder.Query<TqmsOutstandingLoansByCategory>().ToView("TQMS_OUTSTANDING_LOANS");
+            var q = builder.Entity<TqmsOutstandingLoansByCategory>().ToTable("TQMS_OUTSTANDING_LOANS").HasNoKey();
             q.Property(t => t.JobRef).HasColumnName("JOBREF");
             q.Property(t => t.Group).HasColumnName("TQMS_GROUP");
             q.Property(t => t.Category).HasColumnName("CATEGORY");
@@ -2029,7 +2023,7 @@
 
         private void QueryLoanDetails(ModelBuilder builder)
         {
-            var q = builder.Query<LoanDetail>().ToView("OS_LOAN_DETAIL_VIEW");
+            var q = builder.Entity<LoanDetail>().ToTable("OS_LOAN_DETAIL_VIEW").HasNoKey();
             q.Property(e => e.LoanNumber).HasColumnName("LOAN_NUMBER");
             q.Property(e => e.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
             q.Property(e => e.Line).HasColumnName("LINE_NUMBER");
@@ -2101,7 +2095,7 @@
 
         private void QueryStoresLabelTypes(ModelBuilder builder)
         {
-            var query = builder.Query<StoresLabelType>().ToView("STORES_LABEL_TYPES");
+            var query = builder.Entity<StoresLabelType>().ToTable("STORES_LABEL_TYPES").HasNoKey();
             query.Property(t => t.Code).HasColumnName("LABEL_TYPE_CODE");
             query.Property(t => t.DefaultPrinter).HasColumnName("DEFAULT_PRINTER");
             query.Property(t => t.FileName).HasColumnName("FILENAME");
@@ -2163,13 +2157,13 @@
 
         private void QueryLoans(ModelBuilder builder)
         {
-            var q = builder.Query<Loan>().ToView("LOAN_HEADERS");
+            var q = builder.Entity<Loan>().ToTable("LOAN_HEADERS").HasNoKey();
             q.Property(e => e.LoanNumber).HasColumnName("LOAN_NUMBER").HasMaxLength(6);
         }
 
         private void QueryMrParts(ModelBuilder builder)
         {
-            var q = builder.Query<MrPart>().ToView("V_MASTER_MRH");
+            var q = builder.Entity<MrPart>().ToTable("V_MASTER_MRH").HasNoKey();
             q.Property(e => e.PartNumber).HasColumnName("PART_NUMBER");
             q.HasOne(e => e.Part).WithMany().HasForeignKey(e => e.PartNumber);
         }
@@ -2224,7 +2218,7 @@
 
         private void QueryRsnAccessories(ModelBuilder builder)
         {
-            var q = builder.Query<RsnAccessory>().ToView("RSN_ACCESSORIES");
+            var q = builder.Entity<RsnAccessory>().ToTable("RSN_ACCESSORIES").HasNoKey();
             q.Property(a => a.Code).HasColumnName("ACC_CODE");
             q.Property(a => a.Description).HasColumnName("DESCRIPTION");
             q.Property(a => a.ExtraInfoRequired).HasColumnName("EXTRA_INFO_REQD");
@@ -2232,7 +2226,7 @@
 
         private void QueryRsnConditions(ModelBuilder builder)
         {
-            var q = builder.Query<RsnCondition>().ToView("RSN_CONDITIONS");
+            var q = builder.Entity<RsnCondition>().ToTable("RSN_CONDITIONS").HasNoKey();
             q.Property(a => a.Code).HasColumnName("COND_CODE");
             q.Property(a => a.Description).HasColumnName("DESCRIPTION");
             q.Property(a => a.ExtraInfoRequired).HasColumnName("EXTRA_INFO_REQD");
@@ -2250,7 +2244,7 @@
 
         private void QueryEuCreditInvoices(ModelBuilder builder)
         {
-            var q = builder.Query<EuCreditInvoice>().ToView("EU_CREDIT_INVOICES");
+            var q = builder.Entity<EuCreditInvoice>().ToTable("EU_CREDIT_INVOICES").HasNoKey();
             q.Property(a => a.AccountId).HasColumnName("ACCOUNT_ID");
             q.Property(a => a.AccountName).HasColumnName("ACCOUNT_NAME");
             q.Property(a => a.Invoice).HasColumnName("INVOICE");
@@ -2268,14 +2262,14 @@
 
         private void QueryProductUpgradeRules(ModelBuilder builder)
         {
-            var q = builder.Query<ProductUpgradeRule>().ToView("PRODUCT_UPGRADE_RULES");
+            var q = builder.Entity<ProductUpgradeRule>().ToTable("PRODUCT_UPGRADE_RULES").HasNoKey();
             q.Property(r => r.ArticleNumber).HasColumnName("ARTICLE_NUMBER");
             q.Property(r => r.RenewProduct).HasColumnName("RENEW_PRODUCT");
         }
 
         private void QueryStoresMoveLogs(ModelBuilder builder)
         {
-            var q = builder.Query<StoresMoveLog>().ToView("STORES_MOVE_LOG_VIEW");
+            var q = builder.Entity<StoresMoveLog>().ToTable("STORES_MOVE_LOG_VIEW").HasNoKey();
             q.Property(a => a.Id).HasColumnName("MOVE_LOG_ID");
             q.Property(a => a.PartNumber).HasColumnName("PART_NUMBER");
             q.Property(a => a.DateProcessed).HasColumnName("DATE_PROCESSED");
@@ -2339,7 +2333,7 @@
 
         private void QueryDespatchPalletQueueScsDetails(ModelBuilder builder)
         {
-            var q = builder.Query<DespatchPalletQueueScsDetail>().ToView("V_DPQ_SUMMARY_FOR_SCS");
+            var q = builder.Entity<DespatchPalletQueueScsDetail>().ToTable("V_DPQ_SUMMARY_FOR_SCS").HasNoKey();
             q.Property(v => v.KittedFromTime).HasColumnName("KITTED_FROM");
             q.Property(v => v.PalletNumber).HasColumnName("PALLET_NUMBER");
             q.Property(v => v.PickingSequence).HasColumnName("PICKING_SEQUENCE");

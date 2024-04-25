@@ -1,27 +1,28 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System.Threading.Tasks;
+
+    using Linn.Common.Service.Core;
+    using Linn.Common.Service.Core.Extensions;
     using Linn.Stores.Facade.Services;
-    using Linn.Stores.Service.Models;
 
-    using Nancy;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Routing;
 
-    public sealed class AccountingCompaniesModule : NancyModule
+    public sealed class AccountingCompaniesModule : IModule
     {
-        private readonly IAccountingCompanyService accountingCompaniesService;
-
-        public AccountingCompaniesModule(IAccountingCompanyService accountingCompaniesFacadeService)
+        public void MapEndpoints(IEndpointRouteBuilder app)
         {
-            this.accountingCompaniesService = accountingCompaniesFacadeService;
-            this.Get("inventory/accounting-companies", _ => this.GetAccountingCompanies());
+            app.MapGet("inventory/accounting-companies", this.GetAccountingCompanies);
         }
 
-        private object GetAccountingCompanies()
+        private async Task GetAccountingCompanies(
+            HttpRequest req,
+            HttpResponse res,
+            IAccountingCompanyService accountingCompaniesFacadeService)
         {
-            var results = this.accountingCompaniesService.GetValid();
-            return this.Negotiate
-                .WithModel(results)
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
-                .WithView("Index");
+            await res.Negotiate(accountingCompaniesFacadeService.GetValid());
         }
     }
 }

@@ -10,9 +10,9 @@
 
     public class RequisitionProcessResultResourceBuilder : IResourceBuilder<RequisitionProcessResult>
     {
-        public ProcessResultResource Build(RequisitionProcessResult process)
+        public RequisitionProcessResultResource Build(RequisitionProcessResult process)
         {
-            return new ProcessResultResource
+            return new RequisitionProcessResultResource
             {
                Message = process.Message,
                Success = process.Success,

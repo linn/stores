@@ -8,10 +8,7 @@
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Scs;
 
-    using Microsoft.EntityFrameworkCore.Internal;
-
     using Oracle.ManagedDataAccess.Client;
-    using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
     public class ScsPalletFastRepository : IScsPalletsRepository
     {
@@ -28,7 +25,7 @@
             {
                 connection.Open();
                 this.RunCommand(connection, "truncate table scs_pallets");
-                if (EnumerableExtensions.Any(pallets))
+                if (pallets?.Count() > 0)
                 {
                     // new type of crap 
                     var insertSql = "INSERT INTO SCS_PALLETS(PALLET_NUMBER, LAST_UPDATED, AREA, COL, LVL, SIDE, HEIGHT, USER_FRIENDLY_NAME) VALUES (:1,SYSDATE,:2,:3,:4,:5,:6,:7)";
@@ -56,8 +53,9 @@
 
                     cmd.ExecuteNonQuery();
 
-                    this.RunCommand(connection,"COMMIT");
+                    this.RunCommand(connection, "COMMIT");
                 }
+
                 connection.Close();
             }
         }
