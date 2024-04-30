@@ -7,6 +7,111 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="AvailableStockFacadeServiceTests\**" />
+    <Compile Remove="ConsignmentFacadeServiceTests\**" />
+    <Compile Remove="ConsignmentShipfilesFacadeServiceTests\**" />
+    <Compile Remove="EmployeesServiceTest\**" />
+    <Compile Remove="ExchangeRateServiceTests\**" />
+    <Compile Remove="ExportReturnService\**" />
+    <Compile Remove="ExportRsnService\**" />
+    <Compile Remove="ImportBookCpcNumberFacadeServiceTests\**" />
+    <Compile Remove="ImportBookDeliveryTermFacadeServiceTests\**" />
+    <Compile Remove="ImportBookFacadeServiceTests\**" />
+    <Compile Remove="ImportBookReportFacadeServiceTests\**" />
+    <Compile Remove="ImportBookTransactionCodeFacadeServiceTests\**" />
+    <Compile Remove="ImportBookTransportCodeFacadeServiceTests\**" />
+    <Compile Remove="LoansServiceTests\**" />
+    <Compile Remove="LogisticsProcessesFacadeServiceTests\**" />
+    <Compile Remove="LogisticsReportsFacadeServiceTests\**" />
+    <Compile Remove="MechPartSourceFacadeServiceTests\**" />
+    <Compile Remove="MoveStockFacadeServiceTests\**" />
+    <Compile Remove="ParcelFacadeServiceTests\**" />
+    <Compile Remove="PartFacadeServiceTests\**" />
+    <Compile Remove="PartTemplateFacadeServiceTests\**" />
+    <Compile Remove="PortFacadeServiceTests\**" />
+    <Compile Remove="PurchaseOrdersFacadeServiceTests\**" />
+    <Compile Remove="RequisitionActionsFacadeServiceTests\**" />
+    <Compile Remove="RsnsServiceTests\**" />
+    <Compile Remove="SosAllocDetailFacadeServiceTests\**" />
+    <Compile Remove="SosAllocHeadFacadeServiceTests\**" />
+    <Compile Remove="StockTriggerLevelsServiceTests\**" />
+    <Compile Remove="StoragePlaceServiceTests\**" />
+    <Compile Remove="TpkFacadeServiceTests\**" />
+    <Compile Remove="TqmsReportsFacadeServiceTests\**" />
+    <Compile Remove="WandFacadeServiceTests\**" />
+    <Compile Remove="WarehouseFacadeServiceTests\**" />
+    <Compile Remove="WorkstationFacadeServiceTests\**" />
+    <EmbeddedResource Remove="AvailableStockFacadeServiceTests\**" />
+    <EmbeddedResource Remove="ConsignmentFacadeServiceTests\**" />
+    <EmbeddedResource Remove="ConsignmentShipfilesFacadeServiceTests\**" />
+    <EmbeddedResource Remove="EmployeesServiceTest\**" />
+    <EmbeddedResource Remove="ExchangeRateServiceTests\**" />
+    <EmbeddedResource Remove="ExportReturnService\**" />
+    <EmbeddedResource Remove="ExportRsnService\**" />
+    <EmbeddedResource Remove="ImportBookCpcNumberFacadeServiceTests\**" />
+    <EmbeddedResource Remove="ImportBookDeliveryTermFacadeServiceTests\**" />
+    <EmbeddedResource Remove="ImportBookFacadeServiceTests\**" />
+    <EmbeddedResource Remove="ImportBookReportFacadeServiceTests\**" />
+    <EmbeddedResource Remove="ImportBookTransactionCodeFacadeServiceTests\**" />
+    <EmbeddedResource Remove="ImportBookTransportCodeFacadeServiceTests\**" />
+    <EmbeddedResource Remove="LoansServiceTests\**" />
+    <EmbeddedResource Remove="LogisticsProcessesFacadeServiceTests\**" />
+    <EmbeddedResource Remove="LogisticsReportsFacadeServiceTests\**" />
+    <EmbeddedResource Remove="MechPartSourceFacadeServiceTests\**" />
+    <EmbeddedResource Remove="MoveStockFacadeServiceTests\**" />
+    <EmbeddedResource Remove="ParcelFacadeServiceTests\**" />
+    <EmbeddedResource Remove="PartFacadeServiceTests\**" />
+    <EmbeddedResource Remove="PartTemplateFacadeServiceTests\**" />
+    <EmbeddedResource Remove="PortFacadeServiceTests\**" />
+    <EmbeddedResource Remove="PurchaseOrdersFacadeServiceTests\**" />
+    <EmbeddedResource Remove="RequisitionActionsFacadeServiceTests\**" />
+    <EmbeddedResource Remove="RsnsServiceTests\**" />
+    <EmbeddedResource Remove="SosAllocDetailFacadeServiceTests\**" />
+    <EmbeddedResource Remove="SosAllocHeadFacadeServiceTests\**" />
+    <EmbeddedResource Remove="StockTriggerLevelsServiceTests\**" />
+    <EmbeddedResource Remove="StoragePlaceServiceTests\**" />
+    <EmbeddedResource Remove="TpkFacadeServiceTests\**" />
+    <EmbeddedResource Remove="TqmsReportsFacadeServiceTests\**" />
+    <EmbeddedResource Remove="WandFacadeServiceTests\**" />
+    <EmbeddedResource Remove="WarehouseFacadeServiceTests\**" />
+    <EmbeddedResource Remove="WorkstationFacadeServiceTests\**" />
+    <None Remove="AvailableStockFacadeServiceTests\**" />
+    <None Remove="ConsignmentFacadeServiceTests\**" />
+    <None Remove="ConsignmentShipfilesFacadeServiceTests\**" />
+    <None Remove="EmployeesServiceTest\**" />
+    <None Remove="ExchangeRateServiceTests\**" />
+    <None Remove="ExportReturnService\**" />
+    <None Remove="ExportRsnService\**" />
+    <None Remove="ImportBookCpcNumberFacadeServiceTests\**" />
+    <None Remove="ImportBookDeliveryTermFacadeServiceTests\**" />
+    <None Remove="ImportBookFacadeServiceTests\**" />
+    <None Remove="ImportBookReportFacadeServiceTests\**" />
+    <None Remove="ImportBookTransactionCodeFacadeServiceTests\**" />
+    <None Remove="ImportBookTransportCodeFacadeServiceTests\**" />
+    <None Remove="LoansServiceTests\**" />
+    <None Remove="LogisticsProcessesFacadeServiceTests\**" />
+    <None Remove="LogisticsReportsFacadeServiceTests\**" />
+    <None Remove="MechPartSourceFacadeServiceTests\**" />
+    <None Remove="MoveStockFacadeServiceTests\**" />
+    <None Remove="ParcelFacadeServiceTests\**" />
+    <None Remove="PartFacadeServiceTests\**" />
+    <None Remove="PartTemplateFacadeServiceTests\**" />
+    <None Remove="PortFacadeServiceTests\**" />
+    <None Remove="PurchaseOrdersFacadeServiceTests\**" />
+    <None Remove="RequisitionActionsFacadeServiceTests\**" />
+    <None Remove="RsnsServiceTests\**" />
+    <None Remove="SosAllocDetailFacadeServiceTests\**" />
+    <None Remove="SosAllocHeadFacadeServiceTests\**" />
+    <None Remove="StockTriggerLevelsServiceTests\**" />
+    <None Remove="StoragePlaceServiceTests\**" />
+    <None Remove="TpkFacadeServiceTests\**" />
+    <None Remove="TqmsReportsFacadeServiceTests\**" />
+    <None Remove="WandFacadeServiceTests\**" />
+    <None Remove="WarehouseFacadeServiceTests\**" />
+    <None Remove="WorkstationFacadeServiceTests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="Linn.Common.Facade" Version="11.1.0" />
     <PackageReference Include="Linn.Common.Proxy.LinnApps" Version="3.2.0" />
@@ -22,10 +127,6 @@
     <ProjectReference Include="..\..\..\src\Domain\Domain.csproj" />
     <ProjectReference Include="..\..\..\src\Facade\Facade.csproj" />
     <ProjectReference Include="..\..\..\src\Persistence\Persistence.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="TpkFacadeServiceTests\" />
   </ItemGroup>
 
 </Project>

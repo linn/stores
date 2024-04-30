@@ -1,19 +1,23 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System.Threading.Tasks;
+
     using Linn.Common.Facade;
+    using Linn.Common.Resources;
+    using Linn.Common.Service.Core;
+    using Linn.Common.Service.Core.Extensions;
     using Linn.Stores.Domain.LinnApps.Allocation;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources.Allocation;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Service.Models;
 
-    using Nancy;
-    using Nancy.ModelBinding;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Routing;
 
-    public sealed class AllocationModule : NancyModule
+    public sealed class AllocationModule : IModule
     {
-        private readonly IAllocationFacadeService allocationFacadeService;
-
         private readonly IFacadeService<DespatchLocation, int, DespatchLocationResource, DespatchLocationResource>
             despatchLocationFacadeService;
 
@@ -27,53 +31,60 @@
             ISosAllocHeadFacadeService sosAllocHeadFacadeService,
             IFacadeFilterService<SosAllocDetail, int, SosAllocDetailResource, SosAllocDetailResource, JobIdRequestResource> sosAllocDetailFacadeService)
         {
-            this.allocationFacadeService = allocationFacadeService;
             this.despatchLocationFacadeService = despatchLocationFacadeService;
             this.sosAllocHeadFacadeService = sosAllocHeadFacadeService;
             this.sosAllocDetailFacadeService = sosAllocDetailFacadeService;
-            this.Get("/logistics/allocations", _ => this.GetApp());
-            this.Post("/logistics/allocations", _ => this.StartAllocation());
-            this.Post("/logistics/allocations/finish", p => this.FinishAllocation());
-            this.Post("/logistics/allocations/pick", _ => this.PickItems());
-            this.Post("/logistics/allocations/unpick", _ => this.UnpickItems());
-            this.Get("/logistics/despatch-locations", _ => this.GetDespatchLocations());
-            this.Get("/logistics/sos-alloc-heads", _ => this.GetAllocHeads());
-            this.Get("/logistics/sos-alloc-heads/{jobId:int}", p => this.GetAllocHeads(p.jobId));
-            this.Get("/logistics/sos-alloc-details", _ => this.GetAllocDetails());
-            this.Put("/logistics/sos-alloc-details/{id:int}", p => this.UpdateAllocDetail(p.id));
-            this.Get("/logistics/allocations/despatch-picking-summary", _ => this.GetPickingSummaryReport());
-            this.Get("/logistics/allocations/despatch-pallet-queue", _ => this.GetPalletQueueReport());
-            this.Get("/logistics/allocations/despatch-pallet-queue/scs", _ => this.GetPalletQueueForScs());
         }
 
-        private object GetPalletQueueReport()
+        public void MapEndpoints(IEndpointRouteBuilder app)
         {
-            return this.Negotiate
-                .WithModel(this.allocationFacadeService.DespatchPalletQueueReport())
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
-                .WithView("Index");
+            app.MapGet("/logistics/allocations", this.GetApp);
+            app.MapPost("/logistics/allocations", this.StartAllocation);
+            app.MapPost("/logistics/allocations/finish", p => this.FinishAllocation);
+            app.MapPost("/logistics/allocations/pick", this.PickItems);
+            app.MapPost("/logistics/allocations/unpick", this.UnpickItems);
+            app.MapGet("/logistics/despatch-locations", this.GetDespatchLocations);
+            app.MapGet("/logistics/sos-alloc-heads", this.GetAllocHeads);
+            app.MapGet("/logistics/sos-alloc-heads/{jobId:int}", this.GetAllocHeads);
+            app.MapGet("/logistics/sos-alloc-details", this.GetAllocDetails);
+            app.MapPut("/logistics/sos-alloc-details/{id:int}", this.UpdateAllocDetail);
+            app.MapGet("/logistics/allocations/despatch-picking-summary", this.GetPickingSummaryReport);
+            app.MapGet("/logistics/allocations/despatch-pallet-queue", this.GetPalletQueueReport);
+            app.MapGet("/logistics/allocations/despatch-pallet-queue/scs", this.GetPalletQueueForScs);
         }
 
-        private object GetPickingSummaryReport()
+        private async Task GetPalletQueueReport(
+            HttpRequest req,
+            HttpResponse res,
+            IAllocationFacadeService allocationFacadeService)
         {
-            return this.Negotiate
-                .WithModel(this.allocationFacadeService.DespatchPickingSummaryReport())
-                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
-                .WithView("Index");
+            await res.Negotiate(allocationFacadeService.DespatchPalletQueueReport());
         }
 
-        private object PickItems()
+        private async Task GetPickingSummaryReport(
+            HttpRequest req,
+            HttpResponse res,
+            IAllocationFacadeService allocationFacadeService)
         {
-            var resource = this.Bind<AccountOutletRequestResource>();
-
-            return this.Negotiate.WithModel(this.allocationFacadeService.PickItems(resource));
+            await res.Negotiate(allocationFacadeService.DespatchPickingSummaryReport());
         }
 
-        private object UnpickItems()
+        private async Task PickItems(
+            HttpRequest req,
+            HttpResponse res,
+            AccountOutletRequestResource resource,
+            IAllocationFacadeService allocationFacadeService)
         {
-            var resource = this.Bind<AccountOutletRequestResource>();
+            await res.Negotiate(allocationFacadeService.PickItems(resource));
+        }
 
-            return this.Negotiate.WithModel(this.allocationFacadeService.UnpickItems(resource));
+        private async Task UnpickItems(
+            HttpRequest req,
+            HttpResponse res,
+            AccountOutletRequestResource resource,
+            IAllocationFacadeService allocationFacadeService)
+        {
+            await res.Negotiate(allocationFacadeService.UnpickItems(resource));
         }
 
         private object FinishAllocation()

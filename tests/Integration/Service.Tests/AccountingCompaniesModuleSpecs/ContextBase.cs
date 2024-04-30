@@ -4,6 +4,7 @@
 
     using Linn.Common.Persistence;
     using Linn.Stores.Domain.LinnApps;
+    using Linn.Stores.Facade.ResourceBuilders;
     using Linn.Stores.Facade.Services;
     using Linn.Stores.IoC;
     using Linn.Stores.Service.Modules;
@@ -21,7 +22,7 @@
 
         protected HttpResponseMessage Response { get; set; }
 
-        protected IAccountingCompanyService AccountingCompanyFacadeService { get; private set; }
+        protected IAccountingCompanyFacadeService AccountingCompanyFacadeFacadeService { get; private set; }
 
         protected IQueryRepository<AccountingCompany> AccountingCompanyRepository { get; private set; }
 
@@ -29,12 +30,12 @@
         public void SetUpContext()
         {
             this.AccountingCompanyRepository = Substitute.For<IQueryRepository<AccountingCompany>>();
-            this.AccountingCompanyFacadeService = new AccountingCompanyService(this.AccountingCompanyRepository);
+            this.AccountingCompanyFacadeFacadeService = new AccountingCompanyFacadeService(this.AccountingCompanyRepository, new AccountingCompanyResourceBuilder());
 
             this.Client = TestClient.With<AccountingCompaniesModule>(
                 services =>
                     {
-                        services.AddSingleton(this.AccountingCompanyFacadeService);
+                        services.AddSingleton(this.AccountingCompanyFacadeFacadeService);
                         services.AddHandlers();
                         services.AddRouting();
                     });

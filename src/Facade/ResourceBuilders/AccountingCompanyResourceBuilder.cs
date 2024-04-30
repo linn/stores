@@ -1,12 +1,14 @@
 ﻿namespace Linn.Stores.Facade.ResourceBuilders
 {
+    using System.Collections.Generic;
+
     using Linn.Common.Facade;
     using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Resources;
 
-    public class AccountingCompanyResourceBuilder : IResourceBuilder<AccountingCompany>
+    public class AccountingCompanyResourceBuilder : IBuilder<AccountingCompany>
     {
-        public AccountingCompanyResource Build(AccountingCompany model)
+        public AccountingCompanyResource Build(AccountingCompany model, IEnumerable<string> claims)
         {
             return new AccountingCompanyResource { Name = model.Name, Description = model.Description };
         }
@@ -16,6 +18,6 @@
             throw new System.NotImplementedException();
         }
 
-        object IResourceBuilder<AccountingCompany>.Build(AccountingCompany accountingCompany) => this.Build(accountingCompany);
+        object IBuilder<AccountingCompany>.Build(AccountingCompany accountingCompany, IEnumerable<string> claims) => this.Build(accountingCompany, claims);
     }
 }

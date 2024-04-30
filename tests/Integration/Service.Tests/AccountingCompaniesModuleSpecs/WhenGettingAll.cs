@@ -27,8 +27,8 @@
                                    Name = "B", Description = "description B"
                                };
 
-            this.AccountingCompanyFacadeService.GetValid()
-                .Returns(new SuccessResult<IEnumerable<AccountingCompany>>(new List<AccountingCompany> { companyA, companyB }));
+            this.AccountingCompanyFacadeFacadeService.GetValid()
+                .Returns(new SuccessResult<IEnumerable<AccountingCompanyResource>>(new List<AccountingCompany> { companyA, companyB }));
 
             this.Response = this.Browser.Get(
                 "/inventory/accounting-companies",
@@ -47,7 +47,7 @@
         [Test]
         public void ShouldCallService()
         {
-            this.AccountingCompanyFacadeService.Received().GetValid();
+            this.AccountingCompanyFacadeFacadeService.Received().GetValid();
         }
 
         [Test]

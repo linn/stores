@@ -7,6 +7,48 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Modules\ConsignmentsModule.cs" />
+    <Compile Remove="Modules\CountriesModule.cs" />
+    <Compile Remove="Modules\CurrenciesModule.cs" />
+    <Compile Remove="Modules\DepartmentsModule.cs" />
+    <Compile Remove="Modules\EmployeesModule.cs" />
+    <Compile Remove="Modules\ExportReturnModule.cs" />
+    <Compile Remove="Modules\ExportRsnModule.cs" />
+    <Compile Remove="Modules\GoodsInModule.cs" />
+    <Compile Remove="Modules\HomeModule.cs" />
+    <Compile Remove="Modules\ImportBooksModule.cs" />
+    <Compile Remove="Modules\InterCompanyInvoiceModule.cs" />
+    <Compile Remove="Modules\LoansModule.cs" />
+    <Compile Remove="Modules\ParcelsModule.cs" />
+    <Compile Remove="Modules\PartsModule.cs" />
+    <Compile Remove="Modules\PurchaseOrdersModule.cs" />
+    <Compile Remove="Modules\Reports\EuCreditInvoicesReportModule.cs" />
+    <Compile Remove="Modules\Reports\ImportBooksReportModule.cs" />
+    <Compile Remove="Modules\Reports\QcPartsReportsModule.cs" />
+    <Compile Remove="Modules\Reports\StoresMoveLogReportModule.cs" />
+    <Compile Remove="Modules\Reports\WhatWillDecrementReportModule.cs" />
+    <Compile Remove="Modules\RequisitionModule.cs" />
+    <Compile Remove="Modules\RootProductsModule.cs" />
+    <Compile Remove="Modules\RsnsModule.cs" />
+    <Compile Remove="Modules\SalesAccountModule.cs" />
+    <Compile Remove="Modules\SalesOutletModule.cs" />
+    <Compile Remove="Modules\SernosModule.cs" />
+    <Compile Remove="Modules\StockLocatorsModule.cs" />
+    <Compile Remove="Modules\StockMoveModule.cs" />
+    <Compile Remove="Modules\StockPoolModule.cs" />
+    <Compile Remove="Modules\StockTriggerLevelsModule.cs" />
+    <Compile Remove="Modules\StoragePlaceModule.cs" />
+    <Compile Remove="Modules\StoresBudgetModule.cs" />
+    <Compile Remove="Modules\StoresTransactionDefinitionModule.cs" />
+    <Compile Remove="Modules\SuppliersModule.cs" />
+    <Compile Remove="Modules\TpkModule.cs" />
+    <Compile Remove="Modules\TqmsModule.cs" />
+    <Compile Remove="Modules\WandModule.cs" />
+    <Compile Remove="Modules\WarehouseModule.cs" />
+    <Compile Remove="Modules\WorkstationModule.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Linn.Common.Configuration" Version="2.0.0" />
     <PackageReference Include="linn.common.service.core" Version="0.0.3" />
   </ItemGroup>
@@ -17,6 +59,10 @@
     <ProjectReference Include="..\Facade\Facade.csproj" />
     <ProjectReference Include="..\Persistence\Persistence.csproj" />
     <ProjectReference Include="..\Resources\Resources.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Modules\Reports\" />
   </ItemGroup>
 
 </Project>

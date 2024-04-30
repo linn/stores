@@ -11,7 +11,7 @@
         {
             return services
                 .AddTransient<IPartsFacadeService, PartFacadeService>()
-                .AddTransient<IAccountingCompanyService, AccountingCompanyService>()
+                .AddTransient<IAccountingCompanyFacadeService, AccountingCompanyFacadeService>()
                 .AddTransient<ISalesOutletService, SalesOutletService>()
                 .AddTransient<IRootProductService, RootProductsService>()
                 ;

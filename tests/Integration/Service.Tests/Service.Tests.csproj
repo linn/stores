@@ -7,6 +7,120 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ConsignmentModuleSpecs\**" />
+    <Compile Remove="CountryModuleSpecs\**" />
+    <Compile Remove="CurrenciesModuleSpecs\**" />
+    <Compile Remove="DepartmentsModuleSpecs\**" />
+    <Compile Remove="EmployeesModuleSpecs\**" />
+    <Compile Remove="ExportReturnModuleSpecs\**" />
+    <Compile Remove="ExportRsnModuleSpecs\**" />
+    <Compile Remove="GoodsInModuleSpecs\**" />
+    <Compile Remove="ImportBookReportModuleSpecs\**" />
+    <Compile Remove="ImportBooksModuleSpecs\**" />
+    <Compile Remove="ImportBooksReportModuleTests\**" />
+    <Compile Remove="InterCompanyInvoiceModuleSpecs\**" />
+    <Compile Remove="LoansModuleSpecs\**" />
+    <Compile Remove="ParcelsModuleSpecs\**" />
+    <Compile Remove="PartsModuleSpecs\**" />
+    <Compile Remove="PurchaseOrdersModuleSpecs\**" />
+    <Compile Remove="QcPartsReportModuleSpecs\**" />
+    <Compile Remove="RequisitionModuleSpecs\**" />
+    <Compile Remove="RootProductsModuleSpecs\**" />
+    <Compile Remove="RsnsModuleSpecs\**" />
+    <Compile Remove="SalesAccountModuleSpecs\**" />
+    <Compile Remove="SalesOutletModule\**" />
+    <Compile Remove="SernosModuleSpecs\**" />
+    <Compile Remove="StockLocatorsModuleSpecs\**" />
+    <Compile Remove="StockMoveModuleSpecs\**" />
+    <Compile Remove="StockPoolModuleSpecs\**" />
+    <Compile Remove="StockTriggerLevelsModuleSpecs\**" />
+    <Compile Remove="StoragePlaceAuditModuleSpecs\**" />
+    <Compile Remove="StoresBudgetModuleSpecs\**" />
+    <Compile Remove="StoresTransactionDefinitionModuleSpecs\**" />
+    <Compile Remove="SuppliersModuleSpecs\**" />
+    <Compile Remove="TpkModuleSpecs\**" />
+    <Compile Remove="TqmsModuleSpecs\**" />
+    <Compile Remove="WandModuleSpecs\**" />
+    <Compile Remove="WarehouseModuleSpecs\**" />
+    <Compile Remove="WhatWillDecrementReportModuleSpecs\**" />
+    <Compile Remove="WorkstationModuleSpecs\**" />
+    <EmbeddedResource Remove="ConsignmentModuleSpecs\**" />
+    <EmbeddedResource Remove="CountryModuleSpecs\**" />
+    <EmbeddedResource Remove="CurrenciesModuleSpecs\**" />
+    <EmbeddedResource Remove="DepartmentsModuleSpecs\**" />
+    <EmbeddedResource Remove="EmployeesModuleSpecs\**" />
+    <EmbeddedResource Remove="ExportReturnModuleSpecs\**" />
+    <EmbeddedResource Remove="ExportRsnModuleSpecs\**" />
+    <EmbeddedResource Remove="GoodsInModuleSpecs\**" />
+    <EmbeddedResource Remove="ImportBookReportModuleSpecs\**" />
+    <EmbeddedResource Remove="ImportBooksModuleSpecs\**" />
+    <EmbeddedResource Remove="ImportBooksReportModuleTests\**" />
+    <EmbeddedResource Remove="InterCompanyInvoiceModuleSpecs\**" />
+    <EmbeddedResource Remove="LoansModuleSpecs\**" />
+    <EmbeddedResource Remove="ParcelsModuleSpecs\**" />
+    <EmbeddedResource Remove="PartsModuleSpecs\**" />
+    <EmbeddedResource Remove="PurchaseOrdersModuleSpecs\**" />
+    <EmbeddedResource Remove="QcPartsReportModuleSpecs\**" />
+    <EmbeddedResource Remove="RequisitionModuleSpecs\**" />
+    <EmbeddedResource Remove="RootProductsModuleSpecs\**" />
+    <EmbeddedResource Remove="RsnsModuleSpecs\**" />
+    <EmbeddedResource Remove="SalesAccountModuleSpecs\**" />
+    <EmbeddedResource Remove="SalesOutletModule\**" />
+    <EmbeddedResource Remove="SernosModuleSpecs\**" />
+    <EmbeddedResource Remove="StockLocatorsModuleSpecs\**" />
+    <EmbeddedResource Remove="StockMoveModuleSpecs\**" />
+    <EmbeddedResource Remove="StockPoolModuleSpecs\**" />
+    <EmbeddedResource Remove="StockTriggerLevelsModuleSpecs\**" />
+    <EmbeddedResource Remove="StoragePlaceAuditModuleSpecs\**" />
+    <EmbeddedResource Remove="StoresBudgetModuleSpecs\**" />
+    <EmbeddedResource Remove="StoresTransactionDefinitionModuleSpecs\**" />
+    <EmbeddedResource Remove="SuppliersModuleSpecs\**" />
+    <EmbeddedResource Remove="TpkModuleSpecs\**" />
+    <EmbeddedResource Remove="TqmsModuleSpecs\**" />
+    <EmbeddedResource Remove="WandModuleSpecs\**" />
+    <EmbeddedResource Remove="WarehouseModuleSpecs\**" />
+    <EmbeddedResource Remove="WhatWillDecrementReportModuleSpecs\**" />
+    <EmbeddedResource Remove="WorkstationModuleSpecs\**" />
+    <None Remove="ConsignmentModuleSpecs\**" />
+    <None Remove="CountryModuleSpecs\**" />
+    <None Remove="CurrenciesModuleSpecs\**" />
+    <None Remove="DepartmentsModuleSpecs\**" />
+    <None Remove="EmployeesModuleSpecs\**" />
+    <None Remove="ExportReturnModuleSpecs\**" />
+    <None Remove="ExportRsnModuleSpecs\**" />
+    <None Remove="GoodsInModuleSpecs\**" />
+    <None Remove="ImportBookReportModuleSpecs\**" />
+    <None Remove="ImportBooksModuleSpecs\**" />
+    <None Remove="ImportBooksReportModuleTests\**" />
+    <None Remove="InterCompanyInvoiceModuleSpecs\**" />
+    <None Remove="LoansModuleSpecs\**" />
+    <None Remove="ParcelsModuleSpecs\**" />
+    <None Remove="PartsModuleSpecs\**" />
+    <None Remove="PurchaseOrdersModuleSpecs\**" />
+    <None Remove="QcPartsReportModuleSpecs\**" />
+    <None Remove="RequisitionModuleSpecs\**" />
+    <None Remove="RootProductsModuleSpecs\**" />
+    <None Remove="RsnsModuleSpecs\**" />
+    <None Remove="SalesAccountModuleSpecs\**" />
+    <None Remove="SalesOutletModule\**" />
+    <None Remove="SernosModuleSpecs\**" />
+    <None Remove="StockLocatorsModuleSpecs\**" />
+    <None Remove="StockMoveModuleSpecs\**" />
+    <None Remove="StockPoolModuleSpecs\**" />
+    <None Remove="StockTriggerLevelsModuleSpecs\**" />
+    <None Remove="StoragePlaceAuditModuleSpecs\**" />
+    <None Remove="StoresBudgetModuleSpecs\**" />
+    <None Remove="StoresTransactionDefinitionModuleSpecs\**" />
+    <None Remove="SuppliersModuleSpecs\**" />
+    <None Remove="TpkModuleSpecs\**" />
+    <None Remove="TqmsModuleSpecs\**" />
+    <None Remove="WandModuleSpecs\**" />
+    <None Remove="WarehouseModuleSpecs\**" />
+    <None Remove="WhatWillDecrementReportModuleSpecs\**" />
+    <None Remove="WorkstationModuleSpecs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.3.1" />
@@ -22,11 +136,6 @@
     <ProjectReference Include="..\..\..\src\IoC\IoC.csproj" />
     <ProjectReference Include="..\..\..\src\Resources\Resources.csproj" />
     <ProjectReference Include="..\..\..\src\Service\Service.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ImportBooksReportModuleTests\" />
-    <Folder Include="QcPartsReportModuleSpecs\" />
   </ItemGroup>
 
 </Project>

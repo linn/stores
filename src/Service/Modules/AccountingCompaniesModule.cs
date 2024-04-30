@@ -20,9 +20,9 @@
         private async Task GetAccountingCompanies(
             HttpRequest req,
             HttpResponse res,
-            IAccountingCompanyService accountingCompaniesFacadeService)
+            IAccountingCompanyFacadeService accountingCompaniesFacadeFacadeService)
         {
-            await res.Negotiate(accountingCompaniesFacadeService.GetValid());
+            await res.Negotiate(accountingCompaniesFacadeFacadeService.GetValid());
         }
     }
 }
