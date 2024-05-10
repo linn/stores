@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { initialiseOnMount } from '@linn-it/linn-form-components-library';
+import { initialiseOnMount, utilities } from '@linn-it/linn-form-components-library';
 import ImpBookTab from '../../../components/importBooks/tabs/ImpBookTab';
 import suppliersApprovedCarrierActions from '../../../actions/suppliersApprovedCarrierActions';
 import suppliersApprovedCarrierSelectors from '../../../selectors/suppliersApprovedCarrierSelectors';
@@ -44,11 +44,13 @@ const mapStateToProps = state => ({
         displayText: `${e.description}`,
         id: parseInt(e.transactionId, 10)
     })),
-    deliveryTerms: impbookDeliveryTermsSelectors.getItems(state)?.map(e => ({
-        displayText: `${e.deliveryTermCode} (${e.description})`,
-        id: e.deliveryTermCode
-    })),
-    ports: portsSelectors.getItems(state)?.map(e => ({
+    deliveryTerms: utilities
+        .sortEntityList(impbookDeliveryTermsSelectors.getItems(state), 'sortOrder')
+        ?.map(e => ({
+            displayText: `${e.deliveryTermCode} (${e.description})`,
+            id: e.deliveryTermCode
+        })),
+    ports: utilities.sortEntityList(portsSelectors.getItems(state), 'sortOrder')?.map(e => ({
         displayText: `${e.portCode} (${e.description})`,
         id: e.portCode
     })),

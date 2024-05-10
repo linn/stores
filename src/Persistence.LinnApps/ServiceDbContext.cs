@@ -1168,6 +1168,7 @@
             q.Property(e => e.DeliveryTermCode).HasColumnName("DELIVERY_TERM_CODE").HasMaxLength(6);
             q.Property(e => e.Description).HasColumnName("DESCRIPTION").HasMaxLength(60);
             q.Property(e => e.Comments).HasColumnName("COMMENTS").HasMaxLength(1000);
+            q.Property(e => e.SortOrder).HasColumnName("SORT_ORDER");
         }
 
         private void BuildImportBookPostEntries(ModelBuilder builder)
@@ -1233,6 +1234,7 @@
             q.HasKey(e => e.PortCode);
             q.Property(e => e.PortCode).HasColumnName("PORT_CODE").HasMaxLength(3);
             q.Property(e => e.Description).HasColumnName("DESCRIPTION").HasMaxLength(30);
+            q.Property(e => e.SortOrder).HasColumnName("SORT_ORDER");
         }
 
         private void BuildPartParamDataSheets(ModelBuilder builder)
