@@ -8,7 +8,10 @@
     {
         public PortResource Build(Port model)
         {
-            return new PortResource { PortCode = model.PortCode, Description = model.Description };
+            return new PortResource
+                       {
+                           PortCode = model.PortCode, Description = model.Description, SortOrder = model.SortOrder
+                       };
         }
 
         object IResourceBuilder<Port>.Build(Port model) => this.Build(model);

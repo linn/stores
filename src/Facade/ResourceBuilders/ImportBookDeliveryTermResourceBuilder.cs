@@ -12,7 +12,8 @@
                        {
                            DeliveryTermCode = model.DeliveryTermCode,
                            Description = model.Description,
-                           Comments = model.Comments
+                           Comments = model.Comments,
+                           SortOrder = model.SortOrder
                        };
         }
 
