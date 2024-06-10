@@ -243,6 +243,17 @@ function MechPartSource({
         });
     };
 
+    const handleProjectChange = newValue => {
+        if (viewing()) {
+            setEditStatus('edit');
+        }
+        setMechPartSource({
+            ...mechPartSource,
+            projectCode: newValue.name,
+            projectName: newValue.description
+        });
+    };
+
     const resetRow = (current, collectionName, idFieldName) => {
         setMechPartSource(m => ({
             ...m,
@@ -429,7 +440,10 @@ function MechPartSource({
                                     linnPartNumber={mechPartSource.linnPartNumber}
                                     linnPartDescription={mechPartSource.linnPartDescription}
                                     assemblyType={mechPartSource.assemblyType}
+                                    projectCode={mechPartSource.projectCode}
+                                    projectName={mechPartSource.projectName}
                                     handleLinnPartChange={handleLinnPartChange}
+                                    handleProjectChange={handleProjectChange}
                                 />
                             )}
                             {tab === 1 && mechPartSource.part && (

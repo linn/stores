@@ -202,6 +202,7 @@
                                  FootprintRef = resource.FootprintRef,
                                  FootprintRef2 = resource.FootprintRef2,
                                  FootprintRef3 = resource.FootprintRef3,
+                                 ProjectCode = resource.ProjectCode,
                                  RkmCode = resource.Resistance == null ? null :
                                  this.domainService.GetRkmCode(resource.ResistanceUnits, (decimal)resource.Resistance),
 

@@ -30,7 +30,14 @@ function ProposalTab({
     partsSearchLoading,
     clearPartsSearch,
     assemblyType,
-    description
+    description,
+    projectCode,
+    projectName,
+    departmentsSearchResults,
+    departmentsSearchLoading,
+    searchDepartments,
+    clearSearchDepartments,
+    handleProjectChange
 }) {
     const partTypes = [
         'CAP',
@@ -278,7 +285,34 @@ function ProposalTab({
                 />
             </Grid>
             <Grid item xs={9} />
-
+            <Grid item xs={3}>
+                <Typeahead
+                    onSelect={newValue => {
+                        handleProjectChange(newValue);
+                    }}
+                    label="Project Code"
+                    modal
+                    items={departmentsSearchResults}
+                    value={projectCode}
+                    propertyName="projectCode"
+                    loading={departmentsSearchLoading}
+                    fetchItems={searchDepartments}
+                    links={false}
+                    clearSearch={clearSearchDepartments}
+                    placeholder="Search for project code"
+                />
+            </Grid>
+            <Grid item xs={6}>
+                <InputField
+                    onChange={handleFieldChange}
+                    propertyName="projectName"
+                    fullWidth
+                    disabled
+                    value={projectName}
+                    label="Project Name"
+                />
+            </Grid>
+            <Grid item xs={3} />
             <Grid item xs={8}>
                 <InputField
                     onChange={handleFieldChange}
@@ -316,12 +350,19 @@ ProposalTab.propTypes = {
     linnPartNumber: PropTypes.string,
     linnPartDescription: PropTypes.string,
     assemblyType: PropTypes.string,
+    projectCode: PropTypes.string,
+    projectName: PropTypes.string,
     handleLinnPartChange: PropTypes.func.isRequired,
     searchParts: PropTypes.func.isRequired,
     partsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
     partsSearchLoading: PropTypes.bool,
     clearPartsSearch: PropTypes.func.isRequired,
-    description: PropTypes.string
+    description: PropTypes.string,
+    departmentsSearchResults: PropTypes.arrayOf(PropTypes.shape({})),
+    departmentsSearchLoading: PropTypes.bool,
+    searchDepartments: PropTypes.func.isRequired,
+    clearSearchDepartments: PropTypes.func.isRequired,
+    handleProjectChange: PropTypes.func.isRequired
 };
 
 ProposalTab.defaultProps = {
@@ -342,12 +383,16 @@ ProposalTab.defaultProps = {
     sampleQuantity: null,
     dateSamplesRequired: null,
     rohsReplace: null,
+    projectCode: null,
+    projectName: null,
     linnPartNumber: null,
     linnPartDescription: null,
     assemblyType: null,
     partsSearchResults: [],
     partsSearchLoading: false,
-    description: null
+    description: null,
+    departmentsSearchResults: [],
+    departmentsSearchLoading: false
 };
 
 export default ProposalTab;
