@@ -16,6 +16,8 @@
     {
         private readonly IRepository<Employee, int> employeeRepository;
 
+        private readonly IQueryRepository<Department> departmentRepository;
+
         private readonly IPartRepository partRepository;
 
         private readonly IQueryRepository<Supplier> supplierRepository;
@@ -35,9 +37,11 @@
             IQueryRepository<Supplier> supplierRepository,
             IQueryRepository<RootProduct> rootProductRepository,
             IRepository<Manufacturer, string> manufacturerRepository,
-            IRepository<Employee, int> employeeRepository) : base(repository, transactionManager)
+            IRepository<Employee, int> employeeRepository,
+            IQueryRepository<Department> departmentRepository) : base(repository, transactionManager)
         {
             this.employeeRepository = employeeRepository;
+            this.departmentRepository = departmentRepository;
             this.domainService = domainService;
             this.partRepository = partRepository;
             this.databaseService = databaseService;
@@ -58,7 +62,9 @@
             candidate.PartCreatedDate = resource.PartCreatedDate != null
                                             ? DateTime.Parse(resource.PartCreatedDate)
                                             : (DateTime?)null;
-            
+            candidate.Project = string.IsNullOrWhiteSpace(resource.ProjectCode)
+                                    ? null
+                                    : this.departmentRepository.FindBy(a => a.DepartmentCode == resource.ProjectCode);
             return this.domainService.Create(candidate, resource.UserPrivileges);
         }
 

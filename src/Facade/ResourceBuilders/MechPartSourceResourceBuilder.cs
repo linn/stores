@@ -6,6 +6,7 @@
     using Linn.Common.Facade;
     using Linn.Common.Resources;
     using Linn.Stores.Domain.LinnApps.Parts;
+    using Linn.Stores.Resources;
     using Linn.Stores.Resources.Parts;
 
     public class MechPartSourceResourceBuilder : IResourceBuilder<MechPartSource>
@@ -151,7 +152,14 @@
                             FootprintRef2 = model.FootprintRef2,
                             FootprintRef3 = model.FootprintRef3,
                             LibraryName = model.LibraryName,
-                            ProjectCode = model.ProjectCode
+                            ProjectCode = model.ProjectCode,
+                            Project = model.Project == null
+                                          ? null
+                                          : new DepartmentResource
+                                                {
+                                                    DepartmentCode = model.Project.DepartmentCode,
+                                                    Description = model.Project.Description
+                                                }
             };
         }
 

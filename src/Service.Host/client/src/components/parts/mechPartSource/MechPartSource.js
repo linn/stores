@@ -250,7 +250,7 @@ function MechPartSource({
         setMechPartSource({
             ...mechPartSource,
             projectCode: newValue.name,
-            projectName: newValue.description
+            project: { department: newValue.name, description: newValue.description }
         });
     };
 
@@ -441,7 +441,7 @@ function MechPartSource({
                                     linnPartDescription={mechPartSource.linnPartDescription}
                                     assemblyType={mechPartSource.assemblyType}
                                     projectCode={mechPartSource.projectCode}
-                                    projectName={mechPartSource.projectName}
+                                    projectName={mechPartSource.project?.description}
                                     handleLinnPartChange={handleLinnPartChange}
                                     handleProjectChange={handleProjectChange}
                                 />

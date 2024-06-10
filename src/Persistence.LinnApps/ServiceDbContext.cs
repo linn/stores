@@ -695,6 +695,7 @@
             e.Property(s => s.FootprintRef2).HasColumnName("FOOTPRINT_REF_2").HasMaxLength(100);
             e.Property(s => s.FootprintRef3).HasColumnName("FOOTPRINT_REF_3").HasMaxLength(100);
             e.Property(s => s.ProjectCode).HasColumnName("PROJECT_CODE").HasMaxLength(10);
+            e.HasOne(s => s.Project).WithMany().HasForeignKey(s => s.ProjectCode);
         }
 
         private void BuildMechPartAlts(ModelBuilder builder)
