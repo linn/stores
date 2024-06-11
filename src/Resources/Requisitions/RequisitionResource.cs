@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Resources.Requisitions
 {
+    using System;
     using System.Collections.Generic;
 
     using Linn.Common.Resources;
@@ -25,6 +26,16 @@
         public string QcInfo { get; set; }
 
         public string StorageType { get; set; }
+
+        public string Cancelled { get; set; }
+
+        public int? CancelledBy { get; set; }
+
+        public DateTime? DateCancelled { get; set; }
+
+        public string CancelledReason { get; set; }
+
+        public string FunctionCode { get; set; }
 
         public IEnumerable<RequisitionLineResource> Lines { get; set; }
     }

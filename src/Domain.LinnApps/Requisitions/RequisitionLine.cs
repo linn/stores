@@ -1,5 +1,6 @@
 ﻿namespace Linn.Stores.Domain.LinnApps.Requisitions
 {
+    using System;
     using System.Collections.Generic;
 
     using Linn.Stores.Domain.LinnApps.GoodsIn;
@@ -16,6 +17,12 @@
         public string TransactionCode { get; set; }
 
         public StoresTransactionDefinition TransactionDefinition { get; set; }
+
+        public DateTime? DateCancelled { get; set; }
+    
+        public string CancelledReason { get; set; }
+
+        public int? CancelledBy { get; set; }
 
         public IEnumerable<ReqMove> Moves { get; set; }
     }

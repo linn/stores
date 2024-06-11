@@ -1515,6 +1515,12 @@
             e.Property(r => r.ToLocationId).HasColumnName("TO_LOCATION_ID");
             e.Property(r => r.Document1Name).HasColumnName("DOC1_NAME");
             e.Property(r => r.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            e.Property(r => r.Document1Name).HasColumnName("DOC1_NAME");
+            e.Property(r => r.Cancelled).HasColumnName("CANCELLED").HasMaxLength(1);
+            e.Property(r => r.FunctionCode).HasColumnName("FUNCTION_CODE").HasMaxLength(10);
+            e.Property(r => r.DateCancelled).HasColumnName("DATE_CANCELLED");
+            e.Property(r => r.CancelledReason).HasColumnName("CANCELLED_REASON").HasMaxLength(2000);
+            e.Property(r => r.CancelledBy).HasColumnName("CANCELLED_BY").HasMaxLength(6);
             e.HasOne(r => r.Part).WithMany().HasForeignKey(r => r.PartNumber);
             e.HasMany(r => r.Lines).WithOne().HasForeignKey(r => r.ReqNumber);
             e.HasMany(r => r.Moves).WithOne(m => m.Header).HasForeignKey(r => r.ReqNumber);
@@ -1527,9 +1533,11 @@
             r.HasKey(l => new { l.ReqNumber, l.LineNumber });
             r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
             r.Property(l => l.LineNumber).HasColumnName("LINE_NUMBER");
-           
             r.Property(l => l.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
             r.Property(l => l.TransactionCode).HasColumnName("TRANSACTION_CODE").HasMaxLength(10);
+            r.Property(l => l.DateCancelled).HasColumnName("DATE_CANCELLED");
+            r.Property(l => l.CancelledReason).HasColumnName("CANCELLED_REASON").HasMaxLength(2000);
+            r.Property(l => l.CancelledBy).HasColumnName("CANCELLED_BY").HasMaxLength(6);
             r.HasMany(t => t.Moves).WithOne().HasForeignKey(reqMove => new { reqMove.ReqNumber, reqMove.LineNumber });
         }
 

@@ -23,10 +23,18 @@
                 PartDescription = requisition.Part?.Description,
                 QtyReceived = requisition.Qty,
                 StorageType = requisition.ToLocation?.StorageType,
+                Cancelled = requisition.Cancelled,
+                CancelledBy = requisition.CancelledBy,
+                DateCancelled = requisition.DateCancelled,
+                CancelledReason = requisition.CancelledReason,
+                FunctionCode = requisition.FunctionCode,
                 Lines = requisition.Lines.Select(l => new RequisitionLineResource
                                                           {
                                                               TransactionCode = l.TransactionCode,
                                                               Line = l.LineNumber,
+                                                              DateCancelled = l.DateCancelled,
+                                                              CancelledReason = l.CancelledReason,
+                                                              CancelledBy = l.CancelledBy,
                                                           }),
                 Links = this.BuildLinks(requisition).ToArray()
             };
