@@ -73,8 +73,9 @@
         {
             this.partsFacadeService = partsFacadeService;
             this.partDomainService = partDomainService;
+            this.mechPartSourceService = mechPartSourceService;
+            
             this.Get("/parts/sources", _ => this.GetApp());
-
             this.Get("/parts/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/parts/sources/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/parts/{id}", parameters => this.GetPart(parameters.id));
@@ -108,7 +109,6 @@
             this.partLiveService = partLiveService;
             this.Get("/parts/can-be-made-live/{id}", parameters => this.CheckCanBeMadeLive(parameters.id));
 
-            this.mechPartSourceService = mechPartSourceService;
             this.Get("/parts/sources/{id}", parameters => this.GetMechPartSource(parameters.id));
             this.Get("/parts/manufacturer-data/{id}", parameters => this.GetPartWithManufacturerData(parameters.id));
 

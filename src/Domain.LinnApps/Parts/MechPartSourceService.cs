@@ -197,6 +197,7 @@
             current.Usages = updated.Usages;
             current.LifeExpectancyPart = updated.LifeExpectancyPart;
             current.Configuration = updated.Configuration;
+            current.ProjectCode = updated.ProjectCode;
         }
 
         private IEnumerable<PartDataSheet> GetUpdatedDataSheets(IEnumerable<PartDataSheet> from, IEnumerable<PartDataSheet> to)

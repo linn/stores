@@ -694,6 +694,8 @@
             e.Property(s => s.LibraryName).HasColumnName("LIBRARY_NAME").HasMaxLength(200);
             e.Property(s => s.FootprintRef2).HasColumnName("FOOTPRINT_REF_2").HasMaxLength(100);
             e.Property(s => s.FootprintRef3).HasColumnName("FOOTPRINT_REF_3").HasMaxLength(100);
+            e.Property(s => s.ProjectCode).HasColumnName("PROJECT_CODE").HasMaxLength(10);
+            e.HasOne(s => s.Project).WithMany().HasForeignKey(s => s.ProjectCode);
         }
 
         private void BuildMechPartAlts(ModelBuilder builder)
@@ -805,7 +807,8 @@
             e.Property(d => d.DepartmentCode).HasColumnName("DEPARTMENT_CODE").HasMaxLength(10);
             e.Property(d => d.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
             e.Property(d => d.DateClosed).HasColumnName("DATE_CLOSED");
-            e.Property(d => d.ObseleteInStores).HasColumnName("OBSOLETE_IN_STORES");
+            e.Property(d => d.ObsoleteInStores).HasColumnName("OBSOLETE_IN_STORES");
+            e.Property(d => d.ProjectDepartment).HasColumnName("PROJECT_DEPARTMENT").HasMaxLength(1);
             e.HasMany(n => n.NominalAccounts).WithOne(a => a.Department).HasForeignKey("DEPARTMENT");
         }
 
