@@ -1514,8 +1514,7 @@
             e.Property(r => r.Qty).HasColumnName("QTY");
             e.Property(r => r.ToLocationId).HasColumnName("TO_LOCATION_ID");
             e.Property(r => r.Document1Name).HasColumnName("DOC1_NAME");
-            e.Property(r => r.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
-            e.Property(r => r.Document1Name).HasColumnName("DOC1_NAME");
+            e.Property(r => r.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14); 
             e.Property(r => r.Cancelled).HasColumnName("CANCELLED").HasMaxLength(1);
             e.Property(r => r.FunctionCode).HasColumnName("FUNCTION_CODE").HasMaxLength(10);
             e.Property(r => r.DateCancelled).HasColumnName("DATE_CANCELLED");
@@ -1538,6 +1537,7 @@
             r.Property(l => l.DateCancelled).HasColumnName("DATE_CANCELLED");
             r.Property(l => l.CancelledReason).HasColumnName("CANCELLED_REASON").HasMaxLength(2000);
             r.Property(l => l.CancelledBy).HasColumnName("CANCELLED_BY").HasMaxLength(6);
+            r.Property(l => l.Document1Line).HasColumnName("DOCUMENT_1_LINE").HasMaxLength(4);
             r.HasMany(t => t.Moves).WithOne().HasForeignKey(reqMove => new { reqMove.ReqNumber, reqMove.LineNumber });
         }
 

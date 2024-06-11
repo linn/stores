@@ -31,7 +31,7 @@
 
         public int? CancelledBy { get; set; }
 
-        public DateTime? DateCancelled { get; set; }
+        public string DateCancelled { get; set; }
 
         public string CancelledReason { get; set; }
 

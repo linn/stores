@@ -24,6 +24,8 @@
 
         public int? CancelledBy { get; set; }
 
+        public int? Document1Line { get; set; }
+
         public IEnumerable<ReqMove> Moves { get; set; }
     }
 }
