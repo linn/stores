@@ -29,5 +29,15 @@
         public int? ToLocationId { get; set; }
 
         public StorageLocation ToLocation { get; set; }
+
+        public string Cancelled { get; set; }
+
+        public int? CancelledBy { get; set; }
+
+        public DateTime? DateCancelled { get; set; }
+
+        public string CancelledReason { get; set; }
+
+        public string FunctionCode { get; set; }
     }
 }
