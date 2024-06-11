@@ -1,6 +1,5 @@
 ﻿namespace Linn.Stores.Resources.Requisitions
 {
-    using System;
     using System.Collections.Generic;
 
     using Linn.Common.Resources;

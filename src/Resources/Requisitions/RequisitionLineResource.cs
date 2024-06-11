@@ -1,7 +1,5 @@
 ﻿namespace Linn.Stores.Resources.Requisitions
 {
-    using System;
-
     public class RequisitionLineResource
     {
         public string TransactionCode { get; set; }
