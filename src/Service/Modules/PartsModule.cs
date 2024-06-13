@@ -42,7 +42,7 @@
 
         private readonly IPartLiveService partLiveService;
 
-        private readonly IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
+        private readonly IFacadeFilterService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource, MechPartSourceSearchResource>
             mechPartSourceService;
 
         private readonly IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>
@@ -65,7 +65,7 @@
             IPartService partDomainService,
             IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource> partTemplateService,
             IPartLiveService partLiveService,
-            IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource> mechPartSourceService,
+            IFacadeFilterService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource, MechPartSourceSearchResource> mechPartSourceService,
             IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource> manufacturerService,
             IPartDataSheetValuesService dataSheetsValuesService,
             IFacadeService<PartTqmsOverride, string, PartTqmsOverrideResource, PartTqmsOverrideResource> tqmsOverridesService,
@@ -76,6 +76,8 @@
             this.mechPartSourceService = mechPartSourceService;
             
             this.Get("/parts/sources", _ => this.GetApp());
+            this.Get("/parts/sources/report", _ => this.GetSources());
+
             this.Get("/parts/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/parts/sources/create", _ => this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index"));
             this.Get("/parts/{id}", parameters => this.GetPart(parameters.id));
@@ -388,6 +390,17 @@
             return this.Negotiate.WithModel(
                     this.partLibrariesService.GetAll())
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get);
+        }
+
+        private object GetSources()
+        {
+            var resource = this.Bind<MechPartSourceSearchResource>();
+            var results = this.mechPartSourceService.FilterBy(resource);
+
+            return this.Negotiate
+                .WithModel(results)
+                .WithMediaRangeModel("text/html", ApplicationSettings.Get)
+                .WithView("Index");
         }
     }
 }
