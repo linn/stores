@@ -40,7 +40,8 @@
     using Linn.Stores.Resources.StockLocators;
     using Linn.Stores.Resources.Tqms;
 
-    public class ServiceModule : Module
+    public class 
+        ServiceModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

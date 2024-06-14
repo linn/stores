@@ -89,12 +89,17 @@
             return source => source.PartNumber == searchTerm.ToUpper();
         }
 
-        protected override Expression<Func<MechPartSource, bool>> FilterExpression(MechPartSourceSearchResource searchResource)
+        protected override Expression<Func<MechPartSource, bool>> FilterExpression(
+            MechPartSourceSearchResource searchResource)
         {
-            return x => (string.IsNullOrEmpty(searchResource.PartNumber) || x.PartNumber.Contains(searchResource.PartNumber.Trim().ToUpper()))
-                && (string.IsNullOrEmpty(searchResource.Description) || x.PartDescription.Contains(searchResource.Description.Trim().ToUpper()))
-                && (string.IsNullOrEmpty(searchResource.ProjectDeptCode) || x.ProjectCode.Equals(searchResource.ProjectDeptCode.Trim().ToUpper()))
-                && (!searchResource.CreatedBy.HasValue || x.PartCreatedById.Equals(searchResource.CreatedBy.Value));
+            return x 
+                => !string.IsNullOrEmpty(x.PartNumber)
+                        && (string.IsNullOrEmpty(searchResource.PartNumber) || x.PartNumber.Contains(searchResource.PartNumber.Trim().ToUpper()))
+                        && (string.IsNullOrEmpty(searchResource.Description) || x.PartDescription.ToUpper().Contains(searchResource.Description.Trim().ToUpper()))
+                        && (string.IsNullOrEmpty(searchResource.ProjectDeptCode) || x.ProjectCode.Equals(searchResource.ProjectDeptCode.Trim().ToUpper()))
+                        && (!searchResource.CreatedBy.HasValue || x.ProposedBy.Id == searchResource.CreatedBy.Value)
+                        && (string.IsNullOrEmpty(searchResource.FromDate) || x.DateEntered >= DateTime.Parse(searchResource.FromDate))
+                        && (string.IsNullOrEmpty(searchResource.ToDate) || x.DateEntered <= DateTime.Parse(searchResource.ToDate));
         }
 
         private MechPartSource BuildEntityFromResource(MechPartSourceResource resource)

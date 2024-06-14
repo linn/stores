@@ -30,5 +30,11 @@
             return new SuccessResult<IEnumerable<Department>>(
                 this.repository.FilterBy(d => !d.DateClosed.HasValue));
         }
+
+        public IResult<IEnumerable<Department>> GetProjectDepartments()
+        {
+            return new SuccessResult<IEnumerable<Department>>(
+                this.repository.FilterBy(d => d.ProjectDepartment == "Y"));
+        }
     }
 }

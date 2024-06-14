@@ -63,6 +63,7 @@ import StoresMoveLogReport from '../containers/reports/StoresMoveLogReport';
 import StoresMoveLogReportOptions from '../containers/reports/StoresMoveLogReportOptions';
 import StockTriggerLevelsUtility from '../containers/stockTriggerLevelsUtility/StockTriggerLevelsUtility';
 import LabelReprint from '../containers/LabelReprint';
+import PartSources from '../containers/parts/PartSources';
 
 const Root = ({ store }) => (
     <div>
@@ -121,6 +122,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/parts/sources/create"
                                         component={MechPartSource}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/parts/sources/report"
+                                        component={PartSources}
                                     />
                                     <Route
                                         exact

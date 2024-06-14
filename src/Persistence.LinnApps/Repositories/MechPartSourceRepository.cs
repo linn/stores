@@ -67,7 +67,7 @@
 
         public IQueryable<MechPartSource> FilterBy(Expression<Func<MechPartSource, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.MechPartSources.Include(x => x.ProposedBy).AsNoTracking().ToList().AsQueryable().Where(expression);
         }
     }
 }

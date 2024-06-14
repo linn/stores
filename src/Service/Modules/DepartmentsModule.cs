@@ -1,6 +1,11 @@
 ﻿namespace Linn.Stores.Service.Modules
 {
+    using System.Collections.Generic;
+
+    using Linn.Common.Facade;
+    using Linn.Stores.Domain.LinnApps;
     using Linn.Stores.Facade.Services;
+    using Linn.Stores.Resources;
     using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Service.Models;
 
@@ -28,8 +33,12 @@
 
         private object GetDepartments()
         {
-            var resource = this.Bind<SearchRequestResource>();
-            var results = this.departmentsService.GetOpenDepartments(resource.SearchTerm);
+            var resource = this.Bind<DepartmentsRequestResource>();
+
+            var results = resource.ProjectDeptsOnly.GetValueOrDefault() 
+                              ? this.departmentsService.GetProjectDepartments() 
+                              : this.departmentsService.GetOpenDepartments(resource.SearchTerm);
+
             return this.Negotiate
                 .WithModel(results)
                 .WithMediaRangeModel("text/html", ApplicationSettings.Get)

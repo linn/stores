@@ -401,3 +401,5 @@ export const partLibrariesActionTypes = makeActionTypes(itemTypes.partLibraries.
 export const storesTransactionDefinitionsActionTypes = makeActionTypes(
     itemTypes.storesTransactionDefinitions.actionType
 );
+
+export const partSourcesActionTypes = makeActionTypes(itemTypes.partSources.actionType);
