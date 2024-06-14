@@ -16,19 +16,17 @@ function PartSources({ items, loading, search, projectDepartments, employees }) 
         setOptions(o => ({ ...o, [property]: value }));
     };
     function convertISOToDateFormat(isoString) {
-        // Create a new Date object from the ISO string
         const date = new Date(isoString);
 
-        // Get the day, month, and year from the Date object
         const day = String(date.getUTCDate()).padStart(2, '0');
-        const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0');
         const year = date.getUTCFullYear();
 
-        // Format the date as dd/mm/yyyy
         const formattedDate = `${day}/${month}/${year}`;
 
         return formattedDate;
     }
+
     const rows = items?.map(i => ({ ...i, dateEntered: convertISOToDateFormat(i.dateEntered) }));
     const columns = [
         {
