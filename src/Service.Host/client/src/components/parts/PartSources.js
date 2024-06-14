@@ -141,6 +141,9 @@ function PartSources({ items, loading, search, projectDepartments, employees }) 
                             if (options.fromDate) {
                                 body.fromDate = options.fromDate.toISOString();
                             }
+                            if (options.createdBy) {
+                                body.createdBy = options.createdBy;
+                            }
                             if (options.toDate) {
                                 body.toDate = options.toDate.toISOString();
                             }
