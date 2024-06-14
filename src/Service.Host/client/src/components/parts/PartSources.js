@@ -140,8 +140,6 @@ function PartSources({ items, loading, search, projectDepartments, employees }) 
                         rows={items ?? []}
                         columns={columns}
                         loading={loading}
-                        // density="compact"
-                        // rowHeight={34}
                         autoHeight
                         checkboxSelection={false}
                     />
