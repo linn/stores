@@ -14,6 +14,7 @@
     using Linn.Stores.Facade.Services;
     using Linn.Stores.Resources;
     using Linn.Stores.Resources.Parts;
+    using Linn.Stores.Resources.RequestResources;
     using Linn.Stores.Service.Modules;
     using Linn.Stores.Service.ResponseProcessors;
 
@@ -63,7 +64,7 @@
             get; private set;
         }
 
-        protected IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
+        protected IFacadeFilterService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource, MechPartSourceSearchResource>
             MechPartSourceService
         {
             get; private set;
@@ -121,7 +122,7 @@
             this.PartTemplateService = Substitute
                 .For<IFacadeService<PartTemplate, string, PartTemplateResource, PartTemplateResource>>();
             this.MechPartSourceService = Substitute
-                .For<IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>>();
+                .For<IFacadeFilterService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource, MechPartSourceSearchResource>>();
             this.ManufacturerService = Substitute
                 .For<IFacadeService<Manufacturer, string, ManufacturerResource, ManufacturerResource>>();
             this.ManufacturerRepository = Substitute.For<IRepository<Manufacturer, string>>();
@@ -167,6 +168,7 @@
                         with.Dependency<IResourceBuilder<IEnumerable<AssemblyTechnology>>>(
                             new AssemblyTechnologiesResourceBuilder());
                         with.Dependency<IResourceBuilder<DecrementRule>>(new DecrementRuleResourceBuilder());
+                        with.Dependency<IResourceBuilder<IEnumerable<MechPartSource>>>(new MechPartSourcesResourceBuilder());
                         with.Dependency<IResourceBuilder<IEnumerable<DecrementRule>>>(
                             new DecrementRulesResourceBuilder());
                         with.Dependency<IResourceBuilder<PartLiveTest>>(
@@ -196,6 +198,7 @@
                         with.ResponseProcessor<PartTqmsOverridesResponseProcessor>();
                         with.ResponseProcessor<PartLibraryResponseProcessor>();
                         with.ResponseProcessor<PartLibrariesResponseProcessor>();
+                        with.ResponseProcessor<MechPartSourcesResponseProcessor>();
                         with.RequestStartup(
                             (container, pipelines, context) =>
                                 {

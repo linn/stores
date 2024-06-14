@@ -40,7 +40,8 @@
     using Linn.Stores.Resources.StockLocators;
     using Linn.Stores.Resources.Tqms;
 
-    public class ServiceModule : Module
+    public class 
+        ServiceModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -115,7 +116,7 @@
             builder.RegisterType<SosAllocDetailFacadeService>()
                 .As<IFacadeFilterService<SosAllocDetail, int, SosAllocDetailResource, SosAllocDetailResource, JobIdRequestResource>>();
             builder.RegisterType<MechPartSourceFacadeService>()
-                .As<IFacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>>();
+                .As<IFacadeFilterService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource, MechPartSourceSearchResource>>();
             builder.RegisterType<ParcelFacadeService>()
                 .As<IFacadeFilterService<Parcel, int, ParcelResource, ParcelResource, ParcelSearchRequestResource>>();
             builder.RegisterType<ManufacturerService>()

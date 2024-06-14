@@ -11,8 +11,9 @@
     using Linn.Stores.Domain.LinnApps.ExternalServices;
     using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Resources.Parts;
+    using Linn.Stores.Resources.RequestResources;
 
-    public class MechPartSourceFacadeService : FacadeService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource>
+    public class MechPartSourceFacadeService : FacadeFilterService<MechPartSource, int, MechPartSourceResource, MechPartSourceResource, MechPartSourceSearchResource>
     {
         private readonly IRepository<Employee, int> employeeRepository;
 
@@ -86,6 +87,19 @@
         protected override Expression<Func<MechPartSource, bool>> SearchExpression(string searchTerm)
         {
             return source => source.PartNumber == searchTerm.ToUpper();
+        }
+
+        protected override Expression<Func<MechPartSource, bool>> FilterExpression(
+            MechPartSourceSearchResource searchResource)
+        {
+            return x 
+                => !string.IsNullOrEmpty(x.PartNumber)
+                        && (string.IsNullOrEmpty(searchResource.PartNumber) || x.PartNumber.Contains(searchResource.PartNumber.Trim().ToUpper()))
+                        && (string.IsNullOrEmpty(searchResource.Description) || x.PartDescription.ToUpper().Contains(searchResource.Description.Trim().ToUpper()))
+                        && (string.IsNullOrEmpty(searchResource.ProjectDeptCode) || x.ProjectCode.Equals(searchResource.ProjectDeptCode.Trim().ToUpper()))
+                        && (!searchResource.CreatedBy.HasValue || x.ProposedBy.Id == searchResource.CreatedBy.Value)
+                        && (string.IsNullOrEmpty(searchResource.FromDate) || x.DateEntered >= DateTime.Parse(searchResource.FromDate))
+                        && (string.IsNullOrEmpty(searchResource.ToDate) || x.DateEntered <= DateTime.Parse(searchResource.ToDate));
         }
 
         private MechPartSource BuildEntityFromResource(MechPartSourceResource resource)

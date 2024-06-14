@@ -138,6 +138,12 @@ export const auditLocations = new ItemType(
 
 export const mechPartSource = new ItemType('mechPartSource', 'MECH_PART_SOURCE', '/parts/sources');
 
+export const partSources = new ItemType(
+    'partSources',
+    'MECH_PART_SOURCES',
+    '/parts/sources/report'
+);
+
 export const manufacturers = new ItemType(
     'manufacturers',
     'MANUFACTURERS',
