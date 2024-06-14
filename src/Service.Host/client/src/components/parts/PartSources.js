@@ -15,7 +15,21 @@ function PartSources({ items, loading, search, projectDepartments, employees }) 
     const handleFieldChange = (property, value) => {
         setOptions(o => ({ ...o, [property]: value }));
     };
+    function convertISOToDateFormat(isoString) {
+        // Create a new Date object from the ISO string
+        const date = new Date(isoString);
 
+        // Get the day, month, and year from the Date object
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+        const year = date.getUTCFullYear();
+
+        // Format the date as dd/mm/yyyy
+        const formattedDate = `${day}/${month}/${year}`;
+
+        return formattedDate;
+    }
+    const rows = items?.map(i => ({ ...i, dateEntered: convertISOToDateFormat(i.dateEntered) }));
     const columns = [
         {
             headerName: 'Part No',
@@ -26,6 +40,21 @@ function PartSources({ items, loading, search, projectDepartments, employees }) 
             )
         },
         {
+            headerName: 'Proposed By',
+            field: 'proposedByName',
+            width: 200
+        },
+        {
+            headerName: 'Date Entered',
+            field: 'dateEntered',
+            width: 200
+        },
+        {
+            headerName: 'Project Code',
+            field: 'projectCode',
+            width: 200
+        },
+        {
             headerName: 'Desc',
             field: 'description',
             width: 200
@@ -34,7 +63,7 @@ function PartSources({ items, loading, search, projectDepartments, employees }) 
 
     const csvData = [
         columns.map(c => c.headerName),
-        ...items.map(i => columns.map(col => i[col.field]))
+        ...rows.map(i => columns.map(col => i[col.field]))
     ];
     return (
         <Page>
@@ -102,7 +131,7 @@ function PartSources({ items, loading, search, projectDepartments, employees }) 
                 <Grid item xs={6} />
                 <Grid item xs={2}>
                     <Button
-                        variant="contained"
+                        variant="outlined"
                         onClick={() => {
                             const body = {};
                             if (options.partNumber) {
@@ -126,6 +155,8 @@ function PartSources({ items, loading, search, projectDepartments, employees }) 
                         RUN
                     </Button>
                 </Grid>
+                <Grid item xs={8} />
+
                 <>
                     {!!items?.length && (
                         <Grid item xs={2}>
@@ -137,7 +168,7 @@ function PartSources({ items, loading, search, projectDepartments, employees }) 
                 </>
                 <Grid items xs={12}>
                     <DataGrid
-                        rows={items ?? []}
+                        rows={rows ?? []}
                         columns={columns}
                         loading={loading}
                         autoHeight
