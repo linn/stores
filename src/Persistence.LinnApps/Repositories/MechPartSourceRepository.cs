@@ -20,16 +20,29 @@
         public MechPartSource FindById(int key)
         {
             return this.serviceDbContext.MechPartSources
-                .Include(s => s.ProposedBy).Include(s => s.PartToBeReplaced).Include(s => s.Part)
-                .ThenInclude(p => p.DataSheets).Include(s => s.MechPartManufacturerAlts)
-                .ThenInclude(m => m.Manufacturer).Include(s => s.Usages)
-                .Include(s => s.MechPartManufacturerAlts).ThenInclude(m => m.ApprovedBy)
+                .Include(s => s.ProposedBy)
+                .Include(s => s.PartToBeReplaced)
+                .Include(p => p.Project)
+                .Include(s => s.Part)
+                .ThenInclude(p => p.DataSheets)
+                .Include(s => s.MechPartManufacturerAlts)
+                .ThenInclude(m => m.Manufacturer)
+                .Include(s => s.Usages)
+                .Include(s => s.MechPartManufacturerAlts)
+                .ThenInclude(m => m.ApprovedBy)
                 .Include(s => s.PartCreatedBy)
-                .Include(s => s.VerifiedBy).Include(s => s.McitVerifiedBy).Include(s => s.ApplyTCodeBy)
-                .Include(s => s.RemoveTCodeBy).Include(s => s.CancelledBy).Include(s => s.MechPartAlts)
-                .ThenInclude(a => a.Supplier).Include(s => s.PurchasingQuotes)
-                .ThenInclude(q => q.Supplier).Include(s => s.PurchasingQuotes)
-                .ThenInclude(q => q.Manufacturer).FirstOrDefault(s => s.Id == key);
+                .Include(s => s.VerifiedBy)
+                .Include(s => s.McitVerifiedBy)
+                .Include(s => s.ApplyTCodeBy)
+                .Include(s => s.RemoveTCodeBy)
+                .Include(s => s.CancelledBy)
+                .Include(s => s.MechPartAlts)
+                .ThenInclude(a => a.Supplier)
+                .Include(s => s.PurchasingQuotes)
+                .ThenInclude(q => q.Supplier)
+                .Include(s => s.PurchasingQuotes)
+                .ThenInclude(q => q.Manufacturer)
+                .FirstOrDefault(s => s.Id == key);
         }
 
         public IQueryable<MechPartSource> FindAll()
@@ -54,7 +67,7 @@
 
         public IQueryable<MechPartSource> FilterBy(Expression<Func<MechPartSource, bool>> expression)
         {
-            throw new NotImplementedException();
+            return this.serviceDbContext.MechPartSources.Include(x => x.ProposedBy).AsNoTracking().ToList().AsQueryable().Where(expression);
         }
     }
 }

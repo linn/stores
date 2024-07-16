@@ -7,5 +7,7 @@
         public string Description { get; set; }
         
         public string Comments { get; set; }
+
+        public int? SortOrder { get; set; }
     }
 }

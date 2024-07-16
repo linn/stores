@@ -417,7 +417,7 @@
 
            var connectionString = $"Data Source={dataSource};User Id={userId};Password={password};";
 
-           optionsBuilder.UseOracle(connectionString, options => options.UseOracleSQLCompatibility("11"));
+            optionsBuilder.UseOracle(connectionString, options => options.UseOracleSQLCompatibility("11"));
             optionsBuilder.UseLoggerFactory(MyLoggerFactory);
             optionsBuilder.EnableSensitiveDataLogging(true);
             base.OnConfiguring(optionsBuilder);
@@ -694,6 +694,8 @@
             e.Property(s => s.LibraryName).HasColumnName("LIBRARY_NAME").HasMaxLength(200);
             e.Property(s => s.FootprintRef2).HasColumnName("FOOTPRINT_REF_2").HasMaxLength(100);
             e.Property(s => s.FootprintRef3).HasColumnName("FOOTPRINT_REF_3").HasMaxLength(100);
+            e.Property(s => s.ProjectCode).HasColumnName("PROJECT_CODE").HasMaxLength(10);
+            e.HasOne(s => s.Project).WithMany().HasForeignKey(s => s.ProjectCode);
         }
 
         private void BuildMechPartAlts(ModelBuilder builder)
@@ -805,7 +807,8 @@
             e.Property(d => d.DepartmentCode).HasColumnName("DEPARTMENT_CODE").HasMaxLength(10);
             e.Property(d => d.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
             e.Property(d => d.DateClosed).HasColumnName("DATE_CLOSED");
-            e.Property(d => d.ObseleteInStores).HasColumnName("OBSOLETE_IN_STORES");
+            e.Property(d => d.ObsoleteInStores).HasColumnName("OBSOLETE_IN_STORES");
+            e.Property(d => d.ProjectDepartment).HasColumnName("PROJECT_DEPARTMENT").HasMaxLength(1);
             e.HasMany(n => n.NominalAccounts).WithOne(a => a.Department).HasForeignKey("DEPARTMENT");
         }
 
@@ -1168,6 +1171,7 @@
             q.Property(e => e.DeliveryTermCode).HasColumnName("DELIVERY_TERM_CODE").HasMaxLength(6);
             q.Property(e => e.Description).HasColumnName("DESCRIPTION").HasMaxLength(60);
             q.Property(e => e.Comments).HasColumnName("COMMENTS").HasMaxLength(1000);
+            q.Property(e => e.SortOrder).HasColumnName("SORT_ORDER");
         }
 
         private void BuildImportBookPostEntries(ModelBuilder builder)
@@ -1233,6 +1237,7 @@
             q.HasKey(e => e.PortCode);
             q.Property(e => e.PortCode).HasColumnName("PORT_CODE").HasMaxLength(3);
             q.Property(e => e.Description).HasColumnName("DESCRIPTION").HasMaxLength(30);
+            q.Property(e => e.SortOrder).HasColumnName("SORT_ORDER");
         }
 
         private void BuildPartParamDataSheets(ModelBuilder builder)
@@ -1512,7 +1517,12 @@
             e.Property(r => r.Qty).HasColumnName("QTY");
             e.Property(r => r.ToLocationId).HasColumnName("TO_LOCATION_ID");
             e.Property(r => r.Document1Name).HasColumnName("DOC1_NAME");
-            e.Property(r => r.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
+            e.Property(r => r.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14); 
+            e.Property(r => r.Cancelled).HasColumnName("CANCELLED").HasMaxLength(1);
+            e.Property(r => r.FunctionCode).HasColumnName("FUNCTION_CODE").HasMaxLength(10);
+            e.Property(r => r.DateCancelled).HasColumnName("DATE_CANCELLED");
+            e.Property(r => r.CancelledReason).HasColumnName("CANCELLED_REASON").HasMaxLength(2000);
+            e.Property(r => r.CancelledBy).HasColumnName("CANCELLED_BY").HasMaxLength(6);
             e.HasOne(r => r.Part).WithMany().HasForeignKey(r => r.PartNumber);
             e.HasMany(r => r.Lines).WithOne().HasForeignKey(r => r.ReqNumber);
             e.HasMany(r => r.Moves).WithOne(m => m.Header).HasForeignKey(r => r.ReqNumber);
@@ -1525,9 +1535,12 @@
             r.HasKey(l => new { l.ReqNumber, l.LineNumber });
             r.Property(l => l.ReqNumber).HasColumnName("REQ_NUMBER");
             r.Property(l => l.LineNumber).HasColumnName("LINE_NUMBER");
-           
             r.Property(l => l.PartNumber).HasColumnName("PART_NUMBER").HasMaxLength(14);
             r.Property(l => l.TransactionCode).HasColumnName("TRANSACTION_CODE").HasMaxLength(10);
+            r.Property(l => l.DateCancelled).HasColumnName("DATE_CANCELLED");
+            r.Property(l => l.CancelledReason).HasColumnName("CANCELLED_REASON").HasMaxLength(2000);
+            r.Property(l => l.CancelledBy).HasColumnName("CANCELLED_BY").HasMaxLength(6);
+            r.Property(l => l.Document1Line).HasColumnName("DOCUMENT_1_LINE").HasMaxLength(4);
             r.HasMany(t => t.Moves).WithOne().HasForeignKey(reqMove => new { reqMove.ReqNumber, reqMove.LineNumber });
         }
 

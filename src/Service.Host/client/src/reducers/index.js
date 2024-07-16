@@ -145,6 +145,7 @@ import stockTriggerLevel from './stockTriggerLevel';
 import stockTriggerLevels from './stockTriggerLevels';
 import partLibraries from './parts/partLibraries';
 import storesTransactionDefinitions from './storesTransactionDefinitions';
+import partSources from './parts/partSources';
 
 const errors = fetchErrorReducer({ ...itemTypes, ...reportTypes, ...processTypes });
 
@@ -216,6 +217,7 @@ const rootReducer = history =>
         partDataSheetValues,
         partLiveTest,
         parts,
+        partSources,
         partLibraries,
         partStorageTypes,
         partTemplate,

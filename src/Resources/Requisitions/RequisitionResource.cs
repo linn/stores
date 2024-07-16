@@ -26,6 +26,16 @@
 
         public string StorageType { get; set; }
 
+        public string Cancelled { get; set; }
+
+        public int? CancelledBy { get; set; }
+
+        public string DateCancelled { get; set; }
+
+        public string CancelledReason { get; set; }
+
+        public string FunctionCode { get; set; }
+
         public IEnumerable<RequisitionLineResource> Lines { get; set; }
     }
 }

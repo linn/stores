@@ -248,6 +248,7 @@
             builder.RegisterType<StoresBudgetPostingsResourceBuilder>().As<IResourceBuilder<IEnumerable<StoresBudgetPosting>>>();
             builder.RegisterType<StoresTransactionDefinitionResourceBuilder>().As<IResourceBuilder<StoresTransactionDefinition>>();
             builder.RegisterType<StoresTransactionDefinitionsResourceBuilder>().As<IResourceBuilder<IEnumerable<StoresTransactionDefinition>>>();
+            builder.RegisterType<MechPartSourcesResourceBuilder>().As<IResourceBuilder<IEnumerable<MechPartSource>>>();
         }
     }
 }
