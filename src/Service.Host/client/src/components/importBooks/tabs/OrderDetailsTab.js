@@ -320,7 +320,7 @@ function OrderDetailsTab({
                                         modal
                                         links={false}
                                         debounce={1000}
-                                        minimumSearchTermLength={2}
+                                        minimumSearchTermLength={4}
                                         required
                                         disabled={!allowedToEdit}
                                         maxLength={6}
@@ -345,7 +345,7 @@ function OrderDetailsTab({
                                         modal
                                         links={false}
                                         debounce={1000}
-                                        minimumSearchTermLength={2}
+                                        minimumSearchTermLength={4}
                                         required
                                         disabled={!allowedToEdit}
                                         maxLength={6}
