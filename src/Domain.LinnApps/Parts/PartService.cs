@@ -306,12 +306,12 @@
 
             part.ResistorTolerance = source.ResistorTolerance;
 
-            if (part.LibraryName == "Resistors")
+            if (part.LibraryName == "Resistors" || source.PartType == "RES")
             {
                 part.AltiumValueRkm = source.RkmCode;
                 part.AltiumValue = source.Resistance.ToString();
             }
-            else if (part.LibraryName == "Capacitors")
+            else if (part.LibraryName == "Capacitors" || source.PartType == "CAP")
             {
                 part.AltiumValueRkm = source.CapacitanceLetterAndNumeralCode;
                 part.AltiumValue = source.Capacitance.ToString();
