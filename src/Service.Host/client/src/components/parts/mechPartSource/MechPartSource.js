@@ -406,12 +406,12 @@ function MechPartSource({
                                 />
                                 <Tab label="Quality Requirements" />
                                 <Tab label="Suppliers" />
-                                <Tab label="Manufacturers" />
+                                <Tab label="Manufacturers" disabled={creating()} />
                                 <Tab
                                     label="Param Data"
                                     disabled={mechPartSource.mechanicalOrElectrical !== 'E'}
                                 />
-                                <Tab label="Cad Data" />
+                                <Tab label="Cad Data" disabled={creating()} />
                                 <Tab label="Quotes" />
                                 <Tab label="Usages" />
                                 <Tab label="Verification" />
@@ -431,7 +431,6 @@ function MechPartSource({
                                     emcCritical={mechPartSource.emcCritical}
                                     singleSource={mechPartSource.singleSource}
                                     safetyDataDirectory={mechPartSource.safetyDataDirectory}
-                                    productionDate={mechPartSource.productionDate}
                                     estimatedVolume={mechPartSource.estimatedVolume}
                                     samplesRequired={mechPartSource.samplesRequired}
                                     sampleQuantity={mechPartSource.sampleQuantity}

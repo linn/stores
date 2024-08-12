@@ -16,7 +16,6 @@ function ProposalTab({
     emcCritical,
     singleSource,
     safetyDataDirectory,
-    productionDate,
     estimatedVolume,
     samplesRequired,
     sampleQuantity,
@@ -182,17 +181,7 @@ function ProposalTab({
                     label="SafetyDataDirectory"
                 />
             </Grid>
-            <Grid item xs={4} />
-            <Grid item xs={4}>
-                <DatePicker
-                    label="Production Date"
-                    value={productionDate}
-                    onChange={value => {
-                        handleFieldChange('productionDate', value);
-                    }}
-                />
-            </Grid>
-            <Grid item xs={8} />
+            <Grid item xs={12} />
             <Grid item xs={2}>
                 <InputField
                     onChange={handleFieldChange}
@@ -277,7 +266,7 @@ function ProposalTab({
                 <Dropdown
                     label="Assembly Type*"
                     propertyName="assemblyType"
-                    items={['SM', 'TH']}
+                    items={['TH', 'SM']}
                     fullWidth
                     allowNoValue
                     value={assemblyType}
@@ -299,6 +288,7 @@ function ProposalTab({
                     fetchItems={searchDepartments}
                     links={false}
                     clearSearch={clearSearchDepartments}
+                    required
                     placeholder="Search for project code"
                 />
             </Grid>
@@ -341,7 +331,6 @@ ProposalTab.propTypes = {
     emcCritical: PropTypes.string,
     singleSource: PropTypes.string,
     safetyDataDirectory: PropTypes.string,
-    productionDate: PropTypes.string,
     estimatedVolume: PropTypes.number,
     samplesRequired: PropTypes.string,
     sampleQuantity: PropTypes.number,
@@ -377,7 +366,6 @@ ProposalTab.defaultProps = {
     emcCritical: null,
     singleSource: null,
     safetyDataDirectory: null,
-    productionDate: null,
     estimatedVolume: null,
     samplesRequired: null,
     sampleQuantity: null,
