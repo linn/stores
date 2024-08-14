@@ -16,7 +16,8 @@
                        {
                            Id = storageLocation.LocationId,
                            LocationCode = storageLocation.LocationCode,
-                           Description = storageLocation.Description
+                           Description = storageLocation.Description,
+                           SiteCode = storageLocation.SiteCode
                        };
         }
 

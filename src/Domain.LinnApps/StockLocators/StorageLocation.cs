@@ -21,6 +21,8 @@
 
         public string StorageType { get; set; }
 
+        public string SiteCode { get; set; }
+
         public IEnumerable<StockLocator> StockLocators { get; set; }
 
         public IEnumerable<StockLocatorLocation> StockLocatorLocations { get; set; }

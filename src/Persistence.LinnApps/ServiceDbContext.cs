@@ -1374,7 +1374,8 @@
             e.Property(l => l.LocationCode).HasColumnName("LOCATION_CODE").HasMaxLength(16);
             e.Property(l => l.Description).HasColumnName("DESCRIPTION").HasMaxLength(50);
             e.Property(l => l.DateInvalid).HasColumnName("DATE_INVALID");
-            e.Property(l => l.StorageType).HasColumnName("STORAGE_TYPE");
+            e.Property(l => l.StorageType).HasColumnName("STORAGE_TYPE").HasMaxLength(4);
+            e.Property(l => l.SiteCode).HasColumnName("SITE_CODE").HasMaxLength(16);
             e.Property(l => l.LocationType).HasColumnName("LOCATION_TYPE").HasMaxLength(1);
             e.Property(l => l.DefaultStockPool).HasColumnName("DEFAULT_STOCK_POOL").HasMaxLength(10);
         }
