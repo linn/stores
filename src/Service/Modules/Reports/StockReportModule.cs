@@ -14,8 +14,14 @@
         public StockReportModule(IStockReportFacadeService reportService)
         {
             this.reportService = reportService;
-            this.Get("/inventory/reports/stock-locators-report", _ => this.GetReport());
+            this.Get("/inventory/reports/stock-locators-report", _ => this.GetApp());
+            this.Get("/inventory/reports/stock-locators-report/report", _ => this.GetReport());
             this.Get("/inventory/reports/stock-locators-report/export", _ => this.GetExport());
+        }
+
+        private object GetApp()
+        {
+            return this.Negotiate.WithModel(ApplicationSettings.Get()).WithView("Index");
         }
 
         private object GetExport()
