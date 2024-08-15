@@ -33,7 +33,7 @@ export default function StockLocatorReport({ reportData, loading, error, getRepo
                     />
                 </Grid>
                 <Grid item xs={4} />
-                <Grid item xs={8}>
+                <Grid item xs={12}>
                     {loading ? (
                         <Loading />
                     ) : (
@@ -49,7 +49,6 @@ export default function StockLocatorReport({ reportData, loading, error, getRepo
                         )
                     )}
                 </Grid>
-                <Grid item xs={4} />
             </Grid>
         </div>
     );

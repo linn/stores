@@ -42,17 +42,29 @@
                                       {
                                           SortOrder = 30, GridDisplayType = GridDisplayType.TextValue
                                       },
+                                  new AxisDetailsModel("Part Description")
+                                      {
+                                          SortOrder = 35, GridDisplayType = GridDisplayType.TextValue
+                                      },
                                   new AxisDetailsModel("Quantity")
                                       {
                                           SortOrder = 40, GridDisplayType = GridDisplayType.Value
                                       },
+                                  new AxisDetailsModel("Base Unit Price")
+                                      {
+                                          SortOrder = 50, GridDisplayType = GridDisplayType.Value, DecimalPlaces = 2
+                                      },
+                                  new AxisDetailsModel("Total Value")
+                                      {
+                                          SortOrder = 60, GridDisplayType = GridDisplayType.Value, DecimalPlaces = 2
+                                      },
                                   new AxisDetailsModel("State")
                                       {
-                                          SortOrder = 50, GridDisplayType = GridDisplayType.TextValue
+                                          SortOrder = 70, GridDisplayType = GridDisplayType.TextValue
                                       },
                                   new AxisDetailsModel("Batch Ref")
                                       {
-                                          SortOrder = 60, GridDisplayType = GridDisplayType.TextValue
+                                          SortOrder = 80, GridDisplayType = GridDisplayType.TextValue
                                       }
                               };
             report.AddSortedColumns(columns);
@@ -81,8 +93,26 @@
                 values.Add(new CalculationValueModel
                                {
                                    RowId = rowId,
+                                   TextDisplay = stockLocator.Part.Description,
+                                   ColumnId = "Part Description"
+                               });
+                values.Add(new CalculationValueModel
+                               {
+                                   RowId = rowId,
                                    Value = stockLocator.Quantity.GetValueOrDefault(),
                                    ColumnId = "Quantity"
+                               });
+                values.Add(new CalculationValueModel
+                               {
+                                   RowId = rowId,
+                                   Value = stockLocator.Part.BaseUnitPrice.GetValueOrDefault(), 
+                                   ColumnId = "Base Unit Price"
+                               });
+                values.Add(new CalculationValueModel
+                               {
+                                   RowId = rowId,
+                                   Value = stockLocator.Part.BaseUnitPrice.GetValueOrDefault() * stockLocator.Quantity.GetValueOrDefault(),
+                                   ColumnId = "Total Value"
                                });
                 values.Add(new CalculationValueModel
                                {

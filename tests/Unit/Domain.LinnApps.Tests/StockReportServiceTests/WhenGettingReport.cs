@@ -8,6 +8,7 @@
     using FluentAssertions;
 
     using Linn.Common.Reporting.Models;
+    using Linn.Stores.Domain.LinnApps.Parts;
     using Linn.Stores.Domain.LinnApps.StockLocators;
 
     using NSubstitute;
@@ -31,7 +32,8 @@
                                           BatchRef = "B093",
                                           State = "STORES",
                                           PalletNumber = null,
-                                          PartNumber = "CAP 050"
+                                          PartNumber = "CAP 050",
+                                          Part = new Part { BaseUnitPrice = 1.23m, Description = "PD1" }
                                       },
                                   new StockLocator
                                       {
@@ -41,7 +43,8 @@
                                           BatchRef = "B4587",
                                           State = "STORES",
                                           PalletNumber = null,
-                                          PartNumber = "MISS 123"
+                                          PartNumber = "MISS 123",
+                                          Part = new Part { BaseUnitPrice = 2.34m, Description = "PD2" }
                                       }
                               };
 
@@ -70,15 +73,21 @@
             this.result.GetGridTextValue(0, 0).Should().Be("SU-1234");
             this.result.GetGridTextValue(0, 1).Should().BeNullOrEmpty();
             this.result.GetGridTextValue(0, 2).Should().Be("CAP 050");
-            this.result.GetGridValue(0, 3).Should().Be(12);
-            this.result.GetGridTextValue(0, 4).Should().Be("STORES");
-            this.result.GetGridTextValue(0, 5).Should().Be("B093");
+            this.result.GetGridTextValue(0, 3).Should().Be("PD1");
+            this.result.GetGridValue(0, 4).Should().Be(12);
+            this.result.GetGridValue(0, 5).Should().Be(1.23m);
+            this.result.GetGridValue(0, 6).Should().Be(14.76m);
+            this.result.GetGridTextValue(0, 7).Should().Be("STORES");
+            this.result.GetGridTextValue(0, 8).Should().Be("B093");
             this.result.GetGridTextValue(1, 0).Should().Be("SU-9874");
             this.result.GetGridTextValue(1, 1).Should().BeNullOrEmpty();
             this.result.GetGridTextValue(1, 2).Should().Be("MISS 123");
-            this.result.GetGridValue(1, 3).Should().Be(4);
-            this.result.GetGridTextValue(1, 4).Should().Be("STORES");
-            this.result.GetGridTextValue(1, 5).Should().Be("B4587");
+            this.result.GetGridTextValue(1, 3).Should().Be("PD2");
+            this.result.GetGridValue(1, 4).Should().Be(4);
+            this.result.GetGridValue(1, 5).Should().Be(2.34m);
+            this.result.GetGridValue(1, 6).Should().Be(9.36m);
+            this.result.GetGridTextValue(1, 7).Should().Be("STORES");
+            this.result.GetGridTextValue(1, 8).Should().Be("B4587");
         }
     }
 }
