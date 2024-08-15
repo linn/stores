@@ -8,7 +8,6 @@
     using Linn.Common.Reporting.Resources.Extensions;
     using Linn.Stores.Domain.LinnApps.Reports;
     using Linn.Stores.Resources.RequestResources;
-    using Org.BouncyCastle.Asn1.Ocsp;
 
     public class StoresMoveLogReportFacadeService : IStoresMoveLogReportFacadeService
     {

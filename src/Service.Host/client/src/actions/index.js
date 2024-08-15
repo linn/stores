@@ -403,3 +403,7 @@ export const storesTransactionDefinitionsActionTypes = makeActionTypes(
 );
 
 export const partSourcesActionTypes = makeActionTypes(itemTypes.partSources.actionType);
+
+export const stockLocatorReportActionTypes = makeReportActionTypes(
+    reportTypes.stockLocatorReport.actionType
+);
