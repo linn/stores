@@ -75,7 +75,7 @@
                 values.Add(new CalculationValueModel
                                {
                                    RowId = rowId,
-                                   TextDisplay = stockLocator.StorageLocation.LocationCode,
+                                   TextDisplay = stockLocator.StorageLocation?.LocationCode,
                                    ColumnId = "Location"
                                });
                 values.Add(new CalculationValueModel

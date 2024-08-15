@@ -28,7 +28,7 @@
                 .Returns(results);
 
             this.Response = this.Browser.Get(
-                "/inventory/reports/stock-locators-report",
+                "/inventory/reports/stock-locators-report/report",
                 with =>
                     {
                         with.Header("Accept", "application/json");

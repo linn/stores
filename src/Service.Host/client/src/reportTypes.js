@@ -70,5 +70,5 @@ export const storesMoveLogReport = new ItemType(
 export const stockLocatorReport = new ItemType(
     'stockLocatorReport',
     'STOCK_LOCATOR_REPORT',
-    '/inventory/reports/stock-locators-report'
+    '/inventory/reports/stock-locators-report/report'
 );
