@@ -40,8 +40,7 @@
     using Linn.Stores.Resources.StockLocators;
     using Linn.Stores.Resources.Tqms;
 
-    public class 
-        ServiceModule : Module
+    public class ServiceModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -61,6 +60,7 @@
             builder.RegisterType<RequisitionService>().As<IRequisitionService>();
             builder.RegisterType<TpkService>().As<ITpkService>();
             builder.RegisterType<MoveStockService>().As<IMoveStockService>();
+            builder.RegisterType<StockReportService>().As<IStockReportService>();
             builder.RegisterType<TqmsReportsService>().As<ITqmsReportsService>();
             builder.RegisterType<ConsignmentShipfileService>().As<IConsignmentShipfileService>();
             builder.RegisterType<EmailService>().As<IEmailService>();
@@ -89,6 +89,7 @@
             builder.RegisterType<RootProductsService>().As<IRootProductService>();
             builder.RegisterType<DepartmentService>().As<IDepartmentsService>();
             builder.RegisterType<AllocationFacadeService>().As<IAllocationFacadeService>();
+            builder.RegisterType<StockReportFacadeService>().As<IStockReportFacadeService>();
             builder.RegisterType<SernosSequencesService>().As<ISernosSequencesService>();
             builder.RegisterType<UnitsOfMeasureService>().As<IUnitsOfMeasureService>();
             builder.RegisterType<SuppliersService>().As<ISuppliersService>();

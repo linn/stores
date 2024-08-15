@@ -64,6 +64,7 @@ import StoresMoveLogReportOptions from '../containers/reports/StoresMoveLogRepor
 import StockTriggerLevelsUtility from '../containers/stockTriggerLevelsUtility/StockTriggerLevelsUtility';
 import LabelReprint from '../containers/LabelReprint';
 import PartSources from '../containers/parts/PartSources';
+import StockLocatorReport from '../containers/reports/StockLocatorReport';
 
 const Root = ({ store }) => (
     <div>
@@ -388,6 +389,11 @@ const Root = ({ store }) => (
                                         exact
                                         path="/logistics/labels-reprint"
                                         component={LabelReprint}
+                                    />
+                                    <Route
+                                        exact
+                                        path="/inventory/reports/stock-locators-report"
+                                        component={StockLocatorReport}
                                     />
                                     <Route component={NotFoundPage} />
                                 </Switch>
