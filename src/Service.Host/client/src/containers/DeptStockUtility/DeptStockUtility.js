@@ -10,11 +10,14 @@ import stockLocatorsActions from '../../actions/stockLocatorsActions';
 import stockLocatorsSelectors from '../../selectors/stockLocatorsSelectors';
 import stockLocatorActions from '../../actions/stockLocatorActions';
 import stockLocatorSelectors from '../../selectors/stockLocatorSelectors';
+import partActions from '../../actions/partActions';
+import partSelectors from '../../selectors/partSelectors';
 import * as itemTypes from '../../itemTypes';
 
 const mapStateToProps = (state, { location }) => ({
     items: stockLocatorsSelectors.getSearchItems(state),
     itemsLoading: stockLocatorsSelectors.getSearchLoading(state),
+    part: partSelectors.getItem(state),
     departments: departmentsSelectors
         .getSearchItems(state)
         .map(i => ({ ...i, name: i.departmentCode, id: i.departmentCode })),
@@ -29,6 +32,7 @@ const mapStateToProps = (state, { location }) => ({
 
 const initialise = ({ options }) => dispatch => {
     dispatch(stockLocatorsActions.searchWithOptions(null, `&partId=${options.partId}`));
+    dispatch(partActions.fetch(options.partId));
 };
 
 const mapDispatchToProps = {
