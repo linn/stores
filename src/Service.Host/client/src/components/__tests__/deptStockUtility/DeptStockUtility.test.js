@@ -63,7 +63,8 @@ const defaultProps = {
     snackbarVisible: false,
     setSnackbarVisible: jest.fn(),
     itemError: null,
-    history: { push }
+    history: { push },
+    part: { partNumber: 'EMPTY' }
 };
 
 //eslint-disable-next-line react/jsx-props-no-spreading
