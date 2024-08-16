@@ -19,6 +19,7 @@ import Page from '../../containers/Page';
 function DeptStockUtility({
     items,
     itemsLoading,
+    part,
     departments,
     clearDepartmentsSearch,
     searchDepartments,
@@ -204,7 +205,7 @@ function DeptStockUtility({
         <Grid item xs={12}>
             <SaveBackCancelButtons
                 backClick={() => history.push('/inventory/dept-stock-parts')}
-                saveDisabled={!stockLocators.some(x => x.edited)}
+                saveDisabled={!stockLocators.some(x => x.edited) || !part}
                 cancelClick={() => setStockLocators(items)}
                 saveClick={() => {
                     stockLocators
@@ -217,7 +218,7 @@ function DeptStockUtility({
                         .forEach(s => {
                             const body = s;
                             if (!body.partNumber) {
-                                body.partNumber = stockLocators.find(l => l.partNumber).partNumber;
+                                body.partNumber = part.partNumber;
                             }
                             createStockLocator(body);
                         });
@@ -357,6 +358,9 @@ DeptStockUtility.propTypes = {
             errors: PropTypes.arrayOf(PropTypes.shape({}))
         })
     }),
+    part: PropTypes.shape({
+        partNumber: PropTypes.string
+    }),
     history: PropTypes.shape({ push: PropTypes.func }).isRequired
 };
 
@@ -369,7 +373,8 @@ DeptStockUtility.defaultProps = {
     storagePlaces: [],
     stockLocatorLoading: false,
     snackbarVisible: false,
-    itemError: null
+    itemError: null,
+    part: null
 };
 
 export default DeptStockUtility;
