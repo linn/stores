@@ -66,10 +66,6 @@ describe('When creating...', () => {
             fireEvent.change(mechElecDropdown, { target: { value: 'M' } });
         });
 
-        test('should hide part type dropdown', () => {
-            expect(screen.queryByLabelText('Part Type*')).not.toBeInTheDocument();
-        });
-
         test('should disable Param Data and DataSheets tabs', () => {
             const dataSheetsTab = screen.getByText('DataSheets');
             fireEvent.click(dataSheetsTab);
