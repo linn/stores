@@ -38,7 +38,7 @@ function ProposalTab({
     clearSearchDepartments,
     handleProjectChange
 }) {
-    const partTypes = [
+    const electricalPartTypes = [
         'CAP',
         'CONN',
         'CRYS',
@@ -55,6 +55,22 @@ function ProposalTab({
         'PROT',
         'ANT',
         'MOD'
+    ];
+
+    const mechanicalPartTypes = [
+        'RECORD',
+        'MCP',
+        'BOX',
+        'GRILL',
+        'LBL',
+        'MECH',
+        'CAB',
+        'MOLD',
+        'RAW',
+        'SPKR',
+        'TAPE',
+        'GLUE',
+        'WOOD'
     ];
     return (
         <Grid container spacing={3}>
@@ -103,14 +119,23 @@ function ProposalTab({
                     <Dropdown
                         label="Part Type*"
                         propertyName="partType"
-                        items={partTypes}
+                        items={electricalPartTypes}
                         fullWidth
                         value={partType}
                         onChange={handleFieldChange}
                     />
                 </Grid>
             ) : (
-                <Grid item xs={3} />
+                <Grid item xs={3}>
+                    <Dropdown
+                        label="Part Type*"
+                        propertyName="partType"
+                        items={mechanicalPartTypes}
+                        fullWidth
+                        value={partType}
+                        onChange={handleFieldChange}
+                    />
+                </Grid>
             )}
             <Grid item xs={6}>
                 <InputField
