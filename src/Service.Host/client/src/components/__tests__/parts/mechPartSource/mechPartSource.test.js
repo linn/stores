@@ -283,7 +283,7 @@ describe('When clicking tabs...', () => {
         const tab = screen.getByText('Usages');
         fireEvent.click(tab);
         expect(screen.getByText('Product')).toBeInTheDocument();
-        expect(screen.getByText('Quantity Used')).toBeInTheDocument();
+        expect(screen.getByText('Quantity Per Assembly')).toBeInTheDocument();
     });
 
     test('should render Verification tab', () => {
@@ -344,7 +344,7 @@ describe('When url specifies tab...', () => {
     test('should render Usages tab', () => {
         defaultRender({ editStatus: 'create', options: { tab: 'usages' } });
         expect(screen.getByText('Product')).toBeInTheDocument();
-        expect(screen.getByText('Quantity Used')).toBeInTheDocument();
+        expect(screen.getByText('Quantity Per Assembly')).toBeInTheDocument();
     });
 
     test('should render Verification tab', () => {

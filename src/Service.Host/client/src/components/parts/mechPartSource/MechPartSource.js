@@ -406,12 +406,18 @@ function MechPartSource({
                                 />
                                 <Tab label="Quality Requirements" />
                                 <Tab label="Suppliers" />
-                                <Tab label="Manufacturers" disabled={creating()} />
+                                <Tab
+                                    label="Manufacturers"
+                                    disabled={mechPartSource.mechanicalOrElectrical !== 'E'}
+                                />
                                 <Tab
                                     label="Param Data"
                                     disabled={mechPartSource.mechanicalOrElectrical !== 'E'}
                                 />
-                                <Tab label="Cad Data" disabled={creating()} />
+                                <Tab
+                                    label="Cad Data"
+                                    disabled={mechPartSource.mechanicalOrElectrical !== 'E'}
+                                />
                                 <Tab label="Quotes" />
                                 <Tab label="Usages" />
                                 <Tab label="Verification" />
