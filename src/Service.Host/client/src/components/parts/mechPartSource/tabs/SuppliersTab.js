@@ -34,7 +34,7 @@ function SuppliersTab({
             searchLoading: suppliersSearchLoading,
             selectSearchResult: selectSupplierSearchResult,
             searchTitle: 'Search Suppliers',
-            minimumSearchTermLength: 4
+            minimumSearchTermLength: 3
         },
         {
             title: 'Name',
