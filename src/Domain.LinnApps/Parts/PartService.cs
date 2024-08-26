@@ -345,17 +345,35 @@
                                       { "address", bcc2.EmailAddress }
                                   }
                           };
-            this.emailService.SendEmail(
-                to.EmailAddress,
-                to.User.Name,
-                cc,
-                null,
-                "stores@linn.co.uk",
-                "Parts Utility",
-                $"New Source Sheet Created - {source.PartNumber}",
-                $"Click here to view: https://app.linn.co.uk/parts/sources/{source.Id}",
-                null,
-                null);
+            if (source.MechanicalOrElectrical == "E")
+            {
+                this.emailService.SendEmail(
+                    to.EmailAddress,
+                    to.User.Name,
+                    cc,
+                    null,
+                    "stores@linn.co.uk",
+                    "Parts Utility",
+                    $"New Source Sheet Created - {source.PartNumber}",
+                    $"Click here to view: https://app.linn.co.uk/parts/sources/{source.Id}",
+                    null,
+                    null);
+            }
+            else
+            {
+                this.emailService.SendEmail(
+                    "mechanicalsourcingsheet@linn.co.uk",
+                    "Mechanical Sourcing Sheet",
+                    null,
+                    null,
+                    "stores@linn.co.uk",
+                    "Parts Utility",
+                    $"New Source Sheet Created - {source.PartNumber}",
+                    $"Click here to view: https://app.linn.co.uk/parts/sources/{source.Id}",
+                    null,
+                    null);
+            }
+
             return part; 
         }
 
