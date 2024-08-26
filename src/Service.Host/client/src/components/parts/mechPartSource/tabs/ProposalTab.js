@@ -293,7 +293,6 @@ function ProposalTab({
                     propertyName="assemblyType"
                     items={['TH', 'SM']}
                     fullWidth
-                    allowNoValue
                     value={assemblyType}
                     onChange={handleFieldChange}
                 />
@@ -304,7 +303,7 @@ function ProposalTab({
                     onSelect={newValue => {
                         handleProjectChange(newValue);
                     }}
-                    label="Project Code"
+                    label="Project Code*"
                     modal
                     items={departmentsSearchResults}
                     value={projectCode}
